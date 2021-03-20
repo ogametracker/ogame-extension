@@ -1,32 +1,42 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="ogame-tracker-dialog">
+        <test :items="testItems" >
+            <template #first>
+                First tab content
+            </template>
+            <template #look>
+                <b-button>Look Mum, no hands!</b-button>
+            </template>
+        </test>
+        <stats-dialog v-model="visible" />
     </div>
-    <router-view/>
-  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+    import { Component, Vue } from "vue-property-decorator";
+    import StatsDialog from "./components/StatsDialog.vue";
 
-#nav {
-  padding: 30px;
+    import Test, { TabItem } from '@/components/common/Test.vue';
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    @Component({
+        components: { StatsDialog, Test },
+    })
+    export default class App extends Vue {
+        private visible = false;
 
-    &.router-link-exact-active {
-      color: #42b983;
+        private testItems: TabItem[] = [
+            {
+                name: 'first',
+                title: 'First Tab',
+            },
+            {
+                name: 'look',
+                title: 'Hey i am pretty cool',
+            }
+        ];
+
+        private async mounted() {
+            (window as any).ogameTracker = this;
+        }
     }
-  }
-}
-</style>
+</script>
