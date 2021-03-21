@@ -1,5 +1,5 @@
 import fakeData from "@/_fakeData.json";
-import ExpoEventCollection from '@/models/expeditions/ExpoEventCollection';
+
 import { Component, Vue } from 'vue-property-decorator';
 import ExpoEvent from "@/models/expeditions/ExpoEvent";
 
@@ -15,6 +15,12 @@ class ExpoModule extends Vue {
             resolve(Object.values(fakeData) as ExpoEvent[]);
         });
         this.expos.push(...expos);
+    }
+
+    public get firstExpo(): ExpoEvent | null {
+        return this.expos.reduce(
+            (acc, cur) => acc == null || (acc.date > cur.date) ? cur : acc,
+            null as ExpoEvent | null);
     }
 }
 

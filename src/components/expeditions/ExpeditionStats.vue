@@ -1,34 +1,74 @@
 <template>
-    <b-tabs
-        class="min-max-h-100 flex-nowrap"
-        vertical
-        pills
-        content-class="min-max-h-100 flex-grow-1"
-        active-tab-class="min-max-w-100 min-max-h-100 d-flex"
-        nav-class="h-100"
-        nav-wrapper-class="pr-0"
-    >
-        <b-tab title="Übersicht">
+    <tab-view :items="items">
+        <template #overview>
             <expedition-overview />
-        </b-tab>
-        <b-tab title="Rohstofffunde"> <expedition-resources /> </b-tab>
-        <b-tab title="Flottenfunde"> Flottenfunde </b-tab>
-        <b-tab title="DM-Funde"> DM-Funde </b-tab>
-        <b-tab title="Itemfunde"> Itemfunde </b-tab>
-        <b-tab title="Verteilung in %"> Prozentuale Verteilung </b-tab>
-    </b-tabs>
+        </template>
+        <template #resources>
+            <expedition-resources />
+        </template>
+        <template #fleet>
+            <expedition-fleet />
+        </template>
+        <template #darkMatter>
+            <expedition-dark-matter />
+        </template>
+        <template #items>
+            <expedition-item-table />
+        </template>
+        <template #distribution> 
+            <expedition-type-distribution-chart />    
+        </template>
+    </tab-view>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
+    import TabView, { TabViewItem } from "../common/TabView.vue";
     import ExpeditionOverview from "./overview/ExpeditionOverview.vue";
     import ExpeditionResources from "./resources/ExpeditionResources.vue";
+    import ExpeditionFleet from "./fleet/ExpeditionFleet.vue";
+    import ExpeditionDarkMatter from "./darkMatter/ExpeditionDarkMatter.vue";
+    import ExpeditionItemTable from './item/ExpeditionItemTable.vue';
+    import ExpeditionTypeDistributionChart from './distribution/ExpeditionTypeDistributionChart.vue';
+
 
     @Component({
         components: {
             ExpeditionOverview,
             ExpeditionResources,
+            ExpeditionFleet,
+            ExpeditionDarkMatter,
+            ExpeditionItemTable,
+            ExpeditionTypeDistributionChart,
+            TabView,
         },
     })
-    export default class ExpeditionStats extends Vue { }
+    export default class ExpeditionStats extends Vue {
+        private readonly items: TabViewItem[] = [
+            {
+                name: 'overview',
+                title: 'Übersicht',
+            },
+            {
+                name: 'resources',
+                title: 'Rohstofffunde',
+            },
+            {
+                name: 'fleet',
+                title: 'Flottenfunde',
+            },
+            {
+                name: 'darkMatter',
+                title: 'DM-Funde',
+            },
+            {
+                name: 'items',
+                title: 'Itemfunde',
+            },
+            {
+                name: 'distribution',
+                title: 'Verteilung in %',
+            },
+        ];
+    }
 </script>

@@ -4,8 +4,9 @@ enum Ship {
     cruiser = 'Kreuzer',
     battleship = 'Schlachtschiff',
     bomber = 'Bomber',
-    battelcruiser = 'Schlachtkreuzer',
+    battlecruiser = 'Schlachtkreuzer',
     destroyer = 'Zerstörer',
+    deathStar = 'Todesstern',
     reaper = 'Reaper',
     pathfinder = 'Pathfinder',
     smallCargo = 'Kleiner Transporter',
@@ -14,6 +15,6 @@ enum Ship {
     recycler = 'Recycler',
     colonyShip = 'Kolonieschiff',
     crawler = 'Crawler',
-};
+}
 
 export default Ship;

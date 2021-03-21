@@ -1,10 +1,10 @@
 <template>
     <tab-view :items="items" overflow vertical-content>
         <template #chart>
-            <expedition-resources-chart />
+            <expedition-fleet-chart />
         </template>
         <template #tables>
-            <expedition-resources-tables />
+            <expedition-fleet-tables />
         </template>
     </tab-view>
 </template>
@@ -12,17 +12,17 @@
 <script lang="ts">
     import TabView, { TabViewItem } from "@/components/common/TabView.vue";
     import { Component, Vue } from "vue-property-decorator";
-    import ExpeditionResourcesChart from "./ExpeditionResourcesChart.vue";
-    import ExpeditionResourcesTables from "./ExpeditionResourcesTables.vue";
+    import ExpeditionFleetChart from "./ExpeditionFleetChart.vue";
+    import ExpeditionFleetTables from "./ExpeditionFleetTables.vue";
 
     @Component({
         components: {
-            ExpeditionResourcesChart,
-            ExpeditionResourcesTables,
+            ExpeditionFleetChart,
+            ExpeditionFleetTables,
             TabView,
         },
     })
-    export default class ExpeditionResources extends Vue {
+    export default class ExpeditionFleet extends Vue {
         private get items(): TabViewItem[] {
             return [
                 {

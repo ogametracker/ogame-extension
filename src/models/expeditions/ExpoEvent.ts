@@ -2,7 +2,7 @@ import ExpoSize from "./ExpoSize";
 import ExpoType from "./ExpoType";
 
 import Fleet from '../Fleet';
-import Item from "../Item";
+import Item from "../items/Item";
 import Resource from "../Resource";
 
 
@@ -11,7 +11,7 @@ export interface ExpoEventBase {
     date: number;
     type: ExpoType;
     size?: ExpoSize;
-    fleet?: ExpoSize;
+    fleet?: Fleet;
     darkMatter?: number;
     resources?: ExpoEventResourcesList;
 }

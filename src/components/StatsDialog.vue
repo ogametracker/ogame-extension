@@ -20,7 +20,17 @@
             <b-tab title="Angriffe"> Angriffe </b-tab>
 
             <b-tab
-                title-item-class="flex-grow-1 justify-content-end"
+                title-item-class="flex-grow-1"
+                title-link-class="border-0 p-0"
+                disabled
+            ></b-tab>
+
+            <b-tab>
+                <template #title>Einstellungen</template>
+            </b-tab>
+
+            <b-tab
+                :title-item-class="['justify-content-end', $style['close-tab-item']]"
                 title-link-class="border-0 p-0"
             >
                 <template #title>
@@ -64,5 +74,9 @@
 
         max-height: calc(100vh - #{$margin});
         min-height: calc(100vh - #{$margin});
+    }
+
+    .close-tab-item {
+        min-width: 48px;
     }
 </style>

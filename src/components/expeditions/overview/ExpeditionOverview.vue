@@ -1,24 +1,17 @@
 <template>
-    <b-tabs
-        class="min-max-h-100 min-max-w-100 flex-nowrap"
-        vertical
-        pills
-        content-class="min-max-h-100 overflow-auto flex-grow-1"
-        active-tab-class="min-max-w-100"
-        nav-class="h-100 pr-2 border-right"
-        nav-wrapper-class="pl-1"
-    >
-        <b-tab active title="Diagramm">
+    <tab-view :items="items" overflow vertical-content>
+        <template #chart>
             <expedition-overview-chart />
-        </b-tab>
-        <b-tab title="Tabellen">
+        </template>
+        <template #tables>
             <expedition-overview-tables />
-        </b-tab>
-    </b-tabs>
+        </template>
+    </tab-view>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
+    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
     import ExpeditionOverviewChart from "./ExpeditionOverviewChart.vue";
     import ExpeditionOverviewTables from "./ExpeditionOverviewTables.vue";
 
@@ -26,7 +19,21 @@
         components: {
             ExpeditionOverviewChart,
             ExpeditionOverviewTables,
+            TabView,
         },
     })
-    export default class ExpeditionOverview extends Vue {}
+    export default class ExpeditionOverview extends Vue {
+        private get items(): TabViewItem[] {
+            return [
+                {
+                    name: 'chart',
+                    title: this.$t('chart') as string,
+                },
+                {
+                    name: 'tables',
+                    title: this.$t('tables') as string,
+                },
+            ];
+        }
+    }
 </script> 

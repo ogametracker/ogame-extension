@@ -66,11 +66,11 @@ const colors: { [key: string]: HexColor } = {
     purple: '#522eb3',
 };
 
+const mixWithColor: HexColor = '#000000';
 function defaultMixColor (color: HexColor): HexColor {
     return desaturate(mixColor(color, mixWithColor, 0.2), 0.1);
 }
 
-const mixWithColor: HexColor = '#000000';
 const defaultColors: ChartColor[] = Object.values(colors).map(color => ({
     bg: defaultMixColor(color),
     border: color,
