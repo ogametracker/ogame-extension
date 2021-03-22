@@ -1,5 +1,5 @@
 <template>
-    <tab-view :items="items" overflow vertical-content>
+    <tab-view :items="items" overflow vertical>
         <template #chart>
             <expedition-resources-chart />
         </template>

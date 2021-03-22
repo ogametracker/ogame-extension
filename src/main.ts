@@ -1,13 +1,9 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
-
-// bootstrap & boostrap-vue
-import '@/styles/index.scss';
-import { BootstrapVue } from 'bootstrap-vue';
-Vue.use(BootstrapVue);
 
 // vue-i18n
 import i18n from '@/i18n/vue-i18n';

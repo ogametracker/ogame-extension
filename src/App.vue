@@ -1,5 +1,5 @@
 <template>
-    <div id="ogame-tracker-dialog">
+    <div id="ogame-tracker-dialog" class="ogame-tracker-dialog">
         <stats-dialog v-model="visible" />
     </div>
 </template>
@@ -19,3 +19,11 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .ogame-tracker-dialog {
+        color: white;
+        font-family: Verdana, Arial, SunSans-Regular, sans-serif;
+        font-size: 11px;
+    }
+</style>

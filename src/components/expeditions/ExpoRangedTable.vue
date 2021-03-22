@@ -1,5 +1,5 @@
 <template>
-    <table class="table text-white border border-white">
+    <table class="expo-ranged-table">
         <thead>
             <tr>
                 <th></th>
@@ -30,7 +30,7 @@
                     {{ $n(getPercentage(item)) }}
                 </td>
             </tr>
-            <tr v-if="showTotal" style="border-top-style: double">
+            <tr v-if="showTotal" class="total-row">
                 <td>{{ $t(`total`) }}</td>
                 <td
                     v-for="(range, index) in settingsModule.settings.tables
@@ -85,3 +85,20 @@
         }
     }
 </script>
+<style lang="scss">
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+
+        width: 100%;
+
+        td, th {
+            border: 1px solid rgba(white, 0.2);
+            padding: 8px;
+        }
+
+        .total-row {
+            border-top-style: double;
+        }
+    }
+</style>

@@ -1,38 +1,26 @@
 <template>
-    <b-row class="min-max-h-100 flex-grow-1 flex-nowrap">
-        <b-col md="auto" class="min-max-h-100">
-            <b-nav vertical pills>
-                <b-nav-item
-                    v-for="(item, index) in items"
-                    :key="item.name + 'nav-item'"
-                    :active="index == activeIndex"
-                    @click="setActiveIndex(index)"
-                >
-                    {{ item.title }}
-                </b-nav-item>
-            </b-nav>
-        </b-col>
-
-        <b-col
-            class="min-max-h-100"
-            :class="{
-                'overflow-auto': overflow,
-            }"
-        >
+    <div class="tab-view" :class="{ 'tab-view-vertical': vertical }">
+        <div class="tab-nav-list">
             <div
-                class="min-max-h-100 tab-content-wrapper"
-                :class="{
-                    'd-flex': index == activeIndex,
-                    'tab-content-vertical': verticalContent,
-                }"
                 v-for="(item, index) in items"
-                :key="item.name + 'slot'"
-                v-show="index == activeIndex"
+                :key="item.name + 'nav-item'"
+                @click="setActiveIndex(index)"
+                class="tab-nav-item"
+                :class="{ active: activeIndex == index }"
             >
-                <slot :name="item.name" v-if="isSlotRendered(index)" />
+                {{ item.title }}
             </div>
-        </b-col>
-    </b-row>
+        </div>
+
+        <div
+            v-for="(item, index) in items"
+            :key="item.name + 'content'"
+            v-show="activeIndex == index"
+            class="tab-content"
+        >
+            <slot :name="item.name" v-if="isSlotRendered(index)" />
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -51,6 +39,9 @@
 
         @Prop({ required: false, type: Boolean, default: false })
         private overflow!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private vertical!: boolean;
 
         @Prop({ required: false, type: Boolean, default: false })
         private verticalContent!: boolean;
@@ -83,13 +74,41 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-    .tab-content-wrapper > * {
-        display: flex;
-        flex-grow: 1;
+<style lang="scss">
+    $vertical-tab-nav-width: 150px;
+    $horizontal-tab-nav-height: 40px;
+
+    .tab-view {
+        display: grid;
+
+        width: 100%;
+        height: 100%;
+
+        grid-template-columns: auto;
+        grid-template-rows: $horizontal-tab-nav-height 1fr;
+
+        .tab-nav-item {
+            padding: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(blue, 0.5);
+            }
+
+            &.active,
+            &.active:hover {
+                background: blue;
+            }
+        }
     }
 
-    .tab-content-wrapper.tab-content-vertical > * {
-        flex-direction: column;
+    .tab-view.tab-view-vertical {
+        grid-template-rows: auto;
+        grid-template-columns: $vertical-tab-nav-width 1fr;
+    }
+
+    .tab-content {
+        padding: 0 16px;
     }
 </style>

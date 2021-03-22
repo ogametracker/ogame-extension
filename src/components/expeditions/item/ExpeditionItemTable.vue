@@ -1,20 +1,15 @@
 <template>
-    <b-col class="overflow-auto flex-column">
-        <b-row
-            v-for="day in allDays"
-            :key="day.text"
-            class="mb-1 border-bottom"
-        >
-            <b-col md="auto" style="width: 150px">
+    <div>
+        <div v-for="day in allDays" :key="day.text">
+            <div style="width: 150px; display">
                 <span class="text-white">
                     {{ day.text }}
                 </span>
-            </b-col>
-            <b-col>
+            </div>
+            <div>
                 <div
                     v-for="(item, index) in itemsAtDay(day.date)"
                     :key="index"
-                    class="py-1"
                 >
                     <img
                         :src="`https://s146-de.ogame.gameforge.com/cdn/img/item-images/${item.image}-small.png`"
@@ -25,9 +20,9 @@
                         {{ item.name }}
                     </span>
                 </div>
-            </b-col>
-        </b-row>
-    </b-col>
+            </div>
+        </div>
+    </div>
 </template>
 <script lang="ts">
     import { ExpoEventItem } from '@/models/expeditions/ExpoEvent';
@@ -51,7 +46,7 @@
             const days = new Set(this.expoModule.expos
                 .filter(expo => expo.type == ExpoType.item)
                 .map(expo => startOfDay(expo.date).getTime()));
-                
+
             return [...days].sort((a, b) => a - b)
                 .map(date => ({
                     text: format(date, this.dateFormat),

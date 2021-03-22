@@ -1,5 +1,5 @@
 <template>
-    <tab-view :items="items">
+    <tab-view :items="items" vertical>
         <template #overview>
             <expedition-overview />
         </template>

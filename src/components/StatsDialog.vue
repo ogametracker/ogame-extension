@@ -1,51 +1,59 @@
 <template>
-    <b-modal
-        :dialog-class="$style['stats-dialog']"
-        v-model="value"
-        hide-footer
-        hide-header
-        body-class="mh-100 overflow-hidden"
-        content-class="bg-ogame-darkblue"
-        no-fade
-    >
-        <b-tabs
-            class="min-max-h-100 d-flex flex-column"
-            content-class="min-max-h-100 py-3 d-flex flex-nowrap flex-grow-1 pr-4"
-            active-tab-class="min-max-w-100"
-        >
-            <b-tab title="Expeditionen" active>
-                <expedition-stats />
-            </b-tab>
+    <div class="stats-dialog" v-show="value">
+        <div class="stats-dialog-content">
+            <nav class="stats-dialog-nav">
+                <ul class="nav">
+                    <!-- TODO: Vue router -->
+                    <li
+                        class="nav-item"
+                        :class="{ 'nav-item-active': activeTab == 'expos' }"
+                        @click="activeTab = 'expos'"
+                    >
+                        Expeditionen
+                    </li>
+                    <li
+                        class="nav-item"
+                        :class="{ 'nav-item-active': activeTab == 'attacks' }"
+                        @click="activeTab = 'attacks'"
+                    >
+                        Angriffe
+                    </li>
+                    <li style="flex-grow: 1"></li>
+                    <li
+                        class="nav-item"
+                        :class="{ 'nav-item-active': activeTab == 'settings' }"
+                        @click="activeTab = 'settings'"
+                    >
+                        Einstellungen
+                    </li>
+                </ul>
 
-            <b-tab title="Angriffe"> Angriffe </b-tab>
-
-            <b-tab
-                title-item-class="flex-grow-1"
-                title-link-class="border-0 p-0"
-                disabled
-            ></b-tab>
-
-            <b-tab>
-                <template #title>Einstellungen</template>
-            </b-tab>
-
-            <b-tab
-                :title-item-class="['justify-content-end', $style['close-tab-item']]"
-                title-link-class="border-0 p-0"
-            >
-                <template #title>
-                    <button
-                        type="button"
-                        class="close text-white"
-                        style="text-shadow: none"
+                <div class="close-stats-dialog-wrapper">
+                    <span
+                        class="close-stats-dialog-button"
                         @click="$emit('input', false)"
                     >
                         ×
-                    </button>
-                </template>
-            </b-tab>
-        </b-tabs>
-    </b-modal>
+                    </span>
+                </div>
+            </nav>
+            <main class="stats-dialog-body">
+                <!-- router view? -->
+                <expedition-stats
+                    v-if="activeTab == 'expos'"
+                    class="stats-dialog-body-content"
+                />
+                <span v-else-if="activeTab == 'attacks'">
+                    <!-- router view? -->
+                    Angriffe
+                </span>
+                <span v-else-if="activeTab == 'settings'">
+                    <!-- router view? -->
+                    Einstellungen
+                </span>
+            </main>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -60,23 +68,92 @@
     export default class StatsDialog extends Vue {
         @Prop({ type: Boolean, required: true })
         private value!: boolean;
+
+        private activeTab = 'expos';
     }
 </script>
 
-<style lang="scss" module>
-    $margin: 100px;
+<style lang="scss" scoped>
+    $padding: 50px;
 
     .stats-dialog {
         display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 10000;
+        padding: $padding;
 
-        max-width: calc(100vw - #{$margin});
-        min-width: calc(100vw - #{$margin});
-
-        max-height: calc(100vh - #{$margin});
-        min-height: calc(100vh - #{$margin});
+        &::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.5);
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
     }
 
-    .close-tab-item {
+    .stats-dialog-content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        border-radius: 6px;
+        overflow: hidden;
+
+        background: black;
+    }
+
+    .stats-dialog-nav {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 2px solid blue;
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-grow: 1;
+
+        .nav-item {
+            padding: 16px;
+            font-size: 13px;
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(blue, 0.5);
+            }
+
+            &-active,
+            &-active:hover {
+                background: blue;
+            }
+        }
+    }
+
+    .close-stats-dialog-wrapper {
         min-width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .close-stats-dialog-button {
+        cursor: pointer;
+    }
+
+    .stats-dialog-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 16px 16px 32px 16px;
     }
 </style>
