@@ -40,8 +40,7 @@ class SettingsModule extends Vue {
                 {
                     type: "all",
                 },
-            ],
-            showPercentage: true,
+            ]
         },
         charts: {
             days: 31,

@@ -13,7 +13,6 @@
     import Ship from "@/models/Ship";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
-    import isInRange from "@/utils/isInRange";
 
     @Component({
         components: {
@@ -42,9 +41,8 @@
         private get items(): ExpoRangeTableItem[] {
             return this.findableShips.map(ship => ({
                 label: this.$t(`ships['${ship}']`) as string,
-                getValue: (expos, range) => expos.filter(
+                getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.fleet
-                        && (range == null || isInRange(expo.date, range))
                 ).reduce((acc, cur) => acc + (cur.fleet?.[ship as Ship] ?? 0), 0)
             }));
         }

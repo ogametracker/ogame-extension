@@ -4,42 +4,30 @@
             <tr>
                 <th></th>
                 <th
-                    v-for="(range, index) in settingsModule.settings.tables
-                        .ranges"
+                    v-for="(rangeLabel, index) in tableData.rangeLabels"
                     :key="index"
                 >
-                    {{
-                        range.label ||
-                        `${$t("since")} ${$d(firstExpoDate, "short")}`
-                    }}
+                    {{ rangeLabel }}
                 </th>
-                <th v-if="settingsModule.settings.tables.showPercentage">%</th>
+                <th>%</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(item, index) in items" :key="index">
+            <tr v-for="(item, itemIndex) in tableData.items" :key="itemIndex">
                 <td>{{ item.label }}</td>
-                <td
-                    v-for="(range, index) in settingsModule.settings.tables
-                        .ranges"
-                    :key="index"
-                >
-                    {{ $n(item.getValue(expoModule.expos, range)) }}
+                <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
+                    {{ $n(item.rangeValues[rangeIndex]) }}
                 </td>
-                <td v-if="settingsModule.settings.tables.showPercentage">
-                    {{ $n(getPercentage(item)) }}
+                <td>
+                    {{ $n(100 * item.percentage) }}
                 </td>
             </tr>
             <tr v-if="showTotal" class="total-row">
                 <td>{{ $t(`total`) }}</td>
-                <td
-                    v-for="(range, index) in settingsModule.settings.tables
-                        .ranges"
-                    :key="index"
-                >
-                    {{ $n(getTotal(range)) }}
+                <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
+                    {{ $n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
-                <td v-if="settingsModule.settings.tables.showPercentage"></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -50,38 +38,64 @@
     import DateRange from '@/models/settings/DateRange';
     import ExpoModule from '@/store/modules/ExpoModule';
     import SettingsModule from '@/store/modules/SettingsModule';
+    import daysInRange from '@/utils/daysInRange';
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
     export interface ExpoRangeTableItem {
         label: string;
-        getValue: (expos: ExpoEvent[], range?: DateRange) => number;
+        getValue: (expos: ExpoEvent[]) => number;
     }
 
     @Component({})
     export default class ExpoRangedTable extends Vue {
-        @Prop({ required: true, type: Array as PropType<ExpoRangeTableItem[]> })
+        @Prop({ required: true, type: Array as PropType<ExpoRangeTableItem[]>, default: () => [] })
         private items!: ExpoRangeTableItem[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private showTotal!: boolean;
 
-        private getTotal(range?: DateRange) {
-            return this.items.reduce(
-                (total, i) => total + i.getValue(this.expoModule.expos, range),
-                0
-            );
+        private get ranges() {
+            return SettingsModule.settings.tables.ranges;
         }
 
-        private getPercentage(item: ExpoRangeTableItem, range?: DateRange) {
-            return (100 * item.getValue(this.expoModule.expos)) / this.getTotal(range);
+        private get tableData() {
+            const ranges = this.ranges;
+
+            const firstExpoDate = new Date(this.firstExpoDate);
+            const exposByDay = ExpoModule.byDay;
+
+            const rangeInfos = ranges.map(range => this.getRangeInfo(range, exposByDay, firstExpoDate));
+            const totalRange = this.getRangeInfo({ type: 'all' }, exposByDay, firstExpoDate);
+
+            return {
+                rangeLabels: rangeInfos.map(ri => ri.label),
+                rangeTotals: rangeInfos.map(ri => ri.total),
+                items: this.items.map((item, i) => ({
+                    label: item.label,
+                    rangeValues: rangeInfos.map(ri => ri.itemValues[i]),
+                    percentage: totalRange.itemValues[i] / totalRange.total,
+                }))
+            };
         }
 
-        private readonly settingsModule = SettingsModule;
-        private readonly expoModule = ExpoModule;
+        private getRangeInfo(range: DateRange, exposByDay: { [key: number]: ExpoEvent[] | undefined }, firstExpoDate: Date) {
+            const rangeDays = daysInRange(range) ?? Object.keys(exposByDay).map(d => new Date(parseInt(d)));
+            const exposInRange = rangeDays.flatMap(day => exposByDay[day.getTime()] ?? []);
+
+            const label = range.label ?? `${this.$t("since")} ${this.$d(firstExpoDate, "short")}`;
+            const itemValues = this.items.map(item => item.getValue(exposInRange));
+            const total = itemValues.reduce((total, cur) => total + cur, 0);
+
+            return {
+                label,
+                itemValues,
+                total,
+            };
+        }
 
         private get firstExpoDate(): number {
-            return this.expoModule.firstExpo?.date ?? Date.now();
+            return ExpoModule.firstExpo?.date ?? Date.now();
         }
     }
 </script>
@@ -92,7 +106,8 @@
 
         width: 100%;
 
-        td, th {
+        td,
+        th {
             border: 1px solid rgba(white, 0.2);
             padding: 8px;
         }

@@ -28,8 +28,14 @@
                 v-for="(dataset, index) in datasets"
                 :key="dataset.label"
                 class="dataset-label"
-                :class="{ hidden: chart.data.datasets[index].hidden }"
-                @click="toggleDataset(index)"
+                :class="{
+                    hidden:
+                        chart &&
+                        chart.data &&
+                        chart.data.datasets &&
+                        chart.data.datasets[index].hidden,
+                }"
+                @click.prevent.stop="toggleDataset(index)"
             >
                 <span
                     class="dataset-color"
@@ -175,16 +181,7 @@
                 currentDay = add(currentDay, { days: 1 });
             }
 
-            const exposByDay: { [key: number]: ExpoEvent[] | undefined } = this.expoModule.expos.reduce(
-                (acc, expo) => {
-                    const day = startOfDay(expo.date).getTime();
-                    if (acc[day] == null) {
-                        acc[day] = [];
-                    }
-                    acc[day]!.push(expo);
-                    return acc;
-                },
-                {} as { [key: number]: ExpoEvent[] | undefined });
+            const exposByDay = this.expoModule.byDay;
 
             this.fullDatasetsData.push(
                 ...this.datasets.map(
@@ -194,9 +191,22 @@
                 )
             );
 
+            this.updateMaxValue();
+            this.updateDataAndLabels();
+        }
+
+        private updateMaxValue() {
+            this.maxValue = 1;
+
+            const datasets = this.chart?.data.datasets;
+
             //find cumulative max
             this.allDays.forEach((_, i) => {
-                const max = this.fullDatasetsData.reduce((acc, data) => {
+                const max = this.fullDatasetsData.reduce((acc, data, datasetIndex) => {
+                    if (datasets?.[datasetIndex].hidden) {
+                        return acc;
+                    }
+
                     if (this.stacked) {
                         return acc + data[i];
                     }
@@ -208,10 +218,8 @@
                 }
             });
             //round up to nicer value
-            const power = Math.max(0, Math.floor(this.maxValue).toString().length - 2);
+            const power = Math.max(0, Math.floor(this.maxValue).toString().length - 1);
             this.maxValue = (Math.floor(this.maxValue / 10 ** power) + 1) * 10 ** power;
-
-            this.updateDataAndLabels();
         }
 
         private updateDataAndLabels() {
@@ -258,6 +266,7 @@
                     options: this.chartOptions,
                 });
             } else {
+                this.chart.options = this.chartOptions;
                 this.chart.update();
             }
         }
@@ -265,6 +274,7 @@
         private toggleDataset(index: number) {
             this.chart!.data.datasets![index].hidden = !this.chart!.data.datasets![index].hidden;
 
+            this.updateMaxValue();
             this.renderOrUpdate();
         }
 
@@ -305,6 +315,7 @@
         display: flex;
         flex-direction: row;
         cursor: pointer;
+        user-select: none;
 
         .dataset-color {
             width: 16px;

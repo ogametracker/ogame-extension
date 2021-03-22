@@ -10,7 +10,6 @@
 <script lang="ts">
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
-    import isInRange from "@/utils/isInRange";
     import Resource from "@/models/Resource";
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
@@ -27,10 +26,9 @@
         private get items(): ExpoRangeTableItem[] {
             return Object.keys(Resource).map(resource => ({
                 label: this.$t(`resources['${resource}']`) as string,
-                getValue: (expos, range) => expos.filter(
+                getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.resources
-                        && (range == null || isInRange(expo.date, range)))
-                    .reduce((acc, cur) => acc + cur.resources![resource as Resource], 0)
+                ).reduce((acc, cur) => acc + cur.resources![resource as Resource], 0)
             }));
         }
     }

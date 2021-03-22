@@ -61,5 +61,6 @@ export default {
         expeditions: 'Expeditionen',
         attacks: 'Angriffe',
         since: 'Seit',
+        darkMatter: 'Dunkle Materie',
     },
 };

@@ -10,7 +10,6 @@
 <script lang="ts">
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
-    import isInRange from "@/utils/isInRange";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '../ExpoRangedTable.vue';
 
@@ -26,9 +25,8 @@
         private get items(): ExpoRangeTableItem[] {
             return [{
                 label: this.$t(`darkMatter`) as string,
-                getValue: (expos, range) => expos.filter(
+                getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.darkMatter
-                        && (range == null || isInRange(expo.date, range))
                 ).reduce((acc, cur) => acc + (cur.darkMatter ?? 0), 0)
             }];
         }
