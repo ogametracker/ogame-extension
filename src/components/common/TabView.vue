@@ -111,4 +111,11 @@
     .tab-content {
         padding: 0 16px;
     }
+
+    .tab-content,
+    .tab-nav-list {
+        height: 100%;
+        max-height: 100%;
+        overflow: auto;
+    }
 </style>

@@ -7,8 +7,7 @@
     />
 </template>
 <script lang="ts">
-    import { Component } from "vue-property-decorator";
-    import { VueLineChart } from "@/types/chartjs";
+    import { Component, Vue } from "vue-property-decorator";
     import LineExpoChart, { LineExpoChartDataset } from '@/components/common/LineExpoChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
@@ -19,7 +18,7 @@
             LineExpoChart,
         },
     })
-    export default class ExpeditionResourcesChart extends VueLineChart {
+    export default class ExpeditionResourcesChart extends Vue {
         private readonly resources = [
             Resource.metal,
             Resource.crystal,
@@ -28,6 +27,7 @@
 
         private get datasets(): LineExpoChartDataset[] {
             return this.resources.map(resource => ({
+                fill: true,
                 label: this.$t(`resources['${resource}']`) as string,
                 color: SettingsModule.settings.charts.colors.resources[resource],
                 aggregator: expos => expos.filter(expo => expo.type == ExpoType.resources)

@@ -1,5 +1,5 @@
 <template>
-    <div class="stats-dialog" v-show="value">
+    <div class="stats-dialog" v-if="value">
         <div class="stats-dialog-content">
             <nav class="stats-dialog-nav">
                 <ul class="nav">
@@ -77,7 +77,6 @@
     $padding: 50px;
 
     .stats-dialog {
-        display: flex;
         position: fixed;
         top: 0;
         left: 0;
@@ -99,9 +98,10 @@
     }
 
     .stats-dialog-content {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
         border-radius: 6px;
         overflow: hidden;
 
@@ -151,9 +151,7 @@
     }
 
     .stats-dialog-body {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
+        overflow: hidden;
         padding: 16px 16px 32px 16px;
     }
 </style>

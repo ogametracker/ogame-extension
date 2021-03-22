@@ -7,8 +7,7 @@
     />
 </template>
 <script lang="ts">
-    import { Component } from "vue-property-decorator";
-    import { VueLineChart } from "@/types/chartjs";
+    import { Component, Vue } from "vue-property-decorator";
     import LineExpoChart, { LineExpoChartDataset } from '@/components/common/LineExpoChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
@@ -18,11 +17,11 @@
             LineExpoChart,
         },
     })
-    export default class ExpeditionOverviewChart extends VueLineChart {
+    export default class ExpeditionOverviewChart extends Vue {
         private get datasets(): LineExpoChartDataset[] {
             return Object.keys(ExpoType).map(expoType => ({
                 label: this.$t(`expoTypes['${expoType}']`) as string,
-                name: expoType,
+                fill: true,
                 color: SettingsModule.settings.charts.colors.overview[expoType as ExpoType],
                 aggregator: expos => expos.filter(expo => expo.type == expoType).length
             }));

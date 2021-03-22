@@ -5,9 +5,6 @@ const defaultLocale: Locale = {
     },
 };
 
-const defaultDateFormat = 'dd.MM.yyyy';
-
 export {
     defaultLocale, 
-    defaultDateFormat,
 };

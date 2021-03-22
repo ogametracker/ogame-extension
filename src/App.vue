@@ -24,6 +24,6 @@
     .ogame-tracker-dialog {
         color: white;
         font-family: Verdana, Arial, SunSans-Regular, sans-serif;
-        font-size: 11px;
+        font-size: 14px;
     }
 </style>
