@@ -1,27 +1,17 @@
 <template>
     <div>
-        <div v-for="day in allDays" :key="day.text">
-            <div style="width: 150px; display">
-                <span class="text-white">
-                    {{ day.text }}
-                </span>
-            </div>
-            <div>
-                <div
-                    v-for="(item, index) in itemsAtDay(day.date)"
-                    :key="index"
-                >
+        <expo-ranged-table :items="items" no-percentage>
+            <template #value="{ value: items }">
+                <span v-for="(item, index) in items" :key="index">
                     <img
-                        :src="`https://s146-de.ogame.gameforge.com/cdn/img/item-images/${item.image}-small.png`"
+                        :src="`https://s1-de.ogame.gameforge.com/cdn/img/item-images/${item.image}-small.png`"
                         width="32"
                         height="32"
                     />
-                    <span>
-                        {{ item.name }}
-                    </span>
-                </div>
-            </div>
-        </div>
+                    {{ item.name }}
+                </span>
+            </template>
+        </expo-ranged-table>
     </div>
 </template>
 <script lang="ts">
@@ -29,31 +19,41 @@
     import ExpoType from '@/models/expeditions/ExpoType';
     import Item from '@/models/items/Item';
     import ExpoModule from '@/store/modules/ExpoModule';
-    import { startOfDay, isSameDay } from 'date-fns';
+    import { startOfDay } from 'date-fns';
     import { Component, Vue } from 'vue-property-decorator';
     import Items from '@/models/items/';
+    import ExpoRangedTable, { ExpoRangeTableItem } from '../ExpoRangedTable.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpoRangedTable,
+        },
+    })
     export default class ExpeditionItemChart extends Vue {
-        private readonly expoModule = ExpoModule;
-        private readonly items = Items;
-
-        private get allDays() {
-            const days = new Set(this.expoModule.expos
-                .filter(expo => expo.type == ExpoType.item)
-                .map(expo => startOfDay(expo.date).getTime()));
-
-            return [...days].sort((a, b) => a - b)
-                .map(date => ({
-                    text: this.$d(date, 'short'),
-                    date: new Date(date)
-                }))
-                .reverse();
+        private get items(): ExpoRangeTableItem[] {
+            const itemDays = this.itemDays.reverse();
+            return itemDays.map(itemDay => ({
+                label: this.$d(itemDay.day, 'short') as string,
+                getValue: (expos) => expos.some(expo => expo.type == ExpoType.item) ? itemDay.items : [],
+            }));
         }
 
-        private itemsAtDay(day: Date): Item[] {
-            const itemExpos: ExpoEventItem[] = this.expoModule.expos.filter(expo => expo.type == ExpoType.item && isSameDay(day, expo.date)) as ExpoEventItem[];
-            return itemExpos.map(expo => this.items[expo.item.hash]);
+        private get itemDays(): { day: Date; items: Item[] }[] {
+            const result: { [key: number]: { day: Date; items: Item[] } } = {};
+            const itemExpos = ExpoModule.expos.filter(expo => expo.type == ExpoType.item) as ExpoEventItem[];
+            itemExpos.forEach(itemExpo => {
+                const day = startOfDay(itemExpo.date).getTime();
+                if (result[day] == null) {
+                    result[day] = {
+                        day: new Date(day),
+                        items: [],
+                    };
+                }
+
+                result[day].items.push(Items[itemExpo.item.hash]);
+            });
+
+            return Object.values(result).sort((a, b) => a.day.getTime() - b.day.getTime());
         }
     }
 </script>

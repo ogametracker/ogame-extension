@@ -2,32 +2,51 @@
     <table class="expo-ranged-table">
         <thead>
             <tr>
-                <th></th>
+                <th :style="cellWidthStyle"></th>
+
                 <th
+                    :style="cellWidthStyle"
                     v-for="(rangeLabel, index) in tableData.rangeLabels"
                     :key="index"
                 >
                     {{ rangeLabel }}
                 </th>
-                <th>%</th>
+
+                <th :style="cellWidthStyle" v-if="!noPercentage">%</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item, itemIndex) in tableData.items" :key="itemIndex">
-                <td>{{ item.label }}</td>
-                <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
-                    {{ $n(item.rangeValues[rangeIndex]) }}
-                </td>
                 <td>
+                    {{ item.label }}
+                </td>
+
+                <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
+                    <slot
+                        name="value"
+                        :value="item.rangeValues[rangeIndex]"
+                        v-if="$scopedSlots.value"
+                    />
+
+                    <span v-else>
+                        {{ $n(item.rangeValues[rangeIndex]) }}
+                    </span>
+                </td>
+
+                <td v-if="!noPercentage">
                     {{ $n(100 * item.percentage) }}
                 </td>
             </tr>
             <tr v-if="showTotal" class="total-row">
-                <td>{{ $t(`total`) }}</td>
+                <td>
+                    {{ $t(`total`) }}
+                </td>
+
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
                     {{ $n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
-                <td></td>
+
+                <td v-if="!noPercentage"></td>
             </tr>
         </tbody>
     </table>
@@ -44,7 +63,7 @@
 
     export interface ExpoRangeTableItem {
         label: string;
-        getValue: (expos: ExpoEvent[]) => number;
+        getValue: (expos: ExpoEvent[]) => any;
     }
 
     @Component({})
@@ -55,8 +74,16 @@
         @Prop({ required: false, type: Boolean, default: false })
         private showTotal!: boolean;
 
+        @Prop({ required: false, type: Boolean, default: false })
+        private noPercentage!: boolean;
+
         private get ranges() {
             return SettingsModule.settings.tables.ranges;
+        }
+
+        private get cellWidthStyle() {
+            const add = this.noPercentage ? 1 : 2;
+            return `width: ${100 / (add + this.ranges.length)}%`;
         }
 
         private get tableData() {

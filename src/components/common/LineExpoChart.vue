@@ -125,7 +125,8 @@
                         ticks: {
                             callback: this.yTickFormatter ?? ((value) => value),
                             min: 0,
-                            max: this.maxValue
+                            max: this.maxValue,
+                            precision: 0,
                         },
                     }],
                     xAxes: [{

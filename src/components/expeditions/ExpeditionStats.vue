@@ -13,7 +13,7 @@
             <expedition-dark-matter />
         </template>
         <template #items>
-            <expedition-item-table />
+            <expedition-item-chart />
         </template>
         <template #distribution> 
             <expedition-type-distribution-chart />    
@@ -28,7 +28,7 @@
     import ExpeditionResources from "./resources/ExpeditionResources.vue";
     import ExpeditionFleet from "./fleet/ExpeditionFleet.vue";
     import ExpeditionDarkMatter from "./darkMatter/ExpeditionDarkMatter.vue";
-    import ExpeditionItemTable from './item/ExpeditionItemTable.vue';
+    import ExpeditionItemChart from './item/ExpeditionItemChart.vue';
     import ExpeditionTypeDistributionChart from './distribution/ExpeditionTypeDistributionChart.vue';
 
 
@@ -38,7 +38,7 @@
             ExpeditionResources,
             ExpeditionFleet,
             ExpeditionDarkMatter,
-            ExpeditionItemTable,
+            ExpeditionItemChart,
             ExpeditionTypeDistributionChart,
             TabView,
         },
