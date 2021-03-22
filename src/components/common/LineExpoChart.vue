@@ -1,7 +1,26 @@
 <template>
     <div class="line-expo-chart" :class="{ 'no-legend': hideLegend }">
-        <div style="position: relative">
-            <canvas ref="canvas" />
+        <div class="scrollable-chart">
+            <div class="chart-container">
+                <canvas ref="canvas" />
+            </div>
+            <div class="chart-scrollbar-container">
+                <div
+                    class="chart-scrollbar"
+                    ref="scrollbar"
+                    @scroll="updateScroll()"
+                >
+                    <div
+                        class="thumb"
+                        :style="{
+                            width:
+                                (100 * allDays.length) /
+                                    settingsModule.settings.charts.days +
+                                '%',
+                        }"
+                    />
+                </div>
+            </div>
         </div>
 
         <div v-if="!hideLegend && chart != null" class="legend">
@@ -27,7 +46,7 @@
     import ExpoModule from '@/store/modules/ExpoModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { defaultMixColor, HexColor } from '@/utils/colors';
-    import { sub, startOfDay, isSameDay } from 'date-fns';
+    import { sub, startOfDay, isSameDay, add, startOfSecond } from 'date-fns';
     import { PropType } from 'vue';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import Chart from 'chart.js';
@@ -67,6 +86,11 @@
         private readonly datasetsData: { x: number; y: number }[][] = [];
         private readonly datasetsInternal: Chart.ChartDataSets[] = [];
 
+        private readonly fullDatasetsData: number[][] = [];
+
+        private daysOffset = 0;
+
+
         private get context() {
             return (this.$refs.canvas as HTMLCanvasElement).getContext('2d')!;
         }
@@ -81,7 +105,7 @@
                 maintainAspectRatio: false,
                 aspectRatio: 2,
                 animation: {
-                    duration: 150,
+                    duration: 0,
                 },
                 scales: {
                     yAxes: [{
@@ -112,22 +136,15 @@
             };
         }
 
-        private get days() {
-            return [...new Array(this.settingsModule.settings.charts.days)]
-                .map((_, i) => {
-                    return sub(startOfDay(new Date()), {
-                        days: this.settingsModule.settings.charts.days - i - 1,
-                    }).getTime();
-                });
-        }
-
         private readonly chartData: Chart.ChartData = {
             labels: this.labels,
             datasets: this.datasetsInternal,
         };
 
+        private readonly allDays: Date[] = [];
+
         private init() {
-            this.updateDataAndLabels();
+            this.initData();
 
             this.datasetsInternal.push(
                 ...this.datasets.map((dataset, i) => ({
@@ -144,25 +161,71 @@
             );
         }
 
-        private updateDataAndLabels() {
-            const expos = this.expoModule.expos.filter((d) =>
-                this.days.includes(startOfDay(d.date).getTime())
-            );
+        private initData() {
+            const firstDay = startOfDay(this.expoModule.firstExpo?.date
+                ?? sub(new Date(), { days: this.settingsModule.settings.charts.days }));
 
-            this.datasetsData.splice(0);
-            this.datasetsData.push(
+            let currentDay = firstDay;
+            const today = startOfDay(new Date());
+            while (currentDay <= today) {
+                this.allDays.push(currentDay);
+                currentDay = add(currentDay, { days: 1 });
+            }
+
+            const exposByDay: { [key: number]: ExpoEvent[] | undefined } = this.expoModule.expos.reduce(
+                (acc, expo) => {
+                    const day = startOfDay(expo.date).getTime();
+                    if (acc[day] == null) {
+                        acc[day] = [];
+                    }
+                    acc[day]!.push(expo);
+                    return acc;
+                },
+                {} as { [key: number]: ExpoEvent[] | undefined });
+
+            this.fullDatasetsData.push(
                 ...this.datasets.map(
-                    dataset => this.days.map((day, x) => ({
-                        x,
-                        y: dataset.aggregator(expos.filter(expo => isSameDay(expo.date, day)))
-                    }))
+                    dataset => this.allDays.map(
+                        day => dataset.aggregator(exposByDay[day.getTime()] ?? [])
+                    )
                 )
             );
 
+
+            this.updateDataAndLabels();
+        }
+
+        private updateDataAndLabels() {
+            const count = this.settingsModule.settings.charts.days;
+            const startIndex = this.allDays.length - this.daysOffset - count;
+            const indices: number[] = [];
+            for (let i = 0; i < count; i++) {
+                indices.push(i + startIndex);
+            }
+
+            if (this.datasetsData.length == 0) {
+                this.datasetsData.push(
+                    ...this.datasets.map(
+                        () => indices.map(index => ({
+                            x: index - startIndex,
+                            y: 0,
+                        }))
+                    )
+                );
+            }
+
+            this.datasetsData.forEach((data, datasetIndex) => {
+                indices.forEach((totalIndex, i) => {
+                    data[i].y = this.fullDatasetsData[datasetIndex][totalIndex];
+                });
+            });
+
             this.labels.splice(0);
             this.labels.push(
-                ...this.days.map((day) => this.$d(day, 'short'))
+                ...indices.map((index) => this.$d(this.allDays[index], 'short'))
             );
+
+
         }
 
         private mounted() {
@@ -186,6 +249,24 @@
             this.chart!.data.datasets![index].hidden = !this.chart!.data.datasets![index].hidden;
 
             this.renderOrUpdate();
+        }
+
+        private get scrollbar(): HTMLDivElement {
+            return this.$refs.scrollbar as HTMLDivElement;
+        }
+
+        private updateScroll() {
+            const scroll = 1 + (this.scrollbar.scrollLeft / (this.scrollbar.scrollWidth - this.scrollbar.clientWidth));
+
+            const daysOffset = this.allDays.length
+                - this.settingsModule.settings.charts.days
+                - Math.round(scroll * (this.allDays.length - this.settingsModule.settings.charts.days));
+
+            if (daysOffset != this.daysOffset) {
+                this.daysOffset = daysOffset;
+                this.updateDataAndLabels();
+                this.renderOrUpdate();
+            }
         }
     }
 </script>
@@ -222,6 +303,25 @@
 
             .dataset-color {
                 filter: grayscale(100%);
+            }
+        }
+    }
+
+    .scrollable-chart {
+        display: grid;
+        grid-template-rows: 1fr 20px;
+    }
+
+    .chart-scrollbar-container {
+        position: relative;
+        padding-left: 100px;
+
+        .chart-scrollbar {
+            overflow-x: auto;
+            direction: rtl;
+
+            .thumb {
+                height: 1px;
             }
         }
     }
