@@ -52,17 +52,23 @@
                     duration: 150,
                 },
                 scales: {
-                    yAxes: [
-                        {
-                            stacked: this.stacked,
-                            afterFit: (scaleInstance) => {
-                                scaleInstance.width = 100; //sets width of y-axis labels to 100px
-                            },
-                            ticks: {
-                                callback: this.yTickFormatter ?? ((value) => value)
-                            }
+                    yAxes: [{
+                        gridLines: {
+                            color: 'rgba(255, 255, 255, 0.1)'
                         },
-                    ],
+                        stacked: this.stacked,
+                        afterFit: (scaleInstance) => {
+                            scaleInstance.width = 100; //sets width of y-axis labels to 100px
+                        },
+                        ticks: {
+                            callback: this.yTickFormatter ?? ((value) => value)
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            color: 'rgba(255, 255, 255, 0.02)'
+                        },
+                    }],
                 },
                 tooltips: {
                     mode: "index",
