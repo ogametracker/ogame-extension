@@ -10,8 +10,6 @@
 <script lang="ts">
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
-    import ExpoModule from "@/store/modules/ExpoModule";
-    import SettingsModule from "@/store/modules/SettingsModule";
     import Ship from "@/models/Ship";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
@@ -24,9 +22,6 @@
         },
     })
     export default class ExpeditionOverviewTables extends Vue {
-        private readonly expoModule = ExpoModule;
-        private readonly settingsModule = SettingsModule;
-
         private readonly expoType = ExpoType.fleet;
 
         private readonly findableShips = [

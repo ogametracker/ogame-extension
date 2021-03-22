@@ -8,8 +8,6 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
     import isInRange from "@/utils/isInRange";
-    import ExpoModule from "@/store/modules/ExpoModule";
-    import SettingsModule from "@/store/modules/SettingsModule";
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
 
     @Component({
@@ -18,9 +16,6 @@
         },
     })
     export default class ExpeditionOverviewTables extends Vue {
-        private readonly expoModule = ExpoModule;
-        private readonly settingsModule = SettingsModule;
-
         private get items(): ExpoRangeTableItem[] {
             return Object.keys(ExpoType).map(expoType => ({
                 label: this.$t(`expoTypes['${expoType}']`) as string,

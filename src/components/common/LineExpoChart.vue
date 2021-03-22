@@ -117,8 +117,10 @@
                             scaleInstance.width = 100; //sets width of y-axis labels to 100px
                         },
                         ticks: {
-                            callback: this.yTickFormatter ?? ((value) => value)
-                        }
+                            callback: this.yTickFormatter ?? ((value) => value),
+                            min: 0,
+                            max: this.maxValue
+                        },
                     }],
                     xAxes: [{
                         gridLines: {
@@ -141,6 +143,7 @@
             datasets: this.datasetsInternal,
         };
 
+        private maxValue = 1;
         private readonly allDays: Date[] = [];
 
         private init() {
@@ -191,6 +194,22 @@
                 )
             );
 
+            //find cumulative max
+            this.allDays.forEach((_, i) => {
+                const max = this.fullDatasetsData.reduce((acc, data) => {
+                    if (this.stacked) {
+                        return acc + data[i];
+                    }
+                    return Math.max(acc, data[i]);
+                }, 0);
+
+                if (max > this.maxValue) {
+                    this.maxValue = max;
+                }
+            });
+            //round up to nicer value
+            const power = Math.max(0, Math.floor(this.maxValue).toString().length - 2);
+            this.maxValue = (Math.floor(this.maxValue / 10 ** power) + 1) * 10 ** power;
 
             this.updateDataAndLabels();
         }
@@ -224,8 +243,6 @@
             this.labels.push(
                 ...indices.map((index) => this.$d(this.allDays[index], 'short'))
             );
-
-
         }
 
         private mounted() {

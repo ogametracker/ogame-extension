@@ -11,8 +11,6 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
     import isInRange from "@/utils/isInRange";
-    import ExpoModule from "@/store/modules/ExpoModule";
-    import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
@@ -24,9 +22,6 @@
         },
     })
     export default class ExpeditionOverviewTables extends Vue {
-        private readonly expoModule = ExpoModule;
-        private readonly settingsModule = SettingsModule;
-
         private readonly expoType = ExpoType.resources;
 
         private get items(): ExpoRangeTableItem[] {

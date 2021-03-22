@@ -29,17 +29,13 @@
     import ExpoType from '@/models/expeditions/ExpoType';
     import Item from '@/models/items/Item';
     import ExpoModule from '@/store/modules/ExpoModule';
-    import SettingsModule from '@/store/modules/SettingsModule';
-    import { startOfDay, format, isSameDay } from 'date-fns';
+    import { startOfDay, isSameDay } from 'date-fns';
     import { Component, Vue } from 'vue-property-decorator';
     import Items from '@/models/items/';
 
     @Component({})
     export default class ExpeditionItemChart extends Vue {
-        private readonly dateFormat = 'dd.MM.yyyy';
-
         private readonly expoModule = ExpoModule;
-        private readonly settingsModule = SettingsModule;
         private readonly items = Items;
 
         private get allDays() {
@@ -49,7 +45,7 @@
 
             return [...days].sort((a, b) => a - b)
                 .map(date => ({
-                    text: format(date, this.dateFormat),
+                    text: this.$d(date, 'short'),
                     date: new Date(date)
                 }))
                 .reverse();
