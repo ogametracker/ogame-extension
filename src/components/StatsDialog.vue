@@ -74,6 +74,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '@/styles/colors';
+
     $padding: 50px;
 
     .stats-dialog {
@@ -105,13 +107,13 @@
         border-radius: 6px;
         overflow: hidden;
 
-        background: black;
+        background: linear-gradient(290deg, #010106, #02050c);
     }
 
     .stats-dialog-nav {
         display: flex;
         flex-direction: row;
-        border-bottom: 2px solid blue;
+        border-bottom: 2px solid $ogame-blue;
     }
 
     .nav {
@@ -128,12 +130,12 @@
             cursor: pointer;
 
             &:hover {
-                background: rgba(blue, 0.5);
+                background: rgba($ogame-blue, 0.5);
             }
 
             &-active,
             &-active:hover {
-                background: blue;
+                background: $ogame-blue;
             }
         }
     }

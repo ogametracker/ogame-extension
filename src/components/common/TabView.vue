@@ -75,6 +75,8 @@
     }
 </script>
 <style lang="scss">
+    @import '@/styles/colors';
+
     $vertical-tab-nav-width: 150px;
     $horizontal-tab-nav-height: 40px;
 
@@ -93,12 +95,12 @@
             cursor: pointer;
 
             &:hover {
-                background: rgba(blue, 0.5);
+                background: rgba($ogame-blue, 0.3);
             }
 
             &.active,
             &.active:hover {
-                background: blue;
+                background: rgba($ogame-blue, 0.7);
             }
         }
     }

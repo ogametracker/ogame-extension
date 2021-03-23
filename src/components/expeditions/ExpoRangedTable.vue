@@ -127,20 +127,38 @@
     }
 </script>
 <style lang="scss">
+    @import "@/styles/colors";
+
     table {
         border-spacing: 0;
         border-collapse: collapse;
 
         width: 100%;
+        text-align: right;
+
+        thead {
+            background: rgba($ogame-blue, 0.5);
+        }
+
+        tbody {
+            tr:nth-of-type(even) {
+                background: rgba(desaturate($ogame-blue, 50%), 0.02);
+            }
+
+            tr:hover {
+                background: rgba(saturate($ogame-blue, 10%), 0.05);
+            }
+        }
 
         td,
         th {
-            border: 1px solid rgba(white, 0.2);
             padding: 8px;
         }
 
-        .total-row {
+        tr.total-row {
             border-top-style: double;
+            font-weight: bold;
+            background: rgba($ogame-blue, 0.1) !important;
         }
     }
 </style>
