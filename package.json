@@ -17,7 +17,8 @@
     "vue-class-component": "^7.2.3",
     "vue-i18n": "^8.24.1",
     "vue-property-decorator": "^9.1.2",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.31",

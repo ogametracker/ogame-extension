@@ -29,6 +29,7 @@
                     <li
                         class="nav-item"
                         style="font-size: 24px; padding: 9px"
+                        @click="excelExport()"
                     >
                         <icon name="microsoft-excel" />
                     </li>
@@ -65,6 +66,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
+    import xlsx from 'xlsx';
+    import localDownload from '@/utils/localDownload';
 
     @Component({
         components: {
@@ -76,6 +79,27 @@
         private value!: boolean;
 
         private activeTab = 'expos';
+
+
+        private excelExport() {
+            //TODO: export all tables as their own sheet
+            //TODO: export raw data as own sheet
+
+            const testData = [
+                {test: 123, hallo: 'name', expos: 3664},
+                {test: 234, hallo: 'name', expos: 9999},
+                {test: 345, hallo: 'name', expos: 3336},
+                {test: 456, hallo: 'name', expos: 6656},
+                {test: 567, hallo: 'name', expos: 3373},
+            ];
+
+            const sheet = xlsx.utils.json_to_sheet(testData);
+
+            const workbook = xlsx.utils.book_new();
+            xlsx.utils.book_append_sheet(workbook, sheet, "Test");
+
+            xlsx.writeFile(workbook, 'test.xlsx');
+        }
     }
 </script>
 
