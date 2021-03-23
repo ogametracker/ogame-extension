@@ -26,6 +26,12 @@
                     >
                         Einstellungen
                     </li>
+                    <li
+                        class="nav-item"
+                        style="font-size: 24px; padding: 9px"
+                    >
+                        <icon name="microsoft-excel" />
+                    </li>
                 </ul>
 
                 <div class="close-stats-dialog-wrapper">
@@ -74,7 +80,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '@/styles/colors';
+    @import "@/styles/colors";
 
     $padding: 50px;
 
