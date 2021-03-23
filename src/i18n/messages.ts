@@ -37,7 +37,7 @@ export default {
             [ExpoType.fleet]: 'Flotte',
             [ExpoType.item]: 'Item',
             [ExpoType.lostFleet]: 'Flottenverlust',
-            [ExpoType.nothing]: 'Nichts',
+            [ExpoType.nothing]: 'Ohne Ereignis',
             [ExpoType.resources]: 'Rohstoffe',
             [ExpoType.trader]: 'Händler',
         },
