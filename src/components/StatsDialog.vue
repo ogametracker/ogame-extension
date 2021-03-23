@@ -9,6 +9,7 @@
                         :class="{ 'nav-item-active': activeTab == 'expos' }"
                         @click="activeTab = 'expos'"
                     >
+                        <span class="icon-expo" />
                         Expeditionen
                     </li>
                     <li
@@ -16,7 +17,16 @@
                         :class="{ 'nav-item-active': activeTab == 'attacks' }"
                         @click="activeTab = 'attacks'"
                     >
+                        <span class="icon-attack" />
                         Angriffe
+                    </li>
+                    <li
+                        class="nav-item"
+                        :class="{ 'nav-item-active': activeTab == 'tfs' }"
+                        @click="activeTab = 'tfs'"
+                    >
+                        <span class="icon-tf" />
+                        Trümmerfelder
                     </li>
                     <li style="flex-grow: 1"></li>
                     <li
@@ -24,13 +34,10 @@
                         :class="{ 'nav-item-active': activeTab == 'settings' }"
                         @click="activeTab = 'settings'"
                     >
+                        <icon name="cog" />
                         Einstellungen
                     </li>
-                    <li
-                        class="nav-item"
-                        style="font-size: 24px; padding: 9px"
-                        @click="excelExport()"
-                    >
+                    <li class="nav-item" @click="excelExport()">
                         <icon name="microsoft-excel" />
                     </li>
                 </ul>
@@ -54,6 +61,20 @@
                     <!-- router view? -->
                     Angriffe
                 </span>
+                <span v-else-if="activeTab == 'tfs'">
+                    <!-- router view? -->
+                    TFs
+
+                    <code style="white-space: pre">
+                        msg_title: "Schürfbericht von TF auf [8:220:15]."
+                        <br />
+                        <br />
+                        msg_content: "Deine (Recycler|Pathfinder|?) (1 Schiffe)
+                        haben eine Gesamtladekapazität von 34.000. Am Ziel
+                        [8:220:15] treiben 0 Metall und 11.500 Kristall im Raum.
+                        Du hast 0 Metall und 11.500 Kristall abgebaut."
+                    </code>
+                </span>
                 <span v-else-if="activeTab == 'settings'">
                     <!-- router view? -->
                     Einstellungen
@@ -66,8 +87,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
-    import xlsx from 'xlsx';
-    import localDownload from '@/utils/localDownload';
+    import ExcelExport from '@/export/ExcelExport';
 
     @Component({
         components: {
@@ -82,23 +102,7 @@
 
 
         private excelExport() {
-            //TODO: export all tables as their own sheet
-            //TODO: export raw data as own sheet
-
-            const testData = [
-                {test: 123, hallo: 'name', expos: 3664},
-                {test: 234, hallo: 'name', expos: 9999},
-                {test: 345, hallo: 'name', expos: 3336},
-                {test: 456, hallo: 'name', expos: 6656},
-                {test: 567, hallo: 'name', expos: 3373},
-            ];
-
-            const sheet = xlsx.utils.json_to_sheet(testData);
-
-            const workbook = xlsx.utils.book_new();
-            xlsx.utils.book_append_sheet(workbook, sheet, "Test");
-
-            xlsx.writeFile(workbook, 'test.xlsx');
+            ExcelExport.export();
         }
     }
 </script>
@@ -155,9 +159,18 @@
         flex-grow: 1;
 
         .nav-item {
-            padding: 16px;
+            line-height: 50px;
+            height: 50px;
             font-size: 13px;
+            padding: 0 16px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            .mdi {
+                font-size: 24px;
+                margin-right: 6px;
+            }
 
             &:hover {
                 background: rgba($ogame-blue, 0.5);
@@ -185,5 +198,36 @@
     .stats-dialog-body {
         overflow: hidden;
         padding: 16px 16px 32px 16px;
+    }
+
+    .icon-expo,
+    .icon-attack,
+    .icon-tf {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        position: relative;
+        font-size: 36px;
+
+        &::before {
+            content: "";
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .icon-expo::before {
+        background-image: url(~@/assets/icons/expedition.svg);
+    }
+    .icon-attack::before {
+        background-image: url(~@/assets/icons/attack.svg);
+    }
+    .icon-tf::before {
+        background-image: url(~@/assets/icons/wreckfield.svg);
     }
 </style>
