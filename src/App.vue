@@ -18,6 +18,8 @@
             (window as any).ogameTracker = this;
         }
     }
+
+
 </script>
 
 <style lang="scss">

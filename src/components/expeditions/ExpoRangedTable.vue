@@ -101,7 +101,7 @@
                 items: this.items.map((item, i) => ({
                     label: item.label,
                     rangeValues: rangeInfos.map(ri => ri.itemValues[i]),
-                    percentage: totalRange.itemValues[i] / totalRange.total,
+                    percentage: totalRange.itemValues[i] / Math.max(1, totalRange.total),
                 }))
             };
         }

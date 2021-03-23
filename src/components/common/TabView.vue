@@ -90,16 +90,24 @@
 
         .tab-nav-item {
             padding: 16px;
-            border-radius: 4px;
             cursor: pointer;
+            border-radius: 4px;
 
             &:hover {
-                background: rgba($ogame-blue, 0.3);
+                background: linear-gradient(
+                    90deg,
+                    rgba($ogame-blue, 0.3) 30%,
+                    rgba(darken($ogame-blue, 20%), 0.3)
+                );
             }
 
             &.active,
             &.active:hover {
-                background: rgba($ogame-blue, 0.7);
+                background: linear-gradient(
+                    90deg,
+                    rgba($ogame-blue, 0.7) 30%,
+                    rgba(darken($ogame-blue, 20%), 0.7)
+                );
             }
         }
     }

@@ -141,7 +141,7 @@
         border-radius: 6px;
         overflow: hidden;
 
-        background: linear-gradient(290deg, #010106, #02050c);
+        background: linear-gradient(52deg, #010108, #040a17);
     }
 
     .stats-dialog-nav {
@@ -173,12 +173,20 @@
             }
 
             &:hover {
-                background: rgba($ogame-blue, 0.5);
+                background: linear-gradient(
+                    180deg,
+                    rgba(darken($ogame-blue, 25%), 0.5),
+                    rgba($ogame-blue, 0.5)
+                );
             }
 
             &-active,
             &-active:hover {
-                background: $ogame-blue;
+                background: linear-gradient(
+                    180deg,
+                    darken($ogame-blue, 25%),
+                    $ogame-blue
+                );
             }
         }
     }
