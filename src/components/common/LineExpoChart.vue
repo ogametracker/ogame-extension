@@ -344,6 +344,7 @@
     .chart-scrollbar-container {
         position: relative;
         padding-left: 100px;
+        padding-top: 10px;
 
         .chart-scrollbar {
             overflow-x: auto;

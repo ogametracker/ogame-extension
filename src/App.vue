@@ -25,5 +25,16 @@
         color: white;
         font-family: Verdana, Arial, SunSans-Regular, sans-serif;
         font-size: 14px;
+
+        *::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+            background: none;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background: #545454;
+        }
     }
 </style>

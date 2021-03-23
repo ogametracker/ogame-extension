@@ -1,17 +1,11 @@
 <template>
     <div class="tab-view" :class="{ 'tab-view-vertical': vertical }">
-        <div class="tab-nav-list">
-            <div
-                v-for="(item, index) in items"
-                :key="item.name + 'nav-item'"
-                @click="setActiveIndex(index)"
-                class="tab-nav-item"
-                :class="{ active: activeIndex == index }"
-            >
-                {{ item.title }}
-            </div>
-        </div>
-
+        <tab-view-nav
+            class="tab-nav-list"
+            :items="items"
+            :active-index="activeIndex"
+            @update:activeIndex="setActiveIndex($event)"
+        />
         <div
             v-for="(item, index) in items"
             :key="item.name + 'content'"
@@ -26,13 +20,18 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
+    import TabViewNav from './TabViewNav.vue';
 
     export interface TabViewItem {
         name: string;
         title: string;
     }
 
-    @Component({})
+    @Component({
+        components: {
+            TabViewNav,
+        },
+    })
     export default class TabView extends Vue {
         @Prop({ required: true, type: Array as PropType<TabViewItem[]> })
         private items!: TabViewItem[];
@@ -75,7 +74,7 @@
     }
 </script>
 <style lang="scss">
-    @import '@/styles/colors';
+    @import "@/styles/colors";
 
     $vertical-tab-nav-width: 150px;
     $horizontal-tab-nav-height: 40px;
