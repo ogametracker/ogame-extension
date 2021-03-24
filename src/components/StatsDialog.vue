@@ -10,7 +10,7 @@
                         @click="activeTab = 'expos'"
                     >
                         <span class="icon-expo" />
-                        Expeditionen
+                        {{ $t("extension.expeditions") }}
                     </li>
                     <li
                         class="nav-item"
@@ -18,7 +18,7 @@
                         @click="activeTab = 'attacks'"
                     >
                         <span class="icon-attack" />
-                        Angriffe
+                        {{ $t("extension.battles") }}
                     </li>
                     <li
                         class="nav-item"
@@ -26,7 +26,7 @@
                         @click="activeTab = 'tfs'"
                     >
                         <span class="icon-tf" />
-                        Trümmerfelder
+                        {{ $t("extension.tfs") }}
                     </li>
                     <li style="flex-grow: 1"></li>
                     <li
@@ -35,7 +35,7 @@
                         @click="activeTab = 'settings'"
                     >
                         <icon name="cog" />
-                        Einstellungen
+                        {{ $t("extension.settings") }}
                     </li>
                     <li class="nav-item" @click="excelExport()">
                         <icon name="microsoft-excel" />

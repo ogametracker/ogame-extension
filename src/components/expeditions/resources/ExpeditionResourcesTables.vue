@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h5>{{ $t("expos.resources") }}</h5>
+        <h2>{{ $t("extension.eventSizes") }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -25,7 +25,7 @@
 
         private get items(): ExpoRangeTableItem[] {
             return Object.keys(Resource).map(resource => ({
-                label: this.$t(`resources['${resource}']`) as string,
+                label: this.$t(`ogame.resources['${resource}']`) as string,
                 getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.resources
                 ).reduce((acc, cur) => acc + cur.resources![resource as Resource], 0)

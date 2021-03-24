@@ -27,11 +27,11 @@
             return [
                 {
                     name: 'chart',
-                    title: this.$t('chart') as string,
+                    title: this.$t('extension.chart') as string,
                 },
                 {
                     name: 'tables',
-                    title: this.$t('tables') as string,
+                    title: this.$t('extension.tables') as string,
                 },
             ];
         }

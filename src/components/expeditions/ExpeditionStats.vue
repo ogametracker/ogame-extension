@@ -47,27 +47,27 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: 'Übersicht',
+                title: this.$t('extension.expoMenu.overview') as string,
             },
             {
                 name: 'resources',
-                title: 'Rohstofffunde',
+                title:  this.$t('extension.expoMenu.resources') as string,
             },
             {
                 name: 'fleet',
-                title: 'Flottenfunde',
+                title:  this.$t('extension.expoMenu.fleet') as string,
             },
             {
                 name: 'darkMatter',
-                title: 'DM-Funde',
+                title:  this.$t('extension.expoMenu.darkMatter') as string,
             },
             {
                 name: 'items',
-                title: 'Itemfunde',
+                title:  this.$t('extension.expoMenu.items') as string,
             },
             {
                 name: 'distribution',
-                title: 'Verteilung in %',
+                title:  this.$t('extension.expoMenu.distribution') as string,
             },
         ];
     }

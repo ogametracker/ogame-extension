@@ -20,7 +20,7 @@
     export default class ExpeditionOverviewChart extends Vue {
         private get datasets(): LineExpoChartDataset[] {
             return Object.keys(ExpoType).map(expoType => ({
-                label: this.$t(`expoTypes['${expoType}']`) as string,
+                label: this.$t(`ogame.expoTypes['${expoType}']`) as string,
                 fill: true,
                 color: SettingsModule.settings.charts.colors.overview[expoType as ExpoType],
                 aggregator: expos => expos.filter(expo => expo.type == expoType).length
@@ -29,7 +29,7 @@
 
         private getTooltipFooter(items: any[]) {
             const total = items.reduce((acc, cur) => acc + parseInt(cur.value), 0);
-            return `${total} ${this.$t('expeditions')}`;
+            return `${total} ${this.$t('extension.expeditions')}`;
         }
     }
 </script>

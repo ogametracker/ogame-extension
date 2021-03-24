@@ -26,7 +26,7 @@
         ];
 
         private readonly items: ExpoRangeTableItem[] = this.sizes.map(size => ({
-            label: this.$t(`expoSizes['${size}']`) as string,
+            label: this.$t(`ogame.expoSizes['${size}']`) as string,
             getValue: expos => expos.filter(expo => expo.type == this.type && expo.size! == size).length,
         }));
     }

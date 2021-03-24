@@ -3,16 +3,19 @@ export default {
     chart: 'Diagramm',
     tables: 'Tabellen',
     overview: 'Übersicht',
-    expos: {
+    eventSizes: 'Fundgrößen',
+    expoMenu: {
         overview: 'Übersicht',
         resources: 'Rohstofffunde',
         fleet: 'Flottenfunde',
         darkMatter: 'DM-Funde',
-        item: 'Itemfunde',
+        items: 'Itemfunde',
         distribution: 'Verteilung',
     },
     expeditions: 'Expeditionen',
-    attacks: 'Angriffe',
+    battles: 'Kämpfe',
+    tfs: 'Trümmerfelder',
+    settings: 'Einstellungen',
     since: 'Seit',
     darkMatter: 'Dunkle Materie',
 };

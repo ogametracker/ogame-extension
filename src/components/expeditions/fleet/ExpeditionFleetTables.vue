@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h5>{{ $t("expos.fleet") }}</h5>
+        <h2>{{ $t("extension.eventSizes") }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -40,7 +40,7 @@
 
         private get items(): ExpoRangeTableItem[] {
             return this.findableShips.map(ship => ({
-                label: this.$t(`ships['${ship}']`) as string,
+                label: this.$t(`ogame.ships['${ship}']`) as string,
                 getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.fleet
                 ).reduce((acc, cur) => acc + (cur.fleet?.[ship as Ship] ?? 0), 0)

@@ -39,7 +39,7 @@
             </tr>
             <tr v-if="showTotal" class="total-row">
                 <td>
-                    {{ $t(`total`) }}
+                    {{ $t(`extension.total`) }}
                 </td>
 
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
@@ -110,7 +110,7 @@
             const rangeDays = daysInRange(range) ?? Object.keys(exposByDay).map(d => new Date(parseInt(d)));
             const exposInRange = rangeDays.flatMap(day => exposByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$t("since")} ${this.$d(firstExpoDate, "short")}`;
+            const label = range.label ?? `${this.$t("extension.since")} ${this.$d(firstExpoDate, "short")}`;
             const itemValues = this.items.map(item => item.getValue(exposInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 
@@ -135,6 +135,8 @@
 
         width: 100%;
         text-align: right;
+
+        border: 1px solid rgba($ogame-blue, 0.5);
 
         thead {
             background: rgba($ogame-blue, 0.5);

@@ -28,7 +28,7 @@
         private get datasets(): LineExpoChartDataset[] {
             return this.resources.map(resource => ({
                 fill: true,
-                label: this.$t(`resources['${resource}']`) as string,
+                label: this.$t(`ogame.resources['${resource}']`) as string,
                 color: SettingsModule.settings.charts.colors.resources[resource],
                 aggregator: expos => expos.filter(expo => expo.type == ExpoType.resources)
                     .reduce((acc, expo) => acc + expo.resources![resource], 0),

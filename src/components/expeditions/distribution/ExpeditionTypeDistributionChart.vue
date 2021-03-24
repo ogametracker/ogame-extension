@@ -19,7 +19,7 @@
     export default class ExpeditionTypeDistributionChart extends Vue {
 
         private readonly datasets: LineExpoChartDataset[] = Object.keys(ExpoType).map(expoType => ({
-            label: this.$t(`expoTypes['${expoType}']`) as string,
+            label: this.$t(`ogame.expoTypes['${expoType}']`) as string,
             color: SettingsModule.settings.charts.colors.overview[expoType as ExpoType],
             fill: false,
             aggregator: expos => 100 * expos.filter(expo => expo.type == expoType).length / Math.max(expos.length, 10)

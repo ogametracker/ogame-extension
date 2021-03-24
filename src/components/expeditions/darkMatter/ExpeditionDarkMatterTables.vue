@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h5>DM-Funde</h5>
+        <h2>{{ $t("extension.eventSizes") }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -24,7 +24,7 @@
 
         private get items(): ExpoRangeTableItem[] {
             return [{
-                label: this.$t(`darkMatter`) as string,
+                label: this.$t(`ogame.premium.darkMatter`) as string,
                 getValue: (expos) => expos.filter(
                     expo => expo.type == ExpoType.darkMatter
                 ).reduce((acc, cur) => acc + (cur.darkMatter ?? 0), 0)

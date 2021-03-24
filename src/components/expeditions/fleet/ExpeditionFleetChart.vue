@@ -34,7 +34,7 @@
         ];
 
         private readonly datasets: LineExpoChartDataset[] = this.findableShips.map(ship => ({
-            label: this.$t(`ships['${ship}']`) as string,
+            label: this.$t(`ogame.ships['${ship}']`) as string,
             fill: true,
             color: SettingsModule.settings.charts.colors.fleet[ship]!,
             aggregator: expos => expos.filter(expo => expo.type == ExpoType.fleet)

@@ -19,7 +19,7 @@
     })
     export default class ExpeditionDarkMatterChart extends Vue {
         private readonly datasets: LineExpoChartDataset[] = [{
-            label: 'Dunkle Materie',
+            label: this.$t('ogame.premium.darkMatter') as string,
             fill: true,
             color: SettingsModule.settings.charts.colors.darkMatter,
             aggregator: expos => expos.filter(expo => expo.type == ExpoType.darkMatter)
