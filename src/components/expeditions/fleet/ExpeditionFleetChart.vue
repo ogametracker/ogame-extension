@@ -25,7 +25,7 @@
             return {
                 label: this.$t(`ogame.ships['${ship}']`) as string,
                 fill: true,
-                color: SettingsModule.settings.charts.colors.fleet[ship],
+                color: SettingsModule.settings.charts.colors.fleet[ship as unknown as Ship],
                 aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                     .reduce((acc, expo) => acc + expo.fleet[ship], 0)
             };
