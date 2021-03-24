@@ -22,7 +22,7 @@ import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
         private readonly datasets: LineExpoChartDataset[] = [{
             label: this.$t('ogame.premium.darkMatter') as string,
             fill: true,
-            color: SettingsModule.settings.charts.colors.darkMatter,
+            color: SettingsModule.settings.charts.colors.overview.darkMatter,
             aggregator: expos => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
                 .reduce((acc, cur) => acc + cur.darkMatter, 0)
         }];

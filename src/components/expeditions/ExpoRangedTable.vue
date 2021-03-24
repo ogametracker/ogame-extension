@@ -136,19 +136,19 @@
         width: 100%;
         text-align: right;
 
-        border: 1px solid rgba($ogame-blue, 0.5);
+        border: 1px solid rgba(var(--color), 0.5);
 
         thead {
-            background: rgba($ogame-blue, 0.5);
+            background: rgba(var(--color), 0.5);
         }
 
         tbody {
             tr:nth-of-type(even) {
-                background: rgba(desaturate($ogame-blue, 50%), 0.02);
+                background: rgba(var(--color), 0.01);
             }
 
             tr:hover {
-                background: rgba(saturate($ogame-blue, 10%), 0.05);
+                background: rgba(var(--color), 0.05);
             }
         }
 
@@ -160,7 +160,7 @@
         tr.total-row {
             border-top-style: double;
             font-weight: bold;
-            background: rgba($ogame-blue, 0.1) !important;
+            background: rgba(var(--color), 0.1) !important;
         }
     }
 </style>

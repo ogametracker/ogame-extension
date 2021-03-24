@@ -19,4 +19,5 @@ export default {
         month: 'Monate',
         all: 'Alles'
     },
+    hintDateRanges: 'Einstellungen für die Spalten der Übersichtstabellen. Zeilen sind per Drag&Drop sortierbar.',
 };

@@ -1,5 +1,7 @@
-import { ExpoFindableShips } from '@/models/expeditions/ExpoEvent';
+import ExpoType from '@/models/expeditions/ExpoType';
+import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
+import Ship from '@/models/Ship';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
@@ -46,37 +48,40 @@ class SettingsModule extends Vue {
             days: 31,
             colors: {
                 overview: {
-                    nothing: '#2472f3',
-                    resources: '#c72525',
-                    fleet: '#fbbc04',
-                    delay: '#9ecc00',
-                    early: '#00a95e',
-                    darkMatter: '#075263',
-                    pirates: '#de5200',
-                    aliens: '#16a8d4',
-                    item: '#ad135e',
-                    trader: '#00708a',
-                    lostFleet: '#ffffff',
+                    [ExpoType.nothing]: '#2472f3',
+                    [ExpoType.resources]: '#c72525',
+                    [ExpoType.fleet]: '#fbbc04',
+                    [ExpoType.delay]: '#9ecc00',
+                    [ExpoType.early]: '#00a95e',
+                    [ExpoType.darkMatter]: '#075263',
+                    [ExpoType.pirates]: '#de5200',
+                    [ExpoType.aliens]: '#16a8d4',
+                    [ExpoType.item]: '#ad135e',
+                    [ExpoType.trader]: '#00708a',
+                    [ExpoType.lostFleet]: '#ffffff',
                 },
                 resources: {
-                    metal: '#de5200',
-                    crystal: '#249df3',
-                    deuterium: '#14bf73',
+                    [Resource.metal]: '#de5200',
+                    [Resource.crystal]: '#249df3',
+                    [Resource.deuterium]: '#14bf73',
                 },
-                darkMatter: '#075263',
                 fleet: {
-                    [ExpoFindableShips.lightFighter]: '#2472f3',
-                    [ExpoFindableShips.heavyFighter]: '#c72525',
-                    [ExpoFindableShips.cruiser]: '#fbbc04',
-                    [ExpoFindableShips.battleship]: '#9ecc00',
-                    [ExpoFindableShips.bomber]: '#00a95e',
-                    [ExpoFindableShips.battlecruiser]: '#075263',
-                    [ExpoFindableShips.destroyer]: '#de5200',
-                    [ExpoFindableShips.reaper]: '#16a8d4',
-                    [ExpoFindableShips.pathfinder]: '#ad135e',
-                    [ExpoFindableShips.smallCargo]: '#00708a',
-                    [ExpoFindableShips.largeCargo]: '#ffffff',
-                    [ExpoFindableShips.espionageProbe]: '#4b17da',
+                    [Ship.lightFighter]: '#2472f3',
+                    [Ship.heavyFighter]: '#c72525',
+                    [Ship.cruiser]: '#fbbc04',
+                    [Ship.battleship]: '#9ecc00',
+                    [Ship.bomber]: '#00a95e',
+                    [Ship.battlecruiser]: '#075263',
+                    [Ship.destroyer]: '#de5200',
+                    [Ship.reaper]: '#16a8d4',
+                    [Ship.pathfinder]: '#ad135e',
+                    [Ship.smallCargo]: '#00708a',
+                    [Ship.largeCargo]: '#ffffff',
+                    [Ship.espionageProbe]: '#4b17da',
+                    [Ship.deathStar]: '#000000',
+                    [Ship.recycler]: '#000000',
+                    [Ship.colonyShip]: '#000000',
+                    [Ship.crawler]: '#000000',
                 }
             }
         },

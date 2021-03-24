@@ -1,6 +1,9 @@
 <template>
     <div class="settings">
         <h2>Datumsbereiche</h2>
+        <span style="margin-bottom: 8px; display: inline-block">
+            {{ $t("extension.settings.hintDateRanges") }}
+        </span>
         <table class="settings-table">
             <thead>
                 <tr>
@@ -56,11 +59,11 @@
                         </select>
 
                         <span v-else>
-                                {{
-                                    $t(
-                                        `extension.settings.rangeType['${range.type}']`
-                                    )
-                                }}
+                            {{
+                                $t(
+                                    `extension.settings.rangeType['${range.type}']`
+                                )
+                            }}
                         </span>
                     </td>
                     <td class="value-col">
@@ -103,6 +106,80 @@
                 </tr>
             </tfoot>
         </table>
+
+        <hr />
+
+        <h2>Diagrammfarben</h2>
+        <div class="color-tables">
+            <table class="settings-table">
+                <thead>
+                    <tr>
+                        <th>Expeditionsereignisse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="key in Object.keys(
+                            settings.charts.colors.overview
+                        )"
+                        :key="key"
+                    >
+                        <td>
+                            <color-input
+                                v-model="settings.charts.colors.overview[key]"
+                                :label="$t(`ogame.expoTypes['${key}']`)"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="settings-table">
+                <thead>
+                    <tr>
+                        <th>Rohstoffe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="key in Object.keys(
+                            settings.charts.colors.resources
+                        )"
+                        :key="key"
+                    >
+                        <td>
+                            <color-input
+                                v-model="settings.charts.colors.resources[key]"
+                                :label="$t(`ogame.resources['${key}']`)"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="settings-table">
+                <thead>
+                    <tr>
+                        <th>Schiffe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="key in Object.keys(
+                            settings.charts.colors.fleet
+                        )"
+                        :key="key"
+                    >
+                        <td>
+                            <color-input
+                                v-model="settings.charts.colors.fleet[key]"
+                                :label="$t(`ogame.ships['${key}']`)"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -111,10 +188,12 @@
     import SettingsModule from '@/store/modules/SettingsModule';
     import { Component, Vue } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
+    import ColorInput from './ColorInput.vue';
 
     @Component({
         components: {
             draggable,
+            ColorInput,
         },
     })
     export default class Settings extends Vue {
@@ -151,11 +230,10 @@
 
     .settings-table {
         width: auto;
-        text-align: center;
+        text-align: left;
         font-size: 14px;
 
         .name-col {
-            text-align: left;
             padding: 0;
 
             & > * {
@@ -189,7 +267,20 @@
         }
     }
 
+    .color-row {
+        padding: 8px 0;
+    }
+
     .clickable {
         cursor: pointer;
+    }
+
+    .color-tables {
+        display: flex;
+        
+        table {
+            min-width: 200px;
+            margin-right: 6px;
+        }
     }
 </style>
