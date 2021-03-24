@@ -1,3 +1,4 @@
+import { ExpoFindableShips } from '@/models/expeditions/ExpoEvent';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
 import { Component, Vue } from 'vue-property-decorator';
@@ -65,22 +66,18 @@ class SettingsModule extends Vue {
                 },
                 darkMatter: '#075263',
                 fleet: {
-                    [Ship.lightFighter]: '#2472f3',
-                    [Ship.heavyFighter]: '#c72525',
-                    [Ship.cruiser]: '#fbbc04',
-                    [Ship.battleship]: '#9ecc00',
-                    [Ship.bomber]: '#00a95e',
-                    [Ship.battlecruiser]: '#075263',
-                    [Ship.destroyer]: '#de5200',
-                    [Ship.reaper]: '#16a8d4',
-                    [Ship.pathfinder]: '#ad135e',
-                    [Ship.smallCargo]: '#00708a',
-                    [Ship.largeCargo]: '#ffffff',
-                    [Ship.espionageProbe]: '#4b17da',
-                    [Ship.crawler]: undefined,
-                    [Ship.colonyShip]: undefined,
-                    [Ship.recycler]: undefined,
-                    [Ship.deathStar]: undefined,
+                    [ExpoFindableShips.lightFighter]: '#2472f3',
+                    [ExpoFindableShips.heavyFighter]: '#c72525',
+                    [ExpoFindableShips.cruiser]: '#fbbc04',
+                    [ExpoFindableShips.battleship]: '#9ecc00',
+                    [ExpoFindableShips.bomber]: '#00a95e',
+                    [ExpoFindableShips.battlecruiser]: '#075263',
+                    [ExpoFindableShips.destroyer]: '#de5200',
+                    [ExpoFindableShips.reaper]: '#16a8d4',
+                    [ExpoFindableShips.pathfinder]: '#ad135e',
+                    [ExpoFindableShips.smallCargo]: '#00708a',
+                    [ExpoFindableShips.largeCargo]: '#ffffff',
+                    [ExpoFindableShips.espionageProbe]: '#4b17da',
                 }
             }
         },

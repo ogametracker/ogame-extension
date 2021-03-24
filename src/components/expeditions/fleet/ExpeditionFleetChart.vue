@@ -11,6 +11,7 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
     import Ship from "@/models/Ship";
+    import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
@@ -18,27 +19,16 @@
         },
     })
     export default class ExpeditionFleetChart extends Vue {
-        private readonly findableShips = [
-            Ship.lightFighter,
-            Ship.heavyFighter,
-            Ship.cruiser,
-            Ship.battleship,
-            Ship.bomber,
-            Ship.battlecruiser,
-            Ship.destroyer,
-            Ship.reaper,
-            Ship.pathfinder,
-            Ship.smallCargo,
-            Ship.largeCargo,
-            Ship.espionageProbe,
-        ];
 
-        private readonly datasets: LineExpoChartDataset[] = this.findableShips.map(ship => ({
-            label: this.$t(`ogame.ships['${ship}']`) as string,
-            fill: true,
-            color: SettingsModule.settings.charts.colors.fleet[ship]!,
-            aggregator: expos => expos.filter(expo => expo.type == ExpoType.fleet)
-                .reduce((acc, expo) => acc + (expo.fleet![ship as Ship] ?? 0), 0)
-        }));
+        private readonly datasets: LineExpoChartDataset[] = Object.keys(ExpoFindableShips).map(shipName => {
+            const ship = shipName as unknown as ExpoFindableShips;
+            return {
+                label: this.$t(`ogame.ships['${ship}']`) as string,
+                fill: true,
+                color: SettingsModule.settings.charts.colors.fleet[ship],
+                aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
+                    .reduce((acc, expo) => acc + expo.fleet[ship], 0)
+            };
+        });
     }
 </script>

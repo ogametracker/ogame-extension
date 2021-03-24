@@ -3,7 +3,7 @@ import xlsx from 'xlsx';
 import i18n from '@/i18n/vue-i18n';
 import ExpoType from "@/models/expeditions/ExpoType";
 import { add, startOfDay } from "date-fns";
-import ExpoEvent from "@/models/expeditions/ExpoEvent";
+import ExpoEvent, { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
 import Resource from "@/models/Resource";
 
 interface ExportHelper {
@@ -33,13 +33,13 @@ class ExcelExport {
 
 
     private exportExpoResources(expoData: ExpoData): any[] {
-        const resources = [ Resource.metal, Resource.crystal, Resource.deuterium ];
+        const resources = [Resource.metal, Resource.crystal, Resource.deuterium];
 
         const data = expoData.days.map(day => [
             i18n.d(day, 'short'),
-            ...resources.map(resource => (expoData.exposByDay[day.getTime()] ?? [])
-                .filter(expo => expo.type == ExpoType.resources)
-                .reduce((acc, cur) => acc + cur.resources![resource], 0)
+            ...resources.map(resource => ((expoData.exposByDay[day.getTime()] ?? [])
+                .filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
+                .reduce((acc, cur) => acc + cur.resources[resource], 0)
             ),
         ]);
 

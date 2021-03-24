@@ -13,6 +13,7 @@
     import Ship from "@/models/Ship";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
+    import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
@@ -23,28 +24,15 @@
     export default class ExpeditionOverviewTables extends Vue {
         private readonly expoType = ExpoType.fleet;
 
-        private readonly findableShips = [
-            Ship.lightFighter,
-            Ship.heavyFighter,
-            Ship.cruiser,
-            Ship.battleship,
-            Ship.bomber,
-            Ship.battlecruiser,
-            Ship.destroyer,
-            Ship.reaper,
-            Ship.pathfinder,
-            Ship.smallCargo,
-            Ship.largeCargo,
-            Ship.espionageProbe,
-        ];
-
         private get items(): ExpoRangeTableItem[] {
-            return this.findableShips.map(ship => ({
-                label: this.$t(`ogame.ships['${ship}']`) as string,
-                getValue: (expos) => expos.filter(
-                    expo => expo.type == ExpoType.fleet
-                ).reduce((acc, cur) => acc + (cur.fleet?.[ship as Ship] ?? 0), 0)
-            }));
+            return Object.keys(ExpoFindableShips).map(shipName => {
+                const ship = shipName as unknown as ExpoFindableShips;
+                return {
+                    label: this.$t(`ogame.ships['${ship}']`) as string,
+                    getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
+                        .reduce((acc, cur) => acc + cur.fleet[ship], 0)
+                };
+            });
         }
     }
 </script>

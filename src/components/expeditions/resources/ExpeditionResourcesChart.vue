@@ -12,6 +12,7 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
+    import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
@@ -19,20 +20,17 @@
         },
     })
     export default class ExpeditionResourcesChart extends Vue {
-        private readonly resources = [
-            Resource.metal,
-            Resource.crystal,
-            Resource.deuterium,
-        ];
-
         private get datasets(): LineExpoChartDataset[] {
-            return this.resources.map(resource => ({
-                fill: true,
-                label: this.$t(`ogame.resources['${resource}']`) as string,
-                color: SettingsModule.settings.charts.colors.resources[resource],
-                aggregator: expos => expos.filter(expo => expo.type == ExpoType.resources)
-                    .reduce((acc, expo) => acc + expo.resources![resource], 0),
-            }));
+            return Object.keys(Resource).map(resourceName => {
+                const resource = resourceName as Resource;
+                return {
+                    fill: true,
+                    label: this.$t(`ogame.resources['${resource}']`) as string,
+                    color: SettingsModule.settings.charts.colors.resources[resource],
+                    aggregator: expos => (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
+                        .reduce((acc, expo) => acc + expo.resources[resource], 0),
+                };
+            });
         }
 
         private getTooltipLabel(item: any, data: any) {

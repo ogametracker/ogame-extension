@@ -12,6 +12,7 @@
     import { Component, Vue } from "vue-property-decorator";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '../ExpoRangedTable.vue';
+    import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
@@ -25,9 +26,8 @@
         private get items(): ExpoRangeTableItem[] {
             return [{
                 label: this.$t(`ogame.premium.darkMatter`) as string,
-                getValue: (expos) => expos.filter(
-                    expo => expo.type == ExpoType.darkMatter
-                ).reduce((acc, cur) => acc + (cur.darkMatter ?? 0), 0)
+                getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
+                    .reduce((acc, cur) => acc + cur.darkMatter, 0)
             }];
         }
     }

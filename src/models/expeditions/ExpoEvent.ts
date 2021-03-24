@@ -4,72 +4,86 @@ import ExpoType from "./ExpoType";
 import Fleet from '../Fleet';
 import Item from "../items/Item";
 import Resource from "../Resource";
+import Ship from "../Ship";
 
 
 export interface ExpoEventBase {
     id: number | string;
     date: number;
     type: ExpoType;
-    size?: ExpoSize;
-    fleet?: Fleet;
-    darkMatter?: number;
-    resources?: ExpoEventResourcesList;
 }
 
-export type ExpoEventDarkMatter = ExpoEventBase & {
-    type: ExpoType.darkMatter;
+export interface ExpoSizeableEvent {
     size: ExpoSize;
-    darkMatter: number;
 }
+
+export type ExpoEventDarkMatter = ExpoEventBase & ExpoSizeableEvent & {
+    type: ExpoType.darkMatter;
+    darkMatter: number;
+};
 
 export type ExpoEventResourcesList = Record<Resource, number>;
 
-export type ExpoEventResources = ExpoEventBase & {
+export type ExpoEventResources = ExpoEventBase & ExpoSizeableEvent & {
     type: ExpoType.resources;
-    size: ExpoSize;
     resources: ExpoEventResourcesList;
+};
+
+export enum ExpoFindableShips {
+    lightFighter = Ship.lightFighter,
+    heavyFighter = Ship.heavyFighter,
+    cruiser = Ship.cruiser,
+    battleship = Ship.battleship,
+    battlecruiser = Ship.battlecruiser,
+    bomber = Ship.bomber,
+    destroyer = Ship.destroyer,
+    reaper = Ship.reaper,
+    pathfinder = Ship.pathfinder,
+    smallCargo = Ship.smallCargo,
+    largeCargo = Ship.largeCargo,
+    espionageProbe = Ship.espionageProbe,
 }
 
-export type ExpoEventFleet = ExpoEventBase & {
+
+export type ExpoFindableFleet = Record<ExpoFindableShips, number>;
+
+export type ExpoEventFleet = ExpoEventBase & ExpoSizeableEvent & {
     type: ExpoType.fleet;
-    size: ExpoSize;
-    fleet: Fleet;
-}
+    fleet: ExpoFindableFleet;
+};
 
 export type ExpoEventItem = ExpoEventBase & {
     type: ExpoType.item;
-    item: Item;
-}
+    itemHash: string;
+};
 
 export type ExpoEventEarly = ExpoEventBase & {
     type: ExpoType.early;
-}
+};
 
 export type ExpoEventDelay = ExpoEventBase & {
     type: ExpoType.delay;
-}
+};
 
 export type ExpoEventTrader = ExpoEventBase & {
     type: ExpoType.trader;
-}
+};
 
 export type ExpoEventLostFleet = ExpoEventBase & {
     type: ExpoType.lostFleet;
-}
+};
 
 export type ExpoEventNothing = ExpoEventBase & {
     type: ExpoType.nothing;
-}
+};
 
-export type ExpoEventAliens = ExpoEventBase & {
+export type ExpoEventAliens = ExpoEventBase & ExpoSizeableEvent & {
     type: ExpoType.aliens;
-    size: ExpoSize;
-}
+};
 
-export type ExpoEventPirates = ExpoEventBase & {
+export type ExpoEventPirates = ExpoEventBase & ExpoSizeableEvent & {
     type: ExpoType.pirates;
-    size: ExpoSize;
-}
+};
 
 type ExpoEvent = ExpoEventDarkMatter
     | ExpoEventResources

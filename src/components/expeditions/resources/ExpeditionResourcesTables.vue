@@ -13,6 +13,7 @@
     import Resource from "@/models/Resource";
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
+    import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
@@ -24,12 +25,14 @@
         private readonly expoType = ExpoType.resources;
 
         private get items(): ExpoRangeTableItem[] {
-            return Object.keys(Resource).map(resource => ({
-                label: this.$t(`ogame.resources['${resource}']`) as string,
-                getValue: (expos) => expos.filter(
-                    expo => expo.type == ExpoType.resources
-                ).reduce((acc, cur) => acc + cur.resources![resource as Resource], 0)
-            }));
+            return Object.keys(Resource).map(resourceName => {
+                const resource = resourceName as Resource;
+                return {
+                    label: this.$t(`ogame.resources['${resource}']`) as string,
+                    getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
+                        .reduce((acc, cur) => acc + cur.resources[resource], 0)
+                };
+            });
         }
     }
 </script>

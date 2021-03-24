@@ -32,7 +32,7 @@
 <script lang="ts">
     import { ExpoEventItem } from '@/models/expeditions/ExpoEvent';
     import ExpoType from '@/models/expeditions/ExpoType';
-    import items from '@/models/items';
+    import Items from '@/models/items';
     import Item from '@/models/items/Item';
     import ExpoModule from '@/store/modules/ExpoModule';
     import SettingsModule from '@/store/modules/SettingsModule';
@@ -63,7 +63,7 @@
                     };
                 }
 
-                result[day].items.push(items[itemExpo.item.hash]);
+                result[day].items.push(Items[itemExpo.itemHash]);
             });
 
             const days: { day: Date; items: Item[] }[] = [];
