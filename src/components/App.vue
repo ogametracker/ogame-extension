@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import StatsDialog from "./components/StatsDialog.vue";
+    import StatsDialog from "./StatsDialog.vue";
 
     @Component({
         components: { StatsDialog },
@@ -18,12 +18,25 @@
             (window as any).ogameTracker = this;
         }
     }
-
-
 </script>
 
 <style lang="scss">
+    @import '@/styles/colors';
+
     .ogame-tracker-dialog {
+        input, select {
+            color: inherit;
+            
+            &:focus {
+                outline: none;
+            }
+        }
+
+        select > option {
+            background: #050505;
+            color: inherit;
+        }
+
         color: white;
         font-family: Verdana, Arial, SunSans-Regular, sans-serif;
         font-size: 14px;

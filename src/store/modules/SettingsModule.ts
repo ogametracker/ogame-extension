@@ -1,6 +1,5 @@
 import { ExpoFindableShips } from '@/models/expeditions/ExpoEvent';
 import Settings from '@/models/settings/Settings';
-import Ship from '@/models/Ship';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})

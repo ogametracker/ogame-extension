@@ -1,5 +1,7 @@
+export type DateRangeType = 'day' | 'week' | 'month';;
+
 interface NormalDateRange {
-    type: 'day' | 'week' | 'month';
+    type: DateRangeType;
     skip: number;
     take: number;
     label: string;

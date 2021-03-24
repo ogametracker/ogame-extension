@@ -81,7 +81,7 @@
                 </span>
                 <span v-else-if="activeTab.name == 'settings'">
                     <!-- router view? -->
-                    Einstellungen
+                    <settings />
                 </span>
             </main>
         </div>
@@ -91,6 +91,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
+    import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
 
@@ -108,6 +109,7 @@
     @Component({
         components: {
             ExpeditionStats,
+            Settings,
         },
     })
     export default class StatsDialog extends Vue {
@@ -118,17 +120,17 @@
             name: 'expos',
             customIcon: 'icon-expo',
             color: '#0066ff',
-            label: this.$t('extension.expeditions') as string,
+            label: this.$t('extension.headers.expeditions') as string,
         }, {
             name: 'battles',
             customIcon: 'icon-attack',
             color: '#c51b00',
-            label: this.$t('extension.battles') as string,
+            label: this.$t('extension.headers.battles') as string,
         }, {
             name: 'tfs',
             customIcon: 'icon-tf',
             color: '#00a031',
-            label: this.$t('extension.tfs') as string,
+            label: this.$t('extension.headers.tfs') as string,
         }, {
             name: 'placeholder_0',
             disabled: true,
@@ -137,7 +139,7 @@
             name: 'settings',
             icon: 'cog',
             color: '#888888',
-            label: this.$t('extension.settings') as string,
+            label: this.$t('extension.headers.settings') as string,
         }, {
             name: 'excelExport',
             icon: 'microsoft-excel',
@@ -256,7 +258,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 24px;
     }
 
     .close-stats-dialog-button {

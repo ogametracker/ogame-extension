@@ -12,10 +12,11 @@ export default {
         items: 'Itemfunde',
         distribution: 'Verteilung',
     },
-    expeditions: 'Expeditionen',
-    battles: 'Kämpfe',
-    tfs: 'Trümmerfelder',
-    settings: 'Einstellungen',
+    headers: {
+        expeditions: 'Expeditionen',
+        battles: 'Kämpfe',
+        tfs: 'Trümmerfelder',
+        settings: 'Einstellungen',
+    },
     since: 'Seit',
-    darkMatter: 'Dunkle Materie',
 };
