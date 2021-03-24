@@ -155,7 +155,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 export function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCollection {
     const result: ExpoEventCollection = {};
 
-    const expoIds = Object.keys(exposv0).map(parseInt);
+    const expoIds = Object.keys(exposv0).map(n => parseInt(n));
     for (const expoId of expoIds) {
         result[expoId] = migrateExpo_v0_v1(exposv0[expoId]);
     }
