@@ -17,6 +17,7 @@ Vue.config.productionTip = false;
 // vue-i18n
 import i18n from '@/i18n/vue-i18n';
 
+
 new Vue({
     router,
     i18n,

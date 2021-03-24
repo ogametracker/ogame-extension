@@ -61,7 +61,7 @@
                     v-if="activeTab.name == 'expos'"
                     class="stats-dialog-body-content"
                 />
-                <span v-else-if="activeTab.name == 'attacks'">
+                <span v-else-if="activeTab.name == 'battles'">
                     <!-- router view? -->
                     Angriffe
                 </span>
