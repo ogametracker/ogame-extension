@@ -1,44 +1,48 @@
 <template>
     <div class="stats-dialog" v-if="value">
-        <div class="stats-dialog-content">
+        <div
+            class="stats-dialog-content"
+            :style="
+                activeTab.color != null
+                    ? `--color: ${getColorVar(activeTab.color)}`
+                    : null
+            "
+        >
             <nav class="stats-dialog-nav">
                 <ul class="nav">
-                    <!-- TODO: Vue router -->
                     <li
-                        class="nav-item"
-                        :class="{ 'nav-item-active': activeTab == 'expos' }"
-                        @click="activeTab = 'expos'"
+                        v-for="tabItem in tabItems"
+                        :key="tabItem.name"
+                        :class="{
+                            'nav-item': !tabItem.disabled,
+                            'nav-item-active': activeTab == tabItem,
+                            'flex-grow-1': tabItem.flex,
+                        }"
+                        :style="
+                            tabItem.color != null
+                                ? `--color: ${getColorVar(tabItem.color)}`
+                                : null
+                        "
+                        @click="
+                            tabItem.disabled
+                                ? null
+                                : tabItem.customAction
+                                ? tabItem.customAction()
+                                : (activeTab = tabItem)
+                        "
                     >
-                        <span class="icon-expo" />
-                        {{ $t("extension.expeditions") }}
-                    </li>
-                    <li
-                        class="nav-item"
-                        :class="{ 'nav-item-active': activeTab == 'attacks' }"
-                        @click="activeTab = 'attacks'"
-                    >
-                        <span class="icon-attack" />
-                        {{ $t("extension.battles") }}
-                    </li>
-                    <li
-                        class="nav-item"
-                        :class="{ 'nav-item-active': activeTab == 'tfs' }"
-                        @click="activeTab = 'tfs'"
-                    >
-                        <span class="icon-tf" />
-                        {{ $t("extension.tfs") }}
-                    </li>
-                    <li style="flex-grow: 1"></li>
-                    <li
-                        class="nav-item"
-                        :class="{ 'nav-item-active': activeTab == 'settings' }"
-                        @click="activeTab = 'settings'"
-                    >
-                        <icon name="cog" />
-                        {{ $t("extension.settings") }}
-                    </li>
-                    <li class="nav-item" @click="excelExport()">
-                        <icon name="microsoft-excel" />
+                        <icon
+                            v-if="tabItem.icon != null"
+                            :name="tabItem.icon"
+                        />
+                        <span
+                            v-else-if="tabItem.customIcon != null"
+                            :class="tabItem.customIcon"
+                        />
+
+                        <span v-if="tabItem.label != null">
+                            {{ tabItem.label }}
+                        </span>
                     </li>
                 </ul>
 
@@ -54,14 +58,14 @@
             <main class="stats-dialog-body">
                 <!-- router view? -->
                 <expedition-stats
-                    v-if="activeTab == 'expos'"
+                    v-if="activeTab.name == 'expos'"
                     class="stats-dialog-body-content"
                 />
-                <span v-else-if="activeTab == 'attacks'">
+                <span v-else-if="activeTab.name == 'attacks'">
                     <!-- router view? -->
                     Angriffe
                 </span>
-                <span v-else-if="activeTab == 'tfs'">
+                <span v-else-if="activeTab.name == 'tfs'">
                     <!-- router view? -->
                     TFs
 
@@ -75,7 +79,7 @@
                         Du hast 0 Metall und 11.500 Kristall abgebaut."
                     </code>
                 </span>
-                <span v-else-if="activeTab == 'settings'">
+                <span v-else-if="activeTab.name == 'settings'">
                     <!-- router view? -->
                     Einstellungen
                 </span>
@@ -88,6 +92,18 @@
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
     import ExcelExport from '@/export/ExcelExport';
+    import { HexColor, hexColorToRGB } from "@/utils/colors";
+
+    interface TabItem {
+        label?: string;
+        name: string;
+        icon?: string;
+        customIcon?: string;
+        disabled?: boolean;
+        flex?: boolean;
+        color?: HexColor;
+        customAction?: () => void;
+    }
 
     @Component({
         components: {
@@ -98,11 +114,46 @@
         @Prop({ type: Boolean, required: true })
         private value!: boolean;
 
-        private activeTab = 'expos';
+        private readonly tabItems: TabItem[] = [{
+            name: 'expos',
+            customIcon: 'icon-expo',
+            color: '#0066ff',
+            label: this.$t('extension.expeditions') as string,
+        }, {
+            name: 'battles',
+            customIcon: 'icon-attack',
+            color: '#c51b00',
+            label: this.$t('extension.battles') as string,
+        }, {
+            name: 'tfs',
+            customIcon: 'icon-tf',
+            color: '#00a031',
+            label: this.$t('extension.tfs') as string,
+        }, {
+            name: 'placeholder_0',
+            disabled: true,
+            flex: true,
+        }, {
+            name: 'settings',
+            icon: 'cog',
+            color: '#888888',
+            label: this.$t('extension.settings') as string,
+        }, {
+            name: 'excelExport',
+            icon: 'microsoft-excel',
+            color: '#21a366',
+            customAction: this.excelExport,
+        }];
+
+        private activeTab = this.tabItems[0];
 
 
         private excelExport() {
             ExcelExport.export();
+        }
+
+        private getColorVar(color: HexColor): string {
+            return hexColorToRGB(color).replace(/\s+/g, ', ');
         }
     }
 </script>
@@ -141,13 +192,22 @@
         border-radius: 6px;
         overflow: hidden;
 
-        background: linear-gradient(52deg, #010108, #040a17);
+        background-color: black;
+        background-image: linear-gradient(
+            52deg,
+            rgba(var(--color), 0.02),
+            rgba(var(--color), 0.08)
+        );
     }
 
     .stats-dialog-nav {
         display: flex;
         flex-direction: row;
-        border-bottom: 2px solid $ogame-blue;
+        border-bottom: 2px solid rgb(var(--color));
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
     }
 
     .nav {
@@ -175,8 +235,8 @@
             &:hover {
                 background: linear-gradient(
                     180deg,
-                    rgba(darken($ogame-blue, 25%), 0.5),
-                    rgba($ogame-blue, 0.5)
+                    rgba(var(--color), 0.25),
+                    rgba(var(--color), 0.5)
                 );
             }
 
@@ -184,8 +244,8 @@
             &-active:hover {
                 background: linear-gradient(
                     180deg,
-                    darken($ogame-blue, 25%),
-                    $ogame-blue
+                    rgba(var(--color), 0.5),
+                    rgb(var(--color))
                 );
             }
         }

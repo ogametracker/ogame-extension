@@ -21,6 +21,7 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
     import TabViewNav from './TabViewNav.vue';
+import { HexColor } from '@/utils/colors';
 
     export interface TabViewItem {
         name: string;
@@ -96,8 +97,8 @@
             &:hover {
                 background: linear-gradient(
                     90deg,
-                    rgba($ogame-blue, 0.3) 30%,
-                    rgba(darken($ogame-blue, 20%), 0.3)
+                    rgba(var(--color), 0.3) 30%,
+                    rgba(var(--color), 0.15)
                 );
             }
 
@@ -105,8 +106,8 @@
             &.active:hover {
                 background: linear-gradient(
                     90deg,
-                    rgba($ogame-blue, 0.7) 30%,
-                    rgba(darken($ogame-blue, 20%), 0.7)
+                    rgba(var(--color), 0.7) 30%,
+                    rgba(var(--color), 0.4)
                 );
             }
         }

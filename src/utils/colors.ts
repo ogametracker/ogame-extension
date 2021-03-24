@@ -67,7 +67,7 @@ const colors: { [key: string]: HexColor } = {
 };
 
 const mixWithColor: HexColor = '#000000';
-function defaultMixColor (color: HexColor): HexColor {
+function defaultMixColor(color: HexColor): HexColor {
     return desaturate(mixColor(color, mixWithColor, 0.2), 0.1);
 }
 
@@ -83,10 +83,21 @@ function getDefaultChartColor(index: number): ChartColor {
 }
 
 
+type RGB = `${number} ${number} ${number}`;
+function hexColorToRGB(color: HexColor): RGB {
+    const c = {
+        r: parseInt(color.substr(1, 2), 16),
+        g: parseInt(color.substr(3, 2), 16),
+        b: parseInt(color.substr(5, 2), 16),
+    };
+    return `${c.r} ${c.g} ${c.b}` as RGB;
+}
+
 export {
     getDefaultChartColor,
     mixColor,
     defaultMixColor,
     HexColor,
     ChartColor,
+    hexColorToRGB,
 };
