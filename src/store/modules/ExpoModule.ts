@@ -4,17 +4,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import ExpoEvent from "@/models/expeditions/ExpoEvent";
 import { startOfDay } from "date-fns";
 import { migrateExpos_v0_v1 } from "@/migrations/migration_v0_v1";
+import ExpoEventCollection from "@/models/expeditions/ExpoEventCollection";
 import ExpoEventCollectionv0 from "@/models/v0/ExpoEventCollection";
 
 @Component({})
 class ExpoModule extends Vue {
     public readonly expos: ExpoEvent[] = [];
+    public exposById: ExpoEventCollection = {};
 
     private async created() {
         this.expos.splice(0);
 
         const expos = await new Promise<ExpoEvent[]>(resolve => {
             const migrated = migrateExpos_v0_v1(fakeData as ExpoEventCollectionv0);
+            this.exposById = migrated;
             //TODO: load from chrome storage
             resolve(Object.values(migrated) as ExpoEvent[]);
         });
