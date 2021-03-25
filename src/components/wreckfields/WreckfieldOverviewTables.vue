@@ -1,6 +1,6 @@
 <template>
     <div>
-        <wreckfield-ranged-table :items="items" show-total />
+        <wreckfield-ranged-table :items="items" show-total no-percentage />
     </div>
 </template>
  

@@ -3,6 +3,7 @@
         stacked
         :datasets="datasets"
         :y-tick-formatter="(value) => $n(value)"
+        :tooltip-label="getTooltipLabel"
     />
 </template>
 <script lang="ts">
@@ -28,6 +29,12 @@
                 fill: true,
                 aggregator: reports => reports.reduce((acc, report) => acc + report.crystal, 0),
             }];
+        }
+
+        private getTooltipLabel(item: any, data: any) {
+            const resource = data.datasets[item.datasetIndex].label;
+            const value: number = item.value;
+            return `${this.$n(value)} ${resource}`;
         }
     }
 </script>

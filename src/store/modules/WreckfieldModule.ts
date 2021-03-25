@@ -7,7 +7,23 @@ class WreckfieldModule extends Vue {
     public readonly reports: WreckfieldReport[] = [];
 
     private async created() {
-        //TODO: 
+        this.reports.push({
+            date: Date.now() - 24 * 60 * 60 * 1000,
+            crystal: 1150000,
+            metal: 3000000,
+        }, {
+            date: Date.now() - 24 * 60 * 60 * 1000,
+            crystal: 115000,
+            metal: 3000000,
+        }, {
+            date: Date.now(),
+            crystal: 11500,
+            metal: 30000,
+        }, {
+            date: Date.now(),
+            crystal: 115000,
+            metal: 3000000,
+        });
     }
 
     public get firstReport(): WreckfieldReport | null {
