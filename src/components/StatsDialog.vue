@@ -1,5 +1,5 @@
 <template>
-    <div class="stats-dialog" v-if="value">
+    <div class="stats-dialog" v-if="value" @click="close($event)">
         <div
             class="stats-dialog-content"
             :style="
@@ -166,6 +166,15 @@
 
         private getColorVar(color: HexColor): string {
             return hexColorToRGB(color).replace(/\s+/g, ', ');
+        }
+
+        private close($event: Event) {
+            const path = $event.composedPath();
+            if (path[0] != this.$el) {
+                return;
+            }
+
+            this.$emit('input', false);
         }
     }
 </script>
