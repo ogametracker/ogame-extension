@@ -67,14 +67,11 @@
                 />
 
                 <wreckfield-stats
-                    v-else-if="activeTab.name == 'tfs'"
+                    v-else-if="activeTab.name == 'wreckfields'"
                     class="stats-dialog-body-content"
                 />
 
-                <!-- <span v-else-if="activeTab.name == 'tfs'">
-
-                    TFs
-
+                <!-- 
                     <code style="white-space: pre">
                         msg_title: "Schürfbericht von TF auf [8:220:15]."
                         <br />
@@ -137,10 +134,10 @@
             color: '#c51b00',
             label: this.$t('extension.headers.battles') as string,
         }, {
-            name: 'tfs',
-            customIcon: 'icon-tf',
+            name: 'wreckfields',
+            customIcon: 'icon-wreckfield',
             color: '#00a031',
-            label: this.$t('extension.headers.tfs') as string,
+            label: this.$t('extension.headers.wreckfields') as string,
         }, {
             name: 'placeholder_0',
             disabled: true,
@@ -291,7 +288,7 @@
 
     .icon-expo,
     .icon-attack,
-    .icon-tf {
+    .icon-wreckfield {
         display: inline-block;
         width: 1em;
         height: 1em;
@@ -316,7 +313,7 @@
     .icon-attack::before {
         background-image: url(~@/assets/icons/attack.svg);
     }
-    .icon-tf::before {
+    .icon-wreckfield::before {
         background-image: url(~@/assets/icons/wreckfield.svg);
     }
 </style>

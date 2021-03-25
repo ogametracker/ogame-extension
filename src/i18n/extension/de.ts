@@ -15,7 +15,7 @@ export default {
     headers: {
         expeditions: 'Expeditionen',
         battles: 'Kämpfe',
-        tfs: 'Trümmerfelder',
+        wreckfields: 'Trümmerfelder',
         settings: 'Einstellungen',
     },
     since: 'Seit',

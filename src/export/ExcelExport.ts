@@ -49,7 +49,7 @@ class ExcelExport {
         const expoTypes = Object.keys(ExpoType);
 
         const data = expoData.days.map(day => [
-            i18n.d(day, 'short'),
+            day,
             ...expoTypes.map(expoType => (expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == expoType)
                 .length
@@ -69,7 +69,7 @@ class ExcelExport {
         const resources = [Resource.metal, Resource.crystal, Resource.deuterium];
 
         const data = expoData.days.map(day => [
-            i18n.d(day, 'short'),
+            day,
             ...resources.map(resource => ((expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
                 .reduce((acc, cur) => acc + cur.resources[resource], 0)
@@ -88,7 +88,7 @@ class ExcelExport {
         const ships = Object.keys(ExpoFindableShips) as unknown[] as ExpoFindableShips[];
 
         const data = expoData.days.map(day => [
-            i18n.d(day, 'short'),
+            day,
             ...ships.map(ship => ((expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                 .reduce((acc, cur) => acc + cur.fleet[ship], 0)
@@ -105,7 +105,7 @@ class ExcelExport {
 
     private exportExpoDarkMatter(expoData: ExpoData): any[] {
         const data = expoData.days.map(day => [
-            i18n.d(day, 'short'),
+            day,
             ((expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
                 .reduce((acc, cur) => acc + cur.darkMatter, 0),
@@ -121,7 +121,7 @@ class ExcelExport {
 
     private exportExpoItems(expoData: ExpoData): any[] {
         const data = expoData.days.map(day => [
-            i18n.d(day, 'short'),
+            day,
             ((expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == ExpoType.item) as ExpoEventItem[])
                 .map(itemExpo => Items[itemExpo.itemHash].name)
