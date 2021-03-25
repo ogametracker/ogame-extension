@@ -1,5 +1,5 @@
 <template>
-    <line-expo-chart
+    <expo-line-chart
         stacked
         :datasets="datasets"
         :y-tick-formatter="(value) => $n(value)"
@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import LineExpoChart, { LineExpoChartDataset } from '@/components/common/LineExpoChart.vue';
+    import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
@@ -16,11 +16,11 @@
 
     @Component({
         components: {
-            LineExpoChart,
+            ExpoLineChart,
         },
     })
     export default class ExpeditionResourcesChart extends Vue {
-        private get datasets(): LineExpoChartDataset[] {
+        private get datasets(): ExpoLineChartDataset[] {
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {

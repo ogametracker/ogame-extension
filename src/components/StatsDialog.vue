@@ -56,19 +56,23 @@
                 </div>
             </nav>
             <main class="stats-dialog-body">
-                <!-- router view? -->
                 <expedition-stats
                     v-if="activeTab.name == 'expos'"
                     class="stats-dialog-body-content"
                 />
-                <!-- router view? -->
+
                 <battle-stats
-                    v-if="activeTab.name == 'battles'"
+                    v-else-if="activeTab.name == 'battles'"
                     class="stats-dialog-body-content"
                 />
 
-                <span v-else-if="activeTab.name == 'tfs'">
-                    <!-- router view? -->
+                <wreckfield-stats
+                    v-else-if="activeTab.name == 'tfs'"
+                    class="stats-dialog-body-content"
+                />
+
+                <!-- <span v-else-if="activeTab.name == 'tfs'">
+
                     TFs
 
                     <code style="white-space: pre">
@@ -80,9 +84,9 @@
                         [8:220:15] treiben 0 Metall und 11.500 Kristall im Raum.
                         Du hast 0 Metall und 11.500 Kristall abgebaut."
                     </code>
-                </span>
+                </span> -->
+
                 <span v-else-if="activeTab.name == 'settings'">
-                    <!-- router view? -->
                     <settings />
                 </span>
             </main>
@@ -94,6 +98,7 @@
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
     import BattleStats from "./battles/BattleStats.vue";
+    import WreckfieldStats from "./wreckfields/WreckfieldStats.vue";
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
@@ -113,6 +118,7 @@
         components: {
             ExpeditionStats,
             BattleStats,
+            WreckfieldStats,
             Settings,
         },
     })

@@ -1,5 +1,5 @@
 <template>
-    <line-expo-chart
+    <expo-line-chart
         :datasets="datasets"
         :y-tick-formatter="(value) => $n(value)"
         :tooltip-label="getTooltipLabel"
@@ -7,18 +7,18 @@
 </template>
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import LineExpoChart, { LineExpoChartDataset } from '@/components/common/LineExpoChart.vue';
+    import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
 
     @Component({
         components: {
-            LineExpoChart,
+            ExpoLineChart,
         },
     })
     export default class ExpeditionTypeDistributionChart extends Vue {
 
-        private readonly datasets: LineExpoChartDataset[] = Object.keys(ExpoType).map(expoType => ({
+        private readonly datasets: ExpoLineChartDataset[] = Object.keys(ExpoType).map(expoType => ({
             label: this.$t(`ogame.expoTypes['${expoType}']`) as string,
             color: SettingsModule.settings.charts.colors.overview[expoType as ExpoType],
             fill: false,

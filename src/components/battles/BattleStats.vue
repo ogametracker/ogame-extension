@@ -6,8 +6,11 @@
         <template #resources>
             <battles-resources />
         </template>
-        <template #units>
-            <battles-fleet />
+        <template #fleet_players>
+            <battles-fleet-players />
+        </template>
+        <template #fleet_expos>
+            <battles-fleet-expos />
         </template>
     </tab-view>
 </template>
@@ -17,14 +20,16 @@
     import TabView, { TabViewItem } from "../common/TabView.vue";
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
-    import BattlesFleet from "./fleet/BattlesFleet.vue";
+    import BattlesFleetPlayers from "./fleet/BattlesFleetPlayers.vue";
+    import BattlesFleetExpos from "./fleet/BattlesFleetExpos.vue";
 
 
     @Component({
         components: {
             BattlesOverview,
             BattlesResources,
-            BattlesFleet,
+            BattlesFleetPlayers,
+            BattlesFleetExpos,
             TabView,
         },
     })
@@ -32,15 +37,19 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: this.$t('extension.expoMenu.overview') as string,
+                title: 'Übersicht',
             },
             {
                 name: 'resources',
-                title:  this.$t('extension.expoMenu.resources') as string,
+                title: 'Rohstoffbilanz',
             },
             {
-                name: 'fleet',
-                title:  this.$t('extension.expoMenu.fleet') as string,
+                name: 'fleet_players',
+                title: 'Flottenbilanz (Spieler)',
+            },
+            {
+                name: 'fleet_expos',
+                title: 'Flottenbilanz (Expeditionen)',
             },
         ];
     }

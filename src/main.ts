@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './components/App.vue';
-import router from './router';
 
 // include icon as global component
 import Icon from '@/components/common/Icon.vue';
@@ -19,7 +18,6 @@ import i18n from '@/i18n/vue-i18n';
 
 
 new Vue({
-    router,
     i18n,
     render: h => h(App)
 }).$mount('#ogame-tracker-dialog');

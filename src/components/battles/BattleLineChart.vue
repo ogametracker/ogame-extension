@@ -1,5 +1,5 @@
 <template>
-    <div class="line-expo-chart" :class="{ 'no-legend': hideLegend }">
+    <div class="expo-line-chart" :class="{ 'no-legend': hideLegend }">
         <div class="scrollable-chart">
             <div class="chart-container">
                 <canvas ref="canvas" />
@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts">
-    import ExpoEvent from '@/models/expeditions/ExpoEvent';
     import ExpoModule from '@/store/modules/ExpoModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { defaultMixColor, HexColor } from '@/utils/colors';
@@ -57,17 +56,17 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
 
-    export interface LineExpoChartDataset {
+    export interface BattleLineChartDataset {
         label: string;
         color: HexColor;
         fill: boolean;
-        aggregator: (expos: ExpoEvent[]) => number;
+        //TODO: aggregator: (expos: BattleEvent[]) => number;
     }
 
     @Component({})
-    export default class LineExpoChart extends Vue {
-        @Prop({ required: true, type: Array as PropType<LineExpoChartDataset[]>, default: [] })
-        private datasets!: LineExpoChartDataset[];
+    export default class BattleLineChart extends Vue {
+        @Prop({ required: true, type: Array as PropType<BattleLineChartDataset[]>, default: [] })
+        private datasets!: BattleLineChartDataset[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private hideLegend!: boolean;
@@ -187,7 +186,7 @@
             this.fullDatasetsData.push(
                 ...this.datasets.map(
                     dataset => this.allDays.map(
-                        day => dataset.aggregator(exposByDay[day.getTime()] ?? [])
+                        day => 0 //TODO: dataset.aggregator(exposByDay[day.getTime()] ?? [])
                     )
                 )
             );
@@ -299,7 +298,7 @@
     }
 </script>
 <style lang="scss" scoped>
-    .line-expo-chart {
+    .expo-line-chart {
         width: 100%;
         height: 100%;
 

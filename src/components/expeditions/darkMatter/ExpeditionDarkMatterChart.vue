@@ -1,5 +1,5 @@
 <template>
-    <line-expo-chart
+    <expo-line-chart
         stacked
         :datasets="datasets"
         hide-legend
@@ -8,18 +8,18 @@
 </template>
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import LineExpoChart, { LineExpoChartDataset } from '@/components/common/LineExpoChart.vue';
+    import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
 import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
 
     @Component({
         components: {
-            LineExpoChart,
+            ExpoLineChart,
         },
     })
     export default class ExpeditionDarkMatterChart extends Vue {
-        private readonly datasets: LineExpoChartDataset[] = [{
+        private readonly datasets: ExpoLineChartDataset[] = [{
             label: this.$t('ogame.premium.darkMatter') as string,
             fill: true,
             color: SettingsModule.settings.charts.colors.overview.darkMatter,
