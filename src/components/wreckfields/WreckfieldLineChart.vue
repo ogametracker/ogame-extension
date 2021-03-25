@@ -244,7 +244,7 @@
 
             this.datasetsData.forEach((data, datasetIndex) => {
                 indices.forEach((totalIndex, i) => {
-                    data[i].y = this.fullDatasetsData[datasetIndex][totalIndex];
+                    data[i].y = this.fullDatasetsData[datasetIndex][totalIndex] ?? 0;
                 });
             });
 
