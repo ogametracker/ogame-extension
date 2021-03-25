@@ -165,9 +165,7 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="key in Object.keys(
-                            settings.charts.colors.fleet
-                        )"
+                        v-for="key in Object.keys(settings.charts.colors.fleet)"
                         :key="key"
                     >
                         <td>
@@ -185,6 +183,7 @@
 
 <script lang="ts">
     import { DateRangeType } from '@/models/settings/DateRange';
+    import NotificationModule from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { Component, Vue } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
@@ -214,6 +213,16 @@
                 take: 1,
                 label: 'Neuer Bereich',
             });
+
+            const noti = NotificationModule.addNotification({
+                title: 'Speichere Einstellungen',
+                text: 'Speichern....',
+            });
+
+            setTimeout(() => {
+                noti.text = 'Fertig';
+                NotificationModule.remove(noti);
+            }, 2500);
         }
 
         private removeRange(index: number) {
@@ -277,7 +286,7 @@
 
     .color-tables {
         display: flex;
-        
+
         table {
             min-width: 200px;
             margin-right: 6px;
