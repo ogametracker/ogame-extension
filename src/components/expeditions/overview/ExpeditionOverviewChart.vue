@@ -29,7 +29,7 @@
 
         private getTooltipFooter(items: any[]) {
             const total = items.reduce((acc, cur) => acc + parseInt(cur.value), 0);
-            return `${total} ${this.$t('extension.expeditions')}`;
+            return `${total} ${this.$t('extension.headers.expeditions')}`;
         }
     }
 </script>

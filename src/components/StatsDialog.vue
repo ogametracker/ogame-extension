@@ -279,6 +279,11 @@
 
     .close-stats-dialog-button {
         cursor: pointer;
+        color: grey;
+
+        &:hover {
+            color: white;
+        }
     }
 
     .stats-dialog-body {

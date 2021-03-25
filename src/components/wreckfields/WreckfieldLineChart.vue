@@ -48,8 +48,8 @@
 </template>
 
 <script lang="ts">
-    import ExpoEvent from '@/models/expeditions/ExpoEvent';
-    import ExpoModule from '@/store/modules/ExpoModule';
+    import WreckfieldReport from '@/models/wreckfields/WreckfieldReport';
+    import WreckfieldModule from '@/store/modules/WreckfieldModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { defaultMixColor, HexColor } from '@/utils/colors';
     import { sub, startOfDay, add } from 'date-fns';
@@ -57,17 +57,17 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
 
-    export interface ExpoLineChartDataset {
+    export interface WreckfieldLineChartDataset {
         label: string;
         color: HexColor;
         fill: boolean;
-        aggregator: (expos: ExpoEvent[]) => number;
+        aggregator: (expos: WreckfieldReport[]) => number;
     }
 
     @Component({})
-    export default class ExpoLineChart extends Vue {
-        @Prop({ required: true, type: Array as PropType<ExpoLineChartDataset[]>, default: [] })
-        private datasets!: ExpoLineChartDataset[];
+    export default class WreckfieldLineChart extends Vue {
+        @Prop({ required: true, type: Array as PropType<WreckfieldLineChartDataset[]>, default: [] })
+        private datasets!: WreckfieldLineChartDataset[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private hideLegend!: boolean;
@@ -84,7 +84,7 @@
         @Prop({ required: false, type: Function as PropType<(items: any[]) => string>, default: undefined })
         private tooltipFooter!: ((items: any[]) => string) | undefined;
 
-        private readonly expoModule = ExpoModule;
+        private readonly wreckfieldModule = WreckfieldModule;
         private readonly settingsModule = SettingsModule;
         private chart: Chart | null = null;
 
@@ -172,7 +172,7 @@
         }
 
         private initData() {
-            const firstDay = startOfDay(this.expoModule.firstExpo?.date
+            const firstDay = startOfDay(this.wreckfieldModule.firstReport?.date
                 ?? sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
 
             let currentDay = firstDay;
@@ -182,12 +182,12 @@
                 currentDay = add(currentDay, { days: 1 });
             }
 
-            const exposByDay = this.expoModule.byDay;
+            const reports = this.wreckfieldModule.byDay;
 
             this.fullDatasetsData.push(
                 ...this.datasets.map(
                     dataset => this.allDays.map(
-                        day => dataset.aggregator(exposByDay[day.getTime()] ?? [])
+                        day => dataset.aggregator(reports[day.getTime()] ?? [])
                     )
                 )
             );

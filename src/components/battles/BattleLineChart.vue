@@ -172,7 +172,7 @@
 
         private initData() {
             const firstDay = startOfDay(this.expoModule.firstExpo?.date
-                ?? sub(new Date(), { days: this.settingsModule.settings.charts.days }));
+                ?? sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
 
             let currentDay = firstDay;
             const today = startOfDay(new Date());

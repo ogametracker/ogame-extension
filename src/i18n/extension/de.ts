@@ -12,6 +12,9 @@ export default {
         items: 'Itemfunde',
         distribution: 'Verteilung',
     },
+    wreckfieldMenu: {
+        overview: 'Übersicht',
+    },
     headers: {
         expeditions: 'Expeditionen',
         battles: 'Kämpfe',
