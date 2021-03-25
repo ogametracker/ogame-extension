@@ -61,10 +61,12 @@
                     v-if="activeTab.name == 'expos'"
                     class="stats-dialog-body-content"
                 />
-                <span v-else-if="activeTab.name == 'battles'">
-                    <!-- router view? -->
-                    Angriffe
-                </span>
+                <!-- router view? -->
+                <battle-stats
+                    v-if="activeTab.name == 'battles'"
+                    class="stats-dialog-body-content"
+                />
+
                 <span v-else-if="activeTab.name == 'tfs'">
                     <!-- router view? -->
                     TFs
@@ -91,6 +93,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
+    import BattleStats from "./battles/BattleStats.vue";
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
@@ -109,6 +112,7 @@
     @Component({
         components: {
             ExpeditionStats,
+            BattleStats,
             Settings,
         },
     })

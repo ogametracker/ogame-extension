@@ -35,7 +35,6 @@ class NotificationModule extends Vue {
         notification.hidden = true;
 
         setTimeout(() => {
-
             const index = this.notificationsInternal.findIndex(noti => noti == notification);
             if (index < 0)
                 return;
