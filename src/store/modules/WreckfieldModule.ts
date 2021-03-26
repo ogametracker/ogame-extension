@@ -1,29 +1,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 import WreckfieldReport from "@/models/wreckfields/WreckfieldReport";
 import { startOfDay } from 'date-fns';
+import WreckfieldReportCollection from '@/models/wreckfields/WreckfieldReportCollection';
 
 @Component({})
 class WreckfieldModule extends Vue {
+    public reportsById: WreckfieldReportCollection = {};
     public readonly reports: WreckfieldReport[] = [];
 
     private async created() {
-        this.reports.push({
-            date: Date.now() - 24 * 60 * 60 * 1000,
-            crystal: 1150000,
-            metal: 3000000,
-        }, {
-            date: Date.now() - 24 * 60 * 60 * 1000,
-            crystal: 115000,
-            metal: 3000000,
-        }, {
-            date: Date.now(),
-            crystal: 11500,
-            metal: 30000,
-        }, {
-            date: Date.now(),
-            crystal: 115000,
-            metal: 3000000,
-        });
+        //TODO: load from storage
     }
 
     public get firstReport(): WreckfieldReport | null {
@@ -44,6 +30,15 @@ class WreckfieldModule extends Vue {
             },
             {} as { [key: number]: WreckfieldReport[] | undefined }
         );
+    }
+
+    public async save() {
+        //TODO: save in chrome storage
+    }
+
+    public add(report: WreckfieldReport) {
+        this.reportsById[report.id] = report;
+        this.reports.push(report);
     }
 }
 

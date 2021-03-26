@@ -20,7 +20,7 @@
         private visible = false;
 
         private async mounted() {
-            (window as any).ogameTracker = this; //TODO: global object with global properties
+            (window as any).ogameTracker = this;
         }
     }
 </script>

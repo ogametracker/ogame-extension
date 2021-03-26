@@ -21,18 +21,32 @@ import trackMessages from '@/tracking/trackMessages';
 
 
 
-function mount () {
+function mountVue() {
     new Vue({
         i18n,
         render: h => h(App),
     }).$mount('#ogame-tracker-dialog');
 }
 
-function start() {
-    //TODO: add menu item + mount Vue on click
-    mount();
+function addMenuItem() {
+    const menu = document.querySelector('#menuTable')!;
 
-    trackMessages();
+    const dialogLink = document.createElement('li');
+    dialogLink.innerHTML = `
+        <span class="menu_icon">
+            <span class="expo-stats-icon"></span>
+        </span>
+        <a class="menubutton" href="#">
+            <span class="textlabel">Expeditions-Stats</span>
+        </a>
+    `;
+    dialogLink.querySelector('a')!.addEventListener('click', e => {
+        (window as any).ogameTracker.visible = true;
+    });
+
+    menu.appendChild(dialogLink);
 }
 
-start();
+//TODO: addMenuItem();
+mountVue();
+trackMessages();

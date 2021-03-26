@@ -236,9 +236,10 @@
             }
 
             this.saveTimeout = setTimeout(async () => {
-                //TODO: await SettingsModule.save();
+                await SettingsModule.save();
                 this.saveTimeout = null;
 
+                //TODO: localization
                 NotificationModule.addNotification({
                     type: 'success',
                     title: 'Einstellungen gespeichert',

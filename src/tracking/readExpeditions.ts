@@ -48,6 +48,7 @@ export default async function readExpeditions() {
             newMessageCount++;
 
             if(expoEvent.type == ExpoType.lostFleet) {
+                //TODO: localization
                 NotificationModule.addNotification({
                     type: 'warning',
                     title: 'Flottenverlust',

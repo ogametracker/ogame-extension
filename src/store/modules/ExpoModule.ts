@@ -14,8 +14,9 @@ class ExpoModule extends Vue {
     public exposById: ExpoEventCollection = {};
 
     private async created() {
-        this.expos.splice(0);
-
+        this.exposById = await asyncChromeStorage.get(this.storageKey);
+        this.expos.push(...Object.values(this.exposById));
+        /*
         const expos = await new Promise<ExpoEvent[]>(resolve => {
             const migrated = migrateExpos_v0_v1(fakeData as ExpoEventCollectionv0);
             this.exposById = migrated;
@@ -23,6 +24,7 @@ class ExpoModule extends Vue {
             resolve(Object.values(migrated) as ExpoEvent[]);
         });
         this.expos.push(...expos);
+        */
     }
 
     public get firstExpo(): ExpoEvent | null {
@@ -63,7 +65,7 @@ class ExpoModule extends Vue {
 
     public async save() {
         console.log('saving expos', this.exposById);
-        //TODO: await asyncChromeStorage.set(this.storageKey, this.exposById);
+        await asyncChromeStorage.set(this.storageKey, this.exposById);
     }
 }
 
