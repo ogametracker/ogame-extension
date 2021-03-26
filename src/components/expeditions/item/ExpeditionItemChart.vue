@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="label">
-                    <span>{{ $d(itemDay.day, "short") }}</span>
+                    <span>{{ $i18n.formatDate(itemDay.day, "short") }}</span>
                 </div>
             </div>
         </div>

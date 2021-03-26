@@ -3,7 +3,7 @@
         stacked
         :datasets="datasets"
         hide-legend
-        :y-tick-formatter="(value) => $n(value)"
+        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
     />
 </template>
 <script lang="ts">
@@ -12,6 +12,7 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
 import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
+import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -20,7 +21,7 @@ import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
     })
     export default class ExpeditionDarkMatterChart extends Vue {
         private readonly datasets: ExpoLineChartDataset[] = [{
-            label: this.$t('ogame.premium.darkMatter') as string,
+            label: i18n.messages.ogame.premium.darkMatter,
             fill: true,
             color: SettingsModule.settings.charts.colors.overview.darkMatter,
             aggregator: expos => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])

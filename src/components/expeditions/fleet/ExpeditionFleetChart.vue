@@ -2,7 +2,7 @@
     <expo-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $n(value)"
+        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
     />
 </template>
 <script lang="ts">
@@ -12,6 +12,7 @@
     import SettingsModule from "@/store/modules/SettingsModule";
     import Ship from "@/models/Ship";
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
+import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -23,7 +24,7 @@
         private readonly datasets: ExpoLineChartDataset[] = Object.keys(ExpoFindableShips).map(shipName => {
             const ship = shipName as unknown as ExpoFindableShips;
             return {
-                label: this.$t(`ogame.ships['${ship}']`) as string,
+                label: i18n.messages.ogame.ships[ship],
                 fill: true,
                 color: SettingsModule.settings.charts.colors.fleet[ship as unknown as Ship],
                 aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])

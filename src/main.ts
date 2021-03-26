@@ -13,11 +13,10 @@ import '@mdi/font/css/materialdesignicons.min.css';
 
 Vue.config.productionTip = false;
 
-// vue-i18n
-import i18n from '@/i18n/vue-i18n';
-
+// i18n
+import i18n from '@/i18n/';
 
 new Vue({
-    i18n,
+    i18n, 
     render: h => h(App)
 }).$mount('#ogame-tracker-dialog');

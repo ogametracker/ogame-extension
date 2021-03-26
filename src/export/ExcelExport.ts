@@ -1,11 +1,12 @@
 import ExpoModule from "@/store/modules/ExpoModule";
 import xlsx from 'xlsx';
-import i18n from '@/i18n/vue-i18n';
+import i18n from '@/i18n/';
 import ExpoType from "@/models/expeditions/ExpoType";
 import { add, startOfDay } from "date-fns";
 import ExpoEvent, { ExpoEventDarkMatter, ExpoEventFleet, ExpoEventItem, ExpoEventResources, ExpoFindableShips, ExpoSizeableEvent } from "@/models/expeditions/ExpoEvent";
 import Resource from "@/models/Resource";
 import Items from "@/models/items";
+import ExpoSize from "@/models/expeditions/ExpoSize";
 
 interface ExportHelper {
     label: string;
@@ -58,7 +59,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...expoTypes.map(expoType => i18n.t(`ogame.expoTypes['${expoType}']`) as string),
+            ...expoTypes.map(expoType => i18n.messages.ogame.expoTypes[expoType]),
         ];
 
 
@@ -78,7 +79,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...resources.map(resource => i18n.t(`ogame.resources['${resource}']`) as string),
+            ...resources.map(resource => i18n.messages.ogame.resources[resource]),
         ];
 
         return [headers, ...data];
@@ -97,7 +98,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...ships.map(ship => i18n.t(`ogame.ships['${ship}']`) as string),
+            ...ships.map(ship => i18n.messages.ogame.ships[ship]),
         ];
 
         return [headers, ...data];
@@ -113,7 +114,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            i18n.t(`ogame.premium.darkMatter`),
+            i18n.messages.ogame.premium.darkMatter,
         ];
 
         return [headers, ...data];
@@ -140,21 +141,21 @@ class ExcelExport {
 
         const data = expos.map(expo => [
             new Date(expo.date),
-            i18n.t(`ogame.expoTypes['${expo.type}']`) as string,
+            i18n.messages.ogame.expoTypes[expo.type],
 
             ...Object.keys(Resource).map(resource => expo.type == ExpoType.resources ? expo.resources[resource as Resource] : 0),
             ...Object.keys(ExpoFindableShips).map(ship => expo.type == ExpoType.fleet ? (expo.fleet[ship as unknown as ExpoFindableShips] ?? 0) : 0),
             (expo.type == ExpoType.darkMatter ? expo.darkMatter : 0),
-            ((expo as ExpoSizeableEvent | {size: undefined}).size != null ? i18n.t(`ogame.expoSizes['${(expo as ExpoSizeableEvent | {size: undefined}).size}']`) : ''),
+            ((expo as ExpoSizeableEvent | {size: undefined}).size != null ? i18n.messages.ogame.expoSizes[(expo as ExpoSizeableEvent | {size: ExpoSize}).size] : ''),
             (expo.type == ExpoType.item ? Items[expo.itemHash].name : ''),
         ]);
 
         const headers = [
             'Datum + Zeit', 
             'Typ',
-            ...Object.keys(Resource).map(resource => i18n.t(`ogame.resources['${resource}']`) as string),
-            ...Object.keys(ExpoFindableShips).map(ship => i18n.t(`ogame.ships['${ship}']`) as string),
-            i18n.t('ogame.premium.darkMatter') as string,
+            ...Object.keys(Resource).map(resource => i18n.messages.ogame.resources[resource]),
+            ...Object.keys(ExpoFindableShips).map(ship => i18n.messages.ogame.ships[ship]),
+            i18n.messages.ogame.premium.darkMatter,
             'Fundgröße',
             'Item',
         ];

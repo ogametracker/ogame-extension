@@ -2,23 +2,23 @@
     <div class="settings">
         <h2>Datumsbereiche</h2>
         <span style="margin-bottom: 8px; display: inline-block">
-            {{ $t("extension.settings.hintDateRanges") }}
+            {{ $i18n.messages.extension.settings.hintDateRanges }}
         </span>
         <table class="settings-table">
             <thead>
                 <tr>
                     <th style="width: 30px"></th>
                     <th style="width: 200px">
-                        {{ $t("extension.settings.name") }}
+                        {{ $i18n.messages.extension.settings.name }}
                     </th>
                     <th style="width: 150px">
-                        {{ $t("extension.settings.type") }}
+                        {{ $i18n.messages.extension.settings.type }}
                     </th>
                     <th style="width: 200px">
-                        {{ $t("extension.settings.rangeStarts") }}
+                        {{ $i18n.messages.extension.settings.rangeStarts }}
                     </th>
                     <th style="width: 200px">
-                        {{ $t("extension.settings.rangeContains") }}
+                        {{ $i18n.messages.extension.settings.rangeContains }}
                     </th>
                 </tr>
             </thead>
@@ -39,8 +39,8 @@
                             v-model="range.label"
                         />
                         <span v-else>
-                            {{ $t("extension.since") }}
-                            {{ $t("extension.settings.firstDay") }}
+                            {{ $i18n.messages.extension.since }}
+                            {{ $i18n.messages.extension.settings.firstDay }}
                         </span>
                     </td>
                     <td class="value-col">
@@ -51,24 +51,24 @@
                                 :value="rangeType"
                             >
                                 {{
-                                    $t(
-                                        `extension.settings.rangeType['${rangeType}']`
-                                    )
+                                    $i18n.messages.extension.settings.rangeType[
+                                        rangeType
+                                    ]
                                 }}
                             </option>
                         </select>
 
                         <span v-else>
                             {{
-                                $t(
-                                    `extension.settings.rangeType['${range.type}']`
-                                )
+                                $i18n.messages.extension.settings.rangeType[
+                                    range.type
+                                ]
                             }}
                         </span>
                     </td>
                     <td class="value-col">
                         <span v-if="range.type != 'all'">
-                            {{ $t("extension.settings.before") }}
+                            {{ $i18n.messages.extension.settings.before }}
                             <input
                                 type="number"
                                 step="1"
@@ -76,9 +76,9 @@
                                 v-model="range.skip"
                             />
                             {{
-                                $t(
-                                    `extension.settings['${range.type}sVariant']`
-                                )
+                                $i18n.messages.extension.settings[
+                                    `${range.type}sVariant`
+                                ]
                             }}
                         </span>
                     </td>
@@ -90,7 +90,11 @@
                                 min="1"
                                 v-model="range.take"
                             />
-                            {{ $t(`extension.settings['${range.type}s']`) }}
+                            {{
+                                $i18n.messages.extension.settings[
+                                    `${range.type}s`
+                                ]
+                            }}
                         </span>
                     </td>
                 </tr>
@@ -127,7 +131,7 @@
                         <td>
                             <color-input
                                 v-model="settings.charts.colors.overview[key]"
-                                :label="$t(`ogame.expoTypes['${key}']`)"
+                                :label="$i18n.messages.ogame.expoTypes[key]"
                             />
                         </td>
                     </tr>
@@ -150,7 +154,7 @@
                         <td>
                             <color-input
                                 v-model="settings.charts.colors.resources[key]"
-                                :label="$t(`ogame.resources['${key}']`)"
+                                :label="$i18n.messages.ogame.resources[key]"
                             />
                         </td>
                     </tr>
@@ -171,7 +175,7 @@
                         <td>
                             <color-input
                                 v-model="settings.charts.colors.fleet[key]"
-                                :label="$t(`ogame.ships['${key}']`)"
+                                :label="$i18n.messages.ogame.ships[key]"
                             />
                         </td>
                     </tr>

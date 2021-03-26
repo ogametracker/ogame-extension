@@ -11,6 +11,7 @@
 
 <script lang="ts">
     import TabView, { TabViewItem } from "@/components/common/TabView.vue";
+import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import ExpeditionFleetChart from "./ExpeditionFleetChart.vue";
     import ExpeditionFleetTables from "./ExpeditionFleetTables.vue";
@@ -27,11 +28,11 @@
             return [
                 {
                     name: 'chart',
-                    title: this.$t('extension.chart') as string,
+                    title: i18n.messages.extension.chart,
                 },
                 {
                     name: 'tables',
-                    title: this.$t('extension.tables') as string,
+                    title: i18n.messages.extension.tables,
                 },
             ];
         }

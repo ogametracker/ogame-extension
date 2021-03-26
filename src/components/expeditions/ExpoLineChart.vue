@@ -56,6 +56,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
+import i18n from '@/i18n';
 
     export interface ExpoLineChartDataset {
         label: string;
@@ -172,8 +173,11 @@
         }
 
         private initData() {
-            const firstDay = startOfDay(this.expoModule.firstExpo?.date
-                ?? sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
+            const firstTrackedDay = this.expoModule.firstExpo?.date;
+            const xDaysAgo = startOfDay(sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
+            const firstDay = firstTrackedDay == null || startOfDay(firstTrackedDay) > xDaysAgo
+                ? xDaysAgo
+                : startOfDay(firstTrackedDay);
 
             let currentDay = firstDay;
             const today = startOfDay(new Date());
@@ -250,7 +254,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => this.$d(this.allDays[index], 'short'))
+                ...indices.map((index) => i18n.formatDate(this.allDays[index], 'short'))
             );
         }
 

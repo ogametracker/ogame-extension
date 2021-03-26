@@ -99,6 +99,7 @@
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
+import i18n from "@/i18n";
 
     interface TabItem {
         label?: string;
@@ -127,17 +128,17 @@
             name: 'expos',
             customIcon: 'icon-expo',
             color: '#0066ff',
-            label: this.$t('extension.headers.expeditions') as string,
+            label: i18n.messages.extension.headers.expeditions,
         }, {
             name: 'battles',
             customIcon: 'icon-attack',
             color: '#c51b00',
-            label: this.$t('extension.headers.battles') as string,
+            label: i18n.messages.extension.headers.battles,
         }, {
             name: 'wreckfields',
             customIcon: 'icon-wreckfield',
             color: '#00a031',
-            label: this.$t('extension.headers.wreckfields') as string,
+            label: i18n.messages.extension.headers.wreckfields,
         }, {
             name: 'placeholder_0',
             disabled: true,
@@ -146,7 +147,7 @@
             name: 'settings',
             icon: 'cog',
             color: '#888888',
-            label: this.$t('extension.headers.settings') as string,
+            label: i18n.messages.extension.headers.settings,
         }, {
             name: 'excelExport',
             icon: 'microsoft-excel',

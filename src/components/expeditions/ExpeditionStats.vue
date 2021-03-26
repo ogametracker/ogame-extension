@@ -15,8 +15,8 @@
         <template #items>
             <expedition-item-chart />
         </template>
-        <template #distribution> 
-            <expedition-type-distribution-chart />    
+        <template #distribution>
+            <expedition-type-distribution-chart />
         </template>
     </tab-view>
 </template>
@@ -30,6 +30,7 @@
     import ExpeditionDarkMatter from "./darkMatter/ExpeditionDarkMatter.vue";
     import ExpeditionItemChart from './item/ExpeditionItemChart.vue';
     import ExpeditionTypeDistributionChart from './distribution/ExpeditionTypeDistributionChart.vue';
+    import i18n from "@/i18n";
 
 
     @Component({
@@ -47,27 +48,27 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: this.$t('extension.expoMenu.overview') as string,
+                title: i18n.messages.extension.expoMenu.overview,
             },
             {
                 name: 'resources',
-                title:  this.$t('extension.expoMenu.resources') as string,
+                title: i18n.messages.extension.expoMenu.resources,
             },
             {
                 name: 'fleet',
-                title:  this.$t('extension.expoMenu.fleet') as string,
+                title: i18n.messages.extension.expoMenu.fleet,
             },
             {
                 name: 'darkMatter',
-                title:  this.$t('extension.expoMenu.darkMatter') as string,
+                title: i18n.messages.extension.expoMenu.darkMatter,
             },
             {
                 name: 'items',
-                title:  this.$t('extension.expoMenu.items') as string,
+                title: i18n.messages.extension.expoMenu.items,
             },
             {
                 name: 'distribution',
-                title:  this.$t('extension.expoMenu.distribution') as string,
+                title: i18n.messages.extension.expoMenu.distribution,
             },
         ];
     }

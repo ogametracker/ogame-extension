@@ -3,7 +3,8 @@
 </template>
 
 <script lang="ts">
-    import { ExpoSizeableEvent } from '@/models/expeditions/ExpoEvent';
+    import i18n from '@/i18n';
+import { ExpoSizeableEvent } from '@/models/expeditions/ExpoEvent';
     import ExpoSize from '@/models/expeditions/ExpoSize';
     import ExpoType from '@/models/expeditions/ExpoType';
     import { PropType } from 'vue';
@@ -22,7 +23,7 @@
         private readonly items: ExpoRangeTableItem[] = Object.keys(ExpoSize).map(sizeName => {
             const size = sizeName as ExpoSize;
             return {
-                label: this.$t(`ogame.expoSizes['${size}']`) as string,
+                label: i18n.messages.ogame.expoSizes[size],
                 getValue: expos => (expos.filter(expo => expo.type == this.type) as ExpoSizeableEvent[])
                     .filter(expo => expo.size == size).length,
             };

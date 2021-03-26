@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h2>{{ $t("extension.eventSizes") }}</h2>
+        <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -14,6 +14,7 @@
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
+import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -28,7 +29,7 @@
             return Object.keys(ExpoFindableShips).map(shipName => {
                 const ship = shipName as unknown as ExpoFindableShips;
                 return {
-                    label: this.$t(`ogame.ships['${ship}']`) as string,
+                    label: i18n.messages.ogame.ships[ship],
                     getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                         .reduce((acc, cur) => acc + cur.fleet[ship], 0)
                 };

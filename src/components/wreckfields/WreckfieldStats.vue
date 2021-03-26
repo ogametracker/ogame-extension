@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts">
+    import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import TabView, { TabViewItem } from "../common/TabView.vue";
     import WreckfieldOverview from './WreckfieldOverview.vue';
@@ -22,7 +23,7 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: this.$t('extension.wreckfieldMenu.overview') as string,
+                title: i18n.messages.extension.wreckfieldMenu.overview,
             },
         ];
     }

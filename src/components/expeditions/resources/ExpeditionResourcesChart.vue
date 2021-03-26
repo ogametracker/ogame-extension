@@ -2,7 +2,7 @@
     <expo-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $n(value)"
+        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
         :tooltip-label="getTooltipLabel"
     />
 </template>
@@ -13,6 +13,7 @@
     import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
     import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
+import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -25,7 +26,7 @@
                 const resource = resourceName as Resource;
                 return {
                     fill: true,
-                    label: this.$t(`ogame.resources['${resource}']`) as string,
+                    label: i18n.messages.ogame.resources[resource],
                     color: SettingsModule.settings.charts.colors.resources[resource],
                     aggregator: expos => (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
                         .reduce((acc, expo) => acc + expo.resources[resource], 0),
@@ -36,7 +37,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${this.$n(value)} ${resource}`;
+            return `${i18n.formatNumber(value)} ${resource}`;
         }
     }
 </script>
