@@ -59,7 +59,7 @@
             background: linear-gradient(225deg, #3c9c0b, #06540c);
         }
         &.warning {
-            background: linear-gradient(225deg, #d4b000, #71400d);
+            background: linear-gradient(225deg, #d48900, #ab4a05);
         }
         &.error {
             background: linear-gradient(225deg, #bd1111, #6f0b0b);
