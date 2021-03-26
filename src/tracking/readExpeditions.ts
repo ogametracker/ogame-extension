@@ -72,7 +72,10 @@ export default async function readExpeditions() {
             type: 'info',
             title: 'Neue Expeditionen',
             text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
+            timeout: 5000,
         });
+
+        await ExpoModule.save();
     }
 }
 

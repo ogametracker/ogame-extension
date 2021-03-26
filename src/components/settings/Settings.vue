@@ -189,7 +189,7 @@
     import { DateRangeType } from '@/models/settings/DateRange';
     import NotificationModule from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue, Watch } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
     import ColorInput from './ColorInput.vue';
 
@@ -206,8 +206,6 @@
             'month',
         ];
 
-        //TODO: save settings
-
         private get settings() {
             return SettingsModule.settings;
         }
@@ -223,6 +221,32 @@
 
         private removeRange(index: number) {
             SettingsModule.settings.tables.ranges.splice(index, 1);
+        }
+
+        @Watch('settings', { deep: true })
+        private settingsChanged() {
+            this.saveDelayed();
+        }
+
+        private saveTimeout: number | null = null;
+        private readonly saveDelay = 3000;
+        private saveDelayed() {
+            if (this.saveTimeout != null) {
+                clearTimeout(this.saveTimeout);
+            }
+
+            this.saveTimeout = setTimeout(async () => {
+                //TODO: await SettingsModule.save();
+                this.saveTimeout = null;
+
+                NotificationModule.addNotification({
+                    type: 'success',
+                    title: 'Einstellungen gespeichert',
+                    text: 'Die Einstellungen wurden erfolgreich gespeichert.',
+                    timeout: 5000,
+                });
+
+            }, this.saveDelay);
         }
     }
 </script>

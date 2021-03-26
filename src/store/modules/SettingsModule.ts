@@ -2,6 +2,7 @@ import ExpoType from '@/models/expeditions/ExpoType';
 import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
+import asyncChromeStorage from '@/utils/asyncChromeStorage';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
@@ -89,6 +90,21 @@ class SettingsModule extends Vue {
 
     private async created() {
         //TODO: load settings from chrome storage if exists
+    }
+
+    private get storageKey(): string {
+        const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
+        const playerIdMeta = document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null;
+        if(serverMeta == null || playerIdMeta == null)
+            throw new Error();
+
+        const server = serverMeta.content.split('.')[0];
+        const playerId = playerIdMeta.content;
+        return `${server}-${playerId}-settings`;
+    }
+
+    public async save() {
+        await asyncChromeStorage.set(this.storageKey, this.settings);
     }
 }
 

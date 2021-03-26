@@ -5,13 +5,15 @@ import ExpoTypev0 from "@/models/v0/ExpoType";
 import ExpoEvent, { ExpoEventNothing, ExpoEventResources, ExpoEventFleet, ExpoEventAliens, ExpoEventPirates, ExpoEventDarkMatter, ExpoEventDelay, ExpoEventEarly, ExpoEventItem, ExpoEventLostFleet, ExpoEventTrader } from '@/models/expeditions/ExpoEvent';
 import ExpoType from "@/models/expeditions/ExpoType";
 import ExpoSize from "@/models/expeditions/ExpoSize";
+import asyncChromeStorage from "@/utils/asyncChromeStorage";
+import ExpoModule from "@/store/modules/ExpoModule";
 
 function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
     switch (expoEvent.type) {
 
         case ExpoTypev0.nothing: {
             const oldExpo: ExpoEventNothingv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.nothing,
                 date: oldExpo.date,
@@ -21,7 +23,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.resources: {
             const oldExpo: ExpoEventResourcesv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.resources,
                 date: oldExpo.date,
@@ -37,7 +39,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.fleet: {
             const oldExpo: ExpoEventFleetv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.fleet,
                 date: oldExpo.date,
@@ -62,7 +64,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.aliens: {
             const oldExpo: ExpoEventAliensv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.aliens,
                 date: oldExpo.date,
@@ -73,7 +75,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.pirates: {
             const oldExpo: ExpoEventPiratesv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.pirates,
                 date: oldExpo.date,
@@ -84,7 +86,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.darkMatter: {
             const oldExpo: ExpoEventDarkMatterv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.darkMatter,
                 date: oldExpo.date,
@@ -96,7 +98,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.delay: {
             const oldExpo: ExpoEventDelayv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.delay,
                 date: oldExpo.date,
@@ -106,7 +108,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.early: {
             const oldExpo: ExpoEventEarlyv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.early,
                 date: oldExpo.date,
@@ -116,7 +118,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.item: {
             const oldExpo: ExpoEventItemv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.item,
                 date: oldExpo.date,
@@ -127,7 +129,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.lostFleet: {
             const oldExpo: ExpoEventLostFleetv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.lostFleet,
                 date: oldExpo.date,
@@ -137,7 +139,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 
         case ExpoTypev0.trader: {
             const oldExpo: ExpoEventTraderv0 = expoEvent;
-        
+
             return {
                 type: ExpoType.trader,
                 date: oldExpo.date,
@@ -161,4 +163,22 @@ export function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCol
     }
 
     return result;
+}
+
+
+export default async function migration_v0_v1() {
+    const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
+    if (serverMeta == null)
+        throw new Error();
+
+    const server = serverMeta.content.split('.')[0];
+
+    const oldExpoStorageKey = `${server}-expoEvents`;
+    const oldExpoData = await asyncChromeStorage.get(oldExpoStorageKey);
+    if (oldExpoData == null)
+        return;
+
+    const newExpoData = migrateExpos_v0_v1(oldExpoData);
+    await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
+    await asyncChromeStorage.set(oldExpoStorageKey, null);
 }

@@ -43,7 +43,7 @@
     }
 
     .notification {
-        width: 200px;
+        width: 250px;
         min-height: 80px;
         border-radius: 4px;
         margin-bottom: 8px;
@@ -71,14 +71,16 @@
 
         .title {
             text-align: center;
-            border-bottom: 1px solid white;
-            padding: 8px;
+            padding: 12px;
             font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
         }
 
         .body {
             text-align: left;
-            padding: 8px;
+            padding: 12px;
         }
     }
 </style>

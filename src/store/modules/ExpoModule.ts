@@ -6,6 +6,7 @@ import { startOfDay } from "date-fns";
 import { migrateExpos_v0_v1 } from "@/migrations/migration_v0_v1";
 import ExpoEventCollection from "@/models/expeditions/ExpoEventCollection";
 import ExpoEventCollectionv0 from "@/models/v0/ExpoEventCollection";
+import asyncChromeStorage from "@/utils/asyncChromeStorage";
 
 @Component({})
 class ExpoModule extends Vue {
@@ -47,6 +48,22 @@ class ExpoModule extends Vue {
     public add(expo: ExpoEvent) {
         this.exposById[expo.id] = expo;
         this.expos.push(expo);
+    }
+
+    public get storageKey(): string {
+        const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
+        const playerIdMeta = document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null;
+        if(serverMeta == null || playerIdMeta == null)
+            throw new Error();
+
+        const server = serverMeta.content.split('.')[0];
+        const playerId = playerIdMeta.content;
+        return `${server}-${playerId}-expoEvents`;
+    }
+
+    public async save() {
+        console.log('saving expos', this.exposById);
+        //TODO: await asyncChromeStorage.set(this.storageKey, this.exposById);
     }
 }
 

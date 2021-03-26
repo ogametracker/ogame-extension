@@ -6,6 +6,7 @@ interface NotificationData {
     title: string;
     text: string;
     type: NotificationType;
+    timeout?: number;
 }
 
 interface Notification extends NotificationData {
@@ -24,7 +25,6 @@ class NotificationModule extends Vue {
         return this.notificationsInternal;
     }
 
-    //TODO: add notification type (warning, error, info, etc.) OR configurable color
     public addNotification(notification: NotificationData): Notification {
         const id = this.nextId++;
         const noti: Notification = {
@@ -33,6 +33,10 @@ class NotificationModule extends Vue {
             hidden: false,
         };
         this.notificationsInternal.push(noti);
+
+        if (notification.timeout != null) {
+            setTimeout(() => this.remove(noti), notification.timeout);
+        }
 
         return noti;
     }
