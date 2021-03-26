@@ -45,10 +45,10 @@
         background: blue;
         border-radius: 4px;
         margin-bottom: 8px;
-        border: 1px solid white;
         cursor: pointer;
-        transition: opacity 1s;
+        transition: opacity 250ms;
         opacity: 1;
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
 
         &.hidden {
             opacity: 0;

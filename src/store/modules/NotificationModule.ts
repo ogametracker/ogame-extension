@@ -12,6 +12,8 @@ interface Notification extends NotificationData {
 
 @Component({})
 class NotificationModule extends Vue {
+    private readonly fadeOutTime = 250;
+
     private readonly notificationsInternal: Notification[] = [];
     private nextId = 0;
 
@@ -19,6 +21,7 @@ class NotificationModule extends Vue {
         return this.notificationsInternal;
     }
 
+    //TODO: add notification type (warning, error, info, etc.) OR configurable color
     public addNotification(notification: NotificationData): Notification {
         const id = this.nextId++;
         const noti: Notification = {
@@ -40,7 +43,7 @@ class NotificationModule extends Vue {
                 return;
 
             this.notificationsInternal.splice(index, 1);
-        }, 1000);
+        }, this.fadeOutTime);
     }
 }
 

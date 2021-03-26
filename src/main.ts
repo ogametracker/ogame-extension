@@ -16,7 +16,23 @@ Vue.config.productionTip = false;
 // i18n
 import i18n from '@/i18n/';
 
-new Vue({
-    i18n, 
-    render: h => h(App)
-}).$mount('#ogame-tracker-dialog');
+// tracking
+import trackMessages from '@/tracking/trackMessages';
+
+
+
+function mount () {
+    new Vue({
+        i18n,
+        render: h => h(App),
+    }).$mount('#ogame-tracker-dialog');
+}
+
+function start() {
+    //TODO: add menu item + mount Vue on click
+    mount();
+
+    trackMessages();
+}
+
+start();

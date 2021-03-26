@@ -19,7 +19,7 @@ export default {
             'Eine spontane Hyperraumverzerrung hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!',
             'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat eine Energiekreatur, die sich Legorianer nannte, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!',
         ],
-        regex: /Es wurde Dunkle Materie ([\d.]+) erbeutet/,
+        regex: /Es wurde Dunkle Materie (.+) erbeutet/,
     },
 
     [ExpoType.resources]: {
@@ -35,7 +35,7 @@ export default {
             'Ein Mineraliengürtel um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!',
             'Deine Expeditionsflotte meldet den Fund eines riesigen Alien-Schiffswracks. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.',
         ],
-        regex: /Es wurde (Metall|Kristall|Deuterium) ([\d.]+) erbeutet/,
+        regex: /Es wurde (Metall|Kristall|Deuterium) (.+) erbeutet/,
     },
 
     [ExpoType.fleet]: {

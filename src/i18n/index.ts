@@ -9,12 +9,16 @@ class I18n {
     private _dateTimeFormats: Record<string, any> = {
         de: {
             short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy hh:mm:ss',
+            long: 'dd.MM.yyyy HH:mm:ss',
         },
     };
 
     public get messages(): any {
         return this._messages[this.locale] ?? this._messages[this._fallbackLocale];
+    }
+
+    public get dateTimeFormats(): any {
+        return this._dateTimeFormats[this.locale] ?? this._dateTimeFormats[this._fallbackLocale];
     }
 
     public formatDate(date: number | Date, formatName: string) {

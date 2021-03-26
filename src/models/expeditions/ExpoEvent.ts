@@ -8,7 +8,7 @@ import Ship from "../Ship";
 
 
 export interface ExpoEventBase {
-    id: number | string;
+    id: number;
     date: number;
     type: ExpoType;
 }
@@ -45,7 +45,7 @@ export enum ExpoFindableShips {
 }
 
 
-export type ExpoFindableFleet = Record<ExpoFindableShips, number>;
+export type ExpoFindableFleet = Record<ExpoFindableShips, number | undefined>;
 
 export type ExpoEventFleet = ExpoEventBase & ExpoSizeableEvent & {
     type: ExpoType.fleet;

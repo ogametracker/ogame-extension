@@ -1,5 +1,5 @@
 function setBottomLevelKey(bottomLevelKey: string, object: Record<string, any> | string): Record<string, any> {
-    if (typeof object !== 'object') {
+    if (typeof object !== 'object' || object instanceof RegExp || object instanceof Array) {
         return { [bottomLevelKey]: object };
     }
 

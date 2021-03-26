@@ -92,7 +92,7 @@ class ExcelExport {
             day,
             ...ships.map(ship => ((expoData.exposByDay[day.getTime()] ?? [])
                 .filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
-                .reduce((acc, cur) => acc + cur.fleet[ship], 0)
+                .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
             ),
         ]);
 

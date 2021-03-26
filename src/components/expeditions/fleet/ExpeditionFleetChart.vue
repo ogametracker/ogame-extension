@@ -12,7 +12,7 @@
     import SettingsModule from "@/store/modules/SettingsModule";
     import Ship from "@/models/Ship";
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -28,7 +28,7 @@ import i18n from "@/i18n";
                 fill: true,
                 color: SettingsModule.settings.charts.colors.fleet[ship as unknown as Ship],
                 aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
-                    .reduce((acc, expo) => acc + expo.fleet[ship], 0)
+                    .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0)
             };
         });
     }

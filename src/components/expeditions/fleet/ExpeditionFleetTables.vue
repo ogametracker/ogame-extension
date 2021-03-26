@@ -10,11 +10,10 @@
 <script lang="ts">
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
-    import Ship from "@/models/Ship";
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -31,7 +30,7 @@ import i18n from "@/i18n";
                 return {
                     label: i18n.messages.ogame.ships[ship],
                     getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
-                        .reduce((acc, cur) => acc + cur.fleet[ship], 0)
+                        .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
                 };
             });
         }

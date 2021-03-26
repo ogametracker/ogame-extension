@@ -1,12 +1,17 @@
-import i18n from "@/i18n"; 
-import ExpoEvent from "@/models/expeditions/ExpoEvent";
+import i18n from "@/i18n";
+import ExpoEvent, { ExpoEventDarkMatter, ExpoEventResources, ExpoFindableShips, ExpoEventFleet, ExpoEventItem, ExpoEventEarly, ExpoEventDelay, ExpoEventTrader, ExpoEventLostFleet, ExpoEventAliens, ExpoEventPirates, ExpoEventNothing } from "@/models/expeditions/ExpoEvent";
+import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
+import Resource from "@/models/Resource";
 import ExpoModule from "@/store/modules/ExpoModule";
+import NotificationModule from "@/store/modules/NotificationModule";
 import { parse } from "date-fns";
 
-const tabIdExpeditionMessages = '22';
 
 class UnknownExpoEventError extends Error { }
+
+const tabIdExpeditionMessages = '22';
+const expoIdsWithError: number[] = [];
 
 export default async function readExpeditions() {
     const messagePage = document.querySelector('div[id^="ui-id-"][aria-hidden="false"] > #fleetsgenericpage');
@@ -18,7 +23,7 @@ export default async function readExpeditions() {
     if (labelId == null)
         return;
 
-    const tabId = document.getElementById(labelId)?.getAttribute('data-tabid');
+    const tabId = document.getElementById(labelId)?.parentElement?.getAttribute('data-tabid');
     if (tabId != tabIdExpeditionMessages)
         return;
 
@@ -29,102 +34,288 @@ export default async function readExpeditions() {
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
     for (const messageContainer of messageContainers) {
         const expoId = parseInt(messageContainer.getAttribute('data-msg-id')!);
-        if (knownExpos[expoId] != null)
+        if (knownExpos[expoId] != null || expoIdsWithError.includes(expoId))
             continue;
 
         try {
-            const messageContent = messageContainer.querySelector('.msg_content')!.textContent!;
+            const message = messageContainer.querySelector('.msg_content')!.textContent!
+                .trim()
+                .replace(/\s+/g, ' ');
 
-            const expoEvent = getExpoEvent(expoId, messageContent, messageContainer);
+            const expoEvent = getExpoEvent(expoId, message, messageContainer);
+
+            ExpoModule.add(expoEvent);
+            console.log(expoEvent);
+            newMessageCount++;
         } catch (e) {
             if (e instanceof UnknownExpoEventError) {
                 messageContainer.classList.add('unknown-expo');
                 unknownMessageCount++;
             }
+            expoIdsWithError.push(expoId);
+
             console.error(e);
         }
     }
 
     if (unknownMessageCount > 0) {
         //TODO: Notification
+        NotificationModule.addNotification({
+            title: 'Neue Expeditionen',
+            text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
+        });
     }
 
     if (newMessageCount > 0) {
-        //TODO: Notification
+        //TODO: localization
+        //TODO: info notification
+        NotificationModule.addNotification({
+            title: 'Neue Expeditionen',
+            text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
+        });
     }
 }
 
 function getExpoEvent(id: number, message: string, messageContainer: Element): ExpoEvent {
-    const expoInfo = getDarkMatterExpo(message)
-        ?? getResourceExpo(message)
-        ?? getFleetExpo(message)
-        ?? getItemExpo(message, messageContainer)
-        ?? getEarlyExpo(message)
-        ?? getDelayExpo(message)
-        ?? getTraderExpo(message)
-        ?? getLostFleetExpo(message)
-        ?? getAliensExpo(message)
-        ?? getPiratesExpo(message);
+    const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
+    const date = parse(dateText, i18n.dateTimeFormats.long, new Date()).getTime();
+
+    const expoInfo = getDarkMatterExpo(id, date, message)
+        ?? getResourceExpo(id, date, message)
+        ?? getFleetExpo(id, date, message)
+        ?? getItemExpo(id, date, message, messageContainer)
+        ?? getEarlyExpo(id, date, message)
+        ?? getDelayExpo(id, date, message)
+        ?? getTraderExpo(id, date, message)
+        ?? getLostFleetExpo(id, date, message)
+        ?? getAliensExpo(id, date, message)
+        ?? getPiratesExpo(id, date, message)
+        ?? getNothingExpo(id, date, message);
     if (expoInfo == null) {
         throw new UnknownExpoEventError();
     }
 
-    expoInfo.id = id;
-
-    const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!
-    const date = parse(dateText, 'dd.MM.yyyy hh:mm:ss', new Date());
-    expoInfo.date = date.getTime();
-
     return expoInfo;
 }
 
-function getDarkMatterExpo(message: string): ExpoEvent | null {
-    const regex = i18n.messages.ogame.expoMessages.darkMatter.regex as RegExp;
+function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.darkMatter].regex as RegExp;
     const match = message.match(regex);
-    return null;
+    if (match == null)
+        return null;
+
+    const amount = parseInt(match[1].replace(/[^\d]/g, ''));
+    const size = Object.keys(ExpoSize)
+        .find(size => i18n.messages.ogame.expoMessages[ExpoType.darkMatter][size]
+            .some((msg: string) => message.includes(msg))) as ExpoSize | null;
+    if (size == null)
+        return null;
+
+    const result: ExpoEventDarkMatter = {
+        id,
+        date,
+        darkMatter: amount,
+        size: size,
+        type: ExpoType.darkMatter,
+    };
+    return result;
 }
 
 
-function getResourceExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getResourceExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.resources].regex as RegExp;
+    const match = message.match(regex);
+    if (match == null)
+        return null;
+
+    const resourceName = match[1];
+    const amount = parseInt(match[2].replace(/[^\d]/g, ''));
+    const size = Object.keys(ExpoSize)
+        .find(size => i18n.messages.ogame.expoMessages[ExpoType.resources][size]
+            .some((msg: string) => message.includes(msg))) as ExpoSize | null;
+    if (size == null)
+        return null;
+
+    const resource = Object.keys(Resource)
+        .find(resource => Object.keys(i18n.messages.ogame.resources)
+            .find(r => i18n.messages.ogame.resources[r] == resourceName) == resource) as Resource | undefined;
+    if (resource == null)
+        return null;
+
+    const result: ExpoEventResources = {
+        type: ExpoType.resources,
+        id,
+        date,
+        resources: {
+            [Resource.metal]: 0,
+            [Resource.crystal]: 0,
+            [Resource.deuterium]: 0,
+            [resource]: amount,
+        },
+        size: size,
+    };
+    return result;
 }
 
 
-function getFleetExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getFleetExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.fleet].regex as RegExp;
+    const match = message.match(regex);
+    if (match == null)
+        return null;
+
+    const size = Object.keys(ExpoSize)
+        .find(size => i18n.messages.ogame.expoMessages[ExpoType.fleet][size]
+            .some((msg: string) => message.includes(msg))) as ExpoSize | null;
+    if (size == null)
+        return null;
+
+    const shipText = message.substr(match.index! + match[0].length);
+    const ships: Record<ExpoFindableShips, number | undefined> = {};
+    for (const ship of Object.keys(ExpoFindableShips)) {
+        const shipRegex = new RegExp(ship + ': (\\d+)');
+        const shipMatch = shipText.match(shipRegex);
+
+        if (shipMatch != null) {
+            ships[ship as unknown as ExpoFindableShips] = parseInt(shipMatch[1]);
+        }
+    }
+
+    const result: ExpoEventFleet = {
+        type: ExpoType.fleet,
+        id,
+        date,
+        size: size,
+        fleet: ships,
+    };
+    return result;
 }
 
 
-function getItemExpo(message: string, messageContainer: Element): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getItemExpo(id: number, date: number, message: string, messageContainer: Element): ExpoEvent | null {
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.item].regex as RegExp;
+    const match = message.match(regex);
+    if (match == null)
+        return null;
+
+    const itemLink = messageContainer.querySelector('.msg_content > a');
+    if (!(itemLink instanceof HTMLAnchorElement))
+        return null;
+
+    const itemUrl = itemLink.href;
+    const hashMatch = itemUrl.match(/item=([a-f0-9]+)/);
+    if (hashMatch == null)
+        return null;
+
+    const result: ExpoEventItem = {
+        type: ExpoType.item,
+        id,
+        date,
+        itemHash: hashMatch[1],
+    };
+    return result;
 }
 
 
-function getEarlyExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getEarlyExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const isEarly = i18n.messages.ogame.expoMessages[ExpoType.early].some((msg: string) => message.includes(msg));
+    if (!isEarly)
+        return null;
+
+    const result: ExpoEventEarly = {
+        type: ExpoType.early,
+        id,
+        date,
+    };
+    return result;
 }
 
 
-function getDelayExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getDelayExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const isDelay = i18n.messages.ogame.expoMessages[ExpoType.delay].some((msg: string) => message.includes(msg));
+    if (!isDelay)
+        return null;
+
+    const result: ExpoEventDelay = {
+        type: ExpoType.delay,
+        id,
+        date,
+    };
+    return result;
 }
 
 
-function getTraderExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getTraderExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const isTrader = i18n.messages.ogame.expoMessages[ExpoType.trader].some((msg: string) => message.includes(msg));
+    if (!isTrader)
+        return null;
+
+    const result: ExpoEventTrader = {
+        type: ExpoType.trader,
+        id,
+        date,
+    };
+    return result;
 }
 
 
-function getLostFleetExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getLostFleetExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const isLost = i18n.messages.ogame.expoMessages[ExpoType.lostFleet].some((msg: string) => message.includes(msg));
+    if (!isLost)
+        return null;
+
+    const result: ExpoEventLostFleet = {
+        type: ExpoType.lostFleet,
+        id,
+        date,
+    };
+    return result;
 }
 
 
-function getAliensExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getAliensExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const size = Object.keys(ExpoSize)
+        .find(size => i18n.messages.ogame.expoMessages[ExpoType.aliens][size]
+            .some((msg: string) => message.includes(msg))) as ExpoSize | null;
+    if (size == null)
+        return null;
+
+    const result: ExpoEventAliens = {
+        type: ExpoType.aliens,
+        id,
+        date,
+        size,
+    };
+    return result;
 }
 
 
-function getPiratesExpo(message: string): ExpoEvent | null {
-    throw new Error("Function not implemented.");
+function getPiratesExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const size = Object.keys(ExpoSize)
+        .find(size => i18n.messages.ogame.expoMessages[ExpoType.pirates][size]
+            .some((msg: string) => message.includes(msg))) as ExpoSize | null;
+    if (size == null)
+        return null;
+
+    const result: ExpoEventPirates = {
+        type: ExpoType.pirates,
+        id,
+        date,
+        size,
+    };
+    return result;
 }
+
+function getNothingExpo(id: number, date: number, message: string): ExpoEvent | null {
+    const isLost = i18n.messages.ogame.expoMessages[ExpoType.nothing].some((msg: string) => message.includes(msg));
+    if (!isLost)
+        return null;
+
+    const result: ExpoEventNothing = {
+        type: ExpoType.nothing,
+        id,
+        date,
+    };
+    return result;
+}
+

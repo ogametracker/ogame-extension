@@ -43,6 +43,11 @@ class ExpoModule extends Vue {
             {} as { [key: number]: ExpoEvent[] | undefined }
         );
     }
+
+    public add(expo: ExpoEvent) {
+        this.exposById[expo.id] = expo;
+        this.expos.push(expo);
+    }
 }
 
 export default new ExpoModule();
