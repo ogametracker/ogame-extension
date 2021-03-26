@@ -45,8 +45,15 @@ export default async function readExpeditions() {
             const expoEvent = getExpoEvent(expoId, message, messageContainer);
 
             ExpoModule.add(expoEvent);
-            console.log(expoEvent);
             newMessageCount++;
+
+            if(expoEvent.type == ExpoType.lostFleet) {
+                NotificationModule.addNotification({
+                    type: 'warning',
+                    title: 'Flottenverlust',
+                    text: 'Eine Expedition ist nicht zurückgekehrt.',
+                });
+            }
         } catch (e) {
             if (e instanceof UnknownExpoEventError) {
                 messageContainer.classList.add('unknown-expo');
