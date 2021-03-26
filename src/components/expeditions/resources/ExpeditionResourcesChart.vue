@@ -13,7 +13,7 @@
     import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
     import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {

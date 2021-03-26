@@ -3,6 +3,7 @@
         stacked
         :datasets="datasets"
         :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+        :tooltip-label="getTooltipLabel"
     />
 </template>
 <script lang="ts">
@@ -31,5 +32,11 @@
                     .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0)
             };
         });
+
+        private getTooltipLabel(item: any, data: any) {
+            const label = data.datasets[item.datasetIndex].label;
+            const value: number = item.value;
+            return `${i18n.formatNumber(value)} ${label}`;
+        }
     }
 </script>

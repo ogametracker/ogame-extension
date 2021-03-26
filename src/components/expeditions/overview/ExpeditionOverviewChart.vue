@@ -4,6 +4,7 @@
         :datasets="datasets"
         :y-tick-formatter="(value) => $i18n.formatNumber(value)"
         :tooltip-footer="getTooltipFooter"
+        :tooltip-label="getTooltipLabel"
     />
 </template>
 <script lang="ts">
@@ -11,7 +12,7 @@
     import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -31,6 +32,12 @@ import i18n from "@/i18n";
         private getTooltipFooter(items: any[]) {
             const total = items.reduce((acc, cur) => acc + parseInt(cur.value), 0);
             return `${total} ${i18n.messages.extension.headers.expeditions}`;
+        }
+
+        private getTooltipLabel(item: any, data: any) {
+            const label = data.datasets[item.datasetIndex].label;
+            const value: number = item.value;
+            return `${i18n.formatNumber(value)} ${label}`;
         }
     }
 </script>

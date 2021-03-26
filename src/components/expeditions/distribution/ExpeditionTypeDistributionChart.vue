@@ -10,7 +10,7 @@
     import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {

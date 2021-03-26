@@ -4,6 +4,7 @@
         :datasets="datasets"
         hide-legend
         :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+        :tooltip-label="getTooltipLabel"
     />
 </template>
 <script lang="ts">
@@ -11,8 +12,8 @@
     import ExpoLineChart, { ExpoLineChartDataset } from '@/components/expeditions/ExpoLineChart.vue';
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
-import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
-import i18n from "@/i18n";
+    import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
+    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -27,5 +28,11 @@ import i18n from "@/i18n";
             aggregator: expos => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
                 .reduce((acc, cur) => acc + cur.darkMatter, 0)
         }];
+
+        private getTooltipLabel(item: any, data: any) {
+            const label = data.datasets[item.datasetIndex].label;
+            const value: number = item.value;
+            return `${i18n.formatNumber(value)} ${label}`;
+        }
     }
 </script>

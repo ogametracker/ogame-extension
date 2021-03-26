@@ -36,7 +36,7 @@
         position: fixed;
         top: 0;
         right: 0;
-        padding: 8px;
+        margin: 8px;
         z-index: 10000;
         display: flex;
         flex-direction: column;

@@ -70,19 +70,6 @@
                     v-else-if="activeTab.name == 'wreckfields'"
                     class="stats-dialog-body-content"
                 />
-
-                <!-- 
-                    <code style="white-space: pre">
-                        msg_title: "Schürfbericht von TF auf [8:220:15]."
-                        <br />
-                        <br />
-                        msg_content: "Deine (Recycler|Pathfinder|?) (1 Schiffe)
-                        haben eine Gesamtladekapazität von 34.000. Am Ziel
-                        [8:220:15] treiben 0 Metall und 11.500 Kristall im Raum.
-                        Du hast 0 Metall und 11.500 Kristall abgebaut."
-                    </code>
-                </span> -->
-
                 <span v-else-if="activeTab.name == 'settings'">
                     <settings />
                 </span>
@@ -99,7 +86,7 @@
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     interface TabItem {
         label?: string;
@@ -289,7 +276,7 @@ import i18n from "@/i18n";
 
     .stats-dialog-body {
         overflow: hidden;
-        padding: 16px 16px 32px 16px;
+        padding: 16px;
     }
 
     .icon-expo,

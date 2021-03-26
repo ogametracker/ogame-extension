@@ -29,6 +29,12 @@
     @import "@/styles/colors";
 
     .ogame-tracker-dialog {
+        hr {
+            border-color: rgba(var(--color), 0.3);
+            border-width: 1px;
+            border-top-width: 0;
+        }
+
         input,
         select {
             color: inherit;
@@ -58,7 +64,7 @@
             background: rgba(var(--color), 0.35);
 
             &:hover {
-            background: rgba(var(--color), 0.75);
+                background: rgba(var(--color), 0.75);
             }
         }
     }
