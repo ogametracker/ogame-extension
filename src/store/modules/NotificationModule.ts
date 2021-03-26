@@ -1,8 +1,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 
+type NotificationType = 'info' | 'success' | 'warning' | 'error';
+
 interface NotificationData {
     title: string;
     text: string;
+    type: NotificationType;
 }
 
 interface Notification extends NotificationData {

@@ -1,13 +1,16 @@
 <template>
     <div class="notification-center">
         <div
-            class="notification"
             v-for="noti in notifications"
             :key="noti.id"
+            class="notification"
+            :class="[
+                {
+                    hidden: noti.hidden,
+                },
+                noti.type,
+            ]"
             @click="notificationModule.remove(noti)"
-            :class="{
-                hidden: noti.hidden,
-            }"
         >
             <div class="title">{{ noti.title }}</div>
             <div class="body">{{ noti.text }}</div>
@@ -42,13 +45,25 @@
     .notification {
         width: 200px;
         min-height: 80px;
-        background: blue;
         border-radius: 4px;
         margin-bottom: 8px;
         cursor: pointer;
         transition: opacity 250ms;
         opacity: 1;
         box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+
+        &.info {
+            background: linear-gradient(225deg, #0a3471, #0a1f3c);
+        }
+        &.success {
+            background: linear-gradient(225deg, #3c9c0b, #06540c);
+        }
+        &.warning {
+            background: linear-gradient(225deg, #d4b000, #71400d);
+        }
+        &.error {
+            background: linear-gradient(225deg, #bd1111, #6f0b0b);
+        }
 
         &.hidden {
             opacity: 0;
@@ -58,6 +73,7 @@
             text-align: center;
             border-bottom: 1px solid white;
             padding: 8px;
+            font-weight: bold;
         }
 
         .body {

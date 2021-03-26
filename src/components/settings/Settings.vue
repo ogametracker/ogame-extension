@@ -206,6 +206,8 @@
             'month',
         ];
 
+        //TODO: save settings
+
         private get settings() {
             return SettingsModule.settings;
         }
@@ -217,16 +219,6 @@
                 take: 1,
                 label: 'Neuer Bereich',
             });
-
-            const noti = NotificationModule.addNotification({
-                title: 'Speichere Einstellungen',
-                text: 'Speichern....',
-            });
-
-            setTimeout(() => {
-                noti.text = 'Fertig';
-                NotificationModule.remove(noti);
-            }, 2500);
         }
 
         private removeRange(index: number) {

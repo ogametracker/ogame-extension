@@ -353,6 +353,7 @@
         .chart-scrollbar {
             overflow-x: auto;
             direction: rtl;
+            cursor: pointer;
 
             .thumb {
                 height: 1px;

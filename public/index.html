@@ -1,18 +1,1944 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
     </noscript>
-    <button onclick="window.ogameTracker.visible = true">Open</button>
+    <button onclick="window.ogameTracker.visible = true;">Open</button>
+
+    <div id="content"><div id="buttonz">
+        <div class="header">
+            <h2>Newsfeed</h2>
+        </div>
+        <div class="content">
+            <div class="js_tabs tabs_wrap ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="tabs_btn ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                                        <li id="tabs-nfFleets" class="list_item ui-state-default ui-corner-top ui-tabs-active ui-state-active" data-tabid="2" role="tab" tabindex="0" aria-controls="ui-id-2" aria-labelledby="ui-id-1" aria-selected="true" aria-expanded="true">
+                            <a href="index.php?page=messages&amp;tab=2&amp;ajax=1" class="tabs_btn_img tb_fleets ui-tabs-anchor" rel="index.php?page=messages&amp;tab=2&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-1">
+                                                                
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">Flotten</span>
+                            </a>
+                        </li>
+                                        <li id="tabs-nfCommunication" class="list_item ui-state-default ui-corner-top" data-tabid="1" role="tab" tabindex="-1" aria-controls="ui-id-4" aria-labelledby="ui-id-3" aria-selected="false" aria-expanded="false">
+                            <a href="index.php?page=messages&amp;tab=1&amp;ajax=1" class="tabs_btn_img tb_communication ui-tabs-anchor" rel="index.php?page=messages&amp;tab=1&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-3">
+                                                                <span class="new_msg_count" style="display: none;">0</span>
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">Kommunikation</span>
+                            </a>
+                        </li>
+                                        <li id="tabs-nfEconomy" class="list_item ui-state-default ui-corner-top" data-tabid="3" role="tab" tabindex="-1" aria-controls="ui-id-6" aria-labelledby="ui-id-5" aria-selected="false" aria-expanded="false">
+                            <a href="index.php?page=messages&amp;tab=3&amp;ajax=1" class="tabs_btn_img tb_economy ui-tabs-anchor" rel="index.php?page=messages&amp;tab=3&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-5">
+                                                                <span class="new_msg_count" style="display: none;">0</span>
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">Ökonomie</span>
+                            </a>
+                        </li>
+                                        <li id="tabs-nfUniverse" class="list_item ui-state-default ui-corner-top" data-tabid="5" role="tab" tabindex="-1" aria-controls="ui-id-8" aria-labelledby="ui-id-7" aria-selected="false" aria-expanded="false">
+                            <a href="index.php?page=messages&amp;tab=5&amp;ajax=1" class="tabs_btn_img tb_universe ui-tabs-anchor" rel="index.php?page=messages&amp;tab=5&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-7">
+                                                                <span class="new_msg_count" style="display: none;">0</span>
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">Spielwelt</span>
+                            </a>
+                        </li>
+                                        <li id="tabs-nfSystem" class="list_item ui-state-default ui-corner-top" data-tabid="4" role="tab" tabindex="-1" aria-controls="ui-id-10" aria-labelledby="ui-id-9" aria-selected="false" aria-expanded="false">
+                            <a href="index.php?page=messages&amp;tab=4&amp;ajax=1" class="tabs_btn_img tb_system ui-tabs-anchor" rel="index.php?page=messages&amp;tab=4&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-9">
+                                                                <span class="new_msg_count" style="display: none;">0</span>
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">OGame</span>
+                            </a>
+                        </li>
+                                        <li id="tabs-nfFavorites" class="list_item ui-state-default ui-corner-top" data-tabid="6" role="tab" tabindex="-1" aria-controls="ui-id-12" aria-labelledby="ui-id-11" aria-selected="false" aria-expanded="false">
+                            <a href="index.php?page=messages&amp;tab=6&amp;ajax=1" class="tabs_btn_img tb_favorites premiumHighligt ui-tabs-anchor" rel="index.php?page=messages&amp;tab=6&amp;ajax=1" role="presentation" tabindex="-1" id="ui-id-11">
+                                                                <span class="new_msg_count" style="display: none;">0</span>
+                                                            <img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif" height="54" width="54">
+                                <div class="marker"></div>
+                                <span class="icon_caption">Favoriten</span>
+                            </a>
+                        </li>
+                                </ul><div id="ui-id-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="false"><div id="fleetsTab"><div class="tab_ctn">
+        <div class="js_subtabs_fleets ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="subtabs ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                                <li id="subtabs-nfFleet20" class="list_item first ui-state-default ui-corner-top" data-subtabname="Spionage" data-tabid="20" role="tab" tabindex="-1" aria-controls="ui-id-14" aria-labelledby="ui-id-13" aria-selected="false" aria-expanded="false">
+                        <a href="index.php?page=messages&amp;tab=20&amp;ajax=1" class="txt_link ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-13">
+                            Spionage
+                            
+                        </a>
+                    </li>
+                                <li id="subtabs-nfFleet21" class="list_item  ui-state-default ui-corner-top" data-subtabname="Kampfberichte" data-tabid="21" role="tab" tabindex="-1" aria-controls="ui-id-16" aria-labelledby="ui-id-15" aria-selected="false" aria-expanded="false">
+                        <a href="index.php?page=messages&amp;tab=21&amp;ajax=1" class="txt_link ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-15">
+                            Kampfberichte
+                            <span></span>
+                        </a>
+                    </li>
+                                <li id="subtabs-nfFleet22" class="list_item  ui-state-default ui-corner-top ui-tabs-active ui-state-active" data-subtabname="Expeditionen" data-tabid="22" role="tab" tabindex="0" aria-controls="ui-id-18" aria-labelledby="ui-id-17" aria-selected="true" aria-expanded="true">
+                        <a href="index.php?page=messages&amp;tab=22&amp;ajax=1" class="txt_link ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-17">
+                            Expeditionen
+                            
+                        </a>
+                    </li>
+                                <li id="subtabs-nfFleet23" class="list_item  ui-state-default ui-corner-top" data-subtabname="Verbände/Transport" data-tabid="23" role="tab" tabindex="-1" aria-controls="ui-id-20" aria-labelledby="ui-id-19" aria-selected="false" aria-expanded="false">
+                        <a href="index.php?page=messages&amp;tab=23&amp;ajax=1" class="txt_link ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-19">
+                            Verbände/Transport
+                            <span></span>
+                        </a>
+                    </li>
+                                <li id="subtabs-nfFleet24" class="list_item last ui-state-default ui-corner-top" data-subtabname="Sonstige" data-tabid="24" role="tab" tabindex="-1" aria-controls="ui-id-22" aria-labelledby="ui-id-21" aria-selected="false" aria-expanded="false">
+                        <a href="index.php?page=messages&amp;tab=24&amp;ajax=1" class="txt_link ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-21">
+                            Sonstige
+                            <span>(1)</span>
+                        </a>
+                    </li>
+                            <li id="subtabs-nfFleetTrash" class="trash_tab ui-state-default ui-corner-top" data-subtabname="Papierkorb" data-tabid="25" role="tab" tabindex="-1" aria-controls="ui-id-24" aria-labelledby="ui-id-23" aria-selected="false" aria-expanded="false">
+                    <div class="trash_box">
+                        <h3 class="trash_title in_trash" style="display: none;">Papierkorb</h3>
+                        Alle im Tab <span class="js_active_tab">Expeditionen</span> <span class="not_in_trash"><span class="trash_action js_actionKillAll">löschen</span></span> <span class="in_trash" style="display: none;"><span class="trash_action js_actionReviveAll">wiederherstellen</span> oder <span class="trash_action js_actionDeleteAll">endgültig löschen</span></span>.
+                    </div>
+                    <a href="index.php?page=messages&amp;tab=25&amp;ajax=1" class="btn_blue btn_trash ui-tabs-anchor" role="presentation" tabindex="-1" id="ui-id-23">
+                        Papierkorb
+                        <span></span>
+                    </a>
+                </li>
+            </ul><div id="ui-id-14" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-13" role="tabpanel" aria-hidden="true" style="display: none;"><div id="fleetsgenericpage"><ul class="tab_inner ctn_with_trash clearfix">
+        <ul class="pagination"><li class="paginator" data-tab="20" data-page="1">|&lt;&lt;</li><li class="paginator" data-tab="20" data-page="1">&lt;</li><li class="curPage" data-tab="20">1/1</li><li class="paginator" data-tab="20" data-page="1">&gt;</li><li class="paginator" data-tab="20" data-page="1">&gt;&gt;|</li></ul>
+                <li class="no_msg">
+                Zur Zeit gibt es keine Nachrichten in diesem Tab
+            </li>
+            <br>
+            <ul class="pagination"><li class="paginator" data-tab="20" data-page="1">|&lt;&lt;</li><li class="paginator" data-tab="20" data-page="1">&lt;</li><li class="curPage" data-tab="20">1/1</li><li class="paginator" data-tab="20" data-page="1">&gt;</li><li class="paginator" data-tab="20" data-page="1">&gt;&gt;|</li></ul>
+    </ul></div></div><div id="ui-id-16" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-15" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-18" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-17" role="tabpanel" aria-hidden="false" style="display: block;"><div id="fleetsgenericpage"><ul class="tab_inner ctn_with_trash clearfix">
+        <ul class="pagination"><li class="paginator" data-tab="22" data-page="1">|&lt;&lt;</li><li class="paginator" data-tab="22" data-page="1">&lt;</li><li class="curPage" data-tab="22">1/2</li><li class="paginator" data-tab="22" data-page="2">&gt;</li><li class="paginator" data-tab="22" data-page="2">&gt;&gt;|</li></ul>
+                <li class="msg " data-msg-id="55177914">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 18:12:29</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 12.600.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55177914" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55177914&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+    </li>
+                <li class="msg " data-msg-id="55177910">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 18:12:25</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Metall 8.100.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited tpd-hideOnClickOutside" title=""></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55177910" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55177910&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55176143">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 17:04:13</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expeditionsflotte geriet gefährlich nahe an das Gravitationsfeld eines Neutronensterns und musste einige Zeit kämpfen, um sich daraus zu befreien. Dadurch wurde sehr viel Deuterium verbraucht und die Expeditionsflotte kehrte schließlich unverrichteter Dinge zurück.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55176143" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55176143&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55176142">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 17:04:08</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat wunderschöne Bilder einer Supernova gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55176142" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55176142&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55176137">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 17:04:06</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 22.500.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55176137" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55176137&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55176136">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 17:04:02</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Die Expedition folgte einigen seltsamen Signalen und entdeckte einen Asteroiden, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.<br><br>Es wurde Dunkle Materie 353 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55176136" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55176136&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55176134">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 17:03:58</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 18.900.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55176134" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55176134&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55174569">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 16:02:31</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Unsere Expedition fand einen Planeten, der wohl durch anhaltende Kriege fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Schlachtkreuzer: 28<br>Großer Transporter: 154<br>Spionagesonde: 217<br>Pathfinder: 1
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55174569" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55174569&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55174564">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 16:02:26</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition ist auf eine alte Sternenfestung gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Spionagesonde: 4362<br>Reaper: 3<br>Pathfinder: 54<br>Kleiner Transporter: 62<br>Großer Transporter: 2<br>Leichter Jäger: 1
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55174564" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55174564&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55173143">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 15:13:04</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Ein seltsames Computervirus legte kurz nach Verlassen des Sonnensystems die Navigation lahm. Dies führte dazu, dass die gesamte Expeditionsflotte die ganze Zeit im Kreis flog. Überflüssig zu sagen, dass die Expedition nicht besonders erfolgreich war.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55173143" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55173143&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55173138">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 15:12:51</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Metall 13.500.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55173138" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55173138&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55173129">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 15:12:31</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Kristall 3.150.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55173129" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55173129&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55173124">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 15:12:14</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat wunderschöne Bilder einer Supernova gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55173124" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55173124&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55173118">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 15:11:56</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Ein paar anscheinend sehr verzweifelte Weltraumpiraten haben versucht,<br>
+    unsere Expeditionsflotte zu kapern.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55173118" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55173118&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170668">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:30:06</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Kristall 11.250.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170668" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170668&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170632">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:29:39</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Das Führungsschiff deiner Expeditionsflotte kollidierte mit einem fremden Schiff, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170632" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170632&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170613">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:29:10</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir sind auf die Überreste einer Vorgängerexpedition gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Kleiner Transporter: 1259<br>Zerstörer: 39<br>Spionagesonde: 1370<br>Schwerer Jäger: 10
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170613" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170613&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170598">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:28:47</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 6.300.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170598" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170598&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170575">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:28:23</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 5.400.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170575" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170575&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170560">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:28:08</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Ein böser Patzer des Navigators führte zu einer Fehlkalkulation beim Sprung der Expedition. Nicht nur landete die Flotte an einem völlig falschen Ort, auch der Rückweg nahm erheblich mehr Zeit in Anspruch.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170560" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170560&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55170549">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 13:27:50</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition ist auf eine alte Sternenfestung gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Großer Transporter: 213<br>Kreuzer: 15<br>Leichter Jäger: 568<br>Zerstörer: 5<br>Spionagesonde: 25<br>Schwerer Jäger: 4
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55170549" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55170549&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167649">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:32</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir sind auf die Überreste einer Vorgängerexpedition gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Kreuzer: 409<br>Spionagesonde: 48<br>Zerstörer: 1<br>Schwerer Jäger: 3<br>Großer Transporter: 1
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167649" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167649&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167643">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:23</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte beim Rücksprung in einen Sonnenwind. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167643" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167643&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167639">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:17</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Unsere Expedition ist auf ein Geisterschiff gestoßen, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.<br><br>Es wurde Dunkle Materie 308 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167639" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167639&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167637">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:14</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Außer einiger kurioser kleiner Tierchen von einem unbekannten Sumpfplaneten bringt diese Expedition nichts Aufregendes von ihrer Reise mit.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167637" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167637&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167636">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:10</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Metall 18.000.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167636" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167636&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167635">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:07</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Unsere Expedition fand einen Planeten, der wohl durch anhaltende Kriege fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Reaper: 17<br>Pathfinder: 231<br>Spionagesonde: 940<br>Schwerer Jäger: 73<br>Bomber: 1
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167635" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167635&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55167634">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 11:06:02</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition große Rohstoffvorkommen. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.<br><br>Es wurde Kristall 22.500.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55167634" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55167634&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159853">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 01:24:27</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider mit leeren Händen zurück.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159853" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159853&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159852">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 01:24:24</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir haben die Reste einer Armada gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Zerstörer: 64<br>Schwerer Jäger: 30<br>Großer Transporter: 328<br>Spionagesonde: 295<br>Bomber: 1<br>Pathfinder: 2<br>Leichter Jäger: 2
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159852" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159852&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159740">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 00:51:13</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expeditionsflotte geriet gefährlich nahe an das Gravitationsfeld eines Neutronensterns und musste einige Zeit kämpfen, um sich daraus zu befreien. Dadurch wurde sehr viel Deuterium verbraucht und die Expeditionsflotte kehrte schließlich unverrichteter Dinge zurück.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159740" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159740&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159599">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 00:10:55</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Vielleicht hätte man den Geburtstag des Captains nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159599" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159599&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159598">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 00:10:50</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 13.500.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159598" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159598&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159597">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 00:10:46</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Metall 10.800.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159597" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159597&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159595">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">26.03.2021 00:10:40</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat wortwörtlich mit der Leere des Alls Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159595" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159595&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159405">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 23:37:10</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir haben die Überreste eines Alien-Schiffes gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!<br><br>Es wurde Dunkle Materie 383 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159405" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159405&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55159404">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 23:37:05</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf die hypnotischen Muster auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55159404" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55159404&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55158808">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 22:39:56</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition fand einen uralten, voll beladenen, aber menschenleeren Frachterkonvoi. Einige Ressourcen konnten geborgen werden.<br><br>Es wurde Kristall 15.750.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55158808" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55158808&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55158805">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 22:39:51</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expedition hat einen kleinen Asteroidenschwarm entdeckt, aus dem einige Ressourcen gewonnen werden können.<br><br>Es wurde Kristall 7.200.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55158805" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55158805&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55158804">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 22:39:47</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Die Expedition folgte einigen seltsamen Signalen und entdeckte einen Asteroiden, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.<br><br>Es wurde Dunkle Materie 308 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55158804" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55158804&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55158801">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 22:39:36</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Der Sternwind eines roten Riesen verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55158801" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55158801&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55158799">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 22:39:32</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 4.500.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55158799" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55158799&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157380">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:10:12</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Einige primitive Barbaren greifen uns mit Raumschiffen an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157380" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157380&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157376">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=228&amp;position=16" class="txt_link">[5:228:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:10:07</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Auf einem abgelegenen Planetoiden wurden einige leicht zugängliche Ressourcenfelder gefunden und erfolgreich Rohstoffe gewonnen.<br><br>Es wurde Metall 16.200.000 erbeutet.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157376" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157376&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157373">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:10:03</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf die hypnotischen Muster auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157373" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157373&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157371">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=5&amp;system=478&amp;position=16" class="txt_link">[5:478:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:10:01</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Ein böser Patzer des Navigators führte zu einer Fehlkalkulation beim Sprung der Expedition. Nicht nur landete die Flotte an einem völlig falschen Ort, auch der Rückweg nahm erheblich mehr Zeit in Anspruch.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157371" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157371&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157369">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:09:56</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Das neue Navigationsmodul hat wohl doch noch mit einigen Bugs zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157369" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157369&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157368">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=4&amp;system=15&amp;position=16" class="txt_link">[4:15:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:09:53</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir haben die Reste einer Armada gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Kreuzer: 454<br>Leichter Jäger: 1630<br>Schlachtschiff: 1<br>Zerstörer: 4<br>Großer Transporter: 6
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157368" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157368&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55157367">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=1&amp;system=421&amp;position=16" class="txt_link">[1:421:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 21:09:45</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Deine Expeditionsflotte folgte einige Zeit seltsamen Signalen. Schließlich musste sie feststellen, dass die Signale zu einer uralten Sonde gehören, die wohl vor einigen Generationen losgeschickt wurde, um fremde Spezies zu begrüßen. Die Sonde wurde geborgen und mehrere Museen deines Hauptplaneten haben schon Interesse daran verlauten lassen.
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55157367" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55157367&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+                <li class="msg " data-msg-id="55155238">
+        <div class="msg_status"></div>
+    <div class="msg_head">
+        <span class="msg_title blue_txt">Expeditionsergebnis <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=ingame&amp;component=galaxy&amp;galaxy=8&amp;system=220&amp;position=16" class="txt_link">[8:220:16]</a></span>
+        <span class="fright">
+                                <a href="javascript: void(0);" class="fright">
+                    <span class="icon_nf icon_refuse js_actionKill tooltip js_hideTipOnMobile" title="löschen"></span>
+                </a>
+            
+            <span class="msg_date fright">25.03.2021 19:31:07</span>
+        </span>
+        <br>
+        <span class="msg_sender_label">Von:</span>
+        <span class="msg_sender">Flottenkommando</span>
+    </div>
+        <span class="msg_content">
+            Wir sind auf die Überreste einer Vorgängerexpedition gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.<br><br>Folgende Schiffe schlossen sich der Flotte an:<br>Spionagesonde: 6792<br>Großer Transporter: 71<br>Reaper: 9<br>Schlachtschiff: 8<br>Bomber: 6<br>Kreuzer: 1<br>Kleiner Transporter: 6<br>Leichter Jäger: 3
+        </span>
+                <div class="msg_actions clearfix">
+                <a href="javascript: void(0);" class="icon_nf_link fleft">
+                <span class="icon_nf tooltip js_hideTipOnMobile icon_not_favorited" title="als Favoriten markieren"></span>
+            </a>
+        
+        
+                            <a href="https://s146-de.ogame.gameforge.com/game/index.php?page=shareReportOverlay&amp;messageId=55155238" class="icon_nf_link fleft overlay tooltip js_hideTipOnMobile" data-overlay-title="Nachricht teilen" title="Nachricht teilen">
+                    <span class="icon_nf icon_share"></span>
+                </a>
+                
+        
+                            <a class="fright txt_link msg_action_link overlay" href="https://s146-de.ogame.gameforge.com/game/index.php?page=messages&amp;messageId=55155238&amp;tabid=22&amp;ajax=1" data-overlay-title="Mehr Details">
+                    Mehr Details
+                </a>
+        </div>
+
+    
+    </li>
+            <ul class="pagination"><li class="paginator" data-tab="22" data-page="1">|&lt;&lt;</li><li class="paginator" data-tab="22" data-page="1">&lt;</li><li class="curPage" data-tab="22">1/2</li><li class="paginator" data-tab="22" data-page="2">&gt;</li><li class="paginator" data-tab="22" data-page="2">&gt;&gt;|</li></ul>
+    </ul></div></div><div id="ui-id-20" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-19" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-22" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-21" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-24" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-23" role="tabpanel" aria-hidden="true" style="display: none;"></div>
+        </div>
+    </div>
+    </div></div><div id="ui-id-4" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-3" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-5" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-8" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-7" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-10" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-9" role="tabpanel" aria-hidden="true" style="display: none;"></div><div id="ui-id-12" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-live="polite" aria-labelledby="ui-id-11" role="tabpanel" aria-hidden="true" style="display: none;"></div>
+                <div class="ajax_load_shadow clearfix" style="display: none;">
+                    <img class="ajax_load_img64px" src="https://gf1.geo.gfsrv.net/cdnc6/4161a64a933a5345d00cb9fdaa25c7.gif" alt="laden ..." height="64" width="64">
+                </div>
+            </div>         <div class="footer">
+            </div>
+        </div> </div>
+    </div>
+
     <div id="ogame-tracker-dialog"></div>
     <!-- built files will be auto injected -->
-  </body>
+</body>
+
 </html>

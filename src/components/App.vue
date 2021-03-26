@@ -55,7 +55,11 @@
 
         *::-webkit-scrollbar-thumb {
             border-radius: 4px;
+            background: rgba(var(--color), 0.35);
+
+            &:hover {
             background: rgba(var(--color), 0.75);
+            }
         }
     }
 </style>

@@ -56,7 +56,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
-import i18n from '@/i18n';
+    import i18n from '@/i18n';
 
     export interface ExpoLineChartDataset {
         label: string;
@@ -353,6 +353,7 @@ import i18n from '@/i18n';
         .chart-scrollbar {
             overflow-x: auto;
             direction: rtl;
+            cursor: pointer;
 
             .thumb {
                 height: 1px;

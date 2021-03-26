@@ -28,7 +28,7 @@ export default async function readExpeditions() {
         return;
 
     const knownExpos = ExpoModule.exposById;
-    let unknownMessageCount = 0;
+    let errorMessageCount = 0;
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
@@ -50,26 +50,26 @@ export default async function readExpeditions() {
         } catch (e) {
             if (e instanceof UnknownExpoEventError) {
                 messageContainer.classList.add('unknown-expo');
-                unknownMessageCount++;
+                errorMessageCount++;
             }
             expoIdsWithError.push(expoId);
-
             console.error(e);
         }
     }
 
-    if (unknownMessageCount > 0) {
-        //TODO: Notification
+    if (errorMessageCount > 0) {
+        //TODO: localization
         NotificationModule.addNotification({
-            title: 'Neue Expeditionen',
-            text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
+            type: 'error',
+            title: 'Fehler',
+            text: `Es wurden ${errorMessageCount} Expeditionen nicht eingelesen.`,
         });
     }
 
     if (newMessageCount > 0) {
         //TODO: localization
-        //TODO: info notification
         NotificationModule.addNotification({
+            type: 'info',
             title: 'Neue Expeditionen',
             text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
         });
