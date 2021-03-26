@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import App from './components/App.vue';
+import env from '@/env';
 
 // include icon as global component
 import Icon from '@/components/common/Icon.vue';
@@ -22,10 +23,14 @@ import trackMessages from '@/tracking/trackMessages';
 
 
 function mountVue() {
+    const app = document.createElement('div');
+    app.id = 'ogame-tracker-dialog';
+    document.body.appendChild(app);
+
     new Vue({
         i18n,
         render: h => h(App),
-    }).$mount('#ogame-tracker-dialog');
+    }).$mount(`#${app.id}`);
 }
 
 function addMenuItem() {
@@ -40,13 +45,15 @@ function addMenuItem() {
             <span class="textlabel">Expeditions-Stats</span>
         </a>
     `;
-    dialogLink.querySelector('a')!.addEventListener('click', e => {
+    dialogLink.querySelector('a')!.addEventListener('click', () => {
         (window as any).ogameTracker.visible = true;
     });
 
     menu.appendChild(dialogLink);
 }
 
-//TODO: addMenuItem();
+if (env.isProduction) {
+    addMenuItem();
+}
 mountVue();
 trackMessages();

@@ -158,9 +158,9 @@ export function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCol
     const result: ExpoEventCollection = {};
 
     const expoIds = Object.keys(exposv0).map(n => parseInt(n));
-    for (const expoId of expoIds) {
+    expoIds.forEach(expoId => {
         result[expoId] = migrateExpo_v0_v1(exposv0[expoId]);
-    }
+    });
 
     return result;
 }

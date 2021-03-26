@@ -16,7 +16,7 @@ function setDeep(obj: any, keys: string[], value: any) {
 }
 
 function transformRecursive(obj: any, keys: string[], output: any) {
-    for (const key of Object.keys(obj)) {
+    Object.keys(obj).forEach(key => {
         const value = obj[key];
 
         if (typeof value !== 'object' || value instanceof RegExp || value instanceof Array) {
@@ -25,7 +25,7 @@ function transformRecursive(obj: any, keys: string[], output: any) {
         else {
             transformRecursive(value, [...keys, key], output);
         }
-    }
+    });
 }
 
 export default function topLevelKeys(obj: any) {

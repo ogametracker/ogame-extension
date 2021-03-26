@@ -5,14 +5,14 @@ function setBottomLevelKey(bottomLevelKey: string, object: Record<string, any> |
 
     let result: Record<string, any> = {};
 
-    for (const key of Object.keys(object)) {
+    Object.keys(object).forEach(key => {
         const value = object[key];
         const transformed = { [key]: setBottomLevelKey(bottomLevelKey, value) };
         result = {
             ...result,
             ...transformed,
         };
-    }
+    });
 
     return result;
 }
@@ -21,14 +21,14 @@ export default function bottomLevelKeys(object: Record<string, any>): Record<str
     const keys = Object.keys(object);
     let result: Record<string, any> = {};
 
-    for (const key of keys) {
+    keys.forEach(key => {
         const value = object[key];
         const transformed = setBottomLevelKey(key, value);
         result = {
             ...result,
             ...transformed,
         };
-    }
+    });
 
     return result;
 }

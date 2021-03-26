@@ -135,7 +135,7 @@ class ExcelExport {
     }
 
     private exportExposRaw(expoData: ExpoData): any[] {
-        const expos = Object.values(expoData.exposByDay)
+        const expos = Object.values(expoData.exposByDay ?? {})
             .flatMap(expos => expos ?? [])
             .sort((a,b) => a.date - b.date);
 

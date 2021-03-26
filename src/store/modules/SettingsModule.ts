@@ -7,7 +7,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 class SettingsModule extends Vue {
-    public readonly settings: Settings = {
+    public settings: Settings = {
         tables: {
             ranges: [
                 {
@@ -89,7 +89,10 @@ class SettingsModule extends Vue {
     };
 
     private async created() {
-        //TODO: load settings from chrome storage if exists
+        const settings = await asyncChromeStorage.get(this.storageKey);
+        if(settings != null) {
+            this.settings = settings;
+        }
     }
 
     private get storageKey(): string {

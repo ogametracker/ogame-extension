@@ -14,7 +14,7 @@ class ExpoModule extends Vue {
     public exposById: ExpoEventCollection = {};
 
     private async created() {
-        this.exposById = await asyncChromeStorage.get(this.storageKey);
+        this.exposById = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.expos.push(...Object.values(this.exposById));
         /*
         const expos = await new Promise<ExpoEvent[]>(resolve => {

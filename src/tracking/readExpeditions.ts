@@ -32,10 +32,10 @@ export default async function readExpeditions() {
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    for (const messageContainer of messageContainers) {
+    messageContainers.forEach(messageContainer => {
         const expoId = parseInt(messageContainer.getAttribute('data-msg-id')!);
         if (knownExpos[expoId] != null || expoIdsWithError.includes(expoId))
-            continue;
+            return;
 
         try {
             const message = messageContainer.querySelector('.msg_content')!.textContent!
@@ -47,7 +47,7 @@ export default async function readExpeditions() {
             ExpoModule.add(expoEvent);
             newMessageCount++;
 
-            if(expoEvent.type == ExpoType.lostFleet) {
+            if (expoEvent.type == ExpoType.lostFleet) {
                 //TODO: localization
                 NotificationModule.addNotification({
                     type: 'warning',
@@ -64,7 +64,7 @@ export default async function readExpeditions() {
             expoIdsWithError.push(expoId);
             console.error(e);
         }
-    }
+    });
 
     if (errorMessageCount > 0) {
         //TODO: localization
@@ -184,14 +184,14 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
     const shipText = message.substr(match.index! + match[0].length);
     const ships: Record<ExpoFindableShips, number | undefined> = {};
-    for (const ship of Object.keys(ExpoFindableShips)) {
+    Object.keys(ExpoFindableShips).forEach(ship => {
         const shipRegex = new RegExp(ship + ': (\\d+)');
         const shipMatch = shipText.match(shipRegex);
 
         if (shipMatch != null) {
             ships[ship as unknown as ExpoFindableShips] = parseInt(shipMatch[1]);
         }
-    }
+    });
 
     const result: ExpoEventFleet = {
         type: ExpoType.fleet,

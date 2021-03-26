@@ -25,13 +25,11 @@ export default async function readWreckfields() {
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    for (const messageContainer of messageContainers) {
+    messageContainers.forEach(messageContainer => {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
-        if (knownWreckfieldReports[msgId] != null
-            || noWreckfieldReport.includes(msgId)) {
-
-            continue;
+        if (knownWreckfieldReports[msgId] != null || noWreckfieldReport.includes(msgId)) {
+            return;
         }
 
         try {
@@ -42,7 +40,7 @@ export default async function readWreckfields() {
             const wreckfieldReport = getWreckfieldReport(msgId, message, messageContainer);
             if (wreckfieldReport == null) {
                 noWreckfieldReport.push(msgId);
-                continue;
+                return;
             }
 
             WreckfieldModule.add(wreckfieldReport);
@@ -58,7 +56,7 @@ export default async function readWreckfields() {
                 timeout: 5000,
             });
         }
-    }
+    });
 
     if (newMessageCount > 0) {
         //TODO: localization

@@ -1,5 +1,5 @@
 <template>
-    <div class="expo-line-chart" :class="{ 'no-legend': hideLegend }">
+    <div class="line-chart" :class="{ 'no-legend': hideLegend }">
         <div class="scrollable-chart">
             <div class="chart-container">
                 <canvas ref="canvas" />
@@ -301,62 +301,3 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-    .expo-line-chart {
-        width: 100%;
-        height: 100%;
-
-        display: grid;
-        grid-template-columns: 1fr 200px;
-
-        &.no-legend {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .dataset-label {
-        padding: 8px;
-        display: flex;
-        flex-direction: row;
-        cursor: pointer;
-        user-select: none;
-
-        .dataset-color {
-            width: 16px;
-            height: 16px;
-            display: inline-block;
-            border-radius: 3px;
-            margin-right: 4px;
-        }
-
-        &.hidden {
-            text-decoration: line-through;
-            opacity: 0.4;
-
-            .dataset-color {
-                filter: grayscale(100%);
-            }
-        }
-    }
-
-    .scrollable-chart {
-        display: grid;
-        grid-template-rows: 1fr 20px;
-    }
-
-    .chart-scrollbar-container {
-        position: relative;
-        padding-left: 100px;
-        padding-top: 10px;
-
-        .chart-scrollbar {
-            overflow-x: auto;
-            direction: rtl;
-            cursor: pointer;
-
-            .thumb {
-                height: 1px;
-            }
-        }
-    }
-</style>

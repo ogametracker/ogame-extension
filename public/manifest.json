@@ -1,0 +1,31 @@
+{
+    "name": "OGame Vue 12345",
+    "version": "0.0.0.1",
+    "description": "OGame Vue 12345",
+    "manifest_version": 2,
+    "permissions": [
+        "storage",
+        "unlimitedStorage"
+    ],
+    "web_accessible_resources": [
+        "img/*",
+        "fonts/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.ogame.gameforge.com/game/*"
+            ],
+            "css": [
+                "chunk-vendors.css",
+                "app.css"
+            ],
+            "js": [
+                "chunk-vendors.js",
+                "chunk-vendors.js.map",
+                "app.js",
+                "app.js.map"
+            ]
+        }
+    ]
+}
