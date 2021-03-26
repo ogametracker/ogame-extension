@@ -52,6 +52,7 @@ export default async function readExpeditions() {
                     type: 'warning',
                     title: 'Flottenverlust',
                     text: 'Eine Expedition ist nicht zurückgekehrt.',
+                    timeout: 5000,
                 });
             }
         } catch (e) {
