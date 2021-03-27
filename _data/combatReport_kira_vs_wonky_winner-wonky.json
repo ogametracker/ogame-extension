@@ -1,6 +1,6 @@
 {
-    "event_time": "2021-03-23T17:24:00+01:00",
-    "event_timestamp": 1616516640,
+    "event_time": "2021-03-23T15:51:02+01:00",
+    "event_timestamp": 1616511062,
     "defenderPlanetId": 34521147,
     "coordinates": {
         "galaxy": 8,
@@ -9,7 +9,7 @@
         "planetType": 3
     },
     "attacker": {
-        "37168459": {
+        "37167572": {
             "ownerName": "Kira",
             "ownerCharacterClassId": 3,
             "ownerCharacterClassName": "Entdecker",
@@ -18,18 +18,18 @@
             "ownerPlanetType": 1,
             "ownerHomePlanet": "Death Note",
             "planetId": 34450003,
-            "fleetID": 37168459,
+            "fleetID": 37167572,
             "ownerAlliance": "Only a Game",
             "ownerAllianceTag": "OaG",
             "armorPercentage": 180,
             "weaponPercentage": 150,
             "shieldPercentage": 170,
             "shipDetails": {
-                "206": {
-                    "armor": 7560,
-                    "weapon": 1000,
-                    "shield": 135,
-                    "count": 20
+                "204": {
+                    "armor": 1120,
+                    "weapon": 125,
+                    "shield": 27,
+                    "count": 100
                 }
             }
         }
@@ -51,6 +51,12 @@
             "weaponPercentage": 190,
             "shieldPercentage": 180,
             "shipDetails": {
+                "219": {
+                    "armor": 6670,
+                    "weapon": 580,
+                    "shield": 280,
+                    "count": 1000
+                },
                 "401": {
                     "armor": 580,
                     "weapon": 232,
@@ -72,59 +78,59 @@
             "attackerLosses": null,
             "defenderLosses": null,
             "attackerShips": {
-                "37168459": {
-                    "206": 20
+                "37167572": {
+                    "204": 100
                 }
             },
             "defender": [],
             "defenderShips": [
                 {
+                    "219": 1000,
                     "401": 9,
                     "402": 1
                 }
             ]
         },
         {
-            "attackerLosses": [],
-            "attackerLossesInThisRound": [],
-            "defenderLosses": [
-                {
-                    "401": "9",
-                    "402": "1"
+            "attackerLosses": {
+                "37167572": {
+                    "204": "100"
                 }
-            ],
-            "defenderLossesInThisRound": [
-                {
-                    "401": "9",
-                    "402": "1"
+            },
+            "attackerLossesInThisRound": {
+                "37167572": {
+                    "204": "100"
                 }
-            ],
+            },
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
             "statistic": {
-                "hitsAttacker": "95",
-                "hitsDefender": "10",
-                "absorbedDamageAttacker": "1080",
-                "absorbedDamageDefender": "574",
-                "fullStrengthAttacker": "95000",
-                "fullStrengthDefender": "2378"
+                "hitsAttacker": "100",
+                "hitsDefender": "3072",
+                "absorbedDamageAttacker": "2700",
+                "absorbedDamageDefender": "12431",
+                "fullStrengthAttacker": "12500",
+                "fullStrengthDefender": "1778338"
             },
             "attackerShips": {
-                "37168459": {
-                    "206": 20
+                "37167572": {
+                    "204": 0
                 }
             },
             "defenderShips": [
                 {
-                    "401": 0,
-                    "402": 0
+                    "219": 1000,
+                    "401": 9,
+                    "402": 1
                 }
             ]
         }
     ],
     "statistic": {
-        "lostUnitsAttacker": 0,
-        "lostUnitsDefender": 20000
+        "lostUnitsAttacker": 400000,
+        "lostUnitsDefender": 0
     },
-    "result": "attacker",
+    "result": "defender",
     "moon": {
         "genesis": false,
         "chance": 0,
@@ -132,17 +138,17 @@
         "exists": true
     },
     "debris": {
-        "metalTotal": 0,
-        "crystalTotal": 0,
+        "metalTotal": 150000,
+        "crystalTotal": 50000,
         "metalRecycledAfterCombat": 0,
         "crystalRecycledAfterCombat": 0,
-        "metal": 0,
-        "crystal": 0,
+        "metal": 150000,
+        "crystal": 50000,
         "darkMatter": 0
     },
     "lightFighterCombat": {
         "attackerLosses": {
-            "37168459": {
+            "37167572": {
                 "214": 0
             }
         },
@@ -153,17 +159,14 @@
         ]
     },
     "loot": {
-        "metal": 8800,
-        "crystal": 8800,
-        "deuterium": 8800
+        "metal": 0,
+        "crystal": 0,
+        "deuterium": 0
     },
-    "repairedDefense": {
-        "401": 6,
-        "402": 1
-    },
+    "repairedDefense": [],
     "honor": {
         "honorableAttacker": false,
-        "attackerHonorPoints": 2,
+        "attackerHonorPoints": 0,
         "honorableDefender": false,
         "defenderHonorPoints": 0,
         "isCombatWithoutHonor": true
@@ -171,28 +174,22 @@
     "tacticalRetreat": {
         "active": 0,
         "attacker": false,
-        "supremacy": 580000
+        "supremacy": 77.5
     },
-    "lootPercentage": 100,
+    "lootPercentage": 0,
     "debugData": {
-        "combatmicrostart": 1616516640.9159,
-        "combatmicroend": 1616516640.9202,
-        "planet_metal_start": 99771515,
-        "planet_crystal_start": 81272078,
-        "planet_deuterium_start": 716761,
-        "planet_metal_end": 99762715,
-        "planet_crystal_end": 81263278,
-        "planet_deuterium_end": 707961
+        "combatmicrostart": 1616511062.636,
+        "combatmicroend": 1616511062.6404
     },
     "deathstarDestroyed": false,
     "mission": 1,
-    "hashcode": "b913a84f4dde1752ebb833fcfabaa593401fa37a",
-    "combatId": "7499160",
+    "hashcode": "43dda4821e238a288eb2bc25f4d7e999b5046307",
+    "combatId": "7498941",
     "spioReportPictures": null,
     "isExpedition": false,
     "attackerJSON": {
         "member": {
-            "37168459": {
+            "37167572": {
                 "ownerName": "Kira",
                 "ownerCharacterClassId": 3,
                 "ownerCharacterClassName": "Entdecker",
@@ -201,18 +198,18 @@
                 "ownerPlanetType": 1,
                 "ownerHomePlanet": "Death Note",
                 "planetId": 34450003,
-                "fleetID": 37168459,
+                "fleetID": 37167572,
                 "ownerAlliance": "Only a Game",
                 "ownerAllianceTag": "OaG",
                 "armorPercentage": 180,
                 "weaponPercentage": 150,
                 "shieldPercentage": 170,
                 "shipDetails": {
-                    "206": {
-                        "armor": 7560,
-                        "weapon": 1000,
-                        "shield": 135,
-                        "count": 20
+                    "204": {
+                        "armor": 1120,
+                        "weapon": 125,
+                        "shield": 27,
+                        "count": 100
                     }
                 }
             }
@@ -227,22 +224,30 @@
                 },
                 "losses": null,
                 "ships": {
-                    "37168459": {
-                        "206": 20
+                    "37167572": {
+                        "204": 100
                     }
                 }
             },
             {
-                "lossesInThisRound": [],
-                "statistic": {
-                    "hits": "95",
-                    "absorbedDamage": "1080",
-                    "fullStrength": "95000"
+                "lossesInThisRound": {
+                    "37167572": {
+                        "204": "100"
+                    }
                 },
-                "losses": [],
+                "statistic": {
+                    "hits": "100",
+                    "absorbedDamage": "2700",
+                    "fullStrength": "12500"
+                },
+                "losses": {
+                    "37167572": {
+                        "204": "100"
+                    }
+                },
                 "ships": {
-                    "37168459": {
-                        "206": 20
+                    "37167572": {
+                        "204": 0
                     }
                 }
             }
@@ -266,6 +271,12 @@
                 "weaponPercentage": 190,
                 "shieldPercentage": 180,
                 "shipDetails": {
+                    "219": {
+                        "armor": 6670,
+                        "weapon": 580,
+                        "shield": 280,
+                        "count": 1000
+                    },
                     "401": {
                         "armor": 580,
                         "weapon": 232,
@@ -292,33 +303,25 @@
                 "losses": null,
                 "ships": [
                     {
+                        "219": 1000,
                         "401": 9,
                         "402": 1
                     }
                 ]
             },
             {
-                "lossesInThisRound": [
-                    {
-                        "401": "9",
-                        "402": "1"
-                    }
-                ],
+                "lossesInThisRound": [],
                 "statistic": {
-                    "hits": "10",
-                    "absorbedDamage": "574",
-                    "fullStrength": "2378"
+                    "hits": "3072",
+                    "absorbedDamage": "12431",
+                    "fullStrength": "1778338"
                 },
-                "losses": [
-                    {
-                        "401": "9",
-                        "402": "1"
-                    }
-                ],
+                "losses": [],
                 "ships": [
                     {
-                        "401": 0,
-                        "402": 0
+                        "219": 1000,
+                        "401": 9,
+                        "402": 1
                     }
                 ]
             }

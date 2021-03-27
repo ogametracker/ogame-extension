@@ -58,7 +58,7 @@ class SettingsModule extends Vue {
                     [ExpoType.pirates]: '#de5200',
                     [ExpoType.aliens]: '#16a8d4',
                     [ExpoType.item]: '#ad135e',
-                    [ExpoType.trader]: '#00708a',
+                    [ExpoType.trader]: '#888888',
                     [ExpoType.lostFleet]: '#ffffff',
                 },
                 resources: {
@@ -76,7 +76,7 @@ class SettingsModule extends Vue {
                     [Ship.destroyer]: '#de5200',
                     [Ship.reaper]: '#16a8d4',
                     [Ship.pathfinder]: '#ad135e',
-                    [Ship.smallCargo]: '#00708a',
+                    [Ship.smallCargo]: '#888888',
                     [Ship.largeCargo]: '#ffffff',
                     [Ship.espionageProbe]: '#4b17da',
                     [Ship.deathStar]: '#000000',

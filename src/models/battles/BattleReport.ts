@@ -1,19 +1,32 @@
+import Coordinates from "../Coordinates";
+import Fleet from "../Fleet";
+import Resource from "../Resource";
+import BattleResult from "./BattleResult";
+
 export default interface BattleReport {
     date: number;
     id: number;
 
-    //TODO: fleet of attacking parties (before)
-    //TODO: fleet of attacking parties (after)
+    coordinates: Coordinates;
 
-    //TODO: fleet of defending parties (before)
-    //TODO: fleet of defending parties (after)
+    result: BattleResult;
 
-    //TODO: defense of defending parties (before)
-    //TODO: defense of defending parties (after)
+    attackerLosses: Fleet;
+    defenderLosses: Fleet;
 
-    //TODO: captured resources (negative if defending)
+    debrisField: {
+        [Resource.metal]: number;
+        [Resource.crystal]: number;
+    };
 
-    //TODO: created wreckfield
+    loot: {
+        [Resource.metal]: number;
+        [Resource.crystal]: number;
+        [Resource.deuterium]: number;
+    };
 
-    //TODO: honor change
+    honorPoints: number;
+
+    isExpedition: boolean;
+    expeditionAttackType: 'pirates' | 'aliens' | null;
 }

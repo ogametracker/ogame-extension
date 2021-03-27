@@ -1,3 +1,7 @@
+import BattleReport from "@/models/battles/BattleReport";
+import BattleResult from "@/models/battles/BattleResult";
+import OgameBattleReport from "@/models/battles/OgameBattleReport";
+import Resource from "@/models/Resource";
 import BattleModule from "@/store/modules/BattleModule";
 import NotificationModule from "@/store/modules/NotificationModule";
 
@@ -24,7 +28,7 @@ export default async function readBattles() {
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    for(const messageContainer of messageContainers) {
+    for (const messageContainer of messageContainers) {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
         if (knownBattleReports[msgId] != null || errorBattleReports.includes(msgId)) {
@@ -34,23 +38,12 @@ export default async function readBattles() {
         try {
             const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement).href;
 
-            const response = await fetch(messageUrl, { method: 'GET' });
-            const html = await response.text();
-            
-            // find the script with the 'combatData' variable that includes the combat JSON
-            const fakeDoc = document.createElement('div');
-            fakeDoc.innerHTML = html;
-            const scripts = fakeDoc.querySelectorAll('script');
-            const combatScript = Array.from(scripts).find(script => script.textContent!.includes('var combatData'))!;
-
-            const combatJsonRegex = /var combatData = jQuery.parseJSON\('([^']+)'\);/;
-            const combatJsonMatch = combatScript.textContent!.match(combatJsonRegex)!;
-            const combatJson = combatJsonMatch[1];
+            const battleReport = await readBattleReport(msgId, messageUrl);
 
             newMessageCount++;
         } catch (e) {
             console.error(e);
-            
+
             errorBattleReports.push(msgId);
 
             //TODO: localization
@@ -75,3 +68,57 @@ export default async function readBattles() {
         //TODO: await BattleModule.save();
     }
 }
+
+async function readBattleReport(id: number, messageUrl: string): BattleReport {
+    const response = await fetch(messageUrl, { method: 'GET' });
+    const html = await response.text();
+
+    // find the script with the 'combatData' variable that includes the combat JSON
+    const fakeDoc = document.createElement('div');
+    fakeDoc.innerHTML = html;
+    const scripts = fakeDoc.querySelectorAll('script');
+    const combatScript = Array.from(scripts).find(script => script.textContent!.includes('var combatData'))!;
+
+    const combatJsonRegex = /var combatData = jQuery.parseJSON\('([^']+)'\);/;
+    const combatJsonMatch = combatScript.textContent!.match(combatJsonRegex)!;
+    const combatJson = combatJsonMatch[1];
+
+
+    const ogameBattleReport = JSON.parse(combatJson) as OgameBattleReport;
+
+    const expeditionAttackType = null; //TODO: pirates/aliens/none
+    const loot = { //TODO: loot
+        [Resource.metal]: 0,
+        [Resource.crystal]: 0,
+        [Resource.deuterium]: 0,
+    };
+    const honorPoints = 0; //TODO: honor points
+    const debrisField = {//TODO: debris field
+        [Resource.metal]: 0,
+        [Resource.crystal]: 0,
+    };
+
+    const attackerLosses = {}; //TODO: attacker losses
+    const defenderLosses = {}; //TODO: defender losses
+
+    const report: BattleReport = {
+        id,
+        date: new Date(ogameBattleReport.event_time).getTime(),
+        coordinates: {
+            galaxy: ogameBattleReport.coordinates.galaxy,
+            system: ogameBattleReport.coordinates.system,
+            position: ogameBattleReport.coordinates.position,
+            type: ogameBattleReport.coordinates.planetType,
+        },
+        result: ogameBattleReport.result,
+        isExpedition: ogameBattleReport.isExpedition,
+        expeditionAttackType: expeditionAttackType,
+        loot: loot,
+        honorPoints: honorPoints,
+        debrisField: debrisField,
+        attackerLosses: attackerLosses,
+        defenderLosses: defenderLosses,
+    };
+    return report;
+}
+
