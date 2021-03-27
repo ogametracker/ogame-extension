@@ -188,12 +188,14 @@ export default async function migration_v0_v1() {
         await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
         await asyncChromeStorage.set(oldExpoStorageKey, null);
 
-        notification.type = 'success';
-        //TODO: localization
-        notification.text = 'Migration erfolgreich durchgeführt.';
-
         setTimeout(() => {
-            NotificationModule.remove(notification);
+            notification.type = 'success';
+            //TODO: localization
+            notification.text = 'Migration erfolgreich durchgeführt.';
+
+            setTimeout(() => {
+                NotificationModule.remove(notification);
+            }, 2000);
         }, 2000);
     } catch {
         notification.type = 'error';

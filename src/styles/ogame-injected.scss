@@ -36,44 +36,46 @@
     }
 }
 
-.msg-extension-read {
-    .msg_status::before {
-        background: url(#{$base-url}/icons/check.svg) no-repeat center center !important;
-        background-size: contain !important;
-        animation: extension-loading 1s linear infinite;
-        filter: invert(1);
-    }
-}
-
-.msg-extension-loading {
-    .msg_status::before {
-        background: url(#{$base-url}/icons/loading.svg) no-repeat center center !important;
-        background-size: contain !important;
-        filter: invert(1);
-    }
-}
-
-.msg {
-    padding-left: 24px !important;
-
-    .msg_status {
-        width: 24px !important;
-        left: 4px !important;
-        background: none;
-        background-color: transparent !important;
-
-        &::before {
-            width: 100% !important;
-            max-height: 100% !important;
-            background: none;
+#fleetsgenericpage {
+    .msg-extension-read {
+        .msg_status::before {
+            background: url(#{$base-url}/icons/check.svg) no-repeat center center !important;
+            background-size: contain !important;
+            animation: extension-loading 1s linear infinite;
+            filter: invert(1);
         }
     }
 
-    &.msg-error {
-        background: #2f0909 !important;
+    .msg-extension-loading {
+        .msg_status::before {
+            background: url(#{$base-url}/icons/loading.svg) no-repeat center center !important;
+            background-size: contain !important;
+            filter: invert(1);
+        }
     }
-}
 
-.msg_ctn2 {
-    width: 287px !important;
+    .msg {
+        padding-left: 24px !important;
+
+        .msg_status {
+            width: 24px !important;
+            left: 4px !important;
+            background: none;
+            background-color: transparent !important;
+
+            &::before {
+                width: 100% !important;
+                max-height: 100% !important;
+                background: none;
+            }
+        }
+
+        &.msg-error {
+            background: #2f0909 !important;
+        }
+    }
+
+    .msg_ctn2 {
+        width: 287px !important;
+    }
 }

@@ -16,6 +16,7 @@ import i18n from '@/i18n/';
 
 // tracking
 import trackMessages from '@/tracking/trackMessages';
+import migration_v0_v1 from './migrations/migration_v0_v1';
 
 
 
@@ -49,6 +50,11 @@ function addMenuItem() {
     menu.appendChild(dialogLink);
 }
 
+function migrations() {
+    migration_v0_v1();
+}
+
 addMenuItem();
 mountVue();
 trackMessages();
+migrations();

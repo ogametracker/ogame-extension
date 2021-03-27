@@ -62,7 +62,7 @@ class ExcelExport {
         getExpoData: this.exportExposRaw,
     }];
 
-    private readonly battlesExports: ExportHelper[] = [{
+    private readonly battlesExports: ExportHelper[] = [/*{
         label: 'Übersicht', //TODO: localization
         getBattlesData: this.exportBattlesOverview,
     }, {
@@ -77,7 +77,7 @@ class ExcelExport {
     }, {
         label: 'Rohdaten', //TODO: localization
         getBattlesData: this.exportBattlesRaw,
-    }];
+    }*/];
 
     private readonly debrisFieldExports: ExportHelper[] = [{
         label: 'Rohstoffe', //TODO: localization
