@@ -83,6 +83,7 @@ class SettingsModule extends Vue {
                     [Ship.recycler]: '#000000',
                     [Ship.colonyShip]: '#000000',
                     [Ship.crawler]: '#000000',
+                    [Ship.solarSatellite]: '#000000',
                 }
             }
         },

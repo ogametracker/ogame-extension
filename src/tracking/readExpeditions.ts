@@ -3,8 +3,10 @@ import ExpoEvent, { ExpoEventDarkMatter, ExpoEventResources, ExpoFindableShips, 
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
 import Resource from "@/models/Resource";
+import Ship from "@/models/Ship";
 import ExpoModule from "@/store/modules/ExpoModule";
 import NotificationModule from "@/store/modules/NotificationModule";
+import getNumericEnumValues from "@/utils/getNumericEnumValues";
 import { parse } from "date-fns";
 
 
@@ -184,14 +186,17 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
     const shipText = message.substr(match.index! + match[0].length);
     const ships: Record<ExpoFindableShips, number | undefined> = {};
-    Object.keys(ExpoFindableShips).forEach(ship => {
-        const shipRegex = new RegExp(ship + ': (\\d+)');
-        const shipMatch = shipText.match(shipRegex);
 
-        if (shipMatch != null) {
-            ships[ship as unknown as ExpoFindableShips] = parseInt(shipMatch[1]);
-        }
-    });
+    getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+        .forEach(ship => {
+            const shipName = i18n.messages.ogame.ships[ship];
+            const shipRegex = new RegExp(shipName + ': (\\d+)');
+            const shipMatch = shipText.match(shipRegex);
+
+            if (shipMatch != null) {
+                ships[ship] = parseInt(shipMatch[1]);
+            }
+        });
 
     const result: ExpoEventFleet = {
         type: ExpoType.fleet,

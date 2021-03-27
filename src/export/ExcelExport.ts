@@ -7,6 +7,7 @@ import ExpoEvent, { ExpoEventDarkMatter, ExpoEventFleet, ExpoEventItem, ExpoEven
 import Resource from "@/models/Resource";
 import Items from "@/models/items";
 import ExpoSize from "@/models/expeditions/ExpoSize";
+import getNumericEnumValues from "@/utils/getNumericEnumValues";
 
 interface ExportHelper {
     label: string;
@@ -86,7 +87,7 @@ class ExcelExport {
     }
 
     private exportExpoFleet(expoData: ExpoData): any[] {
-        const ships = Object.keys(ExpoFindableShips) as unknown[] as ExpoFindableShips[];
+        const ships = getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips);
 
         const data = expoData.days.map(day => [
             day,
@@ -137,24 +138,35 @@ class ExcelExport {
     private exportExposRaw(expoData: ExpoData): any[] {
         const expos = Object.values(expoData.exposByDay ?? {})
             .flatMap(expos => expos ?? [])
-            .sort((a,b) => a.date - b.date);
+            .sort((a, b) => a.date - b.date);
 
         const data = expos.map(expo => [
             new Date(expo.date),
             i18n.messages.ogame.expoTypes[expo.type],
 
             ...Object.keys(Resource).map(resource => expo.type == ExpoType.resources ? expo.resources[resource as Resource] : 0),
-            ...Object.keys(ExpoFindableShips).map(ship => expo.type == ExpoType.fleet ? (expo.fleet[ship as unknown as ExpoFindableShips] ?? 0) : 0),
+
+            ...getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+                .map(ship => expo.type == ExpoType.fleet ? (expo.fleet[ship] ?? 0) : 0),
+
             (expo.type == ExpoType.darkMatter ? expo.darkMatter : 0),
-            ((expo as ExpoSizeableEvent | {size: undefined}).size != null ? i18n.messages.ogame.expoSizes[(expo as ExpoSizeableEvent | {size: ExpoSize}).size] : ''),
+
+            ((expo as ExpoSizeableEvent | { size: undefined }).size != null
+                ? i18n.messages.ogame.expoSizes[(expo as ExpoSizeableEvent | { size: ExpoSize }).size]
+                : ''),
+
             (expo.type == ExpoType.item ? Items[expo.itemHash].name : ''),
         ]);
 
         const headers = [
-            'Datum + Zeit', 
+            'Datum + Zeit',
             'Typ',
+
             ...Object.keys(Resource).map(resource => i18n.messages.ogame.resources[resource]),
-            ...Object.keys(ExpoFindableShips).map(ship => i18n.messages.ogame.ships[ship]),
+
+            ...getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+                .map(ship => i18n.messages.ogame.ships[ship]),
+
             i18n.messages.ogame.premium.darkMatter,
             'Fundgröße',
             'Item',

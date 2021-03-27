@@ -1,5 +1,6 @@
 export default interface BattleReport {
     date: number;
+    id: number;
 
     //TODO: fleet of attacking parties (before)
     //TODO: fleet of attacking parties (after)

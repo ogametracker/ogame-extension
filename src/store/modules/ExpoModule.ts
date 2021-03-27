@@ -3,9 +3,7 @@ import fakeData from "@/_fakeData.json";
 import { Component, Vue } from 'vue-property-decorator';
 import ExpoEvent from "@/models/expeditions/ExpoEvent";
 import { startOfDay } from "date-fns";
-import { migrateExpos_v0_v1 } from "@/migrations/migration_v0_v1";
 import ExpoEventCollection from "@/models/expeditions/ExpoEventCollection";
-import ExpoEventCollectionv0 from "@/models/v0/ExpoEventCollection";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 
 @Component({})
@@ -16,15 +14,6 @@ class ExpoModule extends Vue {
     private async created() {
         this.exposById = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.expos.push(...Object.values(this.exposById));
-        /*
-        const expos = await new Promise<ExpoEvent[]>(resolve => {
-            const migrated = migrateExpos_v0_v1(fakeData as ExpoEventCollectionv0);
-            this.exposById = migrated;
-            //TODO: load from chrome storage
-            resolve(Object.values(migrated) as ExpoEvent[]);
-        });
-        this.expos.push(...expos);
-        */
     }
 
     public get firstExpo(): ExpoEvent | null {

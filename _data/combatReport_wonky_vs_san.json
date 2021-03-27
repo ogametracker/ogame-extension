@@ -1,0 +1,399 @@
+{
+    "event_time": "2021-03-23T15:15:18+01:00",
+    "event_timestamp": 1616508918,
+    "defenderPlanetId": 34544759,
+    "coordinates": {
+        "galaxy": 9,
+        "system": 57,
+        "position": 8,
+        "planetType": 3
+    },
+    "attacker": {
+        "37167285": {
+            "ownerName": "Wonkydonky",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 117287,
+            "ownerCoordinates": "8:220:15",
+            "ownerPlanetType": 3,
+            "ownerHomePlanet": "Mond 8A",
+            "planetId": 34521147,
+            "fleetID": 37167285,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 190,
+            "weaponPercentage": 190,
+            "shieldPercentage": 180,
+            "shipDetails": {
+                "206": {
+                    "armor": 7830,
+                    "weapon": 1160,
+                    "shield": 140,
+                    "count": 10
+                }
+            }
+        }
+    },
+    "defender": [
+        {
+            "ownerName": "San",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 115388,
+            "ownerCoordinates": "9:57:8",
+            "ownerPlanetType": 3,
+            "ownerHomePlanet": "Mond",
+            "planetId": 34544759,
+            "fleetID": 0,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 190,
+            "weaponPercentage": 180,
+            "shieldPercentage": 170,
+            "shipDetails": {
+                "401": {
+                    "armor": 580,
+                    "weapon": 224,
+                    "shield": 54,
+                    "count": 37
+                },
+                "402": {
+                    "armor": 580,
+                    "weapon": 280,
+                    "shield": 67.5,
+                    "count": 1
+                }
+            }
+        }
+    ],
+    "combatRounds": [
+        {
+            "statistics": null,
+            "attackerLosses": null,
+            "defenderLosses": null,
+            "attackerShips": {
+                "37167285": {
+                    "206": 10
+                }
+            },
+            "defender": [],
+            "defenderShips": [
+                {
+                    "401": 37,
+                    "402": 1
+                }
+            ]
+        },
+        {
+            "attackerLosses": [],
+            "attackerLossesInThisRound": [],
+            "defenderLosses": [
+                {
+                    "401": "31",
+                    "402": "1"
+                }
+            ],
+            "defenderLossesInThisRound": [
+                {
+                    "401": "31",
+                    "402": "1"
+                }
+            ],
+            "statistic": {
+                "hitsAttacker": "88",
+                "hitsDefender": "38",
+                "absorbedDamageAttacker": "1260",
+                "absorbedDamageDefender": "1742",
+                "fullStrengthAttacker": "102080",
+                "fullStrengthDefender": "8568"
+            },
+            "attackerShips": {
+                "37167285": {
+                    "206": 10
+                }
+            },
+            "defenderShips": [
+                {
+                    "401": 6,
+                    "402": 0
+                }
+            ]
+        },
+        {
+            "attackerLosses": [],
+            "attackerLossesInThisRound": [],
+            "defenderLosses": [
+                {
+                    "401": "37",
+                    "402": "1"
+                }
+            ],
+            "defenderLossesInThisRound": [
+                {
+                    "401": 6
+                }
+            ],
+            "statistic": {
+                "hitsAttacker": "43",
+                "hitsDefender": "6",
+                "absorbedDamageAttacker": "420",
+                "absorbedDamageDefender": "324",
+                "fullStrengthAttacker": "49880",
+                "fullStrengthDefender": "1344"
+            },
+            "attackerShips": {
+                "37167285": {
+                    "206": 10
+                }
+            },
+            "defenderShips": [
+                {
+                    "401": 0,
+                    "402": 0
+                }
+            ]
+        }
+    ],
+    "statistic": {
+        "lostUnitsAttacker": 0,
+        "lostUnitsDefender": 76000
+    },
+    "result": "attacker",
+    "moon": {
+        "genesis": false,
+        "chance": 0,
+        "size": 0,
+        "exists": true
+    },
+    "debris": {
+        "metalTotal": 0,
+        "crystalTotal": 0,
+        "metalRecycledAfterCombat": 0,
+        "crystalRecycledAfterCombat": 0,
+        "metal": 0,
+        "crystal": 0,
+        "darkMatter": 0
+    },
+    "lightFighterCombat": {
+        "attackerLosses": {
+            "37167285": {
+                "214": 0
+            }
+        },
+        "defenderLosses": [
+            {
+                "214": 0
+            }
+        ]
+    },
+    "loot": {
+        "metal": 0,
+        "crystal": 0,
+        "deuterium": 0
+    },
+    "repairedDefense": {
+        "401": 30,
+        "402": 1
+    },
+    "honor": {
+        "honorableAttacker": false,
+        "attackerHonorPoints": 5,
+        "honorableDefender": false,
+        "defenderHonorPoints": 0,
+        "isCombatWithoutHonor": true
+    },
+    "tacticalRetreat": {
+        "active": 0,
+        "attacker": false,
+        "supremacy": 290000
+    },
+    "lootPercentage": 50,
+    "debugData": {
+        "combatmicrostart": 1616508918.2852,
+        "combatmicroend": 1616508918.289,
+        "planet_metal_start": 0,
+        "planet_crystal_start": 0,
+        "planet_deuterium_start": 0,
+        "planet_metal_end": 0,
+        "planet_crystal_end": 0,
+        "planet_deuterium_end": 0
+    },
+    "deathstarDestroyed": false,
+    "mission": 1,
+    "hashcode": "f5d0bb2aa22a8b46ba566f0525b8d5de2b0a4073",
+    "combatId": "7498875",
+    "spioReportPictures": null,
+    "isExpedition": false,
+    "attackerJSON": {
+        "member": {
+            "37167285": {
+                "ownerName": "Wonkydonky",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 117287,
+                "ownerCoordinates": "8:220:15",
+                "ownerPlanetType": 3,
+                "ownerHomePlanet": "Mond 8A",
+                "planetId": 34521147,
+                "fleetID": 37167285,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 190,
+                "weaponPercentage": 190,
+                "shieldPercentage": 180,
+                "shipDetails": {
+                    "206": {
+                        "armor": 7830,
+                        "weapon": 1160,
+                        "shield": 140,
+                        "count": 10
+                    }
+                }
+            }
+        },
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": {
+                    "37167285": {
+                        "206": 10
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "88",
+                    "absorbedDamage": "1260",
+                    "fullStrength": "102080"
+                },
+                "losses": [],
+                "ships": {
+                    "37167285": {
+                        "206": 10
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "43",
+                    "absorbedDamage": "420",
+                    "fullStrength": "49880"
+                },
+                "losses": [],
+                "ships": {
+                    "37167285": {
+                        "206": 10
+                    }
+                }
+            }
+        ]
+    },
+    "defenderJSON": {
+        "member": [
+            {
+                "ownerName": "San",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 115388,
+                "ownerCoordinates": "9:57:8",
+                "ownerPlanetType": 3,
+                "ownerHomePlanet": "Mond",
+                "planetId": 34544759,
+                "fleetID": 0,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 190,
+                "weaponPercentage": 180,
+                "shieldPercentage": 170,
+                "shipDetails": {
+                    "401": {
+                        "armor": 580,
+                        "weapon": 224,
+                        "shield": 54,
+                        "count": 37
+                    },
+                    "402": {
+                        "armor": 580,
+                        "weapon": 280,
+                        "shield": 67.5,
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": [
+                    {
+                        "401": 37,
+                        "402": 1
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "401": "31",
+                        "402": "1"
+                    }
+                ],
+                "statistic": {
+                    "hits": "38",
+                    "absorbedDamage": "1742",
+                    "fullStrength": "8568"
+                },
+                "losses": [
+                    {
+                        "401": "31",
+                        "402": "1"
+                    }
+                ],
+                "ships": [
+                    {
+                        "401": 6,
+                        "402": 0
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "401": 6
+                    }
+                ],
+                "statistic": {
+                    "hits": "6",
+                    "absorbedDamage": "324",
+                    "fullStrength": "1344"
+                },
+                "losses": [
+                    {
+                        "401": "37",
+                        "402": "1"
+                    }
+                ],
+                "ships": [
+                    {
+                        "401": 0,
+                        "402": 0
+                    }
+                ]
+            }
+        ]
+    }
+}

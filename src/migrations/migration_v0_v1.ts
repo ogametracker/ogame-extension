@@ -7,6 +7,7 @@ import ExpoType from "@/models/expeditions/ExpoType";
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import ExpoModule from "@/store/modules/ExpoModule";
+import NotificationModule from "@/store/modules/NotificationModule";
 
 function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
     switch (expoEvent.type) {
@@ -154,7 +155,7 @@ function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
 /**
  * Migrates the tracked data from the v0 to the v1 format
  */
-export function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCollection {
+function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCollection {
     const result: ExpoEventCollection = {};
 
     const expoIds = Object.keys(exposv0).map(n => parseInt(n));
@@ -178,7 +179,28 @@ export default async function migration_v0_v1() {
     if (oldExpoData == null)
         return;
 
-    const newExpoData = migrateExpos_v0_v1(oldExpoData);
-    await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
-    await asyncChromeStorage.set(oldExpoStorageKey, null);
+    //TODO: localization
+    const notification = NotificationModule.addNotification({
+        type: 'info',
+        text: 'Migration der Daten wird druchgeführt. Bitte warten...',
+        title: 'Migration',
+    });
+
+    try {
+        const newExpoData = migrateExpos_v0_v1(oldExpoData);
+        await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
+        await asyncChromeStorage.set(oldExpoStorageKey, null);
+
+        notification.type = 'success';
+        //TODO: localization
+        notification.text = 'Migration erfolgreich durchgeführt.';
+
+        setTimeout(() => {
+            NotificationModule.remove(notification);
+        }, 2000);
+    } catch {
+        notification.type = 'error';
+        //TODO: localization
+        notification.text = 'Bei der Migration der Daten ist ein Fehler aufgetreten.';
+    }
 }

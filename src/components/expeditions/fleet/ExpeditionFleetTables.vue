@@ -14,6 +14,7 @@
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
     import i18n from "@/i18n";
+    import getNumericEnumValues from "@/utils/getNumericEnumValues";
 
     @Component({
         components: {
@@ -25,14 +26,14 @@
         private readonly expoType = ExpoType.fleet;
 
         private get items(): ExpoRangeTableItem[] {
-            return Object.keys(ExpoFindableShips).map(shipName => {
-                const ship = shipName as unknown as ExpoFindableShips;
-                return {
-                    label: i18n.messages.ogame.ships[ship],
-                    getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
-                        .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
-                };
-            });
+            return getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+                .map(ship => {
+                    return {
+                        label: i18n.messages.ogame.ships[ship],
+                        getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
+                            .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
+                    };
+                });
         }
     }
 </script>

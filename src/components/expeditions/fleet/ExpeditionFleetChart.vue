@@ -14,6 +14,7 @@
     import Ship from "@/models/Ship";
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
     import i18n from "@/i18n";
+    import getNumericEnumValues from '@/utils/getNumericEnumValues';
 
     @Component({
         components: {
@@ -22,8 +23,8 @@
     })
     export default class ExpeditionFleetChart extends Vue {
 
-        private readonly datasets: ExpoLineChartDataset[] = Object.keys(ExpoFindableShips).map(shipName => {
-            const ship = shipName as unknown as ExpoFindableShips;
+        private readonly datasets: ExpoLineChartDataset[] = getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+            .map(ship => {
             return {
                 label: i18n.messages.ogame.ships[ship],
                 fill: true,

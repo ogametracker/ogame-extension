@@ -1,0 +1,711 @@
+{
+    "event_time": "2021-03-26T15:11:56+01:00",
+    "event_timestamp": 1616767916,
+    "defenderPlanetId": "null",
+    "coordinates": {
+        "galaxy": 8,
+        "system": 220,
+        "position": 16,
+        "planetType": 1
+    },
+    "attacker": [
+        {
+            "ownerName": "Piraten",
+            "ownerCharacterClassId": 0,
+            "ownerCharacterClassName": "",
+            "ownerID": 99999,
+            "ownerCoordinates": "8:220:16",
+            "ownerPlanetType": 1,
+            "ownerHomePlanet": "Unendliche Weiten",
+            "planetId": 0,
+            "fleetID": 0,
+            "armorPercentage": 160,
+            "weaponPercentage": 160,
+            "shieldPercentage": 150,
+            "shipDetails": {
+                "204": {
+                    "armor": 1040,
+                    "weapon": 130,
+                    "shield": 25,
+                    "count": 5
+                },
+                "203": {
+                    "armor": 3120,
+                    "weapon": 13,
+                    "shield": 62.5,
+                    "count": 629
+                }
+            }
+        }
+    ],
+    "defender": {
+        "37215090": {
+            "ownerName": "Wonkydonky",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 117287,
+            "ownerCoordinates": "8:220:15",
+            "ownerPlanetType": 3,
+            "ownerHomePlanet": "Mond 8A",
+            "planetId": 34521147,
+            "fleetID": 37215090,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 190,
+            "weaponPercentage": 190,
+            "shieldPercentage": 180,
+            "shipDetails": {
+                "213": {
+                    "armor": 31900,
+                    "weapon": 5800,
+                    "shield": 1400,
+                    "count": 1
+                },
+                "219": {
+                    "armor": 6670,
+                    "weapon": 580,
+                    "shield": 280,
+                    "count": 1
+                },
+                "203": {
+                    "armor": 3480,
+                    "weapon": 14.5,
+                    "shield": 70,
+                    "count": 2118
+                }
+            }
+        }
+    },
+    "combatRounds": [
+        {
+            "statistics": null,
+            "attackerLosses": null,
+            "defenderLosses": null,
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 629
+                }
+            ],
+            "defender": [],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "1"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": "1"
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "634",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26707",
+                "absorbedDamageDefender": "8501",
+                "fullStrengthAttacker": "8827",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 628
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "2"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": 1
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "633",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26767",
+                "absorbedDamageDefender": "8501",
+                "fullStrengthAttacker": "8814",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 627
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "3"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": 1
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "632",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26658",
+                "absorbedDamageDefender": "8488",
+                "fullStrengthAttacker": "8801",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 626
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "4"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": 1
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "631",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26550",
+                "absorbedDamageDefender": "8462",
+                "fullStrengthAttacker": "8788",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 625
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "5"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": 1
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "630",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26675",
+                "absorbedDamageDefender": "8462",
+                "fullStrengthAttacker": "8775",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 624
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        },
+        {
+            "attackerLosses": [
+                {
+                    "203": "6"
+                }
+            ],
+            "attackerLossesInThisRound": [
+                {
+                    "203": 1
+                }
+            ],
+            "defenderLosses": [],
+            "defenderLossesInThisRound": [],
+            "statistic": {
+                "hitsAttacker": "629",
+                "hitsDefender": "2120",
+                "absorbedDamageAttacker": "26273",
+                "absorbedDamageDefender": "8449",
+                "fullStrengthAttacker": "8762",
+                "fullStrengthDefender": "36032"
+            },
+            "attackerShips": [
+                {
+                    "204": 5,
+                    "203": 623
+                }
+            ],
+            "defenderShips": {
+                "37215090": {
+                    "213": 1,
+                    "219": 1,
+                    "203": 2118
+                }
+            }
+        }
+    ],
+    "statistic": {
+        "lostUnitsAttacker": 72000,
+        "lostUnitsDefender": 0
+    },
+    "result": "draw",
+    "moon": {
+        "genesis": false,
+        "chance": 0,
+        "size": 0,
+        "exists": 0
+    },
+    "debris": {
+        "metalTotal": 7200,
+        "crystalTotal": 7200,
+        "metalRecycledAfterCombat": 0,
+        "crystalRecycledAfterCombat": 0,
+        "metal": 7200,
+        "crystal": 7200,
+        "darkMatter": 0
+    },
+    "lightFighterCombat": {
+        "attackerLosses": [
+            {
+                "214": 0
+            }
+        ],
+        "defenderLosses": {
+            "37215090": {
+                "214": 0
+            }
+        }
+    },
+    "loot": {
+        "metal": 0,
+        "crystal": 0,
+        "deuterium": 0
+    },
+    "repairedDefense": [],
+    "honor": {
+        "honorableAttacker": false,
+        "attackerHonorPoints": 0,
+        "honorableDefender": false,
+        "defenderHonorPoints": 0,
+        "isCombatWithoutHonor": true
+    },
+    "tacticalRetreat": {
+        "active": 0,
+        "attacker": false,
+        "supremacy": 0
+    },
+    "lootPercentage": 0,
+    "debugData": {
+        "combatmicrostart": 1616767916.8155,
+        "combatmicroend": 1616767916.8218
+    },
+    "deathstarDestroyed": false,
+    "hashcode": "961d2833534e7a886e9d65d315b58250fc9ad58e",
+    "combatId": "7510071",
+    "spioReportPictures": null,
+    "isExpedition": true,
+    "attackerJSON": {
+        "member": [
+            {
+                "ownerName": "Piraten",
+                "ownerCharacterClassId": 0,
+                "ownerCharacterClassName": "",
+                "ownerID": 99999,
+                "ownerCoordinates": "8:220:16",
+                "ownerPlanetType": 1,
+                "ownerHomePlanet": "Unendliche Weiten",
+                "planetId": 0,
+                "fleetID": 0,
+                "armorPercentage": 160,
+                "weaponPercentage": 160,
+                "shieldPercentage": 150,
+                "shipDetails": {
+                    "204": {
+                        "armor": 1040,
+                        "weapon": 130,
+                        "shield": 25,
+                        "count": 5
+                    },
+                    "203": {
+                        "armor": 3120,
+                        "weapon": 13,
+                        "shield": 62.5,
+                        "count": 629
+                    }
+                }
+            }
+        ],
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 629
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": "1"
+                    }
+                ],
+                "statistic": {
+                    "hits": "634",
+                    "absorbedDamage": "26707",
+                    "fullStrength": "8827"
+                },
+                "losses": [
+                    {
+                        "203": "1"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 628
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": 1
+                    }
+                ],
+                "statistic": {
+                    "hits": "633",
+                    "absorbedDamage": "26767",
+                    "fullStrength": "8814"
+                },
+                "losses": [
+                    {
+                        "203": "2"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 627
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": 1
+                    }
+                ],
+                "statistic": {
+                    "hits": "632",
+                    "absorbedDamage": "26658",
+                    "fullStrength": "8801"
+                },
+                "losses": [
+                    {
+                        "203": "3"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 626
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": 1
+                    }
+                ],
+                "statistic": {
+                    "hits": "631",
+                    "absorbedDamage": "26550",
+                    "fullStrength": "8788"
+                },
+                "losses": [
+                    {
+                        "203": "4"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 625
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": 1
+                    }
+                ],
+                "statistic": {
+                    "hits": "630",
+                    "absorbedDamage": "26675",
+                    "fullStrength": "8775"
+                },
+                "losses": [
+                    {
+                        "203": "5"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 624
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "203": 1
+                    }
+                ],
+                "statistic": {
+                    "hits": "629",
+                    "absorbedDamage": "26273",
+                    "fullStrength": "8762"
+                },
+                "losses": [
+                    {
+                        "203": "6"
+                    }
+                ],
+                "ships": [
+                    {
+                        "204": 5,
+                        "203": 623
+                    }
+                ]
+            }
+        ]
+    },
+    "defenderJSON": {
+        "member": {
+            "37215090": {
+                "ownerName": "Wonkydonky",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 117287,
+                "ownerCoordinates": "8:220:15",
+                "ownerPlanetType": 3,
+                "ownerHomePlanet": "Mond 8A",
+                "planetId": 34521147,
+                "fleetID": 37215090,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 190,
+                "weaponPercentage": 190,
+                "shieldPercentage": 180,
+                "shipDetails": {
+                    "213": {
+                        "armor": 31900,
+                        "weapon": 5800,
+                        "shield": 1400,
+                        "count": 1
+                    },
+                    "219": {
+                        "armor": 6670,
+                        "weapon": 580,
+                        "shield": 280,
+                        "count": 1
+                    },
+                    "203": {
+                        "armor": 3480,
+                        "weapon": 14.5,
+                        "shield": 70,
+                        "count": 2118
+                    }
+                }
+            }
+        },
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8501",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8501",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8488",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8462",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8462",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": [],
+                "statistic": {
+                    "hits": "2120",
+                    "absorbedDamage": "8449",
+                    "fullStrength": "36032"
+                },
+                "losses": [],
+                "ships": {
+                    "37215090": {
+                        "213": 1,
+                        "219": 1,
+                        "203": 2118
+                    }
+                }
+            }
+        ]
+    }
+}
