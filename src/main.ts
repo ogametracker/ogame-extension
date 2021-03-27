@@ -9,9 +9,6 @@ Vue.component('icon', Icon);
 // import custom styles
 import '@/styles/index.scss';
 
-// import materialdesignicons
-import '@mdi/font/css/materialdesignicons.min.css';
-
 Vue.config.productionTip = false;
 
 // i18n

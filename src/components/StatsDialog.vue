@@ -35,11 +35,6 @@
                             v-if="tabItem.icon != null"
                             :name="tabItem.icon"
                         />
-                        <span
-                            v-else-if="tabItem.customIcon != null"
-                            :class="tabItem.customIcon"
-                        />
-
                         <span v-if="tabItem.label != null">
                             {{ tabItem.label }}
                         </span>
@@ -92,7 +87,6 @@
         label?: string;
         name: string;
         icon?: string;
-        customIcon?: string;
         disabled?: boolean;
         flex?: boolean;
         color?: HexColor;
@@ -113,17 +107,17 @@
 
         private readonly tabItems: TabItem[] = [{
             name: 'expos',
-            customIcon: 'icon-expo',
+            icon: 'expo',
             color: '#0066ff',
             label: i18n.messages.extension.headers.expeditions,
         }, {
             name: 'battles',
-            customIcon: 'icon-attack',
+            icon: 'attack',
             color: '#c51b00',
             label: i18n.messages.extension.headers.battles,
         }, {
             name: 'wreckfields',
-            customIcon: 'icon-wreckfield',
+            icon: 'wreckfield',
             color: '#00a031',
             label: i18n.messages.extension.headers.wreckfields,
         }, {

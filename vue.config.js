@@ -7,5 +7,20 @@ module.exports = {
                 chunkFilename: '[name].css',
             }])
         }
+    },
+    configureWebpack: {
+      output: {
+        filename: '[name].js',
+        chunkFilename: '[name].js'
+      }
+    },
+    css: {
+        loaderOptions: {
+            sass: {
+                prependData: `
+                    $is-production: ${process.env.NODE_ENV === 'production'};
+                `
+            }
+        }
     }
 };

@@ -223,14 +223,14 @@
         padding: 16px;
     }
 
-    .icon-expo,
-    .icon-attack,
-    .icon-wreckfield {
+    [class^="icon-"] {
         display: inline-block;
         width: 1em;
         height: 1em;
         position: relative;
-        font-size: 36px;
+        font-size: 26px;
+        margin-right: 6px;
+        filter: invert(1);
 
         &::before {
             content: "";
@@ -244,14 +244,47 @@
         }
     }
 
+    .icon-expo,
+    .icon-wreckfield,
+    .icon-attack {
+        font-size: 36px;
+        filter: none;
+    }
+
     .icon-expo::before {
-        background-image: url(~@/assets/icons/expedition.svg);
+        @if $is-production == true {
+            background-image: url(chrome-extension://__MSG_@@extension_id__/icons/expedition.svg);
+        } @else {
+            background-image: url(/icons/expedition.svg);
+        }
     }
     .icon-attack::before {
-        background-image: url(~@/assets/icons/attack.svg);
+        @if $is-production == true {
+            background-image: url(chrome-extension://__MSG_@@extension_id__/icons/attack.svg);
+        } @else {
+            background-image: url(/icons/attack.svg);
+        }
     }
     .icon-wreckfield::before {
-        background-image: url(~@/assets/icons/wreckfield.svg);
+        @if $is-production == true {
+            background-image: url(chrome-extension://__MSG_@@extension_id__/icons/wreckfield.svg);
+        } @else {
+            background-image: url(/icons/wreckfield.svg);
+        }
+    }
+    .icon-cog::before {
+        @if $is-production == true {
+            background-image: url(chrome-extension://__MSG_@@extension_id__/icons/cog.svg);
+        } @else {
+            background-image: url(/icons/cog.svg);
+        }
+    }
+    .icon-microsoft-excel::before {
+        @if $is-production == true {
+            background-image: url(chrome-extension://__MSG_@@extension_id__/icons/microsoft-excel.svg);
+        } @else {
+            background-image: url(/icons/microsoft-excel.svg);
+        }
     }
 
     .line-chart {

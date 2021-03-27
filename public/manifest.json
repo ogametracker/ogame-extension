@@ -8,8 +8,7 @@
         "unlimitedStorage"
     ],
     "web_accessible_resources": [
-        "img/*",
-        "fonts/*"
+        "icons/*"
     ],
     "content_scripts": [
         {
@@ -17,7 +16,6 @@
                 "https://*.ogame.gameforge.com/game/*"
             ],
             "css": [
-                "chunk-vendors.css",
                 "app.css"
             ],
             "js": [
