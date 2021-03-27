@@ -1,0 +1,127 @@
+$vertical-tab-nav-width: 150px;
+$horizontal-tab-nav-height: 40px;
+
+.tab-view {
+    display: grid;
+
+    width: 100%;
+    height: 100%;
+
+    grid-template-columns: auto;
+    grid-template-rows: $horizontal-tab-nav-height 1fr;
+
+    .tab-nav-item {
+        padding: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+            background: linear-gradient(90deg, rgba(var(--color), 0.3) 30%, rgba(var(--color), 0.15));
+        }
+
+        &.active,
+        &.active:hover {
+            background: linear-gradient(90deg, rgba(var(--color), 0.7) 30%, rgba(var(--color), 0.4));
+        }
+    }
+}
+
+.tab-view.tab-view-vertical {
+    grid-template-rows: auto;
+    grid-template-columns: $vertical-tab-nav-width 1fr;
+}
+
+.tab-content {
+    padding: 0 16px;
+}
+
+.tab-content,
+.tab-nav-list {
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.item-fake-chart-wrapper {
+    padding-left: 100px;
+    height: 100%;
+    $col-width: 50px;
+
+    .item-fake-chart {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        min-height: 100%;
+        max-height: 100%;
+        overflow-x: auto;
+        padding-left: 16px;
+    }
+
+    .item-column {
+        min-height: 100%;
+        max-height: 100%;
+        display: grid;
+        grid-template-rows: 1fr 100px;
+        width: $col-width;
+    }
+
+    .item-list {
+        display: flex;
+        flex-direction: column-reverse;
+        position: relative;
+
+        &::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 0.5px;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        & > div {
+            width: $col-width;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+    }
+
+    .label {
+        height: 100px;
+        width: $col-width;
+
+        & > span {
+            transform: translateX(-50%) rotate(-60deg);
+            transform-origin: right;
+            display: inline-block;
+            font-size: 10px;
+        }
+    }
+
+    .item-image {
+        border: 2px solid;
+        border-radius: 4px;
+
+        &.grade-none {
+            border-color: $ogame-item-grade-none;
+        }
+
+        &.grade-bronze {
+            border-color: $ogame-item-grade-bronze;
+        }
+
+        &.grade-silver {
+            border-color: $ogame-item-grade-silver;
+        }
+
+        &.grade-gold {
+            border-color: $ogame-item-grade-gold;
+        }
+
+        &.grade-platinum {
+            border-color: $ogame-item-grade-platinum;
+        }
+    }
+}

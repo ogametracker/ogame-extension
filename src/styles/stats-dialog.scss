@@ -1,0 +1,93 @@
+.stats-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10000;
+    padding: 50px;
+
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+.stats-dialog-content {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: 6px;
+    overflow: hidden;
+
+    background-color: black;
+    background-image: linear-gradient(52deg, rgba(var(--color), 0.02), rgba(var(--color), 0.08));
+}
+
+.stats-dialog-nav {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 2px solid rgb(var(--color));
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+
+    .nav-item {
+        line-height: 50px;
+        height: 50px;
+        font-size: 13px;
+        padding: 0 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        .mdi {
+            font-size: 24px;
+            margin-right: 6px;
+        }
+
+        &:hover {
+            background: linear-gradient(180deg, rgba(var(--color), 0.25), rgba(var(--color), 0.5));
+        }
+
+        &-active,
+        &-active:hover {
+            background: linear-gradient(180deg, rgba(var(--color), 0.5), rgb(var(--color)));
+        }
+    }
+}
+
+.close-stats-dialog-wrapper {
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.close-stats-dialog-button {
+    cursor: pointer;
+    color: grey;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.stats-dialog-body {
+    overflow: hidden;
+    padding: 16px;
+}

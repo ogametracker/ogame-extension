@@ -1,0 +1,13 @@
+input,
+select {
+    color: inherit;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+select > option {
+    background: #050505;
+    color: inherit;
+}
