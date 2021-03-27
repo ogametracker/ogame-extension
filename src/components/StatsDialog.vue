@@ -42,9 +42,7 @@
                 </ul>
 
                 <div class="close-stats-dialog-wrapper">
-                    <icon name="close"
-                        @click="$emit('input', false)"
-                    />
+                    <icon name="close" @click="$emit('input', false)" />
                 </div>
             </nav>
             <main class="stats-dialog-body">

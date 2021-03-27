@@ -1,5 +1,9 @@
 <template>
-    <span :class="`icon-${name}`"/>
+    <span
+        :class="`icon-${name}`"
+        v-bind="{ ...$attrs, ...$props }"
+        v-on="$listeners"
+    />
 </template>
 
 <script lang="ts">
