@@ -7,10 +7,10 @@
             <battles-resources />
         </template>
         <template #fleet_players>
-            <battles-fleet-players />
+            <battles-fleet-players-lost-chart />
         </template>
         <template #fleet_expos>
-            <battles-fleet-expos />
+            <battles-fleet-expos-lost-chart />
         </template>
     </tab-view>
 </template>
@@ -20,16 +20,16 @@
     import TabView, { TabViewItem } from "../common/TabView.vue";
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
-    import BattlesFleetPlayers from "./fleet_players/BattlesFleetPlayers.vue";
-    import BattlesFleetExpos from "./fleet_expos/BattlesFleetExpos.vue";
+    import BattlesFleetPlayersLostChart from "./fleet_players/BattlesFleetPlayersLostChart.vue";
+    import BattlesFleetExposLostChart from "./fleet_expos/BattlesFleetExposLostChart.vue";
 
 
     @Component({
         components: {
             BattlesOverview,
             BattlesResources,
-            BattlesFleetPlayers,
-            BattlesFleetExpos,
+            BattlesFleetPlayersLostChart,
+            BattlesFleetExposLostChart,
             TabView,
         },
     })
@@ -45,11 +45,11 @@
             },
             {
                 name: 'fleet_players',
-                title: 'Flottenbilanz (Spieler)', //TODO: localization
+                title: 'Verloren gegen Spieler', //TODO: localization
             },
             {
                 name: 'fleet_expos',
-                title: 'Flottenbilanz (Expeditionen)', //TODO: localization
+                title: 'Verloren auf Expeditionen', //TODO: localization
             },
         ];
     }

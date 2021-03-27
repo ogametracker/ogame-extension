@@ -27,7 +27,7 @@
                     label: i18n.messages.ogame.ships[ship],
                     color: SettingsModule.settings.charts.colors.ships[ship],
                     aggregator: reports => reports.filter(report => !report.isExpedition)
-                        .reduce((acc, report) => acc + report.lostShips, 0),
+                        .reduce((acc, report) => acc + report.lostShips[ship], 0),
                 };
             });
         }

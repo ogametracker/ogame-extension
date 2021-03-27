@@ -126,27 +126,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
         [Resource.crystal]: ogameBattleReport.debris.crystal,
     };
 
-    // attacker and defender losses
-    const attackerLosses: Fleet = {
-        [Ship.battlecruiser]: 0,
-        [Ship.battleship]: 0,
-        [Ship.bomber]: 0,
-        [Ship.colonyShip]: 0,
-        [Ship.crawler]: 0,
-        [Ship.cruiser]: 0,
-        [Ship.deathStar]: 0,
-        [Ship.destroyer]: 0,
-        [Ship.espionageProbe]: 0,
-        [Ship.heavyFighter]: 0,
-        [Ship.largeCargo]: 0,
-        [Ship.lightFighter]: 0,
-        [Ship.pathfinder]: 0,
-        [Ship.reaper]: 0,
-        [Ship.recycler]: 0,
-        [Ship.smallCargo]: 0,
-        [Ship.solarSatellite]: 0,
-    };
-    const defenderLosses: Fleet = {
+    const lostShips: Fleet = {
         [Ship.battlecruiser]: 0,
         [Ship.battleship]: 0,
         [Ship.bomber]: 0,
@@ -168,24 +148,40 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
 
     const ships = getNumericEnumValues<Ship>(Ship);
     const lastRound = ogameBattleReport.combatRounds[ogameBattleReport.combatRounds.length - 1];
-    Object.values(lastRound.attackerLosses ?? {}).forEach(loss => {
+    Object.keys(lastRound.attackerLosses ?? {}).forEach(fleetId => {
+        const id = parseInt(fleetId);
+        if (ogameBattleReport.attacker[id].ownerID != playerId)
+            return;
+
+        const loss = lastRound.attackerLosses?.[fleetId];
+        if (loss == null)
+            return;
+
         ships.forEach(ship => {
             const countStr = loss![ship];
             if (countStr == null)
                 return;
 
             const count = parseInt(countStr);
-            attackerLosses[ship] += count;
+            lostShips[ship] += count;
         });
     });
-    Object.values(lastRound.defenderLosses ?? {}).forEach(loss => {
+    Object.keys(lastRound.defenderLosses ?? {}).forEach(fleetId => {
+        const id = parseInt(fleetId);
+        if (ogameBattleReport.defender[id].ownerID != playerId)
+            return;
+
+        const loss = lastRound.defenderLosses?.[fleetId];
+        if (loss == null)
+            return;
+
         ships.forEach(ship => {
             const countStr = loss![ship];
             if (countStr == null)
                 return;
 
             const count = parseInt(countStr);
-            defenderLosses[ship] += count;
+            lostShips[ship] += count;
         });
     });
 
@@ -201,11 +197,10 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
         },
         result,
         isExpedition: ogameBattleReport.isExpedition,
-        expeditionAttackType: expeditionAttackType,
-        loot: loot,
-        debrisField: debrisField,
-        attackerLosses: attackerLosses,
-        defenderLosses: defenderLosses,
+        expeditionAttackType,
+        loot,
+        debrisField,
+        lostShips,
     };
     return report;
 }

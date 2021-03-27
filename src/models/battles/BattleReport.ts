@@ -12,7 +12,6 @@ export default interface BattleReport {
     result: BattleResult;
 
     lostShips: Fleet;
-    destroyedShips: Fleet;
 
     debrisField: {
         [Resource.metal]: number;

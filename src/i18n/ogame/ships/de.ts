@@ -17,4 +17,5 @@ export default {
     [Ship.colonyShip]: 'Kolonieschiff',
     [Ship.espionageProbe]: 'Spionagesonde',
     [Ship.crawler]: 'Crawler',
+    [Ship.solarSatellite]: 'Solarsatellit',
 };
