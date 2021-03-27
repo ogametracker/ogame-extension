@@ -76,6 +76,9 @@
         @Prop({ required: false, type: Boolean, default: false })
         private stacked!: boolean;
 
+        @Prop({ required: false, type: Number, default: null })
+        private forceMin!: number | null;
+
         @Prop({ required: false, type: Function as PropType<(value: any, index: number, values: any[]) => any>, default: null })
         private yTickFormatter!: ((value: any, index: number, values: any[]) => any) | undefined;
 
@@ -102,6 +105,7 @@
         }
 
         private get chartOptions(): Chart.ChartOptions {
+            const forceMin = this.forceMin != null ? { min: this.forceMin } : {};
             return {
                 legend: {
                     display: false,
@@ -124,9 +128,8 @@
                         },
                         ticks: {
                             callback: this.yTickFormatter ?? ((value) => value),
-                            min: 0,
-                            max: this.maxValue,
                             precision: 0,
+                            ...forceMin,
                         },
                     }],
                     xAxes: [{
@@ -150,7 +153,6 @@
             datasets: this.datasetsInternal,
         };
 
-        private maxValue = 1;
         private readonly allDays: Date[] = [];
 
         private init() {
@@ -195,35 +197,7 @@
                 )
             );
 
-            this.updateMaxValue();
             this.updateDataAndLabels();
-        }
-
-        private updateMaxValue() {
-            this.maxValue = 1;
-
-            const datasets = this.chart?.data.datasets;
-
-            //find cumulative max
-            this.allDays.forEach((_, i) => {
-                const max = this.fullDatasetsData.reduce((acc, data, datasetIndex) => {
-                    if (datasets?.[datasetIndex].hidden) {
-                        return acc;
-                    }
-
-                    if (this.stacked) {
-                        return acc + data[i];
-                    }
-                    return Math.max(acc, data[i]);
-                }, 0);
-
-                if (max > this.maxValue) {
-                    this.maxValue = max;
-                }
-            });
-            //round up to nicer value
-            const power = Math.max(0, Math.floor(this.maxValue).toString().length - 1);
-            this.maxValue = (Math.floor(this.maxValue / 10 ** power) + 1) * 10 ** power;
         }
 
         private updateDataAndLabels() {
@@ -278,7 +252,6 @@
         private toggleDataset(index: number) {
             this.chart!.data.datasets![index].hidden = !this.chart!.data.datasets![index].hidden;
 
-            this.updateMaxValue();
             this.renderOrUpdate();
         }
 
