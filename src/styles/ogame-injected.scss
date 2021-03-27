@@ -1,0 +1,25 @@
+@import 'env.scss';
+
+.statistics-menu-icon {
+    display: block;
+    width: 27px;
+    height: 27px;
+    background: transparent url(#{$base-url}/img/menu-icon-background.png) 0 0 no-repeat;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translate(-50%, -50%) translateY(-1px);
+        background-image: url(#{$base-url}/icons/finance.svg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        filter: invert(1);
+        opacity: 0.2;
+    }
+}

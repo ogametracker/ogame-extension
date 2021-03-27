@@ -8,7 +8,8 @@
         "unlimitedStorage"
     ],
     "web_accessible_resources": [
-        "icons/*"
+        "icons/*",
+        "img/*"
     ],
     "content_scripts": [
         {

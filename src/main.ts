@@ -36,10 +36,10 @@ function addMenuItem() {
     const dialogLink = document.createElement('li');
     dialogLink.innerHTML = `
         <span class="menu_icon">
-            <span class="expo-stats-icon"></span>
+            <span class="statistics-menu-icon"></span>
         </span>
         <a class="menubutton" href="#">
-            <span class="textlabel">Expeditions-Stats</span>
+            <span class="textlabel">Statistiken</span>
         </a>
     `;
     dialogLink.querySelector('a')!.addEventListener('click', () => {
@@ -49,8 +49,6 @@ function addMenuItem() {
     menu.appendChild(dialogLink);
 }
 
-if (env.isProduction) {
-    addMenuItem();
-}
+addMenuItem();
 mountVue();
 trackMessages();

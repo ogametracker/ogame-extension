@@ -1,3 +1,5 @@
+@import "env.scss";
+
 [class^="icon-"] {
     display: inline-block;
     width: 1em;
@@ -27,37 +29,17 @@
 }
 
 .icon-expo::before {
-    @if $is-production == true {
-        background-image: url(chrome-extension://__MSG_@@extension_id__/icons/expedition.svg);
-    } @else {
-        background-image: url(/icons/expedition.svg);
-    }
+    background-image: url(#{$base-url}/icons/expedition.svg);
 }
 .icon-attack::before {
-    @if $is-production == true {
-        background-image: url(chrome-extension://__MSG_@@extension_id__/icons/attack.svg);
-    } @else {
-        background-image: url(/icons/attack.svg);
-    }
+    background-image: url(#{$base-url}/icons/attack.svg);
 }
 .icon-wreckfield::before {
-    @if $is-production == true {
-        background-image: url(chrome-extension://__MSG_@@extension_id__/icons/wreckfield.svg);
-    } @else {
-        background-image: url(/icons/wreckfield.svg);
-    }
+    background-image: url(#{$base-url}/icons/wreckfield.svg);
 }
 .icon-cog::before {
-    @if $is-production == true {
-        background-image: url(chrome-extension://__MSG_@@extension_id__/icons/cog.svg);
-    } @else {
-        background-image: url(/icons/cog.svg);
-    }
+    background-image: url(#{$base-url}/icons/cog.svg);
 }
 .icon-microsoft-excel::before {
-    @if $is-production == true {
-        background-image: url(chrome-extension://__MSG_@@extension_id__/icons/microsoft-excel.svg);
-    } @else {
-        background-image: url(/icons/microsoft-excel.svg);
-    }
+    background-image: url(#{$base-url}/icons/microsoft-excel.svg);
 }
