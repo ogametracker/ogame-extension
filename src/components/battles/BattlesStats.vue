@@ -20,8 +20,8 @@
     import TabView, { TabViewItem } from "../common/TabView.vue";
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
-    import BattlesFleetPlayers from "./fleet/BattlesFleetPlayers.vue";
-    import BattlesFleetExpos from "./fleet/BattlesFleetExpos.vue";
+    import BattlesFleetPlayers from "./fleet_players/BattlesFleetPlayers.vue";
+    import BattlesFleetExpos from "./fleet_expos/BattlesFleetExpos.vue";
 
 
     @Component({
@@ -37,19 +37,19 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: 'Übersicht',
+                title: 'Übersicht', //TODO: localization
             },
             {
                 name: 'resources',
-                title: 'Rohstoffbilanz',
+                title: 'Rohstoffbilanz', //TODO: localization
             },
             {
                 name: 'fleet_players',
-                title: 'Flottenbilanz (Spieler)',
+                title: 'Flottenbilanz (Spieler)', //TODO: localization
             },
             {
                 name: 'fleet_expos',
-                title: 'Flottenbilanz (Expeditionen)',
+                title: 'Flottenbilanz (Expeditionen)', //TODO: localization
             },
         ];
     }

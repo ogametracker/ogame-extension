@@ -53,7 +53,7 @@
                     class="stats-dialog-body-content"
                 />
 
-                <battle-stats
+                <battles-stats
                     v-else-if="activeTab.name == 'battles'"
                     class="stats-dialog-body-content"
                 />
@@ -73,7 +73,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
-    import BattleStats from "./battles/BattleStats.vue";
+    import BattlesStats from "./battles/BattlesStats.vue";
     import DebrisFieldStats from "./debrisFields/DebrisFieldStats.vue";
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
@@ -93,7 +93,7 @@
     @Component({
         components: {
             ExpeditionStats,
-            BattleStats,
+            BattlesStats,
             DebrisFieldStats,
             Settings,
         },

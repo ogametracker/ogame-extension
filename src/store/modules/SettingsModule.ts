@@ -67,7 +67,7 @@ class SettingsModule extends Vue {
                     [Resource.crystal]: '#249df3',
                     [Resource.deuterium]: '#14bf73',
                 },
-                fleet: {
+                ships: {
                     [Ship.lightFighter]: '#2472f3',
                     [Ship.heavyFighter]: '#c72525',
                     [Ship.cruiser]: '#fbbc04',
@@ -85,14 +85,19 @@ class SettingsModule extends Vue {
                     [Ship.colonyShip]: '#000000',
                     [Ship.crawler]: '#000000',
                     [Ship.solarSatellite]: '#000000',
-                }
-            }
+                },
+                battleResults: {
+                    draw: '#888888',
+                    lost: '#c72525',
+                    won: '#00a95e'
+                },
+            },
         },
     };
 
     private async created() {
         const settings = await asyncChromeStorage.get(this.storageKey);
-        if(settings != null) {
+        if (settings != null) {
             this.settings = settings;
         }
     }

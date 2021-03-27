@@ -7,6 +7,7 @@ import ships from './ships';
 import premium from './premium';
 import items from './items';
 import factions from './factions';
+import battleResults from './battleResults';
 
 export default {
     factions,
@@ -18,4 +19,5 @@ export default {
     premium,
     items,
     debrisFieldMessages,
+    battleResults,
 };

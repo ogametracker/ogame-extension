@@ -1,12 +1,16 @@
 <template>
-    <div></div>
+    <battles-overview-chart />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from "vue-property-decorator";
+    import BattlesOverviewChart from "./BattlesOverviewChart.vue";
 
-    @Component({})
+    @Component({
+        components: {
+            BattlesOverviewChart,
+        },
+    })
     export default class BattlesOverview extends Vue {
-        
     }
-</script>
+</script> 

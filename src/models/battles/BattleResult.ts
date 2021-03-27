@@ -1,3 +1,3 @@
-type BattleResult = 'draw' | 'attacker' | 'defender';
+type BattleResult = 'won' | 'lost' | 'draw';
 
 export default BattleResult;

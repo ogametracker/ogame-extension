@@ -22,4 +22,6 @@ export default {
         settings: 'Einstellungen',
     },
     since: 'Seit',
+    lost: 'Verloren',
+    destroyed: 'Zerstört',
 };

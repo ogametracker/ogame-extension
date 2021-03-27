@@ -1,0 +1,41 @@
+<template>
+    <battles-line-chart
+        stacked
+        :datasets="datasets"
+        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+        :tooltip-label="getTooltipLabel"
+    />
+</template>
+<script lang="ts">
+    import { Component, Vue } from "vue-property-decorator";
+    import BattlesLineChart, { BattlesLineChartDataset } from '@/components/battles/BattlesLineChart.vue';
+    import SettingsModule from "@/store/modules/SettingsModule";
+    import i18n from "@/i18n";
+    import Ship from "@/models/Ship";
+    import getNumericEnumValues from "@/utils/getNumericEnumValues";
+
+    @Component({
+        components: {
+            BattlesLineChart,
+        },
+    })
+    export default class BattlesFleetPlayersLostChart extends Vue {
+        private get datasets(): BattlesLineChartDataset[] {
+            return getNumericEnumValues<Ship>(Ship).map(ship => {
+                return {
+                    fill: true,
+                    label: i18n.messages.ogame.ships[ship],
+                    color: SettingsModule.settings.charts.colors.ships[ship],
+                    aggregator: reports => reports.filter(report => !report.isExpedition)
+                        .reduce((acc, report) => acc + report.lostShips, 0),
+                };
+            });
+        }
+
+        private getTooltipLabel(item: any, data: any) {
+            const resource = data.datasets[item.datasetIndex].label;
+            const value: number = item.value;
+            return `${i18n.formatNumber(value)} ${resource}`;
+        }
+    }
+</script>

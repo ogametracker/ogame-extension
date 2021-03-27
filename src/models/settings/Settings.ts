@@ -1,4 +1,5 @@
 import { HexColor } from "@/utils/colors";
+import BattleResult from "../battles/BattleResult";
 import ExpoType from "../expeditions/ExpoType";
 import Resource from "../Resource";
 import Ship from "../Ship";
@@ -16,12 +17,13 @@ interface ChartSettings {
 interface ChartColorSettings {
     overview: OverviewChartColorSettings;
     resources: ResourcesChartColorSettings;
-    fleet: FleetChartColorSettings;
+    ships: ShipsChartColorSettings;
+    battleResults: Record<BattleResult, HexColor>;
 }
 
 type OverviewChartColorSettings = Record<ExpoType, HexColor>;
 type ResourcesChartColorSettings = Record<Resource, HexColor>;
-type FleetChartColorSettings = Record<Ship, HexColor>;
+type ShipsChartColorSettings = Record<Ship, HexColor>;
 
 export default interface Settings {
     tables: TableSettings;

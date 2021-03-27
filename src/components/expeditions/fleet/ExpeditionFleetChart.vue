@@ -23,16 +23,16 @@
     })
     export default class ExpeditionFleetChart extends Vue {
 
-        private readonly datasets: ExpoLineChartDataset[] = getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+        private readonly datasets: ExpoLineChartDataset[] = getNumericEnumValues<Ship>(ExpoFindableShips)
             .map(ship => {
-            return {
-                label: i18n.messages.ogame.ships[ship],
-                fill: true,
-                color: SettingsModule.settings.charts.colors.fleet[ship as unknown as Ship],
-                aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
-                    .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0)
-            };
-        });
+                return {
+                    label: i18n.messages.ogame.ships[ship],
+                    fill: true,
+                    color: SettingsModule.settings.charts.colors.ships[ship],
+                    aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
+                        .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0)
+                };
+            });
 
         private getTooltipLabel(item: any, data: any) {
             const label = data.datasets[item.datasetIndex].label;

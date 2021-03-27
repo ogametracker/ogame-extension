@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts">
-    import ExpoModule from '@/store/modules/ExpoModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { defaultMixColor, HexColor } from '@/utils/colors';
     import { sub, startOfDay, add } from 'date-fns';
@@ -56,18 +55,20 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
     import i18n from '@/i18n';
+    import BattleReport from '@/models/battles/BattleReport';
+    import BattleModule from '@/store/modules/BattleModule';
 
-    export interface BattleLineChartDataset {
+    export interface BattlesLineChartDataset {
         label: string;
         color: HexColor;
         fill: boolean;
-        //TODO: aggregator: (expos: BattleEvent[]) => number;
+        aggregator: (reports: BattleReport[]) => number;
     }
 
     @Component({})
-    export default class BattleLineChart extends Vue {
-        @Prop({ required: true, type: Array as PropType<BattleLineChartDataset[]>, default: [] })
-        private datasets!: BattleLineChartDataset[];
+    export default class BattlesLineChart extends Vue {
+        @Prop({ required: true, type: Array as PropType<BattlesLineChartDataset[]>, default: [] })
+        private datasets!: BattlesLineChartDataset[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private hideLegend!: boolean;
@@ -84,7 +85,6 @@
         @Prop({ required: false, type: Function as PropType<(items: any[]) => string>, default: undefined })
         private tooltipFooter!: ((items: any[]) => string) | undefined;
 
-        private readonly expoModule = ExpoModule;
         private readonly settingsModule = SettingsModule;
         private chart: Chart | null = null;
 
@@ -172,7 +172,7 @@
         }
 
         private initData() {
-            const firstTrackedDay = this.expoModule.firstExpo?.date;
+            const firstTrackedDay = BattleModule.firstReport?.date;
             const xDaysAgo = startOfDay(sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
             const firstDay = firstTrackedDay == null || startOfDay(firstTrackedDay) > xDaysAgo
                 ? xDaysAgo
@@ -185,12 +185,12 @@
                 currentDay = add(currentDay, { days: 1 });
             }
 
-            const exposByDay = this.expoModule.byDay;
+            const reportsByDay = BattleModule.byDay;
 
             this.fullDatasetsData.push(
                 ...this.datasets.map(
                     dataset => this.allDays.map(
-                        day => 0 //TODO: dataset.aggregator(exposByDay[day.getTime()] ?? [])
+                        day => dataset.aggregator(reportsByDay[day.getTime()] ?? [])
                     )
                 )
             );

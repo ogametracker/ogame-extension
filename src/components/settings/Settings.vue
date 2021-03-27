@@ -169,12 +169,12 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="key in Object.keys(settings.charts.colors.fleet)"
+                        v-for="key in Object.keys(settings.charts.colors.ships)"
                         :key="key"
                     >
                         <td>
                             <color-input
-                                v-model="settings.charts.colors.fleet[key]"
+                                v-model="settings.charts.colors.ships[key]"
                                 :label="$i18n.messages.ogame.ships[key]"
                             />
                         </td>

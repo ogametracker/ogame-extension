@@ -44,7 +44,7 @@ export default async function readBattles() {
 
         try {
             const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement)?.href;
-            if(messageUrl == null) {
+            if (messageUrl == null) {
                 emptyBattleReports.push(msgId);
                 continue;
             }
@@ -73,7 +73,7 @@ export default async function readBattles() {
         await BattleModule.save();
     }
 
-    if(newErrorCount > 0) {
+    if (newErrorCount > 0) {
         //TODO: localization
         NotificationModule.addNotification({
             type: 'error',
@@ -93,14 +93,21 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
     // if player a defending fleet but not the owner of the planet = 0
     // else if player lost and is owner of the planet = -1
     let lootFactor = 0;
-    if(!ogameBattleReport.isExpedition) {
-        if(attackingFleets.some(fleet => fleet.ownerID == playerId)) {
+    if (!ogameBattleReport.isExpedition) {
+        if (attackingFleets.some(fleet => fleet.ownerID == playerId)) {
             lootFactor = 1;
-        } else if(ogameBattleReport.defender[0].ownerID == playerId) {
+        } else if (ogameBattleReport.defender[0].ownerID == playerId) {
             lootFactor = -1;
         }
     }
     lootFactor *= (ogameBattleReport.result == 'attacker' ? 1 : 0);
+
+    const result: BattleResult = (attackingFleets.some(fleet => fleet.ownerID == playerId) && ogameBattleReport.result == 'attacker')
+        || (Object.values(ogameBattleReport.defender).some(fleet => fleet.ownerID == playerId) && ogameBattleReport.result == 'defender')
+        ? 'won'
+        : ogameBattleReport.result == 'draw'
+            ? 'draw'
+            : 'lost';
 
 
     const expeditionAttackType = ogameBattleReport.isExpedition
@@ -192,7 +199,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
             position: ogameBattleReport.coordinates.position,
             type: ogameBattleReport.coordinates.planetType,
         },
-        result: ogameBattleReport.result,
+        result,
         isExpedition: ogameBattleReport.isExpedition,
         expeditionAttackType: expeditionAttackType,
         loot: loot,
