@@ -1,30 +1,30 @@
 import { Component, Vue } from 'vue-property-decorator';
-import BattleReport from "@/models/battles/BattleReport";
+import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import { startOfDay } from 'date-fns';
-import BattleReportCollection from '@/models/battles/BattleReportCollection'; 
-import OgameMetaData from '@/models/ogame/OgameMetaData';
+import DebrisFieldReportCollection from '@/models/debrisFields/DebrisFieldReportCollection';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
+import OgameMetaData from '@/models/ogame/OgameMetaData';
 
 @Component({})
-class BattleModule extends Vue {
-    public readonly reports: BattleReport[] = [];
+class DebrisFieldModule extends Vue {
+    public readonly reports: DebrisFieldReport[] = [];
 
-    public get reportsById(): BattleReportCollection {
-        const reports: BattleReportCollection = {};
+    public get reportsById(): DebrisFieldReportCollection {
+        const reports: DebrisFieldReportCollection = {};
         this.reports.forEach(report => reports[report.id] = report);
 
         return reports;
     } 
 
     private async created() {
-        const reportsById: BattleReportCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
+        const reportsById: DebrisFieldReportCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.reports.push(...Object.values(reportsById));
     }
 
-    public get firstReport(): BattleReport | null {
+    public get firstReport(): DebrisFieldReport | null {
         return this.reports.reduce(
             (acc, cur) => acc == null || (acc.date > cur.date) ? cur : acc,
-            null as BattleReport | null);
+            null as DebrisFieldReport | null);
     }
 
     public get byDay() {
@@ -37,23 +37,23 @@ class BattleModule extends Vue {
                 acc[day]!.push(report);
                 return acc;
             },
-            {} as { [key: number]: BattleReport[] | undefined }
+            {} as { [key: number]: DebrisFieldReport[] | undefined }
         );
     }
 
     public get storageKey(): string {
         const server = OgameMetaData.universeShort;
         const playerId = OgameMetaData.playerId;
-        return `${server}-${playerId}-battleReports`;
+        return `${server}-${playerId}-debrisFieldReports`;
     }
 
     public async save() {
         await asyncChromeStorage.set(this.storageKey, this.reportsById);
     }
 
-    public add(report: BattleReport) {
+    public add(report: DebrisFieldReport) {
         this.reports.push(report);
     }
 }
 
-export default new BattleModule();
+export default new DebrisFieldModule();

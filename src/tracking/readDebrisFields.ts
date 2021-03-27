@@ -1,13 +1,14 @@
 import i18n from "@/i18n";
-import WreckfieldReport from "@/models/wreckfields/WreckfieldReport";
+import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import NotificationModule from "@/store/modules/NotificationModule";
-import WreckfieldModule from "@/store/modules/WreckfieldModule";
+import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
 import { parse } from "date-fns";
 
 const tabIdMiscMessages = '24';
-const noWreckfieldReport: number[] = [];
+const noDebrisFieldReport: number[] = [];
+const errorReports: number[] = [];
 
-export default async function readWreckfields() {
+export default async function readDebrisFields() {
     const messagePage = document.querySelector('div[id^="ui-id-"][aria-hidden="false"] > #fleetsgenericpage');
     const parent = messagePage?.parentElement;
     if (messagePage == null || parent == null)
@@ -21,15 +22,16 @@ export default async function readWreckfields() {
     if (tabId != tabIdMiscMessages)
         return;
 
-    const knownWreckfieldReports = WreckfieldModule.reportsById;
+    const knownDebrisFieldReports = DebrisFieldModule.reportsById;
     let newMessageCount = 0;
+    let newErrorCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    messageContainers.forEach(messageContainer => {
+    for (const messageContainer of messageContainers) {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
-        if (knownWreckfieldReports[msgId] != null || noWreckfieldReport.includes(msgId)) {
-            return;
+        if (knownDebrisFieldReports[msgId] != null || errorReports.includes(msgId) || noDebrisFieldReport.includes(msgId)) {
+            continue;
         }
 
         try {
@@ -37,26 +39,20 @@ export default async function readWreckfields() {
                 .trim()
                 .replace(/\s+/g, ' ');
 
-            const wreckfieldReport = getWreckfieldReport(msgId, message, messageContainer);
-            if (wreckfieldReport == null) {
-                noWreckfieldReport.push(msgId);
-                return;
+            const debrisFieldReport = getDebrisFieldReport(msgId, message, messageContainer);
+            if (debrisFieldReport == null) {
+                noDebrisFieldReport.push(msgId);
+                continue;
             }
 
-            WreckfieldModule.add(wreckfieldReport);
+            DebrisFieldModule.add(debrisFieldReport);
             newMessageCount++;
         } catch (e) {
-            console.error(e);
-
-            //TODO: localization
-            NotificationModule.addNotification({
-                type: 'error',
-                text: 'Es ist ein Fehler aufgetreten.',
-                title: 'Fehler',
-                timeout: 5000,
-            });
+            newErrorCount++;
+            errorReports.push(msgId);
+            console.error(e, msgId);
         }
-    });
+    }
 
     if (newMessageCount > 0) {
         //TODO: localization
@@ -67,22 +63,32 @@ export default async function readWreckfields() {
             timeout: 5000,
         });
 
-        await WreckfieldModule.save();
+        await DebrisFieldModule.save();
+    }
+
+    if (newErrorCount > 0) {
+        //TODO: localization
+        NotificationModule.addNotification({
+            type: 'error',
+            title: 'Fehler',
+            text: `Es wurden ${newErrorCount} TF-Nachrichten nicht eingelesen.`,
+            timeout: 5000,
+        });
     }
 }
 
-function getWreckfieldReport(id: number, message: string, messageContainer: Element): WreckfieldReport | null {
+function getDebrisFieldReport(id: number, message: string, messageContainer: Element): DebrisFieldReport | null {
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
     const date = parse(dateText, i18n.dateTimeFormats.long, new Date()).getTime();
 
-    const regex = i18n.messages.ogame.wreckfieldMessages.regex as RegExp;
+    const regex = i18n.messages.ogame.debrisFieldMessages.regex as RegExp;
     const match = message.match(regex);
     if (match == null)
         return null;
 
     const metal = parseInt(match[1].replace(/[^\d]/g, ''));
     const crystal = parseInt(match[2].replace(/[^\d]/g, ''));
-    const report: WreckfieldReport = {
+    const report: DebrisFieldReport = {
         date,
         id,
         metal,

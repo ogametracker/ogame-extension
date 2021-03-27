@@ -58,8 +58,8 @@
                     class="stats-dialog-body-content"
                 />
 
-                <wreckfield-stats
-                    v-else-if="activeTab.name == 'wreckfields'"
+                <debris-field-stats
+                    v-else-if="activeTab.name == 'debrisFields'"
                     class="stats-dialog-body-content"
                 />
                 <span v-else-if="activeTab.name == 'settings'">
@@ -74,7 +74,7 @@
     import { Component, Prop, Vue } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
     import BattleStats from "./battles/BattleStats.vue";
-    import WreckfieldStats from "./wreckfields/WreckfieldStats.vue";
+    import DebrisFieldStats from "./debrisFields/DebrisFieldStats.vue";
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
@@ -94,7 +94,7 @@
         components: {
             ExpeditionStats,
             BattleStats,
-            WreckfieldStats,
+            DebrisFieldStats,
             Settings,
         },
     })
@@ -113,10 +113,10 @@
             color: '#c51b00',
             label: i18n.messages.extension.headers.battles,
         }, {
-            name: 'wreckfields',
-            icon: 'wreckfield',
+            name: 'debrisFields',
+            icon: 'debris-field',
             color: '#00a031',
-            label: i18n.messages.extension.headers.wreckfields,
+            label: i18n.messages.extension.headers.debrisFields,
         }, {
             name: 'placeholder_0',
             disabled: true,

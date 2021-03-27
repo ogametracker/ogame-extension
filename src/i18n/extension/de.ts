@@ -12,13 +12,13 @@ export default {
         items: 'Itemfunde',
         distribution: 'Verteilung',
     },
-    wreckfieldMenu: {
+    debrisFieldsMenu: {
         overview: 'Übersicht',
     },
     headers: {
         expeditions: 'Expeditionen',
         battles: 'Kämpfe',
-        wreckfields: 'Trümmerfelder',
+        debrisFields: 'Trümmerfelder',
         settings: 'Einstellungen',
     },
     since: 'Seit',

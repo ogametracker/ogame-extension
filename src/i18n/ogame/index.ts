@@ -1,5 +1,5 @@
 import expoMessages from './expoMessages';
-import wreckfieldMessages from './wreckfieldMessages';
+import debrisFieldMessages from './debrisFieldMessages';
 import expoSizes from './expoSizes';
 import expoTypes from './expoTypes';
 import resources from './resources';
@@ -17,5 +17,5 @@ export default {
     ships,
     premium,
     items,
-    wreckfieldMessages,
+    debrisFieldMessages,
 };

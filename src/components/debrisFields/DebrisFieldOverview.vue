@@ -1,10 +1,10 @@
 <template>
     <tab-view :items="items" overflow vertical>
         <template #chart>
-            <wreckfield-overview-chart />
+            <debris-field-overview-chart />
         </template>
         <template #tables>
-            <wreckfield-overview-tables />
+            <debris-field-overview-tables />
         </template>
     </tab-view>
 </template>
@@ -12,18 +12,18 @@
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
     import TabView, { TabViewItem } from "@/components/common/TabView.vue";
-    import WreckfieldOverviewChart from "./WreckfieldOverviewChart.vue";
-    import WreckfieldOverviewTables from "./WreckfieldOverviewTables.vue";
+    import DebrisFieldOverviewChart from "./DebrisFieldOverviewChart.vue";
+    import DebrisFieldOverviewTables from "./DebrisFieldOverviewTables.vue";
     import i18n from "@/i18n";
 
     @Component({
         components: {
-            WreckfieldOverviewChart,
-            WreckfieldOverviewTables,
+            DebrisFieldOverviewChart,
+            DebrisFieldOverviewTables,
             TabView,
         },
     })
-    export default class WreckfieldOverview extends Vue {
+    export default class DebrisFieldOverview extends Vue {
         private get items(): TabViewItem[] {
             return [
                 {

@@ -52,7 +52,6 @@ class ExpoModule extends Vue {
     }
 
     public async save() {
-        console.log('saving expos', this.exposById);
         await asyncChromeStorage.set(this.storageKey, this.exposById);
     }
 }

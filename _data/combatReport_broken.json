@@ -1,0 +1,218 @@
+{
+    "event_time": "2021-03-27T16:08:56+01:00",
+    "event_timestamp": 1616857736,
+    "defenderPlanetId": 33993484,
+    "coordinates": {
+        "galaxy": 7,
+        "system": 83,
+        "position": 11,
+        "planetType": 1
+    },
+    "attacker": {
+        "37237130": {
+            "ownerName": "Wonkydonky",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 117287,
+            "ownerCoordinates": "7:83:15",
+            "ownerPlanetType": 1,
+            "ownerHomePlanet": "7A",
+            "planetId": 34421075,
+            "fleetID": 37237130,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 190,
+            "weaponPercentage": 190,
+            "shieldPercentage": 180,
+            "shipDetails": {
+                "210": {
+                    "armor": 290,
+                    "weapon": 0.029,
+                    "shield": 0.028,
+                    "count": 7
+                }
+            }
+        }
+    },
+    "defender": [
+        {
+            "ownerName": "LeoSteph12",
+            "ownerCharacterClassId": 0,
+            "ownerCharacterClassName": "",
+            "ownerID": 114305,
+            "ownerCoordinates": "7:83:11",
+            "ownerPlanetType": 1,
+            "ownerHomePlanet": "Kolonie",
+            "planetId": 33993484,
+            "fleetID": 0,
+            "ownerAlliance": "HTL",
+            "ownerAllianceTag": "Bulmers",
+            "armorPercentage": 20,
+            "weaponPercentage": 20,
+            "shieldPercentage": 60,
+            "shipDetails": []
+        }
+    ],
+    "combatRounds": [
+        {
+            "statistics": null,
+            "attackerLosses": null,
+            "defenderLosses": null,
+            "attackerShips": {
+                "37237130": {
+                    "210": 7
+                }
+            },
+            "defender": [],
+            "defenderShips": [
+                []
+            ]
+        }
+    ],
+    "statistic": {
+        "lostUnitsAttacker": 0,
+        "lostUnitsDefender": 0
+    },
+    "result": "attacker",
+    "moon": {
+        "genesis": false,
+        "chance": 0,
+        "size": 0,
+        "exists": 0
+    },
+    "debris": {
+        "metalTotal": 0,
+        "crystalTotal": 0,
+        "metalRecycledAfterCombat": 0,
+        "crystalRecycledAfterCombat": 0,
+        "metal": 0,
+        "crystal": 0,
+        "darkMatter": 0
+    },
+    "lightFighterCombat": {
+        "attackerLosses": {
+            "37237130": {
+                "214": 0
+            }
+        },
+        "defenderLosses": [
+            {
+                "214": 0
+            }
+        ]
+    },
+    "loot": {
+        "metal": 0,
+        "crystal": 0,
+        "deuterium": 0
+    },
+    "repairedDefense": [],
+    "honor": {
+        "honorableAttacker": false,
+        "attackerHonorPoints": 0,
+        "honorableDefender": false,
+        "defenderHonorPoints": 0,
+        "isCombatWithoutHonor": true
+    },
+    "tacticalRetreat": {
+        "active": 0,
+        "attacker": false,
+        "supremacy": 1
+    },
+    "lootPercentage": 75,
+    "debugData": {
+        "combatmicrostart": 1616857736.7393,
+        "combatmicroend": 1616857736.7433,
+        "planet_metal_start": 191250,
+        "planet_crystal_start": 105000,
+        "planet_deuterium_start": 105000,
+        "planet_metal_end": 255000.33954167,
+        "planet_crystal_end": 140000.25460417,
+        "planet_deuterium_end": 140000.13825444
+    },
+    "deathstarDestroyed": false,
+    "mission": 1,
+    "hashcode": "aa1c397fe9926e9e2fec26c6a3523e30712bc99c",
+    "combatId": "7514147",
+    "spioReportPictures": null,
+    "isExpedition": false,
+    "attackerJSON": {
+        "member": {
+            "37237130": {
+                "ownerName": "Wonkydonky",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 117287,
+                "ownerCoordinates": "7:83:15",
+                "ownerPlanetType": 1,
+                "ownerHomePlanet": "7A",
+                "planetId": 34421075,
+                "fleetID": 37237130,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 190,
+                "weaponPercentage": 190,
+                "shieldPercentage": 180,
+                "shipDetails": {
+                    "210": {
+                        "armor": 290,
+                        "weapon": 0.029,
+                        "shield": 0.028,
+                        "count": 7
+                    }
+                }
+            }
+        },
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": {
+                    "37237130": {
+                        "210": 7
+                    }
+                }
+            }
+        ]
+    },
+    "defenderJSON": {
+        "member": [
+            {
+                "ownerName": "LeoSteph12",
+                "ownerCharacterClassId": 0,
+                "ownerCharacterClassName": "",
+                "ownerID": 114305,
+                "ownerCoordinates": "7:83:11",
+                "ownerPlanetType": 1,
+                "ownerHomePlanet": "Kolonie",
+                "planetId": 33993484,
+                "fleetID": 0,
+                "ownerAlliance": "HTL",
+                "ownerAllianceTag": "Bulmers",
+                "armorPercentage": 20,
+                "weaponPercentage": 20,
+                "shieldPercentage": 60,
+                "shipDetails": []
+            }
+        ],
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": [
+                    []
+                ]
+            }
+        ]
+    }
+}

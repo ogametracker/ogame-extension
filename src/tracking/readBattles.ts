@@ -13,6 +13,7 @@ import getNumericEnumValues from "@/utils/getNumericEnumValues";
 const tabIdBattleMessages = '21';
 
 const errorBattleReports: number[] = [];
+const emptyBattleReports: number[] = [];
 
 export default async function readBattles() {
     //TODO:
@@ -31,34 +32,32 @@ export default async function readBattles() {
 
     const knownBattleReports = BattleModule.reportsById;
     let newMessageCount = 0;
+    let newErrorCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
     for (const messageContainer of messageContainers) {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
-        if (knownBattleReports[msgId] != null || errorBattleReports.includes(msgId)) {
-            return;
+        if (knownBattleReports[msgId] != null || errorBattleReports.includes(msgId) || emptyBattleReports.includes(msgId)) {
+            continue;
         }
 
         try {
-            const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement).href;
+            const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement)?.href;
+            if(messageUrl == null) {
+                emptyBattleReports.push(msgId);
+                continue;
+            }
 
             const battleReport = await readBattleReport(msgId, messageUrl);
             BattleModule.add(battleReport);
 
             newMessageCount++;
         } catch (e) {
-            console.error(e);
+            console.error(e, msgId);
+            newErrorCount++;
 
             errorBattleReports.push(msgId);
-
-            //TODO: localization
-            NotificationModule.addNotification({
-                type: 'error',
-                text: 'Es ist ein Fehler aufgetreten.',
-                title: 'Fehler',
-                timeout: 5000,
-            });
         }
     }
 
@@ -73,6 +72,16 @@ export default async function readBattles() {
 
         await BattleModule.save();
     }
+
+    if(newErrorCount > 0) {
+        //TODO: localization
+        NotificationModule.addNotification({
+            type: 'error',
+            title: 'Fehler',
+            text: `Es wurden ${newErrorCount} Kampfberichte nicht eingelesen.`,
+            timeout: 5000,
+        });
+    }
 }
 
 async function readBattleReport(id: number, messageUrl: string): Promise<BattleReport> {
@@ -83,11 +92,14 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
     // lootFactor if player is one of the attackers = 1
     // if player a defending fleet but not the owner of the planet = 0
     // else if player lost and is owner of the planet = -1
-    let lootFactor = attackingFleets.some(fleet => fleet.ownerID == playerId)
-        ? 1
-        : ogameBattleReport.defender[0].ownerID == playerId
-            ? -1
-            : 0;
+    let lootFactor = 0;
+    if(!ogameBattleReport.isExpedition) {
+        if(attackingFleets.some(fleet => fleet.ownerID == playerId)) {
+            lootFactor = 1;
+        } else if(ogameBattleReport.defender[0].ownerID == playerId) {
+            lootFactor = -1;
+        }
+    }
     lootFactor *= (ogameBattleReport.result == 'attacker' ? 1 : 0);
 
 
@@ -149,7 +161,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
 
     const ships = getNumericEnumValues<Ship>(Ship);
     const lastRound = ogameBattleReport.combatRounds[ogameBattleReport.combatRounds.length - 1];
-    Object.values(lastRound.attackerLosses).forEach(loss => {
+    Object.values(lastRound.attackerLosses ?? {}).forEach(loss => {
         ships.forEach(ship => {
             const countStr = loss![ship];
             if (countStr == null)
@@ -159,7 +171,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
             attackerLosses[ship] += count;
         });
     });
-    Object.values(lastRound.defenderLosses).forEach(loss => {
+    Object.values(lastRound.defenderLosses ?? {}).forEach(loss => {
         ships.forEach(ship => {
             const countStr = loss![ship];
             if (countStr == null)

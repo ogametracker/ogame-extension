@@ -12,7 +12,8 @@ module.exports = {
       output: {
         filename: '[name].js',
         chunkFilename: '[name].js'
-      }
+      },
+      devtool: 'inline-source-map',
     },
     css: {
         loaderOptions: {

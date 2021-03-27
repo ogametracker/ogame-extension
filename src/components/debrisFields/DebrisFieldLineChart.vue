@@ -48,8 +48,8 @@
 </template>
 
 <script lang="ts">
-    import WreckfieldReport from '@/models/wreckfields/WreckfieldReport';
-    import WreckfieldModule from '@/store/modules/WreckfieldModule';
+    import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
+    import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { defaultMixColor, HexColor } from '@/utils/colors';
     import { sub, startOfDay, add } from 'date-fns';
@@ -58,17 +58,17 @@
     import Chart from 'chart.js';
     import i18n from '@/i18n';
 
-    export interface WreckfieldLineChartDataset {
+    export interface DebrisFieldLineChartDataset {
         label: string;
         color: HexColor;
         fill: boolean;
-        aggregator: (expos: WreckfieldReport[]) => number;
+        aggregator: (expos: DebrisFieldReport[]) => number;
     }
 
     @Component({})
-    export default class WreckfieldLineChart extends Vue {
-        @Prop({ required: true, type: Array as PropType<WreckfieldLineChartDataset[]>, default: [] })
-        private datasets!: WreckfieldLineChartDataset[];
+    export default class DebrisFieldLineChart extends Vue {
+        @Prop({ required: true, type: Array as PropType<DebrisFieldLineChartDataset[]>, default: [] })
+        private datasets!: DebrisFieldLineChartDataset[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private hideLegend!: boolean;
@@ -85,7 +85,6 @@
         @Prop({ required: false, type: Function as PropType<(items: any[]) => string>, default: undefined })
         private tooltipFooter!: ((items: any[]) => string) | undefined;
 
-        private readonly wreckfieldModule = WreckfieldModule;
         private readonly settingsModule = SettingsModule;
         private chart: Chart | null = null;
 
@@ -173,7 +172,7 @@
         }
 
         private initData() {
-            const firstTrackedDay = this.wreckfieldModule.firstReport?.date;
+            const firstTrackedDay = DebrisFieldModule.firstReport?.date;
             const xDaysAgo = startOfDay(sub(new Date(), { days: this.settingsModule.settings.charts.days - 1 }));
             const firstDay = firstTrackedDay == null || startOfDay(firstTrackedDay) > xDaysAgo
                 ? xDaysAgo
@@ -186,7 +185,7 @@
                 currentDay = add(currentDay, { days: 1 });
             }
 
-            const reports = this.wreckfieldModule.byDay;
+            const reports = DebrisFieldModule.byDay;
 
             this.fullDatasetsData.push(
                 ...this.datasets.map(

@@ -1,7 +1,7 @@
 import getQueryParameters from "@/utils/getQueryParameters";
 import readBattles from "./readBattles";
 import readExpeditions from "./readExpeditions";
-import readWreckfields from "./readWreckfields";
+import readDebrisFields from "./readDebrisFields";
 
 export default function startMessageTracking() {
     const queryParams = getQueryParameters(window.location);
@@ -13,7 +13,7 @@ export default function startMessageTracking() {
 async function trackMessages() {
     await readExpeditions();
     await readBattles();
-    await readWreckfields();
+    await readDebrisFields();
 
     requestAnimationFrame(trackMessages);
 }

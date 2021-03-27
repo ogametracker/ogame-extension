@@ -54,23 +54,23 @@
 
 <script lang="ts">
     import i18n from '@/i18n';
-import DateRange from '@/models/settings/DateRange';
-    import WreckfieldReport from '@/models/wreckfields/WreckfieldReport';
+    import DateRange from '@/models/settings/DateRange';
+    import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import SettingsModule from '@/store/modules/SettingsModule';
-    import WreckfieldModule from '@/store/modules/WreckfieldModule';
+    import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import daysInRange from '@/utils/daysInRange';
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
-    export interface WreckfieldRangeTableItem {
+    export interface DebrisFieldRangeTableItem {
         label: string;
-        getValue: (expos: WreckfieldReport[]) => any;
+        getValue: (expos: DebrisFieldReport[]) => any;
     }
 
     @Component({})
-    export default class WreckfieldRangeTable extends Vue {
-        @Prop({ required: true, type: Array as PropType<WreckfieldRangeTableItem[]>, default: () => [] })
-        private items!: WreckfieldRangeTableItem[];
+    export default class DebrisFieldRangeTable extends Vue {
+        @Prop({ required: true, type: Array as PropType<DebrisFieldRangeTableItem[]>, default: () => [] })
+        private items!: DebrisFieldRangeTableItem[];
 
         @Prop({ required: false, type: Boolean, default: false })
         private showTotal!: boolean;
@@ -91,7 +91,7 @@ import DateRange from '@/models/settings/DateRange';
             const ranges = this.ranges;
 
             const firstReportDate = new Date(this.firstExpoDate);
-            const reportsByDay = WreckfieldModule.byDay;
+            const reportsByDay = DebrisFieldModule.byDay;
 
             const rangeInfos = ranges.map(range => this.getRangeInfo(range, reportsByDay, firstReportDate));
             const totalRange = this.getRangeInfo({ type: 'all' }, reportsByDay, firstReportDate);
@@ -107,7 +107,7 @@ import DateRange from '@/models/settings/DateRange';
             };
         }
 
-        private getRangeInfo(range: DateRange, exposByDay: { [key: number]: WreckfieldReport[] | undefined }, firstExpoDate: Date) {
+        private getRangeInfo(range: DateRange, exposByDay: { [key: number]: DebrisFieldReport[] | undefined }, firstExpoDate: Date) {
             const rangeDays = daysInRange(range) ?? Object.keys(exposByDay).map(d => new Date(parseInt(d)));
             const exposInRange = rangeDays.flatMap(day => exposByDay[day.getTime()] ?? []);
 
@@ -123,7 +123,7 @@ import DateRange from '@/models/settings/DateRange';
         }
 
         private get firstExpoDate(): number {
-            return WreckfieldModule.firstReport?.date ?? Date.now();
+            return DebrisFieldModule.firstReport?.date ?? Date.now();
         }
     }
 </script>

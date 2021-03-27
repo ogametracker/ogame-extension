@@ -1,21 +1,21 @@
 <template>
     <div>
-        <wreckfield-ranged-table :items="items" show-total no-percentage />
+        <debris-field-ranged-table :items="items" show-total no-percentage />
     </div>
 </template>
  
 <script lang="ts">
     import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
-    import WreckfieldRangedTable, { WreckfieldRangeTableItem } from "./WreckfieldRangedTable.vue";
+    import DebrisFieldRangedTable, { DebrisFieldRangeTableItem } from "./DebrisFieldRangedTable.vue";
 
     @Component({
         components: {
-            WreckfieldRangedTable,
+            DebrisFieldRangedTable,
         },
     })
-    export default class WreckfieldOverviewTables extends Vue {
-        private get items(): WreckfieldRangeTableItem[] {
+    export default class DebrisFieldOverviewTables extends Vue {
+        private get items(): DebrisFieldRangeTableItem[] {
             return [{
                 label: i18n.messages.ogame.resources.metal,
                 getValue: reports => reports.reduce((acc, report) => acc + report.metal, 0),

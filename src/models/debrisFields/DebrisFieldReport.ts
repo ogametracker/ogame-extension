@@ -1,6 +1,6 @@
 import Resource from "../Resource";
 
-export default interface WreckfieldReport {
+export default interface DebrisFieldReport {
     date: number;
     id: number;
     [Resource.metal]: number;

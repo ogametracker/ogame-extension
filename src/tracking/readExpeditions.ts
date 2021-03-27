@@ -34,10 +34,10 @@ export default async function readExpeditions() {
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    messageContainers.forEach(messageContainer => {
+    for(const messageContainer of messageContainers) {
         const expoId = parseInt(messageContainer.getAttribute('data-msg-id')!);
         if (knownExpos[expoId] != null || expoIdsWithError.includes(expoId))
-            return;
+            continue;
 
         try {
             const message = messageContainer.querySelector('.msg_content')!.textContent!
@@ -64,9 +64,9 @@ export default async function readExpeditions() {
                 errorMessageCount++;
             }
             expoIdsWithError.push(expoId);
-            console.error(e);
+            console.error(e, expoId);
         }
-    });
+    }
 
     if (errorMessageCount > 0) {
         //TODO: localization

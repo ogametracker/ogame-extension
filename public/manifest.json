@@ -21,9 +21,7 @@
             ],
             "js": [
                 "chunk-vendors.js",
-                "chunk-vendors.js.map",
-                "app.js",
-                "app.js.map"
+                "app.js"
             ]
         }
     ]

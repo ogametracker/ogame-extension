@@ -10,10 +10,10 @@ export interface OgameCombatRound {
         fullStrengthDefender: string;
     };
 
-    attackerLosses: Record<string, Record<string, string | undefined> | undefined>;
-    defenderLosses: Record<string, Record<string, string | undefined> | undefined>;
-    attackerLossesInThisRound: Record<string, Record<string, string | undefined> | undefined>;
-    defenderLossesInThisRound: Record<string, Record<string, string | undefined> | undefined>;
+    attackerLosses: null | Record<string, Record<string, string | undefined> | undefined>;
+    defenderLosses: null | Record<string, Record<string, string | undefined> | undefined>;
+    attackerLossesInThisRound?: Record<string, Record<string, string | undefined> | undefined>;
+    defenderLossesInThisRound?: Record<string, Record<string, string | undefined> | undefined>;
     attackerShips: Record<string, Record<string, number | undefined>>;
     defenderShips: Record<string, Record<string, number | undefined>>;
 }

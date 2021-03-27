@@ -1,5 +1,5 @@
 <template>
-    <wreckfield-line-chart
+    <debris-field-line-chart
         stacked
         :datasets="datasets"
         :y-tick-formatter="(value) => $i18n.formatNumber(value)"
@@ -8,17 +8,17 @@
 </template>
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import WreckfieldLineChart, { WreckfieldLineChartDataset } from './WreckfieldLineChart.vue';
+    import DebrisFieldLineChart, { DebrisFieldLineChartDataset } from './DebrisFieldLineChart.vue';
     import SettingsModule from "@/store/modules/SettingsModule";
-import i18n from "@/i18n";
+    import i18n from "@/i18n";
 
     @Component({
         components: {
-            WreckfieldLineChart,
+            DebrisFieldLineChart,
         },
     })
-    export default class WreckfieldOverviewChart extends Vue {
-        private get datasets(): WreckfieldLineChartDataset[] {
+    export default class DebrisFieldOverviewChart extends Vue {
+        private get datasets(): DebrisFieldLineChartDataset[] {
             return [{
                 label: i18n.messages.ogame.resources.metal,
                 color: SettingsModule.settings.charts.colors.resources.metal,
