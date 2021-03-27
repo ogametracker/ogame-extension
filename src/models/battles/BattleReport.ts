@@ -25,8 +25,6 @@ export default interface BattleReport {
         [Resource.deuterium]: number;
     };
 
-    honorPoints: number;
-
     isExpedition: boolean;
     expeditionAttackType: 'pirates' | 'aliens' | null;
 }

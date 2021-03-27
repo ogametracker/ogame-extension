@@ -73,7 +73,7 @@ export default async function readExpeditions() {
         NotificationModule.addNotification({
             type: 'error',
             title: 'Fehler',
-            text: `Es wurden ${errorMessageCount} Expeditionen nicht eingelesen.`,
+            text: `Es wurden ${errorMessageCount} Expeditionen nicht eingelesen. Die fehlerhaften Expeditionsbericht wurden farblich markiert.`
         });
     }
 

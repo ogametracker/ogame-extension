@@ -6,10 +6,10 @@ import resources from './resources';
 import ships from './ships';
 import premium from './premium';
 import items from './items';
-import common from './common';
+import factions from './factions';
 
 export default {
-    common,
+    factions,
     expoMessages,
     expoSizes,
     expoTypes,

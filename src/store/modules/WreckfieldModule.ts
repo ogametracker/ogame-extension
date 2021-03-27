@@ -5,8 +5,14 @@ import WreckfieldReportCollection from '@/models/wreckfields/WreckfieldReportCol
 
 @Component({})
 class WreckfieldModule extends Vue {
-    public reportsById: WreckfieldReportCollection = {};
     public readonly reports: WreckfieldReport[] = [];
+
+    public get reportsById(): WreckfieldReportCollection {
+        const reports: WreckfieldReportCollection = {};
+        this.reports.forEach(report => reports[report.id] = report);
+
+        return reports;
+    } 
 
     private async created() {
         //TODO: load from storage
@@ -37,7 +43,6 @@ class WreckfieldModule extends Vue {
     }
 
     public add(report: WreckfieldReport) {
-        this.reportsById[report.id] = report;
         this.reports.push(report);
     }
 }

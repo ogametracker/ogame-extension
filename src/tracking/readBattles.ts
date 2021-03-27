@@ -1,9 +1,14 @@
+import i18n from "@/i18n";
 import BattleReport from "@/models/battles/BattleReport";
 import BattleResult from "@/models/battles/BattleResult";
 import OgameBattleReport from "@/models/battles/OgameBattleReport";
+import Fleet from "@/models/Fleet";
+import OgameMetaData from "@/models/ogame/OgameMetaData";
 import Resource from "@/models/Resource";
+import Ship from "@/models/Ship";
 import BattleModule from "@/store/modules/BattleModule";
 import NotificationModule from "@/store/modules/NotificationModule";
+import getNumericEnumValues from "@/utils/getNumericEnumValues";
 
 const tabIdBattleMessages = '21';
 
@@ -39,6 +44,7 @@ export default async function readBattles() {
             const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement).href;
 
             const battleReport = await readBattleReport(msgId, messageUrl);
+            BattleModule.add(battleReport);
 
             newMessageCount++;
         } catch (e) {
@@ -47,59 +53,123 @@ export default async function readBattles() {
             errorBattleReports.push(msgId);
 
             //TODO: localization
-            // NotificationModule.addNotification({
-            //     type: 'error',
-            //     text: 'Es ist ein Fehler aufgetreten.',
-            //     title: 'Fehler',
-            //     timeout: 5000,
-            // });
+            NotificationModule.addNotification({
+                type: 'error',
+                text: 'Es ist ein Fehler aufgetreten.',
+                title: 'Fehler',
+                timeout: 5000,
+            });
         }
     }
 
     if (newMessageCount > 0) {
         //TODO: localization
-        // NotificationModule.addNotification({
-        //     type: 'info',
-        //     title: 'Neue TF-Nachrichten',
-        //     text: `Es wurden ${newMessageCount} neue TF-Nachrichten eingelesen.`,
-        //     timeout: 5000,
-        // });
+        NotificationModule.addNotification({
+            type: 'info',
+            title: 'Neue Kampfberichte',
+            text: `Es wurden ${newMessageCount} neue Kampfberichte eingelesen.`,
+            timeout: 5000,
+        });
 
-        //TODO: await BattleModule.save();
+        await BattleModule.save();
     }
 }
 
-async function readBattleReport(id: number, messageUrl: string): BattleReport {
-    const response = await fetch(messageUrl, { method: 'GET' });
-    const html = await response.text();
+async function readBattleReport(id: number, messageUrl: string): Promise<BattleReport> {
+    const playerId = OgameMetaData.playerId;
+    const ogameBattleReport = await loadOgameBattleReport(messageUrl);
 
-    // find the script with the 'combatData' variable that includes the combat JSON
-    const fakeDoc = document.createElement('div');
-    fakeDoc.innerHTML = html;
-    const scripts = fakeDoc.querySelectorAll('script');
-    const combatScript = Array.from(scripts).find(script => script.textContent!.includes('var combatData'))!;
+    const attackingFleets = Object.values(ogameBattleReport.attacker);
+    // lootFactor if player is one of the attackers = 1
+    // if player a defending fleet but not the owner of the planet = 0
+    // else if player lost and is owner of the planet = -1
+    let lootFactor = attackingFleets.some(fleet => fleet.ownerID == playerId)
+        ? 1
+        : ogameBattleReport.defender[0].ownerID == playerId
+            ? -1
+            : 0;
+    lootFactor *= (ogameBattleReport.result == 'attacker' ? 1 : 0);
 
-    const combatJsonRegex = /var combatData = jQuery.parseJSON\('([^']+)'\);/;
-    const combatJsonMatch = combatScript.textContent!.match(combatJsonRegex)!;
-    const combatJson = combatJsonMatch[1];
 
+    const expeditionAttackType = ogameBattleReport.isExpedition
+        ? ogameBattleReport.attacker[0].ownerName == i18n.messages.ogame.factions.pirates
+            ? 'pirates'
+            : 'aliens'
+        : null;
 
-    const ogameBattleReport = JSON.parse(combatJson) as OgameBattleReport;
-
-    const expeditionAttackType = null; //TODO: pirates/aliens/none
-    const loot = { //TODO: loot
-        [Resource.metal]: 0,
-        [Resource.crystal]: 0,
-        [Resource.deuterium]: 0,
+    const loot = {
+        [Resource.metal]: ogameBattleReport.loot.metal * lootFactor,
+        [Resource.crystal]: ogameBattleReport.loot.crystal * lootFactor,
+        [Resource.deuterium]: ogameBattleReport.loot.deuterium * lootFactor,
     };
-    const honorPoints = 0; //TODO: honor points
-    const debrisField = {//TODO: debris field
-        [Resource.metal]: 0,
-        [Resource.crystal]: 0,
+    const debrisField = {
+        [Resource.metal]: ogameBattleReport.debris.metal,
+        [Resource.crystal]: ogameBattleReport.debris.crystal,
     };
 
-    const attackerLosses = {}; //TODO: attacker losses
-    const defenderLosses = {}; //TODO: defender losses
+    // attacker and defender losses
+    const attackerLosses: Fleet = {
+        [Ship.battlecruiser]: 0,
+        [Ship.battleship]: 0,
+        [Ship.bomber]: 0,
+        [Ship.colonyShip]: 0,
+        [Ship.crawler]: 0,
+        [Ship.cruiser]: 0,
+        [Ship.deathStar]: 0,
+        [Ship.destroyer]: 0,
+        [Ship.espionageProbe]: 0,
+        [Ship.heavyFighter]: 0,
+        [Ship.largeCargo]: 0,
+        [Ship.lightFighter]: 0,
+        [Ship.pathfinder]: 0,
+        [Ship.reaper]: 0,
+        [Ship.recycler]: 0,
+        [Ship.smallCargo]: 0,
+        [Ship.solarSatellite]: 0,
+    };
+    const defenderLosses: Fleet = {
+        [Ship.battlecruiser]: 0,
+        [Ship.battleship]: 0,
+        [Ship.bomber]: 0,
+        [Ship.colonyShip]: 0,
+        [Ship.crawler]: 0,
+        [Ship.cruiser]: 0,
+        [Ship.deathStar]: 0,
+        [Ship.destroyer]: 0,
+        [Ship.espionageProbe]: 0,
+        [Ship.heavyFighter]: 0,
+        [Ship.largeCargo]: 0,
+        [Ship.lightFighter]: 0,
+        [Ship.pathfinder]: 0,
+        [Ship.reaper]: 0,
+        [Ship.recycler]: 0,
+        [Ship.smallCargo]: 0,
+        [Ship.solarSatellite]: 0,
+    };
+
+    const ships = getNumericEnumValues<Ship>(Ship);
+    const lastRound = ogameBattleReport.combatRounds[ogameBattleReport.combatRounds.length - 1];
+    Object.values(lastRound.attackerLosses).forEach(loss => {
+        ships.forEach(ship => {
+            const countStr = loss![ship];
+            if (countStr == null)
+                return;
+
+            const count = parseInt(countStr);
+            attackerLosses[ship] += count;
+        });
+    });
+    Object.values(lastRound.defenderLosses).forEach(loss => {
+        ships.forEach(ship => {
+            const countStr = loss![ship];
+            if (countStr == null)
+                return;
+
+            const count = parseInt(countStr);
+            defenderLosses[ship] += count;
+        });
+    });
+
 
     const report: BattleReport = {
         id,
@@ -114,11 +184,27 @@ async function readBattleReport(id: number, messageUrl: string): BattleReport {
         isExpedition: ogameBattleReport.isExpedition,
         expeditionAttackType: expeditionAttackType,
         loot: loot,
-        honorPoints: honorPoints,
         debrisField: debrisField,
         attackerLosses: attackerLosses,
         defenderLosses: defenderLosses,
     };
     return report;
+}
+
+async function loadOgameBattleReport(messageUrl: string) {
+    const response = await fetch(messageUrl, { method: 'GET' });
+    const html = await response.text();
+
+    // find the script with the 'combatData' variable that includes the combat JSON
+    const fakeDoc = document.createElement('div');
+    fakeDoc.innerHTML = html;
+    const scripts = fakeDoc.querySelectorAll('script');
+    const combatScript = Array.from(scripts).find(script => script.textContent!.includes('var combatData'))!;
+
+    const combatJsonRegex = /var combatData = jQuery.parseJSON\('([^']+)'\);/;
+    const combatJsonMatch = combatScript.textContent!.match(combatJsonRegex)!;
+    const combatJson = combatJsonMatch[1];
+
+    return JSON.parse(combatJson) as OgameBattleReport;
 }
 

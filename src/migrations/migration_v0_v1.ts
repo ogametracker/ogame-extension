@@ -8,6 +8,7 @@ import ExpoSize from "@/models/expeditions/ExpoSize";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import ExpoModule from "@/store/modules/ExpoModule";
 import NotificationModule from "@/store/modules/NotificationModule";
+import OgameMetaData from "@/models/ogame/OgameMetaData";
 
 function migrateExpo_v0_v1(expoEvent: ExpoEventv0): ExpoEvent {
     switch (expoEvent.type) {
@@ -168,11 +169,7 @@ function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCollection
 
 
 export default async function migration_v0_v1() {
-    const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
-    if (serverMeta == null)
-        throw new Error();
-
-    const server = serverMeta.content.split('.')[0];
+    const server = OgameMetaData.universeShort;
 
     const oldExpoStorageKey = `${server}-expoEvents`;
     const oldExpoData = await asyncChromeStorage.get(oldExpoStorageKey);

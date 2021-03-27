@@ -1,12 +1,18 @@
 import { Component, Vue } from 'vue-property-decorator';
 import BattleReport from "@/models/battles/BattleReport";
 import { startOfDay } from 'date-fns';
-import BattleReportCollection from '@/models/battles/BattleReportCollection';
+import BattleReportCollection from '@/models/battles/BattleReportCollection'; 
 
 @Component({})
 class BattleModule extends Vue {
-    public reportsById: BattleReportCollection = {};
     public readonly reports: BattleReport[] = [];
+
+    public get reportsById(): BattleReportCollection {
+        const reports: BattleReportCollection = {};
+        this.reports.forEach(report => reports[report.id] = report);
+
+        return reports;
+    } 
 
     private async created() {
         //TODO: load from storage
@@ -37,7 +43,6 @@ class BattleModule extends Vue {
     }
 
     public add(report: BattleReport) {
-        this.reportsById[report.id] = report;
         this.reports.push(report);
     }
 }

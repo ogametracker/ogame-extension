@@ -1,19 +1,23 @@
-import fakeData from "@/_fakeData.json";
-
 import { Component, Vue } from 'vue-property-decorator';
 import ExpoEvent from "@/models/expeditions/ExpoEvent";
 import { startOfDay } from "date-fns";
 import ExpoEventCollection from "@/models/expeditions/ExpoEventCollection";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
+import OgameMetaData from "@/models/ogame/OgameMetaData";
 
 @Component({})
 class ExpoModule extends Vue {
     public readonly expos: ExpoEvent[] = [];
-    public exposById: ExpoEventCollection = {};
+    public get exposById(): ExpoEventCollection {
+        const expoEvents: ExpoEventCollection = {};
+        this.expos.forEach(expo => expoEvents[expo.id] = expo);
+
+        return expoEvents;
+    } 
 
     private async created() {
-        this.exposById = await asyncChromeStorage.get(this.storageKey) ?? {};
-        this.expos.push(...Object.values(this.exposById));
+        const exposById: ExpoEventCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
+        this.expos.push(...Object.values(exposById));
     }
 
     public get firstExpo(): ExpoEvent | null {
@@ -37,18 +41,13 @@ class ExpoModule extends Vue {
     }
 
     public add(expo: ExpoEvent) {
-        this.exposById[expo.id] = expo;
+        this.$set(this.exposById, expo.id, expo);
         this.expos.push(expo);
     }
 
     public get storageKey(): string {
-        const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
-        const playerIdMeta = document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null;
-        if(serverMeta == null || playerIdMeta == null)
-            throw new Error();
-
-        const server = serverMeta.content.split('.')[0];
-        const playerId = playerIdMeta.content;
+        const server = OgameMetaData.universeShort;
+        const playerId = OgameMetaData.playerId;
         return `${server}-${playerId}-expoEvents`;
     }
 

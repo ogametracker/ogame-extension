@@ -1,4 +1,5 @@
 import ExpoType from '@/models/expeditions/ExpoType';
+import OgameMetaData from '@/models/ogame/OgameMetaData';
 import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
@@ -97,13 +98,8 @@ class SettingsModule extends Vue {
     }
 
     private get storageKey(): string {
-        const serverMeta = document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null;
-        const playerIdMeta = document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null;
-        if(serverMeta == null || playerIdMeta == null)
-            throw new Error();
-
-        const server = serverMeta.content.split('.')[0];
-        const playerId = playerIdMeta.content;
+        const server = OgameMetaData.universeShort;
+        const playerId = OgameMetaData.playerId;
         return `${server}-${playerId}-settings`;
     }
 

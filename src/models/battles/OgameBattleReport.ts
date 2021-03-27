@@ -1,5 +1,48 @@
-export interface OgameCombatRound {
+import Ship from "../Ship";
 
+export interface OgameCombatRound {
+    statistics: null | {
+        hitsAttacker: string;
+        hitsDefender: string;
+        absorbedDamageAttacker: string;
+        absorbedDamageDefender: string;
+        fullStrengthAttacker: string;
+        fullStrengthDefender: string;
+    };
+
+    attackerLosses: Record<string, Record<string, string | undefined> | undefined>;
+    defenderLosses: Record<string, Record<string, string | undefined> | undefined>;
+    attackerLossesInThisRound: Record<string, Record<string, string | undefined> | undefined>;
+    defenderLossesInThisRound: Record<string, Record<string, string | undefined> | undefined>;
+    attackerShips: Record<string, Record<string, number | undefined>>;
+    defenderShips: Record<string, Record<string, number | undefined>>;
+}
+
+export interface OgameShipDetails {
+    armor: number;
+    weapon: number;
+    shield: number;
+    count: number;
+}
+
+export interface OgameFleetInfo {
+    ownerName: string;
+    ownerCharacterClassId: number;
+    ownerCharacterClassName: string;
+    ownerID: number;
+    ownerCoordinates: string;
+    ownerPlanetType: number;
+    ownerHomePlanet: string;
+    planetId: number;
+    fleetID: number;
+    ownerAlliance: string;
+    ownerAllianceTag: string;
+
+    armorPercentage: number;
+    weaponPercentage: number;
+    shieldPercentage: number;
+
+    shipDetails: Record<string, undefined | OgameShipDetails>;
 }
 
 export default interface OgameBattleReport {
@@ -7,14 +50,20 @@ export default interface OgameBattleReport {
     event_timestamp: number;
     defenderPlanetId: number;
     coordinates: {
-        galaxy: number;   
-        system: number;   
-        position: number;   
-        planetType: number;   
+        galaxy: number;
+        system: number;
+        position: number;
+        planetType: number;
     };
 
-    attacker: ???;
-    defender: ???;
+    attacker: {
+        0: OgameFleetInfo;
+        [key: number]: OgameFleetInfo;
+    };
+    defender: {
+        0: OgameFleetInfo;
+        [key: number]: OgameFleetInfo;
+    };
 
     combatRounds: OgameCombatRound[];
     statistic: {
@@ -42,7 +91,6 @@ export default interface OgameBattleReport {
         crystal: number;
         deuterium: number;
     };
-    repairedDefense: ???[];
     honor: {
         honorableAttacker: boolean;
         attackerHonorPoints: number;
@@ -61,13 +109,14 @@ export default interface OgameBattleReport {
     combatId: string;
     isExpedition: boolean;
 
-    //TODO: we don't really need these
-    mission?: number;
-    attackerJSON: any;
-    defenderJSON: any;
-    debugData: any;
-    lightFighterCombat: {
-        attackerLosses: any;
-        defenderLosses: any;
-    };
+    //we don't really need these
+    // repairedDefense: unknown[];
+    // mission?: number;
+    // attackerJSON: any;
+    // defenderJSON: any;
+    // debugData: any;
+    // lightFighterCombat: {
+    //     attackerLosses: any;
+    //     defenderLosses: any;
+    // };
 }

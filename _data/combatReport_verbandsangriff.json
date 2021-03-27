@@ -1,0 +1,783 @@
+{
+    "event_time": "2021-03-27T15:55:10+01:00",
+    "event_timestamp": 1616856910,
+    "defenderPlanetId": 34421127,
+    "coordinates": {
+        "galaxy": 4,
+        "system": 15,
+        "position": 15,
+        "planetType": 1
+    },
+    "attacker": {
+        "37235615": {
+            "ownerName": "Director Deuterium",
+            "ownerCharacterClassId": 1,
+            "ownerCharacterClassName": "Kollektor",
+            "ownerID": 117091,
+            "ownerCoordinates": "4:182:9",
+            "ownerPlanetType": 3,
+            "ownerHomePlanet": "M8",
+            "planetId": 34457776,
+            "fleetID": 37235615,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 180,
+            "weaponPercentage": 180,
+            "shieldPercentage": 170,
+            "shipDetails": {
+                "204": {
+                    "armor": 1120,
+                    "weapon": 140,
+                    "shield": 27,
+                    "count": 282
+                },
+                "203": {
+                    "armor": 3360,
+                    "weapon": 14,
+                    "shield": 67.5,
+                    "count": 10
+                }
+            }
+        },
+        "37236394": {
+            "ownerName": "Gurami",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 109671,
+            "ownerCoordinates": "4:279:6",
+            "ownerPlanetType": 1,
+            "ownerHomePlanet": "Corydoras",
+            "planetId": 34246631,
+            "fleetID": 37236394,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 240,
+            "weaponPercentage": 200,
+            "shieldPercentage": 200,
+            "shipDetails": {
+                "206": {
+                    "armor": 9180,
+                    "weapon": 1200,
+                    "shield": 150,
+                    "count": 5
+                },
+                "219": {
+                    "armor": 7820,
+                    "weapon": 600,
+                    "shield": 300,
+                    "count": 5
+                }
+            }
+        }
+    },
+    "defender": [
+        {
+            "ownerName": "Wonkydonky",
+            "ownerCharacterClassId": 3,
+            "ownerCharacterClassName": "Entdecker",
+            "ownerID": 117287,
+            "ownerCoordinates": "4:15:15",
+            "ownerPlanetType": 1,
+            "ownerHomePlanet": "4A",
+            "planetId": 34421127,
+            "fleetID": 0,
+            "ownerAlliance": "Only a Game",
+            "ownerAllianceTag": "OaG",
+            "armorPercentage": 190,
+            "weaponPercentage": 190,
+            "shieldPercentage": 180,
+            "shipDetails": {
+                "202": {
+                    "armor": 1160,
+                    "weapon": 14.5,
+                    "shield": 28,
+                    "count": 21774
+                },
+                "203": {
+                    "armor": 3480,
+                    "weapon": 14.5,
+                    "shield": 70,
+                    "count": 913
+                },
+                "204": {
+                    "armor": 1160,
+                    "weapon": 145,
+                    "shield": 28,
+                    "count": 1988
+                },
+                "205": {
+                    "armor": 2900,
+                    "weapon": 435,
+                    "shield": 70,
+                    "count": 345
+                },
+                "206": {
+                    "armor": 7830,
+                    "weapon": 1160,
+                    "shield": 140,
+                    "count": 524
+                },
+                "207": {
+                    "armor": 17400,
+                    "weapon": 2900,
+                    "shield": 560,
+                    "count": 20
+                },
+                "210": {
+                    "armor": 290,
+                    "weapon": 0.029,
+                    "shield": 0.028,
+                    "count": 2728
+                },
+                "211": {
+                    "armor": 21750,
+                    "weapon": 2900,
+                    "shield": 1400,
+                    "count": 30
+                },
+                "212": {
+                    "armor": 580,
+                    "weapon": 2.9,
+                    "shield": 2.8,
+                    "count": 121
+                },
+                "213": {
+                    "armor": 31900,
+                    "weapon": 5800,
+                    "shield": 1400,
+                    "count": 113
+                },
+                "215": {
+                    "armor": 20300,
+                    "weapon": 2030,
+                    "shield": 1120,
+                    "count": 145
+                },
+                "217": {
+                    "armor": 1160,
+                    "weapon": 2.9,
+                    "shield": 2.8,
+                    "count": 1000
+                },
+                "218": {
+                    "armor": 40600,
+                    "weapon": 8120,
+                    "shield": 1960,
+                    "count": 21
+                },
+                "219": {
+                    "armor": 6670,
+                    "weapon": 580,
+                    "shield": 280,
+                    "count": 245
+                },
+                "401": {
+                    "armor": 580,
+                    "weapon": 232,
+                    "shield": 56,
+                    "count": 15000
+                },
+                "402": {
+                    "armor": 580,
+                    "weapon": 290,
+                    "shield": 70,
+                    "count": 6000
+                },
+                "403": {
+                    "armor": 2320,
+                    "weapon": 725,
+                    "shield": 280,
+                    "count": 1500
+                },
+                "404": {
+                    "armor": 10150,
+                    "weapon": 3190,
+                    "shield": 560,
+                    "count": 500
+                },
+                "405": {
+                    "armor": 2320,
+                    "weapon": 435,
+                    "shield": 1400,
+                    "count": 40
+                },
+                "406": {
+                    "armor": 29000,
+                    "weapon": 8700,
+                    "shield": 840,
+                    "count": 200
+                },
+                "407": {
+                    "armor": 5800,
+                    "weapon": 2.9,
+                    "shield": 5600,
+                    "count": 1
+                },
+                "408": {
+                    "armor": 29000,
+                    "weapon": 2.9,
+                    "shield": 28000,
+                    "count": 1
+                }
+            }
+        }
+    ],
+    "combatRounds": [
+        {
+            "statistics": null,
+            "attackerLosses": null,
+            "defenderLosses": null,
+            "attackerShips": {
+                "37235615": {
+                    "204": 282,
+                    "203": 10
+                },
+                "37236394": {
+                    "206": 5,
+                    "219": 5
+                }
+            },
+            "defender": [],
+            "defenderShips": [
+                {
+                    "202": 21774,
+                    "203": 913,
+                    "204": 1988,
+                    "205": 345,
+                    "206": 524,
+                    "207": 20,
+                    "210": 2728,
+                    "211": 30,
+                    "212": 121,
+                    "213": 113,
+                    "215": 145,
+                    "217": 1000,
+                    "218": 21,
+                    "219": 245,
+                    "401": 15000,
+                    "402": 6000,
+                    "403": 1500,
+                    "404": 500,
+                    "405": 40,
+                    "406": 200,
+                    "407": 1,
+                    "408": 1
+                }
+            ]
+        },
+        {
+            "attackerLosses": {
+                "37235615": {
+                    "203": "10",
+                    "204": "282"
+                },
+                "37236394": {
+                    "206": "5",
+                    "219": "5"
+                }
+            },
+            "attackerLossesInThisRound": {
+                "37235615": {
+                    "203": "10",
+                    "204": "282"
+                },
+                "37236394": {
+                    "206": "5",
+                    "219": "5"
+                }
+            },
+            "defenderLosses": [
+                {
+                    "202": "3",
+                    "204": "2",
+                    "210": "5",
+                    "401": "2",
+                    "402": "3"
+                }
+            ],
+            "defenderLossesInThisRound": [
+                {
+                    "202": "3",
+                    "204": "2",
+                    "210": "5",
+                    "401": "2",
+                    "402": "3"
+                }
+            ],
+            "statistic": {
+                "hitsAttacker": "322",
+                "hitsDefender": "55373",
+                "absorbedDamageAttacker": "10809",
+                "absorbedDamageDefender": "14783",
+                "fullStrengthAttacker": "55060",
+                "fullStrengthDefender": "14685739"
+            },
+            "attackerShips": {
+                "37235615": {
+                    "204": 0,
+                    "203": 0
+                },
+                "37236394": {
+                    "206": 0,
+                    "219": 0
+                }
+            },
+            "defenderShips": [
+                {
+                    "202": 21771,
+                    "203": 913,
+                    "204": 1986,
+                    "205": 345,
+                    "206": 524,
+                    "207": 20,
+                    "210": 2723,
+                    "211": 30,
+                    "212": 121,
+                    "213": 113,
+                    "215": 145,
+                    "217": 1000,
+                    "218": 21,
+                    "219": 245,
+                    "401": 14998,
+                    "402": 5997,
+                    "403": 1500,
+                    "404": 500,
+                    "405": 40,
+                    "406": 200,
+                    "407": 1,
+                    "408": 1
+                }
+            ]
+        }
+    ],
+    "statistic": {
+        "lostUnitsAttacker": 1548000,
+        "lostUnitsDefender": 35000
+    },
+    "result": "defender",
+    "moon": {
+        "genesis": false,
+        "chance": 0,
+        "size": 0,
+        "exists": true
+    },
+    "debris": {
+        "metalTotal": 529000,
+        "crystalTotal": 232500,
+        "metalRecycledAfterCombat": 132250,
+        "crystalRecycledAfterCombat": 58125,
+        "metal": 396750,
+        "crystal": 174375,
+        "darkMatter": 0
+    },
+    "lightFighterCombat": {
+        "attackerLosses": {
+            "37235615": {
+                "214": 0
+            },
+            "37236394": {
+                "214": 0
+            }
+        },
+        "defenderLosses": [
+            {
+                "214": 0
+            }
+        ]
+    },
+    "loot": {
+        "metal": 0,
+        "crystal": 0,
+        "deuterium": 0
+    },
+    "repairedDefense": {
+        "401": 2
+    },
+    "honor": {
+        "honorableAttacker": true,
+        "attackerHonorPoints": 5,
+        "honorableDefender": true,
+        "defenderHonorPoints": 346,
+        "isCombatWithoutHonor": false
+    },
+    "tacticalRetreat": {
+        "active": 0,
+        "attacker": false,
+        "supremacy": 66.814814814815
+    },
+    "lootPercentage": 0,
+    "debugData": {
+        "combatmicrostart": 1616856910.6308,
+        "combatmicroend": 1616856910.6407
+    },
+    "deathstarDestroyed": false,
+    "mission": 1,
+    "hashcode": "cbae5aa07fe1ca81b92d09b93844ad172339f629",
+    "combatId": "7514102",
+    "spioReportPictures": null,
+    "isExpedition": false,
+    "attackerJSON": {
+        "member": {
+            "37235615": {
+                "ownerName": "Director Deuterium",
+                "ownerCharacterClassId": 1,
+                "ownerCharacterClassName": "Kollektor",
+                "ownerID": 117091,
+                "ownerCoordinates": "4:182:9",
+                "ownerPlanetType": 3,
+                "ownerHomePlanet": "M8",
+                "planetId": 34457776,
+                "fleetID": 37235615,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 180,
+                "weaponPercentage": 180,
+                "shieldPercentage": 170,
+                "shipDetails": {
+                    "204": {
+                        "armor": 1120,
+                        "weapon": 140,
+                        "shield": 27,
+                        "count": 282
+                    },
+                    "203": {
+                        "armor": 3360,
+                        "weapon": 14,
+                        "shield": 67.5,
+                        "count": 10
+                    }
+                }
+            },
+            "37236394": {
+                "ownerName": "Gurami",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 109671,
+                "ownerCoordinates": "4:279:6",
+                "ownerPlanetType": 1,
+                "ownerHomePlanet": "Corydoras",
+                "planetId": 34246631,
+                "fleetID": 37236394,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 240,
+                "weaponPercentage": 200,
+                "shieldPercentage": 200,
+                "shipDetails": {
+                    "206": {
+                        "armor": 9180,
+                        "weapon": 1200,
+                        "shield": 150,
+                        "count": 5
+                    },
+                    "219": {
+                        "armor": 7820,
+                        "weapon": 600,
+                        "shield": 300,
+                        "count": 5
+                    }
+                }
+            }
+        },
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": {
+                    "37235615": {
+                        "204": 282,
+                        "203": 10
+                    },
+                    "37236394": {
+                        "206": 5,
+                        "219": 5
+                    }
+                }
+            },
+            {
+                "lossesInThisRound": {
+                    "37235615": {
+                        "203": "10",
+                        "204": "282"
+                    },
+                    "37236394": {
+                        "206": "5",
+                        "219": "5"
+                    }
+                },
+                "statistic": {
+                    "hits": "322",
+                    "absorbedDamage": "10809",
+                    "fullStrength": "55060"
+                },
+                "losses": {
+                    "37235615": {
+                        "203": "10",
+                        "204": "282"
+                    },
+                    "37236394": {
+                        "206": "5",
+                        "219": "5"
+                    }
+                },
+                "ships": {
+                    "37235615": {
+                        "204": 0,
+                        "203": 0
+                    },
+                    "37236394": {
+                        "206": 0,
+                        "219": 0
+                    }
+                }
+            }
+        ]
+    },
+    "defenderJSON": {
+        "member": [
+            {
+                "ownerName": "Wonkydonky",
+                "ownerCharacterClassId": 3,
+                "ownerCharacterClassName": "Entdecker",
+                "ownerID": 117287,
+                "ownerCoordinates": "4:15:15",
+                "ownerPlanetType": 1,
+                "ownerHomePlanet": "4A",
+                "planetId": 34421127,
+                "fleetID": 0,
+                "ownerAlliance": "Only a Game",
+                "ownerAllianceTag": "OaG",
+                "armorPercentage": 190,
+                "weaponPercentage": 190,
+                "shieldPercentage": 180,
+                "shipDetails": {
+                    "202": {
+                        "armor": 1160,
+                        "weapon": 14.5,
+                        "shield": 28,
+                        "count": 21774
+                    },
+                    "203": {
+                        "armor": 3480,
+                        "weapon": 14.5,
+                        "shield": 70,
+                        "count": 913
+                    },
+                    "204": {
+                        "armor": 1160,
+                        "weapon": 145,
+                        "shield": 28,
+                        "count": 1988
+                    },
+                    "205": {
+                        "armor": 2900,
+                        "weapon": 435,
+                        "shield": 70,
+                        "count": 345
+                    },
+                    "206": {
+                        "armor": 7830,
+                        "weapon": 1160,
+                        "shield": 140,
+                        "count": 524
+                    },
+                    "207": {
+                        "armor": 17400,
+                        "weapon": 2900,
+                        "shield": 560,
+                        "count": 20
+                    },
+                    "210": {
+                        "armor": 290,
+                        "weapon": 0.029,
+                        "shield": 0.028,
+                        "count": 2728
+                    },
+                    "211": {
+                        "armor": 21750,
+                        "weapon": 2900,
+                        "shield": 1400,
+                        "count": 30
+                    },
+                    "212": {
+                        "armor": 580,
+                        "weapon": 2.9,
+                        "shield": 2.8,
+                        "count": 121
+                    },
+                    "213": {
+                        "armor": 31900,
+                        "weapon": 5800,
+                        "shield": 1400,
+                        "count": 113
+                    },
+                    "215": {
+                        "armor": 20300,
+                        "weapon": 2030,
+                        "shield": 1120,
+                        "count": 145
+                    },
+                    "217": {
+                        "armor": 1160,
+                        "weapon": 2.9,
+                        "shield": 2.8,
+                        "count": 1000
+                    },
+                    "218": {
+                        "armor": 40600,
+                        "weapon": 8120,
+                        "shield": 1960,
+                        "count": 21
+                    },
+                    "219": {
+                        "armor": 6670,
+                        "weapon": 580,
+                        "shield": 280,
+                        "count": 245
+                    },
+                    "401": {
+                        "armor": 580,
+                        "weapon": 232,
+                        "shield": 56,
+                        "count": 15000
+                    },
+                    "402": {
+                        "armor": 580,
+                        "weapon": 290,
+                        "shield": 70,
+                        "count": 6000
+                    },
+                    "403": {
+                        "armor": 2320,
+                        "weapon": 725,
+                        "shield": 280,
+                        "count": 1500
+                    },
+                    "404": {
+                        "armor": 10150,
+                        "weapon": 3190,
+                        "shield": 560,
+                        "count": 500
+                    },
+                    "405": {
+                        "armor": 2320,
+                        "weapon": 435,
+                        "shield": 1400,
+                        "count": 40
+                    },
+                    "406": {
+                        "armor": 29000,
+                        "weapon": 8700,
+                        "shield": 840,
+                        "count": 200
+                    },
+                    "407": {
+                        "armor": 5800,
+                        "weapon": 2.9,
+                        "shield": 5600,
+                        "count": 1
+                    },
+                    "408": {
+                        "armor": 29000,
+                        "weapon": 2.9,
+                        "shield": 28000,
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "combatRounds": [
+            {
+                "lossesInThisRound": null,
+                "statistic": {
+                    "hits": 0,
+                    "absorbedDamage": 0,
+                    "fullStrength": 0
+                },
+                "losses": null,
+                "ships": [
+                    {
+                        "202": 21774,
+                        "203": 913,
+                        "204": 1988,
+                        "205": 345,
+                        "206": 524,
+                        "207": 20,
+                        "210": 2728,
+                        "211": 30,
+                        "212": 121,
+                        "213": 113,
+                        "215": 145,
+                        "217": 1000,
+                        "218": 21,
+                        "219": 245,
+                        "401": 15000,
+                        "402": 6000,
+                        "403": 1500,
+                        "404": 500,
+                        "405": 40,
+                        "406": 200,
+                        "407": 1,
+                        "408": 1
+                    }
+                ]
+            },
+            {
+                "lossesInThisRound": [
+                    {
+                        "202": "3",
+                        "204": "2",
+                        "210": "5",
+                        "401": "2",
+                        "402": "3"
+                    }
+                ],
+                "statistic": {
+                    "hits": "55373",
+                    "absorbedDamage": "14783",
+                    "fullStrength": "14685739"
+                },
+                "losses": [
+                    {
+                        "202": "3",
+                        "204": "2",
+                        "210": "5",
+                        "401": "2",
+                        "402": "3"
+                    }
+                ],
+                "ships": [
+                    {
+                        "202": 21771,
+                        "203": 913,
+                        "204": 1986,
+                        "205": 345,
+                        "206": 524,
+                        "207": 20,
+                        "210": 2723,
+                        "211": 30,
+                        "212": 121,
+                        "213": 113,
+                        "215": 145,
+                        "217": 1000,
+                        "218": 21,
+                        "219": 245,
+                        "401": 14998,
+                        "402": 5997,
+                        "403": 1500,
+                        "404": 500,
+                        "405": 40,
+                        "406": 200,
+                        "407": 1,
+                        "408": 1
+                    }
+                ]
+            }
+        ]
+    }
+}
