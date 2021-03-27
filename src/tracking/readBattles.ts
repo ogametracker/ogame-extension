@@ -38,7 +38,12 @@ export default async function readBattles() {
     for (const messageContainer of messageContainers) {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
-        if (knownBattleReports[msgId] != null || errorBattleReports.includes(msgId) || emptyBattleReports.includes(msgId)) {
+        if (knownBattleReports[msgId] != null) {
+            messageContainer.classList.add('msg-extension-read');
+            continue;
+        }
+
+        if (errorBattleReports.includes(msgId) || emptyBattleReports.includes(msgId)) {
             continue;
         }
 
@@ -49,15 +54,21 @@ export default async function readBattles() {
                 continue;
             }
 
+            messageContainer.classList.add('msg-extension-loading');
+
             const battleReport = await readBattleReport(msgId, messageUrl);
             BattleModule.add(battleReport);
 
             newMessageCount++;
+
+            messageContainer.classList.remove('msg-extension-loading');
+            messageContainer.classList.add('msg-extension-read');
         } catch (e) {
-            console.error(e, msgId);
+            messageContainer.classList.add('msg-error');
             newErrorCount++;
 
             errorBattleReports.push(msgId);
+            console.error(e, msgId);
         }
     }
 

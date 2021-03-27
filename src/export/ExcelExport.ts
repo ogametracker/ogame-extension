@@ -8,10 +8,16 @@ import Resource from "@/models/Resource";
 import Items from "@/models/items";
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import getNumericEnumValues from "@/utils/getNumericEnumValues";
+import BattleModule from "@/store/modules/BattleModule";
+import BattleReport from "@/models/battles/BattleReport";
+import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
+import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
 
 interface ExportHelper {
     label: string;
-    getData: (data: ExpoData) => any[];
+    getExpoData?: (data: ExpoData) => any[];
+    getBattlesData?: (data: BattlesData) => any[];
+    getDebrisFieldsData?: (data: DebrisFieldData) => any[];
 }
 
 interface ExpoData {
@@ -21,30 +27,65 @@ interface ExpoData {
     days: Date[];
 }
 
+interface BattlesData {
+    reportsByDay: {
+        [key: number]: BattleReport[] | undefined;
+    };
+    days: Date[];
+}
+
+interface DebrisFieldData {
+    reportsByDay: {
+        [key: number]: DebrisFieldReport[] | undefined;
+    };
+    days: Date[];
+}
+
 class ExcelExport {
     private readonly expoExports: ExportHelper[] = [{
-        label: 'Übersicht',
-        getData: this.exportExpoOverview,
+        label: 'Übersicht', //TODO: localization
+        getExpoData: this.exportExpoOverview,
     }, {
-        label: 'Rohstofffunde',
-        getData: this.exportExpoResources,
+        label: 'Rohstofffunde', //TODO: localization
+        getExpoData: this.exportExpoResources,
     }, {
-        label: 'Flottenfunde',
-        getData: this.exportExpoFleet,
+        label: 'Flottenfunde', //TODO: localization
+        getExpoData: this.exportExpoFleet,
     }, {
-        label: 'DM-Funde',
-        getData: this.exportExpoDarkMatter,
+        label: 'DM-Funde', //TODO: localization
+        getExpoData: this.exportExpoDarkMatter,
     }, {
-        label: 'Itemfunde',
-        getData: this.exportExpoItems,
+        label: 'Itemfunde', //TODO: localization
+        getExpoData: this.exportExpoItems,
     }, {
-        label: 'Rohdaten',
-        getData: this.exportExposRaw,
+        label: 'Rohdaten', //TODO: localization
+        getExpoData: this.exportExposRaw,
     }];
 
-    private readonly attackExports: ExportHelper[] = [];
+    private readonly battlesExports: ExportHelper[] = [{
+        label: 'Übersicht', //TODO: localization
+        getBattlesData: this.exportBattlesOverview,
+    }, {
+        label: 'Rohstoffe', //TODO: localization
+        getBattlesData: this.exportBattlesResources,
+    }, {
+        label: 'Verl. Schiffe (Sp.)', //TODO: localization
+        getBattlesData: this.exportBattlesLostShipsPlayers,
+    }, {
+        label: 'Verl. Schiffe (Exp.)', //TODO: localization
+        getBattlesData: this.exportBattlesLostShipsExpos,
+    }, {
+        label: 'Rohdaten', //TODO: localization
+        getBattlesData: this.exportBattlesRaw,
+    }];
 
-    private readonly tfExports: ExportHelper[] = [];
+    private readonly debrisFieldExports: ExportHelper[] = [{
+        label: 'Rohstoffe', //TODO: localization
+        getDebrisFieldsData: this.exportDebrisFieldsResources,
+    }, {
+        label: 'Rohdaten', //TODO: localization
+        getDebrisFieldsData: this.exportDebrisFieldsRaw,
+    }];
 
 
     private exportExpoOverview(expoData: ExpoData): any[] {
@@ -159,8 +200,8 @@ class ExcelExport {
         ]);
 
         const headers = [
-            'Datum + Zeit',
-            'Typ',
+            'Datum + Zeit', //TODO: localization
+            'Typ', //TODO: localization
 
             ...Object.keys(Resource).map(resource => i18n.messages.ogame.resources[resource]),
 
@@ -168,8 +209,8 @@ class ExcelExport {
                 .map(ship => i18n.messages.ogame.ships[ship]),
 
             i18n.messages.ogame.premium.darkMatter,
-            'Fundgröße',
-            'Item',
+            'Fundgröße', //TODO: localization
+            'Item', //TODO: localization
         ];
 
         return [headers, ...data];
@@ -177,7 +218,7 @@ class ExcelExport {
 
     private get expoData() {
         const exposByDay = ExpoModule.byDay;
-        const firstDay = Object.keys(exposByDay).map(parseInt).sort((a, b) => a - b)[0];
+        const firstDay = Object.keys(exposByDay).map(x => parseInt(x)).sort((a, b) => a - b)[0];
         const today = startOfDay(new Date());
         const days = [];
         let cur = startOfDay(firstDay);
@@ -192,16 +233,115 @@ class ExcelExport {
         };
     }
 
-    public export() {
+    private exportExpos(workbook: xlsx.WorkBook) {
         const expoData = this.expoData;
-
-        const workbook = xlsx.utils.book_new();
         this.expoExports.forEach(exp => {
-            const data = exp.getData(expoData);
+            const data = exp.getExpoData!(expoData);
             const sheet = xlsx.utils.aoa_to_sheet(data);
 
-            xlsx.utils.book_append_sheet(workbook, sheet, 'Expeditionen - ' + exp.label);
+            xlsx.utils.book_append_sheet(workbook, sheet, 'Expeditionen - ' + exp.label); //TODO: localization
         });
+    }
+
+    private get battlesData() {
+        const reportsByDay = BattleModule.byDay;
+        const firstDay = Object.keys(reportsByDay).map(x => parseInt(x)).sort((a, b) => a - b)[0];
+        const today = startOfDay(new Date());
+        const days = [];
+        let cur = startOfDay(firstDay);
+        while (cur <= today) {
+            days.push(cur);
+            cur = add(cur, { days: 1 });
+        }
+
+        return {
+            reportsByDay,
+            days,
+        };
+    }
+
+    private exportBattles(workbook: xlsx.WorkBook) {
+        return;
+        const battlesData = this.battlesData;
+        this.battlesExports.forEach(exp => {
+            const data = exp.getBattlesData!(battlesData);
+            const sheet = xlsx.utils.aoa_to_sheet(data);
+
+            xlsx.utils.book_append_sheet(workbook, sheet, 'Kämpfe - ' + exp.label); //TODO: localization
+        });
+    }
+
+    private exportDebrisFieldsResources(debrisData: DebrisFieldData): any[] {
+        const data = debrisData.days.map(day => [
+            day,
+            (debrisData.reportsByDay[day.getTime()] ?? [])
+                .reduce((acc, cur) => acc + cur.metal, 0),
+            (debrisData.reportsByDay[day.getTime()] ?? [])
+                .reduce((acc, cur) => acc + cur.crystal, 0),
+        ]);
+
+        const headers = [
+            '',
+            i18n.messages.ogame.resources.metal,
+            i18n.messages.ogame.resources.crystal,
+        ];
+
+        return [headers, ...data];
+    }
+
+    private exportDebrisFieldsRaw(debrisData: DebrisFieldData): any[] {
+        const reports = Object.values(debrisData.reportsByDay ?? {})
+            .flatMap(report => report ?? [])
+            .sort((a, b) => a.date - b.date);
+
+        const data = reports.map(report => [
+            new Date(report.date),
+            report.metal,
+            report.crystal,
+        ]);
+
+        const headers = [
+            'Datum + Zeit', //TODO: localization
+            i18n.messages.ogame.resources.metal,
+            i18n.messages.ogame.resources.crystal,
+        ];
+
+        return [headers, ...data];
+    }
+
+    private get debrisFieldsData() {
+        const reportsByDay = DebrisFieldModule.byDay;
+        const firstDay = Object.keys(reportsByDay).map(x => parseInt(x)).sort((a, b) => a - b)[0];
+        const today = startOfDay(new Date());
+        const days = [];
+        let cur = startOfDay(firstDay);
+        while (cur <= today) {
+            days.push(cur);
+            cur = add(cur, { days: 1 });
+        }
+
+        return {
+            reportsByDay,
+            days,
+        };
+    }
+
+    private exportDebrisFields(workbook: xlsx.WorkBook) {
+        const debrisData = this.debrisFieldsData;
+        this.debrisFieldExports.forEach(exp => {
+            const data = exp.getDebrisFieldsData!(debrisData);
+            const sheet = xlsx.utils.aoa_to_sheet(data);
+
+            xlsx.utils.book_append_sheet(workbook, sheet, 'Trümmerfelder - ' + exp.label); //TODO: localization
+        });
+    }
+
+    public export() {
+        const workbook = xlsx.utils.book_new();
+
+        this.exportExpos(workbook);
+        this.exportBattles(workbook);
+        this.exportDebrisFields(workbook);
 
         xlsx.writeFile(workbook, 'OGame Tracking.xlsx');
     }

@@ -34,9 +34,13 @@ export default async function readExpeditions() {
     let newMessageCount = 0;
 
     const messageContainers = messagePage.querySelectorAll('.msg[data-msg-id]');
-    for(const messageContainer of messageContainers) {
+    for (const messageContainer of messageContainers) {
         const expoId = parseInt(messageContainer.getAttribute('data-msg-id')!);
-        if (knownExpos[expoId] != null || expoIdsWithError.includes(expoId))
+        if (knownExpos[expoId] != null){
+            messageContainer.classList.add('msg-extension-read');
+            continue;
+        } 
+        if(expoIdsWithError.includes(expoId))
             continue;
 
         try {
@@ -49,6 +53,8 @@ export default async function readExpeditions() {
             ExpoModule.add(expoEvent);
             newMessageCount++;
 
+            messageContainer.classList.add('msg-extension-read');
+
             if (expoEvent.type == ExpoType.lostFleet) {
                 //TODO: localization
                 NotificationModule.addNotification({
@@ -59,10 +65,9 @@ export default async function readExpeditions() {
                 });
             }
         } catch (e) {
-            if (e instanceof UnknownExpoEventError) {
-                messageContainer.classList.add('unknown-expo');
-                errorMessageCount++;
-            }
+            messageContainer.classList.add('msg-error');
+            errorMessageCount++;
+            
             expoIdsWithError.push(expoId);
             console.error(e, expoId);
         }

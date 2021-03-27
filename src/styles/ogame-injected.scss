@@ -1,4 +1,4 @@
-@import 'env.scss';
+@import "env.scss";
 
 .statistics-menu-icon {
     display: block;
@@ -8,7 +8,7 @@
     position: relative;
 
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;
@@ -22,4 +22,58 @@
         filter: invert(1);
         opacity: 0.2;
     }
+}
+
+@keyframes extension-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.msg-extension-read {
+    .msg_status::before {
+        background: url(#{$base-url}/icons/check.svg) no-repeat center center !important;
+        background-size: contain !important;
+        animation: extension-loading 1s linear infinite;
+        filter: invert(1);
+    }
+}
+
+.msg-extension-loading {
+    .msg_status::before {
+        background: url(#{$base-url}/icons/loading.svg) no-repeat center center !important;
+        background-size: contain !important;
+        filter: invert(1);
+    }
+}
+
+.msg {
+    padding-left: 24px !important;
+
+    .msg_status {
+        width: 24px !important;
+        left: 4px !important;
+        background: none;
+        background-color: transparent !important;
+
+        &::before {
+            width: 100% !important;
+            max-height: 100% !important;
+            background: none;
+        }
+    }
+
+    &.msg-error {
+        background: #2f0909 !important;
+    }
+}
+
+.msg_ctn2 {
+    width: 287px !important;
 }

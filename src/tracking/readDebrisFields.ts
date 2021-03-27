@@ -30,7 +30,12 @@ export default async function readDebrisFields() {
     for (const messageContainer of messageContainers) {
         const msgId = parseInt(messageContainer.getAttribute('data-msg-id')!);
 
-        if (knownDebrisFieldReports[msgId] != null || errorReports.includes(msgId) || noDebrisFieldReport.includes(msgId)) {
+        if(knownDebrisFieldReports[msgId] != null) {
+            messageContainer.classList.add('msg-extension-read');
+            continue;
+        }
+
+        if (errorReports.includes(msgId) || noDebrisFieldReport.includes(msgId)) {
             continue;
         }
 
@@ -47,8 +52,12 @@ export default async function readDebrisFields() {
 
             DebrisFieldModule.add(debrisFieldReport);
             newMessageCount++;
+
+            messageContainer.classList.add('msg-extension-read');
         } catch (e) {
+            messageContainer.classList.add('msg-error');
             newErrorCount++;
+
             errorReports.push(msgId);
             console.error(e, msgId);
         }

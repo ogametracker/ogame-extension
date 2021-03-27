@@ -181,6 +181,27 @@
                     </tr>
                 </tbody>
             </table>
+
+            <table class="settings-table">
+                <thead>
+                    <tr>
+                        <th>Kämpfe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="key in Object.keys(settings.charts.colors.battleResults)"
+                        :key="key"
+                    >
+                        <td>
+                            <color-input
+                                v-model="settings.charts.colors.battleResults[key]"
+                                :label="$i18n.messages.ogame.battleResults[key]"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
