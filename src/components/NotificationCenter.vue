@@ -8,7 +8,7 @@
                 {
                     hidden: noti.hidden,
                 },
-                noti.type,
+                `notification-${noti.type}`,
             ]"
             @click="notificationModule.remove(noti)"
         >

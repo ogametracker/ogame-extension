@@ -1,6 +1,8 @@
 input,
 select {
     color: inherit;
+    font-size: 14px;
+    border: 0 !important;
 
     &:focus {
         outline: none;
@@ -10,4 +12,6 @@ select {
 select > option {
     background: #050505;
     color: inherit;
+    font-size: 14px;
+    border: 0 !important;
 }

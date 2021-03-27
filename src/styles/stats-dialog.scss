@@ -76,14 +76,14 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-}
 
-.close-stats-dialog-button {
-    cursor: pointer;
-    color: grey;
+    .icon-close {
+        opacity: 0.5;
+        cursor: pointer;
 
-    &:hover {
-        color: white;
+        &:hover {
+            opacity: 1;
+        }
     }
 }
 

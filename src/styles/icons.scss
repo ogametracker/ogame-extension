@@ -28,18 +28,19 @@
     filter: none;
 }
 
-.icon-expo::before {
-    background-image: url(#{$base-url}/icons/expedition.svg);
-}
-.icon-attack::before {
-    background-image: url(#{$base-url}/icons/attack.svg);
-}
-.icon-wreckfield::before {
-    background-image: url(#{$base-url}/icons/wreckfield.svg);
-}
-.icon-cog::before {
-    background-image: url(#{$base-url}/icons/cog.svg);
-}
-.icon-microsoft-excel::before {
-    background-image: url(#{$base-url}/icons/microsoft-excel.svg);
+$icons: (
+    'expo',
+    'attack',
+    'wreckfield',
+    'cog',
+    'microsoft-excel',
+    'plus',
+    'minus',
+    'close',
+);
+
+@each $icon in $icons {
+    .icon-#{$icon}::before {
+        background-image: url(#{$base-url}/icons/#{$icon}.svg);
+    }
 }

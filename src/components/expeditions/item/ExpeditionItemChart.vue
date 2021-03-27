@@ -47,8 +47,11 @@
         }
 
         private get firstDay() {
-            return startOfDay(ExpoModule.firstExpo?.date
-                ?? sub(new Date(), { days: this.shownDays }));
+            const firstTrackedDay = ExpoModule.firstExpo?.date;
+            const xDaysAgo = startOfDay(sub(new Date(), { days: SettingsModule.settings.charts.days - 1 }));
+            return firstTrackedDay == null || startOfDay(firstTrackedDay) > xDaysAgo
+                ? xDaysAgo
+                : startOfDay(firstTrackedDay);
         }
 
         private get itemDays(): { day: Date; items: Item[] }[] {

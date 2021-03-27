@@ -18,16 +18,16 @@
     opacity: 1;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
 
-    &.info {
+    &.notification-info {
         background: linear-gradient(225deg, #0a3471, #0a1f3c);
     }
-    &.success {
+    &.notification-success {
         background: linear-gradient(225deg, #3c9c0b, #06540c);
     }
-    &.warning {
+    &.notification-warning {
         background: linear-gradient(225deg, #d48900, #ab4a05);
     }
-    &.error {
+    &.notification-error {
         background: linear-gradient(225deg, #bd1111, #6f0b0b);
     }
 
