@@ -136,7 +136,7 @@
                     }],
                 },
                 tooltips: {
-                    mode: "index",
+                    mode: 'x-axis',
                     callbacks: {
                         label: this.tooltipLabel ?? ((item, data) => `${item.value} ${data.datasets![item.datasetIndex!].label}`),
                         footer: this.tooltipFooter ?? (() => null!),
