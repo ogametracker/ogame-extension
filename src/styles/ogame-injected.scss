@@ -31,9 +31,6 @@
     100% {
         transform: rotate(360deg);
     }
-    to {
-        transform: rotate(0deg);
-    }
 }
 
 #fleetsgenericpage {
@@ -41,7 +38,6 @@
         .msg_status::before {
             background: url(#{$base-url}/icons/check.svg) no-repeat center center !important;
             background-size: contain !important;
-            animation: extension-loading 1s linear infinite;
             filter: invert(1);
         }
     }
@@ -50,6 +46,7 @@
         .msg_status::before {
             background: url(#{$base-url}/icons/loading.svg) no-repeat center center !important;
             background-size: contain !important;
+            animation: extension-loading 1s linear infinite;
             filter: invert(1);
         }
     }
