@@ -29,7 +29,7 @@
                 :key="dataset.label"
                 class="dataset-label"
                 :class="{
-                    hidden:
+                    'dataset-label-hidden':
                         chart &&
                         chart.data &&
                         chart.data.datasets &&

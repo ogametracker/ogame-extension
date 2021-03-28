@@ -1,6 +1,6 @@
 input,
 select {
-    color: white;
+    color: white !important;
     font-size: 14px;
     border: 0 !important;
 
@@ -10,8 +10,8 @@ select {
 }
 
 select > option {
-    background: #050505;
-    color: white;
+    background: #050505 !important;
+    color: white !important;
     font-size: 14px;
     border: 0 !important;
 }
