@@ -19,7 +19,6 @@ import trackMessages from '@/tracking/trackMessages';
 import migration_v0_v1 from './migrations/migration_v0_v1';
 
 
-
 function mountVue() {
     const app = document.createElement('div');
     app.id = 'ogame-tracker-dialog';
@@ -31,30 +30,15 @@ function mountVue() {
     }).$mount(`#${app.id}`);
 }
 
-function addMenuItem() {
-    const menu = document.querySelector('#menuTable')!;
-
-    const dialogLink = document.createElement('li');
-    dialogLink.innerHTML = `
-        <span class="menu_icon">
-            <span class="statistics-menu-icon"></span>
-        </span>
-        <a class="menubutton" href="#">
-            <span class="textlabel">Statistiken</span>
-        </a>
-    `;
-    dialogLink.querySelector('a')!.addEventListener('click', () => {
-        (window as any).ogameTracker.visible = true;
-    });
-
-    menu.appendChild(dialogLink);
+async function migrations() {
+    await migration_v0_v1();
 }
 
-function migrations() {
-    migration_v0_v1();
+async function initExtension() {
+    mountVue();
+    await migrations();
+    trackMessages();
 }
 
-addMenuItem();
-mountVue();
-trackMessages();
-migrations();
+
+initExtension();

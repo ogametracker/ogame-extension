@@ -4,6 +4,8 @@
     "description": "OGame Vue 12345",
     "manifest_version": 2,
     "permissions": [
+        "tabs",
+        "activeTab",
         "storage",
         "unlimitedStorage"
     ],
@@ -20,9 +22,19 @@
                 "app.css"
             ],
             "js": [
+                "attach.js"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "https://*.ogame.gameforge.com/game/*"
+            ],
+            "js": [
                 "chunk-vendors.js",
                 "app.js"
-            ]
+            ],
+            "run_at": "document_end"
         }
     ]
 }
