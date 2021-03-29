@@ -20,6 +20,8 @@ import trackMessages from '@/tracking/trackMessages';
 // migrations
 import migrations from './migrations';
 
+// register custom chart.js tooltip positioner
+import '@/chartjs/Tooltip.positioners.top';
 
 function mountVue() {
     const app = document.createElement('div');

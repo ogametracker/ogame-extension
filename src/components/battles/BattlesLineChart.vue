@@ -150,6 +150,10 @@
                     filter: (tooltipItem) =>  {
                         return !this.hideZerosInTooltip || tooltipItem.yLabel != 0;
                     },
+                    position: 'top',
+                },
+                hover: {
+                    animationDuration: 0,
                 },
             };
         }
