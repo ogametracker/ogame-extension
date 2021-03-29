@@ -55,7 +55,7 @@ class OgameMetaData {
 
 
     public get storageKeyPrefix(){
-        return `${this.universeShort}-${this.playerId}-`;
+        return `${this.universeShort}-${this.playerId}`;
     }
 }
 
