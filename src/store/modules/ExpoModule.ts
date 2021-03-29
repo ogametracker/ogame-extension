@@ -46,9 +46,7 @@ class ExpoModule extends Vue {
     }
 
     public get storageKey(): string {
-        const server = OgameMetaData.universeShort;
-        const playerId = OgameMetaData.playerId;
-        return `${server}-${playerId}-expoEvents`;
+        return `${OgameMetaData.storageKeyPrefix}-expoEvents`;
     }
 
     public async save() {

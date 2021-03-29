@@ -96,16 +96,14 @@ class SettingsModule extends Vue {
     };
 
     private async created() {
-        const settings = await asyncChromeStorage.get(this.storageKey);
+        const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
         if (settings != null) {
             this.settings = settings;
         }
     }
 
     private get storageKey(): string {
-        const server = OgameMetaData.universeShort;
-        const playerId = OgameMetaData.playerId;
-        return `${server}-${playerId}-settings`;
+        return `${OgameMetaData.storageKeyPrefix}-settings`;
     }
 
     public async save() {

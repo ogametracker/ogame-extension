@@ -23,6 +23,7 @@ export default async function migrations() {
             case ExtensionDataVersion.pre:
                 await migration_v0_v1();
                 await asyncChromeStorage.set(dataVersionStorageKey, ExtensionDataVersion["1.0"]);
+                // eslint-disable no-fallthrough
 
             case ExtensionDataVersion["1.0"]:
                 // add migration call here if the data format changed

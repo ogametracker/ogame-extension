@@ -42,9 +42,7 @@ class DebrisFieldModule extends Vue {
     }
 
     public get storageKey(): string {
-        const server = OgameMetaData.universeShort;
-        const playerId = OgameMetaData.playerId;
-        return `${server}-${playerId}-debrisFieldReports`;
+        return `${OgameMetaData.storageKeyPrefix}-debrisFieldReports`;
     }
 
     public async save() {

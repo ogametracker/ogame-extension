@@ -42,9 +42,7 @@ class BattleModule extends Vue {
     }
 
     public get storageKey(): string {
-        const server = OgameMetaData.universeShort;
-        const playerId = OgameMetaData.playerId;
-        return `${server}-${playerId}-battleReports`;
+        return `${OgameMetaData.storageKeyPrefix}-battleReports`;
     }
 
     public async save() {
