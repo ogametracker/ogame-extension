@@ -8,7 +8,7 @@
     />
 </template>
 <script lang="ts">
-    import { Component, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue } from "vue-property-decorator";
     import BattlesLineChart, { BattlesLineChartDataset } from '@/components/battles/BattlesLineChart.vue';
     import SettingsModule from "@/store/modules/SettingsModule";
     import i18n from "@/i18n";
@@ -19,7 +19,13 @@
             BattlesLineChart,
         },
     })
-    export default class ExpeditionOverviewChart extends Vue {
+    export default class BattlesOverviewChart extends Vue {
+        @Prop({ required: false, type: Boolean, default: false })
+        private players!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private expeditions!: boolean;
+
         private readonly results: BattleResult[] = [
             'won',
             'lost',
@@ -31,7 +37,8 @@
                 label: i18n.messages.ogame.battleResults[battleResult],
                 fill: true,
                 color: SettingsModule.settings.charts.colors.battleResults[battleResult],
-                aggregator: report => report.filter(report => report.result == battleResult).length
+                aggregator: report => report.filter(report => report.result == battleResult
+                    && (report.isExpedition ? this.expeditions : this.players)).length
             }));
         }
 

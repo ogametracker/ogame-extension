@@ -8,7 +8,7 @@
     />
 </template>
 <script lang="ts">
-    import { Component, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue } from "vue-property-decorator";
     import BattlesLineChart, { BattlesLineChartDataset } from '@/components/battles/BattlesLineChart.vue';
     import SettingsModule from "@/store/modules/SettingsModule";
     import i18n from "@/i18n";
@@ -20,14 +20,20 @@
             BattlesLineChart,
         },
     })
-    export default class BattlesFleetPlayersLostChart extends Vue {
+    export default class BattlesFleetLostChart extends Vue {
+        @Prop({ required: false, type: Boolean, default: false })
+        private players!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private expeditions!: boolean;
+
         private get datasets(): BattlesLineChartDataset[] {
             return getNumericEnumValues<Ship>(Ship).map(ship => {
                 return {
                     fill: true,
                     label: i18n.messages.ogame.ships[ship],
                     color: SettingsModule.settings.charts.colors.ships[ship],
-                    aggregator: reports => reports.filter(report => !report.isExpedition)
+                    aggregator: reports => reports.filter(report => report.isExpedition ? this.expeditions : this.players)
                         .reduce((acc, report) => acc + report.lostShips[ship], 0),
                 };
             });
