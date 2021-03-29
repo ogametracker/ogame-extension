@@ -52,6 +52,11 @@ class OgameMetaData {
 
         return this._playerId;
     }
+
+
+    public get storageKeyPrefix(){
+        return `${this.universeShort}-${this.playerId}-`;
+    }
 }
 
 export default new OgameMetaData();

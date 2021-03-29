@@ -167,39 +167,14 @@ function migrateExpos_v0_v1(exposv0: ExpoEventCollectionv0): ExpoEventCollection
     return result;
 }
 
-
 export default async function migration_v0_v1() {
     const server = OgameMetaData.universeShort;
 
     const oldExpoStorageKey = `${server}-expoEvents`;
-    const oldExpoData = await asyncChromeStorage.get(oldExpoStorageKey);
+    const oldExpoData = await asyncChromeStorage.get<ExpoEventCollectionv0>(oldExpoStorageKey);
     if (oldExpoData == null)
         return;
 
-    //TODO: localization
-    const notification = NotificationModule.addNotification({
-        type: 'info',
-        text: 'Migration der Daten wird druchgeführt. Bitte warten...',
-        title: 'Migration',
-    });
-
-    try {
-        const newExpoData = migrateExpos_v0_v1(oldExpoData);
-        await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
-        await asyncChromeStorage.set(oldExpoStorageKey, null);
-
-        setTimeout(() => {
-            notification.type = 'success';
-            //TODO: localization
-            notification.text = 'Migration erfolgreich durchgeführt.';
-
-            setTimeout(() => {
-                NotificationModule.remove(notification);
-            }, 2000);
-        }, 2000);
-    } catch {
-        notification.type = 'error';
-        //TODO: localization
-        notification.text = 'Bei der Migration der Daten ist ein Fehler aufgetreten.';
-    }
+    const newExpoData = migrateExpos_v0_v1(oldExpoData);
+    await asyncChromeStorage.set(ExpoModule.storageKey, newExpoData);
 }

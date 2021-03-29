@@ -16,7 +16,9 @@ import i18n from '@/i18n/';
 
 // tracking
 import trackMessages from '@/tracking/trackMessages';
-import migration_v0_v1 from './migrations/migration_v0_v1';
+
+// migrations
+import migrations from './migrations';
 
 
 function mountVue() {
@@ -28,10 +30,6 @@ function mountVue() {
         i18n,
         render: h => h(App),
     }).$mount(`#${app.id}`);
-}
-
-async function migrations() {
-    await migration_v0_v1();
 }
 
 async function initExtension() {
