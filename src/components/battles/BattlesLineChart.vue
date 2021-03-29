@@ -76,6 +76,9 @@
         @Prop({ required: false, type: Boolean, default: false })
         private stacked!: boolean;
 
+        @Prop({ required: false, type: Boolean, default: true })
+        private hideZerosInTooltip!: boolean;
+
         @Prop({ required: false, type: Number, default: null })
         private forceMin!: number | null;
 
@@ -143,6 +146,9 @@
                     callbacks: {
                         label: this.tooltipLabel ?? ((item, data) => `${item.value} ${data.datasets![item.datasetIndex!].label}`),
                         footer: this.tooltipFooter ?? (() => null!),
+                    },
+                    filter: (tooltipItem) =>  {
+                        return !this.hideZerosInTooltip || tooltipItem.yLabel != 0;
                     },
                 },
             };

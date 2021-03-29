@@ -4,6 +4,7 @@
         :datasets="datasets"
         :y-tick-formatter="(value) => $i18n.formatNumber(value)"
         :tooltip-label="getTooltipLabel"
+        :hide-zeros-in-tooltip="false"
     />
 </template>
 <script lang="ts">
