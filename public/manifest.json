@@ -1,7 +1,7 @@
 {
-    "name": "OGame Vue 12345",
-    "version": "0.0.0.1",
-    "description": "OGame Vue 12345",
+    "name": "OGame Tracker",
+    "version": "1.0.0.",
+    "description": "OGame Tracker",
     "manifest_version": 2,
     "permissions": [
         "tabs",
