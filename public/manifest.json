@@ -1,14 +1,12 @@
 {
     "name": "OGame Tracker",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "description": "OGame Tracker",
     "manifest_version": 2,
     "icons": {
         "128": "icon128.png"
     },
     "permissions": [
-        "tabs",
-        "activeTab",
         "storage",
         "unlimitedStorage"
     ],

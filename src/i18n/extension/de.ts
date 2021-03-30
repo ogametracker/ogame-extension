@@ -20,6 +20,7 @@ export default {
         battles: 'Kämpfe',
         debrisFields: 'Trümmerfelder',
         settings: 'Einstellungen',
+        resourcesOverview: 'Rohstoffbilanz',
     },
     since: 'Seit',
     lost: 'Verloren',

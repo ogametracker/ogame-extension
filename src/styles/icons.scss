@@ -21,23 +21,16 @@
     }
 }
 
-.icon-expo,
-.icon-debris-field,
-.icon-attack {
-    font-size: 36px;
-    filter: none;
-}
+$icons: ("expo", "attack", "debris-field", "economy", "cog", "microsoft-excel", "plus", "minus", "close");
 
-$icons: (
-    'expo',
-    'attack',
-    'debris-field',
-    'cog',
-    'microsoft-excel',
-    'plus',
-    'minus',
-    'close',
-);
+$custom-icons: ("expo", "attack", "debris-field", "economy");
+
+@each $icon in $custom-icons {
+    .icon-#{$icon} {
+        font-size: 36px;
+        filter: none;
+    }
+}
 
 @each $icon in $icons {
     .icon-#{$icon}::before {

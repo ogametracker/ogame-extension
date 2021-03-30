@@ -60,6 +60,12 @@
                     v-else-if="activeTab.name == 'debrisFields'"
                     class="stats-dialog-body-content"
                 />
+
+                <resources-overview
+                    v-else-if="activeTab.name == 'resourcesOverview'"
+                    class="stats-dialog-body-content"
+                />
+
                 <span v-else-if="activeTab.name == 'settings'">
                     <settings />
                 </span>
@@ -77,6 +83,7 @@
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
     import i18n from "@/i18n";
+    import ResourcesOverview from '@/components/resourceOverview/ResourcesOverview.vue';
 
     interface TabItem {
         label?: string;
@@ -94,6 +101,7 @@
             BattlesStats,
             DebrisFieldStats,
             Settings,
+            ResourcesOverview,
         },
     })
     export default class StatsDialog extends Vue {
@@ -115,6 +123,11 @@
             icon: 'debris-field',
             color: '#00a031',
             label: i18n.messages.extension.headers.debrisFields,
+        }, {
+            name: 'resourcesOverview',
+            icon: 'economy',
+            color: '#a9460c',
+            label: i18n.messages.extension.headers.resourcesOverview,
         }, {
             name: 'placeholder_0',
             disabled: true,
