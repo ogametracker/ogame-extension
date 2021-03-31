@@ -3,6 +3,7 @@ import ExtensionDataVersion from "@/models/versioning/ExtensionDataVersion";
 import NotificationModule from "@/store/modules/NotificationModule";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import migration_v0_v1 from "./migration_v0_v1";
+import migration_v1_v1_1 from "./migration_v1_v1.1fleetfix";
 
 export default async function migrations() {
     const dataVersionStorageKey = `${OgameMetaData.storageKeyPrefix}-version`;
@@ -23,9 +24,14 @@ export default async function migrations() {
             case ExtensionDataVersion.pre:
                 await migration_v0_v1();
                 await asyncChromeStorage.set(dataVersionStorageKey, ExtensionDataVersion["1.0"]);
-                // eslint-disable no-fallthrough
+            // eslint-disable no-fallthrough
 
             case ExtensionDataVersion["1.0"]:
+                await migration_v1_v1_1();
+                await asyncChromeStorage.set(dataVersionStorageKey, ExtensionDataVersion["1.1"]);
+            // eslint-disable no-fallthrough
+
+            case ExtensionDataVersion["1.1"]:
                 // add migration call here if the data format changed
                 break;
         }
