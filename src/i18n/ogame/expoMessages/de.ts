@@ -107,10 +107,11 @@ export default {
             'Ein paar anscheinend sehr verzweifelte Weltraumpiraten haben versucht,',
             'Einige primitive Barbaren greifen uns mit Raumschiffen an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.',
             'Wir haben ein paar Funksprüche sehr betrunkener Piraten aufgefangen.',
+            'Wir mussten uns gegen einige Piraten wehren, die zum Glück nicht allzu zahlreich waren.',
+            'Unsere Expeditionsflotte meldet, dass ein gewisser Moa Tikarr und seine wilde Meute die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.',
         ],
         [ExpoSize.medium]: [
             'Deine Expeditionsflotte hatte ein unschönes Zusammentreffen mit einigen Weltraumpiraten.',
-            'Wir mussten uns gegen einige Piraten wehren, die zum Glück nicht allzu zahlreich waren.',
             'Wir sind in den Hinterhalt einiger Sternen-Freibeuter geraten!',
             'Der Hilferuf, dem die Expedition folgte, stellte sich als böse Falle einiger arglistiger Sternen-Freibeuter heraus. Ein Gefecht war unvermeidlich.',
         ],
@@ -125,14 +126,16 @@ export default {
             'Einige fremdartig anmutende Schiffe haben ohne Vorwarnung die Expeditionsflotte angegriffen.',
             'Deine Expeditionsflotte hatte einen nicht besonders freundlichen Erstkontakt mit einer unbekannten Spezies.',
             'Unsere Expedition wurde von einer kleinen Gruppe unbekannter Schiffe angegriffen.',
+            'Die Expeditionsflotte meldet Kontakt mit unbekannten Schiffen. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.',
         ],
         [ExpoSize.medium]: [
             'Eine unbekannte Spezies greift unsere Expedition an!',
             'Deine Expeditionsflotte hat anscheinend das Hoheitsgebiet einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.',
+            'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die Aggressoren konnten nicht identifiziert werden.',
         ],
         [ExpoSize.large]: [
             'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und meldet schwere Gefechte!',
-            'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die Aggressoren konnten nicht identifiziert werden.',
+            'Wir hatten Mühe den korrekten Dialekt einer Alienrasse auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".',
         ],
     },
 };

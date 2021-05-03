@@ -5,7 +5,7 @@ export default {
     [ExpoType.pirates]: 'Piraten',
     [ExpoType.darkMatter]: 'Dunkle Materie',
     [ExpoType.delay]: 'Verspätung',
-    [ExpoType.early]: 'Verfühung',
+    [ExpoType.early]: 'Verfrühung',
     [ExpoType.fleet]: 'Flotte',
     [ExpoType.item]: 'Item',
     [ExpoType.lostFleet]: 'Flottenverlust',
