@@ -1,27 +1,54 @@
 <template>
-    <resource-overview-chart
-        stacked
-        :datasets="datasets"
-        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
-        :tooltip-label="getTooltipLabel"
-        :hide-zeros-in-tooltip="false"
-    />
+    <tab-view :items="items" vertical>
+        <template #chart>
+            <resource-overview-chart
+                stacked
+                :datasets="datasets"
+                :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+                :tooltip-label="getTooltipLabel"
+                :hide-zeros-in-tooltip="false"
+            />
+        </template>
+        <template #tables>
+            <resource-overview-table />
+        </template>
+    </tab-view>
 </template>
+
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
+    import TabView, { TabViewItem } from "../common/TabView.vue";
     import ResourceOverviewChart, { ResourcesOverviewChartDataset } from './ResourceOverviewChart.vue';
-    import ExpoType from "@/models/expeditions/ExpoType";
-    import SettingsModule from "@/store/modules/SettingsModule";
-    import Resource from "@/models/Resource";
-    import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
+    import ResourceOverviewTable from './ResourceOverviewTable.vue';
     import i18n from "@/i18n";
+    import Resource from "@/models/Resource";
+    import SettingsModule from "@/store/modules/SettingsModule";
+    import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
+    import ExpoType from "@/models/expeditions/ExpoType";
+
 
     @Component({
         components: {
             ResourceOverviewChart,
+            ResourceOverviewTable,
+            TabView,
         },
     })
-    export default class ResourcesOverview extends Vue {
+    export default class ResourceOverviewStats extends Vue {
+        private get items(): TabViewItem[] {
+            return [
+                {
+                    name: 'chart',
+                    title: i18n.messages.extension.chart,
+                },
+                {
+                    name: 'tables',
+                    title: i18n.messages.extension.tables,
+                },
+            ];
+        }
+
+
         private get datasets(): ResourcesOverviewChartDataset[] {
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
