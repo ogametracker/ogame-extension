@@ -37,6 +37,7 @@ export default async function readExpeditions() {
     for (const messageContainer of messageContainers) {
         const expoId = parseInt(messageContainer.getAttribute('data-msg-id')!);
         if (knownExpos[expoId] != null){
+            addExpoResultText(knownExpos[expoId], messageContainer);
             messageContainer.classList.add('msg-extension-read');
             continue;
         } 
@@ -53,6 +54,7 @@ export default async function readExpeditions() {
             ExpoModule.add(expoEvent);
             newMessageCount++;
 
+            addExpoResultText(expoEvent, messageContainer);
             messageContainer.classList.add('msg-extension-read');
 
             if (expoEvent.type == ExpoType.lostFleet) {
@@ -93,6 +95,27 @@ export default async function readExpeditions() {
 
         await ExpoModule.save();
     }
+}
+
+function addExpoResultText(expo: ExpoEvent, element: Element) {
+    if(element.querySelector('.msg-expo-title') != null) {
+        return;
+    }
+
+    const headElem = element.querySelector('.msg_head');
+    const titleElem = element.querySelector('.msg_title');
+    if(headElem == null || titleElem == null) {
+        throw new Error("message head or title element not found");
+    }
+
+    const typeElem = document.createElement('span');
+    typeElem.classList.add('msg-expo-title');
+
+    typeElem.textContent = `${i18n.messages.ogame.expoTypes[expo.type]}`;
+    if('size' in expo) {
+        typeElem.textContent += ` (${i18n.messages.ogame.expoSizes[expo.size]})`;
+    }
+    headElem.insertBefore(typeElem, titleElem.nextSibling);
 }
 
 function getExpoEvent(id: number, message: string, messageContainer: Element): ExpoEvent {

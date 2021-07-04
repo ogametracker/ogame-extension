@@ -40,7 +40,7 @@ class I18n {
 
 const i18n = new I18n();
 Object.defineProperty(Vue.prototype, '$i18n', {
-    get() { return i18n;}
+    get() { return i18n; }
 });
 
 export default i18n;
