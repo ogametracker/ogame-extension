@@ -53,10 +53,23 @@
 
     .msg {
         padding-left: 24px !important;
-        color: #444444;
 
-        &:hover {
-            color: unset;
+        &.msg-expo {
+            color: #444444;
+
+            &:hover {
+                color: unset;
+            }
+
+            .msg_title {
+                width: auto !important;
+                margin-right: 12px;
+            }
+
+            .msg-expo-title {
+                font-weight: bold;
+                color: white;
+            }
         }
 
         .msg_status {
@@ -74,16 +87,6 @@
 
         &.msg-error {
             background: #2f0909 !important;
-        }
-
-        .msg_title {
-            width: auto !important;
-            margin-right: 12px;
-        }
-
-        .msg-expo-title {
-            font-weight: bold;
-            color: white;
         }
     }
 

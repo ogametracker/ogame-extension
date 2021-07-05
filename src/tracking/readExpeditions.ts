@@ -102,6 +102,7 @@ function addExpoResultText(expo: ExpoEvent, element: Element) {
         return;
     }
 
+    element.classList.add('msg-expo');
     const headElem = element.querySelector('.msg_head');
     const titleElem = element.querySelector('.msg_title');
     if(headElem == null || titleElem == null) {
