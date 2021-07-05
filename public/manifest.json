@@ -1,6 +1,6 @@
 {
     "name": "OGame Tracker",
-    "version": "1.0.1.2",
+    "version": "[major-version].[minor-version].[revision-version].[patch-version]",
     "description": "OGame Tracker",
     "manifest_version": 2,
     "icons": {

@@ -1,42 +1,47 @@
 {
-  "name": "ogame-tracker",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --mode production",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "chart.js": "^2.9.4",
-    "chartjs": "^0.3.24",
-    "core-js": "^3.6.5",
-    "date-fns": "^2.19.0",
-    "file-loader": "^4.3.0",
-    "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^9.1.2",
-    "vue-router": "^3.2.0",
-    "vuedraggable": "^2.24.3",
-    "xlsx": "^0.16.9"
-  },
-  "devDependencies": {
-    "@types/chart.js": "^2.9.31",
-    "@types/chrome": "^0.0.133",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.11"
-  }
+    "name": "ogame-tracker",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', ((Get-Date).Hour * 24 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second)) | Set-Content ./dist/manifest.json\"",
+        "vue-build": "vue-cli-service build --mode production",
+        "build": "npm run vue-build && npm run ext-set-version",
+        "lint": "vue-cli-service lint",
+        "ext-remove-fake": "powershell -command \"rm ./dist/ogame-fake.js\" && powershell -command \"rm ./dist/index.html\"",
+        "ext-zip": "cmd /c \"C:/Program Files/7-Zip/7z\" a -tzip ./dist/ogame-tracker.zip ./dist/*",
+        "pack": "npm run build && npm run ext-remove-fake && npm run ext-zip"
+    },
+    "dependencies": {
+        "chart.js": "^2.9.4",
+        "chartjs": "^0.3.24",
+        "core-js": "^3.6.5",
+        "date-fns": "^2.19.0",
+        "file-loader": "^4.3.0",
+        "vue": "^2.6.11",
+        "vue-class-component": "^7.2.3",
+        "vue-property-decorator": "^9.1.2",
+        "vue-router": "^3.2.0",
+        "vuedraggable": "^2.24.3",
+        "xlsx": "^0.16.9"
+    },
+    "devDependencies": {
+        "@types/chart.js": "^2.9.31",
+        "@types/chrome": "^0.0.133",
+        "@typescript-eslint/eslint-plugin": "^4.18.0",
+        "@typescript-eslint/parser": "^4.18.0",
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-router": "~4.5.0",
+        "@vue/cli-plugin-typescript": "~4.5.0",
+        "@vue/cli-plugin-vuex": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/eslint-config-typescript": "^7.0.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "sass": "^1.26.5",
+        "sass-loader": "^8.0.2",
+        "typescript": "~4.1.5",
+        "vue-template-compiler": "^2.6.11"
+    }
 }
