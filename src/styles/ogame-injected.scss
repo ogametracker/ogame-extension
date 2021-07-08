@@ -55,11 +55,6 @@
         padding-left: 24px !important;
 
         &.msg-expo {
-            color: #444444;
-
-            &:hover {
-                color: unset;
-            }
 
             .msg_title {
                 width: auto !important;
@@ -69,6 +64,11 @@
             .msg-expo-title {
                 font-weight: bold;
                 color: white;
+            }
+
+            .msg-expo-highlight {
+                color: white;
+                font-weight: bold;
             }
         }
 
