@@ -55,7 +55,6 @@
         padding-left: 24px !important;
 
         &.msg-expo {
-
             .msg_title {
                 width: auto !important;
                 margin-right: 12px;
@@ -69,6 +68,10 @@
             .msg-expo-highlight {
                 color: white;
                 font-weight: bold;
+            }
+
+            &.msg-expo-type-lostFleet .msg-expo-title {
+                color: rgb(255, 68, 68);
             }
         }
 

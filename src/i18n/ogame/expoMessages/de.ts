@@ -19,7 +19,7 @@ export default {
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: /Es wurde Dunkle Materie (.+) erbeutet/,
+        regex: /Es wurde (?<name>Dunkle Materie) (?<amount>.+) erbeutet/,
     },
 
     [ExpoType.resources]: {
@@ -35,7 +35,7 @@ export default {
             /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
             /*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
-        regex: /Es wurde (Metall|Kristall|Deuterium) (.+) erbeutet/,
+        regex: /Es wurde (?<name>Metall|Kristall|Deuterium) (?<amount>.+) erbeutet/,
     },
 
     [ExpoType.fleet]: {
@@ -53,7 +53,7 @@ export default {
             /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: /Folgende Schiffe schlossen sich der Flotte an:/,
+        regex: /Folgende Schiffe schlossen sich der Flotte an:(?<ships>.+)/,
     },
 
     [ExpoType.nothing]: [
@@ -99,7 +99,7 @@ export default {
     ],
 
     [ExpoType.item]: {
-        regex: /Ein (.+) wurde dem Inventar hinzugefügt/,
+        regex: /Ein (?<name>.+) wurde dem Inventar hinzugefügt/,
     },
 
     [ExpoType.pirates]: {

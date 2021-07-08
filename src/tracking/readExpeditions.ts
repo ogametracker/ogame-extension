@@ -113,14 +113,14 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         case ExpoType.resources: {
             const regex = i18n.messages.ogame.expoMessages.resources.regex;
             const match = msgContent.innerHTML.match(regex);
-            if (match == null) {
+            if (match?.groups == null) {
                 throw new Error();
             }
 
             msgContent.innerHTML = msgContent.innerHTML
                 .replace(match[0], match[0]
-                    .replace(match[1], `<span class="msg-expo-highlight">${match[1]}</span>`)
-                    .replace(match[2], `<span class="msg-expo-highlight">${match[2]}</span>`)
+                    .replace(match.groups.name, `<span class="msg-expo-highlight">${match.groups.name}</span>`)
+                    .replace(match.groups.amount, `<span class="msg-expo-highlight">${match.groups.amount}</span>`)
                 );
             break;
         }
@@ -128,18 +128,31 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         case ExpoType.fleet: {
             const regex = i18n.messages.ogame.expoMessages.fleet.regex;
             const match = msgContent.innerHTML.match(regex);
-            if (match == null) {
+            if (match?.groups == null) {
                 throw new Error();
             }
 
             msgContent.innerHTML = msgContent.innerHTML
-                .replace(match[0], match[0] + '<span class="msg-expo-highlight">')
-                + '</span>';
+                .replace(match.groups.ships, `<span class="msg-expo-highlight">${match.groups.ships}</span>`);
+            break;
+        }
+
+        case ExpoType.darkMatter: {
+            const regex = i18n.messages.ogame.expoMessages.darkMatter.regex;
+            const match = msgContent.innerHTML.match(regex);
+            if (match?.groups == null) {
+                throw new Error();
+            }
+
+            msgContent.innerHTML = msgContent.innerHTML
+                .replace(match.groups.name, `<span class="msg-expo-highlight">${match.groups.name}</span>`)
+                .replace(match.groups.amount, `<span class="msg-expo-highlight">${match.groups.amount}</span>`);
             break;
         }
     }
 
     element.classList.add('msg-expo-highlighted');
+    element.classList.add(`msg-expo-type-${expo.type}`);
 }
 
 function addExpoResultText(expo: ExpoEvent, element: Element) {
@@ -189,11 +202,11 @@ function getExpoEvent(id: number, message: string, messageContainer: Element): E
 function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent | null {
     const regex = i18n.messages.ogame.expoMessages[ExpoType.darkMatter].regex;
     const match = message.match(regex);
-    if (match == null) {
+    if (match?.groups == null) {
         return null;
     }
 
-    const amount = parseInt(match[1].replace(/[^\d]/g, ''));
+    const amount = parseInt(match.groups.amount.replace(/[^\d]/g, ''));
     const size = Object.values(ExpoSize)
         .find(size => i18n.messages.ogame.expoMessages[ExpoType.darkMatter][size]
             .some((msg: string) => message.includes(msg))
@@ -296,9 +309,9 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
 
 function getItemExpo(id: number, date: number, message: string, messageContainer: Element): ExpoEvent | null {
-    const regex = i18n.messages.ogame.expoMessages[ExpoType.item].regex as RegExp;
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.item].regex;
     const match = message.match(regex);
-    if (match == null)
+    if (match?.groups == null)
         return null;
 
     const itemLink = messageContainer.querySelector('.msg_content > a');
