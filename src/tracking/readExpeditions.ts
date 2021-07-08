@@ -144,9 +144,10 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
                 throw new Error();
             }
 
-            msgContent.innerHTML = msgContent.innerHTML
+            msgContent.innerHTML = msgContent.innerHTML.replace(match[0], match[0]
                 .replace(match.groups.name, `<span class="msg-expo-highlight">${match.groups.name}</span>`)
-                .replace(match.groups.amount, `<span class="msg-expo-highlight">${match.groups.amount}</span>`);
+                .replace(match.groups.amount, `<span class="msg-expo-highlight">${match.groups.amount}</span>`)
+            );
             break;
         }
     }
