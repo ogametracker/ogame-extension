@@ -1,6 +1,14 @@
-import bottomLevelKeys from '@/i18n/utils/bottomLevelKeys';
+import LanguageKey from '@/i18n/languageKey';
+import Resource from '@/models/Resource';
 import de from './de';
 
-export default bottomLevelKeys({
-    de,
-});
+export interface I18nOgameResources {
+    [Resource.metal]: string;
+    [Resource.crystal]: string;
+    [Resource.deuterium]: string;
+}
+
+const messages: Record<LanguageKey, I18nOgameResources> = {
+    [LanguageKey.de]: de,
+};
+export default messages;

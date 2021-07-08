@@ -15,6 +15,7 @@
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
     import i18n from "@/i18n";
     import getNumericEnumValues from "@/utils/getNumericEnumValues";
+    import Ship from "@/models/Ship";
 
     @Component({
         components: {
@@ -26,7 +27,7 @@
         private readonly expoType = ExpoType.fleet;
 
         private get items(): ExpoRangeTableItem[] {
-            return getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+            return getNumericEnumValues<Ship>(ExpoFindableShips)
                 .map(ship => {
                     return {
                         label: i18n.messages.ogame.ships[ship],

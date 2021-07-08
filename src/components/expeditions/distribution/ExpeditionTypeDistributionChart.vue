@@ -19,7 +19,7 @@
     })
     export default class ExpeditionTypeDistributionChart extends Vue {
 
-        private readonly datasets: ExpoLineChartDataset[] = Object.keys(ExpoType).map(expoType => ({
+        private readonly datasets: ExpoLineChartDataset[] = Object.values(ExpoType).map(expoType => ({
             label: i18n.messages.ogame.expoTypes[expoType],
             color: SettingsModule.settings.charts.colors.overview[expoType as ExpoType],
             fill: false,

@@ -17,7 +17,7 @@ import i18n from "@/i18n";
     })
     export default class ExpeditionOverviewTables extends Vue {
         private get items(): ExpoRangeTableItem[] {
-            return Object.keys(ExpoType).map(expoType => ({
+            return Object.values(ExpoType).map(expoType => ({
                 label: i18n.messages.ogame.expoTypes[expoType],
                 getValue: (expos) => expos.filter(expo => expo.type == expoType).length
             }));

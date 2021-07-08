@@ -12,6 +12,7 @@ import BattleModule from "@/store/modules/BattleModule";
 import BattleReport from "@/models/battles/BattleReport";
 import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
+import Ship from "@/models/Ship";
 
 interface ExportHelper {
     label: string;
@@ -89,7 +90,7 @@ class ExcelExport {
 
 
     private exportExpoOverview(expoData: ExpoData): any[] {
-        const expoTypes = Object.keys(ExpoType);
+        const expoTypes = Object.values(ExpoType);
 
         const data = expoData.days.map(day => [
             day,
@@ -128,7 +129,7 @@ class ExcelExport {
     }
 
     private exportExpoFleet(expoData: ExpoData): any[] {
-        const ships = getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips);
+        const ships = getNumericEnumValues<Ship>(ExpoFindableShips);
 
         const data = expoData.days.map(day => [
             day,
@@ -203,9 +204,9 @@ class ExcelExport {
             'Datum + Zeit', //TODO: localization
             'Typ', //TODO: localization
 
-            ...Object.keys(Resource).map(resource => i18n.messages.ogame.resources[resource]),
+            ...Object.values(Resource).map(resource => i18n.messages.ogame.resources[resource]),
 
-            ...getNumericEnumValues<ExpoFindableShips>(ExpoFindableShips)
+            ...getNumericEnumValues<Ship>(ExpoFindableShips)
                 .map(ship => i18n.messages.ogame.ships[ship]),
 
             i18n.messages.ogame.premium.darkMatter,
