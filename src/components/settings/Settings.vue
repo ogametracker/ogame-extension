@@ -190,12 +190,16 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="key in Object.keys(settings.charts.colors.battleResults)"
+                        v-for="key in Object.keys(
+                            settings.charts.colors.battleResults
+                        )"
                         :key="key"
                     >
                         <td>
                             <color-input
-                                v-model="settings.charts.colors.battleResults[key]"
+                                v-model="
+                                    settings.charts.colors.battleResults[key]
+                                "
                                 :label="$i18n.messages.ogame.battleResults[key]"
                             />
                         </td>
@@ -203,11 +207,29 @@
                 </tbody>
             </table>
         </div>
+
+        <hr />
+
+        <h2>Export</h2>
+        <textarea
+            readonly
+            :value="exportJson"
+            style="width: 60%; height: 300px"
+            @focus="$event.target.select()"
+        />
+
+        <hr />
+
+        <h2>Import</h2>
+        Coming Soon
     </div>
 </template>
 
 <script lang="ts">
     import { DateRangeType } from '@/models/settings/DateRange';
+    import BattleModule from '@/store/modules/BattleModule';
+    import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
+    import ExpoModule from '@/store/modules/ExpoModule';
     import NotificationModule from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { Component, Vue, Watch } from 'vue-property-decorator';
@@ -269,6 +291,14 @@
                 });
 
             }, this.saveDelay);
+        }
+
+        private get exportJson() {
+            return JSON.stringify({
+                battles: BattleModule.reports,
+                debridFields: DebrisFieldModule.reports,
+                expeditions: ExpoModule.expos,
+            });
         }
     }
 </script>
