@@ -275,7 +275,7 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
     if (match == null) {
         return null;
     }
-
+    
     const size = Object.values(ExpoSize)
         .find(size => i18n.messages.ogame.expoMessages[ExpoType.fleet][size]
             .some((msg: string) => message.includes(msg))
@@ -284,7 +284,7 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
         return null;
     }
 
-    const shipText = message.substr(match.index! + match[0].length);
+    const shipText = match.groups!.ships;
     const ships: Record<ExpoFindableShips, number | undefined> = {};
 
     getNumericEnumValues<Ship>(ExpoFindableShips)
