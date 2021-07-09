@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', ((Get-Date).Hour * 24 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second)) | Set-Content ./dist/manifest.json\"",
+        "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', [Math]::Floor(((Get-Date).Hour * 60 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second)) / 2) | Set-Content ./dist/manifest.json\"",
         "vue-build": "vue-cli-service build --mode production",
         "build": "npm run vue-build && npm run ext-set-version",
         "lint": "vue-cli-service lint",
