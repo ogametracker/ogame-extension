@@ -11,8 +11,11 @@ import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
 
+import OgameMetaData from './models/ogame/OgameMetaData';
+
 // i18n
 import i18n from '@/i18n/';
+i18n.locale = Object.values(LanguageKey).find(lang => lang == OgameMetaData.locale) ?? LanguageKey.de;
 
 // tracking
 import trackMessages from '@/tracking/trackMessages';
@@ -22,6 +25,7 @@ import migrations from './migrations';
 
 // register custom chart.js tooltip positioner
 import '@/chartjs/Tooltip.positioners.top';
+import LanguageKey from './i18n/languageKey';
 
 function mountVue() {
     const app = document.createElement('div');

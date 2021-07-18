@@ -1,5 +1,6 @@
 import LanguageKey from '@/i18n/languageKey';
 import de from './de';
+import en from './en';
 
 export interface I18nExtensionSettings {
     name: string;
@@ -25,5 +26,6 @@ export interface I18nExtensionSettings {
 
 const messages: Record<LanguageKey, I18nExtensionSettings> = {
     [LanguageKey.de]: de,
+    [LanguageKey.en]: en,
 };
 export default messages;
