@@ -1,7 +1,7 @@
 const metaUniverse = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement)?.content;
 const metaUniverseName = (document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement)?.content;
 const metaUniverseSpeed = (document.querySelector('meta[name="ogame-universe-speed"]') as HTMLMetaElement)?.content;
-const metaUniverseLanguage = (document.querySelector('meta[name="ogame-universe-language"]') as HTMLMetaElement)?.content;
+const metaUniverseLanguage = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement)?.content;
 const metaUniversePlayerId = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement)?.content;
 
 class OgameMetaData {
