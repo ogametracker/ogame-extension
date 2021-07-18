@@ -24,7 +24,7 @@ export interface I18nExtensionSettings {
     };
     hintDateRanges: string;
     titleDateRanges: string;
-    chartsColors: {
+    chartColors: {
         title: string;
         expeditions: string;
         resources: string;

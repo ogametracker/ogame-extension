@@ -20,7 +20,7 @@ export default {
     },
     hintDateRanges: 'Settings for the columns of the tables. The rows can be reordered using drag and drop.',
     titleDateRanges: 'Date Ranges',
-    chartsColors: {
+    chartColors: {
         title: 'Chart Colors',
         expeditions: 'Expedition Results',
         resources: 'Resources',

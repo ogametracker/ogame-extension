@@ -20,7 +20,7 @@ export default {
     },
     hintDateRanges: 'Einstellungen für die Spalten der Übersichtstabellen. Zeilen sind per Drag&Drop sortierbar.',
     titleDateRanges: 'Datumsbereiche',
-    chartsColors: {
+    chartColors: {
         title: 'Diagrammfarben',
         expeditions: 'Expeditionsereignisse',
         resources: 'Rohstoffe',
