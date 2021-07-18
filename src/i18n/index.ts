@@ -16,6 +16,10 @@ class I18n {
             short: 'dd.MM.yyyy',
             long: 'dd.MM.yyyy HH:mm:ss',
         },
+        [LanguageKey.en]: {
+            short: 'dd.MM.yyyy',
+            long: 'dd.MM.yyyy HH:mm:ss',
+        },
     };
 
     public get messages(): I18nMessages {

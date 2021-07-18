@@ -25,7 +25,7 @@ export interface I18nOgame {
 
 const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
     .map(lang => {
-        const msg: { [lang]: I18nOgame } = {
+        const msg: Record<LanguageKey, I18nOgame> = {
             [lang]: {
                 expoMessages: expoMessages[lang],
                 debrisFieldMessages: debrisFieldMessages[lang],
@@ -38,7 +38,7 @@ const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
                 factions: factions[lang],
                 battleResults: battleResults[lang],
             }
-        };
+        } as Record<LanguageKey, I18nOgame>;
         return msg;
     }).reduce((acc, cur) => ({
         ...acc,

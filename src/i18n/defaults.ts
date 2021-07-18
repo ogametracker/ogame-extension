@@ -1,5 +1,5 @@
 const defaultLocale: Locale = {
-    code: 'de-DE',
+    code: 'de',
     options: {
         weekStartsOn: 1
     },

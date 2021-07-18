@@ -11,12 +11,12 @@ export interface I18nMessages {
 
 const messages: Record<LanguageKey, I18nMessages> = Object.values(LanguageKey)
     .map(lang => {
-        const msg: { [lang]: I18nMessages } = {
+        const msg: Record<LanguageKey, I18nMessages> = {
             [lang]: {
                 extension: extension[lang],
                 ogame: ogame[lang],
             }
-        };
+        } as Record<LanguageKey, I18nMessages>;
         return msg;
     }).reduce((acc, cur) => ({
         ...acc,
