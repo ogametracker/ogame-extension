@@ -12,7 +12,11 @@ observer.observe(document.documentElement, {
 });
 document.addEventListener('load', () => attach());
 
-function addMenuItem() {
+async function addMenuItem() {
+    const lang = 'en';
+    const response = await fetch(chrome.extension.getURL(`/localization/${lang}.json`));
+    const localization = await response.json();
+
     const menu = document.querySelector('#menuTable');
 
     const dialogLink = document.createElement('li');
@@ -21,7 +25,7 @@ function addMenuItem() {
             <span class="statistics-menu-icon"></span>
         </span>
         <a class="menubutton" href="#">
-            <span class="textlabel">Statistiken</span>
+            <span class="textlabel">${localization.menuItem}</span>
         </a>
     `;
     dialogLink.querySelector('a').addEventListener('click', () => {

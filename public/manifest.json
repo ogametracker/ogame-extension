@@ -12,7 +12,8 @@
     ],
     "web_accessible_resources": [
         "icons/*",
-        "img/*"
+        "img/*",
+        "localization/*"
     ],
     "content_scripts": [
         {
