@@ -7,6 +7,7 @@ export interface I18nExtensionSettings {
     type: string;
     rangeStarts: string;
     rangeContains: string;
+    newRange: string;
     firstDay: string;
     before: string;
     days: string;

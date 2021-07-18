@@ -6,7 +6,7 @@ export default {
     [ExpoType.darkMatter]: 'Dark Matter',
     [ExpoType.delay]: 'Delay',
     [ExpoType.early]: 'Early',
-    [ExpoType.fleet]: 'Fleet',
+    [ExpoType.fleet]: 'Ships',
     [ExpoType.item]: 'Item',
     [ExpoType.lostFleet]: 'Lost Fleet',
     [ExpoType.nothing]: 'No Event',

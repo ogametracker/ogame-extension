@@ -3,6 +3,7 @@ export default {
     type: 'Type',
     rangeStarts: 'Range starts',
     rangeContains: 'Range contains',
+    newRange: 'new Range',
     firstDay: '<first day>',
     before: 'Before',
     days: 'Days',

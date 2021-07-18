@@ -64,11 +64,10 @@ export default async function readDebrisFields() {
     }
 
     if (newMessageCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'info',
-            title: 'Neue TF-Nachrichten',
-            text: `Es wurden ${newMessageCount} neue TF-Nachrichten eingelesen.`,
+            title: i18n.messages.extension.notifications.debrisFields.success.title,
+            text: i18n.messages.extension.notifications.debrisFields.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -76,11 +75,10 @@ export default async function readDebrisFields() {
     }
 
     if (newErrorCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'error',
-            title: 'Fehler',
-            text: `Es wurden ${newErrorCount} TF-Nachrichten nicht eingelesen.`,
+            title: i18n.messages.extension.notifications.debrisFields.error.title,
+            text: i18n.messages.extension.notifications.debrisFields.error.text(newErrorCount),
             timeout: 5000,
         });
     }

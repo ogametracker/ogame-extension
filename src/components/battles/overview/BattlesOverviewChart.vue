@@ -44,7 +44,7 @@
 
         private getTooltipFooter(items: any[]) {
             const total = items.reduce((acc, cur) => acc + parseInt(cur.value), 0);
-            return `${total} Kämpfe`; //TODO: localization
+            return `${total} ${i18n.messages.extension.headers.battles}`;
         }
 
         private getTooltipLabel(item: any, data: any) {

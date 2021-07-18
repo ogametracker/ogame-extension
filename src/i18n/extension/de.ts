@@ -25,4 +25,9 @@ export default {
     since: 'Seit',
     lost: 'Verloren',
     destroyed: 'Zerstört',
+    combats: {
+        lostShips: 'Verlorene Schiffe',
+        againstPlayers: 'gegen Spieler',
+        onExpeditions: 'auf Expeditionen',
+    },
 };

@@ -18,6 +18,7 @@
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
     import BattlesFleetLost from "./fleet/BattlesFleetLost.vue";
+    import i18n from "@/i18n";
 
 
     @Component({
@@ -32,15 +33,15 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: 'Übersicht', //TODO: localization
+                title: i18n.messages.extension.overview,
             },
             {
                 name: 'resources',
-                title: 'Rohstoffbilanz', //TODO: localization
+                title: i18n.messages.extension.headers.resourcesOverview,
             },
             {
                 name: 'fleet',
-                title: 'Verlorene Schiffe', //TODO: localization
+                title: i18n.messages.extension.combats.lostShips,
             },
         ];
     }

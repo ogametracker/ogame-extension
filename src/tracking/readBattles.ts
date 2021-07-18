@@ -16,7 +16,6 @@ const errorBattleReports: number[] = [];
 const emptyBattleReports: number[] = [];
 
 export default async function readBattles() {
-    //TODO:
     const messagePage = document.querySelector('div[id^="ui-id-"][aria-hidden="false"] > #fleetsgenericpage');
     const parent = messagePage?.parentElement;
     if (messagePage == null || parent == null)
@@ -73,11 +72,10 @@ export default async function readBattles() {
     }
 
     if (newMessageCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'info',
-            title: 'Neue Kampfberichte',
-            text: `Es wurden ${newMessageCount} neue Kampfberichte eingelesen.`,
+            title: i18n.messages.extension.notifications.combats.success.title,
+            text: i18n.messages.extension.notifications.combats.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -85,11 +83,10 @@ export default async function readBattles() {
     }
 
     if (newErrorCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'error',
-            title: 'Fehler',
-            text: `Es wurden ${newErrorCount} Kampfberichte nicht eingelesen.`,
+            title: i18n.messages.extension.notifications.combats.error.title,
+            text: i18n.messages.extension.notifications.combats.error.text(newMessageCount),
             timeout: 5000,
         });
     }

@@ -226,7 +226,8 @@
 </template>
 
 <script lang="ts">
-    import { DateRangeType } from '@/models/settings/DateRange';
+    import i18n from '@/i18n';
+import { DateRangeType } from '@/models/settings/DateRange';
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import ExpoModule from '@/store/modules/ExpoModule';
@@ -258,7 +259,7 @@
                 type: 'day',
                 skip: 0,
                 take: 1,
-                label: 'Neuer Bereich',
+                label: i18n.messages.extension.settings.newRange,
             });
         }
 
@@ -282,11 +283,10 @@
                 await SettingsModule.save();
                 this.saveTimeout = null;
 
-                //TODO: localization
                 NotificationModule.addNotification({
                     type: 'success',
-                    title: 'Einstellungen gespeichert',
-                    text: 'Die Einstellungen wurden erfolgreich gespeichert.',
+                    title: i18n.messages.extension.notifications.settingsSaved.title,
+                    text: i18n.messages.extension.notifications.settingsSaved.text,
                     timeout: 5000,
                 });
 

@@ -13,9 +13,16 @@ observer.observe(document.documentElement, {
 document.addEventListener('load', () => attach());
 
 async function addMenuItem() {
-    const lang = 'en';
-    const response = await fetch(chrome.extension.getURL(`/localization/${lang}.json`));
-    const localization = await response.json();
+    const lang = document.querySelector('meta[name="ogame-language"]').content;
+    let localization;
+    try {
+        const response = await fetch(chrome.extension.getURL(`/localization/${lang}.json`));
+        localization = await response.json();
+    } catch(error) {
+        console.error(`language '${lang}' not supported (yet), falling back to 'de'`);
+        const response = await fetch(chrome.extension.getURL(`/localization/de.json`));
+        localization = await response.json();
+    }
 
     const menu = document.querySelector('#menuTable');
 

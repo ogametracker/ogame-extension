@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
 import ExtensionDataVersion from "@/models/versioning/ExtensionDataVersion";
 import NotificationModule from "@/store/modules/NotificationModule";
@@ -12,11 +13,10 @@ export default async function migrations() {
     if (version == ExtensionDataVersion.current)
         return;
 
-    //TODO: localization
     const notification = NotificationModule.addNotification({
         type: 'info',
-        text: 'Migration der Daten wird druchgeführt. Bitte warten...',
-        title: 'Migration',
+        title: i18n.messages.extension.notifications.migration.inProgress.title,
+        text: i18n.messages.extension.notifications.migration.inProgress.text,
     });
 
     try {
@@ -38,8 +38,7 @@ export default async function migrations() {
 
         setTimeout(() => {
             notification.type = 'success';
-            //TODO: localization
-            notification.text = 'Migration erfolgreich durchgeführt.';
+            notification.text = i18n.messages.extension.notifications.migration.success.text;
 
             setTimeout(() => {
                 NotificationModule.remove(notification);
@@ -47,7 +46,6 @@ export default async function migrations() {
         }, 2000);
     } catch {
         notification.type = 'error';
-        //TODO: localization
-        notification.text = 'Bei der Migration der Daten ist ein Fehler aufgetreten.';
+        notification.text = i18n.messages.extension.notifications.migration.error.text;
     }
 }

@@ -3,6 +3,7 @@ export default {
     type: 'Typ',
     rangeStarts: 'Bereich beginnt',
     rangeContains: 'Bereich enthält',
+    newRange: 'Neuer Bereich',
     firstDay: '<erster Tag>',
     before: 'Vor',
     days: 'Tage',

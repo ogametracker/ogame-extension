@@ -60,11 +60,10 @@ export default async function readExpeditions() {
             messageContainer.classList.add('msg-extension-read');
 
             if (expoEvent.type == ExpoType.lostFleet) {
-                //TODO: localization
                 NotificationModule.addNotification({
                     type: 'warning',
-                    title: 'Flottenverlust',
-                    text: 'Eine Expedition ist nicht zurückgekehrt.',
+                    title: i18n.messages.extension.notifications.expeditions.fleetLost.title,
+                    text: i18n.messages.extension.notifications.expeditions.fleetLost.text,
                     timeout: 5000,
                 });
             }
@@ -78,20 +77,18 @@ export default async function readExpeditions() {
     }
 
     if (errorMessageCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'error',
-            title: 'Fehler',
-            text: `Es wurden ${errorMessageCount} Expeditionen nicht eingelesen. Die fehlerhaften Expeditionsbericht wurden farblich markiert.`
+            title: i18n.messages.extension.notifications.expeditions.error.title,
+            text: i18n.messages.extension.notifications.expeditions.error.text(errorMessageCount),
         });
     }
 
     if (newMessageCount > 0) {
-        //TODO: localization
         NotificationModule.addNotification({
             type: 'info',
-            title: 'Neue Expeditionen',
-            text: `Es wurden ${newMessageCount} neue Expeditionen eingelesen.`,
+            title: i18n.messages.extension.notifications.expeditions.success.title,
+            text: i18n.messages.extension.notifications.expeditions.success.text(errorMessageCount),
             timeout: 5000,
         });
 

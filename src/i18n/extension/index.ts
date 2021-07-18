@@ -1,10 +1,12 @@
 import LanguageKey from '../languageKey';
 import de from './de';
 import en from './en';
+import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
 
 export interface I18nExtension {
     settings: I18nExtensionSettings;
+    notifications: I18nExtensionNotifications;
 
     total: string;
     chart: string;
@@ -29,6 +31,11 @@ export interface I18nExtension {
         settings: string;
         resourcesOverview: string;
     },
+    combats: {
+        lostShips: string;
+        againstPlayers: string;
+        onExpeditions: string;
+    },
     since: string;
     lost: string;
     destroyed: string;
@@ -37,10 +44,12 @@ export interface I18nExtension {
 const messages: Record<LanguageKey, I18nExtension> = {
     [LanguageKey.de]: {
         settings: settings.de,
+        notifications: notifications.de,
         ...de,
     },
     [LanguageKey.en]: {
         settings: settings.en,
+        notifications: notifications.en,
         ...en,
     },
 };

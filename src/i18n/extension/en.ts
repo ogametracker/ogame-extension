@@ -8,7 +8,7 @@ export default {
         overview: 'Overview',
         resources: 'Resources',
         fleet: 'Ships',
-        darkMatter: 'Darm Matter',
+        darkMatter: 'Dark Matter',
         items: 'Items',
         distribution: 'Distribution',
     },
@@ -25,4 +25,9 @@ export default {
     since: 'Since',
     lost: 'Lost',
     destroyed: 'Destroyed',
+    combats: {
+        lostShips: 'Lost Ships',
+        againstPlayers: 'against Players',
+        onExpeditions: 'on Expeditions',
+    },
 };
