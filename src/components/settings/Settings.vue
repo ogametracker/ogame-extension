@@ -1,6 +1,6 @@
 <template>
     <div class="settings">
-        <h2>Datumsbereiche</h2>
+        <h2>{{ $i18n.messages.extension.settings.titleDateRanges }}</h2>
         <span style="margin-bottom: 8px; display: inline-block">
             {{ $i18n.messages.extension.settings.hintDateRanges }}
         </span>
@@ -113,12 +113,17 @@
 
         <hr />
 
-        <h2>Diagrammfarben</h2>
+        <h2>{{ $i18n.messages.extension.settings.chartColors.title }}</h2>
         <div class="color-tables">
             <table class="settings-table">
                 <thead>
                     <tr>
-                        <th>Expeditionsereignisse</th>
+                        <th>
+                            {{
+                                $i18n.messages.extension.settings.chartColors
+                                    .expeditions
+                            }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +146,12 @@
             <table class="settings-table">
                 <thead>
                     <tr>
-                        <th>Rohstoffe</th>
+                        <th>
+                            {{
+                                $i18n.messages.extension.settings.chartColors
+                                    .resources
+                            }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -164,7 +174,12 @@
             <table class="settings-table">
                 <thead>
                     <tr>
-                        <th>Schiffe</th>
+                        <th>
+                            {{
+                                $i18n.messages.extension.settings.chartColors
+                                    .ships
+                            }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -185,7 +200,12 @@
             <table class="settings-table">
                 <thead>
                     <tr>
-                        <th>Kämpfe</th>
+                        <th>
+                            {{
+                                $i18n.messages.extension.settings.chartColors
+                                    .combats
+                            }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -227,7 +247,7 @@
 
 <script lang="ts">
     import i18n from '@/i18n';
-import { DateRangeType } from '@/models/settings/DateRange';
+    import { DateRangeType } from '@/models/settings/DateRange';
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import ExpoModule from '@/store/modules/ExpoModule';

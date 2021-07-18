@@ -21,8 +21,23 @@ export interface I18nExtensionSettings {
         week: string;
         month: string;
         all: string;
-    },
+    };
     hintDateRanges: string;
+    titleDateRanges: string;
+    chartsColors: {
+        title: string;
+        expeditions: string;
+        resources: string;
+        ships: string;
+        combats: string;
+    };
+    defaultRanges: {
+        today: string;
+        yesterday: string;
+        currentWeek: string;
+        lastWeek: string;
+        currentMonth: string;
+    };
 }
 
 const messages: Record<LanguageKey, I18nExtensionSettings> = {

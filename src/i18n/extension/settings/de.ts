@@ -19,4 +19,19 @@ export default {
         all: 'Alles'
     },
     hintDateRanges: 'Einstellungen für die Spalten der Übersichtstabellen. Zeilen sind per Drag&Drop sortierbar.',
+    titleDateRanges: 'Datumsbereiche',
+    chartsColors: {
+        title: 'Diagrammfarben',
+        expeditions: 'Expeditionsereignisse',
+        resources: 'Rohstoffe',
+        ships: 'Schiffe',
+        combats: 'Kämpfe',
+    },
+    defaultRanges: {
+        today: 'Heute',
+        yesterday: 'Gestern',
+        currentWeek: 'Aktuelle Woche',
+        lastWeek: 'Letzte Woche',
+        currentMonth: 'Aktueller Monat',
+    },
 };

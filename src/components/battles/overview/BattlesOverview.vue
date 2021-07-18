@@ -26,11 +26,11 @@
             return [
                 {
                     name: 'players',
-                    title: 'gegen Spieler',
+                    title: i18n.messages.extension.combats.againstPlayers,
                 },
                 {
                     name: 'expos',
-                    title: 'auf Expeditionen',
+                    title: i18n.messages.extension.combats.onExpeditions,
                 },
             ];
         }

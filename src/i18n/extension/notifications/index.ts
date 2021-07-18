@@ -18,20 +18,20 @@ export interface I18nExtensionNotifications {
         inProgress: I18nNotificationText;
         success: I18nNotificationText;
         error: I18nNotificationText;
-    },
+    };
     combats: {
         success: I18nNotificationFunc;
         error: I18nNotificationFunc;
-    },
+    };
     debrisFields: {
         success: I18nNotificationFunc;
         error: I18nNotificationFunc;
-    },
+    };
     expeditions: {
         success: I18nNotificationFunc;
         error: I18nNotificationFunc;
         fleetLost: I18nNotificationText;
-    },
+    };
 }
 
 const messages: Record<LanguageKey, I18nExtensionNotifications> = {

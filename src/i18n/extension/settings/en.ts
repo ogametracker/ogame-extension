@@ -5,13 +5,13 @@ export default {
     rangeContains: 'Range contains',
     newRange: 'new Range',
     firstDay: '<first day>',
-    before: 'Before',
+    before: '',
     days: 'Days',
-    daysVariant: 'Days',
+    daysVariant: 'Days ago',
     weeks: 'Weeks',
-    weeksVariant: 'Weeks',
+    weeksVariant: 'Weeks ago',
     months: 'Months',
-    monthsVariant: 'Months',
+    monthsVariant: 'Months ago',
     rangeType: {
         day: 'Day',
         week: 'Week',
@@ -19,4 +19,19 @@ export default {
         all: 'Everything'
     },
     hintDateRanges: 'Settings for the columns of the tables. The rows can be reordered using drag and drop.',
+    titleDateRanges: 'Date Ranges',
+    chartsColors: {
+        title: 'Chart Colors',
+        expeditions: 'Expedition Results',
+        resources: 'Resources',
+        ships: 'Ships',
+        combats: 'Combat Results',
+    },
+    defaultRanges: {
+        today: 'Today',
+        yesterday: 'Yesterday',
+        currentWeek: 'Current Week',
+        lastWeek: 'Last Week',
+        currentMonth: 'Current Month',
+    },
 };
