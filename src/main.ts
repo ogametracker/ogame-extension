@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './components/App.vue';
-import env from '@/env';
 
 // include icon as global component
 import Icon from '@/components/common/Icon.vue';
