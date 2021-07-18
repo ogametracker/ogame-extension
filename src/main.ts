@@ -26,6 +26,7 @@ import migrations from './migrations';
 // register custom chart.js tooltip positioner
 import '@/chartjs/Tooltip.positioners.top';
 import LanguageKey from './i18n/languageKey';
+import SettingsModule from './store/modules/SettingsModule';
 
 function mountVue() {
     const app = document.createElement('div');
@@ -40,6 +41,11 @@ function mountVue() {
 
 async function initExtension() {
     mountVue();
+
+    if (SettingsModule.settings == null) {
+        SettingsModule.settings = SettingsModule.defaultSettings;
+    }
+
     await migrations();
     trackMessages();
 }

@@ -9,9 +9,9 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 class SettingsModule extends Vue {
-    private _settings: Settings | null = null;
+    public settings: Settings = null!;
 
-    private get _defaultSettings(): Settings {
+    public get defaultSettings(): Settings {
         return {
             tables: {
                 ranges: [
@@ -100,14 +100,10 @@ class SettingsModule extends Vue {
         };
     }
 
-    public get settings(): Settings {
-        return this._settings ?? this._defaultSettings;
-    }
-
     private async created() {
         const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
         if (settings != null) {
-            this._settings = settings;
+            this.settings = settings;
         }
     }
 
@@ -116,7 +112,7 @@ class SettingsModule extends Vue {
     }
 
     public async save() {
-        await asyncChromeStorage.set(this.storageKey, this._settings);
+        await asyncChromeStorage.set(this.storageKey, this.settings);
     }
 }
 
