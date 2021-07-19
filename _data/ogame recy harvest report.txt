@@ -1,0 +1,4 @@
+ Harvesting report from DF on [5:372:7]
+19.06.2021 14:53:36
+From: Fleet
+Your Recycler (1 ships) have a total storage capacity of 35.000. At the target [5:372:7], 0 Metal and 42.000 Crystal are floating in space. You have harvested 0 Metal and 35.000 Crystal. 

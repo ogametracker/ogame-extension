@@ -4,16 +4,16 @@ import ExpoType from "@/models/expeditions/ExpoType";
 export default {
     [ExpoType.darkMatter]: {
         [ExpoSize.small]: [
-            /*'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
-            /*'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
-            /*'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'The expedition was able to */'capture and store some Dark Matter',
+            /*'We found the */'remains of an alien ship'/*. We found a little container with some Dark Matter on a shelf in the cargo hold!'*/,
+            /*'We met an */'odd alien on the shelf of a small ship'/* who gave us a case with Dark Matter in exchange for some simple mathematical calculations.'*/,
             /*'Our expedition took over a */'ghost ship which was transporting a small amount of Dark Matter'/*. We didn`t find any hints of what happened to the original crew of the ship, but our technicians where able to rescue the Dark Matter.'*/,
-            /*'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'The expedition followed some */'odd signals to an asteroid'/*. In the asteroids core a small amount of Dark Matter was found. The asteroid was taken and the explorers are attempting to extract the Dark Matter.'*/,
         ],
         [ExpoSize.medium]: [
-            /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Our expedition */'accomplished a unique experiment'/*. They were able to harvest Dark Matter from a dying star.'*/,
+            /*'Our Expedition */'located a rusty space station'/*, which seemed to have been floating uncontrolled through outer space for a long time. The station itself was totally useless, however, it was discovered that some Dark Matter is stored in the reactor. Our technicians are trying to save as much as they can.'*/,
+            /*'Our expedition reports a */'spectacular phenomenon'/*. The accumulation of Dark Matter in the energy storages of the ship shields. Our technicians try to store as much Dark Matter as they can while the phenomenon lasts.*/,
         ],
         [ExpoSize.large]: [
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -28,8 +28,8 @@ export default {
             /*'On an isolated planetoid we found */'some easily accessible resources fields'/* and harvested some successfully.'*/,
         ],
         [ExpoSize.medium]: [
-            /*'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
-            /*'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Your expedition found an ancient, */'fully loaded but deserted freighter convoy'/*. Some of the resources could be rescued.'*/,
+            /*'On a */'tiny moon with its own atmosphere'/* your expedition found some huge raw resources storage. The crew on the ground is trying to lift and load that natural treasure.'*/,
         ],
         [ExpoSize.large]: [
             /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
@@ -40,17 +40,17 @@ export default {
 
     [ExpoType.fleet]: {
         [ExpoSize.small]: [
-            /*'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
+            /*'We came across the */'remains of a previous expedition'/*! Our technicians will try to get some of the ships to work again.'*/,
             /*'Your expedition ran into the */'shipyards of a colony that was deserted eons ago'/*. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.'*/,
-            /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
-            /*'Wir haben eine */'verlassene Piratenbasis'/* gefunden. Im Hangar liegen noch einige alte Schiffe. Unsere Techniker schauen nach, ob einige davon noch zu gebrauchen sind.'*/,
+            /*'Our expedition found a planet which was */'almost destroyed during a certain chain of wars'/*. There are different ships floating around in the orbit. The technicians are trying to repair some of them. Maybe we will also get information about what happened here.'*/,
+            /*'We */'found a deserted pirate station'/*. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.'*/,
         ],
         [ExpoSize.medium]: [
-            /*'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
-            /*'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Our expedition ran into an */'old automatic shipyard'/*. Some of the ships are still in the production phase and our technicians are currently trying to reactivate the yards energy generators.'*/,
+            /*'We found */'the remains of an armada'/*. The technicians directly went to the almost intact ships to try to get them to work again.'*/,
         ],
         [ExpoSize.large]: [
-            /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'We */'found an enormous spaceship graveyard'/*. Some of the technicians from the expedition fleet were able to get some of the ships to work again.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: /The following ships are now part of the fleet:(?<ships>.+)/,
@@ -60,59 +60,60 @@ export default {
         /*'Despite the first, */'very promising scans of this sector'/*, we unfortunately returned empty handed.'*/,
         /*'Besides some quaint, */'small pets from a unknown marsh planet'/*, this expedition brings nothing thrilling back from the trip.'*/,
         /*'Your expedition has learnt about */'the extensive emptiness of space'/*. There was not even one small asteroid or radiation or particle that could have made this expedition interesting.'*/,
-        /*'Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf */'die hypnotischen Muster'/* auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.'*/,
-        /*'Ein */'Reaktorfehler des Führungsschiffes'/* hätte beinahe die gesamte Expedition vernichtet. Zum Glück waren die Techniker mehr als fähig und konnten das Schlimmste verhindern. Die Reparatur nahm jedoch so viel Zeit in Anspruch, dass die Expedition unverrichteter Dinge wieder zurückkehren musste.'*/,
-        /*'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
+        /*'A failure in the */'flagships reactor core nearly destroys'/* the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal. */,
+        /*'Your expedition took */'gorgeous pictures of a super nova'/*. Nothing new could be obtained from the expedition, but at least there is good chance to win that "Best Picture Of The Universe" competition in next months issue of OGame magazine.'*/,
         /*'Your expedition fleet */'followed odd signals for some time'/*. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.'*/,
         /*'Well, now we know that those red, */'class 5 anomalies'/* do not only have chaotic effects on the ships navigation systems but also generate massive hallucination on the crew. The expedition didn`t bring anything back.'*/,
         /*'Your expedition nearly */'ran into a neutron stars gravitation field'/* and needed some time to free itself. Because of that a lot of Deuterium was consumed and the expedition fleet had to come back without any results.'*/,
-        /*'Ein */'seltsames Computervirus'/* legte kurz nach Verlassen des Sonnensystems die Navigation lahm. Dies führte dazu, dass die gesamte Expeditionsflotte die ganze Zeit im Kreis flog. Überflüssig zu sagen, dass die Expedition nicht besonders erfolgreich war.'*/,
-        /*'Vielleicht hätte man den */'Geburtstag des Captains'/* nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.'*/,
+        /*'A */'strange computer virus attacked the navigation system'/* shortly after parting our home system. This caused the expedition fleet to fly in circles. Needless to say that the expedition wasn`t really successful.'*/,
+        /*'Our expedition team came across a strange colony that had been abandoned eons ago. After landing, */'our crew started to suffer from a high fever'/* caused by an alien virus. It has been learned that this virus wiped out the entire civilization on the planet. Our expedition team is heading home to treat the sickened crew members. Unfortunately we had to abort the mission and we come home empty handed.'*/,
+        /*'Due to a */'failure in the central computers of the flagship'/*, the expedition mission had to be aborted. Unfortunately as a result of the computer malfunction, the fleet returns home empty handed.'*/,
+        /*'A */'living being made out of pure energy'/* came aboard and induced all the expedition members into some strange trance, causing them to only gazed at the hypnotizing patterns on the computer screens. When most of them finally snapped out of the hypnotic-like state, the expedition mission needed to be aborted as they had way too little Deuterium.'*/,
         /*'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
     ],
 
     [ExpoType.lostFleet]: [
-        /*'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
-        /*'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        /*'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'The last transmission we received from the expedition fleet was this */'magnificent picture of the opening of a black hole'/*.'*/,
+        /*'The */'only thing left from the expedition was the following radio transmission'/*: Zzzrrt Oh no! Krrrzzzzt That zrrrtrzt looks krgzzzz like .. AHH! Krzzzzzzzztzzzz...'*/,
+        /*'A */'core meltdown of the lead ship'/* leads to a chain reaction, which destroys the entire expedition fleet in a spectacular explosion.'*/,
+        /*'Contact with the */'expedition fleet was suddenly lost'/*. Our scientists are still trying to establish contact, but it seems the fleet is lost forever.'*/,
     ],
 
     [ExpoType.trader]: [
-        /*'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        /*'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Your expedition fleet made */'contact with a friendly alien race'/*. They announced that they would send a representative with goods to trade to your worlds.'*/,
+        /*'Your expedition */'picked up an emergency signal'/* during the mission. A mega cargo vessel was caught by a powerful gravitation field generated by a planetoid. After the vessel and cargo was successfully freed, the captain announced that the person who saved them would be their favorite and exclusive client.'*/,
     ],
 
     [ExpoType.early]: [
-        /*'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        /*'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
-        /*'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'An */'unexpected back coupling in the energy spools'/* of the engines hastened the expeditions return, it returns home earlier than expected. First reports tell they do not have anything thrilling to account for.'*/,
+        /*'Your expeditions doesn`t report any anomalies in the explored sector. But the fleet */'ran into some solar wind while returning'/*. This resulted in the return trip being expedited. Your expedition returns home a bit earlier.'*/,
+        /*'The new and daring commander successfully */'traveled through an unstable wormhole'/* to shorten the flight back! However, the expedition itself didn`t bring anything new.'*/,
     ],
 
     [ExpoType.delay]: [
-        /*'Ein böser Patzer des Navigators führte zu einer */'Fehlkalkulation beim Sprung'/* der Expedition.'*/,
-        /*'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
-        /*'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        /*'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
+        /*'Your */'navigator made a grave error in his computations'/* that caused the expeditions jump to be miscalculated. Not only did the fleet miss the target completely, but the return trip will take a lot more time than originally planned.'*/,
+        /*'Your expedition went into a */'sector full of particle storms'/*. This set the energy stores to overload and most of the ships main systems crashed. Your mechanics where able to avoid the worst, but the expedition is going to return with a big delay.'*/,
+        /*'For */'unknown reasons the expeditions jump went totally wrong'/*. It nearly landed in the heart of a sun. Fortunately it landed in a known system, but the jump back is going to take longer than thought.'*/,
+        /*'The */'solar wind of a red giant'/* ruined the expeditions jump and it will take quite some time to calculate the return jump. There was nothing besides the emptiness of space between the stars in that sector. The fleet will return later than expected.'*/,
         /*'The */'new navigation module is still buggy'/*. The expeditions jump not only lead them in the wrong direction, but it used all the Deuterium fuel. Fortunately the fleets jump got them close to the departure planets moon. A bit disappointed the expedition now returns without impulse power. The return trip will take longer than expected.'*/,
-        /*'Das Führungsschiff deiner */'Expeditionsflotte kollidierte mit einem fremden Schiff'/*, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.'*/,
+        /*'The expedition`s */'flagship collided with a foreign ship'/* when it jumped into the fleet without any warning. The foreign ship exploded and the damage to the flagship was substantial. The expedition cannot continue in these conditions, and so the fleet will begin to make its way back once the needed repairs have been carried out.'*/,
     ],
 
     [ExpoType.item]: {
-        regex: /Ein (?<name>.+) wurde dem Inventar hinzugefügt/,
+        regex: /(?<name>.+) have been added to the inventory/,
     },
 
     [ExpoType.pirates]: {
         [ExpoSize.small]: [
-            /*'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
-            /*'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
-            /*'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
-            /*'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Some */'really desperate space pirates'/* tried to capture our expedition fleet.'*/,
+            /*'Some */'primitive barbarians are attacking us with spaceships'/* that can`t even be named as such. If the fire gets serious we will be forced to fire back.'*/,
+            /*'We caught some */'radio transmissions from some drunk pirates'/*. Seems like we will be under attack soon.'*/,
+            /*'We needed to */'fight some pirates which'/* were, fortunately, only a few.'*/,
             /*'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpoSize.medium]: [
             /*'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            /*'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'We ran straight into an */'ambush set by some Star Buccaneers'/*! A fight couldn`t be avoided.'*/,
             /*'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
         ],
         [ExpoSize.large]: [
@@ -123,15 +124,15 @@ export default {
 
     [ExpoType.aliens]: {
         [ExpoSize.small]: [
-            /*'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
-            /*'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
-            /*'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Some */'exotic looking ships attacked the expedition'/* fleet without warning!'*/,
+            /*'Your expedition fleet */'had an unfriendly first contact'/* with an unknown species.'*/,
+            /*'Our expedition was */'attacked by a small group of unknown ships'/*!'*/,
             /*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpoSize.medium]: [
             /*'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
             /*'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'The */'connection to our expedition fleet was interrupted'/* for a short time. We could decrypt their last message. They are under heavy attack, the aggressors could not be identified.'*/,
         ],
         [ExpoSize.large]: [
             /*'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
