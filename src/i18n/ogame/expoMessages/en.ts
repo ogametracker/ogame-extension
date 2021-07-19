@@ -69,7 +69,6 @@ export default {
         /*'Our expedition team came across a strange colony that had been abandoned eons ago. After landing, */'our crew started to suffer from a high fever'/* caused by an alien virus. It has been learned that this virus wiped out the entire civilization on the planet. Our expedition team is heading home to treat the sickened crew members. Unfortunately we had to abort the mission and we come home empty handed.'*/,
         /*'Due to a */'failure in the central computers of the flagship'/*, the expedition mission had to be aborted. Unfortunately as a result of the computer malfunction, the fleet returns home empty handed.'*/,
         /*'A */'living being made out of pure energy'/* came aboard and induced all the expedition members into some strange trance, causing them to only gazed at the hypnotizing patterns on the computer screens. When most of them finally snapped out of the hypnotic-like state, the expedition mission needed to be aborted as they had way too little Deuterium.'*/,
-        /*'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
     ],
 
     [ExpoType.lostFleet]: [
@@ -100,7 +99,7 @@ export default {
     ],
 
     [ExpoType.item]: {
-        regex: /(?<name>.+) have been added to the inventory/,
+        regex: /(?<name>.+) has been added to the inventory/,
     },
 
     [ExpoType.pirates]: {

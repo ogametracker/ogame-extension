@@ -12,7 +12,7 @@
                         :key="itemIndex"
                     >
                         <img
-                            :src="`https://s1-de.ogame.gameforge.com/cdn/img/item-images/${item.image}-small.png`"
+                            :src="`/cdn/img/item-images/${item.image}-small.png`"
                             width="32"
                             height="32"
                             class="item-image"

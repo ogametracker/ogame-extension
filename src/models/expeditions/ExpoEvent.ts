@@ -1,8 +1,5 @@
 import ExpoSize from "./ExpoSize";
 import ExpoType from "./ExpoType";
-
-import Fleet from '../Fleet';
-import Item from "../items/Item";
 import Resource from "../Resource";
 import Ship from "../Ship";
 

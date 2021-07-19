@@ -5,12 +5,15 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', [Math]::Floor(((Get-Date).Hour * 60 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second) / 2)) | Set-Content ./dist/manifest.json\"",
+        "ext-set-name-dev": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[name-suffix]', ' DEV') | Set-Content ./dist/manifest.json\"",
+        "ext-set-name-prod": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[name-suffix]', '') | Set-Content ./dist/manifest.json\"",
         "vue-build": "vue-cli-service build --mode production",
-        "build": "npm run vue-build && npm run ext-set-version",
+        "build": "npm run vue-build && npm run ext-set-version && npm run ext-set-name-dev",
+        "build-prod": "npm run vue-build && npm run ext-set-version && npm run ext-set-name-prod",
         "lint": "vue-cli-service lint",
         "ext-remove-fake": "powershell -command \"rm ./dist/ogame-fake.js\" && powershell -command \"rm ./dist/index.html\"",
         "ext-zip": "cmd /c \"C:/Program Files/7-Zip/7z\" a -tzip ./dist/ogame-tracker.zip ./dist/*",
-        "pack": "npm run build && npm run ext-remove-fake && npm run ext-zip"
+        "pack": "npm run build-prod && npm run ext-remove-fake && npm run ext-zip"
     },
     "dependencies": {
         "chart.js": "^2.9.4",

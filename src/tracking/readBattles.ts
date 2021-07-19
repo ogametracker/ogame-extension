@@ -86,7 +86,7 @@ export default async function readBattles() {
         NotificationModule.addNotification({
             type: 'error',
             title: i18n.messages.extension.notifications.combats.error.title,
-            text: i18n.messages.extension.notifications.combats.error.text(newMessageCount),
+            text: i18n.messages.extension.notifications.combats.error.text(newErrorCount),
             timeout: 5000,
         });
     }

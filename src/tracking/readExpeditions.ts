@@ -88,7 +88,7 @@ export default async function readExpeditions() {
         NotificationModule.addNotification({
             type: 'info',
             title: i18n.messages.extension.notifications.expeditions.success.title,
-            text: i18n.messages.extension.notifications.expeditions.success.text(errorMessageCount),
+            text: i18n.messages.extension.notifications.expeditions.success.text(newMessageCount),
             timeout: 5000,
         });
 
