@@ -1,0 +1,10 @@
+{
+    "appName": {
+        "message": "OGame Tracker",
+        "description": "The title of the application, displayed in the web store."
+    },
+    "appDesc": {
+        "message": "This extension tracks information of the player which currently includes the results of expedition messages, combats and debris field reports.",
+        "description": "The title of the application, displayed in the web store."
+    }
+}

@@ -1,8 +1,9 @@
 {
-    "name": "OGame Tracker[name-suffix]",
+    "name": "__MSG_appName__",
     "version": "[major-version].[minor-version].[revision-version].[patch-version]",
-    "description": "OGame Tracker[name-suffix]",
+    "description": "__MSG_appDesc__",
     "manifest_version": 2,
+    "default_locale": "de",
     "icons": {
         "128": "icon128.png"
     },

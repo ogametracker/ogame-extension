@@ -1,0 +1,10 @@
+{
+    "appName": {
+        "message": "OGame Tracker",
+        "description": "The title of the application, displayed in the web store."
+    },
+    "appDesc": {
+        "message": "Diese Erweiterung trackt Informationen des Spielers, derzeit beinhaltet dies die Ergebnisse von Expeditionen, Kämpfen und Trümmerfeldern.",
+        "description": "The title of the application, displayed in the web store."
+    }
+}
