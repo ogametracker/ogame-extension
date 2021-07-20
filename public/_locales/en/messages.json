@@ -4,7 +4,7 @@
         "description": "The title of the application, displayed in the web store."
     },
     "appDesc": {
-        "message": "This extension tracks information of the player which currently includes the results of expedition messages, combats and debris field reports.",
+        "message": "This extension tracks information of the player and represents these graphically.",
         "description": "The title of the application, displayed in the web store."
     }
 }

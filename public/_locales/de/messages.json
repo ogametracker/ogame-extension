@@ -4,7 +4,7 @@
         "description": "The title of the application, displayed in the web store."
     },
     "appDesc": {
-        "message": "Diese Erweiterung trackt Informationen des Spielers, derzeit beinhaltet dies die Ergebnisse von Expeditionen, Kämpfen und Trümmerfeldern.",
+        "message": "Diese Erweiterung trackt bestimmte Informationen des Spielers und stellt diese graphisch dar.",
         "description": "The title of the application, displayed in the web store."
     }
 }
