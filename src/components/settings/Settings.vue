@@ -1,6 +1,16 @@
 <template>
     <div class="settings">
-        <h2>{{ $i18n.messages.extension.settings.titleDateRanges }}</h2>
+        <h2>
+            {{ $i18n.messages.extension.settings.titleDateRanges }}
+            <button
+                class="reset-button"
+                @click="resetDateRanges()"
+                title="Reset TODO: LOCALIZE"
+            >
+                <!-- TODO: localize -->
+                <icon name="refresh" />
+            </button>
+        </h2>
         <span style="margin-bottom: 8px; display: inline-block">
             {{ $i18n.messages.extension.settings.hintDateRanges }}
         </span>
@@ -113,7 +123,17 @@
 
         <hr />
 
-        <h2>{{ $i18n.messages.extension.settings.chartColors.title }}</h2>
+        <h2>
+            {{ $i18n.messages.extension.settings.chartColors.title }}
+            <button
+                class="reset-button"
+                @click="resetChartColors()"
+                title="Reset TODO: LOCALIZE"
+            >
+                <!-- TODO: localize -->
+                <icon name="refresh" />
+            </button>
+        </h2>
         <div class="color-tables">
             <table class="settings-table">
                 <thead>
@@ -123,6 +143,15 @@
                                 $i18n.messages.extension.settings.chartColors
                                     .expeditions
                             }}
+
+                            <button
+                                class="reset-button"
+                                @click="resetChartColors('overview')"
+                                title="Reset TODO: LOCALIZE"
+                            >
+                                <!-- TODO: localize -->
+                                <icon name="refresh" />
+                            </button>
                         </th>
                     </tr>
                 </thead>
@@ -151,6 +180,15 @@
                                 $i18n.messages.extension.settings.chartColors
                                     .resources
                             }}
+
+                            <button
+                                class="reset-button"
+                                @click="resetChartColors('resources')"
+                                title="Reset TODO: LOCALIZE"
+                            >
+                                <!-- TODO: localize -->
+                                <icon name="refresh" />
+                            </button>
                         </th>
                     </tr>
                 </thead>
@@ -179,6 +217,15 @@
                                 $i18n.messages.extension.settings.chartColors
                                     .ships
                             }}
+
+                            <button
+                                class="reset-button"
+                                @click="resetChartColors('overshipsview')"
+                                title="Reset TODO: LOCALIZE"
+                            >
+                                <!-- TODO: localize -->
+                                <icon name="refresh" />
+                            </button>
                         </th>
                     </tr>
                 </thead>
@@ -205,6 +252,15 @@
                                 $i18n.messages.extension.settings.chartColors
                                     .combats
                             }}
+
+                            <button
+                                class="reset-button"
+                                @click="resetChartColors('battleResults')"
+                                title="Reset TODO: LOCALIZE"
+                            >
+                                <!-- TODO: localize -->
+                                <icon name="refresh" />
+                            </button>
                         </th>
                     </tr>
                 </thead>
@@ -253,6 +309,7 @@
     import ExpoModule from '@/store/modules/ExpoModule';
     import NotificationModule from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
+    import clone from '@/utils/clone';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
     import ColorInput from './ColorInput.vue';
@@ -320,5 +377,44 @@
                 expeditions: ExpoModule.expos,
             });
         }
+
+        private resetDateRanges() {
+            this.settings.tables.ranges = clone(SettingsModule.defaultSettings.tables.ranges);
+        }
+
+        private resetChartColors(key?: keyof Settings['settings']['charts']['colors']) {
+            if (key == null) {
+                this.settings.charts.colors = clone(SettingsModule.defaultSettings.charts.colors);
+            } else {
+                this.settings.charts.colors[key] = clone(SettingsModule.defaultSettings.charts.colors[key]);
+            }
+        }
     }
 </script>
+
+<style lang="scss" scoped>
+    .reset-button {
+        font-size: 14px;
+        background: none;
+        display: inline-flex;
+        align-items: baseline;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 8px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        .icon-refresh {
+            font-size: 22px;
+        }
+    }
+
+    .color-tables th {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+</style>

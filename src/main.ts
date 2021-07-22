@@ -41,10 +41,6 @@ function mountVue() {
 async function initExtension() {
     mountVue();
 
-    if (SettingsModule.settings == null) {
-        SettingsModule.settings = SettingsModule.defaultSettings;
-    }
-
     await migrations();
     trackMessages();
 }

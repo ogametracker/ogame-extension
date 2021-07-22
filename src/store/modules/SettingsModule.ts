@@ -5,6 +5,7 @@ import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
+import clone from '@/utils/clone';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
@@ -104,6 +105,8 @@ class SettingsModule extends Vue {
         const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
         if (settings != null) {
             this.settings = settings;
+        } else {
+            this.settings = clone(this.defaultSettings);
         }
     }
 
