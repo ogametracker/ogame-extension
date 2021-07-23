@@ -1,4 +1,5 @@
 import { BuildingType } from "@/models/BuildingType";
+import Coordinates from "@/models/Coordinates";
 import { Defense } from "@/models/Defense";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
 import { ResearchType } from "@/models/ResearchType";
@@ -9,6 +10,8 @@ import Component from "vue-class-component";
 
 export interface PlanetDataBase {
     id: number;
+    name: string;
+    coordinates: Coordinates;
 
     defense?: DefenseCount;
     activeItemHashes: string[]; 
