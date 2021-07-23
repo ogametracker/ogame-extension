@@ -1,4 +1,8 @@
+import { BuildingType } from "@/models/BuildingType";
+import { Defense } from "@/models/Defense";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
+import { ResearchType } from "@/models/ResearchType";
+import Ship from "@/models/Ship";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import Vue from "vue";
 import Component from "vue-class-component";
@@ -7,12 +11,28 @@ export interface PlanetDataBase {
     id: number;
 
     defense?: DefenseCount;
+    activeItemHashes: string[]; 
 }
 
 export interface PlanetData extends PlanetDataBase {
     isMoon: false;
     buildings: PlanetBuildingLevels;
     ships?: PlanetShipCount;
+
+    productionSettings?: ProductionSettings;
+}
+
+export type ProductionPercentage = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
+export type CrawlerProductionPercentage = ProductionPercentage | 110 | 120 | 130 | 140 | 150;
+
+export interface ProductionSettings {
+    [BuildingType.metalMine]: ProductionPercentage;
+    [BuildingType.crystalMine]: ProductionPercentage;
+    [BuildingType.deuteriumSynthesizer]: ProductionPercentage;
+    [BuildingType.solarPlant]: ProductionPercentage;
+    [BuildingType.fusionReactor]: ProductionPercentage;
+    [Ship.solarSatellite]: ProductionPercentage;
+    [Ship.crawler]: CrawlerProductionPercentage;
 }
 
 export interface MoonData extends PlanetDataBase {
@@ -24,105 +44,105 @@ export interface MoonData extends PlanetDataBase {
 
 export interface PlanetBuildingLevels {
     production?: {
-        metalMine: number;
-        crystalMine: number;
-        deuteriumSynthesizer: number;
+        [BuildingType.metalMine]: number;
+        [BuildingType.crystalMine]: number;
+        [BuildingType.deuteriumSynthesizer]: number;
 
-        metalStorage: number;
-        crystalStorage: number;
-        deuteriumTank: number;
+        [BuildingType.metalStorage]: number;
+        [BuildingType.crystalStorage]: number;
+        [BuildingType.deuteriumTank]: number;
 
-        solarPlant: number;
-        fusionReactor: number;
+        [BuildingType.solarPlant]: number;
+        [BuildingType.fusionReactor]: number;
     };
 
     facilities?: {
-        roboticsFactory: number;
-        shipyard: number;
-        researchLab: number;
-        allianceDepot: number;
-        missileSilo: number;
-        naniteFactory: number;
-        terraformer: number;
-        spaceDock: number;
+        [BuildingType.roboticsFactory]: number;
+        [BuildingType.shipyard]: number;
+        [BuildingType.researchLab]: number;
+        [BuildingType.allianceDepot]: number;
+        [BuildingType.missileSilo]: number;
+        [BuildingType.naniteFactory]: number;
+        [BuildingType.terraformer]: number;
+        [BuildingType.spaceDock]: number;
     };
 }
 
 export interface MoonBuildingLevels {
     production?: {
-        metalStorage: number;
-        crystalStorage: number;
-        deuteriumTank: number;
+        [BuildingType.metalStorage]: number;
+        [BuildingType.crystalStorage]: number;
+        [BuildingType.deuteriumTank]: number;
     };
 
     facilities?: {
-        roboticsFactory: number;
-        shipyard: number;
+        [BuildingType.roboticsFactory]: number;
+        [BuildingType.shipyard]: number;
 
-        lunarBase: number;
-        sensorPhalanx: number;
-        jumpGate: number;
+        [BuildingType.lunarBase]: number;
+        [BuildingType.sensorPhalanx]: number;
+        [BuildingType.jumpGate]: number;
     };
 }
 
 export interface ResearchLevels {
-    energyTechnology: number;
-    laserTechnology: number;
-    ionTechnology: number;
-    hyperspaceTechnology: number;
-    plasmaTechnology: number;
+    [ResearchType.energyTechnology]: number;
+    [ResearchType.laserTechnology]: number;
+    [ResearchType.ionTechnology]: number;
+    [ResearchType.hyperspaceTechnology]: number;
+    [ResearchType.plasmaTechnology]: number;
 
-    combustionDrive: number;
-    impulseDrive: number;
-    hyperspaceDrive: number;
+    [ResearchType.combustionDrive]: number;
+    [ResearchType.impulseDrive]: number;
+    [ResearchType.hyperspaceDrive]: number;
 
-    espionageTechnology: number;
-    computerTechnology: number;
-    astrophysics: number;
-    intergalacticResearchNetwork: number;
-    gravitonTechnology: number;
+    [ResearchType.espionageTechnology]: number;
+    [ResearchType.computerTechnology]: number;
+    [ResearchType.astrophysics]: number;
+    [ResearchType.intergalacticResearchNetwork]: number;
+    [ResearchType.gravitonTechnology]: number;
 
-    weaponsTechnology: number;
-    shieldingTechnology: number;
-    armorTechnology: number;
+    [ResearchType.weaponsTechnology]: number;
+    [ResearchType.shieldingTechnology]: number;
+    [ResearchType.armorTechnology]: number;
 }
 
 export interface MoonShipCount {
-    lightFighter: number;
-    heavyFighter: number;
-    cruiser: number;
-    battleship: number;
-    battlecruiser: number;
-    bomber: number;
-    destroyer: number;
-    deathstar: number;
-    reaper: number;
-    pathfinder: number;
+    [Ship.lightFighter]: number;
+    [Ship.heavyFighter]: number;
+    [Ship.cruiser]: number;
+    [Ship.battleship]: number;
+    [Ship.battlecruiser]: number;
+    [Ship.bomber]: number;
+    [Ship.destroyer]: number;
+    [Ship.deathStar]: number;
+    [Ship.reaper]: number;
+    [Ship.pathfinder]: number;
 
-    smallCargo: number;
-    largeCargo: number;
-    colonyShip: number;
-    recycler: number;
-    espionageProbe: number;
-    solarSatellite: number;
+    [Ship.smallCargo]: number;
+    [Ship.largeCargo]: number;
+    [Ship.colonyShip]: number;
+    [Ship.recycler]: number;
+    [Ship.espionageProbe]: number;
+    [Ship.solarSatellite]: number;
 }
 
 export interface PlanetShipCount extends MoonShipCount {
-    crawler: number;
+    [Ship.crawler]: number;
 }
 
 export interface DefenseCount {
-    rocketLauncher: number;
-    lightLaser: number;
-    heavyLaser: number;
-    gaussCannon: number;
-    ionCannon: number;
-    plasmaTurret: number;
-    smallShieldDome: boolean;
-    largeShieldDome: boolean;
+    [Defense.rocketLauncher]: number;
+    [Defense.lightLaser]: number;
+    [Defense.heavyLaser]: number;
+    [Defense.gaussCannon]: number;
+    [Defense.ionCannon]: number;
+    [Defense.plasmaTurret]: number;
+    [Defense.smallShieldDome]: boolean;
+    [Defense.largeShieldDome]: boolean;
 
-    ballisticMissile: number;
-    interplanetaryMissile: number;
+    [Defense.ballisticMissile]: number;
+    [Defense.interplanetaryMissile]: number;
 }
 
 export enum PlayerClass {
@@ -144,6 +164,15 @@ export interface LocalPlayerData {
     research: ResearchLevels | null;
     playerClass: PlayerClass | null;
     allianceClass: PlayerClass | null;
+    officers: PlayerOfficers;
+}
+
+export interface PlayerOfficers {
+    commander: boolean;
+    admiral: boolean;
+    geologist: boolean;
+    engineer: boolean;
+    technocrate: boolean;
 }
 
 @Component({})
@@ -153,11 +182,18 @@ class LocalPlayerModule extends Vue {
         research: null,
         playerClass: null,
         allianceClass: null,
+        officers: {
+            admiral: false,
+            commander: false,
+            engineer: false,
+            geologist: false,
+            technocrate: false,
+        },
     };
 
     private async created() {
         const data = await asyncChromeStorage.get<LocalPlayerData>(this.storageKey);
-        if(data != null) {
+        if (data != null) {
             this._data = data;
         }
     }
