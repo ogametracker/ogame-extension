@@ -19,10 +19,40 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
         await trackPlayerClass();
     }
 
-    if (queryParams.has('page', 'ingame')
-        && queryParams.has('component', 'research')
-    ) {
-        await trackResearch();
+    if (queryParams.has('page', 'ingame')) {
+        const component = queryParams.get('component');
+        switch (component) {
+            case 'research': {
+                await trackResearch();
+                break;
+            }
+
+            case 'supplies': {
+                await trackSupplies();
+                break;
+            }
+
+            case 'facilities': {
+                await trackFacilities();
+                break;
+            }
+
+            case 'shipyard':
+            case 'fleetdispatch': {
+                await trackShips();
+                break;
+            }
+
+            case 'defenses': {
+                await trackDefenses();
+                break;
+            }
+
+            case 'alliance': {
+                await trackAllianceClass();
+                break;
+            }
+        }
     }
 }
 
@@ -36,19 +66,23 @@ async function trackOwnedPlanets() {
         // planet
         const planetData = getPlanetData(planet);
         const newPlanetData: PlanetData = {
-            ...(playerData.planets[planetData.id] as PlanetData),
+            ...(playerData.planets[planetData.id] as PlanetData | null),
+            id: planetData.id,
             coordinates: planetData.coordinates,
             name: planetData.name,
+            isMoon: false,
         };
         playerData.planets[planetData.id] = newPlanetData;
 
         // moon
         const moonData = getMoonData(planet, planetData.coordinates);
-        if(moonData != null) {
+        if (moonData != null) {
             const newMoonData: MoonData = {
-                ...(playerData.planets[moonData.id] as MoonData),
+                ...(playerData.planets[moonData.id] as MoonData | null),
+                id: moonData.id,
                 coordinates: moonData.coordinates,
                 name: moonData.name,
+                isMoon: true,
             };
             playerData.planets[moonData.id] = newMoonData;
         }
@@ -169,4 +203,28 @@ async function trackResearch() {
         [Research.armorTechnology]: parseInt(armorTechnology, 10),
     };
     await LocalPlayerModule.save(data);
+}
+
+async function trackSupplies() {
+    throw new Error("Function not implemented.");
+}
+
+
+async function trackFacilities() {
+    throw new Error("Function not implemented.");
+}
+
+
+async function trackShips() {
+    throw new Error("Function not implemented.");
+}
+
+
+async function trackDefenses() {
+    throw new Error("Function not implemented.");
+}
+
+
+async function trackAllianceClass() {
+    throw new Error("Function not implemented.");
 }

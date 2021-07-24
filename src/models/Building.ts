@@ -1,27 +1,27 @@
 enum Building {
-    metalMine = 'metalMine',
-    crystalMine = 'crystalMine',
-    deuteriumSynthesizer = 'deuteriumSynthesizer',
+    metalMine = 1,
+    crystalMine = 2,
+    deuteriumSynthesizer = 3,
 
-    metalStorage = 'metalStorage',
-    crystalStorage = 'crystalStorage',
-    deuteriumTank = 'deuteriumTank',
+    metalStorage = 22,
+    crystalStorage = 23,
+    deuteriumTank = 24,
 
-    solarPlant = 'solarPlant',
-    fusionReactor = 'fusionReactor',
+    solarPlant = 4,
+    fusionReactor = 12,
 
-    roboticsFactory = 'roboticsFactory',
-    shipyard = 'shipyard',
-    researchLab = 'researchLab',
-    allianceDepot = 'allianceDepot',
-    missileSilo = 'missileSilo',
-    naniteFactory = 'naniteFactory',
-    terraformer = 'terraformer',
-    spaceDock = 'spaceDock',
+    roboticsFactory = 14,
+    shipyard = 21,
+    researchLab = 31,
+    allianceDepot = 34,
+    missileSilo = 44,
+    naniteFactory = 15,
+    terraformer = 33,
+    spaceDock = 36,
 
-    lunarBase = 'lunarBase',
-    sensorPhalanx = 'sensorPhalanx',
-    jumpGate = 'jumpGate',
+    lunarBase = 41,
+    sensorPhalanx = 42,
+    jumpGate = 43,
 }
 
 export default Building;

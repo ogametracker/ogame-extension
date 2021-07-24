@@ -8,6 +8,10 @@ export class QueryParameters {
     public has(key: string, value: string): boolean {
         return this._values[key] == value;
     }
+
+    public get(key: string): string | null {
+        return this._values[key] ?? null;
+    }
 }
 
 export default function getQueryParameters(location: Location): QueryParameters {

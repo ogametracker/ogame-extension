@@ -350,7 +350,7 @@
         }
 
         private saveTimeout: number | null = null;
-        private readonly saveDelay = 3000;
+        private readonly saveDelay = 1000;
         private saveDelayed() {
             if (this.saveTimeout != null) {
                 clearTimeout(this.saveTimeout);

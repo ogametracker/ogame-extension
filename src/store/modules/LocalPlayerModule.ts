@@ -180,7 +180,7 @@ export interface PlayerOfficers {
 
 @Component({})
 class LocalPlayerModule extends Vue {
-    private _defaultData: LocalPlayerData = {
+    private defaultData: LocalPlayerData = {
         planets: {},
         research: null,
         playerClass: null,
@@ -195,7 +195,8 @@ class LocalPlayerModule extends Vue {
     };
 
     public async getData(): Promise<LocalPlayerData> {
-        return await asyncChromeStorage.get<LocalPlayerData>(this.storageKey) ?? this._defaultData;
+        const storedData = await asyncChromeStorage.get<LocalPlayerData>(this.storageKey);
+        return storedData ?? this.defaultData;
     }
 
     private get storageKey(): string {
