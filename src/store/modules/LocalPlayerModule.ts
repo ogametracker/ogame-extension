@@ -40,7 +40,7 @@ export interface ProductionSettings {
 
 export interface MoonData extends PlanetDataBase {
     isMoon: true;
-    building?: MoonBuildingLevels;
+    buildings?: MoonBuildingLevels;
     ships?: MoonShipCount;
 }
 
@@ -166,7 +166,7 @@ export interface LocalPlayerData {
     planets: Record<number, PlanetData | MoonData>;
     research: ResearchLevels | null;
     playerClass: PlayerClass | null;
-    allianceClass: PlayerClass | null;
+    allianceClass: AllianceClass | null;
     officers: PlayerOfficers;
 }
 
