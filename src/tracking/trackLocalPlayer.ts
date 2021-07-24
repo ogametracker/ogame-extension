@@ -52,6 +52,11 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
                 await trackAllianceClass();
                 break;
             }
+
+            case 'resourceSettings': {
+                await trackProductionPercentages();
+                break;
+            }
         }
     }
 }
@@ -228,3 +233,7 @@ async function trackDefenses() {
 async function trackAllianceClass() {
     throw new Error("Function not implemented.");
 }
+function trackProductionPercentages() {
+    throw new Error("Function not implemented.");
+}
+
