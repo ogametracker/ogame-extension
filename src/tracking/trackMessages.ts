@@ -1,11 +1,10 @@
-import getQueryParameters from "@/utils/getQueryParameters";
+import { QueryParameters } from "@/utils/getQueryParameters";
 import readBattles from "./readBattles";
 import readExpeditions from "./readExpeditions";
 import readDebrisFields from "./readDebrisFields";
 
-export default function startMessageTracking() {
-    const queryParams = getQueryParameters(window.location);
-    if (queryParams.some(param => param.key == 'page' && param.value == 'messages')) {
+export default function startMessageTracking(queryParams: QueryParameters) {
+    if (queryParams.has('page', 'messages')) {
         trackMessages();
     }
 }

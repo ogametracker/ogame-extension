@@ -1,13 +1,13 @@
 export enum Defense {
-    rocketLauncher = 'rocketLauncher',
-    lightLaser = 'lightLaser',
-    heavyLaser = 'heavyLaser',
-    gaussCannon = 'gaussCannon',
-    ionCannon = 'ionCannon',
-    plasmaTurret = 'plasmaTurret',
-    smallShieldDome = 'smallShieldDome',
-    largeShieldDome = 'largeShieldDome',
+    rocketLauncher = 401,
+    lightLaser = 402,
+    heavyLaser = 403,
+    gaussCannon = 404,
+    ionCannon = 405,
+    plasmaTurret = 406,
+    smallShieldDome = 407,
+    largeShieldDome = 408,
 
-    ballisticMissile = 'ballisticMissile',
-    interplanetaryMissile = 'interplanetaryMissile',
+    ballisticMissile = 502,
+    interplanetaryMissile = 503,
 }

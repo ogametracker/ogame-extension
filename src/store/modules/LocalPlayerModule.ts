@@ -14,12 +14,12 @@ export interface PlanetDataBase {
     coordinates: Coordinates;
 
     defense?: DefenseCount;
-    activeItemHashes: string[]; 
+    activeItemHashes?: Record<string, number>; 
 }
 
 export interface PlanetData extends PlanetDataBase {
     isMoon: false;
-    buildings: PlanetBuildingLevels;
+    buildings?: PlanetBuildingLevels;
     ships?: PlanetShipCount;
 
     productionSettings?: ProductionSettings;
@@ -40,7 +40,7 @@ export interface ProductionSettings {
 
 export interface MoonData extends PlanetDataBase {
     isMoon: true;
-    buildings: MoonBuildingLevels;
+    building?: MoonBuildingLevels;
     ships?: MoonShipCount;
 }
 
@@ -175,12 +175,12 @@ export interface PlayerOfficers {
     admiral: boolean;
     geologist: boolean;
     engineer: boolean;
-    technocrate: boolean;
+    technocrat: boolean;
 }
 
 @Component({})
 class LocalPlayerModule extends Vue {
-    private _data: LocalPlayerData = {
+    private _defaultData: LocalPlayerData = {
         planets: {},
         research: null,
         playerClass: null,
@@ -190,23 +190,20 @@ class LocalPlayerModule extends Vue {
             commander: false,
             engineer: false,
             geologist: false,
-            technocrate: false,
+            technocrat: false,
         },
     };
 
-    private async created() {
-        const data = await asyncChromeStorage.get<LocalPlayerData>(this.storageKey);
-        if (data != null) {
-            this._data = data;
-        }
+    public async getData(): Promise<LocalPlayerData> {
+        return await asyncChromeStorage.get<LocalPlayerData>(this.storageKey) ?? this._defaultData;
     }
 
     private get storageKey(): string {
         return `${OgameMetaData.storageKeyPrefix}-local-player`;
     }
 
-    public async save() {
-        await asyncChromeStorage.set(this.storageKey, this._data);
+    public async save(data: LocalPlayerData) {
+        await asyncChromeStorage.set(this.storageKey, data);
     }
 }
 

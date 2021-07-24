@@ -1,16 +1,27 @@
-export default function getQueryParameters(location: Location): { key: string; value: string; }[] {
+export class QueryParameters {
+    private readonly _values: Record<string, string> = {};
+
+    public add(key: string, value: string) {
+        this._values[key] = value;
+    }
+
+    public has(key: string, value: string): boolean {
+        return this._values[key] == value;
+    }
+}
+
+export default function getQueryParameters(location: Location): QueryParameters {
     let query = location.search;
-    if(query.startsWith('?')) {
+    if (query.startsWith('?')) {
         query = query.substr(1);
     }
 
     const pairs = query.split('&');
-    return pairs.map(pair => {
+    const result = new QueryParameters();
+    pairs.forEach(pair => {
         const split = pair.split('=');
-        return {
-            key: split[0],
-            value: split[1],
-        };
+        result.add(split[0], split[1]);
     });
+    return result;
 }
 

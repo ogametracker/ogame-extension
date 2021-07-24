@@ -17,7 +17,7 @@ import i18n from '@/i18n/';
 i18n.locale = Object.values(LanguageKey).find(lang => lang == OgameMetaData.locale) ?? LanguageKey.de;
 
 // tracking
-import trackMessages from '@/tracking/trackMessages';
+import { startTracking } from './tracking';
 
 // migrations
 import migrations from './migrations';
@@ -25,7 +25,6 @@ import migrations from './migrations';
 // register custom chart.js tooltip positioner
 import '@/chartjs/Tooltip.positioners.top';
 import LanguageKey from './i18n/languageKey';
-import SettingsModule from './store/modules/SettingsModule';
 
 function mountVue() {
     const app = document.createElement('div');
@@ -42,7 +41,7 @@ async function initExtension() {
     mountVue();
 
     await migrations();
-    trackMessages();
+    startTracking();
 }
 
 
