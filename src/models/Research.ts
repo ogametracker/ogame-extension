@@ -1,4 +1,4 @@
-export enum ResearchType {
+enum Research {
     energyTechnology = 'energyTechnology',
     laserTechnology = 'laserTechnology',
     ionTechnology = 'ionTechnology',
@@ -19,3 +19,5 @@ export enum ResearchType {
     shieldingTechnology = 'shieldingTechnology',
     armorTechnology = 'armorTechnology',
 }
+
+export default Research;

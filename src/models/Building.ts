@@ -1,4 +1,4 @@
-export enum BuildingType {
+enum Building {
     metalMine = 'metalMine',
     crystalMine = 'crystalMine',
     deuteriumSynthesizer = 'deuteriumSynthesizer',
@@ -23,3 +23,5 @@ export enum BuildingType {
     sensorPhalanx = 'sensorPhalanx',
     jumpGate = 'jumpGate',
 }
+
+export default Building;

@@ -1,8 +1,8 @@
-import { BuildingType } from "@/models/BuildingType";
+import Building from "@/models/Building";
 import Coordinates from "@/models/Coordinates";
 import { Defense } from "@/models/Defense";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
-import { ResearchType } from "@/models/ResearchType";
+import Research from "@/models/Research";
 import Ship from "@/models/Ship";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import Vue from "vue";
@@ -29,11 +29,11 @@ export type ProductionPercentage = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 9
 export type CrawlerProductionPercentage = ProductionPercentage | 110 | 120 | 130 | 140 | 150;
 
 export interface ProductionSettings {
-    [BuildingType.metalMine]: ProductionPercentage;
-    [BuildingType.crystalMine]: ProductionPercentage;
-    [BuildingType.deuteriumSynthesizer]: ProductionPercentage;
-    [BuildingType.solarPlant]: ProductionPercentage;
-    [BuildingType.fusionReactor]: ProductionPercentage;
+    [Building.metalMine]: ProductionPercentage;
+    [Building.crystalMine]: ProductionPercentage;
+    [Building.deuteriumSynthesizer]: ProductionPercentage;
+    [Building.solarPlant]: ProductionPercentage;
+    [Building.fusionReactor]: ProductionPercentage;
     [Ship.solarSatellite]: ProductionPercentage;
     [Ship.crawler]: CrawlerProductionPercentage;
 }
@@ -47,67 +47,67 @@ export interface MoonData extends PlanetDataBase {
 
 export interface PlanetBuildingLevels {
     production?: {
-        [BuildingType.metalMine]: number;
-        [BuildingType.crystalMine]: number;
-        [BuildingType.deuteriumSynthesizer]: number;
+        [Building.metalMine]: number;
+        [Building.crystalMine]: number;
+        [Building.deuteriumSynthesizer]: number;
 
-        [BuildingType.metalStorage]: number;
-        [BuildingType.crystalStorage]: number;
-        [BuildingType.deuteriumTank]: number;
+        [Building.metalStorage]: number;
+        [Building.crystalStorage]: number;
+        [Building.deuteriumTank]: number;
 
-        [BuildingType.solarPlant]: number;
-        [BuildingType.fusionReactor]: number;
+        [Building.solarPlant]: number;
+        [Building.fusionReactor]: number;
     };
 
     facilities?: {
-        [BuildingType.roboticsFactory]: number;
-        [BuildingType.shipyard]: number;
-        [BuildingType.researchLab]: number;
-        [BuildingType.allianceDepot]: number;
-        [BuildingType.missileSilo]: number;
-        [BuildingType.naniteFactory]: number;
-        [BuildingType.terraformer]: number;
-        [BuildingType.spaceDock]: number;
+        [Building.roboticsFactory]: number;
+        [Building.shipyard]: number;
+        [Building.researchLab]: number;
+        [Building.allianceDepot]: number;
+        [Building.missileSilo]: number;
+        [Building.naniteFactory]: number;
+        [Building.terraformer]: number;
+        [Building.spaceDock]: number;
     };
 }
 
 export interface MoonBuildingLevels {
     production?: {
-        [BuildingType.metalStorage]: number;
-        [BuildingType.crystalStorage]: number;
-        [BuildingType.deuteriumTank]: number;
+        [Building.metalStorage]: number;
+        [Building.crystalStorage]: number;
+        [Building.deuteriumTank]: number;
     };
 
     facilities?: {
-        [BuildingType.roboticsFactory]: number;
-        [BuildingType.shipyard]: number;
+        [Building.roboticsFactory]: number;
+        [Building.shipyard]: number;
 
-        [BuildingType.lunarBase]: number;
-        [BuildingType.sensorPhalanx]: number;
-        [BuildingType.jumpGate]: number;
+        [Building.lunarBase]: number;
+        [Building.sensorPhalanx]: number;
+        [Building.jumpGate]: number;
     };
 }
 
 export interface ResearchLevels {
-    [ResearchType.energyTechnology]: number;
-    [ResearchType.laserTechnology]: number;
-    [ResearchType.ionTechnology]: number;
-    [ResearchType.hyperspaceTechnology]: number;
-    [ResearchType.plasmaTechnology]: number;
+    [Research.energyTechnology]: number;
+    [Research.laserTechnology]: number;
+    [Research.ionTechnology]: number;
+    [Research.hyperspaceTechnology]: number;
+    [Research.plasmaTechnology]: number;
 
-    [ResearchType.combustionDrive]: number;
-    [ResearchType.impulseDrive]: number;
-    [ResearchType.hyperspaceDrive]: number;
+    [Research.combustionDrive]: number;
+    [Research.impulseDrive]: number;
+    [Research.hyperspaceDrive]: number;
 
-    [ResearchType.espionageTechnology]: number;
-    [ResearchType.computerTechnology]: number;
-    [ResearchType.astrophysics]: number;
-    [ResearchType.intergalacticResearchNetwork]: number;
-    [ResearchType.gravitonTechnology]: number;
+    [Research.espionageTechnology]: number;
+    [Research.computerTechnology]: number;
+    [Research.astrophysics]: number;
+    [Research.intergalacticResearchNetwork]: number;
+    [Research.gravitonTechnology]: number;
 
-    [ResearchType.weaponsTechnology]: number;
-    [ResearchType.shieldingTechnology]: number;
-    [ResearchType.armorTechnology]: number;
+    [Research.weaponsTechnology]: number;
+    [Research.shieldingTechnology]: number;
+    [Research.armorTechnology]: number;
 }
 
 export interface MoonShipCount {
