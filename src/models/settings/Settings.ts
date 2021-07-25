@@ -28,4 +28,8 @@ type ShipsChartColorSettings = Record<Ship, HexColor>;
 export default interface Settings {
     tables: TableSettings;
     charts: ChartSettings;
+    metalStandardUnits: {
+        [Resource.crystal]: number;
+        [Resource.deuterium]: number;
+    };
 }

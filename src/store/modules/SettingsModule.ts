@@ -98,6 +98,10 @@ class SettingsModule extends Vue {
                     },
                 },
             },
+            metalStandardUnits: {
+                [Resource.crystal]: 2,
+                [Resource.deuterium]: 3,
+            },
         };
     }
 
