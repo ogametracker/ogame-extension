@@ -1,5 +1,6 @@
 import Building from "@/models/Building";
 import Coordinates, { parseCoordinates } from "@/models/Coordinates";
+import { Defense } from "@/models/Defense";
 import PlanetType from "@/models/PlanetType";
 import Research from "@/models/Research";
 import Ship from "@/models/Ship";
@@ -45,7 +46,7 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
 
             case 'shipyard':
             case 'fleetdispatch': {
-                await trackShips(data, currentPlanetId);
+                await trackShips(data, currentPlanetId, component == 'shipyard');
                 break;
             }
 
@@ -64,11 +65,17 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
                 break;
             }
         }
-    } else if(queryParams.has('page', 'resourceSettings')) {
+    } else if (queryParams.has('page', 'resourceSettings')) {
         await trackProductionPercentages(data, currentPlanetId);
     }
 
+    verifyNumbers(data);
+
     await LocalPlayerModule.save(data);
+}
+
+function verifyNumbers(data: LocalPlayerData) {
+    //TODO: verify that there are no NaNs in the data
 }
 
 async function trackOwnedPlanets(playerData: LocalPlayerData) {
@@ -123,7 +130,7 @@ function getMoonData(planet: Element, coords: Coordinates): MoonData | null {
 
     const idRegex = /&cp=(?<id>\d+)/;
     const idMatch = moonlink.href.match(idRegex) ?? _throw('no id match');
-    const id = parseInt(idMatch.groups!.id.split('-')[1], 10);
+    const id = parseInt(idMatch.groups!.id, 10);
 
     const name = moonlink.querySelector('img')?.alt ?? _throw('no planet name found');
 
@@ -329,13 +336,123 @@ function updateMoonFacilities(moon: MoonData) {
 }
 
 
-async function trackShips(data: LocalPlayerData, planetId: number) {
-    throw new Error("Function not implemented.");
+async function trackShips(data: LocalPlayerData, planetId: number, includeStationary: boolean) {
+    const planet = data.planets[planetId];
+    const curShips = planet.ships ?? {
+        [Ship.crawler]: 0,
+        [Ship.solarSatellite]: 0,
+    };
+
+    const noShips = document.querySelector('#fleet1 #warning');
+    if (noShips != null) {
+        planet.ships = {
+            ...curShips,
+            [Ship.lightFighter]: 0,
+            [Ship.heavyFighter]: 0,
+            [Ship.cruiser]: 0,
+            [Ship.battleship]: 0,
+
+            [Ship.battlecruiser]: 0,
+            [Ship.bomber]: 0,
+            [Ship.destroyer]: 0,
+            [Ship.deathStar]: 0,
+
+            [Ship.reaper]: 0,
+            [Ship.pathfinder]: 0,
+
+            [Ship.smallCargo]: 0,
+            [Ship.largeCargo]: 0,
+            [Ship.colonyShip]: 0,
+            [Ship.recycler]: 0,
+            [Ship.espionageProbe]: 0,
+        };
+        return;
+    }
+
+    const lightFighter = document.querySelector(`[data-technology="${Ship.lightFighter}"] .amount`)?.getAttribute('data-value') ?? _throw('no lightFighter amount found');
+    const heavyFighter = document.querySelector(`[data-technology="${Ship.heavyFighter}"] .amount`)?.getAttribute('data-value') ?? _throw('no heavyFighter amount found');
+    const cruiser = document.querySelector(`[data-technology="${Ship.cruiser}"] .amount`)?.getAttribute('data-value') ?? _throw('no cruiser amount found');
+    const battleship = document.querySelector(`[data-technology="${Ship.battleship}"] .amount`)?.getAttribute('data-value') ?? _throw('no battleship amount found');
+
+    const battlecruiser = document.querySelector(`[data-technology="${Ship.battlecruiser}"] .amount`)?.getAttribute('data-value') ?? _throw('no battlecruiser amount found');
+    const bomber = document.querySelector(`[data-technology="${Ship.bomber}"] .amount`)?.getAttribute('data-value') ?? _throw('no bomber amount found');
+    const destroyer = document.querySelector(`[data-technology="${Ship.destroyer}"] .amount`)?.getAttribute('data-value') ?? _throw('no destroyer amount found');
+    const deathStar = document.querySelector(`[data-technology="${Ship.deathStar}"] .amount`)?.getAttribute('data-value') ?? _throw('no deathStar amount found');
+
+    const reaper = document.querySelector(`[data-technology="${Ship.reaper}"] .amount`)?.getAttribute('data-value') ?? _throw('no reaper amount found');
+    const pathfinder = document.querySelector(`[data-technology="${Ship.pathfinder}"] .amount`)?.getAttribute('data-value') ?? _throw('no pathfinder amount found');
+
+    const smallCargo = document.querySelector(`[data-technology="${Ship.smallCargo}"] .amount`)?.getAttribute('data-value') ?? _throw('no smallCargo amount found');
+    const largeCargo = document.querySelector(`[data-technology="${Ship.largeCargo}"] .amount`)?.getAttribute('data-value') ?? _throw('no largeCargo amount found');
+    const colonyShip = document.querySelector(`[data-technology="${Ship.colonyShip}"] .amount`)?.getAttribute('data-value') ?? _throw('no colonyShip amount found');
+    const recycler = document.querySelector(`[data-technology="${Ship.recycler}"] .amount`)?.getAttribute('data-value') ?? _throw('no recycler amount found');
+    const espionageProbe = document.querySelector(`[data-technology="${Ship.espionageProbe}"] .amount`)?.getAttribute('data-value') ?? _throw('no espionageProbe amount found');
+
+    planet.ships = {
+        ...curShips,
+        [Ship.lightFighter]: parseInt(lightFighter, 10),
+        [Ship.heavyFighter]: parseInt(heavyFighter, 10),
+        [Ship.cruiser]: parseInt(cruiser, 10),
+        [Ship.battleship]: parseInt(battleship, 10),
+
+        [Ship.battlecruiser]: parseInt(battlecruiser, 10),
+        [Ship.bomber]: parseInt(bomber, 10),
+        [Ship.destroyer]: parseInt(destroyer, 10),
+        [Ship.deathStar]: parseInt(deathStar, 10),
+
+        [Ship.reaper]: parseInt(reaper, 10),
+        [Ship.pathfinder]: parseInt(pathfinder, 10),
+
+        [Ship.smallCargo]: parseInt(smallCargo, 10),
+        [Ship.largeCargo]: parseInt(largeCargo, 10),
+        [Ship.colonyShip]: parseInt(colonyShip, 10),
+        [Ship.recycler]: parseInt(recycler, 10),
+        [Ship.espionageProbe]: parseInt(espionageProbe, 10),
+    };
+
+    if (includeStationary) {
+        const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
+        const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
+
+        planet.ships = {
+            ...planet.ships,
+            [Ship.crawler]: parseInt(crawler, 10),
+            [Ship.solarSatellite]: parseInt(solarSatellite, 10),
+        };
+    }
 }
 
 
 async function trackDefenses(data: LocalPlayerData, planetId: number) {
-    throw new Error("Function not implemented.");
+    const planet = data.planets[planetId];
+
+    const rocketLauncher = document.querySelector(`[data-technology="${Defense.rocketLauncher}"] .amount`)?.getAttribute('data-value') ?? _throw('no rocketLauncher amount found');
+    const lightLaser = document.querySelector(`[data-technology="${Defense.lightLaser}"] .amount`)?.getAttribute('data-value') ?? _throw('no lightLaser amount found');
+    const heavyLaser = document.querySelector(`[data-technology="${Defense.heavyLaser}"] .amount`)?.getAttribute('data-value') ?? _throw('no heavyLaser amount found');
+    const gaussCannon = document.querySelector(`[data-technology="${Defense.gaussCannon}"] .amount`)?.getAttribute('data-value') ?? _throw('no gaussCannon amount found');
+    const ionCannon = document.querySelector(`[data-technology="${Defense.ionCannon}"] .amount`)?.getAttribute('data-value') ?? _throw('no ionCannon amount found');
+    const plasmaTurret = document.querySelector(`[data-technology="${Defense.plasmaTurret}"] .amount`)?.getAttribute('data-value') ?? _throw('no plasmaTurret amount found');
+
+    const smallShieldDome = document.querySelector(`[data-technology="${Defense.smallShieldDome}"] .amount`)?.getAttribute('data-value') ?? _throw('no smallShieldDome amount found');
+    const largeShieldDome = document.querySelector(`[data-technology="${Defense.largeShieldDome}"] .amount`)?.getAttribute('data-value') ?? _throw('no largeShieldDome amount found');
+
+    const interplanetaryMissile = document.querySelector(`[data-technology="${Defense.interplanetaryMissile}"] .amount`)?.getAttribute('data-value') ?? _throw('no interplanetaryMissile amount found');
+    const ballisticMissile = document.querySelector(`[data-technology="${Defense.ballisticMissile}"] .amount`)?.getAttribute('data-value') ?? _throw('no ballisticMissile amount found');
+
+    planet.defense = {
+        [Defense.rocketLauncher]: parseInt(rocketLauncher, 10),
+        [Defense.lightLaser]: parseInt(lightLaser, 10),
+        [Defense.heavyLaser]: parseInt(heavyLaser, 10),
+        [Defense.gaussCannon]: parseInt(gaussCannon, 10),
+        [Defense.ionCannon]: parseInt(ionCannon, 10),
+        [Defense.plasmaTurret]: parseInt(plasmaTurret, 10),
+
+        [Defense.smallShieldDome]: smallShieldDome == "1",
+        [Defense.largeShieldDome]: largeShieldDome == "1",
+
+        [Defense.interplanetaryMissile]: parseInt(interplanetaryMissile, 10),
+        [Defense.ballisticMissile]: parseInt(ballisticMissile, 10),
+    };
 }
 
 
