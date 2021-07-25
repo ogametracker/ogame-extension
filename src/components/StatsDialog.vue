@@ -26,14 +26,15 @@
                         @click="
                             tabItem.disabled
                                 ? null
-                                : tabItem.customAction
+                                : 'customAction' in tabItem
                                 ? tabItem.customAction()
                                 : (activeTab = tabItem)
                         "
                     >
                         <icon
                             v-if="tabItem.icon != null"
-                            :name="tabItem.icon"
+                            :name="tabItem.icon" 
+                            :style="tabItem.iconStyle"
                         />
                         <span v-if="tabItem.label != null">
                             {{ tabItem.label }}
@@ -46,29 +47,10 @@
                 </div>
             </nav>
             <main class="stats-dialog-body">
-                <expedition-stats
-                    v-if="activeTab.name == 'expos'"
-                    class="stats-dialog-body-content"
+                <component
+                    v-if="'component' in activeTab"
+                    :is="activeTab.component"
                 />
-
-                <battles-stats
-                    v-else-if="activeTab.name == 'battles'"
-                    class="stats-dialog-body-content"
-                />
-
-                <debris-field-stats
-                    v-else-if="activeTab.name == 'debrisFields'"
-                    class="stats-dialog-body-content"
-                />
-
-                <resource-overview
-                    v-else-if="activeTab.name == 'resourceOverview'"
-                    class="stats-dialog-body-content"
-                />
-
-                <span v-else-if="activeTab.name == 'settings'">
-                    <settings />
-                </span>
             </main>
         </div>
     </div>
@@ -85,15 +67,19 @@
     import i18n from "@/i18n";
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
 
-    interface TabItem {
+    type TabItem = {
         label?: string;
         name: string;
         icon?: string;
+        iconStyle?: any;
         disabled?: boolean;
         flex?: boolean;
         color?: HexColor;
-        customAction?: () => void;
-    }
+    } & (
+            { placeholder: true; }
+            | { customAction: () => void; }
+            | { component: string; }
+        );
 
     @Component({
         components: {
@@ -108,41 +94,84 @@
         @Prop({ type: Boolean, required: true })
         private value!: boolean;
 
-        private readonly tabItems: TabItem[] = [{
-            name: 'expos',
-            icon: 'expo',
-            color: '#0066ff',
-            label: i18n.messages.extension.headers.expeditions,
-        }, {
-            name: 'battles',
-            icon: 'attack',
-            color: '#c51b00',
-            label: i18n.messages.extension.headers.battles,
-        }, {
-            name: 'debrisFields',
-            icon: 'debris-field',
-            color: '#00a031',
-            label: i18n.messages.extension.headers.debrisFields,
-        }, {
-            name: 'resourceOverview',
-            icon: 'economy',
-            color: '#a9460c',
-            label: i18n.messages.extension.headers.resourcesOverview,
-        }, {
-            name: 'placeholder_0',
-            disabled: true,
-            flex: true,
-        }, {
-            name: 'settings',
-            icon: 'cog',
-            color: '#888888',
-            label: i18n.messages.extension.headers.settings,
-        }, {
-            name: 'excelExport',
-            icon: 'microsoft-excel',
-            color: '#21a366',
-            customAction: this.excelExport,
-        }];
+        private readonly tabItems: TabItem[] = [
+            {
+                name: 'expos',
+                icon: 'expo',
+                color: '#0066ff',
+                label: i18n.messages.extension.headers.expeditions,
+                component: 'expedition-stats',
+            },
+            {
+                name: 'battles',
+                icon: 'attack',
+                color: '#c51b00',
+                label: i18n.messages.extension.headers.battles,
+                component: 'battles-stats',
+            },
+            {
+                name: 'debrisFields',
+                icon: 'debris-field',
+                color: '#00a031',
+                label: i18n.messages.extension.headers.debrisFields,
+                component: 'debris-field-stats',
+            },
+            {
+                name: 'resourceOverview',
+                icon: 'economy',
+                color: '#a9460c',
+                label: i18n.messages.extension.headers.resourcesOverview,
+                component: 'resource-overview',
+                iconStyle: {
+                    fontSize: '32px',
+                },
+            },
+            {
+                name: 'currentPlanet',
+                icon: 'planet-moon',
+                color: '#5000d0',
+                label: 'LOCA: current planet/moon',
+                component: null!,
+            },
+            {
+                name: 'tools',
+                icon: 'tools',
+                color: '#008c85',
+                label: 'LOCA: Tools',
+                component: null!,
+                iconStyle: {
+                    fontSize: '24px',
+                },
+            },
+            {
+                name: 'placeholder_0',
+                disabled: true,
+                flex: true,
+                placeholder: true,
+            },
+            {
+                name: 'settings',
+                icon: 'cog',
+                color: '#888888',
+                label: i18n.messages.extension.headers.settings,
+                component: 'settings',
+            },
+            {
+                name: 'excelExport',
+                icon: 'microsoft-excel',
+                color: '#21a366',
+                customAction: this.excelExport,
+                iconStyle: {
+                    marginRight: '3px',
+                },
+            },
+            {
+                name: 'info',
+                icon: 'information',
+                color: '#0f0f96',
+                component: null!,
+            },
+        ];
 
         private activeTab = this.tabItems[0];
 
