@@ -1,5 +1,5 @@
+import { ItemHash } from ".";
 import Item from "./Item";
 
-export default interface ItemDictionary {
-    [key: string]: Item;
-}
+type ItemDictionary = Record<ItemHash, Item>;
+export default ItemDictionary;

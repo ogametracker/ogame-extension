@@ -2,6 +2,7 @@ import i18n from "@/i18n";
 import ExpoEvent, { ExpoEventDarkMatter, ExpoEventResources, ExpoFindableShips, ExpoEventFleet, ExpoEventItem, ExpoEventEarly, ExpoEventDelay, ExpoEventTrader, ExpoEventLostFleet, ExpoEventAliens, ExpoEventPirates, ExpoEventNothing } from "@/models/expeditions/ExpoEvent";
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
+import { ItemHash } from "@/models/items";
 import Resource from "@/models/Resource";
 import Ship from "@/models/Ship";
 import ExpoModule from "@/store/modules/ExpoModule";
@@ -317,15 +318,16 @@ function getItemExpo(id: number, date: number, message: string, messageContainer
         return null;
 
     const itemUrl = itemLink.href;
-    const hashMatch = itemUrl.match(/item=([a-f0-9]+)/);
+    const hashMatch = itemUrl.match(/item=(?<itemHash>[a-f0-9]+)/);
     if (hashMatch == null)
         return null;
 
+    const itemHash = hashMatch.groups!.itemHash as ItemHash;
     const result: ExpoEventItem = {
         type: ExpoType.item,
         id,
         date,
-        itemHash: hashMatch[1],
+        itemHash,
     };
     return result;
 }

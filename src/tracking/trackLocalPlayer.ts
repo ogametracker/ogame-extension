@@ -1,6 +1,7 @@
 import Building from "@/models/Building";
 import Coordinates, { parseCoordinates } from "@/models/Coordinates";
 import { Defense } from "@/models/Defense";
+import { ItemHash } from "@/models/items";
 import PlanetType from "@/models/PlanetType";
 import Research from "@/models/Research";
 import Ship from "@/models/Ship";
@@ -19,9 +20,9 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
         || queryParams.has('page', 'rewards')
         || queryParams.has('page', 'premium')
     ) {
-        await trackOwnedPlanets(data);
-        await trackOfficers(data);
-        await trackPlayerClass(data);
+        trackOwnedPlanets(data);
+        trackOfficers(data);
+        trackPlayerClass(data);
     }
 
     const currentPlanetId = parseInt((document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ?? _throw('no planet id meta found'), 10);
@@ -30,43 +31,43 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
 
         switch (component) {
             case 'research': {
-                await trackResearch(data);
+                trackResearch(data);
                 break;
             }
 
             case 'supplies': {
-                await trackSupplies(data, currentPlanetId);
+                trackSupplies(data, currentPlanetId);
                 break;
             }
 
             case 'facilities': {
-                await trackFacilities(data, currentPlanetId);
+                trackFacilities(data, currentPlanetId);
                 break;
             }
 
             case 'shipyard':
             case 'fleetdispatch': {
-                await trackShips(data, currentPlanetId, component == 'shipyard');
+                trackShips(data, currentPlanetId, component == 'shipyard');
                 break;
             }
 
             case 'defenses': {
-                await trackDefenses(data, currentPlanetId);
+                trackDefenses(data, currentPlanetId);
                 break;
             }
 
             case 'alliance': {
-                await trackAllianceClass(data);
+                trackAllianceClass(data);
                 break;
             }
 
             case 'overview': {
-                await trackActiveItems(data, currentPlanetId);
+                trackActiveItems(data, currentPlanetId);
                 break;
             }
         }
     } else if (queryParams.has('page', 'resourceSettings')) {
-        await trackProductionPercentages(data, currentPlanetId);
+        trackProductionPercentages(data, currentPlanetId);
     }
 
     verifyNumbers(data);
@@ -78,7 +79,7 @@ function verifyNumbers(data: LocalPlayerData) {
     //TODO: verify that there are no NaNs in the data
 }
 
-async function trackOwnedPlanets(playerData: LocalPlayerData) {
+function trackOwnedPlanets(playerData: LocalPlayerData) {
     const planetList = document.querySelector('#planetList') ?? _throw('no #planetList found');
     const planets = planetList.querySelectorAll('.smallplanet');
 
@@ -145,7 +146,7 @@ function getMoonData(planet: Element, coords: Coordinates): MoonData | null {
     };
 }
 
-async function trackOfficers(data: LocalPlayerData) {
+function trackOfficers(data: LocalPlayerData) {
     const officersDiv = document.querySelector('#officers') ?? _throw('no #officers elem found');
 
     const commander = officersDiv.querySelector('.commander')?.classList.contains('on') ?? _throw('no commander found');
@@ -157,7 +158,7 @@ async function trackOfficers(data: LocalPlayerData) {
     data.officers = { commander, admiral, engineer, geologist, technocrat };
 }
 
-async function trackPlayerClass(data: LocalPlayerData) {
+function trackPlayerClass(data: LocalPlayerData) {
     const playerClassDiv = document.querySelector('#characterclass') ?? _throw('no #characterclass elem found');
     const classDiv = playerClassDiv.querySelector('div.characterclass') ?? _throw('no character class elem found');
 
@@ -173,7 +174,7 @@ async function trackPlayerClass(data: LocalPlayerData) {
     data.playerClass = playerClass;
 }
 
-async function trackResearch(data: LocalPlayerData) {
+function trackResearch(data: LocalPlayerData) {
     const energyTechnology = document.querySelector(`[data-technology="${Research.energyTechnology}"] .level`)?.getAttribute('data-value') ?? _throw('no energyTechnology level found');
     const laserTechnology = document.querySelector(`[data-technology="${Research.laserTechnology}"] .level`)?.getAttribute('data-value') ?? _throw('no laserTechnology level found');
     const ionTechnology = document.querySelector(`[data-technology="${Research.ionTechnology}"] .level`)?.getAttribute('data-value') ?? _throw('no ionTechnology level found');
@@ -217,7 +218,7 @@ async function trackResearch(data: LocalPlayerData) {
     };
 }
 
-async function trackSupplies(data: LocalPlayerData, planetId: number) {
+function trackSupplies(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
 
     if (!planet.isMoon) {
@@ -273,7 +274,7 @@ function updateMoonSupplies(moon: MoonData) {
     moon.buildings = buildings;
 }
 
-async function trackFacilities(data: LocalPlayerData, planetId: number) {
+function trackFacilities(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
 
     if (!planet.isMoon) {
@@ -281,8 +282,6 @@ async function trackFacilities(data: LocalPlayerData, planetId: number) {
     } else {
         updateMoonFacilities(planet);
     }
-
-    await LocalPlayerModule.save(data);
 }
 
 function updatePlanetFacilities(planet: PlanetData) {
@@ -336,7 +335,7 @@ function updateMoonFacilities(moon: MoonData) {
 }
 
 
-async function trackShips(data: LocalPlayerData, planetId: number, includeStationary: boolean) {
+function trackShips(data: LocalPlayerData, planetId: number, includeStationary: boolean) {
     const planet = data.planets[planetId];
     const curShips = planet.ships ?? {
         [Ship.crawler]: 0,
@@ -423,7 +422,7 @@ async function trackShips(data: LocalPlayerData, planetId: number, includeStatio
 }
 
 
-async function trackDefenses(data: LocalPlayerData, planetId: number) {
+function trackDefenses(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
 
     const rocketLauncher = document.querySelector(`[data-technology="${Defense.rocketLauncher}"] .amount`)?.getAttribute('data-value') ?? _throw('no rocketLauncher amount found');
@@ -456,7 +455,7 @@ async function trackDefenses(data: LocalPlayerData, planetId: number) {
 }
 
 
-async function trackAllianceClass(data: LocalPlayerData) {
+function trackAllianceClass(data: LocalPlayerData) {
     const allianceClassElem = document.querySelector('.allianceclass') ?? _throw('no alliance class found');
 
     let allianceClass = AllianceClass.none;
@@ -471,8 +470,8 @@ async function trackAllianceClass(data: LocalPlayerData) {
     data.allianceClass = allianceClass;
 }
 
-async function trackProductionPercentages(data: LocalPlayerData, planetId: number) {
-    await trackAllianceClass(data);
+function trackProductionPercentages(data: LocalPlayerData, planetId: number) {
+    trackAllianceClass(data);
 
     const planet = data.planets[planetId];
     if (planet.isMoon) {
@@ -502,18 +501,17 @@ async function trackProductionPercentages(data: LocalPlayerData, planetId: numbe
     };
 }
 
-async function trackActiveItems(data: LocalPlayerData, planetId: number) {
+function trackActiveItems(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
-    planet.activeItemHashes ??= {};
+    planet.activeItems ??= {};
 
     const timestamp = parseInt((document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content ?? _throw('no timestamp meta found'), 10);
 
     const activeItemsUl = document.querySelector('ul.active_items') ?? _throw('no active items panel found');
     const activeItems = activeItemsUl.querySelectorAll('div[data-uuid]');
     for (const activeItem of activeItems) {
-        const itemId = activeItem.getAttribute('data-uuid')!;
+        const itemId = activeItem.getAttribute('data-uuid')! as ItemHash;
         const activeFor = parseInt(activeItem.querySelector('.js_duration')?.textContent ?? _throw('no activeUntil found'), 10);
-
-        planet.activeItemHashes[itemId] = timestamp + activeFor;
+        planet.activeItems[itemId] = timestamp + activeFor;
     }
 }

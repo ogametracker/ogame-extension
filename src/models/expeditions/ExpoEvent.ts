@@ -2,6 +2,7 @@ import ExpoSize from "./ExpoSize";
 import ExpoType from "./ExpoType";
 import Resource from "../Resource";
 import Ship from "../Ship";
+import { ItemHash } from "../items";
 
 
 export interface ExpoEventBase {
@@ -51,7 +52,7 @@ export type ExpoEventFleet = ExpoEventBase & ExpoSizeableEvent & {
 
 export type ExpoEventItem = ExpoEventBase & {
     type: ExpoType.item;
-    itemHash: string;
+    itemHash: ItemHash;
 };
 
 export type ExpoEventEarly = ExpoEventBase & {

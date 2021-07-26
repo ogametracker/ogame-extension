@@ -66,6 +66,7 @@
     import { HexColor, hexColorToRGB } from "@/utils/colors";
     import i18n from "@/i18n";
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
+    import EmpireOverview from '@/components/empire/EmpireOverview.vue';
 
     type TabItem = {
         label?: string;
@@ -88,6 +89,7 @@
             DebrisFieldStats,
             Settings,
             ResourceOverview,
+            EmpireOverview,
         },
     })
     export default class StatsDialog extends Vue {
@@ -127,11 +129,11 @@
                 },
             },
             {
-                name: 'currentPlanet',
+                name: 'empire',
                 icon: 'planet-moon',
                 color: '#5000d0',
-                label: 'LOCA: current planet/moon',
-                component: null!,
+                label: 'LOCA: empire',
+                component: 'empire-overview',
             },
             {
                 name: 'tools',

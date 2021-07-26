@@ -3,6 +3,7 @@ const metaUniverseName = (document.querySelector('meta[name="ogame-universe-name
 const metaUniverseSpeed = (document.querySelector('meta[name="ogame-universe-speed"]') as HTMLMetaElement)?.content;
 const metaUniverseLanguage = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement)?.content;
 const metaUniversePlayerId = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement)?.content;
+const metaUniversePlanetId = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement)?.content;
 
 class OgameMetaData {
     private readonly _universe = metaUniverse; //"s146-de.ogame.gameforge.com"
@@ -29,7 +30,7 @@ class OgameMetaData {
         return this._universeName;
     }
 
-    private readonly _universeSpeed = parseInt(metaUniverseSpeed); // 6
+    private readonly _universeSpeed = parseInt(metaUniverseSpeed, 10); // 6
     public get universeSpeed() {
         if (this._universeSpeed == null)
             throw new Error();
@@ -45,12 +46,20 @@ class OgameMetaData {
         return this._locale;
     }
 
-    private readonly _playerId = parseInt(metaUniversePlayerId); // 123456
+    private readonly _playerId = parseInt(metaUniversePlayerId, 10); // 123456
     public get playerId() {
         if (this._playerId == null)
             throw new Error();
 
         return this._playerId;
+    }
+
+    private readonly _planetId = parseInt(metaUniversePlanetId, 10); // 123456
+    public get planetId() {
+        if (this._planetId == null)
+            throw new Error();
+
+        return this._planetId;
     }
 
 

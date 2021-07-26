@@ -1,6 +1,7 @@
 import Building from "@/models/Building";
 import Coordinates from "@/models/Coordinates";
 import { Defense } from "@/models/Defense";
+import { ItemHash } from "@/models/items";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
 import Research from "@/models/Research";
 import Ship from "@/models/Ship";
@@ -14,7 +15,7 @@ export interface PlanetDataBase {
     coordinates: Coordinates;
 
     defense?: DefenseCount;
-    activeItemHashes?: Record<string, number>; 
+    activeItems?: Partial<Record<ItemHash, number | undefined>>; 
 }
 
 export interface PlanetData extends PlanetDataBase {
