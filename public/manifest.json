@@ -33,7 +33,17 @@
                 "https://*.ogame.gameforge.com/game/*"
             ],
             "js": [
-                "chunk-vendors.js",
+                "keepActiveItemsTime.chunk-vendors.js",
+                "keepActiveItemsTime.js"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "https://*.ogame.gameforge.com/game/*"
+            ],
+            "js": [
+                "app.chunk-vendors.js",
                 "app.js"
             ],
             "run_at": "document_end"

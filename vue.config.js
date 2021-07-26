@@ -8,12 +8,30 @@ module.exports = {
             }]);
         }
     },
+    pluginOptions: {
+        configureMultiCompilerWebpack: [
+            {
+                entry: {
+                    app: './src/main.ts'
+                },
+                output: {
+                    filename: 'app.js',
+                    chunkFilename: 'app.chunk-vendors.js'
+                },
+            },
+            {
+                entry: {
+                    app: './src/keepActiveItemsTime.ts'
+                },
+                output: {
+                    filename: 'keepActiveItemsTime.js',
+                    chunkFilename: 'keepActiveItemsTime.chunk-vendors.js'
+                },
+            }
+        ]
+    },
     configureWebpack: {
-      output: {
-        filename: '[name].js',
-        chunkFilename: '[name].js'
-      },
-      devtool: 'inline-source-map',
+        devtool: 'inline-source-map',
     },
     css: {
         loaderOptions: {

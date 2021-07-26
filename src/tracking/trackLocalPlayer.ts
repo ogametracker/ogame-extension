@@ -36,6 +36,7 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
             }
 
             case 'supplies': {
+                trackStationaryShips(data, currentPlanetId);
                 trackSupplies(data, currentPlanetId);
                 break;
             }
@@ -45,9 +46,14 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters) {
                 break;
             }
 
-            case 'shipyard':
+            case 'shipyard': {
+                trackStationaryShips(data, currentPlanetId);
+                trackShips(data, currentPlanetId);
+                break;
+            }
+
             case 'fleetdispatch': {
-                trackShips(data, currentPlanetId, component == 'shipyard');
+                trackShips(data, currentPlanetId);
                 break;
             }
 
@@ -256,6 +262,10 @@ function updatePlanetSupplies(planet: PlanetData) {
         facilities: planet.buildings?.facilities,
     };
     planet.buildings = buildings;
+
+
+    const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
+    const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
 }
 
 function updateMoonSupplies(moon: MoonData) {
@@ -334,8 +344,40 @@ function updateMoonFacilities(moon: MoonData) {
     moon.buildings = buildings;
 }
 
+function trackStationaryShips(data: LocalPlayerData, planetId: number) {
+    const planet = data.planets[planetId];
+    const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
+    const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
 
-function trackShips(data: LocalPlayerData, planetId: number, includeStationary: boolean) {
+    const curShips = planet.ships ?? {
+        [Ship.lightFighter]: 0,
+        [Ship.heavyFighter]: 0,
+        [Ship.cruiser]: 0,
+        [Ship.battleship]: 0,
+
+        [Ship.battlecruiser]: 0,
+        [Ship.bomber]: 0,
+        [Ship.destroyer]: 0,
+        [Ship.deathStar]: 0,
+
+        [Ship.reaper]: 0,
+        [Ship.pathfinder]: 0,
+
+        [Ship.smallCargo]: 0,
+        [Ship.largeCargo]: 0,
+        [Ship.colonyShip]: 0,
+        [Ship.recycler]: 0,
+        [Ship.espionageProbe]: 0,
+    };
+
+    planet.ships = {
+        ...curShips,
+        [Ship.crawler]: parseInt(crawler, 10),
+        [Ship.solarSatellite]: parseInt(solarSatellite, 10),
+    };
+}
+
+function trackShips(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
     const curShips = planet.ships ?? {
         [Ship.crawler]: 0,
@@ -408,17 +450,6 @@ function trackShips(data: LocalPlayerData, planetId: number, includeStationary: 
         [Ship.recycler]: parseInt(recycler, 10),
         [Ship.espionageProbe]: parseInt(espionageProbe, 10),
     };
-
-    if (includeStationary) {
-        const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
-        const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
-
-        planet.ships = {
-            ...planet.ships,
-            [Ship.crawler]: parseInt(crawler, 10),
-            [Ship.solarSatellite]: parseInt(solarSatellite, 10),
-        };
-    }
 }
 
 
@@ -511,7 +542,7 @@ function trackActiveItems(data: LocalPlayerData, planetId: number) {
     const activeItems = activeItemsUl.querySelectorAll('div[data-uuid]');
     for (const activeItem of activeItems) {
         const itemId = activeItem.getAttribute('data-uuid')! as ItemHash;
-        const activeFor = parseInt(activeItem.querySelector('.js_duration')?.textContent ?? _throw('no activeUntil found'), 10);
-        planet.activeItems[itemId] = timestamp + activeFor;
+        const activeFor = parseInt(activeItem.querySelector('.js_duration')?.getAttribute('data-remaining-duration') ?? _throw('no activeUntil found'), 10);
+        planet.activeItems[itemId] = (timestamp + activeFor) * 1000;
     }
 }
