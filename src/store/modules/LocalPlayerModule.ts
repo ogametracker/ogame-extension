@@ -20,6 +20,7 @@ export interface PlanetDataBase {
 
 export interface PlanetData extends PlanetDataBase {
     isMoon: false;
+    maxTemperature?: number;
     buildings?: PlanetBuildingLevels;
     ships?: PlanetShipCount;
 

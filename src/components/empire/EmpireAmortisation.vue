@@ -1,7 +1,7 @@
 <template>
     <div>
-        TODO: Planet wählen
-        Anzahl Zeilen: <input type="number" v-model="rowNumber"/>
+        TODO: Planet wählen Anzahl Zeilen:
+        <input type="number" v-model="rowNumber" />
         <table>
             <thead>
                 <tr>
@@ -28,9 +28,11 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
-import LocalPlayerModule from '@/store/modules/LocalPlayerModule';
-import OgameMetaData from '@/models/ogame/OgameMetaData';
-import Building from '@/models/Building';
+    import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
+    import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
+    import LocalPlayerModule from '@/store/modules/LocalPlayerModule';
+    import OgameMetaData from '@/models/ogame/OgameMetaData';
+    import Building from '@/models/Building';
 
     @Component({})
     export default class EmpireAmortisation extends Vue {
@@ -38,21 +40,38 @@ import Building from '@/models/Building';
 
         async mounted() {
             const localPlayerData = await LocalPlayerModule.getData();
-            const metalMine = new MetalMine();
 
             const currentPlanet = localPlayerData.planets[OgameMetaData.planetId];
-            if(currentPlanet.isMoon) {
+            if (currentPlanet.isMoon) {
                 return;
             }
 
-            const level = currentPlanet.buildings?.production?.[Building.metalMine] ?? 0;
-            const production = metalMine.getProduction(level, {
+            const metalMine = new MetalMine();
+            const metalMineLevel = currentPlanet.buildings?.production?.[Building.metalMine] ?? 0;
+            const metalMineProduction = metalMine.getProduction(metalMineLevel, {
                 player: localPlayerData,
                 currentPlanet: currentPlanet,
                 ecoSpeed: OgameMetaData.universeSpeed,
             });
+            console.log(metalMineProduction);
 
-            console.log(production);
+            const crystalMine = new CrystalMine();
+            const crystalMineLevel = currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0;
+            const crystalMineProduction = crystalMine.getProduction(crystalMineLevel, {
+                player: localPlayerData,
+                currentPlanet: currentPlanet,
+                ecoSpeed: OgameMetaData.universeSpeed,
+            });
+            console.log(crystalMineProduction);
+
+            const deuteriumSynthesizer = new DeuteriumSynthesizer();
+            const deuteriumSynthesizerLevel = currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0;
+            const deuteriumSynthesizerProduction = deuteriumSynthesizer.getProduction(deuteriumSynthesizerLevel, {
+                player: localPlayerData,
+                currentPlanet: currentPlanet,
+                ecoSpeed: OgameMetaData.universeSpeed,
+            });
+            console.log(deuteriumSynthesizerProduction);
         }
     }
 </script>

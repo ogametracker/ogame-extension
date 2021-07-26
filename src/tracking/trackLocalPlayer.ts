@@ -94,10 +94,7 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
         const planetData = getPlanetData(planet);
         const newPlanetData: PlanetData = {
             ...(playerData.planets[planetData.id] as PlanetData | null),
-            id: planetData.id,
-            coordinates: planetData.coordinates,
-            name: planetData.name,
-            isMoon: false,
+            ...planetData,
         };
         playerData.planets[planetData.id] = newPlanetData;
 
@@ -106,10 +103,7 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
         if (moonData != null) {
             const newMoonData: MoonData = {
                 ...(playerData.planets[moonData.id] as MoonData | null),
-                id: moonData.id,
-                coordinates: moonData.coordinates,
-                name: moonData.name,
-                isMoon: true,
+                ...moonData,
             };
             playerData.planets[moonData.id] = newMoonData;
         }
@@ -120,12 +114,18 @@ function getPlanetData(planet: Element): PlanetData {
     const id = parseInt(planet.id.split('-')[1], 10);
     const name = planet.querySelector('.planet-name')?.textContent ?? _throw('no planet name found');
     const coords = parseCoordinates(planet.querySelector('.planet-koords')?.textContent ?? _throw('no planet coords found'));
+    
+    const title = planet.querySelector('a.planetlink')?.getAttribute('title') ?? _throw('no title found');
+    const tempRegex = / (?<temp>-?\d+)°C<br\/>/;
+    const tempMatch = title.match(tempRegex) ?? _throw('no temperature found');
+    const temperature = parseInt(tempMatch.groups!.temp, 10);
 
     return {
         id: id,
         isMoon: false,
         coordinates: coords,
         name: name,
+        maxTemperature: temperature,
     };
 }
 

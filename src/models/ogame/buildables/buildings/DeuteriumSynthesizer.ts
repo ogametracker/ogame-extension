@@ -6,15 +6,15 @@ import { AllianceClass, PlayerClass, PlayerOfficers } from "@/store/modules/Loca
 import Cost from "../Cost";
 import ProductionBuilding, { ProductionInject } from "./ProductionBuilding";
 
-export default class MetalMine extends ProductionBuilding {
+export default class DeuteriumSynthesizer extends ProductionBuilding {
 
     public getProduction(level: number, data: ProductionInject): Cost {
-        const boost = this.getProductionBoost(data.currentPlanet.coordinates.position);
-
-        const baseProduction = Math.trunc(30 * data.ecoSpeed * (1 + boost));
-        const mineProduction = Math.trunc(baseProduction * level * 1.1 ** level * (data.currentPlanet.productionSettings?.[Building.metalMine] ?? 100) / 100);
+        const mineProduction = Math.trunc(10 * level * 1.1 ** level * data.ecoSpeed
+            * (1.44 - 0.004 * (data.currentPlanet.maxTemperature ?? 0)) 
+            * (data.currentPlanet.productionSettings?.[Building.deuteriumSynthesizer] ?? 100) / 100
+        );
         const geologistProduction = Math.round(mineProduction * 0.1 * (data.player.officers.geologist ? 1 : 0));
-        const plasmaTechProduction = Math.round(mineProduction * 0.01 * (data.player.research?.[Research.plasmaTechnology] ?? 0));
+        const plasmaTechProduction = Math.round(mineProduction * 0.0033 * (data.player.research?.[Research.plasmaTechnology] ?? 0));
         const collectorProduction = Math.round(mineProduction * 0.25 * (data.player.playerClass == PlayerClass.collector ? 1 : 0));
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(data.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (data.player.allianceClass == AllianceClass.trader ? 1 : 0));
@@ -33,8 +33,7 @@ export default class MetalMine extends ProductionBuilding {
         const crawlerBoost = Math.min(0.5, 0.0002 * crawlerCount * crawlerProductivity * (data.currentPlanet.productionSettings?.[Ship.crawler] ?? 100) / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
-        const production = baseProduction
-            + mineProduction
+        const production = mineProduction
             + geologistProduction
             + plasmaTechProduction
             + collectorProduction
@@ -44,9 +43,9 @@ export default class MetalMine extends ProductionBuilding {
             + crawlerProduction;
 
         return {
-            metal: production,
+            metal: 0,
             crystal: 0,
-            deuterium: 0,
+            deuterium: production,
             energy: 0,
         };
     }
@@ -58,10 +57,10 @@ export default class MetalMine extends ProductionBuilding {
 
         const now = Date.now();
 
-        const items10 = [ItemHash.metalBooster_bronze_1day, ItemHash.metalBooster_bronze_7days];
-        const items20 = [ItemHash.metalBooster_silver_7days, ItemHash.metalBooster_silver_30days, ItemHash.metalBooster_silver_90days];
-        const items30 = [ItemHash.metalBooster_gold_7days, ItemHash.metalBooster_gold_30days, ItemHash.metalBooster_gold_90days];
-        const items40 = [ItemHash.metalBooster_platinum_7days, ItemHash.metalBooster_platinum_30days, ItemHash.metalBooster_platinum_90days];
+        const items10 = [ItemHash.deuteriumBooster_bronze_1day, ItemHash.deuteriumBooster_bronze_7days];
+        const items20 = [ItemHash.deuteriumBooster_silver_7days, ItemHash.deuteriumBooster_silver_30days, ItemHash.deuteriumBooster_silver_90days];
+        const items30 = [ItemHash.deuteriumBooster_gold_7days, ItemHash.deuteriumBooster_gold_30days, ItemHash.deuteriumBooster_gold_90days];
+        const items40 = [ItemHash.deuteriumBooster_platinum_7days, ItemHash.deuteriumBooster_platinum_30days, ItemHash.deuteriumBooster_platinum_90days];
 
         if (items10.some(hash => (activeItems[hash] ?? -1) > now)) {
             return 0.1;
@@ -87,36 +86,19 @@ export default class MetalMine extends ProductionBuilding {
             && officers.technocrat;
     }
 
-    private getProductionBoost(position: number) {
-        switch (position) {
-            case 8:
-                return 0.35;
-
-            case 7:
-            case 9:
-                return 0.23;
-
-            case 6:
-            case 10:
-                return 0.17;
-        }
-
-        return 0;
-    }
-
     public getConsumption(level: number, data: ProductionInject): Cost {
         return {
             metal: 0,
             crystal: 0,
             deuterium: 0,
-            energy: Math.ceil(10 * level * 1.1 ** level),
+            energy: Math.ceil(20 * level * 1.1 ** level),
         };
     }
 
     public getCost(level: number): Cost {
         return {
-            metal: Math.round(40 * 1.5 ** level),
-            crystal: Math.round(10 * 1.5 ** level),
+            metal: Math.round(150 * 1.5 ** level),
+            crystal: Math.round(50 * 1.5 ** level),
             deuterium: 0,
             energy: 0,
         };

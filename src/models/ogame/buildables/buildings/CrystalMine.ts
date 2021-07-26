@@ -6,15 +6,15 @@ import { AllianceClass, PlayerClass, PlayerOfficers } from "@/store/modules/Loca
 import Cost from "../Cost";
 import ProductionBuilding, { ProductionInject } from "./ProductionBuilding";
 
-export default class MetalMine extends ProductionBuilding {
+export default class CrystalMine extends ProductionBuilding {
 
     public getProduction(level: number, data: ProductionInject): Cost {
         const boost = this.getProductionBoost(data.currentPlanet.coordinates.position);
 
-        const baseProduction = Math.trunc(30 * data.ecoSpeed * (1 + boost));
-        const mineProduction = Math.trunc(baseProduction * level * 1.1 ** level * (data.currentPlanet.productionSettings?.[Building.metalMine] ?? 100) / 100);
+        const baseProduction = Math.trunc(15 * data.ecoSpeed * (1 + boost));
+        const mineProduction = Math.trunc(20 * data.ecoSpeed * (1 + boost) * level * 1.1 ** level * (data.currentPlanet.productionSettings?.[Building.crystalMine] ?? 100) / 100);
         const geologistProduction = Math.round(mineProduction * 0.1 * (data.player.officers.geologist ? 1 : 0));
-        const plasmaTechProduction = Math.round(mineProduction * 0.01 * (data.player.research?.[Research.plasmaTechnology] ?? 0));
+        const plasmaTechProduction = Math.round(mineProduction * 0.0066 * (data.player.research?.[Research.plasmaTechnology] ?? 0));
         const collectorProduction = Math.round(mineProduction * 0.25 * (data.player.playerClass == PlayerClass.collector ? 1 : 0));
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(data.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (data.player.allianceClass == AllianceClass.trader ? 1 : 0));
@@ -44,8 +44,8 @@ export default class MetalMine extends ProductionBuilding {
             + crawlerProduction;
 
         return {
-            metal: production,
-            crystal: 0,
+            metal: 0,
+            crystal: production,
             deuterium: 0,
             energy: 0,
         };
@@ -58,10 +58,10 @@ export default class MetalMine extends ProductionBuilding {
 
         const now = Date.now();
 
-        const items10 = [ItemHash.metalBooster_bronze_1day, ItemHash.metalBooster_bronze_7days];
-        const items20 = [ItemHash.metalBooster_silver_7days, ItemHash.metalBooster_silver_30days, ItemHash.metalBooster_silver_90days];
-        const items30 = [ItemHash.metalBooster_gold_7days, ItemHash.metalBooster_gold_30days, ItemHash.metalBooster_gold_90days];
-        const items40 = [ItemHash.metalBooster_platinum_7days, ItemHash.metalBooster_platinum_30days, ItemHash.metalBooster_platinum_90days];
+        const items10 = [ItemHash.crystalBooster_bronze_1day, ItemHash.crystalBooster_bronze_7days];
+        const items20 = [ItemHash.crystalBooster_silver_7days, ItemHash.crystalBooster_silver_30days, ItemHash.crystalBooster_silver_90days];
+        const items30 = [ItemHash.crystalBooster_gold_7days, ItemHash.crystalBooster_gold_30days, ItemHash.crystalBooster_gold_90days];
+        const items40 = [ItemHash.crystalBooster_platinum_7days, ItemHash.crystalBooster_platinum_30days, ItemHash.crystalBooster_platinum_90days];
 
         if (items10.some(hash => (activeItems[hash] ?? -1) > now)) {
             return 0.1;
@@ -89,16 +89,14 @@ export default class MetalMine extends ProductionBuilding {
 
     private getProductionBoost(position: number) {
         switch (position) {
-            case 8:
-                return 0.35;
+            case 1:
+                return 0.4;
 
-            case 7:
-            case 9:
-                return 0.23;
+            case 2:
+                return 0.3;
 
-            case 6:
-            case 10:
-                return 0.17;
+            case 3:
+                return 0.2;
         }
 
         return 0;
@@ -115,8 +113,8 @@ export default class MetalMine extends ProductionBuilding {
 
     public getCost(level: number): Cost {
         return {
-            metal: Math.round(40 * 1.5 ** level),
-            crystal: Math.round(10 * 1.5 ** level),
+            metal: Math.round(30 * 1.6 ** level),
+            crystal: Math.round(15 * 1.6 ** level),
             deuterium: 0,
             energy: 0,
         };
