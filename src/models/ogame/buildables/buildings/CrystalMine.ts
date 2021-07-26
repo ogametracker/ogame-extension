@@ -6,7 +6,7 @@ import { AllianceClass, PlayerClass, PlayerOfficers } from "@/store/modules/Loca
 import Cost from "../Cost";
 import ProductionBuilding, { ProductionInject } from "./ProductionBuilding";
 
-export default class CrystalMine extends ProductionBuilding {
+class CrystalMine extends ProductionBuilding {
 
     public getProduction(level: number, data: ProductionInject): Cost {
         const boost = this.getProductionBoost(data.currentPlanet.coordinates.position);
@@ -120,3 +120,5 @@ export default class CrystalMine extends ProductionBuilding {
         };
     }
 }
+
+export default new CrystalMine();

@@ -6,7 +6,7 @@ import { AllianceClass, PlayerClass, PlayerOfficers } from "@/store/modules/Loca
 import Cost from "../Cost";
 import ProductionBuilding, { ProductionInject } from "./ProductionBuilding";
 
-export default class DeuteriumSynthesizer extends ProductionBuilding {
+class DeuteriumSynthesizer extends ProductionBuilding {
 
     public getProduction(level: number, data: ProductionInject): Cost {
         const mineProduction = Math.trunc(10 * level * 1.1 ** level * data.ecoSpeed
@@ -104,3 +104,5 @@ export default class DeuteriumSynthesizer extends ProductionBuilding {
         };
     }
 }
+
+export default new DeuteriumSynthesizer();

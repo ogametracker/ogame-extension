@@ -1,7 +1,14 @@
 <template>
-    <div>
-        TODO: Planet wählen Anzahl Zeilen:
-        <input type="number" v-model="rowNumber" />
+    <div v-if="localPlayerData != null">
+        <select v-model="selectedPlanet">
+            <option
+                v-for="planet in planets"
+                :key="planet.id"
+                :value="planet.id"
+            >
+                {{ planet.name }}
+            </option>
+        </select>
         <table>
             <thead>
                 <tr>
@@ -26,51 +33,49 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import LocalPlayerModule from '@/store/modules/LocalPlayerModule';
+    import LocalPlayerModule, { LocalPlayerData, PlanetData } from '@/store/modules/LocalPlayerModule';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import Building from '@/models/Building';
+    import { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
 
     @Component({})
     export default class EmpireAmortisation extends Vue {
-        private rowNumber = 15;
+        private selectedPlanet = OgameMetaData.planetId;
+        private localPlayerData: LocalPlayerData = null!;
+
+        private get planets(): PlanetData[] {
+            return Object.values(this.localPlayerData.planets)
+                .filter(p => !p.isMoon) as PlanetData[];
+        }
 
         async mounted() {
-            const localPlayerData = await LocalPlayerModule.getData();
+            this.localPlayerData = await LocalPlayerModule.getData();
 
-            const currentPlanet = localPlayerData.planets[OgameMetaData.planetId];
+            const currentPlanet = this.localPlayerData.planets[OgameMetaData.planetId];
             if (currentPlanet.isMoon) {
                 return;
             }
 
-            const metalMine = new MetalMine();
-            const metalMineLevel = currentPlanet.buildings?.production?.[Building.metalMine] ?? 0;
-            const metalMineProduction = metalMine.getProduction(metalMineLevel, {
-                player: localPlayerData,
+            const info: ProductionInject = {
+                player: this.localPlayerData,
                 currentPlanet: currentPlanet,
                 ecoSpeed: OgameMetaData.universeSpeed,
-            });
+            };
+
+            const metalMineLevel = currentPlanet.buildings?.production?.[Building.metalMine] ?? 0;
+            const metalMineProduction = MetalMine.getProduction(metalMineLevel, info);
             console.log(metalMineProduction);
 
-            const crystalMine = new CrystalMine();
             const crystalMineLevel = currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0;
-            const crystalMineProduction = crystalMine.getProduction(crystalMineLevel, {
-                player: localPlayerData,
-                currentPlanet: currentPlanet,
-                ecoSpeed: OgameMetaData.universeSpeed,
-            });
+            const crystalMineProduction = CrystalMine.getProduction(crystalMineLevel, info);
             console.log(crystalMineProduction);
 
-            const deuteriumSynthesizer = new DeuteriumSynthesizer();
             const deuteriumSynthesizerLevel = currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0;
-            const deuteriumSynthesizerProduction = deuteriumSynthesizer.getProduction(deuteriumSynthesizerLevel, {
-                player: localPlayerData,
-                currentPlanet: currentPlanet,
-                ecoSpeed: OgameMetaData.universeSpeed,
-            });
+            const deuteriumSynthesizerProduction = DeuteriumSynthesizer.getProduction(deuteriumSynthesizerLevel, info);
             console.log(deuteriumSynthesizerProduction);
         }
     }
