@@ -34,10 +34,17 @@
                     label="LOCA: Current Plasmatech?"
                     v-model="options.plasmaTechnology"
                 />
-                <checkbox-button label="LOCA: Items?" v-model="options.items" />
+                <checkbox-button
+                    label="LOCA: Current Items?"
+                    v-model="options.items"
+                />
+                <checkbox-button
+                    label="LOCA: Geologist?"
+                    v-model="options.geologist"
+                />
                 <checkbox-button
                     label="LOCA: Commandstaff?"
-                    v-model="options.officers"
+                    v-model="options.commandStaff"
                 />
                 <checkbox-button
                     label="LOCA: Current Classes?"
@@ -75,7 +82,7 @@
             </div>
         </div>
 
-        <grid-table sticky-header :columns="cols" style="min-height: 100px;">
+        <grid-table sticky-header :columns="cols" style="min-height: 100px">
             <grid-thead>
                 <grid-tr>
                     <grid-cell>LOCA: Gebäude</grid-cell>
@@ -177,7 +184,8 @@
             crawlerOverload: true,
             plasmaTechnology: true,
             items: true,
-            officers: true,
+            geologist: true,
+            commandStaff: true,
             classes: true,
         };
 
@@ -209,11 +217,11 @@
                 player: {
                     ...this.localPlayerData,
                     officers: {
-                        commander: this.options.officers,
-                        admiral: this.options.officers,
-                        technocrat: this.options.officers,
-                        geologist: this.options.officers,
-                        engineer: this.options.officers,
+                        commander: this.options.commandStaff,
+                        admiral: this.options.commandStaff,
+                        technocrat: this.options.commandStaff,
+                        geologist: this.options.geologist,
+                        engineer: this.options.commandStaff,
                     },
                     research: {
                         ...this.localPlayerData.research,
@@ -337,12 +345,14 @@
             this.options.crawlerOverload = this.localPlayerData.playerClass == PlayerClass.collector;
             this.options.items = Object.values(currentPlanet.activeItems).some(v => v != null && v > Date.now());
 
-            const officers = this.localPlayerData.officers.commander
-                || this.localPlayerData.officers.admiral
-                || this.localPlayerData.officers.geologist
-                || this.localPlayerData.officers.engineer
-                || this.localPlayerData.officers.technocrat;
-            this.options.officers = officers;
+            const commandStaff = this.localPlayerData.officers.commander
+                && this.localPlayerData.officers.admiral
+                && this.localPlayerData.officers.geologist
+                && this.localPlayerData.officers.engineer
+                && this.localPlayerData.officers.technocrat;
+
+            this.options.geologist = this.localPlayerData.officers.geologist;
+            this.options.commandStaff = commandStaff;
         }
 
         private formatTime(timeInHours: number) {
