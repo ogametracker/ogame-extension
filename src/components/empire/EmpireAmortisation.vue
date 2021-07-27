@@ -1,5 +1,8 @@
 <template>
-    <div v-if="localPlayerData != null && settings != null">
+    <div
+        v-if="localPlayerData != null && settings != null"
+        class="amortisation"
+    >
         <div class="options">
             <div>
                 <div>LOCA: Planet</div>
@@ -72,7 +75,7 @@
             </div>
         </div>
 
-        <grid-table sticky-header :columns="cols" style="max-height: 400px">
+        <grid-table sticky-header :columns="cols" style="min-height: 100px;">
             <grid-thead>
                 <grid-tr>
                     <grid-cell>LOCA: Gebäude</grid-cell>
@@ -385,6 +388,7 @@
     }
 
     .options {
+        justify-content: start;
         display: inline-grid;
         grid-template-columns: repeat(2, auto);
         grid-template-rows: repeat(2, auto);
@@ -393,5 +397,11 @@
 
         row-gap: 8px;
         margin-bottom: 16px;
+    }
+
+    .amortisation {
+        max-height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
     }
 </style>
