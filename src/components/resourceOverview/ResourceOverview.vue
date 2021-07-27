@@ -17,7 +17,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import TabView, { TabViewItem } from "../common/TabView.vue";
+    import { TabViewItem } from "../common/TabView.vue";
     import ResourceOverviewChart, { ResourcesOverviewChartDataset } from './ResourceOverviewChart.vue';
     import ResourceOverviewTable from './ResourceOverviewTable.vue';
     import i18n from "@/i18n";
@@ -31,7 +31,6 @@
         components: {
             ResourceOverviewChart,
             ResourceOverviewTable,
-            TabView,
         },
     })
     export default class ResourceOverviewStats extends Vue {

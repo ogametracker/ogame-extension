@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
+    import { TabViewItem } from "@/components/common/TabView.vue";
     import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import BattlesResourcesChart from "./BattlesResourcesChart.vue";
@@ -20,7 +20,6 @@
         components: {
             BattlesResourcesChart,
             BattlesResourcesTables,
-            TabView,
         },
     })
     export default class BattlesResources extends Vue {

@@ -11,7 +11,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
+    import { TabViewItem } from "@/components/common/TabView.vue";
     import ExpeditionOverviewChart from "./ExpeditionOverviewChart.vue";
     import ExpeditionOverviewTables from "./ExpeditionOverviewTables.vue";
     import i18n from "@/i18n";
@@ -20,7 +20,6 @@
         components: {
             ExpeditionOverviewChart,
             ExpeditionOverviewTables,
-            TabView,
         },
     })
     export default class ExpeditionOverview extends Vue {

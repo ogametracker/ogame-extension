@@ -11,7 +11,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
+    import { TabViewItem } from "@/components/common/TabView.vue";
     import DebrisFieldOverviewChart from "./DebrisFieldOverviewChart.vue";
     import DebrisFieldOverviewTables from "./DebrisFieldOverviewTables.vue";
     import i18n from "@/i18n";
@@ -20,7 +20,6 @@
         components: {
             DebrisFieldOverviewChart,
             DebrisFieldOverviewTables,
-            TabView,
         },
     })
     export default class DebrisFieldOverview extends Vue {

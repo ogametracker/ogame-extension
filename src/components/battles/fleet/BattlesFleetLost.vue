@@ -12,13 +12,12 @@
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
     import BattlesFleetLostChart from "./BattlesFleetLostChart.vue";
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
+    import { TabViewItem } from "@/components/common/TabView.vue";
     import i18n from "@/i18n";
 
     @Component({
         components: {
             BattlesFleetLostChart,
-            TabView,
         },
     })
     export default class BattlesFleetLost extends Vue {

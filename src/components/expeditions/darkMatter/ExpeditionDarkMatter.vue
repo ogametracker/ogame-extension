@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
-import i18n from "@/i18n";
+    import { TabViewItem } from "@/components/common/TabView.vue";
+    import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import ExpeditionDarkMatterChart from "./ExpeditionDarkMatterChart.vue";
     import ExpeditionDarkMatterTables from "./ExpeditionDarkMatterTables.vue";
@@ -20,7 +20,6 @@ import i18n from "@/i18n";
         components: {
             ExpeditionDarkMatterChart,
             ExpeditionDarkMatterTables,
-            TabView,
         },
     })
     export default class ExpeditionDarkMatter extends Vue {
@@ -32,7 +31,7 @@ import i18n from "@/i18n";
                 },
                 {
                     name: 'tables',
-                    title:  i18n.messages.extension.tables,
+                    title: i18n.messages.extension.tables,
                 },
             ];
         }

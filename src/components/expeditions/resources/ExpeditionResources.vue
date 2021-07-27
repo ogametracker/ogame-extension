@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-    import TabView, { TabViewItem } from "@/components/common/TabView.vue";
-import i18n from "@/i18n";
+    import { TabViewItem } from "@/components/common/TabView.vue";
+    import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import ExpeditionResourcesChart from "./ExpeditionResourcesChart.vue";
     import ExpeditionResourcesTables from "./ExpeditionResourcesTables.vue";
@@ -20,7 +20,6 @@ import i18n from "@/i18n";
         components: {
             ExpeditionResourcesChart,
             ExpeditionResourcesTables,
-            TabView,
         },
     })
     export default class ExpeditionResources extends Vue {

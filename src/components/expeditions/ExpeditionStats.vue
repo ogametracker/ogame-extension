@@ -23,7 +23,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import TabView, { TabViewItem } from "../common/TabView.vue";
+    import { TabViewItem } from "../common/TabView.vue";
     import ExpeditionOverview from "./overview/ExpeditionOverview.vue";
     import ExpeditionResources from "./resources/ExpeditionResources.vue";
     import ExpeditionFleet from "./fleet/ExpeditionFleet.vue";
@@ -41,7 +41,6 @@
             ExpeditionDarkMatter,
             ExpeditionItemChart,
             ExpeditionTypeDistributionChart,
-            TabView,
         },
     })
     export default class ExpeditionStats extends Vue {

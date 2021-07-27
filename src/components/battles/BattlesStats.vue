@@ -14,7 +14,7 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import TabView, { TabViewItem } from "../common/TabView.vue";
+    import { TabViewItem } from "@/components/common/TabView.vue";
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
     import BattlesFleetLost from "./fleet/BattlesFleetLost.vue";
@@ -26,7 +26,6 @@
             BattlesOverview,
             BattlesResources,
             BattlesFleetLost,
-            TabView,
         },
     })
     export default class BattleStats extends Vue {
