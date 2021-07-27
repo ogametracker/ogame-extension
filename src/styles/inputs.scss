@@ -1,8 +1,13 @@
-input,
+input:not([type]),
+input[type="text"],
+input[type="number"],
 select {
     color: white !important;
+    background: rgba(var(--color), 0.1) !important;
     font-size: 14px;
     border: 0 !important;
+    padding: 8px;
+    visibility: visible !important;
 
     &:focus {
         outline: none;

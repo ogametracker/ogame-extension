@@ -12,9 +12,9 @@ class CrystalMine extends ProductionBuilding {
         const boost = this.getProductionBoost(data.currentPlanet.coordinates.position);
 
         const baseProduction = Math.trunc(15 * data.ecoSpeed * (1 + boost));
-        const mineProduction = Math.trunc(20 * data.ecoSpeed * (1 + boost) * level * 1.1 ** level * (data.currentPlanet.productionSettings?.[Building.crystalMine] ?? 100) / 100);
+        const mineProduction = Math.trunc(20 * data.ecoSpeed * (1 + boost) * level * 1.1 ** level * data.currentPlanet.productionSettings[Building.crystalMine] / 100);
         const geologistProduction = Math.round(mineProduction * 0.1 * (data.player.officers.geologist ? 1 : 0));
-        const plasmaTechProduction = Math.round(mineProduction * 0.0066 * (data.player.research?.[Research.plasmaTechnology] ?? 0));
+        const plasmaTechProduction = Math.round(mineProduction * 0.0066 * data.player.research[Research.plasmaTechnology]);
         const collectorProduction = Math.round(mineProduction * 0.25 * (data.player.playerClass == PlayerClass.collector ? 1 : 0));
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(data.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (data.player.allianceClass == AllianceClass.trader ? 1 : 0));
@@ -22,15 +22,15 @@ class CrystalMine extends ProductionBuilding {
 
         const maxCrawlers = Math.round(
             (
-                (data.currentPlanet.buildings?.production?.[Building.metalMine] ?? 0)
-                + (data.currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0)
-                + (data.currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0)
+                data.currentPlanet.buildings.production[Building.metalMine]
+                + data.currentPlanet.buildings.production[Building.crystalMine]
+                + data.currentPlanet.buildings.production[Building.deuteriumSynthesizer]
             ) * 8
             * (data.player.officers.geologist ? 1.1 : 1)
         );
-        const crawlerCount = Math.min(maxCrawlers, data.currentPlanet.ships?.[Ship.crawler] ?? 0);
+        const crawlerCount = Math.min(maxCrawlers, data.currentPlanet.ships[Ship.crawler]);
         const crawlerProductivity = data.player.playerClass == PlayerClass.collector ? 1.5 : 1;
-        const crawlerBoost = Math.min(0.5, 0.0002 * crawlerCount * crawlerProductivity * (data.currentPlanet.productionSettings?.[Ship.crawler] ?? 100) / 100);
+        const crawlerBoost = Math.min(0.5, 0.0002 * crawlerCount * crawlerProductivity * data.currentPlanet.productionSettings[Ship.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
         const production = baseProduction
@@ -51,11 +51,7 @@ class CrystalMine extends ProductionBuilding {
         };
     }
 
-    private getItemBoost(activeItems?: Partial<Record<ItemHash, number | undefined>>) {
-        if (activeItems == null) {
-            return 0;
-        }
-
+    private getItemBoost(activeItems: Partial<Record<ItemHash, number | undefined>>) {
         const now = Date.now();
 
         const items10 = [ItemHash.crystalBooster_bronze_1day, ItemHash.crystalBooster_bronze_7days];

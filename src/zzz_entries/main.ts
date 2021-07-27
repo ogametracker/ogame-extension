@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import App from '@/components/App.vue';
 
-// include icon as global component
-import Icon from '@/components/common/Icon.vue';
-Vue.component('icon', Icon);
+// include global components
+import '@/components/common';
 
 // import custom styles
 import '@/styles/index.scss';

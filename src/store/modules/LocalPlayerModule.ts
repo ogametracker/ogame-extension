@@ -14,17 +14,17 @@ export interface PlanetDataBase {
     name: string;
     coordinates: Coordinates;
 
-    defense?: DefenseCount;
-    activeItems?: Partial<Record<ItemHash, number | undefined>>; 
+    defense: DefenseCount;
+    activeItems: Partial<Record<ItemHash, number | undefined>>;
 }
 
 export interface PlanetData extends PlanetDataBase {
     isMoon: false;
-    maxTemperature?: number;
-    buildings?: PlanetBuildingLevels;
-    ships?: PlanetShipCount;
+    maxTemperature: number;
+    buildings: PlanetBuildingLevels;
+    ships: PlanetShipCount;
 
-    productionSettings?: ProductionSettings;
+    productionSettings: ProductionSettings;
 }
 
 export type ProductionPercentage = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
@@ -42,13 +42,13 @@ export interface ProductionSettings {
 
 export interface MoonData extends PlanetDataBase {
     isMoon: true;
-    buildings?: MoonBuildingLevels;
-    ships?: MoonShipCount;
+    buildings: MoonBuildingLevels;
+    ships: MoonShipCount;
 }
 
 
 export interface PlanetBuildingLevels {
-    production?: {
+    production: {
         [Building.metalMine]: number;
         [Building.crystalMine]: number;
         [Building.deuteriumSynthesizer]: number;
@@ -61,7 +61,7 @@ export interface PlanetBuildingLevels {
         [Building.fusionReactor]: number;
     };
 
-    facilities?: {
+    facilities: {
         [Building.roboticsFactory]: number;
         [Building.shipyard]: number;
         [Building.researchLab]: number;
@@ -74,13 +74,13 @@ export interface PlanetBuildingLevels {
 }
 
 export interface MoonBuildingLevels {
-    production?: {
+    production: {
         [Building.metalStorage]: number;
         [Building.crystalStorage]: number;
         [Building.deuteriumTank]: number;
     };
 
-    facilities?: {
+    facilities: {
         [Building.roboticsFactory]: number;
         [Building.shipyard]: number;
 
@@ -166,9 +166,9 @@ export enum AllianceClass {
 
 export interface LocalPlayerData {
     planets: Record<number, PlanetData | MoonData>;
-    research: ResearchLevels | null;
-    playerClass: PlayerClass | null;
-    allianceClass: AllianceClass | null;
+    research: ResearchLevels;
+    playerClass: PlayerClass;
+    allianceClass: AllianceClass;
     officers: PlayerOfficers;
 }
 
@@ -184,9 +184,29 @@ export interface PlayerOfficers {
 class LocalPlayerModule extends Vue {
     private defaultData: LocalPlayerData = {
         planets: {},
-        research: null,
-        playerClass: null,
-        allianceClass: null,
+        research: {
+            [Research.energyTechnology]: 0,
+            [Research.laserTechnology]: 0,
+            [Research.ionTechnology]: 0,
+            [Research.hyperspaceTechnology]: 0,
+            [Research.plasmaTechnology]: 0,
+
+            [Research.combustionDrive]: 0,
+            [Research.impulseDrive]: 0,
+            [Research.hyperspaceDrive]: 0,
+
+            [Research.espionageTechnology]: 0,
+            [Research.computerTechnology]: 0,
+            [Research.astrophysics]: 0,
+            [Research.intergalacticResearchNetwork]: 0,
+            [Research.gravitonTechnology]: 0,
+
+            [Research.weaponsTechnology]: 0,
+            [Research.shieldingTechnology]: 0,
+            [Research.armorTechnology]: 0,
+        },
+        playerClass: PlayerClass.none,
+        allianceClass: AllianceClass.none,
         officers: {
             admiral: false,
             commander: false,

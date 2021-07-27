@@ -1,59 +1,127 @@
 <template>
     <div v-if="localPlayerData != null && settings != null">
-        <select v-model="selectedPlanet">
-            <option
-                v-for="planet in planets"
-                :key="planet.id"
-                :value="planet.id"
-            >
-                {{ planet.name }}
-            </option>
-        </select>
+        <div class="options">
+            <div>
+                <div>LOCA: Planet</div>
+                <div>
+                    <select v-model.number="selectedPlanet">
+                        <option
+                            v-for="planet in planets"
+                            :key="planet.id"
+                            :value="planet.id"
+                        >
+                            {{ planet.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>LOCA: Gebäude</th>
-                    <th>LOCA: Level</th>
-                    <th>LOCA: Cost Metal</th>
-                    <th>LOCA: Cost Crystal</th>
-                    <th>LOCA: Cost (MSU)</th>
-                    <th>LOCA: Production/h</th>
-                    <th>LOCA: Production/h (MSU)</th>
-                    <th>LOCA: Amortisation Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(row, i) in rows" :key="i">
-                    <td>
+            <div>
+                <div>LOCA: Options</div>
+                <br />
+                <checkbox-button
+                    label="LOCA: Max. Crawlers?"
+                    v-model="options.crawler"
+                />
+                <checkbox-button
+                    label="LOCA: Crawler Overload?"
+                    v-model="options.crawlerOverload"
+                />
+                <checkbox-button
+                    label="LOCA: Current Plasmatech?"
+                    v-model="options.plasmaTechnology"
+                />
+                <checkbox-button label="LOCA: Items?" v-model="options.items" />
+                <checkbox-button
+                    label="LOCA: Commandstaff?"
+                    v-model="options.officers"
+                />
+                <checkbox-button
+                    label="LOCA: Current Classes?"
+                    v-model="options.classes"
+                />
+            </div>
+
+            <div>
+                <div>LOCA: MSU rates</div>
+                <div>
+                    1:{{ settings.msuConversionRates.crystal }}:{{
+                        settings.msuConversionRates.deuterium
+                    }}
+                </div>
+            </div>
+
+            <div>
+                <div>LOCA: Buildings</div>
+                <br />
+                <checkbox-button
+                    label="LOCA: Metallmine"
+                    :color="colorMetal"
+                    v-model="options.metalMine"
+                />
+                <checkbox-button
+                    label="LOCA: Kristallmine"
+                    :color="colorCrystal"
+                    v-model="options.crystalMine"
+                />
+                <checkbox-button
+                    label="LOCA: Deuterium-Synthetisierer"
+                    :color="colorDeuterium"
+                    v-model="options.deuteriumSynthesizer"
+                />
+            </div>
+        </div>
+
+        <grid-table sticky-header :columns="cols" style="max-height: 400px">
+            <grid-thead>
+                <grid-tr>
+                    <grid-cell>LOCA: Gebäude</grid-cell>
+                    <grid-cell>LOCA: Stufe</grid-cell>
+                    <grid-cell>LOCA: Cost Metal</grid-cell>
+                    <grid-cell>LOCA: Cost Crystal</grid-cell>
+                    <grid-cell>LOCA: Cost (MSU)</grid-cell>
+                    <grid-cell>LOCA: Production/h</grid-cell>
+                    <grid-cell>LOCA: Production/h (MSU)</grid-cell>
+                    <grid-cell>LOCA: Amortisation Time</grid-cell>
+                </grid-tr>
+            </grid-thead>
+            <grid-tbody>
+                <grid-tr v-for="(row, i) in rows" :key="i">
+                    <grid-cell>
                         {{ $i18n.messages.ogame.buildings[row.buildingType] }}
                         <span
                             class="color-indicator"
                             :style="{
-                                '--color': getColorVar(row.color),
+                                background: row.color,
                             }"
                         />
-                    </td>
-                    <td>{{ row.level }}</td>
-                    <td>{{ $i18n.formatNumber(row.cost.metal) }}</td>
-                    <td>{{ $i18n.formatNumber(row.cost.crystal) }}</td>
-                    <td>{{ $i18n.formatNumber(row.msuCost) }}</td>
-                    <td>
+                    </grid-cell>
+                    <grid-cell>{{ row.level }}</grid-cell>
+                    <grid-cell>{{
+                        $i18n.formatNumber(row.cost.metal)
+                    }}</grid-cell>
+                    <grid-cell>{{
+                        $i18n.formatNumber(row.cost.crystal)
+                    }}</grid-cell>
+                    <grid-cell>{{ $i18n.formatNumber(row.msuCost) }}</grid-cell>
+                    <grid-cell>
                         {{
                             $i18n.formatNumber(
                                 Math.max(
-                                row.production.metal,
-                                row.production.crystal,
-                                row.production.deuterium
-                            ))
-
+                                    row.production.metal,
+                                    row.production.crystal,
+                                    row.production.deuterium
+                                )
+                            )
                         }}
-                    </td>
-                    <td>{{ $i18n.formatNumber(row.msuProduction) }}</td>
-                    <td>{{ row.rate }}</td>
-                </tr>
-            </tbody>
-        </table>
+                    </grid-cell>
+                    <grid-cell>{{
+                        $i18n.formatNumber(row.msuProduction)
+                    }}</grid-cell>
+                    <grid-cell>{{ formatTime(row.timeInHours) }}</grid-cell>
+                </grid-tr>
+            </grid-tbody>
+        </grid-table>
     </div>
 </template>
 
@@ -62,7 +130,7 @@
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import LocalPlayerModule, { LocalPlayerData, MoonData, PlanetData } from '@/store/modules/LocalPlayerModule';
+    import LocalPlayerModule, { AllianceClass, LocalPlayerData, MoonData, PlanetData, PlayerClass } from '@/store/modules/LocalPlayerModule';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import Building from '@/models/Building';
     import ProductionBuilding, { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
@@ -70,13 +138,16 @@
     import getMsu from '@/utils/getMsu';
     import Cost from '@/models/ogame/buildables/Cost';
     import { HexColor, hexColorToRGB } from '@/utils/colors';
+    import i18n from '@/i18n';
+    import Ship from '@/models/Ship';
+    import Research from '@/models/Research';
 
     type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
 
     interface AmortisationResult {
         buildingType: ProductionBuildingType;
         level: number;
-        rate: number;
+        timeInHours: number;
         msuCost: number;
         cost: Cost;
         production: Cost;
@@ -88,10 +159,36 @@
     export default class EmpireAmortisation extends Vue {
         private selectedPlanet = OgameMetaData.planetId;
         private localPlayerData: LocalPlayerData = null!;
-        private currentPlanet: PlanetData | MoonData = null!;
         private readonly settings = SettingsModule.settings;
 
-        private rowCount = 15;
+        private readonly cols = ['200px', 'auto', '1fr', '1fr', '1fr', 'auto', 'auto', '1fr',];
+
+        private readonly maxLevel = 70;
+
+        private readonly options = {
+            metalMine: true,
+            crystalMine: true,
+            deuteriumSynthesizer: true,
+
+            crawler: true,
+            crawlerOverload: true,
+            plasmaTechnology: true,
+            items: true,
+            officers: true,
+            classes: true,
+        };
+
+        private get colorMetal() {
+            return this.settings.charts.colors.resources.metal;
+        }
+
+        private get colorCrystal() {
+            return this.settings.charts.colors.resources.crystal;
+        }
+
+        private get colorDeuterium() {
+            return this.settings.charts.colors.resources.deuterium;
+        }
 
         private getColorVar(color: HexColor): string {
             return hexColorToRGB(color).replace(/\s+/g, ', ');
@@ -106,34 +203,70 @@
             }
 
             const info: ProductionInject = {
-                player: this.localPlayerData,
-                currentPlanet: this.currentPlanet as PlanetData,
+                player: {
+                    ...this.localPlayerData,
+                    officers: {
+                        commander: this.options.officers,
+                        admiral: this.options.officers,
+                        technocrat: this.options.officers,
+                        geologist: this.options.officers,
+                        engineer: this.options.officers,
+                    },
+                    research: {
+                        ...this.localPlayerData.research,
+                        [Research.plasmaTechnology]: this.options.plasmaTechnology ? this.localPlayerData.research[Research.plasmaTechnology] : 0,
+                    },
+                    playerClass: this.options.classes ? this.localPlayerData.playerClass : PlayerClass.none,
+                    allianceClass: this.options.classes ? this.localPlayerData.allianceClass : AllianceClass.none,
+                },
+                currentPlanet: {
+                    ...currentPlanet,
+                    productionSettings: {
+                        ...currentPlanet.productionSettings,
+                        [Ship.crawler]: this.options.crawlerOverload ? 150 : 100,
+                    },
+                    ships: {
+                        ...currentPlanet.ships,
+                        [Ship.crawler]: this.options.crawler ? 64000 : 0,
+                    }
+                },
                 ecoSpeed: OgameMetaData.universeSpeed,
             };
 
             const levels: Record<ProductionBuildingType, number> = {
-                [Building.metalMine]: currentPlanet.buildings?.production?.[Building.metalMine] ?? 0,
-                [Building.crystalMine]: currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0,
-                [Building.deuteriumSynthesizer]: currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0,
+                [Building.metalMine]: currentPlanet.buildings.production[Building.metalMine],
+                [Building.crystalMine]: currentPlanet.buildings.production[Building.crystalMine],
+                [Building.deuteriumSynthesizer]: currentPlanet.buildings.production[Building.deuteriumSynthesizer],
             };
             const buildings: Record<ProductionBuildingType, ProductionBuilding> = {
                 [Building.metalMine]: MetalMine,
                 [Building.crystalMine]: CrystalMine,
                 [Building.deuteriumSynthesizer]: DeuteriumSynthesizer,
             };
-            const buildingTypes: ProductionBuildingType[] = [Building.metalMine, Building.crystalMine, Building.deuteriumSynthesizer];
+
+            const buildingTypes: ProductionBuildingType[] = [];
+            if (this.options.metalMine) {
+                buildingTypes.push(Building.metalMine);
+            }
+            if (this.options.crystalMine) {
+                buildingTypes.push(Building.crystalMine);
+            }
+            if (this.options.deuteriumSynthesizer) {
+                buildingTypes.push(Building.deuteriumSynthesizer);
+            }
 
             const colors: Record<ProductionBuildingType, HexColor> = {
-                [Building.metalMine]: this.settings.charts.colors.resources.metal,
-                [Building.crystalMine]: this.settings.charts.colors.resources.crystal,
-                [Building.deuteriumSynthesizer]: this.settings.charts.colors.resources.deuterium,
+                [Building.metalMine]: this.colorMetal,
+                [Building.crystalMine]: this.colorCrystal,
+                [Building.deuteriumSynthesizer]: this.colorDeuterium,
             };
 
-            for (let i = 0; i < this.rowCount; i++) {
+            //eslint-disable-next-line no-constant-condition
+            while (true) {
                 let best: AmortisationResult = {
                     buildingType: null!,
                     level: null!,
-                    rate: Number.MAX_VALUE,
+                    timeInHours: Number.MAX_VALUE,
                     cost: null!,
                     production: null!,
                     msuCost: null!,
@@ -144,6 +277,9 @@
                 for (const buildingType of buildingTypes) {
                     const building = buildings[buildingType];
                     const level = levels[buildingType] + 1;
+                    if (level > this.maxLevel) {
+                        continue;
+                    }
 
                     const cost = building.getCost(level);
                     const msuCost = getMsu(cost, this.settings.msuConversionRates);
@@ -151,12 +287,12 @@
                     const production = building.getProduction(level, info);
                     const msuProduction = getMsu(production, this.settings.msuConversionRates);
 
-                    const rate = msuCost / msuProduction;
-                    if (rate < best.rate) {
+                    const timeInHours = msuCost / msuProduction;
+                    if (timeInHours < best.timeInHours) {
                         best = {
                             buildingType,
                             level,
-                            rate,
+                            timeInHours,
                             cost,
                             production,
                             msuCost,
@@ -166,8 +302,11 @@
                     }
                 }
 
-                levels[best.buildingType]++;
+                if (best.buildingType == null) {
+                    break;
+                }
 
+                levels[best.buildingType]++;
                 result.push(best);
             }
 
@@ -179,20 +318,80 @@
                 .filter(p => !p.isMoon) as PlanetData[];
         }
 
-        async mounted() {
+        private async mounted() {
             this.localPlayerData = await LocalPlayerModule.getData();
-            this.currentPlanet = this.localPlayerData.planets[OgameMetaData.planetId];
+
+            this.updateOptions();
+        }
+
+        private updateOptions() {
+            const currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
+            if (currentPlanet.isMoon) {
+                return;
+            }
+
+            this.options.crawler = currentPlanet.ships[Ship.crawler] > 0;
+            this.options.crawlerOverload = this.localPlayerData.playerClass == PlayerClass.collector;
+            this.options.items = Object.values(currentPlanet.activeItems).some(v => v != null && v > Date.now());
+
+            const officers = this.localPlayerData.officers.commander
+                || this.localPlayerData.officers.admiral
+                || this.localPlayerData.officers.geologist
+                || this.localPlayerData.officers.engineer
+                || this.localPlayerData.officers.technocrat;
+            this.options.officers = officers;
+        }
+
+        private formatTime(timeInHours: number) {
+            let totalTime = Math.ceil(timeInHours * 60 * 60);
+
+            const seconds = totalTime % 60;
+            totalTime = (totalTime - seconds) / 60;
+
+            const minutes = totalTime % 60;
+            totalTime = (totalTime - minutes) / 60;
+
+            const hours = totalTime % 24;
+            totalTime = (totalTime - hours) / 24;
+
+            const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}`;
+            if (totalTime == 0) {
+                return time;
+            }
+
+            const days = totalTime % 7;
+            totalTime = (totalTime - days) / 7;
+
+            const timeWithDays = `${days}d ` + time;
+            if (totalTime == 0) {
+                return timeWithDays;
+            }
+
+            const weeks = totalTime;
+
+            return `${i18n.formatNumber(weeks)}w ` + timeWithDays;
         }
     }
 </script>
 
 <style lang="scss" scoped>
     .color-indicator {
-        background: rgb(var(--color));
-        height: 16px;
-        width: 16px;
+        height: 8px;
+        width: 8px;
         display: inline-block;
-        border-radius: 3px;
+        border-radius: 4px;
         margin-left: 4px;
+        margin-bottom: 2px;
+    }
+
+    .options {
+        display: inline-grid;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: repeat(2, auto);
+        align-items: center;
+        justify-content: center;
+
+        row-gap: 8px;
+        margin-bottom: 16px;
     }
 </style>

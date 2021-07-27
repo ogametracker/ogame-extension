@@ -40,23 +40,12 @@
         }
     }
 
-    input:not([type]),
-    input[type="text"],
-    input[type="number"],
-    select {
-        background: rgba(200, 200, 255, 0.01) !important;
-        border: none;
-        font-size: 14px;
-    }
-
     .value-col {
         input[type="number"] {
-            padding: 8px;
             width: 64px;
         }
 
         select {
-            padding: 8px;
             width: 96px;
         }
     }

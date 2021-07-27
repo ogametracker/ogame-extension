@@ -85,6 +85,141 @@ function verifyNumbers(data: LocalPlayerData) {
     //TODO: verify that there are no NaNs in the data
 }
 
+function getDefaultPlanetData(): PlanetData {
+    return {
+        activeItems: {},
+        isMoon: false,
+        name: '',
+        maxTemperature: 0,
+        id: 0,
+        coordinates: { galaxy: 0, position: 0, system: 0, type: PlanetType.planet },
+        buildings: {
+            production: {
+                [Building.metalMine]: 0,
+                [Building.crystalMine]: 0,
+                [Building.deuteriumSynthesizer]: 0,
+                [Building.metalStorage]: 0,
+                [Building.crystalStorage]: 0,
+                [Building.deuteriumTank]: 0,
+                [Building.solarPlant]: 0,
+                [Building.fusionReactor]: 0,
+            },
+            facilities: {
+                [Building.roboticsFactory]: 0,
+                [Building.shipyard]: 0,
+                [Building.researchLab]: 0,
+                [Building.allianceDepot]: 0,
+                [Building.missileSilo]: 0,
+                [Building.naniteFactory]: 0,
+                [Building.terraformer]: 0,
+                [Building.spaceDock]: 0,
+            }
+        },
+        defense: {
+            [Defense.rocketLauncher]: 0,
+            [Defense.lightLaser]: 0,
+            [Defense.heavyLaser]: 0,
+            [Defense.gaussCannon]: 0,
+            [Defense.ionCannon]: 0,
+            [Defense.plasmaTurret]: 0,
+            [Defense.smallShieldDome]: false,
+            [Defense.largeShieldDome]: false,
+            [Defense.interplanetaryMissile]: 0,
+            [Defense.ballisticMissile]: 0,
+        },
+        ships: {
+            [Ship.lightFighter]: 0,
+            [Ship.heavyFighter]: 0,
+            [Ship.cruiser]: 0,
+            [Ship.battleship]: 0,
+
+            [Ship.battlecruiser]: 0,
+            [Ship.bomber]: 0,
+            [Ship.destroyer]: 0,
+            [Ship.deathStar]: 0,
+
+            [Ship.reaper]: 0,
+            [Ship.pathfinder]: 0,
+
+            [Ship.smallCargo]: 0,
+            [Ship.largeCargo]: 0,
+            [Ship.colonyShip]: 0,
+            [Ship.recycler]: 0,
+            [Ship.espionageProbe]: 0,
+
+            [Ship.crawler]: 0,
+            [Ship.solarSatellite]: 0,
+        },
+        productionSettings: {
+            [Building.metalMine]: 100,
+            [Building.crystalMine]: 100,
+            [Building.deuteriumSynthesizer]: 100,
+            [Building.solarPlant]: 100,
+            [Building.fusionReactor]: 100,
+            [Ship.crawler]: 100,
+            [Ship.solarSatellite]: 100,
+        },
+    };
+}
+
+function getDefaultMoonData(): MoonData {
+    return {
+        id: 0,
+        name: '',
+        isMoon: true,
+        activeItems: {},
+        coordinates: { galaxy: 0, position: 0, system: 0, type: PlanetType.planet },
+        buildings: {
+            production: {
+                [Building.metalStorage]: 0,
+                [Building.crystalStorage]: 0,
+                [Building.deuteriumTank]: 0,
+            },
+            facilities: {
+                [Building.roboticsFactory]: 0,
+                [Building.shipyard]: 0,
+                [Building.lunarBase]: 0,
+                [Building.sensorPhalanx]: 0,
+                [Building.jumpGate]: 0,
+            }
+        },
+        defense: {
+            [Defense.rocketLauncher]: 0,
+            [Defense.lightLaser]: 0,
+            [Defense.heavyLaser]: 0,
+            [Defense.gaussCannon]: 0,
+            [Defense.ionCannon]: 0,
+            [Defense.plasmaTurret]: 0,
+            [Defense.smallShieldDome]: false,
+            [Defense.largeShieldDome]: false,
+            [Defense.interplanetaryMissile]: 0,
+            [Defense.ballisticMissile]: 0,
+        },
+        ships: {
+            [Ship.lightFighter]: 0,
+            [Ship.heavyFighter]: 0,
+            [Ship.cruiser]: 0,
+            [Ship.battleship]: 0,
+
+            [Ship.battlecruiser]: 0,
+            [Ship.bomber]: 0,
+            [Ship.destroyer]: 0,
+            [Ship.deathStar]: 0,
+
+            [Ship.reaper]: 0,
+            [Ship.pathfinder]: 0,
+
+            [Ship.smallCargo]: 0,
+            [Ship.largeCargo]: 0,
+            [Ship.colonyShip]: 0,
+            [Ship.recycler]: 0,
+            [Ship.espionageProbe]: 0,
+
+            [Ship.solarSatellite]: 0,
+        },
+    };
+}
+
 function trackOwnedPlanets(playerData: LocalPlayerData) {
     const planetList = document.querySelector('#planetList') ?? _throw('no #planetList found');
     const planets = planetList.querySelectorAll('.smallplanet');
@@ -93,6 +228,7 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
         // planet
         const planetData = getPlanetData(planet);
         const newPlanetData: PlanetData = {
+            ...getDefaultPlanetData(),
             ...(playerData.planets[planetData.id] as PlanetData | null),
             ...planetData,
         };
@@ -102,6 +238,7 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
         const moonData = getMoonData(planet, planetData.coordinates);
         if (moonData != null) {
             const newMoonData: MoonData = {
+                ...getDefaultMoonData(),
                 ...(playerData.planets[moonData.id] as MoonData | null),
                 ...moonData,
             };
@@ -110,11 +247,11 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
     }
 }
 
-function getPlanetData(planet: Element): PlanetData {
+function getPlanetData(planet: Element): Pick<PlanetData, 'id' | 'isMoon' | 'coordinates' | 'name' | 'maxTemperature'> {
     const id = parseInt(planet.id.split('-')[1], 10);
     const name = planet.querySelector('.planet-name')?.textContent ?? _throw('no planet name found');
     const coords = parseCoordinates(planet.querySelector('.planet-koords')?.textContent ?? _throw('no planet coords found'));
-    
+
     const title = planet.querySelector('a.planetlink')?.getAttribute('title') ?? _throw('no title found');
     const tempRegex = / (?<temp>-?\d+)°C<br\/>/;
     const tempMatch = title.match(tempRegex) ?? _throw('no temperature found');
@@ -129,7 +266,7 @@ function getPlanetData(planet: Element): PlanetData {
     };
 }
 
-function getMoonData(planet: Element, coords: Coordinates): MoonData | null {
+function getMoonData(planet: Element, coords: Coordinates): Pick<MoonData, 'id' | 'isMoon' | 'coordinates' | 'name'> | null {
     const moonlink = planet.querySelector('a.moonlink') as HTMLAnchorElement | null;
     if (moonlink == null) {
         return null;
@@ -262,10 +399,6 @@ function updatePlanetSupplies(planet: PlanetData) {
         facilities: planet.buildings?.facilities,
     };
     planet.buildings = buildings;
-
-
-    const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
-    const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
 }
 
 function updateMoonSupplies(moon: MoonData) {
@@ -279,7 +412,7 @@ function updateMoonSupplies(moon: MoonData) {
             [Building.crystalStorage]: parseInt(crystalStorage, 10),
             [Building.deuteriumTank]: parseInt(deuteriumTank, 10),
         },
-        facilities: moon.buildings?.facilities,
+        facilities: moon.buildings.facilities,
     };
     moon.buildings = buildings;
 }
@@ -317,7 +450,7 @@ function updatePlanetFacilities(planet: PlanetData) {
             [Building.terraformer]: parseInt(terraformer, 10),
             [Building.spaceDock]: parseInt(spaceDock, 10),
         },
-        production: planet.buildings?.production,
+        production: planet.buildings.production,
     };
     planet.buildings = buildings;
 }
@@ -339,7 +472,7 @@ function updateMoonFacilities(moon: MoonData) {
             [Building.sensorPhalanx]: parseInt(sensorPhalanx, 10),
             [Building.jumpGate]: parseInt(jumpGate, 10),
         },
-        production: moon.buildings?.production,
+        production: moon.buildings.production,
     };
     moon.buildings = buildings;
 }
@@ -349,29 +482,8 @@ function trackStationaryShips(data: LocalPlayerData, planetId: number) {
     const crawler = document.querySelector(`[data-technology="${Ship.crawler}"] .amount`)?.getAttribute('data-value') ?? '0'; // no crawlers on moon
     const solarSatellite = document.querySelector(`[data-technology="${Ship.solarSatellite}"] .amount`)?.getAttribute('data-value') ?? _throw('no solarSatellite amount found');
 
-    const curShips = planet.ships ?? {
-        [Ship.lightFighter]: 0,
-        [Ship.heavyFighter]: 0,
-        [Ship.cruiser]: 0,
-        [Ship.battleship]: 0,
-
-        [Ship.battlecruiser]: 0,
-        [Ship.bomber]: 0,
-        [Ship.destroyer]: 0,
-        [Ship.deathStar]: 0,
-
-        [Ship.reaper]: 0,
-        [Ship.pathfinder]: 0,
-
-        [Ship.smallCargo]: 0,
-        [Ship.largeCargo]: 0,
-        [Ship.colonyShip]: 0,
-        [Ship.recycler]: 0,
-        [Ship.espionageProbe]: 0,
-    };
-
     planet.ships = {
-        ...curShips,
+        ...planet.ships,
         [Ship.crawler]: parseInt(crawler, 10),
         [Ship.solarSatellite]: parseInt(solarSatellite, 10),
     };
@@ -379,15 +491,11 @@ function trackStationaryShips(data: LocalPlayerData, planetId: number) {
 
 function trackShips(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
-    const curShips = planet.ships ?? {
-        [Ship.crawler]: 0,
-        [Ship.solarSatellite]: 0,
-    };
 
     const noShips = document.querySelector('#fleet1 #warning');
     if (noShips != null) {
         planet.ships = {
-            ...curShips,
+            ...planet.ships,
             [Ship.lightFighter]: 0,
             [Ship.heavyFighter]: 0,
             [Ship.cruiser]: 0,
@@ -430,7 +538,7 @@ function trackShips(data: LocalPlayerData, planetId: number) {
     const espionageProbe = document.querySelector(`[data-technology="${Ship.espionageProbe}"] .amount`)?.getAttribute('data-value') ?? _throw('no espionageProbe amount found');
 
     planet.ships = {
-        ...curShips,
+        ...planet.ships,
         [Ship.lightFighter]: parseInt(lightFighter, 10),
         [Ship.heavyFighter]: parseInt(heavyFighter, 10),
         [Ship.cruiser]: parseInt(cruiser, 10),
@@ -534,7 +642,6 @@ function trackProductionPercentages(data: LocalPlayerData, planetId: number) {
 
 function trackActiveItems(data: LocalPlayerData, planetId: number) {
     const planet = data.planets[planetId];
-    planet.activeItems ??= {};
 
     const timestamp = parseInt((document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content ?? _throw('no timestamp meta found'), 10);
 
