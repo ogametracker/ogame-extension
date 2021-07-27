@@ -12,7 +12,7 @@ module.exports = {
         configureMultiCompilerWebpack: [
             {
                 entry: {
-                    app: './src/main.ts'
+                    app: './src/zzz_entries/main.ts'
                 },
                 output: {
                     filename: 'app.js',
@@ -21,11 +21,20 @@ module.exports = {
             },
             {
                 entry: {
-                    app: './src/keepActiveItemsTime.ts'
+                    app: './src/zzz_entries/keepActiveItemsTime.ts'
                 },
                 output: {
                     filename: 'keepActiveItemsTime.js',
                     chunkFilename: 'keepActiveItemsTime.chunk-vendors.js'
+                },
+            },
+            {
+                entry: {
+                    app: './src/zzz_entries/attach.ts'
+                },
+                output: {
+                    filename: 'attach.js',
+                    chunkFilename: 'attach.chunk-vendors.js'
                 },
             }
         ]

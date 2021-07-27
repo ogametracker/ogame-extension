@@ -24,6 +24,7 @@
                 "app.css"
             ],
             "js": [
+                "attach.chunk-vendors.js",
                 "attach.js"
             ],
             "run_at": "document_start"

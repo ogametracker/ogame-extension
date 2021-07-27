@@ -1,4 +1,5 @@
 export default {
+    menuItem: 'Statistics',
     total: 'Total',
     chart: 'Chart',
     tables: 'Tables',

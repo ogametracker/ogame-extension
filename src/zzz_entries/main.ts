@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './components/App.vue';
+import App from '@/components/App.vue';
 
 // include icon as global component
 import Icon from '@/components/common/Icon.vue';
@@ -10,21 +10,21 @@ import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
 
-import OgameMetaData from './models/ogame/OgameMetaData';
+import OgameMetaData from '@/models/ogame/OgameMetaData';
 
 // i18n
 import i18n from '@/i18n/';
 i18n.locale = Object.values(LanguageKey).find(lang => lang == OgameMetaData.locale) ?? LanguageKey.de;
 
 // tracking
-import { startTracking } from './tracking';
+import { startTracking } from '@/tracking';
 
 // migrations
-import migrations from './migrations';
+import migrations from '@/migrations';
 
 // register custom chart.js tooltip positioner
 import '@/chartjs/Tooltip.positioners.top';
-import LanguageKey from './i18n/languageKey';
+import LanguageKey from '@/i18n/languageKey';
 
 function mountVue() {
     const app = document.createElement('div');

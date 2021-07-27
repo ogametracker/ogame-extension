@@ -1,5 +1,5 @@
 <template>
-    <div v-if="localPlayerData != null">
+    <div v-if="localPlayerData != null && settings != null">
         <select v-model="selectedPlanet">
             <option
                 v-for="planet in planets"
@@ -9,23 +9,48 @@
                 {{ planet.name }}
             </option>
         </select>
+
         <table>
             <thead>
                 <tr>
-                    <th>LOCA: Gebäude + level</th>
+                    <th>LOCA: Gebäude</th>
+                    <th>LOCA: Level</th>
                     <th>LOCA: Cost Metal</th>
                     <th>LOCA: Cost Crystal</th>
-                    <th>LOCA: Cost MSU</th>
+                    <th>LOCA: Cost (MSU)</th>
+                    <th>LOCA: Production/h</th>
+                    <th>LOCA: Production/h (MSU)</th>
                     <th>LOCA: Amortisation Time</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>LOCA: Abc 13</th>
-                    <th>LOCA: 9.323.622.233</th>
-                    <th>LOCA: 3.108.622.233</th>
-                    <th>LOCA: 16.335.624.222</th>
-                    <th>LOCA: 1y 3w 3d 12h</th>
+                <tr v-for="(row, i) in rows" :key="i">
+                    <td>
+                        {{ $i18n.messages.ogame.buildings[row.buildingType] }}
+                        <span
+                            class="color-indicator"
+                            :style="{
+                                '--color': getColorVar(row.color),
+                            }"
+                        />
+                    </td>
+                    <td>{{ row.level }}</td>
+                    <td>{{ $i18n.formatNumber(row.cost.metal) }}</td>
+                    <td>{{ $i18n.formatNumber(row.cost.crystal) }}</td>
+                    <td>{{ $i18n.formatNumber(row.msuCost) }}</td>
+                    <td>
+                        {{
+                            $i18n.formatNumber(
+                                Math.max(
+                                row.production.metal,
+                                row.production.crystal,
+                                row.production.deuterium
+                            ))
+
+                        }}
+                    </td>
+                    <td>{{ $i18n.formatNumber(row.msuProduction) }}</td>
+                    <td>{{ row.rate }}</td>
                 </tr>
             </tbody>
         </table>
@@ -37,15 +62,117 @@
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import LocalPlayerModule, { LocalPlayerData, PlanetData } from '@/store/modules/LocalPlayerModule';
+    import LocalPlayerModule, { LocalPlayerData, MoonData, PlanetData } from '@/store/modules/LocalPlayerModule';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import Building from '@/models/Building';
-    import { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
+    import ProductionBuilding, { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
+    import SettingsModule from '@/store/modules/SettingsModule';
+    import getMsu from '@/utils/getMsu';
+    import Cost from '@/models/ogame/buildables/Cost';
+    import { HexColor, hexColorToRGB } from '@/utils/colors';
+
+    type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
+
+    interface AmortisationResult {
+        buildingType: ProductionBuildingType;
+        level: number;
+        rate: number;
+        msuCost: number;
+        cost: Cost;
+        production: Cost;
+        msuProduction: number;
+        color: HexColor;
+    }
 
     @Component({})
     export default class EmpireAmortisation extends Vue {
         private selectedPlanet = OgameMetaData.planetId;
         private localPlayerData: LocalPlayerData = null!;
+        private currentPlanet: PlanetData | MoonData = null!;
+        private readonly settings = SettingsModule.settings;
+
+        private rowCount = 15;
+
+        private getColorVar(color: HexColor): string {
+            return hexColorToRGB(color).replace(/\s+/g, ', ');
+        }
+
+        private get rows() {
+            const result: AmortisationResult[] = [];
+
+            const currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
+            if (currentPlanet.isMoon) {
+                return result;
+            }
+
+            const info: ProductionInject = {
+                player: this.localPlayerData,
+                currentPlanet: this.currentPlanet as PlanetData,
+                ecoSpeed: OgameMetaData.universeSpeed,
+            };
+
+            const levels: Record<ProductionBuildingType, number> = {
+                [Building.metalMine]: currentPlanet.buildings?.production?.[Building.metalMine] ?? 0,
+                [Building.crystalMine]: currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0,
+                [Building.deuteriumSynthesizer]: currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0,
+            };
+            const buildings: Record<ProductionBuildingType, ProductionBuilding> = {
+                [Building.metalMine]: MetalMine,
+                [Building.crystalMine]: CrystalMine,
+                [Building.deuteriumSynthesizer]: DeuteriumSynthesizer,
+            };
+            const buildingTypes: ProductionBuildingType[] = [Building.metalMine, Building.crystalMine, Building.deuteriumSynthesizer];
+
+            const colors: Record<ProductionBuildingType, HexColor> = {
+                [Building.metalMine]: this.settings.charts.colors.resources.metal,
+                [Building.crystalMine]: this.settings.charts.colors.resources.crystal,
+                [Building.deuteriumSynthesizer]: this.settings.charts.colors.resources.deuterium,
+            };
+
+            for (let i = 0; i < this.rowCount; i++) {
+                let best: AmortisationResult = {
+                    buildingType: null!,
+                    level: null!,
+                    rate: Number.MAX_VALUE,
+                    cost: null!,
+                    production: null!,
+                    msuCost: null!,
+                    msuProduction: null!,
+                    color: null!,
+                };
+
+                for (const buildingType of buildingTypes) {
+                    const building = buildings[buildingType];
+                    const level = levels[buildingType] + 1;
+
+                    const cost = building.getCost(level);
+                    const msuCost = getMsu(cost, this.settings.msuConversionRates);
+
+                    const production = building.getProduction(level, info);
+                    const msuProduction = getMsu(production, this.settings.msuConversionRates);
+
+                    const rate = msuCost / msuProduction;
+                    if (rate < best.rate) {
+                        best = {
+                            buildingType,
+                            level,
+                            rate,
+                            cost,
+                            production,
+                            msuCost,
+                            msuProduction,
+                            color: colors[buildingType],
+                        };
+                    }
+                }
+
+                levels[best.buildingType]++;
+
+                result.push(best);
+            }
+
+            return result;
+        }
 
         private get planets(): PlanetData[] {
             return Object.values(this.localPlayerData.planets)
@@ -54,29 +181,18 @@
 
         async mounted() {
             this.localPlayerData = await LocalPlayerModule.getData();
-
-            const currentPlanet = this.localPlayerData.planets[OgameMetaData.planetId];
-            if (currentPlanet.isMoon) {
-                return;
-            }
-
-            const info: ProductionInject = {
-                player: this.localPlayerData,
-                currentPlanet: currentPlanet,
-                ecoSpeed: OgameMetaData.universeSpeed,
-            };
-
-            const metalMineLevel = currentPlanet.buildings?.production?.[Building.metalMine] ?? 0;
-            const metalMineProduction = MetalMine.getProduction(metalMineLevel, info);
-            console.log(metalMineProduction);
-
-            const crystalMineLevel = currentPlanet.buildings?.production?.[Building.crystalMine] ?? 0;
-            const crystalMineProduction = CrystalMine.getProduction(crystalMineLevel, info);
-            console.log(crystalMineProduction);
-
-            const deuteriumSynthesizerLevel = currentPlanet.buildings?.production?.[Building.deuteriumSynthesizer] ?? 0;
-            const deuteriumSynthesizerProduction = DeuteriumSynthesizer.getProduction(deuteriumSynthesizerLevel, info);
-            console.log(deuteriumSynthesizerProduction);
+            this.currentPlanet = this.localPlayerData.planets[OgameMetaData.planetId];
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .color-indicator {
+        background: rgb(var(--color));
+        height: 16px;
+        width: 16px;
+        display: inline-block;
+        border-radius: 3px;
+        margin-left: 4px;
+    }
+</style>

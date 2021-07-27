@@ -8,7 +8,7 @@ export interface I18nDateFormats {
     long: string;
 }
 
-class I18n {
+export class I18n {
     public locale: LanguageKey = LanguageKey.de;
     private _messages = messages;
     private _dateTimeFormats: Record<LanguageKey, I18nDateFormats> = {

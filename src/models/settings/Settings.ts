@@ -1,6 +1,7 @@
 import { HexColor } from "@/utils/colors";
 import BattleResult from "../battles/BattleResult";
 import ExpoType from "../expeditions/ExpoType";
+import { MsuConversionRates } from "../ogame/misc/MsuConversionRates";
 import Resource from "../Resource";
 import Ship from "../Ship";
 import DateRange from "./DateRange";
@@ -28,8 +29,5 @@ type ShipsChartColorSettings = Record<Ship, HexColor>;
 export default interface Settings {
     tables: TableSettings;
     charts: ChartSettings;
-    metalStandardUnits: {
-        [Resource.crystal]: number;
-        [Resource.deuterium]: number;
-    };
+    msuConversionRates: MsuConversionRates;
 }

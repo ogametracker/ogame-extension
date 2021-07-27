@@ -1,4 +1,4 @@
-import getQueryParameters from "./utils/getQueryParameters";
+import getQueryParameters from "@/utils/getQueryParameters";
 
 const queryParams = getQueryParameters(window.location);
 if (queryParams.has('page', 'ingame')

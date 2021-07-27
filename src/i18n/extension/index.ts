@@ -5,6 +5,8 @@ import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
 
 export interface I18nExtension {
+    menuItem: string;
+
     settings: I18nExtensionSettings;
     notifications: I18nExtensionNotifications;
 

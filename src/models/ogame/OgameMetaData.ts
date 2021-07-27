@@ -1,69 +1,62 @@
-const metaUniverse = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement)?.content;
-const metaUniverseName = (document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement)?.content;
-const metaUniverseSpeed = (document.querySelector('meta[name="ogame-universe-speed"]') as HTMLMetaElement)?.content;
-const metaUniverseLanguage = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement)?.content;
-const metaUniversePlayerId = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement)?.content;
-const metaUniversePlanetId = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement)?.content;
-
 class OgameMetaData {
-    private readonly _universe = metaUniverse; //"s146-de.ogame.gameforge.com"
     public get universe() {
-        if (this._universe == null)
+        const value = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._universe;
+        return value;
     }
 
-    private readonly _universeShort = metaUniverse.split('.')[0]; // "s146-de"
     public get universeShort() {
-        if (this._universeShort == null)
+        const value = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._universeShort;
+        return value.split('.')[0];
     }
 
-    private readonly _universeName = metaUniverseName; // "Tarazed"
     public get universeName() {
-        if (this._universeName == null)
+        const value = (document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._universeName;
+        return value;
     }
 
-    private readonly _universeSpeed = parseInt(metaUniverseSpeed, 10); // 6
     public get universeSpeed() {
-        if (this._universeSpeed == null)
+        const value = (document.querySelector('meta[name="ogame-universe-speed"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._universeSpeed;
+        return parseInt(value, 10);
     }
 
-    private readonly _locale = metaUniverseLanguage; // "de"
     public get locale() {
-        if (this._locale == null)
+        const value = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._locale;
+        return value;
     }
 
-    private readonly _playerId = parseInt(metaUniversePlayerId, 10); // 123456
     public get playerId() {
-        if (this._playerId == null)
+        const value = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._playerId;
+        return parseInt(value, 10);
     }
 
-    private readonly _planetId = parseInt(metaUniversePlanetId, 10); // 123456
     public get planetId() {
-        if (this._planetId == null)
+        const value = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement)?.content;
+        if (value == null)
             throw new Error();
 
-        return this._planetId;
+        return parseInt(value, 10);
     }
 
 
-    public get storageKeyPrefix(){
+    public get storageKeyPrefix() {
         return `${this.universeShort}-${this.playerId}`;
     }
 }

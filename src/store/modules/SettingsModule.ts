@@ -98,7 +98,7 @@ class SettingsModule extends Vue {
                     },
                 },
             },
-            metalStandardUnits: {
+            msuConversionRates: {
                 [Resource.crystal]: 2,
                 [Resource.deuterium]: 3,
             },
@@ -106,11 +106,13 @@ class SettingsModule extends Vue {
     }
 
     private async created() {
+        this.settings = clone(this.defaultSettings);
         const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
         if (settings != null) {
-            this.settings = settings;
-        } else {
-            this.settings = clone(this.defaultSettings);
+            this.settings = {
+                ...this.settings,
+                ...settings
+            };
         }
     }
 

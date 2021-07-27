@@ -417,4 +417,8 @@
         grid-template-columns: 1fr auto;
         align-items: center;
     }
+
+    .color-tables .settings-table tbody {
+        display: grid;
+    }
 </style>
