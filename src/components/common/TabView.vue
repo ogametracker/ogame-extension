@@ -21,7 +21,6 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
     import TabViewNav from './TabViewNav.vue';
-import { HexColor } from '@/utils/colors';
 
     export interface TabViewItem {
         name: string;

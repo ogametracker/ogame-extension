@@ -403,7 +403,6 @@
         grid-template-columns: repeat(2, auto);
         grid-template-rows: repeat(2, auto);
         align-items: center;
-        justify-content: center;
 
         row-gap: 8px;
         margin-bottom: 16px;

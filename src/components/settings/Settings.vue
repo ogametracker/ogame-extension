@@ -1,303 +1,348 @@
 <template>
     <div class="settings">
-        <h2>
-            {{ $i18n.messages.extension.settings.titleDateRanges }}
-            <button
-                class="reset-button"
-                @click="resetDateRanges()"
-                title="Reset TODO: LOCALIZE"
-            >
-                <!-- TODO: localize -->
-                <icon name="refresh" />
-            </button>
-        </h2>
-        <span style="margin-bottom: 8px; display: inline-block">
-            {{ $i18n.messages.extension.settings.hintDateRanges }}
-        </span>
-        <table class="settings-table">
-            <thead>
-                <tr>
-                    <th style="width: 30px"></th>
-                    <th style="width: 200px">
-                        {{ $i18n.messages.extension.settings.name }}
-                    </th>
-                    <th style="width: 150px">
-                        {{ $i18n.messages.extension.settings.type }}
-                    </th>
-                    <th style="width: 200px">
-                        {{ $i18n.messages.extension.settings.rangeStarts }}
-                    </th>
-                    <th style="width: 200px">
-                        {{ $i18n.messages.extension.settings.rangeContains }}
-                    </th>
-                </tr>
-            </thead>
-
-            <draggable v-model="settings.tables.ranges" tag="tbody">
-                <tr
-                    v-for="(range, index) in settings.tables.ranges"
-                    :key="index"
-                >
-                    <td>
-                        <span @click="removeRange(index)" class="clickable">
-                            <icon v-if="range.type != 'all'" name="minus" />
-                        </span>
-                    </td>
-                    <td class="name-col">
-                        <input
-                            v-if="range.type != 'all'"
-                            v-model="range.label"
-                        />
-                        <span v-else>
-                            {{ $i18n.messages.extension.since }}
-                            {{ $i18n.messages.extension.settings.firstDay }}
-                        </span>
-                    </td>
-                    <td class="value-col">
-                        <select v-if="range.type != 'all'" v-model="range.type">
-                            <option
-                                v-for="(rangeType, index) in rangeTypes"
-                                :key="index"
-                                :value="rangeType"
-                            >
+        <tab-view :items="items" vertical>
+            <template #date-ranges
+                ><h2>
+                    {{ $i18n.messages.extension.settings.titleDateRanges }}
+                    <button
+                        class="reset-button"
+                        @click="resetDateRanges()"
+                        title="Reset TODO: LOCALIZE"
+                    >
+                        <!-- TODO: localize -->
+                        <icon name="refresh" />
+                    </button>
+                </h2>
+                <span style="margin-bottom: 8px; display: inline-block">
+                    {{ $i18n.messages.extension.settings.hintDateRanges }}
+                </span>
+                <table class="settings-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px"></th>
+                            <th style="width: 200px">
+                                {{ $i18n.messages.extension.settings.name }}
+                            </th>
+                            <th style="width: 150px">
+                                {{ $i18n.messages.extension.settings.type }}
+                            </th>
+                            <th style="width: 200px">
                                 {{
-                                    $i18n.messages.extension.settings.rangeType[
-                                        rangeType
-                                    ]
+                                    $i18n.messages.extension.settings
+                                        .rangeStarts
                                 }}
-                            </option>
-                        </select>
+                            </th>
+                            <th style="width: 200px">
+                                {{
+                                    $i18n.messages.extension.settings
+                                        .rangeContains
+                                }}
+                            </th>
+                        </tr>
+                    </thead>
 
-                        <span v-else>
-                            {{
-                                $i18n.messages.extension.settings.rangeType[
-                                    range.type
-                                ]
-                            }}
-                        </span>
-                    </td>
-                    <td class="value-col">
-                        <span v-if="range.type != 'all'">
-                            {{ $i18n.messages.extension.settings.before }}
-                            <input
-                                type="number"
-                                step="1"
-                                min="0"
-                                v-model="range.skip"
-                            />
-                            {{
-                                $i18n.messages.extension.settings[
-                                    `${range.type}sVariant`
-                                ]
-                            }}
-                        </span>
-                    </td>
-                    <td class="value-col">
-                        <span v-if="range.type != 'all'">
-                            <input
-                                type="number"
-                                step="1"
-                                min="1"
-                                v-model="range.take"
-                            />
-                            {{
-                                $i18n.messages.extension.settings[
-                                    `${range.type}s`
-                                ]
-                            }}
-                        </span>
-                    </td>
-                </tr>
-            </draggable>
-            <tfoot>
-                <tr>
-                    <td>
-                        <span class="clickable" @click="addRange()">
-                            <icon name="plus" />
-                        </span>
-                    </td>
-                    <td colspan="4" />
-                </tr>
-            </tfoot>
-        </table>
+                    <draggable v-model="settings.tables.ranges" tag="tbody">
+                        <tr
+                            v-for="(range, index) in settings.tables.ranges"
+                            :key="index"
+                        >
+                            <td>
+                                <span
+                                    @click="removeRange(index)"
+                                    class="clickable"
+                                >
+                                    <icon
+                                        v-if="range.type != 'all'"
+                                        name="minus"
+                                    />
+                                </span>
+                            </td>
+                            <td class="name-col">
+                                <input
+                                    v-if="range.type != 'all'"
+                                    v-model="range.label"
+                                />
+                                <span v-else>
+                                    {{ $i18n.messages.extension.since }}
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .firstDay
+                                    }}
+                                </span>
+                            </td>
+                            <td class="value-col">
+                                <select
+                                    v-if="range.type != 'all'"
+                                    v-model="range.type"
+                                >
+                                    <option
+                                        v-for="(rangeType, index) in rangeTypes"
+                                        :key="index"
+                                        :value="rangeType"
+                                    >
+                                        {{
+                                            $i18n.messages.extension.settings
+                                                .rangeType[rangeType]
+                                        }}
+                                    </option>
+                                </select>
 
-        <hr />
+                                <span v-else>
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .rangeType[range.type]
+                                    }}
+                                </span>
+                            </td>
+                            <td class="value-col">
+                                <span v-if="range.type != 'all'">
+                                    {{
+                                        $i18n.messages.extension.settings.before
+                                    }}
+                                    <input
+                                        type="number"
+                                        step="1"
+                                        min="0"
+                                        v-model="range.skip"
+                                    />
+                                    {{
+                                        $i18n.messages.extension.settings[
+                                            `${range.type}sVariant`
+                                        ]
+                                    }}
+                                </span>
+                            </td>
+                            <td class="value-col">
+                                <span v-if="range.type != 'all'">
+                                    <input
+                                        type="number"
+                                        step="1"
+                                        min="1"
+                                        v-model="range.take"
+                                    />
+                                    {{
+                                        $i18n.messages.extension.settings[
+                                            `${range.type}s`
+                                        ]
+                                    }}
+                                </span>
+                            </td>
+                        </tr>
+                    </draggable>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                <span class="clickable" @click="addRange()">
+                                    <icon name="plus" />
+                                </span>
+                            </td>
+                            <td colspan="4" />
+                        </tr>
+                    </tfoot>
+                </table>
+            </template>
 
-        <h2>
-            {{ $i18n.messages.extension.settings.chartColors.title }}
-            <button
-                class="reset-button"
-                @click="resetChartColors()"
-                title="Reset TODO: LOCALIZE"
-            >
-                <!-- TODO: localize -->
-                <icon name="refresh" />
-            </button>
-        </h2>
-        <div class="color-tables">
-            <table class="settings-table">
-                <thead>
-                    <tr>
-                        <th>
-                            {{
-                                $i18n.messages.extension.settings.chartColors
-                                    .expeditions
-                            }}
-
-                            <button
-                                class="reset-button"
-                                @click="resetChartColors('overview')"
-                                title="Reset TODO: LOCALIZE"
-                            >
-                                <!-- TODO: localize -->
-                                <icon name="refresh" />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="key in Object.keys(
-                            settings.charts.colors.overview
-                        )"
-                        :key="key"
+            <template #chart-colors>
+                <h2>
+                    {{ $i18n.messages.extension.settings.chartColors.title }}
+                    <button
+                        class="reset-button"
+                        @click="resetChartColors()"
+                        title="Reset TODO: LOCALIZE"
                     >
-                        <td>
-                            <color-input
-                                v-model="settings.charts.colors.overview[key]"
-                                :label="$i18n.messages.ogame.expoTypes[key]"
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        <!-- TODO: localize -->
+                        <icon name="refresh" />
+                    </button>
+                </h2>
+                <div class="color-tables">
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .chartColors.expeditions
+                                    }}
 
-            <table class="settings-table">
-                <thead>
-                    <tr>
-                        <th>
-                            {{
-                                $i18n.messages.extension.settings.chartColors
-                                    .resources
-                            }}
-
-                            <button
-                                class="reset-button"
-                                @click="resetChartColors('resources')"
-                                title="Reset TODO: LOCALIZE"
+                                    <button
+                                        class="reset-button"
+                                        @click="resetChartColors('overview')"
+                                        title="Reset TODO: LOCALIZE"
+                                    >
+                                        <!-- TODO: localize -->
+                                        <icon name="refresh" />
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="key in Object.keys(
+                                    settings.charts.colors.overview
+                                )"
+                                :key="key"
                             >
-                                <!-- TODO: localize -->
-                                <icon name="refresh" />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="key in Object.keys(
-                            settings.charts.colors.resources
-                        )"
-                        :key="key"
-                    >
-                        <td>
-                            <color-input
-                                v-model="settings.charts.colors.resources[key]"
-                                :label="$i18n.messages.ogame.resources[key]"
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                <td>
+                                    <color-input
+                                        v-model="
+                                            settings.charts.colors.overview[key]
+                                        "
+                                        :label="
+                                            $i18n.messages.ogame.expoTypes[key]
+                                        "
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <table class="settings-table">
-                <thead>
-                    <tr>
-                        <th>
-                            {{
-                                $i18n.messages.extension.settings.chartColors
-                                    .ships
-                            }}
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .chartColors.resources
+                                    }}
 
-                            <button
-                                class="reset-button"
-                                @click="resetChartColors('overshipsview')"
-                                title="Reset TODO: LOCALIZE"
+                                    <button
+                                        class="reset-button"
+                                        @click="resetChartColors('resources')"
+                                        title="Reset TODO: LOCALIZE"
+                                    >
+                                        <!-- TODO: localize -->
+                                        <icon name="refresh" />
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="key in Object.keys(
+                                    settings.charts.colors.resources
+                                )"
+                                :key="key"
                             >
-                                <!-- TODO: localize -->
-                                <icon name="refresh" />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="key in Object.keys(settings.charts.colors.ships)"
-                        :key="key"
-                    >
-                        <td>
-                            <color-input
-                                v-model="settings.charts.colors.ships[key]"
-                                :label="$i18n.messages.ogame.ships[key]"
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                <td>
+                                    <color-input
+                                        v-model="
+                                            settings.charts.colors.resources[
+                                                key
+                                            ]
+                                        "
+                                        :label="
+                                            $i18n.messages.ogame.resources[key]
+                                        "
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <table class="settings-table">
-                <thead>
-                    <tr>
-                        <th>
-                            {{
-                                $i18n.messages.extension.settings.chartColors
-                                    .combats
-                            }}
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .chartColors.ships
+                                    }}
 
-                            <button
-                                class="reset-button"
-                                @click="resetChartColors('battleResults')"
-                                title="Reset TODO: LOCALIZE"
+                                    <button
+                                        class="reset-button"
+                                        @click="
+                                            resetChartColors('overshipsview')
+                                        "
+                                        title="Reset TODO: LOCALIZE"
+                                    >
+                                        <!-- TODO: localize -->
+                                        <icon name="refresh" />
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="key in Object.keys(
+                                    settings.charts.colors.ships
+                                )"
+                                :key="key"
                             >
-                                <!-- TODO: localize -->
-                                <icon name="refresh" />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="key in Object.keys(
-                            settings.charts.colors.battleResults
-                        )"
-                        :key="key"
-                    >
-                        <td>
-                            <color-input
-                                v-model="
-                                    settings.charts.colors.battleResults[key]
-                                "
-                                :label="$i18n.messages.ogame.battleResults[key]"
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                                <td>
+                                    <color-input
+                                        v-model="
+                                            settings.charts.colors.ships[key]
+                                        "
+                                        :label="$i18n.messages.ogame.ships[key]"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-        <hr />
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{
+                                        $i18n.messages.extension.settings
+                                            .chartColors.combats
+                                    }}
 
-        <h2>Export</h2>
-        <textarea
-            readonly
-            :value="exportJson"
-            style="width: 60%; height: 300px"
-            @focus="$event.target.select()"
-        />
+                                    <button
+                                        class="reset-button"
+                                        @click="
+                                            resetChartColors('battleResults')
+                                        "
+                                        title="Reset TODO: LOCALIZE"
+                                    >
+                                        <!-- TODO: localize -->
+                                        <icon name="refresh" />
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="key in Object.keys(
+                                    settings.charts.colors.battleResults
+                                )"
+                                :key="key"
+                            >
+                                <td>
+                                    <color-input
+                                        v-model="
+                                            settings.charts.colors
+                                                .battleResults[key]
+                                        "
+                                        :label="
+                                            $i18n.messages.ogame.battleResults[
+                                                key
+                                            ]
+                                        "
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
 
-        <hr />
+            <template #import-export>
+                <h2>Export</h2>
+                <textarea
+                    readonly
+                    :value="exportJson"
+                    style="width: 60%; height: 300px"
+                    @focus="$event.target.select()"
+                />
 
-        <h2>Import</h2>
-        Coming Soon
+                <hr />
+
+                <h2>Import</h2>
+                Coming Soon
+            </template>
+        </tab-view>
     </div>
 </template>
 
@@ -312,6 +357,7 @@
     import clone from '@/utils/clone';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
+    import { TabViewItem } from '../common/TabView.vue';
     import ColorInput from './ColorInput.vue';
 
     @Component({
@@ -330,6 +376,21 @@
         private get settings() {
             return SettingsModule.settings;
         }
+
+        private readonly items: TabViewItem[] = [
+            {
+                name: 'date-ranges',
+                title: i18n.messages.extension.settings.titleDateRanges,
+            },
+            {
+                name: 'chart-colors',
+                title: i18n.messages.extension.settings.chartColors.title,
+            },
+            {
+                name: 'import-export',
+                title: 'LOCA: Import/Export',
+            },
+        ];
 
         private addRange() {
             SettingsModule.settings.tables.ranges.push({
