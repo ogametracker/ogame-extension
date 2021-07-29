@@ -45,6 +45,8 @@ table {
     width: 100%;
     text-align: right;
 
+    z-index: 1;
+
     border: 1px solid rgba(var(--color), 0.5);
 
     .grid-table-head {
