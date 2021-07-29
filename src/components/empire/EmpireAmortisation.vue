@@ -457,33 +457,33 @@
         }
 
         private formatTime(timeInHours: number) {
-            let totalTime = Math.ceil(timeInHours * 60 * 60);
+            let totalTime = BigInt(Math.ceil(timeInHours * 60 * 60));
 
-            const seconds = totalTime % 60;
-            totalTime = (totalTime - seconds) / 60;
+            const seconds = totalTime % 60n;
+            totalTime = (totalTime - seconds) / 60n;
 
-            const minutes = totalTime % 60;
-            totalTime = (totalTime - minutes) / 60;
+            const minutes = totalTime % 60n;
+            totalTime = (totalTime - minutes) / 60n;
 
-            const hours = totalTime % 24;
-            totalTime = (totalTime - hours) / 24;
+            const hours = totalTime % 24n;
+            totalTime = (totalTime - hours) / 24n;
 
-            const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}`;
-            if (totalTime == 0) {
+            const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (totalTime == 0n) {
                 return time;
             }
 
-            const days = totalTime % 7;
-            totalTime = (totalTime - days) / 7;
+            const days = totalTime % 7n;
+            totalTime = (totalTime - days) / 7n;
 
             const timeWithDays = `${days}d ` + time;
-            if (totalTime == 0) {
+            if (totalTime == 0n) {
                 return timeWithDays;
             }
 
             const weeks = totalTime;
 
-            return `${i18n.formatNumber(weeks)}w ` + timeWithDays;
+            return `${i18n.formatNumber(Number(weeks))}w ` + timeWithDays;
         }
     }
 </script>
