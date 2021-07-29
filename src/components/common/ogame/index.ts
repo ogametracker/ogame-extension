@@ -7,8 +7,12 @@ import OShip from './OShip.vue';
 import OOfficer from './OOfficer.vue';
 import OPlayerClass from './OPlayerClass.vue';
 import OAllianceClass from './OAllianceClass.vue';
+import OResearch from './OResearch.vue';
+import OBuilding from './OBuilding.vue';
 
 Vue.component('o-ship', OShip);
 Vue.component('o-officer', OOfficer);
 Vue.component('o-player-class', OPlayerClass);
 Vue.component('o-alliance-class', OAllianceClass);
+Vue.component('o-research', OResearch);
+Vue.component('o-building', OBuilding);

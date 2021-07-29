@@ -30,7 +30,11 @@
             <div>LOCA: Crawlers</div>
             <div>
                 <checkbox-button v-model="options.crawler">
-                    <o-ship type="crawler" :size="32" :disabled="!options.crawler" />
+                    <o-ship
+                        type="crawler"
+                        :size="32"
+                        :disabled="!options.crawler"
+                    />
                 </checkbox-button>
 
                 <checkbox-button
@@ -42,7 +46,9 @@
 
             <div>LOCA: Plasmatech</div>
             <div>
+                <o-research type="plasma-technology" :size="32" />
                 <input
+                    style="width: 64px"
                     type="number"
                     v-model.number.lazy="options.plasmaTechnology"
                 />
@@ -109,6 +115,7 @@
                     :color="colorMetal"
                     v-model="options.metalMine"
                 />
+
                 <checkbox-button
                     label="LOCA: Kristallmine"
                     :color="colorCrystal"

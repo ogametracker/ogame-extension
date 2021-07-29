@@ -3,7 +3,7 @@
         class="checkbox-button"
         :class="{
             off: !checked,
-            simple: label != null,
+            simple: label != null || simple,
         }"
         :style="{
             '--button-color': color,
@@ -26,6 +26,9 @@
         @VModel({ required: true, type: Boolean })
         private checked!: boolean;
 
+        @Prop({ required: false, type: Boolean, default: false })
+        private simple!: boolean;
+
         @Prop({ required: false, type: String })
         private label!: string | null;
 
@@ -41,6 +44,7 @@
         margin: 0px 4px;
         border-radius: 3px;
         cursor: pointer;
+        display: inline-block;
 
         &.simple {
             position: relative;
