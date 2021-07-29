@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import App from '@/components/App.vue';
 
+const chromeUrl = chrome.extension.getURL('');
+Vue.prototype.$extBase = chromeUrl.substr(0, chromeUrl.length - 1); // remove trailing slash
+
 // include global components
 import '@/components/common';
 

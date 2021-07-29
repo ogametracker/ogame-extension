@@ -12,7 +12,7 @@
                         :key="itemIndex"
                     >
                         <img
-                            :src="`/cdn/img/item-images/${item.image}-small.png`"
+                            :src="`${$extBase}/img/ogame/items/${item.image}.png`"
                             width="32"
                             height="32"
                             class="item-image"
