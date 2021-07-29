@@ -2,6 +2,10 @@
     color: white;
     font-family: Verdana, Arial, SunSans-Regular, sans-serif;
     font-size: 14px;
+    
+    * {
+        box-sizing: border-box;
+    }
 
     @import "scrollbar.scss";
     @import "inputs.scss";

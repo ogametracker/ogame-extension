@@ -1,0 +1,14 @@
+import Vue from 'vue';
+
+import OImageBase from './OImageBase.vue';
+Vue.component('o-image-base', OImageBase);
+
+import OShip from './OShip.vue';
+import OOfficer from './OOfficer.vue';
+import OPlayerClass from './OPlayerClass.vue';
+import OAllianceClass from './OAllianceClass.vue';
+
+Vue.component('o-ship', OShip);
+Vue.component('o-officer', OOfficer);
+Vue.component('o-player-class', OPlayerClass);
+Vue.component('o-alliance-class', OAllianceClass);

@@ -4,66 +4,106 @@
         class="amortisation"
     >
         <div class="options">
+            <div>LOCA: Planet</div>
             <div>
-                <div>LOCA: Planet</div>
-                <div>
-                    <select v-model.number="selectedPlanet">
-                        <option
-                            v-for="planet in planets"
-                            :key="planet.id"
-                            :value="planet.id"
-                        >
-                            {{ planet.name }}
-                        </option>
-                    </select>
-                </div>
+                <select v-model.number="selectedPlanet">
+                    <option
+                        v-for="planet in planets"
+                        :key="planet.id"
+                        :value="planet.id"
+                    >
+                        [{{ planet.coordinates.galaxy }}:{{
+                            planet.coordinates.system
+                        }}:{{ planet.coordinates.position }}]
+                        {{ planet.name }}
+                    </option>
+                </select>
             </div>
 
+            <div>LOCA: MSU rates</div>
             <div>
-                <div>LOCA: Options</div>
-                <br />
-                <checkbox-button
-                    label="LOCA: Max. Crawlers?"
-                    v-model="options.crawler"
-                />
+                1:{{ settings.msuConversionRates.crystal }}:{{
+                    settings.msuConversionRates.deuterium
+                }}
+            </div>
+
+            <div>LOCA: Crawlers</div>
+            <div>
+                <checkbox-button v-model="options.crawler">
+                    <o-ship type="crawler" :size="32" :disabled="!options.crawler" />
+                </checkbox-button>
+
                 <checkbox-button
                     label="LOCA: Crawler Overload?"
+                    :size="32"
                     v-model="options.crawlerOverload"
                 />
-                <checkbox-button
-                    label="LOCA: Current Plasmatech?"
-                    v-model="options.plasmaTechnology"
-                />
-                <checkbox-button
-                    label="LOCA: Current Items?"
-                    v-model="options.items"
-                />
-                <checkbox-button
-                    label="LOCA: Geologist?"
-                    v-model="options.geologist"
-                />
-                <checkbox-button
-                    label="LOCA: Commandstaff?"
-                    v-model="options.commandStaff"
-                />
-                <checkbox-button
-                    label="LOCA: Current Classes?"
-                    v-model="options.classes"
+            </div>
+
+            <div>LOCA: Plasmatech</div>
+            <div>
+                <input
+                    type="number"
+                    v-model.number.lazy="options.plasmaTechnology"
                 />
             </div>
 
+            <div>LOCA: Items</div>
+            <div>TODO</div>
+
+            <div>LOCA: Officers</div>
             <div>
-                <div>LOCA: MSU rates</div>
-                <div>
-                    1:{{ settings.msuConversionRates.crystal }}:{{
-                        settings.msuConversionRates.deuterium
-                    }}
-                </div>
+                <checkbox-button v-model="options.geologist">
+                    <o-officer type="commander" :size="32" />
+                </checkbox-button>
+                <checkbox-button v-model="options.geologist">
+                    <o-officer type="admiral" :size="32" />
+                </checkbox-button>
+                <checkbox-button v-model="options.geologist">
+                    <o-officer type="engineer" :size="32" />
+                </checkbox-button>
+                <checkbox-button v-model="options.geologist">
+                    <o-officer type="geologist" :size="32" />
+                </checkbox-button>
+                <checkbox-button v-model="options.geologist">
+                    <o-officer type="technocrat" :size="32" />
+                </checkbox-button>
             </div>
 
+            <div>LOCA: Player Class</div>
             <div>
-                <div>LOCA: Buildings</div>
-                <br />
+                <checkbox-button>
+                    <o-player-class type="none" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-player-class type="collector" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-player-class type="discoverer" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-player-class type="general" :size="32" />
+                </checkbox-button>
+            </div>
+
+            <div>LOCA: Alliance Class</div>
+            <div>
+                <checkbox-button>
+                    <o-alliance-class type="none" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-alliance-class type="trader" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-alliance-class type="researcher" :size="32" />
+                </checkbox-button>
+                <checkbox-button>
+                    <o-alliance-class type="warrior" :size="32" />
+                </checkbox-button>
+            </div>
+
+            <div>LOCA: Buildings</div>
+            <div>
                 <checkbox-button
                     label="LOCA: Metallmine"
                     :color="colorMetal"
@@ -96,7 +136,10 @@
                 </grid-tr>
             </grid-thead>
             <grid-tbody>
-                <grid-tr v-for="(row, i) in rows" :key="i">
+                <grid-tr
+                    v-for="row in rows"
+                    :key="`${row.buildingType}-${row.level}`"
+                >
                     <grid-cell>
                         {{ $i18n.messages.ogame.buildings[row.buildingType] }}
                         <span
@@ -400,12 +443,15 @@
     .options {
         justify-content: start;
         display: inline-grid;
-        grid-template-columns: repeat(2, auto);
-        grid-template-rows: repeat(2, auto);
+        grid-template-columns: repeat(6, auto);
         align-items: center;
 
         row-gap: 8px;
         margin-bottom: 16px;
+
+        & > div {
+            display: flex;
+        }
     }
 
     .amortisation {
