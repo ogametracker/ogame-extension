@@ -27,89 +27,105 @@
                 }}
             </div>
 
+            <div style="grid-column-start: 1">LOCA: Plasmatech</div>
+            <div>
+                <o-research type="plasma-technology" :size="32" />
+                <input
+                    style="width: 64px"
+                    type="number"
+                    v-model.number="options.plasmaTechnology"
+                />
+            </div>
+
             <div>LOCA: Crawlers</div>
             <div>
-                <checkbox-button v-model="options.crawler">
+                <checkbox-button v-model="options.crawler.enabled">
                     <o-ship
                         type="crawler"
                         :size="32"
-                        :disabled="!options.crawler"
+                        :disabled="!options.crawler.enabled"
                     />
                 </checkbox-button>
 
                 <checkbox-button
                     label="LOCA: Crawler Overload?"
                     :size="32"
-                    v-model="options.crawlerOverload"
+                    :value="options.crawler.enabled && options.crawler.overload"
+                    @input="
+                        (value) => {
+                            options.crawler.overload = value;
+                            if (value) {
+                                options.crawler.enabled = true;
+                            }
+                        }
+                    "
                 />
             </div>
 
-            <div>LOCA: Plasmatech</div>
-            <div>
-                <o-research type="plasma-technology" :size="32" />
-                <input
-                    style="width: 64px"
-                    type="number"
-                    v-model.number.lazy="options.plasmaTechnology"
-                />
-            </div>
+            <div class="items-cell">LOCA: Items</div>
+            <div class="items-cell">TODO</div>
 
-            <div>LOCA: Items</div>
-            <div>TODO</div>
-
-            <div>LOCA: Officers</div>
-            <div>
-                <checkbox-button v-model="options.geologist">
-                    <o-officer type="commander" :size="32" />
-                </checkbox-button>
-                <checkbox-button v-model="options.geologist">
-                    <o-officer type="admiral" :size="32" />
-                </checkbox-button>
-                <checkbox-button v-model="options.geologist">
-                    <o-officer type="engineer" :size="32" />
-                </checkbox-button>
-                <checkbox-button v-model="options.geologist">
-                    <o-officer type="geologist" :size="32" />
-                </checkbox-button>
-                <checkbox-button v-model="options.geologist">
-                    <o-officer type="technocrat" :size="32" />
+            <div class="officers-cell">LOCA: Officers</div>
+            <div class="officers-cell">
+                <checkbox-button
+                    v-for="off in options_officers"
+                    :key="off"
+                    v-model="options.officers[off]"
+                >
+                    <o-officer
+                        :type="off"
+                        :size="32"
+                        :disabled="!options.officers[off]"
+                    />
                 </checkbox-button>
             </div>
 
-            <div>LOCA: Player Class</div>
-            <div>
-                <checkbox-button>
-                    <o-player-class type="none" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-player-class type="collector" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-player-class type="discoverer" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-player-class type="general" :size="32" />
-                </checkbox-button>
-            </div>
-
-            <div>LOCA: Alliance Class</div>
-            <div>
-                <checkbox-button>
-                    <o-alliance-class type="none" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-alliance-class type="trader" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-alliance-class type="researcher" :size="32" />
-                </checkbox-button>
-                <checkbox-button>
-                    <o-alliance-class type="warrior" :size="32" />
+            <div class="player-class-cell">LOCA: Player Class</div>
+            <div class="player-class-cell">
+                <checkbox-button
+                    v-for="playerClass in options_playerClasses"
+                    :key="playerClass"
+                    :value="options.playerClass == playerClass"
+                    @input="
+                        () =>
+                            (options.playerClass =
+                                options.playerClass == playerClass
+                                    ? options_playerClass_none
+                                    : playerClass)
+                    "
+                >
+                    <o-player-class
+                        :type="playerClass"
+                        :size="32"
+                        :disabled="options.playerClass != playerClass"
+                    />
                 </checkbox-button>
             </div>
 
-            <div>LOCA: Buildings</div>
-            <div>
+            <div class="alliance-class-cell">LOCA: Alliance Class</div>
+            <div class="alliance-class-cell">
+                <checkbox-button
+                    v-for="allianceClass in options_allianceClasses"
+                    :key="allianceClass"
+                    :value="options.allianceClass == allianceClass"
+                    @input="
+                        () =>
+                            (options.allianceClass =
+                                options.allianceClass == allianceClass
+                                    ? options_allianceClass_none
+                                    : allianceClass)
+                    "
+                >
+                    <o-alliance-class
+                        :type="allianceClass"
+                        :size="32"
+                        :disabled="options.allianceClass != allianceClass"
+                    />
+                </checkbox-button>
+            </div>
+
+            <div class="buildings-cell">LOCA: Buildings</div>
+            <div class="buildings-cell buttons">
                 <checkbox-button
                     label="LOCA: Metallmine"
                     :color="colorMetal"
@@ -146,6 +162,7 @@
                 <grid-tr
                     v-for="row in rows"
                     :key="`${row.buildingType}-${row.level}`"
+                    v-show="row.visible"
                 >
                     <grid-cell>
                         {{ $i18n.messages.ogame.buildings[row.buildingType] }}
@@ -190,7 +207,7 @@
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import LocalPlayerModule, { AllianceClass, LocalPlayerData, MoonData, PlanetData, PlayerClass } from '@/store/modules/LocalPlayerModule';
+    import LocalPlayerModule, { AllianceClass, LocalPlayerData, MoonData, PlanetData, PlayerClass, PlayerOfficers } from '@/store/modules/LocalPlayerModule';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import Building from '@/models/Building';
     import ProductionBuilding, { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
@@ -201,6 +218,7 @@
     import i18n from '@/i18n';
     import Ship from '@/models/Ship';
     import Research from '@/models/Research';
+    import _throw from '@/utils/throw';
 
     type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
 
@@ -213,6 +231,7 @@
         production: Cost;
         msuProduction: number;
         color: HexColor;
+        visible: boolean;
     }
 
     @Component({})
@@ -225,18 +244,38 @@
 
         private readonly maxLevel = 70;
 
+        private readonly options_officers: (keyof PlayerOfficers)[] = ['commander', 'admiral', 'engineer', 'geologist', 'technocrat'];
+        private readonly options_playerClasses: PlayerClass[] = [PlayerClass.collector, PlayerClass.discoverer, PlayerClass.general];
+        private readonly options_playerClass_none = PlayerClass.none;
+        private readonly options_allianceClasses: AllianceClass[] = [AllianceClass.trader, AllianceClass.researcher, AllianceClass.warrior];
+        private readonly options_allianceClass_none = AllianceClass.none;
+
+
         private readonly options = {
             metalMine: true,
             crystalMine: true,
             deuteriumSynthesizer: true,
 
-            crawler: true,
-            crawlerOverload: true,
-            plasmaTechnology: true,
-            items: true,
-            geologist: true,
-            commandStaff: true,
-            classes: true,
+            crawler: {
+                enabled: true,
+                overload: true,
+            },
+
+            plasmaTechnology: 0,
+            items: {
+                metal: 0,
+                crystal: 0,
+                deuterium: 0,
+            },
+            officers: {
+                commander: true,
+                admiral: true,
+                engineer: true,
+                geologist: true,
+                technocrat: true,
+            } as Record<keyof PlayerOfficers, boolean>,
+            playerClass: PlayerClass.none,
+            allianceClass: AllianceClass.none,
         };
 
         private get colorMetal() {
@@ -251,8 +290,36 @@
             return this.settings.charts.colors.resources.deuterium;
         }
 
-        private getColorVar(color: HexColor): string {
-            return hexColorToRGB(color).replace(/\s+/g, ', ');
+        private getProductionInject(planet: PlanetData): ProductionInject {
+            return {
+                player: {
+                    ...this.localPlayerData,
+                    officers: { ...this.options.officers },
+                    research: {
+                        ...this.localPlayerData.research,
+                        [Research.plasmaTechnology]: this.options.plasmaTechnology,
+                    },
+                    playerClass: this.options.playerClass,
+                    allianceClass: this.options.allianceClass,
+                },
+                currentPlanet: {
+                    ...planet,
+                    productionSettings: {
+                        [Building.metalMine]: 100,
+                        [Building.crystalMine]: 100,
+                        [Building.deuteriumSynthesizer]: 100,
+                        [Building.solarPlant]: 100,
+                        [Building.fusionReactor]: 100,
+                        [Ship.solarSatellite]: 100,
+                        [Ship.crawler]: this.options.crawler.overload ? 150 : 100,
+                    },
+                    ships: {
+                        ...planet.ships,
+                        [Ship.crawler]: this.options.crawler.enabled ? 64000 : 0,
+                    }
+                },
+                ecoSpeed: OgameMetaData.universeSpeed,
+            };
         }
 
         private get rows() {
@@ -263,36 +330,7 @@
                 return result;
             }
 
-            const info: ProductionInject = {
-                player: {
-                    ...this.localPlayerData,
-                    officers: {
-                        commander: this.options.commandStaff,
-                        admiral: this.options.commandStaff,
-                        technocrat: this.options.commandStaff,
-                        geologist: this.options.geologist,
-                        engineer: this.options.commandStaff,
-                    },
-                    research: {
-                        ...this.localPlayerData.research,
-                        [Research.plasmaTechnology]: this.options.plasmaTechnology ? this.localPlayerData.research[Research.plasmaTechnology] : 0,
-                    },
-                    playerClass: this.options.classes ? this.localPlayerData.playerClass : PlayerClass.none,
-                    allianceClass: this.options.classes ? this.localPlayerData.allianceClass : AllianceClass.none,
-                },
-                currentPlanet: {
-                    ...currentPlanet,
-                    productionSettings: {
-                        ...currentPlanet.productionSettings,
-                        [Ship.crawler]: this.options.crawlerOverload ? 150 : 100,
-                    },
-                    ships: {
-                        ...currentPlanet.ships,
-                        [Ship.crawler]: this.options.crawler ? 64000 : 0,
-                    }
-                },
-                ecoSpeed: OgameMetaData.universeSpeed,
-            };
+            const info = this.getProductionInject(currentPlanet);
 
             const levels: Record<ProductionBuildingType, number> = {
                 [Building.metalMine]: currentPlanet.buildings.production[Building.metalMine],
@@ -305,16 +343,7 @@
                 [Building.deuteriumSynthesizer]: DeuteriumSynthesizer,
             };
 
-            const buildingTypes: ProductionBuildingType[] = [];
-            if (this.options.metalMine) {
-                buildingTypes.push(Building.metalMine);
-            }
-            if (this.options.crystalMine) {
-                buildingTypes.push(Building.crystalMine);
-            }
-            if (this.options.deuteriumSynthesizer) {
-                buildingTypes.push(Building.deuteriumSynthesizer);
-            }
+            const buildingTypes: ProductionBuildingType[] = [Building.metalMine, Building.crystalMine, Building.deuteriumSynthesizer];
 
             const colors: Record<ProductionBuildingType, HexColor> = {
                 [Building.metalMine]: this.colorMetal,
@@ -333,6 +362,7 @@
                     msuCost: null!,
                     msuProduction: null!,
                     color: null!,
+                    visible: false,
                 };
 
                 for (const buildingType of buildingTypes) {
@@ -359,6 +389,7 @@
                             msuCost,
                             msuProduction,
                             color: colors[buildingType],
+                            visible: this.isVisibleBuilding(buildingType),
                         };
                     }
                 }
@@ -374,6 +405,16 @@
             return result;
         }
 
+        private isVisibleBuilding(buildingType: Building): boolean {
+            switch (buildingType) {
+                case Building.metalMine: return this.options.metalMine;
+                case Building.crystalMine: return this.options.crystalMine;
+                case Building.deuteriumSynthesizer: return this.options.deuteriumSynthesizer;
+
+                default: throw new Error('invalid building');
+            }
+        }
+
         private get planets(): PlanetData[] {
             return Object.values(this.localPlayerData.planets)
                 .filter(p => !p.isMoon) as PlanetData[];
@@ -382,27 +423,37 @@
         private async mounted() {
             this.localPlayerData = await LocalPlayerModule.getData();
 
-            this.updateOptions();
+            this.initOptions();
         }
 
-        private updateOptions() {
-            const currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
+        private initOptions() {
+            let currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
             if (currentPlanet.isMoon) {
-                return;
+                const planets = Object.values(this.localPlayerData.planets);
+                const newSelection = planets.find(p => !p.isMoon
+                    && p.coordinates.galaxy == currentPlanet.coordinates.galaxy
+                    && p.coordinates.system == currentPlanet.coordinates.system
+                    && p.coordinates.position == currentPlanet.coordinates.position
+                ) as PlanetData ?? _throw('no planet found for moon');
+
+                this.selectedPlanet = newSelection.id;
+                currentPlanet = newSelection;
             }
 
-            this.options.crawler = currentPlanet.ships[Ship.crawler] > 0;
-            this.options.crawlerOverload = this.localPlayerData.playerClass == PlayerClass.collector;
-            this.options.items = Object.values(currentPlanet.activeItems).some(v => v != null && v > Date.now());
+            this.options.crawler.enabled = currentPlanet.ships[Ship.crawler] > 0;
+            this.options.crawler.overload = this.options.crawler.enabled && this.localPlayerData.playerClass == PlayerClass.collector;
 
-            const commandStaff = this.localPlayerData.officers.commander
-                && this.localPlayerData.officers.admiral
-                && this.localPlayerData.officers.geologist
-                && this.localPlayerData.officers.engineer
-                && this.localPlayerData.officers.technocrat;
+            this.options.playerClass = this.localPlayerData.playerClass;
+            this.options.allianceClass = this.localPlayerData.allianceClass;
+            this.options.plasmaTechnology = this.localPlayerData.research[Research.plasmaTechnology];
 
-            this.options.geologist = this.localPlayerData.officers.geologist;
-            this.options.commandStaff = commandStaff;
+            //this.options.items = Object.values(currentPlanet.activeItems).some(v => v != null && v > Date.now());
+
+            this.options.officers.commander = this.localPlayerData.officers.commander;
+            this.options.officers.admiral = this.localPlayerData.officers.admiral;
+            this.options.officers.geologist = this.localPlayerData.officers.geologist;
+            this.options.officers.engineer = this.localPlayerData.officers.engineer;
+            this.options.officers.technocrat = this.localPlayerData.officers.technocrat;
         }
 
         private formatTime(timeInHours: number) {
@@ -458,6 +509,7 @@
 
         & > div {
             display: flex;
+            padding: 0 8px;
         }
     }
 
@@ -465,5 +517,30 @@
         max-height: 100%;
         display: grid;
         grid-template-rows: auto 1fr;
+    }
+
+    .items-cell {
+        grid-row: 3 / span 3;
+        height: 100%;
+    }
+
+    .officers-cell {
+        grid-row: 3;
+    }
+
+    .player-class-cell {
+        grid-row: 4;
+    }
+
+    .alliance-class-cell {
+        grid-row: 5;
+    }
+
+    .buildings-cell {
+        grid-row: 6;
+
+        &.buttons {
+            grid-column: 2 / span 5;
+        }
     }
 </style>
