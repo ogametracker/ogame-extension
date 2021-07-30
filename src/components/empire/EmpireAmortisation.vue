@@ -22,9 +22,42 @@
 
             <div>LOCA: MSU rates</div>
             <div>
-                1:{{ settings.msuConversionRates.crystal }}:{{
-                    settings.msuConversionRates.deuterium
-                }}
+                <o-resource type="metal" :size="32" />
+                <input type="number" value="1" readonly />
+            
+                <o-resource type="crystal" :size="32" />
+                <input
+                    type="number"
+                    min="1"
+                    max="3"
+                    step="0.01"
+                    :value="settings.msuConversionRates.crystal"
+                    v-debounce:150ms="
+                        (val) =>
+                            (settings.msuConversionRates.crystal = Math.clamp(
+                                parseFloat(val, 10),
+                                1,
+                                3
+                            ))
+                    "
+                />
+                
+                <o-resource type="deuterium" :size="32" />
+                <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    step="0.01"
+                    :value="settings.msuConversionRates.deuterium"
+                    v-debounce:150ms="
+                        (val) =>
+                            (settings.msuConversionRates.deuterium = Math.clamp(
+                                parseFloat(val, 10),
+                                1,
+                                3
+                            ))
+                    "
+                />
             </div>
 
             <div style="grid-column-start: 1">LOCA: Plasmatech</div>
@@ -33,7 +66,18 @@
                 <input
                     style="width: 64px"
                     type="number"
-                    v-model.number="options.plasmaTechnology"
+                    min="0"
+                    max="100"
+                    step="1"
+                    :value="options.plasmaTechnology"
+                    v-debounce:150ms="
+                        (val) =>
+                            (options.plasmaTechnology = Math.clamp(
+                                parseInt(val, 10),
+                                0,
+                                100
+                            ))
+                    "
                 />
             </div>
 

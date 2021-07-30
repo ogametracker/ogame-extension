@@ -9,6 +9,7 @@ import OPlayerClass from './OPlayerClass.vue';
 import OAllianceClass from './OAllianceClass.vue';
 import OResearch from './OResearch.vue';
 import OBuilding from './OBuilding.vue';
+import OResource from './OResource.vue';
 
 Vue.component('o-ship', OShip);
 Vue.component('o-officer', OOfficer);
@@ -16,3 +17,4 @@ Vue.component('o-player-class', OPlayerClass);
 Vue.component('o-alliance-class', OAllianceClass);
 Vue.component('o-research', OResearch);
 Vue.component('o-building', OBuilding);
+Vue.component('o-resource', OResource);

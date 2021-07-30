@@ -10,7 +10,7 @@ export default {
                 return;
             }
 
-            chrome.storage.local.get([key], (result: any) => resolve(result[key]));
+            chrome.storage.local.get([key], (result: Record<string, any>) => resolve(result[key]));
         });
     },
     set<T>(key: string | number, data: T) {

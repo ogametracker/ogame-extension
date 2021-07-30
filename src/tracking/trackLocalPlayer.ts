@@ -9,7 +9,7 @@ import LocalPlayerModule, { AllianceClass, CrawlerProductionPercentage, LocalPla
 import { QueryParameters } from "@/utils/getQueryParameters";
 import _throw from "@/utils/throw";
 
-export async function startLocalPlayerTracking(queryParams: QueryParameters) {
+export async function startLocalPlayerTracking(queryParams: QueryParameters): Promise<void> {
     const data = await LocalPlayerModule.getData();
 
     if (queryParams.has('page', 'ingame')

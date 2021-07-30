@@ -16,7 +16,7 @@ class UnknownExpoEventError extends Error { }
 const tabIdExpeditionMessages = '22';
 const expoIdsWithError: number[] = [];
 
-export default async function readExpeditions() {
+export default async function readExpeditions(): Promise<void> {
     const messagePage = document.querySelector('div[id^="ui-id-"][aria-hidden="false"] > #fleetsgenericpage');
     const parent = messagePage?.parentElement;
     if (messagePage == null || parent == null)

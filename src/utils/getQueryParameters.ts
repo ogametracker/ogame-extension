@@ -1,7 +1,7 @@
 export class QueryParameters {
     private readonly _values: Record<string, string> = {};
 
-    public add(key: string, value: string) {
+    public add(key: string, value: string): void {
         this._values[key] = value;
     }
 
