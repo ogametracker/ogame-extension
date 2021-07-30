@@ -72,7 +72,7 @@
                             settings.msuConversionRates.deuterium = Math.clamp(
                                 parseFloat(val, 10),
                                 1,
-                                3
+                                5
                             );
                             saveSettings();
                         }
@@ -571,6 +571,10 @@
                 },
                 currentPlanet: {
                     ...planet,
+                    buildings: {
+                        production: { ...planet.buildings.production },
+                        facilities: { ...planet.buildings.facilities },
+                    },
                     activeItems: items,
                     productionSettings: {
                         [Building.metalMine]: 100,
@@ -641,10 +645,10 @@
                     }
 
                     const cost = building.getCost(level);
-                    const msuCost = getMsu(cost, this.settings.msuConversionRates);
+                    const msuCost = Math.round(getMsu(cost, this.settings.msuConversionRates));
 
                     const production = building.getProduction(level, info);
-                    const msuProduction = getMsu(production, this.settings.msuConversionRates);
+                    const msuProduction = Math.round(getMsu(production, this.settings.msuConversionRates));
 
                     const timeInHours = msuCost / msuProduction;
                     if (timeInHours < best.timeInHours) {
@@ -667,6 +671,8 @@
                 }
 
                 levels[best.buildingType]++;
+                info.currentPlanet.buildings.production[best.buildingType]++;
+
                 result.push(best);
             }
 
