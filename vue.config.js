@@ -7,6 +7,8 @@ module.exports = {
                 chunkFilename: '[name].css',
             }]);
         }
+
+        config.plugins.delete('named-chunks');
     },
     pluginOptions: {
         configureMultiCompilerWebpack: [
