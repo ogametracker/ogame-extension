@@ -99,29 +99,4 @@ $horizontal-tab-nav-height: 40px;
             font-size: 10px;
         }
     }
-
-    .item-image {
-        border: 2px solid;
-        border-radius: 4px;
-
-        &.grade-none {
-            border-color: $ogame-item-grade-none;
-        }
-
-        &.grade-bronze {
-            border-color: $ogame-item-grade-bronze;
-        }
-
-        &.grade-silver {
-            border-color: $ogame-item-grade-silver;
-        }
-
-        &.grade-gold {
-            border-color: $ogame-item-grade-gold;
-        }
-
-        &.grade-platinum {
-            border-color: $ogame-item-grade-platinum;
-        }
-    }
 }

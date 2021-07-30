@@ -11,13 +11,7 @@
                         v-for="(item, itemIndex) in itemDay.items"
                         :key="itemIndex"
                     >
-                        <img
-                            :src="`${$extBase}/img/ogame/items/${item.image}.png`"
-                            width="32"
-                            height="32"
-                            class="item-image"
-                            :class="`grade-${item.grade}`"
-                        />
+                        <o-item :item="item.hash" :size="32" />
                     </div>
                 </div>
 

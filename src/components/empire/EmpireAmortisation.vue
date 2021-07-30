@@ -23,10 +23,19 @@
             <div>LOCA: MSU rates</div>
             <div>
                 <o-resource type="metal" :size="32" />
-                <input type="number" value="1" readonly />
-            
+                <input
+                    type="number"
+                    value="1"
+                    readonly
+                    style="
+                        width: 64px;
+                        background-color: transparent !important;
+                    "
+                />
+
                 <o-resource type="crystal" :size="32" />
                 <input
+                    style="width: 64px"
                     type="number"
                     min="1"
                     max="3"
@@ -41,9 +50,10 @@
                             ))
                     "
                 />
-                
+
                 <o-resource type="deuterium" :size="32" />
                 <input
+                    style="width: 64px"
                     type="number"
                     min="1"
                     max="5"
@@ -93,6 +103,7 @@
 
                 <checkbox-button
                     label="LOCA: Crawler Overload?"
+                    color="#409e2b"
                     :size="32"
                     :value="options.crawler.enabled && options.crawler.overload"
                     @input="
@@ -107,7 +118,57 @@
             </div>
 
             <div class="items-cell">LOCA: Items</div>
-            <div class="items-cell">TODO</div>
+            <div class="items-cell item-selection">
+                <checkbox-button
+                    v-for="item in options_metalBoost"
+                    :key="item.itemHash"
+                    :value="options.items.metal == item.value"
+                    @input="
+                        options.items.metal =
+                            options.items.metal == item.value ? 0 : item.value
+                    "
+                >
+                    <o-item
+                        :item="item.itemHash"
+                        :size="32"
+                        :disabled="options.items.metal != item.value"
+                    />
+                </checkbox-button>
+
+                <checkbox-button
+                    v-for="item in options_crystalBoost"
+                    :key="item.itemHash"
+                    :value="options.items.crystal == item.value"
+                    @input="
+                        options.items.crystal =
+                            options.items.crystal == item.value ? 0 : item.value
+                    "
+                >
+                    <o-item
+                        :item="item.itemHash"
+                        :size="32"
+                        :disabled="options.items.crystal != item.value"
+                    />
+                </checkbox-button>
+
+                <checkbox-button
+                    v-for="item in options_deuteriumBoost"
+                    :key="item.itemHash"
+                    :value="options.items.deuterium == item.value"
+                    @input="
+                        options.items.deuterium =
+                            options.items.deuterium == item.value
+                                ? 0
+                                : item.value
+                    "
+                >
+                    <o-item
+                        :item="item.itemHash"
+                        :size="32"
+                        :disabled="options.items.deuterium != item.value"
+                    />
+                </checkbox-button>
+            </div>
 
             <div class="officers-cell">LOCA: Officers</div>
             <div class="officers-cell">
@@ -258,13 +319,16 @@
     import SettingsModule from '@/store/modules/SettingsModule';
     import getMsu from '@/utils/getMsu';
     import Cost from '@/models/ogame/buildables/Cost';
-    import { HexColor, hexColorToRGB } from '@/utils/colors';
+    import { HexColor } from '@/utils/colors';
     import i18n from '@/i18n';
     import Ship from '@/models/Ship';
     import Research from '@/models/Research';
     import _throw from '@/utils/throw';
+    import { ItemHash } from '@/models/items';
 
     type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
+
+    type ItemBoost = 0 | 10 | 20 | 30 | 40;
 
     interface AmortisationResult {
         buildingType: ProductionBuildingType;
@@ -280,6 +344,8 @@
 
     @Component({})
     export default class EmpireAmortisation extends Vue {
+        private readonly Items = ItemHash;
+
         private selectedPlanet = OgameMetaData.planetId;
         private localPlayerData: LocalPlayerData = null!;
         private readonly settings = SettingsModule.settings;
@@ -294,6 +360,62 @@
         private readonly options_allianceClasses: AllianceClass[] = [AllianceClass.trader, AllianceClass.researcher, AllianceClass.warrior];
         private readonly options_allianceClass_none = AllianceClass.none;
 
+        private readonly options_metalBoost = [
+            {
+                itemHash: ItemHash.metalBooster_bronze_7days,
+                value: 10,
+            },
+            {
+                itemHash: ItemHash.metalBooster_silver_7days,
+                value: 20,
+            },
+            {
+                itemHash: ItemHash.metalBooster_gold_7days,
+                value: 30,
+            },
+            {
+                itemHash: ItemHash.metalBooster_platinum_7days,
+                value: 40,
+            }
+        ];
+
+        private readonly options_crystalBoost = [
+            {
+                itemHash: ItemHash.crystalBooster_bronze_7days,
+                value: 10,
+            },
+            {
+                itemHash: ItemHash.crystalBooster_silver_7days,
+                value: 20,
+            },
+            {
+                itemHash: ItemHash.crystalBooster_gold_7days,
+                value: 30,
+            },
+            {
+                itemHash: ItemHash.crystalBooster_platinum_7days,
+                value: 40,
+            }
+        ];
+
+        private readonly options_deuteriumBoost = [
+            {
+                itemHash: ItemHash.deuteriumBooster_bronze_7days,
+                value: 10,
+            },
+            {
+                itemHash: ItemHash.deuteriumBooster_silver_7days,
+                value: 20,
+            },
+            {
+                itemHash: ItemHash.deuteriumBooster_gold_7days,
+                value: 30,
+            },
+            {
+                itemHash: ItemHash.deuteriumBooster_platinum_7days,
+                value: 40,
+            }
+        ];
 
         private readonly options = {
             metalMine: true,
@@ -307,9 +429,9 @@
 
             plasmaTechnology: 0,
             items: {
-                metal: 0,
-                crystal: 0,
-                deuterium: 0,
+                metal: 0 as ItemBoost,
+                crystal: 0 as ItemBoost,
+                deuterium: 0 as ItemBoost,
             },
             officers: {
                 commander: true,
@@ -335,6 +457,21 @@
         }
 
         private getProductionInject(planet: PlanetData): ProductionInject {
+            const year = 1000*60*60*24*52;
+            const items: Partial<Record<ItemHash, number>> = {};
+            if(this.options.items.metal > 0) {
+                const item = this.options_metalBoost.find(p => p.value == this.options.items.metal)?.itemHash ?? _throw('invalid metal boost');
+                items[item] = Date.now() + year;
+            }
+            if(this.options.items.crystal > 0) {
+                const item = this.options_crystalBoost.find(p => p.value == this.options.items.crystal)?.itemHash ?? _throw('invalid crystal boost');
+                items[item] = Date.now() + year;
+            }
+            if(this.options.items.deuterium > 0) {
+                const item = this.options_deuteriumBoost.find(p => p.value == this.options.items.deuterium)?.itemHash ?? _throw('invalid deuterium boost');
+                items[item] = Date.now() + year;
+            }
+
             return {
                 player: {
                     ...this.localPlayerData,
@@ -348,6 +485,7 @@
                 },
                 currentPlanet: {
                     ...planet,
+                    activeItems: items,
                     productionSettings: {
                         [Building.metalMine]: 100,
                         [Building.crystalMine]: 100,
@@ -491,13 +629,116 @@
             this.options.allianceClass = this.localPlayerData.allianceClass;
             this.options.plasmaTechnology = this.localPlayerData.research[Research.plasmaTechnology];
 
-            //this.options.items = Object.values(currentPlanet.activeItems).some(v => v != null && v > Date.now());
+            this.options.items = {
+                metal: this.getActiveMetalBoost(currentPlanet.activeItems),
+                crystal: this.getActiveCrystalBoost(currentPlanet.activeItems),
+                deuterium: this.getActiveDeuteriumBoost(currentPlanet.activeItems),
+            };
 
             this.options.officers.commander = this.localPlayerData.officers.commander;
             this.options.officers.admiral = this.localPlayerData.officers.admiral;
             this.options.officers.geologist = this.localPlayerData.officers.geologist;
             this.options.officers.engineer = this.localPlayerData.officers.engineer;
             this.options.officers.technocrat = this.localPlayerData.officers.technocrat;
+        }
+
+        private getActiveMetalBoost(activeItems: Partial<Record<ItemHash, number | undefined>>): ItemBoost {
+            const now = Date.now();
+
+            if ((activeItems[ItemHash.metalBooster_platinum_7days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_platinum_30days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_platinum_90days] ?? 0) > now
+            ) {
+                return 40;
+            }
+
+            if ((activeItems[ItemHash.metalBooster_gold_7days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_gold_30days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_gold_90days] ?? 0) > now
+            ) {
+                return 30;
+            }
+
+            if ((activeItems[ItemHash.metalBooster_silver_7days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_silver_30days] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_silver_90days] ?? 0) > now
+            ) {
+                return 20;
+            }
+
+            if ((activeItems[ItemHash.metalBooster_bronze_1day] ?? 0) > now
+                || (activeItems[ItemHash.metalBooster_bronze_7days] ?? 0) > now
+            ) {
+                return 10;
+            }
+
+            return 0;
+        }
+
+        private getActiveCrystalBoost(activeItems: Partial<Record<ItemHash, number | undefined>>): ItemBoost {
+            const now = Date.now();
+
+            if ((activeItems[ItemHash.crystalBooster_platinum_7days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_platinum_30days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_platinum_90days] ?? 0) > now
+            ) {
+                return 40;
+            }
+
+            if ((activeItems[ItemHash.crystalBooster_gold_7days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_gold_30days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_gold_90days] ?? 0) > now
+            ) {
+                return 30;
+            }
+
+            if ((activeItems[ItemHash.crystalBooster_silver_7days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_silver_30days] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_silver_90days] ?? 0) > now
+            ) {
+                return 20;
+            }
+
+            if ((activeItems[ItemHash.crystalBooster_bronze_1day] ?? 0) > now
+                || (activeItems[ItemHash.crystalBooster_bronze_7days] ?? 0) > now
+            ) {
+                return 10;
+            }
+
+            return 0;
+        }
+
+        private getActiveDeuteriumBoost(activeItems: Partial<Record<ItemHash, number | undefined>>): ItemBoost {
+            const now = Date.now();
+
+            if ((activeItems[ItemHash.deuteriumBooster_platinum_7days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_platinum_30days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_platinum_90days] ?? 0) > now
+            ) {
+                return 40;
+            }
+
+            if ((activeItems[ItemHash.deuteriumBooster_gold_7days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_gold_30days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_gold_90days] ?? 0) > now
+            ) {
+                return 30;
+            }
+
+            if ((activeItems[ItemHash.deuteriumBooster_silver_7days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_silver_30days] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_silver_90days] ?? 0) > now
+            ) {
+                return 20;
+            }
+
+            if ((activeItems[ItemHash.deuteriumBooster_bronze_1day] ?? 0) > now
+                || (activeItems[ItemHash.deuteriumBooster_bronze_7days] ?? 0) > now
+            ) {
+                return 10;
+            }
+
+            return 0;
         }
 
         private formatTime(timeInHours: number) {
@@ -566,6 +807,13 @@
     .items-cell {
         grid-row: 3 / span 3;
         height: 100%;
+
+        &.item-selection {
+            display: grid;
+            grid-template-columns: repeat(4, max-content);
+            grid-template-rows: repeat(4, max-content);
+            row-gap: 3px;
+        }
     }
 
     .officers-cell {

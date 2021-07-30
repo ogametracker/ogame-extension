@@ -67,7 +67,7 @@ table {
     .grid-table-body {
         display: contents;
 
-        .grid-table-row:nth-of-type(even) .grid-table-cell {
+        .grid-table-row:not(.grid-table-row-hidden):nth-of-type(even) .grid-table-cell {
             background: rgba(var(--color), 0.01);
         }
 
@@ -82,6 +82,10 @@ table {
 
     .grid-table-row {
         display: contents;
+
+        &.grid-table-row-hidden {
+            display: none !important;
+        }
     }
 
     .grid-table-cell {

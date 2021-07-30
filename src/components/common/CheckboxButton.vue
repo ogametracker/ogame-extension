@@ -4,6 +4,7 @@
         :class="{
             off: !checked,
             simple: label != null || simple,
+            light: light,
         }"
         :style="{
             '--button-color': color,
@@ -29,6 +30,9 @@
         @Prop({ required: false, type: Boolean, default: false })
         private simple!: boolean;
 
+        @Prop({ required: false, type: Boolean, default: false })
+        private light!: boolean;
+
         @Prop({ required: false, type: String })
         private label!: string | null;
 
@@ -45,6 +49,11 @@
         border-radius: 3px;
         cursor: pointer;
         display: inline-block;
+
+        color: white;
+        &.light {
+            color: black;
+        }
 
         &.simple {
             position: relative;

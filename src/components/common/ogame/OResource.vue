@@ -38,27 +38,27 @@
 
     .o-resource {
         &.metal {
-            background-image: url(#{$base-url}/img/ogame/resources/metal.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/metal.upscaled.png);
         }
         
         &.crystal {
-            background-image: url(#{$base-url}/img/ogame/resources/crystal.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/crystal.upscaled.png);
         }
         
         &.deuterium {
-            background-image: url(#{$base-url}/img/ogame/resources/deuterium.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/deuterium.upscaled.png);
         }
         
         &.energy {
-            background-image: url(#{$base-url}/img/ogame/resources/energy.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/energy.upscaled.png);
         }
         
         &.dark-matter {
-            background-image: url(#{$base-url}/img/ogame/resources/dark-matter.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/dark-matter.upscaled.png);
         }
         
         &.tritium {
-            background-image: url(#{$base-url}/img/ogame/resources/tritium.upscaled.jpg);
+            background-image: url(#{$base-url}/img/ogame/resources/tritium.upscaled.png);
         }
     }
 </style>
