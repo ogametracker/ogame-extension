@@ -1,5 +1,6 @@
 import LanguageKey from '../languageKey';
 import de from './de';
+import empire, { I18nExtensionEmpire } from './empire';
 import en from './en';
 import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
@@ -41,17 +42,21 @@ export interface I18nExtension {
     since: string;
     lost: string;
     destroyed: string;
+
+    empire: I18nExtensionEmpire;
 }
 
 const messages: Record<LanguageKey, I18nExtension> = {
     [LanguageKey.de]: {
         settings: settings.de,
         notifications: notifications.de,
+        empire: empire.de,
         ...de,
     },
     [LanguageKey.en]: {
         settings: settings.en,
         notifications: notifications.en,
+        empire: empire.en,
         ...en,
     },
 };

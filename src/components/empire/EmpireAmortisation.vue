@@ -4,7 +4,11 @@
         class="amortisation"
     >
         <div class="options">
-            <div>LOCA: Planet</div>
+            <div>
+                {{
+                    $i18n.messages.extension.empire.amortisation.selectedPlanet
+                }}
+            </div>
             <div>
                 <select v-model.number="selectedPlanet">
                     <option
@@ -20,7 +24,9 @@
                 </select>
             </div>
 
-            <div>LOCA: MSU rates</div>
+            <div>
+                {{ $i18n.messages.extension.empire.amortisation.msuRates }}
+            </div>
             <div>
                 <o-resource type="metal" :size="32" />
                 <input
@@ -42,12 +48,14 @@
                     step="0.01"
                     :value="settings.msuConversionRates.crystal"
                     v-debounce:150ms="
-                        (val) =>
-                            (settings.msuConversionRates.crystal = Math.clamp(
+                        (val) => {
+                            settings.msuConversionRates.crystal = Math.clamp(
                                 parseFloat(val, 10),
                                 1,
                                 3
-                            ))
+                            );
+                            saveSettings();
+                        }
                     "
                 />
 
@@ -60,17 +68,21 @@
                     step="0.01"
                     :value="settings.msuConversionRates.deuterium"
                     v-debounce:150ms="
-                        (val) =>
-                            (settings.msuConversionRates.deuterium = Math.clamp(
+                        (val) => {
+                            settings.msuConversionRates.deuterium = Math.clamp(
                                 parseFloat(val, 10),
                                 1,
                                 3
-                            ))
+                            );
+                            saveSettings();
+                        }
                     "
                 />
             </div>
 
-            <div style="grid-column-start: 1">LOCA: Plasmatech</div>
+            <div style="grid-column-start: 1">
+                {{ $i18n.messages.ogame.research[122] }}
+            </div>
             <div>
                 <o-research type="plasma-technology" :size="32" />
                 <input
@@ -91,7 +103,9 @@
                 />
             </div>
 
-            <div>LOCA: Crawlers</div>
+            <div>
+                {{ $i18n.messages.ogame.ships[217] }}
+            </div>
             <div>
                 <checkbox-button v-model="options.crawler.enabled">
                     <o-ship
@@ -102,7 +116,10 @@
                 </checkbox-button>
 
                 <checkbox-button
-                    label="LOCA: Crawler Overload?"
+                    :label="
+                        $i18n.messages.extension.empire.amortisation
+                            .crawlerOverload
+                    "
                     color="#409e2b"
                     :size="32"
                     :value="options.crawler.enabled && options.crawler.overload"
@@ -117,7 +134,9 @@
                 />
             </div>
 
-            <div class="items-cell">LOCA: Items</div>
+            <div class="items-cell">
+                {{ $i18n.messages.extension.empire.amortisation.items }}
+            </div>
             <div class="items-cell item-selection">
                 <checkbox-button
                     v-for="item in options_metalBoost"
@@ -170,7 +189,9 @@
                 </checkbox-button>
             </div>
 
-            <div class="officers-cell">LOCA: Officers</div>
+            <div class="officers-cell">
+                {{ $i18n.messages.extension.empire.amortisation.officers }}
+            </div>
             <div class="officers-cell">
                 <checkbox-button
                     v-for="off in options_officers"
@@ -185,7 +206,9 @@
                 </checkbox-button>
             </div>
 
-            <div class="player-class-cell">LOCA: Player Class</div>
+            <div class="player-class-cell">
+                {{ $i18n.messages.extension.empire.amortisation.playerClass }}
+            </div>
             <div class="player-class-cell">
                 <checkbox-button
                     v-for="playerClass in options_playerClasses"
@@ -207,7 +230,9 @@
                 </checkbox-button>
             </div>
 
-            <div class="alliance-class-cell">LOCA: Alliance Class</div>
+            <div class="alliance-class-cell">
+                {{ $i18n.messages.extension.empire.amortisation.allianceClass }}
+            </div>
             <div class="alliance-class-cell">
                 <checkbox-button
                     v-for="allianceClass in options_allianceClasses"
@@ -229,21 +254,23 @@
                 </checkbox-button>
             </div>
 
-            <div class="buildings-cell">LOCA: Buildings</div>
+            <div class="buildings-cell">
+                {{ $i18n.messages.extension.empire.amortisation.buildings }}
+            </div>
             <div class="buildings-cell buttons">
                 <checkbox-button
-                    label="LOCA: Metallmine"
+                    :label="$i18n.messages.ogame.buildings[1]"
                     :color="colorMetal"
                     v-model="options.metalMine"
                 />
 
                 <checkbox-button
-                    label="LOCA: Kristallmine"
+                    :label="$i18n.messages.ogame.buildings[2]"
                     :color="colorCrystal"
                     v-model="options.crystalMine"
                 />
                 <checkbox-button
-                    label="LOCA: Deuterium-Synthetisierer"
+                    :label="$i18n.messages.ogame.buildings[3]"
                     :color="colorDeuterium"
                     v-model="options.deuteriumSynthesizer"
                 />
@@ -253,55 +280,110 @@
         <grid-table sticky-header :columns="cols" style="min-height: 100px">
             <grid-thead>
                 <grid-tr>
-                    <grid-cell>LOCA: Gebäude</grid-cell>
-                    <grid-cell>LOCA: Stufe</grid-cell>
-                    <grid-cell>LOCA: Cost Metal</grid-cell>
-                    <grid-cell>LOCA: Cost Crystal</grid-cell>
-                    <grid-cell>LOCA: Cost (MSU)</grid-cell>
-                    <grid-cell>LOCA: Production/h</grid-cell>
-                    <grid-cell>LOCA: Production/h (MSU)</grid-cell>
-                    <grid-cell>LOCA: Amortisation Time</grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableBuilding
+                        }}
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableLevel
+                        }}
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableCost
+                        }}
+                        <o-resource
+                            type="metal"
+                            :size="24"
+                            style="margin-left: 4px"
+                        />
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableCost
+                        }}
+                        <o-resource
+                            type="crystal"
+                            :size="24"
+                            style="margin-left: 4px"
+                        />
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableCostMsu
+                        }}
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableProduction
+                        }}
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableProductionMsu
+                        }}
+                    </grid-cell>
+                    <grid-cell>
+                        {{
+                            $i18n.messages.extension.empire.amortisation
+                                .tableAmortisationTime
+                        }}
+                    </grid-cell>
                 </grid-tr>
             </grid-thead>
             <grid-tbody>
-                <grid-tr
-                    v-for="row in rows"
-                    :key="`${row.buildingType}-${row.level}`"
-                    v-show="row.visible"
-                >
-                    <grid-cell>
-                        {{ $i18n.messages.ogame.buildings[row.buildingType] }}
-                        <span
-                            class="color-indicator"
-                            :style="{
-                                background: row.color,
-                            }"
-                        />
-                    </grid-cell>
-                    <grid-cell>{{ row.level }}</grid-cell>
-                    <grid-cell>{{
-                        $i18n.formatNumber(row.cost.metal)
-                    }}</grid-cell>
-                    <grid-cell>{{
-                        $i18n.formatNumber(row.cost.crystal)
-                    }}</grid-cell>
-                    <grid-cell>{{ $i18n.formatNumber(row.msuCost) }}</grid-cell>
-                    <grid-cell>
-                        {{
-                            $i18n.formatNumber(
-                                Math.max(
-                                    row.production.metal,
-                                    row.production.crystal,
-                                    row.production.deuterium
+                <template v-for="row in rows">
+                    <grid-tr
+                        v-if="row.visible"
+                        :key="`${row.buildingType}-${row.level}`"
+                    >
+                        <grid-cell>
+                            {{
+                                $i18n.messages.ogame.buildings[row.buildingType]
+                            }}
+                            <span
+                                class="color-indicator"
+                                :style="{
+                                    background: row.color,
+                                }"
+                            />
+                        </grid-cell>
+                        <grid-cell>{{ row.level }}</grid-cell>
+                        <grid-cell>{{
+                            $i18n.formatNumber(row.cost.metal)
+                        }}</grid-cell>
+                        <grid-cell>{{
+                            $i18n.formatNumber(row.cost.crystal)
+                        }}</grid-cell>
+                        <grid-cell>{{
+                            $i18n.formatNumber(row.msuCost)
+                        }}</grid-cell>
+                        <grid-cell>
+                            {{
+                                $i18n.formatNumber(
+                                    Math.max(
+                                        row.production.metal,
+                                        row.production.crystal,
+                                        row.production.deuterium
+                                    )
                                 )
-                            )
-                        }}
-                    </grid-cell>
-                    <grid-cell>{{
-                        $i18n.formatNumber(row.msuProduction)
-                    }}</grid-cell>
-                    <grid-cell>{{ formatTime(row.timeInHours) }}</grid-cell>
-                </grid-tr>
+                            }}
+                        </grid-cell>
+                        <grid-cell>{{
+                            $i18n.formatNumber(row.msuProduction)
+                        }}</grid-cell>
+                        <grid-cell>{{ formatTime(row.timeInHours) }}</grid-cell>
+                    </grid-tr>
+                </template>
             </grid-tbody>
         </grid-table>
     </div>
@@ -349,6 +431,10 @@
         private selectedPlanet = OgameMetaData.planetId;
         private localPlayerData: LocalPlayerData = null!;
         private readonly settings = SettingsModule.settings;
+
+        private async saveSettings() {
+            await SettingsModule.save();
+        }
 
         private readonly cols = ['200px', 'auto', '1fr', '1fr', '1fr', 'auto', 'auto', '1fr',];
 
@@ -457,17 +543,17 @@
         }
 
         private getProductionInject(planet: PlanetData): ProductionInject {
-            const year = 1000*60*60*24*52;
+            const year = 1000 * 60 * 60 * 24 * 52;
             const items: Partial<Record<ItemHash, number>> = {};
-            if(this.options.items.metal > 0) {
+            if (this.options.items.metal > 0) {
                 const item = this.options_metalBoost.find(p => p.value == this.options.items.metal)?.itemHash ?? _throw('invalid metal boost');
                 items[item] = Date.now() + year;
             }
-            if(this.options.items.crystal > 0) {
+            if (this.options.items.crystal > 0) {
                 const item = this.options_crystalBoost.find(p => p.value == this.options.items.crystal)?.itemHash ?? _throw('invalid crystal boost');
                 items[item] = Date.now() + year;
             }
-            if(this.options.items.deuterium > 0) {
+            if (this.options.items.deuterium > 0) {
                 const item = this.options_deuteriumBoost.find(p => p.value == this.options.items.deuterium)?.itemHash ?? _throw('invalid deuterium boost');
                 items[item] = Date.now() + year;
             }

@@ -10,6 +10,7 @@ import factions, { I18nOgameFactions } from './factions';
 import battleResults, { I18nOgameBattleResults } from './battleResults';
 import LanguageKey from '../languageKey';
 import buildings, { I18nOgameBuildings } from './buildings';
+import research, { I18nOgameResearch } from './research';
 
 export interface I18nOgame {
     factions: I18nOgameFactions;
@@ -23,6 +24,7 @@ export interface I18nOgame {
     debrisFieldMessages: I18nOgameDebrisFieldMessages;
     battleResults: I18nOgameBattleResults;
     buildings: I18nOgameBuildings;
+    research: I18nOgameResearch;
 }
 
 const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
@@ -40,6 +42,7 @@ const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
                 factions: factions[lang],
                 battleResults: battleResults[lang],
                 buildings: buildings[lang],
+                research: research[lang],
             }
         } as Record<LanguageKey, I18nOgame>;
         return msg;

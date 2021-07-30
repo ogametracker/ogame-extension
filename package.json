@@ -7,7 +7,7 @@
         "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', [Math]::Floor(((Get-Date).Hour * 60 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second) / 2)) | Set-Content ./dist/manifest.json\"",
         "ext-set-name-dev": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[name-suffix]', ' DEV') | Set-Content ./dist/manifest.json\"",
         "ext-set-name-prod": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[name-suffix]', '') | Set-Content ./dist/manifest.json\"",
-        "vue-build": "vue-cli-service build --mode production",
+        "vue-build": "vue-cli-service build --mode production --verbose",
         "build": "npm run vue-build && npm run ext-set-version && npm run ext-set-name-dev",
         "build-prod": "npm run vue-build && npm run ext-set-version && npm run ext-set-name-prod",
         "lint": "vue-cli-service lint",
@@ -17,7 +17,6 @@
     },
     "dependencies": {
         "chart.js": "^2.9.4",
-        "chartjs": "^0.3.24",
         "core-js": "^3.6.5",
         "date-fns": "^2.19.0",
         "file-loader": "^4.3.0",

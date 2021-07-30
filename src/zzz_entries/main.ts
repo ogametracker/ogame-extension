@@ -8,7 +8,7 @@ Vue.prototype.$extBase = chromeUrl.substr(0, chromeUrl.length - 1); // remove tr
 // add vue-debounce
 import vueDebounce  from 'vue-debounce';
 Vue.use(vueDebounce, {
-    listenTo: ['input'],
+    listenTo: ['input', 'change', 'blur'],
     defaultTime: '150ms',
 });
 
