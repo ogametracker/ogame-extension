@@ -36,8 +36,8 @@ export class I18n {
         return format(date, dateFormat);
     }
 
-    public formatNumber(number: number) {
-        const formatter = new Intl.NumberFormat(this.locale);
+    public formatNumber(number: number, options?: Intl.NumberFormatOptions): string {
+        const formatter = new Intl.NumberFormat(this.locale, options);
         return formatter.format(number);
     }
 }

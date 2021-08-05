@@ -46,48 +46,54 @@ export interface MoonData extends PlanetDataBase {
     ships: MoonShipCount;
 }
 
+export interface PlanetBuildingProductionLevels {
+    [Building.metalMine]: number;
+    [Building.crystalMine]: number;
+    [Building.deuteriumSynthesizer]: number;
+
+    [Building.metalStorage]: number;
+    [Building.crystalStorage]: number;
+    [Building.deuteriumTank]: number;
+
+    [Building.solarPlant]: number;
+    [Building.fusionReactor]: number;
+}
+
+export interface PlanetBuildingFacilitiesLevels {
+    [Building.roboticsFactory]: number;
+    [Building.shipyard]: number;
+    [Building.researchLab]: number;
+    [Building.allianceDepot]: number;
+    [Building.missileSilo]: number;
+    [Building.naniteFactory]: number;
+    [Building.terraformer]: number;
+    [Building.spaceDock]: number;
+}
 
 export interface PlanetBuildingLevels {
-    production: {
-        [Building.metalMine]: number;
-        [Building.crystalMine]: number;
-        [Building.deuteriumSynthesizer]: number;
+    production: PlanetBuildingProductionLevels;
+    facilities: PlanetBuildingFacilitiesLevels;
+}
 
-        [Building.metalStorage]: number;
-        [Building.crystalStorage]: number;
-        [Building.deuteriumTank]: number;
 
-        [Building.solarPlant]: number;
-        [Building.fusionReactor]: number;
-    };
+export interface MoonBuildingProductionLevels {
+    [Building.metalStorage]: number;
+    [Building.crystalStorage]: number;
+    [Building.deuteriumTank]: number;
+}
 
-    facilities: {
-        [Building.roboticsFactory]: number;
-        [Building.shipyard]: number;
-        [Building.researchLab]: number;
-        [Building.allianceDepot]: number;
-        [Building.missileSilo]: number;
-        [Building.naniteFactory]: number;
-        [Building.terraformer]: number;
-        [Building.spaceDock]: number;
-    };
+export interface MoonBuildingFacilitiesLevels {
+    [Building.roboticsFactory]: number;
+    [Building.shipyard]: number;
+
+    [Building.lunarBase]: number;
+    [Building.sensorPhalanx]: number;
+    [Building.jumpGate]: number;
 }
 
 export interface MoonBuildingLevels {
-    production: {
-        [Building.metalStorage]: number;
-        [Building.crystalStorage]: number;
-        [Building.deuteriumTank]: number;
-    };
-
-    facilities: {
-        [Building.roboticsFactory]: number;
-        [Building.shipyard]: number;
-
-        [Building.lunarBase]: number;
-        [Building.sensorPhalanx]: number;
-        [Building.jumpGate]: number;
-    };
+    production: MoonBuildingProductionLevels;
+    facilities: MoonBuildingFacilitiesLevels;
 }
 
 export interface ResearchLevels {

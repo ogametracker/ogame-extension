@@ -394,7 +394,7 @@
     import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import LocalPlayerModule, { AllianceClass, LocalPlayerData, MoonData, PlanetData, PlayerClass, PlayerOfficers } from '@/store/modules/LocalPlayerModule';
+    import LocalPlayerModule, { AllianceClass, LocalPlayerData, PlanetData, PlayerClass, PlayerOfficers } from '@/store/modules/LocalPlayerModule';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import Building from '@/models/Building';
     import ProductionBuilding, { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';

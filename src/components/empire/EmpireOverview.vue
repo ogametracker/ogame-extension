@@ -1,5 +1,8 @@
 <template>
     <tab-view :items="items" vertical>
+        <template #production_buildings>
+            <empire-production />
+        </template>
         <template #amortisation>
             <empire-amortisation />
         </template>
@@ -10,9 +13,11 @@
     import { Component, Vue } from "vue-property-decorator";
     import { TabViewItem } from "@/components/common/TabView.vue";
     import EmpireAmortisation from './EmpireAmortisation.vue';
+    import EmpireProduction from './EmpireProduction.vue';
 
     @Component({
         components: {
+            EmpireProduction,
             EmpireAmortisation,
         },
     })
