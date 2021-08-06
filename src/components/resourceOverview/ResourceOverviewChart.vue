@@ -54,7 +54,7 @@
     import { defaultMixColor, HexColor } from '@/utils/colors';
     import { sub, startOfDay, add } from 'date-fns';
     import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
     import i18n from '@/i18n';
     import BattleReport from '@/models/battles/BattleReport';
@@ -112,9 +112,14 @@
 
         private daysOffset = 0;
 
+        @Ref('canvas')
+        private canvas!: HTMLCanvasElement;
+
+        @Ref('scrollbar')
+        private scrollbar!: HTMLDivElement;
 
         private get context() {
-            return (this.$refs.canvas as HTMLCanvasElement).getContext('2d')!;
+            return (this.canvas as HTMLCanvasElement).getContext('2d')!;
         }
 
         private get chartOptions(): Chart.ChartOptions {
@@ -313,10 +318,6 @@
 
             this.updateMaxValue();
             this.renderOrUpdate();
-        }
-
-        private get scrollbar(): HTMLDivElement {
-            return this.$refs.scrollbar as HTMLDivElement;
         }
 
         private updateScroll() {

@@ -4,7 +4,7 @@
         :size="size"
         :disabled="disabled"
         :style="{
-            'background-image': `url(${$extBase}/img/ogame/items/${itemInfo.image}.png)`,
+            'background-image': `url(${$extBase}/img/ogame/items/${itemInfo.image}.png)`
         }"
         :class="`grade-${itemInfo.grade}`"
     />
@@ -33,11 +33,15 @@
     }
 </script>
 <style lang="scss" scoped>
-    @import '@/styles/colors';
+    @import "@/styles/colors";
 
     .o-item {
         border: 2px solid;
         border-radius: 4px;
+
+        &.disabled {
+            filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
 
         &.grade-none {
             border-color: $ogame-item-grade-none;
