@@ -268,12 +268,7 @@ function getResourceExpo(id: number, date: number, message: string): ExpoEvent |
 
 
 function getFleetExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const regex = i18n.messages.ogame.expoMessages[ExpoType.fleet].regex;
-    const match = message.match(regex);
-    if (match == null) {
-        return null;
-    }
-    
+
     const size = Object.values(ExpoSize)
         .find(size => i18n.messages.ogame.expoMessages[ExpoType.fleet][size]
             .some((msg: string) => message.includes(msg))
@@ -282,19 +277,24 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
         return null;
     }
 
-    const shipText = match.groups!.ships;
     const ships: Record<ExpoFindableShips, number | undefined> = {};
 
-    getNumericEnumValues<Ship>(ExpoFindableShips)
-        .forEach(ship => {
-            const shipName = i18n.messages.ogame.ships[ship];
-            const shipRegex = new RegExp(shipName + ': (\\d+)');
-            const shipMatch = shipText.match(shipRegex);
+    const regex = i18n.messages.ogame.expoMessages[ExpoType.fleet].regex;
+    const match = message.match(regex);
+    if (match != null) {
+        const shipText = match.groups!.ships;
 
-            if (shipMatch != null) {
-                ships[ship] = parseInt(shipMatch[1]);
-            }
-        });
+        getNumericEnumValues<Ship>(ExpoFindableShips)
+            .forEach(ship => {
+                const shipName = i18n.messages.ogame.ships[ship];
+                const shipRegex = new RegExp(shipName + ': (\\d+)');
+                const shipMatch = shipText.match(shipRegex);
+
+                if (shipMatch != null) {
+                    ships[ship] = parseInt(shipMatch[1]);
+                }
+            });
+    }
 
     const result: ExpoEventFleet = {
         type: ExpoType.fleet,
