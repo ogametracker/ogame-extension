@@ -91,6 +91,7 @@
             Settings,
             ResourceOverview,
             EmpireOverview,
+            Info,
         },
     })
     export default class StatsDialog extends Vue {
