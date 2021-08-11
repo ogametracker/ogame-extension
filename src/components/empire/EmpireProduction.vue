@@ -10,26 +10,23 @@
                     <th>LOCA: Planet</th>
                     <th>LOCA: Koordinaten</th>
                     <th>
-                        LOCA: Metallmine
-                        <o-resource type="metal" :size="24" />
+                        <o-building type="metal-mine" :size="100" />
                     </th>
                     <th>
-                        LOCA: Kristallmine
-                        <o-resource type="crystal" :size="24" />
+                        <o-building type="crystal-mine" :size="100" />
                     </th>
                     <th>
-                        LOCA: Deuterium-Synthetisierer
-                        <o-resource type="deuterium" :size="24" />
+                        <o-building type="deuterium-synthesizer" :size="100" />
                     </th>
                     <th>
-                        LOCA: Solarkraftwerk
-                        <o-resource type="energy" :size="24" />
+                        <o-building type="solar-plant" :size="100" />
                     </th>
                     <th>
-                        LOCA: Fusionskraftwerk
-                        <o-resource type="energy" :size="24" />
+                        <o-building type="fusion-reactor" :size="100" />
                     </th>
-                    <th>LOCA: (aktive) Crawler</th>
+                    <th>
+                        <o-ship type="crawler" :size="100" />
+                    </th>
                 </tr>
             </thead>
             <tbody>

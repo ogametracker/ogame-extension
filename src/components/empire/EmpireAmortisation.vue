@@ -436,7 +436,7 @@
             await SettingsModule.save();
         }
 
-        private readonly cols = ['200px', 'auto', '1fr', '1fr', '1fr', 'auto', 'auto', '1fr',];
+        private readonly cols = ['250px', '60px', '1fr', '1fr', '1fr', '1fr', '1fr', '1fr',];
 
         private readonly maxLevel = 70;
 

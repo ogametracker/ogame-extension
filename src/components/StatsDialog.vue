@@ -67,6 +67,7 @@
     import i18n from "@/i18n";
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
     import EmpireOverview from '@/components/empire/EmpireOverview.vue';
+    import Info from '@/components/info/Info.vue';
 
     type TabItem = {
         label?: string;
@@ -171,7 +172,7 @@
                 name: 'info',
                 icon: 'information',
                 color: '#0f0f96',
-                component: null!,
+                component: 'info',
             },
         ];
 
