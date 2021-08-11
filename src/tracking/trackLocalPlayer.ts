@@ -253,7 +253,7 @@ function getPlanetData(planet: Element): Pick<PlanetData, 'id' | 'isMoon' | 'coo
     const coords = parseCoordinates(planet.querySelector('.planet-koords')?.textContent ?? _throw('no planet coords found'));
 
     const title = planet.querySelector('a.planetlink')?.getAttribute('title') ?? _throw('no title found');
-    const tempRegex = / (?<temp>-?\d+)°C<br\/>/;
+    const tempRegex = / (?<temp>-?\d+)\s*°C<br\/>/;
     const tempMatch = title.match(tempRegex) ?? _throw('no temperature found');
     const temperature = parseInt(tempMatch.groups!.temp, 10);
 

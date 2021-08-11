@@ -36,6 +36,10 @@
     @import "@/styles/env.scss";
 
     .o-officer {
+        &.disabled {
+            filter: grayscale(1) brightness(0.6) contrast(1.1);
+        }
+
         &.commander {
             background-image: url(#{$base-url}/img/ogame/officers/commander.png);
         }
