@@ -172,7 +172,7 @@
             {
                 name: 'info',
                 icon: 'information',
-                color: '#0f0f96',
+                color: '#8c8ce0',
                 component: 'info',
             },
         ];

@@ -1,10 +1,12 @@
 <template>
-    <grid-table>
-        <grid-tr v-for="(row, i) in rows" :key="i" :class="row.class">
-            <grid-cell> {{ row.title }} </grid-cell>
-            <grid-cell> {{ row.text }} </grid-cell>
-        </grid-tr>
-    </grid-table>
+    <table style="width: max-content;">
+        <tbody>
+            <tr v-for="(row, i) in rows" :key="i" :class="row.class">
+                <td style="width: 300px;">{{ row.title }}</td>
+                <td>{{ row.text }}</td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <script lang="ts">

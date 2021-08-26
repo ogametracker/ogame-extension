@@ -1,3 +1,9 @@
+$color-strength-even: 0.05;
+$color-strength-odd: 0.02;
+$color-strength-hover: 0.1;
+$color-strength-total: 0.1;
+$color-strength-header: 0.5;
+
 table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -5,23 +11,26 @@ table {
     width: 100%;
     text-align: right;
 
-    border: 1px solid rgba(var(--color), 0.5);
+    border: 1px solid rgba(var(--color), $color-strength-header);
 
     thead {
         td,
         th {
-            background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.5)),
+            background-image: linear-gradient(0deg, rgba(var(--color), $color-strength-header), rgba(var(--color), $color-strength-header)),
                 linear-gradient(0deg, black, black);
         }
     }
 
     tbody {
         tr:nth-of-type(even) {
-            background: rgba(var(--color), 0.01);
+            background: rgba(var(--color), $color-strength-even);
+        }
+        tr:nth-of-type(odd) {
+            background: rgba(var(--color), $color-strength-odd);
         }
 
         tr:hover {
-            background: rgba(var(--color), 0.05);
+            background: rgba(var(--color), $color-strength-hover);
         }
     }
 
@@ -31,9 +40,9 @@ table {
     }
 
     tr.total-row {
-        border-top: 3px double rgba(var(--color), 0.5);
+        border-top: 3px double rgba(var(--color), $color-strength-header);
         font-weight: bold;
-        background: rgba(var(--color), 0.1) !important;
+        background: rgba(var(--color), $color-strength-total) !important;
     }
 }
 
@@ -47,19 +56,19 @@ table {
 
     z-index: 1;
 
-    border: 1px solid rgba(var(--color), 0.5);
+    border: 1px solid rgba(var(--color), $color-strength-header);
 
     .grid-table-head {
         display: contents;
 
         .grid-table-cell {
             padding: 4px 8px;
-            background: rgba(var(--color), 0.5);
+            background: rgba(var(--color), $color-strength-header);
         }
     }
 
     &.sticky-header .grid-table-head .grid-table-cell {
-        background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.5)),
+        background-image: linear-gradient(0deg, rgba(var(--color), $color-strength-header), rgba(var(--color), $color-strength-header)),
             linear-gradient(0deg, black, black);
         position: sticky;
         top: 0;
@@ -69,11 +78,14 @@ table {
         display: contents;
 
         .grid-table-row:nth-of-type(even) .grid-table-cell {
-            background: rgba(var(--color), 0.01);
+            background: rgba(var(--color), $color-strength-even);
+        }
+        .grid-table-row:nth-of-type(odd) .grid-table-cell {
+            background: rgba(var(--color), $color-strength-odd);
         }
 
         .grid-table-row:hover .grid-table-cell {
-            background: rgba(var(--color), 0.05);
+            background: rgba(var(--color), $color-strength-hover);
         }
 
         .grid-table-cell {
@@ -95,6 +107,6 @@ table {
     .grid-table-row.total-row .grid-table-cell {
         border-top-style: double;
         font-weight: bold;
-        background: rgba(var(--color), 0.1) !important;
+        background: rgba(var(--color), $color-strength-total) !important;
     }
 }

@@ -129,6 +129,7 @@
                             </td>
                         </tr>
                     </draggable>
+
                     <tfoot>
                         <tr>
                             <td>
@@ -473,13 +474,15 @@
         }
     }
 
-    .color-tables th {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-    }
-
-    .color-tables .settings-table tbody {
-        display: grid;
+    .color-tables {
+        align-items: flex-start;
+        th {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+        }
+        .settings-table tbody {
+            display: grid;
+        }
     }
 </style>
