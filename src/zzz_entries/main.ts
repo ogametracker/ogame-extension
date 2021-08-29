@@ -19,9 +19,8 @@ import '@/components/common';
 import '@/styles/index.scss';
 
 // i18n
-import OgameMetaData from '@/models/ogame/OgameMetaData';
 import i18n from '@/i18n/';
-i18n.locale = Object.values(LanguageKey).find(lang => lang == OgameMetaData.locale) ?? LanguageKey.de;
+i18n.locale = getLanguage();
 
 // tracking
 import { startTracking } from '@/tracking';
@@ -37,6 +36,7 @@ Vue.config.productionTip = false;
 
 // prototype extensions/overrides
 import '@/prototype-extensions/Math';
+import getLanguage from '@/i18n/mapLanguage';
 
 function mountVue() {
     const app = document.createElement('div');
