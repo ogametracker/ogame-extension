@@ -14,7 +14,7 @@ export default {
         },
         error: {
             title: 'Migration',
-            text: 'An error occured during the migration..',
+            text: 'An error occured during the migration.',
         },
     },
     combats: {
