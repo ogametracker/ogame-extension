@@ -47,12 +47,13 @@ export default async function readBattles() {
         }
 
         try {
-            const messageUrl = (messageContainer.querySelector('.msg_action_link')! as HTMLAnchorElement)?.href;
-            if (messageUrl == null) {
+            const detailsLink = messageContainer.querySelector('.msg_actions a.txt_link');
+            if (detailsLink == null) {
                 emptyBattleReports.push(msgId);
                 continue;
             }
-
+            
+            const messageUrl = `/game/index.php?page=messages&ajax=1&tabid=21&messageId=${msgId}`;
             messageContainer.classList.add('msg-extension-loading');
 
             const battleReport = await readBattleReport(msgId, messageUrl);
