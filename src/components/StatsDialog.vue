@@ -129,7 +129,7 @@
                 iconStyle: {
                     fontSize: '32px',
                 },
-            },
+            },/*
             {
                 name: 'empire',
                 icon: 'planet-moon',
@@ -146,7 +146,7 @@
                 iconStyle: {
                     fontSize: '24px',
                 },
-            },
+            },*/
             {
                 name: 'placeholder_0',
                 disabled: true,
