@@ -22,6 +22,8 @@ export default {
         debrisFields: 'Debris Fields',
         settings: 'Settings',
         resourcesOverview: 'Resource Balance',
+        empire: 'Empire',
+        tools: 'Tools',
     },
     since: 'Since',
     lost: 'Lost',

@@ -34,4 +34,8 @@ export default {
         lastWeek: 'Last Week',
         currentMonth: 'Current Month',
     },
+    titleImportExport: 'Import/Export',
+    import: 'Import',
+    export: 'Export',
+    reset: 'Reset',
 };

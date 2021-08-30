@@ -12,7 +12,7 @@ import { Component, Vue } from 'vue-property-decorator';
 class SettingsModule extends Vue {
     public settings: Settings = null!;
 
-    public get defaultSettings(): Settings {
+    public getDefaultSettings(): Settings {
         return {
             tables: {
                 ranges: [
@@ -106,7 +106,7 @@ class SettingsModule extends Vue {
     }
 
     private async created() {
-        this.settings = clone(this.defaultSettings);
+        this.settings = this.getDefaultSettings();
         const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
         if (settings != null) {
             this.settings = {

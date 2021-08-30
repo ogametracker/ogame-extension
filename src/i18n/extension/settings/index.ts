@@ -38,6 +38,10 @@ export interface I18nExtensionSettings {
         lastWeek: string;
         currentMonth: string;
     };
+    titleImportExport: string;
+    import: string;
+    export: string;
+    reset: string;
 }
 
 const messages: Record<LanguageKey, I18nExtensionSettings> = {

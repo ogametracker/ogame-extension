@@ -134,14 +134,14 @@
                 name: 'empire',
                 icon: 'planet-moon',
                 color: '#5000d0',
-                label: 'LOCA: empire',
+                label: i18n.messages.extension.headers.empire,
                 component: 'empire-overview',
             },
             {
                 name: 'tools',
                 icon: 'tools',
                 color: '#008c85',
-                label: 'LOCA: Tools',
+                label: i18n.messages.extension.headers.tools,
                 component: null!,
                 iconStyle: {
                     fontSize: '24px',

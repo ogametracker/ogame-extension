@@ -2,6 +2,7 @@ import LanguageKey from '../languageKey';
 import de from './de';
 import empire, { I18nExtensionEmpire } from './empire';
 import en from './en';
+import info, { I18nExtensionInfo } from './info';
 import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
 
@@ -33,6 +34,8 @@ export interface I18nExtension {
         debrisFields: string;
         settings: string;
         resourcesOverview: string;
+        empire: string;
+        tools: string;
     },
     combats: {
         lostShips: string;
@@ -44,6 +47,7 @@ export interface I18nExtension {
     destroyed: string;
 
     empire: I18nExtensionEmpire;
+    info: I18nExtensionInfo;
 }
 
 const messages: Record<LanguageKey, I18nExtension> = {
@@ -51,12 +55,14 @@ const messages: Record<LanguageKey, I18nExtension> = {
         settings: settings.de,
         notifications: notifications.de,
         empire: empire.de,
+        info: info.de,
         ...de,
     },
     [LanguageKey.en]: {
         settings: settings.en,
         notifications: notifications.en,
         empire: empire.en,
+        info: info.en,
         ...en,
     },
 };

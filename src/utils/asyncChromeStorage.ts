@@ -13,7 +13,7 @@ export default {
             chrome.storage.local.get([key], (result: Record<string, any>) => resolve(result[key]));
         });
     },
-    set<T>(key: string | number, data: T) {
+    set<T>(key: string | number, data: T): Promise<void> {
         return new Promise<void>(resolve => {
             if (!env.isProduction) {
                 resolve();
@@ -23,4 +23,14 @@ export default {
             chrome.storage.local.set({ [key]: data }, () => resolve());
         });
     },
+    getBytesInUse(key?: string | number): Promise<number> {
+        return new Promise<number>(resolve => {
+            if (!env.isProduction) {
+                resolve(-1);
+                return;
+            }
+
+            chrome.storage.local.getBytesInUse(key?.toString() ?? null, bytes => resolve(bytes));
+        });
+    }
 };

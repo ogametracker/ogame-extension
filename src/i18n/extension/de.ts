@@ -22,6 +22,8 @@ export default {
         debrisFields: 'Trümmerfelder',
         settings: 'Einstellungen',
         resourcesOverview: 'Rohstoffbilanz',
+        empire: 'Imperium',
+        tools: 'Tools',
     },
     since: 'Seit',
     lost: 'Verloren',

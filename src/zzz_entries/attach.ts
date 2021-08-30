@@ -1,6 +1,5 @@
 import i18n from "@/i18n";
-import LanguageKey from "@/i18n/languageKey";
-import OgameMetaData from "@/models/ogame/OgameMetaData";
+import getLanguage from "@/i18n/mapLanguage";
 import _throw from "@/utils/throw";
 
 let ready = false;
@@ -12,8 +11,7 @@ observer.observe(document.documentElement, {
 });
 
 function addMenuItem(menu: Element) {
-    const locale = OgameMetaData.locale;
-    i18n.locale = Object.values(LanguageKey).find(lang => lang == locale) ?? LanguageKey.de;
+    i18n.locale = getLanguage();
     
     const menuItemText = i18n.messages.extension.menuItem;
 

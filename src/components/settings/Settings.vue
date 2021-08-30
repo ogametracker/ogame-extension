@@ -7,9 +7,8 @@
                     <button
                         class="reset-button"
                         @click="resetDateRanges()"
-                        title="Reset TODO: LOCALIZE"
+                        :title="$i18n.messages.extension.settings.reset"
                     >
-                        <!-- TODO: localize -->
                         <icon name="refresh" />
                     </button>
                 </h2>
@@ -149,9 +148,8 @@
                     <button
                         class="reset-button"
                         @click="resetChartColors()"
-                        title="Reset TODO: LOCALIZE"
+                        :title="$i18n.messages.extension.settings.reset"
                     >
-                        <!-- TODO: localize -->
                         <icon name="refresh" />
                     </button>
                 </h2>
@@ -168,9 +166,11 @@
                                     <button
                                         class="reset-button"
                                         @click="resetChartColors('overview')"
-                                        title="Reset TODO: LOCALIZE"
+                                        :title="
+                                            $i18n.messages.extension.settings
+                                                .reset
+                                        "
                                     >
-                                        <!-- TODO: localize -->
                                         <icon name="refresh" />
                                     </button>
                                 </th>
@@ -209,9 +209,11 @@
                                     <button
                                         class="reset-button"
                                         @click="resetChartColors('resources')"
-                                        title="Reset TODO: LOCALIZE"
+                                        :title="
+                                            $i18n.messages.extension.settings
+                                                .reset
+                                        "
                                     >
-                                        <!-- TODO: localize -->
                                         <icon name="refresh" />
                                     </button>
                                 </th>
@@ -254,9 +256,11 @@
                                         @click="
                                             resetChartColors('overshipsview')
                                         "
-                                        title="Reset TODO: LOCALIZE"
+                                        :title="
+                                            $i18n.messages.extension.settings
+                                                .reset
+                                        "
                                     >
-                                        <!-- TODO: localize -->
                                         <icon name="refresh" />
                                     </button>
                                 </th>
@@ -295,9 +299,11 @@
                                         @click="
                                             resetChartColors('battleResults')
                                         "
-                                        title="Reset TODO: LOCALIZE"
+                                        :title="
+                                            $i18n.messages.extension.settings
+                                                .reset
+                                        "
                                     >
-                                        <!-- TODO: localize -->
                                         <icon name="refresh" />
                                     </button>
                                 </th>
@@ -330,7 +336,7 @@
             </template>
 
             <template #import-export>
-                <h2>Export</h2>
+                <!-- <h2>{{ $i18n.messages.extension.settings.export }}</h2>
                 <textarea
                     readonly
                     :value="exportJson"
@@ -340,8 +346,8 @@
 
                 <hr />
 
-                <h2>Import</h2>
-                Coming Soon
+                <h2>{{ $i18n.messages.extension.settings.import }}</h2> -->
+                <h1>Coming Soon&trade;</h1>
             </template>
         </tab-view>
     </div>
@@ -355,7 +361,6 @@
     import ExpoModule from '@/store/modules/ExpoModule';
     import NotificationModule from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
-    import clone from '@/utils/clone';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
     import { TabViewItem } from '../common/TabView.vue';
@@ -389,7 +394,7 @@
             },
             {
                 name: 'import-export',
-                title: 'LOCA: Import/Export',
+                title: i18n.messages.extension.settings.titleImportExport,
             },
         ];
 
@@ -441,14 +446,17 @@
         }
 
         private resetDateRanges() {
-            this.settings.tables.ranges = clone(SettingsModule.defaultSettings.tables.ranges);
+            const defaults = SettingsModule.getDefaultSettings().tables.ranges;
+            this.settings.tables.ranges = defaults;
         }
 
         private resetChartColors(key?: keyof Settings['settings']['charts']['colors']) {
+            const defaults = SettingsModule.getDefaultSettings().charts.colors;
+            
             if (key == null) {
-                this.settings.charts.colors = clone(SettingsModule.defaultSettings.charts.colors);
+                this.settings.charts.colors = defaults;
             } else {
-                this.settings.charts.colors[key] = clone(SettingsModule.defaultSettings.charts.colors[key]);
+                this.settings.charts.colors[key] = defaults[key] as any;
             }
         }
     }
