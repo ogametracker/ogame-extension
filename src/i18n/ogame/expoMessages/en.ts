@@ -59,7 +59,7 @@ export default {
     [ExpoType.nothing]: [
         /*'Despite the first, */'very promising scans of this sector'/*, we unfortunately returned empty handed.'*/,
         /*'Besides some quaint, */'small pets from a unknown marsh planet'/*, this expedition brings nothing thrilling back from the trip.'*/,
-        /*'Your expedition has learnt about */'the extensive emptiness of space'/*. There was not even one small asteroid or radiation or particle that could have made this expedition interesting.'*/,
+        /*'Your expedition has learnt about */'the extensive emptiness'/* of space. There was not even one small asteroid or radiation or particle that could have made this expedition interesting.'*/,
         /*'A failure in the */'flagships reactor core nearly destroys'/* the entire expedition fleet. Fortunately the technicians were more than competent and could avoid the worst. The repairs took quite some time and forced the expedition to return without having accomplished its goal. */,
         /*'Your expedition took */'gorgeous pictures of a super nova'/*. Nothing new could be obtained from the expedition, but at least there is good chance to win that "Best Picture Of The Universe" competition in next months issue of OGame magazine.'*/,
         /*'Your expedition fleet */'followed odd signals for some time'/*. At the end they noticed that those signals where being sent from an old probe which was sent out generations ago to greet foreign species. The probe was saved and some museums of your home planet already voiced their interest.'*/,
@@ -124,7 +124,7 @@ export default {
     [ExpoType.aliens]: {
         [ExpoSize.small]: [
             /*'Some */'exotic looking ships attacked the expedition'/* fleet without warning!'*/,
-            /*'Your expedition fleet */'had an unfriendly first contact'/* with an unknown species.'*/,
+            /*'Your expedition fleet made some */'unfriendly first contact'/* with an unknown species.'*/,
             /*'Our expedition was */'attacked by a small group of unknown ships'/*!'*/,
             /*'The expeditions fleet reports contact with unknown ships. The */'sensor readings are not decipherable'/*, but it seems that the alien ships are activating their weapon system.'*/,
         ],
