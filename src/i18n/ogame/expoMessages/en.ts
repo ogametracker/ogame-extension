@@ -19,7 +19,7 @@ export default {
             /*'A */'spontaneous hyper space deformation'/* allowed your expedition to harvest large amount of Dark Matter'*/,
             /*'Our expedition made first contact with a special race. It looks as though a creature made of pure energy, who */'named himself Legorian'/*, flew through the expedition ships and then decided to help our underdeveloped species. A case containing Dark Matter materialized at the bridge of the ship'*/,
         ],
-        regex: /(?<name>Dark Matter) (?<amount>.+) have been captured/,
+        regex: /(?<name>Dark Matter) (?<amount>[^\s]+) have been captured/,
     },
 
     [ExpoType.resources]: {

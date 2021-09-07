@@ -19,7 +19,7 @@ export default {
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: /Es wurde (?<name>Dunkle Materie) (?<amount>.+) erbeutet/,
+        regex: /Es wurde (?<name>Dunkle Materie) (?<amount>[^\s]+) erbeutet/,
     },
 
     [ExpoType.resources]: {
