@@ -30,7 +30,7 @@
                 },
                 {
                     name: 'amortisation',
-                    title: 'LOCA: Amortisation',
+                    title: 'LOCA: Amortisation Calculator',
                 },
             ];
         }
