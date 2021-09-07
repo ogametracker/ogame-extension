@@ -1,13 +1,12 @@
 export default {
     amortisation: {
-        selectedPlanet: 'Gewählter Planet',
+        selectedPlanet: 'Planet für Voreinstellungen',
         msuRates: 'MSE-Kurse',
         crawlerOverload: 'Crawler-Überladung',
         items: 'Items',
         officers: 'Offiziere',
         playerClass: 'Spielerklasse',
         allianceClass: 'Allianzklasse',
-        buildings: 'Zeige Gebäude',
         tableLevel: 'Stufe',
         tableBuilding: 'Gebäude',
         tableCost: 'Kosten',
@@ -15,5 +14,15 @@ export default {
         tableProduction: 'Produktion/h',
         tableProductionMsu: 'Produktion/h (MSE)',
         tableAmortisationTime: 'Amortisationszeit',
+        temperature: 'Max. Temperatur',
+        position: 'Position',
+        showBuilding: 'in Tabelle anzeigen',
+        level: 'Stufe',
+        yes: 'Ja',
+        no: 'Nein',
+        crawlerMode: {
+            fixed: 'Feste Anzahl',
+            max: 'Max. Anzahl',
+        },
     }
 };

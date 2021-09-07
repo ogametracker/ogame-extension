@@ -1,13 +1,12 @@
 export default {
     amortisation: {
-        selectedPlanet: 'Selected Planet',
+        selectedPlanet: 'Preset Planet',
         msuRates: 'MSU Conversion Rates',
         crawlerOverload: 'Crawler Overload',
         items: 'Items',
         officers: 'Officer',
         playerClass: 'Player Class',
         allianceClass: 'Alliance Class',
-        buildings: 'Show Buildings',
         tableLevel: 'Level',
         tableBuilding: 'Building',
         tableCost: 'Cost',
@@ -15,5 +14,15 @@ export default {
         tableProduction: 'Production/h',
         tableProductionMsu: 'Production/h (MSU)',
         tableAmortisationTime: 'Amortisation Time',
-    }
+        temperature: 'Max. Temperature',
+        position: 'Position',
+        showBuilding: 'Show in table',
+        level: 'Level',
+        yes: 'Yes',
+        no: 'No',
+        crawlerMode: {
+            fixed: 'Fixed Count',
+            max: 'Max. Count',
+        },
+    },
 };

@@ -10,7 +10,10 @@
                 }}
             </div>
             <div>
-                <select v-model.number="selectedPlanet">
+                <select
+                    v-model.number="selectedPlanet"
+                    @change="updateOptions()"
+                >
                     <option
                         v-for="planet in planets"
                         :key="planet.id"
@@ -48,9 +51,9 @@
                     step="0.01"
                     :value="settings.msuConversionRates.crystal"
                     v-debounce:150ms="
-                        (val) => {
+                        val => {
                             settings.msuConversionRates.crystal = Math.clamp(
-                                parseFloat(val, 10),
+                                parseFloat(val),
                                 1,
                                 3
                             );
@@ -68,9 +71,9 @@
                     step="0.01"
                     :value="settings.msuConversionRates.deuterium"
                     v-debounce:150ms="
-                        (val) => {
+                        val => {
                             settings.msuConversionRates.deuterium = Math.clamp(
-                                parseFloat(val, 10),
+                                parseFloat(val),
                                 1,
                                 5
                             );
@@ -80,61 +83,54 @@
                 />
             </div>
 
-            <div style="grid-column-start: 1">
-                {{ $i18n.messages.ogame.research[122] }}
+            <div class="next-row">
+                {{ $i18n.messages.extension.empire.amortisation.temperature }}
             </div>
             <div>
-                <o-research type="plasma-technology" :size="32" />
+                <span>
+                    <input
+                        type="number"
+                        min="-130"
+                        max="260"
+                        step="1"
+                        :value="options.temperature"
+                        v-debounce:150ms="
+                            val =>
+                                (options.temperature = Math.clamp(
+                                    parseInt(val, 10),
+                                    -130,
+                                    260
+                                ))
+                        "
+                        style="width: 64px;"
+                    />
+                    °C
+                </span>
+            </div>
+
+            <div>
+                {{ $i18n.messages.extension.empire.amortisation.position }}
+            </div>
+            <div>
                 <input
-                    style="width: 64px"
                     type="number"
-                    min="0"
-                    max="100"
+                    min="1"
+                    max="15"
                     step="1"
-                    :value="options.plasmaTechnology"
+                    :value="options.position"
                     v-debounce:150ms="
-                        (val) =>
-                            (options.plasmaTechnology = Math.clamp(
+                        val =>
+                            (options.position = Math.clamp(
                                 parseInt(val, 10),
-                                0,
-                                100
+                                1,
+                                15
                             ))
                     "
+                    style="width: 64px;"
                 />
             </div>
 
-            <div>
-                {{ $i18n.messages.ogame.ships[217] }}
-            </div>
-            <div>
-                <checkbox-button v-model="options.crawler.enabled">
-                    <o-ship
-                        type="crawler"
-                        :size="32"
-                        :disabled="!options.crawler.enabled"
-                    />
-                </checkbox-button>
-
-                <checkbox-button
-                    :label="
-                        $i18n.messages.extension.empire.amortisation
-                            .crawlerOverload
-                    "
-                    color="#409e2b"
-                    :size="32"
-                    :value="options.crawler.enabled && options.crawler.overload"
-                    @input="
-                        (value) => {
-                            options.crawler.overload = value;
-                            if (value) {
-                                options.crawler.enabled = true;
-                            }
-                        }
-                    "
-                />
-            </div>
-
-            <div class="items-cell">
+            <div class="next-row items-cell">
                 {{ $i18n.messages.extension.empire.amortisation.items }}
             </div>
             <div class="items-cell item-selection">
@@ -189,7 +185,7 @@
                 </checkbox-button>
             </div>
 
-            <div class="officers-cell">
+            <div class="next-row-indented officers-cell">
                 {{ $i18n.messages.extension.empire.amortisation.officers }}
             </div>
             <div class="officers-cell">
@@ -206,7 +202,7 @@
                 </checkbox-button>
             </div>
 
-            <div class="player-class-cell">
+            <div class="next-row-indented player-class-cell">
                 {{ $i18n.messages.extension.empire.amortisation.playerClass }}
             </div>
             <div class="player-class-cell">
@@ -230,7 +226,7 @@
                 </checkbox-button>
             </div>
 
-            <div class="alliance-class-cell">
+            <div class="next-row-indented alliance-class-cell">
                 {{ $i18n.messages.extension.empire.amortisation.allianceClass }}
             </div>
             <div class="alliance-class-cell">
@@ -254,25 +250,199 @@
                 </checkbox-button>
             </div>
 
-            <div class="buildings-cell">
-                {{ $i18n.messages.extension.empire.amortisation.buildings }}
+            <div class="next-row">
+                {{ $i18n.messages.ogame.ships[217] }}
             </div>
-            <div class="buildings-cell buttons">
-                <checkbox-button
-                    :label="$i18n.messages.ogame.buildings[1]"
-                    :color="colorMetal"
-                    v-model="options.metalMine"
-                />
+            <div>
+                <checkbox-button v-model="options.crawler.enabled">
+                    <o-ship
+                        type="crawler"
+                        :size="32"
+                        :disabled="!options.crawler.enabled"
+                    />
+                </checkbox-button>
 
                 <checkbox-button
-                    :label="$i18n.messages.ogame.buildings[2]"
-                    :color="colorCrystal"
-                    v-model="options.crystalMine"
+                    :label="
+                        $i18n.messages.extension.empire.amortisation
+                            .crawlerOverload
+                    "
+                    color="#409e2b"
+                    :size="32"
+                    :value="options.crawler.enabled && options.crawler.overload"
+                    @input="
+                        value => {
+                            options.crawler.overload = value;
+                            if (value) {
+                                options.crawler.enabled = true;
+                            }
+                        }
+                    "
+                />
+            </div>
+
+            <div>
+                {{ $i18n.messages.ogame.research[122] }}
+            </div>
+            <div>
+                <o-research type="plasma-technology" :size="32" />
+                <input
+                    style="width: 64px"
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="1"
+                    :value="options.plasmaTechnology"
+                    v-debounce:150ms="
+                        val =>
+                            (options.plasmaTechnology = Math.clamp(
+                                parseInt(val, 10),
+                                0,
+                                100
+                            ))
+                    "
+                />
+            </div>
+
+            <div class="next-row" />
+            <div>
+                <checkbox-button
+                    :label="
+                        options.crawler.maxCrawler
+                            ? $i18n.messages.extension.empire.amortisation
+                                  .crawlerMode.max
+                            : $i18n.messages.extension.empire.amortisation
+                                  .crawlerMode.fixed
+                    "
+                    color="#409e2b"
+                    :auto-color="!options.crawler.maxCrawler"
+                    :size="32"
+                    :value="true"
+                    @input="
+                        options.crawler.maxCrawler = !options.crawler.maxCrawler
+                    "
+                    class="crawler-mode"
+                    :class="{ fix: !options.crawler.maxCrawler }"
+                />
+                <input
+                    type="number"
+                    min="0"
+                    max="5000"
+                    step="1"
+                    class="crawler-count-input"
+                    :disabled="options.crawler.maxCrawler"
+                    :value="options.crawler.count"
+                    v-debounce:150ms="
+                        val =>
+                            (options.crawler.count = Math.clamp(
+                                parseInt(val, 10),
+                                0,
+                                5000
+                            ))
+                    "
+                    :style="{
+                        border: options.crawler.maxCrawler
+                            ? null
+                            : '1px solid rgb(var(--color)) !important'
+                    }"
+                />
+            </div>
+
+            <div class="buildings-config">
+                <div />
+                <div v-text="$i18n.messages.ogame.buildings[1]" />
+                <div v-text="$i18n.messages.ogame.buildings[2]" />
+                <div v-text="$i18n.messages.ogame.buildings[3]" />
+
+                <div
+                    v-text="$i18n.messages.extension.empire.amortisation.level"
+                    class="row-header"
+                />
+                <div>
+                    <input
+                        type="number"
+                        min="0"
+                        max="70"
+                        step="1"
+                        :value="options.levelMetalMine"
+                        v-debounce:150ms="
+                            val =>
+                                (options.levelMetalMine = Math.clamp(
+                                    parseInt(val, 10),
+                                    0,
+                                    70
+                                ))
+                        "
+                    />
+                </div>
+                <div>
+                    <input
+                        type="number"
+                        min="0"
+                        max="70"
+                        step="1"
+                        :value="options.levelCrystalMine"
+                        v-debounce:150ms="
+                            val =>
+                                (options.levelCrystalMine = Math.clamp(
+                                    parseInt(val, 10),
+                                    0,
+                                    70
+                                ))
+                        "
+                    />
+                </div>
+                <div>
+                    <input
+                        type="number"
+                        min="0"
+                        max="70"
+                        step="1"
+                        :value="options.levelDeuteriumSynthesizer"
+                        v-debounce:150ms="
+                            val =>
+                                (options.levelDeuteriumSynthesizer = Math.clamp(
+                                    parseInt(val, 10),
+                                    0,
+                                    70
+                                ))
+                        "
+                    />
+                </div>
+
+                <div
+                    v-text="
+                        $i18n.messages.extension.empire.amortisation
+                            .showBuilding
+                    "
+                    class="row-header"
                 />
                 <checkbox-button
-                    :label="$i18n.messages.ogame.buildings[3]"
+                    :label="
+                        options.showMetalMine
+                            ? $i18n.messages.extension.empire.amortisation.yes
+                            : $i18n.messages.extension.empire.amortisation.no
+                    "
+                    :color="colorMetal"
+                    v-model="options.showMetalMine"
+                />
+                <checkbox-button
+                    :label="
+                        options.showCrystalMine
+                            ? $i18n.messages.extension.empire.amortisation.yes
+                            : $i18n.messages.extension.empire.amortisation.no
+                    "
+                    :color="colorCrystal"
+                    v-model="options.showCrystalMine"
+                />
+                <checkbox-button
+                    :label="
+                        options.showDeuteriumSynthesizer
+                            ? $i18n.messages.extension.empire.amortisation.yes
+                            : $i18n.messages.extension.empire.amortisation.no
+                    "
                     :color="colorDeuterium"
-                    v-model="options.deuteriumSynthesizer"
+                    v-model="options.showDeuteriumSynthesizer"
                 />
             </div>
         </div>
@@ -353,7 +523,7 @@
                             <span
                                 class="color-indicator"
                                 :style="{
-                                    background: row.color,
+                                    background: row.color
                                 }"
                             />
                         </grid-cell>
@@ -407,6 +577,7 @@
     import Research from '@/models/Research';
     import _throw from '@/utils/throw';
     import { ItemHash } from '@/models/items';
+    import PlanetType from '@/models/PlanetType';
 
     type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
 
@@ -504,13 +675,18 @@
         ];
 
         private readonly options = {
-            metalMine: true,
-            crystalMine: true,
-            deuteriumSynthesizer: true,
+            showMetalMine: true,
+            showCrystalMine: true,
+            showDeuteriumSynthesizer: true,
+            levelMetalMine: 0,
+            levelCrystalMine: 0,
+            levelDeuteriumSynthesizer: 0,
 
             crawler: {
                 enabled: true,
                 overload: true,
+                maxCrawler: true,
+                count: 0,
             },
 
             plasmaTechnology: 0,
@@ -528,7 +704,46 @@
             } as Record<keyof PlayerOfficers, boolean>,
             playerClass: PlayerClass.none,
             allianceClass: AllianceClass.none,
+            temperature: 0,
+            position: 1,
         };
+
+        private get currentPlanet() {
+            return this.planets.find(p => p.id == this.selectedPlanet) ?? _throw('invalid planet selected');
+        }
+
+        private updateOptions() {
+            const planet = this.currentPlanet;
+
+            this.options.crawler.enabled = planet.ships[Ship.crawler] > 0;
+            this.options.crawler.overload = this.options.crawler.enabled && this.localPlayerData.playerClass == PlayerClass.collector;
+            this.options.crawler.maxCrawler = this.localPlayerData.playerClass == PlayerClass.collector;
+            this.options.crawler.count = planet.ships[Ship.crawler];
+
+            this.options.playerClass = this.localPlayerData.playerClass;
+            this.options.allianceClass = this.localPlayerData.allianceClass;
+            this.options.plasmaTechnology = this.localPlayerData.research[Research.plasmaTechnology];
+
+            this.options.items = {
+                metal: this.getActiveMetalBoost(planet.activeItems),
+                crystal: this.getActiveCrystalBoost(planet.activeItems),
+                deuterium: this.getActiveDeuteriumBoost(planet.activeItems),
+            };
+
+            this.options.officers.commander = this.localPlayerData.officers.commander;
+            this.options.officers.admiral = this.localPlayerData.officers.admiral;
+            this.options.officers.geologist = this.localPlayerData.officers.geologist;
+            this.options.officers.engineer = this.localPlayerData.officers.engineer;
+            this.options.officers.technocrat = this.localPlayerData.officers.technocrat;
+
+            this.options.position = planet.coordinates.position;
+            this.options.temperature = planet.maxTemperature;
+
+
+            this.options.levelMetalMine = planet.buildings.production[Building.metalMine];
+            this.options.levelCrystalMine = planet.buildings.production[Building.crystalMine];
+            this.options.levelDeuteriumSynthesizer = planet.buildings.production[Building.deuteriumSynthesizer];
+        }
 
         private get colorMetal() {
             return this.settings.charts.colors.resources.metal;
@@ -542,7 +757,9 @@
             return this.settings.charts.colors.resources.deuterium;
         }
 
-        private getProductionInject(planet: PlanetData): ProductionInject {
+        private getProductionInject(): ProductionInject {
+            const planet = this.currentPlanet;
+
             const year = 1000 * 60 * 60 * 24 * 52;
             const items: Partial<Record<ItemHash, number>> = {};
             if (this.options.items.metal > 0) {
@@ -570,9 +787,26 @@
                     allianceClass: this.options.allianceClass,
                 },
                 currentPlanet: {
-                    ...planet,
+                    isMoon: false,
+                    id: -1,
+                    name: '',
+                    defense: { ...planet.defense },
+                    coordinates: {
+                        galaxy: 1,
+                        system: 1,
+                        type: PlanetType.planet,
+                        position: this.options.position,
+                    },
+                    maxTemperature: this.options.temperature,
                     buildings: {
-                        production: { ...planet.buildings.production },
+                        production: {
+                            ...planet.buildings.production,
+                            [Building.metalMine]: this.options.levelMetalMine,
+                            [Building.crystalMine]: this.options.levelCrystalMine,
+                            [Building.deuteriumSynthesizer]: this.options.levelDeuteriumSynthesizer,
+                            [Building.solarPlant]: 100,
+                            [Building.fusionReactor]: 100,
+                        },
                         facilities: { ...planet.buildings.facilities },
                     },
                     activeItems: items,
@@ -587,7 +821,11 @@
                     },
                     ships: {
                         ...planet.ships,
-                        [Ship.crawler]: this.options.crawler.enabled ? 64000 : 0,
+                        [Ship.crawler]: this.options.crawler.enabled
+                            ? this.options.crawler.maxCrawler
+                                ? 64000
+                                : this.options.crawler.count
+                            : 0,
                     }
                 },
                 ecoSpeed: OgameMetaData.universeSpeed,
@@ -596,18 +834,12 @@
 
         private get rows() {
             const result: AmortisationResult[] = [];
-
-            const currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
-            if (currentPlanet.isMoon) {
-                return result;
-            }
-
-            const info = this.getProductionInject(currentPlanet);
+            const info = this.getProductionInject();
 
             const levels: Record<ProductionBuildingType, number> = {
-                [Building.metalMine]: currentPlanet.buildings.production[Building.metalMine],
-                [Building.crystalMine]: currentPlanet.buildings.production[Building.crystalMine],
-                [Building.deuteriumSynthesizer]: currentPlanet.buildings.production[Building.deuteriumSynthesizer],
+                [Building.metalMine]: info.currentPlanet.buildings.production[Building.metalMine],
+                [Building.crystalMine]: info.currentPlanet.buildings.production[Building.crystalMine],
+                [Building.deuteriumSynthesizer]: info.currentPlanet.buildings.production[Building.deuteriumSynthesizer],
             };
             const buildings: Record<ProductionBuildingType, ProductionBuilding> = {
                 [Building.metalMine]: MetalMine,
@@ -681,9 +913,9 @@
 
         private isVisibleBuilding(buildingType: Building): boolean {
             switch (buildingType) {
-                case Building.metalMine: return this.options.metalMine;
-                case Building.crystalMine: return this.options.crystalMine;
-                case Building.deuteriumSynthesizer: return this.options.deuteriumSynthesizer;
+                case Building.metalMine: return this.options.showMetalMine;
+                case Building.crystalMine: return this.options.showCrystalMine;
+                case Building.deuteriumSynthesizer: return this.options.showDeuteriumSynthesizer;
 
                 default: throw new Error('invalid building');
             }
@@ -697,11 +929,12 @@
         private async mounted() {
             this.localPlayerData = await LocalPlayerModule.getData();
 
-            this.initOptions();
+            this.initPlanetSelection();
+            this.updateOptions();
         }
 
-        private initOptions() {
-            let currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
+        private initPlanetSelection() {
+            const currentPlanet = this.localPlayerData.planets[this.selectedPlanet];
             if (currentPlanet.isMoon) {
                 const planets = Object.values(this.localPlayerData.planets);
                 const newSelection = planets.find(p => !p.isMoon
@@ -711,27 +944,7 @@
                 ) as PlanetData ?? _throw('no planet found for moon');
 
                 this.selectedPlanet = newSelection.id;
-                currentPlanet = newSelection;
             }
-
-            this.options.crawler.enabled = currentPlanet.ships[Ship.crawler] > 0;
-            this.options.crawler.overload = this.options.crawler.enabled && this.localPlayerData.playerClass == PlayerClass.collector;
-
-            this.options.playerClass = this.localPlayerData.playerClass;
-            this.options.allianceClass = this.localPlayerData.allianceClass;
-            this.options.plasmaTechnology = this.localPlayerData.research[Research.plasmaTechnology];
-
-            this.options.items = {
-                metal: this.getActiveMetalBoost(currentPlanet.activeItems),
-                crystal: this.getActiveCrystalBoost(currentPlanet.activeItems),
-                deuterium: this.getActiveDeuteriumBoost(currentPlanet.activeItems),
-            };
-
-            this.options.officers.commander = this.localPlayerData.officers.commander;
-            this.options.officers.admiral = this.localPlayerData.officers.admiral;
-            this.options.officers.geologist = this.localPlayerData.officers.geologist;
-            this.options.officers.engineer = this.localPlayerData.officers.engineer;
-            this.options.officers.technocrat = this.localPlayerData.officers.technocrat;
         }
 
         private getActiveMetalBoost(activeItems: Partial<Record<ItemHash, number | undefined>>): ItemBoost {
@@ -878,7 +1091,7 @@
     .options {
         justify-content: start;
         display: inline-grid;
-        grid-template-columns: repeat(6, auto);
+        grid-template-columns: repeat(4, auto);
         align-items: center;
 
         row-gap: 8px;
@@ -897,8 +1110,8 @@
     }
 
     .items-cell {
-        grid-row: 3 / span 3;
         height: 100%;
+        grid-row: auto / span 3;
 
         &.item-selection {
             display: grid;
@@ -908,23 +1121,61 @@
         }
     }
 
-    .officers-cell {
-        grid-row: 3;
+    .crawler-mode {
+        margin-right: 0 !important;
+        width: 120px;
+        text-align: center;
+
+        &.fix {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
     }
 
-    .player-class-cell {
-        grid-row: 4;
+    .crawler-count-input {
+        width: 80px;
+        height: 32px;
+
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+
+        &:disabled {
+            background: transparent !important;
+            color: grey !important;
+        }
     }
 
-    .alliance-class-cell {
-        grid-row: 5;
+    .next-row {
+        grid-column-start: 1;
     }
 
-    .buildings-cell {
-        grid-row: 6;
+    .next-row-indented {
+        grid-column-start: 3;
+    }
 
-        &.buttons {
-            grid-column: 2 / span 5;
+    .buildings-config {
+        grid-column: auto / span 4;
+        border-top: 1px solid rgba(var(--color), 0.5);
+
+        display: grid !important;
+        grid-template-columns: auto repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        align-items: center;
+        justify-items: center;
+
+        row-gap: 2px;
+
+        .row-header {
+            justify-self: end;
+        }
+
+        .checkbox-button {
+            width: 64px;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 64px;
         }
     }
 </style>

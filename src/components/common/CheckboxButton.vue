@@ -7,7 +7,7 @@
             light: light,
         }"
         :style="{
-            '--button-color': color,
+            '--button-color': !autoColor ? color : 'rgb(var(--color))',
             height: size == null ? null : `${size}px`,
         }"
         @click="checked = !checked"
@@ -41,6 +41,9 @@
 
         @Prop({ required: false, type: String, default: 'rgba(255, 255, 255, 0.3)' })
         private color!: string | null;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private autoColor!: boolean;
     }
 </script>
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@ export interface I18nExtensionEmpireAmortisationTable {
     officers: string;
     playerClass: string;
     allianceClass: string;
-    buildings: string;
+    position: string;
     tableLevel: string;
     tableBuilding: string;
     tableCost: string;
@@ -18,6 +18,15 @@ export interface I18nExtensionEmpireAmortisationTable {
     tableProduction: string;
     tableProductionMsu: string;
     tableAmortisationTime: string;
+    temperature: string;
+    showBuilding: string;
+    level: string;
+    yes: string;
+    no: string;
+    crawlerMode: {
+        fixed: string;
+        max: string;
+    };
 }
 
 export interface I18nExtensionEmpire {
