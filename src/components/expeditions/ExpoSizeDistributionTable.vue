@@ -1,10 +1,10 @@
 <template>
-    <expo-ranged-table :items="items" />
+    <expo-ranged-table :items="items" show-total />
 </template>
 
 <script lang="ts">
     import i18n from '@/i18n';
-import { ExpoSizeableEvent } from '@/models/expeditions/ExpoEvent';
+    import { ExpoSizeableEvent } from '@/models/expeditions/ExpoEvent';
     import ExpoSize from '@/models/expeditions/ExpoSize';
     import ExpoType from '@/models/expeditions/ExpoType';
     import { PropType } from 'vue';

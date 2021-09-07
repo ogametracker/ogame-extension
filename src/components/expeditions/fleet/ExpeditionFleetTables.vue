@@ -1,6 +1,6 @@
 <template>
     <div>
-        <expo-ranged-table :items="items" />
+        <expo-ranged-table :items="items" show-total />
 
         <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
