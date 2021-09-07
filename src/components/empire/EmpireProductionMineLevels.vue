@@ -1,14 +1,10 @@
 <template>
     <div v-if="player != null">
-        <div class="chart-container">
-            <canvas ref="canvas" />
-        </div>
-
         <table>
             <thead>
                 <tr>
                     <th>LOCA: Planet</th>
-                    <th>LOCA: Koordinaten</th>
+                    <th />
                     <th>
                         <o-building type="metal-mine" :size="100" />
                     </th>
@@ -161,106 +157,12 @@
             });
         }
 
-        private get chartOptions(): Chart.ChartOptions {
-            return {
-                animation: {
-                    duration: 0,
-                },
-                hover: {
-                    animationDuration: 0,
-                },
-                tooltips: {
-                    callbacks: {
-                        label: (item, data) => i18n.formatNumber(data.datasets![0].data![item.index!] as number),
-                    },
-                }
-            };
-        }
-
-        private readonly labels: string[] = [
-            i18n.messages.ogame.resources[Resource.metal],
-            i18n.messages.ogame.resources[Resource.crystal],
-            i18n.messages.ogame.resources[Resource.deuterium],
-        ];
-
-        private get chartDataset(): Chart.ChartDataSets {
-            if (this.player == null) {
-                return {};
-            }
-
-            const inject: Omit<ProductionInject, 'currentPlanet'> = {
-                player: this.player,
-                ecoSpeed: OgameMetaData.universeSpeed,
-            };
-
-            return {
-                data: [
-                    // metal mine
-                    this.planets.reduce((acc, planet) => {
-                        const production = MetalMine.getProduction(planet.buildings.production[Building.metalMine], {
-                            ...inject,
-                            currentPlanet: planet,
-                        });
-                        return acc + production.metal;
-                    }, 0),
-
-                    // crystal mine
-                    this.planets.reduce((acc, planet) => {
-                        const production = CrystalMine.getProduction(planet.buildings.production[Building.crystalMine], {
-                            ...inject,
-                            currentPlanet: planet,
-                        });
-                        return acc + production.crystal;
-                    }, 0),
-
-                    // deuterium synthesizer
-                    this.planets.reduce((acc, planet) => {
-                        const production = DeuteriumSynthesizer.getProduction(planet.buildings.production[Building.deuteriumSynthesizer], {
-                            ...inject,
-                            currentPlanet: planet,
-                        });
-                        return acc + production.deuterium;
-                    }, 0),
-                ],
-                backgroundColor: [
-                    this.settings.charts.colors.resources.metal,
-                    this.settings.charts.colors.resources.crystal,
-                    this.settings.charts.colors.resources.deuterium,
-                ],
-            };
-        }
-
         private get settings() {
             return SettingsModule.settings;
         }
 
-        private get chartData(): Chart.ChartData {
-            return {
-                labels: this.labels,
-                datasets: [this.chartDataset],
-            };
-        }
-
-        private chart: Chart | null = null;
-        private get canvas(): HTMLCanvasElement {
-            return this.$refs.canvas as HTMLCanvasElement;
-        }
-
-        private renderChart() {
-            this.$nextTick(() => {
-                const context = this.canvas.getContext('2d') ?? _throw('no 2d context found');
-                this.chart = new Chart(context, {
-                    type: 'doughnut',
-                    data: this.chartData,
-                    options: this.chartOptions,
-                });
-            });
-        }
-
         private async mounted() {
             this.player = await LocalPlayerModule.getData();
-
-            this.renderChart();
         }
     }
 </script>

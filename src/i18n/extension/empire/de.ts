@@ -1,5 +1,6 @@
 export default {
     amortisation: {
+        menuItem: 'Amortisationsrechner',
         selectedPlanet: 'Planet für Voreinstellungen',
         msuRates: 'MSE-Kurse',
         crawlerOverload: 'Crawler-Überladung',
@@ -24,5 +25,12 @@ export default {
             fixed: 'Feste Anzahl',
             max: 'Max. Anzahl',
         },
-    }
+    },
+    productionOverview: {
+        menuItem: 'Produktionsübersicht',
+        subMenu: {
+            resources: 'Produktion',
+            mines: 'Minenübersicht',
+        },
+    },
 };

@@ -1,5 +1,6 @@
 export default {
     amortisation: {
+        menuItem: 'Amortisation Calculator',
         selectedPlanet: 'Preset Planet',
         msuRates: 'MSU Conversion Rates',
         crawlerOverload: 'Crawler Overload',
@@ -23,6 +24,13 @@ export default {
         crawlerMode: {
             fixed: 'Fixed Count',
             max: 'Max. Count',
+        },
+    },
+    productionOverview: {
+        menuItem: 'Production Overview',
+        subMenu: {
+            resources: 'Production',
+            mines: 'Mine Overview',
         },
     },
 };

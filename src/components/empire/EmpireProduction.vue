@@ -26,11 +26,11 @@
             return [
                 {
                     name: 'resources',
-                    title: 'LOCA: Recource Production',
+                    title: i18n.messages.extension.empire.productionOverview.subMenu.resources,
                 },
                 {
                     name: 'mines',
-                    title: 'LOCA: Mine Levels',
+                    title: i18n.messages.extension.empire.productionOverview.subMenu.mines,
                 },
             ];
         }

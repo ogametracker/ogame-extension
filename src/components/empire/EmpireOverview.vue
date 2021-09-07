@@ -14,6 +14,7 @@
     import { TabViewItem } from "@/components/common/TabView.vue";
     import EmpireAmortisation from './EmpireAmortisation.vue';
     import EmpireProduction from './EmpireProduction.vue';
+    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -26,11 +27,11 @@
             return [
                 {
                     name: 'production_buildings',
-                    title: 'LOCA: Production + Buildings',
+                    title: i18n.messages.extension.empire.productionOverview.menuItem,
                 },
                 {
                     name: 'amortisation',
-                    title: 'LOCA: Amortisation Calculator',
+                    title: i18n.messages.extension.empire.amortisation.menuItem,
                 },
             ];
         }

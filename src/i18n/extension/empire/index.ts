@@ -3,6 +3,7 @@ import de from './de';
 import en from './en';
 
 export interface I18nExtensionEmpireAmortisationTable {
+    menuItem: string;
     selectedPlanet: string;
     msuRates: string;
     crawlerOverload: string;
@@ -29,9 +30,17 @@ export interface I18nExtensionEmpireAmortisationTable {
     };
 }
 
+export interface I18nExtensionEmpireProductionOverview {
+    menuItem: string;
+    subMenu: {
+        resources: string;
+        mines: string;
+    };
+}
+
 export interface I18nExtensionEmpire {
     amortisation: I18nExtensionEmpireAmortisationTable;
-
+    productionOverview: I18nExtensionEmpireProductionOverview;
 }
 
 const messages: Record<LanguageKey, I18nExtensionEmpire> = {
