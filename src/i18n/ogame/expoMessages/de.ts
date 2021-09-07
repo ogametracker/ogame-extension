@@ -53,7 +53,7 @@ export default {
             /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: /Folgende Schiffe schlossen sich der Flotte an:(?<ships>.+)/,
+        regex: /Folgende Schiffe schlossen sich der Flotte an:(?<ships>.+)(Logbuch)?/,
     },
 
     [ExpoType.nothing]: [

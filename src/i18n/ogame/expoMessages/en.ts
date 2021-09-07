@@ -53,7 +53,7 @@ export default {
             /*'We */'found an enormous spaceship graveyard'/*. Some of the technicians from the expedition fleet were able to get some of the ships to work again.'*/,
             /*'We found the */'planet of an extinct civilization'/*. We are able to see a giant intact space station, orbiting. Some of your technicians and pilots went to the surface looking for some ships which could still be used.'*/,
         ],
-        regex: /The following ships are now part of the fleet:(?<ships>.+)/,
+        regex: /The following ships are now part of the fleet:(?<ships>.+)(Entry)?/,
     },
 
     [ExpoType.nothing]: [
