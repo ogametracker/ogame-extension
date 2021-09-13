@@ -3,6 +3,7 @@ import ExpoSize from '@/models/expeditions/ExpoSize';
 import ExpoType from '@/models/expeditions/ExpoType';
 import de from './de';
 import en from './en';
+import dk from './dk';
 
 export interface I18nOgameExpoMessages {
     [ExpoType.darkMatter]: {
@@ -51,5 +52,6 @@ export interface I18nOgameExpoMessages {
 const messages: Record<LanguageKey, I18nOgameExpoMessages> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
+    [LanguageKey.dk]: dk,
 };
 export default messages;

@@ -2,6 +2,7 @@ import LanguageKey from '@/i18n/languageKey';
 import ExpoType from '@/models/expeditions/ExpoType';
 import de from './de';
 import en from './en';
+import dk from './dk';
 
 export interface I18nOgameExpoTypes {
     [ExpoType.aliens]: string;
@@ -20,5 +21,6 @@ export interface I18nOgameExpoTypes {
 const messages: Record<LanguageKey, I18nOgameExpoTypes> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
+    [LanguageKey.dk]: dk,
 };
 export default messages;
