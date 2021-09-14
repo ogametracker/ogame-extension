@@ -1,3 +1,3 @@
 export default {
-    regex: /Du hast ([\d.]+) Metall und ([\d.]+) Kristall abgebaut/,
+    regex: /Du har samlet ([\d.]+) metal og ([\d.]+) krystal/,
 };
