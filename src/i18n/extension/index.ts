@@ -61,14 +61,23 @@ const splitMap = {
     battleResults,
 };
 
+function getSplitMap(languageKey: LanguageKey) {
+    return Object.keys(splitMap).reduce((acc, key) => ({
+        ...acc,
+        [key]: (splitMap as any)[key][languageKey]
+    }), {} as any) as any;
+}
+
+const test = getSplitMap(LanguageKey.de);
+
 const messages: Record<LanguageKey, I18nExtension> = {
     [LanguageKey.de]: {
-        ...Object.keys(splitMap).map(key => (splitMap as any)[key].de) as any,
+        ...getSplitMap(LanguageKey.de),
         ...ogame.de,
         ...de,
     },
     [LanguageKey.en]: {
-        ...Object.keys(splitMap).map(key => (splitMap as any)[key].en) as any,
+        ...getSplitMap(LanguageKey.en),
         ...ogame.en,
         ...en,
     },

@@ -7,12 +7,7 @@ export interface I18nDateFormats {
     long: string;
 }
 
-type I18nLanguageRootMap = Partial<Record<LanguageKey, I18nRootTranslations>>;
-type I18nRootTranslations = I18nTranslationObject;
-type I18nTranslation = I18nTranslationObject | string;
-interface I18nTranslationObject {
-    [key: string]: I18nTranslation;
-}
+type I18nLanguageRootMap<TRoot> = Partial<Record<LanguageKey, TRoot>>;
 
 export interface I18nDateTimeFormats {
     short: string;
@@ -30,31 +25,31 @@ export interface I18nOptions<TMessages> {
 class I18nMessageProxy<TMessages> {
     private readonly $i18n: I18n<TMessages>;
 
-    constructor(i18n: I18n<TMessages>, messages: I18nLanguageRootMap) {
+    constructor(i18n: I18n<TMessages>, messages: I18nLanguageRootMap<TMessages>) {
         this.$i18n = i18n;
 
         this.transformI18nObject(messages);
     }
 
-    private transformI18nObject(obj: I18nLanguageRootMap) {
+    private transformI18nObject(obj: I18nLanguageRootMap<TMessages>) {
         const keys = Object.keys(obj) as LanguageKey[];
         keys.forEach(key => {
             this.transform(
                 this as any,
-                obj[key] as I18nTranslationObject,
+                obj[key] as any,
                 key
             );
         });
     }
 
-    private transform(root: I18nRootTranslations, obj: I18nTranslationObject, lang: LanguageKey) {
+    private transform(root: I18nLanguageRootMap<TMessages>, obj: any, lang: LanguageKey) {
         Object.keys(obj).forEach(key => {
             const value = obj[key];
 
             const fieldKey = `$${key}`;
-            const localRoot = (root[fieldKey] ??= {}) as I18nTranslationObject;
+            const localRoot = ((root as any)[fieldKey] ??= {}) as any;
 
-            if (value instanceof Object) {
+            if (value instanceof Object && typeof value === 'object') {
                 this.transform(localRoot, value, lang);
 
                 if (!Object.getOwnPropertyNames(root).includes(key)) {

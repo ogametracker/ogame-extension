@@ -1,11 +1,11 @@
 
+import { extensionI18n } from '@/i18n';
 import ExpoType from '@/models/expeditions/ExpoType';
 import OgameMetaData from '@/models/ogame/OgameMetaData';
 import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
-import clone from '@/utils/clone';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
@@ -20,31 +20,31 @@ class SettingsModule extends Vue {
                         type: "day",
                         skip: 0,
                         take: 1,
-                        label: this.$i18n.$t.settings.defaultRanges.today,
+                        label: extensionI18n.$t.settings.defaultRanges.today,
                     },
                     {
                         type: "day",
                         skip: 1,
                         take: 1,
-                        label: this.$i18n.$t.settings.defaultRanges.yesterday,
+                        label: extensionI18n.$t.settings.defaultRanges.yesterday,
                     },
                     {
                         type: "week",
                         skip: 0,
                         take: 1,
-                        label: this.$i18n.$t.settings.defaultRanges.currentWeek,
+                        label: extensionI18n.$t.settings.defaultRanges.currentWeek,
                     },
                     {
                         type: "week",
                         skip: 1,
                         take: 1,
-                        label: this.$i18n.$t.settings.defaultRanges.lastWeek,
+                        label: extensionI18n.$t.settings.defaultRanges.lastWeek,
                     },
                     {
                         type: "month",
                         skip: 0,
                         take: 1,
-                        label: this.$i18n.$t.settings.defaultRanges.currentMonth,
+                        label: extensionI18n.$t.settings.defaultRanges.currentMonth,
                     },
                     {
                         type: "all",
