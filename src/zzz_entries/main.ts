@@ -43,8 +43,7 @@ function mountVue() {
     document.body.appendChild(app);
 
     new Vue({
-        ogame: ogameI18n, 
-        extension: extensionI18n,
+        i18n: extensionI18n,
         render: h => h(App),
     }).$mount(`#${app.id}`);
 }

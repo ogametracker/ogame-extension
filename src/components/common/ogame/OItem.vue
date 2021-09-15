@@ -44,23 +44,23 @@
         }
 
         &.grade-none {
-            border-color: $i18n-item-grade-none;
+            border-color: $ogame-item-grade-none;
         }
 
         &.grade-bronze {
-            border-color: $i18n-item-grade-bronze;
+            border-color: $ogame-item-grade-bronze;
         }
 
         &.grade-silver {
-            border-color: $i18n-item-grade-silver;
+            border-color: $ogame-item-grade-silver;
         }
 
         &.grade-gold {
-            border-color: $i18n-item-grade-gold;
+            border-color: $ogame-item-grade-gold;
         }
 
         &.grade-platinum {
-            border-color: $i18n-item-grade-platinum;
+            border-color: $ogame-item-grade-platinum;
         }
     }
 </style>

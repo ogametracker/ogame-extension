@@ -101,14 +101,17 @@ export class I18n<TMessages> {
      *    get key: <returns the value of the current locale or the fallbackLocale>
      * }
      */
+    public readonly dateTimeFormats: I18nDateTimeFormats;
+
     private readonly _dateTimeFormats: I18nDateTimeFormatMap;
 
     constructor(options: I18nOptions<TMessages>) {
         this.locale = options.fallbackLocale;
         this.fallbackLocale = options.fallbackLocale;
 
-        this.$t = new I18nMessageProxy(this, options.messages as any) as any;
+        this.$t = new I18nMessageProxy<TMessages>(this, options.messages as any) as any;
         this._dateTimeFormats = options.dateTimeFormats;
+        this.dateTimeFormats = new I18nMessageProxy(this, options.dateTimeFormats as any) as any;
     }
 
     public $d(date: number | Date, formatName: keyof I18nDateFormats): string {

@@ -1,4 +1,5 @@
 
+import { extensionI18n, ogameI18n } from "@/i18n";
 import ExpoEvent, { ExpoEventDarkMatter, ExpoEventResources, ExpoFindableShips, ExpoEventFleet, ExpoEventItem, ExpoEventEarly, ExpoEventDelay, ExpoEventTrader, ExpoEventLostFleet, ExpoEventAliens, ExpoEventPirates, ExpoEventNothing } from "@/models/expeditions/ExpoEvent";
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
@@ -63,8 +64,8 @@ export default async function readExpeditions(): Promise<void> {
             if (expoEvent.type == ExpoType.lostFleet) {
                 NotificationModule.addNotification({
                     type: 'warning',
-                    title: this.$i18n.$t.notifications.expeditions.fleetLost.title,
-                    text: this.$i18n.$t.notifications.expeditions.fleetLost.text,
+                    title: extensionI18n.$t.notifications.expeditions.fleetLost.title,
+                    text: extensionI18n.$t.notifications.expeditions.fleetLost.text,
                     timeout: 5000,
                 });
             }
@@ -80,16 +81,16 @@ export default async function readExpeditions(): Promise<void> {
     if (errorMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: this.$i18n.$t.notifications.expeditions.error.title,
-            text: this.$i18n.$t.notifications.expeditions.error.text(errorMessageCount),
+            title: extensionI18n.$t.notifications.expeditions.error.title,
+            text: extensionI18n.$t.notifications.expeditions.error.text(errorMessageCount),
         });
     }
 
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: this.$i18n.$t.notifications.expeditions.success.title,
-            text: this.$i18n.$t.notifications.expeditions.success.text(newMessageCount),
+            title: extensionI18n.$t.notifications.expeditions.success.title,
+            text: extensionI18n.$t.notifications.expeditions.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -109,7 +110,7 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
 
     switch (expo.type) {
         case ExpoType.resources: {
-            const regex = this.$ogame.$t.expoMessages.resources.regex;
+            const regex = ogameI18n.$t.expoMessages.resources.regex;
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -124,7 +125,7 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         }
 
         case ExpoType.fleet: {
-            const regex = this.$ogame.$t.expoMessages.fleet.regex;
+            const regex = ogameI18n.$t.expoMessages.fleet.regex;
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -136,7 +137,7 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         }
 
         case ExpoType.darkMatter: {
-            const regex = this.$ogame.$t.expoMessages.darkMatter.regex;
+            const regex = ogameI18n.$t.expoMessages.darkMatter.regex;
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -169,16 +170,16 @@ function addExpoResultText(expo: ExpoEvent, element: Element) {
     const typeElem = document.createElement('span');
     typeElem.classList.add('msg-expo-title');
 
-    typeElem.textContent = `${this.$ogame.$t.expoTypes[expo.type]}`;
+    typeElem.textContent = `${ogameI18n.$t.expoTypes[expo.type]}`;
     if ('size' in expo) {
-        typeElem.textContent += ` (${this.$ogame.$t.expoSizes[expo.size]})`;
+        typeElem.textContent += ` (${ogameI18n.$t.expoSizes[expo.size]})`;
     }
     headElem.insertBefore(typeElem, titleElem.nextSibling);
 }
 
 function getExpoEvent(id: number, message: string, messageContainer: Element): ExpoEvent {
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
-    const date = parse(dateText, i18n.dateTimeFormats.long, new Date()).getTime();
+    const date = parse(dateText, ogameI18n.dateTimeFormats.long, new Date()).getTime();
 
     const expoInfo = getDarkMatterExpo(id, date, message)
         ?? getResourceExpo(id, date, message)
@@ -199,7 +200,7 @@ function getExpoEvent(id: number, message: string, messageContainer: Element): E
 }
 
 function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const regex = this.$ogame.$t.expoMessages[ExpoType.darkMatter].regex;
+    const regex = ogameI18n.$t.expoMessages[ExpoType.darkMatter].regex;
     const match = message.match(regex);
     if (match?.groups == null) {
         return null;
@@ -207,7 +208,7 @@ function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent
 
     const amount = parseInt(match.groups.amount.replace(/[^\d]/g, ''));
     const size = Object.values(ExpoSize)
-        .find(size => this.$ogame.$t.expoMessages[ExpoType.darkMatter][size]
+        .find(size => ogameI18n.$t.expoMessages[ExpoType.darkMatter][size]
             .some((msg: string) => message.includes(msg))
         );
 
@@ -227,7 +228,7 @@ function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent
 
 
 function getResourceExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const regex = this.$ogame.$t.expoMessages[ExpoType.resources].regex;
+    const regex = ogameI18n.$t.expoMessages[ExpoType.resources].regex;
     const match = message.match(regex);
     if (match == null) {
         return null;
@@ -236,7 +237,7 @@ function getResourceExpo(id: number, date: number, message: string): ExpoEvent |
     const resourceName = match[1];
     const amount = parseInt(match[2].replace(/[^\d]/g, ''));
     const size = Object.values(ExpoSize)
-        .find(size => this.$ogame.$t.expoMessages[ExpoType.resources][size]
+        .find(size => ogameI18n.$t.expoMessages[ExpoType.resources][size]
             .some((msg: string) => message.includes(msg))
         );
 
@@ -245,7 +246,7 @@ function getResourceExpo(id: number, date: number, message: string): ExpoEvent |
     }
 
     const resource = Object.values(Resource)
-        .find(resource => this.$ogame.$t.resources[resource] == resourceName);
+        .find(resource => ogameI18n.$t.resources[resource] == resourceName);
 
     if (resource == null) {
         return null;
@@ -270,7 +271,7 @@ function getResourceExpo(id: number, date: number, message: string): ExpoEvent |
 function getFleetExpo(id: number, date: number, message: string): ExpoEvent | null {
 
     const size = Object.values(ExpoSize)
-        .find(size => this.$ogame.$t.expoMessages[ExpoType.fleet][size]
+        .find(size => ogameI18n.$t.expoMessages[ExpoType.fleet][size]
             .some((msg: string) => message.includes(msg))
         );
     if (size == null) {
@@ -279,14 +280,14 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
     const ships: Record<ExpoFindableShips, number | undefined> = {};
 
-    const regex = this.$ogame.$t.expoMessages[ExpoType.fleet].regex;
+    const regex = ogameI18n.$t.expoMessages[ExpoType.fleet].regex;
     const match = message.match(regex);
     if (match != null) {
         const shipText = match.groups!.ships;
 
         getNumericEnumValues<Ship>(ExpoFindableShips)
             .forEach(ship => {
-                const shipName = this.$ogame.$t.ships[ship];
+                const shipName = ogameI18n.$t.ships[ship];
                 const shipRegex = new RegExp(shipName + ': (\\d+)');
                 const shipMatch = shipText.match(shipRegex);
 
@@ -308,7 +309,7 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
 
 function getItemExpo(id: number, date: number, message: string, messageContainer: Element): ExpoEvent | null {
-    const regex = this.$ogame.$t.expoMessages[ExpoType.item].regex;
+    const regex = ogameI18n.$t.expoMessages[ExpoType.item].regex;
     const match = message.match(regex);
     if (match?.groups == null)
         return null;
@@ -334,7 +335,7 @@ function getItemExpo(id: number, date: number, message: string, messageContainer
 
 
 function getEarlyExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const isEarly = this.$ogame.$t.expoMessages[ExpoType.early].some((msg: string) => message.includes(msg));
+    const isEarly = ogameI18n.$t.expoMessages[ExpoType.early].some((msg: string) => message.includes(msg));
     if (!isEarly)
         return null;
 
@@ -348,7 +349,7 @@ function getEarlyExpo(id: number, date: number, message: string): ExpoEvent | nu
 
 
 function getDelayExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const isDelay = this.$ogame.$t.expoMessages[ExpoType.delay].some((msg: string) => message.includes(msg));
+    const isDelay = ogameI18n.$t.expoMessages[ExpoType.delay].some((msg: string) => message.includes(msg));
     if (!isDelay)
         return null;
 
@@ -362,7 +363,7 @@ function getDelayExpo(id: number, date: number, message: string): ExpoEvent | nu
 
 
 function getTraderExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const isTrader = this.$ogame.$t.expoMessages[ExpoType.trader].some((msg: string) => message.includes(msg));
+    const isTrader = ogameI18n.$t.expoMessages[ExpoType.trader].some((msg: string) => message.includes(msg));
     if (!isTrader)
         return null;
 
@@ -376,7 +377,7 @@ function getTraderExpo(id: number, date: number, message: string): ExpoEvent | n
 
 
 function getLostFleetExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const isLost = this.$ogame.$t.expoMessages[ExpoType.lostFleet].some((msg: string) => message.includes(msg));
+    const isLost = ogameI18n.$t.expoMessages[ExpoType.lostFleet].some((msg: string) => message.includes(msg));
     if (!isLost)
         return null;
 
@@ -391,7 +392,7 @@ function getLostFleetExpo(id: number, date: number, message: string): ExpoEvent 
 
 function getAliensExpo(id: number, date: number, message: string): ExpoEvent | null {
     const size = Object.values(ExpoSize)
-        .find(size => this.$ogame.$t.expoMessages[ExpoType.aliens][size]
+        .find(size => ogameI18n.$t.expoMessages[ExpoType.aliens][size]
             .some((msg: string) => message.includes(msg))
         );
     if (size == null) {
@@ -410,7 +411,7 @@ function getAliensExpo(id: number, date: number, message: string): ExpoEvent | n
 
 function getPiratesExpo(id: number, date: number, message: string): ExpoEvent | null {
     const size = Object.values(ExpoSize)
-        .find(size => this.$ogame.$t.expoMessages[ExpoType.pirates][size]
+        .find(size => ogameI18n.$t.expoMessages[ExpoType.pirates][size]
             .some((msg: string) => message.includes(msg))
         );
 
@@ -428,7 +429,7 @@ function getPiratesExpo(id: number, date: number, message: string): ExpoEvent | 
 }
 
 function getNothingExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const isNothing = this.$ogame.$t.expoMessages[ExpoType.nothing].some((msg: string) => message.includes(msg));
+    const isNothing = ogameI18n.$t.expoMessages[ExpoType.nothing].some((msg: string) => message.includes(msg));
 
     if (!isNothing) {
         return null;
