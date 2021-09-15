@@ -33,13 +33,13 @@ class I18nMessageProxy<TMessages> {
     constructor(i18n: I18n<TMessages>, messages: I18nLanguageRootMap) {
         this.$i18n = i18n;
 
-        this.#transformI18nObject(messages);
+        this.transformI18nObject(messages);
     }
 
-    #transformI18nObject(obj: I18nLanguageRootMap) {
+    private transformI18nObject(obj: I18nLanguageRootMap) {
         const keys = Object.keys(obj) as LanguageKey[];
         keys.forEach(key => {
-            this.#transform(
+            this.transform(
                 this as any,
                 obj[key] as I18nTranslationObject,
                 key
@@ -47,7 +47,7 @@ class I18nMessageProxy<TMessages> {
         });
     }
 
-    #transform(root: I18nRootTranslations, obj: I18nTranslationObject, lang: LanguageKey) {
+    private transform(root: I18nRootTranslations, obj: I18nTranslationObject, lang: LanguageKey) {
         Object.keys(obj).forEach(key => {
             const value = obj[key];
 
@@ -55,7 +55,7 @@ class I18nMessageProxy<TMessages> {
             const localRoot = (root[fieldKey] ??= {}) as I18nTranslationObject;
 
             if (value instanceof Object) {
-                this.#transform(localRoot, value, lang);
+                this.transform(localRoot, value, lang);
 
                 if (!Object.getOwnPropertyNames(root).includes(key)) {
                     Object.defineProperty(root, key, {
