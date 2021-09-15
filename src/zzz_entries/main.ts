@@ -6,7 +6,7 @@ const chromeUrl = chrome.extension.getURL('');
 Vue.prototype.$extBase = chromeUrl.substr(0, chromeUrl.length - 1); // remove trailing slash
 
 // add vue-debounce
-import vueDebounce  from 'vue-debounce';
+import vueDebounce from 'vue-debounce';
 Vue.use(vueDebounce, {
     listenTo: ['input', 'change', 'blur'],
     defaultTime: '150ms',
@@ -19,8 +19,8 @@ import '@/components/common';
 import '@/styles/index.scss';
 
 // i18n
-import i18n from '@/i18n/';
-i18n.locale = getLanguage();
+import { ogameI18n, extensionI18n } from '@/i18n/';
+extensionI18n.locale = ogameI18n.locale = getLanguage();
 
 // tracking
 import { startTracking } from '@/tracking';
@@ -44,7 +44,8 @@ function mountVue() {
     document.body.appendChild(app);
 
     new Vue({
-        i18n,
+        ogame: ogameI18n, 
+        extension: extensionI18n,
         render: h => h(App),
     }).$mount(`#${app.id}`);
 }

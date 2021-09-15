@@ -1,50 +1,28 @@
-import { format } from "date-fns";
 import Vue from "vue";
+import { I18n } from "./classes";
 import LanguageKey from "./languageKey";
-import messages, { I18nMessages } from './messages';
 
-export interface I18nDateFormats {
-    short: string;
-    long: string;
-}
-
-export class I18n {
-    public locale: LanguageKey = LanguageKey.de;
-    private _messages = messages;
-    private _dateTimeFormats: Record<LanguageKey, I18nDateFormats> = {
-        [LanguageKey.de]: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
-        },
-        [LanguageKey.en]: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
-        },
-    };
-
-    public get messages(): I18nMessages {
-        return this._messages[this.locale];
-    }
-
-    public get dateTimeFormats(): I18nDateFormats {
-        return this._dateTimeFormats[this.locale];
-    }
-
-    public formatDate(date: number | Date, formatName: keyof I18nDateFormats): string {
-        const dateFormat = this._dateTimeFormats[this.locale][formatName];
-
-        return format(date, dateFormat);
-    }
-
-    public formatNumber(number: number, options?: Intl.NumberFormatOptions): string {
-        const formatter = new Intl.NumberFormat(this.locale, options);
-        return formatter.format(number);
-    }
-}
-
-const i18n = new I18n();
-Object.defineProperty(Vue.prototype, '$i18n', {
-    get() { return i18n; }
+import ogameMessages, { I18nOgame } from "./ogame";
+const ogameI18n = new I18n<I18nOgame>({
+    messages: ogameMessages,
+    dateTimeFormats: {},
+    fallbackLocale: LanguageKey.de,
+});
+Object.defineProperty(Vue.prototype, '$ogame', {
+    get() { return ogameI18n; }
 });
 
-export default i18n;
+import extensionMessages, { I18nExtension } from "./extension";
+const extensionI18n = new I18n<I18nExtension>({
+    messages: extensionMessages,
+    dateTimeFormats: {},
+    fallbackLocale: LanguageKey.de,
+});
+Object.defineProperty(Vue.prototype, '$extension', {
+    get() { return extensionI18n; }
+});
+
+export {
+    ogameI18n,
+    extensionI18n,
+};

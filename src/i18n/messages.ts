@@ -4,6 +4,7 @@ import { I18nOgame } from "./ogame";
 import extension from './extension';
 import ogame from './ogame';
 
+
 export interface I18nMessages {
     extension: I18nExtension;
     ogame: I18nOgame;
