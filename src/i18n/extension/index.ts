@@ -11,8 +11,8 @@ import ogame, { I18nOgame } from '../ogame';
 export interface I18nExtension extends I18nOgame {
     menuItem: string;
 
-    settings: I18nExtensionSettings;
-    notifications: I18nExtensionNotifications;
+    settings: Partial<I18nExtensionSettings>;
+    notifications: Partial<I18nExtensionNotifications>;
 
     total: string;
     chart: string;
@@ -48,9 +48,9 @@ export interface I18nExtension extends I18nOgame {
     lost: string;
     destroyed: string;
 
-    empire: I18nExtensionEmpire;
-    info: I18nExtensionInfo;
-    battleResults: I18nExtensionBattleResults;
+    empire: Partial<I18nExtensionEmpire>;
+    info: Partial<I18nExtensionInfo>;
+    battleResults: Partial<I18nExtensionBattleResults>;
 }
 
 const splitMap = {
