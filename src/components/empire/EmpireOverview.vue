@@ -14,7 +14,7 @@
     import { TabViewItem } from "@/components/common/TabView.vue";
     import EmpireAmortisation from './EmpireAmortisation.vue';
     import EmpireProduction from './EmpireProduction.vue';
-    import i18n from "@/i18n";
+    
 
     @Component({
         components: {
@@ -27,11 +27,11 @@
             return [
                 {
                     name: 'production_buildings',
-                    title: this.$extension.$t.empire.productionOverview.menuItem,
+                    title: this.$i18n.$t.empire.productionOverview.menuItem,
                 },
                 {
                     name: 'amortisation',
-                    title: this.$extension.$t.empire.amortisation.menuItem,
+                    title: this.$i18n.$t.empire.amortisation.menuItem,
                 },
             ];
         }

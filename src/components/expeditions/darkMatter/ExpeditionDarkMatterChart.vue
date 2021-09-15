@@ -3,7 +3,7 @@
         stacked
         :datasets="datasets"
         hide-legend
-        :y-tick-formatter="(value) => $extension.$n(value)"
+        :y-tick-formatter="(value) => $i18n.$n(value)"
         :tooltip-label="getTooltipLabel"
     />
 </template>
@@ -13,7 +13,7 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import SettingsModule from "@/store/modules/SettingsModule";
     import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
-    import i18n from "@/i18n";
+    
 
     @Component({
         components: {
@@ -22,7 +22,7 @@
     })
     export default class ExpeditionDarkMatterChart extends Vue {
         private readonly datasets: ExpoLineChartDataset[] = [{
-            label: this.$ogame.$t.premium.darkMatter,
+            label: this.$i18n.$t.premium.darkMatter,
             fill: true,
             color: SettingsModule.settings.charts.colors.overview.darkMatter,
             aggregator: expos => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
@@ -32,7 +32,7 @@
         private getTooltipLabel(item: any, data: any) {
             const label = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${this.$extension.$n(value)} ${label}`;
+            return `${this.$i18n.$n(value)} ${label}`;
         }
     }
 </script>

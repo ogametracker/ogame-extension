@@ -6,8 +6,9 @@ import en from './en';
 import info, { I18nExtensionInfo } from './info';
 import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
+import ogame, { I18nOgame } from '../ogame';
 
-export interface I18nExtension {
+export interface I18nExtension extends I18nOgame {
     menuItem: string;
 
     settings: I18nExtensionSettings;
@@ -52,21 +53,23 @@ export interface I18nExtension {
     battleResults: I18nExtensionBattleResults;
 }
 
+const splitMap = {
+    settings, 
+    notifications,
+    empire,
+    info,
+    battleResults,
+};
+
 const messages: Record<LanguageKey, I18nExtension> = {
     [LanguageKey.de]: {
-        settings: settings.de,
-        notifications: notifications.de,
-        empire: empire.de,
-        info: info.de,
-        battleResults: battleResults.de,
+        ...Object.keys(splitMap).map(key => (splitMap as any)[key].de) as any,
+        ...ogame.de,
         ...de,
     },
     [LanguageKey.en]: {
-        settings: settings.en,
-        notifications: notifications.en,
-        empire: empire.en,
-        info: info.en,
-        battleResults: battleResults.en,
+        ...Object.keys(splitMap).map(key => (splitMap as any)[key].en) as any,
+        ...ogame.en,
         ...en,
     },
 };

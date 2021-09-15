@@ -30,7 +30,7 @@
     import ExpeditionDarkMatter from "./darkMatter/ExpeditionDarkMatter.vue";
     import ExpeditionItemChart from './item/ExpeditionItemChart.vue';
     import ExpeditionTypeDistributionChart from './distribution/ExpeditionTypeDistributionChart.vue';
-    import i18n from "@/i18n";
+    
 
 
     @Component({
@@ -47,27 +47,27 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: this.$extension.$t.expoMenu.overview,
+                title: this.$i18n.$t.expoMenu.overview,
             },
             {
                 name: 'resources',
-                title: this.$extension.$t.expoMenu.resources,
+                title: this.$i18n.$t.expoMenu.resources,
             },
             {
                 name: 'fleet',
-                title: this.$extension.$t.expoMenu.fleet,
+                title: this.$i18n.$t.expoMenu.fleet,
             },
             {
                 name: 'darkMatter',
-                title: this.$extension.$t.expoMenu.darkMatter,
+                title: this.$i18n.$t.expoMenu.darkMatter,
             },
             {
                 name: 'items',
-                title: this.$extension.$t.expoMenu.items,
+                title: this.$i18n.$t.expoMenu.items,
             },
             {
                 name: 'distribution',
-                title: this.$extension.$t.expoMenu.distribution,
+                title: this.$i18n.$t.expoMenu.distribution,
             },
         ];
     }

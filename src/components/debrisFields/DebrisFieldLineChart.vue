@@ -262,7 +262,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => this.$extension.$d(this.allDays[index], 'short'))
+                ...indices.map((index) => this.$i18n.$d(this.allDays[index], 'short'))
             );
         }
 

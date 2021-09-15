@@ -1,4 +1,4 @@
-import i18n from "@/i18n";
+
 import BattleReport from "@/models/battles/BattleReport";
 import BattleResult from "@/models/battles/BattleResult";
 import OgameBattleReport from "@/models/battles/OgameBattleReport";
@@ -75,8 +75,8 @@ export default async function readBattles() {
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: this.$extension.$t.notifications.combats.success.title,
-            text: this.$extension.$t.notifications.combats.success.text(newMessageCount),
+            title: this.$i18n.$t.notifications.combats.success.title,
+            text: this.$i18n.$t.notifications.combats.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -86,8 +86,8 @@ export default async function readBattles() {
     if (newErrorCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: this.$extension.$t.notifications.combats.error.title,
-            text: this.$extension.$t.notifications.combats.error.text(newErrorCount),
+            title: this.$i18n.$t.notifications.combats.error.title,
+            text: this.$i18n.$t.notifications.combats.error.text(newErrorCount),
             timeout: 5000,
         });
     }

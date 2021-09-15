@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { TabViewItem } from '../common/TabView.vue';
     import EmpireProductionMineLevels from './EmpireProductionMineLevels.vue';
@@ -26,11 +26,11 @@
             return [
                 {
                     name: 'resources',
-                    title: this.$extension.$t.empire.productionOverview.subMenu.resources,
+                    title: this.$i18n.$t.empire.productionOverview.subMenu.resources,
                 },
                 {
                     name: 'mines',
-                    title: this.$extension.$t.empire.productionOverview.subMenu.mines,
+                    title: this.$i18n.$t.empire.productionOverview.subMenu.mines,
                 },
             ];
         }

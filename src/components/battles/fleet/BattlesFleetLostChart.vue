@@ -2,7 +2,7 @@
     <battles-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $extension.$n(value)"
+        :y-tick-formatter="(value) => $i18n.$n(value)"
         :tooltip-label="getTooltipLabel"
         :force-min="0"
     />
@@ -30,7 +30,7 @@
             return getNumericEnumValues<Ship>(Ship).map(ship => {
                 return {
                     fill: true,
-                    label: this.$ogame.$t.ships[ship],
+                    label: this.$i18n.$t.ships[ship],
                     color: SettingsModule.settings.charts.colors.ships[ship],
                     aggregator: reports => reports.filter(report => report.isExpedition ? this.expeditions : this.players)
                         .reduce((acc, report) => acc + report.lostShips[ship], 0),
@@ -41,7 +41,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${this.$extension.$n(value)} ${resource}`;
+            return `${this.$i18n.$n(value)} ${resource}`;
         }
     }
 </script>

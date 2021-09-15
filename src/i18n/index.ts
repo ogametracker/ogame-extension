@@ -8,7 +8,6 @@ const ogameI18n = new I18n<I18nOgame>({
     dateTimeFormats: {},
     fallbackLocale: LanguageKey.de,
 });
-Vue.prototype.$ogame = ogameI18n;
 
 import extensionMessages, { I18nExtension } from "./extension";
 const extensionI18n = new I18n<I18nExtension>({
@@ -16,7 +15,7 @@ const extensionI18n = new I18n<I18nExtension>({
     dateTimeFormats: {},
     fallbackLocale: LanguageKey.de,
 });
-Vue.prototype.$extension = extensionI18n;
+Vue.prototype.$i18n = extensionI18n;
 
 export {
     ogameI18n,

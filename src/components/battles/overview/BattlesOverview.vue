@@ -24,11 +24,11 @@
             return [
                 {
                     name: 'players',
-                    title: this.$extension.$t.combats.againstPlayers,
+                    title: this.$i18n.$t.combats.againstPlayers,
                 },
                 {
                     name: 'expos',
-                    title: this.$extension.$t.combats.onExpeditions,
+                    title: this.$i18n.$t.combats.onExpeditions,
                 },
             ];
         }

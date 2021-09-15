@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h2>{{ $extension.$t.eventSizes }}</h2>
+        <h2>{{ $i18n.$t.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -13,7 +13,7 @@
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '../ExpoRangedTable.vue';
     import { ExpoEventDarkMatter } from "@/models/expeditions/ExpoEvent";
-    import i18n from "@/i18n";
+    
 
     @Component({
         components: {
@@ -26,7 +26,7 @@
 
         private get items(): ExpoRangeTableItem[] {
             return [{
-                label: this.$ogame.$t.premium.darkMatter,
+                label: this.$i18n.$t.premium.darkMatter,
                 getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
                     .reduce((acc, cur) => acc + cur.darkMatter, 0)
             }];

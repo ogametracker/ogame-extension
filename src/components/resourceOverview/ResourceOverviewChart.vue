@@ -56,7 +56,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
-    import i18n from '@/i18n';
+    
     import BattleReport from '@/models/battles/BattleReport';
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import BattleModule from '@/store/modules/BattleModule';
@@ -291,7 +291,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => this.$extension.$d(this.allDays[index], 'short'))
+                ...indices.map((index) => this.$i18n.$d(this.allDays[index], 'short'))
             );
         }
 

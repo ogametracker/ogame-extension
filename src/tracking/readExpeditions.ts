@@ -1,4 +1,4 @@
-import i18n from "@/i18n";
+
 import ExpoEvent, { ExpoEventDarkMatter, ExpoEventResources, ExpoFindableShips, ExpoEventFleet, ExpoEventItem, ExpoEventEarly, ExpoEventDelay, ExpoEventTrader, ExpoEventLostFleet, ExpoEventAliens, ExpoEventPirates, ExpoEventNothing } from "@/models/expeditions/ExpoEvent";
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
@@ -63,8 +63,8 @@ export default async function readExpeditions(): Promise<void> {
             if (expoEvent.type == ExpoType.lostFleet) {
                 NotificationModule.addNotification({
                     type: 'warning',
-                    title: this.$extension.$t.notifications.expeditions.fleetLost.title,
-                    text: this.$extension.$t.notifications.expeditions.fleetLost.text,
+                    title: this.$i18n.$t.notifications.expeditions.fleetLost.title,
+                    text: this.$i18n.$t.notifications.expeditions.fleetLost.text,
                     timeout: 5000,
                 });
             }
@@ -80,16 +80,16 @@ export default async function readExpeditions(): Promise<void> {
     if (errorMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: this.$extension.$t.notifications.expeditions.error.title,
-            text: this.$extension.$t.notifications.expeditions.error.text(errorMessageCount),
+            title: this.$i18n.$t.notifications.expeditions.error.title,
+            text: this.$i18n.$t.notifications.expeditions.error.text(errorMessageCount),
         });
     }
 
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: this.$extension.$t.notifications.expeditions.success.title,
-            text: this.$extension.$t.notifications.expeditions.success.text(newMessageCount),
+            title: this.$i18n.$t.notifications.expeditions.success.title,
+            text: this.$i18n.$t.notifications.expeditions.success.text(newMessageCount),
             timeout: 5000,
         });
 

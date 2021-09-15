@@ -1,4 +1,5 @@
-import i18n from "@/i18n";
+
+import { extensionI18n } from "@/i18n";
 import getLanguage from "@/i18n/mapLanguage";
 import _throw from "@/utils/throw";
 
@@ -10,10 +11,9 @@ observer.observe(document.documentElement, {
     subtree: true,
 });
 
-function addMenuItem(menu: Element) {
-    i18n.locale = getLanguage();
-    
-    const menuItemText = this.$extension.$t.menuItem;
+function addMenuItem(menu: Element) {    
+    extensionI18n.locale = getLanguage();
+    const menuItemText = extensionI18n.$t.menuItem;
 
     const dialogLink = document.createElement('li');
     dialogLink.innerHTML = `

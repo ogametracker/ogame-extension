@@ -1,4 +1,4 @@
-import i18n from "@/i18n";
+
 import OgameMetaData from "@/models/ogame/OgameMetaData";
 import ExtensionDataVersion from "@/models/versioning/ExtensionDataVersion";
 import NotificationModule from "@/store/modules/NotificationModule";
@@ -15,8 +15,8 @@ export default async function migrations() {
 
     const notification = NotificationModule.addNotification({
         type: 'info',
-        title: this.$extension.$t.notifications.migration.inProgress.title,
-        text: this.$extension.$t.notifications.migration.inProgress.text,
+        title: this.$i18n.$t.notifications.migration.inProgress.title,
+        text: this.$i18n.$t.notifications.migration.inProgress.text,
     });
 
     try {
@@ -38,7 +38,7 @@ export default async function migrations() {
 
         setTimeout(() => {
             notification.type = 'success';
-            notification.text = this.$extension.$t.notifications.migration.success.text;
+            notification.text = this.$i18n.$t.notifications.migration.success.text;
 
             setTimeout(() => {
                 NotificationModule.remove(notification);
@@ -46,6 +46,6 @@ export default async function migrations() {
         }, 2000);
     } catch {
         notification.type = 'error';
-        notification.text = this.$extension.$t.notifications.migration.error.text;
+        notification.text = this.$i18n.$t.notifications.migration.error.text;
     }
 }

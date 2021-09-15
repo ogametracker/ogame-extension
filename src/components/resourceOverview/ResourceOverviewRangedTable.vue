@@ -29,21 +29,21 @@
                     />
 
                     <span v-else>
-                        {{ $extension.$n(item.rangeValues[rangeIndex]) }}
+                        {{ $i18n.$n(item.rangeValues[rangeIndex]) }}
                     </span>
                 </td>
 
                 <td v-if="!noPercentage">
-                    {{ $extension.$n(100 * item.percentage) }}
+                    {{ $i18n.$n(100 * item.percentage) }}
                 </td>
             </tr>
             <tr v-if="showTotal" class="total-row">
                 <td>
-                    {{ $extension.$t.total }}
+                    {{ $i18n.$t.total }}
                 </td>
 
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
-                    {{ $extension.$n(tableData.rangeTotals[rangeIndex]) }}
+                    {{ $i18n.$n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
 
                 <td v-if="!noPercentage"></td>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
     import BattleReport from '@/models/battles/BattleReport';
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import ExpoEvent from '@/models/expeditions/ExpoEvent';
@@ -137,7 +137,7 @@
             const battlesInRange = rangeDays.flatMap(day => battlesByDay[day.getTime()] ?? []);
             const debrisInRange = rangeDays.flatMap(day => debrisByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$extension.$t.since} ${this.$extension.$d(firstDate, "short")}`;
+            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstDate, "short")}`;
             const itemValues = this.items.map(item => item.getValue(exposInRange, battlesInRange, debrisInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

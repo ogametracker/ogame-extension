@@ -29,21 +29,21 @@
                     />
 
                     <span v-else>
-                        {{ $extension.$n(item.rangeValues[rangeIndex]) }}
+                        {{ $i18n.$n(item.rangeValues[rangeIndex]) }}
                     </span>
                 </td>
 
                 <td v-if="!noPercentage">
-                    {{ $extension.$n(100 * item.percentage) }}
+                    {{ $i18n.$n(100 * item.percentage) }}
                 </td>
             </tr>
             <tr v-if="showTotal" class="total-row">
                 <td>
-                    {{ $extension.$t.total }}
+                    {{ $i18n.$t.total }}
                 </td>
 
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
-                    {{  $extension.$n(tableData.rangeTotals[rangeIndex]) }}
+                    {{  $i18n.$n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
 
                 <td v-if="!noPercentage"></td>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
 import ExpoEvent from '@/models/expeditions/ExpoEvent';
     import DateRange from '@/models/settings/DateRange';
     import ExpoModule from '@/store/modules/ExpoModule';
@@ -111,7 +111,7 @@ import ExpoEvent from '@/models/expeditions/ExpoEvent';
             const rangeDays = daysInRange(range) ?? Object.keys(exposByDay).map(d => new Date(parseInt(d)));
             const exposInRange = rangeDays.flatMap(day => exposByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$extension.$t.since} ${this.$extension.$d(firstExpoDate, "short")}`;
+            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstExpoDate, "short")}`;
             const itemValues = this.items.map(item => item.getValue(exposInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

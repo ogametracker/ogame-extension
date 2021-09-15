@@ -1,4 +1,4 @@
-import i18n from '@/i18n';
+
 import ExpoType from '@/models/expeditions/ExpoType';
 import OgameMetaData from '@/models/ogame/OgameMetaData';
 import Resource from '@/models/Resource';
@@ -20,31 +20,31 @@ class SettingsModule extends Vue {
                         type: "day",
                         skip: 0,
                         take: 1,
-                        label: this.$extension.$t.settings.defaultRanges.today,
+                        label: this.$i18n.$t.settings.defaultRanges.today,
                     },
                     {
                         type: "day",
                         skip: 1,
                         take: 1,
-                        label: this.$extension.$t.settings.defaultRanges.yesterday,
+                        label: this.$i18n.$t.settings.defaultRanges.yesterday,
                     },
                     {
                         type: "week",
                         skip: 0,
                         take: 1,
-                        label: this.$extension.$t.settings.defaultRanges.currentWeek,
+                        label: this.$i18n.$t.settings.defaultRanges.currentWeek,
                     },
                     {
                         type: "week",
                         skip: 1,
                         take: 1,
-                        label: this.$extension.$t.settings.defaultRanges.lastWeek,
+                        label: this.$i18n.$t.settings.defaultRanges.lastWeek,
                     },
                     {
                         type: "month",
                         skip: 0,
                         take: 1,
-                        label: this.$extension.$t.settings.defaultRanges.currentMonth,
+                        label: this.$i18n.$t.settings.defaultRanges.currentMonth,
                     },
                     {
                         type: "all",

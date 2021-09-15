@@ -37,7 +37,7 @@
                         {{ planet.buildings.production[building] }}
                     </td>
                     <td>
-                        {{ $extension.$n(getActiveCrawlers(planet)) }}
+                        {{ $i18n.$n(getActiveCrawlers(planet)) }}
                     </td>
                 </tr>
                 <tr class="total-row">
@@ -51,7 +51,7 @@
                     <td />
                     <td v-for="building in productionBuildings" :key="building">
                         {{
-                            $extension.$n(buildingAverage[building], {
+                            $i18n.$n(buildingAverage[building], {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -59,7 +59,7 @@
                     </td>
                     <td>
                         {{
-                            $extension.$n(activeCrawlerAverage, {
+                            $i18n.$n(activeCrawlerAverage, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
     import Building from '@/models/Building';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';

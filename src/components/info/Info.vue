@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import ExpoModule from '@/store/modules/ExpoModule';
@@ -33,21 +33,21 @@
         private get rows(): Row[] {
             return [
                 {
-                    title: this.$extension.$t.info.totalSize,
+                    title: this.$i18n.$t.info.totalSize,
                     text: this.formattedBytes,
                     class: '',
                 },
                 {
-                    title: this.$extension.$t.info.trackedExpeditions,
-                    text: this.$extension.$n(this.expoReportCount),
+                    title: this.$i18n.$t.info.trackedExpeditions,
+                    text: this.$i18n.$n(this.expoReportCount),
                 },
                 {
-                    title: this.$extension.$t.info.trackedCombats,
-                    text: this.$extension.$n(this.combatReportCount),
+                    title: this.$i18n.$t.info.trackedCombats,
+                    text: this.$i18n.$n(this.combatReportCount),
                 },
                 {
-                    title: this.$extension.$t.info.trackedDebrisFieldReports,
-                    text: this.$extension.$n(this.dfReportCount),
+                    title: this.$i18n.$t.info.trackedDebrisFieldReports,
+                    text: this.$i18n.$n(this.dfReportCount),
                 },
             ];
         }
@@ -70,7 +70,7 @@
                 unitIndex++;
             }
 
-            return `${this.$extension.$n(bytes, { 
+            return `${this.$i18n.$n(bytes, { 
                 maximumFractionDigits: 1,
             })} ${units[unitIndex]}`;
         }

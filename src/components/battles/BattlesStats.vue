@@ -31,15 +31,15 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: this.$extension.$t.overview,
+                title: this.$i18n.$t.overview,
             },
             {
                 name: 'resources',
-                title: this.$extension.$t.headers.resourcesOverview,
+                title: this.$i18n.$t.headers.resourcesOverview,
             },
             {
                 name: 'fleet',
-                title: this.$extension.$t.combats.lostShips,
+                title: this.$i18n.$t.combats.lostShips,
             },
         ];
     }

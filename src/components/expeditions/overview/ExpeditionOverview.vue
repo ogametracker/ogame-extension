@@ -14,7 +14,7 @@
     import { TabViewItem } from "@/components/common/TabView.vue";
     import ExpeditionOverviewChart from "./ExpeditionOverviewChart.vue";
     import ExpeditionOverviewTables from "./ExpeditionOverviewTables.vue";
-    import i18n from "@/i18n";
+    
 
     @Component({
         components: {
@@ -27,11 +27,11 @@
             return [
                 {
                     name: 'chart',
-                    title: this.$extension.$t.chart,
+                    title: this.$i18n.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: this.$extension.$t.tables,
+                    title: this.$i18n.$t.tables,
                 },
             ];
         }

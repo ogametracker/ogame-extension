@@ -2,7 +2,7 @@
     <battles-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $extension.$n(value)"
+        :y-tick-formatter="(value) => $i18n.$n(value)"
         :tooltip-label="getTooltipLabel"
     />
 </template>
@@ -23,7 +23,7 @@
                 const resource = resourceName as Resource;
                 return {
                     fill: true,
-                    label: this.$ogame.$t.resources[resource],
+                    label: this.$i18n.$t.resources[resource],
                     color: SettingsModule.settings.charts.colors.resources[resource],
                     aggregator: reports => reports.reduce((acc, report) => acc + report.loot[resource], 0),
                 };
@@ -33,7 +33,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${this.$extension.$n(value)} ${resource}`;
+            return `${this.$i18n.$n(value)} ${resource}`;
         }
     }
 </script>

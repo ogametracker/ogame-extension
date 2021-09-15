@@ -19,7 +19,7 @@
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {
-                    label: this.$ogame.$t.resources[resource],
+                    label: this.$i18n.$t.resources[resource],
                     getValue: (reports) => reports.reduce((acc, cur) => acc + cur.loot[resource], 0),
                 };
             });

@@ -1,6 +1,5 @@
 import ExpoModule from "@/store/modules/ExpoModule";
 import xlsx from 'xlsx';
-import i18n from '@/i18n/';
 import ExpoType from "@/models/expeditions/ExpoType";
 import { add, startOfDay } from "date-fns";
 import ExpoEvent, { ExpoEventDarkMatter, ExpoEventFleet, ExpoEventItem, ExpoEventResources, ExpoFindableShips, ExpoSizeableEvent } from "@/models/expeditions/ExpoEvent";
@@ -13,6 +12,7 @@ import BattleReport from "@/models/battles/BattleReport";
 import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
 import Ship from "@/models/Ship";
+import { extensionI18n } from "@/i18n";
 
 interface ExportHelper {
     label: string;
@@ -102,7 +102,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...expoTypes.map(expoType => this.$ogame.$t.expoTypes[expoType]),
+            ...expoTypes.map(expoType => extensionI18n.$t.expoTypes[expoType]),
         ];
 
 
@@ -122,7 +122,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...resources.map(resource => this.$ogame.$t.resources[resource]),
+            ...resources.map(resource => extensionI18n.$t.resources[resource]),
         ];
 
         return [headers, ...data];
@@ -141,7 +141,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...ships.map(ship => this.$ogame.$t.ships[ship]),
+            ...ships.map(ship => extensionI18n.$t.ships[ship]),
         ];
 
         return [headers, ...data];
@@ -157,7 +157,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            this.$ogame.$t.premium.darkMatter,
+            extensionI18n.$t.premium.darkMatter,
         ];
 
         return [headers, ...data];
@@ -184,7 +184,7 @@ class ExcelExport {
 
         const data = expos.map(expo => [
             new Date(expo.date),
-            this.$ogame.$t.expoTypes[expo.type],
+            extensionI18n.$t.expoTypes[expo.type],
 
             ...Object.keys(Resource).map(resource => expo.type == ExpoType.resources ? expo.resources[resource as Resource] : 0),
 
@@ -194,7 +194,7 @@ class ExcelExport {
             (expo.type == ExpoType.darkMatter ? expo.darkMatter : 0),
 
             ((expo as ExpoSizeableEvent | { size: undefined }).size != null
-                ? this.$ogame.$t.expoSizes[(expo as ExpoSizeableEvent | { size: ExpoSize }).size]
+                ? extensionI18n.$t.expoSizes[(expo as ExpoSizeableEvent | { size: ExpoSize }).size]
                 : ''),
 
             (expo.type == ExpoType.item ? Items[expo.itemHash].name : ''),
@@ -204,12 +204,12 @@ class ExcelExport {
             'Datum + Zeit', //TODO: localization
             'Typ', //TODO: localization
 
-            ...Object.values(Resource).map(resource => this.$ogame.$t.resources[resource]),
+            ...Object.values(Resource).map(resource => extensionI18n.$t.resources[resource]),
 
             ...getNumericEnumValues<Ship>(ExpoFindableShips)
-                .map(ship => this.$ogame.$t.ships[ship]),
+                .map(ship => extensionI18n.$t.ships[ship]),
 
-            this.$ogame.$t.premium.darkMatter,
+            extensionI18n.$t.premium.darkMatter,
             'Fundgröße', //TODO: localization
             'Item', //TODO: localization
         ];
@@ -283,8 +283,8 @@ class ExcelExport {
 
         const headers = [
             '',
-            this.$ogame.$t.resources.metal,
-            this.$ogame.$t.resources.crystal,
+            extensionI18n.$t.resources.metal,
+            extensionI18n.$t.resources.crystal,
         ];
 
         return [headers, ...data];
@@ -303,8 +303,8 @@ class ExcelExport {
 
         const headers = [
             'Datum + Zeit', //TODO: localization
-            this.$ogame.$t.resources.metal,
-            this.$ogame.$t.resources.crystal,
+            extensionI18n.$t.resources.metal,
+            extensionI18n.$t.resources.crystal,
         ];
 
         return [headers, ...data];

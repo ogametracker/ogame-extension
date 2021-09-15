@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
+    
     import { ExpoSizeableEvent } from '@/models/expeditions/ExpoEvent';
     import ExpoSize from '@/models/expeditions/ExpoSize';
     import ExpoType from '@/models/expeditions/ExpoType';
@@ -23,7 +23,7 @@
         private readonly items: ExpoRangeTableItem[] = Object.keys(ExpoSize).map(sizeName => {
             const size = sizeName as ExpoSize;
             return {
-                label: this.$ogame.$t.expoSizes[size],
+                label: this.$i18n.$t.expoSizes[size],
                 getValue: expos => (expos.filter(expo => expo.type == this.type) as ExpoSizeableEvent[])
                     .filter(expo => expo.size == size).length,
             };

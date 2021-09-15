@@ -1,4 +1,4 @@
-import i18n from "@/i18n";
+
 import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import NotificationModule from "@/store/modules/NotificationModule";
 import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
@@ -66,8 +66,8 @@ export default async function readDebrisFields() {
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: this.$extension.$t.notifications.debrisFields.success.title,
-            text: this.$extension.$t.notifications.debrisFields.success.text(newMessageCount),
+            title: this.$i18n.$t.notifications.debrisFields.success.title,
+            text: this.$i18n.$t.notifications.debrisFields.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -77,8 +77,8 @@ export default async function readDebrisFields() {
     if (newErrorCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: this.$extension.$t.notifications.debrisFields.error.title,
-            text: this.$extension.$t.notifications.debrisFields.error.text(newErrorCount),
+            title: this.$i18n.$t.notifications.debrisFields.error.title,
+            text: this.$i18n.$t.notifications.debrisFields.error.text(newErrorCount),
             timeout: 5000,
         });
     }
