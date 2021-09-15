@@ -47,27 +47,27 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: i18n.messages.extension.expoMenu.overview,
+                title: this.$extension.$t.expoMenu.overview,
             },
             {
                 name: 'resources',
-                title: i18n.messages.extension.expoMenu.resources,
+                title: this.$extension.$t.expoMenu.resources,
             },
             {
                 name: 'fleet',
-                title: i18n.messages.extension.expoMenu.fleet,
+                title: this.$extension.$t.expoMenu.fleet,
             },
             {
                 name: 'darkMatter',
-                title: i18n.messages.extension.expoMenu.darkMatter,
+                title: this.$extension.$t.expoMenu.darkMatter,
             },
             {
                 name: 'items',
-                title: i18n.messages.extension.expoMenu.items,
+                title: this.$extension.$t.expoMenu.items,
             },
             {
                 name: 'distribution',
-                title: i18n.messages.extension.expoMenu.distribution,
+                title: this.$extension.$t.expoMenu.distribution,
             },
         ];
     }

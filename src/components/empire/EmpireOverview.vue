@@ -27,11 +27,11 @@
             return [
                 {
                     name: 'production_buildings',
-                    title: i18n.messages.extension.empire.productionOverview.menuItem,
+                    title: this.$extension.$t.empire.productionOverview.menuItem,
                 },
                 {
                     name: 'amortisation',
-                    title: i18n.messages.extension.empire.amortisation.menuItem,
+                    title: this.$extension.$t.empire.amortisation.menuItem,
                 },
             ];
         }

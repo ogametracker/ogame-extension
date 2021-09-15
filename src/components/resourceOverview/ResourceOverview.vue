@@ -4,7 +4,7 @@
             <resource-overview-chart
                 stacked
                 :datasets="datasets"
-                :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+                :y-tick-formatter="(value) => $extension.$n(value)"
                 :tooltip-label="getTooltipLabel"
                 :hide-zeros-in-tooltip="false"
             />
@@ -38,11 +38,11 @@
             return [
                 {
                     name: 'chart',
-                    title: i18n.messages.extension.chart,
+                    title: this.$extension.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: i18n.messages.extension.tables,
+                    title: this.$extension.$t.tables,
                 },
             ];
         }
@@ -53,7 +53,7 @@
                 const resource = resourceName as Resource;
                 return {
                     fill: true,
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$ogame.$t.resources[resource],
                     color: SettingsModule.settings.charts.colors.resources[resource],
                     aggregator: (expos, battles, debris) => {
                         const expoResources = (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
@@ -72,7 +72,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${i18n.formatNumber(value)} ${resource}`;
+            return `${this.$extension.$n(value)} ${resource}`;
         }
     }
 </script>

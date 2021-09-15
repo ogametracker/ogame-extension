@@ -6,7 +6,7 @@
         <div class="options">
             <div>
                 {{
-                    $i18n.messages.extension.empire.amortisation.selectedPlanet
+                    $extension.$t.empire.amortisation.selectedPlanet
                 }}
             </div>
             <div>
@@ -28,7 +28,7 @@
             </div>
 
             <div>
-                {{ $i18n.messages.extension.empire.amortisation.msuRates }}
+                {{ $extension.$t.empire.amortisation.msuRates }}
             </div>
             <div>
                 <o-resource type="metal" :size="32" />
@@ -84,7 +84,7 @@
             </div>
 
             <div class="next-row">
-                {{ $i18n.messages.extension.empire.amortisation.temperature }}
+                {{ $extension.$t.empire.amortisation.temperature }}
             </div>
             <div>
                 <span>
@@ -109,7 +109,7 @@
             </div>
 
             <div>
-                {{ $i18n.messages.extension.empire.amortisation.position }}
+                {{ $extension.$t.empire.amortisation.position }}
             </div>
             <div>
                 <input
@@ -131,7 +131,7 @@
             </div>
 
             <div class="next-row items-cell">
-                {{ $i18n.messages.extension.empire.amortisation.items }}
+                {{ $extension.$t.empire.amortisation.items }}
             </div>
             <div class="items-cell item-selection">
                 <checkbox-button
@@ -186,7 +186,7 @@
             </div>
 
             <div class="next-row-indented officers-cell">
-                {{ $i18n.messages.extension.empire.amortisation.officers }}
+                {{ $extension.$t.empire.amortisation.officers }}
             </div>
             <div class="officers-cell">
                 <checkbox-button
@@ -203,7 +203,7 @@
             </div>
 
             <div class="next-row-indented player-class-cell">
-                {{ $i18n.messages.extension.empire.amortisation.playerClass }}
+                {{ $extension.$t.empire.amortisation.playerClass }}
             </div>
             <div class="player-class-cell">
                 <checkbox-button
@@ -227,7 +227,7 @@
             </div>
 
             <div class="next-row-indented alliance-class-cell">
-                {{ $i18n.messages.extension.empire.amortisation.allianceClass }}
+                {{ $extension.$t.empire.amortisation.allianceClass }}
             </div>
             <div class="alliance-class-cell">
                 <checkbox-button
@@ -251,7 +251,7 @@
             </div>
 
             <div class="next-row">
-                {{ $i18n.messages.ogame.ships[217] }}
+                {{ $ogame.$t.ships[217] }}
             </div>
             <div>
                 <checkbox-button v-model="options.crawler.enabled">
@@ -264,7 +264,7 @@
 
                 <checkbox-button
                     :label="
-                        $i18n.messages.extension.empire.amortisation
+                        $extension.$t.empire.amortisation
                             .crawlerOverload
                     "
                     color="#409e2b"
@@ -282,7 +282,7 @@
             </div>
 
             <div>
-                {{ $i18n.messages.ogame.research[122] }}
+                {{ $ogame.$t.research[122] }}
             </div>
             <div>
                 <o-research type="plasma-technology" :size="32" />
@@ -309,9 +309,9 @@
                 <checkbox-button
                     :label="
                         options.crawler.maxCrawler
-                            ? $i18n.messages.extension.empire.amortisation
+                            ? $extension.$t.empire.amortisation
                                   .crawlerMode.max
-                            : $i18n.messages.extension.empire.amortisation
+                            : $extension.$t.empire.amortisation
                                   .crawlerMode.fixed
                     "
                     color="#409e2b"
@@ -350,12 +350,12 @@
 
             <div class="buildings-config">
                 <div />
-                <div v-text="$i18n.messages.ogame.buildings[1]" />
-                <div v-text="$i18n.messages.ogame.buildings[2]" />
-                <div v-text="$i18n.messages.ogame.buildings[3]" />
+                <div v-text="$ogame.$t.buildings[1]" />
+                <div v-text="$ogame.$t.buildings[2]" />
+                <div v-text="$ogame.$t.buildings[3]" />
 
                 <div
-                    v-text="$i18n.messages.extension.empire.amortisation.level"
+                    v-text="$extension.$t.empire.amortisation.level"
                     class="row-header"
                 />
                 <div>
@@ -412,7 +412,7 @@
 
                 <div
                     v-text="
-                        $i18n.messages.extension.empire.amortisation
+                        $extension.$t.empire.amortisation
                             .showBuilding
                     "
                     class="row-header"
@@ -420,8 +420,8 @@
                 <checkbox-button
                     :label="
                         options.showMetalMine
-                            ? $i18n.messages.extension.empire.amortisation.yes
-                            : $i18n.messages.extension.empire.amortisation.no
+                            ? $extension.$t.empire.amortisation.yes
+                            : $extension.$t.empire.amortisation.no
                     "
                     :color="colorMetal"
                     v-model="options.showMetalMine"
@@ -429,8 +429,8 @@
                 <checkbox-button
                     :label="
                         options.showCrystalMine
-                            ? $i18n.messages.extension.empire.amortisation.yes
-                            : $i18n.messages.extension.empire.amortisation.no
+                            ? $extension.$t.empire.amortisation.yes
+                            : $extension.$t.empire.amortisation.no
                     "
                     :color="colorCrystal"
                     v-model="options.showCrystalMine"
@@ -438,8 +438,8 @@
                 <checkbox-button
                     :label="
                         options.showDeuteriumSynthesizer
-                            ? $i18n.messages.extension.empire.amortisation.yes
-                            : $i18n.messages.extension.empire.amortisation.no
+                            ? $extension.$t.empire.amortisation.yes
+                            : $extension.$t.empire.amortisation.no
                     "
                     :color="colorDeuterium"
                     v-model="options.showDeuteriumSynthesizer"
@@ -452,19 +452,19 @@
                 <grid-tr>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableBuilding
                         }}
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableLevel
                         }}
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableCost
                         }}
                         <o-resource
@@ -475,7 +475,7 @@
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableCost
                         }}
                         <o-resource
@@ -486,25 +486,25 @@
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableCostMsu
                         }}
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableProduction
                         }}
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableProductionMsu
                         }}
                     </grid-cell>
                     <grid-cell>
                         {{
-                            $i18n.messages.extension.empire.amortisation
+                            $extension.$t.empire.amortisation
                                 .tableAmortisationTime
                         }}
                     </grid-cell>
@@ -518,7 +518,7 @@
                     >
                         <grid-cell>
                             {{
-                                $i18n.messages.ogame.buildings[row.buildingType]
+                                $ogame.$t.buildings[row.buildingType]
                             }}
                             <span
                                 class="color-indicator"
@@ -529,17 +529,17 @@
                         </grid-cell>
                         <grid-cell>{{ row.level }}</grid-cell>
                         <grid-cell>{{
-                            $i18n.formatNumber(row.cost.metal)
+                            $extension.$n(row.cost.metal)
                         }}</grid-cell>
                         <grid-cell>{{
-                            $i18n.formatNumber(row.cost.crystal)
+                            $extension.$n(row.cost.crystal)
                         }}</grid-cell>
                         <grid-cell>{{
-                            $i18n.formatNumber(row.msuCost)
+                            $extension.$n(row.msuCost)
                         }}</grid-cell>
                         <grid-cell>
                             {{
-                                $i18n.formatNumber(
+                                $extension.$n(
                                     Math.max(
                                         row.production.metal,
                                         row.production.crystal,
@@ -549,7 +549,7 @@
                             }}
                         </grid-cell>
                         <grid-cell>{{
-                            $i18n.formatNumber(row.msuProduction)
+                            $extension.$n(row.msuProduction)
                         }}</grid-cell>
                         <grid-cell>{{ formatTime(row.timeInHours) }}</grid-cell>
                     </grid-tr>
@@ -1073,7 +1073,7 @@
 
             const weeks = totalTime;
 
-            return `${i18n.formatNumber(Number(weeks))}w ` + timeWithDays;
+            return `${this.$extension.$n(Number(weeks))}w ` + timeWithDays;
         }
     }
 </script>

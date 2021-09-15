@@ -2,7 +2,7 @@
     <expo-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+        :y-tick-formatter="(value) => $extension.$n(value)"
         :tooltip-label="getTooltipLabel"
     />
 </template>
@@ -26,7 +26,7 @@
         private readonly datasets: ExpoLineChartDataset[] = getNumericEnumValues<Ship>(ExpoFindableShips)
             .map(ship => {
                 return {
-                    label: i18n.messages.ogame.ships[ship],
+                    label: this.$ogame.$t.ships[ship],
                     fill: true,
                     color: SettingsModule.settings.charts.colors.ships[ship],
                     aggregator: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
@@ -37,7 +37,7 @@
         private getTooltipLabel(item: any, data: any) {
             const label = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${i18n.formatNumber(value)} ${label}`;
+            return `${this.$extension.$n(value)} ${label}`;
         }
     }
 </script>

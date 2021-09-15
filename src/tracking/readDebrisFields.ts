@@ -66,8 +66,8 @@ export default async function readDebrisFields() {
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: i18n.messages.extension.notifications.debrisFields.success.title,
-            text: i18n.messages.extension.notifications.debrisFields.success.text(newMessageCount),
+            title: this.$extension.$t.notifications.debrisFields.success.title,
+            text: this.$extension.$t.notifications.debrisFields.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -77,8 +77,8 @@ export default async function readDebrisFields() {
     if (newErrorCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: i18n.messages.extension.notifications.debrisFields.error.title,
-            text: i18n.messages.extension.notifications.debrisFields.error.text(newErrorCount),
+            title: this.$extension.$t.notifications.debrisFields.error.title,
+            text: this.$extension.$t.notifications.debrisFields.error.text(newErrorCount),
             timeout: 5000,
         });
     }
@@ -88,7 +88,7 @@ function getDebrisFieldReport(id: number, message: string, messageContainer: Ele
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
     const date = parse(dateText, i18n.dateTimeFormats.long, new Date()).getTime();
 
-    const regex = i18n.messages.ogame.debrisFieldMessages.regex as RegExp;
+    const regex = this.$ogame.$t.debrisFieldMessages.regex as RegExp;
     const match = message.match(regex);
     if (match == null)
         return null;

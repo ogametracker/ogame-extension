@@ -22,7 +22,7 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: i18n.messages.extension.debrisFieldsMenu.overview,
+                title: this.$extension.$t.debrisFieldsMenu.overview,
             },
         ];
     }

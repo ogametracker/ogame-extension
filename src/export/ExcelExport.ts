@@ -102,7 +102,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...expoTypes.map(expoType => i18n.messages.ogame.expoTypes[expoType]),
+            ...expoTypes.map(expoType => this.$ogame.$t.expoTypes[expoType]),
         ];
 
 
@@ -122,7 +122,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...resources.map(resource => i18n.messages.ogame.resources[resource]),
+            ...resources.map(resource => this.$ogame.$t.resources[resource]),
         ];
 
         return [headers, ...data];
@@ -141,7 +141,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            ...ships.map(ship => i18n.messages.ogame.ships[ship]),
+            ...ships.map(ship => this.$ogame.$t.ships[ship]),
         ];
 
         return [headers, ...data];
@@ -157,7 +157,7 @@ class ExcelExport {
 
         const headers = [
             '',
-            i18n.messages.ogame.premium.darkMatter,
+            this.$ogame.$t.premium.darkMatter,
         ];
 
         return [headers, ...data];
@@ -184,7 +184,7 @@ class ExcelExport {
 
         const data = expos.map(expo => [
             new Date(expo.date),
-            i18n.messages.ogame.expoTypes[expo.type],
+            this.$ogame.$t.expoTypes[expo.type],
 
             ...Object.keys(Resource).map(resource => expo.type == ExpoType.resources ? expo.resources[resource as Resource] : 0),
 
@@ -194,7 +194,7 @@ class ExcelExport {
             (expo.type == ExpoType.darkMatter ? expo.darkMatter : 0),
 
             ((expo as ExpoSizeableEvent | { size: undefined }).size != null
-                ? i18n.messages.ogame.expoSizes[(expo as ExpoSizeableEvent | { size: ExpoSize }).size]
+                ? this.$ogame.$t.expoSizes[(expo as ExpoSizeableEvent | { size: ExpoSize }).size]
                 : ''),
 
             (expo.type == ExpoType.item ? Items[expo.itemHash].name : ''),
@@ -204,12 +204,12 @@ class ExcelExport {
             'Datum + Zeit', //TODO: localization
             'Typ', //TODO: localization
 
-            ...Object.values(Resource).map(resource => i18n.messages.ogame.resources[resource]),
+            ...Object.values(Resource).map(resource => this.$ogame.$t.resources[resource]),
 
             ...getNumericEnumValues<Ship>(ExpoFindableShips)
-                .map(ship => i18n.messages.ogame.ships[ship]),
+                .map(ship => this.$ogame.$t.ships[ship]),
 
-            i18n.messages.ogame.premium.darkMatter,
+            this.$ogame.$t.premium.darkMatter,
             'Fundgröße', //TODO: localization
             'Item', //TODO: localization
         ];
@@ -283,8 +283,8 @@ class ExcelExport {
 
         const headers = [
             '',
-            i18n.messages.ogame.resources.metal,
-            i18n.messages.ogame.resources.crystal,
+            this.$ogame.$t.resources.metal,
+            this.$ogame.$t.resources.crystal,
         ];
 
         return [headers, ...data];
@@ -303,8 +303,8 @@ class ExcelExport {
 
         const headers = [
             'Datum + Zeit', //TODO: localization
-            i18n.messages.ogame.resources.metal,
-            i18n.messages.ogame.resources.crystal,
+            this.$ogame.$t.resources.metal,
+            this.$ogame.$t.resources.crystal,
         ];
 
         return [headers, ...data];

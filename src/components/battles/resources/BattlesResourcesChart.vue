@@ -2,7 +2,7 @@
     <battles-line-chart
         stacked
         :datasets="datasets"
-        :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+        :y-tick-formatter="(value) => $extension.$n(value)"
         :tooltip-label="getTooltipLabel"
     />
 </template>
@@ -11,7 +11,6 @@
     import BattlesLineChart, { BattlesLineChartDataset } from '@/components/battles/BattlesLineChart.vue';
     import SettingsModule from "@/store/modules/SettingsModule";
     import Resource from "@/models/Resource";
-    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -24,7 +23,7 @@
                 const resource = resourceName as Resource;
                 return {
                     fill: true,
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$ogame.$t.resources[resource],
                     color: SettingsModule.settings.charts.colors.resources[resource],
                     aggregator: reports => reports.reduce((acc, report) => acc + report.loot[resource], 0),
                 };
@@ -34,7 +33,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${i18n.formatNumber(value)} ${resource}`;
+            return `${this.$extension.$n(value)} ${resource}`;
         }
     }
 </script>

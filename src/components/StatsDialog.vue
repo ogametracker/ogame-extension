@@ -64,7 +64,7 @@
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
-    import i18n from "@/i18n";
+    import { extensionI18n as i18n } from "@/i18n";
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
     import EmpireOverview from '@/components/empire/EmpireOverview.vue';
     import Info from '@/components/info/Info.vue';
@@ -103,28 +103,28 @@
                 name: 'expos',
                 icon: 'expo',
                 color: '#0066ff',
-                label: i18n.messages.extension.headers.expeditions,
+                label: i18n.$t.headers.expeditions,
                 component: 'expedition-stats',
             },
             {
                 name: 'battles',
                 icon: 'attack',
                 color: '#c51b00',
-                label: i18n.messages.extension.headers.battles,
+                label: i18n.$t.headers.battles,
                 component: 'battles-stats',
             },
             {
                 name: 'debrisFields',
                 icon: 'debris-field',
                 color: '#00a031',
-                label: i18n.messages.extension.headers.debrisFields,
+                label: i18n.$t.headers.debrisFields,
                 component: 'debris-field-stats',
             },
             {
                 name: 'resourceOverview',
                 icon: 'economy',
                 color: '#a9460c',
-                label: i18n.messages.extension.headers.resourcesOverview,
+                label: i18n.$t.headers.resourcesOverview,
                 component: 'resource-overview',
                 iconStyle: {
                     fontSize: '32px',
@@ -134,14 +134,14 @@
                 name: 'empire',
                 icon: 'planet-moon',
                 color: '#5000d0',
-                label: i18n.messages.extension.headers.empire,
+                label: i18n.$t.headers.empire,
                 component: 'empire-overview',
             },
             {
                 name: 'tools',
                 icon: 'tools',
                 color: '#008c85',
-                label: i18n.messages.extension.headers.tools,
+                label: i18n.$t.headers.tools,
                 component: null!,
                 iconStyle: {
                     fontSize: '24px',
@@ -157,7 +157,7 @@
                 name: 'settings',
                 icon: 'cog',
                 color: '#888888',
-                label: i18n.messages.extension.headers.settings,
+                label: i18n.$t.headers.settings,
                 component: 'settings',
             },
             {

@@ -33,21 +33,21 @@
         private get rows(): Row[] {
             return [
                 {
-                    title: i18n.messages.extension.info.totalSize,
+                    title: this.$extension.$t.info.totalSize,
                     text: this.formattedBytes,
                     class: '',
                 },
                 {
-                    title: i18n.messages.extension.info.trackedExpeditions,
-                    text: i18n.formatNumber(this.expoReportCount),
+                    title: this.$extension.$t.info.trackedExpeditions,
+                    text: this.$extension.$n(this.expoReportCount),
                 },
                 {
-                    title: i18n.messages.extension.info.trackedCombats,
-                    text: i18n.formatNumber(this.combatReportCount),
+                    title: this.$extension.$t.info.trackedCombats,
+                    text: this.$extension.$n(this.combatReportCount),
                 },
                 {
-                    title: i18n.messages.extension.info.trackedDebrisFieldReports,
-                    text: i18n.formatNumber(this.dfReportCount),
+                    title: this.$extension.$t.info.trackedDebrisFieldReports,
+                    text: this.$extension.$n(this.dfReportCount),
                 },
             ];
         }
@@ -70,7 +70,7 @@
                 unitIndex++;
             }
 
-            return `${i18n.formatNumber(bytes, { 
+            return `${this.$extension.$n(bytes, { 
                 maximumFractionDigits: 1,
             })} ${units[unitIndex]}`;
         }

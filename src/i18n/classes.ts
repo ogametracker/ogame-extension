@@ -92,7 +92,6 @@ export class I18n<TMessages> {
      *    get key: <returns the value of the current locale or the fallbackLocale>
      * }
      */
-    public readonly messages: TMessages;
     public readonly $t: TMessages;
 
     /* we trick typescript here, it think the object looks like this
@@ -108,7 +107,7 @@ export class I18n<TMessages> {
         this.locale = options.fallbackLocale;
         this.fallbackLocale = options.fallbackLocale;
 
-        this.$t = this.messages = new I18nMessageProxy(this, options.messages as any) as any;
+        this.$t = new I18nMessageProxy(this, options.messages as any) as any;
         this._dateTimeFormats = options.dateTimeFormats;
     }
 

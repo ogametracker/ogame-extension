@@ -29,21 +29,21 @@
                     />
 
                     <span v-else>
-                        {{ $i18n.formatNumber(item.rangeValues[rangeIndex]) }}
+                        {{ $extension.$n(item.rangeValues[rangeIndex]) }}
                     </span>
                 </td>
 
                 <td v-if="!noPercentage">
-                    {{ $i18n.formatNumber(100 * item.percentage) }}
+                    {{ $extension.$n(100 * item.percentage) }}
                 </td>
             </tr>
             <tr v-if="showTotal" class="total-row">
                 <td>
-                    {{ $i18n.messages.extension.total }}
+                    {{ $extension.$t.total }}
                 </td>
 
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
-                    {{ $i18n.formatNumber(tableData.rangeTotals[rangeIndex]) }}
+                    {{ $extension.$n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
 
                 <td v-if="!noPercentage"></td>
@@ -53,7 +53,6 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
     import BattleReport from '@/models/battles/BattleReport';
     import DateRange from '@/models/settings/DateRange';
     import BattleModule from '@/store/modules/BattleModule';
@@ -111,7 +110,7 @@
             const rangeDays = daysInRange(range) ?? Object.keys(reportsByDay).map(d => new Date(parseInt(d)));
             const reportsInRange = rangeDays.flatMap(day => reportsByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${i18n.messages.extension.since} ${i18n.formatDate(firstReportDate, "short")}`;
+            const label = range.label ?? `${this.$extension.$t.since} ${this.$extension.$d(firstReportDate, "short")}`;
             const itemValues = this.items.map(item => item.getValue(reportsInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" show-total />
 
-        <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
+        <h2>{{ $extension.$t.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -29,7 +29,7 @@
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$ogame.$t.resources[resource],
                     getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
                         .reduce((acc, cur) => acc + cur.resources[resource], 0)
                 };

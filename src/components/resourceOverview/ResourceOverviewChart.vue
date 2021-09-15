@@ -291,7 +291,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => i18n.formatDate(this.allDays[index], 'short'))
+                ...indices.map((index) => this.$extension.$d(this.allDays[index], 'short'))
             );
         }
 

@@ -37,7 +37,7 @@
                         {{ planet.buildings.production[building] }}
                     </td>
                     <td>
-                        {{ $i18n.formatNumber(getActiveCrawlers(planet)) }}
+                        {{ $extension.$n(getActiveCrawlers(planet)) }}
                     </td>
                 </tr>
                 <tr class="total-row">
@@ -51,7 +51,7 @@
                     <td />
                     <td v-for="building in productionBuildings" :key="building">
                         {{
-                            $i18n.formatNumber(buildingAverage[building], {
+                            $extension.$n(buildingAverage[building], {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -59,7 +59,7 @@
                     </td>
                     <td>
                         {{
-                            $i18n.formatNumber(activeCrawlerAverage, {
+                            $extension.$n(activeCrawlerAverage, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })

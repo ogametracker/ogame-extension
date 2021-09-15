@@ -7,7 +7,6 @@ import ships, { I18nOgameShips } from './ships';
 import premium, { I18nOgamePremium } from './premium';
 import items, { I18nOgameItems } from './items';
 import factions, { I18nOgameFactions } from './factions';
-import battleResults, { I18nOgameBattleResults } from './battleResults';
 import LanguageKey from '../languageKey';
 import buildings, { I18nOgameBuildings } from './buildings';
 import research, { I18nOgameResearch } from './research';
@@ -22,7 +21,6 @@ export interface I18nOgame {
     premium: I18nOgamePremium;
     items: I18nOgameItems;
     debrisFieldMessages: I18nOgameDebrisFieldMessages;
-    battleResults: I18nOgameBattleResults;
     buildings: I18nOgameBuildings;
     research: I18nOgameResearch;
 }
@@ -40,7 +38,6 @@ const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
                 premium: premium[lang],
                 items: items[lang],
                 factions: factions[lang],
-                battleResults: battleResults[lang],
                 buildings: buildings[lang],
                 research: research[lang],
             }

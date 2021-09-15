@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" />
 
-        <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
+        <h2>{{ $extension.$t.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -26,7 +26,7 @@
 
         private get items(): ExpoRangeTableItem[] {
             return [{
-                label: i18n.messages.ogame.premium.darkMatter,
+                label: this.$ogame.$t.premium.darkMatter,
                 getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.darkMatter) as ExpoEventDarkMatter[])
                     .reduce((acc, cur) => acc + cur.darkMatter, 0)
             }];

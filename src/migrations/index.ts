@@ -15,8 +15,8 @@ export default async function migrations() {
 
     const notification = NotificationModule.addNotification({
         type: 'info',
-        title: i18n.messages.extension.notifications.migration.inProgress.title,
-        text: i18n.messages.extension.notifications.migration.inProgress.text,
+        title: this.$extension.$t.notifications.migration.inProgress.title,
+        text: this.$extension.$t.notifications.migration.inProgress.text,
     });
 
     try {
@@ -38,7 +38,7 @@ export default async function migrations() {
 
         setTimeout(() => {
             notification.type = 'success';
-            notification.text = i18n.messages.extension.notifications.migration.success.text;
+            notification.text = this.$extension.$t.notifications.migration.success.text;
 
             setTimeout(() => {
                 NotificationModule.remove(notification);
@@ -46,6 +46,6 @@ export default async function migrations() {
         }, 2000);
     } catch {
         notification.type = 'error';
-        notification.text = i18n.messages.extension.notifications.migration.error.text;
+        notification.text = this.$extension.$t.notifications.migration.error.text;
     }
 }

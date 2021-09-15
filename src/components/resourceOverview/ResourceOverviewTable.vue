@@ -22,7 +22,7 @@
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$ogame.$t.resources[resource],
                     getValue: (expos, battles, debris) => {
                         const expoRess = (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
                             .reduce((acc, cur) => acc + cur.resources[resource], 0);

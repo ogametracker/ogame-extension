@@ -1,4 +1,5 @@
 import LanguageKey from '../languageKey';
+import battleResults, { I18nExtensionBattleResults } from './battleResults';
 import de from './de';
 import empire, { I18nExtensionEmpire } from './empire';
 import en from './en';
@@ -48,6 +49,7 @@ export interface I18nExtension {
 
     empire: I18nExtensionEmpire;
     info: I18nExtensionInfo;
+    battleResults: I18nExtensionBattleResults;
 }
 
 const messages: Record<LanguageKey, I18nExtension> = {
@@ -56,6 +58,7 @@ const messages: Record<LanguageKey, I18nExtension> = {
         notifications: notifications.de,
         empire: empire.de,
         info: info.de,
+        battleResults: battleResults.de,
         ...de,
     },
     [LanguageKey.en]: {
@@ -63,6 +66,7 @@ const messages: Record<LanguageKey, I18nExtension> = {
         notifications: notifications.en,
         empire: empire.en,
         info: info.en,
+        battleResults: battleResults.en,
         ...en,
     },
 };

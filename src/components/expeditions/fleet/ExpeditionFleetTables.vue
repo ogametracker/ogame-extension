@@ -2,7 +2,7 @@
     <div>
         <expo-ranged-table :items="items" show-total />
 
-        <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
+        <h2>{{ $extension.$t.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />
     </div>
 </template>
@@ -30,7 +30,7 @@
             return getNumericEnumValues<Ship>(ExpoFindableShips)
                 .map(ship => {
                     return {
-                        label: i18n.messages.ogame.ships[ship],
+                        label: this.$ogame.$t.ships[ship],
                         getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                             .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
                     };

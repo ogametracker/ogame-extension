@@ -26,11 +26,11 @@
             return [
                 {
                     name: 'resources',
-                    title: i18n.messages.extension.empire.productionOverview.subMenu.resources,
+                    title: this.$extension.$t.empire.productionOverview.subMenu.resources,
                 },
                 {
                     name: 'mines',
-                    title: i18n.messages.extension.empire.productionOverview.subMenu.mines,
+                    title: this.$extension.$t.empire.productionOverview.subMenu.mines,
                 },
             ];
         }

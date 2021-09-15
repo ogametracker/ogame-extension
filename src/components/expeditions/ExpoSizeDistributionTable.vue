@@ -23,7 +23,7 @@
         private readonly items: ExpoRangeTableItem[] = Object.keys(ExpoSize).map(sizeName => {
             const size = sizeName as ExpoSize;
             return {
-                label: i18n.messages.ogame.expoSizes[size],
+                label: this.$ogame.$t.expoSizes[size],
                 getValue: expos => (expos.filter(expo => expo.type == this.type) as ExpoSizeableEvent[])
                     .filter(expo => expo.size == size).length,
             };

@@ -30,7 +30,6 @@ import migrations from '@/migrations';
 
 // register custom chart.js tooltip positioner
 import '@/chartjs/Tooltip.positioners.top';
-import LanguageKey from '@/i18n/languageKey';
 
 Vue.config.productionTip = false;
 
@@ -56,6 +55,5 @@ async function initExtension() {
     await migrations();
     startTracking();
 }
-
 
 initExtension();

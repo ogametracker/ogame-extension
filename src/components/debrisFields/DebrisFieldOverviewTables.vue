@@ -5,7 +5,6 @@
 </template>
  
 <script lang="ts">
-    import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import DebrisFieldRangedTable, { DebrisFieldRangeTableItem } from "./DebrisFieldRangedTable.vue";
 
@@ -17,10 +16,10 @@
     export default class DebrisFieldOverviewTables extends Vue {
         private get items(): DebrisFieldRangeTableItem[] {
             return [{
-                label: i18n.messages.ogame.resources.metal,
+                label: this.$ogame.$t.resources.metal,
                 getValue: reports => reports.reduce((acc, report) => acc + report.metal, 0),
             }, {
-                label: i18n.messages.ogame.resources.crystal,
+                label: this.$ogame.$t.resources.crystal,
                 getValue: reports => reports.reduce((acc, report) => acc + report.crystal, 0),
             }];
         }

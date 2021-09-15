@@ -8,7 +8,6 @@
     import { Component, Vue } from "vue-property-decorator";
     import Resource from "@/models/Resource";
     import BattlesRangedTable, { BattlesRangedTableItem } from '@/components/battles/BattlesRangedTable.vue';
-    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -20,7 +19,7 @@
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$ogame.$t.resources[resource],
                     getValue: (reports) => reports.reduce((acc, cur) => acc + cur.loot[resource], 0),
                 };
             });

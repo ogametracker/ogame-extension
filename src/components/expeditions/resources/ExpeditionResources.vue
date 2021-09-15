@@ -27,11 +27,11 @@
             return [
                 {
                     name: 'chart',
-                    title: i18n.messages.extension.chart,
+                    title: this.$extension.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: i18n.messages.extension.tables,
+                    title: this.$extension.$t.tables,
                 },
             ];
         }

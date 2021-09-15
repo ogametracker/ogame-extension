@@ -3,37 +3,37 @@
         <tab-view :items="items" vertical>
             <template #date-ranges
                 ><h2>
-                    {{ $i18n.messages.extension.settings.titleDateRanges }}
+                    {{ $extension.$t.settings.titleDateRanges }}
                     <button
                         class="reset-button"
                         @click="resetDateRanges()"
-                        :title="$i18n.messages.extension.settings.reset"
+                        :title="$extension.$t.settings.reset"
                     >
                         <icon name="refresh" />
                     </button>
                 </h2>
                 <span style="margin-bottom: 8px; display: inline-block">
-                    {{ $i18n.messages.extension.settings.hintDateRanges }}
+                    {{ $extension.$t.settings.hintDateRanges }}
                 </span>
                 <table class="settings-table">
                     <thead>
                         <tr>
                             <th style="width: 30px"></th>
                             <th style="width: 200px">
-                                {{ $i18n.messages.extension.settings.name }}
+                                {{ $extension.$t.settings.name }}
                             </th>
                             <th style="width: 150px">
-                                {{ $i18n.messages.extension.settings.type }}
+                                {{ $extension.$t.settings.type }}
                             </th>
                             <th style="width: 200px">
                                 {{
-                                    $i18n.messages.extension.settings
+                                    $extension.$t.settings
                                         .rangeStarts
                                 }}
                             </th>
                             <th style="width: 200px">
                                 {{
-                                    $i18n.messages.extension.settings
+                                    $extension.$t.settings
                                         .rangeContains
                                 }}
                             </th>
@@ -62,9 +62,9 @@
                                     v-model="range.label"
                                 />
                                 <span v-else>
-                                    {{ $i18n.messages.extension.since }}
+                                    {{ $extension.$t.since }}
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .firstDay
                                     }}
                                 </span>
@@ -80,7 +80,7 @@
                                         :value="rangeType"
                                     >
                                         {{
-                                            $i18n.messages.extension.settings
+                                            $extension.$t.settings
                                                 .rangeType[rangeType]
                                         }}
                                     </option>
@@ -88,7 +88,7 @@
 
                                 <span v-else>
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .rangeType[range.type]
                                     }}
                                 </span>
@@ -96,7 +96,7 @@
                             <td class="value-col">
                                 <span v-if="range.type != 'all'">
                                     {{
-                                        $i18n.messages.extension.settings.before
+                                        $extension.$t.settings.before
                                     }}
                                     <input
                                         type="number"
@@ -105,7 +105,7 @@
                                         v-model="range.skip"
                                     />
                                     {{
-                                        $i18n.messages.extension.settings[
+                                        $extension.$t.settings[
                                             `${range.type}sVariant`
                                         ]
                                     }}
@@ -120,7 +120,7 @@
                                         v-model="range.take"
                                     />
                                     {{
-                                        $i18n.messages.extension.settings[
+                                        $extension.$t.settings[
                                             `${range.type}s`
                                         ]
                                     }}
@@ -144,11 +144,11 @@
 
             <template #chart-colors>
                 <h2>
-                    {{ $i18n.messages.extension.settings.chartColors.title }}
+                    {{ $extension.$t.settings.chartColors.title }}
                     <button
                         class="reset-button"
                         @click="resetChartColors()"
-                        :title="$i18n.messages.extension.settings.reset"
+                        :title="$extension.$t.settings.reset"
                     >
                         <icon name="refresh" />
                     </button>
@@ -159,7 +159,7 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .chartColors.expeditions
                                     }}
 
@@ -167,7 +167,7 @@
                                         class="reset-button"
                                         @click="resetChartColors('overview')"
                                         :title="
-                                            $i18n.messages.extension.settings
+                                            $extension.$t.settings
                                                 .reset
                                         "
                                     >
@@ -189,7 +189,7 @@
                                             settings.charts.colors.overview[key]
                                         "
                                         :label="
-                                            $i18n.messages.ogame.expoTypes[key]
+                                            $ogame.$t.expoTypes[key]
                                         "
                                     />
                                 </td>
@@ -202,7 +202,7 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .chartColors.resources
                                     }}
 
@@ -210,7 +210,7 @@
                                         class="reset-button"
                                         @click="resetChartColors('resources')"
                                         :title="
-                                            $i18n.messages.extension.settings
+                                            $extension.$t.settings
                                                 .reset
                                         "
                                     >
@@ -234,7 +234,7 @@
                                             ]
                                         "
                                         :label="
-                                            $i18n.messages.ogame.resources[key]
+                                            $ogame.$t.resources[key]
                                         "
                                     />
                                 </td>
@@ -247,7 +247,7 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .chartColors.ships
                                     }}
 
@@ -257,7 +257,7 @@
                                             resetChartColors('overshipsview')
                                         "
                                         :title="
-                                            $i18n.messages.extension.settings
+                                            $extension.$t.settings
                                                 .reset
                                         "
                                     >
@@ -278,7 +278,7 @@
                                         v-model="
                                             settings.charts.colors.ships[key]
                                         "
-                                        :label="$i18n.messages.ogame.ships[key]"
+                                        :label="$ogame.$t.ships[key]"
                                     />
                                 </td>
                             </tr>
@@ -290,7 +290,7 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.messages.extension.settings
+                                        $extension.$t.settings
                                             .chartColors.combats
                                     }}
 
@@ -300,7 +300,7 @@
                                             resetChartColors('battleResults')
                                         "
                                         :title="
-                                            $i18n.messages.extension.settings
+                                            $extension.$t.settings
                                                 .reset
                                         "
                                     >
@@ -323,7 +323,7 @@
                                                 .battleResults[key]
                                         "
                                         :label="
-                                            $i18n.messages.ogame.battleResults[
+                                            $ogame.$t.battleResults[
                                                 key
                                             ]
                                         "
@@ -336,7 +336,7 @@
             </template>
 
             <template #import-export>
-                <!-- <h2>{{ $i18n.messages.extension.settings.export }}</h2>
+                <!-- <h2>{{ $extension.$t.settings.export }}</h2>
                 <textarea
                     readonly
                     :value="exportJson"
@@ -346,7 +346,7 @@
 
                 <hr />
 
-                <h2>{{ $i18n.messages.extension.settings.import }}</h2> -->
+                <h2>{{ $extension.$t.settings.import }}</h2> -->
                 <h1>Coming Soon&trade;</h1>
             </template>
         </tab-view>
@@ -386,15 +386,15 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'date-ranges',
-                title: i18n.messages.extension.settings.titleDateRanges,
+                title: this.$extension.$t.settings.titleDateRanges,
             },
             {
                 name: 'chart-colors',
-                title: i18n.messages.extension.settings.chartColors.title,
+                title: this.$extension.$t.settings.chartColors.title,
             },
             {
                 name: 'import-export',
-                title: i18n.messages.extension.settings.titleImportExport,
+                title: this.$extension.$t.settings.titleImportExport,
             },
         ];
 
@@ -403,7 +403,7 @@
                 type: 'day',
                 skip: 0,
                 take: 1,
-                label: i18n.messages.extension.settings.newRange,
+                label: this.$extension.$t.settings.newRange,
             });
         }
 
@@ -429,8 +429,8 @@
 
                 NotificationModule.addNotification({
                     type: 'success',
-                    title: i18n.messages.extension.notifications.settingsSaved.title,
-                    text: i18n.messages.extension.notifications.settingsSaved.text,
+                    title: this.$extension.$t.notifications.settingsSaved.title,
+                    text: this.$extension.$t.notifications.settingsSaved.text,
                     timeout: 5000,
                 });
 

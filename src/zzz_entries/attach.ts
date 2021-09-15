@@ -13,7 +13,7 @@ observer.observe(document.documentElement, {
 function addMenuItem(menu: Element) {
     i18n.locale = getLanguage();
     
-    const menuItemText = i18n.messages.extension.menuItem;
+    const menuItemText = this.$extension.$t.menuItem;
 
     const dialogLink = document.createElement('li');
     dialogLink.innerHTML = `

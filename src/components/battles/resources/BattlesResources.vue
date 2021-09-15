@@ -11,7 +11,6 @@
 
 <script lang="ts">
     import { TabViewItem } from "@/components/common/TabView.vue";
-    import i18n from "@/i18n";
     import { Component, Vue } from "vue-property-decorator";
     import BattlesResourcesChart from "./BattlesResourcesChart.vue";
     import BattlesResourcesTables from "./BattlesResourcesTables.vue";
@@ -27,11 +26,11 @@
             return [
                 {
                     name: 'chart',
-                    title: i18n.messages.extension.chart,
+                    title: this.$extension.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: i18n.messages.extension.tables,
+                    title: this.$extension.$t.tables,
                 },
             ];
         }
