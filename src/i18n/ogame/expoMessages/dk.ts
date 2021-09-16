@@ -11,7 +11,7 @@ export default {
             /*'Din ekspedition fulgte */'nogle gamle signaler'/* og fandt en asteroide. I kernen af asteroiden var en mindre mængde Mørk Materie indkapslet. Dine ingeniører prøver at udvinde det Mørke Materie.'*/,
         ],
         [ExpoSize.medium]: [
-            /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Vores ekspedition gennemførte et */'unikt eksperiment'/*. Det var muligt at høste Mørk Materie fra en døende stjerne.'*/,
             /*'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
             /*'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
@@ -29,7 +29,7 @@ export default {
         ],
         [ExpoSize.medium]: [
             /*'Din ekspedition fandt en gammel, fuldt lastet og */'forladt konvoj af transportskibe'/*. Nogen af ressourcerne kunne reddes.'*/,
-            /*'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'På en */'lille måne med egen atmosfære'/*, fandt din ekspedition nogle store ressourcelagre. Mandskabet prøver at laste ressourcerne.'*/,
         ],
         [ExpoSize.large]: [
             /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
