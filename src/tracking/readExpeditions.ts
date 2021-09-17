@@ -110,7 +110,8 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
 
     switch (expo.type) {
         case ExpoType.resources: {
-            const regex = ogameI18n.$t.expoMessages.resources.regex;
+            const resourceNames = Object.values(Resource);
+            const regex = ogameI18n.$t.expoMessages.resources.regex(resourceNames.map(resource => ogameI18n.$t.resources[resource]));
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -125,7 +126,8 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         }
 
         case ExpoType.fleet: {
-            const regex = ogameI18n.$t.expoMessages.fleet.regex;
+            const shipIds = getNumericEnumValues<Ship>(ExpoFindableShips);
+            const regex = ogameI18n.$t.expoMessages.fleet.regex(shipIds.map(shipId => ogameI18n.$t.ships[shipId]));
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -137,7 +139,7 @@ function highlightExpoResult(expo: ExpoEvent, element: Element) {
         }
 
         case ExpoType.darkMatter: {
-            const regex = ogameI18n.$t.expoMessages.darkMatter.regex;
+            const regex = ogameI18n.$t.expoMessages.darkMatter.regex(ogameI18n.$t.premium.darkMatter);
             const match = msgContent.innerHTML.match(regex);
             if (match?.groups == null) {
                 throw new Error();
@@ -200,7 +202,7 @@ function getExpoEvent(id: number, message: string, messageContainer: Element): E
 }
 
 function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const regex = ogameI18n.$t.expoMessages[ExpoType.darkMatter].regex;
+    const regex = ogameI18n.$t.expoMessages[ExpoType.darkMatter].regex(ogameI18n.$t.premium.darkMatter);
     const match = message.match(regex);
     if (match?.groups == null) {
         return null;
@@ -228,7 +230,8 @@ function getDarkMatterExpo(id: number, date: number, message: string): ExpoEvent
 
 
 function getResourceExpo(id: number, date: number, message: string): ExpoEvent | null {
-    const regex = ogameI18n.$t.expoMessages[ExpoType.resources].regex;
+    const resourceNames = Object.values(Resource);
+    const regex = ogameI18n.$t.expoMessages.resources.regex(resourceNames.map(resource => ogameI18n.$t.resources[resource]));
     const match = message.match(regex);
     if (match == null) {
         return null;
@@ -280,21 +283,21 @@ function getFleetExpo(id: number, date: number, message: string): ExpoEvent | nu
 
     const ships: Record<ExpoFindableShips, number | undefined> = {};
 
-    const regex = ogameI18n.$t.expoMessages[ExpoType.fleet].regex;
+    const shipIds = getNumericEnumValues<Ship>(ExpoFindableShips);
+    const regex = ogameI18n.$t.expoMessages.fleet.regex(shipIds.map(shipId => ogameI18n.$t.ships[shipId]));
     const match = message.match(regex);
     if (match != null) {
         const shipText = match.groups!.ships;
 
-        getNumericEnumValues<Ship>(ExpoFindableShips)
-            .forEach(ship => {
-                const shipName = ogameI18n.$t.ships[ship];
-                const shipRegex = new RegExp(shipName + ': (\\d+)');
-                const shipMatch = shipText.match(shipRegex);
+        shipIds.forEach(ship => {
+            const shipName = ogameI18n.$t.ships[ship];
+            const shipRegex = new RegExp(shipName + ': (\\d+)');
+            const shipMatch = shipText.match(shipRegex);
 
-                if (shipMatch != null) {
-                    ships[ship] = parseInt(shipMatch[1]);
-                }
-            });
+            if (shipMatch != null) {
+                ships[ship] = parseInt(shipMatch[1]);
+            }
+        });
     }
 
     const result: ExpoEventFleet = {

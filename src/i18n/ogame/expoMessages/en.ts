@@ -1,5 +1,8 @@
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
+import { I18nOgamePremium } from "../premium";
+import { I18nOgameResources } from "../resources";
+import { I18nOgameShips } from "../ships";
 
 export default {
     [ExpoType.darkMatter]: {
@@ -19,7 +22,7 @@ export default {
             /*'A */'spontaneous hyper space deformation'/* allowed your expedition to harvest large amount of Dark Matter'*/,
             /*'Our expedition made first contact with a special race. It looks as though a creature made of pure energy, who */'named himself Legorian'/*, flew through the expedition ships and then decided to help our underdeveloped species. A case containing Dark Matter materialized at the bridge of the ship'*/,
         ],
-        regex: /(?<name>Dark Matter) (?<amount>[^\s]+) have been captured/,
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) have been captured`),
     },
 
     [ExpoType.resources]: {
@@ -35,7 +38,7 @@ export default {
             /*'Mineral */'belts around an unknown planet contained countless resources'/*. The expedition ships are coming back and their storages are full'*/,
             /*'Your expedition fleet reports the */'discovery of a giant alien ship wreck'/*. They were not able to learn from their technologies but they were able to divide the ship into its main components and made some useful resources out of it'*/,
         ],
-        regex: /(?<name>Metal|Crystal|Deuterium) (?<amount>.+) have been captured/,
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) have been captured`),
     },
 
     [ExpoType.fleet]: {
@@ -53,7 +56,7 @@ export default {
             /*'We */'found an enormous spaceship graveyard'/*. Some of the technicians from the expedition fleet were able to get some of the ships to work again.'*/,
             /*'We found the */'planet of an extinct civilization'/*. We are able to see a giant intact space station, orbiting. Some of your technicians and pilots went to the surface looking for some ships which could still be used.'*/,
         ],
-        regex: /The following ships are now part of the fleet:(<br>|\s*)(?<ships>([\w\s]+:\s*\d+(<br>|\s*)?)+)?/,
+        regex: (ships: string[]) => new RegExp(`The following ships are now part of the fleet:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
     [ExpoType.nothing]: [

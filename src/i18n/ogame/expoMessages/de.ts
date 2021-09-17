@@ -1,5 +1,8 @@
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
+import { I18nOgamePremium } from "../premium";
+import { I18nOgameResources } from "../resources";
+import { I18nOgameShips } from "../ships";
 
 export default {
     [ExpoType.darkMatter]: {
@@ -19,7 +22,7 @@ export default {
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: /Es wurde (?<name>Dunkle Materie) (?<amount>[^\s]+) erbeutet/,
+        regex: (darkMatter: string) => new RegExp(`Es wurde (?<name>${darkMatter}) (?<amount>[^\\s]+) erbeutet`),
     },
 
     [ExpoType.resources]: {
@@ -35,7 +38,7 @@ export default {
             /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
             /*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
-        regex: /Es wurde (?<name>Metall|Kristall|Deuterium) (?<amount>.+) erbeutet/,
+        regex: (resources: string[]) => new RegExp(`Es wurde (?<name>${resources.join('|')}) (?<amount>.+) erbeutet`),
     },
 
     [ExpoType.fleet]: {
@@ -53,7 +56,7 @@ export default {
             /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: /Folgende Schiffe schlossen sich der Flotte an:(<br>|\s*)(?<ships>([\w\s]+:\s*\d+(<br>|\s*)?)+)?/,
+        regex: (ships: string[]) => new RegExp(`Folgende Schiffe schlossen sich der Flotte an:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
     [ExpoType.nothing]: [

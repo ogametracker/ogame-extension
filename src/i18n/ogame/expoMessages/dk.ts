@@ -1,5 +1,8 @@
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
+import { I18nOgamePremium } from "../premium";
+import { I18nOgameResources } from "../resources";
+import { I18nOgameShips } from "../ships";
 
 export default {
     [ExpoType.darkMatter]: {
@@ -7,7 +10,7 @@ export default {
             /*'Det var muligt for din */'ekspedition at indfange og konservere'/* en del Mørk Materie.'*/,
             /*'Vi har fundet resterne af et */'rumskib af ukendt oprindelse'/*. På skibet var der en lille beholder med Mørk Materie!'*/,
             /*'Vi mødte et */'oldgammelt væsen'/* af ukendt race, i et mindre rumskib. Han gav os en lille kasse med Mørk Materie i bytte for nogle simple matematiske udregninger.'*/,
-            /*'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            /*'Din ekspedition har */'fundet et spøgelsesskib'/* som transporterede en mindre mængde Mørk Materie. De fandt ikke ud af hvad der var sket med besætningen, men dine ingeniører har indsamlet det Mørke Materie.'*/,
             /*'Din ekspedition fulgte */'nogle gamle signaler'/* og fandt en asteroide. I kernen af asteroiden var en mindre mængde Mørk Materie indkapslet. Dine ingeniører prøver at udvinde det Mørke Materie.'*/,
         ],
         [ExpoSize.medium]: [
@@ -19,7 +22,7 @@ export default {
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: /(?<name>Mørk Materie) (?<amount>[^\s]+) er blevet taget/,
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`),
     },
 
     [ExpoType.resources]: {
@@ -35,25 +38,25 @@ export default {
             /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
             /*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
-        regex: /(?<name>Metal|Krystal|Deuterium) (?<amount>.+) er blevet taget./,
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) er blevet taget.`),
     },
 
     [ExpoType.fleet]: {
         [ExpoSize.small]: [
             /*'Vi kom forbi resterne af en */'tidligere ekspedition'/*. Vores teknikere vil forsøge at få nogle af skibene til at virke igen.'*/,
             /*'Vores ekspedition har fundet en */'forladt stjernefæstning'/*. I hangaren fandt vi nogle skibe. Vores tekniker prøver at få dem i gang igen.'*/,
-            /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Vores ekspedition fandt en planet, som næsten var */'blevet ødelagt af konstante angreb'/*. I omløbsbanen lå diverse skibsruiner. Vores tekniker prøver at reparere nogle af dem. Måske kan vi på denne måde få informationer om, hvad der er sket i området.'*/,
             /*'Vi har fundet en */'forladt piratbase'/*. I deres hangar lå nogle gamle skibe. Vores tekniker er på vej for at finde ud om de kan genbruges.'*/,
         ],
         [ExpoSize.medium]: [
             /*'Ekspeditionen rendte ind i et gammel */'automatisk rumskibsværft'/*. Nogen af skibene er stadig i produktionsfasen og vores teknikere forsøger at genaktivere værftets generatorer.'*/,
-            /*'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Vi fandt resterne af en flåde. */'Teknikerne tog direkte hen ti'/*l de næsten intakte skibe for at se om de kunne få dem til at virke igen.'*/,
         ],
         [ExpoSize.large]: [
             /*'Vi fandt en */'enorm rumskibs gravplads'/*. Nogle af teknikerne fra ekspeditionen fik en del af skibene til at virke igen.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: /De følgende skibe er nu del af flåden.(<br>|\s*)(?<ships>([\w\s]+:\s*\d+(<br>|\s*)?)+)?/,
+        regex: (ships: string[]) => new RegExp(`e følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
     [ExpoType.nothing]: [
@@ -93,8 +96,8 @@ export default {
         /*'Din */'navigationschef havde en dårlig dag'/* og fik lavet en fejl i ekspeditionsrutens udregninger. Udover at din flåde er endt et ukendt sted, vil det også tage længere tid at flyve hjem.'*/,
         /*'Din ekspedition er kommet ind i en */'partikelstorm'/*. Dette overbelastede energisystemet og det meste af skibets hovedsystem er derfor brudt sammen. Dine mekanikere fik afværget det værste. Din ekspedition vender tilbage med stor forsinkelse.'*/,
         /*'På grund af en ukendt fejl gik ekspeditionen helt galt. Den */'landede næsten i hjertet af solen'/*. Heldigvis landede den i et kendt system, men tilbageturen vil tage lidt længere tid end beregnet.'*/,
-        /*'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
-        /*'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
+        /*'*/'Stjernevinden i en gigantisk rød stjerne'/* ødelagde ekspeditionen. Det vil tage lidt længere tid at udregne ruten tilbage. Der var iøvrigt ikke andet end tomhed mellem stjernerne i denne sektor. Flåden vil returnere senere end forventet.'*/,
+        /*'Det */'nye navigationsmodul har stadigvæk nogle fejl'/*. Ekspeditionshoppet medførte ikke alene at din ekspedition er endt på en helt forkert kurs, men alt deuteriummet er også blevet opbrugt. Heldigvis fik hoppet bragt dig tæt på en nærliggende måne, hvis tiltrækningskraft kan udnyttes til at komme på rette kurs hjem mod planeten. En skuffet besætning flyver nu tilbage uden impuls. Rejsen vil derfor tage del længere tid end først antaget.'*/,
         /*'Ekspeditionens moderskib havde et */'sammenstød med et fremmed skib'/*. Det fremmede skib eksploderede og den efterfølgende skade på moderskibet var omfattende. Det kan ikke flyve videre i nuværende tilstand. Lige så snart de nødvendige reparationer er lavet, vil dit skib flyve tilbage.'*/,
     ],
 

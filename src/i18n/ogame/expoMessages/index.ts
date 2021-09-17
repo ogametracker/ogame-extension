@@ -6,26 +6,28 @@ import en from './en';
 import dk from './dk';
 import { I18nFullMessageMap } from '@/i18n/types';
 
+export type RegexBuilder<T> = (value: T) => RegExp;
+
 export interface I18nOgameExpoMessages {
     [ExpoType.darkMatter]: {
         [ExpoSize.small]: string[];
         [ExpoSize.medium]: string[];
         [ExpoSize.large]: string[];
-        regex: RegExp;
+        regex: RegexBuilder<string>;
     };
 
     [ExpoType.resources]: {
         [ExpoSize.small]: string[];
         [ExpoSize.medium]: string[];
         [ExpoSize.large]: string[];
-        regex: RegExp;
+        regex: RegexBuilder<string[]>;
     };
 
     [ExpoType.fleet]: {
         [ExpoSize.small]: string[];
         [ExpoSize.medium]: string[];
         [ExpoSize.large]: string[];
-        regex: RegExp;
+        regex: RegexBuilder<string[]>;
     };
 
     [ExpoType.pirates]: {
