@@ -63,7 +63,9 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
                     Object.defineProperty(root, key, {
                         get: () => {
                             const self = root as any;
-                            return self[fieldKey][this.$i18n.locale] ?? self[fieldKey][this.$i18n.fallbackLocale];
+                            return self[fieldKey][this.$i18n.locale] 
+                                ?? self[fieldKey][this.$i18n.fallbackLocale]
+                                ?? self[fieldKey][LanguageKey.de];
                         }
                     });
                 }
