@@ -8,6 +8,35 @@ import notifications, { I18nExtensionNotifications } from './notifications';
 import settings, { I18nExtensionSettings } from './settings';
 import ogame, { I18nOgame } from '../ogame';
 
+interface I18nExtensionExpoMenuItems {
+    overview: string;
+    resources: string;
+    fleet: string;
+    darkMatter: string;
+    items: string;
+    distribution: string;
+}
+
+interface I18nExtensionDebrisFieldMenuItems {
+    overview: string;
+}
+
+interface I18nExtensionHeaders {
+    expeditions: string;
+    battles: string;
+    debrisFields: string;
+    settings: string;
+    resourcesOverview: string;
+    empire: string;
+    tools: string;
+}
+
+interface I18nExtensionCombatsMenuItems {
+    lostShips: string;
+    againstPlayers: string;
+    onExpeditions: string;
+}
+
 export interface PartialI18nExtension extends I18nOgame {
     menuItem: string;
 
@@ -19,31 +48,10 @@ export interface PartialI18nExtension extends I18nOgame {
     tables: string;
     overview: string;
     eventSizes: string;
-    expoMenu: Partial<{
-        overview: string;
-        resources: string;
-        fleet: string;
-        darkMatter: string;
-        items: string;
-        distribution: string;
-    }>;
-    debrisFieldsMenu: {
-        overview: string;
-    };
-    headers: Partial<{
-        expeditions: string;
-        battles: string;
-        debrisFields: string;
-        settings: string;
-        resourcesOverview: string;
-        empire: string;
-        tools: string;
-    }>;
-    combats: Partial<{
-        lostShips: string;
-        againstPlayers: string;
-        onExpeditions: string;
-    }>;
+    expoMenu: Partial<I18nExtensionExpoMenuItems>;
+    debrisFieldsMenu: Partial<I18nExtensionDebrisFieldMenuItems>;
+    headers: Partial<I18nExtensionHeaders>;
+    combats: Partial<I18nExtensionCombatsMenuItems>;
     since: string;
     lost: string;
     destroyed: string;
@@ -57,31 +65,10 @@ export interface I18nExtension extends PartialI18nExtension {
     settings: I18nExtensionSettings;
     notifications: I18nExtensionNotifications;
 
-    expoMenu: {
-        overview: string;
-        resources: string;
-        fleet: string;
-        darkMatter: string;
-        items: string;
-        distribution: string;
-    };
-    debrisFieldsMenu: {
-        overview: string;
-    };
-    headers: {
-        expeditions: string;
-        battles: string;
-        debrisFields: string;
-        settings: string;
-        resourcesOverview: string;
-        empire: string;
-        tools: string;
-    };
-    combats: {
-        lostShips: string;
-        againstPlayers: string;
-        onExpeditions: string;
-    };
+    expoMenu: I18nExtensionExpoMenuItems;
+    debrisFieldsMenu: I18nExtensionDebrisFieldMenuItems;
+    headers: I18nExtensionHeaders;
+    combats: I18nExtensionCombatsMenuItems;
 
     empire: I18nExtensionEmpire;
     info: I18nExtensionInfo;
@@ -96,7 +83,7 @@ const splitMap = {
     battleResults,
 };
 
-const msgs = {
+const msgs: Partial<Record<LanguageKey, Partial<PartialI18nExtension>>> = {
     de,
     en,
 };

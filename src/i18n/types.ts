@@ -1,31 +1,27 @@
 import _throw from "@/utils/throw";
 import { format } from "date-fns";
-import LanguageKey from "./languageKey";
+import LanguageKey, { PartialLanguageKey } from "./languageKey";
 
-export interface I18nDateFormats {
-    short: string;
-    long: string;
-}
+type I18nDateTimeFormatKey = 'short' | 'long';
 
 type I18nLanguageRootMap<TRoot> = Partial<Record<LanguageKey, TRoot>>;
+type I18nDateTimeFormats<T> = Record<I18nDateTimeFormatKey, T>;
+export type I18nDateTimeFormat = string | Intl.DateTimeFormatOptions;
 
-export interface I18nDateTimeFormats {
-    short: string;
-    long: string;
-}
-
-export type I18nDateTimeFormatMap = Partial<Record<LanguageKey, Partial<I18nDateTimeFormats>>>;
-
-export interface I18nOptions<TMessages> {
+export interface I18nOptions<TMessages, TDateTimeFormats> {
     fallbackLocale: LanguageKey;
     messages: Partial<Record<LanguageKey, Partial<TMessages>>>;
-    dateTimeFormats: I18nDateTimeFormatMap;
+    dateTimeFormats: I18nDateTimeFormatMap<TDateTimeFormats>;
 }
 
-class I18nMessageProxy<TMessages> {
-    private readonly $i18n: I18n<TMessages>;
+export type I18nDateTimeFormatMap<T> = { [LanguageKey.de]: I18nDateTimeFormats<T> } & Partial<Record<PartialLanguageKey, I18nDateTimeFormats<T>>>;
+export type I18nMessageMap<T> = { [LanguageKey.de]: T } & Partial<Record<PartialLanguageKey, T>>;
+export type I18nFullMessageMap<T> = Record<LanguageKey, T>;
 
-    constructor(i18n: I18n<TMessages>, messages: I18nLanguageRootMap<TMessages>) {
+class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
+    private readonly $i18n: I18n<TMessages, TDateTimeFormats>;
+
+    constructor(i18n: I18n<TMessages, TDateTimeFormats>, messages: I18nLanguageRootMap<TMessages>) {
         this.$i18n = i18n;
 
         this.transformI18nObject(messages);
@@ -49,7 +45,7 @@ class I18nMessageProxy<TMessages> {
             const fieldKey = `$${key}`;
             const localRoot = ((root as any)[fieldKey] ??= {}) as any;
 
-            if (value instanceof Object && typeof value === 'object') {
+            if (value instanceof Object && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
                 this.transform(localRoot, value, lang);
 
                 if (!Object.getOwnPropertyNames(root).includes(key)) {
@@ -76,7 +72,7 @@ class I18nMessageProxy<TMessages> {
     }
 }
 
-export class I18n<TMessages> {
+export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
     public locale: LanguageKey;
     public fallbackLocale: LanguageKey;
 
@@ -96,25 +92,24 @@ export class I18n<TMessages> {
      *    get key: <returns the value of the current locale or the fallbackLocale>
      * }
      */
-    public readonly dateTimeFormats: I18nDateTimeFormats;
+    public readonly dateTimeFormats: I18nDateTimeFormats<TDateTimeFormats>;
 
-    private readonly _dateTimeFormats: I18nDateTimeFormatMap;
-
-    constructor(options: I18nOptions<TMessages>) {
+    constructor(options: I18nOptions<TMessages, TDateTimeFormats>) {
         this.locale = options.fallbackLocale;
         this.fallbackLocale = options.fallbackLocale;
 
-        this.$t = new I18nMessageProxy<TMessages>(this, options.messages as any) as any;
-        this._dateTimeFormats = options.dateTimeFormats;
-        this.dateTimeFormats = new I18nMessageProxy(this, options.dateTimeFormats as any) as any;
+        this.$t = new I18nMessageProxy<TMessages, TDateTimeFormats>(this, options.messages as any) as any;
+        this.dateTimeFormats = new I18nMessageProxy<any, TDateTimeFormats>(this, options.dateTimeFormats as any) as any;
     }
 
-    public $d(date: number | Date, formatName: keyof I18nDateFormats): string {
-        const dateFormat = this._dateTimeFormats[this.locale]?.[formatName]
-            ?? this._dateTimeFormats[this.fallbackLocale]?.[formatName]
-            ?? _throw(`unknown datetime format key "${formatName}"`);
-
-        return format(date, dateFormat);
+    public $d(date: number | Date, formatName: I18nDateTimeFormatKey): string {
+        const dateFormat = this.dateTimeFormats[formatName] ?? _throw(`unknown datetime format key "${formatName}"`);
+        
+        if(typeof dateFormat === 'string') {
+            return format(date, dateFormat);
+        }
+        
+        return new Intl.DateTimeFormat(this.locale, dateFormat as Intl.DateTimeFormatOptions).format(date);
     }
 
     public $n(number: number, options?: Intl.NumberFormatOptions): string {

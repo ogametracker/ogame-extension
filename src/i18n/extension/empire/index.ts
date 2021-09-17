@@ -1,3 +1,4 @@
+import { I18nMessageMap } from "@/i18n/types";
 import LanguageKey from "@/i18n/languageKey";
 import de from './de';
 import en from './en';
@@ -43,7 +44,7 @@ export interface I18nExtensionEmpire {
     productionOverview: I18nExtensionEmpireProductionOverview;
 }
 
-const messages: Record<LanguageKey, I18nExtensionEmpire> = {
+const messages: I18nMessageMap<I18nExtensionEmpire> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
 };

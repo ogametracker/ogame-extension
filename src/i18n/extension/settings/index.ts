@@ -1,3 +1,4 @@
+import { I18nMessageMap } from '@/i18n/types';
 import LanguageKey from '@/i18n/languageKey';
 import de from './de';
 import en from './en';
@@ -44,7 +45,7 @@ export interface I18nExtensionSettings {
     reset: string;
 }
 
-const messages: Record<LanguageKey, I18nExtensionSettings> = {
+const messages: I18nMessageMap<I18nExtensionSettings> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
 };

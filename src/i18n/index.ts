@@ -1,9 +1,9 @@
 import Vue from "vue";
-import { I18n } from "./classes";
+import { I18n } from "./types";
 import LanguageKey from "./languageKey";
 
 import ogameMessages, { I18nOgame } from "./ogame";
-const ogameI18n = new I18n<I18nOgame>({
+const ogameI18n = new I18n<I18nOgame, string>({
     messages: ogameMessages,
     dateTimeFormats: {
         // this is the only date format that ogame uses
@@ -16,13 +16,28 @@ const ogameI18n = new I18n<I18nOgame>({
 });
 
 import extensionMessages, { I18nExtension } from "./extension";
-const extensionI18n = new I18n<I18nExtension>({
+const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>({
     messages: extensionMessages,
     dateTimeFormats: {
+        //always fallback to de because it will use the current locale anyways
         de: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
+            short: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            },
+            long: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
         },
+
     },
     fallbackLocale: LanguageKey.de,
 });

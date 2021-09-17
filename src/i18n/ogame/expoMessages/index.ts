@@ -4,6 +4,7 @@ import ExpoType from '@/models/expeditions/ExpoType';
 import de from './de';
 import en from './en';
 import dk from './dk';
+import { I18nFullMessageMap } from '@/i18n/types';
 
 export interface I18nOgameExpoMessages {
     [ExpoType.darkMatter]: {
@@ -49,7 +50,7 @@ export interface I18nOgameExpoMessages {
     };
 }
 
-const messages: Record<LanguageKey, I18nOgameExpoMessages> = {
+const messages: I18nFullMessageMap<I18nOgameExpoMessages> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,

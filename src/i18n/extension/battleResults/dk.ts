@@ -1,5 +1,5 @@
 export default {
     draw: 'Uafgjort',
-    lost: 'Faret vild',
+    lost: 'Tabt',
     won: 'Vandt',
 };

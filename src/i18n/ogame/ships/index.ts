@@ -3,6 +3,7 @@ import Ship from '@/models/Ship';
 import de from './de';
 import en from './en';
 import dk from './dk';
+import { I18nFullMessageMap } from '@/i18n/types';
 
 export interface I18nOgameShips {
     [Ship.lightFighter]: string;
@@ -24,7 +25,7 @@ export interface I18nOgameShips {
     [Ship.solarSatellite]: string;
 }
 
-const messages: Record<LanguageKey, I18nOgameShips> = {
+const messages: I18nFullMessageMap<I18nOgameShips> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,
