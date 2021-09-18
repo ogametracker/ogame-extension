@@ -62,7 +62,7 @@ export default {
     [ExpoType.nothing]: [
         /*'Trods det første, meget lovende skan af sektoren kom vi */'desværre tilbage'/* uden noget.'*/,
         /*'Udover nogle underlige, smådyr på en ukendt */'sumpplanet'/* skete der ikke noget spændende.'*/,
-        /*'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'Din ekspedition har */'lært om de store tomrum'/* i rummet. Der var ikke engang en lille asteroide eller en radioaktiv partikel, der kunne have gjort denne ekspedition spændende.'*/,
         /*'En */'skabelse af ren energi sikrede'/* at ekspeditionsmedlemmerne stirrede på hypnotiserende skærmbilleder. Da de fleste af dem kom til sig selv igen, var de nødt til at afbryde ekspeditionen grundet for lidt deuterium.'*/,
         /*'En fejl i */'moderskibets reaktor'/* ødelagde næsten hele ekspeditionsflåden. Heldigvis var teknikerne kompetente og kunne afværge de fleste problemer. Reparationen tog noget tid og tvang ekspeditionen til at returnere uden resultat.'*/,
         /*'Din ekspedition tog */'fantastiske billeder af en Super nova'/*. Ekspeditionen fandt intet nyt, men der burde være en god chance for at vinde "Det bedste billede af universet" i år.'*/,
@@ -82,7 +82,7 @@ export default {
     ],
 
     [ExpoType.trader]: [
-        /*'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Din ekspeditionsflåde har opnået kontakt med en hidtil ukendt race. De meddeler at de vil sende en af */'deres repræsentanter til din verden'/*, som du kan handle råstoffer med.'*/,
         /*'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
     ],
 
@@ -110,7 +110,7 @@ export default {
             /*'Nogle øjensynligt */'fortvivlede pirater'/*, har prøvet at kapre vores ekspeditions flåde.'*/,
             /*'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
             /*'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
-            /*'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Under ekspeditionen blev vi nødt til at */'kæmpe mod nogle få piratskibe'/*.'*/,
             /*'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpoSize.medium]: [
