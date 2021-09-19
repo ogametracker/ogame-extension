@@ -31,5 +31,7 @@ export default interface Settings {
     tables: TableSettings;
     charts: ChartSettings;
     msuConversionRates: MsuConversionRates;
+    
+    language: LanguageKey;
     fallbackLanguage: LanguageKey;
 }

@@ -309,7 +309,27 @@
             </template>
 
             <template #language>
-                <select v-model="$i18n.locale">
+                <h2>Detected OGame Language</h2>
+                <span v-text="ogameLang" />
+
+                <h2>Extension Interface Language</h2>
+                <select
+                    v-model="$i18n.locale"
+                    @change="settings.language = $i18n.locale"
+                >
+                    <option
+                        v-for="lang in languages"
+                        :key="lang"
+                        :value="lang"
+                        v-text="lang"
+                    />
+                </select>
+
+                <h2>Extension Interface Fallback Language</h2>
+                <select
+                    v-model="$i18n.fallbackLocale"
+                    @change="settings.fallbackLanguage = $i18n.fallbackLocale"
+                >
                     <option
                         v-for="lang in languages"
                         :key="lang"
@@ -324,6 +344,8 @@
 
 <script lang="ts">
     import LanguageKey, { Languages } from '@/i18n/languageKey';
+    import getLanguage from '@/i18n/mapLanguage';
+    import OgameMetaData from '@/models/ogame/OgameMetaData';
     import { DateRangeType } from '@/models/settings/DateRange';
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
@@ -349,6 +371,7 @@
         ];
 
         private readonly languages = Languages;
+        private readonly ogameLang = getLanguage(OgameMetaData.locale);
 
         private get settings() {
             return SettingsModule.settings;

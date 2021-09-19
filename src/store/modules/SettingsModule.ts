@@ -104,6 +104,8 @@ class SettingsModule extends Vue {
                 [Resource.crystal]: 2,
                 [Resource.deuterium]: 3,
             },
+            
+            language: LanguageKey.en,
             fallbackLanguage: LanguageKey.en,
         };
     }
