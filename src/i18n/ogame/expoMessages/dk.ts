@@ -89,7 +89,7 @@ export default {
     [ExpoType.early]: [
         /*'En */'uforudset tilbagekobling i energispolen'/* på motoren gør, at din ekspedition vender tilbage tidligere end forventet. Den første rapport fortæller, at der ikke er nogen forklaring på fejlen.'*/,
         /*'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
-        /*'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'Den nye og vovede kommandør har med succes */'rejst til et ustabilt ormehul'/* for at gøre rejsen hjem kortere! Dog bringer selve ekspedition intet nyt.'*/,
     ],
 
     [ExpoType.delay]: [
