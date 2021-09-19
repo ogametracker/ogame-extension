@@ -26,16 +26,10 @@
                                 {{ $i18n.$t.settings.type }}
                             </th>
                             <th style="width: 200px">
-                                {{
-                                    $i18n.$t.settings
-                                        .rangeStarts
-                                }}
+                                {{ $i18n.$t.settings.rangeStarts }}
                             </th>
                             <th style="width: 200px">
-                                {{
-                                    $i18n.$t.settings
-                                        .rangeContains
-                                }}
+                                {{ $i18n.$t.settings.rangeContains }}
                             </th>
                         </tr>
                     </thead>
@@ -63,10 +57,7 @@
                                 />
                                 <span v-else>
                                     {{ $i18n.$t.since }}
-                                    {{
-                                        $i18n.$t.settings
-                                            .firstDay
-                                    }}
+                                    {{ $i18n.$t.settings.firstDay }}
                                 </span>
                             </td>
                             <td class="value-col">
@@ -80,24 +71,22 @@
                                         :value="rangeType"
                                     >
                                         {{
-                                            $i18n.$t.settings
-                                                .rangeType[rangeType]
+                                            $i18n.$t.settings.rangeType[
+                                                rangeType
+                                            ]
                                         }}
                                     </option>
                                 </select>
 
                                 <span v-else>
                                     {{
-                                        $i18n.$t.settings
-                                            .rangeType[range.type]
+                                        $i18n.$t.settings.rangeType[range.type]
                                     }}
                                 </span>
                             </td>
                             <td class="value-col">
                                 <span v-if="range.type != 'all'">
-                                    {{
-                                        $i18n.$t.settings.before
-                                    }}
+                                    {{ $i18n.$t.settings.before }}
                                     <input
                                         type="number"
                                         step="1"
@@ -119,11 +108,7 @@
                                         min="1"
                                         v-model="range.take"
                                     />
-                                    {{
-                                        $i18n.$t.settings[
-                                            `${range.type}s`
-                                        ]
-                                    }}
+                                    {{ $i18n.$t.settings[`${range.type}s`] }}
                                 </span>
                             </td>
                         </tr>
@@ -159,17 +144,14 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.$t.settings
-                                            .chartColors.expeditions
+                                        $i18n.$t.settings.chartColors
+                                            .expeditions
                                     }}
 
                                     <button
                                         class="reset-button"
                                         @click="resetChartColors('overview')"
-                                        :title="
-                                            $i18n.$t.settings
-                                                .reset
-                                        "
+                                        :title="$i18n.$t.settings.reset"
                                     >
                                         <icon name="refresh" />
                                     </button>
@@ -188,9 +170,7 @@
                                         v-model="
                                             settings.charts.colors.overview[key]
                                         "
-                                        :label="
-                                            $i18n.$t.expoTypes[key]
-                                        "
+                                        :label="$i18n.$t.expoTypes[key]"
                                     />
                                 </td>
                             </tr>
@@ -202,17 +182,13 @@
                             <tr>
                                 <th>
                                     {{
-                                        $i18n.$t.settings
-                                            .chartColors.resources
+                                        $i18n.$t.settings.chartColors.resources
                                     }}
 
                                     <button
                                         class="reset-button"
                                         @click="resetChartColors('resources')"
-                                        :title="
-                                            $i18n.$t.settings
-                                                .reset
-                                        "
+                                        :title="$i18n.$t.settings.reset"
                                     >
                                         <icon name="refresh" />
                                     </button>
@@ -233,9 +209,7 @@
                                                 key
                                             ]
                                         "
-                                        :label="
-                                            $i18n.$t.resources[key]
-                                        "
+                                        :label="$i18n.$t.resources[key]"
                                     />
                                 </td>
                             </tr>
@@ -246,20 +220,14 @@
                         <thead>
                             <tr>
                                 <th>
-                                    {{
-                                        $i18n.$t.settings
-                                            .chartColors.ships
-                                    }}
+                                    {{ $i18n.$t.settings.chartColors.ships }}
 
                                     <button
                                         class="reset-button"
                                         @click="
                                             resetChartColors('overshipsview')
                                         "
-                                        :title="
-                                            $i18n.$t.settings
-                                                .reset
-                                        "
+                                        :title="$i18n.$t.settings.reset"
                                     >
                                         <icon name="refresh" />
                                     </button>
@@ -289,20 +257,14 @@
                         <thead>
                             <tr>
                                 <th>
-                                    {{
-                                        $i18n.$t.settings
-                                            .chartColors.combats
-                                    }}
+                                    {{ $i18n.$t.settings.chartColors.combats }}
 
                                     <button
                                         class="reset-button"
                                         @click="
                                             resetChartColors('battleResults')
                                         "
-                                        :title="
-                                            $i18n.$t.settings
-                                                .reset
-                                        "
+                                        :title="$i18n.$t.settings.reset"
                                     >
                                         <icon name="refresh" />
                                     </button>
@@ -322,11 +284,7 @@
                                             settings.charts.colors
                                                 .battleResults[key]
                                         "
-                                        :label="
-                                            $i18n.$t.battleResults[
-                                                key
-                                            ]
-                                        "
+                                        :label="$i18n.$t.battleResults[key]"
                                     />
                                 </td>
                             </tr>
@@ -349,12 +307,23 @@
                 <h2>{{ $i18n.$t.settings.import }}</h2> -->
                 <h1>Coming Soon&trade;</h1>
             </template>
+
+            <template #language>
+                <select v-model="$i18n.locale">
+                    <option
+                        v-for="lang in languages"
+                        :key="lang"
+                        :value="lang"
+                        v-text="lang"
+                    />
+                </select>
+            </template>
         </tab-view>
     </div>
 </template>
 
 <script lang="ts">
-    
+    import LanguageKey, { Languages } from '@/i18n/languageKey';
     import { DateRangeType } from '@/models/settings/DateRange';
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
@@ -379,6 +348,8 @@
             'month',
         ];
 
+        private readonly languages = Languages;
+
         private get settings() {
             return SettingsModule.settings;
         }
@@ -395,6 +366,10 @@
             {
                 name: 'import-export',
                 title: this.$i18n.$t.settings.titleImportExport,
+            },
+            {
+                name: 'language',
+                title: 'LOCA: Language',
             },
         ];
 
@@ -452,7 +427,7 @@
 
         private resetChartColors(key?: keyof Settings['settings']['charts']['colors']) {
             const defaults = SettingsModule.getDefaultSettings().charts.colors;
-            
+
             if (key == null) {
                 this.settings.charts.colors = defaults;
             } else {
