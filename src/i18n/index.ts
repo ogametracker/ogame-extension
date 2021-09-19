@@ -3,7 +3,7 @@ import { I18n } from "./types";
 import LanguageKey from "./languageKey";
 
 import ogameMessages, { I18nOgame } from "./ogame";
-const ogameI18n = new I18n<I18nOgame, string>({
+const ogameI18n = new I18n<I18nOgame, string>().init({
     messages: ogameMessages,
     dateTimeFormats: {
         // this is the only date format that ogame uses
@@ -16,7 +16,7 @@ const ogameI18n = new I18n<I18nOgame, string>({
 });
 
 import extensionMessages, { I18nExtension } from "./extension";
-const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>({
+const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>().init({
     messages: extensionMessages,
     dateTimeFormats: {
         //always fallback to de because it will use the current locale anyways

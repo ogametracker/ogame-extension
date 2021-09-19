@@ -9,6 +9,6 @@ const languageMap: Record<string, LanguageKey> = {
     'us': LanguageKey.en,
 };
 
-export default function getLanguage(): LanguageKey {
-    return languageMap[OgameMetaData.locale] ?? LanguageKey.de;
+export default function getLanguage<TFallback>(fallback: TFallback): LanguageKey | TFallback {
+    return languageMap[OgameMetaData.locale] ?? fallback;
 }

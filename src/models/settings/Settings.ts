@@ -1,3 +1,4 @@
+import LanguageKey from "@/i18n/languageKey";
 import { HexColor } from "@/utils/colors";
 import BattleResult from "../battles/BattleResult";
 import ExpoType from "../expeditions/ExpoType";
@@ -30,4 +31,5 @@ export default interface Settings {
     tables: TableSettings;
     charts: ChartSettings;
     msuConversionRates: MsuConversionRates;
+    fallbackLanguage: LanguageKey;
 }

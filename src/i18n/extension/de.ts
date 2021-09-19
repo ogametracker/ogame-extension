@@ -1,5 +1,5 @@
 export default {
-    menuItem: 'Statistiken',
+    ogameLanguageNotSupported:(lang: string) => `Die OGame-Sprache '${lang}' wird derzeit nicht unterstützt. Daher sind das Tracking von Expeditionen und TFs deaktiviert.`,
     total: 'Gesamt',
     chart: 'Diagramm',
     tables: 'Tabellen',

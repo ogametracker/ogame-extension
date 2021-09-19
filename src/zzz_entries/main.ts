@@ -20,7 +20,6 @@ import '@/styles/index.scss';
 
 // i18n
 import { ogameI18n, extensionI18n } from '@/i18n/';
-extensionI18n.locale = ogameI18n.locale = getLanguage();
 
 // tracking
 import { startTracking } from '@/tracking';
@@ -36,21 +35,37 @@ Vue.config.productionTip = false;
 // prototype extensions/overrides
 import '@/prototype-extensions/Math';
 import getLanguage from '@/i18n/mapLanguage';
+import SettingsModule from '@/store/modules/SettingsModule';
+import attach from './attach';
+import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 
-function mountVue() {
+async function mountDialog(appComponent: App) {
+    await waitForDocumentLoad;
+
     const app = document.createElement('div');
     app.id = 'ogame-tracker-dialog';
     document.body.appendChild(app);
 
-    new Vue({
-        i18n: extensionI18n,
-        render: h => h(App),
-    }).$mount(`#${app.id}`);
+    appComponent.$mount(app);
+}
+
+async function initLocales() {
+    await SettingsModule.createdPromise; //ensure Settings module loaded
+    extensionI18n.locale = SettingsModule.settings.fallbackLanguage;
+    const ogameLang = getLanguage(null);
+    ogameI18n.enabled = ogameLang != null;
+    ogameI18n.locale = ogameLang ?? ogameI18n.locale;
 }
 
 async function initExtension() {
-    mountVue();
+    const app = new App({
+        i18n: extensionI18n,
+    });
 
+    attach(app);
+
+    await mountDialog(app);
+    await initLocales();
     await migrations();
     startTracking();
 }

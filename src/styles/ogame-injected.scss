@@ -23,6 +23,12 @@
         opacity: 0.2;
     }
 }
+.ogame-tracker-menu-item.ogame-tracker-menu-item-warning {
+    .statistics-menu-icon::before {
+        background-image: url(#{$base-url}/icons/alert.svg);
+        opacity: 1;
+    }
+}
 
 @keyframes extension-loading {
     0% {

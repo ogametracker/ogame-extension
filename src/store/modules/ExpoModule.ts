@@ -4,6 +4,7 @@ import { startOfDay } from "date-fns";
 import ExpoEventCollection from "@/models/expeditions/ExpoEventCollection";
 import asyncChromeStorage from "@/utils/asyncChromeStorage";
 import OgameMetaData from "@/models/ogame/OgameMetaData";
+import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 
 @Component({})
 class ExpoModule extends Vue {
@@ -16,6 +17,8 @@ class ExpoModule extends Vue {
     } 
 
     private async created() {
+        await waitForDocumentLoad;
+
         const exposById: ExpoEventCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.expos.push(...Object.values(exposById));
     }
