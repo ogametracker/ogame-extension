@@ -1,6 +1,7 @@
 
 import { extensionI18n } from '@/i18n';
 import LanguageKey from '@/i18n/languageKey';
+import getLanguage from '@/i18n/mapLanguage';
 import ExpoType from '@/models/expeditions/ExpoType';
 import OgameMetaData from '@/models/ogame/OgameMetaData';
 import Resource from '@/models/Resource';
@@ -105,7 +106,7 @@ class SettingsModule extends Vue {
                 [Resource.deuterium]: 3,
             },
             
-            language: LanguageKey.en,
+            language: getLanguage(LanguageKey.en),
         };
     }
 

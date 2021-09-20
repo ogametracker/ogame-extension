@@ -1,8 +1,8 @@
 <template>
     <div class="settings">
         <tab-view :items="items" vertical>
-            <template #date-ranges
-                ><h2>
+            <template #date-ranges>
+                <h2>
                     {{ $i18n.$t.settings.titleDateRanges }}
                     <button
                         class="reset-button"
@@ -313,10 +313,17 @@
                 <span v-text="ogameLang" />
                 <span v-if="!ogameI18n.enabled" class="icon-alert" />
 
-                <h2>Extension Interface Language (where available)</h2>
-                <select
-                    v-model="settings.language"
-                >
+                <h2>
+                    Extension Interface Language (where available)
+                    <button
+                        class="reset-button"
+                        @click="resetLanguage()"
+                        :title="$i18n.$t.settings.reset"
+                    >
+                        <icon name="refresh" />
+                    </button>
+                </h2>
+                <select v-model="settings.language">
                     <option
                         v-for="lang in languages"
                         :key="lang"
@@ -415,7 +422,7 @@
                 await SettingsModule.save();
                 this.saveTimeout = null;
 
-                if(this.oldNotification != null) {
+                if (this.oldNotification != null) {
                     NotificationModule.remove(this.oldNotification);
                     this.oldNotification = null;
                 }
@@ -451,6 +458,11 @@
             } else {
                 this.settings.charts.colors[key] = defaults[key] as any;
             }
+        }
+
+        private resetLanguage() {
+            const defaultLang = SettingsModule.getDefaultSettings().language;
+            this.settings.language = defaultLang;
         }
     }
 </script>
