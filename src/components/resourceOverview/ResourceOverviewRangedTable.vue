@@ -28,7 +28,13 @@
                         v-if="$scopedSlots.value"
                     />
 
-                    <span v-else>
+                    <span
+                        v-else
+                        :class="{
+                            faded:
+                                fadeZeros && item.rangeValues[rangeIndex] == 0
+                        }"
+                    >
                         {{ $i18n.$n(item.rangeValues[rangeIndex]) }}
                     </span>
                 </td>
@@ -53,7 +59,7 @@
 </template>
 
 <script lang="ts">
-    
+
     import BattleReport from '@/models/battles/BattleReport';
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import ExpoEvent from '@/models/expeditions/ExpoEvent';
@@ -81,6 +87,9 @@
 
         @Prop({ required: false, type: Boolean, default: false })
         private noPercentage!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private fadeZeros!: boolean;
 
         private get ranges() {
             return SettingsModule.settings.tables.ranges;
@@ -125,7 +134,7 @@
             firstDate: Date
         ) {
             let rangeDays = daysInRange(range);
-            if(rangeDays == null) {
+            if (rangeDays == null) {
                 const expoDays = Object.keys(exposByDay).map(d => parseInt(d));
                 const battleDays = Object.keys(battlesByDay).map(d => parseInt(d));
                 const debrisDays = Object.keys(debrisByDay).map(d => parseInt(d));
@@ -149,3 +158,8 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .faded {
+        opacity: 0.1;
+    }
+</style>

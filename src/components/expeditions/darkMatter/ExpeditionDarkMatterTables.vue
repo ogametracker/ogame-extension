@@ -1,6 +1,6 @@
 <template>
     <div>
-        <expo-ranged-table :items="items" />
+        <expo-ranged-table :items="items" fade-zeros />
 
         <h2>{{ $i18n.$t.eventSizes }}</h2>
         <expo-size-distribution-table :type="expoType" />

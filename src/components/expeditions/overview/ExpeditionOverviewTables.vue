@@ -1,6 +1,6 @@
 <template>
     <div>
-        <expo-ranged-table :items="items" show-total />
+        <expo-ranged-table :items="items" show-total fade-zeros />
     </div>
 </template>
  

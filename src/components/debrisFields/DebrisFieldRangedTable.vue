@@ -28,7 +28,13 @@
                         v-if="$scopedSlots.value"
                     />
 
-                    <span v-else>
+                    <span
+                        v-else
+                        :class="{
+                            faded:
+                                fadeZeros && item.rangeValues[rangeIndex] == 0
+                        }"
+                    >
                         {{ $i18n.$n(item.rangeValues[rangeIndex]) }}
                     </span>
                 </td>
@@ -43,7 +49,7 @@
                 </td>
 
                 <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
-                    {{$i18n.$n(tableData.rangeTotals[rangeIndex]) }}
+                    {{ $i18n.$n(tableData.rangeTotals[rangeIndex]) }}
                 </td>
 
                 <td v-if="!noPercentage"></td>
@@ -76,6 +82,9 @@
 
         @Prop({ required: false, type: Boolean, default: false })
         private noPercentage!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private fadeZeros!: boolean;
 
         private get ranges() {
             return SettingsModule.settings.tables.ranges;
@@ -126,3 +135,8 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .faded {
+        opacity: 0.1;
+    }
+</style>

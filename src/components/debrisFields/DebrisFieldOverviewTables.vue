@@ -1,6 +1,6 @@
 <template>
     <div>
-        <debris-field-ranged-table :items="items" show-total no-percentage />
+        <debris-field-ranged-table :items="items" show-total no-percentage fade-zeros />
     </div>
 </template>
  

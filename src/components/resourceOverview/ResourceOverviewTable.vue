@@ -1,6 +1,6 @@
 <template>
     <div>
-        <resource-overview-ranged-table :items="items" show-total no-percentage />
+        <resource-overview-ranged-table :items="items" show-total no-percentage fade-zeros />
     </div>
 </template>
  

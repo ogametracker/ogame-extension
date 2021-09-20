@@ -1,6 +1,6 @@
 <template>
     <div>
-        <battles-ranged-table :items="items" no-percentage show-total />
+        <battles-ranged-table :items="items" no-percentage show-total fade-zeros />
     </div>
 </template>
  
