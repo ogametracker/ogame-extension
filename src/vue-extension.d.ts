@@ -8,9 +8,3 @@ declare module 'vue/types/vue' {
         $i18n: I18n<I18nExtension, Intl.DateTimeFormatOptions>;
     }
 }
-
-declare module 'vue/types/options' {
-    interface ComponentOptions<V extends Vue> {
-        i18n?: I18n<I18nExtension, Intl.DateTimeFormatOptions>;
-    }
-}

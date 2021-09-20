@@ -33,5 +33,4 @@ export default interface Settings {
     msuConversionRates: MsuConversionRates;
     
     language: LanguageKey;
-    fallbackLanguage: LanguageKey;
 }

@@ -36,7 +36,6 @@ Vue.config.productionTip = false;
 import '@/prototype-extensions/Math';
 import getLanguage from '@/i18n/mapLanguage';
 import SettingsModule from '@/store/modules/SettingsModule';
-import attach from './attach';
 import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 
 async function mountDialog(appComponent: App) {
@@ -51,16 +50,16 @@ async function mountDialog(appComponent: App) {
 
 async function initLocales() {
     await SettingsModule.createdPromise; //ensure Settings module loaded
-    extensionI18n.locale = SettingsModule.settings.fallbackLanguage;
+    
+    extensionI18n.locale = SettingsModule.settings.language;
+
     const ogameLang = getLanguage(null);
     ogameI18n.enabled = ogameLang != null;
     ogameI18n.locale = ogameLang ?? ogameI18n.locale;
 }
 
 async function initExtension() {
-    const app = new App({
-        i18n: extensionI18n,
-    });
+    const app = new App();
 
     attach(app);
 
@@ -68,6 +67,41 @@ async function initExtension() {
     await initLocales();
     await migrations();
     startTracking();
+}
+
+import MenuItem from '@/components/MenuItem.vue';
+function attach(appComponent: App) {
+    let ready = false;
+
+    const observer = new MutationObserver(() => attachMenuItem());
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
+
+    function addMenuItem(menu: Element) {
+        const dialogLink = document.createElement('li');
+        menu.appendChild(dialogLink);
+
+        const menuItem: any = new MenuItem();
+        menuItem.app = appComponent;
+        menuItem.$mount(dialogLink);
+    }
+
+    function attachMenuItem() {
+        if (ready) {
+            return;
+        }
+
+        const menu = document.querySelector('#menuTable');
+        if (menu == null) {
+            return;
+        }
+
+        addMenuItem(menu);
+        ready = true;
+        observer.disconnect();
+    }
 }
 
 initExtension();

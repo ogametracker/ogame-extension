@@ -311,24 +311,11 @@
             <template #language>
                 <h2>Detected OGame Language</h2>
                 <span v-text="ogameLang" />
+                <span v-if="!ogameI18n.enabled" class="icon-alert" />
 
-                <h2>Extension Interface Language</h2>
+                <h2>Extension Interface Language (where available)</h2>
                 <select
-                    v-model="$i18n.locale"
-                    @change="settings.language = $i18n.locale"
-                >
-                    <option
-                        v-for="lang in languages"
-                        :key="lang"
-                        :value="lang"
-                        v-text="lang"
-                    />
-                </select>
-
-                <h2>Extension Interface Fallback Language</h2>
-                <select
-                    v-model="$i18n.fallbackLocale"
-                    @change="settings.fallbackLanguage = $i18n.fallbackLocale"
+                    v-model="settings.language"
                 >
                     <option
                         v-for="lang in languages"
@@ -343,6 +330,7 @@
 </template>
 
 <script lang="ts">
+    import { ogameI18n } from '@/i18n';
     import LanguageKey, { Languages } from '@/i18n/languageKey';
     import getLanguage from '@/i18n/mapLanguage';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
@@ -350,7 +338,7 @@
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import ExpoModule from '@/store/modules/ExpoModule';
-    import NotificationModule from '@/store/modules/NotificationModule';
+    import NotificationModule, { Notification } from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import draggable from 'vuedraggable';
@@ -370,6 +358,7 @@
             'month',
         ];
 
+        private readonly ogameI18n = ogameI18n;
         private readonly languages = Languages;
         private readonly ogameLang = getLanguage(OgameMetaData.locale);
 
@@ -416,6 +405,7 @@
 
         private saveTimeout: number | null = null;
         private readonly saveDelay = 1000;
+        private oldNotification: Notification | null = null;
         private saveDelayed() {
             if (this.saveTimeout != null) {
                 clearTimeout(this.saveTimeout);
@@ -425,7 +415,12 @@
                 await SettingsModule.save();
                 this.saveTimeout = null;
 
-                NotificationModule.addNotification({
+                if(this.oldNotification != null) {
+                    NotificationModule.remove(this.oldNotification);
+                    this.oldNotification = null;
+                }
+
+                this.oldNotification = NotificationModule.addNotification({
                     type: 'success',
                     title: this.$i18n.$t.notifications.settingsSaved.title,
                     text: this.$i18n.$t.notifications.settingsSaved.text,

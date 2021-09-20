@@ -12,7 +12,7 @@ const ogameI18n = new I18n<I18nOgame, string>().init({
             long: 'dd.MM.yyyy HH:mm:ss',
         },
     },
-    fallbackLocale: LanguageKey.de,
+    fallbackLocale: null as any,
 });
 
 import extensionMessages, { I18nExtension } from "./extension";
@@ -39,7 +39,7 @@ const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>().init
         },
 
     },
-    fallbackLocale: LanguageKey.de,
+    fallbackLocale: LanguageKey.en,
 });
 Vue.prototype.$i18n = extensionI18n;
 

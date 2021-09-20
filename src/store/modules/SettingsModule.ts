@@ -106,7 +106,6 @@ class SettingsModule extends Vue {
             },
             
             language: LanguageKey.en,
-            fallbackLanguage: LanguageKey.en,
         };
     }
 
@@ -119,7 +118,6 @@ class SettingsModule extends Vue {
             ...settings
         };
 
-        extensionI18n.fallbackLocale = this.settings.fallbackLanguage;
         await Promise.resolve();
     }
 

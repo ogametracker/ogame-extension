@@ -16,7 +16,7 @@
                         :class="{
                             'nav-item': !tabItem.disabled,
                             'nav-item-active': activeTab == tabItem,
-                            'flex-grow-1': tabItem.flex,
+                            'flex-grow-1': tabItem.flex
                         }"
                         :style="
                             tabItem.color != null
@@ -33,7 +33,7 @@
                     >
                         <icon
                             v-if="tabItem.icon != null"
-                            :name="tabItem.icon" 
+                            :name="tabItem.icon"
                             :style="tabItem.iconStyle"
                         />
                         <span v-if="tabItem.label != null">
@@ -98,84 +98,86 @@
         @Prop({ type: Boolean, required: true })
         private value!: boolean;
 
-        private readonly tabItems: TabItem[] = [
-            {
-                name: 'expos',
-                icon: 'expo',
-                color: '#0066ff',
-                label: i18n.$t.headers.expeditions,
-                component: 'expedition-stats',
-            },
-            {
-                name: 'battles',
-                icon: 'attack',
-                color: '#c51b00',
-                label: i18n.$t.headers.battles,
-                component: 'battles-stats',
-            },
-            {
-                name: 'debrisFields',
-                icon: 'debris-field',
-                color: '#00a031',
-                label: i18n.$t.headers.debrisFields,
-                component: 'debris-field-stats',
-            },
-            {
-                name: 'resourceOverview',
-                icon: 'economy',
-                color: '#a9460c',
-                label: i18n.$t.headers.resourcesOverview,
-                component: 'resource-overview',
-                iconStyle: {
-                    fontSize: '32px',
+        private get tabItems(): TabItem[] {
+            return [
+                {
+                    name: 'expos',
+                    icon: 'expo',
+                    color: '#0066ff',
+                    label: i18n.$t.headers.expeditions,
+                    component: 'expedition-stats',
                 },
-            },
-            {
-                name: 'empire',
-                icon: 'planet-moon',
-                color: '#5000d0',
-                label: i18n.$t.headers.empire,
-                component: 'empire-overview',
-            },
-            {
-                name: 'tools',
-                icon: 'tools',
-                color: '#008c85',
-                label: i18n.$t.headers.tools,
-                component: null!,
-                iconStyle: {
-                    fontSize: '24px',
+                {
+                    name: 'battles',
+                    icon: 'attack',
+                    color: '#c51b00',
+                    label: i18n.$t.headers.battles,
+                    component: 'battles-stats',
                 },
-            },
-            {
-                name: 'placeholder_0',
-                disabled: true,
-                flex: true,
-                placeholder: true,
-            },
-            {
-                name: 'settings',
-                icon: 'cog',
-                color: '#888888',
-                label: i18n.$t.headers.settings,
-                component: 'settings',
-            },
-            {
-                name: 'excelExport',
-                icon: 'microsoft-excel',
-                color: '#21a366',
-                customAction: this.excelExport,
-                iconStyle: {
-                    marginRight: '3px',
+                {
+                    name: 'debrisFields',
+                    icon: 'debris-field',
+                    color: '#00a031',
+                    label: i18n.$t.headers.debrisFields,
+                    component: 'debris-field-stats',
                 },
-            },
-            {
-                name: 'info',
-                icon: 'information',
-                color: '#8c8ce0',
-                component: 'info',
-            },
-        ];
+                {
+                    name: 'resourceOverview',
+                    icon: 'economy',
+                    color: '#a9460c',
+                    label: i18n.$t.headers.resourcesOverview,
+                    component: 'resource-overview',
+                    iconStyle: {
+                        fontSize: '32px',
+                    },
+                },
+                {
+                    name: 'empire',
+                    icon: 'planet-moon',
+                    color: '#5000d0',
+                    label: i18n.$t.headers.empire,
+                    component: 'empire-overview',
+                },
+                {
+                    name: 'tools',
+                    icon: 'tools',
+                    color: '#008c85',
+                    label: i18n.$t.headers.tools,
+                    component: null!,
+                    iconStyle: {
+                        fontSize: '24px',
+                    },
+                },
+                {
+                    name: 'placeholder_0',
+                    disabled: true,
+                    flex: true,
+                    placeholder: true,
+                },
+                {
+                    name: 'settings',
+                    icon: 'cog',
+                    color: '#888888',
+                    label: i18n.$t.headers.settings,
+                    component: 'settings',
+                },
+                {
+                    name: 'excelExport',
+                    icon: 'microsoft-excel',
+                    color: '#21a366',
+                    customAction: this.excelExport,
+                    iconStyle: {
+                        marginRight: '3px',
+                    },
+                },
+                {
+                    name: 'info',
+                    icon: 'information',
+                    color: '#8c8ce0',
+                    component: 'info',
+                },
+            ];
+        }
 
         private activeTab = this.tabItems[0];
 
