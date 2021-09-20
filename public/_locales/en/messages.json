@@ -1,6 +1,6 @@
 {
     "appName": {
-        "message": "OGame Tracker",
+        "message": "OGame Tracker[name-suffix]",
         "description": "The title of the application, displayed in the web store."
     },
     "appDesc": {

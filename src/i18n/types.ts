@@ -1,5 +1,7 @@
 import _throw from "@/utils/throw";
 import { format } from "date-fns";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
 import LanguageKey, { PartialLanguageKey } from "./languageKey";
 
 type I18nDateTimeFormatKey = 'short' | 'long';
@@ -51,6 +53,8 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
                 if (!Object.getOwnPropertyNames(root).includes(key)) {
                     Object.defineProperty(root, key, {
                         get: () => {
+                            this.$i18n.throwOnDisabled();
+
                             const self = root as any;
                             return self[fieldKey];
                         }
@@ -62,8 +66,10 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
                 if (!Object.getOwnPropertyNames(root).includes(key)) {
                     Object.defineProperty(root, key, {
                         get: () => {
+                            this.$i18n.throwOnDisabled();
+
                             const self = root as any;
-                            return self[fieldKey][this.$i18n.locale] 
+                            return self[fieldKey][this.$i18n.locale]
                                 ?? self[fieldKey][this.$i18n.fallbackLocale]
                                 ?? self[fieldKey][LanguageKey.de];
                         }
@@ -74,9 +80,11 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
     }
 }
 
-export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
-    public locale: LanguageKey;
-    public fallbackLocale: LanguageKey;
+@Component({})
+export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extends Vue {
+    public enabled = true;
+    public locale = LanguageKey.de;
+    public fallbackLocale = LanguageKey.de;
 
     /* we trick typescript here, it think the object looks like this
      * { key: 'value' } (or recursive like this)
@@ -85,7 +93,7 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
      *    get key: <returns the value of the current locale or the fallbackLocale>
      * }
      */
-    public readonly $t: TMessages;
+    public $t: TMessages = null!;
 
     /* we trick typescript here, it think the object looks like this
      * { key: 'value' } (or recursive like this)
@@ -94,27 +102,39 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
      *    get key: <returns the value of the current locale or the fallbackLocale>
      * }
      */
-    public readonly dateTimeFormats: I18nDateTimeFormats<TDateTimeFormats>;
+    public dateTimeFormats: I18nDateTimeFormats<TDateTimeFormats> = null!;
 
-    constructor(options: I18nOptions<TMessages, TDateTimeFormats>) {
+    public init(options: I18nOptions<TMessages, TDateTimeFormats>): I18n<TMessages, TDateTimeFormats> {
         this.locale = options.fallbackLocale;
         this.fallbackLocale = options.fallbackLocale;
 
         this.$t = new I18nMessageProxy<TMessages, TDateTimeFormats>(this, options.messages as any) as any;
         this.dateTimeFormats = new I18nMessageProxy<any, TDateTimeFormats>(this, options.dateTimeFormats as any) as any;
+
+        return this;
+    }
+
+    public throwOnDisabled() {
+        if (!this.enabled) {
+            throw new Error('I18n object is disabled');
+        }
     }
 
     public $d(date: number | Date, formatName: I18nDateTimeFormatKey): string {
+        this.throwOnDisabled();
+
         const dateFormat = this.dateTimeFormats[formatName] ?? _throw(`unknown datetime format key "${formatName}"`);
-        
-        if(typeof dateFormat === 'string') {
+
+        if (typeof dateFormat === 'string') {
             return format(date, dateFormat);
         }
-        
+
         return new Intl.DateTimeFormat(this.locale, dateFormat as Intl.DateTimeFormatOptions).format(date);
     }
 
     public $n(number: number, options?: Intl.NumberFormatOptions): string {
+        this.throwOnDisabled();
+
         const formatter = new Intl.NumberFormat(this.locale, options);
         return formatter.format(number);
     }

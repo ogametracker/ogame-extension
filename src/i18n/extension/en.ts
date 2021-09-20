@@ -1,5 +1,5 @@
 export default {
-    menuItem: 'Statistics',
+    ogameLanguageNotSupported:(lang: string) => `The OGame language '${lang}' is currently not supported. As such, the tracking features for expeditions and debris fields will be disabled.`,
     total: 'Total',
     chart: 'Chart',
     tables: 'Tables',

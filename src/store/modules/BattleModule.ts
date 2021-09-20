@@ -4,6 +4,7 @@ import { startOfDay } from 'date-fns';
 import BattleReportCollection from '@/models/battles/BattleReportCollection'; 
 import OgameMetaData from '@/models/ogame/OgameMetaData';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
+import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 
 @Component({})
 class BattleModule extends Vue {
@@ -17,6 +18,8 @@ class BattleModule extends Vue {
     } 
 
     private async created() {
+        await waitForDocumentLoad;
+
         const reportsById: BattleReportCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.reports.push(...Object.values(reportsById));
     }

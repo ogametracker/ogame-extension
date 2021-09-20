@@ -4,6 +4,7 @@ import { startOfDay } from 'date-fns';
 import DebrisFieldReportCollection from '@/models/debrisFields/DebrisFieldReportCollection';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
 import OgameMetaData from '@/models/ogame/OgameMetaData';
+import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 
 @Component({})
 class DebrisFieldModule extends Vue {
@@ -17,6 +18,8 @@ class DebrisFieldModule extends Vue {
     } 
 
     private async created() {
+        await waitForDocumentLoad;
+
         const reportsById: DebrisFieldReportCollection = await asyncChromeStorage.get(this.storageKey) ?? {};
         this.reports.push(...Object.values(reportsById));
     }

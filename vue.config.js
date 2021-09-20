@@ -29,15 +29,6 @@ module.exports = {
                     filename: 'keepActiveItemsTime.js',
                     chunkFilename: 'keepActiveItemsTime.chunk-vendors.js'
                 },
-            },
-            {
-                entry: {
-                    app: './src/zzz_entries/attach.ts'
-                },
-                output: {
-                    filename: 'attach.js',
-                    chunkFilename: 'attach.chunk-vendors.js'
-                },
             }
         ]
     },

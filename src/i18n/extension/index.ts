@@ -38,8 +38,8 @@ interface I18nExtensionCombatsMenuItems {
 }
 
 export interface PartialI18nExtension extends I18nOgame {
-    menuItem: string;
-
+    ogameLanguageNotSupported(lang: string): string;
+    
     settings: Partial<I18nExtensionSettings>;
     notifications: Partial<I18nExtensionNotifications>;
 
