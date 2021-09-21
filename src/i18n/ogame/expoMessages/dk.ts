@@ -127,7 +127,7 @@ export default {
     [ExpoType.aliens]: {
         [ExpoSize.small]: [
             /*'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
-            /*'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*'Din ekspeditionsflåde havde ikke en */'venlig første kontakt'/* med en ukendt race.'*/,
             /*'Vores ekspedition blev angrebet af en */'mindre gruppe af ukendte skibe'/*!'*/,
             /*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
