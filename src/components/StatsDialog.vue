@@ -226,11 +226,17 @@
     }
 </script>
 <style lang="scss" scoped>
-    .discord-tab:hover {
-        background: linear-gradient(
-            180deg,
-            rgba(var(--color), 0.67),
-            rgb(var(--color))
-        ) !important;
+    .discord-tab {
+        &::v-deep .icon-discord {
+            font-size: 30px !important;
+        }
+        
+        &:hover {
+            background: linear-gradient(
+                180deg,
+                rgba(var(--color), 0.67),
+                rgb(var(--color))
+            ) !important;
+        }
     }
 </style>
