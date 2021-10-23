@@ -44,4 +44,9 @@ export default {
     exportData: 'Daten exportieren',
     importFromFile: 'Daten importieren',
     overwriteExistingData: 'Bestehende Daten überschreiben',
+
+    importFailedTitle: 'Import fehlgeschlagen',
+    importFailedMessage: 'Während des Imports der Daten ist ein Fehler aufgetreten.',
+    importSuccessfulTitle: 'Import erfolgreich',
+    importSuccessfulMessage: 'Die Daten wurden erfolgreich importiert.',
 };

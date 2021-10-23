@@ -49,6 +49,11 @@ export interface I18nExtensionSettings {
     exportData: string;
     importFromFile: string;
     overwriteExistingData: string;
+
+    importFailedTitle: string;
+    importFailedMessage: string;
+    importSuccessfulTitle: string;
+    importSuccessfulMessage: string;
 }
 
 const messages: I18nMessageMap<I18nExtensionSettings> = {
