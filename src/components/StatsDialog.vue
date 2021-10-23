@@ -13,11 +13,14 @@
                     <li
                         v-for="tabItem in tabItems"
                         :key="tabItem.name"
-                        :class="{
-                            'nav-item': !tabItem.disabled,
-                            'nav-item-active': activeTab == tabItem,
-                            'flex-grow-1': tabItem.flex
-                        }"
+                        :class="[
+                            {
+                                'nav-item': !tabItem.disabled,
+                                'nav-item-active': activeTab == tabItem,
+                                'flex-grow-1': tabItem.flex
+                            },
+                            tabItem.customClass
+                        ]"
                         :style="
                             tabItem.color != null
                                 ? `--color: ${getColorVar(tabItem.color)}`
@@ -78,6 +81,7 @@
         disabled?: boolean;
         flex?: boolean;
         color?: HexColor;
+        customClass?: string;
     } & (
             { placeholder: true; }
             | { customAction: () => void; }
@@ -178,6 +182,13 @@
                     color: '#8c8ce0',
                     component: 'info',
                 },
+                {
+                    name: 'discord',
+                    icon: 'discord',
+                    color: '#5865f2', //discord color
+                    customClass: 'discord-tab',
+                    customAction: this.gotoDiscord,
+                },
             ];
         }
 
@@ -191,6 +202,10 @@
         private activeTab = this.tabItems[0];
 
 
+        private gotoDiscord() {
+            const discordLink = 'https://discord.gg/MZE9FrCwRj';
+            window.open(discordLink, '_blank', 'noopener,noreferrer');
+        }
 
         private excelExport() {
             ExcelExport.export();
@@ -210,3 +225,12 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .discord-tab:hover {
+        background: linear-gradient(
+            180deg,
+            rgba(var(--color), 0.67),
+            rgb(var(--color))
+        ) !important;
+    }
+</style>

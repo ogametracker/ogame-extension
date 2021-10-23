@@ -25,7 +25,7 @@
 }
 
 $mdi-icons: ("cog", "microsoft-excel", "plus", "minus", "close", "refresh", "tools", "information", "alert");
-$custom-icons: ("expo", "attack", "debris-field", "economy", "planet-moon");
+$custom-icons: ("expo", "attack", "debris-field", "economy", "planet-moon", "discord");
 
 
 @each $icon in $mdi-icons {
@@ -41,5 +41,6 @@ $custom-icons: ("expo", "attack", "debris-field", "economy", "planet-moon");
     }
     .icon-#{$icon}::before {
         background-image: url(#{$base-url}/icons/#{$icon}.svg);
+        background-position: center;
     }
 }
