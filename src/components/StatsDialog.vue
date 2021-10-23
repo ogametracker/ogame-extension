@@ -68,7 +68,7 @@
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
     import EmpireOverview from '@/components/empire/EmpireOverview.vue';
     import Info from '@/components/info/Info.vue';
-    import Tools from '@/components/info/Tools.vue';
+    import Tools from '@/components/tools/Tools.vue';
 
     type TabItem = {
         label?: string;
