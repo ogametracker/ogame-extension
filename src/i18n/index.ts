@@ -8,8 +8,8 @@ const ogameI18n = new I18n<I18nOgame, string>().init({
     dateTimeFormats: {
         // this is the only date format that ogame uses
         de: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
+            date: 'dd.MM.yyyy',
+            datetime: 'dd.MM.yyyy HH:mm:ss',
         },
     },
     fallbackLocale: null as any,
@@ -21,12 +21,12 @@ const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>().init
     dateTimeFormats: {
         //always fallback to de because it will use the current locale anyways
         de: {
-            short: {
+            date: {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
             },
-            long: {
+            datetime: {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',

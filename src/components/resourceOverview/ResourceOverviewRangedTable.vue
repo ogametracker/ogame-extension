@@ -146,7 +146,7 @@
             const battlesInRange = rangeDays.flatMap(day => battlesByDay[day.getTime()] ?? []);
             const debrisInRange = rangeDays.flatMap(day => debrisByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstDate, "short")}`;
+            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstDate, "date")}`;
             const itemValues = this.items.map(item => item.getValue(exposInRange, battlesInRange, debrisInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

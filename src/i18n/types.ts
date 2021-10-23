@@ -4,7 +4,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import LanguageKey, { PartialLanguageKey } from "./languageKey";
 
-type I18nDateTimeFormatKey = 'short' | 'long';
+type I18nDateTimeFormatKey = 'date' | 'datetime';
 
 type I18nLanguageRootMap<TRoot> = Partial<Record<LanguageKey, TRoot>>;
 type I18nDateTimeFormats<T> = Record<I18nDateTimeFormatKey, T>;

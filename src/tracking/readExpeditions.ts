@@ -181,7 +181,7 @@ function addExpoResultText(expo: ExpoEvent, element: Element) {
 
 function getExpoEvent(id: number, message: string, messageContainer: Element): ExpoEvent {
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
-    const date = parse(dateText, ogameI18n.dateTimeFormats.long, new Date()).getTime();
+    const date = parse(dateText, ogameI18n.dateTimeFormats.datetime, new Date()).getTime();
 
     const expoInfo = getDarkMatterExpo(id, date, message)
         ?? getResourceExpo(id, date, message)

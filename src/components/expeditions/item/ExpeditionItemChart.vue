@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="label">
-                    <span>{{ $i18n.$d(itemDay.day, "short") }}</span>
+                    <span>{{ $i18n.$d(itemDay.day, "date") }}</span>
                 </div>
             </div>
         </div>

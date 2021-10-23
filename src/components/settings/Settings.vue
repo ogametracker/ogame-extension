@@ -2,369 +2,43 @@
     <div class="settings">
         <tab-view :items="items" vertical>
             <template #date-ranges>
-                <h2>
-                    {{ $i18n.$t.settings.titleDateRanges }}
-                    <button
-                        class="reset-button"
-                        @click="resetDateRanges()"
-                        :title="$i18n.$t.settings.reset"
-                    >
-                        <icon name="refresh" />
-                    </button>
-                </h2>
-                <span style="margin-bottom: 8px; display: inline-block">
-                    {{ $i18n.$t.settings.hintDateRanges }}
-                </span>
-                <table class="settings-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 30px"></th>
-                            <th style="width: 200px">
-                                {{ $i18n.$t.settings.name }}
-                            </th>
-                            <th style="width: 150px">
-                                {{ $i18n.$t.settings.type }}
-                            </th>
-                            <th style="width: 200px">
-                                {{ $i18n.$t.settings.rangeStarts }}
-                            </th>
-                            <th style="width: 200px">
-                                {{ $i18n.$t.settings.rangeContains }}
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <draggable v-model="settings.tables.ranges" tag="tbody">
-                        <tr
-                            v-for="(range, index) in settings.tables.ranges"
-                            :key="index"
-                        >
-                            <td>
-                                <span
-                                    @click="removeRange(index)"
-                                    class="clickable"
-                                >
-                                    <icon
-                                        v-if="range.type != 'all'"
-                                        name="minus"
-                                    />
-                                </span>
-                            </td>
-                            <td class="name-col">
-                                <input
-                                    v-if="range.type != 'all'"
-                                    v-model="range.label"
-                                />
-                                <span v-else>
-                                    {{ $i18n.$t.since }}
-                                    {{ $i18n.$t.settings.firstDay }}
-                                </span>
-                            </td>
-                            <td class="value-col">
-                                <select
-                                    v-if="range.type != 'all'"
-                                    v-model="range.type"
-                                >
-                                    <option
-                                        v-for="(rangeType, index) in rangeTypes"
-                                        :key="index"
-                                        :value="rangeType"
-                                    >
-                                        {{
-                                            $i18n.$t.settings.rangeType[
-                                                rangeType
-                                            ]
-                                        }}
-                                    </option>
-                                </select>
-
-                                <span v-else>
-                                    {{
-                                        $i18n.$t.settings.rangeType[range.type]
-                                    }}
-                                </span>
-                            </td>
-                            <td class="value-col">
-                                <span v-if="range.type != 'all'">
-                                    {{ $i18n.$t.settings.before }}
-                                    <input
-                                        type="number"
-                                        step="1"
-                                        min="0"
-                                        v-model="range.skip"
-                                    />
-                                    {{
-                                        $i18n.$t.settings[
-                                            `${range.type}sVariant`
-                                        ]
-                                    }}
-                                </span>
-                            </td>
-                            <td class="value-col">
-                                <span v-if="range.type != 'all'">
-                                    <input
-                                        type="number"
-                                        step="1"
-                                        min="1"
-                                        v-model="range.take"
-                                    />
-                                    {{ $i18n.$t.settings[`${range.type}s`] }}
-                                </span>
-                            </td>
-                        </tr>
-                    </draggable>
-
-                    <tfoot>
-                        <tr>
-                            <td>
-                                <span class="clickable" @click="addRange()">
-                                    <icon name="plus" />
-                                </span>
-                            </td>
-                            <td colspan="4" />
-                        </tr>
-                    </tfoot>
-                </table>
+                <date-ranges />
             </template>
 
             <template #chart-colors>
-                <h2>
-                    {{ $i18n.$t.settings.chartColors.title }}
-                    <button
-                        class="reset-button"
-                        @click="resetChartColors()"
-                        :title="$i18n.$t.settings.reset"
-                    >
-                        <icon name="refresh" />
-                    </button>
-                </h2>
-                <div class="color-tables">
-                    <table class="settings-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    {{
-                                        $i18n.$t.settings.chartColors
-                                            .expeditions
-                                    }}
-
-                                    <button
-                                        class="reset-button"
-                                        @click="resetChartColors('overview')"
-                                        :title="$i18n.$t.settings.reset"
-                                    >
-                                        <icon name="refresh" />
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="key in Object.keys(
-                                    settings.charts.colors.overview
-                                )"
-                                :key="key"
-                            >
-                                <td>
-                                    <color-input
-                                        v-model="
-                                            settings.charts.colors.overview[key]
-                                        "
-                                        :label="$i18n.$t.expoTypes[key]"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="settings-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    {{
-                                        $i18n.$t.settings.chartColors.resources
-                                    }}
-
-                                    <button
-                                        class="reset-button"
-                                        @click="resetChartColors('resources')"
-                                        :title="$i18n.$t.settings.reset"
-                                    >
-                                        <icon name="refresh" />
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="key in Object.keys(
-                                    settings.charts.colors.resources
-                                )"
-                                :key="key"
-                            >
-                                <td>
-                                    <color-input
-                                        v-model="
-                                            settings.charts.colors.resources[
-                                                key
-                                            ]
-                                        "
-                                        :label="$i18n.$t.resources[key]"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="settings-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    {{ $i18n.$t.settings.chartColors.ships }}
-
-                                    <button
-                                        class="reset-button"
-                                        @click="
-                                            resetChartColors('overshipsview')
-                                        "
-                                        :title="$i18n.$t.settings.reset"
-                                    >
-                                        <icon name="refresh" />
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="key in Object.keys(
-                                    settings.charts.colors.ships
-                                )"
-                                :key="key"
-                            >
-                                <td>
-                                    <color-input
-                                        v-model="
-                                            settings.charts.colors.ships[key]
-                                        "
-                                        :label="$i18n.$t.ships[key]"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="settings-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    {{ $i18n.$t.settings.chartColors.combats }}
-
-                                    <button
-                                        class="reset-button"
-                                        @click="
-                                            resetChartColors('battleResults')
-                                        "
-                                        :title="$i18n.$t.settings.reset"
-                                    >
-                                        <icon name="refresh" />
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="key in Object.keys(
-                                    settings.charts.colors.battleResults
-                                )"
-                                :key="key"
-                            >
-                                <td>
-                                    <color-input
-                                        v-model="
-                                            settings.charts.colors
-                                                .battleResults[key]
-                                        "
-                                        :label="$i18n.$t.battleResults[key]"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <chart-colors />
             </template>
 
             <template #import-export>
-                <h2 v-text="$i18n.$t.settings.export" />
-                <button v-text="'LOCA: Export data'" />
-
-                <hr />
-                
-                <h2 v-text="$i18n.$t.settings.export" />
-                <input type="file">
-                <button v-text="'LOCA: Import from selected file'" />
+                <import-export />
             </template>
 
             <template #language>
-                <h2>Detected OGame Language</h2>
-                <span v-text="ogameLang" />
-                <span v-if="!ogameI18n.enabled" class="icon-alert" />
-
-                <h2>
-                    Extension Interface Language (where available)
-                    <button
-                        class="reset-button"
-                        @click="resetLanguage()"
-                        :title="$i18n.$t.settings.reset"
-                    >
-                        <icon name="refresh" />
-                    </button>
-                </h2>
-                <select v-model="settings.language">
-                    <option
-                        v-for="lang in languages"
-                        :key="lang"
-                        :value="lang"
-                        v-text="lang"
-                    />
-                </select>
+                <language />
             </template>
         </tab-view>
     </div>
 </template>
 
 <script lang="ts">
-    import { ogameI18n } from '@/i18n';
-    import LanguageKey, { Languages } from '@/i18n/languageKey';
-    import getLanguage from '@/i18n/mapLanguage';
-    import OgameMetaData from '@/models/ogame/OgameMetaData';
-    import { DateRangeType } from '@/models/settings/DateRange';
-    import BattleModule from '@/store/modules/BattleModule';
-    import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
-    import ExpoModule from '@/store/modules/ExpoModule';
     import NotificationModule, { Notification } from '@/store/modules/NotificationModule';
     import SettingsModule from '@/store/modules/SettingsModule';
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import draggable from 'vuedraggable';
     import { TabViewItem } from '../common/TabView.vue';
-    import ColorInput from './ColorInput.vue';
+    import ImportExport from './ImportExport.vue';
+    import Language from './Language.vue';
+    import ChartColors from './ChartColors.vue';
+    import DateRanges from './DateRanges.vue';
 
     @Component({
         components: {
-            draggable,
-            ColorInput,
+            ImportExport,
+            Language,
+            ChartColors,
+            DateRanges,
         },
     })
     export default class Settings extends Vue {
-        private readonly rangeTypes: DateRangeType[] = [
-            'day',
-            'week',
-            'month',
-        ];
-
-        private readonly ogameI18n = ogameI18n;
-        private readonly languages = Languages;
-        private readonly ogameLang = getLanguage(OgameMetaData.locale);
-
         private get settings() {
             return SettingsModule.settings;
         }
@@ -387,19 +61,6 @@
                 title: this.$i18n.$t.settings.language,
             },
         ];
-
-        private addRange() {
-            SettingsModule.settings.tables.ranges.push({
-                type: 'day',
-                skip: 0,
-                take: 1,
-                label: this.$i18n.$t.settings.newRange,
-            });
-        }
-
-        private removeRange(index: number) {
-            SettingsModule.settings.tables.ranges.splice(index, 1);
-        }
 
         @Watch('settings', { deep: true })
         private settingsChanged() {
@@ -432,39 +93,11 @@
 
             }, this.saveDelay);
         }
-
-        private get exportJson() {
-            return JSON.stringify({
-                battles: BattleModule.reports,
-                debridFields: DebrisFieldModule.reports,
-                expeditions: ExpoModule.expos,
-            });
-        }
-
-        private resetDateRanges() {
-            const defaults = SettingsModule.getDefaultSettings().tables.ranges;
-            this.settings.tables.ranges = defaults;
-        }
-
-        private resetChartColors(key?: keyof Settings['settings']['charts']['colors']) {
-            const defaults = SettingsModule.getDefaultSettings().charts.colors;
-
-            if (key == null) {
-                this.settings.charts.colors = defaults;
-            } else {
-                this.settings.charts.colors[key] = defaults[key] as any;
-            }
-        }
-
-        private resetLanguage() {
-            const defaultLang = SettingsModule.getDefaultSettings().language;
-            this.settings.language = defaultLang;
-        }
     }
 </script>
 
 <style lang="scss" scoped>
-    .reset-button {
+    .settings::v-deep .reset-button {
         font-size: 14px;
         background: none;
         display: inline-flex;
@@ -480,18 +113,6 @@
 
         .icon-refresh {
             font-size: 22px;
-        }
-    }
-
-    .color-tables {
-        align-items: flex-start;
-        th {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: center;
-        }
-        .settings-table tbody {
-            display: grid;
         }
     }
 </style>

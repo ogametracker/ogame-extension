@@ -87,7 +87,7 @@ export default async function readDebrisFields() {
 
 function getDebrisFieldReport(id: number, message: string, messageContainer: Element): DebrisFieldReport | null {
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
-    const date = parse(dateText, ogameI18n.dateTimeFormats.long, new Date()).getTime();
+    const date = parse(dateText, ogameI18n.dateTimeFormats.datetime, new Date()).getTime();
 
     const regex = ogameI18n.$t.debrisFieldMessages.regex as RegExp;
     const match = message.match(regex);

@@ -44,6 +44,11 @@ export interface I18nExtensionSettings {
     export: string;
     reset: string;
     language: string;
+    detectedOgameLanguage: string;
+    interfaceLanguage: string;
+    exportData: string;
+    importFromFile: string;
+    overwriteExistingData: string;
 }
 
 const messages: I18nMessageMap<I18nExtensionSettings> = {

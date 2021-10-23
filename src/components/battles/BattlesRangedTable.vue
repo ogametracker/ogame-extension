@@ -119,7 +119,7 @@
             const rangeDays = daysInRange(range) ?? Object.keys(reportsByDay).map(d => new Date(parseInt(d)));
             const reportsInRange = rangeDays.flatMap(day => reportsByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstReportDate, "short")}`;
+            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstReportDate, "date")}`;
             const itemValues = this.items.map(item => item.getValue(reportsInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

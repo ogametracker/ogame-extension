@@ -55,7 +55,7 @@ class OgameMetaData {
         return parseInt(value, 10);
     }
 
-
+    /** {universe-name}-{playerID} */
     public get storageKeyPrefix() {
         return `${this.universeShort}-${this.playerId}`;
     }

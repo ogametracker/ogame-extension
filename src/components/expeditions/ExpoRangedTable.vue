@@ -120,7 +120,7 @@
             const rangeDays = daysInRange(range) ?? Object.keys(exposByDay).map(d => new Date(parseInt(d)));
             const exposInRange = rangeDays.flatMap(day => exposByDay[day.getTime()] ?? []);
 
-            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstExpoDate, "short")}`;
+            const label = range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(firstExpoDate, "date")}`;
             const itemValues = this.items.map(item => item.getValue(exposInRange));
             const total = itemValues.reduce((total, cur) => total + cur, 0);
 

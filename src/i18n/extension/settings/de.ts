@@ -39,4 +39,9 @@ export default {
     export: 'Export',
     reset: 'Zurücksetzen',
     language: 'Sprache',
+    detectedOgameLanguage: 'Erkannte OGame-Sprache',
+    interfaceLanguage: 'OGame Tracker Sprache (sofern verfügbar)',
+    exportData: 'Daten exportieren',
+    importFromFile: 'Daten importieren',
+    overwriteExistingData: 'Bestehende Daten überschreiben',
 };
