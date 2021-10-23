@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue, Watch } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
     import BattlesStats from "./battles/BattlesStats.vue";
     import DebrisFieldStats from "./debrisFields/DebrisFieldStats.vue";
@@ -181,7 +181,15 @@
             ];
         }
 
+        @Watch('tabItems', { deep: true })
+        private tabItemsChanged() {
+            this.activeTab = this.tabItems.find(tab => tab.name == this.activeTab.name)
+                ?? this.tabItems[0];
+        }
+
+
         private activeTab = this.tabItems[0];
+
 
 
         private excelExport() {
