@@ -16,7 +16,7 @@
                             width:
                                 (100 * allDays.length) /
                                     settingsModule.settings.charts.days +
-                                '%',
+                                '%'
                         }"
                     />
                 </div>
@@ -33,7 +33,7 @@
                         chart &&
                         chart.data &&
                         chart.data.datasets &&
-                        chart.data.datasets[index].hidden,
+                        chart.data.datasets[index].hidden
                 }"
                 @click.prevent.stop="toggleDataset(index)"
             >
@@ -56,7 +56,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
-    
+
     import BattleReport from '@/models/battles/BattleReport';
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import BattleModule from '@/store/modules/BattleModule';

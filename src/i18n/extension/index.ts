@@ -45,6 +45,7 @@ export interface PartialI18nExtension extends I18nOgame {
 
     total: string;
     chart: string;
+    resourceUnits: string;
     tables: string;
     overview: string;
     eventSizes: string;
