@@ -927,8 +927,22 @@ import { parseFloatSafe, parseIntSafe } from '@/utils/parseNumbersSafe';
         }
 
         private get planets(): PlanetData[] {
-            return Object.values(this.localPlayerData.planets)
+            const planets = Object.values(this.localPlayerData.planets)
                 .filter(p => !p.isMoon) as PlanetData[];
+                
+            return planets.sort((a, b) => {
+                const gala = a.coordinates.galaxy - b.coordinates.galaxy;
+                if (gala != 0) {
+                    return gala;
+                }
+
+                const system = a.coordinates.system - b.coordinates.system;
+                if (system != 0) {
+                    return system;
+                }
+
+                return a.coordinates.position - b.coordinates.position;
+            });
         }
 
         private async mounted() {
