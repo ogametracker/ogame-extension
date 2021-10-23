@@ -50,10 +50,10 @@
                     max="3"
                     step="0.01"
                     :value="settings.msuConversionRates.crystal"
-                    v-debounce:150ms="
+                    v-debounce:10ms="
                         val => {
                             settings.msuConversionRates.crystal = Math.clamp(
-                                parseFloat(val),
+                                parseFloatSafe(val),
                                 1,
                                 3
                             );
@@ -70,10 +70,10 @@
                     max="5"
                     step="0.01"
                     :value="settings.msuConversionRates.deuterium"
-                    v-debounce:150ms="
+                    v-debounce:10ms="
                         val => {
                             settings.msuConversionRates.deuterium = Math.clamp(
-                                parseFloat(val),
+                                parseFloatSafe(val),
                                 1,
                                 5
                             );
@@ -94,10 +94,10 @@
                         max="260"
                         step="1"
                         :value="options.temperature"
-                        v-debounce:150ms="
+                        v-debounce:10ms="
                             val =>
                                 (options.temperature = Math.clamp(
-                                    parseInt(val, 10),
+                                    parseIntSafe(val, 10),
                                     -130,
                                     260
                                 ))
@@ -118,10 +118,10 @@
                     max="15"
                     step="1"
                     :value="options.position"
-                    v-debounce:150ms="
+                    v-debounce:10ms="
                         val =>
                             (options.position = Math.clamp(
-                                parseInt(val, 10),
+                                parseIntSafe(val, 10),
                                 1,
                                 15
                             ))
@@ -293,10 +293,10 @@
                     max="100"
                     step="1"
                     :value="options.plasmaTechnology"
-                    v-debounce:150ms="
+                    v-debounce:10ms="
                         val =>
                             (options.plasmaTechnology = Math.clamp(
-                                parseInt(val, 10),
+                                parseIntSafe(val, 10),
                                 0,
                                 100
                             ))
@@ -332,10 +332,10 @@
                     class="crawler-count-input"
                     :disabled="options.crawler.maxCrawler"
                     :value="options.crawler.count"
-                    v-debounce:150ms="
+                    v-debounce:10ms="
                         val =>
                             (options.crawler.count = Math.clamp(
-                                parseInt(val, 10),
+                                parseIntSafe(val, 10),
                                 0,
                                 5000
                             ))
@@ -365,10 +365,10 @@
                         max="70"
                         step="1"
                         :value="options.levelMetalMine"
-                        v-debounce:150ms="
+                        v-debounce:10ms="
                             val =>
                                 (options.levelMetalMine = Math.clamp(
-                                    parseInt(val, 10),
+                                    parseIntSafe(val, 10),
                                     0,
                                     70
                                 ))
@@ -382,10 +382,10 @@
                         max="70"
                         step="1"
                         :value="options.levelCrystalMine"
-                        v-debounce:150ms="
+                        v-debounce:10ms="
                             val =>
                                 (options.levelCrystalMine = Math.clamp(
-                                    parseInt(val, 10),
+                                    parseIntSafe(val, 10),
                                     0,
                                     70
                                 ))
@@ -399,10 +399,10 @@
                         max="70"
                         step="1"
                         :value="options.levelDeuteriumSynthesizer"
-                        v-debounce:150ms="
+                        v-debounce:10ms="
                             val =>
                                 (options.levelDeuteriumSynthesizer = Math.clamp(
-                                    parseInt(val, 10),
+                                    parseIntSafe(val, 10),
                                     0,
                                     70
                                 ))
@@ -578,6 +578,7 @@
     import _throw from '@/utils/throw';
     import { ItemHash } from '@/models/items';
     import PlanetType from '@/models/PlanetType';
+import { parseFloatSafe, parseIntSafe } from '@/utils/parseNumbersSafe';
 
     type ProductionBuildingType = Building.metalMine | Building.crystalMine | Building.deuteriumSynthesizer;
 
@@ -598,6 +599,10 @@
     @Component({})
     export default class EmpireAmortisation extends Vue {
         private readonly Items = ItemHash;
+
+        private readonly parseIntSafe = parseIntSafe;
+        private readonly parseFloatSafe = parseFloatSafe;
+
 
         private selectedPlanet = OgameMetaData.planetId;
         private localPlayerData: LocalPlayerData = null!;

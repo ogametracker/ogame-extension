@@ -43,6 +43,7 @@ export interface I18nExtensionSettings {
     import: string;
     export: string;
     reset: string;
+    language: string;
 }
 
 const messages: I18nMessageMap<I18nExtensionSettings> = {

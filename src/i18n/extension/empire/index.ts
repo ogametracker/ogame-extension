@@ -37,6 +37,13 @@ export interface I18nExtensionEmpireProductionOverview {
         resources: string;
         mines: string;
     };
+    planet: string;
+    productionInfoMessage: string;
+    perHour: string;
+    totalPerHour: string;
+    totalPerDay: string;
+    totalPerWeek: string;
+    titleCalculatorRessourcePackages: string;
 }
 
 export interface I18nExtensionEmpire {

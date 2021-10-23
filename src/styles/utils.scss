@@ -1,0 +1,20 @@
+.average-icon {
+    margin: 0 4px;
+    display: inline-block;
+    height: 0.7em;
+    width: 0.7em;
+    border: 1px solid currentColor;
+    border-radius: 1em;
+    position: relative;
+
+    &::before {
+        content: '';
+        width: 1px;
+        background: currentColor;
+        height: 180%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(40deg);
+    }
+}

@@ -24,11 +24,10 @@
 
 <script lang="ts">
     import { extensionI18n, ogameI18n } from '@/i18n';
-    import LanguageKey from '@/i18n/languageKey';
     import getLanguage from '@/i18n/mapLanguage';
     import OgameMetaData from '@/models/ogame/OgameMetaData';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-import App from './App.vue';
+    import { Component, Vue } from 'vue-property-decorator';
+    import App from './App.vue';
 
     @Component({})
     export default class MenuItem extends Vue {
@@ -44,8 +43,6 @@ import App from './App.vue';
         private async created() {
             const ogameLang = getLanguage(null);
             this.ogameLangSupported = ogameLang != null;
-
-            console.log(extensionI18n);
         }
     }
 </script>

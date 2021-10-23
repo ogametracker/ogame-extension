@@ -1,6 +1,6 @@
 export default {
     amortisation: {
-        menuItem: 'Amortisationsrechner',
+        menuItem: 'Amortisation',
         selectedPlanet: 'Planet für Voreinstellungen',
         msuRates: 'MSE-Kurse',
         crawlerOverload: 'Crawler-Überladung',
@@ -27,10 +27,17 @@ export default {
         },
     },
     productionOverview: {
-        menuItem: 'Produktionsübersicht',
+        menuItem: 'Produktion',
         subMenu: {
-            resources: 'Produktion',
-            mines: 'Minenübersicht',
+            resources: 'Rohstoffe',
+            mines: 'Minen',
         },
+        planet: 'Planet',
+        productionInfoMessage: 'Die angezeigten Werte beziehen sich auf einen Produktionsfaktor von 100% und berücksichtigen alle aktiven Boni. Für Kollektoren ist Crawler-Überladung ebenfalls berücksichtigt.',
+        perHour: 'pro Stunde',
+        totalPerHour: 'Gesamt pro Stunde',
+        totalPerDay: 'Gesamt pro Tag',
+        totalPerWeek: 'Gesamt pro Woche',
+        titleCalculatorRessourcePackages: 'Rechner für Ressourcenpakete (nutzt errechnete Daten der Tabelle darüber)',
     },
 };

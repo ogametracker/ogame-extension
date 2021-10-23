@@ -1,9 +1,19 @@
 <template>
     <div v-if="player != null">
         <table>
+            <colgroup>
+                <col width="auto" />
+                <col width="100px" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+            </colgroup>
             <thead>
                 <tr>
-                    <th>LOCA: Planet</th>
+                    <th v-text="$i18n.$t.empire.productionOverview.planet" />
                     <th />
                     <th>
                         <o-building type="metal-mine" :size="100" />
@@ -27,7 +37,7 @@
             </thead>
             <tbody>
                 <tr v-for="planet in planets" :key="planet.id">
-                    <td>{{ planet.name }}</td>
+                    <td v-text="planet.name" />
                     <td>
                         [{{ planet.coordinates.galaxy }}:{{
                             planet.coordinates.system
@@ -36,17 +46,11 @@
                     <td v-for="building in productionBuildings" :key="building">
                         {{ planet.buildings.production[building] }}
                     </td>
-                    <td>
-                        {{ $i18n.$n(getActiveCrawlers(planet)) }}
-                    </td>
+                    <td v-text="$i18n.$n(getActiveCrawlers(planet))" />
                 </tr>
                 <tr class="total-row">
                     <th>
-                        <span
-                            style="transform: scale(1.5); transform-origin: center; display: inline-block;"
-                        >
-                            ⌀
-                        </span>
+                        <span class="average-icon" />
                     </th>
                     <td />
                     <td v-for="building in productionBuildings" :key="building">
@@ -72,18 +76,10 @@
 </template>
 
 <script lang="ts">
-    
     import Building from '@/models/Building';
-    import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
-    import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
-    import { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
-    import OgameMetaData from '@/models/ogame/OgameMetaData';
-    import Resource from '@/models/Resource';
     import Ship from '@/models/Ship';
     import LocalPlayerModule, { LocalPlayerData, PlanetData, PlayerClass } from '@/store/modules/LocalPlayerModule';
     import { Component, Ref, Vue } from 'vue-property-decorator';
-    import Chart from 'chart.js';
     import SettingsModule from '@/store/modules/SettingsModule';
     import _throw from '@/utils/throw';
 

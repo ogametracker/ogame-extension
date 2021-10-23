@@ -68,6 +68,7 @@
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
     import EmpireOverview from '@/components/empire/EmpireOverview.vue';
     import Info from '@/components/info/Info.vue';
+    import Tools from '@/components/info/Tools.vue';
 
     type TabItem = {
         label?: string;
@@ -92,6 +93,7 @@
             ResourceOverview,
             EmpireOverview,
             Info,
+            Tools,
         },
     })
     export default class StatsDialog extends Vue {
@@ -143,7 +145,7 @@
                     icon: 'tools',
                     color: '#008c85',
                     label: i18n.$t.headers.tools,
-                    component: null!,
+                    component: 'tools',
                     iconStyle: {
                         fontSize: '24px',
                     },

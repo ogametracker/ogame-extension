@@ -38,4 +38,5 @@ export default {
     import: 'Import',
     export: 'Export',
     reset: 'Reset',
+    language: 'Language',
 };

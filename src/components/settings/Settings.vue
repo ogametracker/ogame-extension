@@ -294,18 +294,14 @@
             </template>
 
             <template #import-export>
-                <!-- <h2>{{ $i18n.$t.settings.export }}</h2>
-                <textarea
-                    readonly
-                    :value="exportJson"
-                    style="width: 60%; height: 300px"
-                    @focus="$event.target.select()"
-                />
+                <h2 v-text="$i18n.$t.settings.export" />
+                <button v-text="'LOCA: Export data'" />
 
                 <hr />
-
-                <h2>{{ $i18n.$t.settings.import }}</h2> -->
-                <h1>Coming Soon&trade;</h1>
+                
+                <h2 v-text="$i18n.$t.settings.export" />
+                <input type="file">
+                <button v-text="'LOCA: Import from selected file'" />
             </template>
 
             <template #language>
@@ -388,7 +384,7 @@
             },
             {
                 name: 'language',
-                title: 'LOCA: Language',
+                title: this.$i18n.$t.settings.language,
             },
         ];
 
