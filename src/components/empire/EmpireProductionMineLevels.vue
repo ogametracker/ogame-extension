@@ -10,6 +10,7 @@
                 <col width="auto" />
                 <col width="auto" />
                 <col width="auto" />
+                <col width="40px" />
             </colgroup>
             <thead>
                 <tr>
@@ -30,7 +31,7 @@
                     <th>
                         <o-building type="fusion-reactor" :size="100" />
                     </th>
-                    <th>
+                    <th colspan="2">
                         <o-ship type="crawler" :size="100" />
                     </th>
                 </tr>
@@ -47,6 +48,7 @@
                         {{ planet.buildings.production[building] }}
                     </td>
                     <td v-text="$i18n.$n(getActiveCrawlers(planet))" />
+                    <td v-text="$i18n.$n(getCrawlers(planet))" />
                 </tr>
                 <tr class="total-row">
                     <th>
@@ -64,6 +66,14 @@
                     <td>
                         {{
                             $i18n.$n(activeCrawlerAverage, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })
+                        }}
+                    </td>
+                    <td>
+                        {{
+                            $i18n.$n(crawlerAverage, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -113,8 +123,12 @@
             ) * crawlerFactor);
         }
 
+        private getCrawlers(planet: PlanetData): number {
+            return planet.ships[Ship.crawler];
+        }
+
         private getActiveCrawlers(planet: PlanetData): number {
-            return Math.min(planet.ships[Ship.crawler], this.getMaxCrawlers(planet));
+            return Math.min(this.getCrawlers(planet), this.getMaxCrawlers(planet));
         }
 
         private get buildingAverage(): Record<ProductionBuildings, number> {
@@ -128,6 +142,13 @@
         }
 
         private get activeCrawlerAverage(): number {
+            const planets = this.planets;
+
+            const result = planets.reduce((acc, planet) => acc + this.getActiveCrawlers(planet), 0);
+            return result / planets.length;
+        }
+
+        private get crawlerAverage(): number {
             const planets = this.planets;
 
             const result = planets.reduce((acc, planet) => acc + planet.ships[Ship.crawler], 0);
