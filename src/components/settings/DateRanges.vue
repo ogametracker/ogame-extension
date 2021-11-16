@@ -77,7 +77,7 @@
                                 min="0"
                                 v-model="range.skip"
                             />
-                            {{ $i18n.$t.settings[`${range.type}sVariant`] }}
+                            {{ $i18n.$t.settings.rangeTextVariants[range.type] }}
                         </span>
                     </td>
                     <td class="value-col">
@@ -88,7 +88,7 @@
                                 min="1"
                                 v-model="range.take"
                             />
-                            {{ $i18n.$t.settings[`${range.type}s`] }}
+                            {{ $i18n.$t.settings.rangeTexts[range.type] }}
                         </span>
                     </td>
                     <td>
@@ -141,6 +141,7 @@
             'day',
             'week',
             'month',
+            'year',
         ];
 
         private get settings() {

@@ -1,6 +1,6 @@
 import { defaultLocale } from "@/i18n/defaults";
 import DateRange from "@/models/settings/DateRange";
-import { startOfDay, sub, add, startOfWeek, startOfMonth } from 'date-fns';
+import { startOfDay, sub, add, startOfWeek, startOfMonth, startOfYear } from 'date-fns';
 
 export default function daysInRange(range: DateRange): Date[] | null {
     const today = startOfDay(new Date());
@@ -21,6 +21,11 @@ export default function daysInRange(range: DateRange): Date[] | null {
         case 'month':
             start = sub(startOfMonth(today), { months: range.skip });
             end = add(start, { months: range.take });
+            break;
+
+        case 'year':
+            start = sub(startOfYear(today), { years: range.skip });
+            end = add(start, { years: range.take });
             break;
 
         case 'all': return null;

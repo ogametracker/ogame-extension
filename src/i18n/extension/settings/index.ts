@@ -2,6 +2,7 @@ import { I18nMessageMap } from '@/i18n/types';
 import LanguageKey from '@/i18n/languageKey';
 import de from './de';
 import en from './en';
+import { DateRangeType, FullDateRangeType } from '@/models/settings/DateRange';
 
 export interface I18nExtensionSettings {
     name: string;
@@ -11,18 +12,9 @@ export interface I18nExtensionSettings {
     newRange: string;
     firstDay: string;
     before: string;
-    days: string;
-    daysVariant: string;
-    weeks: string;
-    weeksVariant: string;
-    months: string;
-    monthsVariant: string;
-    rangeType: {
-        day: string;
-        week: string;
-        month: string;
-        all: string;
-    };
+    rangeTexts: Record<DateRangeType, string>;
+    rangeTextVariants: Record<DateRangeType, string>;
+    rangeType: Record<FullDateRangeType, string>;
     hintDateRanges: string;
     titleDateRanges: string;
     chartColors: {
