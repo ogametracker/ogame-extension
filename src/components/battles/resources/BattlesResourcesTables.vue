@@ -7,8 +7,17 @@
             fade-zeros
         />
 
+        <br />
+
         <h2>LOCA: Nach Galaxie</h2>
-        TODO: Radiobuttons für Date Ranges
+        <select v-model="rangeIndex" @change="setRange($event)">
+            <option 
+                v-for="(range, i) in ranges"
+                :key="i"
+                :value="i"
+                v-text="getLabel(range)"
+            />
+        </select>
         <table>
             <thead>
                 <tr>
@@ -41,6 +50,7 @@
     import DateRange from "@/models/settings/DateRange";
     import BattleModule from "@/store/modules/BattleModule";
     import isInRange from "@/utils/isInRange";
+    import ServerDataModule from "@/store/modules/ServerDataModule";
     import SettingsModule from "@/store/modules/SettingsModule";
 
     type AmountByGalaxy = Record<number, number>;
@@ -51,6 +61,18 @@
         },
     })
     export default class BattlesResourcesTables extends Vue {
+        private rangeIndex = 0;
+        private range: DateRange = null!;
+
+        private mounted() {
+            this.range = this.ranges[0];
+        }
+
+        private setRange(index: number) {
+            this.rangeIndex = index;
+            this.range = this.ranges[index];
+        }
+
         private get itemsByResource(): BattlesRangedTableItem[] {
             return this.resources.map(resource => {
                 return {
@@ -60,27 +82,25 @@
             });
         }
 
-        private get range(): DateRange {
-            return { type: 'all' };
-            //return SettingsModule.settings.tables.ranges[0];
+        private get ranges() {
+            return SettingsModule.settings.tables.ranges;
         }
 
-        private galaxyCount = 0;
+        private getLabel(range: DateRange) {
+            return range.label ?? `${this.$i18n.$t.since} ${this.$i18n.$d(this.firstReportDate, "date")}`;
+        }
+
+        private get firstReportDate(): number {
+            return BattleModule.firstReport?.date ?? Date.now();
+        }
+
+        private get galaxyCount() {
+            return ServerDataModule.serverData.galaxies;
+        }
 
         private get galaxies() {
             return Array.from({ length: this.galaxyCount })
                 .map((_, i) => i + 1);
-        }
-
-        private async mounted() {
-            const response = await fetch('/api/serverData.xml');
-            const xml = await response.text();
-            const galaxyCountMatch = xml.match(/<galaxies>(?<count>\d+)<\/galaxies>/);
-            if (galaxyCountMatch == null) {
-                throw new Error('failed to get galaxy count');
-            }
-
-            this.galaxyCount = parseInt(galaxyCountMatch.groups!.count, 10);
         }
 
         private readonly resources: Resource[] = [Resource.metal, Resource.crystal, Resource.deuterium];
