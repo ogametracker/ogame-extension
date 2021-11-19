@@ -63,7 +63,7 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters): Pr
             }
 
             case 'alliance': {
-                trackAllianceClass(data);
+                await trackAllianceClass(data);
                 break;
             }
 
@@ -73,7 +73,7 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters): Pr
             }
         }
     } else if (queryParams.has('page', 'resourceSettings')) {
-        trackProductionPercentages(data, currentPlanetId);
+        await trackProductionPercentages(data, currentPlanetId);
     }
 
     verifyNumbers(data);
@@ -594,23 +594,33 @@ function trackDefenses(data: LocalPlayerData, planetId: number) {
 }
 
 
-function trackAllianceClass(data: LocalPlayerData) {
-    const allianceClassElem = document.querySelector('.allianceclass') ?? _throw('no alliance class found');
+async function trackAllianceClass(data: LocalPlayerData) {
+    await new Promise<void>(resolve => {
+        const interval = setInterval(() => {
+            const allianceClassElem = document.querySelector('.allianceclass');
+            if(allianceClassElem == null) {
+                return;
+            }
 
-    let allianceClass = AllianceClass.none;
-    if (allianceClassElem.classList.contains('trader')) {
-        allianceClass = AllianceClass.trader;
-    } else if (allianceClassElem.classList.contains('explorer')) {
-        allianceClass = AllianceClass.researcher;
-    } else if (allianceClassElem.classList.contains('warrior')) {
-        allianceClass = AllianceClass.warrior;
-    }
+            let allianceClass = AllianceClass.none;
+            if (allianceClassElem.classList.contains('trader')) {
+                allianceClass = AllianceClass.trader;
+            } else if (allianceClassElem.classList.contains('explorer')) {
+                allianceClass = AllianceClass.researcher;
+            } else if (allianceClassElem.classList.contains('warrior')) {
+                allianceClass = AllianceClass.warrior;
+            }
 
-    data.allianceClass = allianceClass;
+            data.allianceClass = allianceClass;
+
+            clearInterval(interval);
+            resolve();
+        }, 250);
+    });
 }
 
-function trackProductionPercentages(data: LocalPlayerData, planetId: number) {
-    trackAllianceClass(data);
+async function trackProductionPercentages(data: LocalPlayerData, planetId: number) {
+    await trackAllianceClass(data);
 
     const planet = data.planets[planetId];
     if (planet.isMoon) {
