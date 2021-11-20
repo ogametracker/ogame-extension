@@ -33,5 +33,7 @@ export default {
         lostShips: 'Verlorene Schiffe',
         againstPlayers: 'gegen Spieler',
         onExpeditions: 'auf Expeditionen',
+        galaxy: 'Galaxie',
+        perGalaxy: 'Pro Galaxie',
     },
 };

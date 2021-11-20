@@ -135,8 +135,3 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-    .faded {
-        opacity: 0.1;
-    }
-</style>

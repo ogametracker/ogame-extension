@@ -33,5 +33,7 @@ export default {
         lostShips: 'Lost Ships',
         againstPlayers: 'against Players',
         onExpeditions: 'on Expeditions',
+        galaxy: 'Galaxy',
+        perGalaxy: 'Per Galaxy',
     },
 };

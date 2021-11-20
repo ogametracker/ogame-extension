@@ -35,6 +35,8 @@ interface I18nExtensionCombatsMenuItems {
     lostShips: string;
     againstPlayers: string;
     onExpeditions: string;
+    galaxy: string;
+    perGalaxy: string;
 }
 
 export interface PartialI18nExtension extends I18nOgame {

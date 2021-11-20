@@ -9,8 +9,8 @@
 
         <br />
 
-        <h2>LOCA: Nach Galaxie</h2>
-        <select v-model="rangeIndex" @change="setRange($event)">
+        <h2 v-text="$i18n.$t.combats.perGalaxy" />
+        <select v-model="rangeIndex" @change="setRange()">
             <option 
                 v-for="(range, i) in ranges"
                 :key="i"
@@ -23,7 +23,7 @@
                 <tr>
                     <th></th>
                     <th v-for="galaxy in galaxies" :key="galaxy">
-                        LOCA: Galaxie {{ galaxy }}
+                        {{ $i18n.$t.combats.galaxy }} {{ galaxy }}
                     </th>
                 </tr>
             </thead>
@@ -34,7 +34,18 @@
                         v-for="galaxy in galaxies"
                         :key="galaxy"
                         v-text="
-                            $i18n.$n(getItemsByGalaxy(range)[resource][galaxy])
+                            $i18n.$n(itemsByGalaxy[resource][galaxy])
+                        "
+                        :class="{ faded: itemsByGalaxy[resource][galaxy] == 0 }"
+                    />
+                </tr>
+                <tr class="total-row">
+                    <td v-text="$i18n.$t.total" />
+                    <th
+                        v-for="galaxy in galaxies"
+                        :key="galaxy"
+                        v-text="
+                            $i18n.$n(getTotal(galaxy))
                         "
                     />
                 </tr>
@@ -62,15 +73,19 @@
     })
     export default class BattlesResourcesTables extends Vue {
         private rangeIndex = 0;
-        private range: DateRange = null!;
+        private selectedRange: DateRange = null!;
 
-        private mounted() {
-            this.range = this.ranges[0];
+        private created() {
+            this.selectedRange = this.ranges[0];
         }
 
-        private setRange(index: number) {
-            this.rangeIndex = index;
-            this.range = this.ranges[index];
+        private setRange() {
+            this.selectedRange = this.ranges[this.rangeIndex];
+        }
+
+        private getTotal(galaxy: number) {
+            const items = this.itemsByGalaxy;
+            return this.resources.reduce((acc, cur) => acc + items[cur][galaxy], 0);
         }
 
         private get itemsByResource(): BattlesRangedTableItem[] {
@@ -105,7 +120,7 @@
 
         private readonly resources: Resource[] = [Resource.metal, Resource.crystal, Resource.deuterium];
 
-        private getItemsByGalaxy(range: DateRange) {
+        private get itemsByGalaxy() {
             const seed = {} as Record<Resource, AmountByGalaxy>;
             this.resources.forEach(resource => {
                 seed[resource] = {};
@@ -113,7 +128,7 @@
                 this.galaxies.forEach(galaxy => seed[resource][galaxy] = 0);
             });
 
-            const reports = BattleModule.reports.filter(report => isInRange(report.date, range));
+            const reports = BattleModule.reports.filter(report => isInRange(report.date, this.selectedRange));
             const reportsByGalaxy = reports.reduce((acc, report) => {
                 const galaxy = report.coordinates.galaxy;
                 this.resources.forEach(resource => {
