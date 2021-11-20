@@ -18,7 +18,6 @@
     import BattlesOverview from "./overview/BattlesOverview.vue";
     import BattlesResources from "./resources/BattlesResources.vue";
     import BattlesFleetLost from "./fleet/BattlesFleetLost.vue";
-    import i18n from "@/i18n";
 
 
     @Component({
@@ -32,15 +31,15 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: i18n.messages.extension.overview,
+                title: this.$i18n.$t.overview,
             },
             {
                 name: 'resources',
-                title: i18n.messages.extension.headers.resourcesOverview,
+                title: this.$i18n.$t.headers.resourcesOverview,
             },
             {
                 name: 'fleet',
-                title: i18n.messages.extension.combats.lostShips,
+                title: this.$i18n.$t.combats.lostShips,
             },
         ];
     }

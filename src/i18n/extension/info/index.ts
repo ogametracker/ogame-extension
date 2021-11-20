@@ -1,3 +1,4 @@
+import { I18nMessageMap } from '@/i18n/types';
 import LanguageKey from '@/i18n/languageKey';
 import de from './de';
 import en from './en';
@@ -9,7 +10,7 @@ export interface I18nExtensionInfo {
     trackedDebrisFieldReports: string;
 }
 
-const messages: Record<LanguageKey, I18nExtensionInfo> = {
+const messages: I18nMessageMap<I18nExtensionInfo> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
 };

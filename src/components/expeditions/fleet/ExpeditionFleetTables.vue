@@ -1,9 +1,12 @@
 <template>
     <div>
-        <expo-ranged-table :items="items" show-total />
+        <expo-ranged-table :items="items" show-total fade-zeros />
 
-        <h2>{{ $i18n.messages.extension.eventSizes }}</h2>
+        <h2 v-text="$i18n.$t.eventSizes" />
         <expo-size-distribution-table :type="expoType" />
+
+        <h2 v-text="$i18n.$t.resourceUnits" />
+        <expo-ranged-table :items="itemsUnits" show-total fade-zeros />
     </div>
 </template>
  
@@ -13,9 +16,10 @@
     import ExpoSizeDistributionTable from '../ExpoSizeDistributionTable.vue';
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
     import { ExpoEventFleet, ExpoFindableShips } from "@/models/expeditions/ExpoEvent";
-    import i18n from "@/i18n";
     import getNumericEnumValues from "@/utils/getNumericEnumValues";
     import Ship from "@/models/Ship";
+    import Resource from "@/models/Resource";
+    import ShipDictionary from '@/models/ogame/buildables/ShipDictionary';
 
     @Component({
         components: {
@@ -30,11 +34,23 @@
             return getNumericEnumValues<Ship>(ExpoFindableShips)
                 .map(ship => {
                     return {
-                        label: i18n.messages.ogame.ships[ship],
+                        label: this.$i18n.$t.ships[ship],
                         getValue: (expos) => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                             .reduce((acc, cur) => acc + (cur.fleet[ship] ?? 0), 0)
                     };
                 });
+        }
+
+        private get itemsUnits(): ExpoRangeTableItem[] {
+            return Object.values(Resource)
+                .map(resource => ({
+                    label: this.$i18n.$t.resources[resource],
+                    getValue: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
+                        .reduce((acc, cur) => {
+                            return acc + (Object.keys(cur.fleet) as any as Ship[])
+                                .reduce((total, ship) => total + ShipDictionary[ship].cost[resource], 0);
+                        }, 0)
+                }));
         }
     }
 </script>

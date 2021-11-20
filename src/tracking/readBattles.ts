@@ -1,4 +1,5 @@
-import i18n from "@/i18n";
+
+import { extensionI18n, ogameI18n } from "@/i18n";
 import BattleReport from "@/models/battles/BattleReport";
 import BattleResult from "@/models/battles/BattleResult";
 import OgameBattleReport from "@/models/battles/OgameBattleReport";
@@ -75,8 +76,8 @@ export default async function readBattles() {
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: i18n.messages.extension.notifications.combats.success.title,
-            text: i18n.messages.extension.notifications.combats.success.text(newMessageCount),
+            title: extensionI18n.$t.notifications.combats.success.title,
+            text: extensionI18n.$t.notifications.combats.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -86,8 +87,8 @@ export default async function readBattles() {
     if (newErrorCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: i18n.messages.extension.notifications.combats.error.title,
-            text: i18n.messages.extension.notifications.combats.error.text(newErrorCount),
+            title: extensionI18n.$t.notifications.combats.error.title,
+            text: extensionI18n.$t.notifications.combats.error.text(newErrorCount),
             timeout: 5000,
         });
     }
@@ -120,7 +121,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
 
 
     const expeditionAttackType = ogameBattleReport.isExpedition
-        ? ogameBattleReport.attacker[0].ownerName == i18n.messages.ogame.factions.pirates
+        ? ogameBattleReport.attacker[0].ownerName == ogameI18n.$t.factions.pirates
             ? 'pirates'
             : 'aliens'
         : null;

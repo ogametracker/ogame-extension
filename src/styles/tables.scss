@@ -43,6 +43,10 @@ table {
         border-top: 3px double rgba(var(--color), $color-strength-header);
         font-weight: bold;
         background: rgba(var(--color), $color-strength-total) !important;
+
+        + tr.total-row {
+            border-top: none;
+        }
     }
 }
 
@@ -108,5 +112,9 @@ table {
         border-top-style: double;
         font-weight: bold;
         background: rgba(var(--color), $color-strength-total) !important;
+    }
+
+    .grid-table-row.total-row + .grid-table-row.total-row .grid-table-cell {
+        border-top: none;
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <tab-view vertical :items="items" overflow>
         <template #resources>
-            resource production overview
+            <empire-production-resources />
         </template>
         <template #mines>
             <empire-production-mine-levels />
@@ -10,14 +10,16 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    
+    import { Component, Vue } from 'vue-property-decorator';
     import { TabViewItem } from '../common/TabView.vue';
     import EmpireProductionMineLevels from './EmpireProductionMineLevels.vue';
+    import EmpireProductionResources from './EmpireProductionResources.vue';
 
     @Component({
         components: {
             EmpireProductionMineLevels,
+            EmpireProductionResources,
         }
     })
     export default class EmpireProduction extends Vue {
@@ -26,11 +28,11 @@
             return [
                 {
                     name: 'resources',
-                    title: i18n.messages.extension.empire.productionOverview.subMenu.resources,
+                    title: this.$i18n.$t.empire.productionOverview.subMenu.resources,
                 },
                 {
                     name: 'mines',
-                    title: i18n.messages.extension.empire.productionOverview.subMenu.mines,
+                    title: this.$i18n.$t.empire.productionOverview.subMenu.mines,
                 },
             ];
         }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <expo-ranged-table :items="items" show-total />
+        <expo-ranged-table :items="items" show-total fade-zeros />
     </div>
 </template>
  
@@ -8,7 +8,7 @@
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
     import ExpoRangedTable, { ExpoRangeTableItem } from '@/components/expeditions/ExpoRangedTable.vue';
-import i18n from "@/i18n";
+
 
     @Component({
         components: {
@@ -18,7 +18,7 @@ import i18n from "@/i18n";
     export default class ExpeditionOverviewTables extends Vue {
         private get items(): ExpoRangeTableItem[] {
             return Object.values(ExpoType).map(expoType => ({
-                label: i18n.messages.ogame.expoTypes[expoType],
+                label: this.$i18n.$t.expoTypes[expoType],
                 getValue: (expos) => expos.filter(expo => expo.type == expoType).length
             }));
         }

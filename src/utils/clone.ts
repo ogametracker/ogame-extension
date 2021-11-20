@@ -1,4 +1,4 @@
 //eslint-disable-next-line
-export default function clone(obj: any): any {
+export default function clone<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }

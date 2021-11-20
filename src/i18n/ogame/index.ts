@@ -7,10 +7,10 @@ import ships, { I18nOgameShips } from './ships';
 import premium, { I18nOgamePremium } from './premium';
 import items, { I18nOgameItems } from './items';
 import factions, { I18nOgameFactions } from './factions';
-import battleResults, { I18nOgameBattleResults } from './battleResults';
 import LanguageKey from '../languageKey';
 import buildings, { I18nOgameBuildings } from './buildings';
 import research, { I18nOgameResearch } from './research';
+import { I18nFullMessageMap } from '../types';
 
 export interface I18nOgame {
     factions: I18nOgameFactions;
@@ -22,14 +22,13 @@ export interface I18nOgame {
     premium: I18nOgamePremium;
     items: I18nOgameItems;
     debrisFieldMessages: I18nOgameDebrisFieldMessages;
-    battleResults: I18nOgameBattleResults;
     buildings: I18nOgameBuildings;
     research: I18nOgameResearch;
 }
 
-const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
+const messages: I18nFullMessageMap<I18nOgame> = Object.values(LanguageKey)
     .map(lang => {
-        const msg: Record<LanguageKey, I18nOgame> = {
+        const msg: I18nFullMessageMap<I18nOgame> = {
             [lang]: {
                 expoMessages: expoMessages[lang],
                 debrisFieldMessages: debrisFieldMessages[lang],
@@ -40,15 +39,14 @@ const messages: Record<LanguageKey, I18nOgame> = Object.values(LanguageKey)
                 premium: premium[lang],
                 items: items[lang],
                 factions: factions[lang],
-                battleResults: battleResults[lang],
                 buildings: buildings[lang],
                 research: research[lang],
             }
-        } as Record<LanguageKey, I18nOgame>;
+        } as I18nFullMessageMap<I18nOgame>;
         return msg;
     }).reduce((acc, cur) => ({
         ...acc,
         ...cur,
-    }), {} as Record<LanguageKey, I18nOgame>);
+    }), {} as I18nFullMessageMap<I18nOgame>);
 
 export default messages;

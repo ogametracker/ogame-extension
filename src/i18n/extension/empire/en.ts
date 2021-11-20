@@ -1,6 +1,6 @@
 export default {
     amortisation: {
-        menuItem: 'Amortisation Calculator',
+        menuItem: 'Amortisation',
         selectedPlanet: 'Preset Planet',
         msuRates: 'MSU Conversion Rates',
         crawlerOverload: 'Crawler Overload',
@@ -27,10 +27,17 @@ export default {
         },
     },
     productionOverview: {
-        menuItem: 'Production Overview',
+        menuItem: 'Production',
         subMenu: {
-            resources: 'Production',
-            mines: 'Mine Overview',
+            resources: 'Resources',
+            mines: 'Mines',
         },
+        planet: 'Planet',
+        productionInfoMessage: 'The shown values refer to a production factor of 100% and include all active bonuses. For collectors, crawler overload is also included.',
+        perHour: 'per hour',
+        totalPerHour: 'Total per hour',
+        totalPerDay: 'Total per day',
+        totalPerWeek: 'Total per week',
+        titleCalculatorRessourcePackages: 'Calculator for resource packages (uses data from the table above)',
     },
 };

@@ -17,7 +17,7 @@
         },
     })
     export default class App extends Vue {
-        private visible = false;
+        public visible = false;
 
         private async mounted() {
             (window as any).ogameTracker = this;

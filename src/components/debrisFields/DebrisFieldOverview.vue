@@ -14,7 +14,6 @@
     import { TabViewItem } from "@/components/common/TabView.vue";
     import DebrisFieldOverviewChart from "./DebrisFieldOverviewChart.vue";
     import DebrisFieldOverviewTables from "./DebrisFieldOverviewTables.vue";
-    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -27,11 +26,11 @@
             return [
                 {
                     name: 'chart',
-                    title: i18n.messages.extension.chart,
+                    title: this.$i18n.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: i18n.messages.extension.tables,
+                    title: this.$i18n.$t.tables,
                 },
             ];
         }

@@ -13,11 +13,14 @@
                     <li
                         v-for="tabItem in tabItems"
                         :key="tabItem.name"
-                        :class="{
-                            'nav-item': !tabItem.disabled,
-                            'nav-item-active': activeTab == tabItem,
-                            'flex-grow-1': tabItem.flex,
-                        }"
+                        :class="[
+                            {
+                                'nav-item': !tabItem.disabled,
+                                'nav-item-active': activeTab == tabItem,
+                                'flex-grow-1': tabItem.flex
+                            },
+                            tabItem.customClass
+                        ]"
                         :style="
                             tabItem.color != null
                                 ? `--color: ${getColorVar(tabItem.color)}`
@@ -33,7 +36,7 @@
                     >
                         <icon
                             v-if="tabItem.icon != null"
-                            :name="tabItem.icon" 
+                            :name="tabItem.icon"
                             :style="tabItem.iconStyle"
                         />
                         <span v-if="tabItem.label != null">
@@ -57,17 +60,18 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue, Watch } from "vue-property-decorator";
     import ExpeditionStats from "./expeditions/ExpeditionStats.vue";
     import BattlesStats from "./battles/BattlesStats.vue";
     import DebrisFieldStats from "./debrisFields/DebrisFieldStats.vue";
     import Settings from "./settings/Settings.vue";
     import ExcelExport from '@/export/ExcelExport';
     import { HexColor, hexColorToRGB } from "@/utils/colors";
-    import i18n from "@/i18n";
+    import { extensionI18n as i18n } from "@/i18n";
     import ResourceOverview from '@/components/resourceOverview/ResourceOverview.vue';
     import EmpireOverview from '@/components/empire/EmpireOverview.vue';
     import Info from '@/components/info/Info.vue';
+    import Tools from '@/components/tools/Tools.vue';
 
     type TabItem = {
         label?: string;
@@ -77,6 +81,7 @@
         disabled?: boolean;
         flex?: boolean;
         color?: HexColor;
+        customClass?: string;
     } & (
             { placeholder: true; }
             | { customAction: () => void; }
@@ -92,93 +97,115 @@
             ResourceOverview,
             EmpireOverview,
             Info,
+            Tools,
         },
     })
     export default class StatsDialog extends Vue {
         @Prop({ type: Boolean, required: true })
         private value!: boolean;
 
-        private readonly tabItems: TabItem[] = [
-            {
-                name: 'expos',
-                icon: 'expo',
-                color: '#0066ff',
-                label: i18n.messages.extension.headers.expeditions,
-                component: 'expedition-stats',
-            },
-            {
-                name: 'battles',
-                icon: 'attack',
-                color: '#c51b00',
-                label: i18n.messages.extension.headers.battles,
-                component: 'battles-stats',
-            },
-            {
-                name: 'debrisFields',
-                icon: 'debris-field',
-                color: '#00a031',
-                label: i18n.messages.extension.headers.debrisFields,
-                component: 'debris-field-stats',
-            },
-            {
-                name: 'resourceOverview',
-                icon: 'economy',
-                color: '#a9460c',
-                label: i18n.messages.extension.headers.resourcesOverview,
-                component: 'resource-overview',
-                iconStyle: {
-                    fontSize: '32px',
+        private get tabItems(): TabItem[] {
+            return [
+                {
+                    name: 'expos',
+                    icon: 'expo',
+                    color: '#0066ff',
+                    label: i18n.$t.headers.expeditions,
+                    component: 'expedition-stats',
                 },
-            },
-            {
-                name: 'empire',
-                icon: 'planet-moon',
-                color: '#5000d0',
-                label: i18n.messages.extension.headers.empire,
-                component: 'empire-overview',
-            },
-            {
-                name: 'tools',
-                icon: 'tools',
-                color: '#008c85',
-                label: i18n.messages.extension.headers.tools,
-                component: null!,
-                iconStyle: {
-                    fontSize: '24px',
+                {
+                    name: 'battles',
+                    icon: 'attack',
+                    color: '#c51b00',
+                    label: i18n.$t.headers.battles,
+                    component: 'battles-stats',
                 },
-            },
-            {
-                name: 'placeholder_0',
-                disabled: true,
-                flex: true,
-                placeholder: true,
-            },
-            {
-                name: 'settings',
-                icon: 'cog',
-                color: '#888888',
-                label: i18n.messages.extension.headers.settings,
-                component: 'settings',
-            },
-            {
-                name: 'excelExport',
-                icon: 'microsoft-excel',
-                color: '#21a366',
-                customAction: this.excelExport,
-                iconStyle: {
-                    marginRight: '3px',
+                {
+                    name: 'debrisFields',
+                    icon: 'debris-field',
+                    color: '#00a031',
+                    label: i18n.$t.headers.debrisFields,
+                    component: 'debris-field-stats',
                 },
-            },
-            {
-                name: 'info',
-                icon: 'information',
-                color: '#8c8ce0',
-                component: 'info',
-            },
-        ];
+                {
+                    name: 'resourceOverview',
+                    icon: 'economy',
+                    color: '#a9460c',
+                    label: i18n.$t.headers.resourcesOverview,
+                    component: 'resource-overview',
+                    iconStyle: {
+                        fontSize: '32px',
+                    },
+                },
+                {
+                    name: 'empire',
+                    icon: 'planet-moon',
+                    color: '#5000d0',
+                    label: i18n.$t.headers.empire,
+                    component: 'empire-overview',
+                },
+                {
+                    name: 'tools',
+                    icon: 'tools',
+                    color: '#008c85',
+                    label: i18n.$t.headers.tools,
+                    component: 'tools',
+                    iconStyle: {
+                        fontSize: '24px',
+                    },
+                },
+                {
+                    name: 'placeholder_0',
+                    disabled: true,
+                    flex: true,
+                    placeholder: true,
+                },
+                {
+                    name: 'settings',
+                    icon: 'cog',
+                    color: '#888888',
+                    label: i18n.$t.headers.settings,
+                    component: 'settings',
+                },
+                {
+                    name: 'excelExport',
+                    icon: 'microsoft-excel',
+                    color: '#21a366',
+                    customAction: this.excelExport,
+                    iconStyle: {
+                        marginRight: '3px',
+                    },
+                },
+                {
+                    name: 'info',
+                    icon: 'information',
+                    color: '#8c8ce0',
+                    component: 'info',
+                },
+                {
+                    name: 'discord',
+                    icon: 'discord',
+                    color: '#5865f2', //discord color
+                    customClass: 'discord-tab',
+                    customAction: this.gotoDiscord,
+                },
+            ];
+        }
+
+        @Watch('tabItems', { deep: true })
+        private tabItemsChanged() {
+            this.activeTab = this.tabItems.find(tab => tab.name == this.activeTab.name)
+                ?? this.tabItems[0];
+        }
+
 
         private activeTab = this.tabItems[0];
 
+
+        private gotoDiscord() {
+            const discordLink = 'https://discord.gg/MZE9FrCwRj';
+            window.open(discordLink, '_blank', 'noopener,noreferrer');
+        }
 
         private excelExport() {
             ExcelExport.export();
@@ -198,3 +225,18 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .discord-tab {
+        &::v-deep .icon-discord {
+            font-size: 30px !important;
+        }
+        
+        &:hover {
+            background: linear-gradient(
+                180deg,
+                rgba(var(--color), 0.67),
+                rgb(var(--color))
+            ) !important;
+        }
+    }
+</style>

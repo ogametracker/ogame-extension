@@ -1,11 +1,14 @@
-import i18n from '@/i18n';
+
+import { extensionI18n } from '@/i18n';
+import LanguageKey from '@/i18n/languageKey';
+import getLanguage from '@/i18n/mapLanguage';
 import ExpoType from '@/models/expeditions/ExpoType';
 import OgameMetaData from '@/models/ogame/OgameMetaData';
 import Resource from '@/models/Resource';
 import Settings from '@/models/settings/Settings';
 import Ship from '@/models/Ship';
 import asyncChromeStorage from '@/utils/asyncChromeStorage';
-import clone from '@/utils/clone';
+import waitForDocumentLoad from '@/utils/waitForDocumentLoad';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
@@ -20,31 +23,31 @@ class SettingsModule extends Vue {
                         type: "day",
                         skip: 0,
                         take: 1,
-                        label: i18n.messages.extension.settings.defaultRanges.today,
+                        label: extensionI18n.$t.settings.defaultRanges.today,
                     },
                     {
                         type: "day",
                         skip: 1,
                         take: 1,
-                        label: i18n.messages.extension.settings.defaultRanges.yesterday,
+                        label: extensionI18n.$t.settings.defaultRanges.yesterday,
                     },
                     {
                         type: "week",
                         skip: 0,
                         take: 1,
-                        label: i18n.messages.extension.settings.defaultRanges.currentWeek,
+                        label: extensionI18n.$t.settings.defaultRanges.currentWeek,
                     },
                     {
                         type: "week",
                         skip: 1,
                         take: 1,
-                        label: i18n.messages.extension.settings.defaultRanges.lastWeek,
+                        label: extensionI18n.$t.settings.defaultRanges.lastWeek,
                     },
                     {
                         type: "month",
                         skip: 0,
                         take: 1,
-                        label: i18n.messages.extension.settings.defaultRanges.currentMonth,
+                        label: extensionI18n.$t.settings.defaultRanges.currentMonth,
                     },
                     {
                         type: "all",
@@ -102,18 +105,45 @@ class SettingsModule extends Vue {
                 [Resource.crystal]: 2,
                 [Resource.deuterium]: 3,
             },
+            
+            language: getLanguage(LanguageKey.en),
         };
     }
 
-    private async created() {
-        this.settings = this.getDefaultSettings();
+    private async updateSettings() {
+        const defaultSettings = this.getDefaultSettings();
         const settings = await asyncChromeStorage.get<Settings>(this.storageKey);
-        if (settings != null) {
-            this.settings = {
-                ...this.settings,
-                ...settings
-            };
-        }
+
+        this.settings = {
+            ...defaultSettings,
+            ...settings
+        };
+
+        await Promise.resolve();
+    }
+
+    public createdPromise: Promise<void> = Promise.resolve();
+    private async created() {
+        await waitForDocumentLoad;
+
+        this.createdPromise = this.init();
+        await this.createdPromise;
+    }
+
+    private async init() {
+        await this.updateSettings();
+
+        chrome.storage.onChanged.addListener((changes, areaName) => {
+            if (areaName != 'local') {
+                return;
+            }
+            if (!(this.storageKey in changes)) {
+                return;
+            }
+
+            // update settings
+            this.updateSettings();
+        });
     }
 
     private get storageKey(): string {

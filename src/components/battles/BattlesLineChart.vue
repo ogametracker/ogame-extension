@@ -54,7 +54,6 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
-    import i18n from '@/i18n';
     import BattleReport from '@/models/battles/BattleReport';
     import BattleModule from '@/store/modules/BattleModule';
 
@@ -237,7 +236,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => i18n.formatDate(this.allDays[index], 'short'))
+                ...indices.map((index) => this.$i18n.$d(this.allDays[index], 'date'))
             );
         }
 

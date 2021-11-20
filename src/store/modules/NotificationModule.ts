@@ -9,7 +9,7 @@ interface NotificationData {
     timeout?: number;
 }
 
-interface Notification extends NotificationData {
+export interface Notification extends NotificationData {
     id: number;
     hidden: boolean;
 }

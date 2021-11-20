@@ -1,4 +1,5 @@
-export type DateRangeType = 'day' | 'week' | 'month';
+export type DateRangeType = 'day' | 'week' | 'month' | 'year';
+export type FullDateRangeType = DateRangeType | 'all';
 
 interface NormalDateRange {
     type: DateRangeType;

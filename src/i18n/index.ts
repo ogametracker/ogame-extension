@@ -1,50 +1,49 @@
-import { format } from "date-fns";
 import Vue from "vue";
+import { I18n } from "./types";
 import LanguageKey from "./languageKey";
-import messages, { I18nMessages } from './messages';
 
-export interface I18nDateFormats {
-    short: string;
-    long: string;
-}
-
-export class I18n {
-    public locale: LanguageKey = LanguageKey.de;
-    private _messages = messages;
-    private _dateTimeFormats: Record<LanguageKey, I18nDateFormats> = {
-        [LanguageKey.de]: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
+import ogameMessages, { I18nOgame } from "./ogame";
+const ogameI18n = new I18n<I18nOgame, string>().init({
+    messages: ogameMessages,
+    dateTimeFormats: {
+        // this is the only date format that ogame uses
+        de: {
+            date: 'dd.MM.yyyy',
+            datetime: 'dd.MM.yyyy HH:mm:ss',
         },
-        [LanguageKey.en]: {
-            short: 'dd.MM.yyyy',
-            long: 'dd.MM.yyyy HH:mm:ss',
-        },
-    };
-
-    public get messages(): I18nMessages {
-        return this._messages[this.locale];
-    }
-
-    public get dateTimeFormats(): I18nDateFormats {
-        return this._dateTimeFormats[this.locale];
-    }
-
-    public formatDate(date: number | Date, formatName: keyof I18nDateFormats): string {
-        const dateFormat = this._dateTimeFormats[this.locale][formatName];
-
-        return format(date, dateFormat);
-    }
-
-    public formatNumber(number: number, options?: Intl.NumberFormatOptions): string {
-        const formatter = new Intl.NumberFormat(this.locale, options);
-        return formatter.format(number);
-    }
-}
-
-const i18n = new I18n();
-Object.defineProperty(Vue.prototype, '$i18n', {
-    get() { return i18n; }
+    },
+    fallbackLocale: null as any,
 });
 
-export default i18n;
+import extensionMessages, { I18nExtension } from "./extension";
+const extensionI18n = new I18n<I18nExtension, Intl.DateTimeFormatOptions>().init({
+    messages: extensionMessages,
+    dateTimeFormats: {
+        //always fallback to de because it will use the current locale anyways
+        de: {
+            date: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            },
+            datetime: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
+        },
+
+    },
+    fallbackLocale: LanguageKey.en,
+});
+Vue.prototype.$i18n = extensionI18n;
+
+export {
+    ogameI18n,
+    extensionI18n,
+};

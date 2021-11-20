@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-    import i18n from "@/i18n";
+    
     import { Component, Vue } from "vue-property-decorator";
     import { TabViewItem } from "../common/TabView.vue";
     import DebrisFieldOverview from './DebrisFieldOverview.vue';
@@ -22,7 +22,7 @@
         private readonly items: TabViewItem[] = [
             {
                 name: 'overview',
-                title: i18n.messages.extension.debrisFieldsMenu.overview,
+                title: this.$i18n.$t.debrisFieldsMenu.overview,
             },
         ];
     }

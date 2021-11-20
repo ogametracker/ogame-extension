@@ -4,7 +4,7 @@
             <resource-overview-chart
                 stacked
                 :datasets="datasets"
-                :y-tick-formatter="(value) => $i18n.formatNumber(value)"
+                :y-tick-formatter="(value) => $i18n.$n(value)"
                 :tooltip-label="getTooltipLabel"
                 :hide-zeros-in-tooltip="false"
             />
@@ -20,7 +20,7 @@
     import { TabViewItem } from "../common/TabView.vue";
     import ResourceOverviewChart, { ResourcesOverviewChartDataset } from './ResourceOverviewChart.vue';
     import ResourceOverviewTable from './ResourceOverviewTable.vue';
-    import i18n from "@/i18n";
+    
     import Resource from "@/models/Resource";
     import SettingsModule from "@/store/modules/SettingsModule";
     import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
@@ -38,11 +38,11 @@
             return [
                 {
                     name: 'chart',
-                    title: i18n.messages.extension.chart,
+                    title: this.$i18n.$t.chart,
                 },
                 {
                     name: 'tables',
-                    title: i18n.messages.extension.tables,
+                    title: this.$i18n.$t.tables,
                 },
             ];
         }
@@ -53,7 +53,7 @@
                 const resource = resourceName as Resource;
                 return {
                     fill: true,
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$i18n.$t.resources[resource],
                     color: SettingsModule.settings.charts.colors.resources[resource],
                     aggregator: (expos, battles, debris) => {
                         const expoResources = (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
@@ -72,7 +72,7 @@
         private getTooltipLabel(item: any, data: any) {
             const resource = data.datasets[item.datasetIndex].label;
             const value: number = item.value;
-            return `${i18n.formatNumber(value)} ${resource}`;
+            return `${this.$i18n.$n(value)} ${resource}`;
         }
     }
 </script>

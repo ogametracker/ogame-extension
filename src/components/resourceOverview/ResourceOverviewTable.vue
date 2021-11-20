@@ -1,13 +1,13 @@
 <template>
     <div>
-        <resource-overview-ranged-table :items="items" show-total no-percentage />
+        <resource-overview-ranged-table :items="items" show-total no-percentage fade-zeros />
     </div>
 </template>
  
 <script lang="ts">
     import ExpoType from "@/models/expeditions/ExpoType";
     import { Component, Vue } from "vue-property-decorator";
-    import i18n from "@/i18n";
+    
     import ResourceOverviewRangedTable, { ResourceOverviewRangedTableItem } from "./ResourceOverviewRangedTable.vue";
     import { ExpoEventResources } from "@/models/expeditions/ExpoEvent";
     import Resource from "@/models/Resource";
@@ -22,7 +22,7 @@
             return Object.keys(Resource).map(resourceName => {
                 const resource = resourceName as Resource;
                 return {
-                    label: i18n.messages.ogame.resources[resource],
+                    label: this.$i18n.$t.resources[resource],
                     getValue: (expos, battles, debris) => {
                         const expoRess = (expos.filter(expo => expo.type == ExpoType.resources) as ExpoEventResources[])
                             .reduce((acc, cur) => acc + cur.resources[resource], 0);

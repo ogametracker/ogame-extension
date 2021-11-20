@@ -1,9 +1,20 @@
 <template>
     <div v-if="player != null">
         <table>
+            <colgroup>
+                <col width="auto" />
+                <col width="100px" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="auto" />
+                <col width="40px" />
+            </colgroup>
             <thead>
                 <tr>
-                    <th>LOCA: Planet</th>
+                    <th v-text="$i18n.$t.empire.productionOverview.planet" />
                     <th />
                     <th>
                         <o-building type="metal-mine" :size="100" />
@@ -20,14 +31,14 @@
                     <th>
                         <o-building type="fusion-reactor" :size="100" />
                     </th>
-                    <th>
+                    <th colspan="2">
                         <o-ship type="crawler" :size="100" />
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="planet in planets" :key="planet.id">
-                    <td>{{ planet.name }}</td>
+                    <td v-text="planet.name" />
                     <td>
                         [{{ planet.coordinates.galaxy }}:{{
                             planet.coordinates.system
@@ -36,22 +47,17 @@
                     <td v-for="building in productionBuildings" :key="building">
                         {{ planet.buildings.production[building] }}
                     </td>
-                    <td>
-                        {{ $i18n.formatNumber(getActiveCrawlers(planet)) }}
-                    </td>
+                    <td v-text="$i18n.$n(getActiveCrawlers(planet))" />
+                    <td v-text="$i18n.$n(getCrawlers(planet))" />
                 </tr>
                 <tr class="total-row">
                     <th>
-                        <span
-                            style="transform: scale(1.5); transform-origin: center; display: inline-block;"
-                        >
-                            ⌀
-                        </span>
+                        <span class="average-icon" />
                     </th>
                     <td />
                     <td v-for="building in productionBuildings" :key="building">
                         {{
-                            $i18n.formatNumber(buildingAverage[building], {
+                            $i18n.$n(buildingAverage[building], {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -59,7 +65,15 @@
                     </td>
                     <td>
                         {{
-                            $i18n.formatNumber(activeCrawlerAverage, {
+                            $i18n.$n(activeCrawlerAverage, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })
+                        }}
+                    </td>
+                    <td>
+                        {{
+                            $i18n.$n(crawlerAverage, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })
@@ -72,18 +86,10 @@
 </template>
 
 <script lang="ts">
-    import i18n from '@/i18n';
     import Building from '@/models/Building';
-    import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
-    import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
-    import MetalMine from '@/models/ogame/buildables/buildings/MetalMine';
-    import { ProductionInject } from '@/models/ogame/buildables/buildings/ProductionBuilding';
-    import OgameMetaData from '@/models/ogame/OgameMetaData';
-    import Resource from '@/models/Resource';
     import Ship from '@/models/Ship';
     import LocalPlayerModule, { LocalPlayerData, PlanetData, PlayerClass } from '@/store/modules/LocalPlayerModule';
     import { Component, Ref, Vue } from 'vue-property-decorator';
-    import Chart from 'chart.js';
     import SettingsModule from '@/store/modules/SettingsModule';
     import _throw from '@/utils/throw';
 
@@ -117,8 +123,12 @@
             ) * crawlerFactor);
         }
 
+        private getCrawlers(planet: PlanetData): number {
+            return planet.ships[Ship.crawler];
+        }
+
         private getActiveCrawlers(planet: PlanetData): number {
-            return Math.min(planet.ships[Ship.crawler], this.getMaxCrawlers(planet));
+            return Math.min(this.getCrawlers(planet), this.getMaxCrawlers(planet));
         }
 
         private get buildingAverage(): Record<ProductionBuildings, number> {
@@ -132,6 +142,13 @@
         }
 
         private get activeCrawlerAverage(): number {
+            const planets = this.planets;
+
+            const result = planets.reduce((acc, planet) => acc + this.getActiveCrawlers(planet), 0);
+            return result / planets.length;
+        }
+
+        private get crawlerAverage(): number {
             const planets = this.planets;
 
             const result = planets.reduce((acc, planet) => acc + planet.ships[Ship.crawler], 0);

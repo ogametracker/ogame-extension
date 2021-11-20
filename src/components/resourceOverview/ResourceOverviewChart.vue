@@ -16,7 +16,7 @@
                             width:
                                 (100 * allDays.length) /
                                     settingsModule.settings.charts.days +
-                                '%',
+                                '%'
                         }"
                     />
                 </div>
@@ -33,7 +33,7 @@
                         chart &&
                         chart.data &&
                         chart.data.datasets &&
-                        chart.data.datasets[index].hidden,
+                        chart.data.datasets[index].hidden
                 }"
                 @click.prevent.stop="toggleDataset(index)"
             >
@@ -56,7 +56,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import Chart from 'chart.js';
-    import i18n from '@/i18n';
+
     import BattleReport from '@/models/battles/BattleReport';
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import BattleModule from '@/store/modules/BattleModule';
@@ -145,7 +145,7 @@
                         },
                         ticks: {
                             callback: this.yTickFormatter ?? ((value) => value),
-                            min: 0,
+                            min: this.minValue,
                             max: this.maxValue,
                             precision: 0,
                         },
@@ -178,6 +178,7 @@
             datasets: this.datasetsInternal,
         };
 
+        private minValue = 0;
         private maxValue = 1;
         private readonly allDays: Date[] = [];
 
@@ -233,8 +234,37 @@
                 )
             );
 
+            this.updateMinValue();
             this.updateMaxValue();
             this.updateDataAndLabels();
+        }
+
+        private updateMinValue() {
+            this.minValue = 0;
+
+            const datasets = this.chart?.data.datasets;
+
+            //find cumulative max
+            this.allDays.forEach((_, i) => {
+                const min = this.fullDatasetsData.reduce((acc, data, datasetIndex) => {
+                    if (datasets?.[datasetIndex].hidden) {
+                        return acc;
+                    }
+
+                    if (this.stacked && data[i] < 0) {
+                        return acc + data[i];
+                    }
+                    return Math.min(acc, data[i]);
+                }, 0);
+
+                if (min < this.minValue) {
+                    this.minValue = min;
+                }
+            });
+            //round up to nicer value
+            const m = Math.abs(this.minValue);
+            const power = Math.max(0, Math.floor(m).toString().length - 1);
+            this.minValue = (Math.floor(m / 10 ** power) + 1) * 10 ** power * Math.sign(this.minValue);
         }
 
         private updateMaxValue() {
@@ -291,7 +321,7 @@
 
             this.labels.splice(0);
             this.labels.push(
-                ...indices.map((index) => i18n.formatDate(this.allDays[index], 'short'))
+                ...indices.map((index) => this.$i18n.$d(this.allDays[index], 'date'))
             );
         }
 

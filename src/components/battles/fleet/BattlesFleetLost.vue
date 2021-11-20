@@ -13,7 +13,6 @@
     import { Component, Vue } from "vue-property-decorator";
     import BattlesFleetLostChart from "./BattlesFleetLostChart.vue";
     import { TabViewItem } from "@/components/common/TabView.vue";
-    import i18n from "@/i18n";
 
     @Component({
         components: {
@@ -25,11 +24,11 @@
             return [
                 {
                     name: 'players',
-                    title: i18n.messages.extension.combats.againstPlayers,
+                    title: this.$i18n.$t.combats.againstPlayers,
                 },
                 {
                     name: 'expos',
-                    title: i18n.messages.extension.combats.onExpeditions,
+                    title: this.$i18n.$t.combats.onExpeditions,
                 },
             ];
         }

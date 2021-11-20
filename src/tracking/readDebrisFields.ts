@@ -1,8 +1,9 @@
-import i18n from "@/i18n";
+
 import DebrisFieldReport from "@/models/debrisFields/DebrisFieldReport";
 import NotificationModule from "@/store/modules/NotificationModule";
 import DebrisFieldModule from "@/store/modules/DebrisFieldModule";
 import { parse } from "date-fns";
+import { extensionI18n, ogameI18n } from "@/i18n";
 
 const tabIdMiscMessages = '24';
 const noDebrisFieldReport: number[] = [];
@@ -66,8 +67,8 @@ export default async function readDebrisFields() {
     if (newMessageCount > 0) {
         NotificationModule.addNotification({
             type: 'info',
-            title: i18n.messages.extension.notifications.debrisFields.success.title,
-            text: i18n.messages.extension.notifications.debrisFields.success.text(newMessageCount),
+            title: extensionI18n.$t.notifications.debrisFields.success.title,
+            text: extensionI18n.$t.notifications.debrisFields.success.text(newMessageCount),
             timeout: 5000,
         });
 
@@ -77,8 +78,8 @@ export default async function readDebrisFields() {
     if (newErrorCount > 0) {
         NotificationModule.addNotification({
             type: 'error',
-            title: i18n.messages.extension.notifications.debrisFields.error.title,
-            text: i18n.messages.extension.notifications.debrisFields.error.text(newErrorCount),
+            title: extensionI18n.$t.notifications.debrisFields.error.title,
+            text: extensionI18n.$t.notifications.debrisFields.error.text(newErrorCount),
             timeout: 5000,
         });
     }
@@ -86,9 +87,9 @@ export default async function readDebrisFields() {
 
 function getDebrisFieldReport(id: number, message: string, messageContainer: Element): DebrisFieldReport | null {
     const dateText = messageContainer.querySelector('.msg_head .msg_date.fright')!.textContent!;
-    const date = parse(dateText, i18n.dateTimeFormats.long, new Date()).getTime();
+    const date = parse(dateText, ogameI18n.dateTimeFormats.datetime, new Date()).getTime();
 
-    const regex = i18n.messages.ogame.debrisFieldMessages.regex as RegExp;
+    const regex = ogameI18n.$t.debrisFieldMessages.regex as RegExp;
     const match = message.match(regex);
     if (match == null)
         return null;
