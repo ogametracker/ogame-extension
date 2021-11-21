@@ -2,10 +2,8 @@ import OgameMetaData from "@/models/ogame/OgameMetaData";
 import LanguageKey from "./languageKey";
 
 const languageMap: Record<string, LanguageKey> = {
-    'de': LanguageKey.de,
-    'dk': LanguageKey.dk,
-
-    'en': LanguageKey.en,
+    ...LanguageKey,
+    
     'us': LanguageKey.en,
 };
 

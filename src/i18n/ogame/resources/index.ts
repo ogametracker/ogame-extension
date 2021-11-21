@@ -3,6 +3,7 @@ import Resource from '@/models/Resource';
 import de from './de';
 import en from './en';
 import dk from './dk';
+import cz from './cz';
 import { I18nFullMessageMap } from '@/i18n/types';
 
 export interface I18nOgameResources {
@@ -15,5 +16,6 @@ const messages: I18nFullMessageMap<I18nOgameResources> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,
+    [LanguageKey.cz]: cz,
 };
 export default messages;

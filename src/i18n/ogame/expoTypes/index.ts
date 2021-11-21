@@ -3,6 +3,7 @@ import ExpoType from '@/models/expeditions/ExpoType';
 import de from './de';
 import en from './en';
 import dk from './dk';
+import cz from './cz';
 import { I18nFullMessageMap } from '@/i18n/types';
 
 export interface I18nOgameExpoTypes {
@@ -23,5 +24,6 @@ const messages: I18nFullMessageMap<I18nOgameExpoTypes> = {
     [LanguageKey.de]: de,
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,
+    [LanguageKey.cz]: cz,
 };
 export default messages;
