@@ -1,3 +1,3 @@
 export default {
-    regex: /*TODO: TF-Regex CZ*//^--------------------------------------------------------------------------------$/,
+    regex: /Vytěžil jsi ([\d.]+) kovu a ([\d.]+) krystalů/,
 };
