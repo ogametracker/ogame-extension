@@ -1,4 +1,4 @@
 export default {
-    pirates: 'Piráti ',
-    aliens: 'Aliens',
+    pirates: 'Piráti',
+    aliens: 'Vetřelci',
 };
