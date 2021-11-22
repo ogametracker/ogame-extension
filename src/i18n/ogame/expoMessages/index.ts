@@ -5,6 +5,7 @@ import de from './de';
 import en from './en';
 import dk from './dk';
 import cz from './cz';
+import hr from './hr';
 import { I18nFullMessageMap } from '@/i18n/types';
 
 export type RegexBuilder<T> = (value: T) => RegExp;
@@ -58,5 +59,6 @@ const messages: I18nFullMessageMap<I18nOgameExpoMessages> = {
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,
     [LanguageKey.cz]: cz,
+    [LanguageKey.hr]: hr,
 };
 export default messages;

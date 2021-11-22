@@ -3,6 +3,7 @@ import dk from './dk';
 import de from './de';
 import en from './en';
 import cz from './cz';
+import hr from './hr';
 import { I18nFullMessageMap } from '@/i18n/types';
 
 export interface I18nOgameDebrisFieldMessages {
@@ -14,5 +15,6 @@ const messages: I18nFullMessageMap<I18nOgameDebrisFieldMessages> = {
     [LanguageKey.en]: en,
     [LanguageKey.dk]: dk,
     [LanguageKey.cz]: cz,
+    [LanguageKey.hr]: hr,
 };
 export default messages;

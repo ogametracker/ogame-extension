@@ -1,8 +1,5 @@
 import ExpoSize from "@/models/expeditions/ExpoSize";
 import ExpoType from "@/models/expeditions/ExpoType";
-import { I18nOgamePremium } from "../premium";
-import { I18nOgameResources } from "../resources";
-import { I18nOgameShips } from "../ships";
 
 export default {
     [ExpoType.darkMatter]: {

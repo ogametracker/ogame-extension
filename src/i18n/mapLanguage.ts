@@ -5,6 +5,7 @@ const languageMap: Record<string, LanguageKey> = {
     ...LanguageKey,
     
     'us': LanguageKey.en,
+    'ba': LanguageKey.hr,
 };
 
 export default function getLanguage<TFallback>(fallback: TFallback): LanguageKey | TFallback {

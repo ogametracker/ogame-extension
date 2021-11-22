@@ -3,6 +3,7 @@ enum LanguageKey {
     dk = 'dk',
     en = 'en',
     cz = 'cz',
+    hr = 'hr',
 }
 
 export default LanguageKey;

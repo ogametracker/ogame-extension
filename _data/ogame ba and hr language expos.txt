@@ -1,0 +1,71 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sljedeći brodovi su sada dio vaše flote:
+Krčilac: 232
+Borbeni brod: 119
+Žetelac: 5
+Veliki transporter: 2
+Veliki lovac: 2
+Mali lovac: 1
+Mali transporter: 5
+
+
