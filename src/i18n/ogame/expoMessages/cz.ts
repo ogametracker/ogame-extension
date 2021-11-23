@@ -11,13 +11,13 @@ export default {
             /*'Expedice následovala */'nezvyklé signály až k asteroidu'/*. V něm jsme nalezli menší množství Temné hmoty.'*/,
         ],
         [ExpoSize.medium]: [
-            /*TODO: 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*TODO: 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*TODO: cz 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*TODO: cz 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
             /*'Naše */'expedice hlásí neobvyklý jev'/*: hromadění Temní hmoty v energetických skladech našich lodí. Technici se pokusí nahromadit této Temné hmoty co možná nejvíce.'*/,
         ],
         [ExpoSize.large]: [
-            /*TODO: 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*TODO: cz 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*TODO: cz 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) bylo ukořistěno`),
     },
@@ -28,7 +28,7 @@ export default {
             /*'Na */'izolovaném planetoidu byla nalezena snadno přístupná'/* pole surovin. Většina těchto surovin byla úspěšně vytěžena.'*/,
         ],
         [ExpoSize.medium]: [
-            /*TODO: 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*TODO: cz 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
             /*'Na */'malém měsíci se svou vlastní atmosférou expedice'/* nalezla velké množství zásob surovin. Posádka na povrchu se snaží vyzvednout a naložit toto přírodní bohatství.'*/,
         ],
         [ExpoSize.large]: [
@@ -51,7 +51,7 @@ export default {
         ],
         [ExpoSize.large]: [
             /*'Nalezli jsme */'obrovský hřbitov vesmírných lodí'/*. Některým technikům z expedice se podařilo opět pár lodí zprovoznit.'*/,
-            /*TODO: 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*TODO: cz 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Folgende Schiffe schlossen sich der Flotte an:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
@@ -72,10 +72,10 @@ export default {
     ],
 
     [ExpoType.lostFleet]: [
-        /*TODO: 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'Poslední informace od expedice byla velmi */'podařená fotka otevírající se černé díry'/*.'*/,
         /*'Jediná věc, která po expedici zbyla, je následující záznam: */'Krrrzzzzt To zrrrtrzt'/* vypadá krgzzzz jako Krzzzzzzzztzzzz...'*/,
         /*'Roztavení jádra v hlavní lodi expedice vede k řetězové reakci, */'která ničí celou letku v obdivuhodné podívané'/*.'*/,
-        /*TODO: 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'Naše */'expedice se nevrátila zpět'/*. Vědci stále zkoumají, co se stalo, ale zdá se, že o letku jsme definitivně přišli.'*/,
     ],
 
     [ExpoType.trader]: [
@@ -105,38 +105,38 @@ export default {
     [ExpoType.pirates]: {
         [ExpoSize.small]: [
             /*'Nějací naprosto */'zoufalí vesmírní piráti se pokusili přepadnout'/* naší expediční letku.'*/,
-            /*TODO: 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Nějací */'primitivní barbaři na nás útočí z lodí'/*, které se snad ani loděmi nedají nazvat. Pokud bude situace vážnější, budeme nuceni opětovat palbu.'*/,
             /*'Zachytili jsme */'radiovou zprávu od nějakých opilých vesmírných pirátů'/*. Zřejmě na nás brzy zaútočí.'*/,
             /*'Museli */'jsme bojovat s vesmírnými piráty'/*, ale naštěstí jich bylo jen pár.'*/,
-            /*TODO: 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*TODO: cz 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpoSize.medium]: [
             /*'Expedice měla */'nepříjemné setkání s vesmírnými piráty'/*.'*/,
-            /*TODO: 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*TODO: 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Vletěli jsme přímo do pasti */'připravé hvězdnými bukanýry'/*! Bitva byla nevyhnutelná.'*/,
+            /*'Nouzový signál, který expedice následovala, byl */'vysílán hvězdnými bukanýry'/*. Bitva byla nevyhnutelná.'*/,
         ],
         [ExpoSize.large]: [
-            /*TODO: 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/*! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*TODO: 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Zaznamenané signály nepřišly od neznámé osoby, */'ale z tajné pirátské základny'/*! Nebyli příliš překvapeni naší prezencí v jejich sektoru.'*/,
+            /*'Expedice hlásí tuhé boje s */'neidentifikovatelnými pirátskými loděmi'/*!'*/,
         ],
     },
 
     [ExpoType.aliens]: {
         [ExpoSize.small]: [
             /*'*/'Exoticky vypadající lodě neznámého původu'/* zaútočily na expedici bez jakéhokoliv varování!'*/,
-            /*TODO: 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*'Tvá expedice */'provedla ne-úplně-přátelské seznámení'/* s neznámou rasou mimozemšťanů.'*/,
             /*'Naše expedice */'byla přepadena malou skupinou neznámých lodí'/*!'*/,
-            /*TODO: 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*TODO: cz 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpoSize.medium]: [
             /*'*/'Neznámí vetřelci zaútočili'/* na naši expedici!'*/,
-            /*TODO: 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*TODO: 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Tvá expedice narazila na území ovládané neznámou, ale */'velmi agresivní rasou vetřelců'/*.'*/,
+            /*'Spojení s expediční letkou bylo přerušeno. Podařilo se dešifrovat jejich posledni zprávu. Jsou pod težkým útokem, */'nepřítel nebyl identifikován.'/*'*/,
         ],
         [ExpoSize.large]: [
-            /*TODO: 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*TODO: 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
-            /*TODO: 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/*!'*/,
+            /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
+            /*TODO: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
 };
