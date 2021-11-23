@@ -13,7 +13,7 @@
         "lint": "vue-cli-service lint",
         "ext-remove-fake": "powershell -command \"rm ./dist/ogame-fake.js\" && powershell -command \"rm ./dist/index.html\"",
         "ext-zip": "cmd /c \"C:/Program Files/7-Zip/7z\" a -tzip ./dist/ogame-tracker.zip ./dist/*",
-        "pack": "npm run build-prod && npm run ext-remove-fake && npm run ext-zip",
+        "publish": "npm run build-prod && npm run ext-remove-fake && npm run ext-zip",
         "ext-change-icon-dev": "powershell -command \"(Get-Content ./dist/manifest.json).replace('icon128.png', 'icon128-dev.png') | Set-Content ./dist/manifest.json\""
     },
     "dependencies": {
