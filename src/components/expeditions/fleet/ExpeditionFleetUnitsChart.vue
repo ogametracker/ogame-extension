@@ -32,7 +32,7 @@
                     .reduce(
                         (acc, expo) => acc +
                             (Object.keys(expo.fleet) as any as Ship[])
-                                .reduce((a, ship) => a + ShipDictionary[ship].cost[resource], 0)
+                                .reduce((a, ship) => a + ShipDictionary[ship].cost[resource] * (expo.fleet[ship] ?? 0), 0)
                         , 0)
             }));
 

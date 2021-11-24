@@ -48,7 +48,7 @@
                     getValue: expos => (expos.filter(expo => expo.type == ExpoType.fleet) as ExpoEventFleet[])
                         .reduce((acc, cur) => {
                             return acc + (Object.keys(cur.fleet) as any as Ship[])
-                                .reduce((total, ship) => total + ShipDictionary[ship].cost[resource], 0);
+                                .reduce((total, ship) => total + ShipDictionary[ship].cost[resource] * (cur.fleet[ship] ?? 0), 0);
                         }, 0)
                 }));
         }
