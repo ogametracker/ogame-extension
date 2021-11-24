@@ -53,7 +53,7 @@ export default {
             /*'Nalezli jsme */'obrovský hřbitov vesmírných lodí'/*. Některým technikům z expedice se podařilo opět pár lodí zprovoznit.'*/,
             /*TODO: cz 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Folgende Schiffe schlossen sich der Flotte an:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
     [ExpoType.nothing]: [
