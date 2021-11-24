@@ -193,11 +193,13 @@
     import OgameMetaData from '@/models/ogame/OgameMetaData';
     import CrystalMine from '@/models/ogame/buildables/buildings/CrystalMine';
     import DeuteriumSynthesizer from '@/models/ogame/buildables/buildings/DeuteriumSynthesizer';
+    import FusionReactor from '@/models/ogame/buildables/buildings/FusionReactor';
     import clone from '@/utils/clone';
     import Cost from '@/models/ogame/buildables/Cost';
     import Ship from '@/models/Ship';
     import { ItemHash } from '@/models/items';
     import { parseIntSafe } from '@/utils/parseNumbersSafe';
+    import Resource from '@/models/Resource';
 
     interface TotalRow {
         key: string | number;
@@ -237,10 +239,13 @@
             inject.currentPlanet.buildings.production[Building.solarPlant] = 100;
             inject.currentPlanet.productionSettings[Ship.crawler] = this.player.playerClass == PlayerClass.collector ? 150 : 100;
 
+            const fusionReactorConsumption = FusionReactor.getConsumption(planet.buildings.production[Building.fusionReactor], inject).deuterium;
+
             return {
                 metal: MetalMine.getProduction(planet.buildings.production[Building.metalMine], inject).metal,
                 crystal: CrystalMine.getProduction(planet.buildings.production[Building.crystalMine], inject).crystal,
-                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[Building.deuteriumSynthesizer], inject).deuterium,
+                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[Building.deuteriumSynthesizer], inject).deuterium
+                    - fusionReactorConsumption,
             };
         }
 
