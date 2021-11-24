@@ -880,6 +880,10 @@ import { parseFloatSafe, parseIntSafe } from '@/utils/parseNumbersSafe';
                     if (level > this.maxLevel) {
                         continue;
                     }
+                    info.currentPlanet.buildings.production = {
+                        ...info.currentPlanet.buildings.production,
+                        ...levels,
+                    };
 
                     const cost = building.getCost(level);
                     const msuCost = Math.round(getMsu(cost, this.settings.msuConversionRates));

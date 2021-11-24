@@ -20,13 +20,16 @@ class MetalMine extends ProductionBuilding {
         const traderProduction = Math.round(mineProduction * 0.05 * (data.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(data.currentPlanet.activeItems));
 
+        const maxCrawlerFactor = data.player.officers.geologist && data.player.playerClass == PlayerClass.collector
+            ? 1.1
+            : 1;
         const maxCrawlers = Math.round(
             (
-                data.currentPlanet.buildings.production[Building.metalMine]
+                level
                 + data.currentPlanet.buildings.production[Building.crystalMine]
                 + data.currentPlanet.buildings.production[Building.deuteriumSynthesizer]
             ) * 8
-            * (data.player.officers.geologist ? 1.1 : 1)
+            * maxCrawlerFactor
         );
         const crawlerCount = Math.min(maxCrawlers, data.currentPlanet.ships[Ship.crawler]);
         const crawlerProductivity = data.player.playerClass == PlayerClass.collector ? 1.5 : 1;
