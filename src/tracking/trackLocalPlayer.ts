@@ -224,9 +224,13 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
     const planetList = document.querySelector('#planetList') ?? _throw('no #planetList found');
     const planets = planetList.querySelectorAll('.smallplanet');
 
+    const planetIds: number[] = [];
+
     for (const planet of planets) {
         // planet
         const planetData = getPlanetData(planet);
+        planetIds.push(planetData.id);
+
         const newPlanetData: PlanetData = {
             ...getDefaultPlanetData(),
             ...(playerData.planets[planetData.id] as PlanetData | null),
@@ -237,6 +241,8 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
         // moon
         const moonData = getMoonData(planet, planetData.coordinates);
         if (moonData != null) {
+            planetIds.push(moonData.id);
+
             const newMoonData: MoonData = {
                 ...getDefaultMoonData(),
                 ...(playerData.planets[moonData.id] as MoonData | null),
@@ -245,6 +251,12 @@ function trackOwnedPlanets(playerData: LocalPlayerData) {
             playerData.planets[moonData.id] = newMoonData;
         }
     }
+
+    // remove planets/moons that do not exist anymore
+    Object.keys(playerData.planets)
+        .map(id => parseInt(id, 10))
+        .filter(id => !planetIds.includes(id))
+        .forEach(id => delete playerData.planets[id]);
 }
 
 function getPlanetData(planet: Element): Pick<PlanetData, 'id' | 'isMoon' | 'coordinates' | 'name' | 'maxTemperature'> {
