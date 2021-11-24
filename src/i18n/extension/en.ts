@@ -36,4 +36,9 @@ export default {
         galaxy: 'Galaxy',
         perGalaxy: 'Per Galaxy',
     },
+    resourceBalance: {
+        expeditions: 'from expeditions',
+        combats: 'from combats',
+        debrisFields: 'from debris field',
+    },
 };

@@ -39,6 +39,12 @@ interface I18nExtensionCombatsMenuItems {
     perGalaxy: string;
 }
 
+interface I18nExtensionResourceBalance {
+    expeditions: string;
+    combats: string;
+    debrisFields: string;
+}
+
 export interface PartialI18nExtension extends I18nOgame {
     ogameLanguageNotSupported(lang: string): string;
     
@@ -62,6 +68,7 @@ export interface PartialI18nExtension extends I18nOgame {
     empire: Partial<I18nExtensionEmpire>;
     info: Partial<I18nExtensionInfo>;
     battleResults: Partial<I18nExtensionBattleResults>;
+    resourceBalance: Partial<I18nExtensionResourceBalance>;
 }
 
 export interface I18nExtension extends PartialI18nExtension {
@@ -76,6 +83,7 @@ export interface I18nExtension extends PartialI18nExtension {
     empire: I18nExtensionEmpire;
     info: I18nExtensionInfo;
     battleResults: I18nExtensionBattleResults;
+    resourceBalance: I18nExtensionResourceBalance;
 }
 
 const splitMap = {

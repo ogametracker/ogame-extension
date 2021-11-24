@@ -36,4 +36,9 @@ export default {
         galaxy: 'Galaxie',
         perGalaxy: 'Pro Galaxie',
     },
+    resourceBalance: {
+        expeditions: 'aus Expeditionen',
+        combats: 'aus Kämpfen',
+        debrisFields: 'aus Trümmerfeldern',
+    },
 };
