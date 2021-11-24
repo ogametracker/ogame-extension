@@ -40,5 +40,6 @@ export default {
         expeditions: 'from expeditions',
         combats: 'from combats',
         debrisFields: 'from debris field',
+        detailedView: 'detailed breakdown',
     },
 };

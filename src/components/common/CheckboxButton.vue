@@ -5,6 +5,7 @@
             off: !checked,
             simple: label != null || simple,
             light: light,
+            'no-margin': noMargin,
         }"
         :style="{
             '--button-color': !autoColor ? color : 'rgb(var(--color))',
@@ -44,11 +45,17 @@
 
         @Prop({ required: false, type: Boolean, default: false })
         private autoColor!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private noMargin!: boolean;
     }
 </script>
 <style lang="scss" scoped>
     .checkbox-button {
         margin: 0px 4px;
+        &.no-margin {
+            margin: 0;
+        }
         border-radius: 3px;
         cursor: pointer;
         display: inline-block;

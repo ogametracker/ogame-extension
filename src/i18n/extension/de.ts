@@ -40,5 +40,6 @@ export default {
         expeditions: 'aus Expeditionen',
         combats: 'aus Kämpfen',
         debrisFields: 'aus Trümmerfeldern',
+        detailedView: 'Detaillierte Ansicht',
     },
 };

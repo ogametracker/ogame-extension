@@ -43,6 +43,7 @@ interface I18nExtensionResourceBalance {
     expeditions: string;
     combats: string;
     debrisFields: string;
+    detailedView: string;
 }
 
 export interface PartialI18nExtension extends I18nOgame {

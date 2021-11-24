@@ -1,10 +1,14 @@
 <template>
     <div>
-        <table class="resource-overview-ranged-table">
+        <checkbox-button v-model="detailed" auto-color simple no-margin>
+            {{ $i18n.$t.resourceBalance.detailedView }}
+        </checkbox-button>
+
+        <table class="resource-overview-ranged-table" style="margin-top: 4px">
             <thead>
                 <tr>
                     <th :style="cellWidthStyle" />
-                    <th :style="cellWidthStyle" />
+                    <th v-if="detailed" :style="cellWidthStyle" />
 
                     <th
                         :style="cellWidthStyle"
@@ -24,7 +28,7 @@
                 >
                     <td v-text="item.label" />
 
-                    <td>
+                    <td v-if="detailed">
                         <div
                             v-for="key in keys"
                             :key="key"
@@ -33,21 +37,29 @@
                         />
                     </td>
 
-                    <td
-                        v-for="(range, rangeIndex) in ranges"
-                        :key="rangeIndex"
-                    >
-                        <div
-                            v-for="key in keys"
-                            :key="key"
+                    <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
+                        <template v-if="detailed">
+                            <div
+                                v-for="key in keys"
+                                :key="key"
+                                :class="{
+                                    faded:
+                                        fadeZeros &&
+                                        item.rangeValues[rangeIndex][key] == 0
+                                }"
+                                v-text="
+                                    $i18n.$n(item.rangeValues[rangeIndex][key])
+                                "
+                            />
+                        </template>
+                        <span
+                            v-else
                             :class="{
                                 faded:
                                     fadeZeros &&
-                                    item.rangeValues[rangeIndex][key] == 0
+                                    item.rangeValues[rangeIndex].total == 0
                             }"
-                            v-text="
-                                $i18n.$n(item.rangeValues[rangeIndex][key])
-                            "
+                            v-text="$i18n.$n(item.rangeValues[rangeIndex].total)"
                         />
                     </td>
 
@@ -57,7 +69,7 @@
                 </tr>
                 <tr v-if="showTotal" class="total-row">
                     <td v-text="$i18n.$t.total" />
-                    <td />
+                    <td v-if="detailed" />
 
                     <td v-for="(range, rangeIndex) in ranges" :key="rangeIndex">
                         {{ $i18n.$n(tableData.rangeTotals[rangeIndex]) }}
@@ -107,6 +119,8 @@
         private readonly showTotal = true;
         private readonly noPercentage = true;
         private readonly fadeZeros = true;
+
+        private detailed = false;
 
         private readonly keys: (keyof TableItemData)[] = ['expeditions', 'combats', 'debrisFields'];
 
