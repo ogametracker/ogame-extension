@@ -447,7 +447,7 @@
             </div>
         </div>
 
-        <grid-table sticky-header :columns="cols" style="min-height: 100px">
+        <grid-table sticky-header :columns="cols" style="min-height: 300px">
             <grid-thead>
                 <grid-tr>
                     <grid-cell>
