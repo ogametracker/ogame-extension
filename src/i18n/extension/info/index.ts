@@ -8,6 +8,7 @@ export interface I18nExtensionInfo {
     trackedExpeditions: string;
     trackedCombats: string;
     trackedDebrisFieldReports: string;
+    infoFirefoxBug: string;
 }
 
 const messages: I18nMessageMap<I18nExtensionInfo> = {

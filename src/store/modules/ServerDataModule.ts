@@ -32,7 +32,7 @@ class ServerDataModule extends Vue {
     }
 
     private async loadServerData(): Promise<ServerDataStorage> {
-        const response = await fetch('/api/serverData.xml');
+        const response = await fetch(location.origin + '/api/serverData.xml');
         const xml = await response.text();
         const doc = document.createElement('div');
         doc.innerHTML = xml;
@@ -49,7 +49,7 @@ class ServerDataModule extends Vue {
     parseServerData(doc: HTMLElement): ServerData {
         const getNumber = (selector: string) => {
             const text = doc.querySelector(selector)?.textContent;
-            if(text == null) {
+            if (text == null) {
                 throw new Error(`did not find element '${selector}'`);
             }
 
@@ -57,7 +57,7 @@ class ServerDataModule extends Vue {
         };
         const getBool = (selector: string) => {
             const text = doc.querySelector(selector)?.textContent;
-            if(text == null) {
+            if (text == null) {
                 throw new Error(`did not find element '${selector}'`);
             }
 
@@ -97,7 +97,7 @@ class ServerDataModule extends Vue {
             }
         };
     }
-    
+
 
     private get storageKey(): string {
         return `${OgameMetaData.storageKeyPrefix}-serverSettings`;

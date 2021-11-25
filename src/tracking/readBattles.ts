@@ -53,7 +53,7 @@ export default async function readBattles() {
                 emptyBattleReports.push(msgId);
                 continue;
             }
-            
+
             const messageUrl = `/game/index.php?page=messages&ajax=1&tabid=21&messageId=${msgId}`;
             messageContainer.classList.add('msg-extension-loading');
 
@@ -216,7 +216,7 @@ async function readBattleReport(id: number, messageUrl: string): Promise<BattleR
 }
 
 async function loadOgameBattleReport(messageUrl: string) {
-    const response = await fetch(messageUrl, { method: 'GET' });
+    const response = await fetch(location.origin + messageUrl, { method: 'GET' });
     const html = await response.text();
 
     // find the script with the 'combatData' variable that includes the combat JSON

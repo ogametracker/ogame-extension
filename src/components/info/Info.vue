@@ -1,16 +1,21 @@
 <template>
-    <table style="width: max-content;">
-        <tbody>
-            <tr v-for="(row, i) in rows" :key="i" :class="row.class">
-                <td style="width: 300px;">{{ row.title }}</td>
-                <td>{{ row.text }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div>
+        <table style="width: max-content;">
+            <tbody>
+                <tr v-for="(row, i) in rows" :key="i" :class="row.class">
+                    <td style="width: 300px;">{{ row.title }}</td>
+                    <td>{{ row.text }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 v-if="isFirefox" v-text="$i18n.$t.info.infoFirefoxBug" />
+    </div>
 </template>
 
 <script lang="ts">
-    
+
+    import env from '@/env';
     import BattleModule from '@/store/modules/BattleModule';
     import DebrisFieldModule from '@/store/modules/DebrisFieldModule';
     import ExpoModule from '@/store/modules/ExpoModule';
@@ -29,6 +34,7 @@
         private expoReportCount = 0;
         private combatReportCount = 0;
         private dfReportCount = 0;
+        private isFirefox = false;
 
         private get rows(): Row[] {
             return [
@@ -53,10 +59,16 @@
         }
 
         private async created() {
-            this.totalBytes = await asyncChromeStorage.getBytesInUse();
             this.expoReportCount = ExpoModule.expos.length;
             this.combatReportCount = BattleModule.reports.length;
             this.dfReportCount = DebrisFieldModule.reports.length;
+
+            if (env.browser == 'firefox') {
+                this.isFirefox = true;
+                return;
+            }
+
+            this.totalBytes = await asyncChromeStorage.getBytesInUse();
         }
 
         private get formattedBytes(): string {
@@ -70,7 +82,7 @@
                 unitIndex++;
             }
 
-            return `${this.$i18n.$n(bytes, { 
+            return `${this.$i18n.$n(bytes, {
                 maximumFractionDigits: 1,
             })} ${units[unitIndex]}`;
         }

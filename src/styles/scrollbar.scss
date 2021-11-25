@@ -1,3 +1,4 @@
+// chromium-based
 *::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -11,4 +12,10 @@
     &:hover {
         background: rgba(var(--color), 0.75);
     }
+}
+
+// firefox fallback
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color)) transparent;
 }

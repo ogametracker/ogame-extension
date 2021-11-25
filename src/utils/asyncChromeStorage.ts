@@ -1,6 +1,7 @@
 /// <reference types="chrome"/>
 
 import env from "@/env";
+import clone from "./clone";
 
 export default {
     get<T>(key: string | number): Promise<T | null> {
@@ -19,6 +20,9 @@ export default {
                 resolve();
                 return;
             }
+
+            // necessary because Firefox does not save getters/setters from the Vue watchers
+            data = clone(data);
 
             chrome.storage.local.set({ [key]: data }, () => resolve());
         });
