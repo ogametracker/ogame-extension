@@ -11,8 +11,8 @@ export default {
             /*'Expedice následovala */'nezvyklé signály až k asteroidu'/*. V něm jsme nalezli menší množství Temné hmoty.'*/,
         ],
         [ExpoSize.medium]: [
-            /*TODO: cz 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*TODO: cz 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Naše */'expedice zaznamenala výjimečný úspěch'/*. Podařilo se natěžit Temnou hmotu ze zanikající hvězdy.'*/,
+            /*'Naše expedice */'nalezla prorezlou vesmírnou stanici'/*, která patrně nekontrolovaně pluje vesmírem již delši dobu. Stanice se ukázala jako prázdná, až na něco málo Temné hmoty nalezené v reaktoru. Naši technici se jí pokusí vyextrahovat co možná nejvíce.'*/,
             /*'Naše */'expedice hlásí neobvyklý jev'/*: hromadění Temní hmoty v energetických skladech našich lodí. Technici se pokusí nahromadit této Temné hmoty co možná nejvíce.'*/,
         ],
         [ExpoSize.large]: [
@@ -28,7 +28,7 @@ export default {
             /*'Na */'izolovaném planetoidu byla nalezena snadno přístupná'/* pole surovin. Většina těchto surovin byla úspěšně vytěžena.'*/,
         ],
         [ExpoSize.medium]: [
-            /*TODO: cz 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'Expedice nalezla prastarou, ale */'plně naloženou nákladní loď'/*. Nějaké suroviny se podařilo zachránit.'*/,
             /*'Na */'malém měsíci se svou vlastní atmosférou expedice'/* nalezla velké množství zásob surovin. Posádka na povrchu se snaží vyzvednout a naložit toto přírodní bohatství.'*/,
         ],
         [ExpoSize.large]: [

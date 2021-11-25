@@ -39,7 +39,8 @@ module.exports = {
         loaderOptions: {
             sass: {
                 prependData: `
-                    $is-production: ${process.env.NODE_ENV === 'production'};
+                    $is-chrome: ${process.env.VUE_APP_BROWSER === 'chrome'};
+                    $is-firefox: ${process.env.VUE_APP_BROWSER === 'firefox'};
                 `
             }
         }
