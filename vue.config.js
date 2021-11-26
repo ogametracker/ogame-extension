@@ -1,4 +1,15 @@
 module.exports = {
+    chainWebpack: config => {
+        if (config.plugins.has('extract-css')) {
+            const extractCSSPlugin = config.plugin('extract-css');
+            extractCSSPlugin && extractCSSPlugin.tap(() => [{
+                filename: 'app.css',
+                chunkFilename: 'app.css',
+            }]);
+        }
+
+        config.plugins.delete('named-chunks');
+    },
     pluginOptions: {
         configureMultiCompilerWebpack: [
             {
@@ -7,7 +18,7 @@ module.exports = {
                 },
                 output: {
                     filename: 'app.js',
-                    chunkFilename: 'app.[name].js',
+                    chunkFilename: 'app.chunk.[chunkhash].js',
                 },
                 optimization: {
                     splitChunks: {
@@ -21,7 +32,7 @@ module.exports = {
                 },
                 output: {
                     filename: 'keepActiveItemsTime.js',
-                    chunkFilename: 'keepActiveItemsTime.[name].js',
+                    chunkFilename: 'keepActiveItemsTime.chunk.[chunkhash].js',
                 },
                 optimization: {
                     splitChunks: {
@@ -33,7 +44,7 @@ module.exports = {
     },
     configureWebpack: {
         devtool: 'inline-source-map',
-        
+
     },
     css: {
         loaderOptions: {

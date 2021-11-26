@@ -13,8 +13,10 @@ async function run() {
     updateManifest();
     updateExtensionName();
     removeVueServeSpecificFiles();
-    await createUploadArchive();
     
+    if(!isDev){
+        await createUploadArchive();
+    }
     console.log('done');
 }
 
