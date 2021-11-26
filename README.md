@@ -1,24 +1,16 @@
 # ogame-tracker
 
-## Project setup
-```
-npm install
-```
+Operation System:
+any that can run Node.js
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Tools necessary:
+Node.js >= 15
 
-### Compiles and minifies for production
-```
-npm run build
-```
+How to build:
+1. npm install
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+2. then one of
+    - npm run vue-build-firefox (production build for Firefox)
+    - npm run vue-build-chrome (production build for Chromium)
+    - npm run publish-firefox (production build for Firefox and create zip-archive)
+    - npm run publish-chrome (production build for Chromium and create zip-archive)
