@@ -20,23 +20,15 @@
             "matches": [
                 "https://*.ogame.gameforge.com/game/*"
             ],
-            "js": [
-                "keepActiveItemsTime.chunk-vendors.js",
-                "keepActiveItemsTime.js"
-            ],
+            "js": "^keepActiveItemsTime.*.js$",
             "run_at": "document_start"
         },
         {
             "matches": [
                 "https://*.ogame.gameforge.com/game/*"
             ],
-            "css": [
-                "app.css"
-            ],
-            "js": [
-                "app.chunk-vendors.js",
-                "app.js"
-            ],
+            "css": "^app.*.css$",
+            "js": "^app.*.js$",
             "run_at": "document_start"
         }
     ]

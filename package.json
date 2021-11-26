@@ -4,22 +4,13 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "ext-set-version": "powershell -command \"(Get-Content ./dist/manifest.json).replace('[major-version]', (Get-Date).ToString('yyyy')).replace('[minor-version]', (Get-Date).ToString('MM')).replace('[revision-version]', (Get-Date).DayOfYear).replace('[patch-version]', [Math]::Floor(((Get-Date).Hour * 60 * 60 + (Get-Date).Minute * 60 + (Get-Date).Second) / 2)) | Set-Content ./dist/manifest.json\"",
-        "ext-set-name-dev": "powershell -command \"foreach($f in Get-ChildItem './dist/_locales/' -Recurse -Include *.json) { (Get-Content $f).replace('[name-suffix]', ' DEV') | Set-Content $f }\"",
-        "ext-set-name-prod": "powershell -command \"foreach($f in Get-ChildItem './dist/_locales/' -Recurse -Include *.json) { (Get-Content $f).replace('[name-suffix]', '') | Set-Content $f }\"",
-        "vue-build-chrome": "vue-cli-service build --mode production-chrome --verbose",
-        "build-chrome": "npm run vue-build-chrome && npm run ext-set-version && npm run ext-set-name-dev && npm run ext-change-icon-dev",
-        "build-prod-chrome": "npm run vue-build-chrome && npm run ext-set-version && npm run ext-set-name-prod",
-        "vue-build-firefox": "vue-cli-service build --mode production-firefox --verbose",
-        "build-firefox": "npm run vue-build-firefox && npm run ext-set-version && npm run ext-set-name-dev && npm run ext-change-icon-dev",
-        "build-prod-firefox": "npm run vue-build-firefox && npm run ext-set-version && npm run ext-set-name-prod",
         "lint": "vue-cli-service lint",
-        "ext-remove-fake": "powershell -command \"rm ./dist/ogame-fake.js\" && powershell -command \"rm ./dist/index.html\"",
-        "ext-zip-chrome": "cmd /c \"C:/Program Files/7-Zip/7z\" a -tzip ./dist/ogame-tracker-chrome.zip ./dist/*",
-        "ext-zip-firefox": "cmd /c \"C:/Program Files/7-Zip/7z\" a -tzip ./dist/ogame-tracker-firefox.zip ./dist/*",
-        "publish-chrome": "npm run build-prod-chrome && npm run ext-remove-fake && npm run ext-zip-chrome",
-        "publish-firefox": "npm run build-prod-firefox && npm run ext-remove-fake && npm run ext-zip-firefox",
-        "ext-change-icon-dev": "powershell -command \"(Get-Content ./dist/manifest.json).replace('icon128.png', 'icon128-dev.png') | Set-Content ./dist/manifest.json\""
+        "vue-build-chrome": "vue-cli-service build --mode production-chrome --verbose",
+        "vue-build-firefox": "vue-cli-service build --mode production-firefox --verbose",
+        "dev-chrome": "npm run vue-build-chrome && node post-build.js --dev --chrome",
+        "dev-firefox": "npm run vue-build-firefox && node post-build.js --dev --firefox",
+        "publish-chrome": "npm run vue-build-chrome && node post-build.js --chrome",
+        "publish-firefox": "npm run vue-build-firefox && node post-build.js --firefox"
     },
     "dependencies": {
         "chart.js": "^2.9.4",
@@ -51,7 +42,8 @@
         "sass": "^1.26.5",
         "sass-loader": "^8.0.2",
         "typescript": "~4.1.5",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.11",
+        "zip-dir": "^2.0.0"
     },
     "vuePlugins": {
         "service": [
