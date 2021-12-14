@@ -1,5 +1,15 @@
 @import "env.scss";
 
+#menuTable {
+    display: flex;
+    flex-direction: column;
+
+    .ogame-tracker-menu-item {
+        order: 1;
+    }
+}
+
+
 .statistics-menu-icon {
     display: block;
     width: 27px;
