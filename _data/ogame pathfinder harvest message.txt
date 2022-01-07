@@ -1,4 +1,0 @@
- Harvesting report from DF on [5:370:16]
-18.06.2021 18:40:33
-From: Fleet
-Your Pathfinder (377 ships) have a total storage capacity of 6.597.500. At the target [5:370:16], 3.137.600 Metal and 3.447.800 Crystal are floating in space. You have harvested 3.137.600 Metal and 3.447.800 Crystal. 

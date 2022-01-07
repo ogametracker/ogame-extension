@@ -1,4 +1,0 @@
-- unintuitive date ranges => show example for current date (e.g. "start 1 week ago"+"include 1 week" shows the first and the last date)
-- average lines in all charts => toggle-able in settings/chart
-- ability to reset all/certain settings to default
-- import/export of data

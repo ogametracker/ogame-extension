@@ -1,4 +1,0 @@
-Harvesting report from DF on [5:372:11]
-22.06.2021 09:37:09
-From: Fleet
-Your Reaper (4 ships) have a total storage capacity of 70.000. At the target [5:372:11], 0 Metal and 7.000 Crystal are floating in space. You have harvested 0 Metal and 1.750 Crystal.
