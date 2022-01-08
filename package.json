@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "OGame Tracker",
   "scripts": {
-    "build-typescript-files": "webpack --mode=production --node-env=production",
-    "build": "npm run build-typescript-files && node scripts/generate-manifest.js"
+    "build-typescript-files:chrome": "webpack --mode=production --node-env=production --env browser=chrome",
+    "build-typescript-files:firefox": "webpack --mode=production --node-env=production --env browser=firefox",
+    "build:chrome": "npm run build-typescript-files:chrome && node scripts/generate-manifest.js",
+    "build:firefox": "npm run build-typescript-files:firefox && node scripts/generate-manifest.js"
   },
   "author": "Wonkydonky",
   "devDependencies": {

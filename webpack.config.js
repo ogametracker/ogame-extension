@@ -3,6 +3,7 @@ const fs = require('fs');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -16,7 +17,7 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
     }, {});
 
 /** @type {import('webpack').Configuration} */
-module.exports = {
+module.exports = (env) => ({
     entry: {
         'service-worker': "./src/service-worker/main.ts",
         ...contentScripts,
@@ -35,6 +36,9 @@ module.exports = {
                     from: './static/'
                 },
             ],
+        }),
+        new webpack.DefinePlugin({
+            'process.env.BROWSER': env.browser,
         }),
     ],
     devtool: 'inline-source-map',
@@ -66,4 +70,4 @@ module.exports = {
             maxSize: 2_000_000, // Firefox extension requirement
         },
     },
-};
+});
