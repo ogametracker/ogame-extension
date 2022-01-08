@@ -8,7 +8,8 @@ const isProduction = process.env.NODE_ENV == "production";
 /** @type {import('webpack').Configuration} */
 module.exports = {
     entry: {
-        'service-worker': "./service-worker/main.ts",
+        'service-worker': "./src/service-worker/main.ts",
+        'content-scripts/add-menu-item': "./src/content-scripts/add-menu-item/main.ts",
     },
     output: {
         path: path.resolve(__dirname, "dist"),
