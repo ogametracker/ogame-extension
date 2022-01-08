@@ -1,15 +1,25 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-
 const path = require("path");
+const fs = require('fs');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
+
+const contentScriptDir = './src/content-scripts';
+const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
+    .filter(file => file.isDirectory())
+    .map(dir => dir.name)
+    .reduce((acc, dirName) => {
+        acc[`content-scripts/${dirName}`] = `${contentScriptDir}/${dirName}/main.ts`;
+        return acc;
+    }, {});
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
     entry: {
         'service-worker': "./src/service-worker/main.ts",
-        'content-scripts/add-menu-item': "./src/content-scripts/add-menu-item/main.ts",
+        ...contentScripts,
     },
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -18,18 +28,32 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: './static/'
+                },
+            ],
+        }),
     ],
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     module: {
         rules: [
+            // typescript
             {
                 test: /\.(ts|tsx)$/i,
                 loader: "ts-loader",
-                exclude: ["/node_modules/"],
+                exclude: ["/node_modules/", "/src/views/"],
             },
+            // styles
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: "asset",
+                test: /\.(sass|scss)$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader",
+                ],
             },
         ],
     },

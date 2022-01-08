@@ -4,17 +4,20 @@
   "description": "OGame Tracker",
   "scripts": {
     "build-typescript-files": "webpack --mode=production --node-env=production",
-    "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch"
+    "build": "npm run build-typescript-files && node scripts/generate-manifest.js"
   },
   "author": "Wonkydonky",
   "devDependencies": {
+    "@types/chrome": "^0.0.175",
     "@types/webpack": "^5.28.0",
     "@webpack-cli/generators": "^2.4.1",
     "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.2.0",
+    "css-loader": "^6.5.1",
+    "mini-css-extract-plugin": "^2.4.6",
     "prettier": "^2.5.1",
+    "sass": "^1.47.0",
+    "sass-loader": "^12.4.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4",
     "webpack": "^5.65.0",

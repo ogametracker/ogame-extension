@@ -5,6 +5,8 @@
         "module": "es6",
         "target": "es5",
         "allowJs": false,
-        "rootDir": "."
-    }
+        "rootDir": ".",
+        "sourceMap": true
+    },
+    "exclude": ["src/views/*"]
 }

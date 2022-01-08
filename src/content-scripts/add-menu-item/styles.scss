@@ -1,0 +1,13 @@
+#ogame-tracker-menu-item {
+    a.menubutton::before {
+        content: 'OGame Tracker';
+    }
+
+    .icon {
+        background: green;
+
+        &.warning {
+            background: red;
+        }
+    }
+}
