@@ -2,7 +2,6 @@ import { parse } from "date-fns";
 import { MessageType } from "../../shared/messages/MessageType";
 import { TrackExpeditionMessage, TrackExpeditionMessageData } from "../../shared/messages/tracking/TrackExpeditionMessage";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
-import { PortNames } from "../../shared/ports/constants";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
 
@@ -32,9 +31,7 @@ function setupExpeditionMessageObserver() {
 }
 
 function setupPort() {
-    port = chrome.runtime.connect({
-        name: PortNames.Expeditions,
-    });
+    port = chrome.runtime.connect();
     port.onDisconnect.addListener(() => setupPort());
 }
 

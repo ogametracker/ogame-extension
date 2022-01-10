@@ -1,3 +1,3 @@
-export function _log<T>(...data: T[]) {
+export function _log(...data: any[]) {
     console.log('[OGame Tracker]', ...data);
 }

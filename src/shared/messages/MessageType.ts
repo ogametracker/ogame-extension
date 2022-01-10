@@ -1,7 +1,13 @@
 export enum MessageType {
-    CreateNotification = 'notification:create',
-    ShowNotification = 'notification:show',
-    HideNotification = 'notification:hide',
-    //
-    TrackExpedition = 'expedition:track',
+    // common
+    Subscribe = 'subscribe',
+    Unsubscribe = 'unsubscribe',
+
+    // notifications
+    CreateNotification = 'notification/create',
+    ShowNotification = 'notification/show',
+    HideNotification = 'notification/hide',
+    
+    // expeditions
+    TrackExpedition = 'expedition/track',
 }

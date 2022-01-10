@@ -1,5 +1,6 @@
 import { Message } from "../Message";
 import { MessageType } from "../MessageType";
+MessageType.CreateNotification
 
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 
