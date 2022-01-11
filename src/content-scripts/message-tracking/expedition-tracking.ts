@@ -1,7 +1,8 @@
 import { parse } from "date-fns";
 import { MessageType } from "../../shared/messages/MessageType";
-import { TrackExpeditionMessage, TrackExpeditionMessageData } from "../../shared/messages/tracking/TrackExpeditionMessage";
+import { TrackExpeditionMessage } from "../../shared/messages/tracking/TrackExpeditionMessage";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
+import { _log } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
 
@@ -33,6 +34,7 @@ function setupExpeditionMessageObserver() {
 function setupPort() {
     port = chrome.runtime.connect();
     port.onDisconnect.addListener(() => setupPort());
+    port.onMessage.addListener(message => _log('message', message));
 }
 
 function trackExpeditions(elem: Element) {
@@ -58,6 +60,10 @@ function trackExpeditions(elem: Element) {
             // send message to service worker
             const workerMessage: TrackExpeditionMessage = {
                 type: MessageType.TrackExpedition,
+                ogameMeta: {
+                    server: 's123-de', //TODO: server id + lang
+                    playerId: 123456, //TODO: player id
+                },
                 data: {
                     id,
                     date,
