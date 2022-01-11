@@ -1,3 +1,6 @@
+import { ItemHash } from "../items/Item";
+import { ResourceType } from "../ogame/resources/ResourceType";
+import { ShipType } from "../ogame/ships/ShipType";
 import { ExpeditionEventSize } from "./ExpeditionEventSize";
 import { ExpeditionEventType } from "./ExpeditionEventType";
 
@@ -16,30 +19,16 @@ export type ExpeditionEventDarkMatter = ExpeditionEventBase & ExpeditionEventWit
     darkMatter: number;
 };
 
-export type ExpeditionEventResourcesAmount = Record<Resource, number>;
+export type ExpeditionEventResourcesAmount = Record<ResourceType, number>;
 
 export type ExpeditionEventResources = ExpeditionEventBase & ExpeditionEventWithSize & {
     type: ExpeditionEventType.resources;
     resources: ExpeditionEventResourcesAmount;
 };
 
-// export type ExpeditionFindableShips = Exclude<Ship, > {
-//     lightFighter = Ship.lightFighter,
-//     heavyFighter = Ship.heavyFighter,
-//     cruiser = Ship.cruiser,
-//     battleship = Ship.battleship,
-//     battlecruiser = Ship.battlecruiser,
-//     bomber = Ship.bomber,
-//     destroyer = Ship.destroyer,
-//     reaper = Ship.reaper,
-//     pathfinder = Ship.pathfinder,
-//     smallCargo = Ship.smallCargo,
-//     largeCargo = Ship.largeCargo,
-//     espionageProbe = Ship.espionageProbe,
-// }
+export type ExpeditionFindableShipType = Exclude<ShipType, ShipType.crawler | ShipType.colonyShip | ShipType.deathStar | ShipType.recycler | ShipType.solarSatellite>;
 
-
-export type ExpeditionFindableFleet = Record<ExpeditionFindableShips, number | undefined>;
+export type ExpeditionFindableFleet = Record<ExpeditionFindableShipType, number | undefined>;
 
 export type ExpeditionEventFleet = ExpeditionEventBase & ExpeditionEventWithSize & {
     type: ExpeditionEventType.fleet;

@@ -1,0 +1,740 @@
+export enum ItemGrade {
+    none = 'none',
+    bronze = 'bronze',
+    silver = 'silver',
+    gold = 'gold',
+    platinum = 'platinum',
+}
+
+export interface Item {
+    name: string;
+    image: string;
+    hash: string;
+    grade: ItemGrade;
+}
+
+export enum ItemHash {
+    discoverer = '2dd05cc4c0e185fce2e712112dc44932027aee98',
+    collector = '9374c79a24b84c4331f0d26526ef6c2d33319a6e',
+    general = '77eff880829027daf23b755e14820a60c4c6fd93',
+
+    researcher = '1aa36213cb676fd5baad5edc2bee4fbe117a778b',
+    trader = '6c9fe5e35bdad0d4e3382eb6a5aeac6bc8263752',
+    warrior = '9b48e257cbef6c5df0f03a47cead7f9abda3d437',
+
+    metalBooster_bronze_1day = 'b956c46faa8e4e5d8775701c69dbfbf53309b279',
+    metalBooster_bronze_7days = 'de922af379061263a56d7204d1c395cefcfb7d75',
+    metalBooster_silver_7days = 'ba85cc2b8a5d986bbfba6954e2164ef71af95d4a',
+    metalBooster_silver_30days = '742743b3b0ae1f0b8a1e01921042810b58f12f39',
+    metalBooster_silver_90days = '6f44dcd2bd84875527abba69158b4e976c308bbc',
+    metalBooster_gold_7days = '05294270032e5dc968672425ab5611998c409166',
+    metalBooster_gold_30days = '6fecb993169fe918d9c63cd37a2e541cc067664e',
+    metalBooster_gold_90days = '21c1a65ca6aecf54ffafb94c01d0c60d821b325d',
+    metalBooster_platinum_7days = 'a83cfdc15b8dba27c82962d57e50d8101d263cfb',
+    metalBooster_platinum_30days = 'c690f492cffe5f9f2952337e8eed307a8a62d6cf',
+    metalBooster_platinum_90days = 'ca7f903a65467b70411e513b0920d66c417aa3a2',
+
+    crystalBooster_bronze_1day = '090a969b05d1b5dc458a6b1080da7ba08b84ec7f',
+    crystalBooster_bronze_7days = '3c9f85221807b8d593fa5276cdf7af9913c4a35d',
+    crystalBooster_silver_7days = '422db99aac4ec594d483d8ef7faadc5d40d6f7d3',
+    crystalBooster_silver_30days = '5b69663e3ba09a1fe77cf72c5094e246cfe954d6',
+    crystalBooster_silver_90days = '04d8afd5936976e32ce894b765ea8bd168aa07ef',
+    crystalBooster_gold_7days = '118d34e685b5d1472267696d1010a393a59aed03',
+    crystalBooster_gold_30days = '36fb611e71d42014f5ebd0aa5a52bc0c81a0c1cb',
+    crystalBooster_gold_90days = 'd45f00e8b909f5293a83df4f369737ea7d69c684',
+    crystalBooster_platinum_7days = '35d96e441c21ef112a84c618934d9d0f026998fd',
+    crystalBooster_platinum_30days = '6bf45fcba8a6a68158273d04a924452eca75cf39',
+    crystalBooster_platinum_90days = '7c2edf40c5cd54ad11c6439398b83020c0a7a6be',
+
+    deuteriumBooster_bronze_1day = 'e254352ac599de4dd1f20f0719df0a070c623ca8',
+    deuteriumBooster_bronze_7days = 'd9fa5f359e80ff4f4c97545d07c66dbadab1d1be',
+    deuteriumBooster_silver_7days = 'e4b78acddfa6fd0234bcb814b676271898b0dbb3',
+    deuteriumBooster_silver_30days = '26416a3cdb94613844b1d3ca78b9057fd6ae9b15',
+    deuteriumBooster_silver_90days = '6f0952a919fd2ab9c009e9ccd83c1745f98f758f',
+    deuteriumBooster_gold_7days = '5560a1580a0330e8aadf05cb5bfe6bc3200406e2',
+    deuteriumBooster_gold_30days = '300493ddc756869578cb2888a3a1bc0c3c66765f',
+    deuteriumBooster_gold_90days = 'dc5896bed3311434224d511fa7ced6fdbe41b4e8',
+    deuteriumBooster_platinum_7days = '4b51d903560edd102467b110586000bd64fdb954',
+    deuteriumBooster_platinum_30days = '620f779dbffa1011aded69b091239727910a3d03',
+    deuteriumBooster_platinum_90days = '831c3ea8d868eb3601536f4d5e768842988a1ba9',
+
+    energyBooster_bronze_7days = '3f6f381dc9b92822406731a942c028adf8dc978f',
+    energyBooster_silver_7days = 'c2bad58fcec374d709099d11d0549e59ea7e233e',
+    energyBooster_silver_30days = 'bedd248aaf288c27e9351cfacfa6be03f1dbb898',
+    energyBooster_silver_90days = 'e05aa5b9e3df5be3857b43da8403eafbf5ad3b96',
+    energyBooster_gold_7days = '55b52cbfb148ec80cd4e5b0580f7bed01149d643',
+    energyBooster_gold_30days = '4fa9a2273ee446284d5177fd9d60a22de01e932b',
+    energyBooster_gold_90days = '5ad783dcfce3655ef97b36197425718a0dad6b66',
+    energyBooster_platinum_7days = '77c36199102e074dca46f5f26ef57ce824d044dd',
+    energyBooster_platinum_30days = 'dfe86378f8c3d7f3ee0790ea64603bc44e83ca47',
+    energyBooster_platinum_90days = 'c39aa972a971e94b1d9b4d7a8f734b3d8be12534',
+
+    moonFields_bronze = 'be67e009a5894f19bbf3b0c9d9b072d49040a2cc',
+    moonFields_silver = 'c21ff33ba8f0a7eadb6b7d1135763366f0c4b8bf',
+    moonFields_gold = '05ee9654bd11a261f1ff0e5d0e49121b5e7e4401',
+    moonFields_platinum = '8a426241572b2fea57844acd99bc326fe40e35cf',
+
+    moonShot_bronze = '485a6d5624d9de836d3eb52b181b13423f795770',
+    moonShot_silver = 'fd895a5c9fd978b9c5c7b65158099773ba0eccef',
+    moonShot_gold = '45d6660308689c65d97f3c27327b0b31f880ae75',
+
+    planetFields_bronze = '16768164989dffd819a373613b5e1a52e226a5b0',
+    planetFields_silver = '0e41524dc46225dca21c9119f2fb735fd7ea5cb3',
+    planetFields_gold = '04e58444d6d0beb57b3e998edc34c60f8318825a',
+    planetFields_platinum = 'f3d9b82e10f2e969209c1a5ad7d22181c703bb36',
+
+    resourcePackage_all = 'c1d0232604872f899ea15a9772baf76880f55c5f',
+    resourcePackage_metal = '859d82d316b83848f7365d21949b3e1e63c7841f',
+    resourcePackage_crystal = 'bb2f6843226ef598f0b567b92c51b283de90aa48',
+    resourcePackage_deuterium = 'cb72ed207dd871832a850ee29f1c1f83aa3f4f36',
+
+    shortenTime_buildings = 'cb4fd53e61feced0d52cfc4c1ce383bad9c05f67',
+    shortenTime_research = '14c17d49462963f5e5b67efa1257622ce1b866ac',
+    shortenTime_shipyard = '75accaa0d1bc22b78d83b89cd437bdccd6a58887',
+
+    kraken_bronze = '40f6c78e11be01ad3389b7dccd6ab8efa9347f3c',
+    kraken_silver = '4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a',
+    kraken_gold = '929d5e15709cc51a4500de4499e19763c879f7f7',
+    kraken_platinum = 'f36042d76e6b8b33d931e1d4ae99f35265cd82d1',
+
+    detroid_bronze = 'd3d541ecc23e4daa0c698e44c32f04afd2037d84',
+    detroid_silver = '27cbcd52f16693023cb966e5026d8a1efbbfc0f9',
+    detroid_gold = '0968999df2fe956aa4a07aea74921f860af7d97f',
+    detroid_platinum = '3347bcd4ee59f1d3fa03c4d18a25bca2da81de82',
+
+    newtron_bronze = 'da4a2a1bb9afd410be07bc9736d87f1c8059e66d',
+    newtron_silver = 'd26f4dab76fdc5296e3ebec11a1e1d2558c713ea',
+    newtron_gold = '8a4f9e8309e1078f7f5ced47d558d30ae15b4a1b',
+    newtron_platinum = 'a1ba242ede5286b530cdf991796b3d1cae9e4f23',
+
+    expeditionslots_bronze_7days = 'e54ecc0416d6e96b4165f24238b03a1b32c1df47',
+    expeditionslots_bronze_30days = '8c1f6c6849d1a5e4d9de6ae9bb1b861f6f7b5d4d',
+    expeditionslots_bronze_90days = 'a5784c685c0e1e6111d9c18aeaf80af2e0777ab4',
+    expeditionslots_silver_7days = 'b2bc9789df7c1ef5e058f72d61380b696dde54e8',
+    expeditionslots_silver_30days = '31a504be1195149a3bef05b9cc6e3af185d24ef2',
+    expeditionslots_silver_90days = '4f6f941bbf2a8527b0424b3ad11014502d8f4fb8',
+    expeditionslots_gold_7days = '9336b9f29d36e3f69b0619c9523d8bec5e09ab8e',
+    expeditionslots_gold_30days = 'fd7d35e73d0e09e83e30812b738ef966ea9ef790',
+    expeditionslots_gold_90days = '540410439514ac09363c5c47cf47117a8b8ae79a',
+
+    fleetSlots_bronze_7days = '0684c6a5a42acbb3cd134913d421fc28dae6b90d',
+    fleetSlots_bronze_30days = '94a28491b6fd85003f1cb151e88dde106f1d7596',
+    fleetSlots_bronze_90days = 'bb47add58876240199a18ddacc2db07789be1934',
+    fleetSlots_silver_7days = 'f8fd610825fb4a442e27e4e9add74f050e040e27',
+    fleetSlots_silver_30days = 'c4e598a85805a7eb3ca70f9265cbd366fc4d2b0e',
+    fleetSlots_silver_90days = 'a693c5ce3f5676efaaf0781d94234bea4f599d2e',
+    fleetSlots_gold_7days = '5a8000c372cd079292a92d35d4ddba3c0f348d3b',
+    fleetSlots_gold_30days = '1808bf7639b81ac3ac87bcb7eb3bbba0a1874d0a',
+    fleetSlots_gold_90days = '1f7024c4f6493f0c589e1b00c76e6ced258c00e5',
+
+    migrationItem = '7eacfcee74660f30bb92a5874e8cccf2bb286ebd',
+}
+
+export type ItemDictionary = Record<ItemHash, Item>;
+
+export const items: ItemDictionary = Object.freeze({
+    "2dd05cc4c0e185fce2e712112dc44932027aee98": {
+        name: "Entdecker",
+        image: "3ecbd5114c3b663aa1a1252fc03091eecc790f10",
+        hash: "2dd05cc4c0e185fce2e712112dc44932027aee98",
+        grade: ItemGrade.none,
+    },
+    "9374c79a24b84c4331f0d26526ef6c2d33319a6e": {
+        name: "Kollektor",
+        image: "09726bf92556fc12b55ec5ee00516af0223b7713",
+        hash: "9374c79a24b84c4331f0d26526ef6c2d33319a6e",
+        grade: ItemGrade.none,
+    },
+    "77eff880829027daf23b755e14820a60c4c6fd93": {
+        name: "General",
+        image: "4b999ea0089c6358b5531635b37e280cfae62da2",
+        hash: "77eff880829027daf23b755e14820a60c4c6fd93",
+        grade: ItemGrade.none,
+    },
+
+    "1aa36213cb676fd5baad5edc2bee4fbe117a778b": {
+        name: "Forscher",
+        image: "55f7003a5cf07e52b38f11b81129ac5042dff4da",
+        hash: "1aa36213cb676fd5baad5edc2bee4fbe117a778b",
+        grade: ItemGrade.none,
+    },
+    "6c9fe5e35bdad0d4e3382eb6a5aeac6bc8263752": {
+        name: "Händler",
+        image: "5df93e894bb92e987219fc9d669c9a276ceb5499",
+        hash: "6c9fe5e35bdad0d4e3382eb6a5aeac6bc8263752",
+        grade: ItemGrade.none,
+    },
+    "9b48e257cbef6c5df0f03a47cead7f9abda3d437": {
+        name: "Krieger",
+        image: "48ca2adbb95b37db83777b659cfc4042c179fece",
+        hash: "9b48e257cbef6c5df0f03a47cead7f9abda3d437",
+        grade: ItemGrade.none,
+    },
+
+    "b956c46faa8e4e5d8775701c69dbfbf53309b279": {
+        hash: "b956c46faa8e4e5d8775701c69dbfbf53309b279",
+        image: "61b6be10761f20795844e467916f8cc2802dd680",
+        name: "Metall-Booster Bronze (1 Tag)",
+        grade: ItemGrade.bronze,
+    },
+    "de922af379061263a56d7204d1c395cefcfb7d75": {
+        hash: "de922af379061263a56d7204d1c395cefcfb7d75",
+        image: "7f833a0709db862070ca9cdca8e91c28e52432af",
+        name: "Metall-Booster Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "ba85cc2b8a5d986bbfba6954e2164ef71af95d4a": {
+        name: "Metall-Booster Silber (7 Tage)",
+        image: "db8f26a29991086cadd9db7deff044d89cd47de",
+        hash: "ba85cc2b8a5d986bbfba6954e2164ef71af95d4a",
+        grade: ItemGrade.silver,
+    },
+    "742743b3b0ae1f0b8a1e01921042810b58f12f39": {
+        name: "Metall-Booster Silber (30 Tage)",
+        image: "2bd0b5df51b77a3cb65d01568171cb991e047ac5",
+        hash: "742743b3b0ae1f0b8a1e01921042810b58f12f39",
+        grade: ItemGrade.silver,
+    },
+    "6f44dcd2bd84875527abba69158b4e976c308bbc": {
+        name: "Metall-Booster Silber (90 Tage)",
+        image: "6b4ea2ced99211b1b9f0b84fb8a312f0f053a366",
+        hash: "6f44dcd2bd84875527abba69158b4e976c308bbc",
+        grade: ItemGrade.silver,
+    },
+    "05294270032e5dc968672425ab5611998c409166": {
+        name: "Metall-Booster Gold (7 Tage)",
+        image: "3d0e872a750a6dae2f2a5a7011ec79794bb0e676",
+        hash: "05294270032e5dc968672425ab5611998c409166",
+        grade: ItemGrade.gold,
+    },
+    "6fecb993169fe918d9c63cd37a2e541cc067664e": {
+        name: "Metall-Booster Gold (30 Tage)",
+        image: "eacc8d23eef74f5dd4b91b99a654e0d63450fa07",
+        hash: "6fecb993169fe918d9c63cd37a2e541cc067664e",
+        grade: ItemGrade.gold,
+    },
+    "21c1a65ca6aecf54ffafb94c01d0c60d821b325d": {
+        name: "Metall-Booster Gold (90 Tage)",
+        image: "b5ed0c10e3396c3cbab4dff2a778e2676f7b936a",
+        hash: "21c1a65ca6aecf54ffafb94c01d0c60d821b325d",
+        grade: ItemGrade.gold,
+    },
+    "a83cfdc15b8dba27c82962d57e50d8101d263cfb": {
+        name: "Metall-Booster Platin (7 Tage)",
+        image: "34752e40512a574a74464006d326bd6aebecb1f1",
+        hash: "a83cfdc15b8dba27c82962d57e50d8101d263cfb",
+        grade: ItemGrade.platinum,
+    },
+    "c690f492cffe5f9f2952337e8eed307a8a62d6cf": {
+        name: "Metall-Booster Platin (30 Tage)",
+        image: "ff1ad1a6d5879cb0ea720199c9eb6518584f0922",
+        hash: "c690f492cffe5f9f2952337e8eed307a8a62d6cf",
+        grade: ItemGrade.platinum,
+    },
+    "ca7f903a65467b70411e513b0920d66c417aa3a2": {
+        name: "Metall-Booster Platin (90 Tage)",
+        image: "ff96652e498d26f8d2621b0599808860f11ee31c",
+        hash: "ca7f903a65467b70411e513b0920d66c417aa3a2",
+        grade: ItemGrade.platinum,
+    },
+
+    "090a969b05d1b5dc458a6b1080da7ba08b84ec7f": {
+        hash: "090a969b05d1b5dc458a6b1080da7ba08b84ec7f",
+        image: "c6772214b0a510ee02d69fbd6c4bd6eae609a3f8",
+        name: "Kristall-Booster Bronze (1 Tag)",
+        grade: ItemGrade.bronze,
+    },
+    "3c9f85221807b8d593fa5276cdf7af9913c4a35d": {
+        hash: "3c9f85221807b8d593fa5276cdf7af9913c4a35d",
+        image: "ddedd2f4128678c7c857af7e5550e397f50f38c2",
+        name: "Kristall-Booster Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "422db99aac4ec594d483d8ef7faadc5d40d6f7d3": {
+        name: "Kristall-Booster Silber (7 Tage)",
+        image: "6e1d20e739c143784d10e58ddb4c50c52122a40a",
+        hash: "422db99aac4ec594d483d8ef7faadc5d40d6f7d3",
+        grade: ItemGrade.silver,
+    },
+    "5b69663e3ba09a1fe77cf72c5094e246cfe954d6": {
+        name: "Kristall-Booster Silber (30 Tage)",
+        image: "4cb9628975e286b2cf4949ef4d216bccc1813a77",
+        hash: "5b69663e3ba09a1fe77cf72c5094e246cfe954d6",
+        grade: ItemGrade.silver,
+    },
+    "04d8afd5936976e32ce894b765ea8bd168aa07ef": {
+        name: "Kristall-Booster Silber (90 Tage)",
+        image: "23f7d50e917ed39c5b755b95786e8cf4c4141279",
+        hash: "04d8afd5936976e32ce894b765ea8bd168aa07ef",
+        grade: ItemGrade.silver,
+    },
+    "118d34e685b5d1472267696d1010a393a59aed03": {
+        name: "Kristall-Booster Gold (7 Tage)",
+        image: "bdb4508609de1df58bf4a6108fff73078c89f777",
+        hash: "118d34e685b5d1472267696d1010a393a59aed03",
+        grade: ItemGrade.gold,
+    },
+    "36fb611e71d42014f5ebd0aa5a52bc0c81a0c1cb": {
+        name: "Kristall-Booster Gold (30 Tage)",
+        image: "5b84505319073e6b71900cfd059657750317ae23",
+        hash: "36fb611e71d42014f5ebd0aa5a52bc0c81a0c1cb",
+        grade: ItemGrade.gold,
+    },
+    "d45f00e8b909f5293a83df4f369737ea7d69c684": {
+        name: "Kristall-Booster Gold (90 Tage)",
+        image: "efdf5966695a147aaa26442f811346e8b749ec6d",
+        hash: "d45f00e8b909f5293a83df4f369737ea7d69c684",
+        grade: ItemGrade.gold,
+    },
+    "35d96e441c21ef112a84c618934d9d0f026998fd": {
+        name: "Kristall-Booster Platin (7 Tage)",
+        image: "9952055cf47d116eedeec429a469b61abdf6ce72",
+        hash: "35d96e441c21ef112a84c618934d9d0f026998fd",
+        grade: ItemGrade.platinum,
+    },
+    "6bf45fcba8a6a68158273d04a924452eca75cf39": {
+        name: "Kristall-Booster Platin (30 Tage)",
+        image: "d4e203516d95ae28081a3d985818e2df5a2475d4",
+        hash: "6bf45fcba8a6a68158273d04a924452eca75cf39",
+        grade: ItemGrade.platinum,
+    },
+    "7c2edf40c5cd54ad11c6439398b83020c0a7a6be": {
+        name: "Kristall-Booster Platin (90 Tage)",
+        image: "5a16b583800c72b8eef5585fd5aa0bbd8e5c2c0f",
+        hash: "7c2edf40c5cd54ad11c6439398b83020c0a7a6be",
+        grade: ItemGrade.platinum,
+    },
+
+    "e254352ac599de4dd1f20f0719df0a070c623ca8": {
+        hash: "e254352ac599de4dd1f20f0719df0a070c623ca8",
+        image: "5f7a90f4d43866b781c61f7511bb8363252639a4",
+        name: "Deuterium-Booster Bronze (1 Tag)",
+        grade: ItemGrade.bronze,
+    },
+    "d9fa5f359e80ff4f4c97545d07c66dbadab1d1be": {
+        hash: "d9fa5f359e80ff4f4c97545d07c66dbadab1d1be",
+        image: "c7c2837a0b341d37383d6a9d8f8986f500db7bf9",
+        name: "Deuterium-Booster Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "e4b78acddfa6fd0234bcb814b676271898b0dbb3": {
+        name: "Deuterium-Booster Silber (7 Tage)",
+        image: "7d3064415ec1a60100db024471fb0c1fa8ab3726",
+        hash: "e4b78acddfa6fd0234bcb814b676271898b0dbb3",
+        grade: ItemGrade.silver,
+    },
+    "26416a3cdb94613844b1d3ca78b9057fd6ae9b15": {
+        name: "Deuterium-Booster Silber (30 Tage)",
+        image: "7c48195115d4b4c97ac5b651b0cd766463631b7a",
+        hash: "26416a3cdb94613844b1d3ca78b9057fd6ae9b15",
+        grade: ItemGrade.silver,
+    },
+    "6f0952a919fd2ab9c009e9ccd83c1745f98f758f": {
+        name: "Deuterium-Booster Silber (90 Tage)",
+        image: "c7850b988587f08689f6d2d8e579bfde146525dd",
+        hash: "6f0952a919fd2ab9c009e9ccd83c1745f98f758f",
+        grade: ItemGrade.silver,
+    },
+    "5560a1580a0330e8aadf05cb5bfe6bc3200406e2": {
+        name: "Deuterium-Booster Gold (7 Tage)",
+        image: "d52a66ed7b32cf220746cc3618a885876fce520e",
+        hash: "5560a1580a0330e8aadf05cb5bfe6bc3200406e2",
+        grade: ItemGrade.gold,
+    },
+    "300493ddc756869578cb2888a3a1bc0c3c66765f": {
+        name: "Deuterium-Booster Gold (30 Tage)",
+        image: "b5d2db0f5428b76ce91a51daea5959426053e973",
+        hash: "300493ddc756869578cb2888a3a1bc0c3c66765f",
+        grade: ItemGrade.gold,
+    },
+    "dc5896bed3311434224d511fa7ced6fdbe41b4e8": {
+        name: "Deuterium-Booster Gold (90 Tage)",
+        image: "b4abecddc518baa61d2f2004687cfbd89d34e7c7",
+        hash: "dc5896bed3311434224d511fa7ced6fdbe41b4e8",
+        grade: ItemGrade.gold,
+    },
+    "4b51d903560edd102467b110586000bd64fdb954": {
+        name: "Deuterium-Booster Platin (7 Tage)",
+        image: "2d1d4247ba12a3185bfd423023b7b551cf841ac3",
+        hash: "4b51d903560edd102467b110586000bd64fdb954",
+        grade: ItemGrade.platinum,
+    },
+    "620f779dbffa1011aded69b091239727910a3d03": {
+        name: "Deuterium-Booster Platin (30 Tage)",
+        image: "8245a9d21fb27088b25d48ae024e9382fcea1448",
+        hash: "620f779dbffa1011aded69b091239727910a3d03",
+        grade: ItemGrade.platinum,
+    },
+    "831c3ea8d868eb3601536f4d5e768842988a1ba9": {
+        name: "Deuterium-Booster Platin (90 Tage)",
+        image: "55a877e91716da736ccec66817e611a61c9a1e4a",
+        hash: "831c3ea8d868eb3601536f4d5e768842988a1ba9",
+        grade: ItemGrade.platinum,
+    },
+
+    "3f6f381dc9b92822406731a942c028adf8dc978f": {
+        name: "Energie-Booster Bronze (7 Tage)",
+        image: "daba686ad7f01a5d1e8b28bd13a1a9d1b8efe19c",
+        hash: "3f6f381dc9b92822406731a942c028adf8dc978f",
+        grade: ItemGrade.bronze,
+    },
+    "c2bad58fcec374d709099d11d0549e59ea7e233e": {
+        name: "Energie-Booster Silber (7 Tage)",
+        image: "78277dabf424cfe6d902fcb67c10d7a81686a51f",
+        hash: "c2bad58fcec374d709099d11d0549e59ea7e233e",
+        grade: ItemGrade.silver,
+    },
+    "bedd248aaf288c27e9351cfacfa6be03f1dbb898": {
+        name: "Energie-Booster Silber (30 Tage)",
+        image: "009ba047272acf73dfacca91dbef8e9c3b8d5a29",
+        hash: "bedd248aaf288c27e9351cfacfa6be03f1dbb898",
+        grade: ItemGrade.silver,
+    },
+    "e05aa5b9e3df5be3857b43da8403eafbf5ad3b96": {
+        name: "Energie-Booster Silber (90 Tage)",
+        image: "0b9e7bcf137a106982345e37a33127400e201ffa",
+        hash: "e05aa5b9e3df5be3857b43da8403eafbf5ad3b96",
+        grade: ItemGrade.silver,
+    },
+    "55b52cbfb148ec80cd4e5b0580f7bed01149d643": {
+        name: "Energie-Booster Gold (7 Tage)",
+        image: "8c59dc4096d4cbddfc83a3a29ed6a64fa4696388",
+        hash: "55b52cbfb148ec80cd4e5b0580f7bed01149d643",
+        grade: ItemGrade.gold,
+    },
+    "4fa9a2273ee446284d5177fd9d60a22de01e932b": {
+        name: "Energie-Booster Gold (30 Tage)",
+        image: "76bc563f528108c6d65b8f3a75789d929e2eae2b",
+        hash: "4fa9a2273ee446284d5177fd9d60a22de01e932b",
+        grade: ItemGrade.gold,
+    },
+    "5ad783dcfce3655ef97b36197425718a0dad6b66": {
+        name: "Energie-Booster Gold (90 Tage)",
+        image: "e7153f5de2c83321c908c2c3fcb76fb874547b5d",
+        hash: "5ad783dcfce3655ef97b36197425718a0dad6b66",
+        grade: ItemGrade.gold,
+    },
+    "77c36199102e074dca46f5f26ef57ce824d044dd": {
+        name: "Energie-Booster Platin (7 Tage)",
+        image: "a09b4c480b8b6971d73cc6d5102e4c2d217f51aa",
+        hash: "77c36199102e074dca46f5f26ef57ce824d044dd",
+        grade: ItemGrade.platinum,
+    },
+    "dfe86378f8c3d7f3ee0790ea64603bc44e83ca47": {
+        name: "Energie-Booster Platin (30 Tage)",
+        image: "9d13f9cd483fe22e01f33ada7511677fa8556e4e",
+        hash: "dfe86378f8c3d7f3ee0790ea64603bc44e83ca47",
+        grade: ItemGrade.platinum,
+    },
+    "c39aa972a971e94b1d9b4d7a8f734b3d8be12534": {
+        name: "Energie-Booster Platin (90 Tage)",
+        image: "b1013d0e9eea34419d4b2acd05c4adcd15868417",
+        hash: "c39aa972a971e94b1d9b4d7a8f734b3d8be12534",
+        grade: ItemGrade.platinum,
+    },
+
+    "be67e009a5894f19bbf3b0c9d9b072d49040a2cc": {
+        name: "Mondfelder Bronze",
+        image: "fc59d4cb4bb28d6b9f43a8dd8bdd8ff9bb36674c",
+        hash: "be67e009a5894f19bbf3b0c9d9b072d49040a2cc",
+        grade: ItemGrade.bronze,
+    },
+    "c21ff33ba8f0a7eadb6b7d1135763366f0c4b8bf": {
+        name: "Mondfelder Silber",
+        image: "f3c070b68fcc9a9fb5189056cfcbc657daafe34e",
+        hash: "c21ff33ba8f0a7eadb6b7d1135763366f0c4b8bf",
+        grade: ItemGrade.silver,
+    },
+    "05ee9654bd11a261f1ff0e5d0e49121b5e7e4401": {
+        name: "Mondfelder Gold",
+        image: "5dbf1cc479110bc65469477c127b81870e4af9a2",
+        hash: "05ee9654bd11a261f1ff0e5d0e49121b5e7e4401",
+        grade: ItemGrade.gold,
+    },
+    "8a426241572b2fea57844acd99bc326fe40e35cf": {
+        name: "Mondfelder Platin",
+        image: "d25f5ba50e9b154aba44bd5616019450b9165b4a",
+        hash: "8a426241572b2fea57844acd99bc326fe40e35cf",
+        grade: ItemGrade.platinum,
+    },
+
+    "485a6d5624d9de836d3eb52b181b13423f795770": {
+        name: "M.O.O.N.S. Bronze",
+        image: "261509b47bbb630462def327128eefbb8344ea86",
+        hash: "485a6d5624d9de836d3eb52b181b13423f795770",
+        grade: ItemGrade.bronze,
+    },
+    "fd895a5c9fd978b9c5c7b65158099773ba0eccef": {
+        name: "M.O.O.N.S. Silber",
+        image: "13ac941d1254701e2ea11a7f401ac8dd0a6a3760",
+        hash: "fd895a5c9fd978b9c5c7b65158099773ba0eccef",
+        grade: ItemGrade.silver,
+    },
+    "45d6660308689c65d97f3c27327b0b31f880ae75": {
+        name: "M.O.O.N.S. Gold",
+        image: "ea9cc6187220bd33632353fca79bbabf3f9cb0be",
+        hash: "45d6660308689c65d97f3c27327b0b31f880ae75",
+        grade: ItemGrade.gold,
+    },
+
+    "16768164989dffd819a373613b5e1a52e226a5b0": {
+        name: "Planetenfelder Bronze",
+        image: "34b21de1e58cdcfe271ac19798c6a877dfd7bc16",
+        hash: "16768164989dffd819a373613b5e1a52e226a5b0",
+        grade: ItemGrade.bronze,
+    },
+    "0e41524dc46225dca21c9119f2fb735fd7ea5cb3": {
+        name: "Planetenfelder Silber",
+        image: "67c8a380625953698ae109c3af85075419c8fe36",
+        hash: "0e41524dc46225dca21c9119f2fb735fd7ea5cb3",
+        grade: ItemGrade.silver,
+    },
+    "04e58444d6d0beb57b3e998edc34c60f8318825a": {
+        name: "Planetenfelder Gold",
+        image: "ddc59021e1e5cec24be946c7f2dcc55721a540fa",
+        hash: "04e58444d6d0beb57b3e998edc34c60f8318825a",
+        grade: ItemGrade.gold,
+    },
+    "f3d9b82e10f2e969209c1a5ad7d22181c703bb36": {
+        name: "Planetenfelder Platin",
+        image: "9771e15c04acfadc55cbd513efc8235ccfe5205d",
+        hash: "f3d9b82e10f2e969209c1a5ad7d22181c703bb36",
+        grade: ItemGrade.platinum,
+    },
+
+    "c1d0232604872f899ea15a9772baf76880f55c5f": {
+        name: "Komplettes Ressourcenpaket",
+        image: "18145145a76b71f151ba97b7c17891a5389ceeb5",
+        hash: "c1d0232604872f899ea15a9772baf76880f55c5f",
+        grade: ItemGrade.none,
+    },
+    "859d82d316b83848f7365d21949b3e1e63c7841f": {
+        name: "Metallpaket",
+        image: "0bd67f2ea31a389bfd33629b4e611e9261597c81",
+        hash: "859d82d16b83848f7365d21949b3e1e63c7841f",
+        grade: ItemGrade.none,
+    },
+    "bb2f6843226ef598f0b567b92c51b283de90aa48": {
+        name: "Kristallpaket",
+        image: "c48c8ca23fb22d8860962109799a1f2e0285a64e",
+        hash: "bb2f6843226ef598f0b567b92c51b283de90aa48",
+        grade: ItemGrade.none,
+    },
+    "cb72ed207dd871832a850ee29f1c1f83aa3f4f36": {
+        name: "Deuteriumpaket",
+        image: "c7e79db86d95d22b033627c706cb47d9342f5ec1",
+        hash: "cb72ed207dd871832a850ee29f1c1f83aa3f4f36",
+        grade: ItemGrade.none,
+    },
+
+    "cb4fd53e61feced0d52cfc4c1ce383bad9c05f67": {
+        name: "Bauverkürzer Gebäude",
+        image: "22bba1f3ceab83dc24eb944d4f2aa8207390ab7c",
+        hash: "cb4fd53e61feced0d52cfc4c1ce383bad9c05f67",
+        grade: ItemGrade.none,
+    },
+    "14c17d49462963f5e5b67efa1257622ce1b866ac": {
+        name: "Bauverkürzer Forschung",
+        image: "959ce485c41b8713fb9c281fcd5d737331e0341c",
+        hash: "14c17d49462963f5e5b67efa1257622ce1b866ac",
+        grade: ItemGrade.none,
+    },
+    "75accaa0d1bc22b78d83b89cd437bdccd6a58887": {
+        name: "Bauverkürzer Schiffe",
+        image: "56d76263b87b56716214c91348602908b1f46fbd",
+        hash: "75accaa0d1bc22b78d83b89cd437bdccd6a58887",
+        grade: ItemGrade.none,
+    },
+
+    "40f6c78e11be01ad3389b7dccd6ab8efa9347f3c": {
+        hash: "40f6c78e11be01ad3389b7dccd6ab8efa9347f3c",
+        image: "98629d11293c9f2703592ed0314d99f320f45845",
+        name: "KRAKEN Bronze",
+        grade: ItemGrade.bronze,
+    },
+    "4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a": {
+        hash: "4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a",
+        image: "1ee55efe00bb03743ca031a9eaa1374bb936d863",
+        name: "KRAKEN Silber",
+        grade: ItemGrade.silver,
+    },
+    "929d5e15709cc51a4500de4499e19763c879f7f7": {
+        hash: "929d5e15709cc51a4500de4499e19763c879f7f7",
+        image: "40a1644e104985a3e72da28b76069197128f9fb5",
+        name: "KRAKEN Gold",
+        grade: ItemGrade.gold,
+    },
+    "f36042d76e6b8b33d931e1d4ae99f35265cd82d1": {
+        hash: "f36042d76e6b8b33d931e1d4ae99f35265cd82d1",
+        image: "59d0d098bdffad7faa5e5b3d17dd7799188500de",
+        name: "KRAKEN Platin",
+        grade: ItemGrade.platinum,
+    },
+
+    "d3d541ecc23e4daa0c698e44c32f04afd2037d84": {
+        hash: "d3d541ecc23e4daa0c698e44c32f04afd2037d84",
+        image: "56724c3a1dcae8036bb172f0be833a6f9a28bc27",
+        name: "DETROID Bronze",
+        grade: ItemGrade.bronze,
+    },
+    "27cbcd52f16693023cb966e5026d8a1efbbfc0f9": {
+        hash: "27cbcd52f16693023cb966e5026d8a1efbbfc0f9",
+        image: "d0b8fb3d307b815b3182f3872e8eab654fe677df",
+        name: "DETROID Silber",
+        grade: ItemGrade.silver,
+    },
+    "0968999df2fe956aa4a07aea74921f860af7d97f": {
+        hash: "0968999df2fe956aa4a07aea74921f860af7d97f",
+        image: "55d4b1750985e4843023d7d0acd2b9bafb15f0b7",
+        name: "DETROID Gold",
+        grade: ItemGrade.gold,
+    },
+    "3347bcd4ee59f1d3fa03c4d18a25bca2da81de82": {
+        hash: "3347bcd4ee59f1d3fa03c4d18a25bca2da81de82",
+        image: "5fe7fc5e764286b3f588ef488df593235671a661",
+        name: "DETROID Platin",
+        grade: ItemGrade.platinum,
+    },
+
+    "da4a2a1bb9afd410be07bc9736d87f1c8059e66d": {
+        hash: "da4a2a1bb9afd410be07bc9736d87f1c8059e66d",
+        image: "4bc4327a3fd508b5da84267e2cfd58d47f9e4dcb",
+        name: "NEWTRON Bronze",
+        grade: ItemGrade.bronze,
+    },
+    "d26f4dab76fdc5296e3ebec11a1e1d2558c713ea": {
+        hash: "d26f4dab76fdc5296e3ebec11a1e1d2558c713ea",
+        image: "a92734028d1bf2e75c5c25ae134b4d298a5ca36e",
+        name: "NEWTRON Silber",
+        grade: ItemGrade.silver,
+    },
+    "8a4f9e8309e1078f7f5ced47d558d30ae15b4a1b": {
+        hash: "8a4f9e8309e1078f7f5ced47d558d30ae15b4a1b",
+        image: "d949732b01a7f7f6d92e814f2de99479a324e1e3",
+        name: "NEWTRON Gold",
+        grade: ItemGrade.gold,
+    },
+    "a1ba242ede5286b530cdf991796b3d1cae9e4f23": {
+        hash: "a1ba242ede5286b530cdf991796b3d1cae9e4f23",
+        image: "c533ada7cad2164f322748638236b38c02aeaea0",
+        name: "NEWTRON Platin",
+        grade: ItemGrade.platinum,
+    },
+
+    "e54ecc0416d6e96b4165f24238b03a1b32c1df47": {
+        hash: "e54ecc0416d6e96b4165f24238b03a1b32c1df47",
+        image: "40224d1fb7b7d7a244b2f40d3cf281dcf484cfd3",
+        name: "Expeditionslots Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "8c1f6c6849d1a5e4d9de6ae9bb1b861f6f7b5d4d": {
+        hash: "e54ecc0416d6e96b4165f24238b03a1b32c1df47",
+        image: "a59682857b7a632c4bef319f0ef79f0c3bdba5c9",
+        name: "Expeditionslots Bronze (30 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "a5784c685c0e1e6111d9c18aeaf80af2e0777ab4": {
+        hash: "a5784c685c0e1e6111d9c18aeaf80af2e0777ab4",
+        image: "dcd22251b799c72a98bf4c425166335165f95a9f",
+        name: "Expeditionslots Bronze (90 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "b2bc9789df7c1ef5e058f72d61380b696dde54e8": {
+        hash: "b2bc9789df7c1ef5e058f72d61380b696dde54e8",
+        image: "dbaa137369a212345f0ab33e18f8bb2335f9bedf",
+        name: "Expeditionslots Silber (7 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "31a504be1195149a3bef05b9cc6e3af185d24ef2": {
+        hash: "31a504be1195149a3bef05b9cc6e3af185d24ef2",
+        image: "2f3ee731849024bfef85eb8c7389bb65e8f6be61",
+        name: "Expeditionslots Silber (30 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "4f6f941bbf2a8527b0424b3ad11014502d8f4fb8": {
+        hash: "4f6f941bbf2a8527b0424b3ad11014502d8f4fb8",
+        image: "4d5123202c051020a7341d2ea3599b4869945319",
+        name: "Expeditionslots Silber (90 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e": {
+        hash: "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e",
+        image: "ea4ec7669692e5b91dde58fc5fa606b7e1f22578",
+        name: "Expeditionslots Gold (7 Tage)",
+        grade: ItemGrade.gold,
+    },
+    "fd7d35e73d0e09e83e30812b738ef966ea9ef790": {
+        hash: "fd7d35e73d0e09e83e30812b738ef966ea9ef790",
+        image: "1ba0e8436af518f0014af352af7d20c8d174fb53",
+        name: "Expeditionslots Gold (30 Tage)",
+        grade: ItemGrade.gold,
+    },
+    "540410439514ac09363c5c47cf47117a8b8ae79a": {
+        hash: "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e",
+        image: "aede22854d3e8e46cb93dad726ad2b7edf9d235f",
+        name: "Expeditionslots Gold (90 Tage)",
+        grade: ItemGrade.gold,
+    },
+
+    "0684c6a5a42acbb3cd134913d421fc28dae6b90d": {
+        hash: "0684c6a5a42acbb3cd134913d421fc28dae6b90d",
+        image: "446d0d01503f8b845c3d3330c4dab673166570e1",
+        name: "Flottenslots Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "94a28491b6fd85003f1cb151e88dde106f1d7596": {
+        hash: "94a28491b6fd85003f1cb151e88dde106f1d7596",
+        image: "8ab6d921069f01d8cb843f4bc37f51e5cf0c4318",
+        name: "Flottenslots Bronze (30 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "bb47add58876240199a18ddacc2db07789be1934": {
+        hash: "bb47add58876240199a18ddacc2db07789be1934",
+        image: "a61bbfc57d4b70abff2365005bbcaf918796d784",
+        name: "Flottenslots Bronze (90 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    "f8fd610825fb4a442e27e4e9add74f050e040e27": {
+        hash: "f8fd610825fb4a442e27e4e9add74f050e040e27",
+        image: "d38f4e83f906ad747ec2601da836c0b11703e3b3",
+        name: "Flottenslots Silber (7 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "c4e598a85805a7eb3ca70f9265cbd366fc4d2b0e": {
+        hash: "c4e598a85805a7eb3ca70f9265cbd366fc4d2b0e",
+        image: "8a133b938e57285a3de891dd4b82b594d4e808a3",
+        name: "Flottenslots Silber (30 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "a693c5ce3f5676efaaf0781d94234bea4f599d2e": {
+        hash: "a693c5ce3f5676efaaf0781d94234bea4f599d2e",
+        image: "f7fc4e566869a8661ac5ef4a75ef9bd5fa5024e1",
+        name: "Flottenslots Silber (90 Tage)",
+        grade: ItemGrade.silver,
+    },
+    "5a8000c372cd079292a92d35d4ddba3c0f348d3b": {
+        hash: "5a8000c372cd079292a92d35d4ddba3c0f348d3b",
+        image: "4db5665750dfb83bb958280ffd500c7105574068",
+        name: "Flottenslots Gold (7 Tage)",
+        grade: ItemGrade.gold,
+    },
+    "1808bf7639b81ac3ac87bcb7eb3bbba0a1874d0a": {
+        hash: "1808bf7639b81ac3ac87bcb7eb3bbba0a1874d0a",
+        image: "2fa215f7fe22370b9fd83796dc6baa17aed3f75a",
+        name: "Flottenslots Gold (30 Tage)",
+        grade: ItemGrade.gold,
+    },
+    "1f7024c4f6493f0c589e1b00c76e6ced258c00e5": {
+        hash: "1f7024c4f6493f0c589e1b00c76e6ced258c00e5",
+        image: "fa17391a273844ee8e71d4625ce7381b458cf1ad",
+        name: "Flottenslots Gold (90 Tage)",
+        grade: ItemGrade.gold,
+    },
+
+    "7eacfcee74660f30bb92a5874e8cccf2bb286ebd": {
+        hash: "7eacfcee74660f30bb92a5874e8cccf2bb286ebd",
+        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
+        name: "Migrations-Item",
+        grade: ItemGrade.none,
+    },
+});

@@ -61,7 +61,8 @@ function trackExpeditions(elem: Element) {
             const workerMessage: TrackExpeditionMessage = {
                 type: MessageType.TrackExpedition,
                 ogameMeta: {
-                    server: 's123-de', //TODO: server id + lang
+                    server: 123,//TODO: server id
+                    language: 'de', //TODO: server lang
                     playerId: 123456, //TODO: player id
                 },
                 data: {
