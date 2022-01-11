@@ -1,7 +1,6 @@
 import { isSupportedLanguage } from "../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../shared/messages/Message";
-import { TrackExpeditionMessage } from "../shared/messages/tracking/TrackExpeditionMessage";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader } from "../shared/models/v1/expeditions/ExpeditionEvents";
 import { RawExpeditionData } from "../shared/models/v1/expeditions/RawExpeditionData";
 import { TryActionResult } from "../shared/TryActionResult";
@@ -14,6 +13,7 @@ import { ExpeditionEventSize } from "../shared/models/v1/expeditions/ExpeditionE
 import { ExpeditionEventType } from "../shared/models/v1/expeditions/ExpeditionEventType";
 import { ResourceType } from "../shared/models/v1/ogame/resources/ResourceType";
 import { ItemHash } from "../shared/models/v1/items/Item";
+import { TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
 
 class ExpeditionEventManager {
     private readonly _key: string;
@@ -30,9 +30,9 @@ class ExpeditionEventManager {
 
     private registerUnload() {
         if (this._unloadTimeout != null) {
-            window.clearTimeout(this._unloadTimeout);
+            clearTimeout(this._unloadTimeout);
         }
-        this._unloadTimeout = window.setTimeout(async () => await this.unload());
+        this._unloadTimeout = setTimeout(async () => await this.unload(), 0, []);
     }
 
     private async unload(): Promise<void> {

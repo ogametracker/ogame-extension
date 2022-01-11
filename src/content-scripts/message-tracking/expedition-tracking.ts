@@ -1,8 +1,10 @@
 import { parse } from "date-fns";
+import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
-import { TrackExpeditionMessage } from "../../shared/messages/tracking/TrackExpeditionMessage";
+import { ExpeditionEventMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
+import { ExpeditionEvent } from "../../shared/models/v1/expeditions/ExpeditionEvents";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
-import { _log } from "../../shared/utils/_log";
+import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
 
@@ -34,11 +36,39 @@ function setupExpeditionMessageObserver() {
 function setupPort() {
     port = chrome.runtime.connect();
     port.onDisconnect.addListener(() => setupPort());
-    port.onMessage.addListener(message => _log('message', message));
+    port.onMessage.addListener(message => {
+        onMessage(message);
+    });
+}
+
+function onMessage(message: Message<MessageType, any>) {
+    _logDebug('got message', message);
+
+    switch (message.type) {
+        case MessageType.Debug_UnhandledError: {
+            alert('Unhandled exception, contact the developer');
+            return;
+        }
+
+        case MessageType.ExpeditionEvent: {
+            const msg = message as ExpeditionEventMessage;
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`);
+            Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
+            li.classList.add(cssClasses.messageProcessed);
+            break;
+        }
+
+        default: {
+            _logWarning('got message that we were not listening for', message);
+            return;
+        }
+    }
 }
 
 function trackExpeditions(elem: Element) {
-    const messages = elem.querySelectorAll(`li.msg[data-msg-id]:not(.${cssClasses.messageProcessed}):not(.${cssClasses.failedToProcessMessage})`);
+    const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
+        .filter(elem => !Object.values(cssClasses).some(cssClass => elem.classList.contains(cssClass)));
+
     messages.forEach(msg => {
         try {
             // prepare message to service worker
@@ -74,8 +104,8 @@ function trackExpeditions(elem: Element) {
             };
             port.postMessage(workerMessage);
 
-            // mark message as processed
-            msg.classList.add(cssClasses.messageProcessed);
+            // mark message as "waiting for result"
+            msg.classList.add(cssClasses.waitingToProcessMessage);
         } catch (error) {
             console.error(error);
             msg.classList.add(cssClasses.failedToProcessMessage);

@@ -1,8 +1,9 @@
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { SubscriptionMessage, UnsubscriptionMessage } from "../shared/messages/subscriptions/types";
-import { TrackExpeditionMessage } from "../shared/messages/tracking/TrackExpeditionMessage";
-import { _log } from "../shared/utils/_log";
+import { TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
+import { _log, _logError, _logWarning } from "../shared/utils/_log";
+import { _throw } from "../shared/utils/_throw";
 import { ExpeditionModule } from "./ExpeditionModule";
 
 type SubscriptionMap = Partial<Record<MessageType, ServerSubscriptionMap | undefined>>;
@@ -12,14 +13,15 @@ class ServiceWorker {
     private readonly noSubscriptionsAllowed: MessageType[] = [
         MessageType.Subscribe,
         MessageType.Unsubscribe,
+        MessageType.Debug_UnhandledError,
     ];
     private subscriptions: SubscriptionMap = {};
-    private readonly expoModule = new ExpeditionModule();
+    private readonly expeditionModule = new ExpeditionModule();
 
     constructor() {
         chrome.runtime.onConnect.addListener(port => {
-            port.onMessage.addListener((message, port) => this.onMessage(message, port));
-        
+            port.onMessage.addListener(async (message, port) => await this.onMessage(message, port));
+
             port.onDisconnect.addListener(port => {
                 // remove port from subscriptions
                 Object.keys(this.subscriptions).forEach((key: MessageType) => {
@@ -34,18 +36,19 @@ class ServiceWorker {
     }
 
     private performMigrations() {
-        throw new Error("Method not implemented.");
+        _logWarning('TODO: perform migrations');
+        //TODO: perform migrations
     }
 
-    private onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
+    private async onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
         _log('got message', message, port);
-    
+
         const key = `${message.ogameMeta.server}-${message.ogameMeta.playerId}`;
 
         switch (message.type) {
             case MessageType.Subscribe: {
                 const msg = (message as SubscriptionMessage);
-                if(this.noSubscriptionsAllowed.includes(msg.data)) {
+                if (this.noSubscriptionsAllowed.includes(msg.data)) {
                     return;
                 }
                 this.subscriptions[msg.data] ??= {};
@@ -53,7 +56,7 @@ class ServiceWorker {
                 this.subscriptions[msg.data][key].push(port);
                 return;
             }
-    
+
             case MessageType.Unsubscribe: {
                 const msg = (message as UnsubscriptionMessage);
                 this.subscriptions[msg.data] ??= {};
@@ -61,13 +64,21 @@ class ServiceWorker {
                 this.subscriptions[msg.data][key] = this.subscriptions[msg.type][key].filter(p => p != port);
                 return;
             }
-    
+
             case MessageType.TrackExpedition: {
-                const data = (message as TrackExpeditionMessage).data;
-                
+                const { success, result } = await this.expeditionModule.tryTrackExpedition(message as TrackExpeditionMessage);
+                if (!success) {
+                    _throw('failed to track expedition');
+                }
+
+                this.sendMessage({
+                    ogameMeta: message.ogameMeta,
+                    type: MessageType.ExpeditionEvent,
+                    data: result,
+                }, port);
                 break;
             }
-    
+
             default: {
                 _log('unhandled message', message, port);
                 break;
@@ -79,15 +90,18 @@ class ServiceWorker {
         const key = `${message.ogameMeta.server}-${message.ogameMeta.playerId}`;
 
         const ports = [
-            port, 
+            port,
             ...(this.subscriptions?.[message.type]?.[key] ?? []).filter(p => p != port),
         ];
-    
+
         ports.forEach(p => {
             p.postMessage(message);
         });
     }
 }
 
-
-const $serviceWorker = new ServiceWorker();
+try {
+    const $serviceWorker = new ServiceWorker();
+} catch (error) {
+    _logError(error);
+}

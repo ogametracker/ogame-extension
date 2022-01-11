@@ -4,7 +4,8 @@ const tabIds = {
 
 const cssClasses = {
     messageProcessed: 'ogame-tracker-msg-processed',
-    failedToProcessMessage: 'ogame-tracker-msg-process-fail',
+    waitingToProcessMessage: 'ogame-tracker-msg-waiting-to-process',
+    failedToProcessMessage: 'ogame-tracker-msg-failed-to-process',
 };
 
 export {
