@@ -1,7 +1,7 @@
 import { isSupportedLanguage } from "../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../shared/messages/Message";
-import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader } from "../shared/models/v1/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../shared/models/v1/expeditions/ExpeditionEvents";
 import { RawExpeditionData } from "../shared/models/v1/expeditions/RawExpeditionData";
 import { TryActionResult } from "../shared/TryActionResult";
 import { _log, _logError } from "../shared/utils/_log";
@@ -9,11 +9,15 @@ import { _throw } from "../shared/utils/_throw";
 import i18nExpeditions from '../shared/i18n/ogame/expeditions';
 import i18nPremium from '../shared/i18n/ogame/premium';
 import i18nResources from '../shared/i18n/ogame/resources';
+import i18nShips from '../shared/i18n/ogame/ships';
 import { ExpeditionEventSize } from "../shared/models/v1/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../shared/models/v1/expeditions/ExpeditionEventType";
 import { ResourceType } from "../shared/models/v1/ogame/resources/ResourceType";
 import { ItemHash } from "../shared/models/v1/items/Item";
 import { TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
+import { getNumericEnumValues } from "../shared/utils/getNumericEnumValues";
+import { ShipType } from "../shared/models/v1/ogame/ships/ShipType";
+import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
 
 class ExpeditionEventManager {
     private readonly _key: string;
@@ -42,23 +46,25 @@ class ExpeditionEventManager {
         this._unloadTimeout = undefined;
     }
 
-    private async load(): Promise<void> {
+    private async load(): Promise<Record<number, ExpeditionEvent>> {
         if (this._expeditions == null) {
             const data = await chrome.storage.local.get(this.storageKey);
             this._expeditions = data?.[this.storageKey] ?? {};
         }
 
         this.registerUnload();
+
+        return this._expeditions ?? _throw(`loaded expeditions but object is still null (key '${this._key}')`)
     }
 
     public async getExpeditions(): Promise<Record<number, ExpeditionEvent>> {
-        await this.load();
-
-        return this._expeditions;
+        return await this.load();
     }
 
     public async add(expeditionEvent: ExpeditionEvent): Promise<void> {
-        this._expeditions[expeditionEvent.id] = expeditionEvent;
+        const expeditions = await this.load();
+        expeditions[expeditionEvent.id] = expeditionEvent;
+        
         await this.save();
     }
 
@@ -76,6 +82,7 @@ export class ExpeditionModule {
         const expeditionEventData = message.data;
 
         const manager = this.getManager(message.ogameMeta);
+        const { language } = message.ogameMeta;
         const expeditionEvents = await manager.getExpeditions();
 
         // check if expedition already tracked => if true, return tracked data
@@ -90,11 +97,11 @@ export class ExpeditionModule {
         // otherwise parse and save result
         let expedition: ExpeditionEvent;
         try {
-            if (!isSupportedLanguage(message.ogameMeta.language)) {
-                _throw('unsupported language');
+            if (!isSupportedLanguage(language)) {
+                _throw(`unsupported language '${language}'`);
             }
 
-            expedition = this.parseExpedition(message.ogameMeta.language as LanguageKey, expeditionEventData);
+            expedition = this.parseExpedition(language as LanguageKey, expeditionEventData);
         } catch (error) {
             _logError({ error, message });
             return { success: false };
@@ -108,10 +115,10 @@ export class ExpeditionModule {
     }
 
     private getManager(meta: MessageOgameMeta): ExpeditionEventManager {
-        const key = `s${meta.server}-${meta.language}-${meta.playerId}`;
-        this.expeditionManagers[key] ??= new ExpeditionEventManager(key);
+        const key = getStorageKeyPrefix(meta);
+        const manager = (this.expeditionManagers[key] ??= new ExpeditionEventManager(key));
 
-        return this.expeditionManagers[key];
+        return manager;
     }
 
     private parseExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEvent {
@@ -124,7 +131,8 @@ export class ExpeditionModule {
             ?? this.tryParseTraderExpedition(language, data)
             ?? this.tryParseAliensExpedition(language, data)
             ?? this.tryParsePiratesExpedition(language, data)
-            ?? this.tryParseLostFleetExpedition(language, data);
+            ?? this.tryParseLostFleetExpedition(language, data)
+            ?? this.tryParseNoEventExpedition(language, data);
 
         if (result == null) {
             _throw('Unknown expedition type');
@@ -133,28 +141,103 @@ export class ExpeditionModule {
         return result;
     }
 
+    private tryParseNoEventExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventNothing | null {
+        const i18nMessages = i18nExpeditions[language][ExpeditionEventType.noEvent];
+        if(!i18nMessages.some(message => data.text.includes(message))) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: ExpeditionEventType.noEvent,
+        };
+    }
+
     private tryParseLostFleetExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventLostFleet | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].lostFleet;
+        if(!i18nMessages.some(message => data.text.includes(message))) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: ExpeditionEventType.lostFleet,
+        };
     }
 
     private tryParsePiratesExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventPirates | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].pirates;
+        const size = Object.values(ExpeditionEventSize).find(
+            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+        );
+        if(size == null) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            size: size,
+            type: ExpeditionEventType.pirates,
+        };
     }
 
     private tryParseAliensExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventAliens | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].aliens;
+        const size = Object.values(ExpeditionEventSize).find(
+            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+        );
+        if(size == null) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            size: size,
+            type: ExpeditionEventType.aliens,
+        };
     }
 
     private tryParseTraderExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventTrader | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].trader;
+        if(!i18nMessages.some(message => data.text.includes(message))) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: ExpeditionEventType.trader,
+        };
     }
 
     private tryParseDelayedExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventDelay | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].delay;
+        if(!i18nMessages.some(message => data.text.includes(message))) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: ExpeditionEventType.delay,
+        };
     }
 
     private tryParseEarlyExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventEarly | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].early;
+        if(!i18nMessages.some(message => data.text.includes(message))) {
+            return null;
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: ExpeditionEventType.early,
+        };
     }
 
     private tryParseItemExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventItem | null {
@@ -179,7 +262,43 @@ export class ExpeditionModule {
     }
 
     private tryParseFleetExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventFleet | null {
-        throw new Error("Method not implemented.");
+        const i18nMessages = i18nExpeditions[language].fleet;
+        const size = Object.values(ExpeditionEventSize).find(
+            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+        );
+        if(size == null) {
+            return null;
+        }
+
+        const ships = getNumericEnumValues<ShipType>(ExpeditionFindableShipType);
+        const shipNames = ships.map(ship => i18nShips[language][ship]);
+        const regex = i18nMessages.regex(shipNames);
+        const match = data.text.match(regex);
+
+        const foundShips: Record<ExpeditionFindableShipType, number | undefined> = {};
+
+        // there can be no match if no ships were found because the expedition fleet was too small
+        if(match != null) {
+            const textWithFoundFleet = match.groups!.ships;
+
+            ships.forEach(ship => {
+                const shipName = i18nShips[language][ship];
+                const shipRegex = new RegExp(`${shipName}: (\\d+)`);
+                const shipMatch = textWithFoundFleet.match(shipRegex);
+                
+                if(shipMatch != null) {
+                    foundShips[ship] = parseInt(shipMatch[1]);
+                }
+            });
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            size,
+            fleet: foundShips,
+            type: ExpeditionEventType.fleet,
+        };
     }
 
     private tryParseDarkMatterExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventDarkMatter | null {

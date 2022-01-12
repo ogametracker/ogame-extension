@@ -26,7 +26,21 @@ export type ExpeditionEventResources = ExpeditionEventBase & ExpeditionEventWith
     resources: ExpeditionEventResourcesAmount;
 };
 
-export type ExpeditionFindableShipType = Exclude<ShipType, ShipType.crawler | ShipType.colonyShip | ShipType.deathStar | ShipType.recycler | ShipType.solarSatellite>;
+export enum ExpeditionFindableShipType {
+    lightFighter = ShipType.lightFighter,
+    heavyFighter = ShipType.heavyFighter,
+    cruiser = ShipType.cruiser,
+    battleship = ShipType.battleship,
+    bomber = ShipType.bomber,
+    battlecruiser = ShipType.battlecruiser,
+    destroyer = ShipType.destroyer,
+    reaper = ShipType.reaper,
+    pathfinder = ShipType.pathfinder,
+    smallCargo = ShipType.smallCargo,
+    largeCargo = ShipType.largeCargo,
+    espionageProbe = ShipType.espionageProbe,
+}
+
 
 export type ExpeditionFindableFleet = Record<ExpeditionFindableShipType, number | undefined>;
 
@@ -57,7 +71,7 @@ export type ExpeditionEventLostFleet = ExpeditionEventBase & {
 };
 
 export type ExpeditionEventNothing = ExpeditionEventBase & {
-    type: ExpeditionEventType.nothing;
+    type: ExpeditionEventType.noEvent;
 };
 
 export type ExpeditionEventAliens = ExpeditionEventBase & ExpeditionEventWithSize & {

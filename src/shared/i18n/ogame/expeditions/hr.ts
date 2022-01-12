@@ -57,7 +57,7 @@ export const hr: ExpeditionMessages = {
         regex: (ships: string[]) => new RegExp(`Sljedeći brodovi su sada dio vaše flote:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
-    [ExpeditionEventType.nothing]: [
+    [ExpeditionEventType.noEvent]: [
         /*'Iako su prva skeniranja sektora bila dobra flota se nažalost */'vratila praznih ruku'/*.'*/,
         /*'Ekspedicija nije vratila ništa drugo osim nekih čudnih i malih stvorenja sa */'nepoznatog močvarnog planeta'/*.'*/,
         /*TODO: hr 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,

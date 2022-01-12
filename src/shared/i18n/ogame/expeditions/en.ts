@@ -57,7 +57,7 @@ export const en: ExpeditionMessages = {
         regex: (ships: string[]) => new RegExp(`The following ships are now part of the fleet:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
-    [ExpeditionEventType.nothing]: [
+    [ExpeditionEventType.noEvent]: [
         /*'Despite the first, */'very promising scans of this sector'/*, we unfortunately returned empty handed.'*/,
         /*'Besides some quaint, */'small pets from a unknown marsh planet'/*, this expedition brings nothing thrilling back from the trip.'*/,
         /*'Your expedition has learnt about */'the extensive emptiness'/* of space. There was not even one small asteroid or radiation or particle that could have made this expedition interesting.'*/,

@@ -2,8 +2,8 @@ import { parse } from "date-fns";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { ExpeditionEventMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
-import { ExpeditionEvent } from "../../shared/models/v1/expeditions/ExpeditionEvents";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
@@ -52,7 +52,7 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.ExpeditionEvent: {
             const msg = message as ExpeditionEventMessage;
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`);
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
             Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
             li.classList.add(cssClasses.messageProcessed);
             break;
@@ -84,17 +84,13 @@ function trackExpeditions(elem: Element) {
             }
 
             const messageTextElem = msg.querySelector('.msg_content') ?? _throw('Cannot find message content element');
-            const text = messageTextElem.textContent;
+            const text = messageTextElem.textContent ?? '';
             const html = messageTextElem.innerHTML;
 
             // send message to service worker
             const workerMessage: TrackExpeditionMessage = {
                 type: MessageType.TrackExpedition,
-                ogameMeta: {
-                    server: 123,//TODO: server id
-                    language: 'de', //TODO: server lang
-                    playerId: 123456, //TODO: player id
-                },
+                ogameMeta: getOgameMeta(),
                 data: {
                     id,
                     date,

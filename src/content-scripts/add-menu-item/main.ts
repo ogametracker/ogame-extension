@@ -7,7 +7,7 @@ const observer = new MutationObserver(() => {
     const menu = document.querySelector('#menuTable');
 
     if (menu != null) {
-        const parent = menu.parentElement;
+        const parent = menu.parentElement ?? _throw('no parent element found');
 
         const ogameTrackerMenu = document.createElement('ul');
         ogameTrackerMenu.classList.add('leftmenu');

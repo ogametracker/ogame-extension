@@ -4,7 +4,7 @@ export enum MessageType {
     Unsubscribe = 'unsubscribe',
 
     // debug
-    Debug_UnhandledError = 'debug/unhandledError',
+    Debug_UnhandledError = 'debug/unhandled-error',
 
     // notifications
     CreateNotification = 'notification/create',
@@ -12,6 +12,6 @@ export enum MessageType {
     HideNotification = 'notification/hide',
     
     // expeditions
-    TrackExpedition = 'expedition/track',
-    ExpeditionEvent = 'expedition/event',
+    TrackExpedition = 'expedition/track-expedition',
+    ExpeditionEvent = 'expedition/expedition-data',
 }

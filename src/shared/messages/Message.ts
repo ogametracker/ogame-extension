@@ -1,7 +1,7 @@
 import { MessageType } from "./MessageType";
 
 export interface MessageOgameMeta {
-    server: number;
+    serverId: number;
     language: string;
     playerId: number;
 }

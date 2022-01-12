@@ -2,6 +2,7 @@ import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { SubscriptionMessage, UnsubscriptionMessage } from "../shared/messages/subscriptions/types";
 import { TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
+import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
 import { _log, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 import { ExpeditionModule } from "./ExpeditionModule";
@@ -24,9 +25,11 @@ class ServiceWorker {
 
             port.onDisconnect.addListener(port => {
                 // remove port from subscriptions
-                Object.keys(this.subscriptions).forEach((key: MessageType) => {
-                    Object.keys(this.subscriptions[key]).forEach(server => {
-                        this.subscriptions[key][server] = this.subscriptions[key][server].filter(p => p != port);
+                (Object.keys(this.subscriptions) as MessageType[]).forEach(key => {
+                    const subs = this.subscriptions[key]!;
+
+                    Object.keys(subs).forEach(server => {
+                        subs[server] = subs[server]!.filter(p => p != port);
                     });
                 });
             });
@@ -43,7 +46,7 @@ class ServiceWorker {
     private async onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
         _log('got message', message, port);
 
-        const key = `${message.ogameMeta.server}-${message.ogameMeta.playerId}`;
+        const key = getStorageKeyPrefix(message.ogameMeta);
 
         switch (message.type) {
             case MessageType.Subscribe: {
@@ -51,17 +54,16 @@ class ServiceWorker {
                 if (this.noSubscriptionsAllowed.includes(msg.data)) {
                     return;
                 }
-                this.subscriptions[msg.data] ??= {};
-                this.subscriptions[msg.data][key] ??= [];
-                this.subscriptions[msg.data][key].push(port);
+                const subscriptions = (this.subscriptions[msg.data] ??= {});
+                const serverSubscriptions = (subscriptions[key] ??= []);
+                serverSubscriptions.push(port);
                 return;
             }
 
             case MessageType.Unsubscribe: {
                 const msg = (message as UnsubscriptionMessage);
-                this.subscriptions[msg.data] ??= {};
-                this.subscriptions[msg.data][key] ??= [];
-                this.subscriptions[msg.data][key] = this.subscriptions[msg.type][key].filter(p => p != port);
+                const subscriptions = (this.subscriptions[msg.data] ??= {});
+                subscriptions[key] = (subscriptions[key] ?? []).filter(p => p != port);
                 return;
             }
 
@@ -87,7 +89,7 @@ class ServiceWorker {
     }
 
     private sendMessage<TData, TMessage extends Message<MessageType, TData>>(message: TMessage, port: chrome.runtime.Port) {
-        const key = `${message.ogameMeta.server}-${message.ogameMeta.playerId}`;
+        const key = getStorageKeyPrefix(message.ogameMeta);
 
         const ports = [
             port,

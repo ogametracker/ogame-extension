@@ -37,7 +37,7 @@ export interface ExpeditionMessages {
         [ExpeditionEventSize.large]: string[];
     };
 
-    [ExpeditionEventType.nothing]: string[];
+    [ExpeditionEventType.noEvent]: string[];
     [ExpeditionEventType.lostFleet]: string[];
     [ExpeditionEventType.trader]: string[];
     [ExpeditionEventType.early]: string[];
