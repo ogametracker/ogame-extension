@@ -1,13 +1,16 @@
 {
     "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "jsx": "preserve",
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true,
-        "module": "es6",
-        "target": "es5",
-        "allowJs": false,
-        "rootDir": ".",
-        "sourceMap": true,
-        "moduleResolution": "node"
+        "sourceMap": true
     },
     "exclude": ["src/views/*"]
 }
