@@ -1,79 +1,24 @@
-import { isSupportedLanguage } from "../shared/i18n/isSupportedLanguage";
-import { LanguageKey } from "../shared/i18n/LanguageKey";
-import { MessageOgameMeta } from "../shared/messages/Message";
-import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../shared/models/v1/expeditions/ExpeditionEvents";
-import { RawExpeditionData } from "../shared/models/v1/expeditions/RawExpeditionData";
-import { TryActionResult } from "../shared/TryActionResult";
-import { _log, _logError } from "../shared/utils/_log";
-import { _throw } from "../shared/utils/_throw";
-import i18nExpeditions from '../shared/i18n/ogame/expeditions';
-import i18nPremium from '../shared/i18n/ogame/premium';
-import i18nResources from '../shared/i18n/ogame/resources';
-import i18nShips from '../shared/i18n/ogame/ships';
-import { ExpeditionEventSize } from "../shared/models/v1/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../shared/models/v1/expeditions/ExpeditionEventType";
-import { ResourceType } from "../shared/models/v1/ogame/resources/ResourceType";
-import { ItemHash } from "../shared/models/v1/items/Item";
-import { TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
-import { getNumericEnumValues } from "../shared/utils/getNumericEnumValues";
-import { ShipType } from "../shared/models/v1/ogame/ships/ShipType";
-import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
-
-class ExpeditionEventManager {
-    private readonly _key: string;
-    private _expeditions: Record<number, ExpeditionEvent> | null = null;
-    private _unloadTimeout: number | undefined;
-
-    constructor(key: string) {
-        this._key = key;
-    }
-
-    private get storageKey(): string {
-        return `${this._key}-expoEvents`;
-    }
-
-    private registerUnload() {
-        if (this._unloadTimeout != null) {
-            clearTimeout(this._unloadTimeout);
-        }
-        this._unloadTimeout = setTimeout(async () => await this.unload(), 0, []);
-    }
-
-    private async unload(): Promise<void> {
-        await this.save();
-
-        this._expeditions = null;
-        this._unloadTimeout = undefined;
-    }
-
-    private async load(): Promise<Record<number, ExpeditionEvent>> {
-        if (this._expeditions == null) {
-            const data = await chrome.storage.local.get(this.storageKey);
-            this._expeditions = data?.[this.storageKey] ?? {};
-        }
-
-        this.registerUnload();
-
-        return this._expeditions ?? _throw(`loaded expeditions but object is still null (key '${this._key}')`)
-    }
-
-    public async getExpeditions(): Promise<Record<number, ExpeditionEvent>> {
-        return await this.load();
-    }
-
-    public async add(expeditionEvent: ExpeditionEvent): Promise<void> {
-        const expeditions = await this.load();
-        expeditions[expeditionEvent.id] = expeditionEvent;
-        
-        await this.save();
-    }
-
-    private async save(): Promise<void> {
-        await chrome.storage.local.set({
-            [this.storageKey]: this._expeditions,
-        });
-    }
-}
+import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
+import { LanguageKey } from "../../shared/i18n/LanguageKey";
+import { MessageOgameMeta } from "../../shared/messages/Message";
+import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../../shared/models/v1/expeditions/ExpeditionEvents";
+import { RawExpeditionData } from "../../shared/models/v1/expeditions/RawExpeditionData";
+import { TryActionResult } from "../../shared/TryActionResult";
+import { _log, _logError } from "../../shared/utils/_log";
+import { _throw } from "../../shared/utils/_throw";
+import i18nExpeditions from '../../shared/i18n/ogame/expeditions';
+import i18nPremium from '../../shared/i18n/ogame/premium';
+import i18nResources from '../../shared/i18n/ogame/resources';
+import i18nShips from '../../shared/i18n/ogame/ships';
+import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
+import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
+import { ItemHash } from "../../shared/models/v1/items/Item";
+import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
+import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
+import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
+import { ExpeditionEventManager } from "./ExpeditionEventManager";
 
 export class ExpeditionModule {
     private readonly expeditionManagers: Record<string, ExpeditionEventManager | undefined> = {};
@@ -112,6 +57,12 @@ export class ExpeditionModule {
             success: true,
             result: expedition,
         };
+    }
+
+    public async getExpeditionEvents(meta: MessageOgameMeta): Promise<ExpeditionEvent[]> {
+        const manager = this.getManager(meta);
+        const expeditions = await manager.getExpeditions();
+        return Object.values(expeditions);
     }
 
     private getManager(meta: MessageOgameMeta): ExpeditionEventManager {

@@ -6,7 +6,7 @@ export interface MessageOgameMeta {
     playerId: number;
 }
 
-export interface Message<TType extends MessageType, TData> {
+export interface Message<TType extends MessageType = MessageType, TData = any> {
     type: TType;
     ogameMeta: MessageOgameMeta;
     data: TData;
