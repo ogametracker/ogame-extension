@@ -56,7 +56,15 @@ module.exports = (env) => ({
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
-                    "sass-loader",
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            // for different styling depending on the browser environment
+                            additionalData: `
+                                $browser: ${env.browser};
+                            `
+                        },
+                    },
                 ],
             },
         ],

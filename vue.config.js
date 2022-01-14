@@ -32,8 +32,7 @@ const config = {
             sass: {
                 // for different styling depending on the browser environment
                 additionalData: `
-                    $is-chrome: ${process.env.VUE_APP_BROWSER === 'chrome'};
-                    $is-firefox: ${process.env.VUE_APP_BROWSER === 'firefox'};
+                    $browser: ${process.env.VUE_APP_BROWSER};
                 `
             },
         },
