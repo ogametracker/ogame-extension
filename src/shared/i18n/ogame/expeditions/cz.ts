@@ -41,7 +41,7 @@ export const cz: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*'Nalezli jsme */'zbytky po předchozí expedici'/*! Naši technici se pokusí znovu zprovoznit některé z těchto lodí.'*/,
+            /*'Nalezli jsme */'zbytky po předchozí expedici'/* ! Naši technici se pokusí znovu zprovoznit některé z těchto lodí.'*/,
             /*'Expedice narazila */'na pevnost opuštěnou před lety'/*. V jejím hangáru nalezli nějaké lodě. Technici se snaží alespoň některé zprovoznit.'*/,
             /*'Expedice narazila na planetu, */'která byla téměř zničena díky mnohaleté válce'/*. Na orbitě se stále vznáší nějaké lodě. Technici se některé z nich snaží zprovoznit. Možná se nám také podaří zjistit, k čemu to vlastně došlo.'*/,
             /*'Narazili jsme na */'opuštěnou pirátskou stanici'/*. V hangáru je pár starých lodí. Naši technici zjišťují, jestli jsou vůbec ještě použitelné.'*/,
@@ -113,12 +113,12 @@ export const cz: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Expedice měla */'nepříjemné setkání s vesmírnými piráty'/*.'*/,
-            /*'Vletěli jsme přímo do pasti */'připravé hvězdnými bukanýry'/*! Bitva byla nevyhnutelná.'*/,
+            /*'Vletěli jsme přímo do pasti */'připravé hvězdnými bukanýry'/* ! Bitva byla nevyhnutelná.'*/,
             /*'Nouzový signál, který expedice následovala, byl */'vysílán hvězdnými bukanýry'/*. Bitva byla nevyhnutelná.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Zaznamenané signály nepřišly od neznámé osoby, */'ale z tajné pirátské základny'/*! Nebyli příliš překvapeni naší prezencí v jejich sektoru.'*/,
-            /*'Expedice hlásí tuhé boje s */'neidentifikovatelnými pirátskými loděmi'/*!'*/,
+            /*'Zaznamenané signály nepřišly od neznámé osoby, */'ale z tajné pirátské základny'/* ! Nebyli příliš překvapeni naší prezencí v jejich sektoru.'*/,
+            /*'Expedice hlásí tuhé boje s */'neidentifikovatelnými pirátskými loděmi'/* !'*/,
         ],
     },
 
@@ -126,7 +126,7 @@ export const cz: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'*/'Exoticky vypadající lodě neznámého původu'/* zaútočily na expedici bez jakéhokoliv varování!'*/,
             /*'Tvá expedice */'provedla ne-úplně-přátelské seznámení'/* s neznámou rasou mimozemšťanů.'*/,
-            /*'Naše expedice */'byla přepadena malou skupinou neznámých lodí'/*!'*/,
+            /*'Naše expedice */'byla přepadena malou skupinou neznámých lodí'/* !'*/,
             /*TODO: cz 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -135,7 +135,7 @@ export const cz: ExpeditionMessages = {
             /*'Spojení s expediční letkou bylo přerušeno. Podařilo se dešifrovat jejich posledni zprávu. Jsou pod težkým útokem, */'nepřítel nebyl identifikován.'/*'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/*!'*/,
+            /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/* !'*/,
             /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
             /*TODO: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],

@@ -1,8 +1,0 @@
-#app {
-    @if ($is-firefox) {
-        background: orange;
-    } 
-    @else {
-        background: green;
-    }
-}

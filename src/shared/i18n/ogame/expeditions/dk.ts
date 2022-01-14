@@ -114,10 +114,10 @@ export const dk: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /*'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*'Vi faldt i baghold af */'nogle piratskibe'/*! En kamp var uundgåelig.'*/,
+            /*'Vi faldt i baghold af */'nogle piratskibe'/* ! En kamp var uundgåelig.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/*! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
             /*'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
     },
@@ -126,7 +126,7 @@ export const dk: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
             /*'Din ekspeditionsflåde havde ikke en */'venlig første kontakt'/* med en ukendt race.'*/,
-            /*'Vores ekspedition blev angrebet af en */'mindre gruppe af ukendte skibe'/*!'*/,
+            /*'Vores ekspedition blev angrebet af en */'mindre gruppe af ukendte skibe'/* !'*/,
             /*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [

@@ -17,30 +17,9 @@ execSync(`npx webpack --mode=production --node-env=production --env browser=${br
 
 // build vue views
 process.stdout.write(`Building views\n`);
-const viewsDir = './src/views';
-const views = fs.readdirSync(viewsDir, { withFileTypes: true })
-    .filter(file => file.isDirectory())
-    .map(dir => dir.name);
-
-views.forEach(view => {
-    process.stdout.write(`Building view '${view}'\n`);
-    const viewDir = `${viewsDir}/${view}`;
-
-    // create .env file with VUE_APP_BROWSER environment variable
-    fs.writeFileSync(`${viewDir}/.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
-
-    execSync(`cd ${viewDir} && npm run build`, { stdio: 'inherit' });
-});
-
-// copy vue views to output directory
-process.stdout.write(`Copying view files to dist\n`);
-fs.mkdirSync('./dist/views');
-views.forEach(view => {
-    const result = bash.cp('-rf', `${viewsDir}/${view}/dist`, `./dist/views/${view}`);
-    if(result.code != 0) {
-        throw new Error(result.stderr);
-    }
-});
+// create .env file with VUE_APP_BROWSER environment variable
+fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
+execSync(`vue-cli-service build`, { stdio: 'inherit' });
 
 // generate manifest
 process.stdout.write(`Generating manifest\n`);

@@ -41,7 +41,7 @@ export const en: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*'We came across the */'remains of a previous expedition'/*! Our technicians will try to get some of the ships to work again.'*/,
+            /*'We came across the */'remains of a previous expedition'/* ! Our technicians will try to get some of the ships to work again.'*/,
             /*'Your expedition ran into the */'shipyards of a colony that was deserted eons ago'/*. In the shipyards hangar they discover some ships that could be salvaged. The technicians are trying to get some of them to fly again.'*/,
             /*'Our expedition found a planet which was */'almost destroyed during a certain chain of wars'/*. There are different ships floating around in the orbit. The technicians are trying to repair some of them. Maybe we will also get information about what happened here.'*/,
             /*'We */'found a deserted pirate station'/*. There are some old ships lying in the hangar. Our technicians are figuring out whether some of them are still useful or not.'*/,
@@ -113,11 +113,11 @@ export const en: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Your expedition had */'an unpleasant rendezvous with some space pirates'/*.'*/,
-            /*'We ran straight into an */'ambush set by some Star Buccaneers'/*! A fight couldn`t be avoided.'*/,
+            /*'We ran straight into an */'ambush set by some Star Buccaneers'/* ! A fight couldn`t be avoided.'*/,
             /*'That emergency signal that the expedition team followed was */'in reality an ambush set up by some Star Buccaneers'/*. A fight could not be avoided.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'The recorded signals didn`t come from a */'foreign being but from a secret pirate base'/*! They were not really surprised by our presence in their sector.'*/,
+            /*'The recorded signals didn`t come from a */'foreign being but from a secret pirate base'/* ! They were not really surprised by our presence in their sector.'*/,
             /*'The expedition */'reports tough battles against unidentified pirate'/* ships.'*/,
         ],
     },
@@ -126,7 +126,7 @@ export const en: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Some */'exotic looking ships attacked the expedition'/* fleet without warning!'*/,
             /*'Your expedition fleet made some */'unfriendly first contact'/* with an unknown species.'*/,
-            /*'Our expedition was */'attacked by a small group of unknown ships'/*!'*/,
+            /*'Our expedition was */'attacked by a small group of unknown ships'/* !'*/,
             /*'The expeditions fleet reports contact with unknown ships. The */'sensor readings are not decipherable'/*, but it seems that the alien ships are activating their weapon system.'*/,
         ],
         [ExpeditionEventSize.medium]: [
