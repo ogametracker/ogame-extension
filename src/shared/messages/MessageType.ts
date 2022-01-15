@@ -13,8 +13,7 @@ export enum MessageType {
     
     // expeditions
     TrackExpedition = 'expedition/track-expedition',
-    ExpeditionEvent = 'expedition/expedition-event',
-    NewExpeditionEvent = 'expedition/new-expedition-event',
-    RequestExpeditionEvents = 'expedition/request-all-expeditions',
-    AllExpeditionEvents = 'expedition/all-expeditions',
+    Expedition = 'expedition/expedition-data/single',
+    AllExpeditions = 'expedition/expedition-data/all',
+    RequestExpeditionEvents = 'expedition/request-expeditions',
 }

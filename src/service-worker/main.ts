@@ -1,11 +1,11 @@
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { SubscriptionMessage, UnsubscriptionMessage } from "../shared/messages/subscriptions/types";
-import { AllExpeditionEventsMessage, ExpeditionEventMessage, NewExpeditionEventMessage, TrackExpeditionMessage } from "../shared/messages/tracking/expeditions";
 import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
 import { _log, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
-import { ExpeditionModule } from "./expeditions/ExpeditionModule";
+import { ExpeditionService } from "./expeditions/ExpeditionService";
+import { MessageService, MessageServiceEventInfo } from "./MessageService";
 
 type SubscriptionMap = Partial<Record<MessageType, ServerSubscriptionMap | undefined>>;
 type ServerSubscriptionMap = Record<string, chrome.runtime.Port[] | undefined>;
@@ -17,7 +17,9 @@ class ServiceWorker {
         MessageType.Debug_UnhandledError,
     ];
     private subscriptions: SubscriptionMap = {};
-    private readonly expeditionModule = new ExpeditionModule();
+    private readonly services: MessageService[] = [
+        new ExpeditionService(),
+    ];
 
     constructor() {
         chrome.runtime.onConnect.addListener(port => {
@@ -48,6 +50,10 @@ class ServiceWorker {
         _log('got message', message, port);
 
         const key = getStorageKeyPrefix(message.ogameMeta);
+        const eventInfo: MessageServiceEventInfo = {
+            sender: port,
+            broadcast: (message, includePorts) => this.sendMessage(message, includePorts),
+        }
 
         switch (message.type) {
             case MessageType.Subscribe: {
@@ -68,43 +74,10 @@ class ServiceWorker {
                 return;
             }
 
-            case MessageType.TrackExpedition: {
-                const tryResult = await this.expeditionModule.tryTrackExpedition(message as TrackExpeditionMessage);
-                if (!tryResult.success) {
-                    _throw('failed to track expedition');
-                }
-
-                const expeditionEventMessage: ExpeditionEventMessage = {
-                    ogameMeta: message.ogameMeta,
-                    type: MessageType.ExpeditionEvent,
-                    data: tryResult.result,
-                };
-                this.sendMessage(expeditionEventMessage, port);
-
-
-                const newExpeditionEventMessage: NewExpeditionEventMessage = {
-                    ogameMeta: message.ogameMeta,
-                    type: MessageType.NewExpeditionEvent,
-                    data: tryResult.result,
-                };
-                this.sendMessage(newExpeditionEventMessage, port);
-                break;
-            }
-
-            case MessageType.RequestExpeditionEvents: {
-                const expeditionEvents = await this.expeditionModule.getExpeditionEvents(message.ogameMeta);
-
-                const allExpeditionEventMessage: AllExpeditionEventsMessage = {
-                    ogameMeta: message.ogameMeta,
-                    type: MessageType.AllExpeditionEvents,
-                    data: expeditionEvents,
-                };
-                this.sendMessage(allExpeditionEventMessage, port);
-                break;
-            }
-
             default: {
-                _log('unhandled message', message, port);
+                for (const service of this.services) {
+                    await service.onMessage(message, eventInfo);
+                }
                 break;
             }
         }

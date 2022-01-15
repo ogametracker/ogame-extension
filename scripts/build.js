@@ -1,7 +1,6 @@
 const { execSync } = require('child_process');
 const process = require('process');
 const fs = require('fs');
-const bash = require('shelljs');
 
 const isDev = process.argv.includes('--dev');
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
@@ -20,6 +19,10 @@ process.stdout.write(`Building views\n`);
 // create .env file with VUE_APP_BROWSER environment variable
 fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
 execSync(`vue-cli-service build --modern`, { stdio: 'inherit' });
+
+// copy favicon to output dir
+process.stdout.write(`Copying favicon\n`);
+fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 
 // generate manifest
 process.stdout.write(`Generating manifest\n`);

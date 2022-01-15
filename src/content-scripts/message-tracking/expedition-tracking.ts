@@ -1,7 +1,7 @@
 import { parse } from "date-fns";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
-import { ExpeditionEventMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
+import { ExpeditionMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
@@ -50,8 +50,8 @@ function onMessage(message: Message<MessageType, any>) {
             return;
         }
 
-        case MessageType.ExpeditionEvent: {
-            const msg = message as ExpeditionEventMessage;
+        case MessageType.Expedition: {
+            const msg = message as ExpeditionMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
             Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
             li.classList.add(cssClasses.messageProcessed);

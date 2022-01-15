@@ -1,7 +1,7 @@
 import { ExpeditionEvent } from "../../shared/models/v1/expeditions/ExpeditionEvents";
 import { _throw } from "../../shared/utils/_throw";
 
-export class ExpeditionEventManager {
+export class ExpeditionManager {
     private readonly _key: string;
     private _expeditions: Record<number, ExpeditionEvent> | null = null;
     private _unloadTimeout: number | undefined;

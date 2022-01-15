@@ -18,10 +18,10 @@ import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditio
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
-import { ExpeditionEventManager } from "./ExpeditionEventManager";
+import { ExpeditionManager } from "./ExpeditionManager";
 
 export class ExpeditionModule {
-    private readonly expeditionManagers: Record<string, ExpeditionEventManager | undefined> = {};
+    private readonly expeditionManagers: Record<string, ExpeditionManager | undefined> = {};
 
     public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEvent>> {
         const expeditionEventData = message.data;
@@ -65,9 +65,9 @@ export class ExpeditionModule {
         return Object.values(expeditions);
     }
 
-    private getManager(meta: MessageOgameMeta): ExpeditionEventManager {
+    private getManager(meta: MessageOgameMeta): ExpeditionManager {
         const key = getStorageKeyPrefix(meta);
-        const manager = (this.expeditionManagers[key] ??= new ExpeditionEventManager(key));
+        const manager = (this.expeditionManagers[key] ??= new ExpeditionManager(key));
 
         return manager;
     }
