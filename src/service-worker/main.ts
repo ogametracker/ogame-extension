@@ -2,7 +2,7 @@ import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { SubscriptionMessage, UnsubscriptionMessage } from "../shared/messages/subscriptions/types";
 import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
-import { _log, _logError, _logWarning } from "../shared/utils/_log";
+import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService, MessageServiceEventInfo } from "./MessageService";
@@ -47,7 +47,7 @@ class ServiceWorker {
     }
 
     private async onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
-        _log('got message', message, port);
+        _log('got message', performance.now(), message, port);
 
         const key = getStorageKeyPrefix(message.ogameMeta);
         const eventInfo: MessageServiceEventInfo = {
@@ -84,7 +84,7 @@ class ServiceWorker {
     }
 
     private sendMessage<TData, TMessage extends Message<MessageType, TData>>(message: TMessage, ...includePorts: chrome.runtime.Port[]) {
-        _log('broadcasting message', { message, includePorts });
+        _log('broadcasting message', performance.now(), { message, includePorts });
         const key = getStorageKeyPrefix(message.ogameMeta);
 
         const ports = (this.subscriptions?.[message.type]?.[key] ?? []);

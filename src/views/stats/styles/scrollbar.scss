@@ -1,0 +1,21 @@
+// chrome
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(var(--color), 0.35);
+
+    &:hover {
+        background: var(--color);
+    }
+}
+
+// firefox fallback
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color)) transparent;
+}

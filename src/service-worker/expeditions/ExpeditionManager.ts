@@ -1,5 +1,8 @@
 import { ExpeditionEvent } from "../../shared/models/v1/expeditions/ExpeditionEvents";
+import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
+
+const unloadTimeout = 5 * 60 * 1000; // 5 minutes
 
 export class ExpeditionManager {
     private readonly _key: string;
@@ -18,7 +21,7 @@ export class ExpeditionManager {
         if (this._unloadTimeout != null) {
             clearTimeout(this._unloadTimeout);
         }
-        this._unloadTimeout = setTimeout(async () => await this.unload(), 0, []);
+        this._unloadTimeout = setTimeout(async () => await this.unload(), unloadTimeout, []);
     }
 
     private async unload(): Promise<void> {
@@ -30,6 +33,7 @@ export class ExpeditionManager {
 
     private async load(): Promise<Record<number, ExpeditionEvent>> {
         if (this._expeditions == null) {
+            _logDebug('loading expeditions from storage', this.storageKey);
             const data = await chrome.storage.local.get(this.storageKey);
             this._expeditions = data?.[this.storageKey] ?? {};
         }

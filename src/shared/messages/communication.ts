@@ -1,0 +1,1 @@
+export const closeOgameTrackerDialogEventName = 'ogame-tracker/close-dialog';

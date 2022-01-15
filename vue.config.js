@@ -2,8 +2,13 @@ const fs = require('fs');
 
 const viewsDir = './src/views';
 const views = fs.readdirSync(viewsDir, { withFileTypes: true })
-    .filter(file => file.isDirectory())
+    // only directories that have a main.ts
+    .filter(file => file.isDirectory()
+        && fs.readdirSync(`${viewsDir}/${file.name}`, { withFileTypes: true })
+            .some(f => f.isFile() && f.name == 'main.ts')
+    )
     .map(dir => dir.name);
+    
 const vuePages = views.reduce((acc, view) => {
     acc[view] = {
         entry: `src/views/${view}/main.ts`,

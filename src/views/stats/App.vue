@@ -2,52 +2,73 @@
     <div
         id="app"
         :style="{
-            '--color': '255, 0, 0',
+            '--color': getColorVariable(activeColor),
         }"
     >
         <nav>
-            <div
+            <component
+                :is="
+                    tab.to != null
+                        ? 'router-link'
+                        : tab.href != null
+                        ? 'a'
+                        : 'div'
+                "
                 v-for="tab in tabs"
                 :key="tab.key"
+                :href="tab.href"
+                :target="tab.href != null ? '_blank' : null"
+                :to="tab.to"
+                :active-class="tab.to != null ? 'nav-item-active' : null"
+                :class="{
+                    'nav-item': tab.noNavItem != true,
+                    'icon-only': tab.label == null && tab.icon != null,
+                }"
                 :style="[
                     {
-                        '--color': getColorVariable(tab.color),
+                        '--color': getColorVariable(getColor(tab)),
                     },
                     tab.style,
                 ]"
             >
-                <span v-if="tab.icon != null" v-text="tab.icon" />
+                <span v-if="tab.icon != null" :class="tab.icon" />
+                <span v-if="tab.label != null" v-text="tab.label" />
+            </component>
 
-                <router-link v-if="tab.to != null" :to="tab.to">
-                    <span v-if="tab.label != null" v-text="tab.label" />
-                </router-link>
-                <span v-else-if="tab.label != null" v-text="tab.label" />
+            <!-- TODO: only show in iframe mode -->
+            <div class="nav-item icon-only" style="--color: none;">
+                <span class="mdi mdi-close close-overlay" @click="closeOverlay()" />
             </div>
         </nav>
         <main>
-            Content (Router-View)
+            Route: {{ $route }}
             <router-view />
         </main>
+        <footer>
+            TODO: Only show when not in iframe mode<br/>
+            Switch between different accounts/servers here
+        </footer>
     </div>
 </template>
 
 <script lang="ts">
+    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     // import { Message } from "@/shared/messages/Message";
     // import { AllExpeditionsMessage } from "@/shared/messages/tracking/expeditions";
-    import { Component, Prop, Vue } from "vue-property-decorator";
     // import { MessageType } from '@/shared/messages/MessageType'
     // import { ExpeditionEvent } from "@/shared/models/v1/expeditions/ExpeditionEvents";
-    import { RawLocation } from "vue-router";
 
-    type Tab = {
+    interface Tab {
         key: string;
-    } & ({
-        to?: RawLocation;
+        to?: { name: string };
+        href?: string;
         icon?: string;
         label?: string;
-        style?: string | Record<string, string>;
+        style?: string | Record<string, any>;
+        noNavItem?: boolean;
         color?: string;
-    });
+    }
 
     @Component
     export default class App extends Vue {
@@ -59,78 +80,97 @@
                 {
                     key: 'expeditions',
                     to: { name: 'expeditions' },
-                    icon: 'ogti-expedition',
+                    icon: 'ogti ogti-expedition',
                     label: 'LOCA: Expeditionen',
-                    color: '#0066ff',
                 },
                 {
                     key: 'combats',
-                    to: { name: 'combat' },
-                    icon: 'ogti-attack',
+                    to: { name: 'combats' },
+                    icon: 'ogti ogti-attack',
                     label: 'LOCA: Kämpfe',
-                    color: '#c51b00',
                 },
                 {
                     key: 'debris-fields',
                     to: { name: 'debris-fields' },
-                    icon: 'ogti-debris-field',
+                    icon: 'ogti ogti-debris-field',
                     label: 'LOCA: Trümmerfelder',
-                    color: '#00a031',
                 },
                 {
                     key: 'resource-balance',
                     to: { name: 'resource-balance' },
-                    icon: 'ogti-economy',
+                    icon: 'ogti ogti-economy',
                     label: 'LOCA: Rohstoffbilanz',
-                    color: '#a9460c',
                 },
                 {
                     key: 'empire',
                     to: { name: 'empire' },
-                    icon: 'ogti-planet-moon',
+                    icon: 'ogti ogti-planet-moon',
                     label: 'LOCA: Imperium',
-                    color: '#5000d0',
                 },
                 {
                     key: 'tools',
                     to: { name: 'tools' },
-                    icon: 'mdi-tools', //TODO: fix
+                    icon: 'mdi mdi-tools', //TODO: fix
                     label: 'LOCA: Tools',
-                    color: '#008c85',
                 },
                 {
                     key: 'space',
+                    style: {
+                        'flex-grow': 1
+                    },
+                    noNavItem: true,
                 },
                 //TODO: remove, move settings to be inline with the usage(s)
                 {
                     key: 'settings',
                     to: { name: 'settings' },
-                    icon: 'mdi-cog',
+                    icon: 'mdi mdi-cog',
                     label: 'LOCA: Einstellungen',
-                    color: '#888888',
                 },
                 {
                     key: 'excel-export',
                     to: { name: 'excel-export' },
-                    icon: 'mdi-microsoft-excel',
-                    color: '#21a366',
+                    icon: 'mdi mdi-microsoft-excel',
                 },
                 {
                     key: 'info',
                     to: { name: 'info' },
-                    icon: 'mdi-info',
-                    color: '#8c8ce0',
+                    icon: 'mdi mdi-information',
+                },
+                {
+                    key: 'donate',
+                    to: { name: 'donate' },
+                    icon: 'mdi mdi-coffee',
+                    label: 'LOCA: Donate',
                 },
                 {
                     key: 'discord',
-                    to: 'https://example.com',
-                    icon: 'ogti-discord',
+                    href: 'https://discord.gg/MZE9FrCwRj',
+                    icon: 'ogti ogti-discord',
                     color: '#5865f2',
                 },
             ];
         }
 
-        private getColorVariable(hexColor?: string): string | null {
+        private get activeColor(): string | null {
+            const matchedRoutes = this.$route.matched;
+            return matchedRoutes.map(route => route.meta?.color)
+                .find(color => color != null)
+                ?? null;
+        }
+
+        private getColor(tab: Tab): string | null {
+            if (tab.color != null) {
+                return tab.color;
+            }
+
+            const routes = this.$router.getRoutes();
+            const route = routes.find(route => route.name == tab.to?.name);
+
+            return route?.meta?.color ?? null;
+        }
+
+        private getColorVariable(hexColor: string | null): string | null {
             if (hexColor == null) {
                 return null;
             }
@@ -185,15 +225,90 @@
         //         }
         //     }
         // }
+
+        private closeOverlay() {
+            window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
+        }
     }
 </script>
 
 <style lang="scss">
+    #app {
+        color: white;
+        height: 100vh;
+
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        background-color: black;
+        background-image: linear-gradient(
+            52deg,
+            rgba(var(--color), 0.02),
+            rgba(var(--color), 0.08)
+        );
+    }
+
     nav {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
 
         border-bottom: 2px solid rgb(var(--color));
+    }
+
+    .nav-item {
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 0 8px;
+
+        &.icon-only {
+            padding: 0 12px;
+        }
+
+        &.nav-item-active,
+        &.nav-item-active:hover {
+            background: linear-gradient(
+                to bottom,
+                rgba(var(--color), 0.5),
+                rgb(var(--color))
+            );
+        }
+        &:hover {
+            background: linear-gradient(
+                to bottom,
+                rgba(var(--color), 0.25),
+                rgba(var(--color), 0.5)
+            );
+        }
+
+        > .ogti {
+            font-size: 36px;
+        }
+        > .mdi {
+            font-size: 28px;
+        }
+
+        > .ogti + *,
+        > .mdi + * {
+            margin-left: 6px;
+        }
+    }
+
+    main {
+        padding: 16px;
+    }
+
+    .close-overlay {
+        opacity: 0.5;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 </style>

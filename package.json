@@ -1,5 +1,5 @@
 {
-  "name": "xyz",
+  "name": "ogame-tracker",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "build:chrome": "node scripts/build.js --browser=chrome"
   },
   "dependencies": {
+    "@mdi/font": "^6.5.95",
     "date-fns": "^2.28.0",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.3",

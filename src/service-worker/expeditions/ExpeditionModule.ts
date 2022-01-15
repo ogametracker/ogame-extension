@@ -20,10 +20,15 @@ import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { ExpeditionManager } from "./ExpeditionManager";
 
+interface ExpeditionEventResult {
+    expedition: ExpeditionEvent;
+    isAlreadyTracked: boolean;
+}
+
 export class ExpeditionModule {
     private readonly expeditionManagers: Record<string, ExpeditionManager | undefined> = {};
 
-    public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEvent>> {
+    public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEventResult>> {
         const expeditionEventData = message.data;
 
         const manager = this.getManager(message.ogameMeta);
@@ -35,7 +40,10 @@ export class ExpeditionModule {
         if (knownExpedition != null) {
             return {
                 success: true,
-                result: knownExpedition
+                result: {
+                    expedition: knownExpedition,
+                    isAlreadyTracked: true,
+                },
             };
         }
 
@@ -55,7 +63,10 @@ export class ExpeditionModule {
         await manager.add(expedition);
         return {
             success: true,
-            result: expedition,
+            result: {
+                expedition,
+                isAlreadyTracked: false,
+            },
         };
     }
 
