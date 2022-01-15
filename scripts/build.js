@@ -19,7 +19,7 @@ execSync(`npx webpack --mode=production --node-env=production --env browser=${br
 process.stdout.write(`Building views\n`);
 // create .env file with VUE_APP_BROWSER environment variable
 fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
-execSync(`vue-cli-service build`, { stdio: 'inherit' });
+execSync(`vue-cli-service build --modern`, { stdio: 'inherit' });
 
 // generate manifest
 process.stdout.write(`Generating manifest\n`);
