@@ -9,7 +9,8 @@ export class ExpeditionManager {
     private readonly _key: string;
     private _expeditions: Record<number, ExpeditionEvent> | null = null;
     private _unloadTimeout: number | undefined;
-    private readonly _lock = new Lock();
+    private readonly _readLock = new Lock();
+    private readonly _writeLock = new Lock();
 
     constructor(key: string) {
         this._key = key;
@@ -34,7 +35,7 @@ export class ExpeditionManager {
     }
 
     private async load(releaseLock: boolean): Promise<Record<number, ExpeditionEvent>> {
-        await this._lock.acquire();
+        await this._readLock.acquire();
 
         if (this._expeditions == null) {
             _logDebug('loading expeditions from storage', this.storageKey);
@@ -43,7 +44,7 @@ export class ExpeditionManager {
         }
 
         if(releaseLock) {
-            this._lock.release();
+            this._readLock.release();
         }
 
         this.registerUnload();
@@ -59,14 +60,18 @@ export class ExpeditionManager {
         const expeditions = await this.load(false);
         expeditions[expeditionEvent.id] = expeditionEvent;
 
-        this._lock.release();
+        this._readLock.release();
         
         await this.save();
     }
 
     private async save(): Promise<void> {
+        await this._writeLock.acquire();
+
         await chrome.storage.local.set({
             [this.storageKey]: this._expeditions,
         });
+
+        this._writeLock.release();
     }
 }

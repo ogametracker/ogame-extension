@@ -104,7 +104,7 @@ export class ExpeditionModule {
     }
 
     private tryParseNoEventExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventNothing | null {
-        const i18nMessages = i18nExpeditions[language][ExpeditionEventType.noEvent];
+        const i18nMessages = i18nExpeditions[language][ExpeditionEventType.nothing];
         if(!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
@@ -112,7 +112,7 @@ export class ExpeditionModule {
         return {
             id: data.id,
             date: data.date,
-            type: ExpeditionEventType.noEvent,
+            type: ExpeditionEventType.nothing,
         };
     }
 

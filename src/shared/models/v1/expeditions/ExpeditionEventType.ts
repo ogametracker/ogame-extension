@@ -1,5 +1,5 @@
 export enum ExpeditionEventType {
-    noEvent = 'nothing',
+    nothing = 'nothing',
     resources = 'resources',
     fleet = 'fleet',
     delay = 'delay',

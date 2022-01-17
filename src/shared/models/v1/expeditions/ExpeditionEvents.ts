@@ -71,7 +71,7 @@ export type ExpeditionEventLostFleet = ExpeditionEventBase & {
 };
 
 export type ExpeditionEventNothing = ExpeditionEventBase & {
-    type: ExpeditionEventType.noEvent;
+    type: ExpeditionEventType.nothing;
 };
 
 export type ExpeditionEventAliens = ExpeditionEventBase & ExpeditionEventWithSize & {

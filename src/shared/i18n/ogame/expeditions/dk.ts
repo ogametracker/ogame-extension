@@ -57,7 +57,7 @@ export const dk: ExpeditionMessages = {
         regex: (ships: string[]) => new RegExp(`e følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
-    [ExpeditionEventType.noEvent]: [
+    [ExpeditionEventType.nothing]: [
         /*'Trods det første, meget lovende skan af sektoren kom vi */'desværre tilbage'/* uden noget.'*/,
         /*'Udover nogle underlige, smådyr på en ukendt */'sumpplanet'/* skete der ikke noget spændende.'*/,
         /*'Din ekspedition har */'lært om de store tomrum'/* i rummet. Der var ikke engang en lille asteroide eller en radioaktiv partikel, der kunne have gjort denne ekspedition spændende.'*/,

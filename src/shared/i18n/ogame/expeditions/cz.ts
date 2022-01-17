@@ -57,7 +57,7 @@ export const cz: ExpeditionMessages = {
         regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
-    [ExpeditionEventType.noEvent]: [
+    [ExpeditionEventType.nothing]: [
         /*'Až na pár prvních, velmi slibných scannů sektoru, expedice */'bohužel nepřináší nic zajímavého'/*.'*/,
         /*'Až na pár */'malých zvířátek z neznámé bažinaté'/* planety expedice nic zajímavého nenašla.'*/,
         /*'Tvá expedice se */'poučila o prázdnosti této části vesmíru'/*. Nebylo nalezeno vůbec nic, co by mohlo být zajímavé.'*/,

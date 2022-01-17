@@ -51,10 +51,6 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
-    // import { Message } from "@/shared/messages/Message";
-    // import { AllExpeditionsMessage } from "@/shared/messages/tracking/expeditions";
-    // import { MessageType } from '@/shared/messages/MessageType'
-    // import { ExpeditionEvent } from "@/shared/models/v1/expeditions/ExpeditionEvents";
 
     interface Tab {
         key: string;
@@ -69,7 +65,6 @@
 
     @Component
     export default class App extends Vue {
-        // private expoEvents: ExpeditionEvent[] = [];
         private readonly port = chrome.runtime.connect();
 
         private get isIframeMode() {
@@ -184,48 +179,6 @@
             return `${r}, ${g}, ${b}`;
         }
 
-
-        // mounted() {
-        //     this.port.onMessage.addListener(message => this.onMessage(message));
-
-        //     const subscribeMessage = {
-        //         type: MessageType.Subscribe,
-        //         ogameMeta: {
-        //             serverId: 146,
-        //             language: 'de',
-        //             playerId: 117848,
-        //         },
-        //         data: MessageType.AllExpeditions,
-        //     };
-        //     this.port.postMessage(subscribeMessage);
-
-        //     this.requestData();
-        // }
-
-        // requestData() {
-        //     const message = {
-        //         type: MessageType.RequestExpeditionEvents,
-        //         ogameMeta: {
-        //             serverId: 146,
-        //             language: 'de',
-        //             playerId: 117838,
-        //         },
-        //         data: undefined,
-        //     };
-        //     this.port.postMessage(message);
-        // }
-
-        // onMessage(msg: Message) {
-        //     const { type } = msg;
-
-        //     switch (type) {
-        //         case MessageType.AllExpeditions: {
-        //             const { data } = msg as AllExpeditionsMessage;
-        //             this.expoEvents = data;
-        //             break;
-        //         }
-        //     }
-        // }
 
         private closeOverlay() {
             window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
