@@ -35,18 +35,15 @@
                 <span v-if="tab.label != null" v-text="tab.label" />
             </component>
 
-            <!-- TODO: only show in iframe mode -->
-            <div class="nav-item icon-only" style="--color: none;">
+            <div v-if="isIframeMode" class="nav-item icon-only" style="--color: none;">
                 <span class="mdi mdi-close close-overlay" @click="closeOverlay()" />
             </div>
         </nav>
         <main>
-            Route: {{ $route }}
             <router-view />
         </main>
-        <footer>
-            TODO: Only show when not in iframe mode<br/>
-            Switch between different accounts/servers here
+        <footer v-if="!isIframeMode">
+            TODO: Switch between different accounts/servers here
         </footer>
     </div>
 </template>
@@ -74,6 +71,10 @@
     export default class App extends Vue {
         // private expoEvents: ExpeditionEvent[] = [];
         private readonly port = chrome.runtime.connect();
+
+        private get isIframeMode() {
+            return window.location.search.length > 0;
+        }
 
         private get tabs(): Tab[] {
             return [

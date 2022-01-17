@@ -1,5 +1,9 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+import Expeditions from '../components/expeditions/Expeditions.vue';
+import ExpeditionsOverview from '../components/expeditions/overview/Overview.vue';
+import ExpeditionsOverviewCharts from '../components/expeditions/overview/Charts.vue';
+import ExpeditionsOverviewTables from '../components/expeditions/overview/Tables.vue';
 
 Vue.use(VueRouter);
 
@@ -14,6 +18,53 @@ const routes: Array<RouteConfig> = [
         meta: {
             color: '#0066ff',
         },
+        redirect: { name: 'expeditions/overview' }, //TODO: user setting
+        component: Expeditions,
+        children: [
+            {
+                name: 'expeditions/overview',
+                path: 'overview',
+                redirect: { name: 'expeditions/overview/charts' }, //TODO: user setting 
+                component: ExpeditionsOverview,
+                children: [
+                    {
+                        name: 'expeditions/overview/charts',
+                        path: 'charts',
+                        component: ExpeditionsOverviewCharts,
+                    },
+                    {
+                        name: 'expeditions/overview/tables',
+                        path: 'tables',
+                        component: ExpeditionsOverviewTables,
+                    },
+                ],
+            },
+            {
+                name: 'expeditions/resources',
+                path: 'resources',
+                //component: null,
+            },
+            {
+                name: 'expeditions/ships',
+                path: 'ships',
+                //component: null,
+            },
+            {
+                name: 'expeditions/dark-matter',
+                path: 'dark-matter',
+                //component: null,
+            },
+            {
+                name: 'expeditions/items',
+                path: 'items',
+                //component: null,
+            },
+            {
+                name: 'expeditions/distribution',
+                path: 'distribution',
+                //component: null,
+            },
+        ],
     },
     {
         name: 'combats',
