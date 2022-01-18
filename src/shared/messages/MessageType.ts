@@ -15,5 +15,6 @@ export enum MessageType {
     TrackExpedition = 'expedition/track-expedition',
     Expedition = 'expedition/expedition-data/single',
     AllExpeditions = 'expedition/expedition-data/all',
+    NewExpedition = 'expedition/new',
     RequestExpeditionEvents = 'expedition/request-expeditions',
 }

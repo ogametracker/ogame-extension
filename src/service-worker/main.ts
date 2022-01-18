@@ -52,7 +52,7 @@ class ServiceWorker {
         const key = getStorageKeyPrefix(message.ogameMeta);
         const eventInfo: MessageServiceEventInfo = {
             sender: port,
-            broadcast: (message, includePorts) => this.sendMessage(message, includePorts),
+            broadcast: (message, ...includePorts) => this.sendMessage(message, ...includePorts),
         }
 
         switch (message.type) {

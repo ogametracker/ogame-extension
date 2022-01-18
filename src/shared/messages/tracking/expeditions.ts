@@ -7,3 +7,4 @@ export type TrackExpeditionMessage = Message<MessageType.TrackExpedition, RawExp
 export type RequestExpeditionEventsMessage = Message<MessageType.RequestExpeditionEvents, undefined>;
 export type ExpeditionMessage = Message<MessageType.Expedition, ExpeditionEvent>;
 export type AllExpeditionsMessage = Message<MessageType.AllExpeditions, ExpeditionEvent[]>;
+export type NewExpeditionMessage = Message<MessageType.NewExpedition, ExpeditionEvent>;

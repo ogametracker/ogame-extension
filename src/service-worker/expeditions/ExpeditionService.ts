@@ -1,6 +1,6 @@
 import { Message, MessageOgameMeta } from '../../shared/messages/Message';
 import { MessageType } from '../../shared/messages/MessageType';
-import { AllExpeditionsMessage, ExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
+import { AllExpeditionsMessage, ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
 import { _throw } from '../../shared/utils/_throw';
 import { MessageService, MessageServiceEventInfo } from '../MessageService';
 import { ExpeditionModule } from './ExpeditionModule';
@@ -26,8 +26,14 @@ export class ExpeditionService implements MessageService {
                 };
                 info.broadcast(expeditionMessage, info.sender);
 
+                // broadcast "new expedition available"
                 // if(!isAlreadyTracked) {
-                //     await this.broadcastAllExpeditions(message.ogameMeta, info);
+                //     const newExpeditionMessage: NewExpeditionMessage = {
+                //         ogameMeta: message.ogameMeta,
+                //         type: MessageType.NewExpedition,
+                //         data: expedition,
+                //     };
+                //     info.broadcast(newExpeditionMessage);
                 // }
                 break;
             }
