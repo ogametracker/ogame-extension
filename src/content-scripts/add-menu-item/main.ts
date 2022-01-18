@@ -19,7 +19,7 @@ const observer = new MutationObserver(() => {
                 <span class="menu_icon">
                     <span class="menuImage icon"></span>
                 </span>
-                <a class="menubutton" href="#"></a>
+                <div class="menubutton"></div>
             </li>
         `;
         const link = ogameTrackerMenu.querySelector('.menubutton')! as HTMLAnchorElement;
@@ -47,15 +47,15 @@ function showOgameTrackerDialog() {
     }
 
     const url = chrome.runtime.getURL('/views/stats.html');
-    const playerid = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content
+    const player = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content
         ?? _throw('cannot find meta tag with player id');
     const language = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content
         ?? _throw('cannot find meta tag with universe language');
-    const serverid = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)
+    const server = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)
         ?.content?.split('-')?.[0]?.substring(1)
         ?? _throw('cannot find meta tag with universe language');
 
-    const query = new URLSearchParams({ playerid, language, serverid });
+    const query = new URLSearchParams({ player, language, server, iframe: 'yes' });
 
     const container = document.createElement('div');
     container.id = 'ogame-tracker-dialog';

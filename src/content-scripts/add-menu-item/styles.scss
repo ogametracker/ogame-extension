@@ -1,9 +1,30 @@
 #ogame-tracker-menu-item {
-    a.menubutton::before {
-        content: 'OGame Tracker';
+    .menubutton {
+        /* START: taken from ogame styles */
+        background: url("//gf3.geo.gfsrv.net/cdneb/f5f81e8302aaad56c958c033677fb8.png") -374px -258px no-repeat;
+        height: 29px;
+        text-align: center;
+        line-height: 25px;
+        width: 136px;
+        color: #767f88;
+        display: block;
+        font: bold 11px/25px verdana, arial, helvetica, sans-serif;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover {
+            background-position: -374px -287px;
+            color: white;
+        }
+        /* END: taken from ogame styles */
+
+        &::before {
+            content: "OGame Tracker";
+        }
     }
 
     .icon {
+        //TODO: fix styles
         background: green;
 
         &.warning {

@@ -35,8 +35,15 @@
                 <span v-if="tab.label != null" v-text="tab.label" />
             </component>
 
-            <div v-if="isIframeMode" class="nav-item icon-only" style="--color: none;">
-                <span class="mdi mdi-close close-overlay" @click="closeOverlay()" />
+            <div
+                v-if="isIframeMode"
+                class="nav-item icon-only"
+                style="--color: none"
+            >
+                <span
+                    class="mdi mdi-close close-overlay"
+                    @click="closeOverlay()"
+                />
             </div>
         </nav>
         <main>
@@ -51,6 +58,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
+    import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
 
     interface Tab {
         key: string;
@@ -68,7 +76,8 @@
         private readonly port = chrome.runtime.connect();
 
         private get isIframeMode() {
-            return window.location.search.length > 0;
+            const params = new URLSearchParams(location.search);
+            return params.get('iframe') != null;
         }
 
         private get tabs(): Tab[] {

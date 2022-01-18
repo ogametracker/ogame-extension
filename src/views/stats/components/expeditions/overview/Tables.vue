@@ -13,13 +13,11 @@
 
     @Component({})
     export default class Tables extends Vue {
-        private readonly manager = new ExpeditionDataModule();
-
         private get rows(): [string, number][] {
             return Object.values(ExpeditionEventType).map(type =>
                 [
                     type as string,
-                    this.manager.expeditions.filter(expo => expo.type == type).length
+                    ExpeditionDataModule.expeditions.filter(expo => expo.type == type).length
                 ]
             );
         }

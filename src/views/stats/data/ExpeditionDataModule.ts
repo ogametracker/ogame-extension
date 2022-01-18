@@ -3,8 +3,9 @@ import { MessageType } from '@/shared/messages/MessageType';
 import { AllExpeditionsMessage, RequestExpeditionEventsMessage } from '@/shared/messages/tracking/expeditions';
 import { SubscriptionMessage } from '@/shared/messages/subscriptions/types';
 import { Message } from '@/shared/messages/Message';
+import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 
-export class ExpeditionDataModule {
+class ExpeditionDataModuleClass {
     private _port = chrome.runtime.connect();
     public expeditions: ExpeditionEvent[] = [];
 
@@ -15,12 +16,7 @@ export class ExpeditionDataModule {
 
         const subscribeMessage: SubscriptionMessage = {
             type: MessageType.Subscribe,
-            ogameMeta: {
-                //TODO: ogame meta
-                serverId: 146,
-                language: 'de',
-                playerId: 117848,
-            },
+            ogameMeta: GlobalOgameMetaData,
             data: MessageType.AllExpeditions,
         };
         this._port.postMessage(subscribeMessage);
@@ -31,12 +27,7 @@ export class ExpeditionDataModule {
     private requestData() {
         const message: RequestExpeditionEventsMessage = {
             type: MessageType.RequestExpeditionEvents,
-            ogameMeta: {
-                //TODO: ogame meta
-                serverId: 146,
-                language: 'de',
-                playerId: 117838,
-            },
+            ogameMeta: GlobalOgameMetaData,
             data: undefined,
         };
         this._port.postMessage(message);
@@ -54,3 +45,5 @@ export class ExpeditionDataModule {
         }
     }
 }
+
+export const ExpeditionDataModule = new ExpeditionDataModuleClass();
