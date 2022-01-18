@@ -27,14 +27,14 @@ export class ExpeditionService implements MessageService {
                 info.broadcast(expeditionMessage, info.sender);
 
                 // broadcast "new expedition available"
-                // if(!isAlreadyTracked) {
-                //     const newExpeditionMessage: NewExpeditionMessage = {
-                //         ogameMeta: message.ogameMeta,
-                //         type: MessageType.NewExpedition,
-                //         data: expedition,
-                //     };
-                //     info.broadcast(newExpeditionMessage);
-                // }
+                if(!isAlreadyTracked) {
+                    const newExpeditionMessage: NewExpeditionMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.NewExpedition,
+                        data: expedition,
+                    };
+                    info.broadcast(newExpeditionMessage);
+                }
                 break;
             }
 
