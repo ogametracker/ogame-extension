@@ -1,29 +1,41 @@
 <template>
     <div class="scrollable-chart">
-        <div class="chart-container">
-            <svg ref="svg">
-                <template v-for="dataset in internalDatasets">
+        <div class="chart-container" ref="svg-container">
+            <svg>
+                <g v-if="filled">
                     <path
+                        v-for="dataset in internalDatasets"
                         :key="`background-${dataset.key}`"
                         :d="dataset.paths.background"
-                        style="stroke: none; opacity: 0.5"
+                        class="dataset-background"
                         :style="{ fill: dataset.color }"
                     />
+                </g>
+                <g>
                     <path
+                        v-for="dataset in internalDatasets"
                         :key="`line-${dataset.key}`"
                         :d="dataset.paths.line"
-                        style="stroke-width: 2px; fill: none"
+                        class="dataset-line"
                         :style="{ stroke: dataset.color }"
                     />
-
-                    <circle
-                        v-for="(point, i) in dataset.linePoints"
-                        :key="i"
-                        :cx="point.x"
-                        :cy="point.y"
-                        :style="{ fill: dataset.color }"
-                    />
-                </template>
+                </g>
+                <g>
+                    <!-- TODO: one single group per x-axis position for hover events -->
+                    <g
+                        v-for="dataset in internalDatasets"
+                        :key="`points-${dataset.key}`"
+                    >
+                        <circle
+                            v-for="(point, i) in dataset.linePoints"
+                            :key="i"
+                            class="dataset-point"
+                            :cx="point.x"
+                            :cy="point.y"
+                            :style="{ fill: dataset.color }"
+                        />
+                    </g>
+                </g>
             </svg>
         </div>
 
@@ -57,18 +69,52 @@
 
     @Component({})
     export default class ScrollableChart extends Vue {
-        @Ref('svg')
-        private svg!: SVGElement;
+        @Ref('svg-container')
+        private svgContainer!: HTMLElement;
 
         @Prop({ required: true, type: Array as PropType<ScrollableChartDataset[]> })
         private datasets!: ScrollableChartDataset[];
 
-        private internalDatasets: ScrollableChartInternalDataset[] = [];
+        @Prop({ required: false, type: Boolean })
+        private stacked!: boolean;
 
-        @Watch('datasets', { immediate: true })
+        @Prop({ required: false, type: Boolean })
+        private filled!: boolean;
+
+        private internalDatasets: ScrollableChartInternalDataset[] = [];
+        private readonly resizeObserver = new ResizeObserver(() => this.onDatasetsChanged());
+
+        @Watch('datasets')
         private onDatasetsChanged() {
-            this.internalDatasets = this.datasets.map(dataset => {
-                const linePoints = this.computePathPoints(dataset.points);
+            const height = this.svgContainer.clientHeight;
+
+            let maxY = 0;
+
+            const mappedDatasets: ScrollableChartDataset[] = [];
+            this.datasets.forEach((dataset, i) => {
+                const points = dataset.points.map(p => {
+                    if (!this.stacked) {
+                        maxY = Math.max(p.y, maxY);
+                        return p;
+                    }
+
+                    const y = p.y + (mappedDatasets[i - 1]?.points.find(pt => pt.x == p.x)?.y ?? 0);
+                    maxY = Math.max(y, maxY);
+
+                    return {
+                        x: p.x,
+                        y,
+                    };
+                });
+
+                mappedDatasets.push({
+                    ...dataset,
+                    points,
+                });
+            });
+
+            const internalDatasets: ScrollableChartInternalDataset[] = mappedDatasets.map(dataset => {
+                const linePoints = this.computePathPoints(dataset.points, maxY);
 
                 return {
                     ...dataset,
@@ -76,17 +122,25 @@
                     paths: {
                         line: this.getSvgPath(linePoints),
                         background: this.getSvgPath([
-                            { x: 0, y: 0 },
+                            { x: 0, y: height },
                             ...linePoints,
-                            { x: linePoints[linePoints.length - 1].x, y: 0 },
+                            { x: linePoints[linePoints.length - 1].x, y: height },
                         ]),
                     },
                 };
             });
+            this.internalDatasets = internalDatasets.reverse();
         }
 
+
         private mounted() {
-            window.addEventListener('resize', () => this.onDatasetsChanged());
+            this.resizeObserver.observe(this.svgContainer);
+
+            this.onDatasetsChanged();
+        }
+
+        private destroyed() {
+            this.resizeObserver.disconnect();
         }
 
         private getSvgPath(points: Point[], close = false) {
@@ -94,15 +148,14 @@
             return svgCommands.join(' ') + (close ? ' Z' : '');
         }
 
-        private computePathPoints(points: Point[]) {
-            const width = this.svg.clientWidth;
-            const height = this.svg.clientHeight;
+        private computePathPoints(points: Point[], maxY: number) {
+            const width = this.svgContainer.clientWidth;
+            const height = this.svgContainer.clientHeight;
 
             const sections = points.length - 1;
-            const maxY = points.reduce((acc, cur) => Math.max(acc, cur.y), 0);
             const svgPoints: Point[] = points.map(p => ({
-                x: width / sections * p.x,
-                y: height * p.y / maxY,
+                x: width * p.x / sections,
+                y: height * (1 - p.y / maxY),
             }));
 
             return svgPoints;
@@ -120,8 +173,26 @@
     svg {
         width: 100%;
         height: 100%;
-        transform: scaleY(
-            -1
-        ); // flip axis so we don't have to flip the coordinates upside down
+    }
+
+    .dataset-background {
+        stroke: none;
+        opacity: 0.8;
+        filter: brightness(0.8);
+    }
+
+    .dataset-line {
+        fill: none;
+        stroke-width: 2px;
+    }
+
+    .dataset-point {
+        will-change: r;
+        transition: r 0.3s ease-in-out;
+        r: 3px;
+
+        &:hover {
+            r: 5px;
+        }
     }
 </style>

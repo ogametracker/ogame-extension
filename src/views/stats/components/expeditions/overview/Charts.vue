@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <scrollable-chart :datasets="datasets" />
+        <scrollable-chart :datasets="datasets" stacked filled />
         TODO: Diagramm Übersicht Expeditionen
     </div>
 </template>
