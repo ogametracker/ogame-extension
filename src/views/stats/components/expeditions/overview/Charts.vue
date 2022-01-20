@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <scrollable-chart :datasets="datasets" stacked filled />
+        <scrollable-chart :datasets="datasets" stacked filled :x-label-formatter="x => formatX(x)" />
         TODO: Diagramm Übersicht Expeditionen
     </div>
 </template>
@@ -30,10 +30,14 @@
             return Object.values(ExpeditionEventType)
                 .map(type => ({
                     key: type,
-                    points: Array.from({ length: 30 }).map((_, x) => ({ x, y: Math.trunc(Math.random() * 100) })),
+                    values: Array.from({ length: 100 }).map((_, i) => [0,99].includes(i) ? 0 : Math.trunc(Math.random() * 100)),
                     color: this.colors[type],
                     label: type,
                 }));
+        }
+
+        private formatX(x: number): string {
+            return `Dies ist ein ${x}`;
         }
     }
 </script>
