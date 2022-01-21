@@ -2,7 +2,7 @@
     <div class="scrollable-chart">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
             <div class="svg-container" ref="svg-container">
-                <svg v-if="isReady">
+                <svg v-if="isReady && internalDatasets.length > 0">
                     <g>
                         <!-- vertical grid lines -->
                         <line
@@ -14,11 +14,16 @@
                             :y2="svgContainer.clientHeight + 10"
                             class="x-grid-line"
                         />
-                        <!-- 
-                        TODO: horizontal grid lines
-                        TODO: y-axis tick lines + labels
-                        TODO: x-axis tick lines
-                        -->
+                        <!-- horizontal grid lines -->
+                        <line
+                            v-for="(yData, y) in yGridLines"
+                            :key="y"
+                            :x1="-10"
+                            :y1="yData.svg"
+                            :x2="svgContainer.clientWidth"
+                            :y2="yData.svg"
+                            class="y-grid-line"
+                        />
                     </g>
 
                     <g v-if="filled">
@@ -76,7 +81,15 @@
                 </svg>
             </div>
 
-            <div class="chart-y-axis" />
+            <div class="chart-y-axis">
+                <div
+                    v-for="(yData, y) in yGridLines"
+                    :key="y"
+                    class="y-axis-label"
+                    :style="{ bottom: `${yData.fraction * 100}%` }"
+                    v-text="'FORMAT: ' + y"
+                />
+            </div>
             <div class="chart-x-axis">
                 <div
                     v-for="x in ticks"
@@ -88,7 +101,6 @@
             </div>
 
             <div class="chart-legend">
-                TODO: Legend
                 <div
                     v-for="dataset in internalDatasets"
                     :key="`legend-item-${dataset.key}`"
@@ -151,6 +163,8 @@
         };
     }
 
+    type YGridLineData = Record<number, { svg: number; fraction: number }>;
+
     @Component({})
     export default class ScrollableChart extends Vue {
         @Ref('svg-container')
@@ -177,9 +191,10 @@
         private tickOffset = 0;
         private internalDatasets: ScrollableChartInternalDataset[] = [];
         private xPositions: number[] = [];
-        private readonly resizeObserver = new ResizeObserver(() => this.updatePaths());
+        private yGridLines: YGridLineData = {};
         private yRange = { min: 0, max: 0 };
         private maxX = 0;
+        private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
         @Watch('datasets')
         private onDatasetsChanged() {
@@ -194,32 +209,59 @@
                 visible: true,
             }));
 
-            this.updateYRange();
 
             this.internalDatasets = internalDatasets;
             this.updateTransformedValues();
 
+            this.updateYRange();
+            this.updateYGridLines();
+            this.updatePaths();
+
             this.tickOffset = Math.max(0, this.maxTickOffset);
+        }
+
+        private updateYGridLines() {
+            //TODO: adjust for negative y-values
+            const maxY = this.yRange.max;
+            const yGridConfig = this.internalConfig.grid.y;
+            let step = 0;
+
+            outerLoop:
+            for (let stepFactor = yGridConfig.stepFactor; ; stepFactor *= yGridConfig.stepFactor) {
+                for (let stepBase of yGridConfig.stepBases) {
+                    let curStep = stepBase * stepFactor;
+
+                    let curMin = curStep * yGridConfig.minLines;
+                    let curMax = curStep * yGridConfig.maxLines;
+                    if (curMin < maxY && curMax >= maxY) {
+                        step = curStep;
+                        break outerLoop;
+                    }
+                }
+            }
+
+            const height = this.svgContainer.clientHeight;
+            const lines: YGridLineData = {};
+            const count = Math.ceil(maxY / step);
+            for (let c = 0; c <= count; c++) {
+                const y = step * c;
+                lines[y] = {
+                    svg: height - height * c / count,
+                    fraction: c / count,
+                };
+            }
+
+            this.yGridLines = lines;
         }
 
         private updateYRange() {
             const yRange = { min: 0, max: 0 };
 
-            this.datasets.forEach(dataset => {
-                let datasetMin = 0;
-                let datasetMax = 0;
-
-                dataset.values.forEach(y => {
-                    datasetMin = Math.min(y, datasetMin);
-                    datasetMax = Math.max(y, datasetMax);
+            this.internalDatasets.forEach(dataset => {
+                dataset.transformedValues.forEach(y => {
+                    yRange.min = Math.min(y, yRange.min);
+                    yRange.max = Math.max(y, yRange.max);
                 });
-
-                yRange.min = Math.min(datasetMin, yRange.min);
-                if(this.stacked) {
-                    yRange.max += datasetMax;
-                } else {
-                    yRange.max = Math.max(datasetMax);
-                }
             });
 
             this.yRange = yRange;
@@ -246,13 +288,12 @@
             });
 
             this.maxX = maxX;
-
-            this.updatePaths();
         }
 
         private toggleVisibility(dataset: ScrollableChartInternalDataset) {
             dataset.visible = !dataset.visible;
             this.updateTransformedValues();
+            this.updatePaths();
         }
 
         private get maxTickOffset() {
@@ -262,6 +303,11 @@
         @Watch('tickOffset')
         private onTickOffsetChanged() {
             this.$nextTick(() => this.updatePaths());
+        }
+
+        private onResize() {
+            this.updateYGridLines();
+            this.updatePaths();
         }
 
         private updatePaths() {
@@ -277,6 +323,10 @@
                 const bgPath = `M 0 ${height} `
                     + `L${linePath.substring(1)} `
                     + `L ${this.xPositions[this.xPositions.length - 1]} ${height}`;
+
+                if (linePath.includes('NaN')) {
+                    debugger;
+                }
 
                 const internalDataset: ScrollableChartInternalDataset = {
                     ...dataset,
@@ -317,6 +367,18 @@
                     return height * (1 - y / this.yRange.max);
                 });
         }
+
+        private readonly internalConfig = {
+            grid: {
+                y: {
+                    minLines: 3,
+                    maxLines: 6,
+
+                    stepBases: [1, 2, 5],
+                    stepFactor: 10,
+                },
+            },
+        };
     }
 </script>
 <style lang="scss" scoped>
@@ -356,9 +418,9 @@
     }
 
     .dataset-point {
-        stroke: rgba(black, 0.5);
+        stroke: rgba(black, 0.2);
         r: 3px;
-        stroke-width: 0;
+        stroke-width: 1px;
     }
 
     .dataset-point-group {
@@ -367,8 +429,8 @@
         }
 
         &:hover > .dataset-point {
+            stroke: rgba(black, 0.5);
             r: 4px;
-            stroke-width: 1px;
         }
     }
 
@@ -384,6 +446,8 @@
     .svg-container {
         grid-row: 1;
         grid-column: 2;
+        min-height: 250px;
+        min-width: 500px;
     }
 
     .chart-x-axis {
@@ -406,6 +470,21 @@
     .chart-y-axis {
         grid-row: 1;
         grid-column: 1;
+
+        position: relative;
+
+        > .y-axis-label {
+            position: absolute;
+            right: 0;
+            transform: translate(-15px, 50%);
+            white-space: pre;
+            color: #888;
+            font-size: 12px;
+
+            &:last-of-type {
+                transform: translate(-15px, 100%);
+            }
+        }
     }
 
     .chart-legend {
@@ -420,9 +499,13 @@
         align-items: center;
 
         &-hidden {
-            filter: grayscale(1);
             text-decoration: line-through;
             color: #888;
+
+            .legend-item-color {
+                border: 2px solid currentColor;
+                background: none;
+            }
         }
     }
 
