@@ -1,7 +1,11 @@
 <template>
     <div class="scrollable-chart">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
-            <div class="svg-container" ref="svg-container">
+            <div
+                class="svg-container"
+                ref="svg-container"
+                @mouseleave="activeX = null"
+            >
                 <svg v-if="isReady && internalDatasets.length > 0">
                     <g>
                         <!-- vertical grid lines -->
@@ -13,6 +17,7 @@
                             :x2="xPositions[x - 1]"
                             :y2="svgContainer.clientHeight + 10"
                             class="x-grid-line"
+                            :class="{ 'x-grid-line-active': x - 1 == activeX }"
                         />
                         <!-- horizontal grid lines -->
                         <line
@@ -52,6 +57,7 @@
                             v-for="x in ticks"
                             :key="`point-group-${x}`"
                             class="dataset-point-group"
+                            @mouseenter="activeX = x - 1"
                         >
                             <circle
                                 v-for="dataset in reversedDatasets"
@@ -79,6 +85,31 @@
                         </g>
                     </g>
                 </svg>
+
+                <div
+                    class="chart-tooltip"
+                    v-if="activeX != null"
+                    :style="{
+                        '--ticks': ticks,
+                        '--x': activeX,
+                    }"
+                >
+                    TODO: x-Label
+                    <div
+                        v-for="dataset in internalDatasets"
+                        v-show="dataset.visible"
+                        :key="`tooltip-${dataset.key}`"
+                        class="chart-tooltip-item"
+                        :class="{
+                            zero: dataset.values[activeX + tickOffset] == 0,
+                        }"
+                    >
+                        TODO: dataset color
+                        <span v-text="dataset.label" />
+                        <span v-text="dataset.values[activeX + tickOffset]" />
+                    </div>
+                    TODO: Custom-Footer (e.g. '77 Expeditions')
+                </div>
             </div>
 
             <div class="chart-y-axis">
@@ -87,7 +118,7 @@
                     :key="y"
                     class="y-axis-label"
                     :style="{ bottom: `${yData.fraction * 100}%` }"
-                    v-text="'FORMAT: ' + y"
+                    v-text="'TODO: ' + y"
                 />
             </div>
             <div class="chart-x-axis">
@@ -188,6 +219,7 @@
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => value.toString() })
         private xLabelFormatter!: (value: number) => string;
 
+        private activeX: number | null = null;
         private tickOffset = 0;
         private internalDatasets: ScrollableChartInternalDataset[] = [];
         private xPositions: number[] = [];
@@ -399,6 +431,11 @@
         stroke: rgba(white, 0.1);
         stroke-width: 1px;
         fill: none;
+
+        &.x-grid-line-active {
+            stroke: rgba(white, 0.5);
+            stroke-width: 3px;
+        }
     }
 
     .y-grid-line {
@@ -443,11 +480,13 @@
             grid-template-columns: 100px 1fr;
         }
     }
+
     .svg-container {
         grid-row: 1;
         grid-column: 2;
         min-height: 250px;
         min-width: 500px;
+        position: relative;
     }
 
     .chart-x-axis {
@@ -515,5 +554,29 @@
         border-radius: 4px;
         background: currentColor;
         margin-right: 4px;
+    }
+
+    .chart-tooltip {
+        position: absolute;
+        top: 0;
+        padding: 12px;
+        background: #333;
+        border-radius: 4px;
+        left: calc(100% * var(--x) / (var(--ticks) - 1));
+        transform: translateX(calc(-100% * var(--x) / (var(--ticks) - 1)));
+        white-space: pre;
+        line-height: 1.1;
+
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        gap: 2px 12px;
+
+        &-item {
+            display: contents;
+
+            &.zero {
+                color: #888;
+            }
+        }
     }
 </style>
