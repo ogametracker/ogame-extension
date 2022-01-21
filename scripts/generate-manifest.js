@@ -36,7 +36,7 @@ const manifest = {
     version: `${now.getFullYear()
         }.${now.getMonth() + 1
         }.${now.getDate()
-        }.${Math.trunc((now.getHours() * 24 * 60 + now.getMinutes() * 60 + now.getSeconds()) / 2)
+        }.${Math.trunc((now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds()) / 2)
         }`,
     icons: {
         [128]: isDev ? 'icon128-dev.png' : 'icon128.png',
