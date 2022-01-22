@@ -296,7 +296,7 @@
             let step = 0;
 
             outerLoop:
-            for (let stepFactor = yGridConfig.stepFactor; ; stepFactor *= yGridConfig.stepFactor) {
+            for (let stepFactor = 1; ; stepFactor *= yGridConfig.stepFactor) {
                 for (let stepBase of yGridConfig.stepBases) {
                     let curStep = stepBase * stepFactor;
 
@@ -308,7 +308,6 @@
                     }
                 }
             }
-
             const height = this.svgContainer.clientHeight;
             const lines: YGridLineData = {};
             const count = Math.ceil(maxY / step);
@@ -324,7 +323,7 @@
         }
 
         private updateYRange() {
-            const yRange = { min: 0, max: 0 };
+            const yRange = { min: 0, max: 10 };
 
             this.internalDatasets.forEach(dataset => {
                 dataset.transformedValues.forEach(y => {
@@ -411,11 +410,13 @@
 
         private isReady = false;
 
-        private mounted() {
+        private async mounted() {
             this.isReady = true;
-            this.resizeObserver.observe(this.svgContainer);
 
             this.onDatasetsChanged();
+
+            await this.$nextTick();
+            this.resizeObserver.observe(this.svgContainer);
         }
 
         private destroyed() {
@@ -615,7 +616,7 @@
         line-height: 1;
 
         display: grid;
-        grid-template-columns: repeat(3, auto);
+        grid-template-columns: auto auto 1fr;
         align-items: center;
         gap: 2px 6px;
         font-size: 0.75rem;
