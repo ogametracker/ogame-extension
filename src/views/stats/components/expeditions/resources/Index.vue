@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '../../common/ListNav.vue';
 
     @Component({})
@@ -12,11 +12,11 @@
             return [
                 {
                     label: 'LOCA: Diagramm',
-                    to: { name: 'expeditions/overview/charts' },
+                    to: { name: 'expeditions/resources/charts' },
                 },
                 {
                     label: 'LOCA: Tabellen',
-                    to: { name: 'expeditions/overview/tables' },
+                    to: { name: 'expeditions/resources/tables' },
                 },
             ];
         }

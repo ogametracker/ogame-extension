@@ -7,7 +7,7 @@
                 @mouseleave="activeX = null"
             >
                 <svg v-if="isReady && internalDatasets.length > 0">
-                    <g>
+                    <g class="grid-lines">
                         <!-- vertical grid lines -->
                         <line
                             v-for="x in ticks"
@@ -31,7 +31,7 @@
                         />
                     </g>
 
-                    <g v-if="filled">
+                    <g v-if="filled" class="background-paths">
                         <path
                             v-for="dataset in reversedDatasets"
                             v-show="dataset.visible"
@@ -42,7 +42,7 @@
                         />
                     </g>
 
-                    <g>
+                    <g class="line-paths">
                         <path
                             v-for="dataset in reversedDatasets"
                             v-show="dataset.visible"
@@ -52,7 +52,7 @@
                             :style="{ stroke: dataset.color }"
                         />
                     </g>
-                    <g>
+                    <g class="points">
                         <g
                             v-for="x in ticks"
                             :key="`point-group-${x}`"
@@ -115,7 +115,7 @@
                         <span
                             class="chart-tooltip-item-value"
                             v-text="
-                                formatNumber(
+                                tooltipValueFormatter(
                                     getValue(dataset, activeX + tickOffset)
                                 )
                             "
@@ -127,8 +127,9 @@
                     </div>
 
                     <div
-                        v-if="footerProvider != null"
-                        v-text="footerText"
+                        v-for="(footer, i) in footerTexts"
+                        :key="i"
+                        v-text="footer"
                         class="chart-tooltip-footer"
                     />
                 </div>
@@ -154,7 +155,7 @@
                 />
             </div>
 
-            <div class="chart-legend">
+            <div class="chart-legend" v-if="!noLegend">
                 <div
                     v-for="dataset in internalDatasets"
                     :key="`legend-item-${dataset.key}`"
@@ -186,6 +187,7 @@
 <script lang="ts">
     import { PropType } from 'vue';
     import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator';
+    import { Localization } from '../../i18n/Localization';
 
     function findPrevious<T>(array: T[], maxIndex: number, predicate: (item: T) => boolean): T | null {
         for (let i = Math.min(maxIndex, array.length - 1); i >= 0; i--) {
@@ -240,11 +242,14 @@
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
 
-        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => value.toString() })
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.numberFormatter.format(value) })
         private xLabelFormatter!: (value: number) => string;
 
-        @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string>, default: null })
-        private footerProvider!: ((values: Record<string, number>) => string) | null;
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.numberFormatter.format(value) })
+        private tooltipValueFormatter!: (value: number) => string;
+
+        @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
+        private footerProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
 
         private activeX: number | null = null;
@@ -254,12 +259,13 @@
         private yGridLines: YGridLineData = {};
         private yRange = { min: 0, max: 0 };
         private maxX = 0;
+        private yGridRange = { min: 0, max: 0 };
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
-        private get footerText(): string | null {
+        private get footerTexts(): string[] {
             const x = this.activeX;
             if (this.footerProvider == null || x == null) {
-                return null;
+                return [];
             }
 
             const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
@@ -267,7 +273,12 @@
                 return acc;
             }, {} as Record<string, number>);
 
-            return this.footerProvider(values);
+            const footer = this.footerProvider(values);
+            if (footer instanceof Array) {
+                return footer;
+            }
+
+            return [footer];
         }
 
         @Watch('datasets')
@@ -326,6 +337,10 @@
             }
 
             this.yGridLines = lines;
+            this.yGridRange = {
+                min: 0,
+                max: step * count,
+            };
         }
 
         private updateYRange() {
@@ -376,7 +391,7 @@
 
         private updateTickOffset() {
             const scrollableDistance = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
-            if(scrollableDistance == 0) {
+            if (scrollableDistance == 0) {
                 this.tickOffset = 0;
                 return;
             }
@@ -448,7 +463,7 @@
             return Array.from({ length: this.ticks })
                 .map((_, x) => {
                     const y = values[x + this.tickOffset] ?? 0;
-                    return height * (1 - y / this.yRange.max);
+                    return height * (1 - y / this.yGridRange.max);
                 });
         }
 
@@ -469,9 +484,7 @@
         }
 
         private formatNumber(n: number) {
-            return new Intl.NumberFormat('de', {
-                maximumFractionDigits: 3,
-            }).format(n);
+            return Localization.numberFormatter.format(n);
         }
     }
 </script>
@@ -540,6 +553,7 @@
 
         &.no-legend {
             grid-template-columns: 100px 1fr;
+            padding-right: 16px; // necessary because overflow of last x-axis label will cause a scrollbar if there is no legend
         }
     }
 

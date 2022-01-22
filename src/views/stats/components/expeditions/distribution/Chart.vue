@@ -2,23 +2,22 @@
     <div style="height: 100%">
         <scrollable-chart
             :datasets="datasets"
-            stacked
-            filled
             :x-label-formatter="(x) => formatX(x)"
-            :footer-provider="(values) => getSum(values)"
+            :tooltip-value-formatter="x => formatTooltipValue(x)"
         />
     </div>
 </template>
 
 <script lang="ts">
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { Localization } from '@/views/stats/i18n/Localization';
     import { startOfDay } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
     import { ScrollableChartDataset } from '../../common/ScrollableChart.vue';
-    import { Localization } from '../../../i18n/Localization';
 
     @Component({})
     export default class Charts extends Vue {
@@ -49,26 +48,25 @@
                     day => (perDay[day] ?? []).filter(expo => expo.type == type).length
                 )
             );
+            const countPerDay = days.map(day => perDay[day]?.length ?? 0);
 
-            return types
-                .map((type, i) => ({
-                    key: type,
-                    values: perTypePerDay[i],
-                    color: this.colors[type],
-                    label: 'LOCA: ' + type, //LOCA
-                }));
+            return types.map((type, i) => ({
+                key: type,
+                values: perTypePerDay[i].map((count, dayIndex) => 100 * count / Math.max(1, countPerDay[dayIndex])),
+                color: this.colors[type],
+                label: 'LOCA: ' + type, //LOCA
+            }));
         }
 
         private formatX(x: number): string {
             const firstDay = ExpeditionDataModule.firstDay;
             const day = addDays(firstDay, x);
-            
+
             return Localization.dateFormatter.format(day);
         }
 
-        private getSum(values: Record<string, number>): string {
-            const sum = Object.values(values).reduce((acc, cur) => acc + cur, 0);
-            return Localization.numberFormatter.format(sum) + ' LOCA: Expeditions'; //LOCA
+        private formatTooltipValue(n: number): string {
+            return Localization.numberFormatter.format(n) + '%';
         }
     }
 </script>

@@ -1,9 +1,27 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Expeditions from '../components/expeditions/Expeditions.vue';
+
+// expeditions/overview
 import ExpeditionsOverview from '../components/expeditions/overview/Index.vue';
 import ExpeditionsOverviewCharts from '../components/expeditions/overview/Charts.vue';
 import ExpeditionsOverviewTables from '../components/expeditions/overview/Tables.vue';
+// expeditions/resources
+import ExpeditionsResources from '../components/expeditions/resources/Index.vue';
+import ExpeditionsResourcesCharts from '../components/expeditions/resources/Charts.vue';
+import ExpeditionsResourcesTables from '../components/expeditions/resources/Tables.vue';
+// expeditions/ships
+import ExpeditionsShips from '../components/expeditions/ships/Index.vue';
+import ExpeditionsShipsCharts from '../components/expeditions/ships/Charts.vue';
+import ExpeditionsShipsTables from '../components/expeditions/ships/Tables.vue';
+// expeditions/dark-matter
+import ExpeditionsDarkMatter from '../components/expeditions/dark-matter/Index.vue';
+import ExpeditionsDarkMatterCharts from '../components/expeditions/dark-matter/Charts.vue';
+import ExpeditionsDarkMatterTables from '../components/expeditions/dark-matter/Tables.vue';
+// expeditions/items
+import ExpeditionsItemsChart from '../components/expeditions/items/Chart.vue';
+// expeditions/distribution
+import ExpeditionsDistributionChart from '../components/expeditions/distribution/Chart.vue';
 
 Vue.use(VueRouter);
 
@@ -42,27 +60,66 @@ const routes: Array<RouteConfig> = [
             {
                 name: 'expeditions/resources',
                 path: 'resources',
-                //component: null,
+                redirect: { name: 'expeditions/resources/charts' }, //TODO: user setting 
+                component: ExpeditionsResources,
+                children: [
+                    {
+                        name: 'expeditions/resources/charts',
+                        path: 'charts',
+                        component: ExpeditionsResourcesCharts,
+                    },
+                    {
+                        name: 'expeditions/resources/tables',
+                        path: 'tables',
+                        component: ExpeditionsResourcesTables,
+                    },
+                ],
             },
             {
                 name: 'expeditions/ships',
                 path: 'ships',
-                //component: null,
+                redirect: { name: 'expeditions/ships/charts' }, //TODO: user setting 
+                component: ExpeditionsShips,
+                children: [
+                    {
+                        name: 'expeditions/ships/charts',
+                        path: 'charts',
+                        component: ExpeditionsShipsCharts,
+                    },
+                    {
+                        name: 'expeditions/ships/tables',
+                        path: 'tables',
+                        component: ExpeditionsShipsTables,
+                    },
+                ],
             },
             {
                 name: 'expeditions/dark-matter',
                 path: 'dark-matter',
-                //component: null,
+                redirect: { name: 'expeditions/dark-matter/charts' }, //TODO: user setting 
+                component: ExpeditionsDarkMatter,
+                children: [
+                    {
+                        name: 'expeditions/dark-matter/charts',
+                        path: 'charts',
+                        component: ExpeditionsDarkMatterCharts,
+                    },
+                    {
+                        name: 'expeditions/dark-matter/tables',
+                        path: 'tables',
+                        component: ExpeditionsDarkMatterTables,
+                    },
+                ],
             },
             {
                 name: 'expeditions/items',
                 path: 'items',
-                //component: null,
+                component: ExpeditionsItemsChart,
             },
             {
                 name: 'expeditions/distribution',
                 path: 'distribution',
-                //component: null,
+                component: ExpeditionsDistributionChart,
             },
         ],
     },
@@ -127,7 +184,7 @@ const routes: Array<RouteConfig> = [
         name: 'donate',
         path: '/donate',
         meta: {
-            color: '#f50057',
+            color: '#ffc800',
         },
     },
 ];

@@ -20,10 +20,13 @@
                 :target="tab.href != null ? '_blank' : null"
                 :to="tab.to"
                 :active-class="tab.to != null ? 'nav-item-active' : null"
-                :class="{
-                    'nav-item': tab.noNavItem != true,
-                    'icon-only': tab.label == null && tab.icon != null,
-                }"
+                :class="[
+                    {
+                        'nav-item': tab.noNavItem != true,
+                        'icon-only': tab.label == null && tab.icon != null,
+                    },
+                    tab.class,
+                ]"
                 :style="[
                     {
                         '--color': getColorVariable(getColor(tab)),
@@ -69,6 +72,7 @@
         style?: string | Record<string, any>;
         noNavItem?: boolean;
         color?: string;
+        class?: string;
     }
 
     @Component
@@ -146,6 +150,7 @@
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
                     label: 'LOCA: Donate',
+                    class: 'donate',
                 },
                 {
                     key: 'discord',
@@ -272,5 +277,9 @@
         &:hover {
             opacity: 1;
         }
+    }
+
+    .nav-item.donate:not(:hover):not(.nav-item-active) {
+        color: rgb(var(--color));
     }
 </style>
