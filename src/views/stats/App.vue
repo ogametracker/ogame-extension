@@ -130,7 +130,6 @@
                     key: 'settings',
                     to: { name: 'settings' },
                     icon: 'mdi mdi-cog',
-                    label: 'LOCA: Einstellungen',
                 },
                 {
                     key: 'excel-export',
@@ -227,7 +226,7 @@
         align-items: center;
         cursor: pointer;
         text-decoration: none;
-        padding: 0 8px;
+        padding: 0 12px 0 6px;
 
         &.icon-only {
             padding: 0 12px;
