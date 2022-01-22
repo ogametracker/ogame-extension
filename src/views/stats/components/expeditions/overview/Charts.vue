@@ -5,6 +5,7 @@
             stacked
             filled
             :x-label-formatter="(x) => formatX(x)"
+            :footer-provider="values => getSum(values)"
         />
         TODO: Diagramm Übersicht Expeditionen
     </div>
@@ -35,7 +36,7 @@
             return Object.values(ExpeditionEventType)
                 .map(type => ({
                     key: type,
-                    values: Array.from({ length: 100 }).map((_, i) => [0, 99].includes(i) ? 0 : Math.trunc(Math.random() * 10)),
+                    values: Array.from({ length: 100 }).map((_, i) => [0, 99].includes(i) ? 0 : Math.trunc(Math.random() * 15)),
                     color: this.colors[type],
                     label: type,
                 }));
@@ -43,6 +44,10 @@
 
         private formatX(x: number): string {
             return `Dies ist ein ${x}`;
+        }
+
+        private getSum(values: Record<string, number>): string {
+            return 'Summe: ' + Object.values(values).reduce((acc, cur) => acc + cur, 0).toString();
         }
     }
 </script>

@@ -94,7 +94,11 @@
                         '--x': activeX,
                     }"
                 >
-                    TODO: x-Label
+                    <div
+                        v-text="xLabelFormatter(activeX + tickOffset)"
+                        class="chart-tooltip-header"
+                    />
+
                     <div
                         v-for="dataset in internalDatasets"
                         v-show="dataset.visible"
@@ -104,15 +108,30 @@
                             zero: dataset.values[activeX + tickOffset] == 0,
                         }"
                     >
-                        TODO: dataset color
-                        <span v-text="dataset.label" />
-                        <span v-text="dataset.values[activeX + tickOffset]" />
+                        <span
+                            class="chart-tooltip-item-color"
+                            :style="{ color: dataset.color }"
+                        />
+                        <span
+                            class="chart-tooltip-item-value"
+                            v-text="dataset.values[activeX + tickOffset]"
+                        />
+                        <span
+                            class="chart-tooltip-item-label"
+                            v-text="dataset.label"
+                        />
                     </div>
-                    TODO: Custom-Footer (e.g. '77 Expeditions')
+
+                    <div
+                        v-if="footerProvider != null"
+                        v-text="footerText"
+                        class="chart-tooltip-footer"
+                    />
                 </div>
             </div>
 
             <div class="chart-y-axis">
+                <!-- TODO: use NumberFormat to localize the values using the extension language -->
                 <div
                     v-for="(yData, y) in yGridLines"
                     :key="y"
@@ -219,6 +238,10 @@
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => value.toString() })
         private xLabelFormatter!: (value: number) => string;
 
+        @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string>, default: null })
+        private footerProvider!: ((values: Record<string, number>) => string) | null;
+
+
         private activeX: number | null = null;
         private tickOffset = 0;
         private internalDatasets: ScrollableChartInternalDataset[] = [];
@@ -227,6 +250,20 @@
         private yRange = { min: 0, max: 0 };
         private maxX = 0;
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
+
+        private get footerText(): string | null {
+            const x = this.activeX;
+            if (this.footerProvider == null || x == null) {
+                return null;
+            }
+
+            const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
+                acc[dataset.key] = dataset.values[x + this.tickOffset];
+                return acc;
+            }, {} as Record<string, number>);
+
+            return this.footerProvider(values);
+        }
 
         @Watch('datasets')
         private onDatasetsChanged() {
@@ -536,14 +573,18 @@
         display: grid;
         grid-template-columns: auto 1fr;
         align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(var(--color), 0.1);
+        }
 
         &-hidden {
             text-decoration: line-through;
-            color: #888;
+            opacity: 0.4;
 
             .legend-item-color {
-                border: 2px solid currentColor;
-                background: none;
+                filter: grayscale(100%);
             }
         }
     }
@@ -559,24 +600,56 @@
     .chart-tooltip {
         position: absolute;
         top: 0;
+        background-color: black;
+        background-image: linear-gradient(
+            135deg,
+            rgba(var(--color), 0.3),
+            rgba(var(--color), 0.2)
+        );
+
         padding: 12px;
-        background: #333;
         border-radius: 4px;
         left: calc(100% * var(--x) / (var(--ticks) - 1));
         transform: translateX(calc(-100% * var(--x) / (var(--ticks) - 1)));
         white-space: pre;
-        line-height: 1.1;
+        line-height: 1;
 
         display: grid;
-        grid-template-columns: repeat(2, auto);
-        gap: 2px 12px;
+        grid-template-columns: repeat(3, auto);
+        align-items: center;
+        gap: 2px 6px;
+        font-size: 0.75rem;
 
         &-item {
             display: contents;
 
-            &.zero {
-                color: #888;
+            &.zero > * {
+                opacity: 0.4;
             }
+
+            &-color {
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                border-radius: 2px;
+                background: currentColor;
+            }
+            &-value {
+                text-align: right;
+            }
+        }
+
+        &-header,
+        &-footer {
+            grid-column: 1 / span 3;
+            font-weight: bold;
+        }
+
+        &-header {
+            margin-bottom: 4px;
+        }
+        &-footer {
+            margin-top: 4px;
         }
     }
 </style>
