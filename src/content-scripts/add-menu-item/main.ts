@@ -3,6 +3,7 @@ import { _throw } from "../../shared/utils/_throw";
 import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
 
 import './styles.scss';
+import { SingleEntryPlugin } from "webpack";
 
 const observer = new MutationObserver(() => {
     const menu = document.querySelector('#menuTable');
@@ -23,12 +24,10 @@ const observer = new MutationObserver(() => {
             </li>
         `;
         const link = ogameTrackerMenu.querySelector('.menubutton')! as HTMLAnchorElement;
-        link.addEventListener('click', e => {
-            // don't change hash
-            e.preventDefault();
+        link.addEventListener('click', e => showOgameTrackerDialog());
 
-            showOgameTrackerDialog();
-        });
+        const miniLink = ogameTrackerMenu.querySelector('.menu_icon')! as HTMLAnchorElement;
+        miniLink.addEventListener('click', e => window.open(getStatsPageUrl(false), '_blank'));
 
         parent.appendChild(ogameTrackerMenu);
 
@@ -41,11 +40,7 @@ observer.observe(document.documentElement, {
     childList: true,
 });
 
-function showOgameTrackerDialog() {
-    if (document.querySelector('#ogame-tracker-dialog') != null) {
-        return;
-    }
-
+function getStatsPageUrl(iframe: boolean) {
     const url = chrome.runtime.getURL('/views/stats.html');
     const player = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content
         ?? _throw('cannot find meta tag with player id');
@@ -55,11 +50,30 @@ function showOgameTrackerDialog() {
         ?.content?.split('-')?.[0]?.substring(1)
         ?? _throw('cannot find meta tag with universe language');
 
-    const query = new URLSearchParams({ player, language, server, iframe: 'yes' });
+    const queryData: Record<string, string> = {
+        player,
+        language,
+        server,
+    };
+
+    if(iframe) {
+        queryData.iframe = 'yes';
+    }
+
+    const query = new URLSearchParams(queryData);
+
+    return `${url}?${query}`;
+}
+
+function showOgameTrackerDialog() {
+    if (document.querySelector('#ogame-tracker-dialog') != null) {
+        return;
+    }
+
 
     const container = document.createElement('div');
     container.id = 'ogame-tracker-dialog';
-    container.innerHTML = `<iframe src="${url}?${query}"></iframe>`;
+    container.innerHTML = `<iframe src="${getStatsPageUrl(true)}"></iframe>`;
     container.addEventListener('click', () => closeOgameTrackerDialog());
 
     document.body.append(container);
