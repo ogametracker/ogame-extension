@@ -639,10 +639,11 @@
     .chart-tooltip {
         position: absolute;
         top: 0;
+        border: 1px solid rgba(var(--color), 0.5);
         background-color: black;
         background-image: linear-gradient(
-            135deg,
-            rgba(var(--color), 0.3),
+            to right,
+            rgba(var(--color), 0.2),
             rgba(var(--color), 0.2)
         );
 
@@ -677,6 +678,7 @@
             }
             &-value {
                 text-align: right;
+                font-weight: bold;
             }
         }
 
