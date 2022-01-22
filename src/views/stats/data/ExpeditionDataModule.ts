@@ -15,10 +15,7 @@ class ExpeditionDataModuleClass extends Vue {
     public firstDate: number | null = null;
 
     private created() {
-        this._port = chrome.runtime.connect();
-        this._port.onDisconnect.addListener(() => this._port = chrome.runtime.connect());
-
-        this._port.onMessage.addListener(message => this.onMessage(message));
+        this.initPort();
 
         const subscribeMessage: SubscriptionMessage = {
             type: MessageType.Subscribe,
@@ -28,6 +25,12 @@ class ExpeditionDataModuleClass extends Vue {
         this._port.postMessage(subscribeMessage);
 
         this.requestData();
+    }
+
+    private initPort() {
+        this._port = chrome.runtime.connect();
+        this._port.onDisconnect.addListener(() => this.initPort());
+        this._port.onMessage.addListener(message => this.onMessage(message));
     }
 
     private requestData() {
