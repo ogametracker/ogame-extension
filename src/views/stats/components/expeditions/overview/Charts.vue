@@ -21,6 +21,7 @@
 
     @Component({})
     export default class Charts extends Vue {
+        //TODO: colors from settings
         private readonly colors: Record<ExpeditionEventType, string> = {
             [ExpeditionEventType.nothing]: '#2472f3',
             [ExpeditionEventType.resources]: '#c72525',
@@ -39,11 +40,7 @@
             const perDay = ExpeditionDataModule.expeditionsPerDay;
             const firstDay = ExpeditionDataModule.firstDay;
             const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            console.log('days', dayCount + 1);
             const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
-            console.log('days array', days.length, days);
-            console.log('per day', perDay);
-            console.log('per day array', days.map(day => perDay[day] ?? []));
 
             const types = Object.values(ExpeditionEventType);
             const perTypePerDay = types.map(
@@ -52,22 +49,28 @@
                 )
             );
 
-
             return types
                 .map((type, i) => ({
                     key: type,
-                    values: perTypePerDay[i],//days.map(day => day/*(perDay[day] ?? []).filter(expo => expo.type == type).length*/),
+                    values: perTypePerDay[i],
                     color: this.colors[type],
-                    label: type,
+                    label: 'LOCA: ' + type, //LOCA
                 }));
         }
 
         private formatX(x: number): string {
-            return `Dies ist ein ${x}`;
+            const firstDay = ExpeditionDataModule.firstDay;
+            const day = addDays(firstDay, x);
+            //TODO: use extension locale
+            return new Intl.DateTimeFormat('de', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }).format(day);
         }
 
         private getSum(values: Record<string, number>): string {
-            return 'LOCA: Expeditions: ' + Object.values(values).reduce((acc, cur) => acc + cur, 0).toString();
+            return 'LOCA: Expeditions: ' + Object.values(values).reduce((acc, cur) => acc + cur, 0).toString(); //LOCA
         }
     }
 </script>
