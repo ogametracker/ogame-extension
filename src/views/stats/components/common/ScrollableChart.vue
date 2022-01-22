@@ -105,7 +105,7 @@
                         :key="`tooltip-${dataset.key}`"
                         class="chart-tooltip-item"
                         :class="{
-                            zero: dataset.values[activeX + tickOffset] == 0,
+                            zero: getValue(dataset, activeX + tickOffset) == 0,
                         }"
                     >
                         <span
@@ -114,7 +114,11 @@
                         />
                         <span
                             class="chart-tooltip-item-value"
-                            v-text="dataset.values[activeX + tickOffset]"
+                            v-text="
+                                formatNumber(
+                                    getValue(dataset, activeX + tickOffset)
+                                )
+                            "
                         />
                         <span
                             class="chart-tooltip-item-label"
@@ -137,7 +141,7 @@
                     :key="y"
                     class="y-axis-label"
                     :style="{ bottom: `${yData.fraction * 100}%` }"
-                    v-text="'TODO: ' + y"
+                    v-text="formatNumber(y)"
                 />
             </div>
             <div class="chart-x-axis">
@@ -167,16 +171,14 @@
                     <div class="legend-item-label" v-text="dataset.label" />
                 </div>
             </div>
-        </div>
 
-        <div class="scrollbar-container">
-            <input
-                type="range"
-                min="0"
-                :max="maxTickOffset"
-                step="1"
-                v-model.number="tickOffset"
-            />
+            <div
+                class="scrollbar-container"
+                ref="scrollbar-container"
+                @scroll="updateTickOffset()"
+            >
+                <div :style="{ width: `${(100 * maxX) / (ticks - 1)}%` }" />
+            </div>
         </div>
     </div>
 </template>
@@ -220,6 +222,9 @@
         @Ref('svg-container')
         private svgContainer!: HTMLElement;
 
+        @Ref('scrollbar-container')
+        private scrollbarContainer!: HTMLElement;
+
         @Prop({ required: true, type: Array as PropType<ScrollableChartDataset[]>, validator: (value: ScrollableChartDataset[]) => value.length > 0 })
         private datasets!: ScrollableChartDataset[];
 
@@ -258,7 +263,7 @@
             }
 
             const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
-                acc[dataset.key] = dataset.values[x + this.tickOffset];
+                acc[dataset.key] = this.getValue(dataset, x + this.tickOffset);
                 return acc;
             }, {} as Record<string, number>);
 
@@ -287,6 +292,7 @@
             this.updatePaths();
 
             this.tickOffset = Math.max(0, this.maxTickOffset);
+            this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
         }
 
         private updateYGridLines() {
@@ -368,6 +374,18 @@
             return this.maxX - this.ticks + 1;
         }
 
+        private updateTickOffset() {
+            const scrollableDistance = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
+            if(scrollableDistance == 0) {
+                this.tickOffset = 0;
+                return;
+            }
+
+            const scrolledFraction = this.scrollbarContainer.scrollLeft / scrollableDistance;
+            const tickOffset = Math.round(scrolledFraction * (this.maxX - this.ticks + 1));
+            this.tickOffset = tickOffset;
+        }
+
         @Watch('tickOffset')
         private onTickOffsetChanged() {
             this.$nextTick(() => this.updatePaths());
@@ -391,10 +409,6 @@
                 const bgPath = `M 0 ${height} `
                     + `L${linePath.substring(1)} `
                     + `L ${this.xPositions[this.xPositions.length - 1]} ${height}`;
-
-                if (linePath.includes('NaN')) {
-                    debugger;
-                }
 
                 const internalDataset: ScrollableChartInternalDataset = {
                     ...dataset,
@@ -449,6 +463,16 @@
                 },
             },
         };
+
+        private getValue(dataset: ScrollableChartInternalDataset, x: number) {
+            return dataset.values[x] ?? 0;
+        }
+
+        private formatNumber(n: number) {
+            return new Intl.NumberFormat('de', {
+                maximumFractionDigits: 3,
+            }).format(n);
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -617,9 +641,11 @@
 
         display: grid;
         grid-template-columns: auto auto 1fr;
-        align-items: center;
         gap: 2px 6px;
+        align-items: center;
+        width: max-content;
         font-size: 0.75rem;
+        pointer-events: none;
 
         &-item {
             display: contents;
@@ -651,6 +677,15 @@
         }
         &-footer {
             margin-top: 4px;
+        }
+    }
+
+    .scrollbar-container {
+        grid-column: 2;
+        overflow-x: auto;
+
+        > div {
+            height: 1px;
         }
     }
 </style>
