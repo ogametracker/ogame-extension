@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Expeditions from '../components/expeditions/Expeditions.vue';
-import ExpeditionsOverview from '../components/expeditions/overview/Overview.vue';
+import ExpeditionsOverview from '../components/expeditions/overview/Index.vue';
 import ExpeditionsOverviewCharts from '../components/expeditions/overview/Charts.vue';
 import ExpeditionsOverviewTables from '../components/expeditions/overview/Tables.vue';
 
