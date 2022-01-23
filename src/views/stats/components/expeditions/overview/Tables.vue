@@ -28,7 +28,7 @@
                     label: '',
                 },
                 ..._dev_DateRanges.map((range, i) => ({
-                    key: `range-${i}`,
+                    key: i.toString(),
                     label: range.label ?? 'LOCA: Since <first day>',
                 })),
                 {
@@ -38,7 +38,7 @@
             ];
         }
 
-        private get exposByRange(): ExpeditionEvent[][]{
+        private get exposByRange(): ExpeditionEvent[][] {
             const expeditions = ExpeditionDataModule.expeditions;
             const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
             expeditions.forEach(expo => {
@@ -59,12 +59,7 @@
             return Object.values(ExpeditionEventType).map(type => ({
                 type, //LOCA:
 
-                ..._dev_DateRanges
-                    .map((_, rangeIndex) => exposByRange[rangeIndex].filter(expo => expo.type == type).length)
-                    .reduce((acc, count, i) => {
-                        acc[`range-${i}`] = count;
-                        return acc;
-                    }, {} as Record<string, number>),
+                ..._dev_DateRanges.map((_, rangeIndex) => exposByRange[rangeIndex].filter(expo => expo.type == type).length),
 
                 percentage: 'TODO', //TODO: percentage
             }));
@@ -76,12 +71,7 @@
             return [{
                 type: 'LOCA: Gesamt',
 
-                ..._dev_DateRanges
-                    .map((_, rangeIndex) => exposByRange[rangeIndex].length)
-                    .reduce((acc, count, i) => {
-                        acc[`range-${i}`] = count;
-                        return acc;
-                    }, {} as Record<string, number>),
+                ..._dev_DateRanges.map((_, rangeIndex) => exposByRange[rangeIndex].length),
 
                 percentage: '',
             }];

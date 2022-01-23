@@ -8,6 +8,16 @@
             style="text-align: right"
         />
 
+        <h2>LOCA: Sizes</h2>
+        <grid-table
+            :columns="sizeColumns"
+            :items="sizeItems"
+            :footer-items="sizeFooterItems"
+            :cell-class-provider="(value) => getCellClass(value)"
+            style="text-align: right"
+        />
+
+        <h2>LOCA: Units</h2>
         <grid-table
             :columns="unitsColumns"
             :items="unitsItems"
@@ -28,7 +38,7 @@
     import { ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
 
     @Component({})
     export default class Tables extends Vue {
@@ -58,7 +68,7 @@ import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
                     label: '',
                 },
                 ..._dev_DateRanges.map((range, i) => ({
-                    key: `range-${i}`,
+                    key: i.toString(),
                     label: range.label ?? 'LOCA: Since <first day>',
                 })),
                 {
@@ -76,12 +86,12 @@ import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
                 .map(ship => ({
                     ship, //LOCA:
 
-                    ..._dev_DateRanges
-                        .map((_, rangeIndex) => exposByRange[rangeIndex])
-                        .reduce((acc, expos, i) => {
-                            acc[`range-${i}`] = expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0);
-                            return acc;
-                        }, {} as Record<string, number>),
+                    ..._dev_DateRanges.map(
+                        (_, rangeIndex) => exposByRange[rangeIndex].reduce(
+                            (acc, expo) => acc + (expo.fleet[ship] ?? 0)
+                            , 0
+                        )
+                    ),
 
                     percentage: 'TODO', //TODO: percentage
                 }));
@@ -93,15 +103,57 @@ import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
             return [{
                 type: 'LOCA: Total',
 
-                ..._dev_DateRanges
-                    .map((_, rangeIndex) => exposByRange[rangeIndex])
-                    .reduce((acc, expos, i) => {
-                        acc[`range-${i}`] = expos.reduce(
-                            (acc, expo) => acc + Object.values(expo.fleet).reduce((acc: number, n) => acc + n!, 0)
-                            , 0);
-                        return acc;
-                    }, {} as Record<string, number>),
+                ..._dev_DateRanges.map(
+                    (_, rangeIndex) => exposByRange[rangeIndex].reduce(
+                        (acc, expo) => acc + Object.values(expo.fleet).reduce((acc: number, n) => acc + n!, 0)
+                        , 0
+                    )
+                ),
 
+                percentage: '',
+            }];
+        }
+        
+        private get sizeColumns(): GridTableColumn[] {
+            return [
+                {
+                    key: 'size',
+                    label: '',
+                },
+                ..._dev_DateRanges.map((range, i) => ({
+                    key: i.toString(),
+                    label: range.label ?? 'LOCA: Since <first day>',
+                })),
+                {
+                    key: 'percentage',
+                    label: '%',
+                },
+            ];
+        }
+
+        private get sizeItems(): Record<string, any>[] {
+            const exposByRange = this.exposByRange;
+
+            //TODO: optimize
+            return Object.values(ExpeditionEventSize).map(size => ({
+                size, //LOCA:
+
+                ..._dev_DateRanges.map(
+                    (_, rangeIndex) => exposByRange[rangeIndex].filter(
+                        expo => expo.size == size
+                    ).length
+                ),
+
+                percentage: 'TODO', //TODO: percentage
+            }));
+        }
+
+        private get sizeFooterItems(): Record<string, any>[] {
+            const exposByRange = this.exposByRange;
+
+            return [{
+                size: 'LOCA: Total',
+                ..._dev_DateRanges.map((_, rangeIndex) => exposByRange[rangeIndex].length),
                 percentage: '',
             }];
         }
@@ -113,7 +165,7 @@ import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
                     label: '',
                 },
                 ..._dev_DateRanges.map((range, i) => ({
-                    key: `range-${i}`,
+                    key: i.toString(),
                     label: range.label ?? 'LOCA: Since <first day>',
                 })),
                 {
