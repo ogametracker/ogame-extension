@@ -28,6 +28,7 @@
                     v-for="column in columns"
                     :key="column.key"
                     class="grid-table-cell"
+                    :class="cellClassProvider(item[column.key])"
                 >
                     <slot
                         v-if="$scopedSlots[`cell-${column.key}`] != null"
@@ -67,6 +68,9 @@
         @Prop({ required: true, type: Array as PropType<Record<string, any>[]> })
         private items!: Record<string, any>[];
 
+        @Prop({ required: false, type: Function as PropType<(value: any) => string>, default: (value: any) => '' })
+        private cellClassProvider!: (value: any) => string;
+
 
         private get gridColumns(): string {
             return this.columns
@@ -83,14 +87,6 @@
         border: 1px solid rgba(var(--color), 0.5);
 
         border-radius: $border-radius;
-        &-head {
-            > &-cell.first {
-                border-top-left-radius: $border-radius;
-            }
-            > &-cell.last {
-                border-top-right-radius: $border-radius;
-            }
-        }
 
         &-head,
         &-body,
@@ -99,7 +95,7 @@
             display: contents;
         }
 
-        &-head &-cell {
+        &-head .grid-table-cell {
             background-color: black;
             background-image: linear-gradient(
                 0deg,
@@ -109,22 +105,30 @@
         }
 
         &-body {
-            &-row:nth-of-type(odd) &-cell {
+            .grid-table-row:nth-of-type(odd) .grid-table-cell {
                 background: rgba(var(--color), 0.05);
             }
 
-            &-row:hover &-cell {
+            .grid-table-row:hover .grid-table-cell {
                 background: rgba(var(--color), 0.15);
             }
         }
 
-        &-foot &-cell {
+        &-foot .grid-table-cell {
             border-top: 3px double rgba(var(--color), 0.5);
             background: rgba(var(--color), 0.2) !important;
         }
 
         &-cell {
             padding: 8px;
+        }
+    }
+    .grid-table-head {
+        > .grid-table-cell.first {
+            border-top-left-radius: $border-radius;
+        }
+        > .grid-table-cell.last {
+            border-top-right-radius: $border-radius;
         }
     }
 </style>

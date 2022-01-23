@@ -268,6 +268,7 @@
 
     main {
         padding: 16px;
+        overflow: hidden;
     }
 
     .close-overlay {
