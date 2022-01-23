@@ -66,7 +66,7 @@
         }
 
         private formatTooltipValue(n: number): string {
-            return Localization.numberFormatter.format(n) + '%';
+            return Localization.numberFormatter.format(n) + '%'; //TODO: force 3 fraction digits
         }
     }
 </script>

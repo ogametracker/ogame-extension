@@ -5,8 +5,19 @@
             stacked
             filled
             :x-label-formatter="(x) => formatX(x)"
-            :footer-provider="(values) => getFooter(values)"
-        />
+        >
+            <template #footer="{ datasets }">
+                <div class="tooltip-footer">
+                    <template v-if="datasets.some((d) => !d.visible)">
+                        <div class="value">{{ getTotal(datasets, false) }}</div>
+                        <div>LOCA: Ships</div>
+                    </template>
+                    <hr />
+                        <div class="value">{{ getTotal(datasets, true) }}</div>
+                        <div>LOCA: Ships (total)</div>
+                </div>
+            </template>
+        </scrollable-chart>
     </div>
 </template>
 
@@ -21,7 +32,7 @@
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '../../common/ScrollableChart.vue';
+    import { ScollableChartFooterDataset, ScrollableChartDataset } from '../../common/ScrollableChart.vue';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
 
     @Component({})
@@ -75,10 +86,28 @@
             return Localization.dateFormatter.format(day);
         }
 
-        private getFooter(values: Record<ShipType, number>): string {
-            const count = Object.values(values).reduce((acc, cur) => acc + cur, 0);
+        private getTotal(datasets: ScollableChartFooterDataset[], includeHidden: boolean): string {
+            const sum = datasets
+                .filter(d => d.visible || includeHidden)
+                .reduce((acc, d) => acc + d.value, 0);
 
-            return Localization.numberFormatter.format(count) + ' LOCA: Ships'; //LOCA
+            return Localization.numberFormatter.format(sum);
         }
     }
 </script>
+<style lang="scss" scoped>
+    .tooltip-footer {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 6px;
+
+        .value {
+            text-align: right;
+        }
+
+        hr {
+            grid-column: 1 / span 2;
+            width: 100%;
+        }
+    }
+</style>

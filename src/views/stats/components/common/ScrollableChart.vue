@@ -126,12 +126,20 @@
                         />
                     </div>
 
-                    <div
-                        v-for="(footer, i) in footerTexts"
-                        :key="i"
-                        v-text="footer"
-                        class="chart-tooltip-footer"
-                    />
+                    <div class="chart-tooltip-footer">
+                        <template v-if="footerProvider != null">
+                            <div
+                                v-for="(footer, i) in footerTexts"
+                                :key="i"
+                                v-text="footer"
+                            />
+                        </template>
+                        <slot
+                            v-else
+                            name="footer"
+                            :datasets="footerSlotDatasets"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -219,6 +227,14 @@
 
     type YGridLineData = Record<number, { svg: number; fraction: number }>;
 
+    export interface ScollableChartFooterDataset {
+        key: string | number;
+        label: string;
+        visible: boolean;
+        color: string;
+        value: number;
+    }
+
     @Component({})
     export default class ScrollableChart extends Vue {
         @Ref('svg-container')
@@ -279,6 +295,16 @@
             }
 
             return [footer];
+        }
+
+        private get footerSlotDatasets(): ScollableChartFooterDataset[] {
+            return this.internalDatasets.map(dataset => ({
+                key: dataset.key,
+                label: dataset.label,
+                visible: dataset.visible,
+                color: dataset.color,
+                value: this.getValue(dataset, (this.activeX ?? 0) + this.tickOffset),
+            }));
         }
 
         @Watch('datasets')
@@ -640,7 +666,7 @@
         position: absolute;
         top: 0;
         border: 1px solid rgba(var(--color), 0.5);
-        background-color: black;
+        background-color: rgba(black, 0.9);
         background-image: linear-gradient(
             to right,
             rgba(var(--color), 0.2),
@@ -671,8 +697,8 @@
 
             &-color {
                 display: inline-block;
-                width: 10px;
-                height: 10px;
+                width: 9px;
+                height: 9px;
                 border-radius: 2px;
                 background: currentColor;
             }
