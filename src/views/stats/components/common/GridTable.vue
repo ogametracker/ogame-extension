@@ -32,7 +32,9 @@
                         cellClassProvider(item[column.key]),
                         {
                             first: footerItems.length == 0 && i == 0,
-                            last: footerItems.length == 0 && i == columns.length - 1,
+                            last:
+                                footerItems.length == 0 &&
+                                i == columns.length - 1,
                         },
                     ]"
                 >
@@ -150,9 +152,14 @@
             }
         }
 
-        &-foot .grid-table-cell {
-            border-top: 3px double rgba(var(--color), 0.5);
-            background: rgba(var(--color), 0.2) !important;
+        &-foot .grid-table-row {
+            &:first-of-type .grid-table-cell {
+                border-top: 3px double rgba(var(--color), 0.5);
+            }
+
+            .grid-table-cell {
+                background: rgba(var(--color), 0.2) !important;
+            }
         }
 
         &-cell {

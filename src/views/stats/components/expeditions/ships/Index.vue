@@ -12,11 +12,11 @@
             return [
                 {
                     label: 'LOCA: Diagramm',
-                    to: { name: 'expeditions/resources/charts' },
+                    to: { name: 'expeditions/ships/charts' },
                 },
                 {
                     label: 'LOCA: Tabellen',
-                    to: { name: 'expeditions/resources/tables' },
+                    to: { name: 'expeditions/ships/tables' },
                 },
             ];
         }

@@ -38,7 +38,7 @@
             ];
         }
 
-        private get items(): Record<string, any>[] {
+        private get exposByRange(): ExpeditionEvent[][]{
             const expeditions = ExpeditionDataModule.expeditions;
             const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
             expeditions.forEach(expo => {
@@ -48,6 +48,12 @@
                     }
                 });
             });
+
+            return exposByRange;
+        }
+
+        private get items(): Record<string, any>[] {
+            const exposByRange = this.exposByRange;
 
             //TODO: optimize
             return Object.values(ExpeditionEventType).map(type => ({
@@ -65,15 +71,7 @@
         }
 
         private get footerItems(): Record<string, any>[] {
-            const expeditions = ExpeditionDataModule.expeditions;
-            const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
-            expeditions.forEach(expo => {
-                _dev_DateRanges.forEach((range, i) => {
-                    if (isInRange(expo.date, range)) {
-                        exposByRange[i].push(expo);
-                    }
-                });
-            });
+            const exposByRange = this.exposByRange;
 
             return [{
                 type: 'LOCA: Gesamt',
