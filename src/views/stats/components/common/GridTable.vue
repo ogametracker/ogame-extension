@@ -28,7 +28,13 @@
                     v-for="column in columns"
                     :key="column.key"
                     class="grid-table-cell"
-                    :class="cellClassProvider(item[column.key])"
+                    :class="[
+                        cellClassProvider(item[column.key]),
+                        {
+                            first: footerItems.length == 0 && i == 0,
+                            last: footerItems.length == 0 && i == columns.length - 1,
+                        },
+                    ]"
                 >
                     <slot
                         v-if="$scopedSlots[`cell-${column.key}`] != null"
@@ -43,7 +49,34 @@
                 </div>
             </div>
         </div>
-        <div class="grid-table-foot"></div>
+        <div class="grid-table-foot">
+            <div
+                class="grid-table-row"
+                v-for="(item, i) in footerItems"
+                :key="i"
+            >
+                <div
+                    v-for="column in columns"
+                    :key="column.key"
+                    class="grid-table-cell"
+                    :class="{
+                        first: i == 0,
+                        last: i == columns.length - 1,
+                    }"
+                >
+                    <slot
+                        v-if="$scopedSlots[`footer-${column.key}`] != null"
+                        :name="`footer-${column.key}`"
+                        :value="item"
+                    />
+                    <span
+                        v-else-if="column.formatter != null"
+                        v-text="column.formatter(item[column.key])"
+                    />
+                    <span v-else v-text="item[column.key]" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -67,6 +100,9 @@
 
         @Prop({ required: true, type: Array as PropType<Record<string, any>[]> })
         private items!: Record<string, any>[];
+
+        @Prop({ required: false, type: Array as PropType<Record<string, any>[]>, default: () => [] })
+        private footerItems!: Record<string, any>[];
 
         @Prop({ required: false, type: Function as PropType<(value: any) => string>, default: (value: any) => '' })
         private cellClassProvider!: (value: any) => string;
@@ -129,6 +165,14 @@
         }
         > .grid-table-cell.last {
             border-top-right-radius: $border-radius;
+        }
+    }
+    .grid-table-foot {
+        > .grid-table-cell.first {
+            border-bottom-left-radius: $border-radius;
+        }
+        > .grid-table-cell.last {
+            border-bottom-right-radius: $border-radius;
         }
     }
 </style>

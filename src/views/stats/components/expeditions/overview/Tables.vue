@@ -3,8 +3,9 @@
         <grid-table
             :columns="columns"
             :items="items"
+            :footer-items="footerItems"
             :cell-class-provider="(value) => getCellClass(value)"
-            style="text-align: right;"
+            style="text-align: right"
         />
     </div>
 </template>
@@ -61,6 +62,31 @@
 
                 percentage: 'TODO', //TODO: percentage
             }));
+        }
+
+        private get footerItems(): Record<string, any>[] {
+            const expeditions = ExpeditionDataModule.expeditions;
+            const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
+            expeditions.forEach(expo => {
+                _dev_DateRanges.forEach((range, i) => {
+                    if (isInRange(expo.date, range)) {
+                        exposByRange[i].push(expo);
+                    }
+                });
+            });
+
+            return [{
+                type: 'LOCA: Gesamt',
+
+                ..._dev_DateRanges
+                    .map((_, rangeIndex) => exposByRange[rangeIndex].length)
+                    .reduce((acc, count, i) => {
+                        acc[`range-${i}`] = count;
+                        return acc;
+                    }, {} as Record<string, number>),
+
+                percentage: '',
+            }];
         }
 
         private getCellClass(value: any): string {
