@@ -1,4 +1,4 @@
-import { add, startOfMonth, startOfWeek, startOfYear, sub } from "date-fns";
+import { addDays, addMonths, addWeeks, addYears, startOfMonth, startOfWeek, startOfYear, subDays, subMonths, subWeeks, subYears } from "date-fns";
 import startOfDay from "date-fns/startOfDay";
 
 export type DateRangeType = 'day' | 'week' | 'month' | 'year';
@@ -19,52 +19,44 @@ interface AllDateRange {
 export type DateRange = NormalDateRange | AllDateRange;
 
 
-export function getDaysInRange(range: DateRange): Date[] | null {
-    const today = startOfDay(new Date());
-
-    let start: Date;
-    let end: Date;
-    switch (range.type) {
-        case 'day':
-            start = sub(today, { days: range.skip });
-            end = add(start, { days: range.take });
-            break;
-
-        case 'week':
-            start = sub(startOfWeek(today, { locale: { code: 'de', options: { weekStartsOn: 1 }} }), { weeks: range.skip }); //TODO: locale from settings
-            end = add(start, { weeks: range.take });
-            break;
-
-        case 'month':
-            start = sub(startOfMonth(today), { months: range.skip });
-            end = add(start, { months: range.take });
-            break;
-
-        case 'year':
-            start = sub(startOfYear(today), { years: range.skip });
-            end = add(start, { years: range.take });
-            break;
-
-        case 'all': return null;
-        default: throw new Error();
-    }
-
-    const days: Date[]= [];
-    let date = start;
-    while(date < end) {
-        days.push(date);
-        date = add(date, { days: 1});
-    }
-
-    return days;
-}
-
 
 export function isInRange(date: number | Date, range: DateRange): boolean {
-    const days = getDaysInRange(range); //TODO: optimize by not computing all days in the range
-    if (days == null)
-        return true;
+    let firstRangeDayIncl: Date;
+    let lastRangeDayExcl: Date;
 
-    const dateDay = startOfDay(date).getTime();
-    return days.map(d => d.getTime()).includes(dateDay);
+    const today = startOfDay(Date.now());
+
+    switch (range.type) {
+        case 'all': return true;
+
+        case 'day': {
+            firstRangeDayIncl = subDays(today, range.skip);
+            lastRangeDayExcl = addDays(firstRangeDayIncl, range.take);
+            break;
+        }
+
+        case 'week': {
+            const start = startOfWeek(Date.now(), { weekStartsOn: 1 }); //TODO: from locale
+            firstRangeDayIncl = subWeeks(start, range.skip);
+            lastRangeDayExcl = addWeeks(firstRangeDayIncl, range.take);
+            break;
+        }
+
+        case 'month': {
+            const start = startOfMonth(Date.now());
+            firstRangeDayIncl = subMonths(start, range.skip);
+            lastRangeDayExcl = addMonths(firstRangeDayIncl, range.take);
+            break;
+        }
+
+        case 'year': {
+            const start = startOfYear(Date.now());
+            firstRangeDayIncl = subYears(start, range.skip);
+            lastRangeDayExcl = addYears(firstRangeDayIncl, range.take);
+            break;
+        }
+    }
+
+    const dayOfDate = startOfDay(date);
+    return firstRangeDayIncl <= dayOfDate && lastRangeDayExcl > dayOfDate;
 }
