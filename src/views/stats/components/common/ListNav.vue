@@ -41,7 +41,7 @@
         background: linear-gradient(
             to right,
             rgba(var(--color), 0.1) 30%,
-            rgba(var(--color), 0.025)
+            rgba(var(--color), 0.05)
         );
 
         &:hover {

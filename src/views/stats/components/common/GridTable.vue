@@ -58,12 +58,12 @@
                 :key="i"
             >
                 <div
-                    v-for="column in columns"
+                    v-for="(column, c) in columns"
                     :key="column.key"
                     class="grid-table-cell"
                     :class="{
-                        first: i == 0,
-                        last: i == columns.length - 1,
+                        first: c == 0,
+                        last: c == columns.length - 1,
                     }"
                 >
                     <slot
@@ -118,13 +118,12 @@
     }
 </script>
 <style lang="scss" scoped>
-    $border-radius: 4px;
-
     .grid-table {
+        --border-radius: 4px;
         display: grid;
         border: 1px solid rgba(var(--color), 0.5);
 
-        border-radius: $border-radius;
+        border-radius: var(--border-radius);
 
         &-head,
         &-body,
@@ -168,18 +167,18 @@
     }
     .grid-table-head {
         > .grid-table-cell.first {
-            border-top-left-radius: $border-radius;
+            border-top-left-radius: calc(var(--border-radius) - 2px);
         }
         > .grid-table-cell.last {
-            border-top-right-radius: $border-radius;
+            border-top-right-radius: calc(var(--border-radius) - 2px);
         }
     }
-    .grid-table-foot {
+    .grid-table-foot .grid-table-row:last-of-type {
         > .grid-table-cell.first {
-            border-bottom-left-radius: $border-radius;
+            border-bottom-left-radius: calc(var(--border-radius) - 2px);
         }
         > .grid-table-cell.last {
-            border-bottom-right-radius: $border-radius;
+            border-bottom-right-radius: calc(var(--border-radius) - 2px);
         }
     }
 </style>
