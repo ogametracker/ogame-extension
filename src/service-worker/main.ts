@@ -22,6 +22,8 @@ class ServiceWorker {
     ];
 
     constructor() {
+        chrome.runtime.onMessage.addListener(message => {});
+
         chrome.runtime.onConnect.addListener(port => {
             _log('port connected', port);
             port.onMessage.addListener(async (message, port) => await this.onMessage(message, port));

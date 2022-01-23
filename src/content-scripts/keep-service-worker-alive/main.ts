@@ -2,10 +2,13 @@
 // The service worker stays shut down even if new ports try to connect.
 // Thus this script opens a new port 60s to keep the service worker alive as long as an OGame page is open.
 
-let port = chrome.runtime.connect();
+
+let port: chrome.runtime.Port | null = null;
+renew();
+setTimeout(() => renew(), 60 * 1000);
+
 function renew() {
-    port.disconnect();
+    chrome.runtime.sendMessage('stay alive');
+    port?.disconnect();
     port = chrome.runtime.connect();
 }
-
-setTimeout(() => renew(), 60 * 1000);
