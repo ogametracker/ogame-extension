@@ -1,27 +1,28 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import Expeditions from '../components/expeditions/Expeditions.vue';
 
+// expeditions
+import Expeditions from '@stats/views/expeditions/Index.vue';
 // expeditions/overview
-import ExpeditionsOverview from '../components/expeditions/overview/Index.vue';
-import ExpeditionsOverviewCharts from '../components/expeditions/overview/Charts.vue';
-import ExpeditionsOverviewTables from '../components/expeditions/overview/Tables.vue';
+import ExpeditionsOverview from '@stats/views/expeditions/overview/Index.vue';
+import ExpeditionsOverviewCharts from '@stats/views/expeditions/overview/Charts.vue';
+import ExpeditionsOverviewTables from '@stats/views/expeditions/overview/Tables.vue';
 // expeditions/resources
-import ExpeditionsResources from '../components/expeditions/resources/Index.vue';
-import ExpeditionsResourcesCharts from '../components/expeditions/resources/Charts.vue';
-import ExpeditionsResourcesTables from '../components/expeditions/resources/Tables.vue';
+import ExpeditionsResources from '@stats/views/expeditions/resources/Index.vue';
+import ExpeditionsResourcesCharts from '@stats/views/expeditions/resources/Charts.vue';
+import ExpeditionsResourcesTables from '@stats/views/expeditions/resources/Tables.vue';
 // expeditions/ships
-import ExpeditionsShips from '../components/expeditions/ships/Index.vue';
-import ExpeditionsShipsCharts from '../components/expeditions/ships/Charts.vue';
-import ExpeditionsShipsTables from '../components/expeditions/ships/Tables.vue';
+import ExpeditionsShips from '@stats/views/expeditions/ships/Index.vue';
+import ExpeditionsShipsCharts from '@stats/views/expeditions/ships/Charts.vue';
+import ExpeditionsShipsTables from '@stats/views/expeditions/ships/Tables.vue';
 // expeditions/dark-matter
-import ExpeditionsDarkMatter from '../components/expeditions/dark-matter/Index.vue';
-import ExpeditionsDarkMatterCharts from '../components/expeditions/dark-matter/Charts.vue';
-import ExpeditionsDarkMatterTables from '../components/expeditions/dark-matter/Tables.vue';
+import ExpeditionsDarkMatter from '@stats/views/expeditions/dark-matter/Index.vue';
+import ExpeditionsDarkMatterCharts from '@stats/views/expeditions/dark-matter/Charts.vue';
+import ExpeditionsDarkMatterTables from '@stats/views/expeditions/dark-matter/Tables.vue';
 // expeditions/items
-import ExpeditionsItemsChart from '../components/expeditions/items/Chart.vue';
+import ExpeditionsItemsChart from '@stats/views/expeditions/items/Chart.vue';
 // expeditions/distribution
-import ExpeditionsDistributionChart from '../components/expeditions/distribution/Chart.vue';
+import ExpeditionsDistributionChart from '@stats/views/expeditions/distribution/Chart.vue';
 
 Vue.use(VueRouter);
 
@@ -42,7 +43,7 @@ const routes: Array<RouteConfig> = [
             {
                 name: 'expeditions/overview',
                 path: 'overview',
-                redirect: { name: 'expeditions/overview/charts' }, //TODO: user setting 
+                redirect: { name: 'expeditions/overview/chart' }, //TODO: user setting 
                 component: ExpeditionsOverview,
                 children: [
                     {
