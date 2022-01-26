@@ -16,7 +16,11 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
         return acc;
     }, {});
 
-/** @type {import('webpack').Configuration} */
+/** @callback WebpackConfigFunction
+ *  @param {any} env
+ *  @return {import('webpack').Configuration}
+ */
+/** @type WebpackConfigFunction */
 module.exports = (env) => ({
     entry: {
         'service-worker': "./src/service-worker/main.ts",
@@ -71,6 +75,10 @@ module.exports = (env) => ({
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
+        alias: {
+            '@stats': path.resolve(__dirname, 'src/views/stats/'),
+            '@notifications': path.resolve(__dirname, 'src/views/notifications/'),
+        },
     },
     mode: isProduction ? 'production' : 'development',
     optimization: {
