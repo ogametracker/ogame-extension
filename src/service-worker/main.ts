@@ -10,74 +10,73 @@ import { MessageService, MessageServiceEventInfo } from "./MessageService";
 type SubscriptionMap = Partial<Record<MessageType, ServerSubscriptionMap | undefined>>;
 type ServerSubscriptionMap = Record<string, chrome.runtime.Port[] | undefined>;
 
-class ServiceWorker {
-    private readonly noSubscriptionsAllowed: MessageType[] = [
+
+try {
+    const noSubscriptionsAllowed: MessageType[] = [
         MessageType.Subscribe,
         MessageType.Unsubscribe,
         MessageType.Debug_UnhandledError,
     ];
-    private subscriptions: SubscriptionMap = {};
-    private readonly services: MessageService[] = [
+    const subscriptions: SubscriptionMap = {};
+    const services: MessageService[] = [
         new ExpeditionService(),
     ];
 
-    constructor() {
-        chrome.runtime.onMessage.addListener(message => {});
+    chrome.runtime.onMessage.addListener(message => console.log(message));
 
-        chrome.runtime.onConnect.addListener(port => {
-            _log('port connected', port);
-            port.onMessage.addListener(async (message, port) => await this.onMessage(message, port));
+    chrome.runtime.onConnect.addListener(port => {
+        _log('port connected', port);
+        port.onMessage.addListener(async (message, port) => await onMessage(message, port));
 
-            port.onDisconnect.addListener(port => {
-                // remove port from subscriptions
-                (Object.keys(this.subscriptions) as MessageType[]).forEach(key => {
-                    const subs = this.subscriptions[key]!;
+        port.onDisconnect.addListener(port => {
+            // remove port from subscriptions
+            (Object.keys(subscriptions) as MessageType[]).forEach(key => {
+                const subs = subscriptions[key]!;
 
-                    Object.keys(subs).forEach(server => {
-                        subs[server] = subs[server]!.filter(p => p != port);
-                    });
+                Object.keys(subs).forEach(server => {
+                    subs[server] = subs[server]!.filter(p => p != port);
                 });
             });
         });
+    });
 
-        this.performMigrations();
-    }
+    performMigrations();
 
-    private performMigrations() {
+    function performMigrations() {
         _logWarning('TODO: perform migrations');
         //TODO: perform migrations
     }
 
-    private async onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
+    async function onMessage(message: Message<MessageType, any>, port: chrome.runtime.Port) {
         _log('got message', performance.now(), message, port);
 
         const key = getStorageKeyPrefix(message.ogameMeta);
         const eventInfo: MessageServiceEventInfo = {
             sender: port,
-            broadcast: (message, ...includePorts) => this.sendMessage(message, ...includePorts),
+            broadcast: (message, ...includePorts) => sendMessage(message, ...includePorts),
         }
 
         switch (message.type) {
             case MessageType.Subscribe: {
                 const msg = (message as SubscriptionMessage);
-                if (this.noSubscriptionsAllowed.includes(msg.data)) {
+                if (noSubscriptionsAllowed.includes(msg.data)) {
                     return;
                 }
-                const subscriptions = (this.subscriptions[msg.data] ??= {});
-                const serverSubscriptions = (subscriptions[key] ??= []);
+                const subs = (subscriptions[msg.data] ??= {});
+                const serverSubscriptions = (subs[key] ??= []);
                 serverSubscriptions.push(port);
                 return;
             }
 
             case MessageType.Unsubscribe: {
                 const msg = (message as UnsubscriptionMessage);
-                const subscriptions = (this.subscriptions[msg.data] ??= {});
-                subscriptions[key] = (subscriptions[key] ?? []).filter(p => p != port);
+                const subs = (subscriptions[msg.data] ??= {});
+                subs[key] = (subs[key] ?? []).filter(p => p != port);
                 return;
             }
 
             default: {
-                for (const service of this.services) {
+                for (const service of services) {
                     await service.onMessage(message, eventInfo);
                 }
                 break;
@@ -85,21 +84,17 @@ class ServiceWorker {
         }
     }
 
-    private sendMessage<TData, TMessage extends Message<MessageType, TData>>(message: TMessage, ...includePorts: chrome.runtime.Port[]) {
+    function sendMessage<TData, TMessage extends Message<MessageType, TData>>(message: TMessage, ...includePorts: chrome.runtime.Port[]) {
         _log('broadcasting message', performance.now(), { message, includePorts });
         const key = getStorageKeyPrefix(message.ogameMeta);
 
-        const ports = (this.subscriptions?.[message.type]?.[key] ?? []);
+        const ports = (subscriptions?.[message.type]?.[key] ?? []);
         ports.push(...includePorts.filter(p => !ports.includes(p)));
 
         ports.forEach(p => {
             p.postMessage(message);
         });
     }
-}
-
-try {
-    const $serviceWorker = new ServiceWorker();
 } catch (error) {
     _logError(error);
 }
