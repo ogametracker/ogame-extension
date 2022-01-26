@@ -89,7 +89,7 @@ const getVueRoutes = (tree) => {
             name: route.name,
         };
 
-        if(route.componentPath != null) {
+        if (route.componentPath != null) {
             const localImportPath = route.componentPath.split('/views/stats/')[1];
             const importPath = '@stats/' + localImportPath;
             const componentName = localImportPath.replace(/\/|(\.vue)|\-/g, '');
@@ -99,13 +99,18 @@ const getVueRoutes = (tree) => {
         }
 
         vueRoute.children = getVueRoutes(route.children);
+
+        return vueRoute;
     });
 };
 /** @type import('vue-router').RouteConfig[] */
 const vueRoutes = getVueRoutes(routeTree);
 
+const code = Object.keys(imports)
+    .map(name => `import ${name} from '${imports[name]}';`)
+    .concat('')
+    .concat(
+        `export default ${JSON.stringify(vueRoutes, null, 4).replace(/"component": "(\w+)"/g, 'component: $1')};`
+    ).join('\n');
 
-console.log(JSON.stringify(vueRoutes, null, 4));
-console.log(JSON.stringify(imports, null, 4));
-
-//TODO: generate views
+fs.writeFileSync(`${__dirname}/router/generated.ts`, code);
