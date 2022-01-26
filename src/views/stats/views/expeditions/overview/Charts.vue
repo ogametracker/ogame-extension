@@ -28,8 +28,7 @@
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScollableChartFooterDataset, ScrollableChartDataset } from '../../common/ScrollableChart.vue';
-    import { Localization } from '../../../i18n/Localization';
+    import { ScollableChartFooterDataset, ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
 
     @Component({})
     export default class Charts extends Vue {
@@ -53,7 +52,7 @@
                 .filter(d => d.visible || includeHidden)
                 .reduce((acc, d) => acc + d.value, 0);
 
-            return Localization.numberFormatter.format(sum);
+            return this.$number(sum);
         }
 
         private get datasets(): ScrollableChartDataset[] {
@@ -82,7 +81,7 @@
             const firstDay = ExpeditionDataModule.firstDay;
             const day = addDays(firstDay, x);
 
-            return Localization.dateFormatter.format(day);
+            return this.$date(day);
         }
     }
 </script>

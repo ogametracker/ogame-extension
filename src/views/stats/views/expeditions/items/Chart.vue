@@ -9,12 +9,11 @@
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { Localization } from '@/views/stats/i18n/Localization';
     import { startOfDay } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '../../common/ScrollableChart.vue';
+    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
 
     @Component({})
     export default class Charts extends Vue {
@@ -50,7 +49,7 @@
             const firstDay = ExpeditionDataModule.firstDay;
             const day = addDays(firstDay, x);
 
-            return Localization.dateFormatter.format(day);
+            return this.$date(day);
         }
 
         private getFooter(values: Record<ResourceType, number>): string[] {
@@ -64,8 +63,8 @@
             const msu = metal + 2 * crystal + 3 * deuterium; //TODO: MSU from settings
 
             return [
-                Localization.numberFormatter.format(sum) + ' LOCA: Total',//LOCA
-                Localization.numberFormatter.format(msu) + ' LOCA: Total (MSU)',//LOCA
+                this.$number(sum) + ' LOCA: Total',//LOCA
+                this.$number(msu) + ' LOCA: Total (MSU)',//LOCA
             ];
         }
     }

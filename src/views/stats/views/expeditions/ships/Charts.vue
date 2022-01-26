@@ -83,7 +83,7 @@
             const firstDay = ExpeditionDataModule.firstDay;
             const day = addDays(firstDay, x);
 
-            return Localization.dateFormatter.format(day);
+            return this.$date(day);
         }
 
         private getTotal(datasets: ScollableChartFooterDataset[], includeHidden: boolean): string {
@@ -91,7 +91,7 @@
                 .filter(d => d.visible || includeHidden)
                 .reduce((acc, d) => acc + d.value, 0);
 
-            return Localization.numberFormatter.format(sum);
+            return this.$number(sum);
         }
     }
 </script>

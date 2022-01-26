@@ -38,7 +38,7 @@
     import { ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
+    import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
 
     @Component({})
     export default class Tables extends Vue {
@@ -113,7 +113,7 @@ import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEv
                 percentage: '',
             }];
         }
-        
+
         private get sizeColumns(): GridTableColumn[] {
             return [
                 {

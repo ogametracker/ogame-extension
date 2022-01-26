@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '../common/ListNav.vue';
+    import { ListNavItem } from '@stats/components/common/ListNav.vue';
 
     @Component({})
     export default class Expeditions extends Vue {

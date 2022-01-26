@@ -3,23 +3,35 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 class LocalizationHelper extends Vue {
-    private _locale: LanguageKey = LanguageKey.de;
+    public language: LanguageKey = LanguageKey.de;
+    private readonly defaultNumberFormatOptions: Intl.NumberFormatOptions = {
+        maximumFractionDigits: 0,
+    };
 
-    //TODO: expose in vue components as $number
-    public get numberFormatter(): Intl.NumberFormat {
-        return new Intl.NumberFormat(this._locale, {
-            maximumFractionDigits: 3,
-        });
+    public formatNumber(value: number, options?: Intl.NumberFormatOptions): string {
+        return new Intl.NumberFormat(this.language, options ?? this.defaultNumberFormatOptions).format(value);
     }
 
-    //TODO: expose in vue components as $date
-    public get dateFormatter(): Intl.DateTimeFormat {
-        return new Intl.DateTimeFormat(this._locale, {
+    public formatDate(value: number | Date): string {
+        return new Intl.DateTimeFormat(this.language, {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
-        });
+        }).format(value);
+    }
+
+    public formatTime(value: number | Date): string {
+        return new Intl.DateTimeFormat(this.language, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        }).format(value);
+    }
+
+    public formatDateTime(value: number | Date): string {
+        return `${this.formatDate(value)} ${this.formatTime(value)}`;
     }
 }
 
 export const Localization = new LocalizationHelper();
+

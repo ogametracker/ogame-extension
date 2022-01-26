@@ -144,13 +144,12 @@
             </div>
 
             <div class="chart-y-axis">
-                <!-- TODO: use NumberFormat to localize the values using the extension language -->
                 <div
                     v-for="(yData, y) in yGridLines"
                     :key="y"
                     class="y-axis-label"
                     :style="{ bottom: `${yData.fraction * 100}%` }"
-                    v-text="formatNumber(y)"
+                    v-text="$number(y)"
                 />
             </div>
             <div class="chart-x-axis">
@@ -258,10 +257,10 @@
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
 
-        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.numberFormatter.format(value) })
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
         private xLabelFormatter!: (value: number) => string;
 
-        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.numberFormatter.format(value) })
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
         private tooltipValueFormatter!: (value: number) => string;
 
         @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
@@ -507,10 +506,6 @@
 
         private getValue(dataset: ScrollableChartInternalDataset, x: number) {
             return dataset.values[x] ?? 0;
-        }
-
-        private formatNumber(n: number) {
-            return Localization.numberFormatter.format(n);
         }
     }
 </script>

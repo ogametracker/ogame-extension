@@ -5,6 +5,7 @@ import './components/common';
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import './i18n/Localization-vue.ts';
 
 Vue.config.productionTip = false;
 
