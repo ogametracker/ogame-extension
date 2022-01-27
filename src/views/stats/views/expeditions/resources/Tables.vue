@@ -22,10 +22,10 @@
 <script lang="ts">
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
-    import { GridTableColumn } from '../../common/GridTable.vue';
-    import { _dev_DateRanges } from '../../../_dev/DateRanges';
-    import { isInRange } from '../../../utils/dateRanges';
+    import { ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { _dev_DateRanges } from '@stats/_dev/DateRanges';
+    import { isInRange } from '@stats/utils/dateRanges';
     import { ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';

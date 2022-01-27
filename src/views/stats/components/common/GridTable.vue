@@ -86,8 +86,8 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
-    export interface GridTableColumn {
-        key: string;
+    export interface GridTableColumn<TKey = string> {
+        key: TKey;
         label: string;
         size?: string;
         class?: string;
@@ -96,9 +96,9 @@
     }
 
     @Component({})
-    export default class GridTable extends Vue {
-        @Prop({ required: true, type: Array as PropType<GridTableColumn[]> })
-        private columns!: GridTableColumn[];
+    export default class GridTable<TKey = string> extends Vue {
+        @Prop({ required: true, type: Array as PropType<GridTableColumn<TKey>[]> })
+        private columns!: GridTableColumn<TKey>[];
 
         @Prop({ required: true, type: Array as PropType<Record<string, any>[]> })
         private items!: Record<string, any>[];

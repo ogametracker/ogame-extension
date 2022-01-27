@@ -1,22 +1,25 @@
 <template>
-    <page :nav-items="navItems" />
+    <div>
+        expeditions/dark-matter/index
+        <page :nav-items="navItems" />
+    </div>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '../../common/ListNav.vue';
+    import { ListNavItem } from '@stats/components/common/ListNav.vue';
 
     @Component({})
     export default class Index extends Vue {
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Diagramm',
-                    to: { name: 'expeditions/dark-matter/charts' },
+                    label: 'LOCA: Count',
+                    to: { name: 'expeditions/dark-matter/count' },
                 },
                 {
-                    label: 'LOCA: Tabellen',
-                    to: { name: 'expeditions/dark-matter/tables' },
+                    label: 'LOCA: Sizes',
+                    to: { name: 'expeditions/dark-matter/sizes' },
                 },
             ];
         }
