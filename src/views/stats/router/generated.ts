@@ -15,31 +15,29 @@ import viewsexpeditionsshipsresourcesChart from '@stats/views/expeditions/ships/
 import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/resources/Table.vue';
 import viewsexpeditionsshipssizesresourcesChart from '@stats/views/expeditions/ships/sizes/resources/Chart.vue';
 import viewsexpeditionsshipssizesresourcesTable from '@stats/views/expeditions/ships/sizes/resources/Table.vue';
+import { RouteConfig } from 'vue-router';
 
-export default [
+const routes: RouteConfig[] = [
     {
         "path": "/",
-        "meta": null,
         "name": "",
         component: viewsIndex,
         "children": [
             {
                 "path": "expeditions",
+                "name": "expeditions",
                 "meta": {
                     "color": "#0066ff"
                 },
-                "name": "expeditions",
                 component: viewsexpeditionsIndex,
                 "children": [
                     {
                         "path": "dark-matter",
-                        "meta": null,
                         "name": "expeditions/dark-matter",
                         component: viewsexpeditionsdarkmatterIndex,
                         "children": [
                             {
                                 "path": "tables",
-                                "meta": null,
                                 "name": "expeditions/dark-matter/tables",
                                 component: viewsexpeditionsdarkmatterTables,
                                 "children": []
@@ -51,7 +49,6 @@ export default [
                         "children": [
                             {
                                 "path": "chart",
-                                "meta": null,
                                 "name": "expeditions/distribution/chart",
                                 component: viewsexpeditionsdistributionChart,
                                 "children": []
@@ -63,7 +60,6 @@ export default [
                         "children": [
                             {
                                 "path": "chart",
-                                "meta": null,
                                 "name": "expeditions/items/chart",
                                 component: viewsexpeditionsitemsChart,
                                 "children": []
@@ -72,13 +68,11 @@ export default [
                     },
                     {
                         "path": "overview",
-                        "meta": null,
                         "name": "expeditions/overview",
                         component: viewsexpeditionsoverviewIndex,
                         "children": [
                             {
                                 "path": "tables",
-                                "meta": null,
                                 "name": "expeditions/overview/tables",
                                 component: viewsexpeditionsoverviewTables,
                                 "children": []
@@ -87,13 +81,11 @@ export default [
                     },
                     {
                         "path": "resources",
-                        "meta": null,
                         "name": "expeditions/resources",
                         component: viewsexpeditionsresourcesIndex,
                         "children": [
                             {
                                 "path": "tables",
-                                "meta": null,
                                 "name": "expeditions/resources/tables",
                                 component: viewsexpeditionsresourcesTables,
                                 "children": []
@@ -102,7 +94,6 @@ export default [
                     },
                     {
                         "path": "ships",
-                        "meta": null,
                         "name": "expeditions/ships",
                         component: viewsexpeditionsshipsIndex,
                         "children": [
@@ -111,14 +102,12 @@ export default [
                                 "children": [
                                     {
                                         "path": "chart",
-                                        "meta": null,
                                         "name": "expeditions/ships/count/chart",
                                         component: viewsexpeditionsshipscountChart,
                                         "children": []
                                     },
                                     {
                                         "path": "table",
-                                        "meta": null,
                                         "name": "expeditions/ships/count/table",
                                         component: viewsexpeditionsshipscountTable,
                                         "children": []
@@ -130,14 +119,12 @@ export default [
                                 "children": [
                                     {
                                         "path": "chart",
-                                        "meta": null,
                                         "name": "expeditions/ships/resources/chart",
                                         component: viewsexpeditionsshipsresourcesChart,
                                         "children": []
                                     },
                                     {
                                         "path": "table",
-                                        "meta": null,
                                         "name": "expeditions/ships/resources/table",
                                         component: viewsexpeditionsshipsresourcesTable,
                                         "children": []
@@ -152,14 +139,12 @@ export default [
                                         "children": [
                                             {
                                                 "path": "chart",
-                                                "meta": null,
                                                 "name": "expeditions/ships/sizes/resources/chart",
                                                 component: viewsexpeditionsshipssizesresourcesChart,
                                                 "children": []
                                             },
                                             {
                                                 "path": "table",
-                                                "meta": null,
                                                 "name": "expeditions/ships/sizes/resources/table",
                                                 component: viewsexpeditionsshipssizesresourcesTable,
                                                 "children": []
@@ -175,3 +160,4 @@ export default [
         ]
     }
 ];
+export default routes;

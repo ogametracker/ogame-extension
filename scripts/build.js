@@ -9,13 +9,6 @@ if (browser == null) {
 }
 
 console.log(`Building OGame Tracker (browser=${browser}, dev=${isDev})`);
-
-// build content script + service worker
-console.log(`Building content scripts and service worker`);
-execSync(`npx webpack --mode=production --node-env=production --env browser=${browser} ${isDev ? 'dev=true' : ''}`, { stdio: 'inherit' });
-
-// build vue views
-console.log('building views');
 // run _build-hook.js files in view directories (if exist)
 const viewsDir = './src/views';
 const viewBuildHooks = fs.readdirSync(viewsDir, { withFileTypes: true })
@@ -32,6 +25,12 @@ viewBuildHooks.forEach(hookPath => {
     console.log(output.toString());
 });
 
+// build content script + service worker
+console.log(`Building content scripts and service worker`);
+execSync(`npx webpack --mode=production --node-env=production --env browser=${browser} ${isDev ? 'dev=true' : ''}`, { stdio: 'inherit' });
+
+// build vue views
+console.log('building views');
 // create .env file with VUE_APP_BROWSER environment variable
 console.log('creating Vue build');
 fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');

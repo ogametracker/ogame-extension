@@ -85,9 +85,11 @@ const getVueRoutes = (tree) => {
         /** @type import('vue-router').RouteConfig */
         const vueRoute = {
             path: route.path,
-            meta: route.meta,
             name: route.name,
         };
+        if(route.meta != null) {
+            vueRoute.meta = route.meta;
+        }
 
         if (route.componentPath != null) {
             const localImportPath = route.componentPath.split('/views/stats/')[1];
@@ -106,11 +108,15 @@ const getVueRoutes = (tree) => {
 /** @type import('vue-router').RouteConfig[] */
 const vueRoutes = getVueRoutes(routeTree);
 
+imports['{ RouteConfig }'] = 'vue-router';
+console.log(imports);
+
 const code = Object.keys(imports)
     .map(name => `import ${name} from '${imports[name]}';`)
     .concat('')
     .concat(
-        `export default ${JSON.stringify(vueRoutes, null, 4).replace(/"component": "(\w+)"/g, 'component: $1')};`
+        `const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4).replace(/"component": "(\w+)"/g, 'component: $1')};`,
+        'export default routes;',
     ).join('\n');
 
 fs.writeFileSync(`${__dirname}/router/generated.ts`, code);
