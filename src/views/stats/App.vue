@@ -105,8 +105,8 @@
                     label: 'LOCA: Trümmerfelder',
                 },
                 {
-                    key: 'resource-balance',
-                    to: { name: 'resource-balance' },
+                    key: 'resource-overview',
+                    to: { name: 'resource-overview' },
                     icon: 'ogti ogti-economy',
                     label: 'LOCA: Rohstoffbilanz',
                 },

@@ -1,8 +1,5 @@
 <template>
-    <div>
-        expeditions/Index
-        <page :nav-items="navItems" />
-    </div>
+    <page :nav-items="navItems" />
 </template>
 
 <script lang="ts">

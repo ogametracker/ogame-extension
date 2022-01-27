@@ -1,4 +1,10 @@
 import viewsIndex from '@stats/views/Index.vue';
+import viewsDonate from '@stats/views/Donate.vue';
+import viewsExcelExport from '@stats/views/Excel-Export.vue';
+import viewsInfo from '@stats/views/Info.vue';
+import viewscombatsIndex from '@stats/views/combats/Index.vue';
+import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
+import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
 import viewsexpeditionsdarkmattercountIndex from '@stats/views/expeditions/dark-matter/count/Index.vue';
@@ -22,6 +28,9 @@ import viewsexpeditionsshipsresourcesChart from '@stats/views/expeditions/ships/
 import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/resources/Table.vue';
 import viewsexpeditionsshipssizesresourcesChart from '@stats/views/expeditions/ships/sizes/resources/Chart.vue';
 import viewsexpeditionsshipssizesresourcesTable from '@stats/views/expeditions/ships/sizes/resources/Table.vue';
+import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue';
+import viewssettingsIndex from '@stats/views/settings/Index.vue';
+import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
@@ -30,6 +39,60 @@ const routes: RouteConfig[] = [
         name: "",
         component: viewsIndex,
         children: [
+            {
+                path: "donate",
+                name: "donate",
+                meta: {
+                    color: "#ffc800"
+                },
+                component: viewsDonate,
+                children: []
+            },
+            {
+                path: "excel-export",
+                name: "excel-export",
+                meta: {
+                    color: "#21a366"
+                },
+                component: viewsExcelExport,
+                children: []
+            },
+            {
+                path: "info",
+                name: "info",
+                meta: {
+                    color: "#8c8ce0"
+                },
+                component: viewsInfo,
+                children: []
+            },
+            {
+                path: "combats",
+                name: "combats",
+                meta: {
+                    color: "#c51b00"
+                },
+                component: viewscombatsIndex,
+                children: []
+            },
+            {
+                path: "debris-fields",
+                name: "debris-fields",
+                meta: {
+                    color: "#00a031"
+                },
+                component: viewsdebrisfieldsIndex,
+                children: []
+            },
+            {
+                path: "empire",
+                name: "empire",
+                meta: {
+                    color: "#5000d0"
+                },
+                component: viewsempireIndex,
+                children: []
+            },
             {
                 path: "expeditions",
                 name: "expeditions",
@@ -207,6 +270,33 @@ const routes: RouteConfig[] = [
                         ]
                     }
                 ]
+            },
+            {
+                path: "resource-overview",
+                name: "resource-overview",
+                meta: {
+                    color: "#a9460c"
+                },
+                component: viewsresourceoverviewIndex,
+                children: []
+            },
+            {
+                path: "settings",
+                name: "settings",
+                meta: {
+                    color: "#888888"
+                },
+                component: viewssettingsIndex,
+                children: []
+            },
+            {
+                path: "tools",
+                name: "tools",
+                meta: {
+                    color: "#008c85"
+                },
+                component: viewstoolsIndex,
+                children: []
             }
         ]
     }

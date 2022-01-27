@@ -23,17 +23,22 @@ const getRoutes = (dir, routePath, depth = 0) => {
 
             if (file.name.toLowerCase() == 'index.vue') {
                 const metaPath = `${dir}/_meta.js`;
+                const metaPathAlt = `${dir}/_meta.index.js`;
                 /** @type RouteInfo */
                 return {
                     path: routePath == '' ? '/' : routePath,
-                    meta: fs.existsSync(metaPath) ? require(metaPath) : null,
+                    meta: fs.existsSync(metaPath)
+                        ? require(metaPath)
+                        : fs.existsSync(metaPathAlt)
+                            ? require(metaPathAlt)
+                            : null,
                     componentPath: `${dir}/${file.name}`,
                     depth: depth,
                 };
             }
 
-            const metaPath = `${dir}/_meta.${file.name}.js`;
             const fileName = path.parse(file.name).name;
+            const metaPath = `${dir}/_meta.${fileName}.js`;
             /** @type RouteInfo */
             return {
                 path: `${routePath}/${fileName.toLowerCase()}`,
@@ -88,7 +93,7 @@ const getVueRoutes = (tree) => {
             path: route.path,
             name: route.name,
         };
-        if(route.meta != null) {
+        if (route.meta != null) {
             vueRoute.meta = route.meta;
         }
 
@@ -116,10 +121,9 @@ const code = Object.keys(imports)
     .map(name => `import ${name} from '${imports[name]}';`)
     .concat('')
     .concat(
-        `const routes: RouteConfig[] = ${
-            JSON.stringify(vueRoutes, null, 4)
-                .replace(/"component": "(\w+)"/g, 'component: $1')
-                .replace(/"([^"]+)":/g, '$1:')
+        `const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4)
+            .replace(/"component": "(\w+)"/g, 'component: $1')
+            .replace(/"([^"]+)":/g, '$1:')
         };`,
         'export default routes;',
     ).join('\n');
