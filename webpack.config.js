@@ -76,8 +76,8 @@ module.exports = (env) => ({
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
-            '@stats': path.resolve(__dirname, 'src/views/stats/'),
-            '@notifications': path.resolve(__dirname, 'src/views/notifications/'),
+            '@stats': path.resolve(__dirname, './src/views/stats/'),
+            '@notifications': path.resolve(__dirname, './src/views/notifications/'),
         },
     },
     mode: isProduction ? 'production' : 'development',

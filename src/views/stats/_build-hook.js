@@ -28,7 +28,7 @@ const getRoutes = (dir, routePath, depth = 0) => {
                     path: routePath == '' ? '/' : routePath,
                     meta: fs.existsSync(metaPath) ? require(metaPath) : null,
                     componentPath: `${dir}/${file.name}`,
-                    depth,
+                    depth: depth,
                 };
             }
 
@@ -47,6 +47,7 @@ const getRoutes = (dir, routePath, depth = 0) => {
 const viewsDir = `${__dirname}/views`;
 /** @type RouteInfo[] */
 const routes = getRoutes(viewsDir, '').sort((a, b) => a.depth - b.depth);
+console.log(JSON.stringify(routes, null, 4));
 
 const routeTree = {};
 const addRouteDeep = (route, path, root) => {
@@ -61,9 +62,9 @@ const addRouteDeep = (route, path, root) => {
 
     if (path.length == 1) {
         root[rootPath] = {
+            ...(root[rootPath] ?? {}),
             ...route,
             path: rootPath,
-            children: {},
         };
     } else {
         addRouteDeep(route, path.slice(1), root[rootPath].children);
@@ -115,8 +116,12 @@ const code = Object.keys(imports)
     .map(name => `import ${name} from '${imports[name]}';`)
     .concat('')
     .concat(
-        `const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4).replace(/"component": "(\w+)"/g, 'component: $1')};`,
+        `const routes: RouteConfig[] = ${
+            JSON.stringify(vueRoutes, null, 4)
+                .replace(/"component": "(\w+)"/g, 'component: $1')
+                .replace(/"([^"]+)":/g, '$1:')
+        };`,
         'export default routes;',
     ).join('\n');
 
-fs.writeFileSync(`${__dirname}/router/generated.ts`, code);
+fs.writeFileSync(`${__dirname}/router/routes.generated.ts`, code);
