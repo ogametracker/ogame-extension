@@ -7,27 +7,37 @@ import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
-import viewsexpeditionsdarkmattercountIndex from '@stats/views/expeditions/dark-matter/count/Index.vue';
-import viewsexpeditionsdarkmattercountChart from '@stats/views/expeditions/dark-matter/count/Chart.vue';
-import viewsexpeditionsdarkmattercountTable from '@stats/views/expeditions/dark-matter/count/Table.vue';
+import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
+import viewsexpeditionsdarkmatteramountChart from '@stats/views/expeditions/dark-matter/amount/Chart.vue';
+import viewsexpeditionsdarkmatteramountTable from '@stats/views/expeditions/dark-matter/amount/Table.vue';
 import viewsexpeditionsdarkmattersizesIndex from '@stats/views/expeditions/dark-matter/sizes/Index.vue';
 import viewsexpeditionsdarkmattersizesChart from '@stats/views/expeditions/dark-matter/sizes/Chart.vue';
 import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-matter/sizes/Table.vue';
+import viewsexpeditionsdistributionIndex from '@stats/views/expeditions/distribution/Index.vue';
 import viewsexpeditionsdistributionChart from '@stats/views/expeditions/distribution/Chart.vue';
-import viewsexpeditionsitemsChart from '@stats/views/expeditions/items/Chart.vue';
+import viewsexpeditionsdistributionoldIndex from '@stats/views/expeditions/distribution/oldIndex.vue';
+import viewsexpeditionsdistributionTable from '@stats/views/expeditions/distribution/Table.vue';
+import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
-import viewsexpeditionsoverviewCharts from '@stats/views/expeditions/overview/Charts.vue';
-import viewsexpeditionsoverviewTables from '@stats/views/expeditions/overview/Tables.vue';
+import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
+import viewsexpeditionsoverviewTable from '@stats/views/expeditions/overview/Table.vue';
 import viewsexpeditionsresourcesIndex from '@stats/views/expeditions/resources/Index.vue';
-import viewsexpeditionsresourcesCharts from '@stats/views/expeditions/resources/Charts.vue';
-import viewsexpeditionsresourcesTables from '@stats/views/expeditions/resources/Tables.vue';
+import viewsexpeditionsresourcesamountIndex from '@stats/views/expeditions/resources/amount/Index.vue';
+import viewsexpeditionsresourcesamountChart from '@stats/views/expeditions/resources/amount/Chart.vue';
+import viewsexpeditionsresourcesamountTable from '@stats/views/expeditions/resources/amount/Table.vue';
+import viewsexpeditionsresourcessizesIndex from '@stats/views/expeditions/resources/sizes/Index.vue';
+import viewsexpeditionsresourcessizesChart from '@stats/views/expeditions/resources/sizes/Chart.vue';
+import viewsexpeditionsresourcessizesTable from '@stats/views/expeditions/resources/sizes/Table.vue';
 import viewsexpeditionsshipsIndex from '@stats/views/expeditions/ships/Index.vue';
-import viewsexpeditionsshipscountChart from '@stats/views/expeditions/ships/count/Chart.vue';
-import viewsexpeditionsshipscountTable from '@stats/views/expeditions/ships/count/Table.vue';
+import viewsexpeditionsshipsamountIndex from '@stats/views/expeditions/ships/amount/Index.vue';
+import viewsexpeditionsshipsamountChart from '@stats/views/expeditions/ships/amount/Chart.vue';
+import viewsexpeditionsshipsamountTable from '@stats/views/expeditions/ships/amount/Table.vue';
+import viewsexpeditionsshipsresourcesIndex from '@stats/views/expeditions/ships/resources/Index.vue';
 import viewsexpeditionsshipsresourcesChart from '@stats/views/expeditions/ships/resources/Chart.vue';
 import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/resources/Table.vue';
-import viewsexpeditionsshipssizesresourcesChart from '@stats/views/expeditions/ships/sizes/resources/Chart.vue';
-import viewsexpeditionsshipssizesresourcesTable from '@stats/views/expeditions/ships/sizes/resources/Table.vue';
+import viewsexpeditionsshipssizesIndex from '@stats/views/expeditions/ships/sizes/Index.vue';
+import viewsexpeditionsshipssizesChart from '@stats/views/expeditions/ships/sizes/Chart.vue';
+import viewsexpeditionsshipssizesTable from '@stats/views/expeditions/ships/sizes/Table.vue';
 import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
@@ -45,8 +55,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#ffc800"
                 },
-                component: viewsDonate,
-                children: []
+                component: viewsDonate
             },
             {
                 path: "excel-export",
@@ -54,8 +63,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#21a366"
                 },
-                component: viewsExcelExport,
-                children: []
+                component: viewsExcelExport
             },
             {
                 path: "info",
@@ -63,8 +71,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#8c8ce0"
                 },
-                component: viewsInfo,
-                children: []
+                component: viewsInfo
             },
             {
                 path: "combats",
@@ -72,8 +79,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#c51b00"
                 },
-                component: viewscombatsIndex,
-                children: []
+                component: viewscombatsIndex
             },
             {
                 path: "debris-fields",
@@ -81,8 +87,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#00a031"
                 },
-                component: viewsdebrisfieldsIndex,
-                children: []
+                component: viewsdebrisfieldsIndex
             },
             {
                 path: "empire",
@@ -90,8 +95,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#5000d0"
                 },
-                component: viewsempireIndex,
-                children: []
+                component: viewsempireIndex
             },
             {
                 path: "expeditions",
@@ -107,23 +111,24 @@ const routes: RouteConfig[] = [
                         component: viewsexpeditionsdarkmatterIndex,
                         children: [
                             {
-                                path: "count",
-                                name: "expeditions/dark-matter/count",
-                                component: viewsexpeditionsdarkmattercountIndex,
+                                path: "amount",
+                                name: "expeditions/dark-matter/amount",
+                                component: viewsexpeditionsdarkmatteramountIndex,
                                 children: [
                                     {
                                         path: "chart",
-                                        name: "expeditions/dark-matter/count/chart",
-                                        component: viewsexpeditionsdarkmattercountChart,
-                                        children: []
+                                        name: "expeditions/dark-matter/amount/chart",
+                                        component: viewsexpeditionsdarkmatteramountChart
                                     },
                                     {
                                         path: "table",
-                                        name: "expeditions/dark-matter/count/table",
-                                        component: viewsexpeditionsdarkmattercountTable,
-                                        children: []
+                                        name: "expeditions/dark-matter/amount/table",
+                                        component: viewsexpeditionsdarkmatteramountTable
                                     }
-                                ]
+                                ],
+                                redirect: {
+                                    name: "expeditions/dark-matter/amount/chart"
+                                }
                             },
                             {
                                 path: "sizes",
@@ -133,40 +138,52 @@ const routes: RouteConfig[] = [
                                     {
                                         path: "chart",
                                         name: "expeditions/dark-matter/sizes/chart",
-                                        component: viewsexpeditionsdarkmattersizesChart,
-                                        children: []
+                                        component: viewsexpeditionsdarkmattersizesChart
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/dark-matter/sizes/table",
-                                        component: viewsexpeditionsdarkmattersizesTable,
-                                        children: []
+                                        component: viewsexpeditionsdarkmattersizesTable
                                     }
-                                ]
+                                ],
+                                redirect: {
+                                    name: "expeditions/dark-matter/sizes/chart"
+                                }
                             }
-                        ]
+                        ],
+                        redirect: {
+                            name: "expeditions/dark-matter/amount"
+                        }
                     },
                     {
                         path: "distribution",
+                        name: "expeditions/distribution",
+                        component: viewsexpeditionsdistributionIndex,
                         children: [
                             {
                                 path: "chart",
                                 name: "expeditions/distribution/chart",
-                                component: viewsexpeditionsdistributionChart,
-                                children: []
+                                component: viewsexpeditionsdistributionChart
+                            },
+                            {
+                                path: "oldindex",
+                                name: "expeditions/distribution/oldindex",
+                                component: viewsexpeditionsdistributionoldIndex
+                            },
+                            {
+                                path: "table",
+                                name: "expeditions/distribution/table",
+                                component: viewsexpeditionsdistributionTable
                             }
-                        ]
+                        ],
+                        redirect: {
+                            name: "expeditions/distribution/chart"
+                        }
                     },
                     {
                         path: "items",
-                        children: [
-                            {
-                                path: "chart",
-                                name: "expeditions/items/chart",
-                                component: viewsexpeditionsitemsChart,
-                                children: []
-                            }
-                        ]
+                        name: "expeditions/items",
+                        component: viewsexpeditionsitemsIndex
                     },
                     {
                         path: "overview",
@@ -174,18 +191,19 @@ const routes: RouteConfig[] = [
                         component: viewsexpeditionsoverviewIndex,
                         children: [
                             {
-                                path: "charts",
-                                name: "expeditions/overview/charts",
-                                component: viewsexpeditionsoverviewCharts,
-                                children: []
+                                path: "chart",
+                                name: "expeditions/overview/chart",
+                                component: viewsexpeditionsoverviewChart
                             },
                             {
-                                path: "tables",
-                                name: "expeditions/overview/tables",
-                                component: viewsexpeditionsoverviewTables,
-                                children: []
+                                path: "table",
+                                name: "expeditions/overview/table",
+                                component: viewsexpeditionsoverviewTable
                             }
-                        ]
+                        ],
+                        redirect: {
+                            name: "expeditions/overview/chart"
+                        }
                     },
                     {
                         path: "resources",
@@ -193,18 +211,49 @@ const routes: RouteConfig[] = [
                         component: viewsexpeditionsresourcesIndex,
                         children: [
                             {
-                                path: "charts",
-                                name: "expeditions/resources/charts",
-                                component: viewsexpeditionsresourcesCharts,
-                                children: []
+                                path: "amount",
+                                name: "expeditions/resources/amount",
+                                component: viewsexpeditionsresourcesamountIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "expeditions/resources/amount/chart",
+                                        component: viewsexpeditionsresourcesamountChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "expeditions/resources/amount/table",
+                                        component: viewsexpeditionsresourcesamountTable
+                                    }
+                                ],
+                                redirect: {
+                                    name: "expeditions/resources/amount/chart"
+                                }
                             },
                             {
-                                path: "tables",
-                                name: "expeditions/resources/tables",
-                                component: viewsexpeditionsresourcesTables,
-                                children: []
+                                path: "sizes",
+                                name: "expeditions/resources/sizes",
+                                component: viewsexpeditionsresourcessizesIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "expeditions/resources/sizes/chart",
+                                        component: viewsexpeditionsresourcessizesChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "expeditions/resources/sizes/table",
+                                        component: viewsexpeditionsresourcessizesTable
+                                    }
+                                ],
+                                redirect: {
+                                    name: "expeditions/resources/sizes/chart"
+                                }
                             }
-                        ]
+                        ],
+                        redirect: {
+                            name: "expeditions/resources/amount"
+                        }
                     },
                     {
                         path: "ships",
@@ -212,64 +261,74 @@ const routes: RouteConfig[] = [
                         component: viewsexpeditionsshipsIndex,
                         children: [
                             {
-                                path: "count",
+                                path: "amount",
+                                name: "expeditions/ships/amount",
+                                component: viewsexpeditionsshipsamountIndex,
                                 children: [
                                     {
                                         path: "chart",
-                                        name: "expeditions/ships/count/chart",
-                                        component: viewsexpeditionsshipscountChart,
-                                        children: []
+                                        name: "expeditions/ships/amount/chart",
+                                        component: viewsexpeditionsshipsamountChart
                                     },
                                     {
                                         path: "table",
-                                        name: "expeditions/ships/count/table",
-                                        component: viewsexpeditionsshipscountTable,
-                                        children: []
+                                        name: "expeditions/ships/amount/table",
+                                        component: viewsexpeditionsshipsamountTable
                                     }
-                                ]
+                                ],
+                                redirect: {
+                                    name: "expeditions/ships/amount/chart"
+                                }
                             },
                             {
                                 path: "resources",
+                                name: "expeditions/ships/resources",
+                                component: viewsexpeditionsshipsresourcesIndex,
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/ships/resources/chart",
-                                        component: viewsexpeditionsshipsresourcesChart,
-                                        children: []
+                                        component: viewsexpeditionsshipsresourcesChart
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/ships/resources/table",
-                                        component: viewsexpeditionsshipsresourcesTable,
-                                        children: []
+                                        component: viewsexpeditionsshipsresourcesTable
                                     }
-                                ]
+                                ],
+                                redirect: {
+                                    name: "expeditions/ships/resources/chart"
+                                }
                             },
                             {
                                 path: "sizes",
+                                name: "expeditions/ships/sizes",
+                                component: viewsexpeditionsshipssizesIndex,
                                 children: [
                                     {
-                                        path: "resources",
-                                        children: [
-                                            {
-                                                path: "chart",
-                                                name: "expeditions/ships/sizes/resources/chart",
-                                                component: viewsexpeditionsshipssizesresourcesChart,
-                                                children: []
-                                            },
-                                            {
-                                                path: "table",
-                                                name: "expeditions/ships/sizes/resources/table",
-                                                component: viewsexpeditionsshipssizesresourcesTable,
-                                                children: []
-                                            }
-                                        ]
+                                        path: "chart",
+                                        name: "expeditions/ships/sizes/chart",
+                                        component: viewsexpeditionsshipssizesChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "expeditions/ships/sizes/table",
+                                        component: viewsexpeditionsshipssizesTable
                                     }
-                                ]
+                                ],
+                                redirect: {
+                                    name: "expeditions/ships/sizes/chart"
+                                }
                             }
-                        ]
+                        ],
+                        redirect: {
+                            name: "expeditions/ships/amount"
+                        }
                     }
-                ]
+                ],
+                redirect: {
+                    name: "expeditions/dark-matter"
+                }
             },
             {
                 path: "resource-overview",
@@ -277,8 +336,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#a9460c"
                 },
-                component: viewsresourceoverviewIndex,
-                children: []
+                component: viewsresourceoverviewIndex
             },
             {
                 path: "settings",
@@ -286,8 +344,7 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#888888"
                 },
-                component: viewssettingsIndex,
-                children: []
+                component: viewssettingsIndex
             },
             {
                 path: "tools",
@@ -295,10 +352,12 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#008c85"
                 },
-                component: viewstoolsIndex,
-                children: []
+                component: viewstoolsIndex
             }
-        ]
+        ],
+        redirect: {
+            name: "donate"
+        }
     }
 ];
 export default routes;

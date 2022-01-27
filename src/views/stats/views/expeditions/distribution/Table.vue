@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <grid-table
-            :columns="columns"
-            :items="items"
-            :footer-items="footerItems"
-            :cell-class-provider="(value) => getCellClass(value)"
-            style="text-align: right"
-        />
-    </div>
+    <grid-table
+        :columns="columns"
+        :items="items"
+        :footer-items="footerItems"
+        :cell-class-provider="(value) => getCellClass(value)"
+        style="text-align: right"
+    />
 </template>
 
 <script lang="ts">

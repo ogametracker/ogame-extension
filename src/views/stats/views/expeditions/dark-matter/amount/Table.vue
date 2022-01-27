@@ -1,10 +1,8 @@
 <template>
-    <div>
-        <ranged-expedition-table
-            :filter="(expo) => filterExpo(expo)"
-            :items="items"
-        />
-    </div>
+    <ranged-expedition-table
+        :filter="(expo) => filterExpo(expo)"
+        :items="items"
+    />
 </template>
 
 <script lang="ts">

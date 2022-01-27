@@ -1,32 +1,21 @@
 <template>
     <scrollable-chart
         :datasets="datasets"
-        stacked
-        filled
         :x-label-formatter="(x) => formatX(x)"
-    >
-        <template #footer="{ datasets }">
-            <div class="tooltip-footer">
-                <template v-if="datasets.some((d) => !d.visible)">
-                    <div class="value">{{ getTotal(datasets, false) }}</div>
-                    <div>LOCA: Expeditions</div>
-                </template>
-                <hr />
-                <div class="value">{{ getTotal(datasets, true) }}</div>
-                <div>LOCA: Expeditions (total)</div>
-            </div>
-        </template>
-    </scrollable-chart>
+        :tooltip-value-formatter="(x) => formatTooltipValue(x)"
+    />
 </template>
 
 <script lang="ts">
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { Localization } from '@/views/stats/i18n/Localization';
     import { startOfDay } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScollableChartFooterDataset, ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
 
     @Component({})
     export default class Charts extends Vue {
@@ -45,14 +34,6 @@
             [ExpeditionEventType.lostFleet]: '#ffffff',
         };
 
-        private getTotal(datasets: ScollableChartFooterDataset[], includeHidden: boolean): string {
-            const sum = datasets
-                .filter(d => d.visible || includeHidden)
-                .reduce((acc, d) => acc + d.value, 0);
-
-            return this.$number(sum);
-        }
-
         private get datasets(): ScrollableChartDataset[] {
             const perDay = ExpeditionDataModule.expeditionsPerDay;
             const firstDay = ExpeditionDataModule.firstDay;
@@ -65,14 +46,14 @@
                     day => (perDay[day] ?? []).filter(expo => expo.type == type).length
                 )
             );
+            const countPerDay = days.map(day => perDay[day]?.length ?? 0);
 
-            return types
-                .map((type, i) => ({
-                    key: type,
-                    values: perTypePerDay[i],
-                    color: this.colors[type],
-                    label: 'LOCA: ' + type, //LOCA
-                }));
+            return types.map((type, i) => ({
+                key: type,
+                values: perTypePerDay[i].map((count, dayIndex) => 100 * count / Math.max(1, countPerDay[dayIndex])),
+                color: this.colors[type],
+                label: 'LOCA: ' + type, //LOCA
+            }));
         }
 
         private formatX(x: number): string {
@@ -81,21 +62,9 @@
 
             return this.$date(day);
         }
+
+        private formatTooltipValue(n: number): string {
+            return this.$number(n, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + '%';
+        }
     }
 </script>
-<style lang="scss" scoped>
-    .tooltip-footer {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 6px;
-
-        .value {
-            text-align: right;
-        }
-
-        hr {
-            grid-column: 1 / span 2;
-            width: 100%;
-        }
-    }
-</style>

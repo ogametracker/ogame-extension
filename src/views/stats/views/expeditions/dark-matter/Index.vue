@@ -12,7 +12,7 @@
             return [
                 {
                     label: 'LOCA: Count',
-                    to: { name: 'expeditions/dark-matter/count' },
+                    to: { name: 'expeditions/dark-matter/amount' },
                 },
                 {
                     label: 'LOCA: Sizes',

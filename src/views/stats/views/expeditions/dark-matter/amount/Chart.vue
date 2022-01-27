@@ -1,12 +1,10 @@
 <template>
-    <div style="height: 100%">
-        <scrollable-chart
-            :datasets="datasets"
-            filled
-            :x-label-formatter="(x) => formatX(x)"
-            no-legend
-        />
-    </div>
+    <scrollable-chart
+        :datasets="datasets"
+        filled
+        :x-label-formatter="(x) => formatX(x)"
+        no-legend
+    />
 </template>
 
 <script lang="ts">

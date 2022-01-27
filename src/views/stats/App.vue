@@ -34,8 +34,8 @@
                     tab.style,
                 ]"
             >
-                <span v-if="tab.icon != null" :class="tab.icon" />
-                <span v-if="tab.label != null" v-text="tab.label" />
+                <span v-if="tab.icon != null" class="nav-item-icon" :class="tab.icon" />
+                <span v-if="tab.label != null" class="nav-item-label " v-text="tab.label" />
             </component>
 
             <div
@@ -59,9 +59,8 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { Component, Vue } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
-    import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
 
     interface Tab {
         key: string;

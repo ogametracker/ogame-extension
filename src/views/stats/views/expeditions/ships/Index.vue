@@ -11,16 +11,12 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Anzahl',
-                    to: { name: 'expeditions/ships/count' },
+                    label: 'LOCA: Count',
+                    to: { name: 'expeditions/resources/amount' },
                 },
                 {
-                    label: 'LOCA: Fundgrößen',
-                    to: { name: 'expeditions/ships/sizes' },
-                },
-                {
-                    label: 'LOCA: Rohstoffeinheiten',
-                    to: { name: 'expeditions/ships/resources' },
+                    label: 'LOCA: Sizes',
+                    to: { name: 'expeditions/resources/sizes' },
                 },
             ];
         }

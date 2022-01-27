@@ -1,24 +1,22 @@
 <template>
-    <div style="height: 100%">
-        <scrollable-chart
-            :datasets="datasets"
-            stacked
-            filled
-            :x-label-formatter="(x) => formatX(x)"
-        >
-            <template #footer="{ datasets }">
-                <div class="tooltip-footer">
-                    <template v-if="datasets.some((d) => !d.visible)">
-                        <div class="value">{{ getTotal(datasets, false) }}</div>
-                        <div>LOCA: Expeditions</div>
-                    </template>
-                    <hr />
-                    <div class="value">{{ getTotal(datasets, true) }}</div>
-                    <div>LOCA: Expeditions (total)</div>
-                </div>
-            </template>
-        </scrollable-chart>
-    </div>
+    <scrollable-chart
+        :datasets="datasets"
+        stacked
+        filled
+        :x-label-formatter="(x) => formatX(x)"
+    >
+        <template #footer="{ datasets }">
+            <div class="tooltip-footer">
+                <template v-if="datasets.some((d) => !d.visible)">
+                    <div class="value">{{ getTotal(datasets, false) }}</div>
+                    <div>LOCA: Expeditions</div>
+                </template>
+                <hr />
+                <div class="value">{{ getTotal(datasets, true) }}</div>
+                <div>LOCA: Expeditions (total)</div>
+            </div>
+        </template>
+    </scrollable-chart>
 </template>
 
 <script lang="ts">

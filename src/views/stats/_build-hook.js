@@ -106,13 +106,28 @@ const getVueRoutes = (tree) => {
             vueRoute.component = componentName;
         }
 
-        vueRoute.children = getVueRoutes(route.children);
+        const children = getVueRoutes(route.children);
+        if(children.length > 0) {
+            vueRoute.children = children;
+        }
 
         return vueRoute;
     });
 };
+
+const addRedirectToFirstChild = (/** @type import('vue-router').RouteConfig */route) => {
+    if((route.children?.length ?? 0) == 0) {
+        return;
+    }
+
+    route.redirect = { name: route.children[0].name };
+    route.children.forEach(childRoute => addRedirectToFirstChild(childRoute));
+};
+
+
 /** @type import('vue-router').RouteConfig[] */
 const vueRoutes = getVueRoutes(routeTree);
+vueRoutes.forEach(route => addRedirectToFirstChild(route));
 
 imports['{ RouteConfig }'] = 'vue-router';
 console.log(imports);
