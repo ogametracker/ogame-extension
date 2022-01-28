@@ -1,9 +1,11 @@
+console.log('[stats view] generating routes');
+
 const fs = require('fs');
 const path = require('path');
 
 /** @typedef RouteInfo
  *  @property {string} path
- *  @property {any} meta
+ *  @property {any} routeConfig
  *  @property {string} componentPath
  *  @property {number} depth
  */
@@ -21,28 +23,29 @@ const getRoutes = (dir, routePath, depth = 0) => {
                 return [];
             }
 
+            const fileName = path.parse(file.name).name;
+            const fileRouteConfigPath = `${dir}/route-config.${fileName}.js`;
+
             if (file.name.toLowerCase() == 'index.vue') {
-                const metaPath = `${dir}/_meta.js`;
-                const metaPathAlt = `${dir}/_meta.index.js`;
+                const routeConfigPaths = [
+                    `${dir}/route-config.js`,
+                    fileRouteConfigPath,
+                ];
+                const routeConfigPath = routeConfigPaths.find(path => fs.existsSync(path));
+
                 /** @type RouteInfo */
                 return {
                     path: routePath == '' ? '/' : routePath,
-                    meta: fs.existsSync(metaPath)
-                        ? require(metaPath)
-                        : fs.existsSync(metaPathAlt)
-                            ? require(metaPathAlt)
-                            : null,
+                    routeConfig: routeConfigPath != null ? require(routeConfigPath) : null,
                     componentPath: `${dir}/${file.name}`,
                     depth: depth,
                 };
             }
 
-            const fileName = path.parse(file.name).name;
-            const metaPath = `${dir}/_meta.${fileName}.js`;
             /** @type RouteInfo */
             return {
                 path: `${routePath}/${fileName.toLowerCase()}`,
-                meta: fs.existsSync(metaPath) ? require(metaPath) : null,
+                routeConfig: fs.existsSync(fileRouteConfigPath) ? require(fileRouteConfigPath) : null,
                 componentPath: `${dir}/${file.name}`,
                 depth,
             };
@@ -52,7 +55,7 @@ const getRoutes = (dir, routePath, depth = 0) => {
 const viewsDir = `${__dirname}/views`;
 /** @type RouteInfo[] */
 const routes = getRoutes(viewsDir, '').sort((a, b) => a.depth - b.depth);
-console.log(JSON.stringify(routes, null, 4));
+// console.log(JSON.stringify(routes, null, 4));
 
 const routeTree = {};
 const addRouteDeep = (route, path, root) => {
@@ -66,6 +69,7 @@ const addRouteDeep = (route, path, root) => {
     }
 
     if (path.length == 1) {
+
         root[rootPath] = {
             ...(root[rootPath] ?? {}),
             ...route,
@@ -89,12 +93,15 @@ const getVueRoutes = (tree) => {
     return Object.values(tree).map(route => {
 
         /** @type import('vue-router').RouteConfig */
-        const vueRoute = {
+        let vueRoute = {
             path: route.path,
             name: route.name,
         };
-        if (route.meta != null) {
-            vueRoute.meta = route.meta;
+        if (route.routeConfig != null) {
+            vueRoute = {
+                ...route.routeConfig,
+                ...vueRoute,
+            };
         }
 
         if (route.componentPath != null) {
@@ -107,7 +114,7 @@ const getVueRoutes = (tree) => {
         }
 
         const children = getVueRoutes(route.children);
-        if(children.length > 0) {
+        if (children.length > 0) {
             vueRoute.children = children;
         }
 
@@ -115,22 +122,12 @@ const getVueRoutes = (tree) => {
     });
 };
 
-const addRedirectToFirstChild = (/** @type import('vue-router').RouteConfig */route) => {
-    if((route.children?.length ?? 0) == 0) {
-        return;
-    }
-
-    route.redirect = { name: route.children[0].name };
-    route.children.forEach(childRoute => addRedirectToFirstChild(childRoute));
-};
-
 
 /** @type import('vue-router').RouteConfig[] */
 const vueRoutes = getVueRoutes(routeTree);
-vueRoutes.forEach(route => addRedirectToFirstChild(route));
 
 imports['{ RouteConfig }'] = 'vue-router';
-console.log(imports);
+// console.log(imports);
 
 const code = Object.keys(imports)
     .map(name => `import ${name} from '${imports[name]}';`)

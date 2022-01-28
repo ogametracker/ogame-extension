@@ -45,64 +45,70 @@ import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
     {
+        redirect: {
+            name: "expeditions"
+        },
         path: "/",
         name: "",
         component: viewsIndex,
         children: [
             {
-                path: "donate",
-                name: "donate",
                 meta: {
                     color: "#ffc800"
                 },
+                path: "donate",
+                name: "donate",
                 component: viewsDonate
             },
             {
-                path: "excel-export",
-                name: "excel-export",
                 meta: {
                     color: "#21a366"
                 },
+                path: "excel-export",
+                name: "excel-export",
                 component: viewsExcelExport
             },
             {
-                path: "info",
-                name: "info",
                 meta: {
                     color: "#8c8ce0"
                 },
+                path: "info",
+                name: "info",
                 component: viewsInfo
             },
             {
-                path: "combats",
-                name: "combats",
                 meta: {
                     color: "#c51b00"
                 },
+                path: "combats",
+                name: "combats",
                 component: viewscombatsIndex
             },
             {
-                path: "debris-fields",
-                name: "debris-fields",
                 meta: {
                     color: "#00a031"
                 },
+                path: "debris-fields",
+                name: "debris-fields",
                 component: viewsdebrisfieldsIndex
             },
             {
-                path: "empire",
-                name: "empire",
                 meta: {
                     color: "#5000d0"
                 },
+                path: "empire",
+                name: "empire",
                 component: viewsempireIndex
             },
             {
-                path: "expeditions",
-                name: "expeditions",
                 meta: {
                     color: "#0066ff"
                 },
+                redirect: {
+                    name: "expeditions/overview"
+                },
+                path: "expeditions",
+                name: "expeditions",
                 component: viewsexpeditionsIndex,
                 children: [
                     {
@@ -125,10 +131,7 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/dark-matter/amount/table",
                                         component: viewsexpeditionsdarkmatteramountTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/dark-matter/amount/chart"
-                                }
+                                ]
                             },
                             {
                                 path: "sizes",
@@ -145,15 +148,9 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/dark-matter/sizes/table",
                                         component: viewsexpeditionsdarkmattersizesTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/dark-matter/sizes/chart"
-                                }
+                                ]
                             }
-                        ],
-                        redirect: {
-                            name: "expeditions/dark-matter/amount"
-                        }
+                        ]
                     },
                     {
                         path: "distribution",
@@ -175,10 +172,7 @@ const routes: RouteConfig[] = [
                                 name: "expeditions/distribution/table",
                                 component: viewsexpeditionsdistributionTable
                             }
-                        ],
-                        redirect: {
-                            name: "expeditions/distribution/chart"
-                        }
+                        ]
                     },
                     {
                         path: "items",
@@ -186,6 +180,9 @@ const routes: RouteConfig[] = [
                         component: viewsexpeditionsitemsIndex
                     },
                     {
+                        redirect: {
+                            name: "expeditions/overview/chart"
+                        },
                         path: "overview",
                         name: "expeditions/overview",
                         component: viewsexpeditionsoverviewIndex,
@@ -200,10 +197,7 @@ const routes: RouteConfig[] = [
                                 name: "expeditions/overview/table",
                                 component: viewsexpeditionsoverviewTable
                             }
-                        ],
-                        redirect: {
-                            name: "expeditions/overview/chart"
-                        }
+                        ]
                     },
                     {
                         path: "resources",
@@ -225,10 +219,7 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/resources/amount/table",
                                         component: viewsexpeditionsresourcesamountTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/resources/amount/chart"
-                                }
+                                ]
                             },
                             {
                                 path: "sizes",
@@ -245,15 +236,9 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/resources/sizes/table",
                                         component: viewsexpeditionsresourcessizesTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/resources/sizes/chart"
-                                }
+                                ]
                             }
-                        ],
-                        redirect: {
-                            name: "expeditions/resources/amount"
-                        }
+                        ]
                     },
                     {
                         path: "ships",
@@ -275,10 +260,7 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/ships/amount/table",
                                         component: viewsexpeditionsshipsamountTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/ships/amount/chart"
-                                }
+                                ]
                             },
                             {
                                 path: "resources",
@@ -295,10 +277,7 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/ships/resources/table",
                                         component: viewsexpeditionsshipsresourcesTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/ships/resources/chart"
-                                }
+                                ]
                             },
                             {
                                 path: "sizes",
@@ -315,49 +294,37 @@ const routes: RouteConfig[] = [
                                         name: "expeditions/ships/sizes/table",
                                         component: viewsexpeditionsshipssizesTable
                                     }
-                                ],
-                                redirect: {
-                                    name: "expeditions/ships/sizes/chart"
-                                }
+                                ]
                             }
-                        ],
-                        redirect: {
-                            name: "expeditions/ships/amount"
-                        }
+                        ]
                     }
-                ],
-                redirect: {
-                    name: "expeditions/dark-matter"
-                }
+                ]
             },
             {
-                path: "resource-overview",
-                name: "resource-overview",
                 meta: {
                     color: "#a9460c"
                 },
+                path: "resource-overview",
+                name: "resource-overview",
                 component: viewsresourceoverviewIndex
             },
             {
-                path: "settings",
-                name: "settings",
                 meta: {
                     color: "#888888"
                 },
+                path: "settings",
+                name: "settings",
                 component: viewssettingsIndex
             },
             {
-                path: "tools",
-                name: "tools",
                 meta: {
                     color: "#008c85"
                 },
+                path: "tools",
+                name: "tools",
                 component: viewstoolsIndex
             }
-        ],
-        redirect: {
-            name: "donate"
-        }
+        ]
     }
 ];
 export default routes;
