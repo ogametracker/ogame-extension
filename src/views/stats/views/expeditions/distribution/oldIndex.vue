@@ -53,6 +53,9 @@
                 values: perTypePerDay[i].map((count, dayIndex) => 100 * count / Math.max(1, countPerDay[dayIndex])),
                 color: this.colors[type],
                 label: 'LOCA: ' + type, //LOCA
+                filled: true,
+                    stack: false,
+                    hidePoints: false,
             }));
         }
 

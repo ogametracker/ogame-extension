@@ -31,6 +31,7 @@
     .nav-list {
         display: flex;
         flex-direction: column;
+        min-width: 125px;
     }
 
     .nav-list-item {

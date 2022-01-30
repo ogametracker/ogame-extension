@@ -17,7 +17,10 @@
                             :x2="xPositions[x - 1]"
                             :y2="svgContainer.clientHeight + 10"
                             class="x-grid-line"
-                            :class="{ 'x-grid-line-active': x - 1 == activeX }"
+                            :class="{
+                                'x-grid-line-active': x - 1 == activeX,
+                                'x-grid-line--first': x == 1,
+                            }"
                         />
                         <!-- horizontal grid lines -->
                         <line
@@ -28,17 +31,19 @@
                             :x2="svgContainer.clientWidth"
                             :y2="yData.svg"
                             class="y-grid-line"
+                            :class="{ 'y-grid-line--first': y == 1 }"
                         />
                     </g>
 
-                    <g v-if="filled" class="background-paths">
+                    <g class="background-paths">
                         <path
                             v-for="dataset in reversedDatasets"
-                            v-show="dataset.visible"
+                            v-show="dataset.visible && dataset.filled"
                             :key="`background-${dataset.key}`"
                             :d="dataset.paths.background"
                             class="dataset-background"
                             :style="{ fill: dataset.color }"
+                            :_debug="dataset.key"
                         />
                     </g>
 
@@ -49,9 +54,23 @@
                             :key="`line-${dataset.key}`"
                             :d="dataset.paths.line"
                             class="dataset-line"
+                            :class="{
+                                'dataset-line--average': dataset.dashed,
+                            }"
                             :style="{ stroke: dataset.color }"
+                            :_debug="dataset.key"
+                        />
+                        <path
+                            v-for="dataset in reversedDatasets"
+                            v-show="dataset.visible"
+                            :key="`line-average-${dataset.key}`"
+                            :d="dataset.paths.averageLine"
+                            class="dataset-line dataset-line--average"
+                            :style="{ stroke: dataset.color }"
+                            :_debug="`${dataset.key}-average`"
                         />
                     </g>
+
                     <g class="points">
                         <g
                             v-for="x in ticks"
@@ -61,12 +80,13 @@
                         >
                             <circle
                                 v-for="dataset in reversedDatasets"
-                                v-show="dataset.visible"
+                                v-show="dataset.visible && !dataset.hidePoints"
                                 :key="`point-${dataset.key}-${x}`"
                                 class="dataset-point"
                                 :cx="xPositions[x - 1]"
                                 :cy="dataset.svgValues[x - 1]"
                                 :style="{ fill: dataset.color }"
+                                :_debug="dataset.key"
                             />
 
                             <rect
@@ -212,6 +232,10 @@
         values: number[];
         color: string;
         label: string;
+        filled: boolean;
+        stack: boolean;
+        hidePoints: boolean;
+        average?: number;
     }
 
     interface ScrollableChartInternalDataset extends ScrollableChartDataset {
@@ -220,6 +244,7 @@
         svgValues: number[];
         paths: {
             line: string;
+            averageLine: string;
             background: string;
         };
     }
@@ -244,12 +269,6 @@
 
         @Prop({ required: true, type: Array as PropType<ScrollableChartDataset[]>, validator: (value: ScrollableChartDataset[]) => value.length > 0 })
         private datasets!: ScrollableChartDataset[];
-
-        @Prop({ required: false, type: Boolean })
-        private stacked!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private filled!: boolean;
 
         @Prop({ required: false, type: Number, default: 30 })
         private ticks!: number;
@@ -314,6 +333,7 @@
                 svgValues: [],
                 paths: {
                     line: '',
+                    averageLine: '',
                     background: '',
                 },
                 visible: true,
@@ -352,7 +372,7 @@
             }
             const height = this.svgContainer.clientHeight;
             const lines: YGridLineData = {};
-            const count = Math.ceil(maxY / step);
+            const count = Math.ceil(maxY / step) + 1;
             for (let c = 0; c <= count; c++) {
                 const y = step * c;
                 lines[y] = {
@@ -389,11 +409,11 @@
             let maxX = 0;
 
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
-                const previousVisibleDataset = findPrevious(internalDatasets, i - 1, d => d.visible);
+                const previousVisibleAndStackedDataset = findPrevious(internalDatasets, i - 1, d => d.visible && d.stack);
 
                 const transformedValues = internalDataset.values.map((y, x) => {
-                    if (this.stacked) {
-                        y += previousVisibleDataset?.transformedValues[x] ?? 0;
+                    if (internalDataset.stack) {
+                        y += previousVisibleAndStackedDataset?.transformedValues[x] ?? 0;
                     }
                     return y;
                 });
@@ -450,11 +470,18 @@
                     + `L${linePath.substring(1)} `
                     + `L ${this.xPositions[this.xPositions.length - 1]} ${height}`;
 
+                let avgLinePath = '';
+                if (dataset.average != null) {
+                    const [avgSvgValue] = this.computeSvgValues([dataset.average]);
+                    avgLinePath = `M 0 ${avgSvgValue} L ${width} ${avgSvgValue}`;
+                }
+
                 const internalDataset: ScrollableChartInternalDataset = {
                     ...dataset,
                     svgValues,
                     paths: {
                         line: linePath,
+                        averageLine: avgLinePath,
                         background: bgPath,
                     },
                 };
@@ -540,18 +567,28 @@
         fill: none;
     }
 
+    .x-grid-line--first,
+    .y-grid-line--first {
+        stroke: rgba(white, 0.75);
+    }
+
     .dataset-background {
         stroke: none;
-        opacity: 0.8;
     }
 
     .dataset-line {
         fill: none;
         stroke-width: 2px;
+        filter: brightness(0.7);
+
+        &--average {
+            stroke-dasharray: 5px;
+            stroke-width: 1px;
+        }
     }
 
     .dataset-point {
-        stroke: rgba(black, 0.2);
+        stroke: rgba(black, 0.5);
         r: 3px;
         stroke-width: 1px;
     }

@@ -200,11 +200,17 @@ const routes: RouteConfig[] = [
                         ]
                     },
                     {
+                        redirect: {
+                            name: "expeditions/resources/amount"
+                        },
                         path: "resources",
                         name: "expeditions/resources",
                         component: viewsexpeditionsresourcesIndex,
                         children: [
                             {
+                                redirect: {
+                                    name: "expeditions/resources/amount/chart"
+                                },
                                 path: "amount",
                                 name: "expeditions/resources/amount",
                                 component: viewsexpeditionsresourcesamountIndex,

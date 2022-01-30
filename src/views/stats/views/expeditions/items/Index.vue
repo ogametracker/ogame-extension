@@ -42,6 +42,9 @@
                     values: resourceExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.resources[resource], 0)),
                     color: this.colors[resource],
                     label: 'LOCA: ' + resource, //LOCA
+                    filled: true,
+                    stack: false,
+                    hidePoints: false,
                 }));
         }
 

@@ -1,7 +1,6 @@
 <template>
     <scrollable-chart
         :datasets="datasets"
-        filled
         :x-label-formatter="(x) => formatX(x)"
         no-legend
     />
@@ -40,6 +39,9 @@
                 values: dmExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0)),
                 color: this.color,
                 label: 'LOCA: Dark Matter', //LOCA
+                filled: true,
+                    stack: true,
+                    hidePoints: false,
             }];
         }
 

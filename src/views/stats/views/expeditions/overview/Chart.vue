@@ -2,7 +2,6 @@
     <scrollable-chart
         :datasets="datasets"
         stacked
-        filled
         :x-label-formatter="(x) => formatX(x)"
     >
         <template #footer="{ datasets }">
@@ -72,6 +71,9 @@
                     values: perTypePerDay[i],
                     color: this.colors[type],
                     label: 'LOCA: ' + type, //LOCA
+                    filled: true,
+                    stack: true,
+                    hidePoints: false,
                 }));
         }
 

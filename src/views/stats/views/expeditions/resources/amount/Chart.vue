@@ -1,53 +1,58 @@
 <template>
-    <scrollable-chart
+    <expedition-chart
+        :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
-        filled
-        :x-label-formatter="(x) => formatX(x)"
-        no-legend
+        stacked
+        show-average
     />
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventDarkMatter, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { Localization } from '@/views/stats/i18n/Localization';
-    import { startOfDay } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays';
-    import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
+    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpeditionChart,
+        },
+    })
     export default class Charts extends Vue {
         //TODO: colors from settings
-        private readonly color = '#075263';
+        private readonly colors: Record<ResourceType, string> = {
+            [ResourceType.metal]: '#de5200',
+            [ResourceType.crystal]: '#249df3',
+            [ResourceType.deuterium]: '#14bf73',
+        };
 
-        private get datasets(): ScrollableChartDataset[] {
-            const perDay = ExpeditionDataModule.expeditionsPerDay;
-            const firstDay = ExpeditionDataModule.firstDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
-
-            const dmExposPerDay = days.map(
-                day => (perDay[day] ?? []).filter(
-                    expo => expo.type == ExpeditionEventType.darkMatter
-                ) as ExpeditionEventDarkMatter[]
-            );
-
-            return [{
-                key: 'dark-matter',
-                values: dmExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0)),
-                color: this.color,
-                label: 'LOCA: Dark Matter', //LOCA
-            }];
+        private get datasets(): ExpeditionDataset[] {
+            return [
+                ...Object.values(ResourceType).map(resource => ({
+                    key: resource,
+                    label: `LOCA: ${resource}`, //LOCA
+                    color: this.colors[resource],
+                    filled: true,
+                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
+                        .reduce((acc, expo) => acc + expo.resources[resource], 0),
+                })),
+                {
+                    key: 'total',
+                    label: 'LOCA: Total Units (MSU)',
+                    color: '#999999',
+                    filled: false,
+                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
+                        .reduce(
+                            (acc, expo) => acc + expo.resources.metal + expo.resources.crystal * 2 + expo.resources.deuterium * 3 //TODO: MSU from settings
+                            , 0),
+                    stack: false,
+                }
+            ];
         }
 
-        private formatX(x: number): string {
-            const firstDay = ExpeditionDataModule.firstDay;
-            const day = addDays(firstDay, x);
-
-            return this.$date(day);
+        private filterExpo(expo: ExpeditionEvent): boolean {
+            return expo.type == ExpeditionEventType.resources;
         }
     }
 </script>
