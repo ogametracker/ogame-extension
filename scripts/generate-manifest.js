@@ -47,6 +47,10 @@ const manifest = {
     ],
     web_accessible_resources: [
         {
+            resources: ['img/*'],
+            matches: ['https://*.ogame.gameforge.com/*'],
+        },
+        {
             resources: ['views/*'],
             matches: ['https://*.ogame.gameforge.com/*'],
         },

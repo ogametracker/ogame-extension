@@ -65,7 +65,8 @@ module.exports = (env) => ({
                         options: {
                             // for different styling depending on the browser environment
                             additionalData: `
-                                $browser: ${env.browser};
+                                $browser: '${env.browser}';
+                                $base-url: '${env.browser == 'chrome' ? 'chrome' : 'moz'}-extension://__MSG_@@extension_id__';
                             `
                         },
                     },

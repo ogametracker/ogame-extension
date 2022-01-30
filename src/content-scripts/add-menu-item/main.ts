@@ -17,7 +17,7 @@ const observer = new MutationObserver(() => {
 
         ogameTrackerMenu.innerHTML = `
             <li id="ogame-tracker-menu-item">
-                <span class="menu_icon">
+                <span class="menu_icon tooltipRight" title="LOCA: Open in new tab">
                     <span class="menuImage icon"></span>
                 </span>
                 <div class="menubutton"></div>
