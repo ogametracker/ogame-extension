@@ -30,10 +30,6 @@
                     label: 'LOCA: Itemfunde',
                     to: { name: 'expeditions/items' },
                 },
-                {
-                    label: 'LOCA: Verteilung',
-                    to: { name: 'expeditions/distribution' },
-                },
             ];
         }
     }

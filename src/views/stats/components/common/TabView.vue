@@ -61,6 +61,13 @@
                 &.tab--active {
                     background-color: rgba(var(--color), 0.5);
                 }
+
+                &::v-deep {
+                    .mdi::before, .ogti::before {
+                        transform: scale(1.5) translateX(-25%);
+                    }
+                }
+
             }
         }
 

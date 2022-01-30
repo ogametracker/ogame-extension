@@ -64,7 +64,7 @@
                     filled: dataset.filled ?? true,
                     stack: dataset.stack ?? true,
                     hidePoints: false,
-                    average: total / filteredExpoDays,
+                    average: total / Math.max(1, filteredExpoDays),
                 };
             });
         }
