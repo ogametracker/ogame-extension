@@ -2,6 +2,7 @@
     <ranged-expedition-table
         :filter="(expo) => filterExpo(expo)"
         :items="items"
+        :footerItems="footerItems"
     />
 </template>
 
@@ -26,9 +27,26 @@
         private get items(): RangedExpeditionTableItem[] {
             return Object.values(ResourceType).map(resource => ({
                 label: `LOCA: ${resource}`,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
+                getValue: expos => (expos as ExpeditionEventResources[])
                     .reduce((acc, expo) => acc + expo.resources[resource], 0),
             }));
+        }
+
+        private get footerItems(): RangedExpeditionTableItem[] {
+            return [
+                {
+                    label: `LOCA: Total`,
+                    getValue: expos => (expos as ExpeditionEventResources[]).reduce(
+                        (acc, expo) => acc + expo.resources.metal + expo.resources.crystal + expo.resources.deuterium
+                        , 0),
+                },
+                {
+                    label: `LOCA: Total (MSU)`,
+                    getValue: expos => (expos as ExpeditionEventResources[]).reduce(
+                        (acc, expo) => acc + expo.resources.metal + expo.resources.crystal * 2 + expo.resources.deuterium * 3 //TODO: MSU from settings
+                        , 0),
+                },
+            ];
         }
     }
 </script>

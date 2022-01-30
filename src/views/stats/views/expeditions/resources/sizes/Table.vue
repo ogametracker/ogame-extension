@@ -2,6 +2,7 @@
     <ranged-expedition-table
         :filter="(expo) => filterExpo(expo)"
         :items="items"
+        :footerItems="footerItems"
         show-percentage
     />
 </template>
@@ -27,10 +28,17 @@
         private get items(): RangedExpeditionTableItem[] {
             return Object.values(ExpeditionEventSize).map(size => ({
                 label: `LOCA: ${size}`,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
+                getValue: expos => (expos as ExpeditionEventResources[])
                     .filter(expo => expo.size == size)
                     .length,
             }));
+        }
+
+        private get footerItems(): RangedExpeditionTableItem[] {
+            return [{
+                label: `LOCA: Total`,
+                getValue: expos => expos.length,
+            }];
         }
     }
 </script>

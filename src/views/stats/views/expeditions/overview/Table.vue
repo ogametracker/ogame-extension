@@ -1,91 +1,41 @@
 <template>
-    <grid-table
-        :columns="columns"
+    <ranged-expedition-table
+        :filter="(expo) => filterExpo(expo)"
         :items="items"
-        :footer-items="footerItems"
-        :cell-class-provider="(value) => getCellClass(value)"
-        style="text-align: right"
+        :footerItems="footerItems"
+        show-percentage
     />
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { _dev_DateRanges } from '@stats/_dev/DateRanges';
-    import { isInRange } from '@stats/utils/dateRanges';
-    import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
+    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
 
-    @Component({})
-    export default class Tables extends Vue {
-        private get columns(): GridTableColumn[] {
-            return [
-                {
-                    key: 'type',
-                    label: '',
-                },
-                ..._dev_DateRanges.map((range, i) => ({
-                    key: i.toString(),
-                    label: range.label ?? 'LOCA: Since <first day>',
-                })),
-                {
-                    key: 'percentage',
-                    label: '%',
-                },
-            ];
+    @Component({
+        components: {
+            RangedExpeditionTable,
+        },
+    })
+    export default class Table extends Vue {
+
+        private filterExpo(expo: ExpeditionEvent): boolean {
+            return true;
         }
 
-        private get exposByRange(): ExpeditionEvent[][] {
-            const expeditions = ExpeditionDataModule.expeditions;
-            const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
-            expeditions.forEach(expo => {
-                _dev_DateRanges.forEach((range, i) => {
-                    if (isInRange(expo.date, range)) {
-                        exposByRange[i].push(expo);
-                    }
-                });
-            });
-
-            return exposByRange;
-        }
-
-        private get items(): Record<string, any>[] {
-            const exposByRange = this.exposByRange;
-
-            //TODO: optimize
-            return Object.values(ExpeditionEventType).map(type => ({
-                type, //LOCA:
-
-                ..._dev_DateRanges.map((_, rangeIndex) => exposByRange[rangeIndex].filter(expo => expo.type == type).length),
-
-                percentage: 'TODO', //TODO: percentage
+        private get items(): RangedExpeditionTableItem[] {
+            return Object.keys(ExpeditionEventType).map(type => ({
+                label: `LOCA: ${type}`,
+                getValue: expos => expos.filter(expo => expo.type == type).length,
             }));
         }
 
-        private get footerItems(): Record<string, any>[] {
-            const exposByRange = this.exposByRange;
-
+        private get footerItems(): RangedExpeditionTableItem[] {
             return [{
-                type: 'LOCA: Gesamt',
-
-                ..._dev_DateRanges.map((_, rangeIndex) => exposByRange[rangeIndex].length),
-
-                percentage: '',
+                label: `LOCA: Total`,
+                getValue: expos => expos.length,
             }];
-        }
-
-        private getCellClass(value: any): string {
-            if (value === 0) {
-                return 'fade-value';
-            }
-
-            return '';
         }
     }
 </script>
-<style lang="scss" scoped>
-    .grid-table::v-deep .fade-value {
-        color: rgba(white, 0.1);
-    }
-</style>

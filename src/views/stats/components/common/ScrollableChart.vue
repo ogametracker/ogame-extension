@@ -671,9 +671,11 @@
         grid-template-columns: auto 1fr;
         align-items: center;
         cursor: pointer;
+        padding: 4px 8px;
 
         &:hover {
             background-color: rgba(var(--color), 0.1);
+            border-radius: 4px;
         }
 
         &-hidden {

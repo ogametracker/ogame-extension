@@ -4,6 +4,7 @@
         :datasets="datasets"
         stacked
         show-average
+        no-legend
     />
 </template>
 
@@ -28,7 +29,7 @@
                 label: `LOCA: dark-matter`, //LOCA
                 color: this.color,
                 filled: true,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventDarkMatter[])
+                getValue: expos => (expos as ExpeditionEventDarkMatter[])
                     .reduce((acc, expo) => acc + expo.darkMatter, 0),
             }];
         }

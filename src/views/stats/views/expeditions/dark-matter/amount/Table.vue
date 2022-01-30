@@ -25,7 +25,7 @@
         private get items(): RangedExpeditionTableItem[] {
             return [{
                 label: 'LOCA: dark matter',
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventDarkMatter[])
+                getValue: expos => (expos as ExpeditionEventDarkMatter[])
                     .reduce((acc, expo) => acc + expo.darkMatter, 0),
             }];
         }

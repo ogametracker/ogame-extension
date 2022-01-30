@@ -42,7 +42,7 @@
                     label: 'LOCA: Total Units (MSU)',
                     color: '#999999',
                     filled: false,
-                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
+                    getValue: expos => (expos as ExpeditionEventResources[])
                         .reduce(
                             (acc, expo) => acc + expo.resources.metal + expo.resources.crystal * 2 + expo.resources.deuterium * 3 //TODO: MSU from settings
                             , 0),

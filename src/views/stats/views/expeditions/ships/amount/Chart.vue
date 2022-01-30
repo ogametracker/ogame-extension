@@ -48,7 +48,7 @@
                 label: `LOCA: ${ship}`, //LOCA
                 color: this.colors[ship],
                 filled: true,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[])
+                getValue: expos => (expos as ExpeditionEventFleet[])
                     .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
             }));
         }

@@ -72,7 +72,7 @@
         }
 
         > main {
-            border: 1px solid rgba(var(--color), 0.5);
+            border: 1px solid rgba(var(--color), 0.25);
             padding: 12px;
             overflow: auto;
             border-bottom-left-radius: 4px;

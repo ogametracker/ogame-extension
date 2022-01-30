@@ -13,9 +13,6 @@ import viewsexpeditionsdarkmatteramountTable from '@stats/views/expeditions/dark
 import viewsexpeditionsdarkmattersizesIndex from '@stats/views/expeditions/dark-matter/sizes/Index.vue';
 import viewsexpeditionsdarkmattersizesChart from '@stats/views/expeditions/dark-matter/sizes/Chart.vue';
 import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-matter/sizes/Table.vue';
-import viewsexpeditionsdistributionIndex from '@stats/views/expeditions/distribution/Index.vue';
-import viewsexpeditionsdistributionChart from '@stats/views/expeditions/distribution/Chart.vue';
-import viewsexpeditionsdistributionTable from '@stats/views/expeditions/distribution/Table.vue';
 import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
 import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
@@ -157,26 +154,6 @@ const routes: RouteConfig[] = [
                                         component: viewsexpeditionsdarkmattersizesTable
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        redirect: {
-                            name: "expeditions/distribution/chart"
-                        },
-                        path: "distribution",
-                        name: "expeditions/distribution",
-                        component: viewsexpeditionsdistributionIndex,
-                        children: [
-                            {
-                                path: "chart",
-                                name: "expeditions/distribution/chart",
-                                component: viewsexpeditionsdistributionChart
-                            },
-                            {
-                                path: "table",
-                                name: "expeditions/distribution/table",
-                                component: viewsexpeditionsdistributionTable
                             }
                         ]
                     },

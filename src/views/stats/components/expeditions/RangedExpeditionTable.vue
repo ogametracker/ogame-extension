@@ -2,6 +2,7 @@
     <grid-table
         :columns="columns"
         :items="rows"
+        :footer-items="footerRows"
         :cell-class-provider="(value) => getCellClass(value)"
     />
 </template>
@@ -24,7 +25,7 @@
 
     interface RangeExpeditionTableRow {
         label: string;
-        percentage?: number;
+        percentage?: number | '';
 
         [index: number]: number;
     }
@@ -41,6 +42,9 @@
 
         @Prop({ required: true, type: Array as PropType<RangedExpeditionTableItem[]> })
         private items!: RangedExpeditionTableItem[];
+
+        @Prop({ required: false, type: Array as PropType<RangedExpeditionTableItem[]>, default: () => [] })
+        private footerItems!: RangedExpeditionTableItem[];
 
         @Prop({ required: false, type: Object as PropType<Intl.NumberFormatOptions>, default: undefined })
         private numberFormatOptions: Intl.NumberFormatOptions | undefined;
@@ -87,10 +91,12 @@
                 {
                     key: 'percentage',
                     label: '%',
-                    formatter: (value: number) => this.$number(value, {
-                        minimumFractionDigits: 3,
-                        maximumFractionDigits: 3,
-                    }),
+                    formatter: (value: number | '') => value != ''
+                        ? this.$number(value, {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3,
+                        })
+                        : value,
                 },
             ];
         }
@@ -100,10 +106,7 @@
 
             const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all') ?? _throw(`failed to find range 'all'`);
 
-            let totalValue = this.items.map(item => item.getValue(exposByRange[allRangeIndex])).reduce((acc, cur) => acc + cur, 0);
-            if (totalValue == 0) {
-                totalValue = 1;
-            }
+            const totalValue = Math.max(1, this.items.map(item => item.getValue(exposByRange[allRangeIndex])).reduce((acc, cur) => acc + cur, 0));
 
             const rows = this.items.map(item => {
 
@@ -118,13 +121,23 @@
 
                 if (this.showPercentage) {
                     const allRangeValue = row[allRangeIndex];
-                    row.percentage = allRangeValue / totalValue;
+                    row.percentage = 100 * allRangeValue / totalValue;
                 }
 
                 return row;
             });
 
             return rows;
+        }
+
+        private get footerRows(): RangeExpeditionTableRow[] {
+            const exposByRange = this.exposByRange;
+
+            return this.footerItems.map(item => ({
+                label: item.label,
+                ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
+                percentage: '',
+            }));
         }
 
         private getCellClass(value: any): string {

@@ -2,15 +2,16 @@
     <ranged-expedition-table
         :filter="(expo) => filterExpo(expo)"
         :items="items"
+        :footerItems="footerItems"
     />
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
 
     @Component({
         components: {
@@ -20,15 +21,26 @@
     export default class Table extends Vue {
 
         private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.resources;
+            return expo.type == ExpeditionEventType.fleet;
         }
 
         private get items(): RangedExpeditionTableItem[] {
-            return Object.values(ResourceType).map(resource => ({
-                label: `LOCA: ${resource}`,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[])
-                    .reduce((acc, expo) => acc + expo.resources[resource], 0),
+            return getNumericEnumValues(ExpeditionFindableShipType).map(ship => ({
+                label: `LOCA: ${ship}`,
+                getValue: expos => (expos as ExpeditionEventFleet[])
+                    .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
             }));
+        }
+
+        private get footerItems(): RangedExpeditionTableItem[] {
+            return [{
+                label: `LOCA: Total`,
+                getValue: expos => (expos as ExpeditionEventFleet[]).reduce(
+                    (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
+                        (acc, ship) => acc + (expo.fleet[ship] ?? 0)
+                        , 0)
+                    , 0),
+            }];
         }
     }
 </script>

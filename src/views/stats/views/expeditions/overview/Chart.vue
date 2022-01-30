@@ -40,7 +40,7 @@
                     label: `LOCA: ${type}`, //LOCA
                     color: this.colors[type],
                     filled: true,
-                    getValue: (expos: ExpeditionEvent[]) => expos.filter(e => e.type == type).length,
+                    getValue: expos => expos.filter(e => e.type == type).length,
                 }));
         }
 

@@ -33,7 +33,7 @@
                 label: `LOCA: ${size}`, //LOCA
                 color: this.colors[size],
                 filled: true,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventResources[]).filter(e => e.size == size).length,
+                getValue: expos => (expos as ExpeditionEventResources[]).filter(e => e.size == size).length,
             }));
         }
 
