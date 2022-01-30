@@ -1,33 +1,23 @@
 <template>
-    <scrollable-chart
+    <expedition-chart
+        :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
         stacked
-        :x-label-formatter="(x) => formatX(x)"
-    >
-        <template #footer="{ datasets }">
-            <div class="tooltip-footer">
-                <template v-if="datasets.some((d) => !d.visible)">
-                    <div class="value">{{ getTotal(datasets, false) }}</div>
-                    <div>LOCA: Expeditions</div>
-                </template>
-                <hr />
-                <div class="value">{{ getTotal(datasets, true) }}</div>
-                <div>LOCA: Expeditions (total)</div>
-            </div>
-        </template>
-    </scrollable-chart>
+        show-average
+    />
 </template>
 
 <script lang="ts">
+    import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { startOfDay } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays';
-    import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScollableChartFooterDataset, ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpeditionChart,
+        },
+    })
     export default class Charts extends Vue {
         //TODO: colors from settings
         private readonly colors: Record<ExpeditionEventType, string> = {
@@ -44,60 +34,18 @@
             [ExpeditionEventType.lostFleet]: '#ffffff',
         };
 
-        private getTotal(datasets: ScollableChartFooterDataset[], includeHidden: boolean): string {
-            const sum = datasets
-                .filter(d => d.visible || includeHidden)
-                .reduce((acc, d) => acc + d.value, 0);
-
-            return this.$number(sum);
+        private get datasets(): ExpeditionDataset[] {
+            return Object.values(ExpeditionEventType).map(type => ({
+                key: type,
+                label: `LOCA: ${type}`, //LOCA
+                color: this.colors[type],
+                filled: true,
+                getValue: (expos: ExpeditionEvent[]) => expos.filter(e => e.type == type).length / Math.max(1, expos.length),
+            }));
         }
 
-        private get datasets(): ScrollableChartDataset[] {
-            const perDay = ExpeditionDataModule.expeditionsPerDay;
-            const firstDay = ExpeditionDataModule.firstDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
-
-            const types = Object.values(ExpeditionEventType);
-            const perTypePerDay = types.map(
-                type => days.map(
-                    day => (perDay[day] ?? []).filter(expo => expo.type == type).length
-                )
-            );
-
-            return types
-                .map((type, i) => ({
-                    key: type,
-                    values: perTypePerDay[i],
-                    color: this.colors[type],
-                    label: 'LOCA: ' + type, //LOCA
-                    filled: false,
-                    stack: false,
-                    hidePoints: false,
-                }));
-        }
-
-        private formatX(x: number): string {
-            const firstDay = ExpeditionDataModule.firstDay;
-            const day = addDays(firstDay, x);
-
-            return this.$date(day);
+        private filterExpo(expo: ExpeditionEvent): boolean {
+            return true;
         }
     }
 </script>
-<style lang="scss" scoped>
-    .tooltip-footer {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 6px;
-
-        .value {
-            text-align: right;
-        }
-
-        hr {
-            grid-column: 1 / span 2;
-            width: 100%;
-        }
-    }
-</style>

@@ -1,55 +1,40 @@
 <template>
-    <scrollable-chart
+    <expedition-chart
+        :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
-        :x-label-formatter="(x) => formatX(x)"
-        no-legend
+        stacked
+        show-average
     />
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventDarkMatter, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { Localization } from '@/views/stats/i18n/Localization';
-    import { startOfDay } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays';
-    import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpeditionChart,
+        },
+    })
     export default class Charts extends Vue {
         //TODO: colors from settings
         private readonly color = '#075263';
 
-        private get datasets(): ScrollableChartDataset[] {
-            const perDay = ExpeditionDataModule.expeditionsPerDay;
-            const firstDay = ExpeditionDataModule.firstDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
-
-            const dmExposPerDay = days.map(
-                day => (perDay[day] ?? []).filter(
-                    expo => expo.type == ExpeditionEventType.darkMatter
-                ) as ExpeditionEventDarkMatter[]
-            );
-
+        private get datasets(): ExpeditionDataset[] {
             return [{
                 key: 'dark-matter',
-                values: dmExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0)),
+                label: `LOCA: dark-matter`, //LOCA
                 color: this.color,
-                label: 'LOCA: Dark Matter', //LOCA
                 filled: true,
-                    stack: true,
-                    hidePoints: false,
+                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventDarkMatter[])
+                    .reduce((acc, expo) => acc + expo.darkMatter, 0),
             }];
         }
 
-        private formatX(x: number): string {
-            const firstDay = ExpeditionDataModule.firstDay;
-            const day = addDays(firstDay, x);
-
-            return this.$date(day);
+        private filterExpo(expo: ExpeditionEvent): boolean {
+            return expo.type == ExpeditionEventType.darkMatter;
         }
     }
 </script>

@@ -12,11 +12,15 @@
             return [
                 {
                     label: 'LOCA: Count',
-                    to: { name: 'expeditions/resources/amount' },
+                    to: { name: 'expeditions/ships/amount' },
                 },
                 {
                     label: 'LOCA: Sizes',
-                    to: { name: 'expeditions/resources/sizes' },
+                    to: { name: 'expeditions/ships/sizes' },
+                },
+                {
+                    label: 'LOCA: Resources',
+                    to: { name: 'expeditions/ships/resources' },
                 },
             ];
         }

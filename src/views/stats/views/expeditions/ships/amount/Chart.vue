@@ -1,55 +1,60 @@
 <template>
-    <scrollable-chart
+    <expedition-chart
+        :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
-        :x-label-formatter="(x) => formatX(x)"
-        no-legend
+        stacked
+        show-average
     />
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventDarkMatter, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { Localization } from '@/views/stats/i18n/Localization';
-    import { startOfDay } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays';
-    import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
+    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpeditionChart,
+        },
+    })
     export default class Charts extends Vue {
         //TODO: colors from settings
-        private readonly color = '#075263';
+        private readonly colors: Record<ShipType, string> = {
+            [ShipType.lightFighter]: '#2472f3',
+            [ShipType.heavyFighter]: '#c72525',
+            [ShipType.cruiser]: '#fbbc04',
+            [ShipType.battleship]: '#9ecc00',
+            [ShipType.bomber]: '#00a95e',
+            [ShipType.battlecruiser]: '#075263',
+            [ShipType.destroyer]: '#de5200',
+            [ShipType.reaper]: '#16a8d4',
+            [ShipType.pathfinder]: '#ad135e',
+            [ShipType.smallCargo]: '#888888',
+            [ShipType.largeCargo]: '#ffffff',
+            [ShipType.espionageProbe]: '#4b17da',
+            [ShipType.deathStar]: '#250909',
+            [ShipType.recycler]: '#8aff8e',
+            [ShipType.colonyShip]: '#d7b58e',
+            [ShipType.crawler]: '#94b4ff',
+            [ShipType.solarSatellite]: '#dd94ff',
+        };
 
-        private get datasets(): ScrollableChartDataset[] {
-            const perDay = ExpeditionDataModule.expeditionsPerDay;
-            const firstDay = ExpeditionDataModule.firstDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
-
-            const dmExposPerDay = days.map(
-                day => (perDay[day] ?? []).filter(
-                    expo => expo.type == ExpeditionEventType.darkMatter
-                ) as ExpeditionEventDarkMatter[]
-            );
-
-            return [{
-                key: 'dark-matter',
-                values: dmExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0)),
-                color: this.color,
-                label: 'LOCA: Dark Matter', //LOCA
+        private get datasets(): ExpeditionDataset[] {
+            return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).map(ship => ({
+                key: `${ship}`,
+                label: `LOCA: ${ship}`, //LOCA
+                color: this.colors[ship],
                 filled: true,
-                    stack: true,
-                    hidePoints: false,
-            }];
+                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[])
+                    .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
+            }));
         }
 
-        private formatX(x: number): string {
-            const firstDay = ExpeditionDataModule.firstDay;
-            const day = addDays(firstDay, x);
-
-            return this.$date(day);
+        private filterExpo(expo: ExpeditionEvent): boolean {
+            return expo.type == ExpeditionEventType.fleet;
         }
     }
 </script>

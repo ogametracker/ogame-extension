@@ -11,12 +11,12 @@
         private get tabs(): Tab[] {
             return [
                 {
-                    to: { name: 'expeditions/resources/amount/chart' },
+                    to: { name: 'expeditions/ships/resources/chart' },
                     icon: 'mdi mdi-chart-areaspline',
                     label: 'LOCA: Chart',
                 },
                 {
-                    to: { name: 'expeditions/resources/amount/table' },
+                    to: { name: 'expeditions/ships/resources/table' },
                     icon: 'mdi mdi-table',
                     label: 'LOCA: Table',
                 },
