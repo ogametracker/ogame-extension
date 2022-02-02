@@ -44,6 +44,10 @@ const manifest = {
     permissions: [
         'storage',
         'unlimitedStorage',
+        'tabs',
+    ],
+    host_permissions: [
+        'https://*.ogame.gameforge.com/*',
     ],
     web_accessible_resources: [
         {
