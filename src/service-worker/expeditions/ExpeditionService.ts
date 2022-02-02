@@ -1,14 +1,15 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { AllExpeditionsMessage, ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
-import { _throw } from '../../shared/utils/_throw';
-import { MessageService, MessageServiceEventInfo } from '../MessageService';
+import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { MessageType } from '@/shared/messages/MessageType';
+import { AllExpeditionsMessage, ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '@/shared/messages/tracking/expeditions';
+import { _throw } from '@/shared/utils/_throw';
+import { MessageService } from '../MessageService';
 import { ExpeditionModule } from './ExpeditionModule';
+import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 
 export class ExpeditionService implements MessageService {
     private readonly expeditionModule = new ExpeditionModule();
 
-    public async onMessage(message: Message<MessageType, any>, info: MessageServiceEventInfo): Promise<void> {
+    public async onMessage(message: Message<MessageType, any>): Promise<void> {
         switch (message.type) {
             case MessageType.TrackExpedition: {
                 const tryResult = await this.expeditionModule.tryTrackExpedition(message as TrackExpeditionMessage);
@@ -24,29 +25,29 @@ export class ExpeditionService implements MessageService {
                     type: MessageType.Expedition,
                     data: expedition,
                 };
-                info.broadcast(expeditionMessage, info.sender);
+                broadcastMessage(expeditionMessage);
 
                 // broadcast "new expedition available"
-                if(!isAlreadyTracked) {
+                if (!isAlreadyTracked) {
                     const newExpeditionMessage: NewExpeditionMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewExpedition,
                         data: expedition,
                     };
-                    info.broadcast(newExpeditionMessage);
+                    broadcastMessage(newExpeditionMessage);
                 }
                 break;
             }
 
             case MessageType.RequestExpeditionEvents: {
-                await this.broadcastAllExpeditions(message.ogameMeta, info);
+                await this.broadcastAllExpeditions(message.ogameMeta);
                 break;
             }
         }
     }
 
 
-    private async broadcastAllExpeditions(meta: MessageOgameMeta, info: MessageServiceEventInfo) {
+    private async broadcastAllExpeditions(meta: MessageOgameMeta) {
         const expeditionEvents = await this.expeditionModule.getExpeditionEvents(meta);
 
         const allExpeditionMessage: AllExpeditionsMessage = {
@@ -54,6 +55,6 @@ export class ExpeditionService implements MessageService {
             type: MessageType.AllExpeditions,
             data: expeditionEvents,
         };
-        info.broadcast(allExpeditionMessage, info.sender);
+        broadcastMessage(allExpeditionMessage);
     }
 }

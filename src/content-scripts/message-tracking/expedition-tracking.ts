@@ -8,10 +8,8 @@ import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
 
-let port: chrome.runtime.Port;
-
 export function initExpeditionTracking() {
-    setupPort();
+    setupCommunication();
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
@@ -33,12 +31,8 @@ function setupExpeditionMessageObserver() {
     observer.observe(tabContent, { childList: true, subtree: true });
 }
 
-function setupPort() {
-    port = chrome.runtime.connect();
-    port.onDisconnect.addListener(() => setupPort());
-    port.onMessage.addListener(message => {
-        onMessage(message);
-    });
+function setupCommunication() {
+    chrome.runtime.onMessage.addListener(message => onMessage(message));
 }
 
 function onMessage(message: Message<MessageType, any>) {
@@ -96,9 +90,9 @@ function trackExpeditions(elem: Element) {
                     date,
                     text,
                     html,
-                }
+                },
             };
-            port.postMessage(workerMessage);
+            chrome.runtime.sendMessage(workerMessage);
 
             // mark message as "waiting for result"
             msg.classList.add(cssClasses.waitingToProcessMessage);

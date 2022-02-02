@@ -76,8 +76,6 @@
 
     @Component
     export default class App extends Vue {
-        private readonly port = chrome.runtime.connect();
-
         private get isIframeMode() {
             const params = new URLSearchParams(location.search);
             return params.get('iframe') != null;

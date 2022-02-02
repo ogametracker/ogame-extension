@@ -1,14 +1,19 @@
-// Chrome currently shuts down the background service worker about every 5 minutes even if there are active ports.
-// The service worker stays shut down even if new ports try to connect.
-// Thus this script opens a new port 60s to keep the service worker alive as long as an OGame page is open.
+// Chrome currently shuts down the background service worker about every 5 minutes.
+// Thus this script sends a message every 60 seconds to keep the service worker alive as long as an OGame page is open.
+
+import { StayAliveMessage } from '@/shared/messages/internal/StayAliveMessage';
+import { MessageType } from '@/shared/messages/MessageType';
+import { getOgameMeta } from '@/shared/ogame-web/getOgameMeta';
 
 
-let port: chrome.runtime.Port | null = null;
-renew();
-setTimeout(() => renew(), 60 * 1000);
+setTimeout(() => renew(), 0);
 
 function renew() {
-    chrome.runtime.sendMessage('stay alive');
-    port?.disconnect();
-    port = chrome.runtime.connect();
+    const message: StayAliveMessage = { 
+        type: MessageType.StayAlive,
+        ogameMeta: getOgameMeta(),
+     };
+    chrome.runtime.sendMessage(message);
+
+    setTimeout(() => renew(), 60 * 1000);
 }

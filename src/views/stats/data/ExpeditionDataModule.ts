@@ -1,45 +1,36 @@
 import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
 import { MessageType } from '@/shared/messages/MessageType';
 import { AllExpeditionsMessage, NewExpeditionMessage, RequestExpeditionEventsMessage } from '@/shared/messages/tracking/expeditions';
-import { SubscriptionMessage } from '@/shared/messages/subscriptions/types';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
+import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 
 @Component
 class ExpeditionDataModuleClass extends Vue {
-    private _port: chrome.runtime.Port = null!;
     public expeditions: ExpeditionEvent[] = [];
     public expeditionsPerDay: Record<number, ExpeditionEvent[]> = {};
     public firstDate: number | null = null;
 
-    private created() {
-        this.initPort();
+    private async created() {
+        this.initCommunication();
 
-        const subscribeMessage: SubscriptionMessage = {
-            type: MessageType.Subscribe,
-            ogameMeta: GlobalOgameMetaData,
-            data: MessageType.NewExpedition,
-        };
-        this._port.postMessage(subscribeMessage);
-
-        this.requestData();
+        await this.requestData();
     }
 
-    private initPort() {
-        this._port = chrome.runtime.connect();
-        this._port.onDisconnect.addListener(() => this.initPort());
-        this._port.onMessage.addListener(message => this.onMessage(message));
+    private initCommunication() {
+        console.log('connecting to background service');
+
+        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
     }
 
-    private requestData() {
+    private async requestData() {
         const message: RequestExpeditionEventsMessage = {
             type: MessageType.RequestExpeditionEvents,
             ogameMeta: GlobalOgameMetaData,
-            data: undefined,
         };
-        this._port.postMessage(message);
+        await broadcastMessage(message);
     }
 
     private onMessage(msg: Message) {

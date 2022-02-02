@@ -1,8 +1,6 @@
 export enum MessageType {
-    // common
-    Subscribe = 'subscribe',
-    Unsubscribe = 'unsubscribe',
-
+    StayAlive = 'internal/stay-alive',
+    
     // debug
     Debug_UnhandledError = 'debug/unhandled-error',
 
