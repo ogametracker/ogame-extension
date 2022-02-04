@@ -3,7 +3,11 @@
         :datasets="computedDatasets"
         :x-label-formatter="(index) => formatDate(index)"
         :no-legend="noLegend"
-    />
+    >
+        <template #tooltip-footer="{ datasets }">
+            <slot name="tooltip-footer" :datasets="datasets" />
+        </template>
+    </scrollable-chart>
 </template>
 
 <script lang="ts">

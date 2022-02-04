@@ -147,7 +147,7 @@
                     </div>
 
                     <div class="chart-tooltip-footer">
-                        <template v-if="footerProvider != null">
+                        <template v-if="tooltipFooterProvider != null">
                             <div
                                 v-for="(footer, i) in footerTexts"
                                 :key="i"
@@ -156,7 +156,7 @@
                         </template>
                         <slot
                             v-else
-                            name="footer"
+                            name="tooltip-footer"
                             :datasets="footerSlotDatasets"
                         />
                     </div>
@@ -283,7 +283,7 @@
         private tooltipValueFormatter!: (value: number) => string;
 
         @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
-        private footerProvider!: ((values: Record<string, number>) => string | string[]) | null;
+        private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
 
         private activeX: number | null = null;
@@ -298,7 +298,7 @@
 
         private get footerTexts(): string[] {
             const x = this.activeX;
-            if (this.footerProvider == null || x == null) {
+            if (this.tooltipFooterProvider == null || x == null) {
                 return [];
             }
 
@@ -307,7 +307,7 @@
                 return acc;
             }, {} as Record<string, number>);
 
-            const footer = this.footerProvider(values);
+            const footer = this.tooltipFooterProvider(values);
             if (footer instanceof Array) {
                 return footer;
             }

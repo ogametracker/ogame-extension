@@ -38,6 +38,7 @@
         padding: 12px;
         border-radius: 4px;
         text-decoration: none;
+        min-width: 140px;
         
         background: linear-gradient(
             to right,
