@@ -13,7 +13,7 @@ import i18nShips from '../../shared/i18n/ogame/ships';
 import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
 import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
-import { ItemHash } from "../../shared/models/v1/items/Item";
+import { ItemHash } from "../../shared/models/v1/ogame/items/ItemHash";
 import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";

@@ -10,3 +10,5 @@ Vue.component('page', Page);
 Vue.component('scrollable-chart', ScrollableChart);
 Vue.component('grid-table', GridTable);
 Vue.component('tab-view', TabView);
+
+import './ogame';

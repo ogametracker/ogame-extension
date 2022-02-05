@@ -1,4 +1,4 @@
-import { ItemHash } from "../items/Item";
+import { ItemHash } from "../ogame/items/ItemHash";
 import { ResourceType } from "../ogame/resources/ResourceType";
 import { ShipType } from "../ogame/ships/ShipType";
 import { ExpeditionEventSize } from "./ExpeditionEventSize";

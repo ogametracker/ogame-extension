@@ -1,11 +1,23 @@
 <template>
-    <div style="height: 100%">
-        TODO: scrollable item chart
+    <div class="item-chart" :style="{ '--ticks': ticks }">
+        <div
+            class="day-column"
+            v-for="(itemHashes, x) in itemsPerDays"
+            :key="x"
+        >
+            <div class="day-items">
+                <o-item v-for="(item, j) in itemHashes" :key="j" :item="item" />
+            </div>
+
+            <div class="day-label">
+                <span v-text="formatDate(x)" />
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEventItem } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
@@ -13,10 +25,12 @@
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
 
     @Component({})
     export default class Charts extends Vue {
+        private readonly ticks = 30;
+
         //TODO: colors from settings
         private readonly colors: Record<ResourceType, string> = {
             [ResourceType.metal]: '#de5200',
@@ -24,51 +38,86 @@
             [ResourceType.deuterium]: '#14bf73',
         };
 
-        private get datasets(): ScrollableChartDataset[] {
+        private get itemsPerDays(): ItemHash[][] {
             const perDay = ExpeditionDataModule.expeditionsPerDay;
             const firstDay = ExpeditionDataModule.firstDay;
             const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
             const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
 
-            const resourceExposPerDay = days.map(
+            const itemExposPerDay = days.map(
                 day => (perDay[day] ?? []).filter(
-                    expo => expo.type == ExpeditionEventType.resources
-                ) as ExpeditionEventResources[]
+                    expo => expo.type == ExpeditionEventType.item
+                ) as ExpeditionEventItem[]
             );
 
-            return Object.values(ResourceType)
-                .map(resource => ({
-                    key: resource,
-                    values: resourceExposPerDay.map(expos => expos.reduce((acc, expo) => acc + expo.resources[resource], 0)),
-                    color: this.colors[resource],
-                    label: 'LOCA: ' + resource, //LOCA
-                    filled: true,
-                    stack: false,
-                    hidePoints: false,
-                }));
+            const array = itemExposPerDay.map(expos => expos.map(expo => expo.itemHash));
+            while (array.length < this.ticks) {
+                array.push([]);
+            }
+
+            return array;
         }
 
-        private formatX(x: number): string {
+        private formatDate(x: number): string {
             const firstDay = ExpeditionDataModule.firstDay;
             const day = addDays(firstDay, x);
 
             return this.$date(day);
         }
 
-        private getFooter(values: Record<ResourceType, number>): string[] {
-            const {
-                [ResourceType.metal]: metal,
-                [ResourceType.crystal]: crystal,
-                [ResourceType.deuterium]: deuterium
-            } = values;
-
-            const sum = metal + crystal + deuterium;
-            const msu = metal + 2 * crystal + 3 * deuterium; //TODO: MSU from settings
-
-            return [
-                this.$number(sum) + ' LOCA: Total',//LOCA
-                this.$number(msu) + ' LOCA: Total (MSU)',//LOCA
-            ];
+        private mounted() {
+            this.$el.scrollLeft = this.$el.scrollWidth - this.$el.clientWidth;
         }
     }
 </script>
+<style lang="scss" scoped>
+    .item-chart {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-left: 16px; // to leave some space to the left for the x-label
+
+        .day-column {
+            height: 100%;
+            min-width: calc(100% / var(--ticks));
+            max-width: calc(100% / var(--ticks));
+            display: grid;
+            grid-template-rows: 1fr 100px;
+
+            .day-items {
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: center;
+                // vertical line in center
+                background-image: linear-gradient(
+                    to right,
+                    transparent 0%,
+                    transparent calc(50% - 1px),
+                    rgba(255, 255, 255, 0.1) calc(50% - 1px),
+                    rgba(255, 255, 255, 0.1) calc(50% + 1px),
+                    transparent calc(50% + 1px),
+                    transparent 100%
+                );
+            }
+
+            .day-label {
+                position: relative;
+                overflow: visible;
+
+                > span {
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    transform-origin: top right;
+                    transform: translateX(-100%) translateY(4px) rotate(-45deg);
+                    white-space: pre;
+                    color: #888;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+</style>
