@@ -3,6 +3,23 @@ import viewsDonate from '@stats/views/Donate.vue';
 import viewsExcelExport from '@stats/views/Excel-Export.vue';
 import viewsInfo from '@stats/views/Info.vue';
 import viewscombatsIndex from '@stats/views/combats/Index.vue';
+import viewscombatslostshipsIndex from '@stats/views/combats/lost-ships/Index.vue';
+import viewscombatslostshipsagainstplayersIndex from '@stats/views/combats/lost-ships/against-players/Index.vue';
+import viewscombatslostshipsagainstplayersChart from '@stats/views/combats/lost-ships/against-players/Chart.vue';
+import viewscombatslostshipsagainstplayersTable from '@stats/views/combats/lost-ships/against-players/Table.vue';
+import viewscombatslostshipsonexpeditionsIndex from '@stats/views/combats/lost-ships/on-expeditions/Index.vue';
+import viewscombatslostshipsonexpeditionsChart from '@stats/views/combats/lost-ships/on-expeditions/Chart.vue';
+import viewscombatslostshipsonexpeditionsTable from '@stats/views/combats/lost-ships/on-expeditions/Table.vue';
+import viewscombatsoverviewIndex from '@stats/views/combats/overview/Index.vue';
+import viewscombatsoverviewagainstplayersIndex from '@stats/views/combats/overview/against-players/Index.vue';
+import viewscombatsoverviewagainstplayersChart from '@stats/views/combats/overview/against-players/Chart.vue';
+import viewscombatsoverviewagainstplayersTable from '@stats/views/combats/overview/against-players/Table.vue';
+import viewscombatsoverviewonexpeditionsIndex from '@stats/views/combats/overview/on-expeditions/Index.vue';
+import viewscombatsoverviewonexpeditionsChart from '@stats/views/combats/overview/on-expeditions/Chart.vue';
+import viewscombatsoverviewonexpeditionsTable from '@stats/views/combats/overview/on-expeditions/Table.vue';
+import viewscombatsresourcesIndex from '@stats/views/combats/resources/Index.vue';
+import viewscombatsresourcesChart from '@stats/views/combats/resources/Chart.vue';
+import viewscombatsresourcesTable from '@stats/views/combats/resources/Table.vue';
 import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
@@ -73,12 +90,137 @@ const routes: RouteConfig[] = [
                 component: viewsInfo
             },
             {
+                redirect: {
+                    name: "combats/overview"
+                },
                 meta: {
                     color: "#c51b00"
                 },
                 path: "combats",
                 name: "combats",
-                component: viewscombatsIndex
+                component: viewscombatsIndex,
+                children: [
+                    {
+                        redirect: {
+                            name: "combats/lost-ships/against-players"
+                        },
+                        path: "lost-ships",
+                        name: "combats/lost-ships",
+                        component: viewscombatslostshipsIndex,
+                        children: [
+                            {
+                                redirect: {
+                                    name: "combats/lost-ships/against-players/chart"
+                                },
+                                path: "against-players",
+                                name: "combats/lost-ships/against-players",
+                                component: viewscombatslostshipsagainstplayersIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "combats/lost-ships/against-players/chart",
+                                        component: viewscombatslostshipsagainstplayersChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "combats/lost-ships/against-players/table",
+                                        component: viewscombatslostshipsagainstplayersTable
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "combats/lost-ships/on-expeditions/chart"
+                                },
+                                path: "on-expeditions",
+                                name: "combats/lost-ships/on-expeditions",
+                                component: viewscombatslostshipsonexpeditionsIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "combats/lost-ships/on-expeditions/chart",
+                                        component: viewscombatslostshipsonexpeditionsChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "combats/lost-ships/on-expeditions/table",
+                                        component: viewscombatslostshipsonexpeditionsTable
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "combats/overview/against-players"
+                        },
+                        path: "overview",
+                        name: "combats/overview",
+                        component: viewscombatsoverviewIndex,
+                        children: [
+                            {
+                                redirect: {
+                                    name: "combats/overview/against-players/chart"
+                                },
+                                path: "against-players",
+                                name: "combats/overview/against-players",
+                                component: viewscombatsoverviewagainstplayersIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "combats/overview/against-players/chart",
+                                        component: viewscombatsoverviewagainstplayersChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "combats/overview/against-players/table",
+                                        component: viewscombatsoverviewagainstplayersTable
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "combats/overview/on-expeditions/chart"
+                                },
+                                path: "on-expeditions",
+                                name: "combats/overview/on-expeditions",
+                                component: viewscombatsoverviewonexpeditionsIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "combats/overview/on-expeditions/chart",
+                                        component: viewscombatsoverviewonexpeditionsChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "combats/overview/on-expeditions/table",
+                                        component: viewscombatsoverviewonexpeditionsTable
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "combats/resources/chart"
+                        },
+                        path: "resources",
+                        name: "combats/resources",
+                        component: viewscombatsresourcesIndex,
+                        children: [
+                            {
+                                path: "chart",
+                                name: "combats/resources/chart",
+                                component: viewscombatsresourcesChart
+                            },
+                            {
+                                path: "table",
+                                name: "combats/resources/table",
+                                component: viewscombatsresourcesTable
+                            }
+                        ]
+                    }
+                ]
             },
             {
                 meta: {

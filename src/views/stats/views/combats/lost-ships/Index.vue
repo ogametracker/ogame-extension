@@ -7,20 +7,16 @@
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
 
     @Component({})
-    export default class Expeditions extends Vue {
+    export default class Index extends Vue {
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Overview',
-                    to: { name: 'combats/overview' },
+                    label: 'LOCA: Against Players',
+                    to: { name: 'combats/lost-ships/against-players' },
                 },
                 {
-                    label: 'LOCA: Resource Balance',
-                    to: { name: 'combats/resources' },
-                },
-                {
-                    label: 'LOCA: Lost Ships',
-                    to: { name: 'combats/lost-ships' },
+                    label: 'LOCA: On Expeditions',
+                    to: { name: 'combats/lost-ships/on-expeditions' },
                 },
             ];
         }
