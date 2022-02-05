@@ -3,6 +3,7 @@
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
+        show-average
     />
 </template>
 
@@ -19,7 +20,6 @@
         },
     })
     export default class Table extends Vue {
-
         private filterExpo(expo: ExpeditionEvent): boolean {
             return expo.type == ExpeditionEventType.resources;
         }

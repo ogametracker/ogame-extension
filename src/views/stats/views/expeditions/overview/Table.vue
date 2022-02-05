@@ -4,6 +4,8 @@
         :items="items"
         :footerItems="footerItems"
         show-percentage
+        show-average
+        :averageNumberFormatOptions="avgFormat"
     />
 </template>
 
@@ -19,6 +21,10 @@
         },
     })
     export default class Table extends Vue {
+        private avgFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        };
 
         private filterExpo(expo: ExpeditionEvent): boolean {
             return true;

@@ -3,6 +3,7 @@
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
+        show-average
     />
 </template>
 

@@ -17,6 +17,7 @@
     import { isInRange } from '@stats/utils/dateRanges';
     import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { _throw } from '@/shared/utils/_throw';
+    import startOfDay from 'date-fns/startOfDay/index';
 
     export interface RangedExpeditionTableItem {
         label: string;
@@ -26,6 +27,7 @@
     interface RangeExpeditionTableRow {
         label: string;
         percentage?: number | '';
+        average?: number;
 
         [index: number]: number;
     }
@@ -40,6 +42,9 @@
         @Prop({ required: false, type: Boolean })
         private showPercentage!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private showAverage!: boolean;
+
         @Prop({ required: true, type: Array as PropType<RangedExpeditionTableItem[]> })
         private items!: RangedExpeditionTableItem[];
 
@@ -48,6 +53,9 @@
 
         @Prop({ required: false, type: Object as PropType<Intl.NumberFormatOptions>, default: undefined })
         private numberFormatOptions: Intl.NumberFormatOptions | undefined;
+
+        @Prop({ required: false, type: Object as PropType<Intl.NumberFormatOptions>, default: undefined })
+        private averageNumberFormatOptions: Intl.NumberFormatOptions | undefined;
 
 
         private get exposByRange(): ExpeditionEvent[][] {
@@ -82,13 +90,16 @@
                 })),
             ];
 
-            if (!this.showPercentage) {
-                return columns;
+            if (this.showAverage) {
+                columns.push({
+                    key: 'average',
+                    label: '⌀ LOCA: per day',
+                    formatter: (value: number) => this.$number(value, this.averageNumberFormatOptions ?? this.numberFormatOptions)
+                });
             }
 
-            return [
-                ...columns,
-                {
+            if (this.showPercentage) {
+                columns.push({
                     key: 'percentage',
                     label: '%',
                     formatter: (value: number | '') => value != ''
@@ -96,31 +107,41 @@
                             minimumFractionDigits: 3,
                             maximumFractionDigits: 3,
                         })
-                        : value,
-                },
-            ];
+                        : value
+                });
+            }
+
+            return columns;
         }
 
         private get rows(): RangeExpeditionTableRow[] {
             const exposByRange = this.exposByRange;
 
-            const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all') ?? _throw(`failed to find range 'all'`);
+            const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
+                ?? _throw(`failed to find range 'all'`);
+            const expoDays = exposByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
+            const daysWithExpos = new Set(expoDays).size;
 
-            const totalValue = Math.max(1, this.items.map(item => item.getValue(exposByRange[allRangeIndex])).reduce((acc, cur) => acc + cur, 0));
+            const totalValue = Math.max(1, this.items
+                .map(item => item.getValue(exposByRange[allRangeIndex]))
+                .reduce((acc, cur) => acc + cur, 0)
+            );
 
             const rows = this.items.map(item => {
 
                 const row: RangeExpeditionTableRow = {
                     label: item.label,
 
-                    ..._dev_DateRanges.map((_, rangeIndex) => {
-                        const value = item.getValue(exposByRange[rangeIndex]);
-                        return value;
-                    }),
+                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
                 };
 
+                const allRangeValue = row[allRangeIndex];
+
+                if (this.showAverage) {
+                    row.average = allRangeValue / daysWithExpos;
+                }
+
                 if (this.showPercentage) {
-                    const allRangeValue = row[allRangeIndex];
                     row.percentage = 100 * allRangeValue / totalValue;
                 }
 
@@ -133,11 +154,25 @@
         private get footerRows(): RangeExpeditionTableRow[] {
             const exposByRange = this.exposByRange;
 
-            return this.footerItems.map(item => ({
-                label: item.label,
-                ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
-                percentage: '',
-            }));
+            const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
+                ?? _throw(`failed to find range 'all'`);
+            const expoDays = exposByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
+            const daysWithExpos = new Set(expoDays).size;
+
+            return this.footerItems.map(item => {
+                const row: RangeExpeditionTableRow = {
+                    label: item.label,
+                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
+                    percentage: '',
+                };
+
+                if (this.showAverage) {
+                    const allRangeValue = row[allRangeIndex];
+                    row.average = allRangeValue / daysWithExpos;
+                }
+
+                return row;
+            });
         }
 
         private getCellClass(value: any): string {

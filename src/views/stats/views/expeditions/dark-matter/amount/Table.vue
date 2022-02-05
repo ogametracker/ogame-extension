@@ -2,6 +2,8 @@
     <ranged-expedition-table
         :filter="(expo) => filterExpo(expo)"
         :items="items"
+        show-average
+        :averageNumberFormatOptions="avgFormat"
     />
 </template>
 
@@ -17,6 +19,11 @@
         },
     })
     export default class Table extends Vue {
+
+        private avgFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        };
 
         private filterExpo(expo: ExpeditionEvent): boolean {
             return expo.type == ExpeditionEventType.darkMatter;
