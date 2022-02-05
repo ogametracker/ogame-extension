@@ -13,7 +13,7 @@
                             )
                         "
                     />
-                    <div>LOCA: Units</div>
+                    <div>LOCA: Resources</div>
 
                     <div
                         class="number"
@@ -25,7 +25,7 @@
                             )
                         "
                     />
-                    <div>LOCA: Units (MSU)</div>
+                    <div>LOCA: Resources (MSU)</div>
                 </div>
                 <hr />
             </template>
@@ -35,13 +35,13 @@
                     class="number"
                     v-text="$number(getResourcesAmount(datasets))"
                 />
-                <div>LOCA: Units (Total)</div>
+                <div>LOCA: Resources (Total)</div>
 
                 <div
                     class="number"
                     v-text="$number(getResourcesAmountInMsu(datasets))"
                 />
-                <div>LOCA: Units (Total, MSU)</div>
+                <div>LOCA: Resources (Total, MSU)</div>
             </div>
         </template>
     </expedition-chart>

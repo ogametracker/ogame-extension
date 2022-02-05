@@ -4,7 +4,36 @@
         :datasets="datasets"
         stacked
         show-average
-    />
+    >
+        <template #tooltip-footer="{ datasets }">
+            <template
+                v-if="getVisibleDatasets(datasets).length < datasets.length"
+            >
+                <div class="footer-item">
+                    <div
+                        class="number"
+                        v-text="$number(getSum(getVisibleDatasets(datasets)))"
+                    />
+                    <div>LOCA: Units Found</div>
+
+                    <div
+                        class="number"
+                        v-text="$number(getSumMsu(getVisibleDatasets(datasets)))"
+                    />
+                    <div>LOCA: Units Found (MSU)</div>
+                </div>
+                <hr />
+            </template>
+
+            <div class="footer-item">
+                <div class="number" v-text="$number(getSum(datasets))" />
+                <div>LOCA: Units Found (Total)</div>
+
+                <div class="number" v-text="$number(getSumMsu(datasets))" />
+                <div>LOCA: Units Found (MSU, Total)</div>
+            </div>
+        </template>
+    </expedition-chart>
 </template>
 
 <script lang="ts">
@@ -15,6 +44,7 @@
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { getResources } from './getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
 
     @Component({
         components: {
@@ -62,6 +92,41 @@
             return expo.type == ExpeditionEventType.fleet;
         }
 
-        
+        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+            return datasets.filter(d => d.visible);
+        }
+
+        private getSum(datasets: ScollableChartFooterDataset[]): number {
+            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
+            return datasets
+                .filter(d => resources.includes(d.key.toString()))
+                .reduce((acc, cur) => acc + cur.value, 0);
+        }
+
+        private getSumMsu(datasets: ScollableChartFooterDataset[]): number {
+            //TODO: MSU from setings
+            const msu: Record<ResourceType, number> = {
+                [ResourceType.metal]: 1,
+                [ResourceType.crystal]: 2,
+                [ResourceType.deuterium]: 3,
+            };
+            return datasets.reduce((acc, cur) => {
+                if (!(cur.key in msu)) {
+                    return acc;
+                }
+                return acc + cur.value * msu[cur.key as ResourceType];
+            }, 0);
+        }
     }
 </script>
+<style lang="scss" scoped>
+    .footer-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 4px;
+
+        .number {
+            text-align: right;
+        }
+    }
+</style>

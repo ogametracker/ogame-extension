@@ -5,14 +5,14 @@
                 v-if="getVisibleDatasets(datasets).length < datasets.length"
             >
                 <div class="footer-item">
-                    <div class="number" v-text="$number(getVisibleDatasets(datasets).length)" />
+                    <div class="number" v-text="$number(getSum(getVisibleDatasets(datasets)))" />
                     <div>LOCA: Expeditions</div>
                 </div>
                 <hr />
             </template>
 
             <div class="footer-item">
-                <div class="number" v-text="$number(datasets.length)" />
+                <div class="number" v-text="$number(getSum(datasets))" />
                 <div>LOCA: Expeditions (Total)</div>
             </div>
         </template>
@@ -63,6 +63,10 @@
 
         private filterExpo(expo: ExpeditionEvent): boolean {
             return true;
+        }
+
+        private getSum(datasets: ScollableChartFooterDataset[]): number {
+            return datasets.reduce((acc, cur) => acc + cur.value, 0);
         }
     }
 </script>
