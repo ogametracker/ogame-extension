@@ -1,4 +1,6 @@
 #ogame-tracker-menu-item {
+    position: relative;
+
     .menubutton {
         /* START: taken from ogame styles */
         background: url("//gf3.geo.gfsrv.net/cdneb/f5f81e8302aaad56c958c033677fb8.png") -374px -258px no-repeat;
@@ -31,6 +33,22 @@
         &.warning {
             background: red;
         }
+    }
+
+    .warning-lang-not-supported {
+        background-image: url(#{$base-url}/img/menu-icon-warning.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 22px;
+        height: 100%;
+        transform: translateX(-100%);
+
+        cursor: help;
     }
 }
 

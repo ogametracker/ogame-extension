@@ -1,28 +1,37 @@
-import { _log } from "../../shared/utils/_log";
+import { _log, _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
+import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
+import { getOgameMeta } from '../../shared/ogame-web/getOgameMeta';
 
 import './styles.scss';
-import { SingleEntryPlugin } from "webpack";
 
 const observer = new MutationObserver(() => {
     const menu = document.querySelector('#menuTable');
 
     if (menu != null) {
+        const ogameMeta = getOgameMeta();
+        const supportsLanguage = isSupportedLanguage(ogameMeta.language);
+
         const parent = menu.parentElement ?? _throw('no parent element found');
 
         const ogameTrackerMenu = document.createElement('ul');
         ogameTrackerMenu.classList.add('leftmenu');
         ogameTrackerMenu.id = 'ogame-tracker-menu';
 
-        ogameTrackerMenu.innerHTML = `
+        let html = `
             <li id="ogame-tracker-menu-item">
                 <span class="menu_icon tooltipRight" title="LOCA: Open in new tab">
                     <span class="menuImage icon"></span>
                 </span>
                 <div class="menubutton"></div>
-            </li>
+                ${supportsLanguage
+                ? ''
+                : `<div class="warning-lang-not-supported tooltip" title="The OGame language '${ogameMeta.language}' is not supported.<br/>Expeditions and debris fields will not be tracked."></div>`
+                }
+                </li>
         `;
+        ogameTrackerMenu.innerHTML = html;
         const link = ogameTrackerMenu.querySelector('.menubutton')! as HTMLAnchorElement;
         link.addEventListener('click', e => showOgameTrackerDialog());
 
@@ -31,7 +40,9 @@ const observer = new MutationObserver(() => {
 
         parent.appendChild(ogameTrackerMenu);
 
-        _log('added menu item');
+        //TODO: add element to menu item if language not completely supported
+
+        _logDebug('added menu item');
         observer.disconnect();
     }
 });
@@ -56,7 +67,7 @@ function getStatsPageUrl(iframe: boolean) {
         server,
     };
 
-    if(iframe) {
+    if (iframe) {
         queryData.iframe = 'yes';
     }
 
@@ -69,7 +80,6 @@ function showOgameTrackerDialog() {
     if (document.querySelector('#ogame-tracker-dialog') != null) {
         return;
     }
-
 
     const container = document.createElement('div');
     container.id = 'ogame-tracker-dialog';
