@@ -4,6 +4,7 @@ import { MessageType } from "../../shared/messages/MessageType";
 import { ExpeditionMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses } from "./constants";
@@ -27,8 +28,11 @@ function setupExpeditionMessageObserver() {
     const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of expedition messages tab content');
     const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of expedition messages');
 
-    const observer = new MutationObserver(() => trackExpeditions(tabContent));
-    observer.observe(tabContent, { childList: true, subtree: true });
+    const meta = getOgameMeta();
+    if (isSupportedLanguage(meta.language)) {
+        const observer = new MutationObserver(() => trackExpeditions(tabContent));
+        observer.observe(tabContent, { childList: true, subtree: true });
+    }
 }
 
 function setupCommunication() {
