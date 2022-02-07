@@ -1,15 +1,16 @@
 import { parse } from "date-fns";
+import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
-import { ExpeditionMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
-import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
+import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { tabIds, cssClasses } from "./constants";
+import { cssClasses, tabIds } from "./constants";
+import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 
-export function initExpeditionTracking() {
+export function initDebrisFieldReportTracking() {
     setupCommunication();
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
@@ -17,20 +18,20 @@ export function initExpeditionTracking() {
         const fleetsTab = document.querySelector('#fleetsTab');
         if (fleetsTab != null) {
             initObserver.disconnect();
-            setupExpeditionMessageObserver();
+            setupObserver();
         }
     });
     initObserver.observe(contentElem, { subtree: true, childList: true });
 }
 
-function setupExpeditionMessageObserver() {
-    const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.expedition}"]`) ?? _throw('Cannot find label of expedition messages');
-    const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of expedition messages tab content');
-    const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of expedition messages');
+function setupObserver() {
+    const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.misc}"]`) ?? _throw('Cannot find label of misc messages');
+    const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of misc messages tab content');
+    const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of misc messages');
 
     const meta = getOgameMeta();
     if (isSupportedLanguage(meta.language)) {
-        const observer = new MutationObserver(() => trackExpeditions(tabContent));
+        const observer = new MutationObserver(() => trackDebrisFieldReports(tabContent));
         observer.observe(tabContent, { childList: true, subtree: true });
     }
 }
@@ -41,17 +42,24 @@ function setupCommunication() {
 
 function onMessage(message: Message<MessageType, any>) {
     switch (message.type) {
-        case MessageType.Expedition: {
-            const msg = message as ExpeditionMessage;
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
+        case MessageType.DebrisFieldReport:
+        case MessageType.NewDebrisFieldReport: {
+            const msg = message as DebrisFieldReportMessage;
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
             Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
             li.classList.add(cssClasses.messageProcessed);
+            break;
+        }
+
+        case MessageType.WillNotBeTracked: {
+            const msgId = (message as WillNotBeTrackedMessage).data;
+            //TODO: mark message as untracked
             break;
         }
     }
 }
 
-function trackExpeditions(elem: Element) {
+function trackDebrisFieldReports(elem: Element) {
     const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
         .filter(elem => !Object.values(cssClasses).some(cssClass => elem.classList.contains(cssClass)));
 
@@ -74,8 +82,8 @@ function trackExpeditions(elem: Element) {
             const html = messageTextElem.innerHTML;
 
             // send message to service worker
-            const workerMessage: TrackExpeditionMessage = {
-                type: MessageType.TrackExpedition,
+            const workerMessage: TrackDebrisFieldReportMessage = {
+                type: MessageType.TrackDebrisFieldReport,
                 ogameMeta: getOgameMeta(),
                 data: {
                     id,

@@ -2,7 +2,6 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../../shared/messages/Message";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../../shared/models/v1/expeditions/ExpeditionEvents";
-import { RawExpeditionData } from "../../shared/models/v1/expeditions/RawExpeditionData";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
@@ -15,6 +14,7 @@ import { ExpeditionEventType } from "../../shared/models/v1/expeditions/Expediti
 import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
 import { ItemHash } from "../../shared/models/v1/ogame/items/ItemHash";
 import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
+import { RawMessageData } from "../../shared/messages/tracking/common";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
@@ -33,7 +33,7 @@ export class ExpeditionModule {
 
         const manager = this.getManager(message.ogameMeta);
         const { language } = message.ogameMeta;
-        const expeditionEvents = await manager.getExpeditions();
+        const expeditionEvents = await manager.getItems();
 
         // check if expedition already tracked => if true, return tracked data
         const knownExpedition = expeditionEvents[expeditionEventData.id];
@@ -72,7 +72,7 @@ export class ExpeditionModule {
 
     public async getExpeditionEvents(meta: MessageOgameMeta): Promise<ExpeditionEvent[]> {
         const manager = this.getManager(meta);
-        const expeditions = await manager.getExpeditions();
+        const expeditions = await manager.getItems();
         return Object.values(expeditions);
     }
 
@@ -83,7 +83,7 @@ export class ExpeditionModule {
         return manager;
     }
 
-    private parseExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEvent {
+    private parseExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEvent {
         const result = this.tryParseDarkMatterExpedition(language, data)
             ?? this.tryParseResourceExpedition(language, data)
             ?? this.tryParseFleetExpedition(language, data)
@@ -103,9 +103,9 @@ export class ExpeditionModule {
         return result;
     }
 
-    private tryParseNoEventExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventNothing | null {
+    private tryParseNoEventExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventNothing | null {
         const i18nMessages = i18nExpeditions[language][ExpeditionEventType.nothing];
-        if(!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
 
@@ -116,9 +116,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseLostFleetExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventLostFleet | null {
+    private tryParseLostFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventLostFleet | null {
         const i18nMessages = i18nExpeditions[language].lostFleet;
-        if(!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
 
@@ -129,12 +129,12 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParsePiratesExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventPirates | null {
+    private tryParsePiratesExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventPirates | null {
         const i18nMessages = i18nExpeditions[language].pirates;
         const size = Object.values(ExpeditionEventSize).find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
-        if(size == null) {
+        if (size == null) {
             return null;
         }
 
@@ -146,12 +146,12 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseAliensExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventAliens | null {
+    private tryParseAliensExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventAliens | null {
         const i18nMessages = i18nExpeditions[language].aliens;
         const size = Object.values(ExpeditionEventSize).find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
-        if(size == null) {
+        if (size == null) {
             return null;
         }
 
@@ -163,9 +163,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseTraderExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventTrader | null {
+    private tryParseTraderExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventTrader | null {
         const i18nMessages = i18nExpeditions[language].trader;
-        if(!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
 
@@ -176,9 +176,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseDelayedExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventDelay | null {
+    private tryParseDelayedExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDelay | null {
         const i18nMessages = i18nExpeditions[language].delay;
-        if(!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
 
@@ -189,9 +189,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseEarlyExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventEarly | null {
+    private tryParseEarlyExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventEarly | null {
         const i18nMessages = i18nExpeditions[language].early;
-        if(!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => data.text.includes(message))) {
             return null;
         }
 
@@ -202,7 +202,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseItemExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventItem | null {
+    private tryParseItemExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventItem | null {
         const i18nMessages = i18nExpeditions[language].item;
         const regex = i18nMessages.regex;
         const match = data.text.match(regex);
@@ -223,12 +223,12 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseFleetExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventFleet | null {
+    private tryParseFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventFleet | null {
         const i18nMessages = i18nExpeditions[language].fleet;
         const size = Object.values(ExpeditionEventSize).find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
-        if(size == null) {
+        if (size == null) {
             return null;
         }
 
@@ -240,15 +240,15 @@ export class ExpeditionModule {
         const foundShips: Record<ExpeditionFindableShipType, number | undefined> = {};
 
         // there can be no match if no ships were found because the expedition fleet was too small
-        if(match != null) {
+        if (match != null) {
             const textWithFoundFleet = match.groups!.ships;
 
             ships.forEach(ship => {
                 const shipName = i18nShips[language][ship];
                 const shipRegex = new RegExp(`${shipName}: (\\d+)`);
                 const shipMatch = textWithFoundFleet.match(shipRegex);
-                
-                if(shipMatch != null) {
+
+                if (shipMatch != null) {
                     foundShips[ship] = parseInt(shipMatch[1]);
                 }
             });
@@ -263,7 +263,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseDarkMatterExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventDarkMatter | null {
+    private tryParseDarkMatterExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDarkMatter | null {
         const i18nMessages = i18nExpeditions[language].darkMatter;
         const regex = i18nMessages.regex(i18nPremium[language].darkMatter);
         const match = data.text.match(regex);
@@ -290,7 +290,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseResourceExpedition(language: LanguageKey, data: RawExpeditionData): ExpeditionEventResources | null {
+    private tryParseResourceExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventResources | null {
         const i18nMessages = i18nExpeditions[language].resources;
         const resourceNames = Object.values(ResourceType);
         const regex = i18nMessages.regex(resourceNames.map(resource => i18nResources[language][resource]));

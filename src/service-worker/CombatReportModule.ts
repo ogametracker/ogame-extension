@@ -1,1 +1,0 @@
-//TODO: combat report module class

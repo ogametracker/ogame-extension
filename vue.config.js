@@ -34,6 +34,7 @@ const config = {
         },
         resolve: {
             alias: {
+                '@': path.resolve(__dirname, './src'),
                 '@stats': path.resolve(__dirname, './src/views/stats/'),
                 '@notifications': path.resolve(__dirname, './src/views/notifications/'),
             },

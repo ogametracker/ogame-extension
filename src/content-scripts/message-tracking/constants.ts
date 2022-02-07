@@ -1,5 +1,7 @@
 const tabIds = {
+    combats: 21,
     expedition: 22,
+    misc: 24,
 };
 
 const cssClasses = {
