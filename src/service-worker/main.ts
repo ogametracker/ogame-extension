@@ -3,12 +3,14 @@ import { MessageType } from "../shared/messages/MessageType";
 import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
 import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
+import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 
 try {
     const services: MessageService[] = [
         new ExpeditionService(),
+        new DebrisFieldReportService(),
     ];
 
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));

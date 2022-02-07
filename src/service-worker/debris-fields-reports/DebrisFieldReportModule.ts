@@ -1,21 +1,10 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../../shared/messages/Message";
-import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../../shared/models/v1/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import i18nExpeditions from '../../shared/i18n/ogame/expeditions';
-import i18nPremium from '../../shared/i18n/ogame/premium';
-import i18nResources from '../../shared/i18n/ogame/resources';
-import i18nShips from '../../shared/i18n/ogame/ships';
-import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
-import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
-import { ItemHash } from "../../shared/models/v1/ogame/items/ItemHash";
-import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
-import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import i18nDebrisFieldReports from '../../shared/i18n/ogame/messages/debris-field-reports';
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { DebrisFieldReportManager } from "./DebrisFieldReportManager";
 import { TrackDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
@@ -24,8 +13,8 @@ import { RawMessageData } from "../../shared/messages/tracking/common";
 
 type DebrisFieldReportResult = {
     ignored: true;
-    report: undefined;
-    isAlreadyTracked: undefined;
+    report?: undefined;
+    isAlreadyTracked?: undefined;
 } | {
     ignored: false;
     report: DebrisFieldReport;
@@ -87,9 +76,28 @@ export class DebrisFieldReportModule {
         };
     }
 
-    private tryParseDebrisFieldReport(language: LanguageKey, messageData: RawMessageData): ({ success: false } | { success: true, report: DebrisFieldReport }) {
-        //TODO: implement df report tracking
-        throw new Error("Method not implemented.");
+    private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): ({ success: false } | { success: true, report: DebrisFieldReport }) {
+        const regex = i18nDebrisFieldReports[language].regex;
+        const match = regex.exec(data.text);
+        if (match == null) {
+            return { success: false };
+        }
+
+        const metal = parseInt(match.groups?.metal ?? _throw('metal not found'), 10);
+        const crystal = parseInt(match.groups?.crystal ?? _throw('crystal not found'), 10);
+        if(isNaN(metal) || isNaN(crystal)) {
+            throw new Error(`failed to parse metal ('${match.groups?.metal ?? ''}') or crystal ('${match.groups?.crystal ?? ''}')`);
+        }
+
+        return {
+            success: true,
+            report: {
+                id: data.id,
+                date: data.date,
+                metal,
+                crystal,
+            },
+        };
     }
 
     public async getDebridFieldReports(meta: MessageOgameMeta): Promise<DebrisFieldReport[]> {

@@ -54,6 +54,9 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.WillNotBeTracked: {
             const msgId = (message as WillNotBeTrackedMessage).data;
             //TODO: mark message as untracked
+            const li = document.querySelector(`li.msg[data-msg-id="${msgId}"]`) ?? _throw(`failed to find debris field report with id '${msgId}'`);
+            Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
+            li.classList.add(cssClasses.messageIgnored);
             break;
         }
     }

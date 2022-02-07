@@ -5,7 +5,7 @@ import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, Expe
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import i18nExpeditions from '../../shared/i18n/ogame/expeditions';
+import i18nExpeditions from '../../shared/i18n/ogame/messages/expeditions';
 import i18nPremium from '../../shared/i18n/ogame/premium';
 import i18nResources from '../../shared/i18n/ogame/resources';
 import i18nShips from '../../shared/i18n/ogame/ships';

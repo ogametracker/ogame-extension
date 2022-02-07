@@ -12,7 +12,7 @@ export class DebrisFieldReportService implements MessageService {
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
         switch (message.type) {
-            case MessageType.TrackExpedition: {
+            case MessageType.TrackDebrisFieldReport: {
                 const msg = message as TrackDebrisFieldReportMessage;
                 const tryResult = await this.dfModule.tryTrackDebrisFieldReport(msg);
                 if (!tryResult.success) {

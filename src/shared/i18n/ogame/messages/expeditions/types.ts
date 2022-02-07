@@ -1,5 +1,5 @@
-import { ExpeditionEventSize } from "../../../models/v1/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../../../models/v1/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "../../../../models/v1/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "../../../../models/v1/expeditions/ExpeditionEventType";
 
 export type RegexBuilder<T> = (value: T) => RegExp;
 
