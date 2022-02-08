@@ -41,7 +41,8 @@ function setupCommunication() {
 
 function onMessage(message: Message<MessageType, any>) {
     switch (message.type) {
-        case MessageType.Expedition: {
+        case MessageType.Expedition:
+        case MessageType.NewExpedition: {
             const msg = message as ExpeditionMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
             Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
