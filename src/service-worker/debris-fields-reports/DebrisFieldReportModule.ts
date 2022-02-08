@@ -83,8 +83,11 @@ export class DebrisFieldReportModule {
             return { success: false };
         }
 
-        const metal = parseInt(match.groups?.metal ?? _throw('metal not found'), 10);
-        const crystal = parseInt(match.groups?.crystal ?? _throw('crystal not found'), 10);
+        const metalText = match.groups?.metal.replace(/\./g, '') ?? _throw('metal not found');
+        const crystalText = match.groups?.crystal.replace(/\./g, '') ?? _throw('crystal not found');
+
+        const metal = parseInt(metalText, 10);
+        const crystal = parseInt(crystalText, 10);
         if(isNaN(metal) || isNaN(crystal)) {
             throw new Error(`failed to parse metal ('${match.groups?.metal ?? ''}') or crystal ('${match.groups?.crystal ?? ''}')`);
         }

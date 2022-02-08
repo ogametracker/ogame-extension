@@ -6,7 +6,7 @@ import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { cssClasses, tabIds } from "./constants";
+import { addOrSetCustomMessageContent, cssClasses, tabIds } from "./utils";
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 
@@ -46,8 +46,10 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewDebrisFieldReport: {
             const msg = message as DebrisFieldReportMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
-            Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
-            li.classList.add(cssClasses.messageProcessed);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.processed);
+            addOrSetCustomMessageContent(li, JSON.stringify(msg.data)); //TODO: content
             break;
         }
 
@@ -55,8 +57,10 @@ function onMessage(message: Message<MessageType, any>) {
             const msgId = (message as WillNotBeTrackedMessage).data;
             //TODO: mark message as untracked
             const li = document.querySelector(`li.msg[data-msg-id="${msgId}"]`) ?? _throw(`failed to find debris field report with id '${msgId}'`);
-            Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
-            li.classList.add(cssClasses.messageIgnored);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.remove(cssClasses.messages.hideContent);
+            addOrSetCustomMessageContent(li, '');
             break;
         }
     }
@@ -64,7 +68,7 @@ function onMessage(message: Message<MessageType, any>) {
 
 function trackDebrisFieldReports(elem: Element) {
     const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-        .filter(elem => !Object.values(cssClasses).some(cssClass => elem.classList.contains(cssClass)));
+    .filter(elem => !elem.classList.contains(cssClasses.messages.base));
 
     messages.forEach(msg => {
         try {
@@ -98,10 +102,14 @@ function trackDebrisFieldReports(elem: Element) {
             chrome.runtime.sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(cssClasses.waitingToProcessMessage);
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed, cssClasses.messages.hideContent);
+            addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`); //TODO: content
         } catch (error) {
             console.error(error);
-            msg.classList.add(cssClasses.failedToProcessMessage);
+
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
+            msg.classList.remove(cssClasses.messages.hideContent);
+            addOrSetCustomMessageContent(msg, ''); //TODO: content
         }
     });
 }

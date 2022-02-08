@@ -7,30 +7,31 @@ import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldRep
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 
+const services: MessageService[] = [
+    new ExpeditionService(),
+    new DebrisFieldReportService(),
+];
+
 try {
-    const services: MessageService[] = [
-        new ExpeditionService(),
-        new DebrisFieldReportService(),
-    ];
+    chrome.runtime.onInstalled.addListener(() => performMigrations());
 
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));
-
-    performMigrations();
-
-    function performMigrations() {
-        _logWarning('TODO: perform migrations');
-        //TODO: perform migrations
-    }
-
-    async function onMessage(message: Message<MessageType, any>) {
-        _logDebug('got message', performance.now(), message);
-
-        const key = getStorageKeyPrefix(message.ogameMeta);
-
-        for (const service of services) {
-            await service.onMessage(message);
-        }
-    }
 } catch (error) {
     _logError(error);
+}
+
+function performMigrations() {
+    //TODO: use
+    _logWarning('TODO: perform migrations');
+    //TODO: perform migrations
+}
+
+async function onMessage(message: Message<MessageType, any>) {
+    _logDebug('got message', performance.now(), message);
+
+    const key = getStorageKeyPrefix(message.ogameMeta);
+
+    for (const service of services) {
+        await service.onMessage(message);
+    }
 }

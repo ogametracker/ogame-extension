@@ -7,7 +7,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { tabIds, cssClasses } from "./constants";
+import { tabIds, cssClasses, addOrSetCustomMessageContent } from "./utils";
 
 export function initExpeditionTracking() {
     setupCommunication();
@@ -45,8 +45,10 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewExpedition: {
             const msg = message as ExpeditionMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
-            Object.values(cssClasses).forEach(cssClass => li.classList.remove(cssClass));
-            li.classList.add(cssClasses.messageProcessed);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.processed);
+            addOrSetCustomMessageContent(li, JSON.stringify(msg.data)); //TODO: content
             break;
         }
     }
@@ -54,7 +56,7 @@ function onMessage(message: Message<MessageType, any>) {
 
 function trackExpeditions(elem: Element) {
     const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-        .filter(elem => !Object.values(cssClasses).some(cssClass => elem.classList.contains(cssClass)));
+        .filter(elem => !elem.classList.contains(cssClasses.messages.base));
 
     messages.forEach(msg => {
         try {
@@ -88,10 +90,14 @@ function trackExpeditions(elem: Element) {
             chrome.runtime.sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(cssClasses.waitingToProcessMessage);
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed, cssClasses.messages.hideContent);
+            addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`); //TODO: content
         } catch (error) {
             console.error(error);
-            msg.classList.add(cssClasses.failedToProcessMessage);
+
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
+            msg.classList.remove(cssClasses.messages.hideContent);
+            addOrSetCustomMessageContent(msg, ''); //TODO: content
         }
     });
 }

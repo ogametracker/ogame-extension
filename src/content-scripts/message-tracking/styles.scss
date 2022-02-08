@@ -1,16 +1,48 @@
 //TODO: fix styles
-.ogame-tracker-msg-processed {
-    background: green !important;
+.ogame-tracker-msg {
+    &--hide-content .msg_content:not(&__content) {
+        height: 0 !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+    }
+
+    &--waiting-to-be-processed {
+        //TODO:
+    }
+
+    &--processed {
+        //TODO:
+    }
+
+    &--error {
+        background: #500707 !important;
+    }
+
+    &--ignored {
+        //TODO:
+    }
 }
 
-.ogame-tracker-msg-waiting-to-process {
-    background: yellow !important;
-}
+// taken from https://projects.lukehaas.me/css-loaders/ and adjusted
+.ogame-tracker-loader {
+    font-size: 20px;
+    position: relative;
+    text-indent: -9999em;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
 
-.ogame-tracker-msg-failed-to-process {
-    background: red !important;
-}
+    border: 0.11em solid transparent;
+    border-left: 0.11em solid #ffffff;
 
-.ogame-tracker-msg-ignored {
-    background: purple !important;
+    transform: translateZ(0);
+    animation: load8 1s infinite ease-in-out;
+}
+@keyframes load8 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
