@@ -29,33 +29,6 @@ $image-size: 36px;
         &--ignored {
             //TODO:
         }
-
-        &--expedition::before,
-        &--debris-field-report::before {
-            content: '';
-
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 50%;
-
-            opacity: 0.05;
-            filter: blur(5px);
-            background-position: 10%;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-
-        &--expedition::before {
-            background-image: url(#{$base-url}/icons/expedition.svg);
-        }
-
-        &--debris-field-report::before {
-            background-image: url(#{$base-url}/icons/debris-field.svg);
-        }
     }
 
     &-expedition-result {
@@ -111,7 +84,7 @@ $image-size: 36px;
             }
         }
 
-        &-trader {
+        &--trader {
             color: #ffd700;
         }
 
