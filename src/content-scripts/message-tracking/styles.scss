@@ -1,48 +1,217 @@
-//TODO: fix styles
-.ogame-tracker-msg {
-    &--hide-content .msg_content:not(&__content) {
-        height: 0 !important;
-        overflow: hidden !important;
-        padding: 0 !important;
+$image-size: 36px;
+
+.ogame-tracker {
+    &-msg {
+        &--hide-content .msg_content:not(&__content) {
+            height: 0 !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+        }
+
+        &__content {
+            display: flex !important;
+            justify-content: center;
+            margin: -10px 0;
+        }
+
+        &--waiting-to-be-processed {
+            //TODO:
+        }
+
+        &--processed {
+            //TODO:
+        }
+
+        &--error {
+            background: #500707 !important;
+        }
+
+        &--ignored {
+            //TODO:
+        }
+
+        &--expedition::before,
+        &--debris-field-report::before {
+            content: '';
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 50%;
+
+            opacity: 0.05;
+            filter: blur(5px);
+            background-position: 10%;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        &--expedition::before {
+            background-image: url(#{$base-url}/icons/expedition.svg);
+        }
+
+        &--debris-field-report::before {
+            background-image: url(#{$base-url}/icons/debris-field.svg);
+        }
     }
 
-    &--waiting-to-be-processed {
-        //TODO:
+    &-expedition-result {
+        display: flex;
+        font-weight: bold;
+        align-items: center;
+        column-gap: 8px;
+
+        &--resources,
+        &--darkMatter {
+            .metal {
+                color: #bababa;
+            }
+
+            .crystal {
+                color: #28bfff;
+            }
+
+            .deuterium {
+                color: #19af8c;
+            }
+            .dark-matter {
+                color: #78c7ff;
+            }
+        }
+
+        &--delay {
+            color: #ff6f00;
+        }
+
+        &--early {
+            color: #64dd17;
+        }
+
+        &--pirates,
+        &--aliens {
+            color: #ffffff;
+        }
+
+        &--lostFleet {
+            color: #d50000;
+
+            .mdi {
+                font-size: 48px !important;
+            }
+        }
+
+        &--fleet {
+            .ship-count-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        &-trader {
+            color: #ffd700;
+        }
+
+        &--size {
+            &-small .ogame-tracker-expedition--size-icon {
+                color: #595f62;
+                font-size: 24px !important;
+            }
+            &-medium .ogame-tracker-expedition--size-icon {
+                color: #82b1ff;
+                font-size: 28px !important;
+            }
+            &-large .ogame-tracker-expedition--size-icon {
+                color: #ab47bc;
+                font-size: 32px !important;
+            }
+        }
+
+        .mdi {
+            font-size: 32px;
+        }
     }
 
-    &--processed {
-        //TODO:
+    &-debris-field-report {
+        display: inline-grid;
+        grid-template-columns: repeat(2, 1fr);
+        font-weight: bold;
+        align-items: center;
+        justify-items: center;
+        column-gap: 16px;
     }
 
-    &--error {
-        background: #500707 !important;
+    &-resource,
+    &-ship {
+        width: $image-size;
+        height: $image-size;
+        display: inline-block;
+        background-size: cover;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        border-radius: 4px;
     }
 
-    &--ignored {
-        //TODO:
+    &-resource {
+        $resources: ("metal", "crystal", "deuterium", "energy", "dark-matter", "tritium");
+        @each $resource in $resources {
+            &.#{$resource} {
+                background-image: url(#{$base-url}/img/ogame/resources/#{$resource}.upscaled.png);
+            }
+        }
     }
-}
 
-// taken from https://projects.lukehaas.me/css-loaders/ and adjusted
-.ogame-tracker-loader {
-    font-size: 20px;
-    position: relative;
-    text-indent: -9999em;
-    border-radius: 50%;
-    width: 1em;
-    height: 1em;
-
-    border: 0.11em solid transparent;
-    border-left: 0.11em solid #ffffff;
-
-    transform: translateZ(0);
-    animation: load8 1s infinite ease-in-out;
-}
-@keyframes load8 {
-    0% {
-        transform: rotate(0deg);
+    &-ship {
+        $ships: (
+            202: "small-cargo",
+            203: "large-cargo",
+            204: "light-fighter",
+            205: "heavy-fighter",
+            206: "cruiser",
+            207: "battleship",
+            208: "colony-ship",
+            209: "recycler",
+            210: "espionage-probe",
+            211: "bomber",
+            212: "solar-satellite",
+            213: "destroyer",
+            214: "death-star",
+            215: "battlecruiser",
+            217: "crawler",
+            218: "reaper",
+            219: "pathfinder",
+        );
+        @each $number, $ship in $ships {
+            &.ship-#{$number} {
+                background-image: url(#{$base-url}/img/ogame/ships/#{$ship}.jpg);
+            }
+        }
     }
-    100% {
-        transform: rotate(360deg);
+
+    // taken from https://projects.lukehaas.me/css-loaders/ and adjusted
+    &-loader {
+        font-size: 20px;
+        position: relative;
+        text-indent: -9999em;
+        border-radius: 50%;
+        width: 1em;
+        height: 1em;
+
+        border: 0.11em solid transparent;
+        border-left: 0.11em solid #ffffff;
+
+        transform: translateZ(0);
+        animation: load8 1s infinite ease-in-out;
+    }
+    @keyframes load8 {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }

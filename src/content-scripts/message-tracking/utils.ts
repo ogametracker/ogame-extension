@@ -17,12 +17,15 @@ export const cssClasses = {
         ignored: `${cssBase}-msg--ignored`,
         hideContent: `${cssBase}-msg--hide-content`,
     
+        expedition: `${cssBase}-msg--expedition`,
+        debrisFieldReport: `${cssBase}-msg--debris-field-report`,
+
         customMessageContent: `${cssBase}-msg__content`,
     },
     loader: `${cssBase}-loader`,
 };
 
-export function addOrSetCustomMessageContent(msgElem: Element, htmlContent: string) {
+export function addOrSetCustomMessageContent(msgElem: Element, htmlContent: string | false) {
     let newContent = msgElem.querySelector(`.msg_content.${cssClasses.messages.customMessageContent}`);
     if (newContent == null) {
         newContent = document.createElement('div');
@@ -32,5 +35,13 @@ export function addOrSetCustomMessageContent(msgElem: Element, htmlContent: stri
         msgElem.insertBefore(newContent, msgContent.nextElementSibling);
     }
 
-    newContent.innerHTML = htmlContent;
+    if(htmlContent == false) {
+        newContent.remove();
+    } else {
+        newContent.innerHTML = htmlContent;
+    }
+}
+
+export function formatNumber(number: number) {
+    return new Intl.NumberFormat().format(number);
 }

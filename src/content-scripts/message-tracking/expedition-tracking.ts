@@ -7,7 +7,12 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { tabIds, cssClasses, addOrSetCustomMessageContent } from "./utils";
+import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
+import { ExpeditionEvent, ExpeditionEventResources, ExpeditionFindableShipType } from "../../shared/models/v1/expeditions/ExpeditionEvents";
+import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
+import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
+import { Items } from "../../shared/models/v1/ogame/items/Items";
 
 export function initExpeditionTracking() {
     setupCommunication();
@@ -48,7 +53,7 @@ function onMessage(message: Message<MessageType, any>) {
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
-            addOrSetCustomMessageContent(li, JSON.stringify(msg.data)); //TODO: content
+            addExpeditionResultContent(li, msg.data);
             break;
         }
     }
@@ -90,14 +95,166 @@ function trackExpeditions(elem: Element) {
             chrome.runtime.sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed, cssClasses.messages.hideContent);
-            addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`); //TODO: content
+            msg.classList.add(
+                cssClasses.messages.base,
+                cssClasses.messages.waitingToBeProcessed,
+                cssClasses.messages.hideContent,
+            );
+            addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
         } catch (error) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
             msg.classList.remove(cssClasses.messages.hideContent);
-            addOrSetCustomMessageContent(msg, ''); //TODO: content
+            addOrSetCustomMessageContent(msg, false);
         }
     });
+}
+
+function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
+    li.classList.add(cssClasses.messages.expedition);
+
+    switch (expedition.type) {
+        case ExpeditionEventType.resources: {
+            const resources = expedition.resources;
+            let resource: ResourceType;
+            let amount: number;
+            if (resources.metal > 0) {
+                [resource, amount] = [ResourceType.metal, resources.metal];
+            } else if (resources.crystal > 0) {
+                [resource, amount] = [ResourceType.crystal, resources.crystal];
+            } else {
+                [resource, amount] = [ResourceType.deuterium, resources.deuterium];
+            }
+
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.resources, expedition.size)}">
+                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="ogame-tracker-resource ${resource}"></div>
+                    <div class="${resource}">${formatNumber(amount)}</div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.fleet: {
+            const ships = Object.keys(expedition.fleet)
+                .map(ship => parseInt(ship) as ExpeditionFindableShipType)
+                .filter(key => (expedition.fleet[key] ?? 0) > 0);
+
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.fleet, expedition.size)}">
+                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    ${ships.map(ship => `
+                        <div class="ship-count-item">
+                            <div class="ogame-tracker-ship ship-${ship}"></div>
+                            <div>${formatNumber(expedition.fleet[ship] ?? 0)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.darkMatter: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
+                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="ogame-tracker-resource dark-matter"></div>
+                    <div class="dark-matter">${formatNumber(expedition.darkMatter)}</div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.delay: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.delay)}">
+                    <div class="mdi mdi-clock-outline"></div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.early: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.early)}">
+                    <div class="mdi mdi-clock-outline"></div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.pirates: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.pirates, expedition.size)}">
+                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="mdi mdi-pirate"></div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.aliens: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.aliens, expedition.size)}">
+                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="mdi mdi-alien"></div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.lostFleet: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.lostFleet)}">
+                    <div class="mdi mdi-cross"></div>
+                    <div class="mdi mdi-skull-crossbones"></div>
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.nothing: {
+            addOrSetCustomMessageContent(li, '-');
+            break;
+        }
+
+        case ExpeditionEventType.item: {
+            const itemImage = Items[expedition.itemHash];
+            //TODO: item
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.item)}">
+                    <img src="/cdn/img/item-images/${itemImage}.png">
+                </div>
+            `);
+            break;
+        }
+
+        case ExpeditionEventType.trader: {
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.trader)}">
+                    <div class="mdi mdi-swap-horizontal-bold"></div>
+                </div>
+            `);
+            break;
+        }
+    }
+}
+
+function getSizeIconClass(size: ExpeditionEventSize) {
+    return 'ogame-tracker-expedition--size-icon mdi ' + ({
+        [ExpeditionEventSize.small]: 'mdi-signal-cellular-1',
+        [ExpeditionEventSize.medium]: 'mdi-signal-cellular-2',
+        [ExpeditionEventSize.large]: 'mdi-signal-cellular-3',
+    }[size]);
+}
+
+function getResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize) {
+    const cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${result}`;
+    if (size == null) {
+        return cssClass;
+    }
+
+    return `${cssClass} ogame-tracker-expedition-result--size-${size}`;
 }

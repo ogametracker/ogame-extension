@@ -36,12 +36,10 @@
     }
 
     .warning-lang-not-supported {
-        background-image: url(#{$base-url}/img/menu-icon-warning.svg);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-
-        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
         left: 0;
         top: 0;
         width: 22px;
