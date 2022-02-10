@@ -97,11 +97,11 @@ $image-size: 36px;
             border-style: solid;
 
             $ogame-item-grades: (
-                none: #2374ba,
-                bronze: #834b2d,
-                silver: #8d939c,
-                gold: #ffb84a,
-                platinum: #7e3d8e,
+                'none': #2374ba,
+                'bronze': #834b2d,
+                'silver': #8d939c,
+                'gold': #ffb84a,
+                'platinum': #7e3d8e,
             );
             @each $grade, $color in $ogame-item-grades {
                 &.item-grade--#{$grade} {
