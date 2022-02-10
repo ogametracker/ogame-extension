@@ -38,16 +38,18 @@
                 <span v-if="tab.label != null" class="nav-item-label " v-text="tab.label" />
             </component>
 
-            <div
-                v-if="isIframeMode"
-                class="nav-item icon-only"
-                style="--color: none"
-            >
-                <span
-                    class="mdi mdi-close close-overlay"
-                    @click="closeOverlay()"
-                />
-            </div>
+            <template v-if="isIframeMode">
+                <div style="width: 24px" />
+                <div
+                    class="nav-item icon-only"
+                    style="--color: none"
+                >
+                    <span
+                        class="mdi mdi-close close-overlay"
+                        @click="closeOverlay()"
+                    />
+                </div>
+            </template>
         </nav>
         <main>
             <router-view />

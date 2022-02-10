@@ -245,9 +245,9 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
 
 function getSizeIconClass(size: ExpeditionEventSize) {
     return 'ogame-tracker-expedition--size-icon mdi ' + ({
-        [ExpeditionEventSize.small]: 'mdi-signal-cellular-1',
-        [ExpeditionEventSize.medium]: 'mdi-signal-cellular-2',
-        [ExpeditionEventSize.large]: 'mdi-signal-cellular-3',
+        [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
+        [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',
+        [ExpeditionEventSize.large]: 'mdi-hexagon-slice-5',
     }[size]);
 }
 

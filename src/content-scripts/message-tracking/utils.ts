@@ -26,10 +26,10 @@ export const cssClasses = {
 };
 
 export function addOrSetCustomMessageContent(msgElem: Element, htmlContent: string | false) {
-    let newContent = msgElem.querySelector(`.msg_content.${cssClasses.messages.customMessageContent}`);
+    let newContent = msgElem.querySelector(`.${cssClasses.messages.customMessageContent}`);
     if (newContent == null) {
         newContent = document.createElement('div');
-        newContent.classList.add('msg_content', cssClasses.messages.customMessageContent);
+        newContent.classList.add(cssClasses.messages.customMessageContent);
 
         const msgContent = msgElem.querySelector('.msg_content') ?? _throw('no message content found');
         msgElem.insertBefore(newContent, msgContent.nextElementSibling);
