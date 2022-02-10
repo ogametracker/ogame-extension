@@ -221,12 +221,12 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
         }
 
         case ExpeditionEventType.item: {
-            const itemImage = Items[expedition.itemHash].image;
-            const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${itemImage}.png`);
+            const item = Items[expedition.itemHash];
+            const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
             //TODO: item
             addOrSetCustomMessageContent(li, `
                 <div class="${getResultClass(ExpeditionEventType.item)}">
-                    <img src="${imageUrl}" />
+                    <img src="${imageUrl}" class="item-grade--${item.grade}" />
                 </div>
             `);
             break;
