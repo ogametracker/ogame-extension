@@ -37,6 +37,7 @@ $image-size: 36px;
         font-weight: bold;
         align-items: center;
         column-gap: 8px;
+        color: white;
 
         &--resources,
         &--darkMatter {
@@ -82,6 +83,7 @@ $image-size: 36px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                row-gap: 4px;
             }
         }
 
