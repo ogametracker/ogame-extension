@@ -11,20 +11,22 @@
     import { PropType } from 'vue';
     import { Prop } from 'vue-property-decorator';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
     import { GridTableColumn } from '@stats/components/common/GridTable.vue';
     import { _dev_DateRanges } from '@stats/_dev/DateRanges';
     import { isInRange } from '@stats/utils/dateRanges';
-    import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { _throw } from '@/shared/utils/_throw';
     import startOfDay from 'date-fns/startOfDay/index';
 
-    export interface RangedExpeditionTableItem {
-        label: string;
-        getValue: (expeditions: ExpeditionEvent[]) => number;
+    interface RangeStatsTableItemWithDate {
+        date: number;
     }
 
-    interface RangeExpeditionTableRow {
+    export interface RangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
+        label: string;
+        getValue: (item: T[]) => number;
+    }
+
+    interface RangedStatsTableRow {
         label: string;
         percentage?: number | '';
         average?: number;
@@ -33,9 +35,9 @@
     }
 
     @Component({})
-    export default class RangedExpeditionTable extends Vue {
-        @Prop({ required: false, type: Function as PropType<(expedition: ExpeditionEvent) => boolean>, default: () => true })
-        private filter!: (expedition: ExpeditionEvent) => boolean;
+    export default class RangedStatsTable<T extends RangeStatsTableItemWithDate> extends Vue {
+        @Prop({ required: false, type: Function as PropType<(item: T) => boolean>, default: () => true })
+        private filter!: (item: T) => boolean;
 
         @Prop({ required: false, type: Boolean })
         private showPercentage!: boolean;
@@ -43,11 +45,11 @@
         @Prop({ required: false, type: Boolean })
         private showAverage!: boolean;
 
-        @Prop({ required: true, type: Array as PropType<RangedExpeditionTableItem[]> })
-        private items!: RangedExpeditionTableItem[];
+        @Prop({ required: true, type: Array as PropType<RangedStatsTableItem<T>[]> })
+        private items!: RangedStatsTableItem<T>[];
 
-        @Prop({ required: false, type: Array as PropType<RangedExpeditionTableItem[]>, default: () => [] })
-        private footerItems!: RangedExpeditionTableItem[];
+        @Prop({ required: false, type: Array as PropType<RangedStatsTableItem<T>[]>, default: () => [] })
+        private footerItems!: RangedStatsTableItem<T>[];
 
         @Prop({ required: false, type: Object as PropType<Intl.NumberFormatOptions>, default: undefined })
         private numberFormatOptions: Intl.NumberFormatOptions | undefined;
@@ -55,28 +57,31 @@
         @Prop({ required: false, type: Object as PropType<Intl.NumberFormatOptions>, default: undefined })
         private averageNumberFormatOptions: Intl.NumberFormatOptions | undefined;
 
+        @Prop({ required: true, type: Array as PropType<T[]> })
+        private dataItems!: T[];
 
-        private get exposByRange(): ExpeditionEvent[][] {
-            const expeditions = ExpeditionDataModule.expeditions;
-            const exposByRange: ExpeditionEvent[][] = _dev_DateRanges.map(() => []);
-            expeditions.forEach(expo => {
-                const isInFilter = this.filter(expo);
+        private get dataItemsByRange(): T[][] {
+            const dataItems = this.dataItems;
+            const dataItemsByRange: T[][] = _dev_DateRanges.map(() => []);
+
+            dataItems.forEach(item => {
+                const isInFilter = this.filter(item);
                 if (!isInFilter) {
                     return;
                 }
 
                 _dev_DateRanges.forEach((range, i) => {
-                    if (isInRange(expo.date, range)) {
-                        exposByRange[i].push(expo);
+                    if (isInRange(item.date, range)) {
+                        dataItemsByRange[i].push(item);
                     }
                 });
             });
 
-            return exposByRange;
+            return dataItemsByRange;
         }
 
-        private get columns(): GridTableColumn<keyof RangeExpeditionTableRow | number>[] {
-            const columns: GridTableColumn<keyof RangeExpeditionTableRow | number>[] = [
+        private get columns(): GridTableColumn<keyof RangedStatsTableRow | number>[] {
+            const columns: GridTableColumn<keyof RangedStatsTableRow | number>[] = [
                 {
                     key: 'label',
                     label: '',
@@ -112,31 +117,31 @@
             return columns;
         }
 
-        private get rows(): RangeExpeditionTableRow[] {
-            const exposByRange = this.exposByRange;
+        private get rows(): RangedStatsTableRow[] {
+            const dataItemsByRange = this.dataItemsByRange;
 
             const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
                 ?? _throw(`failed to find range 'all'`);
-            const expoDays = exposByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
-            const daysWithExpos = new Set(expoDays).size;
+            const dataItemDays = dataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
+            const daysWithDataItems = new Set(dataItemDays).size;
 
             const totalValue = Math.max(1, this.items
-                .map(item => item.getValue(exposByRange[allRangeIndex]))
+                .map(item => item.getValue(dataItemsByRange[allRangeIndex]))
                 .reduce((acc, cur) => acc + cur, 0)
             );
 
             const rows = this.items.map(item => {
 
-                const row: RangeExpeditionTableRow = {
+                const row: RangedStatsTableRow = {
                     label: item.label,
 
-                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
+                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
                 };
 
                 const allRangeValue = row[allRangeIndex];
 
                 if (this.showAverage) {
-                    row.average = allRangeValue / daysWithExpos;
+                    row.average = allRangeValue / daysWithDataItems;
                 }
 
                 if (this.showPercentage) {
@@ -149,24 +154,24 @@
             return rows;
         }
 
-        private get footerRows(): RangeExpeditionTableRow[] {
-            const exposByRange = this.exposByRange;
+        private get footerRows(): RangedStatsTableRow[] {
+            const dataItemsByRange = this.dataItemsByRange;
 
             const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
                 ?? _throw(`failed to find range 'all'`);
-            const expoDays = exposByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
-            const daysWithExpos = new Set(expoDays).size;
+            const dataItemDays = dataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
+            const daysWithDataItems = new Set(dataItemDays).size;
 
             return this.footerItems.map(item => {
-                const row: RangeExpeditionTableRow = {
+                const row: RangedStatsTableRow = {
                     label: item.label,
-                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(exposByRange[rangeIndex])),
+                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
                     percentage: '',
                 };
 
                 if (this.showAverage) {
                     const allRangeValue = row[allRangeIndex];
-                    row.average = allRangeValue / daysWithExpos;
+                    row.average = allRangeValue / daysWithDataItems;
                 }
 
                 return row;

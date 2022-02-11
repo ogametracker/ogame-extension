@@ -21,6 +21,8 @@ import viewscombatsresourcesIndex from '@stats/views/combats/resources/Index.vue
 import viewscombatsresourcesChart from '@stats/views/combats/resources/Chart.vue';
 import viewscombatsresourcesTable from '@stats/views/combats/resources/Table.vue';
 import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
+import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
+import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
@@ -226,9 +228,24 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#00a031"
                 },
+                redirect: {
+                    name: "debris-fields/table"
+                },
                 path: "debris-fields",
                 name: "debris-fields",
-                component: viewsdebrisfieldsIndex
+                component: viewsdebrisfieldsIndex,
+                children: [
+                    {
+                        path: "chart",
+                        name: "debris-fields/chart",
+                        component: viewsdebrisfieldsChart
+                    },
+                    {
+                        path: "table",
+                        name: "debris-fields/table",
+                        component: viewsdebrisfieldsTable
+                    }
+                ]
             },
             {
                 meta: {
