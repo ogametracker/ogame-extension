@@ -30,6 +30,22 @@
         //TODO: fix styles
         background: url(#{$base-url}/img/menu-icon-background.png);
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        
+        > .mdi {
+            opacity: 0.3;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        &:hover > .mdi {
+            opacity: 1;
+            color: #e59a4b;
+        }
+
         &.warning {
             background: red;
         }
@@ -39,7 +55,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         left: 0;
         top: 0;
         width: 22px;

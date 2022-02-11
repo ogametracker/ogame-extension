@@ -21,8 +21,10 @@ const observer = new MutationObserver(() => {
 
         let html = `
             <li id="ogame-tracker-menu-item">
-                <span class="menu_icon tooltipRight" title="LOCA: Open in new tab">
-                    <span class="menuImage icon"></span>
+                <span class="menu_icon">
+                    <span class="menuImage icon">
+                        <span class="mdi mdi-finance"></span>
+                    </span>
                 </span>
                 <div class="menubutton"></div>
                 ${supportsLanguage
