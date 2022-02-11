@@ -1,5 +1,7 @@
 <template>
-    <expedition-chart
+    <stats-chart
+        :firstDay="firstDay"
+        :itemsPerDay="exposPerDay"
         :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
         stacked
@@ -18,7 +20,9 @@
 
                     <div
                         class="number"
-                        v-text="$number(getSumMsu(getVisibleDatasets(datasets)))"
+                        v-text="
+                            $number(getSumMsu(getVisibleDatasets(datasets)))
+                        "
                     />
                     <div>LOCA: Units Found (MSU)</div>
                 </div>
@@ -33,22 +37,23 @@
                 <div>LOCA: Units Found (MSU, Total)</div>
             </div>
         </template>
-    </expedition-chart>
+    </stats-chart>
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
-    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
+    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { getResources } from './getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            ExpeditionChart,
+            StatsChart,
         },
     })
     export default class Charts extends Vue {
@@ -59,14 +64,22 @@
             [ResourceType.deuterium]: '#14bf73',
         };
 
-        private get datasets(): ExpeditionDataset[] {
+        private get firstDay() {
+            return ExpeditionDataModule.firstDay;
+        }
+
+        private get exposPerDay() {
+            return ExpeditionDataModule.expeditionsPerDay;
+        }
+
+        private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
                     label: `LOCA: ${resource}`, //LOCA
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[]).reduce(
+                    getValue: (expos: ExpeditionEventFleet[]) => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource]
                         ), 0),
@@ -76,7 +89,7 @@
                     label: 'LOCA: Total Units (MSU)',
                     color: '#999999',
                     filled: false,
-                    getValue: expos => (expos as ExpeditionEventFleet[]).reduce(
+                    getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
                                 const res = getResources(ship, expo.fleet[ship] ?? 0);

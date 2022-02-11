@@ -1,5 +1,6 @@
 <template>
-    <ranged-expedition-table
+    <ranged-stats-table
+        :dataItems="expos"
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
@@ -10,14 +11,15 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
+    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            RangedExpeditionTable,
+            RangedStatsTable,
         },
     })
     export default class Table extends Vue {
@@ -30,18 +32,21 @@
             return expo.type == ExpeditionEventType.fleet;
         }
 
-        private get items(): RangedExpeditionTableItem[] {
+        private get expos() {
+            return ExpeditionDataModule.expeditions;
+        }
+
+        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return getNumericEnumValues(ExpeditionFindableShipType).map(ship => ({
                 label: `LOCA: ${ship}`,
-                getValue: expos => (expos as ExpeditionEventFleet[])
-                    .reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
+                getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
             }));
         }
 
-        private get footerItems(): RangedExpeditionTableItem[] {
+        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return [{
                 label: `LOCA: Total`,
-                getValue: expos => (expos as ExpeditionEventFleet[]).reduce(
+                getValue: expos => expos.reduce(
                     (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + (expo.fleet[ship] ?? 0)
                         , 0)

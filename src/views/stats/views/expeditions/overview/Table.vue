@@ -1,5 +1,6 @@
 <template>
-    <ranged-expedition-table
+    <ranged-stats-table
+        :dataItems="expos"
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
@@ -11,13 +12,14 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
-    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+    import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            RangedExpeditionTable,
+            RangedStatsTable,
         },
     })
     export default class Table extends Vue {
@@ -26,18 +28,22 @@
             maximumFractionDigits: 1,
         };
 
+        private get expos() {
+            return ExpeditionDataModule.expeditions;
+        }
+
         private filterExpo(expo: ExpeditionEvent): boolean {
             return true;
         }
 
-        private get items(): RangedExpeditionTableItem[] {
+        private get items(): RangedStatsTableItem<ExpeditionEvent>[] {
             return Object.keys(ExpeditionEventType).map(type => ({
                 label: `LOCA: ${type}`,
                 getValue: expos => expos.filter(expo => expo.type == type).length,
             }));
         }
 
-        private get footerItems(): RangedExpeditionTableItem[] {
+        private get footerItems(): RangedStatsTableItem<ExpeditionEvent>[] {
             return [{
                 label: `LOCA: Total`,
                 getValue: expos => expos.length,

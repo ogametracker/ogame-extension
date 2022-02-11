@@ -1,5 +1,6 @@
 <template>
-    <ranged-expedition-table
+    <ranged-stats-table
+        :dataItems="expos"
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
@@ -9,16 +10,17 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
+    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from './getResources';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            RangedExpeditionTable,
+            RangedStatsTable,
         },
     })
     export default class Table extends Vue {
@@ -27,21 +29,25 @@
             return expo.type == ExpeditionEventType.fleet;
         }
 
-        private get items(): RangedExpeditionTableItem[] {
+        private get expos() {
+            return ExpeditionDataModule.expeditions;
+        }
+
+        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return Object.values(ResourceType).map(resource => ({
                 label: `LOCA: ${resource}`,
-                getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[]).reduce(
+                getValue: expos => expos.reduce(
                     (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource]
                     ), 0),
             }));
         }
 
-        private get footerItems(): RangedExpeditionTableItem[] {
+        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return [
                 {
                     label: `LOCA: Total`,
-                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[]).reduce(
+                    getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
                                 const res = getResources(ship, expo.fleet[ship] ?? 0);
@@ -50,7 +56,7 @@
                 },
                 {
                     label: `LOCA: Total (MSU)`,
-                    getValue: (expos: ExpeditionEvent[]) => (expos as ExpeditionEventFleet[]).reduce(
+                    getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
                                 const res = getResources(ship, expo.fleet[ship] ?? 0);

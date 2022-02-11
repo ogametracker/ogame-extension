@@ -1,5 +1,7 @@
 <template>
-    <expedition-chart
+    <stats-chart
+        :firstDay="firstDay"
+        :itemsPerDay="exposPerDay"
         :filter="(expo) => filterExpo(expo)"
         :datasets="datasets"
         stacked
@@ -24,20 +26,21 @@
                 <div>LOCA: Fleet Discoveries (Total)</div>
             </div>
         </template>
-    </expedition-chart>
+    </stats-chart>
 </template>
 
 <script lang="ts">
     import { ExpeditionEvent, ExpeditionEventFleet } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
-    import ExpeditionChart, { ExpeditionDataset } from '@stats/components/expeditions/ExpeditionChart.vue';
+    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            ExpeditionChart,
+            StatsChart,
         },
     })
     export default class Charts extends Vue {
@@ -48,13 +51,21 @@
             [ExpeditionEventSize.large]: '#F50057',
         };
 
-        private get datasets(): ExpeditionDataset[] {
+        private get firstDay() {
+            return ExpeditionDataModule.firstDay;
+        }
+
+        private get exposPerDay() {
+            return ExpeditionDataModule.expeditionsPerDay;
+        }
+
+        private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
             return Object.values(ExpeditionEventSize).map(size => ({
                 key: size,
                 label: `LOCA: ${size}`, //LOCA
                 color: this.colors[size],
                 filled: true,
-                getValue: expos => (expos as ExpeditionEventFleet[]).filter(e => e.size == size).length,
+                getValue: expos => expos.filter(e => e.size == size).length,
             }));
         }
 

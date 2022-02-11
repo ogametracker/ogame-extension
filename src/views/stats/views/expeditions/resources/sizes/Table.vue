@@ -1,5 +1,6 @@
 <template>
-    <ranged-expedition-table
+    <ranged-stats-table
+        :dataItems="expos"
         :filter="(expo) => filterExpo(expo)"
         :items="items"
         :footerItems="footerItems"
@@ -9,14 +10,15 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import RangedExpeditionTable, { RangedExpeditionTableItem } from '@stats/components/expeditions/RangedExpeditionTable.vue';
+    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
-            RangedExpeditionTable,
+            RangedStatsTable,
         },
     })
     export default class Table extends Vue {
@@ -25,16 +27,18 @@
             return expo.type == ExpeditionEventType.resources;
         }
 
-        private get items(): RangedExpeditionTableItem[] {
+        private get expos() {
+            return ExpeditionDataModule.expeditions;
+        }
+
+        private get items(): RangedStatsTableItem<ExpeditionEventResources>[] {
             return Object.values(ExpeditionEventSize).map(size => ({
                 label: `LOCA: ${size}`,
-                getValue: expos => (expos as ExpeditionEventResources[])
-                    .filter(expo => expo.size == size)
-                    .length,
+                getValue: expos => expos.filter(expo => expo.size == size).length,
             }));
         }
 
-        private get footerItems(): RangedExpeditionTableItem[] {
+        private get footerItems(): RangedStatsTableItem<ExpeditionEventResources>[] {
             return [{
                 label: `LOCA: Total`,
                 getValue: expos => expos.length,
