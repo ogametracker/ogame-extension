@@ -1,0 +1,1 @@
+export type CombatResultType = 'won' | 'lost' | 'draw';

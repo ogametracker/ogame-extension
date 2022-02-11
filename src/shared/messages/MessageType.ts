@@ -20,6 +20,13 @@ export enum MessageType {
     TrackDebrisFieldReport = 'debris-fields/track',
     RequestDebrisFieldReports = 'debris-fields/request-reports',
 
+    // combat reports
+    CombatReport = 'combat-reports/single',
+    NewCombatReport = 'combat-reports/new',
+    AllCombatReports = 'combat-reports/all',
+    TrackCombatReport = 'combat-reports/track',
+    RequestCombatReports = 'combat-reports/request-reports',
+
     // message tracking
     WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report
 }
