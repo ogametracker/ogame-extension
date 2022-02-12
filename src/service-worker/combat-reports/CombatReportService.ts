@@ -21,21 +21,21 @@ export class CombatReportService implements MessageService {
 
                 // broadcast "new combat report available"
                 if (!isAlreadyTracked) {
-                    const newExpeditionMessage: NewCombatReportMessage = {
+                    const newCombatReportMessage: NewCombatReportMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewCombatReport,
                         data: report,
                     };
-                    broadcastMessage(newExpeditionMessage);
+                    broadcastMessage(newCombatReportMessage);
                 }
                 // send data of the specific combat report
                 else {
-                    const expeditionMessage: CombatReportMessage = {
+                    const combatReportMessage: CombatReportMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.CombatReport,
                         data: report,
                     };
-                    broadcastMessage(expeditionMessage);
+                    broadcastMessage(combatReportMessage);
                 }
 
                 break;

@@ -19,6 +19,7 @@ export const cssClasses = {
     
         expedition: `${cssBase}-msg--expedition`,
         debrisFieldReport: `${cssBase}-msg--debris-field-report`,
+        combatReport:  `${cssBase}-msg--combat-report`,
 
         customMessageContent: `${cssBase}-msg__content`,
     },

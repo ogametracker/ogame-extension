@@ -11,7 +11,7 @@ import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 
 export function initDebrisFieldReportTracking() {
-    setupCommunication();
+    chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
@@ -36,16 +36,12 @@ function setupObserver() {
     }
 }
 
-function setupCommunication() {
-    chrome.runtime.onMessage.addListener(message => onMessage(message));
-}
-
 function onMessage(message: Message<MessageType, any>) {
     switch (message.type) {
         case MessageType.DebrisFieldReport:
         case MessageType.NewDebrisFieldReport: {
             const msg = message as DebrisFieldReportMessage;
-            
+
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.debrisFieldReport);
 
@@ -77,7 +73,7 @@ function onMessage(message: Message<MessageType, any>) {
 
 function trackDebrisFieldReports(elem: Element) {
     const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-    .filter(elem => !elem.classList.contains(cssClasses.messages.base));
+        .filter(elem => !elem.classList.contains(cssClasses.messages.base));
 
     messages.forEach(msg => {
         try {
@@ -112,8 +108,8 @@ function trackDebrisFieldReports(elem: Element) {
 
             // mark message as "waiting for result"
             msg.classList.add(
-                cssClasses.messages.base, 
-                cssClasses.messages.waitingToBeProcessed, 
+                cssClasses.messages.base,
+                cssClasses.messages.waitingToBeProcessed,
                 cssClasses.messages.hideContent,
             );
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);

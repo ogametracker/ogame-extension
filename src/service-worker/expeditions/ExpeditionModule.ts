@@ -51,7 +51,7 @@ export class ExpeditionModule {
         let expedition: ExpeditionEvent;
         try {
             if (!isSupportedLanguage(language)) {
-                _throw(`unsupported language '${language}'`);
+                throw new Error(`unsupported language '${language}'`);
             }
 
             expedition = this.parseExpedition(language as LanguageKey, expeditionEventData);

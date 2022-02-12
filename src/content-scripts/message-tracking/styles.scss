@@ -1,4 +1,5 @@
 $image-size: 36px;
+$image-size-small: 24px;
 
 .ogame-tracker {
     &-msg {
@@ -99,11 +100,11 @@ $image-size: 36px;
             border-style: solid;
 
             $ogame-item-grades: (
-                'none': #2374ba,
-                'bronze': #834b2d,
-                'silver': #8d939c,
-                'gold': #ffb84a,
-                'platinum': #7e3d8e,
+                "none": #2374ba,
+                "bronze": #834b2d,
+                "silver": #8d939c,
+                "gold": #ffb84a,
+                "platinum": #7e3d8e,
             );
             @each $grade, $color in $ogame-item-grades {
                 &.item-grade--#{$grade} {
@@ -139,6 +140,32 @@ $image-size: 36px;
         align-items: center;
         justify-items: center;
         column-gap: 16px;
+    }
+
+    &-combat-report {
+        color: white;
+        font-weight: bold;
+
+        &--loot-table {
+            display: inline-grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 4px;
+
+            &--negative-loot {
+                color: #d50000;
+            }
+
+            &--no-loot {
+                color: rgba(white, 0.5);
+            }
+
+            > .ogame-tracker-resource {
+                width: $image-size-small;
+                height: $image-size-small;
+                margin-left: 16px;
+            }
+        }
     }
 
     &-resource,

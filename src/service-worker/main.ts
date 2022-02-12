@@ -3,12 +3,14 @@ import { MessageType } from "../shared/messages/MessageType";
 import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
 import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
+import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 
 const services: MessageService[] = [
     new ExpeditionService(),
+    new CombatReportService(),
     new DebrisFieldReportService(),
 ];
 
@@ -21,7 +23,6 @@ try {
 }
 
 function performMigrations() {
-    //TODO: use
     _logWarning('TODO: perform migrations');
     //TODO: perform migrations
 }

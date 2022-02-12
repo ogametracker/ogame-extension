@@ -15,7 +15,7 @@ import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceTyp
 import { Items } from "../../shared/models/v1/ogame/items/Items";
 
 export function initExpeditionTracking() {
-    setupCommunication();
+    chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
@@ -38,10 +38,6 @@ function setupExpeditionMessageObserver() {
         const observer = new MutationObserver(() => trackExpeditions(tabContent));
         observer.observe(tabContent, { childList: true, subtree: true });
     }
-}
-
-function setupCommunication() {
-    chrome.runtime.onMessage.addListener(message => onMessage(message));
 }
 
 function onMessage(message: Message<MessageType, any>) {

@@ -46,11 +46,11 @@ export class DebrisFieldReportModule {
 
         // otherwise parse and save result
         let report: DebrisFieldReport;
+        
         try {
             if (!isSupportedLanguage(language)) {
-                _throw(`unsupported language '${language}'`);
+                throw new Error(`unsupported language '${language}'`);
             }
-
             const parseResult = this.tryParseDebrisFieldReport(language as LanguageKey, messageData);
             if (!parseResult.success) {
                 return {
