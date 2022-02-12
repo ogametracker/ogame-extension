@@ -54,6 +54,8 @@ import viewsexpeditionsshipssizesIndex from '@stats/views/expeditions/ships/size
 import viewsexpeditionsshipssizesChart from '@stats/views/expeditions/ships/sizes/Chart.vue';
 import viewsexpeditionsshipssizesTable from '@stats/views/expeditions/ships/sizes/Table.vue';
 import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue';
+import viewsresourceoverviewChart from '@stats/views/resource-overview/Chart.vue';
+import viewsresourceoverviewTable from '@stats/views/resource-overview/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import { RouteConfig } from 'vue-router';
@@ -464,12 +466,27 @@ const routes: RouteConfig[] = [
                 ]
             },
             {
+                redirect: {
+                    name: "resource-overview/chart"
+                },
                 meta: {
                     color: "#a9460c"
                 },
                 path: "resource-overview",
                 name: "resource-overview",
-                component: viewsresourceoverviewIndex
+                component: viewsresourceoverviewIndex,
+                children: [
+                    {
+                        path: "chart",
+                        name: "resource-overview/chart",
+                        component: viewsresourceoverviewChart
+                    },
+                    {
+                        path: "table",
+                        name: "resource-overview/table",
+                        component: viewsresourceoverviewTable
+                    }
+                ]
             },
             {
                 meta: {

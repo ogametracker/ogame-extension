@@ -43,8 +43,8 @@
         @Prop({ required: true, type: [Number, Date] })
         private firstDay!: number | Date;
 
-        @Prop({ required: true, type: Array as PropType<T[][]> })
-        private itemsPerDay!: T[][];
+        @Prop({ required: true, type: Object as PropType<Record<number, T[]>> })
+        private itemsPerDay!: Record<number, T[]>;
 
 
         private get computedDatasets(): ScrollableChartDataset[] {
