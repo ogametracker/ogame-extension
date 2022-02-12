@@ -15,3 +15,10 @@ new Vue({
     router,
     render: h => h(App)
 }).$mount('#app');
+
+
+window.addEventListener('message', e => {
+    if(e.data == 'focus') {
+        window.focus();
+    }
+});

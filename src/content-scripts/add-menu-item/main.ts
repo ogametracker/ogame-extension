@@ -32,7 +32,7 @@ const observer = new MutationObserver(() => {
                 : `<div class="warning-lang-not-supported tooltip" title="The OGame language '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
                         <span class="mdi mdi-warning"></span>
                     </div>`
-                }
+            }
                 </li>
         `;
         ogameTrackerMenu.innerHTML = html;
@@ -86,11 +86,17 @@ function showOgameTrackerDialog() {
     }
 
     const container = document.createElement('div');
+    const url = getStatsPageUrl(true);
     container.id = 'ogame-tracker-dialog';
-    container.innerHTML = `<iframe src="${getStatsPageUrl(true)}"></iframe>`;
+    container.innerHTML = `<iframe src="${url}"></iframe>`;
     container.addEventListener('click', () => closeOgameTrackerDialog());
 
     document.body.append(container);
+
+    const iframe = container.querySelector('iframe') as HTMLIFrameElement;
+    iframe.addEventListener('load', () => {
+        iframe.contentWindow!.postMessage('focus', '*');
+    });
 }
 
 function closeOgameTrackerDialog() {
