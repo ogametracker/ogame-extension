@@ -88,6 +88,7 @@
                     color: this.colors[resource],
                     filled: true,
                     getValue: (reports: CombatReport[]) => reports.reduce((acc, report) => acc + report.loot[resource], 0),
+                    showAverage: true,
                 })),
                 {
                     key: 'total',
@@ -99,6 +100,7 @@
                         0
                     ),
                     stack: false,
+                    showAverage: true,
                 }
             ];
         }

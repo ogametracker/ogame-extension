@@ -354,27 +354,41 @@
         private updateYGridLines() {
             //TODO: adjust for negative y-values
             const maxY = this.yRange.max;
+            const minY = this.yRange.min;
             const yGridConfig = this.internalConfig.grid.y;
             let step = 0;
+            let stepCount = {
+                positive: 0,
+                negative: 0,
+            };
 
             outerLoop:
             for (let stepFactor = 1; ; stepFactor *= yGridConfig.stepFactor) {
                 for (let stepBase of yGridConfig.stepBases) {
                     let curStep = stepBase * stepFactor;
 
-                    let curMin = curStep * yGridConfig.minLines;
-                    let curMax = curStep * yGridConfig.maxLines;
-                    if (curMin < maxY && curMax >= maxY) {
+                    const positiveSteps = Math.ceil(maxY / curStep);
+                    const negativeSteps = Math.ceil(-minY / curStep);
+                    const steps = positiveSteps + negativeSteps;
+
+                    if (steps >= yGridConfig.minLines && steps <= yGridConfig.maxLines) {
                         step = curStep;
+                        stepCount = {
+                            positive: positiveSteps,
+                            negative: negativeSteps,
+                        };
                         break outerLoop;
                     }
                 }
             }
+
+
             const height = this.svgContainer.clientHeight;
             const lines: YGridLineData = {};
-            const count = Math.ceil(maxY / step) + 1;
+            const count = stepCount.positive + stepCount.negative;
             for (let c = 0; c <= count; c++) {
-                const y = step * c;
+                const relativeC = (c - stepCount.negative);
+                const y = step * relativeC;
                 lines[y] = {
                     svg: height - height * c / count,
                     fraction: c / count,
@@ -383,8 +397,8 @@
 
             this.yGridLines = lines;
             this.yGridRange = {
-                min: 0,
-                max: step * count,
+                min: -stepCount.negative * step,
+                max: stepCount.positive * step,
             };
         }
 
@@ -461,14 +475,15 @@
             const width = this.svgContainer.clientWidth;
             this.xPositions = Array.from({ length: this.ticks }).map((_, x) => width * x / sections);
 
-            const height = this.svgContainer.clientHeight;
+            const [zeroY] = this.computeSvgValues([0]);
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
                 const svgValues = this.computeSvgValues(dataset.transformedValues);
                 const linePath = this.getSvgPath(svgValues);
-                const bgPath = `M 0 ${height} `
+
+                const bgPath = `M 0 ${zeroY} `
                     + `L${linePath.substring(1)} `
-                    + `L ${this.xPositions[this.xPositions.length - 1]} ${height}`;
+                    + `L ${this.xPositions[this.xPositions.length - 1]} ${zeroY}`;
 
                 let avgLinePath = '';
                 if (dataset.average != null) {
@@ -511,11 +526,12 @@
 
         private computeSvgValues(values: number[]): number[] {
             const height = this.svgContainer.clientHeight;
+            const yRange = this.yGridRange.max - this.yGridRange.min;
 
             return Array.from({ length: this.ticks })
                 .map((_, x) => {
                     const y = values[x + this.tickOffset] ?? 0;
-                    return height * (1 - y / this.yGridRange.max);
+                    return height * (1 - (y - this.yGridRange.min) / yRange);
                 });
         }
 
