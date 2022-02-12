@@ -1,6 +1,6 @@
-import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
+import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
 import { MessageType } from '@/shared/messages/MessageType';
-import { AllDebrisFieldReportsMessage, NewDebrisFieldReportMessage, RequestDebrisFieldReportsMessage } from '@/shared/messages/tracking/debris-fields';
+import { AllCombatReportsMessage, NewCombatReportMessage, RequestCombatReportsMessage } from '@/shared/messages/tracking/combat-reports';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
@@ -8,9 +8,9 @@ import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 
 @Component
-class DebrisFieldReportDataModuleClass extends Vue {
-    public reports: DebrisFieldReport[] = [];
-    public reportsPerDay: Record<number, DebrisFieldReport[]> = {};
+class CombatReportDataModuleClass extends Vue {
+    public reports: CombatReport[] = [];
+    public reportsPerDay: Record<number, CombatReport[]> = {};
     public firstDate: number | null = null;
 
     private async created() {
@@ -26,8 +26,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
     }
 
     private async requestData() {
-        const message: RequestDebrisFieldReportsMessage = {
-            type: MessageType.RequestDebrisFieldReports,
+        const message: RequestCombatReportsMessage = {
+            type: MessageType.RequestCombatReports,
             ogameMeta: GlobalOgameMetaData,
         };
         await broadcastMessage(message);
@@ -37,8 +37,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
         const { type } = msg;
 
         switch (type) {
-            case MessageType.NewDebrisFieldReport: {
-                const { data } = msg as NewDebrisFieldReportMessage;
+            case MessageType.NewCombatReport: {
+                const { data } = msg as NewCombatReportMessage;
                 this.reports = this.reports.concat(data);
 
                 const day = startOfDay(data.date).getTime();
@@ -48,8 +48,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
                 break;
             }
 
-            case MessageType.AllDebrisFieldReports: {
-                const { data } = msg as AllDebrisFieldReportsMessage;
+            case MessageType.AllCombatReports: {
+                const { data } = msg as AllCombatReportsMessage;
                 this.reports = data;
                 this.reportsPerDay = data.reduce(
                     (perDay, report) => {
@@ -58,7 +58,7 @@ class DebrisFieldReportDataModuleClass extends Vue {
                         perDay[day].push(report);
                         return perDay;
                     },
-                    {} as Record<number, DebrisFieldReport[]>
+                    {} as Record<number, CombatReport[]>
                 );
 
                 this.firstDate = data.reduce(
@@ -75,4 +75,4 @@ class DebrisFieldReportDataModuleClass extends Vue {
     }
 }
 
-export const DebrisFieldReportDataModule = new DebrisFieldReportDataModuleClass();
+export const CombatReportDataModule = new CombatReportDataModuleClass();

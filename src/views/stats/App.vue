@@ -34,16 +34,26 @@
                     tab.style,
                 ]"
             >
-                <span v-if="tab.icon != null" class="nav-item-icon" :class="tab.icon" />
-                <span v-if="tab.label != null" class="nav-item-label " v-text="tab.label" />
+                <span
+                    v-if="tab.icon != null"
+                    class="nav-item-icon"
+                    :class="tab.icon"
+                />
+                <span v-if="tab.label != null" class="nav-item-label">
+                    <span v-text="tab.label" />
+                    <span
+                        v-if="
+                            tab.keyboardKey != null && tab.keyboardIcon != null
+                        "
+                        class="nav-item-keyboard-shortcut-icon"
+                        :class="tab.keyboardIcon"
+                    />
+                </span>
             </component>
 
             <template v-if="isIframeMode">
                 <div style="width: 24px" />
-                <div
-                    class="nav-item icon-only"
-                    style="--color: none"
-                >
+                <div class="nav-item icon-only" style="--color: none">
                     <span
                         class="mdi mdi-close close-overlay"
                         @click="closeOverlay()"
@@ -74,6 +84,9 @@
         noNavItem?: boolean;
         color?: string;
         class?: string;
+
+        keyboardKey?: string;
+        keyboardIcon?: string;
     }
 
     @Component
@@ -90,36 +103,48 @@
                     to: { name: 'expeditions' },
                     icon: 'ogti ogti-expedition',
                     label: 'LOCA: Expeditionen',
+                    keyboardKey: '1',
+                    keyboardIcon: 'mdi mdi-numeric-1',
                 },
                 {
                     key: 'combats',
                     to: { name: 'combats' },
                     icon: 'ogti ogti-attack',
                     label: 'LOCA: Kämpfe',
+                    keyboardKey: '2',
+                    keyboardIcon: 'mdi mdi-numeric-2',
                 },
                 {
                     key: 'debris-fields',
                     to: { name: 'debris-fields' },
                     icon: 'ogti ogti-debris-field',
                     label: 'LOCA: Trümmerfelder',
+                    keyboardKey: '3',
+                    keyboardIcon: 'mdi mdi-numeric-3',
                 },
                 {
                     key: 'resource-overview',
                     to: { name: 'resource-overview' },
                     icon: 'ogti ogti-economy',
                     label: 'LOCA: Rohstoffbilanz',
+                    keyboardKey: '4',
+                    keyboardIcon: 'mdi mdi-numeric-4',
                 },
                 {
                     key: 'empire',
                     to: { name: 'empire' },
                     icon: 'ogti ogti-planet-moon',
                     label: 'LOCA: Imperium',
+                    keyboardKey: '5',
+                    keyboardIcon: 'mdi mdi-numeric-5',
                 },
                 {
                     key: 'tools',
                     to: { name: 'tools' },
                     icon: 'mdi mdi-tools', //TODO: fix
                     label: 'LOCA: Tools',
+                    keyboardKey: '6',
+                    keyboardIcon: 'mdi mdi-numeric-6',
                 },
                 {
                     key: 'space',
@@ -195,6 +220,20 @@
         private closeOverlay() {
             window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
         }
+
+        private mounted() {
+            window.addEventListener('keypress', e => {
+                if (e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
+                    return;
+                }
+
+                const selectedTab = this.tabs.find(tab => tab.keyboardKey == e.key);
+                const to = selectedTab?.to;
+                if (to != null && !this.$route.matched.some(route => route.name == to.name)) {
+                    this.$router.push(to);
+                }
+            });
+        }
     }
 </script>
 
@@ -250,6 +289,17 @@
                 rgba(var(--color), 0.25),
                 rgba(var(--color), 0.5)
             );
+        }
+
+        &-label {
+            position: relative;
+        }
+
+        &-keyboard-shortcut-icon {
+            font-size: 16px;
+            position: absolute;
+            bottom: -14px;
+            left: -5px;
         }
 
         > .ogti {
