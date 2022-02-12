@@ -31,7 +31,7 @@
                             :x2="svgContainer.clientWidth"
                             :y2="yData.svg"
                             class="y-grid-line"
-                            :class="{ 'y-grid-line--first': y == 1 }"
+                            :class="{ 'y-grid-line--first': y == 0 }"
                         />
                     </g>
 

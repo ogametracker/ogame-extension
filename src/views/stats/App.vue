@@ -298,7 +298,7 @@
         &-keyboard-shortcut-icon {
             font-size: 16px;
             position: absolute;
-            bottom: -14px;
+            top: -14px;
             left: -5px;
         }
 
