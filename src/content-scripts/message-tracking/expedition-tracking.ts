@@ -13,6 +13,7 @@ import { ExpeditionEventType } from "../../shared/models/v1/expeditions/Expediti
 import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
 import { Items } from "../../shared/models/v1/ogame/items/Items";
+import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 
 export function initExpeditionTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -41,6 +42,11 @@ function setupExpeditionMessageObserver() {
 }
 
 function onMessage(message: Message<MessageType, any>) {
+    const ogameMeta = getOgameMeta();
+    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+        return;
+    }
+
     switch (message.type) {
         case MessageType.Expedition:
         case MessageType.NewExpedition: {

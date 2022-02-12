@@ -10,6 +10,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
+import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -38,6 +39,11 @@ function setupObserver() {
 }
 
 function onMessage(message: Message<MessageType, any>) {
+    const ogameMeta = getOgameMeta();
+    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+        return;
+    }
+
     switch (message.type) {
         case MessageType.CombatReport:
         case MessageType.NewCombatReport: {

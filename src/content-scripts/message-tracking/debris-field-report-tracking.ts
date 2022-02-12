@@ -9,6 +9,7 @@ import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
+import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 
 export function initDebrisFieldReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -37,6 +38,11 @@ function setupObserver() {
 }
 
 function onMessage(message: Message<MessageType, any>) {
+    const ogameMeta = getOgameMeta();
+    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+        return;
+    }
+
     switch (message.type) {
         case MessageType.DebrisFieldReport:
         case MessageType.NewDebrisFieldReport: {
