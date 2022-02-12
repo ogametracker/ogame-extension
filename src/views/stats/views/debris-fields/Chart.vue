@@ -11,7 +11,7 @@
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
-import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
 
     @Component({
         components: {

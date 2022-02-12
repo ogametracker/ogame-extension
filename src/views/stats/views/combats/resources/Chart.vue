@@ -1,12 +1,143 @@
 <template>
-    <div>TODO: Chart</div>
+    <stats-chart
+        :datasets="datasets"
+        :firstDay="firstDay"
+        :itemsPerDay="reportsPerDay"
+    >
+        <template #tooltip-footer="{ datasets }">
+            <template
+                v-if="getVisibleDatasets(datasets).length < datasets.length"
+            >
+                <div class="footer-item">
+                    <div
+                        class="number"
+                        v-text="
+                            $number(
+                                getResourcesAmount(getVisibleDatasets(datasets))
+                            )
+                        "
+                    />
+                    <div>LOCA: Resources</div>
+
+                    <div
+                        class="number"
+                        v-text="
+                            $number(
+                                getResourcesAmountInMsu(
+                                    getVisibleDatasets(datasets)
+                                )
+                            )
+                        "
+                    />
+                    <div>LOCA: Resources (MSU)</div>
+                </div>
+                <hr />
+            </template>
+
+            <div class="footer-item">
+                <div
+                    class="number"
+                    v-text="$number(getResourcesAmount(datasets))"
+                />
+                <div>LOCA: Resources (Total)</div>
+
+                <div
+                    class="number"
+                    v-text="$number(getResourcesAmountInMsu(datasets))"
+                />
+                <div>LOCA: Resources (Total, MSU)</div>
+            </div>
+        </template>
+    </stats-chart>
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
+    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
 
-    @Component({})
-    export default class Chart extends Vue {
-        
+    @Component({
+        components: {
+            StatsChart,
+        },
+    })
+    export default class Charts extends Vue {
+        //TODO: colors from settings
+        private readonly colors: Record<ResourceType, string> = {
+            [ResourceType.metal]: '#de5200',
+            [ResourceType.crystal]: '#249df3',
+            [ResourceType.deuterium]: '#14bf73',
+        };
+
+        private get firstDay() {
+            return CombatReportDataModule.firstDay;
+        }
+
+        private get reportsPerDay() {
+            return CombatReportDataModule.reportsPerDay;
+        }
+
+        private get datasets(): StatsChartDataset<CombatReport>[] {
+            return [
+                ...Object.values(ResourceType).map(resource => ({
+                    key: resource,
+                    label: `LOCA: ${resource}`, //LOCA
+                    color: this.colors[resource],
+                    filled: true,
+                    getValue: (reports: CombatReport[]) => reports.reduce((acc, report) => acc + report.loot[resource], 0),
+                })),
+                {
+                    key: 'total',
+                    label: 'LOCA: Total Units (MSU)',
+                    color: '#999999',
+                    filled: false,
+                    getValue: reports => reports.reduce(
+                        (acc, report) => acc + report.loot.metal + report.loot.crystal * 2 + report.loot.deuterium * 3, //TODO: MSU from settings
+                        0
+                    ),
+                    stack: false,
+                }
+            ];
+        }
+
+        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+            return datasets.filter(d => d.visible);
+        }
+
+        private getResourcesAmount(datasets: ScollableChartFooterDataset[]): number {
+            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
+            return datasets
+                .filter(d => resources.includes(d.key.toString()))
+                .reduce((acc, cur) => acc + cur.value, 0);
+        }
+
+        private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
+            //TODO: MSU from setings
+            const msu: Record<ResourceType, number> = {
+                [ResourceType.metal]: 1,
+                [ResourceType.crystal]: 2,
+                [ResourceType.deuterium]: 3,
+            };
+            return datasets.reduce((acc, cur) => {
+                if (!(cur.key in msu)) {
+                    return acc;
+                }
+                return acc + cur.value * msu[cur.key as ResourceType];
+            }, 0);
+        }
     }
 </script>
+<style lang="scss" scoped>
+    .footer-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 4px;
+
+        .number {
+            text-align: right;
+        }
+    }
+</style>
