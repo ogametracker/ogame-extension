@@ -90,6 +90,7 @@
                     color: this.colors[resource],
                     filled: true,
                     getValue: (expos: ExpeditionEventResources[]) => expos.reduce((acc, expo) => acc + expo.resources[resource], 0),
+                    showAverage: true,
                 })),
                 {
                     key: 'total',
@@ -101,6 +102,7 @@
                         0
                     ),
                     stack: false,
+                    showAverage: true,
                 }
             ];
         }

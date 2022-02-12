@@ -75,6 +75,7 @@
                 color: this.colors[type],
                 filled: true,
                 getValue: expos => expos.filter(e => e.type == type).length,
+                showAverage: true,
             }));
         }
 

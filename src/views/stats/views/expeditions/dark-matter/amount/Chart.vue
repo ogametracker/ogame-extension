@@ -15,7 +15,7 @@
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({
         components: {
@@ -33,6 +33,7 @@ import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
                 color: this.color,
                 filled: true,
                 getValue: (expos: ExpeditionEventDarkMatter[]) => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),
+                showAverage: true,
             }];
         }
 

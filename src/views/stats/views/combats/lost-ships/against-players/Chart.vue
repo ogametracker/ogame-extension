@@ -82,7 +82,6 @@
                 color: this.colors[ship],
                 filled: true,
                 getValue: reports => reports.reduce((acc, report) => acc + report.lostShips[ship], 0),
-                showAverage: false,
             }));
         }
 

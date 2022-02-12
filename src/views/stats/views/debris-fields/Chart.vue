@@ -44,6 +44,7 @@
                     color: this.colors[resource],
                     filled: true,
                     getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report[resource], 0),
+                    showAverage: true,
                 })),
                 {
                     key: 'total',
@@ -52,6 +53,7 @@
                     filled: false,
                     getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report.metal + report.crystal * 2, 0), //TODO: MSU from settings
                     stack: false,
+                    showAverage: true,
                 }
             ];
         }

@@ -81,6 +81,7 @@
                 color: this.colors[ship],
                 filled: true,
                 getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
+                showAverage: true,
             }));
         }
 

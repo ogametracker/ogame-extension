@@ -70,7 +70,7 @@
                     filled: dataset.filled ?? true,
                     stack: dataset.stack ?? true,
                     hidePoints: false,
-                    average: total / Math.max(1, filteredItemDays),
+                    average: dataset.showAverage == true ? total / Math.max(1, filteredItemDays) : undefined,
                 };
             });
         }

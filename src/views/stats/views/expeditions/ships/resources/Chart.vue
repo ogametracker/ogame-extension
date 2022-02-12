@@ -83,6 +83,7 @@
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource]
                         ), 0),
+                    showAverage: true,
                 })),
                 {
                     key: 'total',
@@ -97,6 +98,7 @@
                             }
                         ), 0),
                     stack: false,
+                    showAverage: true,
                 }
             ];
         }
