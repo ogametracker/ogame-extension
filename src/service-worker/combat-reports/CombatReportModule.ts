@@ -87,10 +87,10 @@ export class CombatReportModule {
 
         const result: CombatResultType = (attackingFleets.some(fleet => fleet.ownerID == playerId) && ogameCombatReport.result == 'attacker')
             || (Object.values(ogameCombatReport.defender).some(fleet => fleet.ownerID == playerId) && ogameCombatReport.result == 'defender')
-            ? 'won'
+            ? CombatResultType.won
             : ogameCombatReport.result == 'draw'
-                ? 'draw'
-                : 'lost';
+                ? CombatResultType.draw
+                : CombatResultType.lost;
 
 
         const expeditionAttackType = ogameCombatReport.isExpedition
