@@ -1,10 +1,11 @@
 import { MessageOgameMeta } from "@/shared/messages/Message";
 import { _throw } from '@/shared/utils/_throw';
+import { parseIntSafe } from '@/shared/utils/parseNumbers';
 
 const params = new URLSearchParams(location.search);
 
 export const GlobalOgameMetaData: MessageOgameMeta = {
     language: params.get('language') ?? _throw('missing parameter "language"'),
-    playerId: parseInt(params.get('player') ?? _throw('missing parameter "player"')),
-    serverId: parseInt(params.get('server') ?? _throw('missing parameter "server"')),
+    playerId: parseIntSafe(params.get('player') ?? _throw('missing parameter "player"'), 10),
+    serverId: parseIntSafe(params.get('server') ?? _throw('missing parameter "server"'), 10),
 };

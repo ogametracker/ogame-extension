@@ -10,6 +10,7 @@ import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 export function initDebrisFieldReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -84,7 +85,7 @@ function trackDebrisFieldReports(elem: Element) {
     messages.forEach(msg => {
         try {
             // prepare message to service worker
-            const id = parseInt(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'));
+            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
             }

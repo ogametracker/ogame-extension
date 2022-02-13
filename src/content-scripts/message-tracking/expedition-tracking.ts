@@ -14,6 +14,7 @@ import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/Expediti
 import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
 import { Items } from "../../shared/models/v1/ogame/items/Items";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 export function initExpeditionTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -68,7 +69,7 @@ function trackExpeditions(elem: Element) {
     messages.forEach(msg => {
         try {
             // prepare message to service worker
-            const id = parseInt(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'));
+            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
             }
@@ -141,7 +142,7 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
 
         case ExpeditionEventType.fleet: {
             const ships = Object.keys(expedition.fleet)
-                .map(ship => parseInt(ship) as ExpeditionFindableShipType)
+                .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
             addOrSetCustomMessageContent(li, `

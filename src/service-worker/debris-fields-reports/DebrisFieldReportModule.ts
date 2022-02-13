@@ -10,6 +10,7 @@ import { DebrisFieldReportManager } from "./DebrisFieldReportManager";
 import { TrackDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/v1/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 type DebrisFieldReportResult = {
     ignored: true;
@@ -86,11 +87,8 @@ export class DebrisFieldReportModule {
         const metalText = match.groups?.metal.replace(/\./g, '') ?? _throw('metal not found');
         const crystalText = match.groups?.crystal.replace(/\./g, '') ?? _throw('crystal not found');
 
-        const metal = parseInt(metalText, 10);
-        const crystal = parseInt(crystalText, 10);
-        if(isNaN(metal) || isNaN(crystal)) {
-            throw new Error(`failed to parse metal ('${match.groups?.metal ?? ''}') or crystal ('${match.groups?.crystal ?? ''}')`);
-        }
+        const metal = parseIntSafe(metalText, 10);
+        const crystal = parseIntSafe(crystalText, 10);
 
         return {
             success: true,

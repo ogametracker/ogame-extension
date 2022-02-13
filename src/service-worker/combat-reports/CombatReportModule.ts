@@ -13,6 +13,7 @@ import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
 import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 interface CombatReportResult {
     report: CombatReport;
@@ -132,7 +133,7 @@ export class CombatReportModule {
         const ships = getNumericEnumValues<ShipType>(ShipType);
         const lastRound = ogameCombatReport.combatRounds[ogameCombatReport.combatRounds.length - 1];
         Object.keys(lastRound.attackerLosses ?? {}).forEach(fleetId => {
-            const id = parseInt(fleetId);
+            const id = parseIntSafe(fleetId, 10);
             if (ogameCombatReport.attacker[id].ownerID != playerId)
                 return;
 
@@ -145,12 +146,12 @@ export class CombatReportModule {
                 if (countStr == null)
                     return;
 
-                const count = parseInt(countStr);
+                const count = parseIntSafe(countStr, 10);
                 lostShips[ship] += count;
             });
         });
         Object.keys(lastRound.defenderLosses ?? {}).forEach(fleetId => {
-            const id = parseInt(fleetId);
+            const id = parseIntSafe(fleetId, 10);
             if (ogameCombatReport.defender[id].ownerID != playerId)
                 return;
 
@@ -163,7 +164,7 @@ export class CombatReportModule {
                 if (countStr == null)
                     return;
 
-                const count = parseInt(countStr);
+                const count = parseIntSafe(countStr, 10);
                 lostShips[ship] += count;
             });
         });

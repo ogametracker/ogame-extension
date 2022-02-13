@@ -11,6 +11,7 @@ import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
 import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -95,7 +96,7 @@ async function trackCombatReports(elem: Element) {
     const promises = messages.map(async msg => {
         try {
             // prepare message to service worker
-            const id = parseInt(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'));
+            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
             }

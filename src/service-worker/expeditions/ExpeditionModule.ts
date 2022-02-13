@@ -19,6 +19,7 @@ import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { ExpeditionManager } from "./ExpeditionManager";
+import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -249,7 +250,7 @@ export class ExpeditionModule {
                 const shipMatch = textWithFoundFleet.match(shipRegex);
 
                 if (shipMatch != null) {
-                    foundShips[ship] = parseInt(shipMatch[1]);
+                    foundShips[ship] = parseIntSafe(shipMatch[1], 10);
                 }
             });
         }
@@ -272,7 +273,7 @@ export class ExpeditionModule {
             return null;
         }
 
-        const amount = parseInt(match.groups.amount.replace(/[^\d]/g, ''));
+        const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
         const size = Object.values(ExpeditionEventSize).find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
@@ -300,7 +301,7 @@ export class ExpeditionModule {
         }
 
         const resourceName = match[1];
-        const amount = parseInt(match[2].replace(/[^\d]/g, ''));
+        const amount = parseIntSafe(match[2].replace(/[^\d]/g, ''), 10);
         const size = Object.values(ExpeditionEventSize).find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
