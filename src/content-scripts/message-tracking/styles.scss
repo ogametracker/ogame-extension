@@ -119,15 +119,15 @@ $image-size-small: 24px;
 
         &--size {
             &-small .ogame-tracker-expedition--size-icon {
-                color: #595f62;
+                color: #595f62;//TODO: color from settings
                 font-size: 24px !important;
             }
             &-medium .ogame-tracker-expedition--size-icon {
-                color: #82b1ff;
+                color: #82b1ff;//TODO: color from settings
                 font-size: 28px !important;
             }
             &-large .ogame-tracker-expedition--size-icon {
-                color: #ab47bc;
+                color: #ab47bc;//TODO: color from settings
                 font-size: 32px !important;
             }
         }
