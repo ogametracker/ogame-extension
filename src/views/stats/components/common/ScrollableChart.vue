@@ -538,8 +538,8 @@
         private readonly internalConfig = {
             grid: {
                 y: {
-                    minLines: 3,
-                    maxLines: 6,
+                    minLines: 5,
+                    maxLines: 10,
 
                     stepBases: [1, 2, 5],
                     stepFactor: 10,
