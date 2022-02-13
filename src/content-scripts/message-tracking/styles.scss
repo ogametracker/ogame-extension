@@ -31,6 +31,10 @@ $image-size-small: 24px;
         &--ignored {
             //TODO:
         }
+
+        &--combat-report &__content {
+            margin: 0;
+        }
     }
 
     &-expedition-result {
@@ -148,23 +152,23 @@ $image-size-small: 24px;
 
         &--loot-table {
             display: inline-grid;
-            grid-template-columns: auto 1fr;
+            grid-template-columns: repeat(3, auto 1fr);
             align-items: center;
             gap: 4px;
-
-            &--negative-loot {
-                color: #d50000;
-            }
-
-            &--no-loot {
-                color: rgba(white, 0.5);
-            }
 
             > .ogame-tracker-resource {
                 width: $image-size-small;
                 height: $image-size-small;
                 margin-left: 16px;
             }
+        }
+
+        &--negative-loot {
+            color: #d50000;
+        }
+
+        &--no-loot {
+            color: rgba(white, 0.3);
         }
     }
 
