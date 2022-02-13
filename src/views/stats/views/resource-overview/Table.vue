@@ -1,10 +1,16 @@
 <template>
-    <ranged-stats-table
-        :dataItems="events"
-        :items="items"
-        :footerItems="footerItems"
-        show-average
-    />
+    <div>
+        <span>
+            <input type="checkbox" v-model="showDetailedBreakdown" />
+            LOCA: Show detailed breakdown
+        </span>
+        <ranged-stats-table
+            :dataItems="events"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+        />
+    </div>
 </template>
 
 <script lang="ts">
@@ -21,6 +27,7 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from '../expeditions/ships/resources/getResources';
 
+    type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     type Event =
         | ({ eventType: 'expedition' } & ExpeditionEvent)
         | ({ eventType: 'combat-report' } & CombatReport)
@@ -40,7 +47,25 @@
             ];
         }
 
+        private showDetailedBreakdown = false;
+
         private get items(): RangedStatsTableItem<Event>[] {
+            if (this.showDetailedBreakdown) {
+                const types: Record<ResourceType, EventType[]> = {
+                    [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report'],
+                    [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report'],
+                    [ResourceType.deuterium]: ['expedition', 'combat-report'],
+                };
+
+                return Object.values(ResourceType).map(resource => ({
+                    label: `LOCA: ${resource}`,
+                    items: types[resource].map(eventType => ({
+                        label: `LOCA: ${eventType}`,
+                        getValue: events => events.filter(ev => ev.eventType == eventType).reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
+                    }))
+                }));
+            }
+
             return Object.values(ResourceType).map(resource => ({
                 label: `LOCA: ${resource}`,
                 getValue: events => events.reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),

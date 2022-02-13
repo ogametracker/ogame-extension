@@ -4,7 +4,37 @@
         :items="rows"
         :footer-items="footerRows"
         :cell-class-provider="(value) => getCellClass(value)"
-    />
+    >
+        <!-- oh god this is ugly -->
+        <template
+            v-for="column in columns"
+            v-slot:[`cell-${column.key}`]="{ value }"
+        >
+            <span :key="column.key" class="ranged-stats-table-cell">
+                <span
+                    v-if="column.key == 'label'"
+                    :key="i"
+                    v-text="value.label"
+                />
+                <template v-else-if="column.key == 'subLabel'">
+                    <span
+                        v-for="(item, i) in value.items"
+                        :key="i"
+                        v-text="item.label"
+                    />
+                </template>
+                <template v-else>
+                    <span v-for="(item, i) in value.items || [value]" :key="i">
+                        <span
+                            v-if="column.formatter != null"
+                            v-text="column.formatter(item[column.key])"
+                        />
+                        <span v-else v-text="item[column.key]" />
+                    </span>
+                </template>
+            </span>
+        </template>
+    </grid-table>
 </template>
 
 <script lang="ts">
@@ -21,18 +51,32 @@
         date: number;
     }
 
-    export interface RangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
+    interface SingleRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
         label: string;
         getValue: (item: T[]) => number;
     }
 
-    interface RangedStatsTableRow {
+    interface GroupedRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
+        label: string;
+        items: SingleRangedStatsTableItem<T>[];
+    }
+
+    export type RangedStatsTableItem<T extends RangeStatsTableItemWithDate> = SingleRangedStatsTableItem<T> | GroupedRangedStatsTableItem<T>;
+
+    interface SimpleRangedStatsTableRow {
         label: string;
         percentage?: number | '';
         average?: number;
 
         [index: number]: number;
     }
+
+    interface GroupedRangedStatsTableRow {
+        label: string;
+        items: SimpleRangedStatsTableRow[];
+    }
+
+    type RangedStatsTableRow = SimpleRangedStatsTableRow | GroupedRangedStatsTableRow;
 
     @Component({})
     export default class RangedStatsTable<T extends RangeStatsTableItemWithDate> extends Vue {
@@ -60,6 +104,10 @@
         @Prop({ required: true, type: Array as PropType<T[]> })
         private dataItems!: T[];
 
+        private get hasGroupedItems(): boolean {
+            return this.items.some(item => 'items' in item);
+        }
+
         private get dataItemsByRange(): T[][] {
             const dataItems = this.dataItems;
             const dataItemsByRange: T[][] = _dev_DateRanges.map(() => []);
@@ -80,18 +128,25 @@
             return dataItemsByRange;
         }
 
-        private get columns(): GridTableColumn<keyof RangedStatsTableRow | number>[] {
-            const columns: GridTableColumn<keyof RangedStatsTableRow | number>[] = [
+        private get columns(): GridTableColumn<keyof SimpleRangedStatsTableRow | 'subLabel' | number>[] {
+            const columns: GridTableColumn<keyof SimpleRangedStatsTableRow | 'subLabel' | number>[] = [
                 {
                     key: 'label',
                     label: '',
-                },
-                ..._dev_DateRanges.map((range, i) => ({
-                    key: i,
-                    label: range.label ?? 'LOCA: Since <first day>',
-                    formatter: (value: number) => this.$number(value, this.numberFormatOptions),
-                })),
+                }
             ];
+            if (this.hasGroupedItems) {
+                columns.push({
+                    key: 'subLabel',
+                    label: '',
+                });
+            }
+
+            columns.push(..._dev_DateRanges.map((range, i) => ({
+                key: i,
+                label: range.label ?? 'LOCA: Since <first day>',
+                formatter: (value: number) => this.$number(value, this.numberFormatOptions),
+            })));
 
             if (this.showAverage) {
                 columns.push({
@@ -126,13 +181,19 @@
             const daysWithDataItems = new Set(dataItemDays).size;
 
             const totalValue = Math.max(1, this.items
-                .map(item => item.getValue(dataItemsByRange[allRangeIndex]))
+                .map(item => 'getValue' in item
+                    ? item.getValue(dataItemsByRange[allRangeIndex])
+                    : item.items.reduce((acc, i) => acc + i.getValue(dataItemsByRange[allRangeIndex]), 0)
+                )
                 .reduce((acc, cur) => acc + cur, 0)
             );
 
-            const rows = this.items.map(item => {
+            return this.items.map(item => this.mapItemToRow(item, dataItemsByRange, allRangeIndex, daysWithDataItems, totalValue));
+        }
 
-                const row: RangedStatsTableRow = {
+        private mapItemToRow(item: RangedStatsTableItem<T>, dataItemsByRange: T[][], allRangeIndex: number, daysWithDataItems: number, totalValue: number): RangedStatsTableRow {
+            if ('getValue' in item) {
+                const row: SimpleRangedStatsTableRow = {
                     label: item.label,
 
                     ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
@@ -147,11 +208,13 @@
                 if (this.showPercentage) {
                     row.percentage = 100 * allRangeValue / totalValue;
                 }
-
                 return row;
-            });
+            }
 
-            return rows;
+            return {
+                label: item.label,
+                items: item.items.map(subitem => this.mapItemToRow(subitem, dataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow),
+            };
         }
 
         private get footerRows(): RangedStatsTableRow[] {
@@ -165,7 +228,10 @@
             return this.footerItems.map(item => {
                 const row: RangedStatsTableRow = {
                     label: item.label,
-                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
+                    ..._dev_DateRanges.map((_, rangeIndex) => 'getValue' in item
+                        ? item.getValue(dataItemsByRange[rangeIndex])
+                        : item.items.reduce((acc, i) => acc + i.getValue(dataItemsByRange[rangeIndex]), 0)
+                    ),
                     percentage: '',
                 };
 
@@ -194,5 +260,11 @@
         &::v-deep .fade-value {
             color: rgba(white, 0.1);
         }
+    }
+
+    .ranged-stats-table-cell {
+        display: grid;
+        height: 100%;
+        align-items: center;
     }
 </style>
