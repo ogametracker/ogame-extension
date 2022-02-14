@@ -1,6 +1,9 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
 import { PlayerClass } from "../../shared/models/v1/ogame/classes/PlayerClass";
+import { UpdatePlayerClassMessage } from "../../shared/messages/tracking/empire";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { MessageType } from "../../shared/messages/MessageType";
 
 export function trackPlayerClass() {
     observerCallbacks.push({
@@ -17,8 +20,12 @@ export function trackPlayerClass() {
                 playerClass = PlayerClass.collector;
             }
 
-            //TODO: send message with updated player class
-            _throw('TODO: send message with updated player class', playerClass);
+            const message: UpdatePlayerClassMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdatePlayerClass,
+                data: playerClass,
+            };
+            chrome.runtime.sendMessage(message);
         },
     });
 }

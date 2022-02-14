@@ -30,7 +30,7 @@ export class DebrisFieldReportModule {
 
         const manager = this.getManager(message.ogameMeta);
         const { language } = message.ogameMeta;
-        const reports = await manager.getItems();
+        const reports = await manager.getData();
 
         // check if expedition already tracked => if true, return tracked data
         const knownReport = reports[messageData.id];
@@ -103,7 +103,7 @@ export class DebrisFieldReportModule {
 
     public async getDebridFieldReports(meta: MessageOgameMeta): Promise<DebrisFieldReport[]> {
         const manager = this.getManager(meta);
-        const reports = await manager.getItems();
+        const reports = await manager.getData();
         return Object.values(reports);
     }
 

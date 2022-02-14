@@ -3,6 +3,9 @@ import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import { ResearchType } from '../../shared/models/v1/ogame/research/ResearchType';
 import { _throw } from "../../shared/utils/_throw";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { MessageType } from "../../shared/messages/MessageType";
 
 export function trackResearchPage() {
     observerCallbacks.push({
@@ -18,8 +21,12 @@ export function trackResearchPage() {
                 researchLevels[research] = level;
             });
 
-            //TODO: send message with updated research levels
-            _throw('TODO: send message with updated research levels', researchLevels);
+            const message: UpdateResearchLevelsMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdateResearchLevels,
+                data: researchLevels,
+            };
+            chrome.runtime.sendMessage(message);
         },
     });
 }

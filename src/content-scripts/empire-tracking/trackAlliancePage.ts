@@ -1,6 +1,9 @@
 import { observerCallbacks } from "./main";
 import { AllianceClass } from '../../shared/models/v1/ogame/classes/AllianceClass';
 import { _throw } from "../../shared/utils/_throw";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { UpdateAllianceClassMessage } from "../../shared/messages/tracking/empire";
+import { MessageType } from "../../shared/messages/MessageType";
 
 export function trackAlliancePage(): void {
     observerCallbacks.push({
@@ -21,8 +24,12 @@ export function trackAlliancePage(): void {
                     allianceClass = AllianceClass.warrior;
                 }
 
-                //TODO: send message with updated alliance class
-                _throw('TODO: send message with updated alliance class', allianceClass);
+                const message: UpdateAllianceClassMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdateAllianceClass,
+                    data: allianceClass,
+                };
+                chrome.runtime.sendMessage(message);
             });
             observer.observe(element, { childList: true, subtree: true });
         },

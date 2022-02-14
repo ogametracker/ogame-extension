@@ -29,4 +29,17 @@ export enum MessageType {
 
     // message tracking
     WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report
+
+    // empire tracking
+    UpdatePlanetData = 'empire/update-planet-data',
+    UpdatePlanetActiveItems = 'empire/update-active-items',
+    UpdatePlanetBuildingLevels = 'empire/update-buildings-levels',
+    UpdateResearchLevels = 'empire/update-research-levels',
+    UpdatePlanetShipCounts = 'empire/update-planet-ships',
+    UpdatePlanetDefenseCounts = 'empire/update-planet-defenses',
+    UpdateActiveOfficers = 'empire/update-active-officers',
+    UpdatePlayerClass = 'empire/update-player-class',
+    UpdateAllianceClass = 'empire/update-alliance-class',
+    RequestEmpireData = 'empire/request-data',
+    EmpireData = 'empire/data',
 }

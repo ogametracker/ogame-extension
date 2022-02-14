@@ -12,6 +12,7 @@ import { trackFleetDispatchPage } from "./trackFleetDispatchPage";
 import { trackDefensesPage } from "./trackDefensesPage";
 import { trackOverviewPage } from "./trackOverviewPage";
 import { trackResourceSettingsPage } from "./trackResourceSettingsPage";
+import { trackEmpirePage } from "./trackEmpirePage";
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -67,6 +68,10 @@ const pageTrackers: PageTracker[] = [
     },
     {
         action: () => trackResourceSettingsPage(),
+        condition: query => query.page == 'resourceSettings',
+    },
+    {
+        action: () => trackEmpirePage(),
         condition: query => query.page == 'resourceSettings',
     },
 ];

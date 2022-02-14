@@ -34,7 +34,7 @@ export class ExpeditionModule {
 
         const manager = this.getManager(message.ogameMeta);
         const { language } = message.ogameMeta;
-        const expeditionEvents = await manager.getItems();
+        const expeditionEvents = await manager.getData();
 
         // check if expedition already tracked => if true, return tracked data
         const knownExpedition = expeditionEvents[expeditionEventData.id];
@@ -73,7 +73,7 @@ export class ExpeditionModule {
 
     public async getExpeditionEvents(meta: MessageOgameMeta): Promise<ExpeditionEvent[]> {
         const manager = this.getManager(meta);
-        const expeditions = await manager.getItems();
+        const expeditions = await manager.getData();
         return Object.values(expeditions);
     }
 

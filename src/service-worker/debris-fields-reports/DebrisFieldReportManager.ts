@@ -1,7 +1,7 @@
 import { DebrisFieldReport } from "../../shared/models/v1/debris-field-reports/DebrisFieldReport";
-import { PersistentDataManager } from '../PersistentData';
+import { PersistentCollectionDataManager } from '../PersistentData';
 
-export class DebrisFieldReportManager extends PersistentDataManager<DebrisFieldReport> {
+export class DebrisFieldReportManager extends PersistentCollectionDataManager<DebrisFieldReport> {
     constructor(key: string) {
         super(key, 'debrisFieldReports');
     }

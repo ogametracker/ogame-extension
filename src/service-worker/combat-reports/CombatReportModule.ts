@@ -27,7 +27,7 @@ export class CombatReportModule {
         const combatReportData = message.data;
 
         const manager = this.getManager(message.ogameMeta);
-        const combatReports = await manager.getItems();
+        const combatReports = await manager.getData();
 
         // check if expedition already tracked => if true, return tracked data
         const knownReport = combatReports[combatReportData.id];
@@ -191,7 +191,7 @@ export class CombatReportModule {
 
     public async getCombatReports(meta: MessageOgameMeta): Promise<CombatReport[]> {
         const manager = this.getManager(meta);
-        const expeditions = await manager.getItems();
+        const expeditions = await manager.getData();
         return Object.values(expeditions);
     }
 

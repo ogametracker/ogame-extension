@@ -1,7 +1,7 @@
-import { PersistentDataManager } from '../PersistentData';
+import { PersistentCollectionDataManager } from '../PersistentData';
 import { CombatReport } from '../../shared/models/v1/combat-reports/CombatReport';
 
-export class CombatReportManager extends PersistentDataManager<CombatReport> {
+export class CombatReportManager extends PersistentCollectionDataManager<CombatReport> {
     constructor(key: string) {
         super(key, 'battleReports');
     }

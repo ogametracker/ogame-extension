@@ -1,30 +1,38 @@
-import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet } from "../../shared/messages/tracking/empire";
+import { BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdatePlanetDataMessage } from "../../shared/messages/tracking/empire";
 import { PlanetType } from "../../shared/models/v1/ogame/common/PlanetType";
 import { observerCallbacks } from "./main";
 import { _throw } from "../../shared/utils/_throw";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { parseCoordinates } from '../../shared/utils/parseCoordinates';
 import { Coordinates } from "../../shared/models/v1/ogame/common/Coordinates";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { MessageType } from "../../shared/messages/MessageType";
 
 export function trackOwnedPlanets() {
     observerCallbacks.push({
         selector: '#planetList',
         callback: element => {
-            const planets: BasicPlanetData[] = [];
-
             const planetElems = element.querySelectorAll('.smallplanet');
             planetElems.forEach(planetElem => {
                 const planet = getPlanetData(planetElem);
-                planets.push(planet);
+
+                const message: UpdatePlanetDataMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdatePlanetData,
+                    data: planet,
+                };
+                chrome.runtime.sendMessage(message);
 
                 const moon = getMoonData(planetElem, planet.coordinates);
                 if (moon != null) {
-                    planets.push(moon);
+                    const message: UpdatePlanetDataMessage = {
+                        ogameMeta: getOgameMeta(),
+                        type: MessageType.UpdatePlanetData,
+                        data: moon,
+                    };
+                    chrome.runtime.sendMessage(message);
                 }
             });
-
-            //TODO: send message with updated planet/moon data
-            _throw('TODO: send message with updated (basic) planet/moon data', planets);
         },
     });
 }

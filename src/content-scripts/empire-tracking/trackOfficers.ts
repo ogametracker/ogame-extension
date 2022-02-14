@@ -1,6 +1,9 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
 import { PlayerOfficers } from "../../shared/models/v1/empire/PlayerOfficers";
+import { UpdateActiveOfficersMessage } from "../../shared/messages/tracking/empire";
+import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { MessageType } from "../../shared/messages/MessageType";
 
 export function trackOfficers() {
     observerCallbacks.push({
@@ -19,8 +22,13 @@ export function trackOfficers() {
                 geologist,
                 technocrat,
             };
-            //TODO: send message with updated officers
-            _throw('TODO: send message with updated officers', officers);
+
+            const message: UpdateActiveOfficersMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdateActiveOfficers,
+                data: officers,
+            };
+            chrome.runtime.sendMessage(message);
         },
     });
 }

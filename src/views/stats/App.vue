@@ -141,7 +141,7 @@
                 {
                     key: 'tools',
                     to: { name: 'tools' },
-                    icon: 'mdi mdi-tools', //TODO: fix
+                    icon: 'mdi mdi-tools', 
                     label: 'LOCA: Tools',
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',

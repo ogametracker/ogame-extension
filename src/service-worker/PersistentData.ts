@@ -6,14 +6,14 @@ export interface PersistentDataItem {
     id: number;
 }
 
-const unloadTimeout = 5 * 60 * 1000; // 5 minutes
-export abstract class PersistentDataManager<TItem extends PersistentDataItem> {
+const unloadTimeout = 15 * 60 * 1000; // 15 minutes
+export abstract class PersistentDataManager<TItem> {
     private readonly _key: string;
     private readonly _suffix: string;
-    private _items: Record<number, TItem> | null = null;
+    private _item: TItem | null = null;
     private _unloadTimeout: number | undefined;
-    private readonly _readLock = new Lock();
-    private readonly _writeLock = new Lock();
+    protected readonly _readLock = new Lock();
+    protected readonly _writeLock = new Lock();
 
     constructor(key: string, suffix: string) {
         this._key = key;
@@ -34,17 +34,17 @@ export abstract class PersistentDataManager<TItem extends PersistentDataItem> {
     private async unload(): Promise<void> {
         await this.save();
 
-        this._items = null;
+        this._item = null;
         this._unloadTimeout = undefined;
     }
 
-    private async load(releaseLock: boolean): Promise<Record<number, TItem>> {
+    protected async load(releaseLock: boolean): Promise<TItem> {
         await this._readLock.acquire();
 
-        if (this._items == null) {
-            _logDebug('loading items from storage', this.storageKey);
+        if (this._item == null) {
+            _logDebug('loading item from storage', this.storageKey);
             const data = await chrome.storage.local.get(this.storageKey);
-            this._items = data?.[this.storageKey] ?? {};
+            this._item = data?.[this.storageKey] ?? {};
         }
 
         if(releaseLock) {
@@ -53,11 +53,35 @@ export abstract class PersistentDataManager<TItem extends PersistentDataItem> {
 
         this.registerUnload();
 
-        return this._items ?? _throw(`loaded items but object is still null (key '${this._key}')`)
+        return this._item ?? _throw(`loaded items but object is still null (key '${this._key}')`)
     }
 
-    public async getItems(): Promise<Record<number, TItem>> {
+    public async updateData(data: TItem): Promise<void> {
+        await this._readLock.acquire();
+        this._item = data;
+        this._readLock.release();
+        
+        await this.save();
+    }
+
+    public async getData(): Promise<TItem> {
         return await this.load(true);
+    }
+
+    protected async save(): Promise<void> {
+        await this._writeLock.acquire();
+
+        await chrome.storage.local.set({
+            [this.storageKey]: this._item,
+        });
+
+        this._writeLock.release();
+    }
+}
+
+export abstract class PersistentCollectionDataManager<TItem extends PersistentDataItem> extends PersistentDataManager<Record<number, TItem>> {
+    constructor(key: string, suffix: string) {
+        super(key, suffix);
     }
 
     public async add(item: TItem): Promise<void> {
@@ -67,15 +91,5 @@ export abstract class PersistentDataManager<TItem extends PersistentDataItem> {
         this._readLock.release();
         
         await this.save();
-    }
-
-    private async save(): Promise<void> {
-        await this._writeLock.acquire();
-
-        await chrome.storage.local.set({
-            [this.storageKey]: this._items,
-        });
-
-        this._writeLock.release();
     }
 }
