@@ -27,7 +27,6 @@
 
     .icon {
         cursor: pointer;
-        //TODO: fix styles
         background: url(#{$base-url}/img/menu-icon-background.png);
 
         display: flex;
@@ -45,10 +44,6 @@
             opacity: 1;
             color: #e59a4b;
         }
-
-        &.warning {
-            background: red;
-        }
     }
 
     .warning-lang-not-supported {
@@ -56,6 +51,7 @@
         align-items: center;
         justify-content: center;
 
+        position: absolute;
         left: 0;
         top: 0;
         width: 22px;
@@ -63,6 +59,7 @@
         transform: translateX(-100%);
 
         cursor: help;
+        font-size: 20px;
     }
 }
 
