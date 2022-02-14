@@ -44,8 +44,6 @@ const observer = new MutationObserver(() => {
 
         parent.appendChild(ogameTrackerMenu);
 
-        //TODO: add element to menu item if language not completely supported
-
         _logDebug('added menu item');
         observer.disconnect();
     }
