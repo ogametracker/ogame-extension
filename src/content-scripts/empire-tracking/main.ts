@@ -72,7 +72,7 @@ const pageTrackers: PageTracker[] = [
     },
     {
         action: () => trackEmpirePage(),
-        condition: query => query.page == 'resourceSettings',
+        condition: query => query.page == 'standalone' && query.component == 'empire',
     },
 ];
 export const observerCallbacks: ObserverCallback[] = [];
