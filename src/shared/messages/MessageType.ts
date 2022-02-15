@@ -42,4 +42,5 @@ export enum MessageType {
     UpdateAllianceClass = 'empire/update-alliance-class',
     RequestEmpireData = 'empire/request-data',
     EmpireData = 'empire/data',
+    NotifyEmpireDataUpdate = 'empire/notify-update',
 }

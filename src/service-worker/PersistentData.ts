@@ -38,13 +38,15 @@ export abstract class PersistentDataManager<TItem> {
         this._unloadTimeout = undefined;
     }
 
+    protected abstract getDefaultItem(): TItem;
+
     protected async load(releaseLock: boolean): Promise<TItem> {
         await this._readLock.acquire();
 
         if (this._item == null) {
             _logDebug('loading item from storage', this.storageKey);
             const data = await chrome.storage.local.get(this.storageKey);
-            this._item = data?.[this.storageKey] ?? {};
+            this._item = data?.[this.storageKey] ?? this.getDefaultItem();
         }
 
         if(releaseLock) {
@@ -91,5 +93,9 @@ export abstract class PersistentCollectionDataManager<TItem extends PersistentDa
         this._readLock.release();
         
         await this.save();
+    }
+
+    protected getDefaultItem(): Record<number, TItem> {
+        return {};
     }
 }

@@ -11,6 +11,10 @@ export function trackSuppliesPage() {
     observerCallbacks.push({
         selector: '#producers',
         callback: element => {
+            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
+            const planetId = parseIntSafe(planetIdText, 10);
+
             const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
                 ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
@@ -41,10 +45,12 @@ export function trackSuppliesPage() {
             const buildingsMessage: UpdatePlanetBuildingLevelsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetBuildingLevels,
-                data: buildingLevels,
+                data: {
+                    planetId, 
+                    data: buildingLevels,
+                },
             };
             chrome.runtime.sendMessage(buildingsMessage);
-
 
 
             const shipTypes = [ ShipType.solarSatellite, ShipType.crawler];
@@ -60,7 +66,10 @@ export function trackSuppliesPage() {
             const shipMessage: UpdatePlanetShipCountsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetShipCounts,
-                data: shipCounts,
+                data: {
+                    planetId,
+                    data: shipCounts,
+                },
             };
             chrome.runtime.sendMessage(shipMessage);
         },

@@ -45,37 +45,21 @@ export class EmpireModule {
     }
 
     public async updateBuildingLevels(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<BuildingType, number>>>) {
-        const facilities = [
-            BuildingType.roboticsFactory,
-            BuildingType.shipyard,
-            BuildingType.researchLab,
-            BuildingType.allianceDepot,
-            BuildingType.missileSilo,
-            BuildingType.naniteFactory,
-            BuildingType.terraformer,
-            BuildingType.spaceDock,
-            BuildingType.lunarBase,
-            BuildingType.sensorPhalanx,
-            BuildingType.jumpGate
-        ];
-        const supplies = [
-            BuildingType.metalMine,
-            BuildingType.metalStorage,
-            BuildingType.crystalMine,
-            BuildingType.crystalStorage,
-            BuildingType.deuteriumSynthesizer,
-            BuildingType.deuteriumTank,
-            BuildingType.solarPlant,
-            BuildingType.fusionReactor
-        ];
-
-        const updateFacilities = facilities.filter(b => Object.keys(data.data).map(b => parseIntSafe(b, 10)).includes(b));
-        const updateSupplies = supplies.filter(b => Object.keys(data.data).map(b => parseIntSafe(b, 10)).includes(b));
-
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
-            updateFacilities.forEach(b => localPlayerData.planets[data.planetId].buildings.facilities[b] = data.data[b]);
-            updateSupplies.forEach(b => localPlayerData.planets[data.planetId].buildings.production[b] = data.data[b]);
+            const updateFacilities = Object.keys(localPlayerData.planets[data.planetId].buildings.facilities)
+                .map(p => parseIntSafe(p, 10))
+                .filter(b => Object.keys(data.data).map(b => parseIntSafe(b, 10) as BuildingType).includes(b)) as BuildingType[];
+
+            const updateSupplies = Object.keys(localPlayerData.planets[data.planetId].buildings.production)
+                .map(p => parseIntSafe(p, 10))
+                .filter(b => Object.keys(data.data).map(b => parseIntSafe(b, 10) as BuildingType).includes(b)) as BuildingType[];
+
+            const planetFacilities = localPlayerData.planets[data.planetId].buildings.facilities as Record<BuildingType, number>;
+            const planetSupplies = localPlayerData.planets[data.planetId].buildings.production as Record<BuildingType, number>;
+
+            updateFacilities.forEach(b => planetFacilities[b] = data.data[b]!);
+            updateSupplies.forEach(b => planetSupplies[b] = data.data[b]!);
             return localPlayerData;
         });
     }
@@ -92,7 +76,7 @@ export class EmpireModule {
             // add new planets
             data.filter(planet => localPlayerData.planets[planet.id] == null)
                 .forEach(p => {
-                    if(p.isMoon) {
+                    if (p.isMoon) {
                         const moon = this.createMoonData(p);
                         localPlayerData.planets[moon.id] = moon;
                     } else {
@@ -117,9 +101,12 @@ export class EmpireModule {
     public async updatePlanetShips(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<ShipType, number>>>) {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
+            const ships = localPlayerData.planets[data.planetId].ships as Record<ShipType, number>;
+
             Object.keys(data.data)
-                .map(shipId => parseIntSafe(shipId, 10))
-                .forEach(shipId => localPlayerData.planets[data.planetId].ships[shipId] = data.data[shipId]);
+                .map(shipId => parseIntSafe(shipId, 10) as ShipType)
+                .filter(ship => ships[ship] != null)
+                .forEach(shipId => ships[shipId] = data.data[shipId]!);
             return localPlayerData;
         });
     }

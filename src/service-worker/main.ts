@@ -5,6 +5,7 @@ import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
+import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 
@@ -12,6 +13,7 @@ const services: MessageService[] = [
     new ExpeditionService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
+    new EmpireService(),
 ];
 
 try {

@@ -10,6 +10,10 @@ export function trackFacilitiesPage() {
     observerCallbacks.push({
         selector: '#technologies > .icons',
         callback: element => {
+            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
+            const planetId = parseIntSafe(planetIdText, 10);
+
             const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
                 ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
@@ -34,7 +38,7 @@ export function trackFacilitiesPage() {
             const buildingLevels = {} as Partial<Record<BuildingType, number>>;
 
             buildingTypes.forEach(building => {
-                const levelText = element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value') 
+                const levelText = element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value')
                     ?? _throw(`did not find level of building '${BuildingType[building]}'`);
                 const level = parseIntSafe(levelText, 10);
 
@@ -44,7 +48,10 @@ export function trackFacilitiesPage() {
             const message: UpdatePlanetBuildingLevelsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetBuildingLevels,
-                data: buildingLevels,
+                data: {
+                    planetId,
+                    data: buildingLevels,
+                },
             };
             chrome.runtime.sendMessage(message);
         },

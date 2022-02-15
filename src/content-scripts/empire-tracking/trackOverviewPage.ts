@@ -37,7 +37,7 @@ export function trackOverviewPage(): void {
                 type: MessageType.UpdatePlanetActiveItems,
                 data: {
                     planetId,
-                    items: activeItems,
+                    data: activeItems,
                 },
             };
             chrome.runtime.sendMessage(message);

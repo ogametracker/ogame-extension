@@ -65,3 +65,7 @@ export type UpdateAllianceClassMessage = Message<MessageType.UpdateAllianceClass
 
 export type RequestLocalPlayerDataMessage = NoDataMessage<MessageType.RequestEmpireData>;
 export type EmpireDataMessage = Message<MessageType.EmpireData, LocalPlayerData>;
+
+
+// notifications
+export type NotifyEmpireDataUpdateMessage = Message<MessageType.NotifyEmpireDataUpdate, LocalPlayerData>;

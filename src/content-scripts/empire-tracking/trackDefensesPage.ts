@@ -1,7 +1,7 @@
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { DefenseType} from '../../shared/models/v1/ogame/defenses/DefenseType';
+import { DefenseType } from '../../shared/models/v1/ogame/defenses/DefenseType';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
@@ -10,7 +10,11 @@ import { MessageType } from "../../shared/messages/MessageType";
 export function trackDefensesPage() {
     observerCallbacks.push({
         selector: '#technologies > .icons',
-        callback: element => { 
+        callback: element => {
+            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
+            const planetId = parseIntSafe(planetIdText, 10);
+
             const defenseTypes = getNumericEnumValues<DefenseType>(DefenseType);
             const defenseCounts = {} as Record<DefenseType, number>;
 
@@ -25,7 +29,14 @@ export function trackDefensesPage() {
             const message: UpdatePlanetDefenseCountsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetDefenseCounts,
-                data: defenseCounts,
+                data: {
+                    planetId,
+                    data: {
+                        ...defenseCounts,
+                        [DefenseType.smallShieldDome]: defenseCounts[DefenseType.smallShieldDome] > 0,
+                        [DefenseType.largeShieldDome]: defenseCounts[DefenseType.largeShieldDome] > 0,
+                    },
+                },
             };
             chrome.runtime.sendMessage(message);
         },

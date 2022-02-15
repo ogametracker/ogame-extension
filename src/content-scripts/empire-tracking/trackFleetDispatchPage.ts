@@ -11,6 +11,10 @@ export function trackFleetDispatchPage(): void {
     observerCallbacks.push({
         selector: '#technologies',
         callback: element => {
+            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
+            const planetId = parseIntSafe(planetIdText, 10);
+
             const shipTypes = getNumericEnumValues<ShipType>(ShipType)
                 .filter(ship => ![ShipType.solarSatellite, ShipType.crawler].includes(ship));
             const shipCounts = {} as Record<ShipType, number>;
@@ -26,7 +30,10 @@ export function trackFleetDispatchPage(): void {
             const message: UpdatePlanetShipCountsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetShipCounts,
-                data: shipCounts,
+                data: {
+                    planetId,
+                    data: shipCounts,
+                },
             };
             chrome.runtime.sendMessage(message);
         },
