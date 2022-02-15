@@ -4,42 +4,66 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { EmpireDataMessage } from '../../shared/messages/tracking/empire';
+import { EmpireDataMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage } from '../../shared/messages/tracking/empire';
 
 export class EmpireService implements MessageService {
     private readonly empireModule = new EmpireModule();
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
         switch (message.type) {
-            // case MessageType.TrackExpedition: {
-            //     const tryResult = await this.expeditionModule.tryTrackExpedition(message as TrackExpeditionMessage);
-            //     if (!tryResult.success) {
-            //         _throw('failed to track expedition');
-            //     }
+            case MessageType.UpdateActiveOfficers: {
+                const msg = message as UpdateActiveOfficersMessage;
+                await this.empireModule.updateOfficers(msg.ogameMeta, msg.data);
+                break;
+            }
 
-            //     const { expedition, isAlreadyTracked } = tryResult.result;
+            case MessageType.UpdateAllianceClass: {
+                const msg = message as UpdateAllianceClassMessage;
+                await this.empireModule.updateAlliance(msg.ogameMeta, msg.data);
+                break;
+            }
 
-            //     // broadcast "new expedition available"
-            //     if (!isAlreadyTracked) {
-            //         const newExpeditionMessage: NewExpeditionMessage = {
-            //             ogameMeta: message.ogameMeta,
-            //             type: MessageType.NewExpedition,
-            //             data: expedition,
-            //         };
-            //         broadcastMessage(newExpeditionMessage);
-            //     }
-            //     // send data of the specific expedition
-            //     else {
-            //         const expeditionMessage: ExpeditionMessage = {
-            //             ogameMeta: message.ogameMeta,
-            //             type: MessageType.Expedition,
-            //             data: expedition,
-            //         };
-            //         broadcastMessage(expeditionMessage);
-            //     }
+            case MessageType.UpdatePlanetActiveItems: {
+                const msg = message as UpdatePlanetActiveItemsMessage;
+                await this.empireModule.updateActiveItems(msg.ogameMeta, msg.data);
+                break;
+            }
 
-            //     break;
-            // }
+            case MessageType.UpdatePlanetBuildingLevels: {
+                const msg = message as UpdatePlanetBuildingLevelsMessage;
+                await this.empireModule.updateBuildingLevels(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdatePlanetData: {
+                const msg = message as UpdateOwnedPlanetsMessage;
+                await this.empireModule.updateBasicPlanets(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdatePlanetDefenseCounts: {
+                const msg = message as UpdatePlanetDefenseCountsMessage;
+                await this.empireModule.updatePlanetDefenses(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdatePlanetShipCounts: {
+                const msg = message as UpdatePlanetShipCountsMessage;
+                await this.empireModule.updatePlanetShips(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdatePlayerClass: {
+                const msg = message as UpdatePlayerClassMessage;
+                await this.empireModule.updatePlayerClass(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdateResearchLevels: {
+                const msg = message as UpdateResearchLevelsMessage;
+                await this.empireModule.updateResearchLevels(msg.ogameMeta, msg.data);
+                break;
+            }
 
             case MessageType.RequestEmpireData: {
                 await this.broadcastEmpireData(message.ogameMeta);

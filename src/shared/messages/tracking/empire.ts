@@ -13,7 +13,7 @@ import { LocalPlayerData } from "../../models/v1/empire/LocalPlayerData";
 
 
 // basic planet/moon data
-interface BasicPlanetDataBase {
+export interface BasicPlanetDataBase {
     id: number;
     name: string;
     coordinates: Coordinates;
@@ -27,15 +27,16 @@ export interface BasicPlanetDataMoon extends BasicPlanetDataBase {
 }
 export type BasicPlanetData = BasicPlanetDataPlanet | BasicPlanetDataMoon;
 
-export type UpdatePlanetDataMessage = Message<MessageType.UpdatePlanetData, BasicPlanetData>;
+export type UpdateOwnedPlanetsMessage = Message<MessageType.UpdatePlanetData, BasicPlanetData[]>;
 
+
+export interface PlanetDataWrapper<T> {
+    planetId: number;
+    data: T;
+}
 
 // active items
-interface PlanetActiveItems {
-    planetId: number;
-    items: Partial<Record<ItemHash, number>>;
-}
-export type UpdatePlanetActiveItemsMessage = Message<MessageType.UpdatePlanetActiveItems, PlanetActiveItems>;
+export type UpdatePlanetActiveItemsMessage = Message<MessageType.UpdatePlanetActiveItems, PlanetDataWrapper<Partial<Record<ItemHash, number>>>>;
 
 // research levels
 type ResearchLevels = Record<ResearchType, number>;
@@ -43,15 +44,18 @@ export type UpdateResearchLevelsMessage = Message<MessageType.UpdateResearchLeve
 
 // building levels
 type PlanetBuildingLevels = Partial<Record<BuildingType, number>>;
-export type UpdatePlanetBuildingLevelsMessage = Message<MessageType.UpdatePlanetBuildingLevels, PlanetBuildingLevels>;
+export type UpdatePlanetBuildingLevelsMessage = Message<MessageType.UpdatePlanetBuildingLevels, PlanetDataWrapper<PlanetBuildingLevels>>;
 
 // ship counts
 type PlanetShipCounts = Partial<Record<ShipType, number>>;
-export type UpdatePlanetShipCountsMessage = Message<MessageType.UpdatePlanetShipCounts, PlanetShipCounts>;
+export type UpdatePlanetShipCountsMessage = Message<MessageType.UpdatePlanetShipCounts, PlanetDataWrapper<PlanetShipCounts>>;
 
 // defense counts
-type DefenseShipCounts = Partial<Record<DefenseType, number>>;
-export type UpdatePlanetDefenseCountsMessage = Message<MessageType.UpdatePlanetDefenseCounts, DefenseShipCounts>;
+export type PlanetDefenseCounts = Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & { 
+    [DefenseType.smallShieldDome]: boolean;
+    [DefenseType.largeShieldDome]: boolean;
+};
+export type UpdatePlanetDefenseCountsMessage = Message<MessageType.UpdatePlanetDefenseCounts, PlanetDataWrapper<PlanetDefenseCounts>>;
 
 // active officers, player class, alliance class
 export type UpdateActiveOfficersMessage = Message<MessageType.UpdateActiveOfficers, PlayerOfficers>;

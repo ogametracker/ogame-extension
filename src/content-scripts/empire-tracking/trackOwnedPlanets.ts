@@ -1,4 +1,4 @@
-import { BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdatePlanetDataMessage } from "../../shared/messages/tracking/empire";
+import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateOwnedPlanetsMessage, } from "../../shared/messages/tracking/empire";
 import { PlanetType } from "../../shared/models/v1/ogame/common/PlanetType";
 import { observerCallbacks } from "./main";
 import { _throw } from "../../shared/utils/_throw";
@@ -13,26 +13,24 @@ export function trackOwnedPlanets() {
         selector: '#planetList',
         callback: element => {
             const planetElems = element.querySelectorAll('.smallplanet');
+            const ownedPlanets: BasicPlanetData[] = [];
+
             planetElems.forEach(planetElem => {
                 const planet = getPlanetData(planetElem);
-
-                const message: UpdatePlanetDataMessage = {
-                    ogameMeta: getOgameMeta(),
-                    type: MessageType.UpdatePlanetData,
-                    data: planet,
-                };
-                chrome.runtime.sendMessage(message);
+                ownedPlanets.push(planet);
 
                 const moon = getMoonData(planetElem, planet.coordinates);
                 if (moon != null) {
-                    const message: UpdatePlanetDataMessage = {
-                        ogameMeta: getOgameMeta(),
-                        type: MessageType.UpdatePlanetData,
-                        data: moon,
-                    };
-                    chrome.runtime.sendMessage(message);
+                    ownedPlanets.push(moon);
                 }
             });
+
+            const message: UpdateOwnedPlanetsMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdatePlanetData,
+                data: ownedPlanets,
+            };
+            chrome.runtime.sendMessage(message);
         },
     });
 }
