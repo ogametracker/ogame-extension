@@ -10,6 +10,7 @@ import { AllianceClass } from "../../models/v1/ogame/classes/AllianceClass";
 import { BuildingType } from "../../models/v1/ogame/buildings/BuildingType";
 import { ResearchType } from "../../models/v1/ogame/research/ResearchType";
 import { LocalPlayerData } from "../../models/v1/empire/LocalPlayerData";
+import { ProductionSettings } from "@/shared/models/v1/empire/ProductionSettings";
 
 
 // basic planet/moon data
@@ -65,6 +66,9 @@ export type UpdateAllianceClassMessage = Message<MessageType.UpdateAllianceClass
 
 export type RequestLocalPlayerDataMessage = NoDataMessage<MessageType.RequestEmpireData>;
 export type EmpireDataMessage = Message<MessageType.EmpireData, LocalPlayerData>;
+
+// production percentages
+export type UpdatePlanetProductionSettingsMessage = Message<MessageType.UpdatePlanetProductionSettings, PlanetDataWrapper<ProductionSettings>>;
 
 
 // notifications

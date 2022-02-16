@@ -1,5 +1,7 @@
 import { MessageType } from "../../shared/messages/MessageType";
-import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
+import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
+import { CrawlerProductionPercentage } from "../../shared/models/v1/empire/CrawlerProductionPercentage";
+import { ProductionPercentage } from "../../shared/models/v1/empire/ProductionPercentage";
 import { BuildingType } from "../../shared/models/v1/ogame/buildings/BuildingType";
 import { AllianceClass } from "../../shared/models/v1/ogame/classes/AllianceClass";
 import { ResearchType } from "../../shared/models/v1/ogame/research/ResearchType";
@@ -22,7 +24,7 @@ export function trackResourceSettingsPage(): void {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetBuildingLevels,
                 data: {
-                    planetId, 
+                    planetId,
                     data: {
                         [BuildingType.metalMine]: getLevelOrAmount(element, BuildingType.metalMine),
                         [BuildingType.crystalMine]: getLevelOrAmount(element, BuildingType.crystalMine),
@@ -46,7 +48,7 @@ export function trackResourceSettingsPage(): void {
                 },
             };
             chrome.runtime.sendMessage(solSatMessage);
-            
+
 
             const researchMessage: UpdateResearchLevelsMessage = {
                 ogameMeta: getOgameMeta(),
@@ -66,8 +68,23 @@ export function trackResourceSettingsPage(): void {
             chrome.runtime.sendMessage(allyClassMessage);
 
 
-            //TODO: get production percentages
-            _throw('TODO: get production percentages');
+            const productionSettingsMessage: UpdatePlanetProductionSettingsMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdatePlanetProductionSettings,
+                data: {
+                    planetId,
+                    data: {
+                        [BuildingType.metalMine]: getProductionPercentage(element, BuildingType.metalMine) as ProductionPercentage,
+                        [BuildingType.crystalMine]: getProductionPercentage(element, BuildingType.crystalMine) as ProductionPercentage,
+                        [BuildingType.deuteriumSynthesizer]: getProductionPercentage(element, BuildingType.deuteriumSynthesizer) as ProductionPercentage,
+                        [BuildingType.solarPlant]: getProductionPercentage(element, BuildingType.solarPlant) as ProductionPercentage,
+                        [BuildingType.fusionReactor]: getProductionPercentage(element, BuildingType.fusionReactor) as ProductionPercentage,
+                        [ShipType.solarSatellite]: getProductionPercentage(element, ShipType.solarSatellite) as ProductionPercentage,
+                        [ShipType.crawler]: getProductionPercentage(element, ShipType.crawler) as CrawlerProductionPercentage,
+                    },
+                },
+            };
+            chrome.runtime.sendMessage(productionSettingsMessage);
         },
     });
 }
@@ -97,3 +114,16 @@ function getAllianceClass(element: Element): AllianceClass {
 
     return AllianceClass.none;
 }
+
+function getProductionPercentage(element: Element, techId: number): number {
+    const select = element.querySelector(`select[name="last${techId}"]`) as HTMLSelectElement | null
+        ?? _throw(`select not found for techid ${techId}`);
+
+    const levelOrAmount = getLevelOrAmount(element, techId);
+    // sometimes production is set to 0% for level/count 0 items, but will change to 100 automatically afterwards, so we just set it to 100
+    if (levelOrAmount == 0)
+        return 100;
+
+    return parseIntSafe(select.value, 10);
+}
+

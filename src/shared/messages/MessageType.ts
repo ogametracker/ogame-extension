@@ -40,6 +40,7 @@ export enum MessageType {
     UpdateActiveOfficers = 'empire/update-active-officers',
     UpdatePlayerClass = 'empire/update-player-class',
     UpdateAllianceClass = 'empire/update-alliance-class',
+    UpdatePlanetProductionSettings = 'empire/update-planet-production-settings',
     RequestEmpireData = 'empire/request-data',
     EmpireData = 'empire/data',
     NotifyEmpireDataUpdate = 'empire/notify-update',

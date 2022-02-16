@@ -16,6 +16,7 @@ import { DefenseType } from "../../shared/models/v1/ogame/defenses/DefenseType";
 import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { PlayerClass } from "../../shared/models/v1/ogame/classes/PlayerClass";
 import { ResearchType } from "../../shared/models/v1/ogame/research/ResearchType";
+import { ProductionSettings } from "../../shared/models/v1/empire/ProductionSettings";
 
 export class EmpireModule {
     private readonly empireManagers: Record<string, EmpireManager | undefined> = {};
@@ -125,6 +126,17 @@ export class EmpireModule {
                 .map(researchId => parseIntSafe(researchId, 10) as ResearchType)
                 .forEach(researchId => localPlayerData.research[researchId] = researchLevels[researchId]!);
                 
+            return localPlayerData;
+        });
+    }
+
+    public async updateProductionSettings(meta: MessageOgameMeta, data: PlanetDataWrapper<ProductionSettings>) {
+        const manager = this.getManager(meta);
+        await manager.update(localPlayerData => {
+            const planet = localPlayerData.planets[data.planetId];
+            if(!planet.isMoon) {
+                planet.productionSettings = data.data;
+            }
             return localPlayerData;
         });
     }
