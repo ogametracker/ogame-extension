@@ -105,7 +105,6 @@ export class EmpireModule {
 
             Object.keys(data.data)
                 .map(shipId => parseIntSafe(shipId, 10) as ShipType)
-                .filter(ship => ships[ship] != null)
                 .forEach(shipId => ships[shipId] = data.data[shipId]!);
             return localPlayerData;
         });
@@ -119,10 +118,13 @@ export class EmpireModule {
         });
     }
 
-    public async updateResearchLevels(meta: MessageOgameMeta, researchLevels: Record<ResearchType, number>) {
+    public async updateResearchLevels(meta: MessageOgameMeta, researchLevels: Partial<Record<ResearchType, number>>) {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
-            localPlayerData.research = researchLevels;
+            Object.keys(researchLevels)
+                .map(researchId => parseIntSafe(researchId, 10) as ResearchType)
+                .forEach(researchId => localPlayerData.research[researchId] = researchLevels[researchId]!);
+                
             return localPlayerData;
         });
     }

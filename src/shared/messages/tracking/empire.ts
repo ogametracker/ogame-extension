@@ -39,7 +39,7 @@ export interface PlanetDataWrapper<T> {
 export type UpdatePlanetActiveItemsMessage = Message<MessageType.UpdatePlanetActiveItems, PlanetDataWrapper<Partial<Record<ItemHash, number>>>>;
 
 // research levels
-type ResearchLevels = Record<ResearchType, number>;
+type ResearchLevels = Partial<Record<ResearchType, number>>;
 export type UpdateResearchLevelsMessage = Message<MessageType.UpdateResearchLevels, ResearchLevels>;
 
 // building levels

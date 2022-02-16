@@ -27,6 +27,11 @@ export function trackOverviewPage(): void {
                 const durationLeftText = itemElem.querySelector('.js_duration')?.textContent ?? _throw('no item duration found');
                 const durationLeft = parseIntSafe(durationLeftText, 10) * 1000;
                 const activeUntil = ogameNow + durationLeft;
+                
+                // permanent items have negative duration
+                if(durationLeft < 0) {
+                    //TODO: handle items with no remaining duration (like planet/moon field items)
+                }
 
                 activeItems[hash as ItemHash] = activeUntil;
             });

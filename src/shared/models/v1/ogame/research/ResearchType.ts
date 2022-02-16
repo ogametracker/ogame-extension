@@ -1,21 +1,18 @@
 export enum ResearchType {
-    energyTechnology = 113,
-    laserTechnology = 120,
-    ionTechnology = 121,
-    hyperspaceTechnology = 114,
-    plasmaTechnology = 122,
-
-    combustionDrive = 115,
-    impulseDrive = 117,
-    hyperspaceDrive = 118,
-
     espionageTechnology = 106,
     computerTechnology = 108,
-    astrophysics = 124,
-    intergalacticResearchNetwork = 123,
-    gravitonTechnology = 199,
-
     weaponsTechnology = 109,
     shieldingTechnology = 110,
     armorTechnology = 111,
+    energyTechnology = 113,
+    hyperspaceTechnology = 114,
+    combustionDrive = 115,
+    impulseDrive = 117,
+    hyperspaceDrive = 118,
+    laserTechnology = 120,
+    ionTechnology = 121,
+    plasmaTechnology = 122,
+    intergalacticResearchNetwork = 123,
+    astrophysics = 124,
+    gravitonTechnology = 199,
 }
