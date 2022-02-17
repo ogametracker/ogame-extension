@@ -1,6 +1,8 @@
 <template>
     <div>
-       Empire: {{ empireData }}
+        <router-view />
+        <hr />
+        Empire: {{ empireData }}
     </div>
 </template>
 

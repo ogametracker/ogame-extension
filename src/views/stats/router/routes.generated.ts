@@ -24,6 +24,9 @@ import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
 import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
+import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
+import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
+import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
 import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
@@ -250,12 +253,34 @@ const routes: RouteConfig[] = [
                 ]
             },
             {
+                redirect: {
+                    name: "empire/production/resources"
+                },
                 meta: {
                     color: "#5000d0"
                 },
                 path: "empire",
                 name: "empire",
-                component: viewsempireIndex
+                component: viewsempireIndex,
+                children: [
+                    {
+                        path: "production",
+                        name: "empire/production",
+                        component: viewsempireproductionIndex,
+                        children: [
+                            {
+                                path: "mines",
+                                name: "empire/production/mines",
+                                component: viewsempireproductionMines
+                            },
+                            {
+                                path: "resources",
+                                name: "empire/production/resources",
+                                component: viewsempireproductionResources
+                            }
+                        ]
+                    }
+                ]
             },
             {
                 meta: {
