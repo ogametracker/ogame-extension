@@ -22,7 +22,7 @@ export function trackOverviewPage(): void {
             const planetId = parseIntSafe(planetIdText, 10);
 
             itemElements.forEach(itemElem => {
-                const hash = itemElem.getAttribute('uuid') ?? _throw('no item uuid found');
+                const hash = itemElem.getAttribute('data-uuid') ?? _throw('no item uuid found');
 
                 const durationLeftText = itemElem.querySelector('.js_duration')?.textContent ?? _throw('no item duration found');
                 const durationLeft = parseIntSafe(durationLeftText, 10) * 1000;
