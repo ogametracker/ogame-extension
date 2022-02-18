@@ -176,6 +176,8 @@ export interface LocalPlayerData {
     playerClass: PlayerClass;
     allianceClass: AllianceClass;
     officers: PlayerOfficers;
+    name?: string;
+    universeName?: string;
 }
 
 export interface PlayerOfficers {

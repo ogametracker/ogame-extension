@@ -23,6 +23,7 @@ export async function startLocalPlayerTracking(queryParams: QueryParameters): Pr
         trackOwnedPlanets(data);
         trackOfficers(data);
         trackPlayerClass(data);
+        trackPlayerAndUniverseName(data);
     }
 
     const currentPlanetId = parseInt((document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ?? _throw('no planet id meta found'), 10);
@@ -265,7 +266,7 @@ function getPlanetData(planet: Element): Pick<PlanetData, 'id' | 'isMoon' | 'coo
     const coords = parseCoordinates(planet.querySelector('.planet-koords')?.textContent ?? _throw('no planet coords found'));
 
     const title = planet.querySelector('a.planetlink')?.getAttribute('title') ?? _throw('no title found');
-    const tempRegex = / (?<temp>-?\d+)\s*°C<br\/>/;
+    const tempRegex = / (?<temp>-?\d+)\s*°C<br\/?>/;
     const tempMatch = title.match(tempRegex) ?? _throw('no temperature found');
     const temperature = parseInt(tempMatch.groups!.temp, 10);
 
@@ -311,6 +312,16 @@ function trackOfficers(data: LocalPlayerData) {
     const technocrat = officersDiv.querySelector('.technocrat')?.classList.contains('on') ?? _throw('no technocrat found');
 
     data.officers = { commander, admiral, engineer, geologist, technocrat };
+}
+
+function trackPlayerAndUniverseName(data: LocalPlayerData) {
+    const playerNameMeta = document.querySelector('meta[name="ogame-player-name"]') as HTMLMetaElement ?? _throw('no player name meta found');
+    const playerName = playerNameMeta.content;
+    data.name = playerName;
+
+    const uniNameMeta = document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement ?? _throw('no universe name meta found');
+    const uniName = uniNameMeta.content;
+    data.universeName = uniName;
 }
 
 function trackPlayerClass(data: LocalPlayerData) {
