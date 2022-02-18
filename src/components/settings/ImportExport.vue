@@ -8,7 +8,7 @@
 
         <hr />
 
-        <h2 v-text="$i18n.$t.settings.export" />
+        <h2 v-text="$i18n.$t.settings.import" />
         <input type="file" ref="importFileInput" @change="updateImportFile()" />
         <br />
         <label>
@@ -38,7 +38,7 @@
     import DebrisFieldReport from '@/models/debrisFields/DebrisFieldReport';
     import ExpoEvent, { ExpoEventBase } from '@/models/expeditions/ExpoEvent';
     import BattleReport from '@/models/battles/BattleReport';
-import NotificationModule from '@/store/modules/NotificationModule';
+    import NotificationModule from '@/store/modules/NotificationModule';
 
     @Component({})
     export default class ImportExport extends Vue {
