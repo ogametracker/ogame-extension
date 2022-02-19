@@ -1,5 +1,26 @@
 <template>
-    <div>{{ test }}</div>
+    <grid-table :columns="columns" :items="items">
+        <template #header-metal>
+            <o-resource resource="metal" size="40px" />
+        </template>
+        <template #header-crystal>
+            <o-resource resource="crystal" size="40px" />
+        </template>
+        <template #header-deuterium>
+            <o-resource resource="deuterium" size="40px" />
+        </template>
+
+        <template #cell-planet="{ value: item }">
+            <div class="planet-info">
+                <span v-text="item.planet.name" />
+                <span>
+                    [{{ item.planet.coordinates.galaxy }}:{{
+                        item.planet.coordinates.system
+                    }}:{{ item.planet.coordinates.position }}]
+                </span>
+            </div>
+        </template>
+    </grid-table>
 </template>
 
 <script lang="ts">
@@ -19,10 +40,11 @@
     import { PlayerClass } from '@/shared/models/v1/ogame/classes/PlayerClass';
     import { AllianceClass } from '@/shared/models/v1/ogame/classes/AllianceClass';
     import { LocalPlayerData } from '@/shared/models/v1/empire/LocalPlayerData';
-import { ProductionSettings } from '@/shared/models/v1/empire/ProductionSettings';
-import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-import { PlanetShipCount } from '@/shared/models/v1/empire/PlanetShipCount';
-import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+    import { ProductionSettings } from '@/shared/models/v1/empire/ProductionSettings';
+    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { PlanetShipCount } from '@/shared/models/v1/empire/PlanetShipCount';
+    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
 
     interface Production {
         metal: number;
@@ -30,8 +52,42 @@ import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
         deuterium: number;
     }
 
+    interface ProductionItem {
+        planet: {
+            name: string;
+            coordinates: Coordinates;
+        };
+        metal: number;
+        crystal: number;
+        deuterium: number;
+    }
+
     @Component({})
     export default class Resources extends Vue {
+        private get columns(): GridTableColumn<keyof ProductionItem>[] {
+            return [
+                {
+                    key: 'planet',
+                    label: 'LOCA: Planet',
+                },
+                { key: 'metal' },
+                { key: 'crystal' },
+                { key: 'deuterium' },
+            ];
+        }
+
+        private get items(): ProductionItem[] {
+            return this.planets.map(planet => {
+                const production = this.getProduction(planet);
+
+                return {
+                    planet,
+                    ...production,
+                };
+            });
+        }
+
+
         private get planets(): PlanetData[] {
             return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon) as PlanetData[];

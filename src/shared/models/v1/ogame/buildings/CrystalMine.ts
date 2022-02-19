@@ -7,6 +7,7 @@ import { ResearchType } from "../research/ResearchType";
 import { ShipType } from "../ships/ShipType";
 import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
 
 class CrystalMineClass extends ProductionBuilding {
 
@@ -22,16 +23,12 @@ class CrystalMineClass extends ProductionBuilding {
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
 
-        const maxCrawlerFactor = dependencies.player.officers.geologist && dependencies.player.playerClass == PlayerClass.collector
-            ? 1.1
-            : 1;
-        const maxCrawlers = Math.round(
-            (
-                dependencies.planet.buildings.production[BuildingType.metalMine]
-                + level
-                + dependencies.planet.buildings.production[BuildingType.deuteriumSynthesizer]
-            ) * 8
-            * maxCrawlerFactor
+        const maxCrawlers = getMaxActiveCrawlers(
+            dependencies.planet.buildings.production[BuildingType.metalMine],
+            level,
+            dependencies.planet.buildings.production[BuildingType.deuteriumSynthesizer],
+            dependencies.player.playerClass,
+            dependencies.player.officers.geologist
         );
         const crawlerCount = Math.min(maxCrawlers, dependencies.planet.ships[ShipType.crawler]);
         const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? 1.5 : 1;

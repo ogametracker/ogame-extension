@@ -57,9 +57,9 @@
         background-position: center;
         image-rendering: -webkit-optimize-contrast;
         image-rendering: -moz-crisp-edges;
+        border-radius: 4px;
 
         border: 2px solid transparent;
-        border-radius: 4px;
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);

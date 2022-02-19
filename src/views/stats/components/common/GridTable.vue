@@ -88,7 +88,7 @@
 
     export interface GridTableColumn<TKey = string> {
         key: TKey;
-        label: string;
+        label?: string;
         size?: string;
         class?: string;
         style?: string | Record<string, any>;
