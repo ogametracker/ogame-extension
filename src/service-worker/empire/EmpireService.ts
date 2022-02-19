@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { EmpireDataMessage, NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage } from '../../shared/messages/tracking/empire';
+import { EmpireDataMessage, NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdatePlayerNameMessage, UpdateResearchLevelsMessage, UpdateUniverseNameMessage } from '../../shared/messages/tracking/empire';
 
 export class EmpireService implements MessageService {
     private readonly empireModule = new EmpireModule();
@@ -86,6 +86,22 @@ export class EmpireService implements MessageService {
             case MessageType.UpdatePlanetProductionSettings: {
                 const msg = message as UpdatePlanetProductionSettingsMessage;
                 await this.empireModule.updateProductionSettings(msg.ogameMeta, msg.data);
+
+                await this.notifyEmpireUpdate(message.ogameMeta);
+                break;
+            }
+
+            case MessageType.UpdatePlayerName: {
+                const msg = message as UpdatePlayerNameMessage;
+                await this.empireModule.updatePlayerName(msg.ogameMeta, msg.data);
+
+                await this.notifyEmpireUpdate(message.ogameMeta);
+                break;
+            }
+
+            case MessageType.UpdateUniverseName: {
+                const msg = message as UpdateUniverseNameMessage;
+                await this.empireModule.updateUniverseName(msg.ogameMeta, msg.data);
 
                 await this.notifyEmpireUpdate(message.ogameMeta);
                 break;

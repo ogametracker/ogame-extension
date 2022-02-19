@@ -13,6 +13,8 @@ import { trackDefensesPage } from "./trackDefensesPage";
 import { trackOverviewPage } from "./trackOverviewPage";
 import { trackResourceSettingsPage } from "./trackResourceSettingsPage";
 import { trackEmpirePage } from "./trackEmpirePage";
+import { trackPlayerName } from "./trackPlayerName";
+import { trackUniverseName } from "./trackUniverseName";
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -31,6 +33,8 @@ const pageTrackers: PageTracker[] = [
             trackOwnedPlanets();
             trackOfficers();
             trackPlayerClass();
+            trackPlayerName();
+            trackUniverseName();
         },
         condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page),
     },
@@ -71,7 +75,11 @@ const pageTrackers: PageTracker[] = [
         condition: query => query.page == 'resourceSettings',
     },
     {
-        action: () => trackEmpirePage(),
+        action: () => {
+            trackEmpirePage();
+            trackPlayerName();
+            trackUniverseName();
+        },
         condition: query => query.page == 'standalone' && query.component == 'empire',
     },
 ];

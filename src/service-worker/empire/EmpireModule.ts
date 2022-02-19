@@ -140,6 +140,22 @@ export class EmpireModule {
             return localPlayerData;
         });
     }
+    
+    public async updateUniverseName(meta: MessageOgameMeta, name: string) {
+        const manager = this.getManager(meta);
+        await manager.update(localPlayerData => {
+            localPlayerData.universeName = name;
+            return localPlayerData;
+        });
+    }
+    
+    public async updatePlayerName(meta: MessageOgameMeta, universeName: string) {
+        const manager = this.getManager(meta);
+        await manager.update(localPlayerData => {
+            localPlayerData.name = universeName;
+            return localPlayerData;
+        });
+    }
 
     private createMoonData(p: BasicPlanetDataMoon): MoonData {
         return {

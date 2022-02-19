@@ -41,6 +41,8 @@ export enum MessageType {
     UpdatePlayerClass = 'empire/update-player-class',
     UpdateAllianceClass = 'empire/update-alliance-class',
     UpdatePlanetProductionSettings = 'empire/update-planet-production-settings',
+    UpdatePlayerName = 'empire/update-player-name',
+    UpdateUniverseName = 'empire/update-universe-name',
     RequestEmpireData = 'empire/request-data',
     EmpireData = 'empire/data',
     NotifyEmpireDataUpdate = 'empire/notify-update',

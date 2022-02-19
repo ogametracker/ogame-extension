@@ -70,6 +70,10 @@ export type EmpireDataMessage = Message<MessageType.EmpireData, LocalPlayerData>
 // production percentages
 export type UpdatePlanetProductionSettingsMessage = Message<MessageType.UpdatePlanetProductionSettings, PlanetDataWrapper<ProductionSettings>>;
 
+// player and universe name
+export type UpdatePlayerNameMessage = Message<MessageType.UpdatePlayerName, string>;
+export type UpdateUniverseNameMessage = Message<MessageType.UpdateUniverseName, string>;
+
 
 // notifications
 export type NotifyEmpireDataUpdateMessage = Message<MessageType.NotifyEmpireDataUpdate, LocalPlayerData>;
