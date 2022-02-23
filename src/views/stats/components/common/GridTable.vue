@@ -10,10 +10,13 @@
                 v-for="(column, i) in columns"
                 :key="column.key"
                 class="grid-table-cell"
-                :class="{
-                    first: i == 0,
-                    last: i == columns.length - 1,
-                }"
+                :class="[
+                    column.footerClass,
+                    {
+                        first: i == 0,
+                        last: i == columns.length - 1,
+                    },
+                ]"
             >
                 <slot
                     v-if="$scopedSlots[`header-${column.key}`] != null"
@@ -30,6 +33,7 @@
                     class="grid-table-cell"
                     :class="[
                         cellClassProvider(item[column.key]),
+                        column.class,
                         {
                             first: footerItems.length == 0 && i == 0,
                             last:
@@ -61,10 +65,13 @@
                     v-for="(column, c) in columns"
                     :key="column.key"
                     class="grid-table-cell"
-                    :class="{
-                        first: c == 0,
-                        last: c == columns.length - 1,
-                    }"
+                    :class="[
+                        column.footerClass,
+                        {
+                            first: c == 0,
+                            last: c == columns.length - 1,
+                        },
+                    ]"
                 >
                     <slot
                         v-if="$scopedSlots[`footer-${column.key}`] != null"
@@ -91,6 +98,8 @@
         label?: string;
         size?: string;
         class?: string;
+        footerClass?: string;
+        headerClass?: string;
         style?: string | Record<string, any>;
         formatter?: (value: any) => string;
     }
