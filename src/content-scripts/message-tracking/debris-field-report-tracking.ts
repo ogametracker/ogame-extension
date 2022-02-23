@@ -12,14 +12,14 @@ import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../s
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
+let tabContent: Element | null = null;
+
 export function initDebrisFieldReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
-        const fleetsTab = document.querySelector('#fleetsTab');
-        if (fleetsTab != null) {
-            initObserver.disconnect();
+        if (tabContent?.isConnected != true) {
             setupObserver();
         }
     });
@@ -29,12 +29,13 @@ export function initDebrisFieldReportTracking() {
 function setupObserver() {
     const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.misc}"]`) ?? _throw('Cannot find label of misc messages');
     const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of misc messages tab content');
-    const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of misc messages');
+    tabContent = document.querySelector(`#${tabContentId}`);
+    const tabContentElem = tabContent ?? _throw('Cannot find content element of misc messages');
 
     const meta = getOgameMeta();
     if (isSupportedLanguage(meta.language)) {
-        const observer = new MutationObserver(() => trackDebrisFieldReports(tabContent));
-        observer.observe(tabContent, { childList: true, subtree: true });
+        const observer = new MutationObserver(() => trackDebrisFieldReports(tabContentElem));
+        observer.observe(tabContentElem, { childList: true, subtree: true });
     }
 }
 

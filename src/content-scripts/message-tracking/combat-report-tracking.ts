@@ -16,14 +16,14 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
 
+let tabContent: Element | null = null;
+
 export function initCombatReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
-        const fleetsTab = document.querySelector('#fleetsTab');
-        if (fleetsTab != null) {
-            initObserver.disconnect();
+        if (tabContent?.isConnected != true) {
             setupObserver();
         }
     });
@@ -33,10 +33,11 @@ export function initCombatReportTracking() {
 function setupObserver() {
     const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.combats}"]`) ?? _throw('Cannot find label of combat report messages');
     const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of combat report messages tab content');
-    const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of combat report messages');
+    tabContent = document.querySelector(`#${tabContentId}`);
+    const tabContentElem = tabContent ?? _throw('Cannot find content element of combat report messages');
 
-    const observer = new MutationObserver(async () => await trackCombatReports(tabContent));
-    observer.observe(tabContent, { childList: true, subtree: true });
+    const observer = new MutationObserver(async () => await trackCombatReports(tabContentElem));
+    observer.observe(tabContentElem, { childList: true, subtree: true });
 }
 
 function onMessage(message: Message<MessageType, any>) {

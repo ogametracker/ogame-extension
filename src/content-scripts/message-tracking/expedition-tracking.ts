@@ -16,16 +16,16 @@ import { Items } from "../../shared/models/v1/ogame/items/Items";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 
+let tabContent: Element | null = null;
+
 export function initExpeditionTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
-        const fleetsTab = document.querySelector('#fleetsTab');
-        if (fleetsTab != null) {
-            initObserver.disconnect();
+        if (tabContent?.isConnected != true) {
             setupExpeditionMessageObserver();
-        }
+        } 
     });
     initObserver.observe(contentElem, { subtree: true, childList: true });
 }
@@ -33,12 +33,13 @@ export function initExpeditionTracking() {
 function setupExpeditionMessageObserver() {
     const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.expedition}"]`) ?? _throw('Cannot find label of expedition messages');
     const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of expedition messages tab content');
-    const tabContent = document.querySelector(`#${tabContentId}`) ?? _throw('Cannot find content element of expedition messages');
+    tabContent = document.querySelector(`#${tabContentId}`);
+    const tabContentElement = tabContent ?? _throw('Cannot find content element of expedition messages');
 
     const meta = getOgameMeta();
     if (isSupportedLanguage(meta.language)) {
-        const observer = new MutationObserver(() => trackExpeditions(tabContent));
-        observer.observe(tabContent, { childList: true, subtree: true });
+        const observer = new MutationObserver(() => trackExpeditions(tabContentElement));
+        observer.observe(tabContentElement, { childList: true, subtree: true });
     }
 }
 
