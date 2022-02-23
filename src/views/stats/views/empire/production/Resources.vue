@@ -1,5 +1,9 @@
 <template>
-    <grid-table :columns="columns" :items="items">
+    <grid-table
+        :columns="columns"
+        :items="items"
+        class="resources-production-table"
+    >
         <template #header-metal>
             <o-resource resource="metal" size="40px" />
         </template>
@@ -19,6 +23,21 @@
                     }}:{{ item.planet.coordinates.position }}]
                 </span>
             </div>
+        </template>
+        <template #cell-metal="{ value: item }">
+            {{ $number(item.metal) }}
+        </template>
+        <template #cell-crystal="{ value: item }">
+            {{ $number(item.crystal) }}
+        </template>
+        <template #cell-deuterium="{ value: item }">
+            {{ $number(item.deuterium) }}
+        </template>
+        <template #cell-total="{ value: item }">
+            {{ $number(item.total) }}
+        </template>
+        <template #cell-totalMsu="{ value: item }">
+            {{ $number(item.totalMsu) }}
         </template>
     </grid-table>
 </template>
@@ -60,6 +79,8 @@
         metal: number;
         crystal: number;
         deuterium: number;
+        total: number;
+        totalMsu: number;
     }
 
     @Component({})
@@ -73,6 +94,11 @@
                 { key: 'metal' },
                 { key: 'crystal' },
                 { key: 'deuterium' },
+                {
+                    key: 'total',
+                    class: 'total-column',
+                },
+                { key: 'totalMsu' },
             ];
         }
 
@@ -83,6 +109,8 @@
                 return {
                     planet,
                     ...production,
+                    total: production.metal + production.crystal + production.deuterium,
+                    totalMsu: production.metal + production.crystal * 2 + production.deuterium * 3, //TODO: MSU from settings
                 };
             });
         }
@@ -152,3 +180,8 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .resources-production-table::v-deep .total-column {
+        border-left: 1px solid rgba(var(--color), 0.5);
+    }
+</style>
