@@ -172,6 +172,9 @@
 
         &-cell {
             padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
     .grid-table-head {

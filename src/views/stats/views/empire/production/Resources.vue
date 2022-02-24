@@ -2,6 +2,7 @@
     <grid-table
         :columns="columns"
         :items="items"
+        :footerItems="footerItems"
         class="resources-production-table"
     >
         <template #header-metal>
@@ -13,6 +14,12 @@
         <template #header-deuterium>
             <o-resource resource="deuterium" size="40px" />
         </template>
+        <template #header-total>
+            LOCA: Total
+        </template>
+        <template #header-totalMsu>
+            LOCA: Total (MSU)
+        </template>
 
         <template #cell-planet="{ value: item }">
             <div class="planet-info">
@@ -23,6 +30,9 @@
                     }}:{{ item.planet.coordinates.position }}]
                 </span>
             </div>
+        </template>
+        <template #footer-planet="{ value: item }">
+            <span v-text="item.planet.name" />
         </template>
         <template #cell-metal="{ value: item }">
             {{ $number(item.metal) }}
@@ -37,6 +47,21 @@
             {{ $number(item.total) }}
         </template>
         <template #cell-totalMsu="{ value: item }">
+            {{ $number(item.totalMsu) }}
+        </template>
+        <template #footer-metal="{ value: item }">
+            {{ $number(item.metal) }}
+        </template>
+        <template #footer-crystal="{ value: item }">
+            {{ $number(item.crystal) }}
+        </template>
+        <template #footer-deuterium="{ value: item }">
+            {{ $number(item.deuterium) }}
+        </template>
+        <template #footer-total="{ value: item }">
+            {{ $number(item.total) }}
+        </template>
+        <template #footer-totalMsu="{ value: item }">
             {{ $number(item.totalMsu) }}
         </template>
     </grid-table>
@@ -113,6 +138,63 @@
                     totalMsu: production.metal + production.crystal * 2 + production.deuterium * 3, //TODO: MSU from settings
                 };
             });
+        }
+
+        private get footerItems(): ProductionItem[] {
+            const planets = this.planets;
+
+            const metalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
+            const crystalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
+            const deuteriumPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
+            const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
+            const totalMsuPerHour = metalPerHour + crystalPerHour * 2 + deuteriumPerHour * 3;//TODO: MSU from settings
+
+            return [
+                {
+                    planet: {
+                        name: 'LOCA: ⌀ per hour',
+                        coordinates: null!,
+                    },
+                    metal: metalPerHour / planets.length,
+                    crystal: crystalPerHour / planets.length,
+                    deuterium: deuteriumPerHour / planets.length,
+                    total: totalPerHour / planets.length,
+                    totalMsu: totalMsuPerHour / planets.length,
+                },
+                {
+                    planet: {
+                        name: 'LOCA: total per hour',
+                        coordinates: null!,
+                    },
+                    metal: metalPerHour,
+                    crystal: crystalPerHour,
+                    deuterium: deuteriumPerHour,
+                    total: totalPerHour,
+                    totalMsu: totalMsuPerHour,
+                },
+                {
+                    planet: {
+                        name: 'LOCA: total per day',
+                        coordinates: null!,
+                    },
+                    metal: metalPerHour * 24,
+                    crystal: crystalPerHour * 24,
+                    deuterium: deuteriumPerHour * 24,
+                    total: totalPerHour * 24,
+                    totalMsu: totalMsuPerHour * 24,
+                },
+                {
+                    planet: {
+                        name: 'LOCA: total per week',
+                        coordinates: null!,
+                    },
+                    metal: metalPerHour * 24 * 7,
+                    crystal: crystalPerHour * 24 * 7,
+                    deuterium: deuteriumPerHour * 24 * 7,
+                    total: totalPerHour * 24 * 7,
+                    totalMsu: totalMsuPerHour * 24 * 7,
+                },
+            ];
         }
 
 
