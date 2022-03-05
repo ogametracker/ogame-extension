@@ -24,6 +24,7 @@ import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
 import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
+import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -254,7 +255,7 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "empire/production/resources"
+                    name: "empire/production"
                 },
                 meta: {
                     color: "#5000d0"
@@ -264,6 +265,14 @@ const routes: RouteConfig[] = [
                 component: viewsempireIndex,
                 children: [
                     {
+                        path: "amortization",
+                        name: "empire/amortization",
+                        component: viewsempireAmortization
+                    },
+                    {
+                        redirect: {
+                            name: "empire/production/resources"
+                        },
                         path: "production",
                         name: "empire/production",
                         component: viewsempireproductionIndex,

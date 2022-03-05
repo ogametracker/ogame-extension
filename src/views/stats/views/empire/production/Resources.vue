@@ -19,7 +19,7 @@
 
         <template #header-productionSettings>
             <div class="production-settings-mini-table">
-                <span class="header" v-text="'LOCA: Production Settings'" />
+                <span class="header" v-text="'LOCA: used production settings'" />
                 <!-- TODO: Settings as dropdowns to change? -->
                 <span
                     class="header"
@@ -58,8 +58,57 @@
             </div>
         </template>
 
-        <template #footer-planet="{ value }">
-            <span v-text="value.name" />
+        <template #footer-planet="{ value, item }">
+            <span v-if="!item.isResourcePackageRow" v-text="value.name" />
+            <span v-else class="resource-packages-cell">
+                <o-item
+                    :item="ItemHash.resourcePackage_all"
+                    size="32px"
+                    hide-item-grade
+                />
+                <input
+                    type="number"
+                    v-model.number="resourcePackageAmounts.all"
+                    min="0"
+                    step="1"
+                />
+
+                <o-item
+                    :item="ItemHash.resourcePackage_metal"
+                    size="32px"
+                    hide-item-grade
+                />
+                <input
+                    type="number"
+                    v-model.number="resourcePackageAmounts.metal"
+                    min="0"
+                    step="1"
+                />
+
+                <o-item
+                    :item="ItemHash.resourcePackage_crystal"
+                    size="32px"
+                    hide-item-grade
+                />
+                <input
+                    type="number"
+                    v-model.number="resourcePackageAmounts.crystal"
+                    min="0"
+                    step="1"
+                />
+
+                <o-item
+                    :item="ItemHash.resourcePackage_deuterium"
+                    size="32px"
+                    hide-item-grade
+                />
+                <input
+                    type="number"
+                    v-model.number="resourcePackageAmounts.deuterium"
+                    min="0"
+                    step="1"
+                />
+            </span>
         </template>
         <template #cell-metal="{ value }">
             {{ $number(value) }}
@@ -104,18 +153,9 @@
     import { ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
     import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
     import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
-    import { PlanetBuildingProductionLevels } from '@/shared/models/v1/empire/PlanetBuildingProductionLevels';
-    import { PlanetBuildingLevels } from '@/shared/models/v1/empire/PlanetBuildingLevels';
-    import { ResearchType } from '@/shared/models/v1/ogame/research/ResearchType';
-    import { ResearchLevels } from '@/shared/models/v1/empire/ResearchLevels';
-    import { PlayerClass } from '@/shared/models/v1/ogame/classes/PlayerClass';
-    import { AllianceClass } from '@/shared/models/v1/ogame/classes/AllianceClass';
-    import { LocalPlayerData } from '@/shared/models/v1/empire/LocalPlayerData';
-    import { ProductionSettings } from '@/shared/models/v1/empire/ProductionSettings';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-    import { PlanetShipCount } from '@/shared/models/v1/empire/PlanetShipCount';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
+    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
 
     interface Production {
         metal: number;
@@ -135,6 +175,8 @@
         totalMsu: number;
 
         productionSettings: PoductionSettingsItem;
+
+        isResourcePackageRow?: boolean;
     }
 
     interface PoductionSettingsItem {
@@ -149,6 +191,15 @@
 
     @Component({})
     export default class Resources extends Vue {
+        private readonly ItemHash = ItemHash;
+
+        private readonly resourcePackageAmounts = {
+            all: 0,
+            metal: 0,
+            crystal: 0,
+            deuterium: 0,
+        };
+
         private get columns(): GridTableColumn<keyof ProductionItem>[] {
             return [
                 {
@@ -199,10 +250,14 @@
             const planets = this.planets;
 
             const metalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
-            const crystalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
-            const deuteriumPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
+            const crystalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).crystal, 0);
+            const deuteriumPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).deuterium, 0);
             const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
             const totalMsuPerHour = metalPerHour + crystalPerHour * 2 + deuteriumPerHour * 3;//TODO: MSU from settings
+
+            const metalPackages = metalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.metal);
+            const crystalPackages = crystalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.crystal);
+            const deuteriumPackages = deuteriumPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.deuterium);
 
             return [
                 {
@@ -257,6 +312,20 @@
 
                     productionSettings: null!,
                 },
+                {
+                    isResourcePackageRow: true,
+                    planet: {
+                        name: 'TODO: Row for resource packages',
+                        coordinates: null!,
+                    },
+                    metal: metalPackages,
+                    crystal: crystalPackages,
+                    deuterium: deuteriumPackages,
+                    total: metalPackages + crystalPackages + deuteriumPackages,
+                    totalMsu: metalPackages + crystalPackages * 2 + deuteriumPackages * 3, //TODO: MSU from settings
+
+                    productionSettings: null!,
+                },
             ];
         }
 
@@ -279,50 +348,6 @@
                 deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[BuildingType.deuteriumSynthesizer], deps).deuterium,
             };
         }
-
-        private get test() {
-            return MetalMine.getProduction(47, {
-                economySpeed: 8,
-                planet: {
-                    coordinates: {
-                        position: 10
-                    } as Coordinates,
-                    buildings: {
-                        production: {
-                            [BuildingType.metalMine]: 47,
-                            [BuildingType.crystalMine]: 38,
-                            [BuildingType.deuteriumSynthesizer]: 43,
-                        } as PlanetBuildingProductionLevels,
-                    } as PlanetBuildingLevels,
-                    productionSettings: {
-                        [BuildingType.metalMine]: 100,
-                        [BuildingType.crystalMine]: 100,
-                        [BuildingType.deuteriumSynthesizer]: 100,
-                        [ShipType.crawler]: 150,
-                    } as ProductionSettings,
-                    activeItems: {
-                        [ItemHash.metalBooster_platinum_90days]: Date.now() + 100000000,
-                    },
-                    ships: {
-                        [ShipType.crawler]: 10000,
-                    } as PlanetShipCount,
-                } as PlanetData,
-                player: {
-                    research: {
-                        [ResearchType.plasmaTechnology]: 21,
-                    } as ResearchLevels,
-                    playerClass: PlayerClass.collector,
-                    allianceClass: AllianceClass.trader,
-                    officers: {
-                        commander: true,
-                        admiral: true,
-                        geologist: true,
-                        engineer: true,
-                        technocrat: true,
-                    },
-                } as LocalPlayerData,
-            }).crystal;
-        }
     }
 </script>
 <style lang="scss" scoped>
@@ -336,6 +361,10 @@
         }
         .production-settings-header-column {
             border-left: 3px solid transparent;
+        }
+
+        > .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell {
+            border-top: 3px double rgba(var(--color), 0.5);
         }
     }
 
@@ -356,6 +385,15 @@
         }
         > * {
             padding: 0 4px;
+        }
+    }
+
+    .resource-packages-cell {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+
+        > input[type="number"] {
+            width: 60px;
         }
     }
 </style>

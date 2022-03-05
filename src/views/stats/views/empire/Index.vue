@@ -1,19 +1,24 @@
 <template>
-    <div>
-        <router-view />
-        <hr />
-        Empire: {{ empireData }}
-    </div>
+    <page :nav-items="navItems" />
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
+    import { ListNavItem } from '../../components/common/ListNav.vue';
 
     @Component({})
     export default class Index extends Vue {
-        private get empireData() {
-            return EmpireDataModule.empire;
+        private get navItems(): ListNavItem[] {
+            return [
+                {
+                    label: 'LOCA: Production',
+                    to: { name: 'empire/production' },
+                },
+                {
+                    label: 'LOCA: Amortization',
+                    to: { name: 'empire/amortization' },
+                },
+            ];
         }
     }
 </script>

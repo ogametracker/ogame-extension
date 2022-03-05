@@ -1,10 +1,11 @@
 <template>
     <div
         class="o-item"
-        :class="[
-            `o-item--grade-${fullItem.grade}`,
-            { 'o-item--disabled': disabled },
-        ]"
+        :class="{
+            [`o-item--grade-${fullItem.grade}`]: !hideItemGrade,
+            'o-item--disabled': disabled,
+            'o-item--hide-grade': hideItemGrade,
+        }"
         :style="{
             'background-image': `url(/img/ogame/items/${fullItem.image}.png)`,
             'font-size': size,
@@ -24,6 +25,9 @@
 
         @Prop({ required: true, type: String as PropType<ItemHash> })
         private item!: ItemHash;
+
+        @Prop({ required: false, type: Boolean, default: false })
+        private hideItemGrade!: boolean;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
@@ -60,6 +64,10 @@
         border-radius: 4px;
 
         border: 2px solid transparent;
+
+        &--hide-grade {
+            border: none;
+        }
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
