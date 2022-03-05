@@ -27,14 +27,16 @@ viewBuildHooks.forEach(hookPath => {
 
 // build content script + service worker
 console.log(`Building content scripts and service worker`);
-execSync(`npx webpack --mode=production --node-env=production --env browser=${browser} ${isDev ? 'dev=true' : ''}`, { stdio: 'inherit' });
+const webpackBuildMode = isDev ? 'development' : 'production';
+execSync(`npx webpack --mode=${webpackBuildMode} --node-env=${webpackBuildMode} --env browser=${browser} ${isDev ? 'dev=true' : ''}`, { stdio: 'inherit' });
 
 // build vue views
 console.log('building views');
 // create .env file with VUE_APP_BROWSER environment variable
 console.log('creating Vue build');
 fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
-execSync(`vue-cli-service build --modern`, { stdio: 'inherit' });
+const vueBuildMode = isDev ? 'development' : 'production';
+execSync(`vue-cli-service build --modern --mode ${vueBuildMode}`, { stdio: 'inherit' });
 
 // copy favicon to output dir
 console.log(`Copying favicon`);
