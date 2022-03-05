@@ -17,6 +17,24 @@
         <template #header-total> LOCA: Total </template>
         <template #header-totalMsu> LOCA: Total (MSU) </template>
 
+        <template #header-productionSettings>
+            <div class="production-settings-mini-table">
+                <span class="header" v-text="'LOCA: Production Settings'" />
+                <!-- TODO: Settings as dropdowns to change? -->
+                <span
+                    class="header"
+                    v-text="'TODO: Settings as dropdowns to change?'"
+                />
+                <o-building building="metal-mine" />
+                <o-building building="crystal-mine" />
+                <o-building building="deuterium-synthesizer" />
+                <o-building building="solar-plant" />
+                <o-building building="fusion-reactor" />
+                <o-ship ship="solar-satellite" />
+                <o-ship ship="crawler" />
+            </div>
+        </template>
+
         <template #cell-planet="{ value: planet }">
             <div class="planet-info">
                 <span v-text="planet.name" />
@@ -27,6 +45,19 @@
                 </span>
             </div>
         </template>
+
+        <template #cell-productionSettings="{ value: settings }">
+            <div class="production-settings-mini-table">
+                <span v-text="settings.metalMine" />
+                <span v-text="settings.crystalMine" />
+                <span v-text="settings.deuteriumSynthesizer" />
+                <span v-text="settings.solarPlant" />
+                <span v-text="settings.fusionReactor" />
+                <span v-text="settings.solarSatellite" />
+                <span v-text="settings.crawler" />
+            </div>
+        </template>
+
         <template #footer-planet="{ value }">
             <span v-text="value.name" />
         </template>
@@ -66,7 +97,7 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import { MetalMine } from '@/shared/models/v1/ogame/buildings/MetalMine';
     import { CrystalMine } from '@/shared/models/v1/ogame/buildings/CrystalMine';
     import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
@@ -102,6 +133,18 @@
         deuterium: number;
         total: number;
         totalMsu: number;
+
+        productionSettings: PoductionSettingsItem;
+    }
+
+    interface PoductionSettingsItem {
+        metalMine: number;
+        crystalMine: number;
+        deuteriumSynthesizer: number;
+        solarPlant: number;
+        fusionReactor: number;
+        solarSatellite: number;
+        crawler: number;
     }
 
     @Component({})
@@ -120,6 +163,11 @@
                     class: 'total-column',
                 },
                 { key: 'totalMsu' },
+                {
+                    key: 'productionSettings',
+                    class: 'production-settings-column',
+                    headerClass: 'production-settings-header-column',
+                },
             ];
         }
 
@@ -132,6 +180,17 @@
                     ...production,
                     total: production.metal + production.crystal + production.deuterium,
                     totalMsu: production.metal + production.crystal * 2 + production.deuterium * 3, //TODO: MSU from settings
+
+                    productionSettings: {
+                        metalMine: planet.productionSettings[BuildingType.metalMine],
+                        crystalMine: planet.productionSettings[BuildingType.crystalMine],
+                        deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
+                        solarPlant: planet.productionSettings[BuildingType.solarPlant],
+                        fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
+
+                        solarSatellite: planet.productionSettings[ShipType.solarSatellite],
+                        crawler: planet.productionSettings[ShipType.crawler],
+                    },
                 };
             });
         }
@@ -156,6 +215,8 @@
                     deuterium: deuteriumPerHour / planets.length,
                     total: totalPerHour / planets.length,
                     totalMsu: totalMsuPerHour / planets.length,
+
+                    productionSettings: null!,
                 },
                 {
                     planet: {
@@ -167,6 +228,8 @@
                     deuterium: deuteriumPerHour,
                     total: totalPerHour,
                     totalMsu: totalMsuPerHour,
+
+                    productionSettings: null!,
                 },
                 {
                     planet: {
@@ -178,6 +241,8 @@
                     deuterium: deuteriumPerHour * 24,
                     total: totalPerHour * 24,
                     totalMsu: totalMsuPerHour * 24,
+
+                    productionSettings: null!,
                 },
                 {
                     planet: {
@@ -189,6 +254,8 @@
                     deuterium: deuteriumPerHour * 24 * 7,
                     total: totalPerHour * 24 * 7,
                     totalMsu: totalMsuPerHour * 24 * 7,
+
+                    productionSettings: null!,
                 },
             ];
         }
@@ -259,13 +326,36 @@
     }
 </script>
 <style lang="scss" scoped>
-    .resources-production-table::v-deep .total-column {
-        border-left: 1px solid rgba(var(--color), 0.5);
+    .resources-production-table::v-deep {
+        .total-column {
+            border-left: 1px solid rgba(var(--color), 0.33);
+        }
+
+        .production-settings-column {
+            border-left: 3px double rgba(var(--color), 0.5);
+        }
+        .production-settings-header-column {
+            border-left: 3px solid transparent;
+        }
     }
 
     .planet-info {
         display: grid;
         grid-template-columns: 1fr;
         justify-items: end;
+    }
+
+    .production-settings-mini-table {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        width: 100%;
+        justify-items: center;
+
+        > .header {
+            grid-column: 1 / span 7;
+        }
+        > * {
+            padding: 0 4px;
+        }
     }
 </style>
