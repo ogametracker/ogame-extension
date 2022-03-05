@@ -6,20 +6,16 @@
         class="resources-production-table"
     >
         <template #header-metal>
-            <o-resource resource="metal" size="40px" />
+            <o-resource resource="metal" size="50px" />
         </template>
         <template #header-crystal>
-            <o-resource resource="crystal" size="40px" />
+            <o-resource resource="crystal" size="50px" />
         </template>
         <template #header-deuterium>
-            <o-resource resource="deuterium" size="40px" />
+            <o-resource resource="deuterium" size="50px" />
         </template>
-        <template #header-total>
-            LOCA: Total
-        </template>
-        <template #header-totalMsu>
-            LOCA: Total (MSU)
-        </template>
+        <template #header-total> LOCA: Total </template>
+        <template #header-totalMsu> LOCA: Total (MSU) </template>
 
         <template #cell-planet="{ value: planet }">
             <div class="planet-info">
@@ -265,5 +261,11 @@
 <style lang="scss" scoped>
     .resources-production-table::v-deep .total-column {
         border-left: 1px solid rgba(var(--color), 0.5);
+    }
+
+    .planet-info {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: end;
     }
 </style>

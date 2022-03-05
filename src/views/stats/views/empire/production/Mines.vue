@@ -44,9 +44,7 @@
                 />
                 <span>/{{ $number(value.maximum) }}</span>
                 <br />
-                <span
-                    v-text="`(${$number(value.available)} LOCA: available)`"
-                />
+                <span v-text="`${$number(value.available)} LOCA: available`" />
             </div>
         </template>
 
@@ -84,6 +82,15 @@
                             value.active > 0 && value.active < value.maximum,
                         'crawlers-bad': value.active == 0,
                     }"
+                />
+                <br />
+                <span
+                    v-text="
+                        `${$number(
+                            value.available,
+                            avgNumberFormat
+                        )} LOCA: available`
+                    "
                 />
             </div>
         </template>
@@ -228,5 +235,11 @@
         &-bad {
             color: #dd2c00;
         }
+    }
+
+    .planet-info {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: end;
     }
 </style>
