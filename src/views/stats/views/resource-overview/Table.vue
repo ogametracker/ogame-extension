@@ -1,9 +1,9 @@
 <template>
     <div>
-        <span>
+        <label>
             <input type="checkbox" v-model="showDetailedBreakdown" />
             LOCA: Show detailed breakdown
-        </span>
+        </label>
         <ranged-stats-table
             :dataItems="events"
             :items="items"

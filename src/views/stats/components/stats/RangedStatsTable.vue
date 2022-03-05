@@ -24,7 +24,11 @@
                     />
                 </template>
                 <template v-else>
-                    <span v-for="(item, i) in value.items || [value]" :key="i">
+                    <span
+                        v-for="(item, i) in value.items || [value]"
+                        :key="i"
+                        :class="getCellClass(item[column.key])"
+                    >
                         <span
                             v-if="column.formatter != null"
                             v-text="column.formatter(item[column.key])"
