@@ -251,6 +251,8 @@
             rgba(var(--color), 0.02),
             rgba(var(--color), 0.08)
         );
+
+        overflow: auto;
     }
 
     nav {
