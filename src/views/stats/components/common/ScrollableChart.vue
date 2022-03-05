@@ -11,7 +11,7 @@
                         <!-- vertical grid lines -->
                         <line
                             v-for="x in ticks"
-                            :key="x"
+                            :key="`x-${x}`"
                             :x1="xPositions[x - 1]"
                             :y1="0"
                             :x2="xPositions[x - 1]"
@@ -25,7 +25,7 @@
                         <!-- horizontal grid lines -->
                         <line
                             v-for="(yData, y) in yGridLines"
-                            :key="y"
+                            :key="`y-${y}`"
                             :x1="-10"
                             :y1="yData.svg"
                             :x2="svgContainer.clientWidth"
@@ -150,7 +150,7 @@
                         <template v-if="tooltipFooterProvider != null">
                             <div
                                 v-for="(footer, i) in footerTexts"
-                                :key="i"
+                                :key="`footer-texts-${i}`"
                                 v-text="footer"
                             />
                         </template>
@@ -166,7 +166,7 @@
             <div class="chart-y-axis">
                 <div
                     v-for="(yData, y) in yGridLines"
-                    :key="y"
+                    :key="`y-grid-line-${y}`"
                     class="y-axis-label"
                     :style="{ bottom: `${yData.fraction * 100}%` }"
                     v-text="$number(y)"
@@ -175,7 +175,7 @@
             <div class="chart-x-axis">
                 <div
                     v-for="x in ticks"
-                    :key="x"
+                    :key="`x-grid-line-${x}`"
                     class="x-axis-label"
                     :style="{ left: `${((x - 1) * 100) / (ticks - 1)}%` }"
                     v-text="xLabelFormatter(x - 1 + tickOffset)"
