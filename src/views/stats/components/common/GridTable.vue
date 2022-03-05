@@ -45,7 +45,8 @@
                     <slot
                         v-if="$scopedSlots[`cell-${column.key}`] != null"
                         :name="`cell-${column.key}`"
-                        :value="item"
+                        :value="item[column.key]"
+                        :item="item"
                     />
                     <span
                         v-else-if="column.formatter != null"
@@ -76,7 +77,8 @@
                     <slot
                         v-if="$scopedSlots[`footer-${column.key}`] != null"
                         :name="`footer-${column.key}`"
-                        :value="item"
+                        :value="item[column.key]"
+                        :item="item"
                     />
                     <span
                         v-else-if="column.formatter != null"

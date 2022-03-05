@@ -21,48 +21,48 @@
             LOCA: Total (MSU)
         </template>
 
-        <template #cell-planet="{ value: item }">
+        <template #cell-planet="{ value: planet }">
             <div class="planet-info">
-                <span v-text="item.planet.name" />
+                <span v-text="planet.name" />
                 <span>
-                    [{{ item.planet.coordinates.galaxy }}:{{
-                        item.planet.coordinates.system
-                    }}:{{ item.planet.coordinates.position }}]
+                    [{{ planet.coordinates.galaxy }}:{{
+                        planet.coordinates.system
+                    }}:{{ planet.coordinates.position }}]
                 </span>
             </div>
         </template>
-        <template #footer-planet="{ value: item }">
-            <span v-text="item.planet.name" />
+        <template #footer-planet="{ value }">
+            <span v-text="value.name" />
         </template>
-        <template #cell-metal="{ value: item }">
-            {{ $number(item.metal) }}
+        <template #cell-metal="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #cell-crystal="{ value: item }">
-            {{ $number(item.crystal) }}
+        <template #cell-crystal="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #cell-deuterium="{ value: item }">
-            {{ $number(item.deuterium) }}
+        <template #cell-deuterium="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #cell-total="{ value: item }">
-            {{ $number(item.total) }}
+        <template #cell-total="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #cell-totalMsu="{ value: item }">
-            {{ $number(item.totalMsu) }}
+        <template #cell-totalMsu="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #footer-metal="{ value: item }">
-            {{ $number(item.metal) }}
+        <template #footer-metal="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #footer-crystal="{ value: item }">
-            {{ $number(item.crystal) }}
+        <template #footer-crystal="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #footer-deuterium="{ value: item }">
-            {{ $number(item.deuterium) }}
+        <template #footer-deuterium="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #footer-total="{ value: item }">
-            {{ $number(item.total) }}
+        <template #footer-total="{ value }">
+            {{ $number(value) }}
         </template>
-        <template #footer-totalMsu="{ value: item }">
-            {{ $number(item.totalMsu) }}
+        <template #footer-totalMsu="{ value }">
+            {{ $number(value) }}
         </template>
     </grid-table>
 </template>

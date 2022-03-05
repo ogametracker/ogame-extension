@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items">
+    <grid-table :columns="columns" :items="items" :footerItems="footerItems">
         <template #header-metalMine>
             <o-building building="metal-mine" size="100px" />
         </template>
@@ -20,23 +20,72 @@
             <o-ship ship="crawler" size="100px" />
         </template>
 
-        <template #cell-planet="{ value: item }">
+        <template #cell-planet="{ value: planet }">
             <div class="planet-info">
-                <span v-text="item.planet.name" />
+                <span v-text="planet.name" />
                 <span>
-                    [{{ item.planet.coordinates.galaxy }}:{{
-                        item.planet.coordinates.system
-                    }}:{{ item.planet.coordinates.position }}]
+                    [{{ planet.coordinates.galaxy }}:{{
+                        planet.coordinates.system
+                    }}:{{ planet.coordinates.position }}]
                 </span>
             </div>
         </template>
 
         <template #cell-crawlers="{ value }">
             <div class="crawlers">
-                <span v-text="value.crawlers.active" />
-                <span v-text="'/'" />
-                <span v-text="value.crawlers.maximum" />
-                <span v-text="`(${value.crawlers.available} LOCA: available)`" />
+                <span
+                    v-text="$number(value.active)"
+                    :class="{
+                        'crawlers-good': value.active == value.maximum,
+                        'crawlers-ok':
+                            value.active > 0 && value.active < value.maximum,
+                        'crawlers-bad': value.active == 0,
+                    }"
+                />
+                <span>/{{ $number(value.maximum) }}</span>
+                <br />
+                <span
+                    v-text="`(${$number(value.available)} LOCA: available)`"
+                />
+            </div>
+        </template>
+
+        <template #footer-planet>⌀</template>
+
+        <template #footer-metalMine="{ value }">
+            <span v-text="$number(value, avgNumberFormat)" />
+        </template>
+
+        <template #footer-crystalMine="{ value }">
+            <span v-text="$number(value, avgNumberFormat)" />
+        </template>
+
+        <template #footer-deuteriumSynthesizer="{ value }">
+            {{ value }}
+            <span v-text="$number(value, avgNumberFormat)" />
+        </template>
+
+        <template #footer-solarPlant="{ value }">
+            <span v-text="$number(value, avgNumberFormat)" />
+        </template>
+
+        <template #footer-fusionReactor="{ value }">
+            <span v-text="$number(value, avgNumberFormat)" />
+        </template>
+
+        <template #footer-crawlers="{ value }">
+            <div class="crawlers">
+                <span
+                    v-text="
+                        `${$number(value.active, avgNumberFormat)} LOCA: active`
+                    "
+                    :class="{
+                        'crawlers-good': value.active == value.maximum,
+                        'crawlers-ok':
+                            value.active > 0 && value.active < value.maximum,
+                        'crawlers-bad': value.active == 0,
+                    }"
+                />
             </div>
         </template>
     </grid-table>
@@ -45,13 +94,14 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
     import { getMaxActiveCrawlers } from '@/shared/models/v1/ogame/buildings/getMaxActiveCrawlers';
     import { LocalPlayerData } from '@/shared/models/v1/empire/LocalPlayerData';
+    import { PlanetType } from '@/shared/models/v1/ogame/common/PlanetType';
 
     interface ProductionMineItem {
         planet: {
@@ -74,6 +124,11 @@
 
     @Component({})
     export default class Resources extends Vue {
+        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        };
+
         private get columns(): GridTableColumn<keyof ProductionMineItem>[] {
             return [
                 {
@@ -88,6 +143,39 @@
 
                 { key: 'crawlers' },
             ];
+        }
+
+        private get footerItems(): ProductionMineItem[] {
+            const item: ProductionMineItem = {
+                planet: { name: '⌀', coordinates: { galaxy: 0, system: 0, position: 0, type: PlanetType.planet } },
+                metalMine: 0,
+                crystalMine: 0,
+                deuteriumSynthesizer: 0,
+                solarPlant: 0,
+                fusionReactor: 0,
+                crawlers: {
+                    active: 0,
+                    maximum: 0,
+                    available: 0,
+                },
+            };
+
+            const items = this.items;
+            const result = items.reduce((acc, item) => {
+                acc.metalMine += item.metalMine / items.length;
+                acc.crystalMine += item.crystalMine / items.length;
+                acc.deuteriumSynthesizer += item.deuteriumSynthesizer / items.length;
+                acc.solarPlant += item.solarPlant / items.length;
+                acc.fusionReactor += item.fusionReactor / items.length;
+
+                acc.crawlers.active += item.crawlers.active / items.length;
+                acc.crawlers.maximum += item.crawlers.maximum / items.length;
+                acc.crawlers.available += item.crawlers.available / items.length;
+
+                return acc;
+            }, item);
+
+            return [result];
         }
 
         private get items(): ProductionMineItem[] {
@@ -128,3 +216,18 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .crawlers {
+        text-align: right;
+
+        &-good {
+            color: #4caf50;
+        }
+        &-ok {
+            color: #ffc107;
+        }
+        &-bad {
+            color: #dd2c00;
+        }
+    }
+</style>

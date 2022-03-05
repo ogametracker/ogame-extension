@@ -8,24 +8,24 @@
         <!-- oh god this is ugly -->
         <template
             v-for="column in columns"
-            v-slot:[`cell-${column.key}`]="{ value }"
+            v-slot:[`cell-${column.key}`]="{ value, item }"
         >
             <span :key="column.key" class="ranged-stats-table-cell">
                 <span
                     v-if="column.key == 'label'"
                     :key="i"
-                    v-text="value.label"
+                    v-text="value"
                 />
                 <template v-else-if="column.key == 'subLabel'">
                     <span
-                        v-for="(item, i) in value.items"
+                        v-for="(item, i) in item.items"
                         :key="i"
                         v-text="item.label"
                     />
                 </template>
                 <template v-else>
                     <span
-                        v-for="(item, i) in value.items || [value]"
+                        v-for="(item, i) in item.items || [item]"
                         :key="i"
                         :class="getCellClass(item[column.key])"
                     >
