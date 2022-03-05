@@ -61,7 +61,6 @@
         </template>
 
         <template #footer-deuteriumSynthesizer="{ value }">
-            {{ value }}
             <span v-text="$number(value, avgNumberFormat)" />
         </template>
 
