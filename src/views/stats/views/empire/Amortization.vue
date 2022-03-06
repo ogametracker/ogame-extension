@@ -1,10 +1,163 @@
 <template>
     <div>
-        <div v-for="(building, i) in amortizationOrder" :key="i">
-            <span v-text="`${building.building}: `" />
-            <span v-text="building.level" />
-            <span v-text="`(${building.planetId})`" />
+        <h3>LOCA: Player Settings</h3>
+        <div class="player-settings">
+            <span>LOCA: MSU conversion rates</span>
+            <span>
+                <o-resource resource="metal" />
+                <input type="number" value="1" readonly />
+                <o-resource resource="crystal" />
+                <input
+                    type="number"
+                    v-model.number="msuConversionRates.crystal"
+                    min="1"
+                    max="3"
+                    step="0.01"
+                />
+                <o-resource resource="deuterium" />
+                <input
+                    type="number"
+                    v-model.number="msuConversionRates.deuterium"
+                    min="2"
+                    max="5"
+                    step="0.01"
+                />
+            </span>
+
+            <span>LOCA: Officers</span>
+            <span>
+                <o-officer
+                    v-for="(active, officer) in officers"
+                    :key="officer"
+                    :officer="officer"
+                    :disabled="!active"
+                    @click="officers[officer] = !officers[officer]"
+                />
+            </span>
+
+            <span>LOCA: Player Class</span>
+            <span>
+                <o-player-class
+                    v-for="(classType, plClass) in playerClasses"
+                    :key="plClass"
+                    :player-class="classType"
+                    :disabled="playerClass != plClass"
+                    @click="togglePlayerClass(plClass)"
+                />
+            </span>
+
+            <span>LOCA: Alliance Class</span>
+            <span>
+                <o-alliance-class
+                    v-for="(classType, allyClass) in allianceClasses"
+                    :key="allyClass"
+                    :alliance-class="classType"
+                    :disabled="allianceClass != allyClass"
+                    @click="toggleAllianceClass(allyClass)"
+                />
+            </span>
+
+            <span>LOCA: Current Level Plasmatechnology</span>
+            <span>
+                <input
+                    type="number"
+                    v-model.number="currentLevelPlasmaTechnology"
+                    min="0"
+                    max="50"
+                    step="1"
+                />
+            </span>
+
+            <span>LOCA: Current Level Astrophysics</span>
+            <span>
+                <input
+                    type="number"
+                    v-model.number="currentLevelAstrophysics"
+                    min="0"
+                    max="50"
+                    step="1"
+                />
+            </span>
         </div>
+        <hr />
+
+        <h3>LOCA: Planet Settings</h3>
+        <div class="planet-settings" v-for="planet in planets" :key="planet.id">
+            <span>LOCA: Planet</span>
+            <span v-text="planet.name" />
+
+            <span>LOCA: Position</span>
+            <span>
+                <input
+                    type="number"
+                    v-model.number="planet.coordinates.position"
+                    min="1"
+                    max="15"
+                    step="1"
+                />
+            </span>
+
+            <span>LOCA: Temperature</span>
+            <span>
+                <input
+                    type="number"
+                    v-model.number="planet.maxTemperature"
+                    min="-130"
+                    max="260"
+                    step="1"
+                />
+            </span>
+
+            <span>LOCA: Items</span>
+            <span>TODO: Item settings here</span>
+
+            <span>LOCA: Crawlers</span>
+            <span>TODO: Crawler settings here</span>
+
+            <span>LOCA: Mine Levels</span>
+            <span>TODO: Current mine levels here</span>
+        </div>
+        <hr />
+
+        <h3>LOCA: Plasmatechnology</h3>
+        <div class="plasma-tech-settings">
+            <span>LOCA: Show plasmatech in result</span>
+            <span>
+                TODO
+                <input type="checkbox" />
+            </span>
+        </div>
+        <hr />
+
+        <h3>LOCA: Astrophysics</h3>
+        <div class="astrophysics-settings">
+            <span>LOCA: Show astrophysics + new colony in result</span>
+            <span>
+                TODO
+                <input type="checkbox" />
+            </span>
+
+            <span>LOCA: Position</span>
+            <span>
+                TODO
+                <input type="number" min="1" max="15" step="1" />
+            </span>
+
+            <span>LOCA: Temperature</span>
+            <span>
+                TODO
+                <input type="number" min="-130" max="260" step="1" />
+            </span>
+
+            <span>LOCA: Items</span>
+            <span>TODO: Item settings here</span>
+
+            <span>LOCA: Crawlers</span>
+            <span>TODO: Crawler settings here</span>
+        </div>
+
+        <!-- TODO: amortization table -->
+        <grid-table />
     </div>
 </template>
 
@@ -34,197 +187,76 @@
      * - checkbox to consider astrophysics (on = use in calculation)
      *      + same settings as for planets EXCEPT current mine levels
      *          = prefill temperature with avg. value based on position (see official list: https://board.de.ogame.gameforge.com/index.php?thread/193098-offizielle-planetengr%C3%B6%C3%9Fen-in-version-6-1/)
+     * 
+     * - max. levels for each mine, plasma tech, and astrophysics (higher = more computational expensive, defaults: [60/60/60, 28, 35])
      */
 
+    import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
+    import { AllianceClass } from '@/shared/models/v1/ogame/classes/AllianceClass';
+    import { PlayerClass } from '@/shared/models/v1/ogame/classes/PlayerClass';
+    import { ResearchType } from '@/shared/models/v1/ogame/research/ResearchType';
+    import { Component, Vue } from 'vue-property-decorator';
+    import { OAllianceClassType } from '../../components/common/ogame/OAllianceClass.vue';
+    import { OPlayerClassType } from '../../components/common/ogame/OPlayerClass.vue';
+    import { EmpireDataModule } from '../../data/EmpireDataModule';
 
-    
+    @Component({})
+    export default class Amortization extends Vue {
+        private readonly playerClasses: Partial<Record<PlayerClass, OPlayerClassType>> = {
+            [PlayerClass.collector]: OPlayerClassType.collector,
+            [PlayerClass.discoverer]: OPlayerClassType.explorer,
+            [PlayerClass.general]: OPlayerClassType.general,
+        };
+        private readonly allianceClasses: Partial<Record<AllianceClass, OAllianceClassType>> = {
+            [AllianceClass.trader]: OAllianceClassType.trader,
+            [AllianceClass.researcher]: OAllianceClassType.researcher,
+            [AllianceClass.warrior]: OAllianceClassType.warrior,
+        };
 
+        //TODO: MSU rates from settings
+        private readonly msuConversionRates = {
+            crystal: 2,
+            deuterium: 3,
+        };
+        private officers = {
+            admiral: false,
+            commander: false,
+            engineer: false,
+            geologist: false,
+            technocrat: false,
+        };
+        private playerClass = PlayerClass.none;
+        private allianceClass = AllianceClass.none;
+        private currentLevelPlasmaTechnology = 0;
+        private currentLevelAstrophysics = 0;
+        private planets: PlanetData[] = [];
 
+        private mounted() {
+            const empire = EmpireDataModule.empire;
 
+            this.officers = { ...empire.officers };
+            this.playerClass = empire.playerClass;
+            this.allianceClass = empire.allianceClass;
+            this.currentLevelPlasmaTechnology = empire.research[ResearchType.plasmaTechnology];
+            this.currentLevelAstrophysics = empire.research[ResearchType.astrophysics];
+            this.planets = Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[];
+        }
 
+        private togglePlayerClass(playerClass: PlayerClass): void {
+            if (this.playerClass == playerClass) {
+                this.playerClass = PlayerClass.none;
+                return;
+            }
 
+            this.playerClass = playerClass;
+        }
+        private toggleAllianceClass(allianceClass: AllianceClass): void {
+            if (this.allianceClass == allianceClass) {
+                this.allianceClass = AllianceClass.none;
+                return;
+            }
 
-
-    // import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
-    // import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
-    // import { CrystalMine } from '@/shared/models/v1/ogame/buildings/CrystalMine';
-    // import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
-    // import { MetalMine } from '@/shared/models/v1/ogame/buildings/MetalMine';
-    // import { ProductionBuilding, ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
-    // import { addCost, Cost } from '@/shared/models/v1/ogame/common/Cost';
-    // import { ResearchType } from '@/shared/models/v1/ogame/research/ResearchType';
-    // import { Component, Prop, Vue } from 'vue-property-decorator';
-    // import { EmpireDataModule } from '../../data/EmpireDataModule';
-    // import { Astrophysics } from '@/shared/models/v1/ogame/research/Astrophysics';
-
-    // interface AmortizationBuildingItem {
-    //     planetId: number;
-
-    //     building: BuildingType;
-    //     level: number;
-    //     timeInHours: number;
-    //     cost: Cost;
-
-    //     production: number;
-    //     productionMsu: number;
-    // }
-
-    // interface AmortizationPlasmaTechnologyItem {
-    //     research: ResearchType.plasmaTechnology;
-
-    //     level: number;
-    //     timeInHours: number;
-    //     cost: Cost;
-
-    //     production: Cost;
-    //     productionMsu: number;
-    // }
-
-    // interface MineLevels {
-    //     metalMine: number;
-    //     crystalMine: number;
-    //     deuteriumSynthesizer: number;
-    // }
-
-    // @Component({})
-    // export default class Amortization extends Vue {
-    //     private readonly maxMineLevel = 70; //TODO: setting?
-
-    //     private readonly amortizationOrder: AmortizationBuildingItem[] = [];
-
-    //     private mounted() {
-    //         const player = EmpireDataModule.empire;
-    //         const planets = Object.values(EmpireDataModule.empire.planets).filter(p => !p.isMoon) as PlanetData[];
-
-    //         const economySpeed = 8; //TODO: from server settings
-
-
-    //         const buildingItems = {
-    //             metal: [] as AmortizationBuildingItem[][],
-    //             crystal: [] as AmortizationBuildingItem[][],
-    //             deuterium: [] as AmortizationBuildingItem[][],
-    //         };
-
-    //         planets.forEach(planet => {
-    //             const dependencies: ProductionBuildingDependencies = {
-    //                 economySpeed,
-    //                 planet,
-    //                 player,
-    //             };
-
-    //             const levelMetalMine = planet.buildings.production[BuildingType.metalMine];
-    //             buildingItems.metal.push(this.getAmortizationBuildingItems(levelMetalMine, BuildingType.metalMine, MetalMine, dependencies));
-
-    //             const levelCrystalMine = planet.buildings.production[BuildingType.crystalMine];
-    //             buildingItems.crystal.push(this.getAmortizationBuildingItems(levelCrystalMine, BuildingType.crystalMine, CrystalMine, dependencies));
-
-    //             const levelDeutSynth = planet.buildings.production[BuildingType.deuteriumSynthesizer];
-    //             buildingItems.deuterium.push(this.getAmortizationBuildingItems(levelDeutSynth, BuildingType.deuteriumSynthesizer, DeuteriumSynthesizer, dependencies));
-    //         });
-
-    //         const mineLevelsPerPlanet = this.getMineLevelsPerPlanet(planets);
-
-    //         while (true) {
-    //             const metalMine = this.getNextBuilding(buildingItems.metal);
-    //             const crystalMine = this.getNextBuilding(buildingItems.crystal);
-    //             const deutSynth = this.getNextBuilding(buildingItems.deuterium);
-
-    //             const plasmaTech = this.getPlasmaTechItem(mineLevelsPerPlanet);
-
-    //             const order = ([metalMine, crystalMine, deutSynth].filter(b => b != null) as AmortizationBuildingItem[])
-    //                 .sort((a, b) => a.timeInHours - b.timeInHours);
-    //             const winner = order[0];
-    //             if (winner == null) {
-    //                 break;
-    //             }
-
-    //             this.amortizationOrder.push(winner);
-
-    //             if (winner.building == BuildingType.metalMine) {
-    //                 buildingItems.metal = buildingItems.metal.map(items => items.filter(item => item != winner));
-    //                 mineLevelsPerPlanet[winner.planetId].metalMine++;
-    //             }
-    //             else if (winner.building == BuildingType.crystalMine) {
-    //                 buildingItems.crystal = buildingItems.crystal.map(items => items.filter(item => item != winner));
-    //                 mineLevelsPerPlanet[winner.planetId].crystalMine++;
-    //             }
-    //             else if (winner.building == BuildingType.deuteriumSynthesizer) {
-    //                 buildingItems.deuterium = buildingItems.deuterium.map(items => items.filter(item => item != winner));
-    //                 mineLevelsPerPlanet[winner.planetId].deuteriumSynthesizer++;
-    //             }
-    //         }
-
-    //         console.debug('amortization order', this.amortizationOrder);
-    //     }
-        
-    //     private getPlasmaTechItem(mineLevelsPerPlanet: Record<number, MineLevels>): AmortizationPlasmaTechnologyItem {
-            
-    //     }
-
-    //     private getMineLevelsPerPlanet(planets: PlanetData[]): Record<number, MineLevels> {
-    //         return planets.reduce((acc, planet) => {
-    //             acc[planet.id] = {
-    //                 metalMine: planet.buildings.production[BuildingType.metalMine],
-    //                 crystalMine: planet.buildings.production[BuildingType.crystalMine],
-    //                 deuteriumSynthesizer: planet.buildings.production[BuildingType.deuteriumSynthesizer],
-    //             };
-    //             return acc;
-    //         }, {} as Record<number, MineLevels>);
-    //     }
-
-    //     private getNextBuilding(items: AmortizationBuildingItem[][]): AmortizationBuildingItem | null {
-    //         if (items.every(arr => arr.length == 0)) {
-    //             return null;
-    //         }
-
-    //         return items.reduce((acc, itemArray) => {
-    //             const item = itemArray[0] as AmortizationBuildingItem | undefined;
-    //             if (item == null) {
-    //                 return acc;
-    //             }
-
-    //             if (acc == null || item.timeInHours < acc.timeInHours) {
-    //                 return item;
-    //             }
-
-    //             return acc;
-    //         }, null as AmortizationBuildingItem | null);
-    //     }
-
-    //     private getMsu(cost: Cost): number {
-    //         return cost.metal + cost.crystal * 2 + cost.deuterium * 3; //TODO: MSU from settings
-    //     }
-
-    //     private getAmortizationBuildingItems(currentLevel: number, buildingType: BuildingType, building: ProductionBuilding, dependencies: ProductionBuildingDependencies): AmortizationBuildingItem[] {
-    //         const result: AmortizationBuildingItem[] = [];
-
-    //         const curProduction = building.getProduction(currentLevel, dependencies);
-    //         let curProductionMsu = this.getMsu(curProduction);
-
-    //         for (let level = currentLevel + 1; level <= this.maxMineLevel; level++) {
-    //             const cost = building.getCost(level);
-    //             const msuCost = this.getMsu(cost);
-
-    //             const production = building.getProduction(level, dependencies);
-    //             const productionMsu = this.getMsu(production);
-
-    //             const timeInHours = msuCost / (productionMsu - curProductionMsu);
-
-    //             result.push({
-    //                 planetId: dependencies.planet.id,
-
-    //                 building: buildingType,
-    //                 level,
-    //                 cost,
-    //                 production: Math.max(production.metal, production.crystal, production.deuterium),
-    //                 productionMsu,
-    //                 timeInHours,
-    //             });
-
-    //             curProductionMsu = productionMsu;
-    //         }
-
-    //         return result;
-    //     }
-    // }
+            this.allianceClass = allianceClass;
+        }
+    }
 </script>
