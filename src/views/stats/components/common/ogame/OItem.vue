@@ -10,6 +10,8 @@
             'background-image': `url(/img/ogame/items/${fullItem.image}.png)`,
             'font-size': size,
         }"
+        v-on="$listeners"
+        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
@@ -23,7 +25,10 @@
     @Component({})
     export default class OItem extends Vue {
 
-        @Prop({ required: true, type: String as PropType<ItemHash> })
+        @Prop({ 
+            required: true, 
+            type: String as PropType<ItemHash>, 
+            validator: (value: string) => (Object.values(ItemHash).filter(h => h.length == 40) as string[]).includes(value)})
         private item!: ItemHash;
 
         @Prop({ required: false, type: Boolean, default: false })

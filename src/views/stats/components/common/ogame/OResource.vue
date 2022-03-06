@@ -1,10 +1,15 @@
 <template>
     <div
         class="o-resource"
+        :class="{
+            'o-resource--disabled': disabled,
+        }"
         :style="{
             'background-image': `url(/img/ogame/resources/${resource}.upscaled.png)`,
             'font-size': size,
         }"
+        v-on="$listeners"
+        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
@@ -33,6 +38,9 @@
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
+
+        @Prop({ required: false, type: Boolean })
+        private disabled!: boolean;
     }
 </script>
 <style lang="scss" scoped>

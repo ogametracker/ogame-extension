@@ -1,10 +1,15 @@
 <template>
     <div
         class="o-building"
+        :class="{
+            'o-building--disabled': disabled,
+        }"
         :style="{
             'background-image': `url(/img/ogame/buildings/${building}.jpg)`,
             'font-size': size,
         }"
+        v-on="$listeners"
+        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 

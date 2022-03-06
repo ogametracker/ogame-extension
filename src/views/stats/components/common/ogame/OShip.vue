@@ -1,10 +1,15 @@
 <template>
     <div
         class="o-ship"
+        :class="{
+            'o-ship--disabled': disabled,
+        }"
         :style="{
             'background-image': `url(/img/ogame/ships/${ship}.jpg)`,
             'font-size': size,
         }"
+        v-on="$listeners"
+        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
