@@ -11,7 +11,7 @@
                 :key="column.key"
                 class="grid-table-cell"
                 :class="[
-                    column.footerClass,
+                    column.headerClass,
                     {
                         first: i == 0,
                         last: i == columns.length - 1,
