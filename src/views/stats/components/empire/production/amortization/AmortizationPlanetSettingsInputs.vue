@@ -10,6 +10,13 @@
             </span>
         </span>
 
+        <template v-if="toggleable">
+            <span>LOCA: Enabled</span>
+            <span>
+                <input type="checkbox" v-model="settings.enabled" />
+            </span>
+        </template>
+
         <span>LOCA: Position</span>
         <span>
             <input
@@ -47,9 +54,10 @@
     import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
     import { PropType } from 'vue';
-    import { Component, VModel, Vue } from 'vue-property-decorator';
+    import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
 
     export interface AmortizationPlanetSettings {
+        enabled: boolean;
         id: number;
         name: string;
         coordinates?: Coordinates;
@@ -75,6 +83,7 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
 
-
+        @Prop({ required: false, type: Boolean })
+        private toggleable!: boolean;
     }
 </script>

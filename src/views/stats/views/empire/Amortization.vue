@@ -10,6 +10,7 @@
                 v-for="(planetSetting, i) in planetSettings"
                 :key="planetSetting.id"
                 v-model="planetSettings[i]"
+                toggleable
             />
         </div>
         <hr />
@@ -130,6 +131,7 @@
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
             include: true,
             planet: {
+                enabled: true,
                 id: -1,
                 name: '',
                 position: 0,
@@ -166,6 +168,7 @@
 
             this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
                 .map(planet => ({
+                    enabled: true,
                     id: planet.id,
                     name: planet.name,
                     maxTemperature: planet.maxTemperature,
@@ -187,6 +190,7 @@
             this.astrophysicsSettings = {
                 include: true,
                 planet: {
+                    enabled: true,
                     id: -1,
                     name: 'LOCA: new colony',
                     position: 8,
