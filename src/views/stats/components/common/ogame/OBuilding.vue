@@ -18,29 +18,29 @@
     import { PropType } from 'vue';
 
     export enum OBuildingType {
-        metalMine = 'metal-mine',
-        crystalMine = 'crystal-mine',
-        deuteriumSynthesizer = 'deuterium-synthesizer',
+        'metal-mine' = 'metal-mine',
+        'crystal-mine' = 'crystal-mine',
+        'deuterium-synthesizer' = 'deuterium-synthesizer',
 
-        metalStorage = 'metal-storage',
-        crystalStorage = 'crystal-storage',
-        deuteriumTank = 'deuterium-tank',
+        'metal-storage' = 'metal-storage',
+        'crystal-storage' = 'crystal-storage',
+        'deuterium-tank' = 'deuterium-tank',
 
-        solarPlant = 'solar-plant',
-        fusionReactor = 'fusion-reactor',
+        'solar-plant' = 'solar-plant',
+        'fusion-reactor' = 'fusion-reactor',
 
-        roboticsFactory = 'robotics-factory',
-        shipyard = 'shipyard',
-        researchLab = 'research-lab',
-        allianceDepot = 'alliance-depot',
-        missileSilo = 'missile-silo',
-        naniteFactory = 'nanite-factory',
-        terraformer = 'terraformer',
-        spaceDock = 'space-dock',
+        'robotics-factory' = 'robotics-factory',
+        'shipyard' = 'shipyard',
+        'research-lab' = 'research-lab',
+        'alliance-depot' = 'alliance-depot',
+        'missile-silo' = 'missile-silo',
+        'nanite-factory' = 'nanite-factory',
+        'terraformer' = 'terraformer',
+        'space-dock' = 'space-dock',
 
-        lunarBase = 'lunar-base',
-        sensorPhalanx = 'sensor-phalanx',
-        jumpGate = 'jump-gate',
+        'lunar-base' = 'lunar-base',
+        'sensor-phalanx' = 'sensor-phalanx',
+        'jump-gate' = 'jump-gate',
     }
 
     @Component({})

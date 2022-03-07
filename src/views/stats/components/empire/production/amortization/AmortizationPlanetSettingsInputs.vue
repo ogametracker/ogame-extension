@@ -11,9 +11,9 @@
         </span>
 
         <template v-if="toggleable">
-            <span>LOCA: Enabled</span>
+            <span>LOCA: Show</span>
             <span>
-                <input type="checkbox" v-model="settings.enabled" />
+                <input type="checkbox" v-model="settings.show" />
             </span>
         </template>
 
@@ -45,8 +45,10 @@
         <span>LOCA: Crawlers</span>
         <span>TODO: Crawler settings here</span>
 
-        <span>LOCA: Mine Levels</span>
-        <span>TODO: Current mine levels here</span>
+        <template v-if="settings.mineLevels != null">
+            <span>LOCA: Mine Levels</span>
+            <span>TODO: Current mine levels here</span>
+        </template>
     </div>
 </template>
 
@@ -57,7 +59,7 @@
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
 
     export interface AmortizationPlanetSettings {
-        enabled: boolean;
+        show: boolean;
         id: number;
         name: string;
         coordinates?: Coordinates;

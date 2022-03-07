@@ -8,6 +8,7 @@ declare module 'vue/types/vue' {
         $date(value: number | Date): string;
         $time(value: number | Date): string;
         $datetime(value: number | Date): string;
+        $timespan(valueInSeconds: number): string;
     }
 }
 
@@ -15,3 +16,4 @@ Vue.prototype.$number = (value: number, options?: Intl.DateTimeFormatOptions) =>
 Vue.prototype.$date = (value: number | Date) => Localization.formatDate(value);
 Vue.prototype.$time = (value: number | Date) => Localization.formatTime(value);
 Vue.prototype.$datetime = (value: number | Date) => Localization.formatDateTime(value);
+Vue.prototype.$timespan = (value: number) => Localization.formatTimeSpan(value);

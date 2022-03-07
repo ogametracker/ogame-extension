@@ -6,3 +6,19 @@ export interface Coordinates {
     position: number;
     type: PlanetType;
 }
+
+export function compareCoordinates(a: Coordinates, b: Coordinates): number {
+    const keys: (keyof Coordinates)[] = [
+        'galaxy',
+        'system',
+        'position',
+        'type',
+    ];
+    for (const key of keys) {
+        const diff = a[key] - b[key];
+        if (diff != 0) {
+            return diff;
+        }
+    }
+    return 0;
+}

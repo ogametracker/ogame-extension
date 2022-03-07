@@ -5,74 +5,107 @@
             '--color': getColorVariable(activeColor),
         }"
     >
-        <nav>
-            <component
-                :is="
-                    tab.to != null
-                        ? 'router-link'
-                        : tab.href != null
-                        ? 'a'
-                        : 'div'
-                "
-                v-for="tab in tabs"
-                :key="tab.key"
-                :href="tab.href"
-                :target="tab.href != null ? '_blank' : null"
-                :to="tab.to"
-                :active-class="tab.to != null ? 'nav-item-active' : null"
-                :class="[
-                    {
-                        'nav-item': tab.noNavItem != true,
-                        'icon-only': tab.label == null && tab.icon != null,
-                    },
-                    tab.class,
-                ]"
-                :style="[
-                    {
-                        '--color': getColorVariable(getColor(tab)),
-                    },
-                    tab.style,
-                ]"
-            >
-                <span
-                    v-if="tab.icon != null"
-                    class="nav-item-icon"
-                    :class="tab.icon"
-                />
-                <span v-if="tab.label != null" class="nav-item-label">
-                    <span v-text="tab.label" />
-                    <span
-                        v-if="
-                            tab.keyboardKey != null && tab.keyboardIcon != null
-                        "
-                        class="nav-item-keyboard-shortcut-icon"
-                        :class="tab.keyboardIcon"
-                    />
-                </span>
-            </component>
+        <span v-if="loading"> LOCA: loading... </span>
 
-            <template v-if="isIframeMode">
-                <div style="width: 24px" />
-                <div class="nav-item icon-only" style="--color: none">
+        <template v-else>
+            <nav>
+                <component
+                    :is="
+                        tab.to != null
+                            ? 'router-link'
+                            : tab.href != null
+                            ? 'a'
+                            : 'div'
+                    "
+                    v-for="tab in tabs"
+                    :key="tab.key"
+                    :href="tab.href"
+                    :target="tab.href != null ? '_blank' : null"
+                    :to="tab.to"
+                    :active-class="tab.to != null ? 'nav-item-active' : null"
+                    :class="[
+                        {
+                            'nav-item': tab.noNavItem != true,
+                            'icon-only': tab.label == null && tab.icon != null,
+                        },
+                        tab.class,
+                    ]"
+                    :style="[
+                        {
+                            '--color': getColorVariable(getColor(tab)),
+                        },
+                        tab.style,
+                    ]"
+                >
                     <span
-                        class="mdi mdi-close close-overlay"
-                        @click="closeOverlay()"
+                        v-if="tab.icon != null"
+                        class="nav-item-icon"
+                        :class="tab.icon"
                     />
+                    <span v-if="tab.label != null" class="nav-item-label">
+                        <span v-text="tab.label" />
+                        <span
+                            v-if="
+                                tab.keyboardKey != null &&
+                                tab.keyboardIcon != null
+                            "
+                            class="nav-item-keyboard-shortcut-icon"
+                            :class="tab.keyboardIcon"
+                        />
+                    </span>
+                </component>
+
+                <template v-if="isIframeMode">
+                    <div style="width: 24px" />
+                    <div class="nav-item icon-only" style="--color: none">
+                        <span
+                            class="mdi mdi-close close-overlay"
+                            @click="closeOverlay()"
+                        />
+                    </div>
+                </template>
+            </nav>
+            <main>
+                <router-view />
+            </main>
+            <footer v-if="!isIframeMode">
+                <span
+                    v-if="knownAccounts.length == 0"
+                    v-text="'LOCA: loading...'"
+                />
+                <div v-else>
+                    LOCA: Look at data of account
+                    <select
+                        @change="gotoAccount()"
+                        v-model="selectedAccountIndex"
+                    >
+                        <option
+                            v-for="(account, i) in knownAccounts"
+                            :key="account.key"
+                            :value="i"
+                        >
+                            {{ account.name || account.id }} ({{
+                                account.universeName || account.universeId
+                            }}
+                            {{ account.universeLanguage.toUpperCase() }})
+                        </option>
+                    </select>
                 </div>
-            </template>
-        </nav>
-        <main>
-            <router-view />
-        </main>
-        <footer v-if="!isIframeMode">
-            TODO: Switch between different accounts/servers here
-        </footer>
+            </footer>
+        </template>
     </div>
 </template>
 
 <script lang="ts">
+    import { LocalPlayerData } from "@/shared/models/v1/empire/LocalPlayerData";
+    import { parseIntSafe } from "@/shared/utils/parseNumbers";
     import { Component, Vue } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
+    import { CombatReportDataModule } from "./data/CombatReportDataModule";
+    import { DebrisFieldReportDataModule } from "./data/DebrisFieldReportDataModule";
+    import { EmpireDataModule } from "./data/EmpireDataModule";
+    import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
+    import { IDataModule } from "./data/IDataModule";
 
     interface Tab {
         key: string;
@@ -89,8 +122,24 @@
         keyboardIcon?: string;
     }
 
+    interface KnownAccount {
+        key: string;
+
+        id: number;
+        universeId: number;
+        universeLanguage: string;
+
+        name?: string;
+        universeName?: string;
+    }
+
     @Component
     export default class App extends Vue {
+
+        private loading = true;
+        private knownAccounts: KnownAccount[] = [];
+        private selectedAccountIndex = -1;
+
         private get isIframeMode() {
             const params = new URLSearchParams(location.search);
             return params.get('iframe') != null;
@@ -141,7 +190,7 @@
                 {
                     key: 'tools',
                     to: { name: 'tools' },
-                    icon: 'mdi mdi-tools', 
+                    icon: 'mdi mdi-tools',
                     label: 'LOCA: Tools',
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',
@@ -221,7 +270,7 @@
             window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
         }
 
-        private mounted() {
+        private async mounted() {
             window.addEventListener('keypress', e => {
                 if (e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
                     return;
@@ -233,6 +282,78 @@
                     this.$router.push(to);
                 }
             });
+
+
+            const dataModules: IDataModule[] = [
+                CombatReportDataModule,
+                DebrisFieldReportDataModule,
+                EmpireDataModule,
+                ExpeditionDataModule,
+            ];
+            const loadPromises = dataModules.map(mod => mod.load());
+            await Promise.all(loadPromises);
+
+            this.loading = false;
+
+            if (!this.isIframeMode) {
+                await this.loadKnownAccounts();
+            }
+        }
+
+        private async loadKnownAccounts(): Promise<void> {
+            const all = await chrome.storage.local.get(null);
+            const localPlayerKeys = Object.keys(all).filter(key => key.endsWith('-local-player'));
+            const accounts: KnownAccount[] = localPlayerKeys.map(key => {
+                const split = key.split('-');
+                const localPlayer = all[key] as LocalPlayerData;
+                const id = parseIntSafe(split[2], 10);
+                const uniId = parseIntSafe(split[0].substring(1), 10);
+                const uniLang = split[1];
+                const { name, universeName } = localPlayer;
+
+                return {
+                    key: key.replace('-local-player', ''),
+                    id,
+                    universeId: uniId,
+                    universeLanguage: uniLang,
+                    name,
+                    universeName,
+                };
+            });
+
+            this.knownAccounts = accounts.sort((a, b) => {
+                const lang = a.universeLanguage.localeCompare(b.universeLanguage);
+                if (lang != 0) {
+                    return lang;
+                }
+
+                if (a.universeName != null && b.universeName == null) {
+                    return -1;
+                }
+                if (a.universeName == null && b.universeName != null) {
+                    return 1;
+                }
+
+                const uniId = a.universeId - b.universeId;
+                if (uniId != 0) {
+                    return uniId;
+                }
+
+                if (a.name != null && b.name == null) {
+                    return -1;
+                }
+                if (a.name == null && b.name != null) {
+                    return 1;
+                }
+
+                return a.id - b.id;
+            });
+        }
+
+        private gotoAccount(): void {
+            const account = this.knownAccounts[this.selectedAccountIndex];
+            const url = `/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
     }
 </script>

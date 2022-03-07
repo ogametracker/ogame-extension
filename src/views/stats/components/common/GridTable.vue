@@ -1,9 +1,15 @@
 <template>
     <div
         class="grid-table"
+        :class="{
+            'grid-table--sticky-header': sticky != null,
+        }"
         :style="{
             'grid-template-columns': gridColumns,
+            '--grid-table--sticky-height': sticky,
         }"
+        @scroll="onScroll($event)"
+        ref="element"
     >
         <div class="grid-table-head">
             <div
@@ -93,7 +99,7 @@
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
 
     export interface GridTableColumn<TKey = string> {
         key: TKey;
@@ -104,6 +110,17 @@
         headerClass?: string;
         style?: string | Record<string, any>;
         formatter?: (value: any) => string;
+    }
+
+    export interface GridTableScrollEvent {
+        x: {
+            current: number;
+            max: number;
+        };
+        y: {
+            current: number;
+            max: number;
+        };
     }
 
     @Component({})
@@ -120,11 +137,32 @@
         @Prop({ required: false, type: Function as PropType<(value: any) => string>, default: (value: any) => '' })
         private cellClassProvider!: (value: any) => string;
 
+        @Prop({ required: false, type: String, default: null })
+        private sticky!: string | null;
+
 
         private get gridColumns(): string {
             return this.columns
                 .map(col => col.size ?? 'auto')
                 .join(' ');
+        }
+
+        @Ref('element')
+        private tableElement!: Element;
+
+        private onScroll(event: Event) {
+            const elem = this.tableElement;
+            const scrollData: GridTableScrollEvent = {
+                x: {
+                    max: elem.scrollWidth - elem.clientWidth,
+                    current: elem.scrollLeft,
+                },
+                y: {
+                    max: elem.scrollHeight - elem.clientHeight,
+                    current: elem.scrollTop,
+                },
+            };
+            this.$emit('scroll', scrollData);
         }
     }
 </script>
@@ -136,6 +174,9 @@
 
         border-radius: var(--border-radius);
 
+        z-index: 0;
+
+
         &-head,
         &-body,
         &-foot,
@@ -144,6 +185,7 @@
         }
 
         &-head .grid-table-cell {
+            z-index: 1;
             background-color: black;
             background-image: linear-gradient(
                 0deg,
@@ -177,6 +219,15 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
+        }
+
+        &--sticky-header > &-head > &-cell {
+            position: sticky;
+            top: 0;
+        }
+        &--sticky-header {
+            max-height: var(--grid-table--sticky-height);
+            overflow: auto;
         }
     }
     .grid-table-head {

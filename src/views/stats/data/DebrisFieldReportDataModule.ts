@@ -6,9 +6,10 @@ import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
+import { IDataModule } from './IDataModule';
 
 @Component
-class DebrisFieldReportDataModuleClass extends Vue {
+class DebrisFieldReportDataModuleClass extends Vue implements IDataModule {
     public reports: DebrisFieldReport[] = [];
     public reportsPerDay: Record<number, DebrisFieldReport[]> = {};
     public firstDate: number | null = null;
@@ -17,6 +18,21 @@ class DebrisFieldReportDataModuleClass extends Vue {
         this.initCommunication();
 
         await this.requestData();
+    }
+
+    private _loaded = false;
+
+    public async load(): Promise<void> {
+        await new Promise<void>(resolve => {
+            const interval = setInterval(() => {
+                if(!this._loaded) {
+                    return;
+                }
+
+                clearInterval(interval);
+                resolve();
+            }, 10);
+        });
     }
 
     private initCommunication() {
@@ -65,6 +81,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
                     (date, report) => Math.min(date ?? report.date, report.date),
                     null as null | number
                 );
+
+                this._loaded = true;
                 break;
             }
         }

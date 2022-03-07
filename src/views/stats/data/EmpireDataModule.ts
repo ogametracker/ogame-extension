@@ -6,9 +6,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { EmpireDataMessage, RequestLocalPlayerDataMessage } from '@/shared/messages/tracking/empire';
+import { IDataModule } from './IDataModule';
 
 @Component
-class EmpireDataModuleClass extends Vue {
+class EmpireDataModuleClass extends Vue implements IDataModule {
     public empire: LocalPlayerData = null!;
 
     private resolveInitialDataPromise: (() => void) | null = null;
@@ -19,6 +20,21 @@ class EmpireDataModuleClass extends Vue {
             this.initCommunication();
 
             await this.requestData();
+        });
+    }
+
+    private _loaded = false;
+
+    public async load(): Promise<void> {
+        await new Promise<void>(resolve => {
+            const interval = setInterval(() => {
+                if(!this._loaded) {
+                    return;
+                }
+
+                clearInterval(interval);
+                resolve();
+            }, 10);
         });
     }
 
@@ -46,6 +62,8 @@ class EmpireDataModuleClass extends Vue {
 
                 const { data } = msg as EmpireDataMessage;
                 this.empire = data;
+
+                this._loaded = true;
                 break;
             }
         }

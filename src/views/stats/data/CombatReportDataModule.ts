@@ -6,9 +6,10 @@ import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
+import { IDataModule } from './IDataModule';
 
 @Component
-class CombatReportDataModuleClass extends Vue {
+class CombatReportDataModuleClass extends Vue implements IDataModule {
     public reports: CombatReport[] = [];
     public reportsPerDay: Record<number, CombatReport[]> = {};
     public firstDate: number | null = null;
@@ -17,6 +18,21 @@ class CombatReportDataModuleClass extends Vue {
         this.initCommunication();
 
         await this.requestData();
+    }
+
+    private _loaded = false;
+
+    public async load(): Promise<void> {
+        await new Promise<void>(resolve => {
+            const interval = setInterval(() => {
+                if(!this._loaded) {
+                    return;
+                }
+
+                clearInterval(interval);
+                resolve();
+            }, 10);
+        });
     }
 
     private initCommunication() {
@@ -65,6 +81,8 @@ class CombatReportDataModuleClass extends Vue {
                     (date, report) => Math.min(date ?? report.date, report.date),
                     null as null | number
                 );
+
+                this._loaded = true;
                 break;
             }
         }

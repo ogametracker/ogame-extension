@@ -6,20 +6,23 @@
         class="resources-production-table"
     >
         <template #header-metal>
-            <o-resource resource="metal" size="50px" />
+            <o-resource resource="metal" size="75px" />
         </template>
         <template #header-crystal>
-            <o-resource resource="crystal" size="50px" />
+            <o-resource resource="crystal" size="75px" />
         </template>
         <template #header-deuterium>
-            <o-resource resource="deuterium" size="50px" />
+            <o-resource resource="deuterium" size="75px" />
         </template>
         <template #header-total> LOCA: Total </template>
         <template #header-totalMsu> LOCA: Total (MSU) </template>
 
         <template #header-productionSettings>
             <div class="production-settings-mini-table">
-                <span class="header" v-text="'LOCA: used production settings'" />
+                <span
+                    class="header"
+                    v-text="'LOCA: used production settings'"
+                />
                 <!-- TODO: Settings as dropdowns to change? -->
                 <span
                     class="header"
@@ -152,7 +155,7 @@
     import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
     import { ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
     import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
-    import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
+    import { compareCoordinates, Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
@@ -332,7 +335,8 @@
 
         private get planets(): PlanetData[] {
             return Object.values(EmpireDataModule.empire.planets)
-                .filter(planet => !planet.isMoon) as PlanetData[];
+                .filter(planet => !planet.isMoon)
+                .sort((a, b) => compareCoordinates(a.coordinates, b.coordinates)) as PlanetData[];
         }
 
         private getProduction(planet: PlanetData): Production {
