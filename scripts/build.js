@@ -46,4 +46,13 @@ fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 console.log(`Generating manifest`);
 execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''}`, { stdio: 'inherit' });
 
-console.log(`Done`);
+const dateFormat = new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+});
+console.log(`Done (${dateFormat.format(new Date())})`);
