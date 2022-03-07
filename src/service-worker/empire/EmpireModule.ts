@@ -86,6 +86,17 @@ export class EmpireModule {
                     }
                 });
 
+            // update planet data
+            data.forEach(planet => {
+                const planetData = localPlayerData.planets[planet.id];
+
+                planetData.coordinates = planet.coordinates;
+                planetData.name = planet.name;
+                if (!planetData.isMoon && !planet.isMoon) {
+                    planetData.maxTemperature = planet.maxTemperature;
+                }
+            });
+
 
             return localPlayerData;
         });
@@ -125,7 +136,7 @@ export class EmpireModule {
             Object.keys(researchLevels)
                 .map(researchId => parseIntSafe(researchId, 10) as ResearchType)
                 .forEach(researchId => localPlayerData.research[researchId] = researchLevels[researchId]!);
-                
+
             return localPlayerData;
         });
     }
@@ -134,13 +145,13 @@ export class EmpireModule {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
             const planet = localPlayerData.planets[data.planetId];
-            if(!planet.isMoon) {
+            if (!planet.isMoon) {
                 planet.productionSettings = data.data;
             }
             return localPlayerData;
         });
     }
-    
+
     public async updateUniverseName(meta: MessageOgameMeta, name: string) {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
@@ -148,7 +159,7 @@ export class EmpireModule {
             return localPlayerData;
         });
     }
-    
+
     public async updatePlayerName(meta: MessageOgameMeta, universeName: string) {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
@@ -223,8 +234,8 @@ export class EmpireModule {
                 [BuildingType.deuteriumSynthesizer]: 100,
                 [BuildingType.solarPlant]: 100,
                 [BuildingType.fusionReactor]: 100,
-                [ShipType.solarSatellite]: 0,
-                [ShipType.crawler]: 0,
+                [ShipType.solarSatellite]: 100,
+                [ShipType.crawler]: 100,
             },
             activeItems: {},
             name: p.name,
