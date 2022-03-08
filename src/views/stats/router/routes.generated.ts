@@ -57,6 +57,7 @@ import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/
 import viewsexpeditionsshipssizesIndex from '@stats/views/expeditions/ships/sizes/Index.vue';
 import viewsexpeditionsshipssizesChart from '@stats/views/expeditions/ships/sizes/Chart.vue';
 import viewsexpeditionsshipssizesTable from '@stats/views/expeditions/ships/sizes/Table.vue';
+import viewspointsIndex from '@stats/views/points/Index.vue';
 import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue';
 import viewsresourceoverviewChart from '@stats/views/resource-overview/Chart.vue';
 import viewsresourceoverviewTable from '@stats/views/resource-overview/Table.vue';
@@ -498,6 +499,14 @@ const routes: RouteConfig[] = [
                         ]
                     }
                 ]
+            },
+            {
+                meta: {
+                    color: "#8b0436"
+                },
+                path: "points",
+                name: "points",
+                component: viewspointsIndex
             },
             {
                 redirect: {

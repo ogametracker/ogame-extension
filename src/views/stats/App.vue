@@ -196,6 +196,14 @@
                     keyboardIcon: 'mdi mdi-numeric-6',
                 },
                 {
+                    key: 'points',
+                    to: { name: 'points' },
+                    icon: 'mdi mdi-chart-areaspline',
+                    label: 'LOCA: Points',
+                    keyboardKey: '7',
+                    keyboardIcon: 'mdi mdi-numeric-7',
+                },
+                {
                     key: 'space',
                     style: {
                         'flex-grow': 1
