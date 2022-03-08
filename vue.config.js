@@ -39,6 +39,17 @@ const config = {
                 '@notifications': path.resolve(__dirname, './src/views/notifications/'),
             },
         },
+        output: {
+            devtoolModuleFilenameTemplate: info => {
+                const isVue = info.resourcePath.match(/\.vue$/) && info.resource.match(/type=script/) && info.moduleId == '';
+                const isTypescript = info.resourcePath.match(/\.ts$/);
+                if(isVue || isTypescript) {
+                    return `ogame-tracker:///${info.resourcePath}`;
+                }
+                return null;
+            },
+            devtoolFallbackModuleFilenameTemplate: 'webpack:///[resource-path]?[hash]',
+        },
     },
     css: {
         loaderOptions: {
