@@ -374,8 +374,9 @@
 
     .planet-info {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
         justify-items: end;
+        column-gap: 8px;
     }
 
     .production-settings-mini-table {

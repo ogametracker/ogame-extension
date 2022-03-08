@@ -51,6 +51,7 @@
                 :columns="columns"
                 sticky="100%"
                 @scroll="onTableScroll($event)"
+                :hide-row="item => !item.visible"
             >
                 <template #header-cost>
                     <div class="cost-grid">
@@ -108,12 +109,15 @@
                             research="astrophysics"
                             :disabled="value.levels.length == 0"
                         />
+                        <span v-if="value.levels.length == 0" v-text="'-'" />
                         <span
-                            v-if="value.levels.length == 0"
-                            v-text="'-'"
+                            v-else-if="value.levels.length == 1"
+                            v-text="value.levels[0]"
                         />
-                        <span v-else-if="value.levels.length == 1" v-text="value.levels[0]" />
-                        <span v-else v-text="`${value.levels[0]}+${value.levels[1]}`" />
+                        <span
+                            v-else
+                            v-text="`${value.levels[0]}+${value.levels[1]}`"
+                        />
 
                         <span
                             class="mdi mdi-arrow-right-thin"
@@ -227,7 +231,7 @@
     import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
     import { ResearchType } from '@/shared/models/v1/ogame/research/ResearchType';
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue, Watch } from 'vue-property-decorator';
     import AmortizationPlanetSettingsInputs, { AmortizationPlanetSettings } from '../../components/empire/production/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs, { AmortizationPlayerSettings } from '../../components/empire/production/amortization/AmortizationPlayerSettingsInputs.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
@@ -824,12 +828,10 @@
             };
 
             return this.amortizationItems
-                .filter(item =>
-                    (item.type == 'mine' && (this.planetSettings[item.planetId]?.show ?? this.astrophysicsSettings.show))
-                    || (item.type == 'plasma-technology' && this.showPlasmaTechnology)
-                    || (item.type == 'astrophysics-and-colony' && this.astrophysicsSettings.show)
-                )
                 .map(item => ({
+                    visible: (item.type == 'mine' && (this.planetSettings[item.planetId]?.show ?? this.astrophysicsSettings.show))
+                        || (item.type == 'plasma-technology' && this.showPlasmaTechnology)
+                        || (item.type == 'astrophysics-and-colony' && this.astrophysicsSettings.show),
                     cost: item.cost,
                     costMsu: item.costMsu,
                     productionDelta: item.productionDelta,
@@ -841,6 +843,15 @@
 
         private formatCoordinates(coordinates: Coordinates): string {
             return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
+        }
+
+        @Watch('items')
+        private onItemsChanged(items: AmortizationTableItem[]) {
+            const visibleItems = items.filter(item => item.visible);
+
+            if (visibleItems.length < 100) {
+                this.insertNextAmortizationItems(20);
+            }
         }
 
         private onTableScroll(event: GridTableScrollEvent): void {
@@ -872,6 +883,7 @@
     type AmortizationTableItemWhat = AmortizationMineTableItem | AmortizationPlasmaTechnologyTableItem | AmortizationAstrophysicsTableItem;
 
     interface AmortizationTableItem {
+        visible: boolean;
         what: AmortizationTableItemWhat;
         cost: Cost;
         costMsu: number;
@@ -899,6 +911,7 @@
 
             & > span:first-of-type {
                 display: grid;
+                justify-items: end;
             }
         }
 
@@ -935,6 +948,7 @@
 
         &-table {
             overflow: auto;
+            min-height: 300px;
         }
     }
 </style>

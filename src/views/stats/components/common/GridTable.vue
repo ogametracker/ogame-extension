@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="grid-table-body">
-            <div class="grid-table-row" v-for="(item, i) in items" :key="i">
+            <div class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
                 <div
                     v-for="column in columns"
                     :key="column.key"
@@ -139,6 +139,9 @@
 
         @Prop({ required: false, type: String, default: null })
         private sticky!: string | null;
+
+        @Prop({ required: false, type: Function as PropType<(item: any) => boolean>, default: () => false })
+        private hideRow!: (item: any) => boolean;
 
 
         private get gridColumns(): string {

@@ -33,18 +33,22 @@
 
         <template #cell-crawlers="{ value }">
             <div class="crawlers">
+                <span>
+                    <span
+                        v-text="$number(value.active)"
+                        :class="{
+                            'crawlers-good': value.active == value.maximum,
+                            'crawlers-ok':
+                                value.active > 0 &&
+                                value.active < value.maximum,
+                            'crawlers-bad': value.active == 0,
+                        }"
+                    />
+                    <span>/{{ $number(value.maximum) }}</span>
+                </span>
                 <span
-                    v-text="$number(value.active)"
-                    :class="{
-                        'crawlers-good': value.active == value.maximum,
-                        'crawlers-ok':
-                            value.active > 0 && value.active < value.maximum,
-                        'crawlers-bad': value.active == 0,
-                    }"
+                    v-text="`(${$number(value.available)} LOCA: available)`"
                 />
-                <span>/{{ $number(value.maximum) }}</span>
-                <br />
-                <span v-text="`${$number(value.available)} LOCA: available`" />
             </div>
         </template>
 
@@ -73,9 +77,7 @@
         <template #footer-crawlers="{ value }">
             <div class="crawlers">
                 <span
-                    v-text="
-                        `${$number(value.active, avgNumberFormat)} LOCA: active`
-                    "
+                    v-text="$number(value.active, avgNumberFormat)"
                     :class="{
                         'crawlers-good': value.active == value.maximum,
                         'crawlers-ok':
@@ -83,13 +85,12 @@
                         'crawlers-bad': value.active == 0,
                     }"
                 />
-                <br />
                 <span
                     v-text="
-                        `${$number(
+                        `(${$number(
                             value.available,
                             avgNumberFormat
-                        )} LOCA: available`
+                        )} LOCA: available)`
                     "
                 />
             </div>
@@ -140,12 +141,13 @@
                 {
                     key: 'planet',
                     label: 'LOCA: Planet',
+                    size: '1fr',
                 },
-                { key: 'metalMine' },
-                { key: 'crystalMine' },
-                { key: 'deuteriumSynthesizer' },
-                { key: 'solarPlant' },
-                { key: 'fusionReactor' },
+                { key: 'metalMine', size: '1fr' },
+                { key: 'crystalMine', size: '1fr' },
+                { key: 'deuteriumSynthesizer', size: '1fr' },
+                { key: 'solarPlant', size: '1fr' },
+                { key: 'fusionReactor', size: '1fr' },
 
                 { key: 'crawlers' },
             ];
@@ -226,7 +228,11 @@
 </script>
 <style lang="scss" scoped>
     .crawlers {
-        text-align: right;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+        column-gap: 8px;
+        justify-items: end;
 
         &-good {
             color: #4caf50;
@@ -241,7 +247,8 @@
 
     .planet-info {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
         justify-items: end;
+        column-gap: 8px;
     }
 </style>
