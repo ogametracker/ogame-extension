@@ -23,6 +23,7 @@ interface PageTracker {
 
 interface ObserverCallback {
     selector: string;
+    asap?: boolean;
     callback: (element: Element) => void;
 }
 
@@ -85,12 +86,17 @@ const pageTrackers: PageTracker[] = [
 ];
 export const observerCallbacks: ObserverCallback[] = [];
 const observer = new MutationObserver(() => {
-    if (document.querySelector('#siteFooter') == null) {
+    const siteFooter = document.querySelector('#siteFooter');
+    if (siteFooter == null) {
         return;
     }
 
     for (let i = 0; i < observerCallbacks.length; i++) {
         const observerCallback = observerCallbacks[i];
+        if(siteFooter == null && !observerCallback.asap) {
+            continue;
+        }
+        
         const elem = document.querySelector(observerCallback.selector);
 
         if (elem != null) {

@@ -17,6 +17,7 @@ import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
 import { PlayerClass } from "../../shared/models/v1/ogame/classes/PlayerClass";
 import { ResearchType } from "../../shared/models/v1/ogame/research/ResearchType";
 import { ProductionSettings } from "../../shared/models/v1/empire/ProductionSettings";
+import { PlanetActiveItems } from "../../shared/models/v1/empire/PlanetActiveItems";
 
 export class EmpireModule {
     private readonly empireManagers: Record<string, EmpireManager | undefined> = {};
@@ -37,7 +38,7 @@ export class EmpireModule {
         });
     }
 
-    public async updateActiveItems(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<ItemHash, number>>>) {
+    public async updateActiveItems(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetActiveItems>) {
         const manager = this.getManager(meta);
         await manager.update(localPlayerData => {
             localPlayerData.planets[data.planetId].activeItems = data.data;

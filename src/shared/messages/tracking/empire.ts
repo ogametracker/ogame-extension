@@ -11,6 +11,7 @@ import { BuildingType } from "../../models/v1/ogame/buildings/BuildingType";
 import { ResearchType } from "../../models/v1/ogame/research/ResearchType";
 import { LocalPlayerData } from "../../models/v1/empire/LocalPlayerData";
 import { ProductionSettings } from "@/shared/models/v1/empire/ProductionSettings";
+import { PlanetActiveItems } from "@/shared/models/v1/empire/PlanetActiveItems";
 
 
 // basic planet/moon data
@@ -37,7 +38,7 @@ export interface PlanetDataWrapper<T> {
 }
 
 // active items
-export type UpdatePlanetActiveItemsMessage = Message<MessageType.UpdatePlanetActiveItems, PlanetDataWrapper<Partial<Record<ItemHash, number>>>>;
+export type UpdatePlanetActiveItemsMessage = Message<MessageType.UpdatePlanetActiveItems, PlanetDataWrapper<PlanetActiveItems>>;
 
 // research levels
 type ResearchLevels = Partial<Record<ResearchType, number>>;

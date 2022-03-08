@@ -1,3 +1,4 @@
+import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
 import { PlayerOfficers } from "../../empire/PlayerOfficers";
 import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";
@@ -52,7 +53,7 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
         };
     }
 
-    private getItemBoost(activeItems: Partial<Record<ItemHash, number | undefined>>) {
+    private getItemBoost(activeItems: PlanetActiveItems) {
         const now = Date.now();
 
         const items10 = [ItemHash.deuteriumBooster_bronze_1day, ItemHash.deuteriumBooster_bronze_7days];
@@ -60,16 +61,16 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
         const items30 = [ItemHash.deuteriumBooster_gold_7days, ItemHash.deuteriumBooster_gold_30days, ItemHash.deuteriumBooster_gold_90days];
         const items40 = [ItemHash.deuteriumBooster_platinum_7days, ItemHash.deuteriumBooster_platinum_30days, ItemHash.deuteriumBooster_platinum_90days];
 
-        if (items10.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items10.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.1;
         }
-        if (items20.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items20.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.2;
         }
-        if (items30.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items30.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.3;
         }
-        if (items40.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items40.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.4;
         }
 

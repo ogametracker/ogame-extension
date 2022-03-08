@@ -1,6 +1,7 @@
 import { Coordinates } from "../ogame/common/Coordinates";
-import { ItemHash } from "../ogame/items/ItemHash";
+import { PlanetActiveItems } from "./PlanetActiveItems";
 import { DefenseCount } from './DefenseCount';
+
 
 export interface PlanetDataBase {
     id: number;
@@ -8,5 +9,5 @@ export interface PlanetDataBase {
     coordinates: Coordinates;
 
     defense: DefenseCount;
-    activeItems: Partial<Record<ItemHash, number | undefined>>;
+    activeItems: PlanetActiveItems;
 }

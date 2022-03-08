@@ -8,6 +8,7 @@ import { ShipType } from "../ships/ShipType";
 import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
 import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
+import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
 
 class CrystalMineClass extends ProductionBuilding {
 
@@ -55,7 +56,7 @@ class CrystalMineClass extends ProductionBuilding {
         };
     }
 
-    private getItemBoost(activeItems: Partial<Record<ItemHash, number | undefined>>) {
+    private getItemBoost(activeItems: PlanetActiveItems) {
         const now = Date.now();
 
         const items10 = [ItemHash.crystalBooster_bronze_1day, ItemHash.crystalBooster_bronze_7days];
@@ -63,16 +64,16 @@ class CrystalMineClass extends ProductionBuilding {
         const items30 = [ItemHash.crystalBooster_gold_7days, ItemHash.crystalBooster_gold_30days, ItemHash.crystalBooster_gold_90days];
         const items40 = [ItemHash.crystalBooster_platinum_7days, ItemHash.crystalBooster_platinum_30days, ItemHash.crystalBooster_platinum_90days];
 
-        if (items10.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items10.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.1;
         }
-        if (items20.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items20.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.2;
         }
-        if (items30.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items30.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.3;
         }
-        if (items40.some(hash => (activeItems[hash] ?? -1) > now)) {
+        if (items40.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
             return 0.4;
         }
 
