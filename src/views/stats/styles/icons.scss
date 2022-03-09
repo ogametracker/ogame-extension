@@ -23,6 +23,6 @@ $icons: ("attack", "debris-field", "discord", "economy", "expedition", "planet-m
 
 @each $icon in $icons {
     .#{$icon-prefix}-#{$icon}::before {
-        background-image: url(#{$base-url}/icons/#{$icon}.svg); //TODO: create icon font
+        background-image: url(../assets/icons/#{$icon}.svg); //TODO: create icon font
     }
 }

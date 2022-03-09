@@ -198,7 +198,7 @@
                 {
                     key: 'points',
                     to: { name: 'points' },
-                    icon: 'mdi mdi-chart-areaspline',
+                    icon: 'mdi mdi-chart-timeline-variant',
                     label: 'LOCA: Points',
                     keyboardKey: '7',
                     keyboardIcon: 'mdi mdi-numeric-7',
