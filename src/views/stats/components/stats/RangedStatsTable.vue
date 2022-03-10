@@ -7,21 +7,33 @@
     >
         <!-- oh god this is ugly -->
         <template
-            v-for="column in columns"
+            v-for="(column, i) in columns"
             v-slot:[`cell-${column.key}`]="{ value, item }"
         >
             <span :key="column.key" class="ranged-stats-table-cell">
-                <span
-                    v-if="column.key == 'label'"
-                    :key="i"
-                    v-text="value"
-                />
-                <template v-else-if="column.key == 'subLabel'">
-                    <span
-                        v-for="(item, i) in item.items"
-                        :key="i"
-                        v-text="item.label"
+                <template v-if="column.key == 'label'">
+                    <slot
+                        v-if="
+                            column.slotName != null &&
+                            $scopedSlots[column.slotName] != null
+                        "
+                        :name="column.slotName"
+                        :value="value"
                     />
+                    <span v-else :key="i" v-text="value" />
+                </template>
+                <template v-else-if="column.key == 'subLabel'">
+                    <span v-for="(item, i) in item.items" :key="i">
+                        <slot
+                            v-if="
+                                column.slotName != null &&
+                                $scopedSlots[column.slotName] != null
+                            "
+                            :name="column.slotName"
+                            :value="item.label"
+                        />
+                        <span v-else v-text="item.label" />
+                    </span>
                 </template>
                 <template v-else>
                     <span
@@ -38,6 +50,12 @@
                 </template>
             </span>
         </template>
+
+        <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+            <slot :name="name" v-bind="data" />
+        </template>
+    </grid-table>
+</template>
     </grid-table>
 </template>
 
@@ -81,6 +99,10 @@
     }
 
     type RangedStatsTableRow = SimpleRangedStatsTableRow | GroupedRangedStatsTableRow;
+
+    interface RangeStatsTableColumn extends GridTableColumn<keyof SimpleRangedStatsTableRow | 'subLabel' | number> {
+        slotName?: string;
+    }
 
     @Component({})
     export default class RangedStatsTable<T extends RangeStatsTableItemWithDate> extends Vue {
@@ -132,17 +154,19 @@
             return dataItemsByRange;
         }
 
-        private get columns(): GridTableColumn<keyof SimpleRangedStatsTableRow | 'subLabel' | number>[] {
-            const columns: GridTableColumn<keyof SimpleRangedStatsTableRow | 'subLabel' | number>[] = [
+        private get columns(): RangeStatsTableColumn[] {
+            const columns: RangeStatsTableColumn[] = [
                 {
                     key: 'label',
                     label: '',
+                    slotName: 'label',
                 }
             ];
             if (this.hasGroupedItems) {
                 columns.push({
                     key: 'subLabel',
                     label: '',
+                    slotName: 'subLabel',
                 });
             }
 
