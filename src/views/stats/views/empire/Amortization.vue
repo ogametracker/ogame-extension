@@ -51,7 +51,7 @@
                 :columns="columns"
                 sticky="100%"
                 @scroll="onTableScroll($event)"
-                :hide-row="item => !item.visible"
+                :hide-row="(item) => !item.visible"
             >
                 <template #header-cost>
                     <div class="cost-grid">
@@ -850,7 +850,7 @@
             const visibleItems = items.filter(item => item.visible);
 
             if (visibleItems.length < 100) {
-                this.insertNextAmortizationItems(20);
+                setTimeout(() => this.insertNextAmortizationItems(20), 50);
             }
         }
 

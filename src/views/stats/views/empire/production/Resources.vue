@@ -153,6 +153,7 @@
     import { MetalMine } from '@/shared/models/v1/ogame/buildings/MetalMine';
     import { CrystalMine } from '@/shared/models/v1/ogame/buildings/CrystalMine';
     import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
+    import { FusionReactor } from '@/shared/models/v1/ogame/buildings/FusionReactor';
     import { ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
     import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
     import { compareCoordinates, Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
@@ -349,7 +350,8 @@
             return {
                 metal: MetalMine.getProduction(planet.buildings.production[BuildingType.metalMine], deps).metal,
                 crystal: CrystalMine.getProduction(planet.buildings.production[BuildingType.crystalMine], deps).crystal,
-                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[BuildingType.deuteriumSynthesizer], deps).deuterium,
+                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[BuildingType.deuteriumSynthesizer], deps).deuterium
+                    - FusionReactor.getConsumption(planet.buildings.production[BuildingType.fusionReactor], deps).deuterium,
             };
         }
     }
