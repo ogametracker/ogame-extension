@@ -108,6 +108,7 @@
 <style lang="scss" scoped>
     .tri-resource {
         position: relative;
+        display: flex;
 
         > .o-resource:not(:last-of-type) {
             position: absolute;
