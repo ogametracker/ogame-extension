@@ -4,8 +4,6 @@ import routes from './routes.generated';
 
 Vue.use(VueRouter);
 
-const router = new VueRouter({
+export const router = new VueRouter({
     routes
 });
-
-export default router;

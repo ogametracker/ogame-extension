@@ -99,7 +99,7 @@
 <script lang="ts">
     import { LocalPlayerData } from "@/shared/models/v1/empire/LocalPlayerData";
     import { parseIntSafe } from "@/shared/utils/parseNumbers";
-    import { Component, Vue } from "vue-property-decorator";
+    import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     import { CombatReportDataModule } from "./data/CombatReportDataModule";
     import { DebrisFieldReportDataModule } from "./data/DebrisFieldReportDataModule";
@@ -107,6 +107,7 @@
     import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import { IDataModule } from "./data/IDataModule";
+    import { router } from "./router";
 
     interface Tab {
         key: string;
