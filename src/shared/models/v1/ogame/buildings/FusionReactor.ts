@@ -22,7 +22,7 @@ class FusionReactorClass extends ProductionBuilding {
         return {
             metal: 0,
             crystal: 0,
-            deuterium: Math.ceil(10 * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.fusionReactor] / 100) * dependencies.economySpeed,
+            deuterium: Math.floor(10 * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.fusionReactor] / 100 * dependencies.economySpeed),
             energy: 0,
         };
     }

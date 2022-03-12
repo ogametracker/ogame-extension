@@ -42,6 +42,7 @@
                 />
             </div>
 
+            <button @click="initItems()">LOCA: Update</button>
             <hr />
         </div>
 
