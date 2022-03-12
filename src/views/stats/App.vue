@@ -410,7 +410,7 @@
         &.nav-item-active:hover {
             background: linear-gradient(
                 to bottom,
-                rgba(var(--color), 0.5),
+                rgba(var(--color), 0.7),
                 rgb(var(--color))
             );
         }

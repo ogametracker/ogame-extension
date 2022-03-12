@@ -40,17 +40,17 @@
         text-decoration: none;
         min-width: 140px;
         
-        background: linear-gradient(
-            to right,
-            rgba(var(--color), 0.1) 30%,
-            rgba(var(--color), 0.05)
-        );
+            background: linear-gradient(
+                to right,
+                rgba(var(--color), 0.25) 30%,
+                rgba(var(--color), 0.15)
+            );
 
         &:hover {
             background: linear-gradient(
                 to right,
-                rgba(var(--color), 0.3) 30%,
-                rgba(var(--color), 0.15)
+                rgba(var(--color), 0.5) 30%,
+                rgba(var(--color), 0.3)
             );
         }
 
@@ -64,7 +64,7 @@
         background: linear-gradient(
             to right,
             rgba(var(--color), 0.7) 30%,
-            rgba(var(--color), 0.4)
+            rgba(var(--color), 0.7)
         );
     }
 </style>
