@@ -19,7 +19,6 @@
 <script lang="ts">
     import { ExpeditionEventItem } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { startOfDay } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
@@ -30,13 +29,6 @@
     @Component({})
     export default class Charts extends Vue {
         private readonly ticks = 30;
-
-        //TODO: colors from settings
-        private readonly colors: Record<ResourceType, string> = {
-            [ResourceType.metal]: '#de5200',
-            [ResourceType.crystal]: '#249df3',
-            [ResourceType.deuterium]: '#14bf73',
-        };
 
         private get itemsPerDays(): ItemHash[][] {
             const perDay = ExpeditionDataModule.expeditionsPerDay;

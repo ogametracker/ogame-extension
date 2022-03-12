@@ -34,6 +34,7 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -41,20 +42,9 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ExpeditionEventType, string> = {
-            [ExpeditionEventType.nothing]: '#2472f3',
-            [ExpeditionEventType.resources]: '#c72525',
-            [ExpeditionEventType.fleet]: '#fbbc04',
-            [ExpeditionEventType.delay]: '#9ecc00',
-            [ExpeditionEventType.early]: '#00a95e',
-            [ExpeditionEventType.darkMatter]: '#075263',
-            [ExpeditionEventType.pirates]: '#de5200',
-            [ExpeditionEventType.aliens]: '#16a8d4',
-            [ExpeditionEventType.item]: '#ad135e',
-            [ExpeditionEventType.trader]: '#888888',
-            [ExpeditionEventType.lostFleet]: '#ffffff',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.expeditions.events;
+        }
 
         private get firstDay() {
             return ExpeditionDataModule.firstDay;

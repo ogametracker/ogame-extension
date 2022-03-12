@@ -58,6 +58,7 @@
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -65,12 +66,13 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ResourceType, string> = {
-            [ResourceType.metal]: '#de5200',
-            [ResourceType.crystal]: '#249df3',
-            [ResourceType.deuterium]: '#14bf73',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.resources;
+        }
+
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
 
         private get firstDay() {
             return CombatReportDataModule.firstDay;
@@ -93,10 +95,13 @@
                 {
                     key: 'total',
                     label: 'LOCA: Total Units (MSU)',
-                    color: '#999999',
+                    color: this.colors.totalMsu,
                     filled: false,
                     getValue: reports => reports.reduce(
-                        (acc, report) => acc + report.loot.metal + report.loot.crystal * 2 + report.loot.deuterium * 3, //TODO: MSU from settings
+                        (acc, report) => acc
+                            + report.loot.metal
+                            + report.loot.crystal * this.msuConversionRates.crystal
+                            + report.loot.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                     stack: false,
@@ -117,11 +122,9 @@
         }
 
         private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
             return datasets.reduce((acc, cur) => {
                 if (!(cur.key in msu)) {

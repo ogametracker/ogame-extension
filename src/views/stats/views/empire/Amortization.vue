@@ -191,7 +191,7 @@
 </template>
 
 <script lang="ts">
-    /* TODO: see list below
+    /* 
      * - player wide settings
      *      + MSU conversion rates
      *      + active officers
@@ -240,6 +240,7 @@
     import { PlasmaTechnology } from '@/shared/models/v1/ogame/research/PlasmaTechnology';
     import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
     import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
+import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface AmortizationMaxLevels {
         mine: number;
@@ -356,6 +357,10 @@
         private amortizationItems: AmortizationItem[] = [];
         private generator: Generator<AmortizationItem, void, unknown> = null!;
 
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private mounted() {
             this.initSettings();
 
@@ -385,11 +390,7 @@
             const empire = this.empire;
 
             this.playerSettings = {
-                //TODO: MSU rates from settings
-                msuConversionRates: {
-                    crystal: 2,
-                    deuterium: 3,
-                },
+                msuConversionRates: this.msuConversionRates,
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,

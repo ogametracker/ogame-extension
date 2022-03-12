@@ -105,6 +105,7 @@
     import { DebrisFieldReportDataModule } from "./data/DebrisFieldReportDataModule";
     import { EmpireDataModule } from "./data/EmpireDataModule";
     import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
+    import { SettingsDataModule } from "./data/SettingsDataModule";
     import { IDataModule } from "./data/IDataModule";
 
     interface Tab {
@@ -210,7 +211,6 @@
                     },
                     noNavItem: true,
                 },
-                //TODO: remove, move settings to be inline with the usage(s)
                 {
                     key: 'settings',
                     to: { name: 'settings' },
@@ -297,6 +297,7 @@
                 DebrisFieldReportDataModule,
                 EmpireDataModule,
                 ExpeditionDataModule,
+                SettingsDataModule,
             ];
             const loadPromises = dataModules.map(mod => mod.load());
             await Promise.all(loadPromises);

@@ -23,6 +23,7 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from './getResources';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -30,6 +31,9 @@
         },
     })
     export default class Table extends Vue {
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
 
         private filterExpo(expo: ExpeditionEvent): boolean {
             return expo.type == ExpeditionEventType.fleet;
@@ -66,7 +70,7 @@
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
                                 const res = getResources(ship, expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal * 2 + res.deuterium * 3; //TODO: MSU from settings
+                                return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
                             }), 0),
                 },
             ];

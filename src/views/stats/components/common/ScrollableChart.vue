@@ -352,7 +352,6 @@
         }
 
         private updateYGridLines() {
-            //TODO: adjust for negative y-values
             const maxY = this.yRange.max;
             const minY = this.yRange.min;
             const yGridConfig = this.internalConfig.grid.y;

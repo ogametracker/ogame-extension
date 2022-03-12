@@ -19,6 +19,7 @@
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -26,6 +27,10 @@
         },
     })
     export default class Table extends Vue {
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private get combats() {
             return CombatReportDataModule.reports;
         }
@@ -49,7 +54,10 @@
                 {
                     label: `LOCA: Total (MSU)`,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + expo.loot.metal + expo.loot.crystal * 2 + expo.loot.deuterium * 3, //TODO: MSU from settings
+                        (acc, expo) => acc 
+                            + expo.loot.metal 
+                            + expo.loot.crystal * this.msuConversionRates.crystal 
+                            + expo.loot.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                 },

@@ -32,6 +32,7 @@
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from '../expeditions/ships/resources/getResources';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     type Event =
@@ -45,6 +46,14 @@
         },
     })
     export default class Table extends Vue {
+        private get includeFoundShipsFactor() {
+            return SettingsDataModule.settings.expeditionFoundShipsResourceFactor;
+        }
+
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private get events(): Event[] {
             return [
                 ...CombatReportDataModule.reports.map<Event>(report => ({ ...report, eventType: 'combat-report' })),
@@ -53,7 +62,7 @@
             ];
         }
 
-        private showDetailedBreakdown = false;
+        private showDetailedBreakdown = SettingsDataModule.settings.showDetailedResourceBalance;
 
         private get resourceIconSize() {
             if (this.showDetailedBreakdown) {
@@ -100,7 +109,7 @@
             }
         }
         private getExpoResourceAmount(expo: ExpeditionEvent, resource: ResourceType): number {
-            const includeFoundShipsFactor: number = 0.35; //TODO: factor from settings
+            const includeFoundShipsFactor = this.includeFoundShipsFactor;
 
             switch (expo.type) {
                 case ExpeditionEventType.resources: {
@@ -123,11 +132,9 @@
         }
 
         private get footerItems(): RangedStatsTableItem<Event>[] {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
 
             return [

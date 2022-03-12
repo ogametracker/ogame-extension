@@ -8,12 +8,14 @@ import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldRep
 import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
+import { SettingsService } from "./settings/SettingsService";
 
 const services: MessageService[] = [
     new ExpeditionService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
     new EmpireService(),
+    new SettingsService(),
 ];
 
 try {

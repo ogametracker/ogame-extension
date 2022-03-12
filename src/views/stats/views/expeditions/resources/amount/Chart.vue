@@ -60,6 +60,7 @@
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -67,12 +68,13 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ResourceType, string> = {
-            [ResourceType.metal]: '#de5200',
-            [ResourceType.crystal]: '#249df3',
-            [ResourceType.deuterium]: '#14bf73',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.resources;
+        }
+
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
 
         private get firstDay() {
             return ExpeditionDataModule.firstDay;
@@ -98,7 +100,10 @@
                     color: '#999999',
                     filled: false,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + expo.resources.metal + expo.resources.crystal * 2 + expo.resources.deuterium * 3, //TODO: MSU from settings
+                        (acc, expo) => acc
+                            + expo.resources.metal
+                            + expo.resources.crystal * this.msuConversionRates.crystal
+                            + expo.resources.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                     stack: false,
@@ -123,11 +128,9 @@
         }
 
         private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
             return datasets.reduce((acc, cur) => {
                 if (!(cur.key in msu)) {

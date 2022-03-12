@@ -160,6 +160,7 @@
     import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     interface Production {
         metal: number;
@@ -204,6 +205,10 @@
             deuterium: 0,
         };
 
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private get columns(): GridTableColumn<keyof ProductionItem>[] {
             return [
                 {
@@ -234,7 +239,7 @@
                     planet,
                     ...production,
                     total: production.metal + production.crystal + production.deuterium,
-                    totalMsu: production.metal + production.crystal * 2 + production.deuterium * 3, //TODO: MSU from settings
+                    totalMsu: production.metal + production.crystal * this.msuConversionRates.crystal + production.deuterium * this.msuConversionRates.deuterium,
 
                     productionSettings: {
                         metalMine: planet.productionSettings[BuildingType.metalMine],
@@ -257,7 +262,7 @@
             const crystalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).crystal, 0);
             const deuteriumPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).deuterium, 0);
             const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
-            const totalMsuPerHour = metalPerHour + crystalPerHour * 2 + deuteriumPerHour * 3;//TODO: MSU from settings
+            const totalMsuPerHour = metalPerHour + crystalPerHour * this.msuConversionRates.crystal + deuteriumPerHour * this.msuConversionRates.deuterium;
 
             const metalPackages = metalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.metal);
             const crystalPackages = crystalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.crystal);
@@ -326,7 +331,7 @@
                     crystal: crystalPackages,
                     deuterium: deuteriumPackages,
                     total: metalPackages + crystalPackages + deuteriumPackages,
-                    totalMsu: metalPackages + crystalPackages * 2 + deuteriumPackages * 3, //TODO: MSU from settings
+                    totalMsu: metalPackages + crystalPackages * this.msuConversionRates.crystal + deuteriumPackages * this.msuConversionRates.deuterium,
 
                     productionSettings: null!,
                 },

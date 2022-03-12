@@ -21,6 +21,7 @@
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -28,6 +29,10 @@
         },
     })
     export default class Table extends Vue {
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private filterExpo(expo: ExpeditionEvent): boolean {
             return expo.type == ExpeditionEventType.resources;
         }
@@ -55,7 +60,10 @@
                 {
                     label: `LOCA: Total (MSU)`,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + expo.resources.metal + expo.resources.crystal * 2 + expo.resources.deuterium * 3, //TODO: MSU from settings
+                        (acc, expo) => acc
+                            + expo.resources.metal
+                            + expo.resources.crystal * this.msuConversionRates.crystal
+                            + expo.resources.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                 },

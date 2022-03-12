@@ -36,7 +36,7 @@ export function isInRange(date: number | Date, range: DateRange): boolean {
         }
 
         case 'week': {
-            const start = startOfWeek(Date.now(), { weekStartsOn: 1 }); //TODO: from locale
+            const start = startOfWeek(Date.now(), { weekStartsOn: 1 });
             firstRangeDayIncl = subWeeks(start, range.skip);
             lastRangeDayExcl = addWeeks(firstRangeDayIncl, range.take);
             break;

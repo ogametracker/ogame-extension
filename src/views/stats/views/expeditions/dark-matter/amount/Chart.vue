@@ -16,6 +16,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -23,8 +24,9 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly color = '#075263';
+        private get color() {
+            return SettingsDataModule.settings.colors.expeditions.events.darkMatter;
+        }
 
         private get datasets(): StatsChartDataset<ExpeditionEventDarkMatter>[] {
             return [{

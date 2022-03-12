@@ -34,6 +34,7 @@
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
     import { CombatResultType } from '@/shared/models/v1/combat-reports/CombatResultType';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -41,12 +42,9 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<CombatResultType, string> = {
-            [CombatResultType.won]: '#00a95e',
-            [CombatResultType.draw]: '#888888',
-            [CombatResultType.lost]: '#c72525',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.combatResults;
+        }
 
         private filterCombat(combat: CombatReport): boolean {
             return !combat.isExpedition;

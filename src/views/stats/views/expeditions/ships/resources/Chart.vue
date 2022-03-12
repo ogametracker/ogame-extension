@@ -50,6 +50,7 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -57,12 +58,13 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ResourceType, string> = {
-            [ResourceType.metal]: '#de5200',
-            [ResourceType.crystal]: '#249df3',
-            [ResourceType.deuterium]: '#14bf73',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.resources;
+        }
+
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
 
         private get firstDay() {
             return ExpeditionDataModule.firstDay;
@@ -94,7 +96,7 @@
                         (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
                                 const res = getResources(ship, expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal * 2 + res.deuterium * 3;//TODO: MSU from settings
+                                return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
                             }
                         ), 0),
                     stack: false,
@@ -119,11 +121,9 @@
         }
 
         private getSumMsu(datasets: ScollableChartFooterDataset[]): number {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
             return datasets.reduce((acc, cur) => {
                 if (!(cur.key in msu)) {

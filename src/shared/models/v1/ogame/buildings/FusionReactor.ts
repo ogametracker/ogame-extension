@@ -11,7 +11,7 @@ class FusionReactorClass extends ProductionBuilding {
             crystal: 0,
             deuterium: 0,
             energy: Math.round(
-                Math.floor(30 * level * (1.05 + dependencies.player.research[ResearchType.energyTechnology]* 0.01)** level)
+                Math.floor(30 * level * (1.05 + dependencies.player.research[ResearchType.energyTechnology] * 0.01) ** level)
                 * (dependencies.planet.productionSettings[BuildingType.fusionReactor] / 100),
                 //TODO: production needs to respect items, player class, alliance class, active officers
             ),

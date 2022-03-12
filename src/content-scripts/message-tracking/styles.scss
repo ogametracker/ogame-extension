@@ -16,20 +16,8 @@ $image-size-small: 24px;
             padding: 0 5px 5px 12px;
         }
 
-        &--waiting-to-be-processed {
-            //TODO:
-        }
-
-        &--processed {
-            //TODO:
-        }
-
         &--error {
             background: #500707 !important;
-        }
-
-        &--ignored {
-            //TODO:
         }
 
         &--combat-report &__content {
@@ -47,36 +35,37 @@ $image-size-small: 24px;
         &--resources,
         &--darkMatter {
             .metal {
-                color: #bababa; //TODO: color from settings
+                color: var(--ogame-tracker--resource--metal);
             }
-
             .crystal {
-                color: #28bfff; //TODO: color from settings
+                color: var(--ogame-tracker--resource--crystal);
+            }
+            .deuterium {
+                color: var(--ogame-tracker--resource--deuterium);
             }
 
-            .deuterium {
-                color: #19af8c; //TODO: color from settings
-            }
             .dark-matter {
-                color: #78c7ff; //TODO: color from settings
+                color: var(--ogame-tracker--dark-matter);
             }
         }
 
         &--delay {
-            color: #ff6f00; //TODO: color from settings
+            color: var(--ogame-tracker--expedition-event--delay);
         }
 
         &--early {
-            color: #64dd17; //TODO: color from settings
+            color: var(--ogame-tracker--expedition-event--early);
         }
 
-        &--pirates,
+        &--pirates {
+            color: var(--ogame-tracker--expedition-event--pirates);
+        }
         &--aliens {
-            color: #ffffff; //TODO: color from settings
+            color: var(--ogame-tracker--expedition-event--aliens);
         }
 
         &--lostFleet {
-            color: #d50000; //TODO: color from settings
+            color: var(--ogame-tracker--expedition-event--lostFleet);
 
             .mdi {
                 font-size: 48px !important;
@@ -93,7 +82,15 @@ $image-size-small: 24px;
         }
 
         &--trader {
-            color: #ffd700; //TODO: color from settings
+            color: var(--ogame-tracker--expedition-event--trader);
+        }
+
+        &--nothing {
+            color: var(--ogame-tracker--expedition-event--nothing);
+
+            > .mdi {
+                font-size: 16px;
+            }
         }
 
         &--item img {
@@ -119,15 +116,15 @@ $image-size-small: 24px;
 
         &--size {
             &-small .ogame-tracker-expedition--size-icon {
-                color: #595f62;//TODO: color from settings
+                color: var(--ogame-tracker--expedition-size--small);
                 font-size: 24px !important;
             }
             &-medium .ogame-tracker-expedition--size-icon {
-                color: #82b1ff;//TODO: color from settings
+                color: var(--ogame-tracker--expedition-size--medium);
                 font-size: 28px !important;
             }
             &-large .ogame-tracker-expedition--size-icon {
-                color: #ab47bc;//TODO: color from settings
+                color: var(--ogame-tracker--expedition-size--large);
                 font-size: 32px !important;
             }
         }

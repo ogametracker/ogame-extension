@@ -20,6 +20,7 @@
     import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
     import { DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({
         components: {
@@ -27,6 +28,10 @@
         },
     })
     export default class Table extends Vue {
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private get items(): RangedStatsTableItem<DebrisFieldReport>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
@@ -49,7 +54,7 @@
                 },
                 {
                     label: `LOCA: Total (MSU)`,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * 2, 0), //TODO: MSU from settings
+                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
                 },
             ];
         }

@@ -37,6 +37,7 @@
     import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -44,12 +45,9 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ExpeditionEventSize, string> = {
-            [ExpeditionEventSize.small]: '#90A4AE',
-            [ExpeditionEventSize.medium]: '#3949AB',
-            [ExpeditionEventSize.large]: '#F50057',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.expeditions.sizes;
+        }
 
         private get firstDay() {
             return ExpeditionDataModule.firstDay;

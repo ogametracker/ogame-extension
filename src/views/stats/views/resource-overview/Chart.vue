@@ -66,6 +66,7 @@
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { getResources } from '../expeditions/ships/resources/getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface DayEvents {
         expeditions: ExpeditionEvent[];
@@ -79,12 +80,17 @@
         },
     })
     export default class Charts extends Vue {
-        //TODO: colors from settings
-        private readonly colors: Record<ResourceType, string> = {
-            [ResourceType.metal]: '#de5200',
-            [ResourceType.crystal]: '#249df3',
-            [ResourceType.deuterium]: '#14bf73',
-        };
+        private get colors() {
+            return SettingsDataModule.settings.colors.resources;
+        }
+
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
+        private get includeFoundShipsFactor() {
+            return SettingsDataModule.settings.expeditionFoundShipsResourceFactor;
+        }
 
         private get firstDay() {
             return min([
@@ -129,11 +135,9 @@
         }
 
         private get datasets(): StatsChartDataset<DayEvents>[] {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
 
             return [
@@ -186,11 +190,9 @@
         }
 
         private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            //TODO: MSU from setings
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
-                [ResourceType.crystal]: 2,
-                [ResourceType.deuterium]: 3,
+                ...this.msuConversionRates,
             };
             return datasets.reduce((acc, cur) => {
                 if (!(cur.key in msu)) {
@@ -201,7 +203,7 @@
         }
 
         private getResourceAmount(expo: ExpeditionEvent, resource: ResourceType) {
-            const includeFoundShipsFactor: number = 0.35; //TODO: factor from settings
+            const includeFoundShipsFactor = this.includeFoundShipsFactor;
 
             switch (expo.type) {
                 case ExpeditionEventType.resources: {

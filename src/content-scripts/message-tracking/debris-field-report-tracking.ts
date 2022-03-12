@@ -41,7 +41,7 @@ function setupObserver() {
 
 function onMessage(message: Message<MessageType, any>) {
     const ogameMeta = getOgameMeta();
-    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+    if (!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
         return;
     }
 
@@ -68,7 +68,6 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.WillNotBeTracked: {
             const msgId = (message as WillNotBeTrackedMessage).data;
-            //TODO: mark message as untracked
             const li = document.querySelector(`li.msg[data-msg-id="${msgId}"]`) ?? _throw(`failed to find debris field report with id '${msgId}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);

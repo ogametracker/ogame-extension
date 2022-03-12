@@ -46,4 +46,9 @@ export enum MessageType {
     RequestEmpireData = 'empire/request-data',
     EmpireData = 'empire/data',
     NotifyEmpireDataUpdate = 'empire/notify-update',
+
+    // settings
+    UpdateSettings = 'settings/update',
+    RequestSettings = 'settings/request-data',
+    Settings = 'settings/data',
 }
