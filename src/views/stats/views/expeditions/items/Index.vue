@@ -65,7 +65,7 @@
 <style lang="scss" scoped>
     .item-chart {
         width: 100%;
-        height: 100%;
+        height: 310px;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -83,6 +83,7 @@
                 display: flex;
                 flex-direction: column-reverse;
                 align-items: center;
+                row-gap: 2px;
                 // vertical line in center
                 background-image: linear-gradient(
                     to right,

@@ -14,6 +14,7 @@
             <span
                 v-if="value == ExpeditionEventType.nothing"
                 class="mdi mdi-close"
+                :style="{ color: colors.nothing }"
             />
             <span
                 v-else-if="value == ExpeditionEventType.resources"
@@ -29,10 +30,12 @@
             <span
                 v-else-if="value == ExpeditionEventType.delay"
                 class="mdi mdi-clock-outline"
+                :style="{ color: colors.delay }"
             />
             <span
                 v-else-if="value == ExpeditionEventType.early"
                 class="mdi mdi-clock-outline"
+                :style="{ color: colors.early }"
             />
             <o-resource
                 v-else-if="value == ExpeditionEventType.darkMatter"
@@ -42,10 +45,12 @@
             <span
                 v-else-if="value == ExpeditionEventType.pirates"
                 class="mdi mdi-pirate"
+                :style="{ color: colors.pirates }"
             />
             <span
                 v-else-if="value == ExpeditionEventType.aliens"
                 class="mdi mdi-alien"
+                :style="{ color: colors.aliens }"
             />
             <span v-else-if="value == ExpeditionEventType.item">
                 TODO: {{ value }}
@@ -53,10 +58,12 @@
             <span
                 v-else-if="value == ExpeditionEventType.trader"
                 class="mdi mdi-swap-horizontal-bold"
+                :style="{ color: colors.trader }"
             />
             <span
                 v-else-if="value == ExpeditionEventType.lostFleet"
                 class="mdi mdi-cross"
+                :style="{ color: colors.lostFleet }"
             />
         </template>
     </ranged-stats-table>
@@ -68,6 +75,7 @@
     import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -81,6 +89,10 @@
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
         };
+
+        private get colors() {
+            return SettingsDataModule.settings.colors.expeditions.events;
+        }
 
         private get expos() {
             return ExpeditionDataModule.expeditions;
