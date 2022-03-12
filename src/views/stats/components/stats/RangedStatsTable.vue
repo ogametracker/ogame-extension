@@ -230,7 +230,7 @@
                 const allRangeValue = row[allRangeIndex];
 
                 if (this.showAverage) {
-                    row.average = allRangeValue / daysWithDataItems;
+                    row.average = allRangeValue / Math.max(1, daysWithDataItems);
                 }
 
                 if (this.showPercentage) {
@@ -265,7 +265,7 @@
 
                 if (this.showAverage) {
                     const allRangeValue = row[allRangeIndex];
-                    row.average = allRangeValue / daysWithDataItems;
+                    row.average = allRangeValue / Math.max(1, daysWithDataItems);
                 }
 
                 return row;

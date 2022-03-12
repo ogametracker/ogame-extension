@@ -213,14 +213,17 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
             addOrSetCustomMessageContent(li, `
                 <div class="${getResultClass(ExpeditionEventType.lostFleet)}">
                     <div class="mdi mdi-cross"></div>
-                    <div class="mdi mdi-skull-crossbones"></div>
                 </div>
             `);
             break;
         }
 
         case ExpeditionEventType.nothing: {
-            addOrSetCustomMessageContent(li, '-');
+            addOrSetCustomMessageContent(li, `
+                <div class="${getResultClass(ExpeditionEventType.nothing)}">
+                    <div class="mdi mdi-close"></div>
+                </div>
+            `);
             break;
         }
 

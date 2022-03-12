@@ -5,7 +5,13 @@
         :items="items"
         :footerItems="footerItems"
         show-average
-    />
+    >
+        <template #cell-label="{ value }">
+            <span v-text="value" />
+
+            <o-resource :resource="value" size="24px" />
+        </template>
+    </ranged-stats-table>
 </template>
 
 <script lang="ts">
@@ -35,7 +41,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return Object.values(ResourceType).map(resource => ({
-                label: `LOCA: ${resource}`,
+                label: resource,
                 getValue: expos => expos.reduce(
                     (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource]

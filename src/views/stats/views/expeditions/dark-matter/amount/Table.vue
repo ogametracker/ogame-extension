@@ -5,7 +5,13 @@
         :items="items"
         show-average
         :averageNumberFormatOptions="avgFormat"
-    />
+    >
+        <template #cell-label="{ value }">
+            <span v-text="value" />
+
+            <o-resource resource="dark-matter" size="24px" />
+        </template>
+    </ranged-stats-table>
 </template>
 
 <script lang="ts">
@@ -37,7 +43,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventDarkMatter>[] {
             return [{
-                label: 'LOCA: dark matter',
+                label: 'dark-matter',
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),
             }];
         }

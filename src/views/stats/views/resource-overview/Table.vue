@@ -9,7 +9,13 @@
             :items="items"
             :footerItems="footerItems"
             show-average
-        />
+        >
+            <template #cell-label="{ value }">
+                <span v-text="value" />
+
+                <o-resource :resource="value" :size="resourceIconSize" />
+            </template>
+        </ranged-stats-table>
     </div>
 </template>
 
@@ -49,6 +55,13 @@
 
         private showDetailedBreakdown = false;
 
+        private get resourceIconSize() {
+            if (this.showDetailedBreakdown) {
+                return '36px';
+            }
+            return '24px';
+        }
+
         private get items(): RangedStatsTableItem<Event>[] {
             if (this.showDetailedBreakdown) {
                 const types: Record<ResourceType, EventType[]> = {
@@ -58,7 +71,7 @@
                 };
 
                 return Object.values(ResourceType).map(resource => ({
-                    label: `LOCA: ${resource}`,
+                    label: resource,
                     items: types[resource].map(eventType => ({
                         label: `LOCA: ${eventType}`,
                         getValue: events => events.filter(ev => ev.eventType == eventType).reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
@@ -67,7 +80,7 @@
             }
 
             return Object.values(ResourceType).map(resource => ({
-                label: `LOCA: ${resource}`,
+                label: resource,
                 getValue: events => events.reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
             }));
         }

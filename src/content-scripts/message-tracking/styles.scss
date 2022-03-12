@@ -47,36 +47,36 @@ $image-size-small: 24px;
         &--resources,
         &--darkMatter {
             .metal {
-                color: #bababa;
+                color: #bababa; //TODO: color from settings
             }
 
             .crystal {
-                color: #28bfff;
+                color: #28bfff; //TODO: color from settings
             }
 
             .deuterium {
-                color: #19af8c;
+                color: #19af8c; //TODO: color from settings
             }
             .dark-matter {
-                color: #78c7ff;
+                color: #78c7ff; //TODO: color from settings
             }
         }
 
         &--delay {
-            color: #ff6f00;
+            color: #ff6f00; //TODO: color from settings
         }
 
         &--early {
-            color: #64dd17;
+            color: #64dd17; //TODO: color from settings
         }
 
         &--pirates,
         &--aliens {
-            color: #ffffff;
+            color: #ffffff; //TODO: color from settings
         }
 
         &--lostFleet {
-            color: #d50000;
+            color: #d50000; //TODO: color from settings
 
             .mdi {
                 font-size: 48px !important;
@@ -93,7 +93,7 @@ $image-size-small: 24px;
         }
 
         &--trader {
-            color: #ffd700;
+            color: #ffd700; //TODO: color from settings
         }
 
         &--item img {

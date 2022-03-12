@@ -4,7 +4,13 @@
         :items="items"
         :footerItems="footerItems"
         show-average
-    />
+    >
+        <template #cell-label="{ value }">
+            <span v-text="value" />
+
+            <o-resource :resource="value" size="24px" />
+        </template>
+    </ranged-stats-table>
 </template>
 
 <script lang="ts">
@@ -25,7 +31,7 @@
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
             return resources.map(resource => ({
-                label: `LOCA: ${resource}`,
+                label: resource,
                 getValue: reports => reports
                     .reduce((acc, report) => acc + report[resource], 0),
             }));
