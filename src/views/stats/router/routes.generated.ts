@@ -24,7 +24,9 @@ import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
 import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
-import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
+import viewsempireamortizationIndex from '@stats/views/empire/amortization/Index.vue';
+import viewsempireamortizationEnergyProduction from '@stats/views/empire/amortization/Energy-Production.vue';
+import viewsempireamortizationResourceProduction from '@stats/views/empire/amortization/Resource-Production.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -266,9 +268,24 @@ const routes: RouteConfig[] = [
                 component: viewsempireIndex,
                 children: [
                     {
+                        redirect: {
+                            name: "empire/amortization/resource-production"
+                        },
                         path: "amortization",
                         name: "empire/amortization",
-                        component: viewsempireAmortization
+                        component: viewsempireamortizationIndex,
+                        children: [
+                            {
+                                path: "energy-production",
+                                name: "empire/amortization/energy-production",
+                                component: viewsempireamortizationEnergyProduction
+                            },
+                            {
+                                path: "resource-production",
+                                name: "empire/amortization/resource-production",
+                                component: viewsempireamortizationResourceProduction
+                            }
+                        ]
                     },
                     {
                         redirect: {
