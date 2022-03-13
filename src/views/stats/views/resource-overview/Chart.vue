@@ -158,7 +158,7 @@
                 {
                     key: 'total',
                     label: 'LOCA: Total Units (MSU)',
-                    color: '#999999',
+                    color: this.colors.totalMsu,
                     filled: false,
                     getValue: (dayEvents: DayEvents[]) => Object.values(ResourceType).reduce(
                         (acc, resource) => acc + dayEvents.reduce(

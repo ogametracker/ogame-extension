@@ -89,7 +89,7 @@ $image-size-small: 24px;
             color: var(--ogame-tracker--expedition-event--nothing);
 
             > .mdi {
-                font-size: 16px;
+                font-size: 16px !important;
             }
         }
 

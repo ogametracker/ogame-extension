@@ -18,7 +18,7 @@ export class SettingsManager extends PersistentDataManager<Settings> {
         console.debug(`[Settings Maager]: Ogame language is '${this.ogameLanguage}'`);
     }
 
-    protected getDefaultItem(): Settings {
+    public getDefaultItem(): Settings {
         return {
             dateRanges: [],
             showDetailedResourceBalance: false,

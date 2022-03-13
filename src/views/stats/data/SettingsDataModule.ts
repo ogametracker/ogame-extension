@@ -5,13 +5,26 @@ import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { IDataModule } from './IDataModule';
 import { Settings } from '@/shared/models/v1/settings/Settings';
-import { RequestSettingsMessage, SettingsMessage } from '@/shared/messages/settings';
+import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
 
 @Component
 class SettingsDataModuleClass extends Vue implements IDataModule {
     public settings: Settings = null!;
 
     private resolveInitialDataPromise: (() => void) | null = null;
+
+    public updateSettings(settings: Settings) {
+        console.debug('updating settings', settings);
+        
+        const message: UpdateSettingsMessage = {
+            type: MessageType.UpdateSettings,
+            ogameMeta: GlobalOgameMetaData,
+            data: settings,
+        };
+        broadcastMessage(message);
+
+        this.settings = settings;
+    }
 
     private async created() {
         await new Promise<void>(async resolve => {

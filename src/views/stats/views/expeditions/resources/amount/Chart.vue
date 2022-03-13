@@ -97,7 +97,7 @@
                 {
                     key: 'total',
                     label: 'LOCA: Total Units (MSU)',
-                    color: '#999999',
+                    color: this.colors.totalMsu,
                     filled: false,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
