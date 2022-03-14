@@ -29,7 +29,10 @@ export interface Settings {
     msuConversionRates: MsuConversionRates;
 
     showDetailedResourceBalance: boolean;
-    expeditionFoundShipsResourceFactor: number;
+    expeditionFoundShipsResourceUnits: {
+        factor: number;
+        deuteriumFactor: number;
+    };
 
     defaultRoutes: Record<string, string | undefined>;
 }

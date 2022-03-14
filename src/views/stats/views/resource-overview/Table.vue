@@ -46,8 +46,13 @@
         },
     })
     export default class Table extends Vue {
-        private get includeFoundShipsFactor() {
-            return SettingsDataModule.settings.expeditionFoundShipsResourceFactor;
+        private get includeFoundShipsFactor(): Record<ResourceType, number> {
+            const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return {
+                [ResourceType.metal]: factor,
+                [ResourceType.crystal]: factor,
+                [ResourceType.deuterium]: deuteriumFactor,
+            };
         }
 
         private get msuConversionRates() {
@@ -117,12 +122,9 @@
                 }
 
                 case ExpeditionEventType.fleet: {
-                    if (includeFoundShipsFactor == 0) {
-                        return 0;
-                    }
 
-                    return includeFoundShipsFactor * getNumericEnumValues(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource],
+                    return getNumericEnumValues(ExpeditionFindableShipType).reduce(
+                        (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource] * this.includeFoundShipsFactor[resource],
                         0
                     );
                 }

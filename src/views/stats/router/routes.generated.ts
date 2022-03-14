@@ -64,6 +64,10 @@ import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue
 import viewsresourceoverviewChart from '@stats/views/resource-overview/Chart.vue';
 import viewsresourceoverviewTable from '@stats/views/resource-overview/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
+import viewssettingsColors from '@stats/views/settings/Colors.vue';
+import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
+import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
+import viewssettingsMisc from '@stats/views/settings/Misc.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import { RouteConfig } from 'vue-router';
 
@@ -549,12 +553,37 @@ const routes: RouteConfig[] = [
                 ]
             },
             {
+                redirect: {
+                    name: "settings/date-ranges"
+                },
                 meta: {
                     color: "#888888"
                 },
                 path: "settings",
                 name: "settings",
-                component: viewssettingsIndex
+                component: viewssettingsIndex,
+                children: [
+                    {
+                        path: "colors",
+                        name: "settings/colors",
+                        component: viewssettingsColors
+                    },
+                    {
+                        path: "date-ranges",
+                        name: "settings/date-ranges",
+                        component: viewssettingsDateRanges
+                    },
+                    {
+                        path: "import-export",
+                        name: "settings/import-export",
+                        component: viewssettingsImportExport
+                    },
+                    {
+                        path: "misc",
+                        name: "settings/misc",
+                        component: viewssettingsMisc
+                    }
+                ]
             },
             {
                 meta: {

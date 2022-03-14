@@ -15,7 +15,7 @@ export class SettingsManager extends PersistentDataManager<Settings> {
         super(key, 'settings');
 
         this.ogameLanguage = key.split('-')[1];
-        console.debug(`[Settings Maager]: Ogame language is '${this.ogameLanguage}'`);
+        console.debug(`[Settings Manager]: Ogame language is '${this.ogameLanguage}'`);
     }
 
     public getDefaultItem(): Settings {
@@ -26,7 +26,10 @@ export class SettingsManager extends PersistentDataManager<Settings> {
                 crystal: 2,
                 deuterium: 3,
             },
-            expeditionFoundShipsResourceFactor: 1,
+            expeditionFoundShipsResourceUnits: {
+                factor: 1,
+                deuteriumFactor: 1,
+            },
             extensionLanguage: isSupportedLanguage(this.ogameLanguage) ? LanguageKey[this.ogameLanguage as LanguageKey] : LanguageKey.en,
             defaultRoutes: {},
             colors: {
