@@ -36,6 +36,10 @@
                         },
                         tab.style,
                     ]"
+                    @click="
+                        () =>
+                            tab.customAction != null ? tab.customAction() : null
+                    "
                 >
                     <span
                         v-if="tab.icon != null"
@@ -68,31 +72,33 @@
             <main>
                 <router-view />
             </main>
-            <footer v-if="!isIframeMode">
-                <span
-                    v-if="knownAccounts.length == 0"
-                    v-text="'LOCA: loading...'"
-                />
-                <div v-else>
-                    LOCA: Look at data of account
-                    <select
-                        @change="gotoAccount()"
-                        v-model="selectedAccountIndex"
-                    >
-                        <option
-                            v-for="(account, i) in knownAccounts"
-                            :key="account.key"
-                            :value="i"
-                        >
-                            {{ account.name || account.id }} ({{
-                                account.universeName || account.universeId
-                            }}
-                            {{ account.universeLanguage.toUpperCase() }})
-                        </option>
-                    </select>
-                </div>
-            </footer>
         </template>
+
+        <custom-dialog
+            v-if="showAccountSwitchDialog"
+            show-close
+            @close="showAccountSwitchDialog = false"
+        >
+            <span
+                v-if="knownAccounts.length == 0"
+                v-text="'LOCA: loading...'"
+            />
+            <div v-else>
+                LOCA: Look at data of account
+                <select @change="gotoAccount()" v-model="selectedAccountIndex">
+                    <option
+                        v-for="(account, i) in knownAccounts"
+                        :key="account.key"
+                        :value="i"
+                    >
+                        {{ account.name || account.id }} ({{
+                            account.universeName || account.universeId
+                        }}
+                        {{ account.universeLanguage.toUpperCase() }})
+                    </option>
+                </select>
+            </div>
+        </custom-dialog>
     </div>
 </template>
 
@@ -107,7 +113,6 @@
     import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import { IDataModule } from "./data/IDataModule";
-    import { router } from "./router";
 
     interface Tab {
         key: string;
@@ -119,6 +124,7 @@
         noNavItem?: boolean;
         color?: string;
         class?: string;
+        customAction?: () => void;
 
         keyboardKey?: string;
         keyboardIcon?: string;
@@ -139,8 +145,10 @@
     export default class App extends Vue {
 
         private loading = true;
+
         private knownAccounts: KnownAccount[] = [];
         private selectedAccountIndex = -1;
+        private showAccountSwitchDialog = false;
 
         private get isIframeMode() {
             const params = new URLSearchParams(location.search);
@@ -148,7 +156,7 @@
         }
 
         private get tabs(): Tab[] {
-            return [
+            const tabs: Tab[] = [
                 {
                     key: 'expeditions',
                     to: { name: 'expeditions' },
@@ -241,6 +249,17 @@
                     color: '#5865f2',
                 },
             ];
+
+            if (!this.isIframeMode) {
+                tabs.push({
+                    key: 'switch-account',
+                    customAction: () => this.showAccountSwitchDialog = true,
+                    icon: 'mdi mdi-account-multiple',
+                    color: '#666666',
+                });
+            }
+
+            return tabs;
         }
 
         private get activeColor(): string | null {
@@ -302,6 +321,8 @@
             ];
             const loadPromises = dataModules.map(mod => mod.load());
             await Promise.all(loadPromises);
+
+            //TODO: set window title to include universe name (if available), universe id, player name (if available), and player id
 
             this.loading = false;
 
