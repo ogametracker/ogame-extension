@@ -5,6 +5,16 @@
         :items="items"
         style="width: max-content"
     >
+        <template #header-key="{ label }">
+            <span v-text="label" />
+            <button
+                class="reset-button"
+                @click="$emit('reset')"
+                title="'LOCA: Reset'"
+            >
+                <span class="mdi mdi-refresh" />
+            </button>
+        </template>
         <template #cell-key="{ value: key }">
             <div
                 class="color-input"
@@ -58,13 +68,6 @@
             return keys.map(key => ({ key }));
         }
 
-        // private get colorInputs(): Record<string, HTMLInputElement> {
-        //     const result: Record<string, HTMLInputElement> = {};
-        //     Object.keys(this.colors).forEach(key => result[key] = this.$refs[`colorInput-${key}`] as HTMLInputElement);
-
-        //     return result;
-        // }
-
         private updateColor(key: string, event: InputEvent) {
             if (event.target instanceof HTMLInputElement) {
                 this.colors = {
@@ -103,5 +106,23 @@
 
     .color-settings::v-deep .color-settings-header {
         justify-content: center;
+    }
+
+    .reset-button {
+        font-size: 14px;
+        display: inline-flex;
+        align-items: baseline;
+        cursor: pointer;
+        margin-left: 8px;
+        background: none;
+        padding: 0 4px;
+
+        &:hover {
+            background: rgba(var(--color), 0.3);
+        }
+
+        > .mdi {
+            transform: scale(1.3);
+        }
     }
 </style>

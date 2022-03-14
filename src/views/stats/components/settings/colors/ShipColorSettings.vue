@@ -4,11 +4,14 @@
         :labels="labels"
         :keys="keys"
         v-model="colors"
+        @reset="resetColors()"
     />
 </template>
 
 <script lang="ts">
+    import { LanguageKey } from '@/shared/i18n/LanguageKey';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
@@ -75,6 +78,18 @@
                 colors: {
                     ...SettingsDataModule.settings.colors,
                     ships: value,
+                },
+            });
+        }
+
+        public resetColors(): void {
+            const defaultColors = getDefaultSettings(LanguageKey.de).colors.ships;
+
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                colors: {
+                    ...SettingsDataModule.settings.colors,
+                    ships: defaultColors,
                 },
             });
         }

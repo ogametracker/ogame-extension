@@ -4,6 +4,7 @@
         :labels="labels"
         :keys="keys"
         v-model="colors"
+        @reset="resetColors()"
     />
 </template>
 
@@ -12,6 +13,8 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
+    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
+    import { LanguageKey } from '@/shared/i18n/LanguageKey';
 
     @Component({
         components: {
@@ -47,6 +50,18 @@
                 colors: {
                     ...SettingsDataModule.settings.colors,
                     combatResults: value,
+                },
+            });
+        }
+
+        public resetColors(): void {
+            const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
+
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                colors: {
+                    ...SettingsDataModule.settings.colors,
+                    combatResults: defaultColors,
                 },
             });
         }

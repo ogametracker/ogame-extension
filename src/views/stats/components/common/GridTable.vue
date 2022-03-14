@@ -27,6 +27,7 @@
                 <slot
                     v-if="$scopedSlots[`header-${column.key}`] != null"
                     :name="`header-${column.key}`"
+                    :label="column.label"
                 />
                 <span v-else v-text="column.label" />
             </div>

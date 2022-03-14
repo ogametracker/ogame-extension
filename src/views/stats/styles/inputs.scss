@@ -1,11 +1,11 @@
 input:not([type]),
 input[type="text"],
 input[type="password"],
-input[type="number"] {
-    background: black
-        linear-gradient(0deg, rgba(var(--color), 0.3), rgba(var(--color), 0.3));
+input[type="number"],
+button {
+    background: black linear-gradient(0deg, rgba(var(--color), 0.3), rgba(var(--color), 0.3));
     border: 1px solid rgba(var(--color), 0.5);
-    border-radius: 2px;
+    border-radius: 4px;
     padding: 2px 6px;
     color: white;
     outline: none;
@@ -13,11 +13,6 @@ input[type="number"] {
     &:hover,
     &:focus {
         border-color: rgba(var(--color), 0.7);
-        background: black
-            linear-gradient(
-                0deg,
-                rgba(var(--color), 0.5),
-                rgba(var(--color), 0.5)
-            );
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.5));
     }
 }

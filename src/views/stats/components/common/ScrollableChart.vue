@@ -348,9 +348,9 @@
             this.updatePaths();
 
             this.$nextTick(() => {
-                this.tickOffset = Math.max(0, this.maxTickOffset);
-                this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
-                this.updateTickOffset();
+            this.tickOffset = Math.max(0, this.maxTickOffset);
+            this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
+            this.updateTickOffset();
             });
         }
 

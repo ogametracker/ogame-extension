@@ -4,11 +4,14 @@
         :labels="labels"
         :keys="keys"
         v-model="colors"
+        @reset="resetColors()"
     />
 </template>
 
 <script lang="ts">
+    import { LanguageKey } from '@/shared/i18n/LanguageKey';
     import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
+    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
@@ -49,6 +52,21 @@
                     expeditions: {
                         ...SettingsDataModule.settings.colors.expeditions,
                         sizes: value,
+                    },
+                },
+            });
+        }
+
+        public resetColors(): void {
+            const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.sizes;
+
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                colors: {
+                    ...SettingsDataModule.settings.colors,
+                    expeditions: {
+                        ...SettingsDataModule.settings.colors.expeditions,
+                        sizes: defaultColors,
                     },
                 },
             });
