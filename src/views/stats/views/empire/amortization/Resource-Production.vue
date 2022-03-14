@@ -301,6 +301,13 @@
         deuteriumSynthesizer: number;
     }
 
+    interface AmortizationGenerationSettings {
+        player: AmortizationPlayerSettings;
+        planets: Record<number, AmortizationPlanetSettings>;
+        maxLevels: AmortizationMaxLevels;
+        astrophysics: AmortizationAstrophysicsSettings;
+    }
+
     @Component({
         components: {
             AmortizationPlanetSettingsInputs,
@@ -335,7 +342,6 @@
             plasmaTechnology: 30,
             astrophysics: 37,
         };
-        private showPlasmaTechnology = true;
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
             show: true,
             planet: {
@@ -352,6 +358,8 @@
                 },
             },
         };
+        private showPlasmaTechnology = true;
+
 
         private readonly empire = EmpireDataModule.empire;
         private amortizationItems: AmortizationItem[] = [];
@@ -369,8 +377,21 @@
 
         private initItems(): void {
             this.amortizationItems = [];
-            this.generator = this.generateAmortizationItems();
+
+            const generationSettings = this.getAmortizationGenerationSettings();
+            this.generator = this.generateAmortizationItems(generationSettings);
             this.insertNextAmortizationItems(100);
+        }
+
+        private getAmortizationGenerationSettings(): AmortizationGenerationSettings {
+            const settings: AmortizationGenerationSettings = {
+                player: this.playerSettings,
+                planets: this.planetSettings,
+                maxLevels: this.maxLevels,
+                astrophysics: this.astrophysicsSettings,
+            };
+
+            return JSON.parse(JSON.stringify(settings));
         }
 
         private insertNextAmortizationItems(count: number): void {
@@ -440,18 +461,18 @@
             };
         }
 
-        private * generateAmortizationItems(): Generator<AmortizationItem, void, unknown> {
-            if (Object.keys(this.planetSettings).length == 0) {
+        private * generateAmortizationItems(settings: AmortizationGenerationSettings): Generator<AmortizationItem, void, unknown> {
+            if (Object.keys(settings.planets).length == 0) {
                 return;
             }
 
-            let { levelPlasmaTechnology, levelAstrophysics } = this.playerSettings;
+            let { levelPlasmaTechnology, levelAstrophysics } = settings.player;
 
             const planets = { ...this.empire.planets };
 
             const mineLevels: Record<number, MineLevels> = {};
             const planetIds: number[] = [];
-            const planetSettings = { ...this.planetSettings };
+            const planetSettings = { ...settings.planets };
             Object.values(planetSettings).forEach(planet => {
                 mineLevels[planet.id] = {
                     metalMine: planet.mineLevels?.metalMine ?? 0,
@@ -468,17 +489,17 @@
             const itemsPerTimeout = 10;
             let curItems = 0;
             while (
-                levelPlasmaTechnology < this.maxLevels.plasmaTechnology
-                || levelAstrophysics < this.maxLevels.astrophysics
-                || mineLevelsArray.some(l => l.metalMine < this.maxLevels.mine || l.crystalMine < this.maxLevels.mine || l.deuteriumSynthesizer < this.maxLevels.mine)
+                levelPlasmaTechnology < settings.maxLevels.plasmaTechnology
+                || levelAstrophysics < settings.maxLevels.astrophysics
+                || mineLevelsArray.some(l => l.metalMine < settings.maxLevels.mine || l.crystalMine < settings.maxLevels.mine || l.deuteriumSynthesizer < settings.maxLevels.mine)
             ) {
                 const mineItems = planetIds.flatMap(planetId => [
-                    this.getMineAmortizationItem(planetId, BuildingType.metalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId]),
-                    this.getMineAmortizationItem(planetId, BuildingType.crystalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId]),
-                    this.getMineAmortizationItem(planetId, BuildingType.deuteriumSynthesizer, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId]),
+                    this.getMineAmortizationItem(planetId, BuildingType.metalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
+                    this.getMineAmortizationItem(planetId, BuildingType.crystalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
+                    this.getMineAmortizationItem(planetId, BuildingType.deuteriumSynthesizer, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
                 ]);
-                const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(mineLevels, levelPlasmaTechnology);
-                const astrophysicsItem = this.getAstrophysicsAmortizationItem(levelAstrophysics, levelPlasmaTechnology, planetIds.length, -(newPlanets + 1));
+                const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(mineLevels, levelPlasmaTechnology, settings);
+                const astrophysicsItem = this.getAstrophysicsAmortizationItem(levelAstrophysics, levelPlasmaTechnology, planetIds.length, -(newPlanets + 1), settings);
 
                 const items = [
                     ...mineItems,
@@ -519,7 +540,7 @@
                         mineLevelsArray.push(newPlanetMineLevels);
 
                         const fakePlanet = { buildings: { production: {}, facilities: {} } } as PlanetData;
-                        planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet).planet;
+                        planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
                         break;
                     }
                 }
@@ -533,7 +554,7 @@
             }
         }
 
-        private getAstrophysicsAmortizationItem(levelAstrophysics: number, levelPlasmaTechnology: number, curPlanetCount: number, newPlanetId: number): AstrophysicsAmortizationItem {
+        private getAstrophysicsAmortizationItem(levelAstrophysics: number, levelPlasmaTechnology: number, curPlanetCount: number, newPlanetId: number, settings: AmortizationGenerationSettings): AstrophysicsAmortizationItem {
 
             const maxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
             const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
@@ -566,9 +587,9 @@
             let production: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
             let timeInHours = Infinity;
             do {
-                const metalMineItem = this.getMineAmortizationItem(-1, BuildingType.metalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet);
-                const crystalMineItem = this.getMineAmortizationItem(-1, BuildingType.crystalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet);
-                const deutSynthItem = this.getMineAmortizationItem(-1, BuildingType.deuteriumSynthesizer, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet);
+                const metalMineItem = this.getMineAmortizationItem(-1, BuildingType.metalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const crystalMineItem = this.getMineAmortizationItem(-1, BuildingType.crystalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const deutSynthItem = this.getMineAmortizationItem(-1, BuildingType.deuteriumSynthesizer, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
 
                 const bestItem = [metalMineItem, crystalMineItem, deutSynthItem].reduce(
                     (best, item) => item.timeInHours < best.timeInHours ? item : best,
@@ -576,10 +597,10 @@
                 );
 
                 const newTotalCost = addCost(totalCost, bestItem.cost);
-                const newTotalCostMsu = this.getMsu(newTotalCost);
+                const newTotalCostMsu = this.getMsu(newTotalCost, settings);
 
                 const newProduction = addCost(production, bestItem.productionDelta);
-                const newProductionMsu = this.getMsu(newProduction);
+                const newProductionMsu = this.getMsu(newProduction, settings);
 
                 const newTimeInHours = newTotalCostMsu / newProductionMsu;
                 if (newTimeInHours > timeInHours) {
@@ -602,24 +623,24 @@
                 levels,
                 mineLevels,
                 cost: totalCost,
-                costMsu: this.getMsu(totalCost),
+                costMsu: this.getMsu(totalCost, settings),
                 productionDelta: production,
-                productionDeltaMsu: this.getMsu(production),
+                productionDeltaMsu: this.getMsu(production, settings),
                 timeInHours: timeInHours,
                 newPlanetId,
             };
         }
 
-        private getPlasmaTechnologyAmortizationItem(mineLevels: Record<number, MineLevels>, levelPlasmaTechnology: number): PlasmaTechnologyAmortizationItem {
+        private getPlasmaTechnologyAmortizationItem(mineLevels: Record<number, MineLevels>, levelPlasmaTechnology: number, settings: AmortizationGenerationSettings): PlasmaTechnologyAmortizationItem {
             const level = levelPlasmaTechnology + 1;
 
             const cost = PlasmaTechnology.getCost(level);
-            const costMsu = this.getMsu(cost);
+            const costMsu = this.getMsu(cost, settings);
 
             const production = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings);
+                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -633,7 +654,7 @@
             const newProduction = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, level, this.empire.planets[planetSettings.id] as PlanetData, planetSettings);
+                    const dependencies = this.buildProductionDependencies(levels, level, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -645,7 +666,7 @@
                 );
 
             const productionDelta = subCost(newProduction, production);
-            const productionDeltaMsu = this.getMsu(productionDelta);
+            const productionDeltaMsu = this.getMsu(productionDelta, settings);
 
             return {
                 type: 'plasma-technology',
@@ -659,7 +680,7 @@
             };
         }
 
-        private getMineAmortizationItem(planetId: number, mineType: MineBuildingType, levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings): MineAmortizationItem {
+        private getMineAmortizationItem(planetId: number, mineType: MineBuildingType, levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): MineAmortizationItem {
             const mineLevel = {
                 [BuildingType.metalMine]: levels.metalMine,
                 [BuildingType.crystalMine]: levels.crystalMine,
@@ -673,13 +694,13 @@
             }[mineType];
 
             const cost = mine.getCost(mineLevel + 1);
-            const costMsu = this.getMsu(cost);
+            const costMsu = this.getMsu(cost, settings);
 
-            const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, planet, planetSettings);
+            const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, planet, planetSettings, settings);
             const curProduction = mine.getProduction(mineLevel, dependencies);
             const newProduction = mine.getProduction(mineLevel + 1, dependencies);
             const productionDelta = subCost(newProduction, curProduction);
-            const productionDeltaMsu = this.getMsu(productionDelta);
+            const productionDeltaMsu = this.getMsu(productionDelta, settings);
 
             return {
                 type: 'mine',
@@ -695,7 +716,7 @@
             };
         }
 
-        private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings): ProductionBuildingDependencies {
+        private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): ProductionBuildingDependencies {
             return {
                 economySpeed: 8, //TODO: eco speed from server data
                 planet: {
@@ -738,9 +759,9 @@
                 },
                 player: {
                     ...this.empire,
-                    playerClass: this.playerSettings.playerClass,
-                    allianceClass: this.playerSettings.allianceClass,
-                    officers: this.playerSettings.officers,
+                    playerClass: settings.player.playerClass,
+                    allianceClass: settings.player.allianceClass,
+                    officers: settings.player.officers,
                     research: {
                         ...this.empire.research,
                         [ResearchType.plasmaTechnology]: levelPlasmaTechnology,
@@ -749,10 +770,10 @@
             };
         }
 
-        private getMsu(cost: Cost): number {
+        private getMsu(cost: Cost, settings: AmortizationGenerationSettings): number {
             return cost.metal
-                + cost.crystal * this.playerSettings.msuConversionRates.crystal
-                + cost.deuterium * this.playerSettings.msuConversionRates.deuterium;
+                + cost.crystal * settings.player.msuConversionRates.crystal
+                + cost.deuterium * settings.player.msuConversionRates.deuterium;
         }
 
         /** 
@@ -852,14 +873,35 @@
             const visibleItems = items.filter(item => item.visible);
 
             if (visibleItems.length < 100) {
-                setTimeout(() => this.insertNextAmortizationItems(20), 50);
+                this.queueTimeout(() => this.insertNextAmortizationItems(20));
             }
         }
 
         private onTableScroll(event: GridTableScrollEvent): void {
             if (event.y.max - event.y.current < 150) {
-                this.insertNextAmortizationItems(20);
+                this.queueTimeout(() => this.insertNextAmortizationItems(20));
             }
+        }
+
+        private timeoutQueue: (() => any)[] = [];
+        private timeout: number | null = null;
+        private queueTimeout(action: () => any) {
+            this.timeoutQueue.push(action);
+            this.updateTimeout();
+        }
+
+        private updateTimeout() {
+            if (this.timeout == null) {
+                this.timeout = setTimeout(() => this.invokeNextTimeoutQueueAction(), 250);
+            }
+        }
+
+        private invokeNextTimeoutQueueAction() {
+            const action = this.timeoutQueue.shift();
+            action?.();
+
+            this.timeout = null;
+            this.updateTimeout();
         }
     }
 
