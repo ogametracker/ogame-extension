@@ -53,11 +53,11 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';

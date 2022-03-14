@@ -1,10 +1,10 @@
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
-import { BuildingType } from "../../shared/models/v1/ogame/buildings/BuildingType";
-import { PlanetType } from "../../shared/models/v1/ogame/common/PlanetType";
-import { DefenseType } from "../../shared/models/v1/ogame/defenses/DefenseType";
-import { ResearchType } from "../../shared/models/v1/ogame/research/ResearchType";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
+import { PlanetType } from "../../shared/models/ogame/common/PlanetType";
+import { DefenseType } from "../../shared/models/ogame/defenses/DefenseType";
+import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";

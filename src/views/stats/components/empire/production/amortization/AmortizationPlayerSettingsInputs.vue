@@ -83,8 +83,8 @@
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { AllianceClass } from '@/shared/models/v1/ogame/classes/AllianceClass';
-    import { PlayerClass } from '@/shared/models/v1/ogame/classes/PlayerClass';
+    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
+    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
     import { OPlayerClassType } from '../../../common/ogame/OPlayerClass.vue';
     import { OAllianceClassType } from '../../../common/ogame/OAllianceClass.vue';

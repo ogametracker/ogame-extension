@@ -17,9 +17,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from './getResources';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';

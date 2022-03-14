@@ -1,6 +1,6 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { BuildingType } from '../../shared/models/v1/ogame/buildings/BuildingType';
+import { BuildingType } from '../../shared/models/ogame/buildings/BuildingType';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetBuildingLevelsMessage } from "../../shared/messages/tracking/empire";
 import { MessageType } from "../../shared/messages/MessageType";

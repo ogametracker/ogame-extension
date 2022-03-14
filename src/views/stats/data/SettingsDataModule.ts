@@ -4,7 +4,7 @@ import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { IDataModule } from './IDataModule';
-import { Settings } from '@/shared/models/v1/settings/Settings';
+import { Settings } from '@/shared/models/settings/Settings';
 import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
 
 @Component

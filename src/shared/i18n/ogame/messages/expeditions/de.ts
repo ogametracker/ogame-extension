@@ -1,5 +1,5 @@
-import { ExpeditionEventSize } from "../../../../models/v2/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../../../../models/v2/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
 
 export const de: ExpeditionMessages = {

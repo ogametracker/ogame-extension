@@ -1,6 +1,6 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { PlayerClass } from "../../shared/models/v1/ogame/classes/PlayerClass";
+import { PlayerClass } from "../../shared/models/ogame/classes/PlayerClass";
 import { UpdatePlayerClassMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";

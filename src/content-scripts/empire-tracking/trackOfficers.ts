@@ -1,6 +1,6 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { PlayerOfficers } from "../../shared/models/v1/empire/PlayerOfficers";
+import { PlayerOfficers } from "../../shared/models/empire/PlayerOfficers";
 import { UpdateActiveOfficersMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";

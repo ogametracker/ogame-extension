@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-    import { CombatResultType } from '@/shared/models/v1/combat-reports/CombatResultType';
+    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';

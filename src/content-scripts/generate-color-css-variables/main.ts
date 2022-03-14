@@ -1,12 +1,12 @@
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { RequestSettingsMessage, SettingsMessage } from "../../shared/messages/settings";
-import { CombatResultType } from "../../shared/models/v1/combat-reports/CombatResultType";
-import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
-import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
-import { ColorSettings } from "../../shared/models/v1/settings/Settings";
+import { CombatResultType } from "../../shared/models/combat-reports/CombatResultType";
+import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
+import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ColorSettings } from "../../shared/models/settings/Settings";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 

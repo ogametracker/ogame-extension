@@ -18,9 +18,9 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
-    import { Items } from '@/shared/models/v1/ogame/items/Items';
-    import { Item } from '@/shared/models/v1/ogame/items/Item';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { Items } from '@/shared/models/ogame/items/Items';
+    import { Item } from '@/shared/models/ogame/items/Item';
 
     @Component({})
     export default class OItem extends Vue {

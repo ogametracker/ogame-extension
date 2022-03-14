@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';

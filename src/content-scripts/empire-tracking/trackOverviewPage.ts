@@ -1,7 +1,7 @@
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage } from "../../shared/messages/tracking/empire";
-import { PlanetActiveItems } from "../../shared/models/v1/empire/PlanetActiveItems";
-import { ItemHash } from "../../shared/models/v1/ogame/items/ItemHash";
+import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
+import { ItemHash } from "../../shared/models/ogame/items/ItemHash";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _throw } from "../../shared/utils/_throw";

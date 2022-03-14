@@ -1,0 +1,1 @@
+export type MigrationFunction = () => void | Promise<void>;

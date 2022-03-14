@@ -1,6 +1,6 @@
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";

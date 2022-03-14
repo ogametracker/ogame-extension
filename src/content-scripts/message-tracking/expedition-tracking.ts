@@ -8,11 +8,11 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionEventResources, ExpeditionFindableShipType } from "../../shared/models/v1/expeditions/ExpeditionEvents";
-import { ExpeditionEventType } from "../../shared/models/v1/expeditions/ExpeditionEventType";
-import { ExpeditionEventSize } from "../../shared/models/v1/expeditions/ExpeditionEventSize";
-import { ResourceType } from "../../shared/models/v1/ogame/resources/ResourceType";
-import { Items } from "../../shared/models/v1/ogame/items/Items";
+import { ExpeditionEvent, ExpeditionEventResources, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
+import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
+import { Items } from "../../shared/models/ogame/items/Items";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 

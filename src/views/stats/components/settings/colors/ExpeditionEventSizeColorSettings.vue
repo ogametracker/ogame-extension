@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
+    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';

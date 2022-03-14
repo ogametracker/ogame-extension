@@ -1,7 +1,7 @@
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetBuildingLevelsMessage, UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
-import { BuildingType } from "../../shared/models/v1/ogame/buildings/BuildingType";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _throw } from "../../shared/utils/_throw";

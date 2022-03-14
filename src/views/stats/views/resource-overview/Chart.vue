@@ -54,16 +54,16 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import min from 'date-fns/min/index';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getResources } from '../expeditions/ships/resources/getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '../../data/SettingsDataModule';

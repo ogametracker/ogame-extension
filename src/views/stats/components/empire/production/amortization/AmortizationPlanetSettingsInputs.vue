@@ -53,8 +53,8 @@
 </template>
 
 <script lang="ts">
-    import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
 

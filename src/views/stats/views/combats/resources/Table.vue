@@ -16,9 +16,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
 import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({

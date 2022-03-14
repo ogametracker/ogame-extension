@@ -12,8 +12,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
-    import { CombatResultType } from '@/shared/models/v1/combat-reports/CombatResultType';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
 
     @Component({
         components: {

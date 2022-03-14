@@ -1,4 +1,4 @@
-import { DebrisFieldReport } from '@/shared/models/v2/debris-field-reports/DebrisFieldReport';
+import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
 import { MessageType } from '@/shared/messages/MessageType';
 import { AllDebrisFieldReportsMessage, NewDebrisFieldReportMessage, RequestDebrisFieldReportsMessage } from '@/shared/messages/tracking/debris-fields';
 import { Message } from '@/shared/messages/Message';

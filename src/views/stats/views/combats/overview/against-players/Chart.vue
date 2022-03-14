@@ -32,8 +32,8 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
-    import { CombatResultType } from '@/shared/models/v1/combat-reports/CombatResultType';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({

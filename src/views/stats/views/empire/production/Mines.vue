@@ -99,16 +99,16 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
+    import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { Component, Vue } from 'vue-property-decorator';
-    import { compareCoordinates, Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
+    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
-    import { getMaxActiveCrawlers } from '@/shared/models/v1/ogame/buildings/getMaxActiveCrawlers';
-    import { LocalPlayerData } from '@/shared/models/v1/empire/LocalPlayerData';
-    import { PlanetType } from '@/shared/models/v1/ogame/common/PlanetType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { getMaxActiveCrawlers } from '@/shared/models/ogame/buildings/getMaxActiveCrawlers';
+    import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
+    import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
 
     interface ProductionMineItem {
         planet: {

@@ -19,9 +19,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
-    import { ExpeditionEventSize } from '@/shared/models/v1/expeditions/ExpeditionEventSize';
+    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({

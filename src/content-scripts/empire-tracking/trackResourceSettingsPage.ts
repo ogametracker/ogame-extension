@@ -1,11 +1,11 @@
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
-import { CrawlerProductionPercentage } from "../../shared/models/v1/empire/CrawlerProductionPercentage";
-import { ProductionPercentage } from "../../shared/models/v1/empire/ProductionPercentage";
-import { BuildingType } from "../../shared/models/v1/ogame/buildings/BuildingType";
-import { AllianceClass } from "../../shared/models/v1/ogame/classes/AllianceClass";
-import { ResearchType } from "../../shared/models/v1/ogame/research/ResearchType";
-import { ShipType } from "../../shared/models/v1/ogame/ships/ShipType";
+import { CrawlerProductionPercentage } from "../../shared/models/empire/CrawlerProductionPercentage";
+import { ProductionPercentage } from "../../shared/models/empire/ProductionPercentage";
+import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
+import { AllianceClass } from "../../shared/models/ogame/classes/AllianceClass";
+import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _throw } from "../../shared/utils/_throw";

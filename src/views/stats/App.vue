@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-    import { LocalPlayerData } from "@/shared/models/v1/empire/LocalPlayerData";
+    import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
     import { parseIntSafe } from "@/shared/utils/parseNumbers";
     import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';

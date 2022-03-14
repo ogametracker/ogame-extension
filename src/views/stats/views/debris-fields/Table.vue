@@ -15,9 +15,9 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
+    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
     import { DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';

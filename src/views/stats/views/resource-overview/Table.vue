@@ -22,14 +22,14 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType } from '@/shared/models/v1/ogame/resources/ResourceType';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
-    import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { DebrisFieldReport } from '@/shared/models/v1/debris-field-reports/DebrisFieldReport';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from '../expeditions/ships/resources/getResources';
     import { SettingsDataModule } from '../../data/SettingsDataModule';

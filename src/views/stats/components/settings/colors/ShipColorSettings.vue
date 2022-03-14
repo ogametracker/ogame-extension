@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';

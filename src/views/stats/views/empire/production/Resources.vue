@@ -147,19 +147,19 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
+    import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { Component, Vue } from 'vue-property-decorator';
-    import { MetalMine } from '@/shared/models/v1/ogame/buildings/MetalMine';
-    import { CrystalMine } from '@/shared/models/v1/ogame/buildings/CrystalMine';
-    import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
-    import { FusionReactor } from '@/shared/models/v1/ogame/buildings/FusionReactor';
-    import { ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
-    import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
-    import { compareCoordinates, Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { MetalMine } from '@/shared/models/ogame/buildings/MetalMine';
+    import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
+    import { DeuteriumSynthesizer } from '@/shared/models/ogame/buildings/DeuteriumSynthesizer';
+    import { FusionReactor } from '@/shared/models/ogame/buildings/FusionReactor';
+    import { ProductionBuildingDependencies } from '@/shared/models/ogame/buildings/ProductionBuilding';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     interface Production {

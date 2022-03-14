@@ -17,8 +17,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
 
     @Component({

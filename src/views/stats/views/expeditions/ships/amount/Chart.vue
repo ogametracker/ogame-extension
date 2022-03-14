@@ -30,11 +30,11 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';

@@ -1,5 +1,5 @@
 import { observerCallbacks } from "./main";
-import { AllianceClass } from '../../shared/models/v1/ogame/classes/AllianceClass';
+import { AllianceClass } from '../../shared/models/ogame/classes/AllianceClass';
 import { _throw } from "../../shared/utils/_throw";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { UpdateAllianceClassMessage } from "../../shared/messages/tracking/empire";

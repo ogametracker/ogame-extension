@@ -1,4 +1,4 @@
-import { ExpeditionEvent } from "../../models/v2/expeditions/ExpeditionEvents";
+import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
 import { Message, NoDataMessage } from "../Message";
 import { MessageType } from "../MessageType";
 import { RawMessageData } from "./common";

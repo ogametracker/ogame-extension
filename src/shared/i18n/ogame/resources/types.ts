@@ -1,4 +1,4 @@
-import { ResourceType } from "../../../models/v2/ogame/resources/ResourceType";
+import { ResourceType } from "../../../models/ogame/resources/ResourceType";
 
 export interface ResourceTranslations {
     [ResourceType.metal]: string;

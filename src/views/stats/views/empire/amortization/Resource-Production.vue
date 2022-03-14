@@ -220,26 +220,26 @@
      * - max. levels for each mine, plasma tech, and astrophysics (higher = more computational expensive, defaults: [60/60/60, 28, 35])
      */
 
-    import { PlanetData } from '@/shared/models/v1/empire/PlanetData';
-    import { BuildingType } from '@/shared/models/v1/ogame/buildings/BuildingType';
-    import { CrystalMine } from '@/shared/models/v1/ogame/buildings/CrystalMine';
-    import { DeuteriumSynthesizer } from '@/shared/models/v1/ogame/buildings/DeuteriumSynthesizer';
-    import { MetalMine } from '@/shared/models/v1/ogame/buildings/MetalMine';
-    import { ProductionBuildingDependencies } from '@/shared/models/v1/ogame/buildings/ProductionBuilding';
-    import { AllianceClass } from '@/shared/models/v1/ogame/classes/AllianceClass';
-    import { PlayerClass } from '@/shared/models/v1/ogame/classes/PlayerClass';
-    import { addCost, Cost, subCost } from '@/shared/models/v1/ogame/common/Cost';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
-    import { ResearchType } from '@/shared/models/v1/ogame/research/ResearchType';
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
+    import { DeuteriumSynthesizer } from '@/shared/models/ogame/buildings/DeuteriumSynthesizer';
+    import { MetalMine } from '@/shared/models/ogame/buildings/MetalMine';
+    import { ProductionBuildingDependencies } from '@/shared/models/ogame/buildings/ProductionBuilding';
+    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
+    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import { addCost, Cost, subCost } from '@/shared/models/ogame/common/Cost';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import AmortizationPlanetSettingsInputs, { AmortizationPlanetSettings } from '../../../components/empire/production/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs, { AmortizationPlayerSettings } from '../../../components/empire/production/amortization/AmortizationPlayerSettingsInputs.vue';
     import { EmpireDataModule } from '../../../data/EmpireDataModule';
-    import { Astrophysics } from '@/shared/models/v1/ogame/research/Astrophysics';
-    import { PlasmaTechnology } from '@/shared/models/v1/ogame/research/PlasmaTechnology';
+    import { Astrophysics } from '@/shared/models/ogame/research/Astrophysics';
+    import { PlasmaTechnology } from '@/shared/models/ogame/research/PlasmaTechnology';
     import { GridTableColumn, GridTableScrollEvent } from '../../../components/common/GridTable.vue';
-    import { Coordinates } from '@/shared/models/v1/ogame/common/Coordinates';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
 
     interface AmortizationMaxLevels {

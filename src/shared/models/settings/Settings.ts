@@ -1,4 +1,4 @@
-import { LanguageKey } from "../../../i18n/LanguageKey";
+import { LanguageKey } from "../../i18n/LanguageKey";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ResourceType } from "../ogame/resources/ResourceType";

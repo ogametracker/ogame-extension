@@ -1,6 +1,6 @@
 import { observerCallbacks } from "./main";
 import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
-import { ResearchType } from '../../shared/models/v1/ogame/research/ResearchType';
+import { ResearchType } from '../../shared/models/ogame/research/ResearchType';
 import { _throw } from "../../shared/utils/_throw";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";

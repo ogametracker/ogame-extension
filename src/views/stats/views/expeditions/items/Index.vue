@@ -17,14 +17,14 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventItem } from '@/shared/models/v1/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/v1/expeditions/ExpeditionEventType';
+    import { ExpeditionEventItem } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { startOfDay } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ItemHash } from '@/shared/models/v1/ogame/items/ItemHash';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 
     @Component({})
     export default class Charts extends Vue {

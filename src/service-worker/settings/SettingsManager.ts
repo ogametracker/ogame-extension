@@ -1,11 +1,11 @@
 import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
 import { LanguageKey } from '../../shared/i18n/LanguageKey';
-import { CombatResultType } from '../../shared/models/v2/combat-reports/CombatResultType';
-import { ExpeditionEventSize } from '../../shared/models/v2/expeditions/ExpeditionEventSize';
-import { ExpeditionEventType } from '../../shared/models/v2/expeditions/ExpeditionEventType';
-import { ResourceType } from '../../shared/models/v2/ogame/resources/ResourceType';
-import { ShipType } from '../../shared/models/v2/ogame/ships/ShipType';
-import { Settings } from '../../shared/models/v2/settings/Settings';
+import { CombatResultType } from '../../shared/models/combat-reports/CombatResultType';
+import { ExpeditionEventSize } from '../../shared/models/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '../../shared/models/expeditions/ExpeditionEventType';
+import { ResourceType } from '../../shared/models/ogame/resources/ResourceType';
+import { ShipType } from '../../shared/models/ogame/ships/ShipType';
+import { Settings } from '../../shared/models/settings/Settings';
 import { PersistentDataManager } from '../PersistentData';
 
 export class SettingsManager extends PersistentDataManager<Settings> {

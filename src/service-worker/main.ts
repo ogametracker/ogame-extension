@@ -1,6 +1,6 @@
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
-import { getStorageKeyPrefix } from "../shared/utils/getStorageKeyPrefix";
+import { executeMigrations } from "../shared/migrations/executeMigrations";
 import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 import { CombatReportService } from "./combat-reports/CombatReportService";
@@ -26,15 +26,13 @@ try {
     _logError(error);
 }
 
-function performMigrations() {
-    _logWarning('TODO: perform migrations');
-    //TODO: perform migrations
+async function performMigrations() {
+    _logDebug('performing migrations');
+    await executeMigrations();
 }
 
 async function onMessage(message: Message<MessageType, any>) {
     _logDebug('got message', performance.now(), message);
-
-    const key = getStorageKeyPrefix(message.ogameMeta);
 
     for (const service of services) {
         await service.onMessage(message);

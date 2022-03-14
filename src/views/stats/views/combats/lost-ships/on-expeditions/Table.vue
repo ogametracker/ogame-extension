@@ -18,8 +18,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
-    import { ShipType } from '@/shared/models/v1/ogame/ships/ShipType';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { OShipType } from '@/views/stats/components/common/ogame/OShip.vue';
 

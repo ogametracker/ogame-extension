@@ -1,10 +1,10 @@
 import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateOwnedPlanetsMessage, } from "../../shared/messages/tracking/empire";
-import { PlanetType } from "../../shared/models/v1/ogame/common/PlanetType";
+import { PlanetType } from "../../shared/models/ogame/common/PlanetType";
 import { observerCallbacks } from "./main";
 import { _throw } from "../../shared/utils/_throw";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { parseCoordinates } from '../../shared/utils/parseCoordinates';
-import { Coordinates } from "../../shared/models/v1/ogame/common/Coordinates";
+import { Coordinates } from "../../shared/models/ogame/common/Coordinates";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 

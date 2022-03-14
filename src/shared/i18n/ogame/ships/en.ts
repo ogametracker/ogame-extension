@@ -1,4 +1,4 @@
-import { ShipType } from "../../../models/v2/ogame/ships/ShipType";
+import { ShipType } from "../../../models/ogame/ships/ShipType";
 import { ShipTranslations } from "./types";
 
 export const en: ShipTranslations =  {

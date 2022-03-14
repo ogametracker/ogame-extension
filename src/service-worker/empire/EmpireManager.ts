@@ -1,7 +1,7 @@
-import { LocalPlayerData } from "../../shared/models/v2/empire/LocalPlayerData";
-import { AllianceClass } from "../../shared/models/v2/ogame/classes/AllianceClass";
-import { PlayerClass } from "../../shared/models/v2/ogame/classes/PlayerClass";
-import { ResearchType } from "../../shared/models/v2/ogame/research/ResearchType";
+import { LocalPlayerData } from "../../shared/models/empire/LocalPlayerData";
+import { AllianceClass } from "../../shared/models/ogame/classes/AllianceClass";
+import { PlayerClass } from "../../shared/models/ogame/classes/PlayerClass";
+import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
 import { PersistentDataManager } from '../PersistentData';
 
 export class EmpireManager extends PersistentDataManager<LocalPlayerData> {

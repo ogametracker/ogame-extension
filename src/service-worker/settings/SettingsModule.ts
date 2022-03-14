@@ -1,7 +1,7 @@
 import { MessageOgameMeta } from "../../shared/messages/Message";
 import { SettingsManager } from "./SettingsManager";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
-import { Settings } from "../../shared/models/v2/settings/Settings";
+import { Settings } from "../../shared/models/settings/Settings";
 import { UpdateSettingsMessage } from "../../shared/messages/settings";
 
 export class SettingsModule {
