@@ -7,13 +7,7 @@
     >
         <template #header-key="{ label }">
             <span v-text="label" />
-            <button
-                class="reset-button"
-                @click="$emit('reset')"
-                title="'LOCA: Reset'"
-            >
-                <span class="mdi mdi-refresh" />
-            </button>
+            <reset-button @reset="$emit('reset')" />
         </template>
         <template #cell-key="{ value: key }">
             <div
@@ -40,8 +34,13 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
     import { GridTableColumn } from '../../common/GridTable.vue';
+    import ResetButton from '../ResetButton.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            ResetButton,
+        },
+    })
     export default class ColorSettingsTable extends Vue {
         @Prop({ required: true, type: String })
         private header!: string;
@@ -106,23 +105,5 @@
 
     .color-settings::v-deep .color-settings-header {
         justify-content: center;
-    }
-
-    .reset-button {
-        font-size: 14px;
-        display: inline-flex;
-        align-items: baseline;
-        cursor: pointer;
-        margin-left: 8px;
-        background: none;
-        padding: 0 4px;
-
-        &:hover {
-            background: rgba(var(--color), 0.3);
-        }
-
-        > .mdi {
-            transform: scale(1.3);
-        }
     }
 </style>

@@ -8,7 +8,39 @@ import { Settings } from "./Settings";
 
 export function getDefaultSettings(language: LanguageKey): Settings {
     return {
-        dateRanges: [],
+        dateRanges: [
+            {
+                label: 'LOCA: Today',
+                type: 'day',
+                skip: 0,
+                take: 1,
+            },
+            {
+                label: 'LOCA: Yesterday',
+                type: 'day',
+                skip: 1,
+                take: 1,
+            },
+            {
+                label: 'LOCA: Current Week',
+                type: 'week',
+                skip: 0,
+                take: 1,
+            },
+            {
+                label: 'LOCA: Last Week',
+                type: 'week',
+                skip: 1,
+                take: 1,
+            },
+            {
+                label: 'LOCA: Current Month',
+                type: 'month',
+                skip: 0,
+                take: 1,
+            },
+            { type: 'all' },
+        ],
         showDetailedResourceBalance: false,
         msuConversionRates: {
             crystal: 2,

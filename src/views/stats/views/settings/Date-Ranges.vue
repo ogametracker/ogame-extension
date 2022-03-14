@@ -1,13 +1,16 @@
 <template>
-    <div>
-        TODO: Date Ranges
-    </div>
+    <date-range-settings />
 </template>
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
-    @Component({})
-    export default class DateRanges extends Vue {    
+    @Component({
+        components: {
+            DateRangeSettings,
+        },
+    })
+    export default class DateRanges extends Vue {
     }
 </script>

@@ -18,16 +18,17 @@ interface AllDateRange {
 
 export type DateRange = NormalDateRange | AllDateRange;
 
+export function getRangeDays(range: AllDateRange): | null;
+export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date };
+export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date } | null {
 
-
-export function isInRange(date: number | Date, range: DateRange): boolean {
     let firstRangeDayIncl: Date;
     let lastRangeDayExcl: Date;
 
     const today = startOfDay(Date.now());
 
     switch (range.type) {
-        case 'all': return true;
+        case 'all': return null;
 
         case 'day': {
             firstRangeDayIncl = subDays(today, range.skip);
@@ -57,6 +58,15 @@ export function isInRange(date: number | Date, range: DateRange): boolean {
         }
     }
 
+    return {
+        firstDay: firstRangeDayIncl,
+        lastDay: subDays(lastRangeDayExcl, 1),
+    };
+}
+
+export function isInRange(date: number | Date, range: DateRange): boolean {
+    const { firstDay, lastDay } = getRangeDays(range);
+
     const dayOfDate = startOfDay(date);
-    return firstRangeDayIncl <= dayOfDate && lastRangeDayExcl > dayOfDate;
+    return firstDay <= dayOfDate && lastDay >= dayOfDate;
 }
