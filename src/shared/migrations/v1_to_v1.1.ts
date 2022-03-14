@@ -283,11 +283,12 @@ const migrate: MigrationFunction = async () => {
                 .map(key => key.match(/^(?<prefix>s\d+-\w+-\d+)-.+$/)?.groups?.prefix)
                 .filter(key => key != null) as string[]
         )
-    ].filter(prefix => allData[`${prefix}-version`] == '1.1');
+    ].filter(prefix => allData[`${prefix}-version`] == '1.0');
 
     for (const prefix of keyPrefixes) {
         _logDebug(`migrating from v1 to v1.1: '${prefix}'`);
         const exposKey = `${prefix}-expoEvents`;
+        const versionKey = `${prefix}-version`;
         const expos = allData[exposKey] as Record<number, ExpoEvent>;
 
         Object.values(expos).forEach(expo => {
@@ -297,7 +298,10 @@ const migrate: MigrationFunction = async () => {
             migrateExpo_v1_v1_1_fleetfix(expo as ExpoEventFleet_kaputt);
         });
 
-        //TODO: save
+        await chrome.storage.local.set({
+            [exposKey]: expos,
+            [versionKey]: '1.1',
+        });
     }
 };
 export default migrate;
