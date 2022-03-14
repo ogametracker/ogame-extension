@@ -65,8 +65,11 @@ export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date 
 }
 
 export function isInRange(date: number | Date, range: DateRange): boolean {
-    const { firstDay, lastDay } = getRangeDays(range);
+    const rangeDays = getRangeDays(range);
+    if(rangeDays == null) {
+        return true;
+    }
 
     const dayOfDate = startOfDay(date);
-    return firstDay <= dayOfDate && lastDay >= dayOfDate;
+    return rangeDays.firstDay <= dayOfDate && rangeDays.lastDay >= dayOfDate;
 }
