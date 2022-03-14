@@ -1,5 +1,5 @@
-import { ExpeditionFindableShipType } from "@/shared/models/v1/expeditions/ExpeditionEvents";
-import { ResourceType } from "@/shared/models/v1/ogame/resources/ResourceType";
+import { ExpeditionFindableShipType } from "@/shared/models/v2/expeditions/ExpeditionEvents";
+import { ResourceType } from "@/shared/models/v2/ogame/resources/ResourceType";
 
 // TODO: should use shared model(s)
 export function getResources(ship: ExpeditionFindableShipType, count: number): Record<ResourceType, number> {

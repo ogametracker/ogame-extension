@@ -13,4 +13,5 @@ interface AllDateRange {
     label?: undefined;
 }
 
-export type DateRange = NormalDateRange | AllDateRange;
+type DateRange = NormalDateRange | AllDateRange;
+export default DateRange;

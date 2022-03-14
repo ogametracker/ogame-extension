@@ -8,7 +8,7 @@ import i18nDebrisFieldReports from '../../shared/i18n/ogame/messages/debris-fiel
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { DebrisFieldReportManager } from "./DebrisFieldReportManager";
 import { TrackDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
-import { DebrisFieldReport } from "../../shared/models/v1/debris-field-reports/DebrisFieldReport";
+import { DebrisFieldReport } from "../../shared/models/v2/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 

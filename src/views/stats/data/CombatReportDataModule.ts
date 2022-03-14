@@ -1,4 +1,4 @@
-import { CombatReport } from '@/shared/models/v1/combat-reports/CombatReport';
+import { CombatReport } from '@/shared/models/v2/combat-reports/CombatReport';
 import { MessageType } from '@/shared/messages/MessageType';
 import { AllCombatReportsMessage, NewCombatReportMessage, RequestCombatReportsMessage } from '@/shared/messages/tracking/combat-reports';
 import { Message } from '@/shared/messages/Message';

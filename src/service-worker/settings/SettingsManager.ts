@@ -1,11 +1,11 @@
 import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
 import { LanguageKey } from '../../shared/i18n/LanguageKey';
-import { CombatResultType } from '../../shared/models/v1/combat-reports/CombatResultType';
-import { ExpeditionEventSize } from '../../shared/models/v1/expeditions/ExpeditionEventSize';
-import { ExpeditionEventType } from '../../shared/models/v1/expeditions/ExpeditionEventType';
-import { ResourceType } from '../../shared/models/v1/ogame/resources/ResourceType';
-import { ShipType } from '../../shared/models/v1/ogame/ships/ShipType';
-import { Settings } from '../../shared/models/v1/settings/Settings';
+import { CombatResultType } from '../../shared/models/v2/combat-reports/CombatResultType';
+import { ExpeditionEventSize } from '../../shared/models/v2/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '../../shared/models/v2/expeditions/ExpeditionEventType';
+import { ResourceType } from '../../shared/models/v2/ogame/resources/ResourceType';
+import { ShipType } from '../../shared/models/v2/ogame/ships/ShipType';
+import { Settings } from '../../shared/models/v2/settings/Settings';
 import { PersistentDataManager } from '../PersistentData';
 
 export class SettingsManager extends PersistentDataManager<Settings> {

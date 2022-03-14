@@ -1,4 +1,4 @@
-import { ExpeditionEvent } from '@/shared/models/v1/expeditions/ExpeditionEvents';
+import { ExpeditionEvent } from '@/shared/models/v2/expeditions/ExpeditionEvents';
 import { MessageType } from '@/shared/messages/MessageType';
 import { AllExpeditionsMessage, NewExpeditionMessage, RequestExpeditionEventsMessage } from '@/shared/messages/tracking/expeditions';
 import { Message } from '@/shared/messages/Message';

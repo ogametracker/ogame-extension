@@ -1,38 +1,36 @@
-import { LanguageKey } from "../../../i18n/LanguageKey";
-import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
-import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
-import { ResourceType } from "../ogame/resources/ResourceType";
-import { ShipType } from "../ogame/ships/ShipType";
-import { DateRange } from "./DateRange";
-import { CombatResultType } from "../combat-reports/CombatResultType";
+import LanguageKey from "@/i18n/languageKey";
+import { HexColor } from "@/utils/colors";
+import BattleResult from "../battles/BattleResult";
+import ExpoType from "../expeditions/ExpoType";
+import { MsuConversionRates } from "../ogame/misc/MsuConversionRates";
+import Resource from "../Resource";
+import Ship from "../Ship";
+import DateRange from "./DateRange";
 
-export interface ColorSettings {
-    expeditions: {
-        events: Record<ExpeditionEventType, string>;
-        sizes: Record<ExpeditionEventSize, string>;
-    };
-    resources: Record<ResourceType | 'totalMsu', string>;
-    ships: Record<ShipType, string>;
-    combatResults: Record<CombatResultType, string>;
+interface TableSettings {
+    ranges: DateRange[];
 }
 
-export interface MsuConversionRates {
-    crystal: number;
-    deuterium: number;
+interface ChartSettings {
+    days: number;
+    colors: ChartColorSettings;
 }
 
-export interface Settings {
-    extensionLanguage: LanguageKey;
+interface ChartColorSettings {
+    overview: OverviewChartColorSettings;
+    resources: ResourcesChartColorSettings;
+    ships: ShipsChartColorSettings;
+    battleResults: Record<BattleResult, HexColor>;
+}
 
-    dateRanges: DateRange[];
-    colors: ColorSettings;
+type OverviewChartColorSettings = Record<ExpoType, HexColor>;
+type ResourcesChartColorSettings = Record<Resource, HexColor>;
+type ShipsChartColorSettings = Record<Ship, HexColor>;
+
+export default interface Settings {
+    tables: TableSettings;
+    charts: ChartSettings;
     msuConversionRates: MsuConversionRates;
-
-    showDetailedResourceBalance: boolean;
-    expeditionFoundShipsResourceUnits: {
-        factor: number;
-        deuteriumFactor: number;
-    };
-
-    defaultRoutes: Record<string, string | undefined>;
+    
+    language: LanguageKey;
 }

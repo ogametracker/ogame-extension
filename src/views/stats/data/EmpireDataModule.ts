@@ -1,4 +1,4 @@
-import { LocalPlayerData } from '@/shared/models/v1/empire/LocalPlayerData';
+import { LocalPlayerData } from '@/shared/models/v2/empire/LocalPlayerData';
 import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
