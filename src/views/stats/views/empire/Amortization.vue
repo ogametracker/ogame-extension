@@ -233,14 +233,14 @@
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import AmortizationPlanetSettingsInputs, { AmortizationPlanetSettings } from '../../../components/empire/production/amortization/AmortizationPlanetSettingsInputs.vue';
-    import AmortizationPlayerSettingsInputs, { AmortizationPlayerSettings } from '../../../components/empire/production/amortization/AmortizationPlayerSettingsInputs.vue';
-    import { EmpireDataModule } from '../../../data/EmpireDataModule';
+    import AmortizationPlanetSettingsInputs, { AmortizationPlanetSettings } from '../../components/empire/production/amortization/AmortizationPlanetSettingsInputs.vue';
+    import AmortizationPlayerSettingsInputs, { AmortizationPlayerSettings } from '../../components/empire/production/amortization/AmortizationPlayerSettingsInputs.vue';
+    import { EmpireDataModule } from '../../data/EmpireDataModule';
     import { Astrophysics } from '@/shared/models/ogame/research/Astrophysics';
     import { PlasmaTechnology } from '@/shared/models/ogame/research/PlasmaTechnology';
-    import { GridTableColumn, GridTableScrollEvent } from '../../../components/common/GridTable.vue';
+    import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface AmortizationMaxLevels {
         mine: number;
