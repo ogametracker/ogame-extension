@@ -6,6 +6,7 @@ import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { IDataModule } from './IDataModule';
 import { Settings } from '@/shared/models/settings/Settings';
 import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
+import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 
 @Component
 class SettingsDataModuleClass extends Vue implements IDataModule {
@@ -15,7 +16,7 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
 
     public updateSettings(settings: Settings) {
         console.debug('updating settings', settings);
-        
+
         const message: UpdateSettingsMessage = {
             type: MessageType.UpdateSettings,
             ogameMeta: GlobalOgameMetaData,
@@ -40,7 +41,7 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
     public async load(): Promise<void> {
         await new Promise<void>(resolve => {
             const interval = setInterval(() => {
-                if(!this._loaded) {
+                if (!this._loaded) {
                     return;
                 }
 
@@ -65,7 +66,10 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
     }
 
     private onMessage(msg: Message) {
-        const { type } = msg;
+        const { type, ogameMeta } = msg;
+        if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
+            return;
+        }
 
         switch (type) {
             case MessageType.Settings: {

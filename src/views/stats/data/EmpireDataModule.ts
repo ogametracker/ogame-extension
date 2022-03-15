@@ -7,6 +7,7 @@ import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { EmpireDataMessage, RequestLocalPlayerDataMessage } from '@/shared/messages/tracking/empire';
 import { IDataModule } from './IDataModule';
+import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 
 @Component
 class EmpireDataModuleClass extends Vue implements IDataModule {
@@ -53,7 +54,10 @@ class EmpireDataModuleClass extends Vue implements IDataModule {
     }
 
     private onMessage(msg: Message) {
-        const { type } = msg;
+        const { type, ogameMeta } = msg;
+        if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
+            return;
+        }
 
         switch (type) {
             case MessageType.EmpireData:
