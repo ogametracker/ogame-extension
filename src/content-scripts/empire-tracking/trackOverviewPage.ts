@@ -7,6 +7,8 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _throw } from "../../shared/utils/_throw";
 
 export function trackOverviewPage(): void {
+    const activeItems: PlanetActiveItems = {};
+
     const observer = new MutationObserver(() => {
         if (['ogame-timestamp', 'ogame-planet-id'].some(name => document.querySelector(`meta[name="${name}"]`) == null)) {
             return;
@@ -20,22 +22,25 @@ export function trackOverviewPage(): void {
             ?? _throw('no meta element found for ogame-planet-id');
         const planetId = parseIntSafe(planetIdText, 10);
 
-        const activeItems: PlanetActiveItems = {};
         const items = document.querySelectorAll('.active_items [data-uuid]:not([ogt-active-until])');
 
         items.forEach(item => {
-            const hash = item.getAttribute('data-uuid') ?? _throw('no item uuid found');
-            const durationLeftElem = item.querySelector('.js_duration') ?? _throw('no item duration found');
-            const durationLeftText = durationLeftElem.textContent ?? _throw('no duration found');
-            const totalDuration = parseIntSafe(durationLeftElem.getAttribute('data-total-duration') ?? _throw('no duration found'), 10);
+            try {
+                const hash = item.getAttribute('data-uuid') ?? _throw('no item uuid found');
+                const durationLeftElem = item.querySelector('.js_duration') ?? _throw('no item duration found');
+                const durationLeftText = durationLeftElem.textContent ?? _throw('no duration found');
+                const totalDuration = parseIntSafe(durationLeftElem.getAttribute('data-total-duration') ?? _throw('no duration found'), 10);
 
-            let activeUntil: number | 'permanent' = 'permanent';
-            if (durationLeftText != '' && totalDuration > 0) {
-                const durationLeft = parseIntSafe(durationLeftText, 10) * 1000;
-                activeUntil = ogameNow + durationLeft;
+                let activeUntil: number | 'permanent' = 'permanent';
+                if (durationLeftText != '' && totalDuration > 0) {
+                    const durationLeft = parseIntSafe(durationLeftText, 10) * 1000;
+                    activeUntil = ogameNow + durationLeft;
+                }
+                item.setAttribute('ogt-active-until', activeUntil.toString());
+                activeItems[hash as ItemHash] = activeUntil;
+            } catch (error) {
+                console.error(error);
             }
-            item.setAttribute('ogt-active-until', activeUntil.toString());
-            activeItems[hash as ItemHash] = activeUntil;
         });
 
         if (items.length > 0) {
