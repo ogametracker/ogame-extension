@@ -47,6 +47,7 @@
 
         padding: 32px;
         background: rgba(black, 0.7);
+        z-index: 1000;
     }
 
     .dialog {
