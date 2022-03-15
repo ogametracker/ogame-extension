@@ -1,52 +1,67 @@
 <template>
     <div class="amortization">
         <div class="amortization-settings">
-            <h3>LOCA: Player Settings</h3>
-            <amortization-player-settings-inputs v-model="playerSettings" />
-            <hr />
+            <button @click="showSettings = !showSettings">
+                <span class="mdi mdi-cog" />
+                <span class="mdi mdi-menu-down" v-if="!showSettings" />
+                <span class="mdi mdi-menu-up" v-else />
 
-            <h3>LOCA: Planet Settings</h3>
-            <div>
-                <amortization-planet-settings-inputs
-                    v-for="(planetSetting, id) in planetSettings"
-                    :key="id"
-                    v-model="planetSettings[id]"
-                    toggleable
-                />
+                <span v-if="!showSettings" v-text="'LOCA: Settings'" />
+                <span v-else v-text="'LOCA: Apply and close'" />
+            </button>
+
+            <div v-show="showSettings" style="overflow: auto">
+                <div class="flex-settings">
+                    <div>
+                        <h3>LOCA: Player Settings</h3>
+                        <amortization-player-settings-inputs
+                            v-model="playerSettings"
+                        />
+                    </div>
+
+                    <div>
+                        <h3>LOCA: Plasmatechnology</h3>
+                        <div class="plasma-tech-settings">
+                            <checkbox
+                                v-model="showPlasmaTechnology"
+                                :label="'LOCA: Show plasmatech in result'"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>LOCA: Astrophysics</h3>
+                        <div class="astrophysics-settings">
+                            <checkbox
+                                v-model="astrophysicsSettings.show"
+                                :label="'LOCA: Show astrophysics + new colony in result'"
+                            />
+
+                            <amortization-planet-settings-inputs
+                                v-model="astrophysicsSettings.planet"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>LOCA: Planet Settings</h3>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                            <amortization-planet-settings-inputs
+                                v-for="(planetSetting, id) in planetSettings"
+                                :key="id"
+                                v-model="planetSettings[id]"
+                                toggleable
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <button @click="initItems()">LOCA: Update (REMOVE ME)</button>
+                <hr />
             </div>
-            <hr />
-
-            <h3>LOCA: Plasmatechnology</h3>
-            <div class="plasma-tech-settings">
-                <span>LOCA: Show plasmatech in result</span>
-                <span>
-                    TODO
-                    <input type="checkbox" v-model="showPlasmaTechnology" />
-                </span>
-            </div>
-            <hr />
-
-            <h3>LOCA: Astrophysics</h3>
-            <div class="astrophysics-settings">
-                <span>LOCA: Show astrophysics + new colony in result</span>
-                <span>
-                    TODO
-                    <input
-                        type="checkbox"
-                        v-model="astrophysicsSettings.show"
-                    />
-                </span>
-
-                <amortization-planet-settings-inputs
-                    v-model="astrophysicsSettings.planet"
-                />
-            </div>
-
-            <button @click="initItems()">LOCA: Update</button>
-            <hr />
         </div>
 
-        <div class="amortization-table">
+        <div class="amortization-table" v-if="!showSettings">
             <grid-table
                 :items="items"
                 :columns="columns"
@@ -360,6 +375,7 @@
         };
         private showPlasmaTechnology = true;
 
+        private showSettings = false;
 
         private readonly empire = EmpireDataModule.empire;
         private amortizationItems: AmortizationItem[] = [];
@@ -988,11 +1004,26 @@
     .amortization {
         display: grid;
         grid-template-rows: auto 1fr;
-        height: 100%;
+        max-height: 100%;
 
         &-table {
             overflow: auto;
             min-height: 300px;
         }
+
+        &-settings {
+            margin-bottom: 4px;
+            max-height: 100%;
+            overflow: auto;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            justify-items: start;
+        }
+    }
+
+    .flex-settings {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 48px;
     }
 </style>

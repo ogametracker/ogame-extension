@@ -33,7 +33,12 @@
             </div>
         </div>
         <div class="grid-table-body">
-            <div class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
+            <div
+                class="grid-table-row"
+                v-for="(item, i) in items"
+                :key="i"
+                v-show="!hideRow(item)"
+            >
                 <div
                     v-for="column in columns"
                     :key="column.key"
@@ -180,7 +185,6 @@
 
         z-index: 0;
 
-
         &-head,
         &-body,
         &-foot,
@@ -223,6 +227,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            text-align: right;
         }
 
         &--sticky-header > &-head > &-cell {

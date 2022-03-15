@@ -5,7 +5,9 @@ import ScrollableChart from './ScrollableChart.vue';
 import GridTable from './GridTable.vue';
 import TabView from './TabView.vue';
 import CustomDialog from './CustomDialog.vue';
+import Checkbox from './Checkbox.vue';
 
+Vue.component('checkbox', Checkbox);
 Vue.component('custom-dialog', CustomDialog);
 Vue.component('grid-table', GridTable);
 Vue.component('list-nav', ListNav);

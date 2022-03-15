@@ -1,29 +1,37 @@
 <template>
     <div class="player-settings">
         <span>LOCA: MSU conversion rates</span>
-        <span>
-            <o-resource resource="metal" />
-            <input type="number" value="1" readonly />
-            <o-resource resource="crystal" />
-            <input
-                type="number"
-                v-model.number="settings.msuConversionRates.crystal"
-                min="1"
-                max="3"
-                step="0.01"
-            />
-            <o-resource resource="deuterium" />
-            <input
-                type="number"
-                v-model.number="settings.msuConversionRates.deuterium"
-                min="2"
-                max="5"
-                step="0.01"
-            />
+        <span class="gap">
+            <span>
+                <o-resource resource="metal" />
+                <input type="number" value="1" readonly />
+            </span>
+
+            <span>
+                <o-resource resource="crystal" />
+                <input
+                    type="number"
+                    v-model.number="settings.msuConversionRates.crystal"
+                    min="1"
+                    max="3"
+                    step="0.01"
+                />
+            </span>
+
+            <span>
+                <o-resource resource="deuterium" />
+                <input
+                    type="number"
+                    v-model.number="settings.msuConversionRates.deuterium"
+                    min="2"
+                    max="5"
+                    step="0.01"
+                />
+            </span>
         </span>
 
         <span>LOCA: Officers</span>
-        <span>
+        <span class="gap">
             <o-officer
                 v-for="(active, officer) in settings.officers"
                 :key="officer"
@@ -36,9 +44,9 @@
         </span>
 
         <span>LOCA: Player Class</span>
-        <span>
+        <span class="gap">
             <o-player-class
-                v-for="(classType, plClass) in settings.playerClasses"
+                v-for="(classType, plClass) in playerClasses"
                 :key="plClass"
                 :player-class="classType"
                 :disabled="settings.playerClass != plClass"
@@ -47,18 +55,19 @@
         </span>
 
         <span>LOCA: Alliance Class</span>
-        <span>
+        <span class="gap">
             <o-alliance-class
-                v-for="(classType, allyClass) in settings.allianceClasses"
+                v-for="(classType, allyClass) in allianceClasses"
                 :key="allyClass"
                 :alliance-class="classType"
-                :disabled="allianceClass != allyClass"
+                :disabled="settings.allianceClass != allyClass"
                 @click="toggleAllianceClass(allyClass)"
             />
         </span>
 
         <span>LOCA: Current Level Plasmatechnology</span>
         <span>
+            <o-research research="plasma-technology" />
             <input
                 type="number"
                 v-model.number="settings.levelPlasmaTechnology"
@@ -70,6 +79,7 @@
 
         <span>LOCA: Current Level Astrophysics</span>
         <span>
+            <o-research research="astrophysics" />
             <input
                 type="number"
                 v-model.number="settings.levelAstrophysics"
@@ -109,7 +119,7 @@
 
     @Component({})
     export default class AmortizationPlayerSettingsInputs extends Vue {
-        
+
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
 
@@ -145,3 +155,37 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .player-settings {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 8px 16px;
+
+        > * {
+            display: flex;
+            
+            &:nth-of-type(2n + 1) {
+                justify-self: flex-end;
+            }
+        }
+
+        input[type="number"] {
+            width: 60px;
+        }
+
+        .o-officer,
+        .o-player-class,
+        .o-alliance-class {
+            cursor: pointer;
+        }
+
+        .gap {
+            column-gap: 8px;
+
+            > * {
+                display: flex;
+            }
+        }
+    }
+</style>
