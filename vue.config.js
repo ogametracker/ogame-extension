@@ -14,7 +14,7 @@ const vuePages = views.reduce((acc, view) => {
     acc[view] = {
         entry: `src/views/${view}/main.ts`,
         filename: `${view}.html`,
-        title: `DEV: ${view} Page`,
+        title: `${view} Page`,
         template: `src/views/index.html`,
     };
     return acc;

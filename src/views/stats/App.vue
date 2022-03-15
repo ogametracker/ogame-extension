@@ -113,6 +113,7 @@
     import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import { IDataModule } from "./data/IDataModule";
+    import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
 
     interface Tab {
         key: string;
@@ -322,13 +323,34 @@
             const loadPromises = dataModules.map(mod => mod.load());
             await Promise.all(loadPromises);
 
-            //TODO: set window title to include universe name (if available), universe id, player name (if available), and player id
+            this.updateDocumentTitle();
 
             this.loading = false;
 
             if (!this.isIframeMode) {
                 await this.loadKnownAccounts();
             }
+        }
+
+        private updateDocumentTitle() {
+            const ogameMeta = GlobalOgameMetaData;
+
+            const serverName = EmpireDataModule.empire.universeName;
+            const serverId = ogameMeta.serverId;
+            const serverLang = ogameMeta.language;
+
+            const playerName = EmpireDataModule.empire.name;
+            const playerId = ogameMeta.playerId;
+
+            const playerText = playerName != null
+                ? `${playerName} (${playerId})`
+                : playerId.toString();
+
+            const serverText = serverName != null
+                ? `${serverLang.toUpperCase()} ${serverName} (${serverId})`
+                : `${serverLang.toUpperCase()} ${serverId}`;
+
+            document.title = `${playerText} - ${serverText}`;
         }
 
         private async loadKnownAccounts(): Promise<void> {
