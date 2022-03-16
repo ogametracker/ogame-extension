@@ -1,13 +1,25 @@
 <template>
-    <stats-chart
-        :firstDay="firstDay"
-        :itemsPerDay="exposPerDay"
-        :filter="(expo) => filterExpo(expo)"
-        :datasets="datasets"
-        stacked
-        show-average
-        no-legend
-    />
+    <div class="chart-container">
+        <stats-chart
+            :firstDay="firstDay"
+            :itemsPerDay="exposPerDay"
+            :filter="(expo) => filterExpo(expo)"
+            :datasets="datasets"
+            stacked
+            show-average
+            no-legend
+        />
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <expedition-event-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -17,13 +29,18 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            ExpeditionEventColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get color() {
             return SettingsDataModule.settings.colors.expeditions.events.darkMatter;
         }
@@ -52,3 +69,11 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>

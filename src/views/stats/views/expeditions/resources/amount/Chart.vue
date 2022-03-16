@@ -1,55 +1,69 @@
 <template>
-    <stats-chart
-        :filter="(expo) => filterExpo(expo)"
-        :datasets="datasets"
-        :firstDay="firstDay"
-        :itemsPerDay="exposPerDay"
-    >
-        <template #tooltip-footer="{ datasets }">
-            <template
-                v-if="getVisibleDatasets(datasets).length < datasets.length"
-            >
+    <div class="chart-container">
+        <stats-chart
+            :filter="(expo) => filterExpo(expo)"
+            :datasets="datasets"
+            :firstDay="firstDay"
+            :itemsPerDay="exposPerDay"
+        >
+            <template #tooltip-footer="{ datasets }">
+                <template
+                    v-if="getVisibleDatasets(datasets).length < datasets.length"
+                >
+                    <div class="footer-item">
+                        <div
+                            class="number"
+                            v-text="
+                                $number(
+                                    getResourcesAmount(
+                                        getVisibleDatasets(datasets)
+                                    )
+                                )
+                            "
+                        />
+                        <div>LOCA: Resources</div>
+
+                        <div
+                            class="number"
+                            v-text="
+                                $number(
+                                    getResourcesAmountInMsu(
+                                        getVisibleDatasets(datasets)
+                                    )
+                                )
+                            "
+                        />
+                        <div>LOCA: Resources (MSU)</div>
+                    </div>
+                    <hr />
+                </template>
+
                 <div class="footer-item">
                     <div
                         class="number"
-                        v-text="
-                            $number(
-                                getResourcesAmount(getVisibleDatasets(datasets))
-                            )
-                        "
+                        v-text="$number(getResourcesAmount(datasets))"
                     />
-                    <div>LOCA: Resources</div>
+                    <div>LOCA: Resources (Total)</div>
 
                     <div
                         class="number"
-                        v-text="
-                            $number(
-                                getResourcesAmountInMsu(
-                                    getVisibleDatasets(datasets)
-                                )
-                            )
-                        "
+                        v-text="$number(getResourcesAmountInMsu(datasets))"
                     />
-                    <div>LOCA: Resources (MSU)</div>
+                    <div>LOCA: Resources (Total, MSU)</div>
                 </div>
-                <hr />
+            </template>
+        </stats-chart>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
             </template>
 
-            <div class="footer-item">
-                <div
-                    class="number"
-                    v-text="$number(getResourcesAmount(datasets))"
-                />
-                <div>LOCA: Resources (Total)</div>
-
-                <div
-                    class="number"
-                    v-text="$number(getResourcesAmountInMsu(datasets))"
-                />
-                <div>LOCA: Resources (Total, MSU)</div>
-            </div>
-        </template>
-    </stats-chart>
+            <resource-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -61,13 +75,18 @@
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            ResourceColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
         }
@@ -150,5 +169,12 @@
         .number {
             text-align: right;
         }
+    }
+
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
     }
 </style>

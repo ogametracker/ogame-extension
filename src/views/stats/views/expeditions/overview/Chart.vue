@@ -1,30 +1,44 @@
 <template>
-    <stats-chart
-        :filter="(expo) => filterExpo(expo)"
-        :datasets="datasets"
-        :firstDay="firstDay"
-        :itemsPerDay="exposPerDay"
-    >
-        <template #tooltip-footer="{ datasets }">
-            <template
-                v-if="getVisibleDatasets(datasets).length < datasets.length"
-            >
+    <div class="chart-container">
+        <stats-chart
+            :filter="(expo) => filterExpo(expo)"
+            :datasets="datasets"
+            :firstDay="firstDay"
+            :itemsPerDay="exposPerDay"
+        >
+            <template #tooltip-footer="{ datasets }">
+                <template
+                    v-if="getVisibleDatasets(datasets).length < datasets.length"
+                >
+                    <div class="footer-item">
+                        <div
+                            class="number"
+                            v-text="
+                                $number(getSum(getVisibleDatasets(datasets)))
+                            "
+                        />
+                        <div>LOCA: Expeditions</div>
+                    </div>
+                    <hr />
+                </template>
+
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$number(getSum(getVisibleDatasets(datasets)))"
-                    />
-                    <div>LOCA: Expeditions</div>
+                    <div class="number" v-text="$number(getSum(datasets))" />
+                    <div>LOCA: Expeditions (Total)</div>
                 </div>
-                <hr />
+            </template>
+        </stats-chart>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
             </template>
 
-            <div class="footer-item">
-                <div class="number" v-text="$number(getSum(datasets))" />
-                <div>LOCA: Expeditions (Total)</div>
-            </div>
-        </template>
-    </stats-chart>
+            <expedition-event-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -34,14 +48,19 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            ExpeditionEventColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get colors() {
             return SettingsDataModule.settings.colors.expeditions.events;
         }
@@ -87,5 +106,12 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
         .number {
             text-align: right;
         }
+    }
+
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
     }
 </style>

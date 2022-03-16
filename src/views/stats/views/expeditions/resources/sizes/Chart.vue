@@ -1,32 +1,46 @@
 <template>
-    <stats-chart
-        :firstDay="firstDay"
-        :itemsPerDay="exposPerDay"
-        :filter="(expo) => filterExpo(expo)"
-        :datasets="datasets"
-        stacked
-        show-average
-    >
-        <template #tooltip-footer="{ datasets }">
-            <template
-                v-if="getVisibleDatasets(datasets).length < datasets.length"
-            >
+    <div class="chart-container">
+        <stats-chart
+            :firstDay="firstDay"
+            :itemsPerDay="exposPerDay"
+            :filter="(expo) => filterExpo(expo)"
+            :datasets="datasets"
+            stacked
+            show-average
+        >
+            <template #tooltip-footer="{ datasets }">
+                <template
+                    v-if="getVisibleDatasets(datasets).length < datasets.length"
+                >
+                    <div class="footer-item">
+                        <div
+                            class="number"
+                            v-text="
+                                $number(getSum(getVisibleDatasets(datasets)))
+                            "
+                        />
+                        <div>LOCA: Resource Discoveries</div>
+                    </div>
+                    <hr />
+                </template>
+
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$number(getSum(getVisibleDatasets(datasets)))"
-                    />
-                    <div>LOCA: Resource Discoveries</div>
+                    <div class="number" v-text="$number(getSum(datasets))" />
+                    <div>LOCA: Resource Discoveries (Total)</div>
                 </div>
-                <hr />
+            </template>
+        </stats-chart>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
             </template>
 
-            <div class="footer-item">
-                <div class="number" v-text="$number(getSum(datasets))" />
-                <div>LOCA: Resource Discoveries (Total)</div>
-            </div>
-        </template>
-    </stats-chart>
+            <expedition-event-size-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -38,13 +52,18 @@
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            ExpeditionEventSizeColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get colors() {
             return SettingsDataModule.settings.colors.expeditions.sizes;
         }
@@ -90,5 +109,12 @@
         .number {
             text-align: right;
         }
+    }
+
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
     }
 </style>
