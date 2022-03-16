@@ -86,22 +86,45 @@
             <template v-if="settings.mineLevels != null">
                 <span>LOCA: Mine Levels</span>
                 <span class="mine-grid">
-                    <o-building building="metal-mine" />
+                    <o-building
+                        building="metal-mine"
+                        :disabled="settings.mineLevels.metalMine.show"
+                        @click="
+                            settings.mineLevels.metalMine.show =
+                                !settings.mineLevels.metalMine.show
+                        "
+                    />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.metalMine"
+                        v-model="settings.mineLevels.metalMine.level"
                     />
 
-                    <o-building building="crystal-mine" />
+                    <o-building
+                        building="crystal-mine"
+                        :disabled="settings.mineLevels.crystalMine.show"
+                        @click="
+                            settings.mineLevels.crystalMine.show =
+                                !settings.mineLevels.crystalMine.show
+                        "
+                    />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.crystalMine"
+                        v-model="settings.mineLevels.crystalMine.level"
                     />
 
-                    <o-building building="deuterium-synthesizer" />
+                    <o-building
+                        building="deuterium-synthesizer"
+                        :disabled="
+                            settings.mineLevels.deuteriumSynthesizer.show
+                        "
+                        @click="
+                            settings.mineLevels.deuteriumSynthesizer.show =
+                                !settings.mineLevels.deuteriumSynthesizer.show
+                        "
+                    />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.deuteriumSynthesizer"
+                        v-model="settings.mineLevels.deuteriumSynthesizer.level"
                     />
                 </span>
             </template>
@@ -114,6 +137,11 @@
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
+
+    interface MineSettings {
+        level: number;
+        show: boolean;
+    }
 
     export interface AmortizationPlanetSettings {
         show: boolean;
@@ -130,10 +158,10 @@
             count: 'max' | number;
         };
 
-        mineLevels?: {
-            metalMine: number;
-            crystalMine: number;
-            deuteriumSynthesizer: number;
+        mines?: {
+            metalMine: MineSettings;
+            crystalMine: MineSettings;
+            deuteriumSynthesizer: MineSettings;
         };
     }
 

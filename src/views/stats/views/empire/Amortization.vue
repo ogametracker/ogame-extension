@@ -47,9 +47,9 @@
                         <h3>LOCA: Planet Settings</h3>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap">
                             <amortization-planet-settings-inputs
-                                v-for="(planetSetting, id) in planetSettings"
-                                :key="id"
-                                v-model="planetSettings[id]"
+                                v-for="planetSetting in planetSettingsSorted"
+                                :key="planetSetting.id"
+                                v-model="planetSettings[planetSetting.id]"
                                 toggleable
                             />
                         </div>
@@ -67,7 +67,6 @@
                 :columns="columns"
                 sticky="100%"
                 @scroll="onTableScroll($event)"
-                :hide-row="(item) => !item.visible"
             >
                 <template #header-cost>
                     <div class="cost-grid">
@@ -254,7 +253,7 @@
     import { Astrophysics } from '@/shared/models/ogame/research/Astrophysics';
     import { PlasmaTechnology } from '@/shared/models/ogame/research/PlasmaTechnology';
     import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface AmortizationMaxLevels {
@@ -385,6 +384,10 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
+        private get planetSettingsSorted(): AmortizationPlanetSettings[] {
+            return Object.values(this.planetSettings).sort((a, b) => compareCoordinates(a.coordinates!, b.coordinates!));
+        }
+
         private mounted() {
             this.initSettings();
 
@@ -437,17 +440,26 @@
 
             this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
                 .reduce((acc, planet) => {
-                    acc[planet.id] = {
+                    const settings: AmortizationPlanetSettings = {
                         show: true,
                         id: planet.id,
                         name: planet.name,
                         maxTemperature: planet.maxTemperature,
                         coordinates: planet.coordinates,
                         position: planet.coordinates.position,
-                        mineLevels: {
-                            metalMine: planet.buildings.production[BuildingType.metalMine],
-                            crystalMine: planet.buildings.production[BuildingType.crystalMine],
-                            deuteriumSynthesizer: planet.buildings.production[BuildingType.deuteriumSynthesizer],
+                        mines: {
+                            metalMine: {
+                                level: planet.buildings.production[BuildingType.metalMine],
+                                show: true,
+                            },
+                            crystalMine:  {
+                                level: planet.buildings.production[BuildingType.crystalMine],
+                                show: true,
+                            },
+                            deuteriumSynthesizer: {
+                                level: planet.buildings.production[BuildingType.deuteriumSynthesizer],
+                                show: true,
+                            },
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
@@ -456,6 +468,7 @@
                             count: empire.playerClass == PlayerClass.collector ? 'max' : planet.ships[ShipType.crawler],
                         },
                     };
+                    acc[planet.id] = settings;
                     return acc;
                 }, {} as Record<number, AmortizationPlanetSettings>);
 
@@ -491,9 +504,9 @@
             const planetSettings = { ...settings.planets };
             Object.values(planetSettings).forEach(planet => {
                 mineLevels[planet.id] = {
-                    metalMine: planet.mineLevels?.metalMine ?? 0,
-                    crystalMine: planet.mineLevels?.crystalMine ?? 0,
-                    deuteriumSynthesizer: planet.mineLevels?.deuteriumSynthesizer ?? 0,
+                    metalMine: planet.mines?.metalMine.level ?? 0,
+                    crystalMine: planet.mines?.crystalMine.level ?? 0,
+                    deuteriumSynthesizer: planet.mines?.deuteriumSynthesizer.level ?? 0,
                 };
                 planetIds.push(planet.id);
             });
@@ -528,6 +541,8 @@
                     { timeInHours: Infinity } as AmortizationItem
                 );
 
+                let yieldItem: boolean;
+
                 switch (bestItem.type) {
                     case 'mine': {
                         const mine = (<Record<MineBuildingType, keyof MineLevels>>{
@@ -536,11 +551,16 @@
                             [BuildingType.deuteriumSynthesizer]: 'deuteriumSynthesizer',
                         })[bestItem.mine];
                         mineLevels[bestItem.planetId][mine] = bestItem.level;
+
+                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings | undefined;
+                        yieldItem = (planetSettings?.show && planetSettings?.mines![mine].show) ?? this.astrophysicsSettings.show;
                         break;
                     }
 
                     case 'plasma-technology': {
                         levelPlasmaTechnology = bestItem.level;
+
+                        yieldItem = this.showPlasmaTechnology;
                         break;
                     }
 
@@ -557,11 +577,15 @@
 
                         const fakePlanet = { buildings: { production: {}, facilities: {} } } as PlanetData;
                         planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
+
+                        yieldItem = this.astrophysicsSettings.show;
                         break;
                     }
                 }
 
-                yield bestItem;
+                if(yieldItem) {
+                    yield bestItem;
+                }
 
                 curItems++;
                 if (curItems >= itemsPerTimeout) {
@@ -757,7 +781,13 @@
                     },
                     activeItems: {
                         ...planet.activeItems,
-                        //TODO: active items
+                        ...planetSettings.activeItems.reduce(
+                            (acc, item) => {
+                                acc[item] = 'permanent';
+                                return acc;
+                            },
+                            {} as Partial<Record<ItemHash, number | "permanent">>
+                        ),
                     },
                     buildings: {
                         production: {
@@ -868,9 +898,6 @@
 
             return this.amortizationItems
                 .map(item => ({
-                    visible: (item.type == 'mine' && (this.planetSettings[item.planetId]?.show ?? this.astrophysicsSettings.show))
-                        || (item.type == 'plasma-technology' && this.showPlasmaTechnology)
-                        || (item.type == 'astrophysics-and-colony' && this.astrophysicsSettings.show),
                     cost: item.cost,
                     costMsu: item.costMsu,
                     productionDelta: item.productionDelta,
@@ -886,9 +913,7 @@
 
         @Watch('items')
         private onItemsChanged(items: AmortizationTableItem[]) {
-            const visibleItems = items.filter(item => item.visible);
-
-            if (visibleItems.length < 100) {
+            if (items.length < 100) {
                 this.queueTimeout(() => this.insertNextAmortizationItems(20));
             }
         }
@@ -943,7 +968,6 @@
     type AmortizationTableItemWhat = AmortizationMineTableItem | AmortizationPlasmaTechnologyTableItem | AmortizationAstrophysicsTableItem;
 
     interface AmortizationTableItem {
-        visible: boolean;
         what: AmortizationTableItemWhat;
         cost: Cost;
         costMsu: number;
