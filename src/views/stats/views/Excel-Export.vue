@@ -8,9 +8,6 @@
 
     @Component({})
     export default class ExcelExport extends Vue {
-        @Prop({ required: true, type: String })
-        private prop!: string;
-
 
     }
 </script>
