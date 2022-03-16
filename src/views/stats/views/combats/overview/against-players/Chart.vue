@@ -1,30 +1,44 @@
 <template>
-    <stats-chart
-        :datasets="datasets"
-        :filter="(combat) => filterCombat(combat)"
-        :firstDay="firstDay"
-        :itemsPerDay="reportsPerDay"
-    >
-        <template #tooltip-footer="{ datasets }">
-            <template
-                v-if="getVisibleDatasets(datasets).length < datasets.length"
-            >
+    <div class="chart-container">
+        <stats-chart
+            :datasets="datasets"
+            :filter="(combat) => filterCombat(combat)"
+            :firstDay="firstDay"
+            :itemsPerDay="reportsPerDay"
+        >
+            <template #tooltip-footer="{ datasets }">
+                <template
+                    v-if="getVisibleDatasets(datasets).length < datasets.length"
+                >
+                    <div class="footer-item">
+                        <div
+                            class="number"
+                            v-text="
+                                $number(getSum(getVisibleDatasets(datasets)))
+                            "
+                        />
+                        <div>LOCA: Combats</div>
+                    </div>
+                    <hr />
+                </template>
+
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$number(getSum(getVisibleDatasets(datasets)))"
-                    />
+                    <div class="number" v-text="$number(getSum(datasets))" />
                     <div>LOCA: Combats</div>
                 </div>
-                <hr />
+            </template>
+        </stats-chart>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
             </template>
 
-            <div class="footer-item">
-                <div class="number" v-text="$number(getSum(datasets))" />
-                <div>LOCA: Combats</div>
-            </div>
-        </template>
-    </stats-chart>
+            <combat-result-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -35,13 +49,18 @@
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            CombatResultColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get colors() {
             return SettingsDataModule.settings.colors.combatResults;
         }
@@ -86,5 +105,12 @@
         .number {
             text-align: right;
         }
+    }
+
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
     }
 </style>

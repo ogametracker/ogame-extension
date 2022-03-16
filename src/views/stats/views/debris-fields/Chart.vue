@@ -1,9 +1,21 @@
 <template>
-    <stats-chart
-        :datasets="datasets"
-        :firstDay="firstDay"
-        :itemsPerDay="reportsPerDay"
-    />
+    <div class="chart-container">
+        <stats-chart
+            :datasets="datasets"
+            :firstDay="firstDay"
+            :itemsPerDay="reportsPerDay"
+        />
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <resource-color-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -13,13 +25,18 @@
     import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
+            ResourceColorSettings,
         },
     })
     export default class Charts extends Vue {
+
+        private showSettings = false;
+
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
         }
@@ -53,7 +70,7 @@
                     label: 'LOCA: Total Units (MSU)',
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0), 
+                    getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
                     stack: false,
                     showAverage: true,
                 }
@@ -61,3 +78,11 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>
