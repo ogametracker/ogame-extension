@@ -13,6 +13,7 @@
 </script>
 <style lang="scss" scoped>
     .reset-button {
+        background: rgba(var(--color), 0.25) !important;
         font-size: 14px;
         display: inline-flex;
         align-items: baseline;
@@ -22,7 +23,7 @@
         padding: 0 4px;
 
         &:hover {
-            background: rgba(var(--color), 0.3);
+            background: rgba(var(--color), 0.5) !important;
         }
 
         > .mdi {

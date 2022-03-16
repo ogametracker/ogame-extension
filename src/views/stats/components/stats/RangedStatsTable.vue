@@ -4,6 +4,7 @@
         :items="rows"
         :footer-items="footerRows"
         :cell-class-provider="(value) => getCellClass(value)"
+        class="ranged-stats-table"
     >
         <!-- oh god this is ugly -->
         <template
