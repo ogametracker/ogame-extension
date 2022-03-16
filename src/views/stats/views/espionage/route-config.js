@@ -1,5 +1,5 @@
 module.exports = {
     meta: {
-        color: '#ffca00',
+        color: '#cb9913',
     },
 };

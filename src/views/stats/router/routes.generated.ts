@@ -28,6 +28,7 @@ import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
+import viewsespionageIndex from '@stats/views/espionage/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
 import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
@@ -80,7 +81,7 @@ const routes: RouteConfig[] = [
         children: [
             {
                 meta: {
-                    color: "#ffc800"
+                    color: "#ffca00"
                 },
                 path: "donate",
                 name: "donate",
@@ -295,6 +296,14 @@ const routes: RouteConfig[] = [
                         ]
                     }
                 ]
+            },
+            {
+                meta: {
+                    color: "#cb9913"
+                },
+                path: "espionage",
+                name: "espionage",
+                component: viewsespionageIndex
             },
             {
                 meta: {

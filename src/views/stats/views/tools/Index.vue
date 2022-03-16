@@ -1,10 +1,11 @@
 <template>
     <div>
-        <input type="text" v-model="text" />
+        TODO: Tools
+        <!-- <input type="text" v-model="text" />
         {{ text }}
         <hr />
         <input type="number" v-model.number="number" :step="0.1" :min="0" :max="10.1" />
-        {{ number }}
+        {{ number }} -->
     </div>
 </template>
 
@@ -13,14 +14,14 @@
 
     @Component({})
     export default class Index extends Vue {
-        private text = 'Text';
-        private number = 5.55;
+        // private text = 'Text';
+        // private number = 5.55;
 
-        @Watch('number')
-        private onNumberChanged(newValue: string | number) {
-            if(isNaN(this.number) || newValue == '') {
-                this.number = 0;
-            }
-        }
+        // @Watch('number')
+        // private onNumberChanged(newValue: string | number) {
+        //     if(isNaN(this.number) || newValue == '') {
+        //         this.number = 0;
+        //     }
+        // }
     }
 </script>

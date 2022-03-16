@@ -69,7 +69,7 @@
                     </div>
                 </template>
             </nav>
-            <main>
+            <main :class="activeTab ? activeTab.mainClass : ''">
                 <router-view />
             </main>
         </template>
@@ -125,6 +125,7 @@
         noNavItem?: boolean;
         color?: string;
         class?: string;
+        mainClass?: string;
         customAction?: () => void;
 
         keyboardKey?: string;
@@ -154,6 +155,12 @@
         private get isIframeMode() {
             const params = new URLSearchParams(location.search);
             return params.get('iframe') != null;
+        }
+
+        private get activeTab(): Tab | null {
+            return this.tabs.find(tab => tab.to != null &&
+                this.$route.matched.some(route => route.name == tab.to?.name)
+            ) ?? null;
         }
 
         private get tabs(): Tab[] {
@@ -215,6 +222,14 @@
                     keyboardIcon: 'mdi mdi-numeric-7',
                 },
                 {
+                    key: 'espionage',
+                    to: { name: 'espionage' },
+                    icon: 'mdi mdi-eye-outline',
+                    label: 'LOCA: Espionage',
+                    keyboardKey: '8',
+                    keyboardIcon: 'mdi mdi-numeric-8',
+                },
+                {
                     key: 'space',
                     style: {
                         'flex-grow': 1
@@ -241,7 +256,8 @@
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
                     label: 'LOCA: Donate',
-                    class: 'donate',
+                    class: 'donate',//TODO: more custom styling 
+                    mainClass: 'donate-page',
                 },
                 {
                     key: 'discord',
@@ -505,7 +521,27 @@
         }
     }
 
-    .nav-item.donate:not(:hover):not(.nav-item-active) {
-        color: rgb(var(--color));
+    .nav-item.donate {
+        font-weight: bold;
+
+        &:not(:hover):not(.nav-item-active) {
+            color: rgb(var(--color));
+        }
+
+        &:hover {
+            background: rgba(var(--color), 0.5);
+            color: black;
+        }
+
+        &.nav-item-active,
+        &.nav-item-active:hover {
+            background: rgb(var(--color));
+            color: black;
+        }
+    }
+
+    main.donate-page {
+        background: black linear-gradient(180deg, rgb(var(--color)), #ffc165);
+        color: black;
     }
 </style>
