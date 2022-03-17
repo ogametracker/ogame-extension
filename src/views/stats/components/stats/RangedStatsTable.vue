@@ -65,10 +65,10 @@
     import { Prop } from 'vue-property-decorator';
     import { Component, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { _dev_DateRanges } from '@stats/_dev/DateRanges';
     import { isInRange } from '@stats/utils/dateRanges';
     import { _throw } from '@/shared/utils/_throw';
     import startOfDay from 'date-fns/startOfDay/index';
+import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface RangeStatsTableItemWithDate {
         date: number;
@@ -135,9 +135,13 @@
             return this.items.some(item => 'items' in item);
         }
 
+        private get dateRanges() {
+            return SettingsDataModule.settings.dateRanges;
+        }
+
         private get dataItemsByRange(): T[][] {
             const dataItems = this.dataItems;
-            const dataItemsByRange: T[][] = _dev_DateRanges.map(() => []);
+            const dataItemsByRange: T[][] = this.dateRanges.map(() => []);
 
             dataItems.forEach(item => {
                 const isInFilter = this.filter(item);
@@ -145,7 +149,7 @@
                     return;
                 }
 
-                _dev_DateRanges.forEach((range, i) => {
+                this.dateRanges.forEach((range, i) => {
                     if (isInRange(item.date, range)) {
                         dataItemsByRange[i].push(item);
                     }
@@ -171,7 +175,7 @@
                 });
             }
 
-            columns.push(..._dev_DateRanges.map((range, i) => ({
+            columns.push(...this.dateRanges.map((range, i) => ({
                 key: i,
                 label: range.label ?? 'LOCA: Since <first day>',
                 formatter: (value: number) => this.$number(value, this.numberFormatOptions),
@@ -204,7 +208,7 @@
         private get rows(): RangedStatsTableRow[] {
             const dataItemsByRange = this.dataItemsByRange;
 
-            const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
+            const allRangeIndex = this.dateRanges.findIndex(range => range.type == 'all')
                 ?? _throw(`failed to find range 'all'`);
             const dataItemDays = dataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
             const daysWithDataItems = new Set(dataItemDays).size;
@@ -225,7 +229,7 @@
                 const row: SimpleRangedStatsTableRow = {
                     label: item.label,
 
-                    ..._dev_DateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
+                    ...this.dateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
                 };
 
                 const allRangeValue = row[allRangeIndex];
@@ -249,7 +253,7 @@
         private get footerRows(): RangedStatsTableRow[] {
             const dataItemsByRange = this.dataItemsByRange;
 
-            const allRangeIndex = _dev_DateRanges.findIndex(range => range.type == 'all')
+            const allRangeIndex = this.dateRanges.findIndex(range => range.type == 'all')
                 ?? _throw(`failed to find range 'all'`);
             const dataItemDays = dataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
             const daysWithDataItems = new Set(dataItemDays).size;
@@ -257,7 +261,7 @@
             return this.footerItems.map(item => {
                 const row: RangedStatsTableRow = {
                     label: item.label,
-                    ..._dev_DateRanges.map((_, rangeIndex) => 'getValue' in item
+                    ...this.dateRanges.map((_, rangeIndex) => 'getValue' in item
                         ? item.getValue(dataItemsByRange[rangeIndex])
                         : item.items.reduce((acc, i) => acc + i.getValue(dataItemsByRange[rangeIndex]), 0)
                     ),

@@ -47,6 +47,7 @@
                 rgba(var(--color), 0.1),
                 rgba(var(--color), 0.2)
             );
+        width: max-content;
 
         &.floating-menu--left {
             right: 0;

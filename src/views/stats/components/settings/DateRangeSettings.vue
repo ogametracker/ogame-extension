@@ -21,23 +21,63 @@
                         <td />
                     </tr>
                 </thead>
-                <draggable tag="tbody" v-model="itemsTest" handle=".grab">
-                    <tr v-for="(item, i) in itemsTest" :key="i">
+                <draggable
+                    tag="tbody"
+                    v-model="items"
+                    handle=".grab"
+                    @change="onItemsUpdated()"
+                >
+                    <tr v-for="(range, i) in items" :key="i">
                         <td>
                             <span class="grab mdi mdi-drag" />
                         </td>
                         <td>
                             <span
-                                v-if="item.range.type != 'all'"
+                                v-if="range.type != 'all'"
                                 class="delete mdi mdi-delete"
-                                @click="deleteRange(item.range)"
+                                @click="deleteRange(range)"
                             />
                         </td>
-                        <td v-text="item.label" />
-                        <td v-text="item.type" />
-                        <td v-text="item.skip" />
-                        <td v-text="item.take" />
-                        <td v-text="item.rangeText" />
+                        <td>
+                            <input
+                                v-if="range.type != 'all'"
+                                type="text"
+                                v-model.lazy="range.label"
+                                @change="onItemsUpdated()"
+                            />
+                            <span v-else v-text="'LOCA: Since <first day>'" />
+                        </td>
+                        <td>
+                            <select
+                                v-if="range.type != 'all'"
+                                v-model="range.type"
+                                @change="onItemsUpdated()"
+                            >
+                                <option
+                                    v-for="rangeType in rangeTypes"
+                                    :key="rangeType"
+                                    :value="rangeType"
+                                    v-text="`LOCA: ${rangeType}`"
+                                />
+                            </select>
+                        </td>
+                        <td>
+                            <input
+                                v-if="range.type != 'all'"
+                                type="number"
+                                v-model="range.skip"
+                                @change="onItemsUpdated()"
+                            />
+                        </td>
+                        <td>
+                            <input
+                                v-if="range.type != 'all'"
+                                type="number"
+                                v-model="range.take"
+                                @change="onItemsUpdated()"
+                            />
+                        </td>
+                        <td v-text="getRangeText(range)" />
                     </tr>
                 </draggable>
                 <tfoot>
@@ -58,24 +98,14 @@
 </template>
 
 <script lang="ts">
-    import { DateRange, FullDateRangeType } from '@/shared/models/settings/DateRange';
+    import { DateRange, DateRangeType, FullDateRangeType, NormalDateRange } from '@/shared/models/settings/DateRange';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { getRangeDays } from '../../utils/dateRanges';
     import ResetButton from './ResetButton.vue';
     import draggable from 'vuedraggable';
-
-    interface DateRangeSettingsItem {
-        label: string;
-        type: FullDateRangeType;
-        skip: number;
-        take: number;
-        rangeText: string;
-
-        range: DateRange;
-    }
 
     @Component({
         components: {
@@ -85,7 +115,15 @@
     })
     export default class DateRangeSettings extends Vue {
 
-        private get columns(): GridTableColumn<keyof DateRangeSettingsItem | 'delete' | 'drag'>[] {
+        private items: DateRange[] = [];
+        private readonly rangeTypes: DateRangeType[] = [
+            'day',
+            'week',
+            'month',
+            'year',
+        ];
+
+        private get columns(): GridTableColumn<keyof NormalDateRange | 'delete' | 'drag' | 'rangeText'>[] {
             return [
                 { key: 'drag' },
                 { key: 'delete' },
@@ -109,49 +147,52 @@
             ];
         }
 
-        private itemsTest: DateRangeSettingsItem[] = [];
+        private getRangeText(range: DateRange): string {
+            if (range.type == 'all') {
+                return '';
+            }
 
-        mounted() {
-            this.itemsTest = this.items;
+            const rangeDays = getRangeDays(range);
+            return `${this.$date(rangeDays.firstDay)} - ${this.$date(rangeDays.lastDay)}`;
         }
 
-        private get items(): DateRangeSettingsItem[] {
-            return SettingsDataModule.settings.dateRanges.map(range => {
-                const rangeDays = getRangeDays(range);
-                let rangeText = '';
-                if (range.type != 'all') {
-                    rangeText = `${this.$date(rangeDays.firstDay)} - ${this.$date(rangeDays.lastDay)}`;
-                }
-
-                return {
-                    label: range.label ?? 'LOCA: Since <first day>',
-                    type: range.type,
-                    skip: range.type == 'all' ? 0 : range.skip,
-                    take: range.type == 'all' ? 0 : range.take,
-                    rangeText,
-
-                    range,
-                };
-            });
+        private mounted() {
+            this.initItems();
         }
 
-        private set items(value: DateRangeSettingsItem[]) {
-            console.log('set', value);
+        private initItems() {
+            this.items = [...SettingsDataModule.settings.dateRanges];
         }
 
-        private get footerItems(): {}[] {
-            return [{}];
-        }
-
-        private deleteRange(range: DateRange) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                dateRanges: SettingsDataModule.settings.dateRanges.filter(r => r != range),
-            });
+        private deleteRange(item: DateRange) {
+            this.items = this.items.filter(i => i != item);
+            this.onItemsUpdated();
         }
 
         private addNewRange() {
-            //TODO: add new date range
+            this.items.push({
+                type: 'day',
+                skip: 0,
+                take: 1,
+                label: 'LOCA: New Range',
+            });
+            this.onItemsUpdated();
+        }
+
+        private onItemsUpdated() {
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                dateRanges: [...this.items],
+            });
+        }
+
+        private get settings() {
+            return SettingsDataModule.settings;
+        }
+
+        @Watch('settings')
+        private onSettingsChanged() {
+            this.initItems();
         }
 
 
@@ -162,6 +203,8 @@
                 ...SettingsDataModule.settings,
                 dateRanges: defaultRanges,
             });
+
+            this.initItems();
         }
     }
 </script>
