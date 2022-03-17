@@ -1,13 +1,5 @@
 <template>
     <div>
-        <span>
-            LOCA: Settings for the time spans of the columns of the tables. You
-            can change the order of the columns by dragging the respective rows
-            below to the desired positions.
-        </span>
-
-        <reset-button @reset="resetDateRanges()" />
-
         <div class="table">
             <table>
                 <thead>
@@ -18,7 +10,9 @@
                         <td v-text="'LOCA: Type'" />
                         <td v-text="'LOCA: Range start'" />
                         <td v-text="'LOCA: Range contains'" />
-                        <td />
+                        <td>
+                            <reset-button @reset="resetDateRanges()" />
+                        </td>
                     </tr>
                 </thead>
                 <draggable
