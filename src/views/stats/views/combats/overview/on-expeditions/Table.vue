@@ -1,11 +1,23 @@
 <template>
-    <ranged-stats-table
-        :dataItems="combats"
-        :filter="(combat) => filterCombat(combat)"
-        :items="items"
-        :footerItems="footerItems"
-        show-average
-    />
+    <div class="table-container">
+        <ranged-stats-table
+            :dataItems="combats"
+            :filter="(combat) => filterCombat(combat)"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+        />
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <date-range-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -14,13 +26,17 @@
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
+            DateRangeSettings,
         },
     })
     export default class Table extends Vue {
+        private showSettings = false;
+
         private get combats() {
             return CombatReportDataModule.reports;
         }
@@ -46,3 +62,12 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>

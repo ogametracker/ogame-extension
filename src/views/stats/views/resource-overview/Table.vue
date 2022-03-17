@@ -1,21 +1,33 @@
 <template>
-    <div>
-        <label>
-            <input type="checkbox" v-model="showDetailedBreakdown" />
-            LOCA: Show detailed breakdown
-        </label>
-        <ranged-stats-table
-            :dataItems="events"
-            :items="items"
-            :footerItems="footerItems"
-            show-average
-        >
-            <template #cell-label="{ value }">
-                <span v-text="value" />
+    <div class="table-container">
+        <div>
+            <ranged-stats-table
+                :dataItems="events"
+                :items="items"
+                :footerItems="footerItems"
+                show-average
+            >
+                <template #cell-label="{ value }">
+                    <span v-text="value" />
 
-                <o-resource :resource="value" :size="resourceIconSize" />
+                    <o-resource :resource="value" :size="resourceIconSize" />
+                </template>
+            </ranged-stats-table>
+            <label>
+                <input type="checkbox" v-model="showDetailedBreakdown" />
+                LOCA: Show detailed breakdown
+            </label>
+        </div>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
             </template>
-        </ranged-stats-table>
+
+            <date-range-settings />
+        </floating-menu>
     </div>
 </template>
 
@@ -33,6 +45,7 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { getResources } from '../expeditions/ships/resources/getResources';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     type Event =
@@ -43,9 +56,12 @@
     @Component({
         components: {
             RangedStatsTable,
+            DateRangeSettings,
         },
     })
     export default class Table extends Vue {
+        private showSettings = false;
+
         private get includeFoundShipsFactor(): Record<ResourceType, number> {
             const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
             return {
@@ -165,3 +181,12 @@
     }
 
 </script>
+<style lang="scss" scoped>
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>

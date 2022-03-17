@@ -1,16 +1,28 @@
 <template>
-    <ranged-stats-table
-        :dataItems="combats"
-        :items="items"
-        :footerItems="footerItems"
-        show-average
-    >
-        <template #cell-label="{ value }">
-            <span v-text="value" />
+    <div class="table-container">
+        <ranged-stats-table
+            :dataItems="combats"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+        >
+            <template #cell-label="{ value }">
+                <span v-text="value" />
 
-            <o-resource :resource="value" size="24px" />
-        </template>
-    </ranged-stats-table>
+                <o-resource :resource="value" size="24px" />
+            </template>
+        </ranged-stats-table>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <date-range-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -19,14 +31,18 @@
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
+            DateRangeSettings,
         },
     })
     export default class Table extends Vue {
+        private showSettings = false;
+
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
         }
@@ -54,9 +70,9 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
                 {
                     label: `LOCA: Total (MSU)`,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc 
-                            + expo.loot.metal 
-                            + expo.loot.crystal * this.msuConversionRates.crystal 
+                        (acc, expo) => acc
+                            + expo.loot.metal
+                            + expo.loot.crystal * this.msuConversionRates.crystal
                             + expo.loot.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
@@ -65,3 +81,12 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
         }
     }
 </script>
+<style lang="scss" scoped>
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>

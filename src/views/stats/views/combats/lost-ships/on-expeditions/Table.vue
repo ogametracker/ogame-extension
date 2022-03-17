@@ -1,17 +1,29 @@
 <template>
-    <ranged-stats-table
-        :dataItems="combats"
-        :filter="(combat) => filterCombat(combat)"
-        :items="items"
-        :footerItems="footerItems"
-        show-average
-    >
-        <template #cell-label="{ value }">
-            <span v-text="value" />
+    <div class="table-container">
+        <ranged-stats-table
+            :dataItems="combats"
+            :filter="(combat) => filterCombat(combat)"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+        >
+            <template #cell-label="{ value }">
+                <span v-text="value" />
 
-            <o-ship :ship="shipTable[value]" size="24px" />
-        </template>
-    </ranged-stats-table>
+                <o-ship :ship="shipTable[value]" size="24px" />
+            </template>
+        </ranged-stats-table>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <date-range-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -22,13 +34,17 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { OShipType } from '@/views/stats/components/common/ogame/OShip.vue';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
+            DateRangeSettings,
         },
     })
     export default class Table extends Vue {
+        private showSettings = false;
+
         private get combats() {
             return CombatReportDataModule.reports;
         }
@@ -77,3 +93,12 @@
         };
     }
 </script>
+<style lang="scss" scoped>
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>

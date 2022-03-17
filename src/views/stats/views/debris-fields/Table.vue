@@ -1,16 +1,28 @@
 <template>
-    <ranged-stats-table
-        :dataItems="debrisFieldReports"
-        :items="items"
-        :footerItems="footerItems"
-        show-average
-    >
-        <template #cell-label="{ value }">
-            <span v-text="value" />
+    <div class="table-container">
+        <ranged-stats-table
+            :dataItems="debrisFieldReports"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+        >
+            <template #cell-label="{ value }">
+                <span v-text="value" />
 
-            <o-resource :resource="value" size="24px" />
-        </template>
-    </ranged-stats-table>
+                <o-resource :resource="value" size="24px" />
+            </template>
+        </ranged-stats-table>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <date-range-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -21,13 +33,17 @@
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
     import { DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
+            DateRangeSettings,
         },
     })
     export default class Table extends Vue {
+        private showSettings = false;
+
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
         }
@@ -60,3 +76,12 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
+    }
+</style>
