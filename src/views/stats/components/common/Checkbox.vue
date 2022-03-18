@@ -1,6 +1,5 @@
 <template>
     <span class="checkbox" @click="checked = !checked">
-        <span v-if="label != null" v-text="label" />
         <span class="checkmark">
             <span
                 class="mdi"
@@ -13,6 +12,8 @@
             />
             <span class="check-icon mdi mdi-check" v-if="checked" />
         </span>
+        
+        <span v-if="label != null" v-text="label" />
     </span>
 </template>
 
@@ -30,7 +31,6 @@
 
         @Prop({ required: false, type: String, default: () => null })
         private label!: string | null;
-
     }
 </script>
 <style lang="scss" scoped>

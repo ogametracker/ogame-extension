@@ -13,10 +13,6 @@
                     <o-resource :resource="value" :size="resourceIconSize" />
                 </template>
             </ranged-stats-table>
-            <label>
-                <input type="checkbox" v-model="showDetailedBreakdown" />
-                LOCA: Show detailed breakdown
-            </label>
         </div>
 
         <floating-menu v-model="showSettings" left>
@@ -27,6 +23,7 @@
             </template>
 
             <date-range-settings />
+            <detailed-resource-balance-settings />
         </floating-menu>
     </div>
 </template>
@@ -46,6 +43,7 @@
     import { getResources } from '../expeditions/ships/resources/getResources';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     type Event =
@@ -57,6 +55,7 @@
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            DetailedResourceBalanceSettings,
         },
     })
     export default class Table extends Vue {
@@ -83,7 +82,9 @@
             ];
         }
 
-        private showDetailedBreakdown = SettingsDataModule.settings.showDetailedResourceBalance;
+        private get showDetailedBreakdown() {
+            return SettingsDataModule.settings.showDetailedResourceBalance;
+        }
 
         private get resourceIconSize() {
             if (this.showDetailedBreakdown) {

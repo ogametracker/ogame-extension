@@ -11,12 +11,8 @@
 
         <div class="body">
             <template v-if="toggleable">
-                <span style="grid-column: 1 / span 2">
-                    <checkbox
-                        v-model="settings.show"
-                        :label="'LOCA: Show in result'"
-                    />
-                </span>
+                <span v-text="'LOCA: Show in result'" />
+                <checkbox v-model="settings.show" />
             </template>
 
             <span>LOCA: Position</span>

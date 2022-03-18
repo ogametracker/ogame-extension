@@ -20,16 +20,6 @@
                     </div>
 
                     <div>
-                        <h3>LOCA: Plasmatechnology</h3>
-                        <div class="plasma-tech-settings">
-                            <checkbox
-                                v-model="showPlasmaTechnology"
-                                :label="'LOCA: Show plasmatech in result'"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
                         <h3>LOCA: Astrophysics</h3>
                         <div class="astrophysics-settings">
                             <checkbox
@@ -39,6 +29,16 @@
 
                             <amortization-planet-settings-inputs
                                 v-model="astrophysicsSettings.planet"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>LOCA: Plasmatechnology</h3>
+                        <div class="plasma-tech-settings">
+                            <checkbox
+                                v-model="showPlasmaTechnology"
+                                :label="'LOCA: Show plasmatech in result'"
                             />
                         </div>
                     </div>
