@@ -1,34 +1,6 @@
 <template>
     <div class="player-settings">
-        <span>LOCA: MSU conversion rates</span>
-        <span class="gap">
-            <span>
-                <o-resource resource="metal" />
-                <input type="number" value="1" readonly />
-            </span>
-
-            <span>
-                <o-resource resource="crystal" />
-                <input
-                    type="number"
-                    v-model.number="settings.msuConversionRates.crystal"
-                    min="1"
-                    max="3"
-                    step="0.01"
-                />
-            </span>
-
-            <span>
-                <o-resource resource="deuterium" />
-                <input
-                    type="number"
-                    v-model.number="settings.msuConversionRates.deuterium"
-                    min="2"
-                    max="5"
-                    step="0.01"
-                />
-            </span>
-        </span>
+        <msu-conversion-rate-settings style="display: contents;" />
 
         <span>LOCA: Officers</span>
         <span class="gap">
@@ -98,6 +70,7 @@
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
     import { OPlayerClassType } from '../../../common/ogame/OPlayerClass.vue';
     import { OAllianceClassType } from '../../../common/ogame/OAllianceClass.vue';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     export interface AmortizationPlayerSettings {
         msuConversionRates: {
@@ -117,7 +90,11 @@
         levelAstrophysics: number;
     }
 
-    @Component({})
+    @Component({
+        components: {
+            MsuConversionRateSettings,
+        },
+    })
     export default class AmortizationPlayerSettingsInputs extends Vue {
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })

@@ -48,6 +48,8 @@
                 rgba(var(--color), 0.2)
             );
         width: max-content;
+        padding: 8px;
+        border-radius: 8px;
 
         &.floating-menu--left {
             right: 0;

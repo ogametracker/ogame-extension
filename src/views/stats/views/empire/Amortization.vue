@@ -1,7 +1,7 @@
 <template>
     <div class="amortization">
         <div class="amortization-settings">
-            <button @click="showSettings = !showSettings">
+            <button @click="toggleSettings()">
                 <span class="mdi mdi-cog" />
                 <span class="mdi mdi-menu-down" v-if="!showSettings" />
                 <span class="mdi mdi-menu-up" v-else />
@@ -55,9 +55,6 @@
                         </div>
                     </div>
                 </div>
-
-                <button @click="initItems()">LOCA: Update (REMOVE ME)</button>
-                <hr />
             </div>
         </div>
 
@@ -392,6 +389,15 @@
             this.initSettings();
 
             this.initItems();
+        }
+
+        private toggleSettings() {
+            if(!this.showSettings) {
+                this.showSettings = true;
+            } else {
+                this.showSettings = false;
+                this.initItems();
+            }
         }
 
         private initItems(): void {

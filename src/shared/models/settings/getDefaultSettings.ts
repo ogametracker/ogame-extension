@@ -41,14 +41,18 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             },
             { type: 'all' },
         ],
+        lostShipsResourceUnits: {
+            factor: 0.35,
+            deuteriumFactor: 0.35,
+        },
         showDetailedResourceBalance: false,
         msuConversionRates: {
             crystal: 2,
             deuterium: 3,
         },
         expeditionFoundShipsResourceUnits: {
-            factor: 1,
-            deuteriumFactor: 1,
+            factor: 0.35,
+            deuteriumFactor: 0.35,
         },
         extensionLanguage: language,
         defaultRoutes: {},

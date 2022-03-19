@@ -21,6 +21,11 @@ export interface MsuConversionRates {
     deuterium: number;
 }
 
+export interface ShipResourceUnitsFactors {
+    factor: number;
+    deuteriumFactor: number;
+}
+
 export interface Settings {
     extensionLanguage: LanguageKey;
 
@@ -28,11 +33,9 @@ export interface Settings {
     colors: ColorSettings;
     msuConversionRates: MsuConversionRates;
 
+    lostShipsResourceUnits: ShipResourceUnitsFactors;
     showDetailedResourceBalance: boolean;
-    expeditionFoundShipsResourceUnits: {
-        factor: number;
-        deuteriumFactor: number;
-    };
+    expeditionFoundShipsResourceUnits: ShipResourceUnitsFactors;
 
     defaultRoutes: Record<string, string | undefined>;
 }

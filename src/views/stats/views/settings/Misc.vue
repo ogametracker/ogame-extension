@@ -11,6 +11,19 @@
 
         <div class="fake-table">
             <div class="fake-table-header">
+                <span
+                    v-text="
+                        'LOCA: Include resource units of found ships on expeditions with factors:'
+                    "
+                />
+            </div>
+            <div class="fake-table-body">
+                <expedition-ship-resource-units-factor-settings />
+            </div>
+        </div>
+
+        <div class="fake-table">
+            <div class="fake-table-header">
                 <span v-text="'LOCA: Detailed resource balance'" />
             </div>
             <div class="fake-table-body">
@@ -34,12 +47,14 @@
     import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExtensionLanguageSettings from '@stats/components/settings/ExtensionLanguageSettings.vue';
+    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
 
     @Component({
         components: {
             DetailedResourceBalanceSettings,
             MsuConversionRateSettings,
             ExtensionLanguageSettings,
+            ExpeditionShipResourceUnitsFactorSettings,
         },
     })
     export default class Misc extends Vue {

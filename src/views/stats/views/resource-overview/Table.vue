@@ -23,6 +23,7 @@
             </template>
 
             <date-range-settings />
+            <hr />
             <detailed-resource-balance-settings />
         </floating-menu>
     </div>

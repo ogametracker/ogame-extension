@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
@@ -44,8 +44,13 @@
         private crystal = 2;
         private deuterium = 3;
 
-        private mounted() {
-            const { crystal, deuterium } = SettingsDataModule.settings.msuConversionRates;
+        private get msuRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
+        @Watch('msuRates', { immediate: true })
+        private onMsuRatesChanged() {
+            const { crystal, deuterium } = this.msuRates;
             this.crystal = crystal;
             this.deuterium = deuterium;
         }
