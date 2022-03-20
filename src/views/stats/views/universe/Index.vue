@@ -1,5 +1,5 @@
 <template>
-    <div>TODO: Points tracking</div>
+    <div>TODO: Universe tracking data here</div>
 </template>
 
 <script lang="ts">

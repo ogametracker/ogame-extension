@@ -219,10 +219,10 @@
                     keyboardIcon: 'mdi mdi-numeric-6',
                 },
                 {
-                    key: 'points',
-                    to: { name: 'points' },
+                    key: 'universe',
+                    to: { name: 'universe' },
                     icon: 'mdi mdi-chart-timeline-variant-shimmer',
-                    label: 'LOCA: Points',
+                    label: 'LOCA: Universe',
                     keyboardKey: '7',
                     keyboardIcon: 'mdi mdi-numeric-7',
                 },
