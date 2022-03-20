@@ -9,14 +9,6 @@ export class EmpireManager extends PersistentDataManager<LocalPlayerData> {
         super(key, 'local-player');
     }
 
-    public async update(action: (data: LocalPlayerData) => LocalPlayerData): Promise<void> {
-        const data = await this.load(false);
-        const updatedData = action(data);
-        this._readLock.release();
-
-        await this.updateData(updatedData);
-    }
-
     protected getDefaultItem(): LocalPlayerData {
         return {
             allianceClass: AllianceClass.none,

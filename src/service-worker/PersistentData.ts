@@ -58,6 +58,14 @@ export abstract class PersistentDataManager<TItem> {
         return this._item ?? _throw(`loaded items but object is still null (key '${this._key}')`)
     }
 
+    public async updateInTransaction(action: (data: TItem) => TItem): Promise<void> {
+        const data = await this.load(false);
+        const updatedData = action(data);
+        this._readLock.release();
+
+        await this.updateData(updatedData);
+    }
+
     public async updateData(data: TItem): Promise<void> {
         await this._readLock.acquire();
         this._item = data;

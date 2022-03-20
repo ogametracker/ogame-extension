@@ -2,7 +2,7 @@ import { Coordinates } from "../models/ogame/common/Coordinates";
 import { PlanetType } from "../models/ogame/common/PlanetType";
 import { parseIntSafe } from "./parseNumbers";
 
-const coordsRegex = /^\[(?<galaxy>\d+):(?<system>\d+):(?<position>\d+)\]$/;
+const coordsRegex = /^\[?(?<galaxy>\d+):(?<system>\d+):(?<position>\d+)\]?$/;
 
 export function parseCoordinates(coords: string, type = PlanetType.planet): Coordinates {
     const match = coords.match(coordsRegex)

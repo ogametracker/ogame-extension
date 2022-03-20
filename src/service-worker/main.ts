@@ -1,3 +1,4 @@
+import { Lock } from "semaphore-async-await";
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { executeMigrations } from "../shared/migrations/executeMigrations";
@@ -9,6 +10,7 @@ import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 import { SettingsService } from "./settings/SettingsService";
+import { UniverseHistoryService } from "./universe-players/UniverseHistoryService";
 
 const services: MessageService[] = [
     new ExpeditionService(),
@@ -16,8 +18,10 @@ const services: MessageService[] = [
     new DebrisFieldReportService(),
     new EmpireService(),
     new SettingsService(),
+    new UniverseHistoryService(),
 ];
 
+const migrationLock = new Lock();
 try {
     chrome.runtime.onInstalled.addListener(() => performMigrations());
 
@@ -27,11 +31,21 @@ try {
 }
 
 async function performMigrations() {
-    _logDebug('performing migrations');
-    await executeMigrations();
+    await migrationLock.acquire();
+    try {
+        _logDebug('performing migrations');
+        await executeMigrations();
+    } catch (error) {
+        //TODO: send notification with error
+        console.error(error);
+    }
+    migrationLock.release();
 }
 
 async function onMessage(message: Message<MessageType, any>) {
+    await migrationLock.wait();
+    migrationLock.release();
+
     _logDebug('got message', performance.now(), message);
 
     for (const service of services) {

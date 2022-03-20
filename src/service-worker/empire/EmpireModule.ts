@@ -24,7 +24,7 @@ export class EmpireModule {
 
     public async updateOfficers(meta: MessageOgameMeta, data: PlayerOfficers): Promise<void> {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.officers = data;
             return localPlayerData;
         });
@@ -32,7 +32,7 @@ export class EmpireModule {
 
     public async updateAlliance(meta: MessageOgameMeta, data: AllianceClass) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.allianceClass = data;
             return localPlayerData;
         });
@@ -40,7 +40,7 @@ export class EmpireModule {
 
     public async updateActiveItems(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetActiveItems>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.planets[data.planetId].activeItems = data.data;
             return localPlayerData;
         });
@@ -48,7 +48,7 @@ export class EmpireModule {
 
     public async updateBuildingLevels(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<BuildingType, number>>>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             const updateFacilities = Object.keys(localPlayerData.planets[data.planetId].buildings.facilities)
                 .map(p => parseIntSafe(p, 10))
                 .filter(b => Object.keys(data.data).map(b => parseIntSafe(b, 10) as BuildingType).includes(b)) as BuildingType[];
@@ -68,7 +68,7 @@ export class EmpireModule {
 
     public async updateBasicPlanets(meta: MessageOgameMeta, data: BasicPlanetData[]) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             // remove old planets that dont exist anymore
             Object.keys(localPlayerData.planets)
                 .map(pid => parseIntSafe(pid, 10))
@@ -105,7 +105,7 @@ export class EmpireModule {
 
     public async updatePlanetDefenses(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetDefenseCounts>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.planets[data.planetId].defense = data.data;
             return localPlayerData;
         });
@@ -113,7 +113,7 @@ export class EmpireModule {
 
     public async updatePlanetShips(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<ShipType, number>>>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             const ships = localPlayerData.planets[data.planetId].ships as Record<ShipType, number>;
 
             Object.keys(data.data)
@@ -125,7 +125,7 @@ export class EmpireModule {
 
     public async updatePlayerClass(meta: MessageOgameMeta, data: PlayerClass) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.playerClass = data;
             return localPlayerData;
         });
@@ -133,7 +133,7 @@ export class EmpireModule {
 
     public async updateResearchLevels(meta: MessageOgameMeta, researchLevels: Partial<Record<ResearchType, number>>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             Object.keys(researchLevels)
                 .map(researchId => parseIntSafe(researchId, 10) as ResearchType)
                 .forEach(researchId => localPlayerData.research[researchId] = researchLevels[researchId]!);
@@ -144,7 +144,7 @@ export class EmpireModule {
 
     public async updateProductionSettings(meta: MessageOgameMeta, data: PlanetDataWrapper<ProductionSettings>) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             const planet = localPlayerData.planets[data.planetId];
             if (!planet.isMoon) {
                 planet.productionSettings = data.data;
@@ -155,7 +155,7 @@ export class EmpireModule {
 
     public async updateUniverseName(meta: MessageOgameMeta, name: string) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.universeName = name;
             return localPlayerData;
         });
@@ -163,7 +163,7 @@ export class EmpireModule {
 
     public async updatePlayerName(meta: MessageOgameMeta, universeName: string) {
         const manager = this.getManager(meta);
-        await manager.update(localPlayerData => {
+        await manager.updateInTransaction(localPlayerData => {
             localPlayerData.name = universeName;
             return localPlayerData;
         });
