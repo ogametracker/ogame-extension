@@ -22,3 +22,12 @@ export function subCost(a: Cost, b: Cost): Cost {
         energy: a.energy - b.energy,
     };
 }
+
+export function multiplyCost(cost: Cost, factor: number): Cost {
+    return {
+        metal: cost.metal * factor,
+        crystal: cost.crystal * factor,
+        deuterium: cost.deuterium * factor,
+        energy: cost.energy * factor,
+    };
+}
