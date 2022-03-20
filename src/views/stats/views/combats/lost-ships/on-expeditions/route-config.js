@@ -1,3 +1,3 @@
 module.exports = {
-    redirect: { name: 'combats/lost-ships/on-expeditions/chart' },
+    redirect: { name: 'combats/lost-ships/on-expeditions/amount' },
 };

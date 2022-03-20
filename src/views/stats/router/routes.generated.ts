@@ -5,11 +5,19 @@ import viewsInfo from '@stats/views/Info.vue';
 import viewscombatsIndex from '@stats/views/combats/Index.vue';
 import viewscombatslostshipsIndex from '@stats/views/combats/lost-ships/Index.vue';
 import viewscombatslostshipsagainstplayersIndex from '@stats/views/combats/lost-ships/against-players/Index.vue';
-import viewscombatslostshipsagainstplayersChart from '@stats/views/combats/lost-ships/against-players/Chart.vue';
-import viewscombatslostshipsagainstplayersTable from '@stats/views/combats/lost-ships/against-players/Table.vue';
+import viewscombatslostshipsagainstplayersamountIndex from '@stats/views/combats/lost-ships/against-players/amount/Index.vue';
+import viewscombatslostshipsagainstplayersamountChart from '@stats/views/combats/lost-ships/against-players/amount/Chart.vue';
+import viewscombatslostshipsagainstplayersamountTable from '@stats/views/combats/lost-ships/against-players/amount/Table.vue';
+import viewscombatslostshipsagainstplayersresourcesIndex from '@stats/views/combats/lost-ships/against-players/resources/Index.vue';
+import viewscombatslostshipsagainstplayersresourcesChart from '@stats/views/combats/lost-ships/against-players/resources/Chart.vue';
+import viewscombatslostshipsagainstplayersresourcesTable from '@stats/views/combats/lost-ships/against-players/resources/Table.vue';
 import viewscombatslostshipsonexpeditionsIndex from '@stats/views/combats/lost-ships/on-expeditions/Index.vue';
-import viewscombatslostshipsonexpeditionsChart from '@stats/views/combats/lost-ships/on-expeditions/Chart.vue';
-import viewscombatslostshipsonexpeditionsTable from '@stats/views/combats/lost-ships/on-expeditions/Table.vue';
+import viewscombatslostshipsonexpeditionsamountIndex from '@stats/views/combats/lost-ships/on-expeditions/amount/Index.vue';
+import viewscombatslostshipsonexpeditionsamountChart from '@stats/views/combats/lost-ships/on-expeditions/amount/Chart.vue';
+import viewscombatslostshipsonexpeditionsamountTable from '@stats/views/combats/lost-ships/on-expeditions/amount/Table.vue';
+import viewscombatslostshipsonexpeditionsresourcesIndex from '@stats/views/combats/lost-ships/on-expeditions/resources/Index.vue';
+import viewscombatslostshipsonexpeditionsresourcesChart from '@stats/views/combats/lost-ships/on-expeditions/resources/Chart.vue';
+import viewscombatslostshipsonexpeditionsresourcesTable from '@stats/views/combats/lost-ships/on-expeditions/resources/Table.vue';
 import viewscombatsoverviewIndex from '@stats/views/combats/overview/Index.vue';
 import viewscombatsoverviewagainstplayersIndex from '@stats/views/combats/overview/against-players/Index.vue';
 import viewscombatsoverviewagainstplayersChart from '@stats/views/combats/overview/against-players/Chart.vue';
@@ -124,41 +132,101 @@ const routes: RouteConfig[] = [
                         children: [
                             {
                                 redirect: {
-                                    name: "combats/lost-ships/against-players/chart"
+                                    name: "combats/lost-ships/against-players/amount"
                                 },
                                 path: "against-players",
                                 name: "combats/lost-ships/against-players",
                                 component: viewscombatslostshipsagainstplayersIndex,
                                 children: [
                                     {
-                                        path: "chart",
-                                        name: "combats/lost-ships/against-players/chart",
-                                        component: viewscombatslostshipsagainstplayersChart
+                                        redirect: {
+                                            name: "combats/lost-ships/against-players/amount/chart"
+                                        },
+                                        path: "amount",
+                                        name: "combats/lost-ships/against-players/amount",
+                                        component: viewscombatslostshipsagainstplayersamountIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "combats/lost-ships/against-players/amount/chart",
+                                                component: viewscombatslostshipsagainstplayersamountChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "combats/lost-ships/against-players/amount/table",
+                                                component: viewscombatslostshipsagainstplayersamountTable
+                                            }
+                                        ]
                                     },
                                     {
-                                        path: "table",
-                                        name: "combats/lost-ships/against-players/table",
-                                        component: viewscombatslostshipsagainstplayersTable
+                                        redirect: {
+                                            name: "combats/lost-ships/against-players/resources/chart"
+                                        },
+                                        path: "resources",
+                                        name: "combats/lost-ships/against-players/resources",
+                                        component: viewscombatslostshipsagainstplayersresourcesIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "combats/lost-ships/against-players/resources/chart",
+                                                component: viewscombatslostshipsagainstplayersresourcesChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "combats/lost-ships/against-players/resources/table",
+                                                component: viewscombatslostshipsagainstplayersresourcesTable
+                                            }
+                                        ]
                                     }
                                 ]
                             },
                             {
                                 redirect: {
-                                    name: "combats/lost-ships/on-expeditions/chart"
+                                    name: "combats/lost-ships/on-expeditions/amount"
                                 },
                                 path: "on-expeditions",
                                 name: "combats/lost-ships/on-expeditions",
                                 component: viewscombatslostshipsonexpeditionsIndex,
                                 children: [
                                     {
-                                        path: "chart",
-                                        name: "combats/lost-ships/on-expeditions/chart",
-                                        component: viewscombatslostshipsonexpeditionsChart
+                                        redirect: {
+                                            name: "combats/lost-ships/on-expeditions/amount/chart"
+                                        },
+                                        path: "amount",
+                                        name: "combats/lost-ships/on-expeditions/amount",
+                                        component: viewscombatslostshipsonexpeditionsamountIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "combats/lost-ships/on-expeditions/amount/chart",
+                                                component: viewscombatslostshipsonexpeditionsamountChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "combats/lost-ships/on-expeditions/amount/table",
+                                                component: viewscombatslostshipsonexpeditionsamountTable
+                                            }
+                                        ]
                                     },
                                     {
-                                        path: "table",
-                                        name: "combats/lost-ships/on-expeditions/table",
-                                        component: viewscombatslostshipsonexpeditionsTable
+                                        redirect: {
+                                            name: "combats/lost-ships/on-expeditions/resources/chart"
+                                        },
+                                        path: "resources",
+                                        name: "combats/lost-ships/on-expeditions/resources",
+                                        component: viewscombatslostshipsonexpeditionsresourcesIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "combats/lost-ships/on-expeditions/resources/chart",
+                                                component: viewscombatslostshipsonexpeditionsresourcesChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "combats/lost-ships/on-expeditions/resources/table",
+                                                component: viewscombatslostshipsonexpeditionsresourcesTable
+                                            }
+                                        ]
                                     }
                                 ]
                             }

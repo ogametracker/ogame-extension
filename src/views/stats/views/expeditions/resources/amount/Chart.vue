@@ -61,6 +61,8 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -76,11 +78,13 @@
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
+            MsuConversionRateSettings,
         },
     })
     export default class Charts extends Vue {

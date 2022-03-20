@@ -1,8 +1,8 @@
 <template>
     <div class="table-container">
         <ranged-stats-table
-            :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
+            :dataItems="items"
+            :filter="(combat) => filterCombat(combat)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -22,7 +22,7 @@
             </template>
 
             <msu-conversion-rate-settings />
-            <expedition-ship-resource-units-factor-settings />
+            <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
@@ -32,70 +32,100 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import { multiplyCost } from '@/shared/models/ogame/common/Cost';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
-    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+    import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
             MsuConversionRateSettings,
-            ExpeditionShipResourceUnitsFactorSettings,
+            LostShipResourceUnitsFactorSettings,
         },
     })
     export default class Table extends Vue {
         private showSettings = false;
 
+        private get colors() {
+            return SettingsDataModule.settings.colors.resources;
+        }
+
+        private get factors() {
+            return SettingsDataModule.settings.lostShipsResourceUnits;
+        }
+
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
         }
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
+        private filterCombat(combat: CombatReport): boolean {
+            return combat.isExpedition;
         }
 
-        private get expos() {
-            return ExpeditionDataModule.expeditions;
+        private get firstDay() {
+            return CombatReportDataModule.firstDay;
         }
 
-        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
+        private get reportsPerDay() {
+            return CombatReportDataModule.reportsPerDay;
+        }
+
+        private get items(): RangedStatsTableItem<CombatReport>[] {
+            const factors: Record<ResourceType, number> = {
+                [ResourceType.metal]: this.factors.factor,
+                [ResourceType.crystal]: this.factors.factor,
+                [ResourceType.deuterium]: this.factors.deuteriumFactor,
+            };
+
             return Object.values(ResourceType).map(resource => ({
                 label: resource,
-                getValue: expos => expos.reduce(
-                    (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource]
+                getValue: reports => reports.reduce(
+                    (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
+                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0)[resource] * factors[resource],
+                        0
                     ), 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
+        private get footerItems(): RangedStatsTableItem<CombatReport>[] {
+            const factors: Record<ResourceType, number> = {
+                [ResourceType.metal]: this.factors.factor,
+                [ResourceType.crystal]: this.factors.factor,
+                [ResourceType.deuterium]: this.factors.deuteriumFactor,
+            };
+
             return [
                 {
                     label: `LOCA: Total`,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                    getValue: reports => reports.reduce(
+                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal + res.deuterium;
+                                const res = multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0);
+                                return acc
+                                    + res.metal * factors.metal
+                                    + res.crystal * factors.crystal
+                                    + res.deuterium * factors.deuterium;
                             }), 0),
                 },
                 {
                     label: `LOCA: Total (MSU)`,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                    getValue: reports => reports.reduce(
+                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
+                                const res = multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0);
+                                return acc
+                                    + res.metal * factors.metal
+                                    + res.crystal * this.msuConversionRates.crystal * factors.crystal
+                                    + res.deuterium * this.msuConversionRates.deuterium * factors.deuterium;
                             }), 0),
                 },
             ];

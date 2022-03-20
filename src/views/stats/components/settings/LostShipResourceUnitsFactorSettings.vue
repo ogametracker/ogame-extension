@@ -1,11 +1,7 @@
 <template>
     <div class="fake-table expedition-ship-resource-units-factor-settings">
         <div class="fake-table-header">
-            <span
-                v-text="
-                    'LOCA: Resource unit factors of ships found on expeditions'
-                "
-            />
+            <span v-text="'LOCA: Resource unit factors of lost ships'" />
         </div>
         <div class="fake-table-body">
             <span class="inputs">
@@ -51,7 +47,7 @@
         private deuteriumFactor = 1;
 
         private get factors() {
-            return SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return SettingsDataModule.settings.lostShipsResourceUnits;
         }
 
         @Watch('factors', { immediate: true })
@@ -64,7 +60,7 @@
         private updateMsuConversionRates() {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
-                expeditionFoundShipsResourceUnits: {
+                lostShipsResourceUnits: {
                     factor: this.factor,
                     deuteriumFactor: this.deuteriumFactor,
                 },

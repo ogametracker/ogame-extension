@@ -2,6 +2,7 @@
     <div class="chart-container">
         <stats-chart
             :datasets="datasets"
+            :filter="(combat) => filterCombat(combat)"
             :firstDay="firstDay"
             :itemsPerDay="reportsPerDay"
         >
@@ -13,42 +14,17 @@
                         <div
                             class="number"
                             v-text="
-                                $number(
-                                    getResourcesAmount(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
+                                $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Resources</div>
-
-                        <div
-                            class="number"
-                            v-text="
-                                $number(
-                                    getResourcesAmountInMsu(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
-                            "
-                        />
-                        <div>LOCA: Resources (MSU)</div>
+                        <div>LOCA: Ships lost</div>
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$number(getResourcesAmount(datasets))"
-                    />
-                    <div>LOCA: Resources (Total)</div>
-
-                    <div
-                        class="number"
-                        v-text="$number(getResourcesAmountInMsu(datasets))"
-                    />
-                    <div>LOCA: Resources (Total, MSU)</div>
+                    <div class="number" v-text="$number(getSum(datasets))" />
+                    <div>LOCA: Ships lost</div>
                 </div>
             </template>
         </stats-chart>
@@ -62,7 +38,9 @@
 
             <msu-conversion-rate-settings />
             <hr />
-            <resource-color-settings />
+            <lost-ship-resource-units-factor-settings />
+            <hr />
+            <ship-color-settings />
         </floating-menu>
     </div>
 </template>
@@ -70,19 +48,25 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
-            ResourceColorSettings,
+            ShipColorSettings,
             MsuConversionRateSettings,
+            LostShipResourceUnitsFactorSettings,
         },
     })
     export default class Charts extends Vue {
@@ -93,8 +77,12 @@
             return SettingsDataModule.settings.colors.resources;
         }
 
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
+        private get factors() {
+            return SettingsDataModule.settings.lostShipsResourceUnits;
+        }
+
+        private filterCombat(combat: CombatReport): boolean {
+            return combat.isExpedition;
         }
 
         private get firstDay() {
@@ -105,28 +93,46 @@
             return CombatReportDataModule.reportsPerDay;
         }
 
+        private get msuConversionRates() {
+            return SettingsDataModule.settings.msuConversionRates;
+        }
+
         private get datasets(): StatsChartDataset<CombatReport>[] {
+            const factors: Record<ResourceType, number> = {
+                [ResourceType.metal]: this.factors.factor,
+                [ResourceType.crystal]: this.factors.factor,
+                [ResourceType.deuterium]: this.factors.deuteriumFactor,
+            };
+
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
                     label: `LOCA: ${resource}`, //LOCA
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (reports: CombatReport[]) => reports.reduce((acc, report) => acc + report.loot[resource], 0),
-                    showAverage: true,
+                    getValue: (reports: CombatReport[]) => reports.reduce(
+                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
+                            (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0)[resource] * factors[resource],
+                            0
+                        ),
+                        0
+                    ),
                 })),
                 {
                     key: 'total',
                     label: 'LOCA: Total Units (MSU)',
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: reports => reports.reduce(
-                        (acc, report) => acc
-                            + report.loot.metal
-                            + report.loot.crystal * this.msuConversionRates.crystal
-                            + report.loot.deuterium * this.msuConversionRates.deuterium,
-                        0
-                    ),
+                    getValue: (reports: CombatReport[]) => reports.reduce(
+                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
+                            (acc, ship) => {
+                                const res = multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0);
+                                return acc
+                                    + res.metal * factors.metal
+                                    + res.crystal * this.msuConversionRates.crystal * factors.crystal
+                                    + res.deuterium * this.msuConversionRates.deuterium * factors.deuterium;
+                            }
+                        ), 0),
                     stack: false,
                     showAverage: true,
                 }
@@ -137,24 +143,8 @@
             return datasets.filter(d => d.visible);
         }
 
-        private getResourcesAmount(datasets: ScollableChartFooterDataset[]): number {
-            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-            return datasets
-                .filter(d => resources.includes(d.key.toString()))
-                .reduce((acc, cur) => acc + cur.value, 0);
-        }
-
-        private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
-            return datasets.reduce((acc, cur) => {
-                if (!(cur.key in msu)) {
-                    return acc;
-                }
-                return acc + cur.value * msu[cur.key as ResourceType];
-            }, 0);
+        private getSum(datasets: ScollableChartFooterDataset[]): number {
+            return datasets.reduce((acc, cur) => acc + cur.value, 0);
         }
     }
 </script>

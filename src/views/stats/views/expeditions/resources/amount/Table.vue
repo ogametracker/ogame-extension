@@ -21,6 +21,8 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -35,11 +37,13 @@
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            MsuConversionRateSettings,
         },
     })
     export default class Table extends Vue {

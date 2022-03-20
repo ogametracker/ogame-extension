@@ -1,22 +1,22 @@
 <template>
-    <tab-view :tabs="tabs" />
+    <page :nav-items="navItems" />
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { Tab } from '@/views/stats/components/common/TabView.vue';
+    import { ListNavItem } from '@stats/components/common/ListNav.vue';
 
     @Component({})
     export default class Index extends Vue {
-        private get tabs(): Tab[] {
+        private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Chart',
-                    to: { name: 'combats/lost-ships/on-expeditions/chart' },
+                    label: 'LOCA: Amount',
+                    to: { name: 'combats/lost-ships/on-expeditions/amount' },
                 },
                 {
-                    label: 'LOCA: Table',
-                    to: { name: 'combats/lost-ships/on-expeditions/table' },
+                    label: 'LOCA: Resource Units',
+                    to: { name: 'combats/lost-ships/on-expeditions/resources' },
                 },
             ];
         }

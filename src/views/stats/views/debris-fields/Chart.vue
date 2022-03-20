@@ -13,6 +13,8 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -26,11 +28,13 @@
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
+            MsuConversionRateSettings,
         },
     })
     export default class Charts extends Vue {

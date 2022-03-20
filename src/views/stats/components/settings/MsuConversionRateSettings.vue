@@ -1,36 +1,40 @@
 <template>
-    <div class="msu-conversion-rate-settings">
-        <span>LOCA: MSU conversion rates</span>
-        <span class="msu-inputs">
-            <span>
-                <o-resource resource="metal" />
-                <input type="number" value="1" readonly />
-            </span>
+    <div class="msu-conversion-rate-settings fake-table">
+        <div class="fake-table-header">
+            <span v-text="'LOCA: MSU conversion rates'" />
+        </div>
+        <div class="fake-table-body">
+            <span class="msu-inputs">
+                <span>
+                    <o-resource resource="metal" />
+                    <input type="number" value="1" readonly />
+                </span>
 
-            <span>
-                <o-resource resource="crystal" />
-                <input
-                    type="number"
-                    v-model.number.lazy="crystal"
-                    @change="updateMsuConversionRates()"
-                    min="1"
-                    max="3"
-                    step="0.01"
-                />
-            </span>
+                <span>
+                    <o-resource resource="crystal" />
+                    <input
+                        type="number"
+                        v-model.number.lazy="crystal"
+                        @change="updateMsuConversionRates()"
+                        min="1"
+                        max="3"
+                        step="0.01"
+                    />
+                </span>
 
-            <span>
-                <o-resource resource="deuterium" />
-                <input
-                    type="number"
-                    v-model.number.lazy="deuterium"
-                    @change="updateMsuConversionRates()"
-                    min="2"
-                    max="5"
-                    step="0.01"
-                />
+                <span>
+                    <o-resource resource="deuterium" />
+                    <input
+                        type="number"
+                        v-model.number.lazy="deuterium"
+                        @change="updateMsuConversionRates()"
+                        min="2"
+                        max="5"
+                        step="0.01"
+                    />
+                </span>
             </span>
-        </span>
+        </div>
     </div>
 </template>
 
@@ -83,6 +87,30 @@
 
         input[type="number"] {
             width: 60px;
+        }
+    }
+
+    .fake-table {
+        border: 1px solid rgba(var(--color), 0.5);
+        border-radius: 4px;
+        display: grid;
+        width: fit-content;
+
+        &-header {
+            background: black
+                linear-gradient(
+                    0deg,
+                    rgba(var(--color), 0.5),
+                    rgba(var(--color), 0.5)
+                );
+            justify-content: center;
+        }
+
+        &-header,
+        &-body {
+            padding: 8px;
+            display: flex;
+            align-items: center;
         }
     }
 </style>

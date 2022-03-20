@@ -15,16 +15,20 @@
             </ranged-stats-table>
         </div>
 
-        <floating-menu v-model="showSettings" left>
+        <floating-menu v-model="showSettings" left class="floating-settings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <date-range-settings />
-            <hr />
-            <detailed-resource-balance-settings />
+            <msu-conversion-rate-settings />
+            <expedition-ship-resource-units-factor-settings />
+            <lost-ship-resource-units-factor-settings />
+            <hr class="three-column" />
+            <detailed-resource-balance-settings class="three-column" />
+            <hr class="three-column" />
+            <date-range-settings class="three-column" />
         </floating-menu>
     </div>
 </template>
@@ -41,10 +45,15 @@
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { getResources } from '../expeditions/ships/resources/getResources';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
+    import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { Ships } from '@/shared/models/ogame/ships/Ships';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+    import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     type Event =
@@ -57,6 +66,9 @@
             RangedStatsTable,
             DateRangeSettings,
             DetailedResourceBalanceSettings,
+            MsuConversionRateSettings,
+            ExpeditionShipResourceUnitsFactorSettings,
+            LostShipResourceUnitsFactorSettings,
         },
     })
     export default class Table extends Vue {
@@ -119,9 +131,11 @@
 
         private getEventResourceAmount(ev: Event, resource: ResourceType): number {
             switch (ev.eventType) {
-                case 'expedition': return this.getExpoResourceAmount(ev, resource);
+                case 'expedition':
+                    return this.getExpoResourceAmount(ev, resource);
 
-                case 'combat-report': return ev.loot[resource];
+                case 'combat-report':
+                    return this.getCombatResourceAmount(ev)[resource];
 
                 case 'debris-field-report': {
                     if (resource == ResourceType.deuterium) {
@@ -141,14 +155,27 @@
 
                 case ExpeditionEventType.fleet: {
 
-                    return getNumericEnumValues(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource] * this.includeFoundShipsFactor[resource],
+                    return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
                         0
                     );
                 }
 
                 default: return 0;
             }
+        }
+
+        private getCombatResourceAmount(combatReport: CombatReport) {
+            const loot: Cost = {
+                ...combatReport.loot,
+                energy: 0,
+            };
+            const lostShipsUnits = getNumericEnumValues<ShipType>(ShipType).reduce(
+                (acc, ship) => addCost(acc, multiplyCost(Ships[ship].getCost(), combatReport.lostShips[ship] ?? 0)),
+                { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
+            );
+
+            return addCost(loot, lostShipsUnits);
         }
 
         private get footerItems(): RangedStatsTableItem<Event>[] {
@@ -190,5 +217,19 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+    }
+
+    .floating-settings::v-deep .floating-menu {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        column-gap: 8px;
+
+        .three-column {
+            grid-column: 1 / span 3;
+        }
+
+        hr {
+            width: 100%;
+        }
     }
 </style>

@@ -19,12 +19,12 @@
                     to: { name: 'settings/colors' },
                 },
                 {
-                    label: 'LOCA: Import/Export',
-                    to: { name: 'settings/import-export' },
-                },
-                {
                     label: 'LOCA: Misc',
                     to: { name: 'settings/misc' },
+                },
+                {
+                    label: 'LOCA: Import/Export',
+                    to: { name: 'settings/import-export' },
                 },
             ];
         }

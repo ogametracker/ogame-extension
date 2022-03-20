@@ -41,7 +41,7 @@
                 </div>
             </template>
         </stats-chart>
-        
+
         <floating-menu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
@@ -49,6 +49,10 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
+            <expedition-ship-resource-units-factor-settings />
+            <hr />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -60,17 +64,23 @@
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { getResources } from './getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { Ships } from '@/shared/models/ogame/ships/Ships';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import { multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
+            MsuConversionRateSettings,
+            ExpeditionShipResourceUnitsFactorSettings,
         },
     })
     export default class Charts extends Vue {
@@ -101,8 +111,8 @@
                     color: this.colors[resource],
                     filled: true,
                     getValue: (expos: ExpeditionEventFleet[]) => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
-                            (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource]
+                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                            (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource]
                         ), 0),
                     showAverage: true,
                 })),
@@ -112,9 +122,9 @@
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
+                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
-                                const res = getResources(ship, expo.fleet[ship] ?? 0);
+                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
                                 return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
                             }
                         ), 0),

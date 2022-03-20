@@ -60,6 +60,12 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
+            <expedition-ship-resource-units-factor-settings />
+            <hr />
+            <lost-ship-resource-units-factor-settings />
+            <hr />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -78,10 +84,15 @@
     import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
     import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getResources } from '../expeditions/ships/resources/getResources';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { Ships } from '@/shared/models/ogame/ships/Ships';
+    import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+    import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
 
     interface DayEvents {
         expeditions: ExpeditionEvent[];
@@ -93,6 +104,9 @@
         components: {
             StatsChart,
             ResourceColorSettings,
+            MsuConversionRateSettings,
+            ExpeditionShipResourceUnitsFactorSettings,
+            LostShipResourceUnitsFactorSettings,
         },
     })
     export default class Charts extends Vue {
@@ -173,7 +187,7 @@
                     getValue: (dayEvents: DayEvents[]) => dayEvents.reduce(
                         (acc, events) => acc
                             + events.expeditions.reduce((acc, expo) => acc + this.getResourceAmount(expo, resource), 0)
-                            + events.combatReports.reduce((acc, combat) => acc + combat.loot[resource], 0)
+                            + events.combatReports.reduce((acc, combat) => acc + this.getCombatResourceAmount(combat)[resource], 0)
                             + events.debrisFieldReports.reduce((acc, report) => acc + (resource == ResourceType.deuterium ? 0 : report[resource]), 0),
                         0
                     ),
@@ -189,7 +203,7 @@
                             (acc, events) => acc
                                 + msu[resource] * (
                                     events.expeditions.reduce((acc, expo) => acc + this.getResourceAmount(expo, resource), 0)
-                                    + events.combatReports.reduce((acc, combat) => acc + combat.loot[resource], 0)
+                                    + events.combatReports.reduce((acc, combat) => acc + this.getCombatResourceAmount(combat)[resource], 0)
                                     + events.debrisFieldReports.reduce((acc, report) => acc + (resource == ResourceType.deuterium ? 0 : report[resource]), 0)
                                 ),
                             0
@@ -235,14 +249,27 @@
                 }
 
                 case ExpeditionEventType.fleet: {
-                    return getNumericEnumValues(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + getResources(ship, expo.fleet[ship] ?? 0)[resource] * this.includeFoundShipsFactor[resource],
+                    return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
                         0
                     );
                 }
 
                 default: return 0;
             }
+        }
+
+        private getCombatResourceAmount(combatReport: CombatReport) {
+            const loot: Cost = {
+                ...combatReport.loot,
+                energy: 0,
+            };
+            const lostShipsUnits = getNumericEnumValues<ShipType>(ShipType).reduce(
+                (acc, ship) => addCost(acc, multiplyCost(Ships[ship].getCost(), combatReport.lostShips[ship] ?? 0)),
+                { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
+            );
+
+            return addCost(loot, lostShipsUnits);
         }
     }
 </script>

@@ -20,6 +20,8 @@
                 </button>
             </template>
 
+            <msu-conversion-rate-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -34,11 +36,13 @@
     import { DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            MsuConversionRateSettings,
         },
     })
     export default class Table extends Vue {
