@@ -609,14 +609,14 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
     private async getAllPlayerScores(): Promise<Record<number, PlayerScores>> {
         const scores: Record<number, PlayerScores> = {};
 
-        const total = this.getPlayerScores(HighscoreType.total);
-        const economy = this.getPlayerScores(HighscoreType.economy);
-        const research = this.getPlayerScores(HighscoreType.research);
-        const military = this.getPlayerMilitaryScores();
-        const militaryBuilt = this.getPlayerScores(HighscoreType.militaryBuilt);
-        const militaryDestroyed = this.getPlayerScores(HighscoreType.militaryDestroyed);
-        const militaryLost = this.getPlayerScores(HighscoreType.militaryLost);
-        const honor = this.getPlayerScores(HighscoreType.honor);
+        const total = await this.getPlayerScores(HighscoreType.total);
+        const economy = await this.getPlayerScores(HighscoreType.economy);
+        const research = await this.getPlayerScores(HighscoreType.research);
+        const military = await this.getPlayerMilitaryScores();
+        const militaryBuilt = await this.getPlayerScores(HighscoreType.militaryBuilt);
+        const militaryDestroyed = await this.getPlayerScores(HighscoreType.militaryDestroyed);
+        const militaryLost = await this.getPlayerScores(HighscoreType.militaryLost);
+        const honor = await this.getPlayerScores(HighscoreType.honor);
 
         Object.keys(total)
             .map(playerId => parseIntSafe(playerId, 10))
