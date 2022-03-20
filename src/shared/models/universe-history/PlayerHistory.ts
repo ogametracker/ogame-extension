@@ -1,27 +1,29 @@
 import { PlanetHistory } from './PlanetHistory';
+import { HistoryItem } from './HistoryItem';
 
-export type PlayerState = null | 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'deleted';
+export type PlayerStateType = null | 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'deleted';
+export type PlayerState = { 0: PlayerStateType } & PlayerStateType[];
 
 export interface PlayerHistory {
     id: number;
-    /** name changes by datetime */
-    name: Record<number, string>;
-    /** score changes by datetime */
+    /** name changes */
+    name: HistoryItem<string>[];
+    /** score changes */
     scores: {
-        total: Record<number, number>;
-        economy: Record<number, number>;
-        research: Record<number, number>;
-        military: Record<number, number>;
-        militaryBuilt: Record<number, number>;
-        militaryDestroyed: Record<number, number>;
-        militaryLost: Record<number, number>;
-        honor: Record<number, number>;
-        numberOfShips: Record<number, number>;
+        total: HistoryItem<number>[];
+        economy: HistoryItem<number>[];
+        research: HistoryItem<number>[];
+        military: HistoryItem<number>[];
+        militaryBuilt: HistoryItem<number>[];
+        militaryDestroyed: HistoryItem<number>[];
+        militaryLost: HistoryItem<number>[];
+        honor: HistoryItem<number>[];
+        numberOfShips: HistoryItem<number>[];
     };
-    /** alliance changes by datetime */
-    alliance: Record<number, number | null>;
-    /** state changes by datetime */
-    state: Record<number, PlayerState[]>;
-    /** planet changes by datetime */
-    planets: Record<number, PlanetHistory>;
+    /** alliance changes */
+    alliance: HistoryItem<number | null>[];
+    /** state changes */
+    state: HistoryItem<PlayerState>[];
+    /** planet changes by id */
+    planets: Partial<Record<number, PlanetHistory>>;
 }

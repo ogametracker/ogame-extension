@@ -1,10 +1,12 @@
+import { HistoryItem } from "./HistoryItem";
+
 export type MoonState = null | 'deleted';
 
 export interface MoonHistory {
     id: number;
     size: number;
-    /** name changes by datetime */
-    name: Record<number, string>;
-    /** state changes by datetime */
-    state: Record<number, MoonState>;
+    /** name changes */
+    name: HistoryItem<string>[];
+    /** state changes */
+    state: HistoryItem<MoonState>[];
 }

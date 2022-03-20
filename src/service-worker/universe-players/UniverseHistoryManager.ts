@@ -3,9 +3,16 @@ import { UniverseHistory } from '../../shared/models/universe-history/UniverseHi
 import { _throw } from '../../shared/utils/_throw';
 import { PersistentDataManager } from '../PersistentData';
 import { parseIntSafe } from '../../shared/utils/parseNumbers';
-import { Coordinates } from '../../shared/models/ogame/common/Coordinates';
+import { compareCoordinates, Coordinates } from '../../shared/models/ogame/common/Coordinates';
 import { parseCoordinates } from '../../shared/utils/parseCoordinates';
 import { XMLParser } from 'fast-xml-parser';
+import { AllianceHistory } from '../../shared/models/universe-history/AllianceHistory';
+import { PlayerHistory, PlayerState, PlayerStateType } from '../../shared/models/universe-history/PlayerHistory';
+import { ca } from 'date-fns/locale';
+import { HistoryItem } from '../../shared/models/universe-history/HistoryItem';
+import { PlanetHistory } from '../../shared/models/universe-history/PlanetHistory';
+import { MoonHistory } from '../../shared/models/universe-history/MoonHistory';
+import { _logDebug } from '../../shared/utils/_log';
 
 declare namespace OgameApi {
     export interface Response {
@@ -130,6 +137,18 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         parseAttributeValue: false,
     });
 
+    private readonly defaultPlayerScores: PlayerScores = {
+        total: 0,
+        economy: 0,
+        research: 0,
+        military: 0,
+        militaryBuilt: 0,
+        militaryDestroyed: 0,
+        militaryLost: 0,
+        numberOfShips: 0,
+        honor: 0,
+    };
+
     constructor(key: string, meta: MessageOgameMeta) {
         super(key, 'universe-history');
 
@@ -151,7 +170,8 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         const data = await this.getData();
         const now = Date.now();
 
-        timeout ??= Math.max(0, now - data.lastUpdate + this.intervalInMs);
+        timeout ??= Math.max(0, data.lastUpdate + this.intervalInMs - now);
+        _logDebug(`next universe history tracking in ${timeout} ms (${new Date(Date.now() + timeout)})`);
         setTimeout(async () => await this.trackUniverseUpdates(), timeout);
     }
 
@@ -171,26 +191,332 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
     }
 
     private async updateHistory(players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScores>, planets: Planet[]) {
-        await this.updateInTransaction(data => {
-            //TODO: update players
-            //TODO: update alliances
-            alliances.forEach(ally => {
-                const allyData = data.alliances[ally.id] ?? {
-                    id: ally.id,
-                    members: {},
-                    name: {},
-                    state: {},
-                    tag: {},
-                };
-                //TODO: update alliance
-            });
+        const now = Date.now();
 
-            //TODO: data.lastUpdate = Date.now();
+        await this.updateInTransaction(data => {
+            // update players
+            this.updatePlayers(players, data, now, playerScores, planets);
+
+            // update alliances
+            this.updateAlliances(alliances, data, now, players);
+
+            data.lastUpdate = now;
             return data;
         });
+    }
 
-        console.debug(players, alliances, playerScores, planets);
-        throw new Error('Method not implemented.');
+    private updateAlliances(alliances: Alliance[], data: UniverseHistory, now: number, players: Player[]) {
+        const knownAllyIds = alliances.map(ally => ally.id);
+        alliances.forEach(ally => {
+            try {
+                const allyHistory: AllianceHistory = data.alliances[ally.id] ?? {
+                    id: ally.id,
+                    members: [],
+                    name: [],
+                    state: [],
+                    tag: [],
+                };
+
+                this.updateAlliance(now, allyHistory, ally, players.filter(p => p.alliance == ally.id));
+                data.alliances[ally.id] = allyHistory;
+            } catch (error) {
+                console.error(error);
+            }
+        });
+        // mark known non-existing alliances as deleted
+        Object.keys(data.alliances)
+            .map(allyId => parseIntSafe(allyId, 10))
+            .filter(allyId => !knownAllyIds.includes(allyId) && data.alliances[allyId]!.state.slice(-1)[0]?.value != 'deleted')
+            .forEach(allyId => data.alliances[allyId]!.state.push({
+                value: 'deleted',
+                date: now,
+            }));
+    }
+
+    private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScores>, planets: Planet[]) {
+        const knownPlayerIds = players.map(player => player.id);
+        players.forEach(player => {
+            try {
+                const playerHistory: PlayerHistory = data.players[player.id] ?? {
+                    id: player.id,
+                    name: [],
+                    planets: {},
+                    scores: {
+                        total: [],
+                        economy: [],
+                        research: [],
+                        military: [],
+                        militaryBuilt: [],
+                        militaryDestroyed: [],
+                        militaryLost: [],
+                        honor: [],
+                        numberOfShips: [],
+                    },
+                    state: [],
+                    alliance: [],
+                };
+
+                this.updatePlayer(
+                    now,
+                    playerHistory,
+                    player,
+                    playerScores[player.id] ?? this.defaultPlayerScores,
+                    planets.filter(p => p.player == player.id)
+                );
+                data.players[player.id] = playerHistory;
+            } catch (error) {
+                console.error(error);
+            }
+        });
+        // mark known non-existing players as deleted
+        Object.keys(data.players)
+            .map(playerId => parseIntSafe(playerId, 10))
+            .filter(playerId => !knownPlayerIds.includes(playerId) && !this.arraysEqual((data.players[playerId]!.state.slice(-1)[0]?.value ?? []), ['deleted']))
+            .forEach(playerId => data.players[playerId]!.state.push({
+                value: ['deleted'],
+                date: now,
+            }));
+    }
+
+    private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScores, planets: Planet[]) {
+        this.updatePlayerName(now, playerHistory, player);
+        this.updatePlayerAlliance(now, playerHistory, player);
+        this.updatePlayerState(now, playerHistory, player);
+        this.updatePlayerScores(now, playerHistory, scores);
+        this.updatePlayerPlanets(now, playerHistory, planets);
+    }
+
+    private updatePlayerPlanets(now: number, playerHistory: PlayerHistory, planets: Planet[]) {
+        const planetIds = planets.map(p => p.id);
+        planets.forEach(planet => this.updatePlayerPlanet(now, playerHistory.planets, planet));
+
+        // mark known non-existing planets as deleted
+        Object.keys(playerHistory.planets)
+            .map(planetId => parseIntSafe(planetId, 10))
+            .filter(planetId => !planetIds.includes(planetId) && playerHistory.planets[planetId]!.state.slice(-1)[0]?.value != 'deleted')
+            .forEach(planetId => playerHistory.planets[planetId]!.state.push({
+                date: now,
+                value: 'deleted'
+            }));
+    }
+
+    private updatePlayerPlanet(now: number, planetHistories: Partial<Record<number, PlanetHistory>>, planet: Planet): void {
+        const planetHistory = planetHistories[planet.id];
+
+        if (planetHistory == null) {
+            const moonHistory: Record<number, MoonHistory> = {};
+            if (planet.moon != null) {
+                moonHistory[planet.moon.id] = this.getMoonHistory(now, planet.moon);
+            }
+
+            planetHistories[planet.id] = {
+                id: planet.id,
+                coordinates: [{
+                    date: now,
+                    value: planet.coordinates,
+                }],
+                state: [{
+                    date: now,
+                    value: null,
+                }],
+                name: [{
+                    date: now,
+                    value: planet.name,
+                }],
+                moon: moonHistory,
+            };
+            return;
+        }
+
+        this.updatePlanetCoordinates(now, planetHistory.coordinates, planet.coordinates);
+        this.updatePlanetName(now, planetHistory.name, planet.name);
+        this.updatePlanetMoon(now, planetHistory.moon, planet.moon);
+    }
+
+    private updatePlanetMoon(now: number, moonHistories: Partial<Record<number, MoonHistory>>, moon: Moon | undefined) {
+        // mark known non-existing moons as deleted
+        Object.keys(moonHistories)
+            .map(moonId => parseIntSafe(moonId, 10))
+            .filter(moonId => moonHistories[moonId]!.state.slice(-1)[0]?.value != 'deleted')
+            .forEach(moonId => moonHistories[moonId]!.state.push({
+                date: now,
+                value: 'deleted'
+            }));
+
+        if (moon != null) {
+            const moonHistory = (moonHistories[moon.id] ??= {
+                id: moon.id,
+                size: moon.size,
+                name: [],
+                state: [{
+                    date: now,
+                    value: null,
+                }],
+            });
+
+            if (moonHistory.name.slice(-1)[0]?.value != moon.name) {
+                moonHistory.name.push({
+                    date: now,
+                    value: moon.name,
+                });
+            }
+        }
+    }
+
+    private updatePlanetName(now: number, nameHistory: HistoryItem<string>[], name: string) {
+        if (nameHistory.slice(-1)[0]?.value != name) {
+            nameHistory.push({
+                date: now,
+                value: name,
+            });
+        }
+    }
+
+    private updatePlanetCoordinates(now: number, coordinatesHistory: HistoryItem<Coordinates>[], coordinates: Coordinates) {
+        const lastCoords = coordinatesHistory.slice(-1)[0]?.value;
+
+        if (lastCoords == null || compareCoordinates(lastCoords, coordinates) != 0) {
+            coordinatesHistory.push({
+                date: now,
+                value: coordinates,
+            });
+        }
+    }
+
+    private getMoonHistory(now: number, moon: Moon): MoonHistory {
+        return {
+            id: moon.id,
+            size: moon.size,
+            name: [{
+                date: now,
+                value: moon.name,
+            }],
+            state: [{
+                date: now,
+                value: null
+            }],
+        };
+    }
+
+    private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScores) {
+        this.updatePlayerScore(now, playerHistory.scores.total, scores.total);
+        this.updatePlayerScore(now, playerHistory.scores.economy, scores.economy);
+        this.updatePlayerScore(now, playerHistory.scores.research, scores.research);
+        this.updatePlayerScore(now, playerHistory.scores.military, scores.military);
+        this.updatePlayerScore(now, playerHistory.scores.militaryBuilt, scores.militaryBuilt);
+        this.updatePlayerScore(now, playerHistory.scores.militaryDestroyed, scores.militaryDestroyed);
+        this.updatePlayerScore(now, playerHistory.scores.militaryLost, scores.militaryLost);
+        this.updatePlayerScore(now, playerHistory.scores.honor, scores.honor);
+        this.updatePlayerScore(now, playerHistory.scores.numberOfShips, scores.numberOfShips);
+    }
+
+    private updatePlayerScore(now: number, scoreHistory: HistoryItem<number>[], score: number) {
+        if (scoreHistory.slice(-1)[0]?.value != score) {
+            scoreHistory.push({
+                date: now,
+                value: score,
+            });
+        }
+    }
+
+    private mapState(status: string | null): PlayerState {
+        if (status == null) {
+            return [null];
+        }
+
+        const stateMap: Record<string, PlayerStateType> = {
+            a: 'admin',
+            b: 'banned',
+            v: 'vacation',
+            i: 'inactive',
+            I: 'inactive-long',
+        };
+        const states: PlayerStateType[] = [];
+        status.split('').forEach(c => states.push(stateMap[c] ?? _throw(`unknown player state '${c}'`)));
+
+        if (states.length == 0) {
+            throw new Error('number of player stats was zero');
+        }
+
+        return states as PlayerState;
+    }
+
+    private updatePlayerState(now: number, playerHistory: PlayerHistory, player: Player) {
+        const states = this.mapState(player.status);
+
+        if (playerHistory.state.length == 0
+            || !this.arraysEqual(playerHistory.state.slice(-1)[0].value, states)
+        ) {
+            playerHistory.state.push({
+                value: states,
+                date: now,
+            });
+        }
+    }
+
+    private updatePlayerAlliance(now: number, playerHistory: PlayerHistory, player: Player) {
+        if (playerHistory.alliance.slice(-1)[0]?.value != player.alliance
+        ) {
+            playerHistory.alliance.push({
+                value: player.alliance,
+                date: now,
+            });
+        }
+    }
+
+    private updatePlayerName(now: number, playerHistory: PlayerHistory, player: Player) {
+        if (playerHistory.name.slice(-1)[0]?.value != player.name
+        ) {
+            playerHistory.name.push({
+                value: player.name,
+                date: now,
+            });
+        }
+    }
+
+    private updateAlliance(now: number, allyHistory: AllianceHistory, allyData: Alliance, members: Player[]) {
+        this.updateAllianceName(now, allyHistory, allyData);
+        this.updateAllianceTag(now, allyHistory, allyData);
+        this.updateAllianceMembers(now, allyHistory, members);
+    }
+
+    private updateAllianceTag(now: number, allyHistory: AllianceHistory, allyData: Alliance) {
+        if (allyHistory.tag.slice(-1)[0]?.value != allyData.tag
+        ) {
+            allyHistory.tag.push({
+                value: allyData.tag,
+                date: now,
+            });
+        }
+    }
+
+    private updateAllianceName(now: number, allyHistory: AllianceHistory, allyData: Alliance) {
+        if (allyHistory.name.slice(-1)[0]?.value != allyData.name
+        ) {
+            allyHistory.name.push({
+                value: allyData.name,
+                date: now,
+            });
+        }
+    }
+
+    private updateAllianceMembers(now: number, allyHistory: AllianceHistory, members: Player[]) {
+        const memberIds = members.map(member => member.id);
+
+        if (allyHistory.members.length == 0
+            || this.arraysEqual(allyHistory.members.slice(-1)[0].value, memberIds)
+        ) {
+            allyHistory.members.push({
+                value: memberIds,
+                date: now,
+            });
+        }
+    }
+
+    private arraysEqual<T>(a: T[], b: T[]): boolean {
+        return a.length == b.length
+            && a.every(aValue => b.includes(aValue))
+            && b.every(bValue => a.includes(bValue));
     }
 
     private get apiUrlBase() {
