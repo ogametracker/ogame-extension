@@ -6,5 +6,5 @@ interface Environment {
 }
 
 export const env: Environment = {
-    browser: process.env.BROWSER as Browser ?? _throw('invalid browser environment'),
+    browser: process.env.BROWSER as Browser ?? process.env.VUE_APP_BROWSER ?? _throw('invalid browser environment'),
 };
