@@ -2,7 +2,8 @@ input:not([type]),
 input[type="text"],
 input[type="password"],
 input[type="number"],
-button {
+button,
+select {
     background: black linear-gradient(0deg, rgba(var(--color), 0.3), rgba(var(--color), 0.3));
     border: 1px solid rgba(var(--color), 0.1);
     border-radius: 4px;
@@ -18,7 +19,7 @@ button {
         }
     }
 
-    &:not(button):read-only,
+    &:not(button):not(select):read-only,
     &:disabled {
         cursor: default;
     }
@@ -28,6 +29,7 @@ button {
     }
 }
 
-button {
+button,
+select {
     cursor: pointer;
 }

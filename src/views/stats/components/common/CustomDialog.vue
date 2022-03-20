@@ -1,7 +1,10 @@
 <template>
     <div class="dialog-wrapper">
         <div class="dialog">
-            <div class="dialog-header">
+            <div
+                class="dialog-header"
+                :class="{ 'dialog-header--close': showClose }"
+            >
                 <div v-if="$scopedSlots.header != null">
                     <slot name="header" />
                 </div>
@@ -61,15 +64,23 @@
         grid-template-rows: auto 1fr;
 
         background: black
-            linear-gradient(180deg, rgba(#969696, 0.3), rgba(#969696, 0.4));
+            linear-gradient(
+                111deg,
+                rgba(var(--color), 0.15),
+                rgba(var(--color), 0.2)
+            );
         padding: 4px 16px 16px 16px;
-        border-radius: 4px;
+        border-radius: 8px;
 
         &-header {
             display: grid;
             align-items: center;
             justify-items: center;
             grid-template-columns: 1fr auto;
+
+            &--close {
+                margin-right: -8px;
+            }
 
             > .close-dialog {
                 opacity: 0.5;

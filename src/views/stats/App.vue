@@ -78,13 +78,14 @@
             v-if="showAccountSwitchDialog"
             show-close
             @close="showAccountSwitchDialog = false"
+            :style="`--color: ${getColorVariable(colors.switchAccount)};`"
         >
             <span
                 v-if="knownAccounts.length == 0"
                 v-text="'LOCA: loading...'"
             />
             <div v-else>
-                LOCA: Look at data of account
+                <div v-text="'LOCA: Look at data of account'" />
                 <select @change="gotoAccount()" v-model="selectedAccountIndex">
                     <option
                         v-for="(account, i) in knownAccounts"
@@ -145,6 +146,10 @@
 
     @Component
     export default class App extends Vue {
+        private readonly colors = {
+            switchAccount: '#666666',
+            discord: '#5865f2',
+        };
 
         private loading = true;
 
@@ -263,7 +268,7 @@
                     key: 'discord',
                     href: 'https://discord.gg/MZE9FrCwRj',
                     icon: 'ogti ogti-discord',
-                    color: '#5865f2',
+                    color: this.colors.discord,
                 },
             ];
 
@@ -272,7 +277,7 @@
                     key: 'switch-account',
                     customAction: () => this.showAccountSwitchDialog = true,
                     icon: 'mdi mdi-account-multiple',
-                    color: '#666666',
+                    color: this.colors.switchAccount,
                 });
             }
 
@@ -423,6 +428,8 @@
             const account = this.knownAccounts[this.selectedAccountIndex];
             const url = `/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
             window.open(url, '_blank', 'noopener,noreferrer');
+
+            this.showAccountSwitchDialog = false;
         }
     }
 </script>
