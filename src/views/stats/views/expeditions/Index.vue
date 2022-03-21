@@ -5,9 +5,14 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
+    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
 
     @Component({})
     export default class Expeditions extends Vue {
+        async mounted() {
+            await ExpeditionDataModule.load();
+        }
+
         private get navItems(): ListNavItem[] {
             return [
                 {

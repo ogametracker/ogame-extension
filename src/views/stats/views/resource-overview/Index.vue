@@ -5,9 +5,18 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { Tab } from '@stats/components/common/TabView.vue';
+    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { CombatReportDataModule } from '../../data/CombatReportDataModule';
+    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
 
     @Component({})
     export default class Index extends Vue {
+        private async mounted() {
+            await CombatReportDataModule.load();
+            await ExpeditionDataModule.load();
+            await DebrisFieldReportDataModule.load();
+        }
+        
         private get tabs(): Tab[] {
             return [
                 {

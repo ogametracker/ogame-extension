@@ -19,7 +19,11 @@
             z-index: 10000;
             background: linear-gradient(45deg, hsl(208deg 32% 1%), #08121b);
             opacity: 1;
-            transition: opacity 1s linear;
+            transition: opacity 0.3s linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         #splashscreen.fade {
@@ -28,22 +32,24 @@
         }
 
         #splashscreen .logo {
-            width: 500px;
-            height: 500px;
-            font-size: 500px;
-            max-width: 70%;
+            flex-grow: 1;
             aspect-ratio: 1;
             background-image: url(/icon.svg);
             background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
             box-shadow: 0.005em 0.01em 0.035em 0 black;
             border-radius: 6.6666%;
         }
 
         #splashscreen .logo-wrapper {
             display: flex;
-            height: 100%;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: min(500px, 50vh);
+            width: min(500px, 50vw);
+            font-size: min(500px, 50vh, 50vw);
             animation: pulse 4s infinite ease-in-out;
         }
 

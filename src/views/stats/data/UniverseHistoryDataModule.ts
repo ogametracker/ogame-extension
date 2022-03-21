@@ -7,35 +7,24 @@ import { RequestUniverseHistoryMessage, UniverseHistoryDataMessage } from '@/sha
 import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { UniverseHistory } from '@/shared/models/universe-history/UniverseHistory';
+import { Lock } from 'semaphore-async-await';
 
 @Component
 class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
     public history: UniverseHistory = null!;
-
-    private resolveInitialDataPromise: (() => void) | null = null;
+    private readonly lock = new Lock();
 
     private async created() {
-        await new Promise<void>(async resolve => {
-            this.resolveInitialDataPromise = resolve;
-            this.initCommunication();
+        await this.lock.acquire();
 
-            await this.requestData();
-        });
+        this.initCommunication();
+
+        await this.requestData();
     }
 
-    private loaded = false;
-
     public async load(): Promise<void> {
-        await new Promise<void>(resolve => {
-            const interval = setInterval(() => {
-                if(!this.loaded) {
-                    return;
-                }
-
-                clearInterval(interval);
-                resolve();
-            }, 10);
-        });
+        await this.lock.acquire();
+        this.lock.release();
     }
 
     private initCommunication() {
@@ -59,12 +48,10 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
         switch (type) {
             case MessageType.UniverseHistoryData:
             case MessageType.NotifyUniverseHistoryUpdate: {
-                this.resolveInitialDataPromise?.();
-
                 const { data } = msg as UniverseHistoryDataMessage;
                 this.history = data;
 
-                this.loaded = true;
+                this.lock.release();
                 break;
             }
         }

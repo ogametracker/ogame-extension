@@ -3,40 +3,29 @@ import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
-import { startOfDay } from 'date-fns';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { EmpireDataMessage, RequestLocalPlayerDataMessage } from '@/shared/messages/tracking/empire';
 import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
+import { Lock } from 'semaphore-async-await';
 
 @Component
 class EmpireDataModuleClass extends Vue implements IDataModule {
     public empire: LocalPlayerData = null!;
 
-    private resolveInitialDataPromise: (() => void) | null = null;
+    private readonly lock = new Lock();
 
     private async created() {
-        await new Promise<void>(async resolve => {
-            this.resolveInitialDataPromise = resolve;
-            this.initCommunication();
+        await this.lock.acquire();
 
-            await this.requestData();
-        });
+        this.initCommunication();
+
+        await this.requestData();
     }
 
-    private _loaded = false;
-
     public async load(): Promise<void> {
-        await new Promise<void>(resolve => {
-            const interval = setInterval(() => {
-                if(!this._loaded) {
-                    return;
-                }
-
-                clearInterval(interval);
-                resolve();
-            }, 10);
-        });
+        await this.lock.acquire();
+        this.lock.release();
     }
 
     private initCommunication() {
@@ -62,12 +51,10 @@ class EmpireDataModuleClass extends Vue implements IDataModule {
         switch (type) {
             case MessageType.EmpireData:
             case MessageType.NotifyEmpireDataUpdate: {
-                this.resolveInitialDataPromise?.();
-
                 const { data } = msg as EmpireDataMessage;
                 this.empire = data;
 
-                this._loaded = true;
+                this.lock.release();
                 break;
             }
         }

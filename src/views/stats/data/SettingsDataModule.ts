@@ -7,12 +7,13 @@ import { IDataModule } from './IDataModule';
 import { Settings } from '@/shared/models/settings/Settings';
 import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
+import { Lock } from 'semaphore-async-await';
 
 @Component
 class SettingsDataModuleClass extends Vue implements IDataModule {
     public settings: Settings = null!;
 
-    private resolveInitialDataPromise: (() => void) | null = null;
+    private readonly lock = new Lock();
 
     public updateSettings(settings: Settings) {
         console.debug('updating settings', settings);
@@ -28,27 +29,16 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
     }
 
     private async created() {
-        await new Promise<void>(async resolve => {
-            this.resolveInitialDataPromise = resolve;
-            this.initCommunication();
+        await this.lock.acquire();
 
-            await this.requestData();
-        });
+        this.initCommunication();
+
+        await this.requestData();
     }
 
-    private _loaded = false;
-
     public async load(): Promise<void> {
-        await new Promise<void>(resolve => {
-            const interval = setInterval(() => {
-                if (!this._loaded) {
-                    return;
-                }
-
-                clearInterval(interval);
-                resolve();
-            }, 10);
-        });
+        await this.lock.acquire();
+        this.lock.release();
     }
 
     private initCommunication() {
@@ -73,12 +63,10 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
 
         switch (type) {
             case MessageType.Settings: {
-                this.resolveInitialDataPromise?.();
-
                 const { data: settings } = msg as SettingsMessage;
                 this.settings = settings;
 
-                this._loaded = true;
+                this.lock.release();
                 break;
             }
         }

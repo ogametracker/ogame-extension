@@ -334,17 +334,7 @@
                 }
             });
 
-
-            const dataModules: IDataModule[] = [
-                CombatReportDataModule,
-                DebrisFieldReportDataModule,
-                EmpireDataModule,
-                ExpeditionDataModule,
-                SettingsDataModule,
-                UniverseHistoryDataModule,
-            ];
-            const loadPromises = dataModules.map(mod => mod.load());
-            await Promise.all(loadPromises);
+            await EmpireDataModule.load();
 
             this.updateDocumentTitle();
 
@@ -352,7 +342,7 @@
 
             const splashscreen = document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');
-            setTimeout(() => splashscreen?.remove(), 1500);
+            setTimeout(() => splashscreen?.remove(), 500);
 
             if (!this.isIframeMode) {
                 await this.loadKnownAccounts();
