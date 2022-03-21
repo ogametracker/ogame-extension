@@ -1,7 +1,7 @@
 import { PlanetHistory } from './PlanetHistory';
 import { HistoryItem } from './HistoryItem';
 
-export type PlayerStateType = null | 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'deleted';
+export type PlayerStateType = null | 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw' | 'deleted';
 export type PlayerState = { 0: PlayerStateType } & PlayerStateType[];
 
 export interface PlayerHistory {

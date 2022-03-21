@@ -115,6 +115,7 @@
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import { IDataModule } from "./data/IDataModule";
     import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
+    import { UniverseHistoryDataModule } from "./data/UniverseHistoryDataModule";
 
     interface Tab {
         key: string;
@@ -219,10 +220,10 @@
                     keyboardIcon: 'mdi mdi-numeric-6',
                 },
                 {
-                    key: 'universe',
-                    to: { name: 'universe' },
+                    key: 'universe-history',
+                    to: { name: 'universe-history' },
                     icon: 'mdi mdi-chart-timeline-variant-shimmer',
-                    label: 'LOCA: Universe',
+                    label: 'LOCA: Universe History',
                     keyboardKey: '7',
                     keyboardIcon: 'mdi mdi-numeric-7',
                 },
@@ -340,6 +341,7 @@
                 EmpireDataModule,
                 ExpeditionDataModule,
                 SettingsDataModule,
+                UniverseHistoryDataModule,
             ];
             const loadPromises = dataModules.map(mod => mod.load());
             await Promise.all(loadPromises);
@@ -347,6 +349,10 @@
             this.updateDocumentTitle();
 
             this.loading = false;
+
+            const splashscreen = document.querySelector('#splashscreen');
+            splashscreen?.classList.add('fade');
+            setTimeout(() => splashscreen?.remove(), 1500);
 
             if (!this.isIframeMode) {
                 await this.loadKnownAccounts();

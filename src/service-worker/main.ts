@@ -46,7 +46,7 @@ async function onMessage(message: Message<MessageType, any>) {
     await migrationLock.wait();
     migrationLock.release();
 
-    _logDebug('got message', performance.now(), message);
+    _logDebug('got message', new Date(), message);
 
     for (const service of services) {
         await service.onMessage(message);

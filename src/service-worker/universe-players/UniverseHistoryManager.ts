@@ -8,7 +8,6 @@ import { parseCoordinates } from '../../shared/utils/parseCoordinates';
 import { XMLParser } from 'fast-xml-parser';
 import { AllianceHistory } from '../../shared/models/universe-history/AllianceHistory';
 import { PlayerHistory, PlayerState, PlayerStateType } from '../../shared/models/universe-history/PlayerHistory';
-import { ca } from 'date-fns/locale';
 import { HistoryItem } from '../../shared/models/universe-history/HistoryItem';
 import { PlanetHistory } from '../../shared/models/universe-history/PlanetHistory';
 import { MoonHistory } from '../../shared/models/universe-history/MoonHistory';
@@ -126,6 +125,8 @@ interface Moon {
     size: number;
 }
 
+type bit = 0 | 1;
+
 export class UniverseHistoryManager extends PersistentDataManager<UniverseHistory> {
 
     private readonly intervalInMs = 1000 * 60 * 60; //1h
@@ -148,6 +149,8 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         numberOfShips: 0,
         honor: 0,
     };
+    private readonly listeners: (() => void)[] = [];
+    private static timeout: number | undefined = undefined;
 
     constructor(key: string, meta: MessageOgameMeta) {
         super(key, 'universe-history');
@@ -156,6 +159,10 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         this.serverId = meta.serverId;
 
         this.initTracking();
+    }
+
+    public addBroadcastNotifyListener(listener: () => void) {
+        this.listeners.push(listener);
     }
 
     protected getDefaultItem(): UniverseHistory {
@@ -171,18 +178,27 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         const now = Date.now();
 
         timeout ??= Math.max(0, data.lastUpdate + this.intervalInMs - now);
-        _logDebug(`next universe history tracking in ${timeout} ms (${new Date(Date.now() + timeout)})`);
-        setTimeout(async () => await this.trackUniverseUpdates(), timeout);
+        _logDebug(`next universe history tracking in ${timeout} ms (${new Date(Date.now() + timeout)}) for universe ${this.serverId} ${this.language.toUpperCase()}`);
+
+        if(UniverseHistoryManager.timeout != null) {
+            clearTimeout(UniverseHistoryManager.timeout);
+            UniverseHistoryManager.timeout = undefined;
+        }
+        UniverseHistoryManager.timeout = globalThis.setTimeout(async () => await this.trackUniverseUpdates(), timeout, null);
     }
 
     private async trackUniverseUpdates() {
         try {
+            _logDebug(`tracking universe history for universe ${this.serverId} ${this.language.toUpperCase()}`);
             const players = await this.getPlayers();
             const alliances = await this.getAlliances();
             const playerScores = await this.getAllPlayerScores();
             const planets = await this.getPlanets();
 
-            await this.updateHistory(players, alliances, playerScores, planets);
+            const updated = await this.updateHistory(players, alliances, playerScores, planets);
+            if(updated) {
+                this.broadcastUniverseHistoryUpdate();
+            }
 
             await this.initTracking();
         } catch (error) {
@@ -190,23 +206,28 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         }
     }
 
-    private async updateHistory(players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScores>, planets: Planet[]) {
+    private broadcastUniverseHistoryUpdate() {
+        this.listeners.forEach(listener => listener());
+    }
+
+    private async updateHistory(players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScores>, planets: Planet[]): Promise<boolean> {
         const now = Date.now();
+        let updated = 0 as bit;
 
         await this.updateInTransaction(data => {
-            // update players
-            this.updatePlayers(players, data, now, playerScores, planets);
-
-            // update alliances
-            this.updateAlliances(alliances, data, now, players);
+            updated = (this.updatePlayers(players, data, now, playerScores, planets)
+                | this.updateAlliances(alliances, data, now, players)) as bit;
 
             data.lastUpdate = now;
             return data;
         });
+
+        return updated != 0;
     }
 
-    private updateAlliances(alliances: Alliance[], data: UniverseHistory, now: number, players: Player[]) {
+    private updateAlliances(alliances: Alliance[], data: UniverseHistory, now: number, players: Player[]): bit {
         const knownAllyIds = alliances.map(ally => ally.id);
+        let updated: bit = 0;
         alliances.forEach(ally => {
             try {
                 const allyHistory: AllianceHistory = data.alliances[ally.id] ?? {
@@ -217,24 +238,29 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                     tag: [],
                 };
 
-                this.updateAlliance(now, allyHistory, ally, players.filter(p => p.alliance == ally.id));
+                updated = (updated | this.updateAlliance(now, allyHistory, ally, players.filter(p => p.alliance == ally.id))) as bit;
                 data.alliances[ally.id] = allyHistory;
             } catch (error) {
                 console.error(error);
             }
         });
+
         // mark known non-existing alliances as deleted
-        Object.keys(data.alliances)
+        const deletedAllyIds = Object.keys(data.alliances)
             .map(allyId => parseIntSafe(allyId, 10))
-            .filter(allyId => !knownAllyIds.includes(allyId) && data.alliances[allyId]!.state.slice(-1)[0]?.value != 'deleted')
-            .forEach(allyId => data.alliances[allyId]!.state.push({
-                value: 'deleted',
-                date: now,
-            }));
+            .filter(allyId => !knownAllyIds.includes(allyId) && data.alliances[allyId]!.state.slice(-1)[0]?.value != 'deleted');
+        deletedAllyIds.forEach(allyId => data.alliances[allyId]!.state.push({
+            value: 'deleted',
+            date: now,
+        }));
+
+        updated = (updated | (deletedAllyIds.length > 0 ? 1 : 0)) as bit;
+        return updated;
     }
 
-    private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScores>, planets: Planet[]) {
+    private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScores>, planets: Planet[]): bit {
         const knownPlayerIds = players.map(player => player.id);
+        let updated: bit = 0;
         players.forEach(player => {
             try {
                 const playerHistory: PlayerHistory = data.players[player.id] ?? {
@@ -256,51 +282,59 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                     alliance: [],
                 };
 
-                this.updatePlayer(
+                updated = (updated | this.updatePlayer(
                     now,
                     playerHistory,
                     player,
                     playerScores[player.id] ?? this.defaultPlayerScores,
                     planets.filter(p => p.player == player.id)
-                );
+                )) as bit;
                 data.players[player.id] = playerHistory;
             } catch (error) {
                 console.error(error);
             }
         });
+
         // mark known non-existing players as deleted
-        Object.keys(data.players)
+        const deletedPlayerIds = Object.keys(data.players)
             .map(playerId => parseIntSafe(playerId, 10))
-            .filter(playerId => !knownPlayerIds.includes(playerId) && !this.arraysEqual((data.players[playerId]!.state.slice(-1)[0]?.value ?? []), ['deleted']))
-            .forEach(playerId => data.players[playerId]!.state.push({
-                value: ['deleted'],
-                date: now,
-            }));
+            .filter(playerId => !knownPlayerIds.includes(playerId) && !this.arraysEqual((data.players[playerId]!.state.slice(-1)[0]?.value ?? []), ['deleted']));
+        deletedPlayerIds.forEach(playerId => data.players[playerId]!.state.push({
+            value: ['deleted'],
+            date: now,
+        }));
+
+        updated = (updated | (deletedPlayerIds.length > 0 ? 1 : 0)) as bit;
+        return updated;
     }
 
-    private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScores, planets: Planet[]) {
-        this.updatePlayerName(now, playerHistory, player);
-        this.updatePlayerAlliance(now, playerHistory, player);
-        this.updatePlayerState(now, playerHistory, player);
-        this.updatePlayerScores(now, playerHistory, scores);
-        this.updatePlayerPlanets(now, playerHistory, planets);
+    private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScores, planets: Planet[]): bit {
+        return (this.updatePlayerName(now, playerHistory, player)
+            | this.updatePlayerAlliance(now, playerHistory, player)
+            | this.updatePlayerState(now, playerHistory, player)
+            | this.updatePlayerScores(now, playerHistory, scores)
+            | this.updatePlayerPlanets(now, playerHistory, planets)) as bit;
     }
 
-    private updatePlayerPlanets(now: number, playerHistory: PlayerHistory, planets: Planet[]) {
+    private updatePlayerPlanets(now: number, playerHistory: PlayerHistory, planets: Planet[]): bit {
         const planetIds = planets.map(p => p.id);
-        planets.forEach(planet => this.updatePlayerPlanet(now, playerHistory.planets, planet));
+        let updated: bit = 0;
+        planets.forEach(planet => updated = (updated | this.updatePlayerPlanet(now, playerHistory.planets, planet)) as bit);
 
         // mark known non-existing planets as deleted
-        Object.keys(playerHistory.planets)
+        const deletedPlanetIds = Object.keys(playerHistory.planets)
             .map(planetId => parseIntSafe(planetId, 10))
-            .filter(planetId => !planetIds.includes(planetId) && playerHistory.planets[planetId]!.state.slice(-1)[0]?.value != 'deleted')
-            .forEach(planetId => playerHistory.planets[planetId]!.state.push({
-                date: now,
-                value: 'deleted'
-            }));
+            .filter(planetId => !planetIds.includes(planetId) && playerHistory.planets[planetId]!.state.slice(-1)[0]?.value != 'deleted');
+        deletedPlanetIds.forEach(planetId => playerHistory.planets[planetId]!.state.push({
+            date: now,
+            value: 'deleted'
+        }));
+
+        updated = (updated | (deletedPlanetIds.length > 0 ? 1 : 0)) as bit;
+        return updated;
     }
 
-    private updatePlayerPlanet(now: number, planetHistories: Partial<Record<number, PlanetHistory>>, planet: Planet): void {
+    private updatePlayerPlanet(now: number, planetHistories: Partial<Record<number, PlanetHistory>>, planet: Planet): bit {
         const planetHistory = planetHistories[planet.id];
 
         if (planetHistory == null) {
@@ -325,25 +359,26 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                 }],
                 moon: moonHistory,
             };
-            return;
+            return 1;
         }
 
-        this.updatePlanetCoordinates(now, planetHistory.coordinates, planet.coordinates);
-        this.updatePlanetName(now, planetHistory.name, planet.name);
-        this.updatePlanetMoon(now, planetHistory.moon, planet.moon);
+        return (this.updatePlanetCoordinates(now, planetHistory.coordinates, planet.coordinates)
+            | this.updatePlanetName(now, planetHistory.name, planet.name)
+            | this.updatePlanetMoon(now, planetHistory.moon, planet.moon)) as bit;
     }
 
-    private updatePlanetMoon(now: number, moonHistories: Partial<Record<number, MoonHistory>>, moon: Moon | undefined) {
+    private updatePlanetMoon(now: number, moonHistories: Partial<Record<number, MoonHistory>>, moon: Moon | undefined): bit {
         // mark known non-existing moons as deleted
-        Object.keys(moonHistories)
+        const deletedMoonIds = Object.keys(moonHistories)
             .map(moonId => parseIntSafe(moonId, 10))
-            .filter(moonId => moonHistories[moonId]!.state.slice(-1)[0]?.value != 'deleted')
-            .forEach(moonId => moonHistories[moonId]!.state.push({
-                date: now,
-                value: 'deleted'
-            }));
+            .filter(moonId => moonHistories[moonId]!.state.slice(-1)[0]?.value != 'deleted');
+        deletedMoonIds.forEach(moonId => moonHistories[moonId]!.state.push({
+            date: now,
+            value: 'deleted'
+        }));
 
         if (moon != null) {
+            const moonHistoryOld = moonHistories[moon.id];
             const moonHistory = (moonHistories[moon.id] ??= {
                 id: moon.id,
                 size: moon.size,
@@ -359,20 +394,30 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                     date: now,
                     value: moon.name,
                 });
+                return 1;
+            }
+
+            if (moonHistoryOld == null) {
+                return 1;
             }
         }
+
+        return deletedMoonIds.length > 0 ? 1 : 0;
     }
 
-    private updatePlanetName(now: number, nameHistory: HistoryItem<string>[], name: string) {
+    private updatePlanetName(now: number, nameHistory: HistoryItem<string>[], name: string): bit {
         if (nameHistory.slice(-1)[0]?.value != name) {
             nameHistory.push({
                 date: now,
                 value: name,
             });
+
+            return 1;
         }
+        return 0;
     }
 
-    private updatePlanetCoordinates(now: number, coordinatesHistory: HistoryItem<Coordinates>[], coordinates: Coordinates) {
+    private updatePlanetCoordinates(now: number, coordinatesHistory: HistoryItem<Coordinates>[], coordinates: Coordinates): bit {
         const lastCoords = coordinatesHistory.slice(-1)[0]?.value;
 
         if (lastCoords == null || compareCoordinates(lastCoords, coordinates) != 0) {
@@ -380,7 +425,9 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                 date: now,
                 value: coordinates,
             });
+            return 1;
         }
+        return 0;
     }
 
     private getMoonHistory(now: number, moon: Moon): MoonHistory {
@@ -398,25 +445,27 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         };
     }
 
-    private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScores) {
-        this.updatePlayerScore(now, playerHistory.scores.total, scores.total);
-        this.updatePlayerScore(now, playerHistory.scores.economy, scores.economy);
-        this.updatePlayerScore(now, playerHistory.scores.research, scores.research);
-        this.updatePlayerScore(now, playerHistory.scores.military, scores.military);
-        this.updatePlayerScore(now, playerHistory.scores.militaryBuilt, scores.militaryBuilt);
-        this.updatePlayerScore(now, playerHistory.scores.militaryDestroyed, scores.militaryDestroyed);
-        this.updatePlayerScore(now, playerHistory.scores.militaryLost, scores.militaryLost);
-        this.updatePlayerScore(now, playerHistory.scores.honor, scores.honor);
-        this.updatePlayerScore(now, playerHistory.scores.numberOfShips, scores.numberOfShips);
+    private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScores): bit {
+        return (this.updatePlayerScore(now, playerHistory.scores.total, scores.total)
+            | this.updatePlayerScore(now, playerHistory.scores.economy, scores.economy)
+            | this.updatePlayerScore(now, playerHistory.scores.research, scores.research)
+            | this.updatePlayerScore(now, playerHistory.scores.military, scores.military)
+            | this.updatePlayerScore(now, playerHistory.scores.militaryBuilt, scores.militaryBuilt)
+            | this.updatePlayerScore(now, playerHistory.scores.militaryDestroyed, scores.militaryDestroyed)
+            | this.updatePlayerScore(now, playerHistory.scores.militaryLost, scores.militaryLost)
+            | this.updatePlayerScore(now, playerHistory.scores.honor, scores.honor)
+            | this.updatePlayerScore(now, playerHistory.scores.numberOfShips, scores.numberOfShips)) as bit;
     }
 
-    private updatePlayerScore(now: number, scoreHistory: HistoryItem<number>[], score: number) {
+    private updatePlayerScore(now: number, scoreHistory: HistoryItem<number>[], score: number): bit {
         if (scoreHistory.slice(-1)[0]?.value != score) {
             scoreHistory.push({
                 date: now,
                 value: score,
             });
+            return 1;
         }
+        return 0;
     }
 
     private mapState(status: string | null): PlayerState {
@@ -430,6 +479,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
             v: 'vacation',
             i: 'inactive',
             I: 'inactive-long',
+            o: 'outlaw',
         };
         const states: PlayerStateType[] = [];
         status.split('').forEach(c => states.push(stateMap[c] ?? _throw(`unknown player state '${c}'`)));
@@ -441,7 +491,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         return states as PlayerState;
     }
 
-    private updatePlayerState(now: number, playerHistory: PlayerHistory, player: Player) {
+    private updatePlayerState(now: number, playerHistory: PlayerHistory, player: Player): bit {
         const states = this.mapState(player.status);
 
         if (playerHistory.state.length == 0
@@ -451,33 +501,39 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                 value: states,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
-    private updatePlayerAlliance(now: number, playerHistory: PlayerHistory, player: Player) {
+    private updatePlayerAlliance(now: number, playerHistory: PlayerHistory, player: Player): bit {
         if (playerHistory.alliance.slice(-1)[0]?.value != player.alliance
         ) {
             playerHistory.alliance.push({
                 value: player.alliance,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
-    private updatePlayerName(now: number, playerHistory: PlayerHistory, player: Player) {
+    private updatePlayerName(now: number, playerHistory: PlayerHistory, player: Player): bit {
         if (playerHistory.name.slice(-1)[0]?.value != player.name
         ) {
             playerHistory.name.push({
                 value: player.name,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
-    private updateAlliance(now: number, allyHistory: AllianceHistory, allyData: Alliance, members: Player[]) {
-        this.updateAllianceName(now, allyHistory, allyData);
-        this.updateAllianceTag(now, allyHistory, allyData);
-        this.updateAllianceMembers(now, allyHistory, members);
+    private updateAlliance(now: number, allyHistory: AllianceHistory, allyData: Alliance, members: Player[]): bit {
+        return (this.updateAllianceName(now, allyHistory, allyData)
+            | this.updateAllianceTag(now, allyHistory, allyData)
+            | this.updateAllianceMembers(now, allyHistory, members)) as bit;
     }
 
     private updateAllianceTag(now: number, allyHistory: AllianceHistory, allyData: Alliance) {
@@ -487,20 +543,24 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                 value: allyData.tag,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
-    private updateAllianceName(now: number, allyHistory: AllianceHistory, allyData: Alliance) {
+    private updateAllianceName(now: number, allyHistory: AllianceHistory, allyData: Alliance): bit {
         if (allyHistory.name.slice(-1)[0]?.value != allyData.name
         ) {
             allyHistory.name.push({
                 value: allyData.name,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
-    private updateAllianceMembers(now: number, allyHistory: AllianceHistory, members: Player[]) {
+    private updateAllianceMembers(now: number, allyHistory: AllianceHistory, members: Player[]): bit {
         const memberIds = members.map(member => member.id);
 
         if (allyHistory.members.length == 0
@@ -510,7 +570,9 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                 value: memberIds,
                 date: now,
             });
+            return 1;
         }
+        return 0;
     }
 
     private arraysEqual<T>(a: T[], b: T[]): boolean {

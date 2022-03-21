@@ -75,7 +75,9 @@ import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsMisc from '@stats/views/settings/Misc.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
-import viewsuniverseIndex from '@stats/views/universe/Index.vue';
+import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
+import viewsuniversehistoryAlliances from '@stats/views/universe-history/Alliances.vue';
+import viewsuniversehistoryPlayers from '@stats/views/universe-history/Players.vue';
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
@@ -649,9 +651,21 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#8b0436"
                 },
-                path: "universe",
-                name: "universe",
-                component: viewsuniverseIndex
+                path: "universe-history",
+                name: "universe-history",
+                component: viewsuniversehistoryIndex,
+                children: [
+                    {
+                        path: "alliances",
+                        name: "universe-history/alliances",
+                        component: viewsuniversehistoryAlliances
+                    },
+                    {
+                        path: "players",
+                        name: "universe-history/players",
+                        component: viewsuniversehistoryPlayers
+                    }
+                ]
             }
         ]
     }

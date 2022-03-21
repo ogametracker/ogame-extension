@@ -1,17 +1,80 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <style>
+        #splashscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10000;
+            background: linear-gradient(45deg, hsl(208deg 32% 1%), #08121b);
+            opacity: 1;
+            transition: opacity 1s linear;
+        }
+
+        #splashscreen.fade {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #splashscreen .logo {
+            width: 500px;
+            height: 500px;
+            font-size: 500px;
+            max-width: 70%;
+            aspect-ratio: 1;
+            background-image: url(/icon.svg);
+            background-size: contain;
+            box-shadow: 0.005em 0.01em 0.035em 0 black;
+            border-radius: 6.6666%;
+        }
+
+        #splashscreen .logo-wrapper {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
     </noscript>
+    <div id="splashscreen">
+        <div class="logo-wrapper">
+            <div class="logo"></div>
+        </div>
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-  </body>
+</body>
+
 </html>

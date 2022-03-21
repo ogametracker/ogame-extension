@@ -51,4 +51,9 @@ export enum MessageType {
     UpdateSettings = 'settings/update',
     RequestSettings = 'settings/request-data',
     Settings = 'settings/data',
+
+    // universe-history
+    UniverseHistoryData = 'universe-history/data',
+    NotifyUniverseHistoryUpdate = 'universe-history/notify-update',
+    RequestUniverseHistoryData = 'universe-history/request-data',
 }
