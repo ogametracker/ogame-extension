@@ -648,6 +648,9 @@ const routes: RouteConfig[] = [
                 component: viewstoolsIndex
             },
             {
+                redirect: {
+                    name: "universe-history/players"
+                },
                 meta: {
                     color: "#8b0436"
                 },
