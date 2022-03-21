@@ -10,7 +10,7 @@ import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
 import { SettingsService } from "./settings/SettingsService";
-import { UniverseHistoryService } from "./universe-players/UniverseHistoryService";
+import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 
 const services: MessageService[] = [
     new ExpeditionService(),

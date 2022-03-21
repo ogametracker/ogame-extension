@@ -13,7 +13,8 @@ export class UniverseHistoryModule {
         let manager = this.managers[key];
         if(manager == null) {
             manager = new UniverseHistoryManager(key, meta);
-            manager.addBroadcastNotifyListener(() => this.listeners.forEach(listener => listener(meta)))
+            manager.addBroadcastNotifyListener(() => this.listeners.forEach(listener => listener(meta)));
+            this.managers[key] = manager;
         }
 
         return manager;
