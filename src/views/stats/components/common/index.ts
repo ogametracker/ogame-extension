@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import Checkbox from './Checkbox.vue';
+import CheckboxButton from './CheckboxButton.vue';
 import CustomDialog from './CustomDialog.vue';
 import FloatingMenu from './FloatingMenu.vue';
 import GridTable from './GridTable.vue';
@@ -10,6 +11,7 @@ import ScrollableChart from './ScrollableChart.vue';
 import TabView from './TabView.vue';
 
 Vue.component('checkbox', Checkbox);
+Vue.component('checkbox-button', CheckboxButton);
 Vue.component('custom-dialog', CustomDialog);
 Vue.component('floating-menu', FloatingMenu);
 Vue.component('grid-table', GridTable);
