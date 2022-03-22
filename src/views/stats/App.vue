@@ -526,13 +526,15 @@
 
         &:hover {
             background: rgba(var(--color), 0.5);
-            color: black;
+            text-shadow: 0 0 3px black, 0 0 8px rgb(var(--color)),
+                0 0 16px rgb(var(--color)), 0 0 24px rgb(var(--color));
         }
 
         &.nav-item-active,
         &.nav-item-active:hover {
             background: rgb(var(--color));
             color: black;
+            text-shadow: none;
         }
     }
 

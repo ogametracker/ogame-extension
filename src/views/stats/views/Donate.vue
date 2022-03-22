@@ -46,6 +46,7 @@
         &-header {
             background: rgba(white, 0.4);
             justify-content: center;
+            font-weight: bold;
         }
 
         &-body {
