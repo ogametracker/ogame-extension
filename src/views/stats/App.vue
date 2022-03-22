@@ -72,6 +72,7 @@
             <main :class="activeTab ? activeTab.mainClass : ''">
                 <router-view />
             </main>
+            <footer>by Wonkydonky</footer>
         </template>
 
         <custom-dialog
@@ -497,8 +498,11 @@
     }
 
     main {
-        padding: 16px;
+        padding: 16px 16px 8px 16px;
         overflow: hidden;
+    }
+    footer {
+        padding: 0 8px 4px 16px;
     }
 
     .close-overlay {
