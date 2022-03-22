@@ -272,13 +272,19 @@
             if (!this.isIframeMode) {
                 tabs.push({
                     key: 'switch-account',
-                    customAction: () => this.showAccountSwitchDialog = true,
+                    customAction: async () => await this.initAccountDialog(),
                     icon: 'mdi mdi-account-multiple',
                     color: this.colors.switchAccount,
                 });
             }
 
             return tabs;
+        }
+
+        private async initAccountDialog() {
+            this.showAccountSwitchDialog = true;
+
+            await this.loadKnownAccounts();
         }
 
         private get activeColor(): string | null {
@@ -330,10 +336,6 @@
             const splashscreen = document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');
             setTimeout(() => splashscreen?.remove(), 500);
-
-            if (!this.isIframeMode) {
-                await this.loadKnownAccounts();
-            }
         }
 
         private updateDocumentTitle() {
