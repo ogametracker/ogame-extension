@@ -4,6 +4,7 @@
         :style="{
             '--color': getColorVariable(activeColor),
         }"
+        :class="activeTab ? activeTab.appClass : ''"
     >
         <span v-if="loading"> LOCA: loading... </span>
 
@@ -69,7 +70,7 @@
                     </div>
                 </template>
             </nav>
-            <main :class="activeTab ? activeTab.mainClass : ''">
+            <main>
                 <router-view />
             </main>
             <footer>by Wonkydonky</footer>
@@ -123,7 +124,7 @@
         noNavItem?: boolean;
         color?: string;
         class?: string;
-        mainClass?: string;
+        appClass?: string;
         customAction?: () => void;
 
         keyboardKey?: string;
@@ -259,7 +260,7 @@
                     icon: 'mdi mdi-coffee',
                     label: 'LOCA: Donate',
                     class: 'donate',//TODO: more custom styling 
-                    mainClass: 'donate-page',
+                    appClass: 'donate-page',
                 },
                 {
                     key: 'discord',
@@ -535,8 +536,19 @@
         }
     }
 
-    main.donate-page {
+    #app.donate-page {
         background: black linear-gradient(180deg, rgb(var(--color)), #ffc165);
-        color: black;
+
+        main {
+            color: black;
+        }
+
+        footer {
+            color: black;
+        }
+
+        nav {
+            background: black;
+        }
     }
 </style>
