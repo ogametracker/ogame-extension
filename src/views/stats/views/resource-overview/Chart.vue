@@ -89,7 +89,7 @@
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
-    import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import { addCost, Cost, multiplyCost, multiplyCostComponentWise, subCost } from '@/shared/models/ogame/common/Cost';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
@@ -123,6 +123,15 @@
 
         private get includeFoundShipsFactor(): Record<ResourceType, number> {
             const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return {
+                [ResourceType.metal]: factor,
+                [ResourceType.crystal]: factor,
+                [ResourceType.deuterium]: deuteriumFactor,
+            };
+        }
+
+        private get includeLostShipsFactor(): Record<ResourceType, number> {
+            const { factor, deuteriumFactor } = SettingsDataModule.settings.lostShipsResourceUnits;
             return {
                 [ResourceType.metal]: factor,
                 [ResourceType.crystal]: factor,
@@ -260,6 +269,7 @@
         }
 
         private getCombatResourceAmount(combatReport: CombatReport) {
+            const includeLostShipsFactor = this.includeLostShipsFactor;
             const loot: Cost = {
                 ...combatReport.loot,
                 energy: 0,
@@ -269,7 +279,7 @@
                 { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
             );
 
-            return addCost(loot, lostShipsUnits);
+            return subCost(loot, multiplyCostComponentWise(lostShipsUnits, { ...includeLostShipsFactor, energy: 0 }));
         }
     }
 </script>

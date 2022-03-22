@@ -48,7 +48,7 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
-    import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
+    import { addCost, Cost, multiplyCost, multiplyCostComponentWise, subCost } from '@/shared/models/ogame/common/Cost';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -76,6 +76,15 @@
 
         private get includeFoundShipsFactor(): Record<ResourceType, number> {
             const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return {
+                [ResourceType.metal]: factor,
+                [ResourceType.crystal]: factor,
+                [ResourceType.deuterium]: deuteriumFactor,
+            };
+        }
+
+        private get includeLostShipsFactor(): Record<ResourceType, number> {
+            const { factor, deuteriumFactor } = SettingsDataModule.settings.lostShipsResourceUnits;
             return {
                 [ResourceType.metal]: factor,
                 [ResourceType.crystal]: factor,
@@ -154,7 +163,6 @@
                 }
 
                 case ExpeditionEventType.fleet: {
-
                     return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
                         0
@@ -166,6 +174,7 @@
         }
 
         private getCombatResourceAmount(combatReport: CombatReport) {
+            const includeLostShipsFactor = this.includeLostShipsFactor;
             const loot: Cost = {
                 ...combatReport.loot,
                 energy: 0,
@@ -175,7 +184,7 @@
                 { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
             );
 
-            return addCost(loot, lostShipsUnits);
+            return subCost(loot, multiplyCostComponentWise(lostShipsUnits, { ...includeLostShipsFactor, energy: 0 }));
         }
 
         private get footerItems(): RangedStatsTableItem<Event>[] {

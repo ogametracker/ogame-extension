@@ -108,14 +108,9 @@
     import { parseIntSafe } from "@/shared/utils/parseNumbers";
     import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
-    import { CombatReportDataModule } from "./data/CombatReportDataModule";
-    import { DebrisFieldReportDataModule } from "./data/DebrisFieldReportDataModule";
     import { EmpireDataModule } from "./data/EmpireDataModule";
-    import { ExpeditionDataModule } from "./data/ExpeditionDataModule";
-    import { SettingsDataModule } from "./data/SettingsDataModule";
-    import { IDataModule } from "./data/IDataModule";
     import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
-    import { UniverseHistoryDataModule } from "./data/UniverseHistoryDataModule";
+    import { getRGBString } from './utils/getRGBString';
 
     interface Tab {
         key: string;
@@ -304,16 +299,7 @@
         }
 
         private getColorVariable(hexColor: string | null): string | null {
-            if (hexColor == null) {
-                return null;
-            }
-
-            hexColor = hexColor.substring(1); // remove # at start
-            const r = parseInt(hexColor.substring(0, 2), 16);
-            const g = parseInt(hexColor.substring(2, 4), 16);
-            const b = parseInt(hexColor.substring(4, 6), 16);
-
-            return `${r}, ${g}, ${b}`;
+            return getRGBString(hexColor);
         }
 
 

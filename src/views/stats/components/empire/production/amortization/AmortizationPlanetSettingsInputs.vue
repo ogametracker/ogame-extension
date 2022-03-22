@@ -63,64 +63,87 @@
             </span>
 
             <span>LOCA: Crawlers</span>
-            <span>
-                <o-ship ship="crawler" :disabled="settings.crawlers.enabled" />
-                <checkbox-button v-model="settings.crawlers.overload">
-                    LOCA: Overload
-                </checkbox-button>
-
-                <button :value="settings.crawlers.count == 'max'">
-                    LOCA: Max-Count
-                </button>
-                <input
-                    type="number"
-                    :value="settings.crawlers.count"
-                    v-if="settings.crawlers.count != 'max'"
-                />
+            <span class="crawler-grid">
+                <div class="crawler-grid-row">
+                    <o-ship
+                        ship="crawler"
+                        :disabled="settings.crawlers.enabled"
+                        @click="
+                            settings.crawlers.enabled =
+                                !settings.crawlers.enabled
+                        "
+                    />
+                    <checkbox-button
+                        v-model="settings.crawlers.overload"
+                        color="#00ff00"
+                    >
+                        LOCA: Overload
+                    </checkbox-button>
+                </div>
+                <div class="crawler-grid-row">
+                    <checkbox-button
+                        v-model="settings.crawlers.max"
+                        :unchecked-color="null"
+                        :style="{
+                            '--color': settings.crawlers.max
+                                ? '0, 255, 0'
+                                : null,
+                        }"
+                    >
+                        <span
+                            v-if="settings.crawlers.max"
+                            v-text="'LOCA: Max-Count'"
+                        />
+                        <span v-else v-text="'LOCA: Fix Count'" />
+                    </checkbox-button>
+                    <input
+                        type="number"
+                        :value="settings.crawlers.count"
+                        :disabled="settings.crawlers.max"
+                    />
+                </div>
             </span>
 
-            <template v-if="settings.mineLevels != null">
-                <span>LOCA: Mine Levels</span>
+            <template v-if="settings.mines != null">
+                <span>LOCA: Mines</span>
                 <span class="mine-grid">
                     <o-building
                         building="metal-mine"
-                        :disabled="settings.mineLevels.metalMine.show"
+                        :disabled="!settings.mines.metalMine.show"
                         @click="
-                            settings.mineLevels.metalMine.show =
-                                !settings.mineLevels.metalMine.show
+                            settings.mines.metalMine.show =
+                                !settings.mines.metalMine.show
                         "
                     />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.metalMine.level"
+                        v-model="settings.mines.metalMine.level"
                     />
 
                     <o-building
                         building="crystal-mine"
-                        :disabled="settings.mineLevels.crystalMine.show"
+                        :disabled="!settings.mines.crystalMine.show"
                         @click="
-                            settings.mineLevels.crystalMine.show =
-                                !settings.mineLevels.crystalMine.show
+                            settings.mines.crystalMine.show =
+                                !settings.mines.crystalMine.show
                         "
                     />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.crystalMine.level"
+                        v-model="settings.mines.crystalMine.level"
                     />
 
                     <o-building
                         building="deuterium-synthesizer"
-                        :disabled="
-                            settings.mineLevels.deuteriumSynthesizer.show
-                        "
+                        :disabled="!settings.mines.deuteriumSynthesizer.show"
                         @click="
-                            settings.mineLevels.deuteriumSynthesizer.show =
-                                !settings.mineLevels.deuteriumSynthesizer.show
+                            settings.mines.deuteriumSynthesizer.show =
+                                !settings.mines.deuteriumSynthesizer.show
                         "
                     />
                     <input
                         type="number"
-                        v-model="settings.mineLevels.deuteriumSynthesizer.level"
+                        v-model="settings.mines.deuteriumSynthesizer.level"
                     />
                 </span>
             </template>
@@ -151,7 +174,8 @@
         crawlers: {
             enabled: boolean;
             overload: boolean;
-            count: 'max' | number;
+            count: number;
+            max: boolean;
         };
 
         mines?: {
@@ -260,6 +284,17 @@
 
         .o-building {
             cursor: pointer;
+        }
+    }
+
+    .crawler-grid {
+        display: grid;
+        gap: 4px;
+
+        &-row {
+            display: flex;
+            column-gap: 4px;
+            height: 32px;
         }
     }
 </style>

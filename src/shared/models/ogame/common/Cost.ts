@@ -31,3 +31,12 @@ export function multiplyCost(cost: Cost, factor: number): Cost {
         energy: cost.energy * factor,
     };
 }
+
+export function multiplyCostComponentWise(cost: Cost, factors: Cost): Cost {
+    return {
+        metal: cost.metal * factors.metal,
+        crystal: cost.crystal * factors.crystal,
+        deuterium: cost.deuterium * factors.deuterium,
+        energy: cost.energy * factors.energy,
+    };
+}

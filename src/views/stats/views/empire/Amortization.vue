@@ -325,7 +325,7 @@
             AmortizationPlayerSettingsInputs,
         },
     })
-    export default class ResourceProduction extends Vue {
+    export default class Amortization extends Vue {
 
         /**********************************/
         /* START amortization calculation */
@@ -366,6 +366,7 @@
                     enabled: false,
                     overload: false,
                     count: 0,
+                    max: false,
                 },
             },
         };
@@ -410,7 +411,10 @@
 
         private getAmortizationGenerationSettings(): AmortizationGenerationSettings {
             const settings: AmortizationGenerationSettings = {
-                player: this.playerSettings,
+                player: {
+                    ...this.playerSettings,
+                    msuConversionRates: SettingsDataModule.settings.msuConversionRates,
+                },
                 planets: this.planetSettings,
                 maxLevels: this.maxLevels,
                 astrophysics: this.astrophysicsSettings,
@@ -471,7 +475,8 @@
                         crawlers: {
                             enabled: true,
                             overload: empire.playerClass == PlayerClass.collector,
-                            count: empire.playerClass == PlayerClass.collector ? 'max' : planet.ships[ShipType.crawler],
+                            count: planet.ships[ShipType.crawler],
+                            max: empire.playerClass == PlayerClass.collector,
                         },
                     };
                     acc[planet.id] = settings;
@@ -490,7 +495,8 @@
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
                         overload: empire.playerClass == PlayerClass.collector,
-                        count: empire.playerClass == PlayerClass.collector ? 'max' : 0,
+                        count: 0,
+                        max: empire.playerClass == PlayerClass.collector,
                     },
                 },
             };
@@ -806,7 +812,7 @@
                     },
                     ships: {
                         ...planet.ships,
-                        [ShipType.crawler]: planetSettings.crawlers.count == 'max' ? 10_000 : planetSettings.crawlers.count,
+                        [ShipType.crawler]: planetSettings.crawlers.max ? 10_000 : planetSettings.crawlers.count,
                     },
                 },
                 player: {

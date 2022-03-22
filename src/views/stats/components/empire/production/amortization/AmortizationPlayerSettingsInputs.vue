@@ -1,6 +1,6 @@
 <template>
     <div class="player-settings">
-        <msu-conversion-rate-settings style="display: contents;" />
+        <msu-conversion-rate-settings class="msu-rate-settings" />
 
         <span>LOCA: Officers</span>
         <span class="gap">
@@ -141,7 +141,7 @@
 
         > * {
             display: flex;
-            
+
             &:nth-of-type(2n + 1) {
                 justify-self: flex-end;
             }
@@ -162,6 +162,21 @@
 
             > * {
                 display: flex;
+            }
+        }
+    }
+
+    .msu-rate-settings {
+        display: contents;
+
+        &::v-deep {
+            .fake-table-header {
+                background: none;
+                justify-content: end;
+                padding-right: 0;
+            }
+            .fake-table-body {
+                padding-left: 0;
             }
         }
     }

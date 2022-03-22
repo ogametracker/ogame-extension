@@ -20,7 +20,7 @@
                     to: { name: 'combats/overview' },
                 },
                 {
-                    label: 'LOCA: Resource Balance',
+                    label: 'LOCA: Loot',
                     to: { name: 'combats/resources' },
                 },
                 {
