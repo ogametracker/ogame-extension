@@ -1,5 +1,5 @@
 <template>
-    <page :nav-items="navItems" />
+    <page v-if="ready" :nav-items="navItems" />
 </template>
 
 <script lang="ts">
@@ -9,8 +9,11 @@
 
     @Component({})
     export default class Expeditions extends Vue {
+        private ready = false;
+
         private async mounted() {
             await UniverseHistoryDataModule.load();
+            this.ready = true;
         }
 
         private get navItems(): ListNavItem[] {

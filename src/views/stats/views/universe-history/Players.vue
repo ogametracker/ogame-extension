@@ -48,7 +48,7 @@
 
             let index = 0;
             for (const curDate of dates) {
-                const { date, value: score } = scoreHistory[index];
+                const { date, value: score } = scoreHistory[index] ?? { date: Number.MAX_VALUE, value: null };
                 if (curDate < date) {
                     result.push(result[result.length - 1] ?? 0);
                     continue;
@@ -70,7 +70,7 @@
                 key: player.id,
                 values: this.playerScoreToValues(dates, player.scores.total),
                 color: 'yellow',
-                label: 'total',
+                label: `total ${player.name.slice(-1)[0].value}`,
                 filled: false,
                 stack: false,
                 hidePoints: false,
