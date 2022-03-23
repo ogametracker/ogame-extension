@@ -113,6 +113,7 @@
     import { EmpireDataModule } from "./data/EmpireDataModule";
     import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
     import { getRGBString } from './utils/getRGBString';
+    import { delay } from '@/shared/utils/delay';
 
     interface Tab {
         key: string;
@@ -329,6 +330,8 @@
             });
 
             await EmpireDataModule.load();
+            await document.fonts.ready;
+            await delay(500);
 
             this.updateDocumentTitle();
 
