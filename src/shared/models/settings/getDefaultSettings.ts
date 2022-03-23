@@ -91,7 +91,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 events: {
                     [ExpeditionEventType.nothing]: '#404040',
                     [ExpeditionEventType.resources]: '#2242e2',
-                    [ExpeditionEventType.fleet]: '#e01a76',
+                    [ExpeditionEventType.fleet]: '#dddddd',
                     [ExpeditionEventType.delay]: '#ff5e00',
                     [ExpeditionEventType.early]: '#00c23a',
                     [ExpeditionEventType.darkMatter]: '#33bcdb',
