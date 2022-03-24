@@ -19,7 +19,7 @@
 
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
-                <span v-text="'LOCA: Donate using PayPal'" />
+                <span v-text="'LOCA: Donate using PayPal or debit/credit card'" />
             </div>
             <div class="fake-table-body">
                 <a
