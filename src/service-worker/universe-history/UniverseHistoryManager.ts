@@ -71,6 +71,7 @@ declare namespace OgameApi {
     export interface PlayerScore {
         id: string;
         score: string;
+        position: string;
         ships?: string;
     }
 }
@@ -88,16 +89,21 @@ interface Alliance {
     name: string;
 }
 
-interface PlayerScores {
-    total: number;
-    economy: number;
-    research: number;
-    military: number;
-    militaryBuilt: number;
-    militaryDestroyed: number;
-    militaryLost: number;
-    honor: number;
-    numberOfShips: number;
+interface ScorePosition {
+    score: number;
+    position: number;
+}
+
+interface PlayerScorePositions {
+    total: ScorePosition;
+    economy: ScorePosition;
+    research: ScorePosition;
+    military: ScorePosition;
+    militaryBuilt: ScorePosition;
+    militaryDestroyed: ScorePosition;
+    militaryLost: ScorePosition;
+    honor: ScorePosition;
+    numberOfShips: ScorePosition;
 }
 
 enum HighscoreType {
@@ -138,16 +144,16 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         parseAttributeValue: false,
     });
 
-    private readonly defaultPlayerScores: PlayerScores = {
-        total: 0,
-        economy: 0,
-        research: 0,
-        military: 0,
-        militaryBuilt: 0,
-        militaryDestroyed: 0,
-        militaryLost: 0,
-        numberOfShips: 0,
-        honor: 0,
+    private readonly defaultPlayerScores: PlayerScorePositions = {
+        total: { score: 0, position: 0 },
+        economy: { score: 0, position: 0 },
+        research: { score: 0, position: 0 },
+        military: { score: 0, position: 0 },
+        militaryBuilt: { score: 0, position: 0 },
+        militaryDestroyed: { score: 0, position: 0 },
+        militaryLost: { score: 0, position: 0 },
+        numberOfShips: { score: 0, position: 0 },
+        honor: { score: 0, position: 0 },
     };
     private readonly listeners: (() => void)[] = [];
     private static timeout: number | undefined = undefined;
@@ -180,7 +186,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         timeout ??= Math.max(0, data.lastUpdate + this.intervalInMs - now);
         _logDebug(`next universe history tracking in ${timeout} ms (${new Date(Date.now() + timeout)}) for universe ${this.serverId} ${this.language.toUpperCase()}`);
 
-        if(UniverseHistoryManager.timeout != null) {
+        if (UniverseHistoryManager.timeout != null) {
             clearTimeout(UniverseHistoryManager.timeout);
             UniverseHistoryManager.timeout = undefined;
         }
@@ -196,7 +202,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
             const planets = await this.getPlanets();
 
             const updated = await this.updateHistory(players, alliances, playerScores, planets);
-            if(updated) {
+            if (updated) {
                 this.broadcastUniverseHistoryUpdate();
             }
 
@@ -210,7 +216,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         this.listeners.forEach(listener => listener());
     }
 
-    private async updateHistory(players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScores>, planets: Planet[]): Promise<boolean> {
+    private async updateHistory(players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScorePositions>, planets: Planet[]): Promise<boolean> {
         const now = Date.now();
         let updated = 0 as bit;
 
@@ -258,7 +264,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         return updated;
     }
 
-    private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScores>, planets: Planet[]): bit {
+    private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScorePositions>, planets: Planet[]): bit {
         const knownPlayerIds = players.map(player => player.id);
         let updated: bit = 0;
         players.forEach(player => {
@@ -268,6 +274,17 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
                     name: [],
                     planets: {},
                     scores: {
+                        total: [],
+                        economy: [],
+                        research: [],
+                        military: [],
+                        militaryBuilt: [],
+                        militaryDestroyed: [],
+                        militaryLost: [],
+                        honor: [],
+                        numberOfShips: [],
+                    },
+                    scorePositions: {
                         total: [],
                         economy: [],
                         research: [],
@@ -308,7 +325,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         return updated;
     }
 
-    private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScores, planets: Planet[]): bit {
+    private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScorePositions, planets: Planet[]): bit {
         return (this.updatePlayerName(now, playerHistory, player)
             | this.updatePlayerAlliance(now, playerHistory, player)
             | this.updatePlayerState(now, playerHistory, player)
@@ -445,27 +462,39 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         };
     }
 
-    private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScores): bit {
-        return (this.updatePlayerScore(now, playerHistory.scores.total, scores.total)
-            | this.updatePlayerScore(now, playerHistory.scores.economy, scores.economy)
-            | this.updatePlayerScore(now, playerHistory.scores.research, scores.research)
-            | this.updatePlayerScore(now, playerHistory.scores.military, scores.military)
-            | this.updatePlayerScore(now, playerHistory.scores.militaryBuilt, scores.militaryBuilt)
-            | this.updatePlayerScore(now, playerHistory.scores.militaryDestroyed, scores.militaryDestroyed)
-            | this.updatePlayerScore(now, playerHistory.scores.militaryLost, scores.militaryLost)
-            | this.updatePlayerScore(now, playerHistory.scores.honor, scores.honor)
-            | this.updatePlayerScore(now, playerHistory.scores.numberOfShips, scores.numberOfShips)) as bit;
+    private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScorePositions): bit {
+        return (this.updatePlayerScorePosition(now, playerHistory.scores.total, playerHistory.scorePositions.total, scores.total)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.economy, playerHistory.scorePositions.economy, scores.economy)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.research, playerHistory.scorePositions.research, scores.research)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.military, playerHistory.scorePositions.military, scores.military)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.militaryBuilt, playerHistory.scorePositions.militaryBuilt, scores.militaryBuilt)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.militaryDestroyed, playerHistory.scorePositions.militaryDestroyed, scores.militaryDestroyed)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.militaryLost, playerHistory.scorePositions.militaryLost, scores.militaryLost)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.honor, playerHistory.scorePositions.honor, scores.honor)
+            | this.updatePlayerScorePosition(now, playerHistory.scores.numberOfShips, playerHistory.scorePositions.numberOfShips, scores.numberOfShips)) as bit;
     }
 
-    private updatePlayerScore(now: number, scoreHistory: HistoryItem<number>[], score: number): bit {
+    private updatePlayerScorePosition(now: number, scoreHistory: HistoryItem<number>[], positionHistory: HistoryItem<number>[], scorePosition: ScorePosition): bit {
+        const { score, position } = scorePosition;
+        let updated: bit = 0;
+
         if (scoreHistory.slice(-1)[0]?.value != score) {
             scoreHistory.push({
                 date: now,
                 value: score,
             });
-            return 1;
+            updated = 1;
         }
-        return 0;
+
+        if (positionHistory.slice(-1)[0]?.value != position) {
+            positionHistory.push({
+                date: now,
+                value: position,
+            });
+            updated = 1;
+        }
+
+        return updated;
     }
 
     private mapState(status: string | null): PlayerState {
@@ -668,17 +697,17 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         return alliances;
     }
 
-    private async getAllPlayerScores(): Promise<Record<number, PlayerScores>> {
-        const scores: Record<number, PlayerScores> = {};
+    private async getAllPlayerScores(): Promise<Record<number, PlayerScorePositions>> {
+        const scores: Record<number, PlayerScorePositions> = {};
 
-        const total = await this.getPlayerScores(HighscoreType.total);
-        const economy = await this.getPlayerScores(HighscoreType.economy);
-        const research = await this.getPlayerScores(HighscoreType.research);
-        const military = await this.getPlayerMilitaryScores();
-        const militaryBuilt = await this.getPlayerScores(HighscoreType.militaryBuilt);
-        const militaryDestroyed = await this.getPlayerScores(HighscoreType.militaryDestroyed);
-        const militaryLost = await this.getPlayerScores(HighscoreType.militaryLost);
-        const honor = await this.getPlayerScores(HighscoreType.honor);
+        const total = await this.getPlayerScorePositions(HighscoreType.total);
+        const economy = await this.getPlayerScorePositions(HighscoreType.economy);
+        const research = await this.getPlayerScorePositions(HighscoreType.research);
+        const military = await this.getPlayerMilitaryScorePositions();
+        const militaryBuilt = await this.getPlayerScorePositions(HighscoreType.militaryBuilt);
+        const militaryDestroyed = await this.getPlayerScorePositions(HighscoreType.militaryDestroyed);
+        const militaryLost = await this.getPlayerScorePositions(HighscoreType.militaryLost);
+        const honor = await this.getPlayerScorePositions(HighscoreType.honor);
 
         Object.keys(total)
             .map(playerId => parseIntSafe(playerId, 10))
@@ -699,33 +728,56 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         return scores;
     }
 
-    private async getPlayerScores(type: Exclude<HighscoreType, HighscoreType.militaryAndNumberOfShips>): Promise<Record<number, number>> {
-        const scores: Record<number, number> = {};
+    private async getPlayerScorePositions(type: Exclude<HighscoreType, HighscoreType.militaryAndNumberOfShips>): Promise<Record<number, ScorePosition>> {
+        const scores: Record<number, ScorePosition> = {};
 
         const xml = await this.getXml<OgameApi.HighscoreXml>(`highscore.xml?category=1&type=${type}`);
         xml.highscore.player.forEach(player => {
             const id = parseIntSafe(player.id ?? _throw('no player id found'), 10);
             const score = parseIntSafe(player.score ?? _throw('no player score found'), 10);
+            const position = parseIntSafe(player.position ?? _throw('no player position found'), 10);
 
-            scores[id] = score;
+            scores[id] = { score, position };
         });
         return scores;
     }
 
-    private async getPlayerMilitaryScores(): Promise<Record<number, { points: number; numberOfShips: number }>> {
-        const scores: Record<number, { points: number; numberOfShips: number }> = {};
+    private async getPlayerMilitaryScorePositions(): Promise<Record<number, { points: ScorePosition, numberOfShips: ScorePosition }>> {
+        const scores: Record<number, { points: ScorePosition, numberOfShips: ScorePosition }> = {};
 
         const xml = await this.getXml<OgameApi.HighscoreXml>(`highscore.xml?category=1&type=${HighscoreType.militaryAndNumberOfShips}`);
-        xml.highscore.player.forEach(player => {
+        const mapped = xml.highscore.player.map(player => {
             const id = parseIntSafe(player.id ?? _throw('no player id found'), 10);
-            const points = parseIntSafe(player.score ?? _throw('no player score found'), 10);
+            const score = parseIntSafe(player.score ?? _throw('no player score found'), 10);
+            const position = parseIntSafe(player.position ?? _throw('no player position found'), 10);
+
             const numberOfShips = parseIntSafe(player.ships ?? '0', 10);
 
-            scores[id] = {
-                points,
+            return {
+                id,
+                score,
+                position,
                 numberOfShips,
             };
         });
+        mapped.sort((a, b) => b.numberOfShips - a.numberOfShips);
+
+        mapped.forEach((player, index) => {
+            const { id, score, position, numberOfShips } = player;
+            const numberOfShipsPosition = index + 1;
+
+            scores[id] = {
+                points: {
+                    score,
+                    position,
+                },
+                numberOfShips: {
+                    score: numberOfShips,
+                    position: numberOfShipsPosition,
+                },
+            };
+        });
+
         return scores;
     }
 }

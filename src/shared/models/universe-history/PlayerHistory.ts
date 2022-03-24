@@ -20,6 +20,18 @@ export interface PlayerHistory {
         honor: HistoryItem<number>[];
         numberOfShips: HistoryItem<number>[];
     };
+    /** score position changes */
+    scorePositions: {
+        total: HistoryItem<number>[];
+        economy: HistoryItem<number>[];
+        research: HistoryItem<number>[];
+        military: HistoryItem<number>[];
+        militaryBuilt: HistoryItem<number>[];
+        militaryDestroyed: HistoryItem<number>[];
+        militaryLost: HistoryItem<number>[];
+        honor: HistoryItem<number>[];
+        numberOfShips: HistoryItem<number>[];
+    };
     /** alliance changes */
     alliance: HistoryItem<number | null>[];
     /** state changes */
