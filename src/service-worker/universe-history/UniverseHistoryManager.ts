@@ -13,6 +13,7 @@ import { PlanetHistory } from '../../shared/models/universe-history/PlanetHistor
 import { MoonHistory } from '../../shared/models/universe-history/MoonHistory';
 import { _logDebug } from '../../shared/utils/_log';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace OgameApi {
     export interface Response {
         timestamp: string;
@@ -164,7 +165,7 @@ export class UniverseHistoryManager extends PersistentDataManager<UniverseHistor
         this.language = meta.language;
         this.serverId = meta.serverId;
 
-        this.initTracking();
+        void this.initTracking();
     }
 
     public addBroadcastNotifyListener(listener: () => void) {

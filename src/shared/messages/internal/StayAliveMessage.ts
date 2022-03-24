@@ -1,4 +1,4 @@
 import { NoDataMessage } from "../Message";
 import { MessageType } from "../MessageType";
 
-export interface StayAliveMessage extends NoDataMessage<MessageType.StayAlive> { }
+export type StayAliveMessage = NoDataMessage<MessageType.StayAlive>;

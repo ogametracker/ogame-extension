@@ -1,5 +1,5 @@
-import Vue from "vue";
-import { Localization } from "./Localization";
+import Vue from 'vue';
+import { Localization } from './Localization';
 
 // augment Vue type with localization stuff
 declare module 'vue/types/vue' {

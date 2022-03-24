@@ -15,6 +15,7 @@ import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { Items } from "../../shared/models/ogame/items/Items";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 let tabContent: Element | null = null;
 
@@ -96,7 +97,7 @@ function trackExpeditions(elem: Element) {
                     html,
                 },
             };
-            chrome.runtime.sendMessage(workerMessage);
+            sendMessage(workerMessage);
 
             // mark message as "waiting for result"
             msg.classList.add(

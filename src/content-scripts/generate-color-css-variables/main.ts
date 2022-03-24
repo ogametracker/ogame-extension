@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { RequestSettingsMessage, SettingsMessage } from "../../shared/messages/settings";
@@ -35,7 +36,7 @@ function requestSettings() {
         type: MessageType.RequestSettings,
         ogameMeta,
     };
-    chrome.runtime.sendMessage(requestMessage);
+    sendMessage(requestMessage);
 }
 
 function generateCssVariables(colors: ColorSettings) {

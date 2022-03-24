@@ -1,6 +1,6 @@
-import { MoonBuildingLevels } from "./MoonBuildingLevels";
-import { MoonShipCount } from "./MoonShipCount";
-import { PlanetDataBase } from "./PlanetDataBase";
+import { MoonBuildingLevels } from './MoonBuildingLevels';
+import { MoonShipCount } from './MoonShipCount';
+import { PlanetDataBase } from './PlanetDataBase';
 
 export interface MoonData extends PlanetDataBase {
     isMoon: true;

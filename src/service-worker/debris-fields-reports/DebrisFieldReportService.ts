@@ -25,7 +25,7 @@ export class DebrisFieldReportService implements MessageService {
                         type: MessageType.WillNotBeTracked,
                         data: msg.data.id,
                     };
-                    broadcastMessage(ignoreMessage);
+                    await broadcastMessage(ignoreMessage);
                     break;
                 }
 
@@ -38,7 +38,7 @@ export class DebrisFieldReportService implements MessageService {
                         type: MessageType.NewDebrisFieldReport,
                         data: report,
                     };
-                    broadcastMessage(newDfReportMessage);
+                    await broadcastMessage(newDfReportMessage);
                 }
                 // send data of the specific expedition
                 else {
@@ -47,7 +47,7 @@ export class DebrisFieldReportService implements MessageService {
                         type: MessageType.DebrisFieldReport,
                         data: report,
                     };
-                    broadcastMessage(dfReportMessage);
+                    await broadcastMessage(dfReportMessage);
                 }
                 break;
             }
@@ -69,6 +69,6 @@ export class DebrisFieldReportService implements MessageService {
             type: MessageType.AllDebrisFieldReports,
             data: reports,
         };
-        broadcastMessage(allDfReportsMessage);
+        await broadcastMessage(allDfReportsMessage);
     }
 }

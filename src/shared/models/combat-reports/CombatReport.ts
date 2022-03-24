@@ -1,6 +1,6 @@
-import { Coordinates } from "../ogame/common/Coordinates";
-import { ResourceType } from "../ogame/resources/ResourceType";
-import { ShipType } from "../ogame/ships/ShipType";
+import { Coordinates } from '../ogame/common/Coordinates';
+import { ResourceType } from '../ogame/resources/ResourceType';
+import { ShipType } from '../ogame/ships/ShipType';
 import { CombatResultType } from './CombatResultType';
 
 export interface CombatReport {

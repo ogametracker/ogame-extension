@@ -8,7 +8,7 @@ import { router } from './router';
 import './i18n/Localization-vue.ts';
 import { SettingsDataModule } from './data/SettingsDataModule';
 
-init();
+void init();
 
 
 async function init() {

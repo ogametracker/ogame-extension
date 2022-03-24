@@ -1,4 +1,4 @@
-import { HistoryItem } from "./HistoryItem";
+import { HistoryItem } from './HistoryItem';
 
 export type MoonState = null | 'deleted';
 

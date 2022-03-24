@@ -7,6 +7,7 @@ import { parseCoordinates } from '../../shared/utils/parseCoordinates';
 import { Coordinates } from "../../shared/models/ogame/common/Coordinates";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackOwnedPlanets() {
     observerCallbacks.push({
@@ -30,7 +31,7 @@ export function trackOwnedPlanets() {
                 type: MessageType.UpdatePlanetData,
                 data: ownedPlanets,
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

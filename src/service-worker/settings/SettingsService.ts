@@ -14,12 +14,12 @@ export class SettingsService implements MessageService {
             case MessageType.UpdateSettings: {
                 const msg = message as UpdateSettingsMessage;
                 await this.module.updateSettings(msg);
-                this.broadcastSettings(message.ogameMeta);
+                await this.broadcastSettings(message.ogameMeta);
                 break;
             }
             
             case MessageType.RequestSettings: {
-                this.broadcastSettings(message.ogameMeta);
+                await this.broadcastSettings(message.ogameMeta);
                 break;
             }
         }
@@ -33,6 +33,6 @@ export class SettingsService implements MessageService {
             type: MessageType.Settings,
             data: settings,
         };
-        broadcastMessage(settingsMessage);
+        await broadcastMessage(settingsMessage);
     }
 }

@@ -1,5 +1,5 @@
-import { Coordinates } from "../ogame/common/Coordinates";
-import { HistoryItem } from "./HistoryItem";
+import { Coordinates } from '../ogame/common/Coordinates';
+import { HistoryItem } from './HistoryItem';
 import { MoonHistory } from './MoonHistory';
 
 export type PlanetState = null | 'deleted';

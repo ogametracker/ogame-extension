@@ -5,6 +5,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetBuildingLevelsMessage } from "../../shared/messages/tracking/empire";
 import { MessageType } from "../../shared/messages/MessageType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackFacilitiesPage() {
     observerCallbacks.push({
@@ -53,7 +54,7 @@ export function trackFacilitiesPage() {
                     data: buildingLevels,
                 },
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

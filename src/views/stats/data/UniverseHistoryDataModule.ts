@@ -46,14 +46,14 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.UniverseHistoryData:
-            case MessageType.NotifyUniverseHistoryUpdate: {
-                const { data } = msg as UniverseHistoryDataMessage;
-                this.history = data;
+        case MessageType.UniverseHistoryData:
+        case MessageType.NotifyUniverseHistoryUpdate: {
+            const { data } = msg as UniverseHistoryDataMessage;
+            this.history = data;
 
-                this.lock.release();
-                break;
-            }
+            this.lock.release();
+            break;
+        }
         }
     }
 }

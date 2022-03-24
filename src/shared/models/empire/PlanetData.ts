@@ -1,7 +1,7 @@
-import { PlanetBuildingLevels } from "./PlanetBuildingLevels";
-import { PlanetDataBase } from "./PlanetDataBase";
-import { PlanetShipCount } from "./PlanetShipCount";
-import { ProductionSettings } from "./ProductionSettings";
+import { PlanetBuildingLevels } from './PlanetBuildingLevels';
+import { PlanetDataBase } from './PlanetDataBase';
+import { PlanetShipCount } from './PlanetShipCount';
+import { ProductionSettings } from './ProductionSettings';
 
 export interface PlanetData extends PlanetDataBase {
     isMoon: false;

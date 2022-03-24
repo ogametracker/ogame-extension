@@ -1,4 +1,4 @@
-import { ResourceType } from "../ogame/resources/ResourceType";
+import { ResourceType } from '../ogame/resources/ResourceType';
 
 export interface DebrisFieldReport {
     date: number;

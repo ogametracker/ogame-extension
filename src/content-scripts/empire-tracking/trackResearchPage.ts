@@ -6,6 +6,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackResearchPage() {
     observerCallbacks.push({
@@ -26,7 +27,7 @@ export function trackResearchPage() {
                 type: MessageType.UpdateResearchLevels,
                 data: researchLevels,
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

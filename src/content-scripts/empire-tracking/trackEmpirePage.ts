@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
@@ -88,7 +89,7 @@ export function trackEmpirePage() {
                         data: buildingLevels,
                     },
                 };
-                chrome.runtime.sendMessage(buildingsMessage);
+                sendMessage(buildingsMessage);
 
                 // update ship counts
                 const shipCounts = shipTypes.reduce((acc, ship) => {
@@ -104,7 +105,7 @@ export function trackEmpirePage() {
                         data: shipCounts,
                     },
                 };
-                chrome.runtime.sendMessage(shipCountsMessage);
+                sendMessage(shipCountsMessage);
 
                 // update defense counts
                 const defenseCounts = defenseTypes.reduce((acc, def) => {
@@ -124,7 +125,7 @@ export function trackEmpirePage() {
                         },
                     },
                 };
-                chrome.runtime.sendMessage(defenseCountsMessage);
+                sendMessage(defenseCountsMessage);
 
                 // update active items using the small image hashes
                 const itemDoc = domParser.parseFromString(planet.equipment_html, 'text/html');
@@ -166,7 +167,7 @@ export function trackEmpirePage() {
                         data: activeItems,
                     },
                 };
-                chrome.runtime.sendMessage(message);
+                sendMessage(message);
             });
 
 
@@ -181,7 +182,7 @@ export function trackEmpirePage() {
                 type: MessageType.UpdateResearchLevels,
                 data: researchLevels,
             };
-            chrome.runtime.sendMessage(researchMessage);
+            sendMessage(researchMessage);
         },
     });
 }

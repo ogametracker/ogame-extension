@@ -11,6 +11,7 @@ import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 let tabContent: Element | null = null;
 
@@ -111,7 +112,7 @@ function trackDebrisFieldReports(elem: Element) {
                     html,
                 },
             };
-            chrome.runtime.sendMessage(workerMessage);
+            sendMessage(workerMessage);
 
             // mark message as "waiting for result"
             msg.classList.add(

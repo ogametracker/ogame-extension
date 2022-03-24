@@ -122,7 +122,7 @@ export class EmpireService implements MessageService {
             ogameMeta: meta,
             data: empireData,
         };
-        broadcastMessage(notifyMessge);
+        await broadcastMessage(notifyMessge);
     }
 
 
@@ -134,6 +134,6 @@ export class EmpireService implements MessageService {
             type: MessageType.EmpireData,
             data: empireData,
         };
-        broadcastMessage(empireDataMessage);
+        await broadcastMessage(empireDataMessage);
     }
 }

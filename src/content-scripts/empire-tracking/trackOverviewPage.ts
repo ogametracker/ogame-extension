@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
@@ -52,7 +53,7 @@ export function trackOverviewPage(): void {
                     data: activeItems,
                 },
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         }
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });

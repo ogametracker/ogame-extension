@@ -15,7 +15,7 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
 
     private readonly lock = new Lock();
 
-    public updateSettings(settings: Settings) {
+    public async updateSettings(settings: Settings) {
         console.debug('updating settings', settings);
 
         const message: UpdateSettingsMessage = {
@@ -23,7 +23,7 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
             ogameMeta: GlobalOgameMetaData,
             data: settings,
         };
-        broadcastMessage(message);
+        await broadcastMessage(message);
 
         this.settings = settings;
     }
@@ -62,13 +62,13 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.Settings: {
-                const { data: settings } = msg as SettingsMessage;
-                this.settings = settings;
+        case MessageType.Settings: {
+            const { data: settings } = msg as SettingsMessage;
+            this.settings = settings;
 
-                this.lock.release();
-                break;
-            }
+            this.lock.release();
+            break;
+        }
         }
     }
 }

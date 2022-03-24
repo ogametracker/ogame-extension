@@ -4,6 +4,7 @@ import { PlayerOfficers } from "../../shared/models/empire/PlayerOfficers";
 import { UpdateActiveOfficersMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackOfficers() {
     observerCallbacks.push({
@@ -28,7 +29,7 @@ export function trackOfficers() {
                 type: MessageType.UpdateActiveOfficers,
                 data: officers,
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetBuildingLevelsMessage, UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
 import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
@@ -50,7 +51,7 @@ export function trackSuppliesPage() {
                     data: buildingLevels,
                 },
             };
-            chrome.runtime.sendMessage(buildingsMessage);
+            sendMessage(buildingsMessage);
 
 
             const shipTypes = [ ShipType.solarSatellite, ShipType.crawler];
@@ -71,7 +72,7 @@ export function trackSuppliesPage() {
                     data: shipCounts,
                 },
             };
-            chrome.runtime.sendMessage(shipMessage);
+            sendMessage(shipMessage);
         },
     });
 }

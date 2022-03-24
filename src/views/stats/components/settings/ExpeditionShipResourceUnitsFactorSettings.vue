@@ -61,8 +61,8 @@
             this.deuteriumFactor = deuteriumFactor;
         }
 
-        private updateMsuConversionRates() {
-            SettingsDataModule.updateSettings({
+        private async updateMsuConversionRates() {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 expeditionFoundShipsResourceUnits: {
                     factor: this.factor,

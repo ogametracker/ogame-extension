@@ -3,7 +3,8 @@
         :header="header"
         :labels="labels"
         :keys="keys"
-        v-model="colors"
+        :value="colors"
+        @input="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
@@ -46,8 +47,8 @@
             return SettingsDataModule.settings.colors.resources;
         }
 
-        private set colors(value: Record<ResourceType | 'totalMsu', string>) {
-            SettingsDataModule.updateSettings({
+        private async updateColors(value: Record<ResourceType | 'totalMsu', string>) {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -56,10 +57,10 @@
             });
         }
 
-        public resetColors(): void {
+        private async resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.resources;
 
-            SettingsDataModule.updateSettings({
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,

@@ -9,7 +9,7 @@ export class SettingsModule {
 
     public async updateSettings(message: UpdateSettingsMessage): Promise<void> {
         const manager = this.getManager(message.ogameMeta);
-        manager.updateData(message.data);
+        await manager.updateData(message.data);
     }
 
     public async getSettings(meta: MessageOgameMeta): Promise<Settings> {

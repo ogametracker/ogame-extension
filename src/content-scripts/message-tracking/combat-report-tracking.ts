@@ -12,6 +12,7 @@ import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
 import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -132,7 +133,7 @@ async function trackCombatReports(elem: Element) {
                     ogameCombatReport,
                 },
             };
-            chrome.runtime.sendMessage(workerMessage);
+            sendMessage(workerMessage);
 
         } catch (error) {
             console.error(error);

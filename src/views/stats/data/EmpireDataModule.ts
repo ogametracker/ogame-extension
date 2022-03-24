@@ -49,14 +49,14 @@ class EmpireDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.EmpireData:
-            case MessageType.NotifyEmpireDataUpdate: {
-                const { data } = msg as EmpireDataMessage;
-                this.empire = data;
+        case MessageType.EmpireData:
+        case MessageType.NotifyEmpireDataUpdate: {
+            const { data } = msg as EmpireDataMessage;
+            this.empire = data;
 
-                this.lock.release();
-                break;
-            }
+            this.lock.release();
+            break;
+        }
         }
     }
 }

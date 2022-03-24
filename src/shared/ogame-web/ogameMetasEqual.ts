@@ -1,4 +1,4 @@
-import { MessageOgameMeta } from "../messages/Message";
+import { MessageOgameMeta } from '../messages/Message';
 
 export function ogameMetasEqual(a: MessageOgameMeta, b: MessageOgameMeta, includePlayerId = true): boolean {
     return a.language == b.language

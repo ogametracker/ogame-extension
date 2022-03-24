@@ -1,17 +1,17 @@
-import { Coordinates } from "../../models/ogame/common/Coordinates";
-import { Message, NoDataMessage } from "../../messages/Message";
-import { MessageType } from "../MessageType";
-import { ItemHash } from "../../models/ogame/items/ItemHash";
-import { ShipType } from "../../models/ogame/ships/ShipType";
-import { DefenseType } from "../../models/ogame/defenses/DefenseType";
-import { PlayerOfficers } from "../../models/empire/PlayerOfficers";
-import { PlayerClass } from "../../models/ogame/classes/PlayerClass";
-import { AllianceClass } from "../../models/ogame/classes/AllianceClass";
-import { BuildingType } from "../../models/ogame/buildings/BuildingType";
-import { ResearchType } from "../../models/ogame/research/ResearchType";
-import { LocalPlayerData } from "../../models/empire/LocalPlayerData";
-import { ProductionSettings } from "@/shared/models/empire/ProductionSettings";
-import { PlanetActiveItems } from "@/shared/models/empire/PlanetActiveItems";
+import { Coordinates } from '../../models/ogame/common/Coordinates';
+import { Message, NoDataMessage } from '../../messages/Message';
+import { MessageType } from '../MessageType';
+import { ItemHash } from '../../models/ogame/items/ItemHash';
+import { ShipType } from '../../models/ogame/ships/ShipType';
+import { DefenseType } from '../../models/ogame/defenses/DefenseType';
+import { PlayerOfficers } from '../../models/empire/PlayerOfficers';
+import { PlayerClass } from '../../models/ogame/classes/PlayerClass';
+import { AllianceClass } from '../../models/ogame/classes/AllianceClass';
+import { BuildingType } from '../../models/ogame/buildings/BuildingType';
+import { ResearchType } from '../../models/ogame/research/ResearchType';
+import { LocalPlayerData } from '../../models/empire/LocalPlayerData';
+import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
+import { PlanetActiveItems } from '@/shared/models/empire/PlanetActiveItems';
 
 
 // basic planet/moon data

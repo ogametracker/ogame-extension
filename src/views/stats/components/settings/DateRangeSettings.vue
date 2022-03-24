@@ -158,9 +158,9 @@
             this.items = [...SettingsDataModule.settings.dateRanges];
         }
 
-        private deleteRange(item: DateRange) {
+        private async deleteRange(item: DateRange) {
             this.items = this.items.filter(i => i != item);
-            this.onItemsUpdated();
+            await this.onItemsUpdated();
         }
 
         private addNewRange() {
@@ -173,8 +173,8 @@
             this.onItemsUpdated();
         }
 
-        private onItemsUpdated() {
-            SettingsDataModule.updateSettings({
+        private async onItemsUpdated() {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 dateRanges: [...this.items],
             });
@@ -190,10 +190,10 @@
         }
 
 
-        private resetDateRanges() {
+        private async resetDateRanges() {
             const defaultRanges = getDefaultSettings(SettingsDataModule.settings.extensionLanguage).dateRanges;
 
-            SettingsDataModule.updateSettings({
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 dateRanges: defaultRanges,
             });

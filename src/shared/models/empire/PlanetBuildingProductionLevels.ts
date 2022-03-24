@@ -1,4 +1,4 @@
-import { BuildingType } from "../ogame/buildings/BuildingType";
+import { BuildingType } from '../ogame/buildings/BuildingType';
 
 export interface PlanetBuildingProductionLevels {
     [BuildingType.metalMine]: number;

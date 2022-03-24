@@ -26,7 +26,7 @@ export class ExpeditionService implements MessageService {
                         type: MessageType.NewExpedition,
                         data: expedition,
                     };
-                    broadcastMessage(newExpeditionMessage);
+                    await broadcastMessage(newExpeditionMessage);
                 }
                 // send data of the specific expedition
                 else {
@@ -35,7 +35,7 @@ export class ExpeditionService implements MessageService {
                         type: MessageType.Expedition,
                         data: expedition,
                     };
-                    broadcastMessage(expeditionMessage);
+                    await broadcastMessage(expeditionMessage);
                 }
 
                 break;
@@ -57,6 +57,6 @@ export class ExpeditionService implements MessageService {
             type: MessageType.AllExpeditions,
             data: expeditionEvents,
         };
-        broadcastMessage(allExpeditionMessage);
+        await broadcastMessage(allExpeditionMessage);
     }
 }

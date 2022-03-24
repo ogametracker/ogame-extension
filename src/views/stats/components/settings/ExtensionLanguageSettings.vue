@@ -32,8 +32,8 @@
             return SettingsDataModule.settings.extensionLanguage;
         }
 
-        private setLanguage(extensionLanguage: LanguageKey) {
-            SettingsDataModule.updateSettings({
+        private async setLanguage(extensionLanguage: LanguageKey) {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 extensionLanguage,
             });

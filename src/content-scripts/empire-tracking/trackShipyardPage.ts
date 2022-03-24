@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
@@ -34,7 +35,7 @@ export function trackShipyardPage() {
                     data: shipCounts,
                 },
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

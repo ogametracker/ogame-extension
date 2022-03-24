@@ -1,6 +1,6 @@
-import { CombatReport } from "../../models/combat-reports/CombatReport";
-import { Message, NoDataMessage } from "../Message";
-import { MessageType } from "../MessageType";
+import { CombatReport } from '../../models/combat-reports/CombatReport';
+import { Message, NoDataMessage } from '../Message';
+import { MessageType } from '../MessageType';
 import { OgameCombatReport } from '../../models/ogame/combats/OgameCombatReport';
 
 export interface RawCombatReportData {

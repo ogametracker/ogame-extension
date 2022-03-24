@@ -18,7 +18,7 @@ export class UniverseHistoryService implements MessageService {
 
         switch (message.type) {
             case MessageType.RequestUniverseHistoryData: {
-                this.broadcastUniverseHistory(message.ogameMeta);
+                await this.broadcastUniverseHistory(message.ogameMeta);
                 break;
             }
         }
@@ -32,6 +32,6 @@ export class UniverseHistoryService implements MessageService {
             type: MessageType.UniverseHistoryData,
             data: history,
         };
-        broadcastMessage(message);
+        await broadcastMessage(message);
     }
 }

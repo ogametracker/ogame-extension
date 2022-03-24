@@ -24,8 +24,8 @@
             return SettingsDataModule.settings.showDetailedResourceBalance;
         }
 
-        private toggleDetailedBreakdown(showDetailedResourceBalance: boolean) {
-            SettingsDataModule.updateSettings({
+        private async toggleDetailedBreakdown(showDetailedResourceBalance: boolean) {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 showDetailedResourceBalance,
             });

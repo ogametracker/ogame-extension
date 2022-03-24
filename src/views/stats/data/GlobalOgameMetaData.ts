@@ -1,4 +1,4 @@
-import { MessageOgameMeta } from "@/shared/messages/Message";
+import { MessageOgameMeta } from '@/shared/messages/Message';
 import { _throw } from '@/shared/utils/_throw';
 import { parseIntSafe } from '@/shared/utils/parseNumbers';
 

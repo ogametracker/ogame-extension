@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { CrawlerProductionPercentage } from "../../shared/models/empire/CrawlerProductionPercentage";
@@ -34,7 +35,7 @@ export function trackResourceSettingsPage(): void {
                     },
                 },
             };
-            chrome.runtime.sendMessage(buildingsMessage);
+            sendMessage(buildingsMessage);
 
 
             const solSatMessage: UpdatePlanetShipCountsMessage = {
@@ -47,7 +48,7 @@ export function trackResourceSettingsPage(): void {
                     },
                 },
             };
-            chrome.runtime.sendMessage(solSatMessage);
+            sendMessage(solSatMessage);
 
 
             const researchMessage: UpdateResearchLevelsMessage = {
@@ -57,7 +58,7 @@ export function trackResourceSettingsPage(): void {
                     [ResearchType.plasmaTechnology]: getLevelOrAmount(element, ResearchType.plasmaTechnology),
                 },
             };
-            chrome.runtime.sendMessage(researchMessage);
+            sendMessage(researchMessage);
 
 
             const allyClassMessage: UpdateAllianceClassMessage = {
@@ -65,7 +66,7 @@ export function trackResourceSettingsPage(): void {
                 type: MessageType.UpdateAllianceClass,
                 data: getAllianceClass(element),
             };
-            chrome.runtime.sendMessage(allyClassMessage);
+            sendMessage(allyClassMessage);
 
 
             const productionSettingsMessage: UpdatePlanetProductionSettingsMessage = {
@@ -84,7 +85,7 @@ export function trackResourceSettingsPage(): void {
                     },
                 },
             };
-            chrome.runtime.sendMessage(productionSettingsMessage);
+            sendMessage(productionSettingsMessage);
         },
     });
 }

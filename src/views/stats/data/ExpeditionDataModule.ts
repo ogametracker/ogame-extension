@@ -49,38 +49,38 @@ class ExpeditionDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.NewExpedition: {
-                const { data } = msg as NewExpeditionMessage;
-                this.expeditions = this.expeditions.concat(data);
+        case MessageType.NewExpedition: {
+            const { data } = msg as NewExpeditionMessage;
+            this.expeditions = this.expeditions.concat(data);
 
-                const day = startOfDay(data.date).getTime();
-                const inDay = this.expeditionsPerDay[day] ?? [];
-                inDay.push(data);
-                this.expeditionsPerDay[day] = inDay;
-                break;
-            }
+            const day = startOfDay(data.date).getTime();
+            const inDay = this.expeditionsPerDay[day] ?? [];
+            inDay.push(data);
+            this.expeditionsPerDay[day] = inDay;
+            break;
+        }
 
-            case MessageType.AllExpeditions: {
-                const { data } = msg as AllExpeditionsMessage;
-                this.expeditions = data;
-                this.expeditionsPerDay = data.reduce(
-                    (perDay, expo) => {
-                        const day = startOfDay(expo.date).getTime();
-                        perDay[day] ??= [];
-                        perDay[day].push(expo);
-                        return perDay;
-                    },
+        case MessageType.AllExpeditions: {
+            const { data } = msg as AllExpeditionsMessage;
+            this.expeditions = data;
+            this.expeditionsPerDay = data.reduce(
+                (perDay, expo) => {
+                    const day = startOfDay(expo.date).getTime();
+                    perDay[day] ??= [];
+                    perDay[day].push(expo);
+                    return perDay;
+                },
                     {} as Record<number, ExpeditionEvent[]>
-                );
+            );
 
-                this.firstDate = data.reduce(
-                    (date, expo) => Math.min(date ?? expo.date, expo.date),
+            this.firstDate = data.reduce(
+                (date, expo) => Math.min(date ?? expo.date, expo.date),
                     null as null | number
-                );
+            );
 
-                this.lock.release();
-                break;
-            }
+            this.lock.release();
+            break;
+        }
         }
     }
 

@@ -6,6 +6,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
+import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackDefensesPage() {
     observerCallbacks.push({
@@ -38,7 +39,7 @@ export function trackDefensesPage() {
                     },
                 },
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

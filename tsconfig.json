@@ -37,11 +37,8 @@
         ]
     },
     "include": [
-        "src/views/**/*.ts",
-        "src/views/**/*.tsx",
-        "src/views/**/*.vue",
+        "src/**/*.ts",
         "tests/**/*.ts",
-        "tests/**/*.tsx"
     ],
     "exclude": [
         "node_modules"

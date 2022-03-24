@@ -1,7 +1,7 @@
-import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
-import { Message, NoDataMessage } from "../Message";
-import { MessageType } from "../MessageType";
-import { RawMessageData } from "./common";
+import { ExpeditionEvent } from '../../models/expeditions/ExpeditionEvents';
+import { Message, NoDataMessage } from '../Message';
+import { MessageType } from '../MessageType';
+import { RawMessageData } from './common';
 
 export type TrackExpeditionMessage = Message<MessageType.TrackExpedition, RawMessageData>;
 export type RequestExpeditionEventsMessage = NoDataMessage<MessageType.RequestExpeditionEvents>;

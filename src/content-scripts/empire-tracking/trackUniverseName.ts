@@ -1,3 +1,4 @@
+import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateUniverseNameMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
@@ -16,7 +17,7 @@ export function trackUniverseName() {
                 ogameMeta: getOgameMeta(),
                 data: universeName,
             };
-            chrome.runtime.sendMessage(message);
+            sendMessage(message);
         },
     });
 }

@@ -1,4 +1,4 @@
-import { PlanetType } from "./PlanetType";
+import { PlanetType } from './PlanetType';
 
 export interface Coordinates {
     galaxy: number;

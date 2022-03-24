@@ -1,6 +1,6 @@
-import { Message, NoDataMessage } from "../Message";
-import { MessageType } from "../MessageType";
-import { RawMessageData } from "./common";
+import { Message, NoDataMessage } from '../Message';
+import { MessageType } from '../MessageType';
+import { RawMessageData } from './common';
 import { DebrisFieldReport } from '../../models/debris-field-reports/DebrisFieldReport';
 
 export type TrackDebrisFieldReportMessage = Message<MessageType.TrackDebrisFieldReport, RawMessageData>;

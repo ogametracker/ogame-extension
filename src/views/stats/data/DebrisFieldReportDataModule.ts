@@ -52,38 +52,38 @@ class DebrisFieldReportDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.NewDebrisFieldReport: {
-                const { data } = msg as NewDebrisFieldReportMessage;
-                this.reports = this.reports.concat(data);
+        case MessageType.NewDebrisFieldReport: {
+            const { data } = msg as NewDebrisFieldReportMessage;
+            this.reports = this.reports.concat(data);
 
-                const day = startOfDay(data.date).getTime();
-                const inDay = this.reportsPerDay[day] ?? [];
-                inDay.push(data);
-                this.reportsPerDay[day] = inDay;
-                break;
-            }
+            const day = startOfDay(data.date).getTime();
+            const inDay = this.reportsPerDay[day] ?? [];
+            inDay.push(data);
+            this.reportsPerDay[day] = inDay;
+            break;
+        }
 
-            case MessageType.AllDebrisFieldReports: {
-                const { data } = msg as AllDebrisFieldReportsMessage;
-                this.reports = data;
-                this.reportsPerDay = data.reduce(
-                    (perDay, report) => {
-                        const day = startOfDay(report.date).getTime();
-                        perDay[day] ??= [];
-                        perDay[day].push(report);
-                        return perDay;
-                    },
+        case MessageType.AllDebrisFieldReports: {
+            const { data } = msg as AllDebrisFieldReportsMessage;
+            this.reports = data;
+            this.reportsPerDay = data.reduce(
+                (perDay, report) => {
+                    const day = startOfDay(report.date).getTime();
+                    perDay[day] ??= [];
+                    perDay[day].push(report);
+                    return perDay;
+                },
                     {} as Record<number, DebrisFieldReport[]>
-                );
+            );
 
-                this.firstDate = data.reduce(
-                    (date, report) => Math.min(date ?? report.date, report.date),
+            this.firstDate = data.reduce(
+                (date, report) => Math.min(date ?? report.date, report.date),
                     null as null | number
-                );
+            );
 
-                this.lock.release();
-                break;
-            }
+            this.lock.release();
+            break;
+        }
         }
     }
 

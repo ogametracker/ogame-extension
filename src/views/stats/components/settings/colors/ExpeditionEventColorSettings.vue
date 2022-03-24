@@ -3,7 +3,8 @@
         :header="header"
         :labels="labels"
         :keys="keys"
-        v-model="colors"
+        :value="colors"
+        @input="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
@@ -60,8 +61,8 @@
             return SettingsDataModule.settings.colors.expeditions.events;
         }
 
-        private set colors(value: Record<ExpeditionEventType, string>) {
-            SettingsDataModule.updateSettings({
+        private async updateColors(value: Record<ExpeditionEventType, string>) {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -73,10 +74,10 @@
             });
         }
 
-        public resetColors(): void {
+        private async resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.events;
 
-            SettingsDataModule.updateSettings({
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,

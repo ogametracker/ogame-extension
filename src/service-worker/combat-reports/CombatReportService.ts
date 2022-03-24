@@ -26,7 +26,7 @@ export class CombatReportService implements MessageService {
                         type: MessageType.NewCombatReport,
                         data: report,
                     };
-                    broadcastMessage(newCombatReportMessage);
+                    await broadcastMessage(newCombatReportMessage);
                 }
                 // send data of the specific combat report
                 else {
@@ -35,7 +35,7 @@ export class CombatReportService implements MessageService {
                         type: MessageType.CombatReport,
                         data: report,
                     };
-                    broadcastMessage(combatReportMessage);
+                    await broadcastMessage(combatReportMessage);
                 }
 
                 break;
@@ -57,6 +57,6 @@ export class CombatReportService implements MessageService {
             type: MessageType.AllCombatReports,
             data: combatReports,
         };
-        broadcastMessage(allCombatReportsMessage);
+        await broadcastMessage(allCombatReportsMessage);
     }
 }

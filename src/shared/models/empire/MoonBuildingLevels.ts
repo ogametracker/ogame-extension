@@ -1,5 +1,5 @@
-import { MoonBuildingFacilitiesLevels } from "./MoonBuildingFacilitiesLevels";
-import { MoonBuildingProductionLevels } from "./MoonBuildingProductionLevels";
+import { MoonBuildingFacilitiesLevels } from './MoonBuildingFacilitiesLevels';
+import { MoonBuildingProductionLevels } from './MoonBuildingProductionLevels';
 
 export interface MoonBuildingLevels {
     production: MoonBuildingProductionLevels;

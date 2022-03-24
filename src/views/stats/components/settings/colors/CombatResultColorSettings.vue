@@ -3,7 +3,8 @@
         :header="header"
         :labels="labels"
         :keys="keys"
-        v-model="colors"
+        :value="colors"
+        @input="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
@@ -44,8 +45,8 @@
             return SettingsDataModule.settings.colors.combatResults;
         }
 
-        private set colors(value: Record<CombatResultType, string>) {
-            SettingsDataModule.updateSettings({
+        private async updateColors(value: Record<CombatResultType, string>) {
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -54,10 +55,10 @@
             });
         }
 
-        public resetColors(): void {
+        private async resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
 
-            SettingsDataModule.updateSettings({
+            await SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
