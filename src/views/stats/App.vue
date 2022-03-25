@@ -73,7 +73,16 @@
             <main>
                 <router-view />
             </main>
-            <footer>by Wonkydonky</footer>
+            <footer>
+                <router-link
+                    :to="{ name: 'donate' }"
+                    style="text-decoration: none"
+                >
+                    made with
+                    <span class="mdi mdi-heart" style="color: #ff1f1f" /> by
+                    Wonkydonky
+                </router-link>
+            </footer>
         </template>
 
         <custom-dialog
