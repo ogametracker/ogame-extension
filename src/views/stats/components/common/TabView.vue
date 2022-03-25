@@ -59,7 +59,7 @@
                 }
 
                 &.tab--active {
-                    background-color: rgba(var(--color), 0.5);
+                    background: linear-gradient(135deg, rgba(var(--color), 0.4), rgba(var(--color), 0.7));
                 }
 
                 &::v-deep {
