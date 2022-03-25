@@ -1,5 +1,8 @@
 <template>
-    <span class="floating-menu-wrapper">
+    <span
+        class="floating-menu-wrapper"
+        :class="{ 'floating-menu-wrapper--active': show }"
+    >
         <slot name="activator" />
 
         <div
@@ -61,7 +64,10 @@
         &-wrapper {
             position: relative;
             display: inline-block;
-            z-index: 1;
+
+            &--active {
+                z-index: 1;
+            }
         }
     }
 </style>

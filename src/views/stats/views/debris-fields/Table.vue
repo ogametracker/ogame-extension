@@ -13,17 +13,20 @@
             </template>
         </ranged-stats-table>
 
-        <floating-menu v-model="showSettings" left>
-            <template #activator>
-                <button @click="showSettings = !showSettings">
-                    <span class="mdi mdi-cog" />
-                </button>
-            </template>
+        <span class="multi-menu">
+            <floating-menu v-model="showSettings" left>
+                <template #activator>
+                    <button @click="showSettings = !showSettings">
+                        <span class="mdi mdi-cog" />
+                    </button>
+                </template>
 
-            <msu-conversion-rate-settings />
-            <hr />
-            <date-range-settings />
-        </floating-menu>
+                <msu-conversion-rate-settings />
+                <hr />
+                <date-range-settings />
+            </floating-menu>
+            <manually-add-debris-field-menu />
+        </span>
     </div>
 </template>
 
@@ -37,12 +40,14 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
             MsuConversionRateSettings,
+            ManuallyAddDebrisFieldMenu,
         },
     })
     export default class Table extends Vue {
@@ -87,5 +92,11 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+    }
+
+    .multi-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
     }
 </style>
