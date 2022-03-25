@@ -26,7 +26,7 @@
                     <o-resource resource="deuterium" size="24px" />
                 </span>
                 <span v-else-if="value == ExpeditionEventType.fleet">
-                    TODO: {{ value }}
+                    <o-ship ship="battleship" size="24px" />
                 </span>
                 <span
                     v-else-if="value == ExpeditionEventType.delay"
@@ -54,7 +54,7 @@
                     :style="{ color: colors.aliens }"
                 />
                 <span v-else-if="value == ExpeditionEventType.item">
-                    TODO: {{ value }}
+                    <o-item :item="detroidItem" size="24px" />
                 </span>
                 <span
                     v-else-if="value == ExpeditionEventType.trader"
@@ -89,6 +89,7 @@
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 
     @Component({
         components: {
@@ -99,6 +100,7 @@
     export default class Table extends Vue {
         private readonly ExpeditionEventType = ExpeditionEventType;
         private showSettings = false;
+        private readonly detroidItem = ItemHash.detroid_bronze;
 
         private avgFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,

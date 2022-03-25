@@ -264,7 +264,7 @@
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
                     label: 'LOCA: Donate',
-                    class: 'donate',//TODO: more custom styling 
+                    class: 'donate',
                     appClass: 'donate-page',
                 },
                 {
