@@ -9,17 +9,18 @@ import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
 import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
 import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
+import { ServerSettings } from "../../server-settings/ServerSettings";
 
 class CrystalMineClass extends ProductionBuilding {
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): Cost {
-        const boost = this.getProductionBoost(dependencies.planet.coordinates.position);
+        const boost = this.getProductionBoost(dependencies.planet.coordinates.position, dependencies.serverSettings);
 
-        const baseProduction = Math.trunc(15 * dependencies.economySpeed * (1 + boost));
-        const mineProduction = Math.trunc(20 * dependencies.economySpeed * (1 + boost) * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.crystalMine] / 100);
+        const baseProduction = Math.trunc(15 * dependencies.serverSettings.speed.economy * (1 + boost));
+        const mineProduction = Math.trunc(20 * dependencies.serverSettings.speed.economy * (1 + boost) * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.crystalMine] / 100);
         const geologistProduction = Math.round(mineProduction * 0.1 * (dependencies.player.officers.geologist ? 1 : 0));
         const plasmaTechProduction = Math.round(mineProduction * 0.0066 * dependencies.player.research[ResearchType.plasmaTechnology]);
-        const collectorProduction = Math.round(mineProduction * 0.25 * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0));
+        const collectorProduction = Math.round(mineProduction * dependencies.serverSettings.playerClasses.collector.productionFactorBonus * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0));
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
@@ -29,11 +30,14 @@ class CrystalMineClass extends ProductionBuilding {
             level,
             dependencies.planet.buildings.production[BuildingType.deuteriumSynthesizer],
             dependencies.player.playerClass,
-            dependencies.player.officers.geologist
+            dependencies.player.officers.geologist,
+            dependencies.serverSettings,
         );
         const crawlerCount = Math.min(maxCrawlers, dependencies.planet.ships[ShipType.crawler]);
-        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? 1.5 : 1;
-        const crawlerBoost = Math.min(0.5, 0.0002 * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
+        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? (1 + dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) : 1;
+        const crawlerBoost = Math.min(
+            dependencies.serverSettings.playerClasses.crawlers.maxProductionFactor,
+            dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit* crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
         const production = Math.trunc(
@@ -88,19 +92,19 @@ class CrystalMineClass extends ProductionBuilding {
             && officers.technocrat;
     }
 
-    private getProductionBoost(position: number) {
+    private getProductionBoost(position: number, serverSettings: ServerSettings) {
         switch (position) {
             case 1:
-                return 0.4;
+                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos1;
 
             case 2:
-                return 0.3;
+                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos2;
 
             case 3:
-                return 0.2;
+                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos3;
         }
 
-        return 0;
+        return serverSettings.resourceProduction.productionFactorBonus.crystal.default;
     }
 
     public getConsumption(level: number, dependencies: ProductionBuildingDependencies): Cost {

@@ -13,13 +13,13 @@ import { ProductionBuilding, ProductionBuildingDependencies } from "./Production
 class DeuteriumSynthesizerClass extends ProductionBuilding {
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): Cost {
-        const mineProduction = Math.trunc(10 * level * 1.1 ** level * dependencies.economySpeed
+        const mineProduction = Math.trunc(10 * level * 1.1 ** level * dependencies.serverSettings.speed.economy
             * (1.44 - 0.004 * dependencies.planet.maxTemperature)
             * dependencies.planet.productionSettings[BuildingType.deuteriumSynthesizer] / 100
         );
         const geologistProduction = Math.round(mineProduction * 0.1 * (dependencies.player.officers.geologist ? 1 : 0));
         const plasmaTechProduction = Math.round(mineProduction * 0.0033 * dependencies.player.research[ResearchType.plasmaTechnology]);
-        const collectorProduction = Math.round(mineProduction * 0.25 * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0));
+        const collectorProduction = Math.round(mineProduction * dependencies.serverSettings.playerClasses.collector.productionFactorBonus * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0));
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
@@ -29,11 +29,14 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             dependencies.planet.buildings.production[BuildingType.crystalMine],
             level,
             dependencies.player.playerClass,
-            dependencies.player.officers.geologist
+            dependencies.player.officers.geologist,
+            dependencies.serverSettings,
         );
         const crawlerCount = Math.min(maxCrawlers, dependencies.planet.ships[ShipType.crawler]);
-        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? 1.5 : 1;
-        const crawlerBoost = Math.min(0.5, 0.0002 * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
+        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? (1 + dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) : 1;
+        const crawlerBoost = Math.min(
+            dependencies.serverSettings.playerClasses.crawlers.maxProductionFactor,
+            dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
         const production = mineProduction

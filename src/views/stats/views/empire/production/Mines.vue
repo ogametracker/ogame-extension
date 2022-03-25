@@ -109,6 +109,7 @@
     import { getMaxActiveCrawlers } from '@/shared/models/ogame/buildings/getMaxActiveCrawlers';
     import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
     import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
+import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
 
     interface ProductionMineItem {
         planet: {
@@ -194,7 +195,8 @@
                         planet.buildings.production[BuildingType.crystalMine],
                         planet.buildings.production[BuildingType.deuteriumSynthesizer],
                         this.player.playerClass,
-                        this.player.officers.geologist
+                        this.player.officers.geologist,
+                        ServerSettingsDataModule.serverSettings,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 

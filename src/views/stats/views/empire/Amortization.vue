@@ -252,6 +252,7 @@
     import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
     import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
     interface AmortizationMaxLevels {
         mine: number;
@@ -393,7 +394,7 @@
         }
 
         private toggleSettings() {
-            if(!this.showSettings) {
+            if (!this.showSettings) {
                 this.showSettings = true;
             } else {
                 this.showSettings = false;
@@ -462,7 +463,7 @@
                                 level: planet.buildings.production[BuildingType.metalMine],
                                 show: true,
                             },
-                            crystalMine:  {
+                            crystalMine: {
                                 level: planet.buildings.production[BuildingType.crystalMine],
                                 show: true,
                             },
@@ -474,7 +475,7 @@
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
                             enabled: true,
-                            overload: empire.playerClass == PlayerClass.collector,
+                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -494,7 +495,7 @@
                     activeItems: [],
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
-                        overload: empire.playerClass == PlayerClass.collector,
+                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
@@ -595,7 +596,7 @@
                     }
                 }
 
-                if(yieldItem) {
+                if (yieldItem) {
                     yield bestItem;
                 }
 
@@ -770,7 +771,7 @@
 
         private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): ProductionBuildingDependencies {
             return {
-                economySpeed: 8, //TODO: eco speed from server data
+                serverSettings: ServerSettingsDataModule.serverSettings,
                 planet: {
                     ...planet,
                     coordinates: {

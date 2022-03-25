@@ -3,15 +3,15 @@ import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
-import { RequestUniverseHistoryMessage, UniverseHistoryDataMessage } from '@/shared/messages/tracking/universe-history';
 import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { UniverseHistory } from '@/shared/models/universe-history/UniverseHistory';
 import { Lock } from 'semaphore-async-await';
+import { ServerSettings } from '@/shared/models/server-settings/ServerSettings';
+import { RequestServerSettingsMessage, ServerSettingsDataMessage } from '@/shared/messages/tracking/server-settings';
 
 @Component
-class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
-    public history: UniverseHistory = null!;
+class ServerSettingsDataModuleClass extends Vue implements IDataModule {
+    public serverSettings: ServerSettings = null!;
     private readonly lock = new Lock();
 
     private async created() {
@@ -32,8 +32,8 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
     }
 
     private async requestData() {
-        const message: RequestUniverseHistoryMessage = {
-            type: MessageType.RequestUniverseHistoryData,
+        const message: RequestServerSettingsMessage = {
+            type: MessageType.RequestServerSettingsData,
             ogameMeta: GlobalOgameMetaData,
         };
         await broadcastMessage(message);
@@ -46,10 +46,10 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-            case MessageType.UniverseHistoryData:
-            case MessageType.NotifyUniverseHistoryUpdate: {
-                const { data } = msg as UniverseHistoryDataMessage;
-                this.history = data;
+            case MessageType.ServerSettingsData:
+            case MessageType.NotifyServerSettingsUpdate: {
+                const { data } = msg as ServerSettingsDataMessage;
+                this.serverSettings = data;
 
                 this.lock.release();
                 break;
@@ -58,4 +58,4 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
     }
 }
 
-export const UniverseHistoryDataModule = new UniverseHistoryDataModuleClass();
+export const ServerSettingsDataModule = new ServerSettingsDataModuleClass();

@@ -76,6 +76,7 @@
                     <checkbox-button
                         v-model="settings.crawlers.overload"
                         color="#00ff00"
+                        :disabled="!isCrawlerOverloadEnabled"
                     >
                         LOCA: Overload
                     </checkbox-button>
@@ -154,6 +155,7 @@
 <script lang="ts">
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
 
@@ -213,6 +215,10 @@
                 ItemHash.deuteriumBooster_platinum_7days,
             ],
         };
+
+        private get isCrawlerOverloadEnabled() {
+             return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
+        }
 
         private get activeBooster() {
             return {

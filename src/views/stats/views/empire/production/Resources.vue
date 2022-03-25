@@ -161,6 +161,7 @@
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
 
     interface Production {
         metal: number;
@@ -347,7 +348,7 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
         private getProduction(planet: PlanetData): Production {
             const deps: ProductionBuildingDependencies = {
-                economySpeed: 8, //TODO: from server settings
+                serverSettings: ServerSettingsDataModule.serverSettings,
                 planet,
                 player: EmpireDataModule.empire,
             };
