@@ -9,6 +9,7 @@ import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldRep
 import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
 import { MessageService } from "./MessageService";
+import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 
@@ -19,6 +20,7 @@ const services: MessageService[] = [
     new EmpireService(),
     new SettingsService(),
     new UniverseHistoryService(),
+    new ServerSettingsService(),
 ];
 
 const migrationLock = new Lock();
