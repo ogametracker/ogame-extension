@@ -1,7 +1,7 @@
 import viewsIndex from '@stats/views/Index.vue';
 import viewsDonate from '@stats/views/Donate.vue';
 import viewsExcelExport from '@stats/views/Excel-Export.vue';
-import viewsInfo from '@stats/views/Info.vue';
+import viewsHelp from '@stats/views/Help.vue';
 import viewscombatsIndex from '@stats/views/combats/Index.vue';
 import viewscombatslostshipsIndex from '@stats/views/combats/lost-ships/Index.vue';
 import viewscombatslostshipsagainstplayersIndex from '@stats/views/combats/lost-ships/against-players/Index.vue';
@@ -109,9 +109,9 @@ const routes: RouteConfig[] = [
                 meta: {
                     color: "#8c8ce0"
                 },
-                path: "info",
-                name: "info",
-                component: viewsInfo
+                path: "help",
+                name: "help",
+                component: viewsHelp
             },
             {
                 redirect: {

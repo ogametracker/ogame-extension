@@ -1,5 +1,7 @@
 <template>
     <div>
+        TODO: Help/FAQ here
+        <hr />
         <grid-table :items="items" :columns="columns" class="info-table" />
     </div>
 </template>

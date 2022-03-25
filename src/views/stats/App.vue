@@ -251,11 +251,6 @@
                     icon: 'mdi mdi-microsoft-excel',
                 },
                 {
-                    key: 'info',
-                    to: { name: 'info' },
-                    icon: 'mdi mdi-information',
-                },
-                {
                     key: 'donate',
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
@@ -268,6 +263,11 @@
                     href: 'https://discord.gg/MZE9FrCwRj',
                     icon: 'ogti ogti-discord',
                     color: this.colors.discord,
+                },
+                {
+                    key: 'help',
+                    to: { name: 'help' },
+                    icon: 'mdi mdi-help-box',
                 },
             ];
 
