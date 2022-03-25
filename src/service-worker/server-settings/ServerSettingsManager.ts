@@ -273,6 +273,7 @@ export class ServerSettingsManager extends PersistentDataManager<ServerSettings>
             _logDebug(`tracking server settings for universe ${this.serverId} ${this.language.toUpperCase()}`);
             const serverSettings = await this.getServerSettings();
             this.broadcastServerSettingsUpdate();
+            await this.updateData(serverSettings);
 
             await this.initTracking();
         } catch (error) {
