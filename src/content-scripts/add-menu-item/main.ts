@@ -90,11 +90,6 @@ function showOgameTrackerDialog() {
     container.addEventListener('click', () => closeOgameTrackerDialog());
 
     document.body.append(container);
-
-    const iframe = container.querySelector('iframe') as HTMLIFrameElement;
-    iframe.addEventListener('load', () => {
-        iframe.contentWindow!.postMessage('focus', '*');
-    });
 }
 
 function closeOgameTrackerDialog() {

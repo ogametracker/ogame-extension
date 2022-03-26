@@ -345,6 +345,7 @@
             this.updateDocumentTitle();
 
             this.loading = false;
+            window.focus();
 
             const splashscreen = document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');

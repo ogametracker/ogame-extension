@@ -14,13 +14,6 @@ void init();
 async function init() {
     await applyRouteSettings();
     mountVue();
-
-    // this is to focus the window if the view is inside an iframe
-    window.addEventListener('message', e => {
-        if (e.data == 'focus') {
-            window.focus();
-        }
-    });
 }
 
 async function applyRouteSettings() {
