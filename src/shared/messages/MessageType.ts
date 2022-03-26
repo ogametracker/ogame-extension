@@ -18,6 +18,7 @@ export enum MessageType {
     NewDebrisFieldReport = 'debris-fields/new',
     AllDebrisFieldReports = 'debris-fields/all',
     TrackDebrisFieldReport = 'debris-fields/track',
+    TrackManualDebrisFieldReport = 'debris-fields/track-manually',
     RequestDebrisFieldReports = 'debris-fields/request-reports',
 
     // combat reports

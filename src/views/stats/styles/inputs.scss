@@ -2,6 +2,8 @@ input:not([type]),
 input[type="text"],
 input[type="password"],
 input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
 button,
 select {
     background: black linear-gradient(0deg, rgba(var(--color), 0.3), rgba(var(--color), 0.3));
@@ -11,7 +13,7 @@ select {
     color: white;
     outline: none;
 
-    &:not(input:read-only) {
+    &:not(input:read-only):not(:disabled) {
         &:hover,
         &:focus {
             border-color: rgb(var(--color));

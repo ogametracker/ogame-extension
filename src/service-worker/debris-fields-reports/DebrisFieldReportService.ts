@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { AllDebrisFieldReportsMessage, DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
+import { AllDebrisFieldReportsMessage, DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 
 export class DebrisFieldReportService implements MessageService {
@@ -53,6 +53,19 @@ export class DebrisFieldReportService implements MessageService {
             }
 
 
+            case MessageType.TrackManualDebrisFieldReport: {
+                const msg = message as TrackManualDebrisFieldReportMessage;
+                await this.dfModule.trackManualDebrisFieldReport(msg);
+                
+                const newDfReportMessage: NewDebrisFieldReportMessage = {
+                    ogameMeta: message.ogameMeta,
+                    type: MessageType.NewDebrisFieldReport,
+                    data: msg.data,
+                };
+                await broadcastMessage(newDfReportMessage);
+            }
+
+
             case MessageType.RequestDebrisFieldReports: {
                 await this.broadcastAllDebrisFieldReports(message.ogameMeta);
                 break;
@@ -62,7 +75,7 @@ export class DebrisFieldReportService implements MessageService {
 
 
     private async broadcastAllDebrisFieldReports(meta: MessageOgameMeta) {
-        const reports = await this.dfModule.getDebridFieldReports(meta);
+        const reports = await this.dfModule.getDebrisFieldReports(meta);
 
         const allDfReportsMessage: AllDebrisFieldReportsMessage = {
             ogameMeta: meta,

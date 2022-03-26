@@ -59,15 +59,19 @@
                 }
 
                 &.tab--active {
-                    background: linear-gradient(135deg, rgba(var(--color), 0.4), rgba(var(--color), 0.7));
+                    background: linear-gradient(
+                        135deg,
+                        rgba(var(--color), 0.4),
+                        rgba(var(--color), 0.7)
+                    );
                 }
 
                 &::v-deep {
-                    .mdi::before, .ogti::before {
+                    .mdi::before,
+                    .ogti::before {
                         transform: scale(1.5) translateX(-25%);
                     }
                 }
-
             }
         }
 
@@ -77,6 +81,7 @@
             overflow: auto;
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;
+            background: rgba(var(--color), 0.05);
         }
     }
 </style>

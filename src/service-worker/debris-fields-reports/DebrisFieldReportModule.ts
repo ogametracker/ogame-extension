@@ -7,7 +7,7 @@ import { _throw } from "../../shared/utils/_throw";
 import i18nDebrisFieldReports from '../../shared/i18n/ogame/messages/debris-field-reports';
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { DebrisFieldReportManager } from "./DebrisFieldReportManager";
-import { TrackDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
+import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
@@ -24,6 +24,12 @@ type DebrisFieldReportResult = {
 
 export class DebrisFieldReportModule {
     private readonly dfManagers: Record<string, DebrisFieldReportManager | undefined> = {};
+
+    public async trackManualDebrisFieldReport(message: TrackManualDebrisFieldReportMessage): Promise<void> {
+        const report = message.data;
+        const manager = this.getManager(message.ogameMeta);
+        await manager.add(report);
+    }
 
     public async tryTrackDebrisFieldReport(message: TrackDebrisFieldReportMessage): Promise<TryActionResult<DebrisFieldReportResult>> {
         const messageData = message.data;
@@ -101,7 +107,7 @@ export class DebrisFieldReportModule {
         };
     }
 
-    public async getDebridFieldReports(meta: MessageOgameMeta): Promise<DebrisFieldReport[]> {
+    public async getDebrisFieldReports(meta: MessageOgameMeta): Promise<DebrisFieldReport[]> {
         const manager = this.getManager(meta);
         const reports = await manager.getData();
         return Object.values(reports);
