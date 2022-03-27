@@ -10,55 +10,74 @@
 
         <template v-else>
             <nav>
-                <component
-                    :is="
-                        tab.to != null
-                            ? 'router-link'
-                            : tab.href != null
-                            ? 'a'
-                            : 'div'
-                    "
+                <floating-menu
+                    :value="tabWithMenu == tab"
+                    @input="tabWithMenu = null"
                     v-for="tab in tabs"
                     :key="tab.key"
-                    :href="tab.href"
-                    :target="tab.href != null ? '_blank' : null"
-                    :to="tab.to"
-                    :active-class="tab.to != null ? 'nav-item-active' : null"
-                    :class="[
-                        {
-                            'nav-item': tab.noNavItem != true,
-                            'icon-only': tab.label == null && tab.icon != null,
-                        },
-                        tab.class,
-                    ]"
-                    :style="[
-                        {
-                            '--color': getColorVariable(getColor(tab)),
-                        },
-                        tab.style,
-                    ]"
-                    @click="
-                        () =>
-                            tab.customAction != null ? tab.customAction() : null
-                    "
+                    :style="tab.noNavItem ? tab.style : null"
                 >
-                    <span
-                        v-if="tab.icon != null"
-                        class="nav-item-icon"
-                        :class="tab.icon"
-                    />
-                    <span v-if="tab.label != null" class="nav-item-label">
-                        <span v-text="tab.label" />
-                        <span
-                            v-if="
-                                tab.keyboardKey != null &&
-                                tab.keyboardIcon != null
+                    <template #activator>
+                        <component
+                            :is="
+                                tab.to != null
+                                    ? 'router-link'
+                                    : tab.href != null
+                                    ? 'a'
+                                    : 'div'
                             "
-                            class="nav-item-keyboard-shortcut-icon"
-                            :class="tab.keyboardIcon"
-                        />
-                    </span>
-                </component>
+                            :href="tab.href"
+                            :target="tab.href != null ? '_blank' : null"
+                            :to="tab.to"
+                            :active-class="
+                                tab.to != null ? 'nav-item-active' : null
+                            "
+                            :class="[
+                                {
+                                    'nav-item': tab.noNavItem != true,
+                                    'icon-only':
+                                        tab.label == null && tab.icon != null,
+                                },
+                                tab.class,
+                            ]"
+                            :style="[
+                                {
+                                    '--color': getColorVariable(getColor(tab)),
+                                },
+                                tab.noNavItem ? null : tab.style,
+                            ]"
+                            @click.left="
+                                () =>
+                                    tab.customAction != null
+                                        ? tab.customAction()
+                                        : null
+                            "
+                            :ref="`tab-${tab.key}`"
+                        >
+                            <span
+                                v-if="tab.icon != null"
+                                class="nav-item-icon"
+                                :class="tab.icon"
+                            />
+                            <span
+                                v-if="tab.label != null"
+                                class="nav-item-label"
+                            >
+                                <span v-text="tab.label" />
+                                <span
+                                    v-if="
+                                        tab.keyboardKey != null &&
+                                        tab.keyboardIcon != null
+                                    "
+                                    class="nav-item-keyboard-shortcut-icon"
+                                    :class="tab.keyboardIcon"
+                                />
+                            </span>
+                        </component>
+                    </template>
+
+                    TODO: right click menu here
+                </floating-menu>
 
                 <template v-if="isIframeMode">
                     <div style="width: 24px" />
@@ -123,6 +142,7 @@
     import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
     import { getRGBString } from './utils/getRGBString';
     import { delay } from '@/shared/utils/delay';
+    import { _throw } from "@/shared/utils/_throw";
 
     interface Tab {
         key: string;
@@ -136,6 +156,7 @@
         class?: string;
         appClass?: string;
         customAction?: () => void;
+        canBeDefault?: boolean;
 
         keyboardKey?: string;
         keyboardIcon?: string;
@@ -176,6 +197,12 @@
             ) ?? null;
         }
 
+        private tabWithMenu: Tab | null = null;
+
+        private setTabWithMenu(tab: Tab) {
+            this.tabWithMenu = tab;
+        }
+
         private get tabs(): Tab[] {
             const tabs: Tab[] = [
                 {
@@ -185,6 +212,7 @@
                     label: 'LOCA: Expeditionen',
                     keyboardKey: '1',
                     keyboardIcon: 'mdi mdi-numeric-1',
+                    canBeDefault: true,
                 },
                 {
                     key: 'combats',
@@ -193,6 +221,7 @@
                     label: 'LOCA: Kämpfe',
                     keyboardKey: '2',
                     keyboardIcon: 'mdi mdi-numeric-2',
+                    canBeDefault: true,
                 },
                 {
                     key: 'debris-fields',
@@ -201,6 +230,7 @@
                     label: 'LOCA: Trümmerfelder',
                     keyboardKey: '3',
                     keyboardIcon: 'mdi mdi-numeric-3',
+                    canBeDefault: true,
                 },
                 {
                     key: 'resource-overview',
@@ -209,6 +239,7 @@
                     label: 'LOCA: Rohstoffbilanz',
                     keyboardKey: '4',
                     keyboardIcon: 'mdi mdi-numeric-4',
+                    canBeDefault: true,
                 },
                 {
                     key: 'empire',
@@ -217,6 +248,7 @@
                     label: 'LOCA: Imperium',
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',
+                    canBeDefault: true,
                 },
                 {
                     key: 'tools',
@@ -225,6 +257,7 @@
                     label: 'LOCA: Tools',
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',
+                    canBeDefault: true,
                 },
                 {
                     key: 'universe-history',
@@ -233,6 +266,7 @@
                     label: 'LOCA: Universe History',
                     keyboardKey: '7',
                     keyboardIcon: 'mdi mdi-numeric-7',
+                    canBeDefault: true,
                 },
                 {
                     key: 'espionage',
@@ -241,6 +275,7 @@
                     label: 'LOCA: Espionage',
                     keyboardKey: '8',
                     keyboardIcon: 'mdi mdi-numeric-8',
+                    canBeDefault: true,
                 },
                 {
                     key: 'space',
@@ -345,11 +380,33 @@
             this.updateDocumentTitle();
 
             this.loading = false;
+            await this.$nextTick();
+            this.onRefsChanged();
             window.focus();
 
             const splashscreen = document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');
             setTimeout(() => splashscreen?.remove(), 500);
+        }
+
+        private onRefsChanged() {
+            // this method exists because @contextmenu does not seem to get passed to dynamic <component>
+            const refKeys = Object.keys(this.$refs).filter(key => key.startsWith('tab-'));
+            refKeys.forEach(key => {
+                const tabKey = key.substring('tab-'.length);
+                const tab = this.tabs.find(tab => tab.key == tabKey) ?? _throw(`tab with key '${tabKey}' not found`);
+
+                if (!tab.canBeDefault) {
+                    return;
+                }
+
+                const refElem = (this.$refs[key] as Vue[])[0];
+                refElem.$el.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.setTabWithMenu(tab);
+                });
+            });
         }
 
         private updateDocumentTitle() {
