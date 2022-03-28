@@ -73,10 +73,19 @@
                                     :class="tab.keyboardIcon"
                                 />
                             </span>
+                            <span
+                                v-if="isDefaultRoute(tab.to)"
+                                class="nav-item-home-icon mdi mdi-home"
+                            />
                         </component>
                     </template>
 
-                    TODO: right click menu here
+                    <set-default-route-button
+                        v-if="tab.canBeDefault"
+                        :label="'LOCA: Set as default'"
+                        rootRouteName=""
+                        :routeName="tab.to.name"
+                    />
                 </floating-menu>
 
                 <template v-if="isIframeMode">
@@ -143,6 +152,8 @@
     import { getRGBString } from './utils/getRGBString';
     import { delay } from '@/shared/utils/delay';
     import { _throw } from "@/shared/utils/_throw";
+    import { SettingsDataModule } from "./data/SettingsDataModule";
+    import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
 
     interface Tab {
         key: string;
@@ -173,7 +184,11 @@
         universeName?: string;
     }
 
-    @Component
+    @Component({
+        components: {
+            SetDefaultRouteButton,
+        },
+    })
     export default class App extends Vue {
         private readonly colors = {
             switchAccount: '#666666',
@@ -183,6 +198,7 @@
         private loading = true;
 
         private knownAccounts: KnownAccount[] = [];
+        private knownAccountsLoaded = false;
         private selectedAccountIndex = -1;
         private showAccountSwitchDialog = false;
 
@@ -201,6 +217,15 @@
 
         private setTabWithMenu(tab: Tab) {
             this.tabWithMenu = tab;
+        }
+
+        private isDefaultRoute(to?: { name: string }): boolean {
+            if (to == null) {
+                return false;
+            }
+
+            const defaultRoute = SettingsDataModule.settings.defaultRoutes[''] ?? 'expeditions';
+            return defaultRoute == to.name;
         }
 
         private get tabs(): Tab[] {
@@ -330,7 +355,10 @@
         private async initAccountDialog() {
             this.showAccountSwitchDialog = true;
 
-            await this.loadKnownAccounts();
+            if (!this.knownAccountsLoaded) {
+                await this.loadKnownAccounts();
+                this.knownAccountsLoaded = true;
+            }
         }
 
         private get activeColor(): string | null {
@@ -555,6 +583,13 @@
             position: absolute;
             top: -14px;
             left: -5px;
+        }
+
+        &-home-icon {
+            position: absolute;
+            left: 2px;
+            bottom: -2px;
+            font-size: 12px !important;
         }
 
         > .ogti {

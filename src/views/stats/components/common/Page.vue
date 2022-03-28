@@ -1,6 +1,9 @@
 <template>
     <div class="page">
-        <list-nav :items="navItems" />
+        <list-nav
+            :items="navItems"
+            :root-route-name="rootRouteName"
+        />
 
         <div class="page-content">
             <router-view />
@@ -17,6 +20,9 @@
     export default class Page extends Vue {
         @Prop({ required: true, type: Array as PropType<ListNavItem[]> })
         private navItems!: ListNavItem[];
+
+        @Prop({ required: false, type: String, default: () => null })
+        private rootRouteName!: string | null;
     }
 </script>
 <style lang="scss" scoped>

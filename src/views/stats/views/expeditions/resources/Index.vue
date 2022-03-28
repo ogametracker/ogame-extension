@@ -1,5 +1,8 @@
 <template>
-    <page :nav-items="navItems" />
+    <page
+        :nav-items="navItems"
+        :root-route-name="rootRoute"
+    />
 </template>
 
 <script lang="ts">
@@ -8,6 +11,8 @@
 
     @Component({})
     export default class Index extends Vue {
+        private readonly rootRoute = 'expeditions/resources';
+
         private get navItems(): ListNavItem[] {
             return [
                 {

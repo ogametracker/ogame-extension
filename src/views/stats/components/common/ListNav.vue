@@ -1,30 +1,96 @@
 <template>
     <div class="nav-list">
-        <router-link
+        <floating-menu
             v-for="(item, i) in items"
             :key="i"
-            class="nav-list-item"
-            :to="item.to"
-            v-text="item.label"
-            active-class="nav-list-item-active"
-        />
+            :value="rootRouteName != null && showMenu[i] == true"
+            @input="$set(showMenu, i, $event)"
+            class="nav-list_floating-menu"
+        >
+            <template #activator>
+                <router-link
+                    class="nav-list-item"
+                    :to="item.to"
+                    active-class="nav-list-item-active"
+                    ref="links"
+                >
+                    <span v-text="item.label" />
+                    <span
+                        v-if="isDefaultRoute(item.to)"
+                        class="nav-list-item-home-icon mdi mdi-home"
+                    />
+                </router-link>
+            </template>
+
+            <set-default-route-button
+                v-if="rootRouteName != null"
+                :label="'LOCA: Set default for this selection'"
+                :rootRouteName="rootRouteName"
+                :routeName="item.to.name"
+                @click="$set(showMenu, i, false)"
+            />
+        </floating-menu>
     </div>
 </template>
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { RawLocation } from 'vue-router';
+    import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     export interface ListNavItem {
         label: string;
-        to: RawLocation;
+        to: RawLocation & { name: string };
     }
 
-    @Component({})
+    @Component({
+        components: {
+            SetDefaultRouteButton,
+        },
+    })
     export default class ListNav extends Vue {
         @Prop({ required: true, type: Array as PropType<ListNavItem[]> })
         private items!: ListNavItem[];
+
+        @Prop({ required: false, type: String, default: () => null })
+        private rootRouteName!: string | null;
+
+        private showMenu: Record<number, boolean> = {};
+
+        private get defaultRouteName() {
+            const routes = this.$router.getRoutes();
+            const rootRoute = routes.find(route => route.name == this.rootRouteName);
+
+            if (rootRoute?.redirect instanceof Object) {
+                return rootRoute.redirect.name;
+            }
+
+            throw new Error('route without default route!');
+        }
+
+        private async mounted() {
+            await this.$nextTick();
+            (this.$refs.links as Vue[]).forEach((component, i) => {
+                const element = component.$el;
+                element.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+
+                    Object.keys(this.showMenu).forEach(key => this.showMenu[parseInt(key)] = false);
+                    this.$set(this.showMenu, i, true);
+                });
+            });
+        }
+
+        private isDefaultRoute(to: { name: string }): boolean {
+            if (this.rootRouteName == null) {
+                return false;
+            }
+
+            const defaultRoute = SettingsDataModule.settings.defaultRoutes[this.rootRouteName] ?? this.defaultRouteName;
+            return defaultRoute == to.name;
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -32,6 +98,7 @@
         display: flex;
         flex-direction: column;
         min-width: 125px;
+        gap: 2px;
     }
 
     .nav-list-item {
@@ -39,12 +106,12 @@
         border-radius: 4px;
         text-decoration: none;
         min-width: 140px;
-        
-            background: linear-gradient(
-                to right,
-                rgba(var(--color), 0.25) 30%,
-                rgba(var(--color), 0.15)
-            );
+
+        background: linear-gradient(
+            to right,
+            rgba(var(--color), 0.25) 30%,
+            rgba(var(--color), 0.15)
+        );
 
         &:hover {
             background: linear-gradient(
@@ -57,6 +124,14 @@
         + .nav-list-item {
             margin-top: 2px;
         }
+
+        &-home-icon {
+            position: absolute;
+            bottom: 0;
+            left: 2px;
+            font-size: 12px;
+            opacity: 0.5;
+        }
     }
 
     .nav-list-item-active,
@@ -66,5 +141,23 @@
             rgba(var(--color), 0.7) 30%,
             rgba(var(--color), 0.7)
         );
+
+        .nav-list-item-home-icon {
+            opacity: 1;
+        }
+    }
+
+    .nav-list_floating-menu {
+        display: flex !important;
+
+        > .nav-list-item {
+            width: 100%;
+        }
+
+        &::v-deep .floating-menu {
+            left: 50%;
+            top: 50%;
+            z-index: 0;
+        }
     }
 </style>

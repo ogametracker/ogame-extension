@@ -27,13 +27,17 @@
         private left!: boolean;
 
         private mounted() {
-            window.addEventListener('click', e => {
-                const path = e.composedPath();
+            window.addEventListener('click', this.onMouseEvent);
+            window.addEventListener('contextmenu', this.onMouseEvent);
+            window.addEventListener('mouseup', this.onMouseEvent);
+        }
 
-                if (!path.includes(this.$el)) {
-                    this.show = false;
-                }
-            });
+        private onMouseEvent(e: MouseEvent) {
+            const path = e.composedPath();
+
+            if (!path.includes(this.$el)) {
+                this.show = false;
+            }
         }
     }
 </script>
@@ -66,7 +70,7 @@
             display: inline-block;
 
             &--active {
-                z-index: 1;
+                z-index: 2;
             }
         }
     }

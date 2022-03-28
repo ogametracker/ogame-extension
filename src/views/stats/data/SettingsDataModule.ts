@@ -62,13 +62,13 @@ class SettingsDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-        case MessageType.Settings: {
-            const { data: settings } = msg as SettingsMessage;
-            this.settings = settings;
+            case MessageType.Settings: {
+                const { data: settings } = msg as SettingsMessage;
+                this.settings = settings;
 
-            this.lock.release();
-            break;
-        }
+                this.lock.release();
+                break;
+            }
         }
     }
 }

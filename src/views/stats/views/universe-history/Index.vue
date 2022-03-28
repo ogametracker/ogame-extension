@@ -1,5 +1,5 @@
 <template>
-    <page v-if="ready" :nav-items="navItems" />
+    <page v-if="ready" :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
 <script lang="ts">
@@ -9,6 +9,7 @@
 
     @Component({})
     export default class Expeditions extends Vue {
+        private readonly rootRoute = 'universe-history';
         private ready = false;
 
         private async mounted() {
