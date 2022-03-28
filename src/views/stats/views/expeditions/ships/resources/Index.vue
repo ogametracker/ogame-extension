@@ -12,12 +12,10 @@
             return [
                 {
                     to: { name: 'expeditions/ships/resources/chart' },
-                    icon: 'mdi mdi-chart-areaspline',
                     label: 'LOCA: Chart',
                 },
                 {
                     to: { name: 'expeditions/ships/resources/table' },
-                    icon: 'mdi mdi-table',
                     label: 'LOCA: Table',
                 },
             ];

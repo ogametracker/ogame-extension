@@ -12,12 +12,10 @@
             return [
                 {
                     to: { name: 'expeditions/dark-matter/amount/chart' },
-                    icon: 'mdi mdi-chart-areaspline',
                     label: 'LOCA: Chart',
                 },
                 {
                     to: { name: 'expeditions/dark-matter/amount/table' },
-                    icon: 'mdi mdi-table',
                     label: 'LOCA: Table',
                 },
             ];

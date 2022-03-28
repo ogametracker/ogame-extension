@@ -16,7 +16,6 @@
                 },
                 {
                     to: { name: 'empire/production/mines' },
-                    icon: 'mdi mdi-table',
                     label: 'LOCA: Mines',
                 },
             ];
