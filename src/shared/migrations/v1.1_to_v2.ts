@@ -124,6 +124,8 @@ const migrate: MigrationFunction = async () => {
             };
         }
 
+        //TODO: remove old stored server settings (keys that end with -serverSettings)
+
         await chrome.storage.local.set({
             [settingsKey]: newSettings,
             [versionKey]: '2.0',
