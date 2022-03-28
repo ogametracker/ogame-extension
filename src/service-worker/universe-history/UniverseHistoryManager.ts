@@ -136,7 +136,7 @@ type bit = 0 | 1;
 
 export class UniverseHistoryManager extends PersistentDataManager<UniverseHistory> {
 
-    private readonly intervalInMs = 1000 * 60 * 60; //1h
+    private readonly intervalInMs = 1000 * 60 * 60 * 12; //12h
     private readonly language: string;
     private readonly serverId: number;
     private readonly parser = new XMLParser({
