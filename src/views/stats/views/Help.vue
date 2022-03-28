@@ -28,13 +28,14 @@
             'debrisFieldReports',
             'expoEvents',
             'local-player',
-            'serverSettings',
+            'server-settings',
             'settings',
             'version',
         ];
 
         private bytesInUse = {
             currentAccount: 0,
+            universeHistory: 0,
             total: 0,
         };
         private isFirefox = false;
@@ -58,6 +59,7 @@
             const keys = this.keysSuffixes.map(suffix => `s${meta.serverId}-${meta.language}-${meta.playerId}-${suffix}`);
             this.bytesInUse.currentAccount = await chrome.storage.local.getBytesInUse(keys);
             this.bytesInUse.total = await chrome.storage.local.getBytesInUse();
+            this.bytesInUse.universeHistory = await chrome.storage.local.getBytesInUse(`s${meta.serverId}-${meta.language}-universe-history`);
         }
 
         private get items(): InfoItem[] {
@@ -67,6 +69,12 @@
                     value: this.isFirefox
                         ? 'LOCA: not available => Firefox bug'
                         : this.formatBytes(this.bytesInUse.currentAccount),
+                },
+                {
+                    label: 'LOCA: Size of universe history saved data',
+                    value: this.isFirefox
+                        ? 'LOCA: not available => Firefox bug'
+                        : this.formatBytes(this.bytesInUse.universeHistory),
                 },
                 {
                     label: 'LOCA: Size of saved data (total)',
