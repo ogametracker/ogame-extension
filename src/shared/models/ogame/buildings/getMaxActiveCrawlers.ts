@@ -12,7 +12,7 @@ export function getMaxActiveCrawlers(
     const maxCrawlerFactor = geologist && playerClass == PlayerClass.collector
         ? (1 + serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus)
         : 1;
-    const maxCrawlers = Math.round(
+    const maxCrawlers = Math.floor(
         (metalMineLevel + crystalMineLevel + deuteriumSynthesizerLevel) 
         * 8
         * maxCrawlerFactor
