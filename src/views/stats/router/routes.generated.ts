@@ -78,6 +78,7 @@ import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
 import viewsuniversehistoryAlliances from '@stats/views/universe-history/Alliances.vue';
 import viewsuniversehistoryPlayers from '@stats/views/universe-history/Players.vue';
+import viewsuniversehistoryPlayers2 from '@stats/views/universe-history/Players2.vue';
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
@@ -667,6 +668,11 @@ const routes: RouteConfig[] = [
                         path: "players",
                         name: "universe-history/players",
                         component: viewsuniversehistoryPlayers
+                    },
+                    {
+                        path: "players2",
+                        name: "universe-history/players2",
+                        component: viewsuniversehistoryPlayers2
                     }
                 ]
             }

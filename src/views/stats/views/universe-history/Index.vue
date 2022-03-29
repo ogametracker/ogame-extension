@@ -24,6 +24,10 @@
                     to: { name: 'universe-history/players' },
                 },
                 {
+                    label: 'LOCA: Players2',
+                    to: { name: 'universe-history/players2' },
+                },
+                {
                     label: 'LOCA: Alliances',
                     to: { name: 'universe-history/alliances' },
                 },
