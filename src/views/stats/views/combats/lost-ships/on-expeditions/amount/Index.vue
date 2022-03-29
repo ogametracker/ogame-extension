@@ -1,5 +1,5 @@
 <template>
-    <tab-view :tabs="tabs" />
+    <tab-view :tabs="tabs" root-route-name="combats/lost-ships/on-expeditions/amount" />
 </template>
 
 <script lang="ts">

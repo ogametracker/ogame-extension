@@ -1,5 +1,5 @@
 <template>
-    <tab-view :tabs="tabs" />
+    <tab-view :tabs="tabs" root-route-name="combats/overview/against-players" />
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-    <tab-view :tabs="tabs" />
+    <tab-view :tabs="tabs" root-route-name="expeditions/ships/sizes" />
 </template>
 
 <script lang="ts">
