@@ -19,6 +19,8 @@
                         type="number"
                         v-model.number.lazy="factor"
                         @change="updateMsuConversionRates()"
+                        @focus="isFocused = true"
+                        @blur="onBlur()"
                         min="0"
                         max="1"
                         step="0.01"
@@ -31,6 +33,8 @@
                         type="number"
                         v-model.number.lazy="deuteriumFactor"
                         @change="updateMsuConversionRates()"
+                        @focus="isFocused = true"
+                        @blur="onBlur()"
                         min="0"
                         max="1"
                         step="0.01"
@@ -49,6 +53,7 @@
     export default class ExpeditionShipResourceUnitsFactorSettings extends Vue {
         private factor = 1;
         private deuteriumFactor = 1;
+        private isFocused = false;
 
         private get factors() {
             return SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
@@ -57,8 +62,11 @@
         @Watch('factors', { immediate: true })
         private onFactorsChanged() {
             const { factor, deuteriumFactor } = this.factors;
-            this.factor = factor;
-            this.deuteriumFactor = deuteriumFactor;
+
+            if (!this.isFocused) {
+                this.factor = factor;
+                this.deuteriumFactor = deuteriumFactor;
+            }
         }
 
         private async updateMsuConversionRates() {
@@ -71,6 +79,10 @@
             });
         }
 
+        private onBlur() {
+            this.isFocused = false;
+            this.onFactorsChanged();
+        }
     }
 </script>
 <style lang="scss" scoped>
