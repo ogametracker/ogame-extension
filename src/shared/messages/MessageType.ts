@@ -27,6 +27,8 @@ export enum MessageType {
     AllCombatReports = 'combat-reports/all',
     TrackCombatReport = 'combat-reports/track',
     RequestCombatReports = 'combat-reports/request-reports',
+    RequestSingleCombatReport = 'combat-reports/request-single-report',
+    CombatReportUnknown = 'combat-reports/is-unknown',
 
     // message tracking
     WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report

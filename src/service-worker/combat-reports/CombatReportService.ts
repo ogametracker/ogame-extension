@@ -4,13 +4,35 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { CombatReportModule } from './CombatReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { AllCombatReportsMessage, CombatReportMessage, NewCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
+import { AllCombatReportsMessage, CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
 
 export class CombatReportService implements MessageService {
     private readonly combatReportModule = new CombatReportModule();
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
         switch (message.type) {
+            case MessageType.RequestSingleCombatReport: {
+                const { data: id } = message as RequestSingleCombatReportMessage;
+                const tryResult = await this.combatReportModule.tryGetSingleReport(message as RequestSingleCombatReportMessage);
+                if(!tryResult.success) {
+                    const unknownMessage: CombatReportUnknownMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.CombatReportUnknown,
+                        data: id,
+                    };
+                    await broadcastMessage(unknownMessage);
+                }
+                else {
+                    const combatReportMessage: CombatReportMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.CombatReport,
+                        data: tryResult.result,
+                    };
+                    await broadcastMessage(combatReportMessage);
+                }
+                break;
+            }
+
             case MessageType.TrackCombatReport: {
                 const tryResult = await this.combatReportModule.tryTrackCombatReport(message as TrackCombatReportMessage);
                 if (!tryResult.success) {

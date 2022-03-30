@@ -1,8 +1,8 @@
 import { parse } from "date-fns";
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
-import { Message } from "../../shared/messages/Message";
+import { Message, MessageOgameMeta } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
-import { CombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
+import { CombatReportMessage, CombatReportUnknownMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
 import { OgameCombatReport } from "../../shared/models/ogame/combats/OgameCombatReport";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
@@ -43,15 +43,25 @@ function setupObserver() {
 
 function onMessage(message: Message<MessageType, any>) {
     const ogameMeta = getOgameMeta();
-    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+    if (!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
         return;
     }
 
     switch (message.type) {
+        case MessageType.CombatReportUnknown: {
+            const { data: id } = message as CombatReportUnknownMessage;
+            shouldTrackResolvers[id]?.(true);
+            delete shouldTrackResolvers[id];
+            break;
+        }
+
         case MessageType.CombatReport:
         case MessageType.NewCombatReport: {
             const msg = message as CombatReportMessage;
             const combatReport = msg.data;
+
+            shouldTrackResolvers[combatReport.id]?.(false);
+            delete shouldTrackResolvers[combatReport.id];
 
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
@@ -77,7 +87,8 @@ function onMessage(message: Message<MessageType, any>) {
                         </div>
                     </div>
                 `);
-            } else {
+            }
+            else {
                 addOrSetCustomMessageContent(li, `-`);
             }
             break;
@@ -101,6 +112,11 @@ async function trackCombatReports(elem: Element) {
             const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
+            }
+
+            const shouldTrack = await shouldTrackCombatReport(id, ogameMeta);
+            if (!shouldTrack) {
+                return;
             }
 
             const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
@@ -145,6 +161,21 @@ async function trackCombatReports(elem: Element) {
     });
 
     await Promise.all(promises);
+}
+
+const shouldTrackResolvers: Record<number, (value: boolean) => void> = {};
+
+function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
+    return new Promise<boolean>(resolve => {
+        shouldTrackResolvers[id] = resolve;
+
+        const workerMessage: RequestSingleCombatReportMessage = {
+            type: MessageType.RequestSingleCombatReport,
+            ogameMeta,
+            data: id,
+        };
+        sendMessage(workerMessage);
+    });
 }
 
 async function loadOgameCombatReport(url: string): Promise<OgameCombatReport> {

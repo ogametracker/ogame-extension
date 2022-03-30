@@ -7,7 +7,7 @@ import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { CombatReportManager } from "./CombatReportManager";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
-import { RawCombatReportData, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
+import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
 import { CombatResultType } from "../../shared/models/combat-reports/CombatResultType";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
@@ -62,6 +62,22 @@ export class CombatReportModule {
                 isAlreadyTracked: false,
             },
         };
+    }
+
+    public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReport>> {
+        const manager = this.getManager(message.ogameMeta);
+        const combatReports = await manager.getData();
+
+        // check if expedition already tracked => if true, return tracked data
+        const knownReport = combatReports[message.data];
+        if (knownReport != null) {
+            return {
+                success: true,
+                result: knownReport,
+            };
+        }
+
+        return { success: false };
     }
 
     private parseCombatReport(language: string, playerId: number, rawCombatReportData: RawCombatReportData): CombatReport {
