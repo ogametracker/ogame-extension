@@ -1,29 +1,21 @@
 <template>
     <div class="scrollable-chart">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
-            <div
-                class="svg-container"
-                ref="svg-container"
-                @mouseleave="activeX = null"
-            >
+            <div class="svg-container" ref="svg-container">
                 <svg v-if="isReady && internalDatasets.length > 0">
                     <g class="grid-lines">
                         <!-- vertical grid lines -->
-                        <!-- <line
-                            v-for="x in ticks"
-                            :key="`x-${x}`"
-                            :x1="xPositions[x - 1]"
+                        <line
+                            v-for="(x, i) in xAxisTicks"
+                            :key="`x-${i}`"
+                            :x1="x * svgContainer.clientWidth"
                             :y1="0"
-                            :x2="xPositions[x - 1]"
+                            :x2="x * svgContainer.clientWidth"
                             :y2="svgContainer.clientHeight + 10"
                             class="x-grid-line"
-                            :class="{
-                                'x-grid-line-active': x - 1 == activeX,
-                                'x-grid-line--first': x == 1,
-                            }"
-                        /> -->
+                        />
                         <!-- horizontal grid lines -->
-                        <!-- <line
+                        <line
                             v-for="(yData, y) in yGridLines"
                             :key="`y-${y}`"
                             :x1="-10"
@@ -32,7 +24,7 @@
                             :y2="yData.svg"
                             class="y-grid-line"
                             :class="{ 'y-grid-line--first': y == 0 }"
-                        /> -->
+                        />
                     </g>
 
                     <g class="background-paths">
@@ -71,39 +63,35 @@
                         />
                     </g>
 
-                    <!-- <g class="points">
-                        <g
+                    <g class="points">
+                        <!-- <g
                             v-for="x in ticks"
                             :key="`point-group-${x}`"
                             class="dataset-point-group"
                             @mouseenter="activeX = x - 1"
-                        >
+                        > -->
+                        <template v-for="dataset in reversedDatasets">
                             <circle
-                                v-for="dataset in reversedDatasets"
+                                v-for="(point, i) in dataset.svgValues"
+                                :key="`point-${dataset.key}-${i}`"
                                 v-show="dataset.visible && !dataset.hidePoints"
-                                :key="`point-${dataset.key}-${x}`"
                                 class="dataset-point"
-                                :cx="xPositions[x - 1]"
-                                :cy="dataset.svgValues[x - 1]"
+                                :cx="point.x"
+                                :cy="point.y"
                                 :style="{ fill: dataset.color }"
                                 :_debug="dataset.key"
                             />
+                        </template>
 
-                            <rect
+                        <rect
                                 class="dataset-point-group-rect"
-                                :x="
-                                    Math.ceil(
-                                        xPositions[x - 1] -
-                                            (0.5 * svgContainer.clientWidth) /
-                                                ticks
-                                    )
-                                "
+                                :x="i"
                                 y="0"
                                 :width="1 + svgContainer.clientWidth / ticks"
                                 :height="svgContainer.clientHeight"
                             />
                         </g>
-                    </g> -->
+                    </g>
                 </svg>
 
                 <!-- <div
@@ -172,15 +160,15 @@
                     v-text="$number(y)"
                 />
             </div>
-            <!-- <div class="chart-x-axis">
+            <div class="chart-x-axis">
                 <div
-                    v-for="x in ticks"
+                    v-for="x in xAxisTicks"
                     :key="`x-grid-line-${x}`"
                     class="x-axis-label"
-                    :style="{ left: `${((x - 1) * 100) / (ticks - 1)}%` }"
-                    v-text="xLabelFormatter(x - 1 + tickOffset)"
+                    :style="{ left: `${x * 100}%` }"
+                    v-text="xLabelFormatter(x)"
                 />
-            </div> -->
+            </div>
 
             <div class="chart-legend" v-if="!noLegend">
                 <div
@@ -240,7 +228,7 @@
 
     interface ScrollableChart2InternalDataset extends ScrollableChart2Dataset {
         visible: boolean;
-        transformedValues: Point[];
+        normalizedValues: Point[];
         svgValues: Point[];
         paths: {
             line: string;
@@ -280,6 +268,9 @@
 
         @PropSync('rightX', { required: true, type: Number, default: 1 })
         private xRangeMax!: number;
+
+        @Prop({ required: false, type: Array as PropType<number[]>, default: () => [] })
+        private ticks!: number[];
 
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
@@ -333,7 +324,7 @@
         private onDatasetsChanged() {
             const internalDatasets: ScrollableChart2InternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
-                transformedValues: [],
+                normalizedValues: [],
                 svgValues: [],
                 paths: {
                     line: '',
@@ -346,15 +337,20 @@
 
             this.internalDatasets = internalDatasets;
             this.updateYRange();
-            this.updateTransformedValues();
+            this.updatenormalizedValues();
 
             this.updateYGridLines();
             this.updatePaths();
 
             this.$nextTick(() => {
                 this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
-                this.updateTickOffset();
             });
+        }
+
+        private get xAxisTicks() {
+            return this.ticks
+                .filter(x => x >= this.xRangeMin && x <= this.xRangeMax)
+                .map(x => (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin));
         }
 
         private updateYGridLines() {
@@ -424,25 +420,25 @@
             return [...this.internalDatasets].reverse();
         }
 
-        private updateTransformedValues() {
+        private updatenormalizedValues() {
             let maxX = 0;
             const yRange = this.yRange.max - this.yRange.min;
 
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
                 const previousVisibleAndStackedDataset = findPrevious(internalDatasets, i - 1, d => d.visible && d.stack);
 
-                const transformedValues = internalDataset.values.map((point, i) => {
+                const normalizedValues = internalDataset.values.map((point, i) => {
                     let { x, y } = point;
                     x = (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin);
 
                     if (internalDataset.stack) {
-                        y += previousVisibleAndStackedDataset?.transformedValues[i].y ?? 0;
+                        y += previousVisibleAndStackedDataset?.normalizedValues[i].y ?? 0;
                     }
                     y = (y - this.yRange.min) / yRange;
                     return { x, y };
                 });
-                maxX = Math.max(maxX, transformedValues.length - 1);
-                internalDataset.transformedValues = transformedValues;
+                maxX = Math.max(maxX, normalizedValues.length - 1);
+                internalDataset.normalizedValues = normalizedValues;
             });
 
             this.maxX = maxX;
@@ -450,18 +446,8 @@
 
         private toggleVisibility(dataset: ScrollableChart2InternalDataset) {
             dataset.visible = !dataset.visible;
-            this.updateTransformedValues();
+            this.updatenormalizedValues();
             this.updatePaths();
-        }
-
-        private updateTickOffset() {
-            const scrollableDistance = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
-            if (scrollableDistance == 0) {
-                return;
-            }
-
-            const scrolledFraction = this.scrollbarContainer.scrollLeft / scrollableDistance;
-            //TODO: update x offset
         }
 
         private onResize() {
@@ -475,7 +461,7 @@
             const zeroY = this.computeSvgValues([{ x: 0, y: 0 }])[0].y;
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
-                const svgValues = this.computeSvgValues(dataset.transformedValues);
+                const svgValues = this.computeSvgValues(dataset.normalizedValues);
                 const linePath = this.getSvgPath(svgValues);
 
                 const bgPath = `M 0 ${zeroY} `

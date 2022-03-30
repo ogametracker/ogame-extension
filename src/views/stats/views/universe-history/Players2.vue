@@ -1,16 +1,11 @@
 <template>
-    <div style="height: 100%">
-        TODO: Player histories here: {{ playerIds }}:
-        <hr />
-        {{ datasets.length }}
-        {{ ready }}
-        <scrollable-chart-2
-            v-if="datasets.length > 0 && ready"
-            :datasets="datasets"
-            :leftX.sync="leftX"
-            :rightX.sync="rightX"
-        />
-    </div>
+    <scrollable-chart-2
+        v-if="datasets.length > 0 && ready"
+        :datasets="datasets"
+        :leftX.sync="leftX"
+        :rightX.sync="rightX"
+        :ticks="ticks"
+    />
 </template>
 
 <script lang="ts">
@@ -20,6 +15,9 @@
     import { GlobalOgameMetaData } from '../../data/GlobalOgameMetaData';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import ScrollableChart2, { ScrollableChart2Dataset } from '@stats/components/common/ScrollableChart2.vue';
+    import startOfDay from 'date-fns/startOfDay/index';
+    import { addDays } from 'date-fns';
+    import differenceInDays from 'date-fns/differenceInDays/index';
 
     @Component({
         components: {
@@ -54,6 +52,16 @@
             this.rightX = max;
 
             this.ready = true;
+        }
+
+        private get ticks() {
+            let { min, max } = this.getMinAndMaxDates(this.playerHistories[0]);
+            min = startOfDay(min).getTime();
+            max = addDays(startOfDay(max), 1).getTime();
+            const dayDiff = differenceInDays(max, min);
+
+            return Array.from({ length: dayDiff + 1 })
+                .map((_, offset) => min + offset * 24 * 60 * 60 * 1000);
         }
 
         private getMinAndMaxDates(history: PlayerHistory): { min: number, max: number } {
