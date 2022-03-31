@@ -6,12 +6,12 @@
                     <g class="grid-lines">
                         <!-- vertical grid lines -->
                         <line
-                            v-for="(x, i) in xAxisTicks"
+                            v-for="(x, i) in xValues"
                             :key="`x-${i}`"
-                            :x1="x * svgContainer.clientWidth"
+                            :x1="x * width"
                             :y1="0"
-                            :x2="x * svgContainer.clientWidth"
-                            :y2="svgContainer.clientHeight + 10"
+                            :x2="x * width"
+                            :y2="height + 10"
                             class="x-grid-line"
                         />
                         <!-- horizontal grid lines -->
@@ -20,7 +20,7 @@
                             :key="`y-${y}`"
                             :x1="-10"
                             :y1="yData.svg"
-                            :x2="svgContainer.clientWidth"
+                            :x2="width"
                             :y2="yData.svg"
                             class="y-grid-line"
                             :class="{ 'y-grid-line--first': y == 0 }"
@@ -64,31 +64,43 @@
                     </g>
 
                     <g class="points">
-                        <!-- <g
-                            v-for="x in ticks"
+                        <g
+                            v-for="(x, i) in xValues"
                             :key="`point-group-${x}`"
                             class="dataset-point-group"
-                            @mouseenter="activeX = x - 1"
-                        > -->
-                        <template v-for="dataset in reversedDatasets">
-                            <circle
-                                v-for="(point, i) in dataset.svgValues"
-                                :key="`point-${dataset.key}-${i}`"
-                                v-show="dataset.visible && !dataset.hidePoints"
-                                class="dataset-point"
-                                :cx="point.x"
-                                :cy="point.y"
-                                :style="{ fill: dataset.color }"
-                                :_debug="dataset.key"
-                            />
-                        </template>
+                            @mouseenter="activeX = x"
+                        >
+                            <template v-for="dataset in reversedDatasets">
+                                <circle
+                                    v-if="
+                                        dataset.normalizedValuesByX[x] != null
+                                    "
+                                    :key="`point-${dataset.key}-${x}`"
+                                    v-show="
+                                        dataset.visible && !dataset.hidePoints
+                                    "
+                                    class="dataset-point"
+                                    :cx="x * width"
+                                    :cy="
+                                        height *
+                                        (1 - dataset.normalizedValuesByX[x])
+                                    "
+                                    :style="{ fill: dataset.color }"
+                                    :_debug-x="x"
+                                    :_debug-y="dataset.normalizedValuesByX[x]"
+                                />
+                            </template>
 
-                        <rect
+                            <rect
                                 class="dataset-point-group-rect"
-                                :x="i"
+                                :x="width * (x + (xValues[i - 1] || 0)) / 2"
                                 y="0"
-                                :width="1 + svgContainer.clientWidth / ticks"
-                                :height="svgContainer.clientHeight"
+                                :width="width * getRectWidth(i)"
+                                :height="height"
+                                :_debug-left-x="xValues[i - 1] || 0"
+                                :_debug-x="x || 0"
+                                :_debug-right-x="xValues[i + 1] || 0"
+                                :_debug-width="getRectWidth(i)"
                             />
                         </g>
                     </g>
@@ -228,8 +240,9 @@
 
     interface ScrollableChart2InternalDataset extends ScrollableChart2Dataset {
         visible: boolean;
+        svgPoints: Point[];
         normalizedValues: Point[];
-        svgValues: Point[];
+        normalizedValuesByX: Record<number, number>;
         paths: {
             line: string;
             averageLine: string;
@@ -260,14 +273,8 @@
         @Ref('scrollbar-container')
         private scrollbarContainer!: HTMLElement;
 
-        @Prop({ required: true, type: Array as PropType<ScrollableChart2Dataset[]>, validator: (value: ScrollableChart2Dataset[]) => value.length > 0 })
+        @Prop({ required: true, type: Array as PropType<ScrollableChart2Dataset[]> })
         private datasets!: ScrollableChart2Dataset[];
-
-        @PropSync('leftX', { required: true, type: Number, default: 0 })
-        private xRangeMin!: number;
-
-        @PropSync('rightX', { required: true, type: Number, default: 1 })
-        private xRangeMax!: number;
 
         @Prop({ required: false, type: Array as PropType<number[]>, default: () => [] })
         private ticks!: number[];
@@ -284,11 +291,12 @@
         // @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
         // private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
-        private maxX = 0;
         private internalDatasets: ScrollableChart2InternalDataset[] = [];
-        private yGridLines: YGridLineData = {};
+        private xRange = { min: 0, max: 0 };
         private yRange = { min: 0, max: 0 };
+
         private yGridRange = { min: 0, max: 0 };
+        private yGridLines: YGridLineData = {};
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
         // private get footerTexts(): string[] {
@@ -325,7 +333,8 @@
             const internalDatasets: ScrollableChart2InternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
                 normalizedValues: [],
-                svgValues: [],
+                normalizedValuesByX: {},
+                svgPoints: [],
                 paths: {
                     line: '',
                     averageLine: '',
@@ -336,8 +345,12 @@
 
 
             this.internalDatasets = internalDatasets;
-            this.updateYRange();
-            this.updatenormalizedValues();
+            if (this.internalDatasets.length == 0) {
+                return;
+            }
+
+            this.updateXAndYRange();
+            this.updateNormalizedValues();
 
             this.updateYGridLines();
             this.updatePaths();
@@ -348,9 +361,23 @@
         }
 
         private get xAxisTicks() {
-            return this.ticks
-                .filter(x => x >= this.xRangeMin && x <= this.xRangeMax)
-                .map(x => (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin));
+            return [];
+            // return this.ticks
+            //     .filter(x => x >= this.xRangeMin && x <= this.xRangeMax)
+            //     .map(x => (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin));
+        }
+
+        private get xValues() {
+            const result = new Set(this.internalDatasets.flatMap(d => d.normalizedValues.map(p => p.x)));
+            return [...result].sort((a, b) => a - b);
+        }
+
+        private get width() {
+            return this.svgContainer.clientWidth;
+        }
+
+        private get height() {
+            return this.svgContainer.clientHeight;
         }
 
         private updateYGridLines() {
@@ -384,7 +411,7 @@
             }
 
 
-            const height = this.svgContainer.clientHeight;
+            const height = this.height;
             const lines: YGridLineData = {};
             const count = stepCount.positive + stepCount.negative;
             for (let c = 0; c <= count; c++) {
@@ -403,16 +430,21 @@
             };
         }
 
-        private updateYRange() {
-            const yRange = { min: 0, max: 0 };
+        private updateXAndYRange() {
+            const yRange = { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER };
+            const xRange = { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER };
 
             this.internalDatasets.forEach(dataset => {
                 dataset.values.forEach(point => {
+                    xRange.min = Math.min(point.x, xRange.min);
+                    xRange.max = Math.max(point.x, xRange.max);
+
                     yRange.min = Math.min(point.y, yRange.min);
                     yRange.max = Math.max(point.y, yRange.max);
                 });
             });
 
+            this.xRange = xRange;
             this.yRange = yRange;
         }
 
@@ -420,34 +452,34 @@
             return [...this.internalDatasets].reverse();
         }
 
-        private updatenormalizedValues() {
-            let maxX = 0;
-            const yRange = this.yRange.max - this.yRange.min;
-
+        private updateNormalizedValues() {
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
                 const previousVisibleAndStackedDataset = findPrevious(internalDatasets, i - 1, d => d.visible && d.stack);
 
                 const normalizedValues = internalDataset.values.map((point, i) => {
                     let { x, y } = point;
-                    x = (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin);
+                    x = (x - this.xRange.min) / (this.xRange.max - this.xRange.min);
+                    y = (y - this.yRange.min) / (this.yRange.max - this.yRange.min);
 
                     if (internalDataset.stack) {
                         y += previousVisibleAndStackedDataset?.normalizedValues[i].y ?? 0;
                     }
-                    y = (y - this.yRange.min) / yRange;
                     return { x, y };
                 });
-                maxX = Math.max(maxX, normalizedValues.length - 1);
                 internalDataset.normalizedValues = normalizedValues;
-            });
 
-            this.maxX = maxX;
+                internalDataset.normalizedValuesByX = {};
+                normalizedValues.forEach(point => internalDataset.normalizedValuesByX[point.x] = point.y);
+            });
         }
 
         private toggleVisibility(dataset: ScrollableChart2InternalDataset) {
             dataset.visible = !dataset.visible;
-            this.updatenormalizedValues();
-            this.updatePaths();
+
+            if (dataset.stack) {
+                this.updateNormalizedValues();
+                this.updatePaths();
+            }
         }
 
         private onResize() {
@@ -456,13 +488,13 @@
         }
 
         private updatePaths() {
-            const width = this.svgContainer.clientWidth;
+            const width = this.width;
 
             const zeroY = this.computeSvgValues([{ x: 0, y: 0 }])[0].y;
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
-                const svgValues = this.computeSvgValues(dataset.normalizedValues);
-                const linePath = this.getSvgPath(svgValues);
+                const svgPoints = this.computeSvgValues(dataset.normalizedValues);
+                const linePath = this.getSvgPath(svgPoints);
 
                 const bgPath = `M 0 ${zeroY} `
                     + `L${linePath.substring(1)} `
@@ -476,7 +508,8 @@
 
                 const internalDataset: ScrollableChart2InternalDataset = {
                     ...dataset,
-                    svgValues,
+
+                    svgPoints: svgPoints,
                     paths: {
                         line: linePath,
                         averageLine: avgLinePath,
@@ -508,9 +541,8 @@
         }
 
         private computeSvgValues(values: Point[]): Point[] {
-            const width = this.svgContainer.clientWidth;
-            const height = this.svgContainer.clientHeight;
-            const yRange = this.yGridRange.max - this.yGridRange.min;
+            const width = this.width;
+            const height = this.height;
 
             return values.map(point => {
                 const x = width * point.x;
@@ -531,8 +563,14 @@
             },
         };
 
-        private getValue(dataset: ScrollableChart2InternalDataset, x: number) {
-            return dataset.values[x] ?? 0;
+        private getRectWidth(xIndex: number) {
+            const xValues = this.xValues;
+            const leftX = xValues[xIndex - 1] ?? 0;
+            const x = xValues[xIndex];
+            const rightX = xValues[xIndex + 1] ?? 1;
+
+            const width = (x - leftX) / 2 + (rightX - x) / 2;
+            return width;
         }
     }
 </script>

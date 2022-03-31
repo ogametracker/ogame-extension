@@ -100,15 +100,28 @@
         private get datasets(): ScrollableChart2Dataset[] {
             const playerHistories = this.playerHistories;
 
-            return playerHistories.map(player => ({
-                key: player.id,
-                values: player.scores.total.map(h => ({ x: h.date, y: h.value })),
-                color: 'yellow',
-                label: `total ${player.name.slice(-1)[0].value}`,
+            const keys: (keyof PlayerHistory['scores'])[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const colors: Record<keyof PlayerHistory['scores'], string> = {
+                total: 'yellow',
+                economy: 'grey',
+                research: 'lime',
+                military: 'red',
+                militaryBuilt: 'purple',
+                militaryDestroyed: 'pink',
+                militaryLost: 'darkred',
+                honor: 'skyblue',
+                numberOfShips: 'deeppink',
+            };
+
+            return playerHistories.flatMap(player => keys.map(key => ({
+                key: `${player.id}-${key}`,
+                values: player.scores[key].map(h => ({ x: h.date, y: h.value })),
+                color: colors[key],
+                label: `${key} ${player.name.slice(-1)[0].value}`,
                 filled: false,
                 stack: false,
                 hidePoints: false,
-            }));
+            })));
         }
     }
 </script>
