@@ -16,6 +16,7 @@
                     v-for="tab in tabs"
                     :key="tab.key"
                     :style="tab.noNavItem ? tab.style : null"
+                    class="tab_floating-menu"
                 >
                     <template #activator>
                         <component
@@ -145,7 +146,7 @@
 <script lang="ts">
     import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
     import { parseIntSafe } from "@/shared/utils/parseNumbers";
-    import { Component, Vue, Watch } from "vue-property-decorator";
+    import { Component,Vue,Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     import { EmpireDataModule } from "./data/EmpireDataModule";
     import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
@@ -161,7 +162,7 @@
         href?: string;
         icon?: string;
         label?: string;
-        style?: string | Record<string, any>;
+        style?: string|Record<string,any>;
         noNavItem?: boolean;
         color?: string;
         class?: string;
@@ -190,46 +191,46 @@
         },
     })
     export default class App extends Vue {
-        private readonly colors = {
+        private readonly colors={
             switchAccount: '#666666',
             discord: '#5865f2',
         };
 
-        private loading = true;
+        private loading=true;
 
-        private knownAccounts: KnownAccount[] = [];
-        private knownAccountsLoaded = false;
-        private selectedAccountIndex = -1;
-        private showAccountSwitchDialog = false;
+        private knownAccounts: KnownAccount[]=[];
+        private knownAccountsLoaded=false;
+        private selectedAccountIndex=-1;
+        private showAccountSwitchDialog=false;
 
         private get isIframeMode() {
-            const params = new URLSearchParams(location.search);
-            return params.get('iframe') != null;
+            const params=new URLSearchParams(location.search);
+            return params.get('iframe')!=null;
         }
 
-        private get activeTab(): Tab | null {
-            return this.tabs.find(tab => tab.to != null &&
-                this.$route.matched.some(route => route.name == tab.to?.name)
-            ) ?? null;
+        private get activeTab(): Tab|null {
+            return this.tabs.find(tab => tab.to!=null&&
+                this.$route.matched.some(route => route.name==tab.to?.name)
+            )??null;
         }
 
-        private tabWithMenu: Tab | null = null;
+        private tabWithMenu: Tab|null=null;
 
         private setTabWithMenu(tab: Tab) {
-            this.tabWithMenu = tab;
+            this.tabWithMenu=tab;
         }
 
         private isDefaultRoute(to?: { name: string }): boolean {
-            if (to == null) {
+            if(to==null) {
                 return false;
             }
 
-            const defaultRoute = SettingsDataModule.settings.defaultRoutes[''] ?? 'expeditions';
-            return defaultRoute == to.name;
+            const defaultRoute=SettingsDataModule.settings.defaultRoutes['']??'expeditions';
+            return defaultRoute==to.name;
         }
 
         private get tabs(): Tab[] {
-            const tabs: Tab[] = [
+            const tabs: Tab[]=[
                 {
                     key: 'expeditions',
                     to: { name: 'expeditions' },
@@ -340,7 +341,7 @@
                 },
             ];
 
-            if (!this.isIframeMode) {
+            if(!this.isIframeMode) {
                 tabs.push({
                     key: 'switch-account',
                     customAction: async () => await this.initAccountDialog(),
@@ -353,50 +354,50 @@
         }
 
         private async initAccountDialog() {
-            this.showAccountSwitchDialog = true;
+            this.showAccountSwitchDialog=true;
 
-            if (!this.knownAccountsLoaded) {
+            if(!this.knownAccountsLoaded) {
                 await this.loadKnownAccounts();
-                this.knownAccountsLoaded = true;
+                this.knownAccountsLoaded=true;
             }
         }
 
-        private get activeColor(): string | null {
-            const matchedRoutes = this.$route.matched;
+        private get activeColor(): string|null {
+            const matchedRoutes=this.$route.matched;
             return matchedRoutes.map(route => route.meta?.color)
-                .find(color => color != null)
-                ?? null;
+                .find(color => color!=null)
+                ??null;
         }
 
-        private getColor(tab: Tab): string | null {
-            if (tab.color != null) {
+        private getColor(tab: Tab): string|null {
+            if(tab.color!=null) {
                 return tab.color;
             }
 
-            const routes = this.$router.getRoutes();
-            const route = routes.find(route => route.name == tab.to?.name);
+            const routes=this.$router.getRoutes();
+            const route=routes.find(route => route.name==tab.to?.name);
 
-            return route?.meta?.color ?? null;
+            return route?.meta?.color??null;
         }
 
-        private getColorVariable(hexColor: string | null): string | null {
+        private getColorVariable(hexColor: string|null): string|null {
             return getRGBString(hexColor);
         }
 
 
         private closeOverlay() {
-            window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
+            window.parent.postMessage(closeOgameTrackerDialogEventName,'*');
         }
 
         private async mounted() {
-            window.addEventListener('keypress', e => {
-                if (e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
+            window.addEventListener('keypress',e => {
+                if(e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
                     return;
                 }
 
-                const selectedTab = this.tabs.find(tab => tab.keyboardKey == e.key);
-                const to = selectedTab?.to;
-                if (to != null && !this.$route.matched.some(route => route.name == to.name)) {
+                const selectedTab=this.tabs.find(tab => tab.keyboardKey==e.key);
+                const to=selectedTab?.to;
+                if(to!=null&&!this.$route.matched.some(route => route.name==to.name)) {
                     this.$router.push(to);
                 }
             });
@@ -407,29 +408,29 @@
 
             this.updateDocumentTitle();
 
-            this.loading = false;
+            this.loading=false;
             await this.$nextTick();
             this.onRefsChanged();
             window.focus();
 
-            const splashscreen = document.querySelector('#splashscreen');
+            const splashscreen=document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');
-            setTimeout(() => splashscreen?.remove(), 500);
+            setTimeout(() => splashscreen?.remove(),500);
         }
 
         private onRefsChanged() {
             // this method exists because @contextmenu does not seem to get passed to dynamic <component>
-            const refKeys = Object.keys(this.$refs).filter(key => key.startsWith('tab-'));
+            const refKeys=Object.keys(this.$refs).filter(key => key.startsWith('tab-'));
             refKeys.forEach(key => {
-                const tabKey = key.substring('tab-'.length);
-                const tab = this.tabs.find(tab => tab.key == tabKey) ?? _throw(`tab with key '${tabKey}' not found`);
+                const tabKey=key.substring('tab-'.length);
+                const tab=this.tabs.find(tab => tab.key==tabKey)??_throw(`tab with key '${tabKey}' not found`);
 
-                if (!tab.canBeDefault) {
+                if(!tab.canBeDefault) {
                     return;
                 }
 
-                const refElem = (this.$refs[key] as Vue[])[0];
-                refElem.$el.addEventListener('contextmenu', e => {
+                const refElem=(this.$refs[key] as Vue[])[0];
+                refElem.$el.addEventListener('contextmenu',e => {
                     e.preventDefault();
                     e.stopPropagation();
                     this.setTabWithMenu(tab);
@@ -438,39 +439,39 @@
         }
 
         private updateDocumentTitle() {
-            const ogameMeta = GlobalOgameMetaData;
+            const ogameMeta=GlobalOgameMetaData;
 
-            const serverName = EmpireDataModule.empire.universeName;
-            const serverId = ogameMeta.serverId;
-            const serverLang = ogameMeta.language;
+            const serverName=EmpireDataModule.empire.universeName;
+            const serverId=ogameMeta.serverId;
+            const serverLang=ogameMeta.language;
 
-            const playerName = EmpireDataModule.empire.name;
-            const playerId = ogameMeta.playerId;
+            const playerName=EmpireDataModule.empire.name;
+            const playerId=ogameMeta.playerId;
 
-            const playerText = playerName != null
+            const playerText=playerName!=null
                 ? `${playerName} (${playerId})`
-                : playerId.toString();
+                :playerId.toString();
 
-            const serverText = serverName != null
+            const serverText=serverName!=null
                 ? `${serverLang.toUpperCase()} ${serverName} (${serverId})`
-                : `${serverLang.toUpperCase()} ${serverId}`;
+                :`${serverLang.toUpperCase()} ${serverId}`;
 
-            document.title = `${playerText} - ${serverText}`;
+            document.title=`${playerText} - ${serverText}`;
         }
 
         private async loadKnownAccounts(): Promise<void> {
-            const all = await chrome.storage.local.get(null);
-            const localPlayerKeys = Object.keys(all).filter(key => key.endsWith('-local-player'));
-            const accounts: KnownAccount[] = localPlayerKeys.map(key => {
-                const split = key.split('-');
-                const localPlayer = all[key] as LocalPlayerData;
-                const id = parseIntSafe(split[2], 10);
-                const uniId = parseIntSafe(split[0].substring(1), 10);
-                const uniLang = split[1];
-                const { name, universeName } = localPlayer;
+            const all=await chrome.storage.local.get(null);
+            const localPlayerKeys=Object.keys(all).filter(key => key.endsWith('-local-player'));
+            const accounts: KnownAccount[]=localPlayerKeys.map(key => {
+                const split=key.split('-');
+                const localPlayer=all[key] as LocalPlayerData;
+                const id=parseIntSafe(split[2],10);
+                const uniId=parseIntSafe(split[0].substring(1),10);
+                const uniLang=split[1];
+                const { name,universeName }=localPlayer;
 
                 return {
-                    key: key.replace('-local-player', ''),
+                    key: key.replace('-local-player',''),
                     id,
                     universeId: uniId,
                     universeLanguage: uniLang,
@@ -479,41 +480,41 @@
                 };
             });
 
-            this.knownAccounts = accounts.sort((a, b) => {
-                const lang = a.universeLanguage.localeCompare(b.universeLanguage);
-                if (lang != 0) {
+            this.knownAccounts=accounts.sort((a,b) => {
+                const lang=a.universeLanguage.localeCompare(b.universeLanguage);
+                if(lang!=0) {
                     return lang;
                 }
 
-                if (a.universeName != null && b.universeName == null) {
+                if(a.universeName!=null&&b.universeName==null) {
                     return -1;
                 }
-                if (a.universeName == null && b.universeName != null) {
+                if(a.universeName==null&&b.universeName!=null) {
                     return 1;
                 }
 
-                const uniId = a.universeId - b.universeId;
-                if (uniId != 0) {
+                const uniId=a.universeId-b.universeId;
+                if(uniId!=0) {
                     return uniId;
                 }
 
-                if (a.name != null && b.name == null) {
+                if(a.name!=null&&b.name==null) {
                     return -1;
                 }
-                if (a.name == null && b.name != null) {
+                if(a.name==null&&b.name!=null) {
                     return 1;
                 }
 
-                return a.id - b.id;
+                return a.id-b.id;
             });
         }
 
         private gotoAccount(): void {
-            const account = this.knownAccounts[this.selectedAccountIndex];
-            const url = `/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
-            window.open(url, '_blank', 'noopener,noreferrer');
+            const account=this.knownAccounts[this.selectedAccountIndex];
+            const url=`/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
+            window.open(url,'_blank','noopener,noreferrer');
 
-            this.showAccountSwitchDialog = false;
+            this.showAccountSwitchDialog=false;
         }
     }
 </script>
@@ -656,6 +657,14 @@
 
         nav {
             background: black;
+        }
+    }
+
+    .tab_floating-menu {
+        &::v-deep .floating-menu {
+            left: 50%;
+            top: 50%;
+            z-index: 0 !important;
         }
     }
 </style>
