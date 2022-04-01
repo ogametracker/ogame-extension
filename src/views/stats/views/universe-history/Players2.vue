@@ -4,10 +4,12 @@
         :datasets="datasets"
         continue-last-value
         show-x-values-in-grid
+        :ticks="5"
+        :tick-list="days"
         :min-tick="firstDay"
         :max-tick="nextDay"
         :tick-interval="tickInterval"
-        :x-label-formatter="x => $datetime(x)"
+        :x-label-formatter="x => $date(x)"
     />
 </template>
 
@@ -63,6 +65,17 @@
 
         private get nextDay() {
             return addDays(startOfDay(Date.now()), 1).getTime();
+        }
+
+        private get days() {
+            const days: number[] = [];
+
+            const maxDay = this.nextDay;
+            for(let day = this.firstDay; day<= this.nextDay; day = addDays(day, 1).getTime()) {    
+                days.push(day);           
+            }
+
+            return days;
         }
 
         private readonly tickInterval = 24 * 60 * 60 * 1000;

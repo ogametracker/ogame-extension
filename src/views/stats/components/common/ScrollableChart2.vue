@@ -1,224 +1,256 @@
 <template>
     <div class="scrollable-chart">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
-            <div
-                class="svg-container"
-                ref="svg-container"
-                @mouseleave="activeXNormalized = null"
-            >
-                <svg v-if="isReady && internalDatasets.length > 0">
-                    <g class="grid-lines">
-                        <!-- x grid lines for exiting x-values -->
-                        <line
-                            v-for="x in xValuesNormalized"
-                            v-show="showXValuesInGrid || x == activeXNormalized"
-                            :key="`x-tick-grid-${x}`"
-                            :x1="x * width"
-                            :y1="0"
-                            :x2="x * width"
-                            :y2="height + 10"
-                            class="x-tick-grid-line"
-                            :class="{
-                                'x-grid-line-active': x == activeXNormalized,
-                            }"
-                        />
-
-                        <!-- vertical grid lines -->
-                        <line
-                            v-for="x in xAxisTicksNormalized"
-                            :key="`x-tick-line-${x}`"
-                            :x1="x * width"
-                            :y1="0"
-                            :x2="x * width"
-                            :y2="height + 10"
-                            class="x-grid-line"
-                            :class="{
-                                'x-grid-line-active': x == activeXNormalized,
-                            }"
-                        />
-                        <!-- horizontal grid lines -->
-                        <line
-                            v-for="(yData, y) in yGridLines"
-                            :key="`y-tick-line-${y}`"
-                            :x1="-10"
-                            :y1="yData.svg"
-                            :x2="width"
-                            :y2="yData.svg"
-                            class="y-grid-line"
-                            :class="{ 'y-grid-line--first': y == 0 }"
-                        />
-                    </g>
-
-                    <g class="background-paths">
-                        <path
-                            v-for="dataset in reversedDatasets"
-                            v-show="dataset.visible && dataset.filled"
-                            :key="`background-${dataset.key}`"
-                            :d="dataset.paths.background"
-                            class="dataset-background"
-                            :style="{ fill: dataset.color }"
-                            :_debug="dataset.key"
-                        />
-                    </g>
-
-                    <g class="line-paths">
-                        <path
-                            v-for="dataset in reversedDatasets"
-                            v-show="dataset.visible"
-                            :key="`line-${dataset.key}`"
-                            :d="dataset.paths.line"
-                            class="dataset-line"
-                            :class="{
-                                'dataset-line--average': dataset.dashed,
-                            }"
-                            :style="{ stroke: dataset.color }"
-                            :_debug="dataset.key"
-                        />
-                        <path
-                            v-for="dataset in reversedDatasets"
-                            v-show="dataset.visible"
-                            :key="`line-average-${dataset.key}`"
-                            :d="dataset.paths.averageLine"
-                            class="dataset-line dataset-line--average"
-                            :style="{ stroke: dataset.color }"
-                            :_debug="`${dataset.key}-average`"
-                        />
-                    </g>
-
-                    <g class="points">
-                        <g
-                            v-for="(x, i) in xValuesNormalized"
-                            :key="`point-group-${x}`"
-                            class="dataset-point-group"
-                            @mouseenter="activeXNormalized = x"
-                        >
-                            <template v-for="dataset in reversedDatasets">
-                                <circle
-                                    v-if="
-                                        dataset.normalizedValuesByNormalizedX[
-                                            x
-                                        ] != null
-                                    "
-                                    :key="`point-${dataset.key}-${x}`"
-                                    v-show="
-                                        dataset.visible && !dataset.hidePoints
-                                    "
-                                    class="dataset-point"
-                                    :cx="x * width"
-                                    :cy="
-                                        height *
-                                        (1 -
-                                            dataset
-                                                .normalizedValuesByNormalizedX[
-                                                x
-                                            ])
-                                    "
-                                    :style="{ fill: dataset.color }"
-                                    :_debug-x="x"
-                                    :_debug-y="
-                                        dataset.normalizedValuesByNormalizedX[x]
-                                    "
-                                />
-                            </template>
-
-                            <rect
-                                class="dataset-point-group-rect"
-                                :x="
-                                    (width *
-                                        (x + (xValuesNormalized[i - 1] || 0))) /
-                                    2
-                                "
-                                y="0"
-                                :width="width * getRectWidth(i)"
-                                :height="height"
-                            />
-                        </g>
-                    </g>
-                </svg>
-
+            <div class="chart-content" v-if="isReady">
                 <div
-                    class="chart-tooltip"
-                    v-if="activeXNormalized != null"
-                    :style="{
-                        '--x': activeXNormalized,
-                    }"
+                    class="svg-container"
+                    ref="svg-container"
+                    @mouseleave="activeXNormalized = null"
                 >
-                    <div
-                        v-text="xLabelFormatter(activeX)"
-                        class="chart-tooltip-header"
-                    />
+                    <svg v-if="internalDatasets.length > 0">
+                        <g
+                            :style="{
+                                transform: `translateX(${-leftX * width}px)`,
+                            }"
+                        >
+                            <g class="grid-lines">
+                                <!-- x grid lines for exiting x-values -->
+                                <line
+                                    v-for="x in xValuesNormalized"
+                                    v-show="
+                                        showXValuesInGrid ||
+                                        x == activeXNormalized
+                                    "
+                                    :key="`x-tick-grid-${x}`"
+                                    :x1="x * width"
+                                    :y1="0"
+                                    :x2="x * width"
+                                    :y2="height + 10"
+                                    class="x-tick-grid-line"
+                                    :class="{
+                                        'x-grid-line-active':
+                                            x == activeXNormalized,
+                                    }"
+                                />
+
+                                <!-- vertical grid lines -->
+                                <line
+                                    v-for="x in xAxisTicksNormalized"
+                                    :key="`x-tick-line-${x}`"
+                                    :x1="x * width"
+                                    :y1="0"
+                                    :x2="x * width"
+                                    :y2="height + 10"
+                                    class="x-grid-line"
+                                    :class="{
+                                        'x-grid-line-active':
+                                            x == activeXNormalized,
+                                    }"
+                                />
+                                <!-- horizontal grid lines -->
+                                <line
+                                    v-for="(yData, y) in yGridLines"
+                                    :key="`y-tick-line-${y}`"
+                                    :x1="-10"
+                                    :y1="yData.svg"
+                                    :x2="width * maxXNormalized"
+                                    :y2="yData.svg"
+                                    class="y-grid-line"
+                                    :class="{ 'y-grid-line--first': y == 0 }"
+                                />
+                            </g>
+
+                            <g class="background-paths">
+                                <path
+                                    v-for="dataset in reversedDatasets"
+                                    v-show="dataset.visible && dataset.filled"
+                                    :key="`background-${dataset.key}`"
+                                    :d="dataset.paths.background"
+                                    class="dataset-background"
+                                    :style="{ fill: dataset.color }"
+                                    :_debug="dataset.key"
+                                />
+                            </g>
+
+                            <g class="line-paths">
+                                <path
+                                    v-for="dataset in reversedDatasets"
+                                    v-show="dataset.visible"
+                                    :key="`line-${dataset.key}`"
+                                    :d="dataset.paths.line"
+                                    class="dataset-line"
+                                    :class="{
+                                        'dataset-line--average': dataset.dashed,
+                                    }"
+                                    :style="{ stroke: dataset.color }"
+                                    :_debug="dataset.key"
+                                />
+                                <path
+                                    v-for="dataset in reversedDatasets"
+                                    v-show="dataset.visible"
+                                    :key="`line-average-${dataset.key}`"
+                                    :d="dataset.paths.averageLine"
+                                    class="dataset-line dataset-line--average"
+                                    :style="{ stroke: dataset.color }"
+                                    :_debug="`${dataset.key}-average`"
+                                />
+                            </g>
+
+                            <g class="points">
+                                <g
+                                    v-for="(x, i) in xValuesNormalized"
+                                    :key="`point-group-${x}`"
+                                    class="dataset-point-group"
+                                    @mouseenter="activeXNormalized = x"
+                                >
+                                    <template
+                                        v-for="dataset in reversedDatasets"
+                                    >
+                                        <circle
+                                            v-if="
+                                                dataset
+                                                    .normalizedValuesByNormalizedX[
+                                                    x
+                                                ] != null
+                                            "
+                                            :key="`point-${dataset.key}-${x}`"
+                                            v-show="
+                                                dataset.visible &&
+                                                !dataset.hidePoints
+                                            "
+                                            class="dataset-point"
+                                            :cx="x * width"
+                                            :cy="
+                                                height *
+                                                (1 -
+                                                    dataset
+                                                        .normalizedValuesByNormalizedX[
+                                                        x
+                                                    ])
+                                            "
+                                            :style="{ fill: dataset.color }"
+                                            :_debug-x="x"
+                                            :_debug-y="
+                                                dataset
+                                                    .normalizedValuesByNormalizedX[
+                                                    x
+                                                ]
+                                            "
+                                        />
+                                    </template>
+
+                                    <rect
+                                        class="dataset-point-group-rect"
+                                        :x="
+                                            (width *
+                                                (x +
+                                                    (xValuesNormalized[i - 1] ||
+                                                        0))) /
+                                            2
+                                        "
+                                        y="0"
+                                        :width="width * getRectWidth(i)"
+                                        :height="height"
+                                    />
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
 
                     <div
-                        v-for="dataset in internalDatasets"
-                        v-show="
-                            dataset.visible &&
-                            dataset.valuesByNormalizedX[
-                                activeXNormalized
-                            ] != null
-                        "
-                        :key="`tooltip-${dataset.key}`"
-                        class="chart-tooltip-item"
-                        :class="{
-                            zero:
-                                dataset.valuesByNormalizedX[
-                                    activeXNormalized
-                                ] == 0,
+                        class="chart-tooltip"
+                        v-if="activeXNormalized != null"
+                        :style="{
+                            '--x': activeXNormalized - leftX,
                         }"
                     >
-                        <span
-                            class="chart-tooltip-item-color"
-                            :style="{ color: dataset.color }"
+                        <div
+                            v-text="xLabelFormatter(activeX)"
+                            class="chart-tooltip-header"
                         />
-                        <span
-                            class="chart-tooltip-item-value"
-                            v-text="
-                                tooltipValueFormatter(
+
+                        <div
+                            v-for="dataset in internalDatasets"
+                            v-show="
+                                dataset.visible &&
+                                dataset.valuesByNormalizedX[
+                                    activeXNormalized
+                                ] != null
+                            "
+                            :key="`tooltip-${dataset.key}`"
+                            class="chart-tooltip-item"
+                            :class="{
+                                zero:
                                     dataset.valuesByNormalizedX[
                                         activeXNormalized
-                                    ]
-                                )
-                            "
-                        />
-                        <span
-                            class="chart-tooltip-item-label"
-                            v-text="dataset.label"
-                        />
-                    </div>
-
-                    <div class="chart-tooltip-footer">
-                        <template v-if="tooltipFooterProvider != null">
-                            <div
-                                v-for="(footer, i) in footerTexts"
-                                :key="`footer-texts-${i}`"
-                                v-text="footer"
+                                    ] == 0,
+                            }"
+                        >
+                            <span
+                                class="chart-tooltip-item-color"
+                                :style="{ color: dataset.color }"
                             />
-                        </template>
-                        <slot
-                            v-else
-                            name="tooltip-footer"
-                            :datasets="footerSlotDatasets"
+                            <span
+                                class="chart-tooltip-item-value"
+                                v-text="
+                                    tooltipValueFormatter(
+                                        dataset.valuesByNormalizedX[
+                                            activeXNormalized
+                                        ]
+                                    )
+                                "
+                            />
+                            <span
+                                class="chart-tooltip-item-label"
+                                v-text="dataset.label"
+                            />
+                        </div>
+
+                        <div class="chart-tooltip-footer">
+                            <template v-if="tooltipFooterProvider != null">
+                                <div
+                                    v-for="(footer, i) in footerTexts"
+                                    :key="`footer-texts-${i}`"
+                                    v-text="footer"
+                                />
+                            </template>
+                            <slot
+                                v-else
+                                name="tooltip-footer"
+                                :datasets="footerSlotDatasets"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-y-axis">
+                    <div
+                        v-for="(yData, y) in yGridLines"
+                        :key="`y-grid-label-${y}`"
+                        class="y-axis-label"
+                        :style="{ bottom: `${yData.fraction * 100}%` }"
+                        v-text="$number(y)"
+                    />
+                </div>
+                <div class="chart-x-axis">
+                    <div
+                        class="x-axis-labels"
+                        :style="{
+                            width: `${maxXNormalized * width}px`,
+                            transform: `translateX(${-leftX * width}px)`,
+                        }"
+                    >
+                        <div
+                            v-for="(x, i) in xAxisTicks"
+                            :key="`x-grid-label-${x}`"
+                            class="x-axis-label"
+                            :style="{
+                                left: `${xAxisTicksNormalized[i] * width}px`,
+                            }"
+                            v-text="xLabelFormatter(x)"
                         />
                     </div>
                 </div>
-            </div>
-
-            <div class="chart-y-axis">
-                <div
-                    v-for="(yData, y) in yGridLines"
-                    :key="`y-grid-label-${y}`"
-                    class="y-axis-label"
-                    :style="{ bottom: `${yData.fraction * 100}%` }"
-                    v-text="$number(y)"
-                />
-            </div>
-            <div class="chart-x-axis">
-                <div
-                    v-for="(x, i) in xAxisTicks"
-                    :key="`x-grid-label-${x}`"
-                    class="x-axis-label"
-                    :style="{ left: `${xAxisTicksNormalized[i] * 100}%` }"
-                    v-text="xLabelFormatter(x)"
-                />
             </div>
 
             <div class="chart-legend" v-if="!noLegend">
@@ -244,13 +276,21 @@
                 ref="scrollbar-container"
                 @scroll="updateTickOffset()"
             >
-                <!-- <div :style="{ width: `${(100 * maxX) / (ticks - 1)}%` }" /> -->
+                <div
+                    :style="{
+                        width: `${
+                            (100 * (xRange.max - xRange.min)) /
+                            (tickInterval * visibleTickCount)
+                        }%`,
+                    }"
+                />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
+    import { _throw } from '@/shared/utils/_throw';
     import { PropType } from 'vue';
     import { Component, Prop, PropSync, Ref, Vue, Watch } from 'vue-property-decorator';
     import { Localization } from '../../i18n/Localization';
@@ -308,16 +348,13 @@
     @Component({})
     export default class ScrollableChart2 extends Vue {
         @Ref('svg-container')
-        private svgContainer!: HTMLElement;
+        private svgContainer!: HTMLElement | null;
 
         @Ref('scrollbar-container')
-        private scrollbarContainer!: HTMLElement;
+        private scrollbarContainer!: HTMLElement | null;
 
         @Prop({ required: true, type: Array as PropType<ScrollableChart2Dataset[]> })
         private datasets!: ScrollableChart2Dataset[];
-
-        @Prop({ required: false, type: Array as PropType<number[]>, default: () => [] })
-        private ticks!: number[];
 
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
@@ -333,13 +370,16 @@
         private tickInterval!: number;
 
         @Prop({ required: false, type: Number, default: () => 30 })
-        private visibleTicks!: number;
+        private ticks!: number;
 
         @Prop({ required: false, type: Number, default: () => null })
         private minTick!: number | null;
 
         @Prop({ required: false, type: Number, default: () => null })
         private maxTick!: number | null;
+
+        @Prop({ required: false, type: Array as PropType<number[]>, default: () => null })
+        private tickList!: number[] | null;
 
 
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
@@ -355,6 +395,7 @@
         private internalDatasets: ScrollableChart2InternalDataset[] = [];
         private xRange = { min: 0, max: 0 };
         private yRange = { min: 0, max: 0 };
+        private leftX = 0;
 
         private activeXNormalized: number | null = null;
         private yGridRange = { min: 0, max: 0 };
@@ -427,17 +468,24 @@
             }
 
             this.updateXAndYRange();
-            this.updateNormalizedValues();
-
             this.updateYGridLines();
+
+            this.updateNormalizedValues();
             this.updatePaths();
 
             this.$nextTick(() => {
+                if (this.scrollbarContainer == null) {
+                    throw new Error('scrollbar container is null');
+                }
                 this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
             });
         }
 
         private get xAxisTicks(): number[] {
+            if (this.tickList != null) {
+                return this.tickList;
+            }
+
             const { min, max } = this.xRange;
             const result: number[] = [];
 
@@ -448,8 +496,8 @@
         }
 
         private get xAxisTicksNormalized(): number[] {
-            const { min, max } = this.xRange;
-            return this.xAxisTicks.map(x => (x - min) / (max - min));
+            const { min } = this.xRange;
+            return this.xAxisTicks.map(x => (x - min) / (this.tickInterval * this.visibleTickCount));
         }
 
         private get xValues() {
@@ -458,7 +506,7 @@
         }
 
         private get xValuesNormalized() {
-            return this.xValues.map(x => (x - this.xRange.min) / (this.xRange.max - this.xRange.min));
+            return this.xValues.map(x => (x - this.xRange.min) / (this.tickInterval * this.visibleTickCount));
         }
 
         private get xValuesByXNormalized(): Record<number, number> {
@@ -474,11 +522,11 @@
         }
 
         private get width() {
-            return this.svgContainer.clientWidth;
+            return this.svgContainer?.clientWidth ?? 0;
         }
 
         private get height() {
-            return this.svgContainer.clientHeight;
+            return this.svgContainer?.clientHeight ?? 0;
         }
 
         private updateYGridLines() {
@@ -529,6 +577,11 @@
                 min: -stepCount.negative * step,
                 max: stepCount.positive * step,
             };
+
+            this.yRange = {
+                min: Math.min(this.yRange.min, this.yGridRange.min),
+                max: Math.max(this.yRange.max, this.yGridRange.max),
+            };
         }
 
         private updateXAndYRange() {
@@ -553,13 +606,21 @@
             return [...this.internalDatasets].reverse();
         }
 
+        private get visibleTickCount() {
+            return Math.min(this.ticks, Math.ceil((this.xRange.max - this.xRange.min) / this.tickInterval));
+        }
+
+        private get maxXNormalized() {
+            return (this.xRange.max - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
+        }
+
         private updateNormalizedValues() {
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
                 const previousVisibleAndStackedDataset = findPrevious(internalDatasets, i - 1, d => d.visible && d.stack);
 
                 const normalizedValues = internalDataset.values.map((point, i) => {
                     let { x, y } = point;
-                    x = (x - this.xRange.min) / (this.xRange.max - this.xRange.min);
+                    x = (x - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
                     y = (y - this.yRange.min) / (this.yRange.max - this.yRange.min);
 
                     if (internalDataset.stack) {
@@ -606,9 +667,9 @@
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
                 const svgPoints = this.computeSvgValues(dataset.normalizedValues);
-                if (this.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < 1) {
+                if (this.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < this.maxXNormalized) {
                     svgPoints.push({
-                        x: width,
+                        x: this.maxXNormalized * width,
                         y: svgPoints[svgPoints.length - 1].y,
                     });
                 }
@@ -644,7 +705,7 @@
             this.onDatasetsChanged();
 
             await this.$nextTick();
-            this.resizeObserver.observe(this.svgContainer);
+            this.resizeObserver.observe(this.svgContainer ?? _throw('svgContainer is null'));
         }
 
         private destroyed() {
@@ -683,10 +744,19 @@
             const xValuesNormalized = this.xValuesNormalized;
             const leftX = xValuesNormalized[xIndex - 1] ?? 0;
             const x = xValuesNormalized[xIndex];
-            const rightX = xValuesNormalized[xIndex + 1] ?? 1;
+            const rightX = xValuesNormalized[xIndex + 1] ?? this.maxXNormalized;
 
             const width = (x - leftX) / 2 + (rightX - x) / 2;
             return width;
+        }
+
+        private updateTickOffset() {
+            if (this.scrollbarContainer == null) {
+                throw new Error('scrollbar container is null');
+            }
+            const scrolledFraction = this.scrollbarContainer.scrollLeft / (this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth);
+            this.leftX = (this.maxXNormalized - 1) * scrolledFraction;
+            console.log(this.leftX);
         }
     }
 </script>
@@ -771,13 +841,20 @@
 
     .chart-container {
         display: grid;
-        grid-template-columns: 100px 1fr 200px;
-        grid-template-rows: 1fr 100px;
+        grid-template-columns: 1fr 200px;
+        grid-template-rows: 1fr auto;
 
         &.no-legend {
-            grid-template-columns: 100px 1fr;
+            grid-template-columns: 1fr;
             padding-right: 16px; // necessary because overflow of last x-axis label will cause a scrollbar if there is no legend
         }
+    }
+
+    .chart-content {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        grid-template-rows: 1fr 100px;
+        overflow: hidden;
     }
 
     .svg-container {
@@ -786,22 +863,30 @@
         min-height: 250px;
         min-width: 500px;
         position: relative;
+        overflow: hidden;
+        margin-right: 10px;
     }
 
     .chart-x-axis {
         grid-row: 2;
-        grid-column: 2;
+        grid-column: 1 / span 2;
         position: relative;
+        overflow: hidden;
 
-        > .x-axis-label {
-            position: absolute;
-            top: 0;
-            transform-origin: top right;
-            transform: translateY(10px) translateX(-100%) translateX(-5px)
-                rotate(-45deg);
-            white-space: pre;
-            color: #888;
-            font-size: 12px;
+        > .x-axis-labels {
+            position: relative;
+            margin-left: 100px;
+
+            > .x-axis-label {
+                position: absolute;
+                top: 0;
+                transform-origin: top right;
+                transform: translateY(10px) translateX(-100%) translateX(-5px)
+                    rotate(-45deg);
+                white-space: pre;
+                color: #888;
+                font-size: 12px;
+            }
         }
     }
 
@@ -827,7 +912,7 @@
 
     .chart-legend {
         grid-row: 1 / span 2;
-        grid-column: 3;
+        grid-column: 2;
         padding: 0 12px;
     }
 
@@ -922,7 +1007,7 @@
     }
 
     .scrollbar-container {
-        grid-column: 2;
+        margin-left: 100px;
         overflow-x: auto;
 
         > div {
