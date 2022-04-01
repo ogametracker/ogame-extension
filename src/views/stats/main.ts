@@ -5,7 +5,8 @@ import './components/common';
 import Vue from 'vue';
 import App from './App.vue';
 import { router } from './router';
-import './i18n/Localization-vue.ts';
+import './i18n/Localization-vue';
+import './extend-vue';
 import { SettingsDataModule } from './data/SettingsDataModule';
 
 void init();

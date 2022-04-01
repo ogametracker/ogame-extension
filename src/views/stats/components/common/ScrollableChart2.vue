@@ -1,23 +1,45 @@
 <template>
     <div class="scrollable-chart">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
-            <div class="svg-container" ref="svg-container">
+            <div
+                class="svg-container"
+                ref="svg-container"
+                @mouseleave="activeXNormalized = null"
+            >
                 <svg v-if="isReady && internalDatasets.length > 0">
                     <g class="grid-lines">
+                        <!-- x grid lines for exiting x-values -->
+                        <line
+                            v-for="x in xValuesNormalized"
+                            v-show="showXValuesInGrid || x == activeXNormalized"
+                            :key="`x-tick-grid-${x}`"
+                            :x1="x * width"
+                            :y1="0"
+                            :x2="x * width"
+                            :y2="height + 10"
+                            class="x-tick-grid-line"
+                            :class="{
+                                'x-grid-line-active': x == activeXNormalized,
+                            }"
+                        />
+
                         <!-- vertical grid lines -->
                         <line
-                            v-for="(x, i) in xValues"
-                            :key="`x-${i}`"
+                            v-for="x in xAxisTicksNormalized"
+                            :key="`x-tick-line-${x}`"
                             :x1="x * width"
                             :y1="0"
                             :x2="x * width"
                             :y2="height + 10"
                             class="x-grid-line"
+                            :class="{
+                                'x-grid-line-active': x == activeXNormalized,
+                            }"
                         />
                         <!-- horizontal grid lines -->
                         <line
                             v-for="(yData, y) in yGridLines"
-                            :key="`y-${y}`"
+                            :key="`y-tick-line-${y}`"
                             :x1="-10"
                             :y1="yData.svg"
                             :x2="width"
@@ -65,15 +87,17 @@
 
                     <g class="points">
                         <g
-                            v-for="(x, i) in xValues"
+                            v-for="(x, i) in xValuesNormalized"
                             :key="`point-group-${x}`"
                             class="dataset-point-group"
-                            @mouseenter="activeX = x"
+                            @mouseenter="activeXNormalized = x"
                         >
                             <template v-for="dataset in reversedDatasets">
                                 <circle
                                     v-if="
-                                        dataset.normalizedValuesByX[x] != null
+                                        dataset.normalizedValuesByNormalizedX[
+                                            x
+                                        ] != null
                                     "
                                     :key="`point-${dataset.key}-${x}`"
                                     v-show="
@@ -83,49 +107,62 @@
                                     :cx="x * width"
                                     :cy="
                                         height *
-                                        (1 - dataset.normalizedValuesByX[x])
+                                        (1 -
+                                            dataset
+                                                .normalizedValuesByNormalizedX[
+                                                x
+                                            ])
                                     "
                                     :style="{ fill: dataset.color }"
                                     :_debug-x="x"
-                                    :_debug-y="dataset.normalizedValuesByX[x]"
+                                    :_debug-y="
+                                        dataset.normalizedValuesByNormalizedX[x]
+                                    "
                                 />
                             </template>
 
                             <rect
                                 class="dataset-point-group-rect"
-                                :x="width * (x + (xValues[i - 1] || 0)) / 2"
+                                :x="
+                                    (width *
+                                        (x + (xValuesNormalized[i - 1] || 0))) /
+                                    2
+                                "
                                 y="0"
                                 :width="width * getRectWidth(i)"
                                 :height="height"
-                                :_debug-left-x="xValues[i - 1] || 0"
-                                :_debug-x="x || 0"
-                                :_debug-right-x="xValues[i + 1] || 0"
-                                :_debug-width="getRectWidth(i)"
                             />
                         </g>
                     </g>
                 </svg>
 
-                <!-- <div
+                <div
                     class="chart-tooltip"
-                    v-if="activeX != null"
+                    v-if="activeXNormalized != null"
                     :style="{
-                        '--ticks': ticks,
-                        '--x': activeX,
+                        '--x': activeXNormalized,
                     }"
                 >
                     <div
-                        v-text="xLabelFormatter(activeX + tickOffset)"
+                        v-text="xLabelFormatter(activeX)"
                         class="chart-tooltip-header"
                     />
 
                     <div
                         v-for="dataset in internalDatasets"
-                        v-show="dataset.visible"
+                        v-show="
+                            dataset.visible &&
+                            dataset.valuesByNormalizedX[
+                                activeXNormalized
+                            ] != null
+                        "
                         :key="`tooltip-${dataset.key}`"
                         class="chart-tooltip-item"
                         :class="{
-                            zero: getValue(dataset, activeX + tickOffset) == 0,
+                            zero:
+                                dataset.valuesByNormalizedX[
+                                    activeXNormalized
+                                ] == 0,
                         }"
                     >
                         <span
@@ -136,7 +173,9 @@
                             class="chart-tooltip-item-value"
                             v-text="
                                 tooltipValueFormatter(
-                                    getValue(dataset, activeX + tickOffset)
+                                    dataset.valuesByNormalizedX[
+                                        activeXNormalized
+                                    ]
                                 )
                             "
                         />
@@ -160,13 +199,13 @@
                             :datasets="footerSlotDatasets"
                         />
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <div class="chart-y-axis">
                 <div
                     v-for="(yData, y) in yGridLines"
-                    :key="`y-grid-line-${y}`"
+                    :key="`y-grid-label-${y}`"
                     class="y-axis-label"
                     :style="{ bottom: `${yData.fraction * 100}%` }"
                     v-text="$number(y)"
@@ -174,10 +213,10 @@
             </div>
             <div class="chart-x-axis">
                 <div
-                    v-for="x in xAxisTicks"
-                    :key="`x-grid-line-${x}`"
+                    v-for="(x, i) in xAxisTicks"
+                    :key="`x-grid-label-${x}`"
                     class="x-axis-label"
-                    :style="{ left: `${x * 100}%` }"
+                    :style="{ left: `${xAxisTicksNormalized[i] * 100}%` }"
                     v-text="xLabelFormatter(x)"
                 />
             </div>
@@ -241,8 +280,9 @@
     interface ScrollableChart2InternalDataset extends ScrollableChart2Dataset {
         visible: boolean;
         svgPoints: Point[];
+        valuesByNormalizedX: Record<number, number>;
         normalizedValues: Point[];
-        normalizedValuesByX: Record<number, number>;
+        normalizedValuesByNormalizedX: Record<number, number>;
         paths: {
             line: string;
             averageLine: string;
@@ -282,58 +322,95 @@
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private showXValuesInGrid!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private continueLastValue!: boolean;
+
+
+        @Prop({ required: false, type: Number, default: () => 1 })
+        private tickInterval!: number;
+
+        @Prop({ required: false, type: Number, default: () => 30 })
+        private visibleTicks!: number;
+
+        @Prop({ required: false, type: Number, default: () => null })
+        private minTick!: number | null;
+
+        @Prop({ required: false, type: Number, default: () => null })
+        private maxTick!: number | null;
+
+
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
         private xLabelFormatter!: (value: number) => string;
 
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
         private tooltipValueFormatter!: (value: number) => string;
 
-        // @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
-        // private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
+        @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
+        private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
+
 
         private internalDatasets: ScrollableChart2InternalDataset[] = [];
         private xRange = { min: 0, max: 0 };
         private yRange = { min: 0, max: 0 };
 
+        private activeXNormalized: number | null = null;
         private yGridRange = { min: 0, max: 0 };
         private yGridLines: YGridLineData = {};
+        private isReady = false;
+
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
-        // private get footerTexts(): string[] {
-        //     const x = this.activeX;
-        //     if (this.tooltipFooterProvider == null || x == null) {
-        //         return [];
-        //     }
 
-        //     const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
-        //         acc[dataset.key] = this.getValue(dataset, x + this.tickOffset);
-        //         return acc;
-        //     }, {} as Record<string, number>);
+        private get activeX() {
+            if (this.activeXNormalized == null) {
+                return null;
+            }
 
-        //     const footer = this.tooltipFooterProvider(values);
-        //     if (footer instanceof Array) {
-        //         return footer;
-        //     }
+            return this.xValuesByXNormalized[this.activeXNormalized];
+        }
 
-        //     return [footer];
-        // }
+        private get footerTexts(): string[] {
+            const x = this.activeXNormalized;
+            if (this.tooltipFooterProvider == null || x == null) {
+                return [];
+            }
 
-        // private get footerSlotDatasets(): ScollableChartFooterDataset[] {
-        //     return this.internalDatasets.map(dataset => ({
-        //         key: dataset.key,
-        //         label: dataset.label,
-        //         visible: dataset.visible,
-        //         color: dataset.color,
-        //         value: this.getValue(dataset, (this.activeX ?? 0) + this.tickOffset),
-        //     }));
-        // }
+            const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
+                const y = dataset.valuesByNormalizedX[x];
+                if (y != null) {
+                    acc[dataset.key] = y;
+                }
+                return acc;
+            }, {} as Record<string, number>);
+
+            const footer = this.tooltipFooterProvider(values);
+            if (footer instanceof Array) {
+                return footer;
+            }
+
+            return [footer];
+        }
+
+        private get footerSlotDatasets(): ScollableChartFooterDataset[] {
+            return this.internalDatasets.map(dataset => ({
+                key: dataset.key,
+                label: dataset.label,
+                visible: dataset.visible,
+                color: dataset.color,
+                value: dataset.valuesByNormalizedX[this.activeXNormalized ?? this.minTick ?? 0],
+            }));
+        }
 
         @Watch('datasets')
         private onDatasetsChanged() {
             const internalDatasets: ScrollableChart2InternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
+                valuesByNormalizedX: {},
                 normalizedValues: [],
-                normalizedValuesByX: {},
+                normalizedValuesByNormalizedX: {},
                 svgPoints: [],
                 paths: {
                     line: '',
@@ -360,16 +437,40 @@
             });
         }
 
-        private get xAxisTicks() {
-            return [];
-            // return this.ticks
-            //     .filter(x => x >= this.xRangeMin && x <= this.xRangeMax)
-            //     .map(x => (x - this.xRangeMin) / (this.xRangeMax - this.xRangeMin));
+        private get xAxisTicks(): number[] {
+            const { min, max } = this.xRange;
+            const result: number[] = [];
+
+            for (let x = min; x <= max; x += this.tickInterval) {
+                result.push(x);
+            }
+            return result;
+        }
+
+        private get xAxisTicksNormalized(): number[] {
+            const { min, max } = this.xRange;
+            return this.xAxisTicks.map(x => (x - min) / (max - min));
         }
 
         private get xValues() {
-            const result = new Set(this.internalDatasets.flatMap(d => d.normalizedValues.map(p => p.x)));
+            const result = new Set(this.internalDatasets.flatMap(d => d.values.map(p => p.x)));
             return [...result].sort((a, b) => a - b);
+        }
+
+        private get xValuesNormalized() {
+            return this.xValues.map(x => (x - this.xRange.min) / (this.xRange.max - this.xRange.min));
+        }
+
+        private get xValuesByXNormalized(): Record<number, number> {
+            const result: Record<number, number> = {};
+
+            const x = this.xValues;
+            const xNormalized = this.xValuesNormalized;
+            for (let i = 0; i < x.length; i++) {
+                result[xNormalized[i]] = x[i];
+            }
+
+            return result;
         }
 
         private get width() {
@@ -431,8 +532,8 @@
         }
 
         private updateXAndYRange() {
+            const xRange = { min: this.minTick ?? Number.MAX_SAFE_INTEGER, max: this.maxTick ?? Number.MIN_SAFE_INTEGER };
             const yRange = { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER };
-            const xRange = { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER };
 
             this.internalDatasets.forEach(dataset => {
                 dataset.values.forEach(point => {
@@ -464,12 +565,20 @@
                     if (internalDataset.stack) {
                         y += previousVisibleAndStackedDataset?.normalizedValues[i].y ?? 0;
                     }
-                    return { x, y };
+                    return {
+                        xNormalized: x,
+                        yNormalized: y,
+                        y: point.y,
+                    };
                 });
-                internalDataset.normalizedValues = normalizedValues;
+                internalDataset.normalizedValues = normalizedValues.map(p => ({ x: p.xNormalized, y: p.yNormalized }));
 
-                internalDataset.normalizedValuesByX = {};
-                normalizedValues.forEach(point => internalDataset.normalizedValuesByX[point.x] = point.y);
+                internalDataset.valuesByNormalizedX = {};
+                internalDataset.normalizedValuesByNormalizedX = {};
+                normalizedValues.forEach(point => {
+                    internalDataset.valuesByNormalizedX[point.xNormalized] = point.y;
+                    internalDataset.normalizedValuesByNormalizedX[point.xNormalized] = point.yNormalized;
+                });
             });
         }
 
@@ -483,6 +592,9 @@
         }
 
         private onResize() {
+            this.$forceCompute('width');
+            this.$forceCompute('height');
+
             this.updateYGridLines();
             this.updatePaths();
         }
@@ -494,6 +606,12 @@
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
                 const svgPoints = this.computeSvgValues(dataset.normalizedValues);
+                if (this.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < 1) {
+                    svgPoints.push({
+                        x: width,
+                        y: svgPoints[svgPoints.length - 1].y,
+                    });
+                }
                 const linePath = this.getSvgPath(svgPoints);
 
                 const bgPath = `M 0 ${zeroY} `
@@ -519,8 +637,6 @@
                 return internalDataset;
             });
         }
-
-        private isReady = false;
 
         private async mounted() {
             this.isReady = true;
@@ -564,10 +680,10 @@
         };
 
         private getRectWidth(xIndex: number) {
-            const xValues = this.xValues;
-            const leftX = xValues[xIndex - 1] ?? 0;
-            const x = xValues[xIndex];
-            const rightX = xValues[xIndex + 1] ?? 1;
+            const xValuesNormalized = this.xValuesNormalized;
+            const leftX = xValuesNormalized[xIndex - 1] ?? 0;
+            const x = xValuesNormalized[xIndex];
+            const rightX = xValuesNormalized[xIndex + 1] ?? 1;
 
             const width = (x - leftX) / 2 + (rightX - x) / 2;
             return width;
@@ -589,7 +705,18 @@
     }
 
     .x-grid-line {
-        stroke: rgba(white, 0.1);
+        stroke: rgba(white, 0.15);
+        stroke-width: 1px;
+        fill: none;
+
+        &.x-grid-line-active {
+            stroke: rgba(white, 0.5);
+            stroke-width: 3px;
+        }
+    }
+
+    .x-tick-grid-line {
+        stroke: rgba(white, 0.0666);
         stroke-width: 1px;
         fill: none;
 
@@ -747,8 +874,8 @@
 
         padding: 12px;
         border-radius: 4px;
-        left: calc(100% * var(--x) / (var(--ticks) - 1));
-        transform: translateX(calc(-100% * var(--x) / (var(--ticks) - 1)));
+        left: calc(100% * var(--x));
+        transform: translateX(calc(-100% * var(--x)));
         white-space: pre;
         line-height: 1;
 

@@ -2,9 +2,12 @@
     <scrollable-chart-2
         v-if="datasets.length > 0 && ready"
         :datasets="datasets"
-        :leftX.sync="leftX"
-        :rightX.sync="rightX"
-        :ticks="ticks"
+        continue-last-value
+        show-x-values-in-grid
+        :min-tick="firstDay"
+        :max-tick="nextDay"
+        :tick-interval="tickInterval"
+        :x-label-formatter="x => $datetime(x)"
     />
 </template>
 
@@ -17,7 +20,6 @@
     import ScrollableChart2, { ScrollableChart2Dataset } from '@stats/components/common/ScrollableChart2.vue';
     import startOfDay from 'date-fns/startOfDay/index';
     import { addDays } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays/index';
 
     @Component({
         components: {
@@ -54,15 +56,16 @@
             this.ready = true;
         }
 
-        private get ticks() {
-            let { min, max } = this.getMinAndMaxDates(this.playerHistories[0]);
-            min = startOfDay(min).getTime();
-            max = addDays(startOfDay(max), 1).getTime();
-            const dayDiff = differenceInDays(max, min);
-
-            return Array.from({ length: dayDiff + 1 })
-                .map((_, offset) => min + offset * 24 * 60 * 60 * 1000);
+        private get firstDay() {
+            let { min } = this.getMinAndMaxDates(this.playerHistories[0]);
+            return startOfDay(min).getTime();
         }
+
+        private get nextDay() {
+            return addDays(startOfDay(Date.now()), 1).getTime();
+        }
+
+        private readonly tickInterval = 24 * 60 * 60 * 1000;
 
         private getMinAndMaxDates(history: PlayerHistory): { min: number, max: number } {
             const dates = [...new Set([
