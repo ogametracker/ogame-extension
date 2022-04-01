@@ -165,7 +165,7 @@
                         }"
                     >
                         <div
-                            v-text="xLabelFormatter(activeX)"
+                            v-text="xValueTooltipFormatter(activeX)"
                             class="chart-tooltip-header"
                         />
 
@@ -173,7 +173,7 @@
                             v-for="dataset in internalDatasets"
                             v-show="
                                 dataset.visible &&
-                                dataset.valuesByNormalizedX[
+                                dataset.originalValuesByNormalizedX[
                                     activeXNormalized
                                 ] != null
                             "
@@ -181,7 +181,7 @@
                             class="chart-tooltip-item"
                             :class="{
                                 zero:
-                                    dataset.valuesByNormalizedX[
+                                    dataset.originalValuesByNormalizedX[
                                         activeXNormalized
                                     ] == 0,
                             }"
@@ -194,7 +194,7 @@
                                 class="chart-tooltip-item-value"
                                 v-text="
                                     tooltipValueFormatter(
-                                        dataset.valuesByNormalizedX[
+                                        dataset.originalValuesByNormalizedX[
                                             activeXNormalized
                                         ]
                                     )
@@ -320,6 +320,9 @@
     interface ScrollableChartInternalDataset extends ScrollableChartDataset {
         visible: boolean;
         svgPoints: Point[];
+        originalValuesByX: Record<number, number>;
+        originalValuesByNormalizedX: Record<number, number>;
+        valuesByX: Record<number, number>;
         valuesByNormalizedX: Record<number, number>;
         normalizedValues: Point[];
         normalizedValuesByNormalizedX: Record<number, number>;
@@ -391,6 +394,9 @@
         @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
         private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: null })
+        private xLabelTooltipFormatter!: (value: number) => string;
+
 
         private internalDatasets: ScrollableChartInternalDataset[] = [];
         private xRange = { min: 0, max: 0 };
@@ -404,6 +410,10 @@
 
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
+
+        private get xValueTooltipFormatter() {
+            return this.xLabelTooltipFormatter ?? this.xLabelFormatter;
+        }
 
         private get activeX() {
             if (this.activeXNormalized == null) {
@@ -420,7 +430,7 @@
             }
 
             const values: Record<string, number> = this.internalDatasets.reduce((acc, dataset) => {
-                const y = dataset.valuesByNormalizedX[x];
+                const y = dataset.originalValuesByNormalizedX[x];
                 if (y != null) {
                     acc[dataset.key] = y;
                 }
@@ -441,7 +451,7 @@
                 label: dataset.label,
                 visible: dataset.visible,
                 color: dataset.color,
-                value: dataset.valuesByNormalizedX[this.activeXNormalized ?? this.minTick ?? 0],
+                value: dataset.originalValuesByNormalizedX[this.activeXNormalized ?? this.minTick ?? 0],
             }));
         }
 
@@ -449,6 +459,9 @@
         private onDatasetsChanged() {
             const internalDatasets: ScrollableChartInternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
+                originalValuesByX: {},
+                originalValuesByNormalizedX: {},
+                valuesByX: {},
                 valuesByNormalizedX: {},
                 normalizedValues: [],
                 normalizedValuesByNormalizedX: {},
@@ -466,6 +479,8 @@
             if (this.internalDatasets.length == 0) {
                 return;
             }
+
+            this.updateValues();
 
             this.updateXAndYRange();
             this.updateYGridLines();
@@ -614,18 +629,38 @@
             return (this.xRange.max - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
         }
 
-        private updateNormalizedValues() {
+        private updateValues() {
+            this.internalDatasets.forEach((internalDataset) => {
+                internalDataset.values.forEach(point => internalDataset.valuesByX[point.x] = point.y);
+            });
+
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
                 const previousVisibleAndStackedDataset = findPrevious(internalDatasets, i - 1, d => d.visible && d.stack);
 
+                internalDataset.values.forEach(point => internalDataset.originalValuesByX[point.x] = point.y);
+
+                const values = internalDataset.values.map((point, i) => {
+                    let { x, y } = point;
+                    if (internalDataset.stack) {
+                        y += previousVisibleAndStackedDataset?.valuesByX[x] ?? 0;
+                    }
+                    return { x, y };
+                });
+                internalDataset.values = values;
+                internalDataset.valuesByX = values.reduce((acc, point) => {
+                    acc[point.x] = point.y;
+                    return acc;
+                }, internalDataset.valuesByX);
+            });
+        }
+
+        private updateNormalizedValues() {
+            this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
                 const normalizedValues = internalDataset.values.map((point, i) => {
                     let { x, y } = point;
                     x = (x - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
                     y = (y - this.yRange.min) / (this.yRange.max - this.yRange.min);
 
-                    if (internalDataset.stack) {
-                        y += previousVisibleAndStackedDataset?.normalizedValues[i].y ?? 0;
-                    }
                     return {
                         xNormalized: x,
                         yNormalized: y,
@@ -640,6 +675,14 @@
                     internalDataset.valuesByNormalizedX[point.xNormalized] = point.y;
                     internalDataset.normalizedValuesByNormalizedX[point.xNormalized] = point.yNormalized;
                 });
+
+                Object.keys(internalDataset.originalValuesByX)
+                    .map(x => parseFloat(x))
+                    .forEach(x => {
+                        const normalizedX = (x - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
+                        const y = internalDataset.originalValuesByX[x];
+                        internalDataset.originalValuesByNormalizedX[normalizedX] = y;
+                    });
             });
         }
 
@@ -677,12 +720,12 @@
 
                 const bgPath = `M 0 ${zeroY} `
                     + `L${linePath.substring(1)} `
-                    + `L ${width} ${zeroY}`;
+                    + `L ${width * this.maxXNormalized} ${zeroY}`;
 
                 let avgLinePath = '';
                 if (dataset.average != null) {
                     const avgSvgValue = this.computeSvgValues([{ x: 0, y: dataset.average }])[0].y;
-                    avgLinePath = `M 0 ${avgSvgValue} L ${width} ${avgSvgValue}`;
+                    avgLinePath = `M 0 ${avgSvgValue} L ${width * this.maxXNormalized} ${avgSvgValue}`;
                 }
 
                 const internalDataset: ScrollableChartInternalDataset = {

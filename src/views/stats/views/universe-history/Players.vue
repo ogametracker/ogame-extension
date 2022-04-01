@@ -4,12 +4,13 @@
         :datasets="datasets"
         continue-last-value
         show-x-values-in-grid
-        :ticks="5"
+        :ticks="30"
         :tick-list="days"
         :min-tick="firstDay"
         :max-tick="nextDay"
         :tick-interval="tickInterval"
         :x-label-formatter="(x) => $date(x)"
+        :x-label-tooltip-formatter="(x) => $datetime(x)"
     />
 </template>
 
@@ -23,8 +24,7 @@
     import { addDays } from 'date-fns';
     import { ScrollableChartDataset } from '../../components/common/ScrollableChart.vue';
 
-    @Component({
-    })
+    @Component({})
     export default class Players extends Vue {
         private leftX = 0;
         private rightX = 1;
