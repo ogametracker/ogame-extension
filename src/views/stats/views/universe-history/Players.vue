@@ -1,22 +1,35 @@
 <template>
-    <div>
-        TODO: Player histories here: {{ playerIds }}:
-        <hr />
-        <scrollable-chart :datasets="datasets" />
-    </div>
+    <scrollable-chart
+        v-if="datasets.length > 0 && ready"
+        :datasets="datasets"
+        continue-last-value
+        show-x-values-in-grid
+        :ticks="5"
+        :tick-list="days"
+        :min-tick="firstDay"
+        :max-tick="nextDay"
+        :tick-interval="tickInterval"
+        :x-label-formatter="(x) => $date(x)"
+    />
 </template>
 
 <script lang="ts">
-    import { HistoryItem } from '@/shared/models/universe-history/HistoryItem';
     import { PlayerHistory } from '@/shared/models/universe-history/PlayerHistory';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '../../components/common/ScrollableChart.vue';
     import { GlobalOgameMetaData } from '../../data/GlobalOgameMetaData';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
+    import startOfDay from 'date-fns/startOfDay/index';
+    import { addDays } from 'date-fns';
+    import { ScrollableChartDataset } from '../../components/common/ScrollableChart.vue';
 
-    @Component({})
+    @Component({
+    })
     export default class Players extends Vue {
+        private leftX = 0;
+        private rightX = 1;
+        private ready = false;
+
         private get playerIds(): number[] {
             return (this.$route.query.players as string | null ?? '')
                 .split(',')
@@ -32,8 +45,62 @@
                         players: GlobalOgameMetaData.playerId.toString(),
                     },
                 });
-                return;
             }
+
+            const playerHistories = this.playerHistories;
+            const { min, max } = this.getMinAndMaxDates(playerHistories[0]);
+            this.leftX = min;
+            this.rightX = max;
+
+            this.ready = true;
+        }
+
+        private get firstDay() {
+            let { min } = this.getMinAndMaxDates(this.playerHistories[0]);
+            return startOfDay(min).getTime();
+        }
+
+        private get nextDay() {
+            return addDays(startOfDay(Date.now()), 1).getTime();
+        }
+
+        private get days() {
+            const days: number[] = [];
+
+            const maxDay = this.nextDay;
+            for (let day = this.firstDay; day <= this.nextDay; day = addDays(day, 1).getTime()) {
+                days.push(day);
+            }
+
+            return days;
+        }
+
+        private readonly tickInterval = 24 * 60 * 60 * 1000;
+
+        private getMinAndMaxDates(history: PlayerHistory): { min: number, max: number } {
+            const dates = [...new Set([
+                ...history.name.map(n => n.date),
+                ...Object.values(history.scores).flatMap(score => score.map(s => s.date)),
+                ...Object.values(history.scorePositions).flatMap(score => score.map(s => s.date)),
+                ...history.alliance.map(n => n.date),
+                ...history.state.map(s => s.date),
+                ...Object.values(history.planets).flatMap(p => [
+                    ...p!.name.map(h => h.date),
+                    ...p!.state.map(h => h.date),
+                    ...p!.coordinates.map(h => h.date),
+                    ...Object.values(p!.moon).flatMap(m => [
+                        ...m!.name.map(h => h.date),
+                        ...m!.state.map(h => h.date),
+                    ]),
+                ]),
+            ])];
+            dates.sort((a, b) => a - b);
+            const [min, max] = [dates[0], dates[dates.length - 1]];
+
+            return {
+                min,
+                max,
+            };
         }
 
         private get playerHistories() {
@@ -43,38 +110,31 @@
                 .filter(ph => ph != null) as PlayerHistory[];
         }
 
-        private playerScoreToValues(dates: number[], scoreHistory: HistoryItem<number>[]): number[] {
-            const result: number[] = [];
-
-            let index = 0;
-            for (const curDate of dates) {
-                const { date, value: score } = scoreHistory[index] ?? { date: Number.MAX_VALUE, value: null };
-                if (curDate < date) {
-                    result.push(result[result.length - 1] ?? 0);
-                    continue;
-                }
-
-                result.push(score);
-                index++;
-            }
-
-            return result;
-        }
-
         private get datasets(): ScrollableChartDataset[] {
             const playerHistories = this.playerHistories;
-            const dates = [...new Set(playerHistories.flatMap(player => player.scores.total.map(history => history.date)))]
-                .sort((a, b) => a - b);
 
-            return playerHistories.map(player => ({
-                key: player.id,
-                values: this.playerScoreToValues(dates, player.scores.total),
-                color: 'yellow',
-                label: `total ${player.name.slice(-1)[0].value}`,
+            const keys: (keyof PlayerHistory['scores'])[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const colors: Record<keyof PlayerHistory['scores'], string> = {
+                total: 'yellow',
+                economy: 'grey',
+                research: 'lime',
+                military: 'red',
+                militaryBuilt: 'purple',
+                militaryDestroyed: 'pink',
+                militaryLost: 'darkred',
+                honor: 'skyblue',
+                numberOfShips: 'deeppink',
+            };
+
+            return playerHistories.flatMap(player => keys.map(key => ({
+                key: `${player.id}-${key}`,
+                values: player.scores[key].map(h => ({ x: h.date, y: h.value })),
+                color: colors[key],
+                label: `${key} ${player.name.slice(-1)[0].value}`,
                 filled: false,
                 stack: false,
                 hidePoints: false,
-            }));
+            })));
         }
     }
 </script>

@@ -66,7 +66,7 @@
                     key: dataset.key,
                     color: dataset.color,
                     label: dataset.label,
-                    values: values,
+                    values: values.map((y, x) => ({ x, y })),
                     filled: dataset.filled ?? true,
                     stack: dataset.stack ?? true,
                     hidePoints: false,
