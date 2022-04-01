@@ -306,7 +306,7 @@
         return null;
     }
 
-    export interface ScrollableChart2Dataset {
+    export interface ScrollableChartDataset {
         key: string | number;
         values: Point[];
         color: string;
@@ -317,7 +317,7 @@
         average?: number;
     }
 
-    interface ScrollableChart2InternalDataset extends ScrollableChart2Dataset {
+    interface ScrollableChartInternalDataset extends ScrollableChartDataset {
         visible: boolean;
         svgPoints: Point[];
         valuesByNormalizedX: Record<number, number>;
@@ -346,15 +346,15 @@
     }
 
     @Component({})
-    export default class ScrollableChart2 extends Vue {
+    export default class ScrollableChart extends Vue {
         @Ref('svg-container')
         private svgContainer!: HTMLElement | null;
 
         @Ref('scrollbar-container')
         private scrollbarContainer!: HTMLElement | null;
 
-        @Prop({ required: true, type: Array as PropType<ScrollableChart2Dataset[]> })
-        private datasets!: ScrollableChart2Dataset[];
+        @Prop({ required: true, type: Array as PropType<ScrollableChartDataset[]> })
+        private datasets!: ScrollableChartDataset[];
 
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
@@ -392,7 +392,7 @@
         private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
 
-        private internalDatasets: ScrollableChart2InternalDataset[] = [];
+        private internalDatasets: ScrollableChartInternalDataset[] = [];
         private xRange = { min: 0, max: 0 };
         private yRange = { min: 0, max: 0 };
         private leftX = 0;
@@ -447,7 +447,7 @@
 
         @Watch('datasets')
         private onDatasetsChanged() {
-            const internalDatasets: ScrollableChart2InternalDataset[] = this.datasets.map((dataset, i) => ({
+            const internalDatasets: ScrollableChartInternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
                 valuesByNormalizedX: {},
                 normalizedValues: [],
@@ -643,7 +643,7 @@
             });
         }
 
-        private toggleVisibility(dataset: ScrollableChart2InternalDataset) {
+        private toggleVisibility(dataset: ScrollableChartInternalDataset) {
             dataset.visible = !dataset.visible;
 
             if (dataset.stack) {
@@ -685,7 +685,7 @@
                     avgLinePath = `M 0 ${avgSvgValue} L ${width} ${avgSvgValue}`;
                 }
 
-                const internalDataset: ScrollableChart2InternalDataset = {
+                const internalDataset: ScrollableChartInternalDataset = {
                     ...dataset,
 
                     svgPoints: svgPoints,
