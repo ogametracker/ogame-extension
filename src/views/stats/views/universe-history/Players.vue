@@ -1,17 +1,20 @@
 <template>
-    <scrollable-chart
-        v-if="datasets.length > 0 && ready"
-        :datasets="datasets"
-        continue-last-value
-        show-x-values-in-grid
-        :ticks="30"
-        :tick-list="days"
-        :min-tick="firstDay"
-        :max-tick="nextDay"
-        :tick-interval="tickInterval"
-        :x-label-formatter="(x) => $date(x)"
-        :x-label-tooltip-formatter="(x) => $datetime(x)"
-    />
+    <div class="charts" v-if="ready">
+        <scrollable-chart
+            v-for="(datasets, i) in datasetGroups"
+            :key="i"
+            :datasets="datasets"
+            continue-last-value
+            show-x-values-in-grid
+            :ticks="30"
+            :tick-list="days"
+            :min-tick="firstDay"
+            :max-tick="nextDay"
+            :tick-interval="tickInterval"
+            :x-label-formatter="(x) => $date(x)"
+            :x-label-tooltip-formatter="(x) => $datetime(x)"
+        />
+    </div>
 </template>
 
 <script lang="ts">
@@ -110,7 +113,7 @@
                 .filter(ph => ph != null) as PlayerHistory[];
         }
 
-        private get datasets(): ScrollableChartDataset[] {
+        private get datasetGroups(): ScrollableChartDataset[][] {
             const playerHistories = this.playerHistories;
 
             const keys: (keyof PlayerHistory['scores'])[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
@@ -126,15 +129,16 @@
                 numberOfShips: 'deeppink',
             };
 
-            return playerHistories.flatMap(player => keys.map(key => ({
-                key: `${player.id}-${key}`,
-                values: player.scores[key].map(h => ({ x: h.date, y: h.value })),
-                color: colors[key],
-                label: `${key} ${player.name.slice(-1)[0].value}`,
-                filled: false,
-                stack: false,
-                hidePoints: false,
-            })));
+            return keys.map(key =>
+                playerHistories.map(player => ({
+                    key: `${player.id}-${key}`,
+                    values: player.scores[key].map(h => ({ x: h.date, y: h.value })),
+                    color: colors[key],
+                    label: `${key} ${player.name.slice(-1)[0].value}`,
+                    filled: false,
+                    stack: false,
+                    hidePoints: false,
+                })));
         }
     }
 </script>

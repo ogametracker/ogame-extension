@@ -369,6 +369,10 @@
         private continueLastValue!: boolean;
 
 
+        @Prop({ required: true, type: Boolean, default: () => true })
+        private showZeroY!: boolean;
+
+
         @Prop({ required: false, type: Number, default: () => 1 })
         private tickInterval!: number;
 
@@ -600,8 +604,14 @@
         }
 
         private updateXAndYRange() {
-            const xRange = { min: this.minTick ?? Number.MAX_SAFE_INTEGER, max: this.maxTick ?? Number.MIN_SAFE_INTEGER };
-            const yRange = { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER };
+            const xRange = {
+                min: this.minTick ?? Number.MAX_SAFE_INTEGER,
+                max: this.maxTick ?? Number.MIN_SAFE_INTEGER
+            };
+            const yRange = {
+                min: this.showZeroY ? 0 : Number.MAX_SAFE_INTEGER,
+                max: Number.MIN_SAFE_INTEGER
+            };
 
             this.internalDatasets.forEach(dataset => {
                 dataset.values.forEach(point => {
