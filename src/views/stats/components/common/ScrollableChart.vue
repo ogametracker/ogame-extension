@@ -706,7 +706,8 @@
         private updatePaths() {
             const width = this.width;
 
-            const zeroY = this.computeSvgValues([{ x: 0, y: 0 }])[0].y;
+            const normalizedZeroY = -this.yRange.min / (this.yRange.max - this.yRange.min);
+            const zeroY = this.computeSvgValues([{ x: 0, y: normalizedZeroY }])[0].y;
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
                 const svgPoints = this.computeSvgValues(dataset.normalizedValues);
@@ -897,7 +898,6 @@
         display: grid;
         grid-template-columns: 100px 1fr;
         grid-template-rows: 1fr 100px;
-        overflow: hidden;
     }
 
     .svg-container {
