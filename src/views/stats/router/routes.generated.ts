@@ -75,6 +75,11 @@ import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsMisc from '@stats/views/settings/Misc.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
+import viewstoolsConstructionQueue from '@stats/views/tools/Construction-Queue.vue';
+import viewstoolsCostCalculator from '@stats/views/tools/Cost-Calculator.vue';
+import viewstoolsExpeditionCalculator from '@stats/views/tools/Expedition-Calculator.vue';
+import viewstoolsProductionCalculator from '@stats/views/tools/Production-Calculator.vue';
+import viewstoolsResourceConversion from '@stats/views/tools/Resource-Conversion.vue';
 import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
 import viewsuniversehistoryalliancesIndex from '@stats/views/universe-history/alliances/Index.vue';
 import viewsuniversehistoryalliancesHighscore from '@stats/views/universe-history/alliances/Highscore.vue';
@@ -644,16 +649,46 @@ const routes: RouteConfig[] = [
                 ]
             },
             {
+                redirect: {
+                    name: "tools/expedition-calculator"
+                },
                 meta: {
                     color: "#008c85"
                 },
                 path: "tools",
                 name: "tools",
-                component: viewstoolsIndex
+                component: viewstoolsIndex,
+                children: [
+                    {
+                        path: "construction-queue",
+                        name: "tools/construction-queue",
+                        component: viewstoolsConstructionQueue
+                    },
+                    {
+                        path: "cost-calculator",
+                        name: "tools/cost-calculator",
+                        component: viewstoolsCostCalculator
+                    },
+                    {
+                        path: "expedition-calculator",
+                        name: "tools/expedition-calculator",
+                        component: viewstoolsExpeditionCalculator
+                    },
+                    {
+                        path: "production-calculator",
+                        name: "tools/production-calculator",
+                        component: viewstoolsProductionCalculator
+                    },
+                    {
+                        path: "resource-conversion",
+                        name: "tools/resource-conversion",
+                        component: viewstoolsResourceConversion
+                    }
+                ]
             },
             {
                 redirect: {
-                    name: "universe-history/highscore"
+                    name: "universe-history/players"
                 },
                 meta: {
                     color: "#8b0436"

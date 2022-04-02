@@ -13,28 +13,24 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Flight Cost/Time Calculator => Proxy',
-                    to: { name: 'tools/flight' },
+                    label: 'LOCA: Expedition Calculator',
+                    to: { name: 'tools/expedition-calculator' },
                 },
                 {
-                    label: 'LOCA: Cost/Time Calculator => Proxy',
-                    to: { name: 'tools/cost' },
+                    label: 'LOCA: Cost Calculator',
+                    to: { name: 'tools/cost-calculator' },
                 },
                 {
-                    label: 'LOCA: Production Calculator => Proxy',
-                    to: { name: 'tools/production' },
+                    label: 'LOCA: Production Calculator',
+                    to: { name: 'tools/production-calculator' },
                 },
                 {
-                    label: 'LOCA: Trader Resource Conversion => Proxy',
-                    to: { name: 'tools/trader' },
+                    label: 'LOCA: Construction Queue',
+                    to: { name: 'tools/construction-queue' },
                 },
                 {
-                    label: 'LOCA: Moons => Proxy',
-                    to: { name: 'tools/moons' },
-                },
-                {
-                    label: 'LOCA: Expeditions => ExpoCalc',
-                    to: { name: 'tools/expeditions' },
+                    label: 'LOCA: Resource Conversion',
+                    to: { name: 'tools/resource-conversion' },
                 },
             ];
         }
