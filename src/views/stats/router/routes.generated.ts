@@ -76,8 +76,12 @@ import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsMisc from '@stats/views/settings/Misc.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
-import viewsuniversehistoryAlliances from '@stats/views/universe-history/Alliances.vue';
-import viewsuniversehistoryPlayers from '@stats/views/universe-history/Players.vue';
+import viewsuniversehistoryalliancesIndex from '@stats/views/universe-history/alliances/Index.vue';
+import viewsuniversehistoryalliancesHighscore from '@stats/views/universe-history/alliances/Highscore.vue';
+import viewsuniversehistoryalliancesHistory from '@stats/views/universe-history/alliances/History.vue';
+import viewsuniversehistoryplayersIndex from '@stats/views/universe-history/players/Index.vue';
+import viewsuniversehistoryplayersHighscore from '@stats/views/universe-history/players/Highscore.vue';
+import viewsuniversehistoryplayersHistory from '@stats/views/universe-history/players/History.vue';
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
@@ -649,7 +653,7 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "universe-history/players"
+                    name: "universe-history/highscore"
                 },
                 meta: {
                     color: "#8b0436"
@@ -659,14 +663,44 @@ const routes: RouteConfig[] = [
                 component: viewsuniversehistoryIndex,
                 children: [
                     {
+                        redirect: {
+                            name: "universe-history/alliances/highscore"
+                        },
                         path: "alliances",
                         name: "universe-history/alliances",
-                        component: viewsuniversehistoryAlliances
+                        component: viewsuniversehistoryalliancesIndex,
+                        children: [
+                            {
+                                path: "highscore",
+                                name: "universe-history/alliances/highscore",
+                                component: viewsuniversehistoryalliancesHighscore
+                            },
+                            {
+                                path: "history",
+                                name: "universe-history/alliances/history",
+                                component: viewsuniversehistoryalliancesHistory
+                            }
+                        ]
                     },
                     {
+                        redirect: {
+                            name: "universe-history/players/highscore"
+                        },
                         path: "players",
                         name: "universe-history/players",
-                        component: viewsuniversehistoryPlayers
+                        component: viewsuniversehistoryplayersIndex,
+                        children: [
+                            {
+                                path: "highscore",
+                                name: "universe-history/players/highscore",
+                                component: viewsuniversehistoryplayersHighscore
+                            },
+                            {
+                                path: "history",
+                                name: "universe-history/players/history",
+                                component: viewsuniversehistoryplayersHistory
+                            }
+                        ]
                     }
                 ]
             }

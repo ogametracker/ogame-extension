@@ -46,7 +46,6 @@ export function trackEmpirePage() {
     observerCallbacks.push({
         selector: '#siteFooter',
         callback: () => {
-            console.log('hello');
             const ogameNowText = (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content
                 ?? _throw('no meta element found for ogame-timestamp');
             const ogameNow = parseIntSafe(ogameNowText, 10) * 1000;

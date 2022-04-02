@@ -194,9 +194,7 @@
                                 class="chart-tooltip-item-value"
                                 v-text="
                                     tooltipValueFormatter(
-                                        dataset.originalValuesByNormalizedX[
-                                            activeXNormalized
-                                        ]
+                                        getLastValue(dataset, activeXNormalized)
                                     )
                                 "
                             />
@@ -414,6 +412,18 @@
 
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
+        private getLastValue(dataset: ScrollableChartInternalDataset, xNormalized: number): number {
+            const xs = this.xValuesNormalized;
+            const index = xs.indexOf(xNormalized);
+
+            for (let i = index; i >= 0; i--) {
+                const value = dataset.originalValuesByNormalizedX[xs[i]];
+                if (value != null) {
+                    return value;
+                }
+            }
+            return 0;
+        }
 
         private get xValueTooltipFormatter() {
             return this.xLabelTooltipFormatter ?? this.xLabelFormatter;
@@ -551,6 +561,9 @@
         private updateYGridLines() {
             const maxY = this.yRange.max;
             const minY = this.yRange.min;
+            if(minY == maxY) {
+                return;
+            }
             const yGridConfig = this.internalConfig.grid.y;
             let step = 0;
             let stepCount = {
@@ -625,8 +638,6 @@
 
             this.xRange = xRange;
             this.yRange = yRange;
-
-            console.log({ xRange, yRange });
         }
 
         private get reversedDatasets() {

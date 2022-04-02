@@ -1,5 +1,5 @@
 module.exports = {
-    redirect: { name: 'universe-history/players' },
+    redirect: { name: 'universe-history/highscore' },
     meta: {
         color: '#8b0436',
     },

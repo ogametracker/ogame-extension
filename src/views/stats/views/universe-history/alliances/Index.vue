@@ -1,31 +1,24 @@
 <template>
-    <page v-if="ready" :nav-items="navItems" :root-route-name="rootRoute" />
+    <page :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
-    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
 
     @Component({})
     export default class Expeditions extends Vue {
-        private readonly rootRoute = 'universe-history';
-        private ready = false;
-
-        private async mounted() {
-            await UniverseHistoryDataModule.load();
-            this.ready = true;
-        }
+        private readonly rootRoute = 'universe-history/alliances';
 
         private get navItems(): ListNavItem[] {
             return [
                 {
                     label: 'LOCA: Highscore',
-                    to: { name: 'universe-history/highscore' },
+                    to: { name: 'universe-history/alliances/highscore' },
                 },
                 {
                     label: 'LOCA: History',
-                    to: { name: 'universe-history/history' },
+                    to: { name: 'universe-history/alliances/history' },
                 },
             ];
         }
