@@ -369,7 +369,7 @@
         private continueLastValue!: boolean;
 
 
-        @Prop({ required: true, type: Boolean, default: () => true })
+        @Prop({ required: false, type: Boolean, default: () => true })
         private showZeroY!: boolean;
 
 
@@ -625,6 +625,8 @@
 
             this.xRange = xRange;
             this.yRange = yRange;
+
+            console.log({ xRange, yRange });
         }
 
         private get reversedDatasets() {
@@ -810,7 +812,6 @@
             }
             const scrolledFraction = this.scrollbarContainer.scrollLeft / (this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth);
             this.leftX = (this.maxXNormalized - 1) * scrolledFraction;
-            console.log(this.leftX);
         }
     }
 </script>

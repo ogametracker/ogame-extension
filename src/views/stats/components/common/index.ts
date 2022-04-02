@@ -9,6 +9,7 @@ import ListNav from './ListNav.vue';
 import Page from './Page.vue';
 import ScrollableChart from './ScrollableChart.vue';
 import TabView from './TabView.vue';
+import Tabs from './Tabs.vue';
 
 Vue.component('checkbox', Checkbox);
 Vue.component('checkbox-button', CheckboxButton);
@@ -19,5 +20,6 @@ Vue.component('list-nav', ListNav);
 Vue.component('page', Page);
 Vue.component('scrollable-chart', ScrollableChart);
 Vue.component('tab-view', TabView);
+Vue.component('tabs', Tabs);
 
 import './ogame';

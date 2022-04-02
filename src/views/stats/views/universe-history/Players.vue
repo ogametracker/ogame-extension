@@ -1,20 +1,24 @@
 <template>
-    <div class="charts" v-if="ready">
-        <scrollable-chart
-            v-for="(datasets, i) in datasetGroups"
-            :key="i"
-            :datasets="datasets"
-            continue-last-value
-            show-x-values-in-grid
-            :ticks="30"
-            :tick-list="days"
-            :min-tick="firstDay"
-            :max-tick="nextDay"
-            :tick-interval="tickInterval"
-            :x-label-formatter="(x) => $date(x)"
-            :x-label-tooltip-formatter="(x) => $datetime(x)"
-        />
-    </div>
+    <tabs :tabs="tabs">
+        <template v-for="key in keys">
+            <template :slot="`tab-content-${key}`">
+                <scrollable-chart
+                    v-if="playerIds.length > 0"
+                    :key="`score-${key}`"
+                    :datasets="scoreDatasets[key]"
+                    continue-last-value
+                    show-x-values-in-grid
+                    :tick-interval="1000 * 60 * 60 * 24"
+                    :ticks="30"
+                    :tick-list="days"
+                    :min-tick="firstDay"
+                    :max-tick="nextDay"
+                    :x-label-formatter="(x) => $date(x)"
+                    :x-label-tooltip-formatter="(x) => $datetime(x)"
+                />
+            </template>
+        </template>
+    </tabs>
 </template>
 
 <script lang="ts">
@@ -26,12 +30,55 @@
     import startOfDay from 'date-fns/startOfDay/index';
     import { addDays } from 'date-fns';
     import { ScrollableChartDataset } from '../../components/common/ScrollableChart.vue';
+    import { Tab } from '../../components/common/Tabs.vue';
 
     @Component({})
     export default class Players extends Vue {
         private leftX = 0;
         private rightX = 1;
         private ready = false;
+
+        private readonly keys: ScoreKey[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        private get tabs(): (Tab & { key: ScoreKey })[] {
+            return [
+                {
+                    key: 'total',
+                    label: 'LOCA: total',
+                },
+                {
+                    key: 'economy',
+                    label: 'LOCA: economy',
+                },
+                {
+                    key: 'research',
+                    label: 'LOCA: research',
+                },
+                {
+                    key: 'military',
+                    label: 'LOCA: military',
+                },
+                {
+                    key: 'militaryBuilt',
+                    label: 'LOCA: militaryBuilt',
+                },
+                {
+                    key: 'militaryDestroyed',
+                    label: 'LOCA: militaryDestroyed',
+                },
+                {
+                    key: 'militaryLost',
+                    label: 'LOCA: militaryLost',
+                },
+                {
+                    key: 'honor',
+                    label: 'LOCA: honor',
+                },
+                {
+                    key: 'numberOfShips',
+                    label: 'LOCA: numberOfShips',
+                },
+            ];
+        }
 
         private get playerIds(): number[] {
             return (this.$route.query.players as string | null ?? '')
@@ -78,8 +125,6 @@
             return days;
         }
 
-        private readonly tickInterval = 24 * 60 * 60 * 1000;
-
         private getMinAndMaxDates(history: PlayerHistory): { min: number, max: number } {
             const dates = [...new Set([
                 ...history.name.map(n => n.date),
@@ -113,11 +158,10 @@
                 .filter(ph => ph != null) as PlayerHistory[];
         }
 
-        private get datasetGroups(): ScrollableChartDataset[][] {
+        private get positionDatasets(): Record<ScoreKey, ScrollableChartDataset[]> {
             const playerHistories = this.playerHistories;
 
-            const keys: (keyof PlayerHistory['scores'])[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
-            const colors: Record<keyof PlayerHistory['scores'], string> = {
+            const colors: Record<ScoreKey, string> = {
                 total: 'yellow',
                 economy: 'grey',
                 research: 'lime',
@@ -129,8 +173,37 @@
                 numberOfShips: 'deeppink',
             };
 
-            return keys.map(key =>
-                playerHistories.map(player => ({
+            return this.keys.reduce((result, key) => {
+                result[key] = playerHistories.map(player => ({
+                    key: `${player.id}-${key}`,
+                    values: player.scorePositions[key].map(h => ({ x: h.date, y: h.value })),
+                    color: colors[key],
+                    label: `${key} ${player.name.slice(-1)[0].value}`,
+                    filled: false,
+                    stack: false,
+                    hidePoints: false,
+                }));
+                return result;
+            }, {} as Record<ScoreKey, ScrollableChartDataset[]>);
+        }
+
+        private get scoreDatasets(): Record<ScoreKey, ScrollableChartDataset[]> {
+            const playerHistories = this.playerHistories;
+
+            const colors: Record<ScoreKey, string> = {
+                total: 'yellow',
+                economy: 'grey',
+                research: 'lime',
+                military: 'red',
+                militaryBuilt: 'purple',
+                militaryDestroyed: 'pink',
+                militaryLost: 'darkred',
+                honor: 'skyblue',
+                numberOfShips: 'deeppink',
+            };
+
+            return this.keys.reduce((result, key) => {
+                result[key] = playerHistories.map(player => ({
                     key: `${player.id}-${key}`,
                     values: player.scores[key].map(h => ({ x: h.date, y: h.value })),
                     color: colors[key],
@@ -138,7 +211,11 @@
                     filled: false,
                     stack: false,
                     hidePoints: false,
-                })));
+                }));
+                return result;
+            }, {} as Record<ScoreKey, ScrollableChartDataset[]>);
         }
     }
+
+    type ScoreKey = keyof PlayerHistory['scores'];
 </script>
