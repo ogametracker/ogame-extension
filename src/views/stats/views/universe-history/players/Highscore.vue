@@ -132,7 +132,7 @@
         private mounted() {
             if (this.playerIds.length == 0) {
                 this.$router.replace({
-                    name: 'universe-history/highscore/players',
+                    name: 'universe-history/players/highscore',
                     query: {
                         players: GlobalOgameMetaData.playerId.toString(),
                     },

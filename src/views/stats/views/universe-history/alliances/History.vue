@@ -18,7 +18,7 @@
         private mounted() {
             if (this.allyIds.length == 0) {
                 this.$router.replace({
-                    name: 'universe-history/history/alliances',
+                    name: 'universe-history/alliances/history',
                     query: {
                         alliances: '0', //TODO: current alliance of current player
                     },

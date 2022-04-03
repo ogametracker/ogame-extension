@@ -132,7 +132,7 @@
         private mounted() {
             if (this.playerIds.length == 0) {
                 this.$router.replace({
-                    name: 'universe-history/history/players',
+                    name: 'universe-history/players/history',
                     query: {
                         players: GlobalOgameMetaData.playerId.toString(),
                     },
