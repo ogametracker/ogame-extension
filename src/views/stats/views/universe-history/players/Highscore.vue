@@ -1,24 +1,46 @@
 <template>
-    <tabs :tabs="tabs">
-        <template v-for="key in keys">
-            <template :slot="`tab-content-${key}`">
-                <scrollable-chart
-                    v-if="playerIds.length > 0"
-                    :key="`score-${key}`"
-                    :datasets="scoreDatasets[key]"
-                    continue-last-value
-                    show-x-values-in-grid
-                    :tick-interval="1000 * 60 * 60 * 24"
-                    :ticks="30"
-                    :tick-list="days"
-                    :min-tick="firstDay"
-                    :max-tick="nextDay"
-                    :x-label-formatter="(x) => $date(x)"
-                    :x-label-tooltip-formatter="(x) => $datetime(x)"
-                />
+    <div class="highscores">
+        <div class="player-selection">
+            <input
+                type="text"
+                v-model="selectedPlayerName"
+                placeholder="TODO: Player search here"
+                list="player-list"
+                @change="onPlayerSelected($event.target.value)"
+            />
+            <datalist id="player-list">
+                <option v-for="name in playerNames" :key="name">
+                    {{ name }}
+                </option>
+            </datalist>
+
+            <div v-for="player in selectedPlayers" :key="player.id">
+                <span class="mdi mdi-delete" @click="removePlayer(player.id)" />
+                <span v-text="player.name" />
+            </div>
+        </div>
+
+        <tabs :tabs="tabs">
+            <template v-for="key in keys">
+                <template :slot="`tab-content-${key}`">
+                    <scrollable-chart
+                        v-if="playerIds.length > 0"
+                        :key="`score-${key}`"
+                        :datasets="scoreDatasets[key]"
+                        continue-last-value
+                        show-x-values-in-grid
+                        :tick-interval="1000 * 60 * 60 * 24"
+                        :ticks="30"
+                        :tick-list="days"
+                        :min-tick="firstDay"
+                        :max-tick="nextDay"
+                        :x-label-formatter="(x) => $date(x)"
+                        :x-label-tooltip-formatter="(x) => $datetime(x)"
+                    />
+                </template>
             </template>
-        </template>
-    </tabs>
+        </tabs>
+    </div>
 </template>
 
 <script lang="ts">
@@ -233,7 +255,68 @@
                 return result;
             }, {} as Record<ScoreKey, ScrollableChartDataset[]>);
         }
+
+
+        private selectedPlayerName = '';
+
+        private get players() {
+            return Object.values(UniverseHistoryDataModule.history.players) as PlayerHistory[];
+        }
+
+        private get playerNames() {
+            return this.players
+                .map(player => player.name.slice(-1)[0].value)
+                .sort();
+        }
+
+        private get selectedPlayers() {
+            return this.playerIds.map(pid => {
+                const data = UniverseHistoryDataModule.history.players[pid];
+                if (data == null) {
+                    return null;
+                }
+
+                return {
+                    id: pid,
+                    name: data.name.slice(-1)[0].value,
+                };
+            });
+        }
+
+        private async onPlayerSelected(name: string) {
+            const player = this.players.find(p => p.name.slice(-1)[0].value == name);
+            if (player == null) {
+                return;
+            }
+
+            const playerIds = (this.$route.query.players as string | null)?.split(',') ?? [];
+            await this.updatePlayerIdRoute([
+                ...playerIds.filter(pid => pid != player.id.toString()),
+                player.id,
+            ]);
+
+            this.selectedPlayerName = '';
+        }
+
+        private async removePlayer(id: number) {
+            await this.updatePlayerIdRoute(this.playerIds.filter(pid => pid != id));
+        }
+
+        private async updatePlayerIdRoute(ids: (string | number)[]) {
+            await this.$router.replace({
+                query: {
+                    players: ids.join(','),
+                },
+            });
+        }
     }
 
     type ScoreKey = keyof PlayerHistory['scores'];
 </script>
+<style lang="scss" scoped>
+    .highscores {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        height: 100%;
+    }
+</style>

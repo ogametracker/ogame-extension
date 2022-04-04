@@ -20,12 +20,12 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Highscore',
-                    to: { name: 'universe-history/highscore' },
+                    label: 'LOCA: Players',
+                    to: { name: 'universe-history/players' },
                 },
                 {
-                    label: 'LOCA: History',
-                    to: { name: 'universe-history/history' },
+                    label: 'LOCA: Alliances',
+                    to: { name: 'universe-history/alliances' },
                 },
             ];
         }

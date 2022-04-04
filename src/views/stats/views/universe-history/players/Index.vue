@@ -5,6 +5,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
+    import { UniverseHistoryDataModule } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { PlayerHistory } from '@/shared/models/universe-history/PlayerHistory';
 
     @Component({})
     export default class Expeditions extends Vue {
