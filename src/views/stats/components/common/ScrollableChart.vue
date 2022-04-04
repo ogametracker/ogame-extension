@@ -171,19 +171,12 @@
 
                         <div
                             v-for="dataset in internalDatasets"
-                            v-show="
-                                dataset.visible &&
-                                dataset.originalValuesByNormalizedX[
-                                    activeXNormalized
-                                ] != null
-                            "
+                            v-show="dataset.visible"
                             :key="`tooltip-${dataset.key}`"
                             class="chart-tooltip-item"
                             :class="{
                                 zero:
-                                    dataset.originalValuesByNormalizedX[
-                                        activeXNormalized
-                                    ] == 0,
+                                    getLastValue(dataset, activeXNormalized) == 0,
                             }"
                         >
                             <span
@@ -561,7 +554,7 @@
         private updateYGridLines() {
             const maxY = this.yRange.max;
             const minY = this.yRange.min;
-            if(minY == maxY) {
+            if (minY == maxY) {
                 return;
             }
             const yGridConfig = this.internalConfig.grid.y;
