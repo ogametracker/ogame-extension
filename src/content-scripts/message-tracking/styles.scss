@@ -146,17 +146,36 @@ $image-size-small: 24px;
     &-combat-report {
         color: white;
         font-weight: bold;
+        display: grid;
+        gap: 8px;
+        justify-items: center;
+
+        .ogame-tracker-resource {
+            width: $image-size-small;
+            height: $image-size-small;
+            margin-left: 16px;
+        }
 
         &--loot-table {
             display: inline-grid;
             grid-template-columns: repeat(3, auto 1fr);
             align-items: center;
             gap: 4px;
+        }
 
-            > .ogame-tracker-resource {
-                width: $image-size-small;
-                height: $image-size-small;
-                margin-left: 16px;
+        &--debris-field-table {
+            display: inline-grid;
+            grid-template-columns: auto repeat(2, auto 1fr);
+            align-items: center;
+            gap: 4px;
+
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+
+            > .head {
+                grid-column: 1 / span 4;
+                justify-self: center;
             }
         }
 
@@ -238,5 +257,12 @@ $image-size-small: 24px;
         100% {
             transform: rotate(360deg);
         }
+    }
+
+    &-debris-field-icon {
+        width: $image-size-small;
+        height: $image-size-small;
+        background-size: cover;
+        background-image: url(#{$base-url}/img/ogame/misc/debris-field-icon.svg);
     }
 }

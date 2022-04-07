@@ -13,6 +13,7 @@ import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "
 import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -82,6 +83,18 @@ function onMessage(message: Message<MessageType, any>) {
 /*                                      */ : ''
 /*                              */}">
                                     ${formatNumber(combatReport.loot[resource])}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="ogame-tracker-combat-report--debris-field-table">
+                            <span class="ogame-tracker-debris-field-icon"></span>
+                            ${(Object.keys(combatReport.debrisField) as (keyof CombatReport['debrisField'])[]).map(resource => `
+                                <div class="ogame-tracker-resource ${resource}"></div>
+                                <div class="${combatReport.debrisField[resource] == 0
+/*                                  */ ? 'ogame-tracker-combat-report--no-loot'
+/*                                  */ : ''
+/*                              */}">
+                                    ${formatNumber(combatReport.debrisField[resource])}
                                 </div>
                             `).join('')}
                         </div>
