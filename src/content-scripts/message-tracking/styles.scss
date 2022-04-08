@@ -115,17 +115,35 @@ $image-size-small: 24px;
         }
 
         &--size {
-            &-small .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--small);
-                font-size: 24px !important;
+            &-small {
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid var(--ogame-tracker--expedition-size--small);
+
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--small);
+                    font-size: 24px !important;
+                }
             }
-            &-medium .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--medium);
-                font-size: 28px !important;
+            &-medium {
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid var(--ogame-tracker--expedition-size--medium);
+
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--medium);
+                    font-size: 28px !important;
+                }
             }
-            &-large .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--large);
-                font-size: 32px !important;
+            &-large {
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid var(--ogame-tracker--expedition-size--large);
+
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--large);
+                    font-size: 32px !important;
+                }
             }
         }
 
@@ -141,6 +159,10 @@ $image-size-small: 24px;
         align-items: center;
         justify-items: center;
         column-gap: 16px;
+
+        border: 1px solid rgba(white, 0.25);
+        padding: 4px;
+        border-radius: 4px;
     }
 
     &-combat-report {
@@ -161,6 +183,10 @@ $image-size-small: 24px;
             grid-template-columns: repeat(3, auto 1fr);
             align-items: center;
             gap: 4px;
+
+            padding: 4px;
+            border: 1px solid rgba(white, 0.25);
+            border-radius: 4px;
         }
 
         &--debris-field-table {
@@ -170,7 +196,7 @@ $image-size-small: 24px;
             gap: 4px;
 
             padding: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(white, 0.25);
             border-radius: 4px;
 
             > .head {
