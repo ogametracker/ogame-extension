@@ -71,7 +71,7 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.processed);
 
             if (Object.values(combatReport.loot).some(amount => amount != 0)) {
-                addOrSetCustomMessageContent(li, `
+                let html = `
                     <div class="ogame-tracker-combat-report">
                         <div class="ogame-tracker-combat-report--loot-table">
                             ${Object.values(ResourceType).map(resource => `
@@ -86,6 +86,9 @@ function onMessage(message: Message<MessageType, any>) {
                                 </div>
                             `).join('')}
                         </div>
+                    `;
+                if (combatReport.debrisField.metal > 0 || combatReport.debrisField.crystal > 0) {
+                    html += `
                         <div class="ogame-tracker-combat-report--debris-field-table">
                             <span class="ogame-tracker-debris-field-icon"></span>
                             ${(Object.keys(combatReport.debrisField) as (keyof CombatReport['debrisField'])[]).map(resource => `
@@ -98,8 +101,10 @@ function onMessage(message: Message<MessageType, any>) {
                                 </div>
                             `).join('')}
                         </div>
-                    </div>
-                `);
+                    `;
+                }
+                html += '</div>';
+                addOrSetCustomMessageContent(li, html);
             }
             else {
                 addOrSetCustomMessageContent(li, `-`);
