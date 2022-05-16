@@ -68,6 +68,7 @@ function onMessage(message: Message<MessageType, any>) {
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find expedition message with id '${msg.data}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.remove(cssClasses.messages.hideContent);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
             break;
