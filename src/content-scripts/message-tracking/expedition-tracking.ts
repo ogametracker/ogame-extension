@@ -16,6 +16,7 @@ import { Items } from "../../shared/models/ogame/items/Items";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
 
 let tabContent: Element | null = null;
 
@@ -59,6 +60,16 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
             addExpeditionResultContent(li, msg.data);
+            break;
+        }
+
+        case MessageType.TrackingError: {
+            const msg = message as MessageTrackingErrorMessage;
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find expedition message with id '${msg.data}'`);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.error);
+            addOrSetCustomMessageContent(li, false);
             break;
         }
     }

@@ -3,7 +3,7 @@ import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../../shared/messages/Message";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logError } from "../../shared/utils/_log";
+import { _log, _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import i18nExpeditions from '../../shared/i18n/ogame/messages/expeditions';
 import i18nPremium from '../../shared/i18n/ogame/premium';
@@ -63,7 +63,7 @@ export class ExpeditionModule {
                 },
             };
         } catch (error) {
-            _logError({ error, message });
+            _logWarning({ error, message });
             return { success: false };
         }
     }
