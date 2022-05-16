@@ -9,10 +9,14 @@ const lock = new Lock();
 
 export async function getDatabase() {
     await lock.acquire();
-    
+
     if (db == null) {
         const name = getStorageKeyPrefix(GlobalOgameMetaData);
-        db = await openDB(name, DbVersion);
+        db = await openDB(name, DbVersion, {
+            upgrade() {
+                throw new Error('db does not exist');
+            },
+        });
     }
 
     lock.release();
