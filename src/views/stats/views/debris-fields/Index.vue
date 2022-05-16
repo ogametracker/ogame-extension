@@ -10,7 +10,7 @@ import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataMod
     @Component({})
     export default class Index extends Vue {
         private async mounted() {
-            await DebrisFieldReportDataModule.load();
+            //TODO: await DebrisFieldReportDataModule.load();
         }
 
         private get tabs(): Tab[] {

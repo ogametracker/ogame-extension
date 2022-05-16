@@ -1,16 +1,15 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
-import { MessageOgameMeta } from "../../shared/messages/Message";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import i18nDebrisFieldReports from '../../shared/i18n/ogame/messages/debris-field-reports';
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
-import { DebrisFieldReportManager } from "./DebrisFieldReportManager";
 import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { getDatabase } from "../PersistentData";
 
 type DebrisFieldReportResult = {
     ignored: true;
@@ -23,23 +22,20 @@ type DebrisFieldReportResult = {
 };
 
 export class DebrisFieldReportModule {
-    private readonly dfManagers: Record<string, DebrisFieldReportManager | undefined> = {};
 
     public async trackManualDebrisFieldReport(message: TrackManualDebrisFieldReportMessage): Promise<void> {
         const report = message.data;
-        const manager = this.getManager(message.ogameMeta);
-        await manager.add(report);
+        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        await db.put('debrisFieldReports', report);
     }
 
     public async tryTrackDebrisFieldReport(message: TrackDebrisFieldReportMessage): Promise<TryActionResult<DebrisFieldReportResult>> {
         const messageData = message.data;
-
-        const manager = this.getManager(message.ogameMeta);
         const { language } = message.ogameMeta;
-        const reports = await manager.getData();
+        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
 
         // check if expedition already tracked => if true, return tracked data
-        const knownReport = reports[messageData.id];
+        const knownReport = await db.get('debrisFieldReports', messageData.id);
         if (knownReport != null) {
             return {
                 success: true,
@@ -53,7 +49,7 @@ export class DebrisFieldReportModule {
 
         // otherwise parse and save result
         let report: DebrisFieldReport;
-        
+
         try {
             if (!isSupportedLanguage(language)) {
                 throw new Error(`unsupported language '${language}'`);
@@ -67,20 +63,21 @@ export class DebrisFieldReportModule {
             }
 
             report = parseResult.report;
+
+            await db.put('debrisFieldReports', report);
+
+            return {
+                success: true,
+                result: {
+                    ignored: false,
+                    report,
+                    isAlreadyTracked: false,
+                },
+            };
         } catch (error) {
             _logError({ error, message });
             return { success: false };
         }
-
-        await manager.add(report);
-        return {
-            success: true,
-            result: {
-                ignored: false,
-                report,
-                isAlreadyTracked: false,
-            },
-        };
     }
 
     private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): ({ success: false } | { success: true, report: DebrisFieldReport }) {
@@ -105,18 +102,5 @@ export class DebrisFieldReportModule {
                 crystal,
             },
         };
-    }
-
-    public async getDebrisFieldReports(meta: MessageOgameMeta): Promise<DebrisFieldReport[]> {
-        const manager = this.getManager(meta);
-        const reports = await manager.getData();
-        return Object.values(reports);
-    }
-
-    private getManager(meta: MessageOgameMeta): DebrisFieldReportManager {
-        const key = getStorageKeyPrefix(meta);
-        const manager = (this.dfManagers[key] ??= new DebrisFieldReportManager(key));
-
-        return manager;
     }
 }

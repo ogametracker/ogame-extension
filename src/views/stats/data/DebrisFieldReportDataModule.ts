@@ -1,48 +1,49 @@
 import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
 import { MessageType } from '@/shared/messages/MessageType';
-import { AllDebrisFieldReportsMessage, NewDebrisFieldReportMessage, RequestDebrisFieldReportsMessage } from '@/shared/messages/tracking/debris-fields';
+import { NewDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { broadcastMessage } from '@/shared/communication/broadcastMessage';
-import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { Lock } from 'semaphore-async-await';
+import { getDatabase } from './getDatabase';
 
 @Component
-class DebrisFieldReportDataModuleClass extends Vue implements IDataModule {
+class DebrisFieldReportDataModuleClass extends Vue {
     public reports: DebrisFieldReport[] = [];
     public reportsPerDay: Record<number, DebrisFieldReport[]> = {};
     public firstDate: number | null = null;
 
-    private readonly lock = new Lock();
-
     private async created() {
-        await this.lock.acquire();
-
         this.initCommunication();
-
-        await this.requestData();
+        await this.loadData();
     }
 
-    public async load(): Promise<void> {
-        await this.lock.acquire();
-        this.lock.release();
+    private async loadData() {
+        const db = await getDatabase();
+        const reports = await db.getAll('debrisFieldReports');
+
+        this.reports = reports;
+        this.reportsPerDay = reports.reduce(
+            (perDay, report) => {
+                const day = startOfDay(report.date).getTime();
+                perDay[day] ??= [];
+                perDay[day].push(report);
+                return perDay;
+            },
+            {} as Record<number, DebrisFieldReport[]>
+        );
+
+        this.firstDate = reports.reduce(
+            (date, report) => Math.min(date ?? report.date, report.date),
+            null as null | number
+        );
     }
 
     private initCommunication() {
         console.log('connecting to background service');
 
         chrome.runtime.onMessage.addListener(message => this.onMessage(message));
-    }
-
-    private async requestData() {
-        const message: RequestDebrisFieldReportsMessage = {
-            type: MessageType.RequestDebrisFieldReports,
-            ogameMeta: GlobalOgameMetaData,
-        };
-        await broadcastMessage(message);
     }
 
     private onMessage(msg: Message) {
@@ -52,38 +53,16 @@ class DebrisFieldReportDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-        case MessageType.NewDebrisFieldReport: {
-            const { data } = msg as NewDebrisFieldReportMessage;
-            this.reports = this.reports.concat(data);
+            case MessageType.NewDebrisFieldReport: {
+                const { data } = msg as NewDebrisFieldReportMessage;
+                this.reports = this.reports.concat(data);
 
-            const day = startOfDay(data.date).getTime();
-            const inDay = this.reportsPerDay[day] ?? [];
-            inDay.push(data);
-            this.reportsPerDay[day] = inDay;
-            break;
-        }
-
-        case MessageType.AllDebrisFieldReports: {
-            const { data } = msg as AllDebrisFieldReportsMessage;
-            this.reports = data;
-            this.reportsPerDay = data.reduce(
-                (perDay, report) => {
-                    const day = startOfDay(report.date).getTime();
-                    perDay[day] ??= [];
-                    perDay[day].push(report);
-                    return perDay;
-                },
-                    {} as Record<number, DebrisFieldReport[]>
-            );
-
-            this.firstDate = data.reduce(
-                (date, report) => Math.min(date ?? report.date, report.date),
-                    null as null | number
-            );
-
-            this.lock.release();
-            break;
-        }
+                const day = startOfDay(data.date).getTime();
+                const inDay = this.reportsPerDay[day] ?? [];
+                inDay.push(data);
+                this.reportsPerDay[day] = inDay;
+                break;
+            }
         }
     }
 

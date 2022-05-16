@@ -12,7 +12,5 @@ export interface RawCombatReportData {
 export type TrackCombatReportMessage = Message<MessageType.TrackCombatReport, RawCombatReportData>;
 export type CombatReportMessage = Message<MessageType.CombatReport, CombatReport>;
 export type NewCombatReportMessage = Message<MessageType.NewCombatReport, CombatReport>;
-export type AllCombatReportsMessage = Message<MessageType.AllCombatReports, CombatReport[]>;
-export type RequestCombatReportsMessage = NoDataMessage<MessageType.RequestCombatReports>;
 export type RequestSingleCombatReportMessage = Message<MessageType.RequestSingleCombatReport, number>;
 export type CombatReportUnknownMessage = Message<MessageType.CombatReportUnknown, number>;

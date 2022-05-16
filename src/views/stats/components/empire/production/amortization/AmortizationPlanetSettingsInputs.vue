@@ -217,7 +217,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         };
 
         private get isCrawlerOverloadEnabled() {
-             return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
+             return ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled;//TODO: !
         }
 
         private get activeBooster() {

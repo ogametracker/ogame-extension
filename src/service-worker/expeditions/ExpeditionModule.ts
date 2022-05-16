@@ -18,8 +18,8 @@ import { RawMessageData } from "../../shared/messages/tracking/common";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
-import { ExpeditionManager } from "./ExpeditionManager";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { getDatabase } from "../PersistentData";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -27,17 +27,13 @@ interface ExpeditionEventResult {
 }
 
 export class ExpeditionModule {
-    private readonly expeditionManagers: Record<string, ExpeditionManager | undefined> = {};
-
     public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEventResult>> {
         const expeditionEventData = message.data;
-
-        const manager = this.getManager(message.ogameMeta);
         const { language } = message.ogameMeta;
-        const expeditionEvents = await manager.getData();
+        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
 
         // check if expedition already tracked => if true, return tracked data
-        const knownExpedition = expeditionEvents[expeditionEventData.id];
+        const knownExpedition = await db.get('expeditions', expeditionEventData.id);
         if (knownExpedition != null) {
             return {
                 success: true,
@@ -56,32 +52,20 @@ export class ExpeditionModule {
             }
 
             expedition = this.parseExpedition(language as LanguageKey, expeditionEventData);
+
+            await db.put('expeditions', expedition);
+
+            return {
+                success: true,
+                result: {
+                    expedition,
+                    isAlreadyTracked: false,
+                },
+            };
         } catch (error) {
             _logError({ error, message });
             return { success: false };
         }
-
-        await manager.add(expedition);
-        return {
-            success: true,
-            result: {
-                expedition,
-                isAlreadyTracked: false,
-            },
-        };
-    }
-
-    public async getExpeditionEvents(meta: MessageOgameMeta): Promise<ExpeditionEvent[]> {
-        const manager = this.getManager(meta);
-        const expeditions = await manager.getData();
-        return Object.values(expeditions);
-    }
-
-    private getManager(meta: MessageOgameMeta): ExpeditionManager {
-        const key = getStorageKeyPrefix(meta);
-        const manager = (this.expeditionManagers[key] ??= new ExpeditionManager(key));
-
-        return manager;
     }
 
     private parseExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEvent {

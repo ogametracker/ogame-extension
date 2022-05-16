@@ -1,45 +1,47 @@
 import { ExpeditionEvent } from '@/shared/models/expeditions/ExpeditionEvents';
 import { MessageType } from '@/shared/messages/MessageType';
-import { AllExpeditionsMessage, NewExpeditionMessage, RequestExpeditionEventsMessage } from '@/shared/messages/tracking/expeditions';
+import { NewExpeditionMessage } from '@/shared/messages/tracking/expeditions';
 import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { broadcastMessage } from '@/shared/communication/broadcastMessage';
-import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { Lock } from 'semaphore-async-await';
+import { getDatabase } from './getDatabase';
 
 @Component
-class ExpeditionDataModuleClass extends Vue implements IDataModule {
+class ExpeditionDataModuleClass extends Vue {
     public expeditions: ExpeditionEvent[] = [];
     public expeditionsPerDay: Record<number, ExpeditionEvent[]> = {};
     public firstDate: number | null = null;
 
-    private readonly lock = new Lock();
-
     private async created() {
-        await this.lock.acquire();
-
         this.initCommunication();
-        await this.requestData();
+        await this.loadData();
     }
 
-    public async load(): Promise<void> {
-        await this.lock.acquire();
-        this.lock.release();
+    private async loadData() {
+        const db = await getDatabase();
+        const expeditions = await db.getAll('expeditions');
+
+        this.expeditions = expeditions;
+        this.expeditionsPerDay = expeditions.reduce(
+            (perDay, expo) => {
+                const day = startOfDay(expo.date).getTime();
+                perDay[day] ??= [];
+                perDay[day].push(expo);
+                return perDay;
+            },
+            {} as Record<number, ExpeditionEvent[]>
+        );
+
+        this.firstDate = expeditions.reduce(
+            (date, expo) => Math.min(date ?? expo.date, expo.date),
+            null as null | number
+        );
     }
 
     private initCommunication() {
         chrome.runtime.onMessage.addListener(message => this.onMessage(message));
-    }
-
-    private async requestData() {
-        const message: RequestExpeditionEventsMessage = {
-            type: MessageType.RequestExpeditionEvents,
-            ogameMeta: GlobalOgameMetaData,
-        };
-        await broadcastMessage(message);
     }
 
     private onMessage(msg: Message) {
@@ -49,38 +51,16 @@ class ExpeditionDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-        case MessageType.NewExpedition: {
-            const { data } = msg as NewExpeditionMessage;
-            this.expeditions = this.expeditions.concat(data);
+            case MessageType.NewExpedition: {
+                const { data } = msg as NewExpeditionMessage;
+                this.expeditions = this.expeditions.concat(data);
 
-            const day = startOfDay(data.date).getTime();
-            const inDay = this.expeditionsPerDay[day] ?? [];
-            inDay.push(data);
-            this.expeditionsPerDay[day] = inDay;
-            break;
-        }
-
-        case MessageType.AllExpeditions: {
-            const { data } = msg as AllExpeditionsMessage;
-            this.expeditions = data;
-            this.expeditionsPerDay = data.reduce(
-                (perDay, expo) => {
-                    const day = startOfDay(expo.date).getTime();
-                    perDay[day] ??= [];
-                    perDay[day].push(expo);
-                    return perDay;
-                },
-                    {} as Record<number, ExpeditionEvent[]>
-            );
-
-            this.firstDate = data.reduce(
-                (date, expo) => Math.min(date ?? expo.date, expo.date),
-                    null as null | number
-            );
-
-            this.lock.release();
-            break;
-        }
+                const day = startOfDay(data.date).getTime();
+                const inDay = this.expeditionsPerDay[day] ?? [];
+                inDay.push(data);
+                this.expeditionsPerDay[day] = inDay;
+                break;
+            }
         }
     }
 

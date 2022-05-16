@@ -1,3 +1,5 @@
+import { DbVersion, OgameTrackerDbSchema } from "@/shared/db/OgameTrackerDbSchema";
+import { IDBPDatabase, openDB } from "idb";
 import { Lock } from "semaphore-async-await";
 import { _logDebug } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
@@ -89,21 +91,20 @@ export abstract class PersistentDataManager<TItem> {
     }
 }
 
-export abstract class PersistentCollectionDataManager<TItem extends PersistentDataItem> extends PersistentDataManager<Record<number, TItem>> {
-    constructor(key: string, suffix: string) {
-        super(key, suffix);
+
+const databases: Partial<Record<string, IDBPDatabase<OgameTrackerDbSchema>>> = {};
+const dbLocks: Partial<Record<string, Lock>> = {};
+
+export async function getDatabase(name: string): Promise<IDBPDatabase<OgameTrackerDbSchema>> {
+    const lock = (dbLocks[name] ??= new Lock());
+    await lock.acquire();
+
+    let db = databases[name];
+    if(db == null) {
+        db = await openDB(name, DbVersion);
+        databases[name] = db;
     }
 
-    public async add(item: TItem): Promise<void> {
-        const items = await this.load(false);
-        items[item.id] = item;
-
-        this._readLock.release();
-        
-        await this.save();
-    }
-
-    protected getDefaultItem(): Record<number, TItem> {
-        return {};
-    }
+    lock.release();
+    return db;
 }

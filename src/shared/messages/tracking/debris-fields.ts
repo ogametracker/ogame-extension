@@ -7,5 +7,3 @@ export type TrackDebrisFieldReportMessage = Message<MessageType.TrackDebrisField
 export type TrackManualDebrisFieldReportMessage = Message<MessageType.TrackManualDebrisFieldReport, DebrisFieldReport>;
 export type DebrisFieldReportMessage = Message<MessageType.DebrisFieldReport, DebrisFieldReport>;
 export type NewDebrisFieldReportMessage = Message<MessageType.NewDebrisFieldReport, DebrisFieldReport>;
-export type AllDebrisFieldReportsMessage = Message<MessageType.AllDebrisFieldReports, DebrisFieldReport[]>;
-export type RequestDebrisFieldReportsMessage = NoDataMessage<MessageType.RequestDebrisFieldReports>;

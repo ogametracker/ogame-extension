@@ -216,7 +216,7 @@
         }
 
         private get playerHistories() {
-            const playerHistories = UniverseHistoryDataModule.history.players;
+            const playerHistories = UniverseHistoryDataModule.history!.players;//TODO: !
             return this.playerIds
                 .map(pid => playerHistories[pid])
                 .filter(ph => ph != null) as PlayerHistory[];
@@ -260,7 +260,7 @@
         private selectedPlayerName = '';
 
         private get players() {
-            return Object.values(UniverseHistoryDataModule.history.players) as PlayerHistory[];
+            return Object.values(UniverseHistoryDataModule.history!.players) as PlayerHistory[];//TODO: !
         }
 
         private get playerNames() {
@@ -271,7 +271,7 @@
 
         private get selectedPlayers() {
             return this.playerIds.map(pid => {
-                const data = UniverseHistoryDataModule.history.players[pid];
+                const data = UniverseHistoryDataModule.history!.players[pid];//TODO: !
                 if (data == null) {
                     return null;
                 }

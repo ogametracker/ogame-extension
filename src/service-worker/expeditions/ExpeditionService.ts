@@ -1,10 +1,11 @@
 import { Message, MessageOgameMeta } from '../../shared/messages/Message';
 import { MessageType } from '../../shared/messages/MessageType';
-import { AllExpeditionsMessage, ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
+import { ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
 import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { ExpeditionModule } from './ExpeditionModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
+import { MessageTrackingErrorMessage } from '@/shared/messages/tracking/misc';
 
 export class ExpeditionService implements MessageService {
     private readonly expeditionModule = new ExpeditionModule();
@@ -12,9 +13,17 @@ export class ExpeditionService implements MessageService {
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
         switch (message.type) {
             case MessageType.TrackExpedition: {
-                const tryResult = await this.expeditionModule.tryTrackExpedition(message as TrackExpeditionMessage);
+                const msg = message as TrackExpeditionMessage;
+                const tryResult = await this.expeditionModule.tryTrackExpedition(msg);
+
                 if (!tryResult.success) {
-                    _throw('failed to track expedition');
+                    const errorMessage: MessageTrackingErrorMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.TrackingError,
+                        data: msg.data.id,
+                    };
+                    await broadcastMessage(errorMessage);
+                    return;
                 }
 
                 const { expedition, isAlreadyTracked } = tryResult.result;
@@ -40,23 +49,6 @@ export class ExpeditionService implements MessageService {
 
                 break;
             }
-
-            case MessageType.RequestExpeditionEvents: {
-                await this.broadcastAllExpeditions(message.ogameMeta);
-                break;
-            }
         }
-    }
-
-
-    private async broadcastAllExpeditions(meta: MessageOgameMeta) {
-        const expeditionEvents = await this.expeditionModule.getExpeditionEvents(meta);
-
-        const allExpeditionMessage: AllExpeditionsMessage = {
-            ogameMeta: meta,
-            type: MessageType.AllExpeditions,
-            data: expeditionEvents,
-        };
-        await broadcastMessage(allExpeditionMessage);
     }
 }

@@ -12,7 +12,7 @@
         private readonly rootRoute = 'expeditions';
 
         async mounted() {
-            await ExpeditionDataModule.load();
+            //TODO: await ExpeditionDataModule.load();
         }
 
         private get navItems(): ListNavItem[] {

@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { AllDebrisFieldReportsMessage, DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
+import { DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 
 export class DebrisFieldReportService implements MessageService {
@@ -64,24 +64,6 @@ export class DebrisFieldReportService implements MessageService {
                 };
                 await broadcastMessage(newDfReportMessage);
             }
-
-
-            case MessageType.RequestDebrisFieldReports: {
-                await this.broadcastAllDebrisFieldReports(message.ogameMeta);
-                break;
-            }
         }
-    }
-
-
-    private async broadcastAllDebrisFieldReports(meta: MessageOgameMeta) {
-        const reports = await this.dfModule.getDebrisFieldReports(meta);
-
-        const allDfReportsMessage: AllDebrisFieldReportsMessage = {
-            ogameMeta: meta,
-            type: MessageType.AllDebrisFieldReports,
-            data: reports,
-        };
-        await broadcastMessage(allDfReportsMessage);
     }
 }

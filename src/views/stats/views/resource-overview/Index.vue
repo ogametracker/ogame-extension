@@ -12,11 +12,11 @@
     @Component({})
     export default class Index extends Vue {
         private async mounted() {
-            await CombatReportDataModule.load();
-            await ExpeditionDataModule.load();
-            await DebrisFieldReportDataModule.load();
+            //TODO: await CombatReportDataModule.load();
+            //TODO: await ExpeditionDataModule.load();
+            //TODO: await DebrisFieldReportDataModule.load();
         }
-        
+
         private get tabs(): Tab[] {
             return [
                 {

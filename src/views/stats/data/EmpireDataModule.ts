@@ -5,27 +5,15 @@ import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { EmpireDataMessage, RequestLocalPlayerDataMessage } from '@/shared/messages/tracking/empire';
-import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { Lock } from 'semaphore-async-await';
 
 @Component
-class EmpireDataModuleClass extends Vue implements IDataModule {
-    public empire: LocalPlayerData = null!;
-
-    private readonly lock = new Lock();
+class EmpireDataModuleClass extends Vue {
+    public empire: LocalPlayerData | null = null;
 
     private async created() {
-        await this.lock.acquire();
-
         this.initCommunication();
-
         await this.requestData();
-    }
-
-    public async load(): Promise<void> {
-        await this.lock.acquire();
-        this.lock.release();
     }
 
     private initCommunication() {
@@ -49,14 +37,12 @@ class EmpireDataModuleClass extends Vue implements IDataModule {
         }
 
         switch (type) {
-        case MessageType.EmpireData:
-        case MessageType.NotifyEmpireDataUpdate: {
-            const { data } = msg as EmpireDataMessage;
-            this.empire = data;
-
-            this.lock.release();
-            break;
-        }
+            case MessageType.EmpireData:
+            case MessageType.NotifyEmpireDataUpdate: {
+                const { data } = msg as EmpireDataMessage;
+                this.empire = data;
+                break;
+            }
         }
     }
 }

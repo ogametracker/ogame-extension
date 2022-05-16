@@ -2,36 +2,29 @@ export enum MessageType {
     StayAlive = 'internal/stay-alive',
 
     // notifications
-    CreateNotification = 'notification/create',
-    ShowNotification = 'notification/show',
-    HideNotification = 'notification/hide',
+    NewNotification = 'notification/new',
     
     // expeditions
     TrackExpedition = 'expedition/track-expedition',
-    Expedition = 'expedition/expedition-data/single',
-    AllExpeditions = 'expedition/expedition-data/all',
+    Expedition = 'expedition/single',
     NewExpedition = 'expedition/new',
-    RequestExpeditionEvents = 'expedition/request-expeditions',
 
     // debris field reports
     DebrisFieldReport = 'debris-fields/single',
     NewDebrisFieldReport = 'debris-fields/new',
-    AllDebrisFieldReports = 'debris-fields/all',
     TrackDebrisFieldReport = 'debris-fields/track',
     TrackManualDebrisFieldReport = 'debris-fields/track-manually',
-    RequestDebrisFieldReports = 'debris-fields/request-reports',
 
     // combat reports
     CombatReport = 'combat-reports/single',
     NewCombatReport = 'combat-reports/new',
-    AllCombatReports = 'combat-reports/all',
     TrackCombatReport = 'combat-reports/track',
-    RequestCombatReports = 'combat-reports/request-reports',
     RequestSingleCombatReport = 'combat-reports/request-single-report',
     CombatReportUnknown = 'combat-reports/is-unknown',
 
     // message tracking
     WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report
+    TrackingError = 'message-tracking/error',
 
     // empire tracking
     UpdatePlanetData = 'empire/update-planet-data',

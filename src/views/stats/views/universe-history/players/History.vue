@@ -194,7 +194,7 @@
         }
 
         private get playerHistories() {
-            const playerHistories = UniverseHistoryDataModule.history.players;
+            const playerHistories = UniverseHistoryDataModule.history!.players; //TODO: !
             return this.playerIds
                 .map(pid => playerHistories[pid])
                 .filter(ph => ph != null) as PlayerHistory[];

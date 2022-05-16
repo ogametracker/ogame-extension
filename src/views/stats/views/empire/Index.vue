@@ -14,8 +14,8 @@
 
         async mounted() {
             await Promise.all([
-                EmpireDataModule.load(),
-                ServerSettingsDataModule.load(),
+                //TODO: EmpireDataModule.load(),
+                //TODO: ServerSettingsDataModule.load(),
             ]);            
         }
 

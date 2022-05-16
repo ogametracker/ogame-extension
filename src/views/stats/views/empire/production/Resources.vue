@@ -341,16 +341,16 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
 
 
         private get planets(): PlanetData[] {
-            return Object.values(EmpireDataModule.empire.planets)
+            return Object.values(EmpireDataModule.empire!.planets)//TODO: !
                 .filter(planet => !planet.isMoon)
                 .sort((a, b) => compareCoordinates(a.coordinates, b.coordinates)) as PlanetData[];
         }
 
         private getProduction(planet: PlanetData): Production {
             const deps: ProductionBuildingDependencies = {
-                serverSettings: ServerSettingsDataModule.serverSettings,
+                serverSettings: ServerSettingsDataModule.serverSettings!,//TODO: !
                 planet,
-                player: EmpireDataModule.empire,
+                player: EmpireDataModule.empire!, //TODO: !
             };
 
             return {

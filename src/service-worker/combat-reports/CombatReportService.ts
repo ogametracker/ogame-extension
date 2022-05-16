@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { CombatReportModule } from './CombatReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { AllCombatReportsMessage, CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
+import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
 
 export class CombatReportService implements MessageService {
     private readonly combatReportModule = new CombatReportModule();
@@ -62,23 +62,6 @@ export class CombatReportService implements MessageService {
 
                 break;
             }
-
-            case MessageType.RequestCombatReports: {
-                await this.broadcastAllCombatReports(message.ogameMeta);
-                break;
-            }
         }
-    }
-
-
-    private async broadcastAllCombatReports(meta: MessageOgameMeta) {
-        const combatReports = await this.combatReportModule.getCombatReports(meta);
-
-        const allCombatReportsMessage: AllCombatReportsMessage = {
-            ogameMeta: meta,
-            type: MessageType.AllCombatReports,
-            data: combatReports,
-        };
-        await broadcastMessage(allCombatReportsMessage);
     }
 }

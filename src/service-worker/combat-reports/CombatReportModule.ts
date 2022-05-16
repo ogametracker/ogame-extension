@@ -1,10 +1,8 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
-import { MessageOgameMeta } from "../../shared/messages/Message";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
-import { CombatReportManager } from "./CombatReportManager";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
@@ -14,6 +12,7 @@ import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
+import { getDatabase } from "../PersistentData";
 
 interface CombatReportResult {
     report: CombatReport;
@@ -21,16 +20,12 @@ interface CombatReportResult {
 }
 
 export class CombatReportModule {
-    private readonly combatReportManagers: Record<string, CombatReportManager | undefined> = {};
-
     public async tryTrackCombatReport(message: TrackCombatReportMessage): Promise<TryActionResult<CombatReportResult>> {
         const combatReportData = message.data;
 
-        const manager = this.getManager(message.ogameMeta);
-        const combatReports = await manager.getData();
-
+        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
         // check if expedition already tracked => if true, return tracked data
-        const knownReport = combatReports[combatReportData.id];
+        const knownReport = await db.get('combatReports', combatReportData.id);
         if (knownReport != null) {
             return {
                 success: true,
@@ -49,27 +44,26 @@ export class CombatReportModule {
                 message.ogameMeta.playerId,
                 combatReportData
             );
+
+            await db.put('combatReports', report);
+
+            return {
+                success: true,
+                result: {
+                    report,
+                    isAlreadyTracked: false,
+                },
+            };
         } catch (error) {
             _logError({ error, message });
             return { success: false };
         }
-
-        await manager.add(report);
-        return {
-            success: true,
-            result: {
-                report,
-                isAlreadyTracked: false,
-            },
-        };
     }
 
     public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReport>> {
-        const manager = this.getManager(message.ogameMeta);
-        const combatReports = await manager.getData();
-
+        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
         // check if expedition already tracked => if true, return tracked data
-        const knownReport = combatReports[message.data];
+        const knownReport = await db.get('combatReports', message.data);
         if (knownReport != null) {
             return {
                 success: true,
@@ -203,18 +197,5 @@ export class CombatReportModule {
             lostShips,
         };
         return report;
-    }
-
-    public async getCombatReports(meta: MessageOgameMeta): Promise<CombatReport[]> {
-        const manager = this.getManager(meta);
-        const expeditions = await manager.getData();
-        return Object.values(expeditions);
-    }
-
-    private getManager(meta: MessageOgameMeta): CombatReportManager {
-        const key = getStorageKeyPrefix(meta);
-        const manager = (this.combatReportManagers[key] ??= new CombatReportManager(key));
-
-        return manager;
     }
 }

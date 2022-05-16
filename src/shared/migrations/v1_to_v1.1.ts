@@ -289,7 +289,7 @@ const migrate: MigrationFunction = async () => {
         _logDebug(`migrating from v1 to v1.1: '${prefix}'`);
         const exposKey = `${prefix}-expoEvents`;
         const versionKey = `${prefix}-version`;
-        const expos = allData[exposKey] as Record<number, ExpoEvent>;
+        const expos = (allData[exposKey] ?? {}) as Record<number, ExpoEvent>;
 
         Object.values(expos).forEach(expo => {
             if (expo.type != ExpoType.fleet)

@@ -13,7 +13,7 @@
         private ready = false;
 
         private async mounted() {
-            await UniverseHistoryDataModule.load();
+            //TODO: await UniverseHistoryDataModule.load();
             this.ready = true;
         }
 

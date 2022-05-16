@@ -438,7 +438,7 @@
         }
 
         private initSettings() {
-            const empire = this.empire;
+            const empire = this.empire!;//TODO: !
 
             this.playerSettings = {
                 msuConversionRates: this.msuConversionRates,
@@ -446,10 +446,10 @@
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
-                levelAstrophysics: empire.research[ResearchType.astrophysics],
+                levelAstrophysics: empire!.research[ResearchType.astrophysics],
             };
 
-            this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
+            this.planetSettings = (Object.values(empire!.planets).filter(p => !p.isMoon) as PlanetData[])//TODO: !
                 .reduce((acc, planet) => {
                     const settings: AmortizationPlanetSettings = {
                         show: true,
@@ -475,7 +475,7 @@
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
                             enabled: true,
-                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled,//TODO: !
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -495,7 +495,7 @@
                     activeItems: [],
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
-                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled,//TODO: !
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
@@ -510,7 +510,7 @@
 
             let { levelPlasmaTechnology, levelAstrophysics } = settings.player;
 
-            const planets = { ...this.empire.planets };
+            const planets = { ...this.empire!.planets };//TODO: !
 
             const mineLevels: Record<number, MineLevels> = {};
             const planetIds: number[] = [];
@@ -693,7 +693,7 @@
             const production = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
+                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire!.planets[planetSettings.id] as PlanetData, planetSettings, settings);//TODO: !
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -707,7 +707,7 @@
             const newProduction = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, level, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
+                    const dependencies = this.buildProductionDependencies(levels, level, this.empire!.planets[planetSettings.id] as PlanetData, planetSettings, settings);//TODO: !
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -771,7 +771,7 @@
 
         private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): ProductionBuildingDependencies {
             return {
-                serverSettings: ServerSettingsDataModule.serverSettings,
+                serverSettings: ServerSettingsDataModule.serverSettings!,//TODO: !
                 planet: {
                     ...planet,
                     coordinates: {
@@ -817,12 +817,12 @@
                     },
                 },
                 player: {
-                    ...this.empire,
+                    ...this.empire!,//TODO: !
                     playerClass: settings.player.playerClass,
                     allianceClass: settings.player.allianceClass,
                     officers: settings.player.officers,
                     research: {
-                        ...this.empire.research,
+                        ...this.empire!.research,//TODO: !
                         [ResearchType.plasmaTechnology]: levelPlasmaTechnology,
                     },
                 },

@@ -12,7 +12,7 @@
         private readonly rootRoute = 'combats';
 
         private async mounted() {
-            await CombatReportDataModule.load();
+            //TODO: await CombatReportDataModule.load();
         }
 
         private get navItems(): ListNavItem[] {

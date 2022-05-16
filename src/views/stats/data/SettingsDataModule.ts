@@ -3,14 +3,13 @@ import { Message } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
-import { IDataModule } from './IDataModule';
 import { Settings } from '@/shared/models/settings/Settings';
 import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { Lock } from 'semaphore-async-await';
 
 @Component
-class SettingsDataModuleClass extends Vue implements IDataModule {
+class SettingsDataModuleClass extends Vue {
     public settings: Settings = null!;
 
     private readonly lock = new Lock();

@@ -4,27 +4,16 @@ import { GlobalOgameMetaData } from './GlobalOgameMetaData';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { RequestUniverseHistoryMessage, UniverseHistoryDataMessage } from '@/shared/messages/tracking/universe-history';
-import { IDataModule } from './IDataModule';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { UniverseHistory } from '@/shared/models/universe-history/UniverseHistory';
-import { Lock } from 'semaphore-async-await';
 
 @Component
-class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
-    public history: UniverseHistory = null!;
-    private readonly lock = new Lock();
+class UniverseHistoryDataModuleClass extends Vue  {
+    public history: UniverseHistory | null = null;
 
     private async created() {
-        await this.lock.acquire();
-
         this.initCommunication();
-
         await this.requestData();
-    }
-
-    public async load(): Promise<void> {
-        await this.lock.acquire();
-        this.lock.release();
     }
 
     private initCommunication() {
@@ -50,8 +39,6 @@ class UniverseHistoryDataModuleClass extends Vue implements IDataModule {
             case MessageType.NotifyUniverseHistoryUpdate: {
                 const { data } = msg as UniverseHistoryDataMessage;
                 this.history = data;
-
-                this.lock.release();
                 break;
             }
         }
