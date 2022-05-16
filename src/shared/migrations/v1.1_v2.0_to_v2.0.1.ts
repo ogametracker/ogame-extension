@@ -112,24 +112,29 @@ const migrate: MigrationFunction = async () => {
 
 
     for (const prefix of keyPrefixes) {
-        const version = allData[`${prefix}-version`];
-        _logDebug(`migrating from v${version} to v2.0.1: '${prefix}'`);
+        try {
+            const version = allData[`${prefix}-version`];
+            _logDebug(`migrating from v${version} to v2.0.1: '${prefix}'`);
 
-        const db = await initDatabase(prefix);
+            const db = await initDatabase(prefix);
 
-        await migrateCombatReports(allData, prefix, db);
-        await migrateDebrisFieldReports(allData, prefix, db);
-        await migrateExpeditions(allData, prefix, db);
+            await migrateCombatReports(allData, prefix, db);
+            await migrateDebrisFieldReports(allData, prefix, db);
+            await migrateExpeditions(allData, prefix, db);
 
-        if(version == '1.1') {
-            await migrateSettings(allData, prefix);
+            if (version == '1.1') {
+                await migrateSettings(allData, prefix);
+            }
+
+            // remove old server settings saved per user
+            await chrome.storage.local.remove(`${prefix}-serverSettings`);
+
+            // update version
+            await chrome.storage.local.set({ [`${prefix}-version`]: '2.0.1' });
         }
-
-        // remove old server settings saved per user
-        await chrome.storage.local.remove(`${prefix}-serverSettings`);
-
-        // update version
-        await chrome.storage.local.set({ [`${prefix}-version`]: '2.0.1' });
+        catch (error) {
+            console.error(error);
+        }
     }
 };
 export default migrate;
@@ -160,7 +165,7 @@ async function migrateCombatReports(allData: Record<string, any>, prefix: string
     const combatReports = Object.values(allData[key] ?? {}) as CombatReport[];
 
     const tx = db.transaction('combatReports', 'readwrite');
-    for(const combatReport of combatReports) {
+    for (const combatReport of combatReports) {
         await tx.objectStore('combatReports').put(combatReport);
     }
     await tx.done;
@@ -174,7 +179,7 @@ async function migrateDebrisFieldReports(allData: Record<string, any>, prefix: s
     const debrisFieldReports = Object.values(allData[key] ?? {}) as DebrisFieldReport[];
 
     const tx = db.transaction('debrisFieldReports', 'readwrite');
-    for(const report of debrisFieldReports) {
+    for (const report of debrisFieldReports) {
         await tx.objectStore('debrisFieldReports').put(report);
     }
     await tx.done;
@@ -188,7 +193,7 @@ async function migrateExpeditions(allData: Record<string, any>, prefix: string, 
     const expeditions = Object.values(allData[key] ?? {}) as ExpeditionEvent[];
 
     const tx = db.transaction('expeditions', 'readwrite');
-    for(const expedition of expeditions) {
+    for (const expedition of expeditions) {
         await tx.objectStore('expeditions').put(expedition);
     }
     await tx.done;
