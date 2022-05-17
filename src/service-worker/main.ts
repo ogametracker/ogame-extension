@@ -1,4 +1,4 @@
-import { Lock } from "semaphore-async-await";
+import Semaphore, { Lock } from "semaphore-async-await";
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { executeMigrations } from "../shared/migrations/executeMigrations";
@@ -25,7 +25,8 @@ const services: MessageService[] = [
     new ServerSettingsService(),
 ];
 
-const migrationLock = new Lock();
+const permits = 1000; // number of parallel processable messages
+const migrationLock = new Semaphore(permits);
 try {
     chrome.runtime.onInstalled.addListener(() => performMigrations());
 
@@ -35,7 +36,7 @@ try {
 }
 
 async function performMigrations() {
-    await migrationLock.acquire();
+    const permits = migrationLock.drainPermits();
     try {
         _logDebug('performing migrations');
         await executeMigrations();
@@ -43,11 +44,14 @@ async function performMigrations() {
         //TODO: send notification with error
         console.error(error);
     }
-    migrationLock.release();
+
+    for(let i = 0; i < permits; i++) {
+        migrationLock.release();
+    }
 }
 
 async function onMessage(message: Message<MessageType, any>) {
-    await migrationLock.wait();
+    await migrationLock.acquire();
     migrationLock.release();
 
     _logDebug('got message', new Date(), message);

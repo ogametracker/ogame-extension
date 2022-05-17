@@ -51,7 +51,7 @@ export abstract class PersistentDataManager<TItem> {
             this._item = data?.[this.storageKey] ?? this.getDefaultItem();
         }
 
-        if(releaseLock) {
+        if (releaseLock) {
             this._readLock.release();
         }
 
@@ -72,7 +72,7 @@ export abstract class PersistentDataManager<TItem> {
         await this._readLock.acquire();
         this._item = data;
         this._readLock.release();
-        
+
         await this.save();
     }
 
@@ -100,8 +100,12 @@ export async function getDatabase(name: string): Promise<IDBPDatabase<OgameTrack
     await lock.acquire();
 
     let db = databases[name];
-    if(db == null) {
-        db = await openDB(name, DbVersion);
+    if (db == null) {
+        db = await openDB(name, DbVersion, {
+            upgrade() {
+                throw new Error('db does not exist');
+            },
+        });
         databases[name] = db;
     }
 

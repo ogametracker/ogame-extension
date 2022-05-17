@@ -58,7 +58,7 @@ function onMessage(message: Message<MessageType, any>) {
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.processed);
+            li.classList.add(cssClasses.messages.hideContent, cssClasses.messages.processed);
             addExpeditionResultContent(li, msg.data);
             break;
         }
@@ -68,7 +68,6 @@ function onMessage(message: Message<MessageType, any>) {
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find expedition message with id '${msg.data}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.remove(cssClasses.messages.hideContent);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
             break;
@@ -115,14 +114,12 @@ function trackExpeditions(elem: Element) {
             msg.classList.add(
                 cssClasses.messages.base,
                 cssClasses.messages.waitingToBeProcessed,
-                cssClasses.messages.hideContent,
             );
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
         } catch (error) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
-            msg.classList.remove(cssClasses.messages.hideContent);
             addOrSetCustomMessageContent(msg, false);
         }
     });

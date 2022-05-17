@@ -74,7 +74,7 @@ function onMessage(message: Message<MessageType, any>) {
                 let html = `
                     <div class="ogame-tracker-combat-report">
                         <div class="ogame-tracker-combat-report--loot-table">
-                            ${Object.values(ResourceType).map(resource => `
+                            ${[ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].map(resource => `
                                 <div class="ogame-tracker-resource ${resource}"></div>
                                 <div class="${combatReport.loot[resource] < 0
 /*                                  */ ? 'ogame-tracker-combat-report--negative-loot'
@@ -91,7 +91,7 @@ function onMessage(message: Message<MessageType, any>) {
                     html += `
                         <div class="ogame-tracker-combat-report--debris-field-table">
                             <span class="ogame-tracker-debris-field-icon"></span>
-                            ${(Object.keys(combatReport.debrisField) as (keyof CombatReport['debrisField'])[]).map(resource => `
+                            ${([ResourceType.metal, ResourceType.crystal] as (keyof CombatReport['debrisField'])[]).map(resource => `
                                 <div class="ogame-tracker-resource ${resource}"></div>
                                 <div class="${combatReport.debrisField[resource] == 0
 /*                                  */ ? 'ogame-tracker-combat-report--no-loot'
@@ -173,7 +173,6 @@ async function trackCombatReports(elem: Element) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
-            msg.classList.remove(cssClasses.messages.hideContent);
             addOrSetCustomMessageContent(msg, false);
         }
     });
