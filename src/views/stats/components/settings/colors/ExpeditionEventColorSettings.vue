@@ -61,8 +61,8 @@
             return SettingsDataModule.settings.colors.expeditions.events;
         }
 
-        private async updateColors(value: Record<ExpeditionEventType, string>) {
-            await SettingsDataModule.updateSettings({
+        private updateColors(value: Record<ExpeditionEventType, string>) {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -74,10 +74,10 @@
             });
         }
 
-        private async resetColors() {
+        private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.events;
 
-            await SettingsDataModule.updateSettings({
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,

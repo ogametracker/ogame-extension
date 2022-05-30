@@ -45,8 +45,8 @@
             return SettingsDataModule.settings.colors.combatResults;
         }
 
-        private async updateColors(value: Record<CombatResultType, string>) {
-            await SettingsDataModule.updateSettings({
+        private updateColors(value: Record<CombatResultType, string>) {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -55,10 +55,10 @@
             });
         }
 
-        private async resetColors() {
+        private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
 
-            await SettingsDataModule.updateSettings({
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,

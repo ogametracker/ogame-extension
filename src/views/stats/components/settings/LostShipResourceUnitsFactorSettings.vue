@@ -65,8 +65,8 @@
             }
         }
 
-        private async updateMsuConversionRates() {
-            await SettingsDataModule.updateSettings({
+        private updateMsuConversionRates() {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 lostShipsResourceUnits: {
                     factor: this.factor,

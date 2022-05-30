@@ -173,8 +173,8 @@
             this.onItemsUpdated();
         }
 
-        private async onItemsUpdated() {
-            await SettingsDataModule.updateSettings({
+        private onItemsUpdated() {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 dateRanges: [...this.items],
             });
@@ -190,10 +190,10 @@
         }
 
 
-        private async resetDateRanges() {
+        private resetDateRanges() {
             const defaultRanges = getDefaultSettings(SettingsDataModule.settings.extensionLanguage).dateRanges;
 
-            await SettingsDataModule.updateSettings({
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 dateRanges: defaultRanges,
             });

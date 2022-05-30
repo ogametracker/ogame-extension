@@ -47,8 +47,8 @@
             return SettingsDataModule.settings.colors.resources;
         }
 
-        private async updateColors(value: Record<ResourceType | 'totalMsu', string>) {
-            await SettingsDataModule.updateSettings({
+        private updateColors(value: Record<ResourceType | 'totalMsu', string>) {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
@@ -57,10 +57,10 @@
             });
         }
 
-        private async resetColors() {
+        private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.resources;
 
-            await SettingsDataModule.updateSettings({
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,

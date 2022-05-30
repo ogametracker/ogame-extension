@@ -22,8 +22,8 @@
         private rootRouteName!: string;
 
 
-        private async setDefaultRoute(ev: Event) {
-            await SettingsDataModule.updateSettings({
+        private setDefaultRoute(ev: Event) {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 defaultRoutes: {
                     ...SettingsDataModule.settings.defaultRoutes,

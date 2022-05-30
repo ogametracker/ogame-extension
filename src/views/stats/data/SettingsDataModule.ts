@@ -15,8 +15,9 @@ class SettingsDataModuleClass extends Vue {
 
     private readonly lock = new Lock();
 
-    public async updateSettings(settings: Settings) {
+    public updateSettings(settings: Settings) {
         console.debug('updating settings', settings);
+        this.settings = settings;
 
         const message: UpdateSettingsMessage = {
             type: MessageType.UpdateSettings,
@@ -24,9 +25,7 @@ class SettingsDataModuleClass extends Vue {
             data: settings,
             senderUuid: statsViewUuid,
         };
-        await broadcastMessage(message);
-
-        this.settings = settings;
+        void broadcastMessage(message);
     }
 
     private async created() {

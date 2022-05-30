@@ -90,7 +90,6 @@ interface Settings {
 import { _logDebug } from "../utils/_log";
 import { MigrationFunction } from "./models";
 import { SettingsManager } from "../../service-worker/settings/SettingsManager";
-import { Settings as NewSettings } from "../models/settings/Settings";
 import { IDBPDatabase, openDB } from "idb";
 import { CombatReport } from "../models/combat-reports/CombatReport";
 import { DbVersion, OgameTrackerDbSchema } from "../db/OgameTrackerDbSchema";
@@ -134,6 +133,7 @@ const migrate: MigrationFunction = async () => {
         }
         catch (error) {
             console.error(error);
+            //TODO: handle migration error
         }
     }
 };
@@ -147,13 +147,13 @@ async function initDatabase(prefix: string) {
             db.createObjectStore('expeditions', { keyPath: 'id' });
         },
         blocked() {
-            console.error('blocked');
+            throw new Error('db access blocked');
         },
         blocking() {
-            console.error('blocking');
+            throw new Error('db access blocking');
         },
         terminated() {
-            console.error('terminated');
+            throw new Error('db access terminated');
         },
     });
 

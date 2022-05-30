@@ -59,8 +59,8 @@
             this.deuterium = deuterium;
         }
 
-        private async updateMsuConversionRates() {
-            await SettingsDataModule.updateSettings({
+        private updateMsuConversionRates() {
+            SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 msuConversionRates: {
                     crystal: this.crystal,
