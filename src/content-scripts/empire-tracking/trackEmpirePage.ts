@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
@@ -87,6 +88,7 @@ export function trackEmpirePage() {
                         planetId: planet.id,
                         data: buildingLevels,
                     },
+                    senderUuid: empireTrackingUuid,
                 };
                 sendMessage(buildingsMessage);
 
@@ -103,6 +105,7 @@ export function trackEmpirePage() {
                         planetId: planet.id,
                         data: shipCounts,
                     },
+                    senderUuid: empireTrackingUuid,
                 };
                 sendMessage(shipCountsMessage);
 
@@ -123,6 +126,7 @@ export function trackEmpirePage() {
                             [DefenseType.largeShieldDome]: defenseCounts[DefenseType.largeShieldDome] > 0,
                         },
                     },
+                    senderUuid: empireTrackingUuid,
                 };
                 sendMessage(defenseCountsMessage);
 
@@ -165,6 +169,7 @@ export function trackEmpirePage() {
                         planetId: planet.id,
                         data: activeItems,
                     },
+                    senderUuid: empireTrackingUuid,
                 };
                 sendMessage(message);
             });
@@ -180,6 +185,7 @@ export function trackEmpirePage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdateResearchLevels,
                 data: researchLevels,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(researchMessage);
         },

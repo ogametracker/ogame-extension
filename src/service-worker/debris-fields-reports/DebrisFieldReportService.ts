@@ -6,6 +6,7 @@ import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class DebrisFieldReportService implements MessageService {
     private readonly dfModule = new DebrisFieldReportModule();
@@ -24,6 +25,7 @@ export class DebrisFieldReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.WillNotBeTracked,
                         data: msg.data.id,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(ignoreMessage);
                     break;
@@ -37,6 +39,7 @@ export class DebrisFieldReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewDebrisFieldReport,
                         data: report,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(newDfReportMessage);
                 }
@@ -46,6 +49,7 @@ export class DebrisFieldReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.DebrisFieldReport,
                         data: report,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(dfReportMessage);
                 }
@@ -61,6 +65,7 @@ export class DebrisFieldReportService implements MessageService {
                     ogameMeta: message.ogameMeta,
                     type: MessageType.NewDebrisFieldReport,
                     data: msg.data,
+                    senderUuid: serviceWorkerUuid,
                 };
                 await broadcastMessage(newDfReportMessage);
             }

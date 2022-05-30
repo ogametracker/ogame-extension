@@ -1,12 +1,13 @@
 import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
-import { GlobalOgameMetaData } from './GlobalOgameMetaData';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { Settings } from '@/shared/models/settings/Settings';
 import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { Lock } from 'semaphore-async-await';
+import { messageTrackingUuid } from '@/shared/uuid';
 
 @Component
 class SettingsDataModuleClass extends Vue {
@@ -21,6 +22,7 @@ class SettingsDataModuleClass extends Vue {
             type: MessageType.UpdateSettings,
             ogameMeta: GlobalOgameMetaData,
             data: settings,
+            senderUuid: statsViewUuid,
         };
         await broadcastMessage(message);
 
@@ -50,6 +52,7 @@ class SettingsDataModuleClass extends Vue {
         const message: RequestSettingsMessage = {
             type: MessageType.RequestSettings,
             ogameMeta: GlobalOgameMetaData,
+            senderUuid: statsViewUuid,
         };
         await broadcastMessage(message);
     }
@@ -57,6 +60,10 @@ class SettingsDataModuleClass extends Vue {
     private onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
+            return;
+        }
+
+        if(msg.senderUuid == statsViewUuid) {
             return;
         }
 

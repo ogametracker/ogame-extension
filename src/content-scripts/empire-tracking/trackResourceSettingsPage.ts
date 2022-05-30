@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { CrawlerProductionPercentage } from "../../shared/models/empire/CrawlerProductionPercentage";
@@ -34,6 +35,7 @@ export function trackResourceSettingsPage(): void {
                         [BuildingType.solarPlant]: getLevelOrAmount(element, BuildingType.solarPlant),
                     },
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(buildingsMessage);
 
@@ -47,6 +49,7 @@ export function trackResourceSettingsPage(): void {
                         [ShipType.solarSatellite]: getLevelOrAmount(element, ShipType.solarSatellite),
                     },
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(solSatMessage);
 
@@ -57,6 +60,7 @@ export function trackResourceSettingsPage(): void {
                 data: {
                     [ResearchType.plasmaTechnology]: getLevelOrAmount(element, ResearchType.plasmaTechnology),
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(researchMessage);
 
@@ -65,6 +69,7 @@ export function trackResourceSettingsPage(): void {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdateAllianceClass,
                 data: getAllianceClass(element),
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(allyClassMessage);
 
@@ -84,6 +89,7 @@ export function trackResourceSettingsPage(): void {
                         [ShipType.crawler]: getProductionPercentage(element, ShipType.crawler) as CrawlerProductionPercentage,
                     },
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(productionSettingsMessage);
         },

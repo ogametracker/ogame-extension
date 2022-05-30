@@ -55,7 +55,7 @@
     import { TrackManualDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { GlobalOgameMetaData } from '../../data/GlobalOgameMetaData';
+    import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
 
     @Component({})
     export default class ManuallyAddDebrisFieldMenu extends Vue {
@@ -99,6 +99,7 @@
                     metal: this.metal,
                     crystal: this.crystal,
                 },
+                senderUuid: statsViewUuid,
             };
             sendMessage(message);
 

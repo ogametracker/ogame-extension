@@ -5,6 +5,7 @@ import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
 import { EmpireDataMessage, NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdatePlayerNameMessage, UpdateResearchLevelsMessage, UpdateUniverseNameMessage } from '../../shared/messages/tracking/empire';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class EmpireService implements MessageService {
     private readonly empireModule = new EmpireModule();
@@ -121,6 +122,7 @@ export class EmpireService implements MessageService {
             type: MessageType.NotifyEmpireDataUpdate,
             ogameMeta: meta,
             data: empireData,
+            senderUuid: serviceWorkerUuid,
         };
         await broadcastMessage(notifyMessge);
     }
@@ -133,6 +135,7 @@ export class EmpireService implements MessageService {
             ogameMeta: meta,
             type: MessageType.EmpireData,
             data: empireData,
+            senderUuid: serviceWorkerUuid,
         };
         await broadcastMessage(empireDataMessage);
     }

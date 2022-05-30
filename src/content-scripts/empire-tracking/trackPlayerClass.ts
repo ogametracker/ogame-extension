@@ -5,6 +5,7 @@ import { UpdatePlayerClassMessage } from "../../shared/messages/tracking/empire"
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackPlayerClass() {
     observerCallbacks.push({
@@ -25,6 +26,7 @@ export function trackPlayerClass() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlayerClass,
                 data: playerClass,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

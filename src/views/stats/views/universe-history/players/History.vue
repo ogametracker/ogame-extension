@@ -25,7 +25,7 @@
     import { PlayerHistory } from '@/shared/models/universe-history/PlayerHistory';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { GlobalOgameMetaData } from '../../../data/GlobalOgameMetaData';
+    import { GlobalOgameMetaData } from '../../../data/global';
     import { UniverseHistoryDataModule } from '../../../data/UniverseHistoryDataModule';
     import startOfDay from 'date-fns/startOfDay/index';
     import { addDays } from 'date-fns';

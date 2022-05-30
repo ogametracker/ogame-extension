@@ -5,6 +5,7 @@ import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { UniverseHistoryModule } from './UniverseHistoryModule';
 import { UniverseHistoryDataMessage } from '../../shared/messages/tracking/universe-history';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class UniverseHistoryService implements MessageService {
     private readonly module = new UniverseHistoryModule();
@@ -31,6 +32,7 @@ export class UniverseHistoryService implements MessageService {
             ogameMeta: meta,
             type: MessageType.UniverseHistoryData,
             data: history,
+            senderUuid: serviceWorkerUuid,
         };
         await broadcastMessage(message);
     }

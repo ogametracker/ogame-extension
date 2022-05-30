@@ -6,6 +6,7 @@ import { MessageService } from '../MessageService';
 import { ExpeditionModule } from './ExpeditionModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { MessageTrackingErrorMessage } from '@/shared/messages/tracking/misc';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class ExpeditionService implements MessageService {
     private readonly expeditionModule = new ExpeditionModule();
@@ -21,6 +22,7 @@ export class ExpeditionService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.TrackingError,
                         data: msg.data.id,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(errorMessage);
                     return;
@@ -34,6 +36,7 @@ export class ExpeditionService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewExpedition,
                         data: expedition,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(newExpeditionMessage);
                 }
@@ -43,6 +46,7 @@ export class ExpeditionService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.Expedition,
                         data: expedition,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(expeditionMessage);
                 }

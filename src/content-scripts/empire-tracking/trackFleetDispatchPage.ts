@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
@@ -35,6 +36,7 @@ export function trackFleetDispatchPage(): void {
                     planetId,
                     data: shipCounts,
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateUniverseNameMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
@@ -16,6 +17,7 @@ export function trackUniverseName() {
                 type: MessageType.UpdateUniverseName,
                 ogameMeta: getOgameMeta(),
                 data: universeName,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

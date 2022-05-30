@@ -17,6 +17,7 @@ import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
+import { messageTrackingUuid } from "@/shared/uuid";
 
 let tabContent: Element | null = null;
 
@@ -107,6 +108,7 @@ function trackExpeditions(elem: Element) {
                     text,
                     html,
                 },
+                senderUuid: messageTrackingUuid,
             };
             sendMessage(workerMessage);
 

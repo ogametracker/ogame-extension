@@ -6,6 +6,7 @@ import { UpdatePlanetBuildingLevelsMessage } from "../../shared/messages/trackin
 import { MessageType } from "../../shared/messages/MessageType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackFacilitiesPage() {
     observerCallbacks.push({
@@ -53,6 +54,7 @@ export function trackFacilitiesPage() {
                     planetId,
                     data: buildingLevels,
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

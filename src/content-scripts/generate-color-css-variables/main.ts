@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { internalUuid } from "@/shared/uuid";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { RequestSettingsMessage, SettingsMessage } from "../../shared/messages/settings";
@@ -35,6 +36,7 @@ function requestSettings() {
     const requestMessage: RequestSettingsMessage = {
         type: MessageType.RequestSettings,
         ogameMeta,
+        senderUuid: internalUuid,
     };
     sendMessage(requestMessage);
 }

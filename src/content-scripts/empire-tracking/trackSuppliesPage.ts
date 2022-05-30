@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetBuildingLevelsMessage, UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
 import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
@@ -50,6 +51,7 @@ export function trackSuppliesPage() {
                     planetId, 
                     data: buildingLevels,
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(buildingsMessage);
 
@@ -71,6 +73,7 @@ export function trackSuppliesPage() {
                     planetId,
                     data: shipCounts,
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(shipMessage);
         },

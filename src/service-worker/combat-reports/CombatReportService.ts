@@ -5,6 +5,7 @@ import { MessageService } from '../MessageService';
 import { CombatReportModule } from './CombatReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class CombatReportService implements MessageService {
     private readonly combatReportModule = new CombatReportModule();
@@ -19,6 +20,7 @@ export class CombatReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.CombatReportUnknown,
                         data: id,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(unknownMessage);
                 }
@@ -27,6 +29,7 @@ export class CombatReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.CombatReport,
                         data: tryResult.result,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(combatReportMessage);
                 }
@@ -47,6 +50,7 @@ export class CombatReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewCombatReport,
                         data: report,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(newCombatReportMessage);
                 }
@@ -56,6 +60,7 @@ export class CombatReportService implements MessageService {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.CombatReport,
                         data: report,
+                        senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(combatReportMessage);
                 }

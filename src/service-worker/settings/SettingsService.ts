@@ -5,6 +5,7 @@ import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { SettingsModule } from './SettingsModule';
 import { SettingsMessage, UpdateSettingsMessage } from '../../shared/messages/settings';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class SettingsService implements MessageService {
     private readonly module = new SettingsModule();
@@ -14,7 +15,7 @@ export class SettingsService implements MessageService {
             case MessageType.UpdateSettings: {
                 const msg = message as UpdateSettingsMessage;
                 await this.module.updateSettings(msg);
-                await this.broadcastSettings(message.ogameMeta);
+                await this.broadcastSettings(message.ogameMeta, message.senderUuid);
                 break;
             }
             
@@ -25,13 +26,14 @@ export class SettingsService implements MessageService {
         }
     }
 
-    private async broadcastSettings(meta: MessageOgameMeta): Promise<void> {
+    private async broadcastSettings(meta: MessageOgameMeta, uuid?: string): Promise<void> {
         const settings = await this.module.getSettings(meta);
 
         const settingsMessage: SettingsMessage = {
             ogameMeta: meta,
             type: MessageType.Settings,
             data: settings,
+            senderUuid: uuid ?? serviceWorkerUuid,
         };
         await broadcastMessage(settingsMessage);
     }

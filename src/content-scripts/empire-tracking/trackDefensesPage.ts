@@ -7,6 +7,7 @@ import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackDefensesPage() {
     observerCallbacks.push({
@@ -38,6 +39,7 @@ export function trackDefensesPage() {
                         [DefenseType.largeShieldDome]: defenseCounts[DefenseType.largeShieldDome] > 0,
                     },
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

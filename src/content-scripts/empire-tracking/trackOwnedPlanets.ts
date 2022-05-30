@@ -8,6 +8,7 @@ import { Coordinates } from "../../shared/models/ogame/common/Coordinates";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackOwnedPlanets() {
     observerCallbacks.push({
@@ -30,6 +31,7 @@ export function trackOwnedPlanets() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetData,
                 data: ownedPlanets,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

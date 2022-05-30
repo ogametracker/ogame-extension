@@ -5,6 +5,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { UpdateAllianceClassMessage } from "../../shared/messages/tracking/empire";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackAlliancePage(): void {
     observerCallbacks.push({
@@ -29,6 +30,7 @@ export function trackAlliancePage(): void {
                     ogameMeta: getOgameMeta(),
                     type: MessageType.UpdateAllianceClass,
                     data: allianceClass,
+                    senderUuid: empireTrackingUuid,
                 };
                 sendMessage(message);
             });

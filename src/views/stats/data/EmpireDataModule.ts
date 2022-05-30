@@ -1,7 +1,7 @@
 import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
 import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
-import { GlobalOgameMetaData } from './GlobalOgameMetaData';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { EmpireDataMessage, RequestLocalPlayerDataMessage } from '@/shared/messages/tracking/empire';
@@ -26,6 +26,7 @@ class EmpireDataModuleClass extends Vue {
         const message: RequestLocalPlayerDataMessage = {
             type: MessageType.RequestEmpireData,
             ogameMeta: GlobalOgameMetaData,
+            senderUuid: statsViewUuid,
         };
         await broadcastMessage(message);
     }

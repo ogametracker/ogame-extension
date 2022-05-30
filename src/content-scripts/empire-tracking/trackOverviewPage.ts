@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
@@ -52,6 +53,7 @@ export function trackOverviewPage(): void {
                     planetId,
                     data: activeItems,
                 },
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         }

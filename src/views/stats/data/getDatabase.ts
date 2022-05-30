@@ -2,7 +2,7 @@ import { DbVersion, OgameTrackerDbSchema } from "@/shared/db/OgameTrackerDbSchem
 import { getStorageKeyPrefix } from "@/shared/utils/getStorageKeyPrefix";
 import { IDBPDatabase, openDB } from "idb";
 import { Lock } from "semaphore-async-await";
-import { GlobalOgameMetaData } from "./GlobalOgameMetaData";
+import { GlobalOgameMetaData } from "./global";
 
 let db: IDBPDatabase<OgameTrackerDbSchema> | null = null;
 const lock = new Lock();

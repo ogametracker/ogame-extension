@@ -12,7 +12,7 @@
     import { CombatReportDataModule } from '../data/CombatReportDataModule';
     import { DebrisFieldReportDataModule } from '../data/DebrisFieldReportDataModule';
     import { ExpeditionDataModule } from '../data/ExpeditionDataModule';
-    import { GlobalOgameMetaData } from '../data/GlobalOgameMetaData';
+    import { GlobalOgameMetaData } from '../data/global';
     import { env } from '@/shared/env';
 
     interface InfoItem {

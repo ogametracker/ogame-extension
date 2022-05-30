@@ -1,6 +1,6 @@
 import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
-import { GlobalOgameMetaData } from './GlobalOgameMetaData';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
@@ -24,6 +24,7 @@ class ServerSettingsDataModuleClass extends Vue {
         const message: RequestServerSettingsMessage = {
             type: MessageType.RequestServerSettingsData,
             ogameMeta: GlobalOgameMetaData,
+            senderUuid: statsViewUuid,
         };
         await broadcastMessage(message);
     }

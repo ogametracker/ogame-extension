@@ -2,7 +2,7 @@ import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
 import { MessageType } from '@/shared/messages/MessageType';
 import { NewCombatReportMessage } from '@/shared/messages/tracking/combat-reports';
 import { Message } from '@/shared/messages/Message';
-import { GlobalOgameMetaData } from './GlobalOgameMetaData';
+import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';

@@ -5,6 +5,7 @@ import { UpdateActiveOfficersMessage } from "../../shared/messages/tracking/empi
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackOfficers() {
     observerCallbacks.push({
@@ -28,6 +29,7 @@ export function trackOfficers() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdateActiveOfficers,
                 data: officers,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

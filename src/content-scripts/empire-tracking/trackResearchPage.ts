@@ -7,6 +7,7 @@ import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empi
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@/shared/uuid";
 
 export function trackResearchPage() {
     observerCallbacks.push({
@@ -26,6 +27,7 @@ export function trackResearchPage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdateResearchLevels,
                 data: researchLevels,
+                senderUuid: empireTrackingUuid,
             };
             sendMessage(message);
         },

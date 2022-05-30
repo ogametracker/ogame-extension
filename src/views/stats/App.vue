@@ -149,7 +149,7 @@
     import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     import { EmpireDataModule } from "./data/EmpireDataModule";
-    import { GlobalOgameMetaData } from "./data/GlobalOgameMetaData";
+    import { GlobalOgameMetaData } from "./data/global";
     import { getRGBString } from './utils/getRGBString';
     import { delay } from '@/shared/utils/delay';
     import { _throw } from "@/shared/utils/_throw";

@@ -1,6 +1,6 @@
 import { MessageType } from '@/shared/messages/MessageType';
 import { Message } from '@/shared/messages/Message';
-import { GlobalOgameMetaData } from './GlobalOgameMetaData';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { RequestUniverseHistoryMessage, UniverseHistoryDataMessage } from '@/shared/messages/tracking/universe-history';
@@ -24,6 +24,7 @@ class UniverseHistoryDataModuleClass extends Vue  {
         const message: RequestUniverseHistoryMessage = {
             type: MessageType.RequestUniverseHistoryData,
             ogameMeta: GlobalOgameMetaData,
+            senderUuid: statsViewUuid,
         };
         await broadcastMessage(message);
     }

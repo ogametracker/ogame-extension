@@ -5,6 +5,7 @@ import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { ServerSettingsModule } from './ServerSettingsModule';
 import { ServerSettingsDataMessage } from '@/shared/messages/tracking/server-settings';
+import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class ServerSettingsService implements MessageService {
     private readonly module = new ServerSettingsModule();
@@ -31,6 +32,7 @@ export class ServerSettingsService implements MessageService {
             ogameMeta: meta,
             type: MessageType.ServerSettingsData,
             data: history,
+            senderUuid: serviceWorkerUuid,
         };
         await broadcastMessage(message);
     }

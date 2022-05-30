@@ -14,6 +14,7 @@ import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
+import { messageTrackingUuid } from "@/shared/uuid";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -166,6 +167,7 @@ async function trackCombatReports(elem: Element) {
                     date,
                     ogameCombatReport,
                 },
+                senderUuid: messageTrackingUuid,
             };
             sendMessage(workerMessage);
 
@@ -190,6 +192,7 @@ function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
             type: MessageType.RequestSingleCombatReport,
             ogameMeta,
             data: id,
+            senderUuid: messageTrackingUuid,
         };
         sendMessage(workerMessage);
     });
