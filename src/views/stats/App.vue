@@ -294,15 +294,15 @@
                     keyboardIcon: 'mdi mdi-numeric-7',
                     canBeDefault: true,
                 },
-                {
-                    key: 'espionage',
-                    to: { name: 'espionage' },
-                    icon: 'mdi mdi-eye-outline',
-                    label: 'LOCA: Espionage',
-                    keyboardKey: '8',
-                    keyboardIcon: 'mdi mdi-numeric-8',
-                    canBeDefault: true,
-                },
+                // {
+                //     key: 'espionage',
+                //     to: { name: 'espionage' },
+                //     icon: 'mdi mdi-eye-outline',
+                //     label: 'LOCA: Espionage',
+                //     keyboardKey: '8',
+                //     keyboardIcon: 'mdi mdi-numeric-8',
+                //     canBeDefault: true,
+                // },
                 {
                     key: 'space',
                     style: {
