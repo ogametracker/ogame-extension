@@ -71,45 +71,43 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
 
+            let html = '';
+
             if (Object.values(combatReport.loot).some(amount => amount != 0)) {
-                let html = `
-                    <div class="ogame-tracker-combat-report">
-                        <div class="ogame-tracker-combat-report--loot-table">
-                            ${[ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].map(resource => `
-                                <div class="ogame-tracker-resource ${resource}"></div>
-                                <div class="${combatReport.loot[resource] < 0
-/*                                  */ ? 'ogame-tracker-combat-report--negative-loot'
-/*                                  */ : combatReport.loot[resource] == 0
-/*                                      */ ? 'ogame-tracker-combat-report--no-loot'
-/*                                      */ : ''
-/*                              */}">
-                                    ${formatNumber(combatReport.loot[resource])}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                if (combatReport.debrisField.metal > 0 || combatReport.debrisField.crystal > 0) {
-                    html += `
-                        <div class="ogame-tracker-combat-report--debris-field-table">
-                            <span class="ogame-tracker-debris-field-icon"></span>
-                            ${([ResourceType.metal, ResourceType.crystal] as (keyof CombatReport['debrisField'])[]).map(resource => `
-                                <div class="ogame-tracker-resource ${resource}"></div>
-                                <div class="${combatReport.debrisField[resource] == 0
+                html = `
+                    <div class="ogame-tracker-combat-report--loot-table">
+                        ${[ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].map(resource => `
+                            <div class="ogame-tracker-resource ${resource}"></div>
+                            <div class="${combatReport.loot[resource] < 0
+/*                              */ ? 'ogame-tracker-combat-report--negative-loot'
+/*                              */ : combatReport.loot[resource] == 0
 /*                                  */ ? 'ogame-tracker-combat-report--no-loot'
 /*                                  */ : ''
-/*                              */}">
-                                    ${formatNumber(combatReport.debrisField[resource])}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
-                html += '</div>';
-                addOrSetCustomMessageContent(li, html);
+/*                          */}">
+                                ${formatNumber(combatReport.loot[resource])}
+                            </div>
+                        `).join('')}
+                    </div>`;
             }
-            else {
-                addOrSetCustomMessageContent(li, `-`);
+            if (combatReport.debrisField.metal > 0 || combatReport.debrisField.crystal > 0) {
+                html += `
+                    <div class="ogame-tracker-combat-report--debris-field-table">
+                        <span class="ogame-tracker-debris-field-icon"></span>
+                        ${([ResourceType.metal, ResourceType.crystal] as (keyof CombatReport['debrisField'])[]).map(resource => `
+                            <div class="ogame-tracker-resource ${resource}"></div>
+                            <div class="${combatReport.debrisField[resource] == 0
+/*                              */ ? 'ogame-tracker-combat-report--no-loot'
+/*                              */ : ''
+/*                          */}">
+                                ${formatNumber(combatReport.debrisField[resource])}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
             }
+
+            const outerHtml = `<div class="ogame-tracker-combat-report">${html == '' ? '-' : html}</div>`;
+            addOrSetCustomMessageContent(li, outerHtml);
             break;
         }
     }
