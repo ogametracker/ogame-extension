@@ -2,7 +2,6 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
-import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
@@ -12,7 +11,7 @@ import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "../PersistentData";
 
 interface CombatReportResult {
     report: CombatReport;
@@ -23,7 +22,7 @@ export class CombatReportModule {
     public async tryTrackCombatReport(message: TrackCombatReportMessage): Promise<TryActionResult<CombatReportResult>> {
         const combatReportData = message.data;
 
-        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        const db = await getPlayerDatabase(message.ogameMeta);
         // check if expedition already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', combatReportData.id);
         if (knownReport != null) {
@@ -61,7 +60,7 @@ export class CombatReportModule {
     }
 
     public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReport>> {
-        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        const db = await getPlayerDatabase(message.ogameMeta);
         // check if expedition already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', message.data);
         if (knownReport != null) {

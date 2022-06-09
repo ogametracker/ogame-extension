@@ -1,6 +1,7 @@
-import { DbVersion, OgameTrackerDbSchema } from "@/shared/db/OgameTrackerDbSchema";
+import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from "@/shared/db/schema";
+import { MessageOgameMeta } from "@/shared/messages/Message";
 import { IDBPDatabase, openDB } from "idb";
-import { Lock } from "semaphore-async-await";
+import Semaphore, { Lock } from "semaphore-async-await";
 import { _logDebug } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 
@@ -92,12 +93,18 @@ export abstract class PersistentDataManager<TItem> {
 }
 
 
-const databases: Partial<Record<string, IDBPDatabase<OgameTrackerDbSchema>>> = {};
-const dbLocks: Partial<Record<string, Lock>> = {};
+const databases: Partial<Record<string, IDBPDatabase<any>>> = {};
+const dbLocks: Partial<Record<string, Semaphore>> = {};
 
-export async function getDatabase(name: string): Promise<IDBPDatabase<OgameTrackerDbSchema>> {
-    const lock = (dbLocks[name] ??= new Lock());
-    await lock.acquire();
+async function getDatabase<TSchema>(name: string): Promise<IDBPDatabase<TSchema>> {
+    let lock = dbLocks[name];
+    if(lock == null) {
+        lock = new Semaphore(1000);
+        lock.drainPermits();
+    } 
+    else {
+        await lock.acquire();
+    }
 
     let db = databases[name];
     if (db == null) {
@@ -111,4 +118,18 @@ export async function getDatabase(name: string): Promise<IDBPDatabase<OgameTrack
 
     lock.release();
     return db;
+}
+
+export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerPlayerDbSchema>> {
+    const name = `s${meta.serverId}-${meta.language}-${meta.playerId}`;
+    return await getDatabase(name);
+}
+
+export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerServerDbSchema>> {
+    const name = `s${meta.serverId}-${meta.language}`;
+    return await getDatabase(name);
+}
+
+export async function getGlobalDatabase(): Promise<IDBPDatabase<OgameTrackerGlobalDbSchema>> {
+    return await getDatabase('ogame-tracker');
 }

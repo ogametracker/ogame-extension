@@ -1,26 +1,23 @@
+import { isSupportedLanguage } from "@/shared/i18n/isSupportedLanguage";
+import { getDefaultSettings } from "@/shared/models/settings/getDefaultSettings";
 import { MessageOgameMeta } from "../../shared/messages/Message";
-import { SettingsManager } from "./SettingsManager";
-import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { Settings } from "../../shared/models/settings/Settings";
-import { UpdateSettingsMessage } from "../../shared/messages/settings";
+import { getGlobalDatabase } from "../PersistentData";
+import { LanguageKey } from "../../shared/i18n/LanguageKey";
 
 export class SettingsModule {
-    private readonly managers: Record<string, SettingsManager | undefined> = {};
-
-    public async updateSettings(message: UpdateSettingsMessage): Promise<void> {
-        const manager = this.getManager(message.ogameMeta);
-        await manager.updateData(message.data);
-    }
-
     public async getSettings(meta: MessageOgameMeta): Promise<Settings> {
-        const manager = this.getManager(meta);
-        return await manager.getData();
-    }
+        const db = await getGlobalDatabase();
+        const settings = await db.get('settings', 0);
 
-    private getManager(meta: MessageOgameMeta): SettingsManager {
-        const key = getStorageKeyPrefix(meta);
-        const manager = (this.managers[key] ??= new SettingsManager(key));
+        if (settings != null) {
+            return settings;
+        }
 
-        return manager;
+        const language = isSupportedLanguage(meta.language)
+            ? LanguageKey[meta.language as LanguageKey]
+            : LanguageKey.en;
+
+        return getDefaultSettings(language);
     }
 }

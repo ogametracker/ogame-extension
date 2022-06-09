@@ -1,4 +1,4 @@
-import { DbVersion, OgameTrackerDbSchema } from "@/shared/db/OgameTrackerDbSchema";
+import { DbVersion, OgameTrackerDbSchema } from "@/shared/db/schema";
 import { getStorageKeyPrefix } from "@/shared/utils/getStorageKeyPrefix";
 import { IDBPDatabase, openDB } from "idb";
 import { Lock } from "semaphore-async-await";

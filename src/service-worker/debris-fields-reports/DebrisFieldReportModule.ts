@@ -4,12 +4,11 @@ import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import i18nDebrisFieldReports from '../../shared/i18n/ogame/messages/debris-field-reports';
-import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "../PersistentData";
 
 type DebrisFieldReportResult = {
     ignored: true;
@@ -25,14 +24,14 @@ export class DebrisFieldReportModule {
 
     public async trackManualDebrisFieldReport(message: TrackManualDebrisFieldReportMessage): Promise<void> {
         const report = message.data;
-        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        const db = await getPlayerDatabase(message.ogameMeta);
         await db.put('debrisFieldReports', report);
     }
 
     public async tryTrackDebrisFieldReport(message: TrackDebrisFieldReportMessage): Promise<TryActionResult<DebrisFieldReportResult>> {
         const messageData = message.data;
         const { language } = message.ogameMeta;
-        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if expedition already tracked => if true, return tracked data
         const knownReport = await db.get('debrisFieldReports', messageData.id);

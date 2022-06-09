@@ -17,9 +17,8 @@ import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditio
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
-import { getStorageKeyPrefix } from "../../shared/utils/getStorageKeyPrefix";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "../PersistentData";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -30,7 +29,7 @@ export class ExpeditionModule {
     public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEventResult>> {
         const expeditionEventData = message.data;
         const { language } = message.ogameMeta;
-        const db = await getDatabase(getStorageKeyPrefix(message.ogameMeta));
+        const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if expedition already tracked => if true, return tracked data
         const knownExpedition = await db.get('expeditions', expeditionEventData.id);

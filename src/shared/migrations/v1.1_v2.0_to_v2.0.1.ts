@@ -92,7 +92,7 @@ import { MigrationFunction } from "./models";
 import { SettingsManager } from "../../service-worker/settings/SettingsManager";
 import { IDBPDatabase, openDB } from "idb";
 import { CombatReport } from "../models/combat-reports/CombatReport";
-import { DbVersion, OgameTrackerDbSchema } from "../db/OgameTrackerDbSchema";
+import { DbVersion, OgameTrackerDbSchema } from "../db/schema";
 import { DebrisFieldReport } from "../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../models/expeditions/ExpeditionEvents";
 
