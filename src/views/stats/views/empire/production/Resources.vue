@@ -160,8 +160,10 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
+    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
 
     interface Production {
         metal: number;
@@ -250,10 +252,18 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
                         fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
 
                         solarSatellite: planet.productionSettings[ShipType.solarSatellite],
-                        crawler: planet.productionSettings[ShipType.crawler],
+                        crawler: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
                     },
                 };
             });
+        }
+
+        private correctCrawlerProductionSettings(production: CrawlerProductionPercentage): CrawlerProductionPercentage {
+            if(EmpireDataModule.empire?.playerClass == PlayerClass.collector) {
+                return production;
+            }
+
+            return Math.min(100, production) as CrawlerProductionPercentage;
         }
 
         private get footerItems(): ProductionItem[] {
@@ -349,7 +359,13 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         private getProduction(planet: PlanetData): Production {
             const deps: ProductionBuildingDependencies = {
                 serverSettings: ServerSettingsDataModule.serverSettings!,//TODO: !
-                planet,
+                planet: {
+                    ...planet,
+                    productionSettings: {
+                        ...planet.productionSettings,
+                        [ShipType.crawler]: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
+                    },
+                },
                 player: EmpireDataModule.empire!, //TODO: !
             };
 
