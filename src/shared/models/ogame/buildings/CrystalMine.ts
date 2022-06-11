@@ -26,9 +26,9 @@ class CrystalMineClass extends ProductionBuilding {
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
 
         const maxCrawlers = getMaxActiveCrawlers(
-            dependencies.planet.buildings.production[BuildingType.metalMine],
+            dependencies.planet.buildings[BuildingType.metalMine],
             level,
-            dependencies.planet.buildings.production[BuildingType.deuteriumSynthesizer],
+            dependencies.planet.buildings[BuildingType.deuteriumSynthesizer],
             dependencies.player.playerClass,
             dependencies.player.officers.geologist,
             dependencies.serverSettings,

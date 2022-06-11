@@ -7,10 +7,12 @@ import { PlayerOfficers } from './PlayerOfficers';
 
 export interface LocalPlayerData {
     planets: Record<number, PlanetData | MoonData>;
+    planetOrder: number[];
     research: ResearchLevels;
     playerClass: PlayerClass;
     allianceClass: AllianceClass;
     officers: PlayerOfficers;
-    name?: string;
-    universeName?: string;
+    
+    name?: string; //TODO: move somewhere else
+    universeName?: string; //TODO: move somewhere else
 }

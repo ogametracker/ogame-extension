@@ -460,53 +460,57 @@
         }
 
         private async loadKnownAccounts(): Promise<void> {
-            const all = await chrome.storage.local.get(null);
-            const localPlayerKeys = Object.keys(all).filter(key => key.endsWith('-local-player'));
-            const accounts: KnownAccount[] = localPlayerKeys.map(key => {
-                const split = key.split('-');
-                const localPlayer = all[key] as LocalPlayerData;
-                const id = parseIntSafe(split[2], 10);
-                const uniId = parseIntSafe(split[0].substring(1), 10);
-                const uniLang = split[1];
-                const { name, universeName } = localPlayer;
+            // TODO: load from idb
+            //
+            /////////////////////////////////////////////////////////////////////////////////////
+            //
+            // const all = await chrome.storage.local.get(null);
+            // const localPlayerKeys = Object.keys(all).filter(key => key.endsWith('-local-player'));
+            // const accounts: KnownAccount[] = localPlayerKeys.map(key => {
+            //     const split = key.split('-');
+            //     const localPlayer = all[key] as LocalPlayerData;
+            //     const id = parseIntSafe(split[2], 10);
+            //     const uniId = parseIntSafe(split[0].substring(1), 10);
+            //     const uniLang = split[1];
+            //     const { name, universeName } = localPlayer;
 
-                return {
-                    key: key.replace('-local-player', ''),
-                    id,
-                    universeId: uniId,
-                    universeLanguage: uniLang,
-                    name,
-                    universeName,
-                };
-            });
+            //     return {
+            //         key: key.replace('-local-player', ''),
+            //         id,
+            //         universeId: uniId,
+            //         universeLanguage: uniLang,
+            //         name,
+            //         universeName,
+            //     };
+            // });
 
-            this.knownAccounts = accounts.sort((a, b) => {
-                const lang = a.universeLanguage.localeCompare(b.universeLanguage);
-                if (lang != 0) {
-                    return lang;
-                }
+            // this.knownAccounts = accounts.sort((a, b) => {
+            //     const lang = a.universeLanguage.localeCompare(b.universeLanguage);
+            //     if (lang != 0) {
+            //         return lang;
+            //     }
 
-                if (a.universeName != null && b.universeName == null) {
-                    return -1;
-                }
-                if (a.universeName == null && b.universeName != null) {
-                    return 1;
-                }
+            //     if (a.universeName != null && b.universeName == null) {
+            //         return -1;
+            //     }
+            //     if (a.universeName == null && b.universeName != null) {
+            //         return 1;
+            //     }
 
-                const uniId = a.universeId - b.universeId;
-                if (uniId != 0) {
-                    return uniId;
-                }
+            //     const uniId = a.universeId - b.universeId;
+            //     if (uniId != 0) {
+            //         return uniId;
+            //     }
 
-                if (a.name != null && b.name == null) {
-                    return -1;
-                }
-                if (a.name == null && b.name != null) {
-                    return 1;
-                }
+            //     if (a.name != null && b.name == null) {
+            //         return -1;
+            //     }
+            //     if (a.name == null && b.name != null) {
+            //         return 1;
+            //     }
 
-                return a.id - b.id;
-            });
+            //     return a.id - b.id;
+            // });
         }
 
         private gotoAccount(): void {

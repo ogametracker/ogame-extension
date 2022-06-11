@@ -460,15 +460,15 @@
                         position: planet.coordinates.position,
                         mines: {
                             metalMine: {
-                                level: planet.buildings.production[BuildingType.metalMine],
+                                level: planet.buildings[BuildingType.metalMine],
                                 show: true,
                             },
                             crystalMine: {
-                                level: planet.buildings.production[BuildingType.crystalMine],
+                                level: planet.buildings[BuildingType.crystalMine],
                                 show: true,
                             },
                             deuteriumSynthesizer: {
-                                level: planet.buildings.production[BuildingType.deuteriumSynthesizer],
+                                level: planet.buildings[BuildingType.deuteriumSynthesizer],
                                 show: true,
                             },
                         },
@@ -588,7 +588,7 @@
                         mineLevels[bestItem.newPlanetId] = newPlanetMineLevels;
                         mineLevelsArray.push(newPlanetMineLevels);
 
-                        const fakePlanet = { buildings: { production: {}, facilities: {} } } as PlanetData;
+                        const fakePlanet = { buildings: {} } as PlanetData;
                         planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
 
                         yieldItem = this.astrophysicsSettings.show;
@@ -625,10 +625,7 @@
             }
 
             const fakePlanet = {
-                buildings: {
-                    production: {},
-                    facilities: {},
-                },
+                buildings: {},
             } as PlanetData;
 
             const mineLevels: MineLevels = {
@@ -803,13 +800,10 @@
                         ),
                     },
                     buildings: {
-                        production: {
-                            ...planet.buildings.production,
-                            [BuildingType.metalMine]: levels.metalMine,
-                            [BuildingType.crystalMine]: levels.crystalMine,
-                            [BuildingType.deuteriumSynthesizer]: levels.deuteriumSynthesizer,
-                        },
-                        facilities: planet.buildings.facilities,
+                        ...planet.buildings,
+                        [BuildingType.metalMine]: levels.metalMine,
+                        [BuildingType.crystalMine]: levels.crystalMine,
+                        [BuildingType.deuteriumSynthesizer]: levels.deuteriumSynthesizer,
                     },
                     ships: {
                         ...planet.ships,

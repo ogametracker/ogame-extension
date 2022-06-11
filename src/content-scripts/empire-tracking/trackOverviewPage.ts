@@ -24,6 +24,10 @@ export function trackOverviewPage(): void {
             ?? _throw('no meta element found for ogame-planet-id');
         const planetId = parseIntSafe(planetIdText, 10);
 
+        const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+            ?? _throw('did not find meta ogame-planet-type');
+        const isMoon = planetType == 'moon';
+
         const items = document.querySelectorAll('.active_items [data-uuid]:not([ogt-active-until])');
 
         items.forEach(item => {
@@ -50,6 +54,7 @@ export function trackOverviewPage(): void {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetActiveItems,
                 data: {
+                    isMoon,
                     planetId,
                     data: activeItems,
                 },

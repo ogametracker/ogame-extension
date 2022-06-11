@@ -7,7 +7,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { Lock } from 'semaphore-async-await';
-import { getDatabase } from './getDatabase';
+import { getPlayerDatabase } from '@/shared/db/access';
 
 @Component
 class CombatReportDataModuleClass extends Vue {
@@ -23,7 +23,7 @@ class CombatReportDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        const db = await getDatabase();
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
         const reports = await db.getAll('combatReports');
 
         this.reports = reports;

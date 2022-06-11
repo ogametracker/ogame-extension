@@ -48,6 +48,7 @@ export function trackSuppliesPage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetBuildingLevels,
                 data: {
+                    isMoon,
                     planetId, 
                     data: buildingLevels,
                 },
@@ -70,6 +71,7 @@ export function trackSuppliesPage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetShipCounts,
                 data: {
+                    isMoon,
                     planetId,
                     data: shipCounts,
                 },

@@ -11,7 +11,7 @@ import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getPlayerDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "@/shared/db/access";
 
 interface CombatReportResult {
     report: CombatReport;

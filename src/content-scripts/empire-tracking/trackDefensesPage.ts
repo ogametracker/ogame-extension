@@ -17,6 +17,10 @@ export function trackDefensesPage() {
                 ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
+            const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
+            const isMoon = planetType == 'moon';
+
             const defenseTypes = getNumericEnumValues<DefenseType>(DefenseType);
             const defenseCounts = {} as Record<DefenseType, number>;
 
@@ -32,6 +36,7 @@ export function trackDefensesPage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetDefenseCounts,
                 data: {
+                    isMoon,
                     planetId,
                     data: {
                         ...defenseCounts,

@@ -89,12 +89,12 @@ interface Settings {
 
 import { _logDebug } from "../utils/_log";
 import { MigrationFunction } from "./models";
-import { SettingsManager } from "../../service-worker/settings/SettingsManager";
 import { IDBPDatabase, openDB } from "idb";
 import { CombatReport } from "../models/combat-reports/CombatReport";
-import { DbVersion, OgameTrackerDbSchema } from "../db/schema";
+import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema } from "../db/schema";
 import { DebrisFieldReport } from "../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../models/expeditions/ExpeditionEvents";
+import { getDefaultSettings } from "../models/settings/getDefaultSettings";
 
 
 const migrate: MigrationFunction = async () => {
@@ -110,19 +110,21 @@ const migrate: MigrationFunction = async () => {
     ].filter(prefix => allData[`${prefix}-version`] == '1.1' || allData[`${prefix}-version`] == '2.0');
 
 
+    const globalDb = await initGlobalDatabase(); // init global db so it exists 
+
     for (const prefix of keyPrefixes) {
         try {
             const version = allData[`${prefix}-version`];
             _logDebug(`migrating from v${version} to v2.0.1: '${prefix}'`);
 
-            const db = await initDatabase(prefix);
+            const playerDb = await initPlayerDatabase(prefix);
 
-            await migrateCombatReports(allData, prefix, db);
-            await migrateDebrisFieldReports(allData, prefix, db);
-            await migrateExpeditions(allData, prefix, db);
+            await migrateCombatReports(allData, prefix, playerDb);
+            await migrateDebrisFieldReports(allData, prefix, playerDb);
+            await migrateExpeditions(allData, prefix, playerDb);
 
             if (version == '1.1') {
-                await migrateSettings(allData, prefix);
+                await migrateSettings(allData, globalDb, prefix);
             }
 
             // remove old server settings saved per user
@@ -139,8 +141,8 @@ const migrate: MigrationFunction = async () => {
 };
 export default migrate;
 
-async function initDatabase(prefix: string) {
-    const db = await openDB<OgameTrackerDbSchema>(prefix, DbVersion, {
+async function initPlayerDatabase(prefix: string) {
+    const db = await openDB<OgameTrackerPlayerDbSchema>(prefix, DbVersion, {
         upgrade(db) {
             db.createObjectStore('combatReports', { keyPath: 'id' });
             db.createObjectStore('debrisFieldReports', { keyPath: 'id' });
@@ -160,7 +162,29 @@ async function initDatabase(prefix: string) {
     return db;
 }
 
-async function migrateCombatReports(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerDbSchema>) {
+async function initGlobalDatabase() {
+    const db = await openDB<OgameTrackerGlobalDbSchema>('ogame-tracker', DbVersion, {
+        upgrade(db) {
+            db.createObjectStore('settings');
+            db.createObjectStore('accounts');
+            db.createObjectStore('servers');
+        },
+        blocked() {
+            throw new Error('db access blocked');
+        },
+        blocking() {
+            throw new Error('db access blocking');
+        },
+        terminated() {
+            throw new Error('db access terminated');
+        },
+    });
+
+    return db;
+}
+
+async function migrateCombatReports(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerPlayerDbSchema>) {
+    console.debug('migrating combats');
     const key = `${prefix}-battleReports`;
     const combatReports = Object.values(allData[key] ?? {}) as CombatReport[];
 
@@ -174,7 +198,8 @@ async function migrateCombatReports(allData: Record<string, any>, prefix: string
 }
 
 
-async function migrateDebrisFieldReports(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerDbSchema>) {
+async function migrateDebrisFieldReports(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerPlayerDbSchema>) {
+    console.debug('migrating df reports');
     const key = `${prefix}-debrisFieldReports`;
     const debrisFieldReports = Object.values(allData[key] ?? {}) as DebrisFieldReport[];
 
@@ -188,7 +213,8 @@ async function migrateDebrisFieldReports(allData: Record<string, any>, prefix: s
 }
 
 
-async function migrateExpeditions(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerDbSchema>) {
+async function migrateExpeditions(allData: Record<string, any>, prefix: string, db: IDBPDatabase<OgameTrackerPlayerDbSchema>) {
+    console.debug('migrating expeditions');
     const key = `${prefix}-expoEvents`;
     const expeditions = Object.values(allData[key] ?? {}) as ExpeditionEvent[];
 
@@ -202,10 +228,11 @@ async function migrateExpeditions(allData: Record<string, any>, prefix: string, 
 }
 
 
-async function migrateSettings(allData: Record<string, any>, prefix: string) {
+async function migrateSettings(allData: Record<string, any>,  db: IDBPDatabase<OgameTrackerGlobalDbSchema>, prefix: string) {
+    console.debug('migrating settings');
     const key = `${prefix}-settings`;
     const settings = allData[key] as Settings | undefined;
-    let newSettings = new SettingsManager('$$__migration-only__$$').getDefaultItem();
+    let newSettings = getDefaultSettings('$$__migrationOnly__$$' as LanguageKey);
 
     if (settings != null) {
         newSettings = {
@@ -217,5 +244,6 @@ async function migrateSettings(allData: Record<string, any>, prefix: string) {
         };
     }
 
-    await chrome.storage.local.set({ [key]: newSettings });
+    await db.put('settings', newSettings, 0);
+    // await chrome.storage.local.set({ [key]: newSettings });
 }

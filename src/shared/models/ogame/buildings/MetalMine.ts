@@ -26,8 +26,8 @@ class MetalMineClass extends ProductionBuilding {
 
         const maxCrawlers = getMaxActiveCrawlers(
             level,
-            dependencies.planet.buildings.production[BuildingType.crystalMine],
-            dependencies.planet.buildings.production[BuildingType.deuteriumSynthesizer],
+            dependencies.planet.buildings[BuildingType.crystalMine],
+            dependencies.planet.buildings[BuildingType.deuteriumSynthesizer],
             dependencies.player.playerClass,
             dependencies.player.officers.geologist,
             dependencies.serverSettings,

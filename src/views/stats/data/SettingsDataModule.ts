@@ -4,10 +4,12 @@ import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { Settings } from '@/shared/models/settings/Settings';
-import { RequestSettingsMessage, SettingsMessage, UpdateSettingsMessage } from '@/shared/messages/settings';
+import { NotifySettingsUpdateMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { Lock } from 'semaphore-async-await';
-import { messageTrackingUuid } from '@/shared/uuid';
+import { getGlobalDatabase } from '@/shared/db/access';
+import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
+import { LanguageKey } from '@/shared/i18n/LanguageKey';
 
 @Component
 class SettingsDataModuleClass extends Vue {
@@ -19,21 +21,25 @@ class SettingsDataModuleClass extends Vue {
         console.debug('updating settings', settings);
         this.settings = settings;
 
-        const message: UpdateSettingsMessage = {
-            type: MessageType.UpdateSettings,
-            ogameMeta: GlobalOgameMetaData,
-            data: settings,
-            senderUuid: statsViewUuid,
-        };
-        void broadcastMessage(message);
+        void (async () => {
+            const db = await getGlobalDatabase();
+            await db.put('settings', settings, 0);
+
+            const msg: NotifySettingsUpdateMessage = {
+                ogameMeta: GlobalOgameMetaData,
+                senderUuid: statsViewUuid,
+                type: MessageType.NotifySettingsUpdate,
+            }
+            await broadcastMessage(msg);
+        });
     }
 
     private async created() {
         await this.lock.acquire();
 
         this.initCommunication();
-
-        await this.requestData();
+        await this.loadData();
+        this.lock.release();
     }
 
     public async load(): Promise<void> {
@@ -44,34 +50,27 @@ class SettingsDataModuleClass extends Vue {
     private initCommunication() {
         console.log('connecting to background service');
 
-        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
+        chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
 
-    private async requestData() {
-        const message: RequestSettingsMessage = {
-            type: MessageType.RequestSettings,
-            ogameMeta: GlobalOgameMetaData,
-            senderUuid: statsViewUuid,
-        };
-        await broadcastMessage(message);
+    private async loadData() {
+        const db = await getGlobalDatabase();
+        this.settings = await db.get('settings', 0) ?? getDefaultSettings(GlobalOgameMetaData.language as LanguageKey);
     }
 
-    private onMessage(msg: Message) {
+    private async onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
         }
 
-        if(msg.senderUuid == statsViewUuid) {
+        if (msg.senderUuid == statsViewUuid) {
             return;
         }
 
         switch (type) {
-            case MessageType.Settings: {
-                const { data: settings } = msg as SettingsMessage;
-                this.settings = settings;
-
-                this.lock.release();
+            case MessageType.NotifySettingsUpdate: {
+                await this.loadData();
                 break;
             }
         }

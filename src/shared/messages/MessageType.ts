@@ -37,16 +37,14 @@ export enum MessageType {
     UpdatePlayerClass = 'empire/update-player-class',
     UpdateAllianceClass = 'empire/update-alliance-class',
     UpdatePlanetProductionSettings = 'empire/update-planet-production-settings',
-    UpdatePlayerName = 'empire/update-player-name',
-    UpdateUniverseName = 'empire/update-universe-name',
-    RequestEmpireData = 'empire/request-data',
-    EmpireData = 'empire/data',
+    UpdatePlayerName = 'empire/update-player-name', //TODO: put somewhere else
+    UpdateUniverseName = 'empire/update-universe-name', //TODO: put somewhere else
     NotifyEmpireDataUpdate = 'empire/notify-update',
 
     // settings
-    UpdateSettings = 'settings/update',
     RequestSettings = 'settings/request-data',
     Settings = 'settings/data',
+    NotifySettingsUpdate = 'settings/notify-update',
 
     // universe history
     UniverseHistoryData = 'universe-history/data',

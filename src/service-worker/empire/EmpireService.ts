@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { EmpireDataMessage, NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdatePlayerNameMessage, UpdateResearchLevelsMessage, UpdateUniverseNameMessage } from '../../shared/messages/tracking/empire';
+import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdatePlayerNameMessage, UpdateResearchLevelsMessage, UpdateUniverseNameMessage } from '../../shared/messages/tracking/empire';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class EmpireService implements MessageService {
@@ -107,36 +107,15 @@ export class EmpireService implements MessageService {
                 await this.notifyEmpireUpdate(message.ogameMeta);
                 break;
             }
-
-            case MessageType.RequestEmpireData: {
-                await this.broadcastEmpireData(message.ogameMeta);
-                break;
-            }
         }
     }
 
     private async notifyEmpireUpdate(meta: MessageOgameMeta) {
-        const empireData = await this.empireModule.getEmpireData(meta);
-
         const notifyMessge: NotifyEmpireDataUpdateMessage = {
             type: MessageType.NotifyEmpireDataUpdate,
             ogameMeta: meta,
-            data: empireData,
             senderUuid: serviceWorkerUuid,
         };
         await broadcastMessage(notifyMessge);
-    }
-
-
-    private async broadcastEmpireData(meta: MessageOgameMeta) {
-        const empireData = await this.empireModule.getEmpireData(meta);
-
-        const empireDataMessage: EmpireDataMessage = {
-            ogameMeta: meta,
-            type: MessageType.EmpireData,
-            data: empireData,
-            senderUuid: serviceWorkerUuid,
-        };
-        await broadcastMessage(empireDataMessage);
     }
 }

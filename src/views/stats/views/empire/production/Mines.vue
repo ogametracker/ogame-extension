@@ -191,9 +191,9 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
             return this.planets
                 .map(planet => {
                     const maxActiveCrawlers = getMaxActiveCrawlers(
-                        planet.buildings.production[BuildingType.metalMine],
-                        planet.buildings.production[BuildingType.crystalMine],
-                        planet.buildings.production[BuildingType.deuteriumSynthesizer],
+                        planet.buildings[BuildingType.metalMine],
+                        planet.buildings[BuildingType.crystalMine],
+                        planet.buildings[BuildingType.deuteriumSynthesizer],
                         this.player.playerClass,
                         this.player.officers.geologist,
                         ServerSettingsDataModule.serverSettings!,//TODO: !
@@ -202,11 +202,11 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
 
                     return {
                         planet,
-                        metalMine: planet.buildings.production[BuildingType.metalMine],
-                        crystalMine: planet.buildings.production[BuildingType.crystalMine],
-                        deuteriumSynthesizer: planet.buildings.production[BuildingType.deuteriumSynthesizer],
-                        solarPlant: planet.buildings.production[BuildingType.solarPlant],
-                        fusionReactor: planet.buildings.production[BuildingType.fusionReactor],
+                        metalMine: planet.buildings[BuildingType.metalMine],
+                        crystalMine: planet.buildings[BuildingType.crystalMine],
+                        deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
+                        solarPlant: planet.buildings[BuildingType.solarPlant],
+                        fusionReactor: planet.buildings[BuildingType.fusionReactor],
                         crawlers: {
                             available: availableCrawlers,
                             maximum: maxActiveCrawlers,

@@ -2,8 +2,8 @@ import { isSupportedLanguage } from "@/shared/i18n/isSupportedLanguage";
 import { getDefaultSettings } from "@/shared/models/settings/getDefaultSettings";
 import { MessageOgameMeta } from "../../shared/messages/Message";
 import { Settings } from "../../shared/models/settings/Settings";
-import { getGlobalDatabase } from "../PersistentData";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
+import { getGlobalDatabase } from "@/shared/db/access";
 
 export class SettingsModule {
     public async getSettings(meta: MessageOgameMeta): Promise<Settings> {

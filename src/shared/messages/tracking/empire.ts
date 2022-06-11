@@ -9,7 +9,6 @@ import { PlayerClass } from '../../models/ogame/classes/PlayerClass';
 import { AllianceClass } from '../../models/ogame/classes/AllianceClass';
 import { BuildingType } from '../../models/ogame/buildings/BuildingType';
 import { ResearchType } from '../../models/ogame/research/ResearchType';
-import { LocalPlayerData } from '../../models/empire/LocalPlayerData';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 import { PlanetActiveItems } from '@/shared/models/empire/PlanetActiveItems';
 
@@ -34,6 +33,7 @@ export type UpdateOwnedPlanetsMessage = Message<MessageType.UpdatePlanetData, Ba
 
 export interface PlanetDataWrapper<T> {
     planetId: number;
+    isMoon: boolean;
     data: T;
 }
 
@@ -65,9 +65,6 @@ export type UpdatePlayerClassMessage = Message<MessageType.UpdatePlayerClass, Pl
 export type UpdateAllianceClassMessage = Message<MessageType.UpdateAllianceClass, AllianceClass>;
 
 
-export type RequestLocalPlayerDataMessage = NoDataMessage<MessageType.RequestEmpireData>;
-export type EmpireDataMessage = Message<MessageType.EmpireData, LocalPlayerData>;
-
 // production percentages
 export type UpdatePlanetProductionSettingsMessage = Message<MessageType.UpdatePlanetProductionSettings, PlanetDataWrapper<ProductionSettings>>;
 
@@ -77,4 +74,4 @@ export type UpdateUniverseNameMessage = Message<MessageType.UpdateUniverseName, 
 
 
 // notifications
-export type NotifyEmpireDataUpdateMessage = Message<MessageType.NotifyEmpireDataUpdate, LocalPlayerData>;
+export type NotifyEmpireDataUpdateMessage = NoDataMessage<MessageType.NotifyEmpireDataUpdate>;

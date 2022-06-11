@@ -370,10 +370,10 @@
             };
 
             return {
-                metal: MetalMine.getProduction(planet.buildings.production[BuildingType.metalMine], deps).metal,
-                crystal: CrystalMine.getProduction(planet.buildings.production[BuildingType.crystalMine], deps).crystal,
-                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings.production[BuildingType.deuteriumSynthesizer], deps).deuterium
-                    - FusionReactor.getConsumption(planet.buildings.production[BuildingType.fusionReactor], deps).deuterium,
+                metal: MetalMine.getProduction(planet.buildings[BuildingType.metalMine], deps).metal,
+                crystal: CrystalMine.getProduction(planet.buildings[BuildingType.crystalMine], deps).crystal,
+                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings[BuildingType.deuteriumSynthesizer], deps).deuterium
+                    - FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], deps).deuterium,
             };
         }
     }

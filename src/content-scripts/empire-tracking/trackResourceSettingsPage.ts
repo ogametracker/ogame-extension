@@ -21,11 +21,16 @@ export function trackResourceSettingsPage(): void {
                 ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
+            const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
+            const isMoon = planetType == 'moon';
+
 
             const buildingsMessage: UpdatePlanetBuildingLevelsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetBuildingLevels,
                 data: {
+                    isMoon,
                     planetId,
                     data: {
                         [BuildingType.metalMine]: getLevelOrAmount(element, BuildingType.metalMine),
@@ -44,6 +49,7 @@ export function trackResourceSettingsPage(): void {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetShipCounts,
                 data: {
+                    isMoon,
                     planetId,
                     data: {
                         [ShipType.solarSatellite]: getLevelOrAmount(element, ShipType.solarSatellite),
@@ -78,6 +84,7 @@ export function trackResourceSettingsPage(): void {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetProductionSettings,
                 data: {
+                    isMoon,
                     planetId,
                     data: {
                         [BuildingType.metalMine]: getProductionPercentage(element, BuildingType.metalMine) as ProductionPercentage,

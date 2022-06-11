@@ -16,6 +16,10 @@ export function trackShipyardPage() {
             const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
                 ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
+            
+            const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
+            const isMoon = planetType == 'moon';
 
             const shipTypes = getNumericEnumValues<ShipType>(ShipType);
             const shipCounts = {} as Record<ShipType, number>;
@@ -32,6 +36,7 @@ export function trackShipyardPage() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetShipCounts,
                 data: {
+                    isMoon,
                     planetId,
                     data: shipCounts,
                 },

@@ -6,7 +6,7 @@ import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getDatabase } from './getDatabase';
+import { getPlayerDatabase } from '@/shared/db/access';
 
 @Component
 class ExpeditionDataModuleClass extends Vue {
@@ -20,7 +20,7 @@ class ExpeditionDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        const db = await getDatabase();
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
         const expeditions = await db.getAll('expeditions');
 
         this.expeditions = expeditions;

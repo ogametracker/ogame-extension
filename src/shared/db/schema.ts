@@ -1,13 +1,8 @@
 import { DBSchema } from "idb";
 import { CombatReport } from "../models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "../models/debris-field-reports/DebrisFieldReport";
-import { MoonData } from "../models/empire/MoonData";
-import { PlanetData } from "../models/empire/PlanetData";
-import { PlanetDataBase } from "../models/empire/PlanetDataBase";
-import { PlayerOfficers } from "../models/empire/PlayerOfficers";
-import { ResearchLevels } from "../models/empire/ResearchLevels";
 import { ExpeditionEvent } from "../models/expeditions/ExpeditionEvents";
-import { BuildingType } from "../models/ogame/buildings/BuildingType";
+import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../models/ogame/buildings/BuildingType";
 import { AllianceClass } from "../models/ogame/classes/AllianceClass";
 import { PlayerClass } from "../models/ogame/classes/PlayerClass";
 import { Coordinates } from "../models/ogame/common/Coordinates";
@@ -30,41 +25,14 @@ export interface DbBasicPlanetData {
     maxTemperature: number;
 }
 
-export type DbPlanetBuildingLevels = Record<(
-    | BuildingType.metalMine
-    | BuildingType.crystalMine
-    | BuildingType.deuteriumSynthesizer
-    | BuildingType.metalStorage
-    | BuildingType.crystalStorage
-    | BuildingType.deuteriumTank
-    | BuildingType.solarPlant
-    | BuildingType.fusionReactor
+export type DbPlanetBuildingLevels = Record<PlanetBuildingType, number>;
 
-    | BuildingType.roboticsFactory
-    | BuildingType.shipyard
-    | BuildingType.researchLab
-    | BuildingType.allianceDepot
-    | BuildingType.missileSilo
-    | BuildingType.naniteFactory
-    | BuildingType.terraformer
-    | BuildingType.spaceDock
-), number>;
-
-export type DbMoonBuildingLevels = Record<(
-    | BuildingType.metalStorage
-    | BuildingType.crystalStorage
-    | BuildingType.deuteriumTank
-
-    | BuildingType.roboticsFactory
-    | BuildingType.shipyard
-    | BuildingType.lunarBase
-    | BuildingType.sensorPhalanx
-    | BuildingType.jumpGate
-), number>;
+export type DbMoonBuildingLevels = Record<MoonBuildingType, number>;
 
 export type DbActiveItems = Partial<Record<ItemHash, number | 'permanent'>>;
 export type DbShipAmounts = Record<ShipType, number>;
-export type DbDefenseAmounts = Record<DefenseType, number>;
+export type DbDefenseAmounts = Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> 
+& Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
 
 export type DbPlanetProductionSettings = {
     [BuildingType.metalMine]: number;
@@ -108,16 +76,18 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
         | { key: 'officers'; value: DbPlayerOfficers }
         | { key: 'playerClass'; value: PlayerClass }
         | { key: 'research'; value: DbPlayerResearchLevels }
-        | { key: 'planets'; value: DbPlayerPlanetIds } //TODO: track order of planets & moons
+        | { key: 'planetOrder'; value: DbPlayerPlanetIds }
 
         | { key: `planet.${number}`; value: DbBasicPlanetData }
         | { key: `planet.${number}.buildings`; value: DbPlanetBuildingLevels }
         | { key: `planet.${number}.ships`; value: DbShipAmounts }
         | { key: `planet.${number}.defenses`; value: DbDefenseAmounts }
         | { key: `planet.${number}.activeItems`; value: DbActiveItems }
+        | { key: `planet.${number}.productionSettings`; value: DbPlanetProductionSettings }
 
         | { key: `moon.${number}`; value: DbBasicMoonData }
-        | { key: `moon.${number}.ships`; value: DbMoonBuildingLevels }
+        | { key: `moon.${number}.buildings`; value: DbMoonBuildingLevels }
+        | { key: `moon.${number}.ships`; value: DbShipAmounts }
         | { key: `moon.${number}.defenses`; value: DbDefenseAmounts }
         | { key: `moon.${number}.activeItems`; value: DbActiveItems }
     );

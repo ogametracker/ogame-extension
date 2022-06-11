@@ -25,8 +25,8 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
 
         const maxCrawlers = getMaxActiveCrawlers(
-            dependencies.planet.buildings.production[BuildingType.metalMine],
-            dependencies.planet.buildings.production[BuildingType.crystalMine],
+            dependencies.planet.buildings[BuildingType.metalMine],
+            dependencies.planet.buildings[BuildingType.crystalMine],
             level,
             dependencies.player.playerClass,
             dependencies.player.officers.geologist,

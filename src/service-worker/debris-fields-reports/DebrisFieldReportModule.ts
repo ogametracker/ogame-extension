@@ -8,7 +8,7 @@ import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } fr
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getPlayerDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "@/shared/db/access";
 
 type DebrisFieldReportResult = {
     ignored: true;

@@ -70,10 +70,12 @@ export function trackEmpirePage() {
 
             ogameEmpireData.planets.forEach(planet => {
                 /* ATTENTION! 
-                 * Basic Planet data (IDs, positions, temperatures etc.) are NOT tracked here because we need to know ALL planets AND moons at once
-                 * which is not possible on the OGame empire page
-                 */
-
+                * Basic Planet data (IDs, positions, temperatures etc.) are NOT tracked here because we need to know ALL planets AND moons at once
+                * which is not possible on the OGame empire page
+                */
+               
+                const isMoon = planet.type == 3;
+               
                 // update building levels
                 const updateBuildings = buildingTypes.filter(building => planet[building] != null);
                 const buildingLevels = updateBuildings.reduce((acc, building) => {
@@ -85,6 +87,7 @@ export function trackEmpirePage() {
                     ogameMeta,
                     type: MessageType.UpdatePlanetBuildingLevels,
                     data: {
+                        isMoon,
                         planetId: planet.id,
                         data: buildingLevels,
                     },
@@ -102,6 +105,7 @@ export function trackEmpirePage() {
                     ogameMeta,
                     type: MessageType.UpdatePlanetShipCounts,
                     data: {
+                        isMoon,
                         planetId: planet.id,
                         data: shipCounts,
                     },
@@ -119,6 +123,7 @@ export function trackEmpirePage() {
                     ogameMeta,
                     type: MessageType.UpdatePlanetDefenseCounts,
                     data: {
+                        isMoon,
                         planetId: planet.id,
                         data: {
                             ...defenseCounts,
@@ -166,6 +171,7 @@ export function trackEmpirePage() {
                     ogameMeta: getOgameMeta(),
                     type: MessageType.UpdatePlanetActiveItems,
                     data: {
+                        isMoon,
                         planetId: planet.id,
                         data: activeItems,
                     },

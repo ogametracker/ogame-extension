@@ -18,7 +18,7 @@ import { RawMessageData } from "../../shared/messages/tracking/common";
 import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getPlayerDatabase } from "../PersistentData";
+import { getPlayerDatabase } from "@/shared/db/access";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;

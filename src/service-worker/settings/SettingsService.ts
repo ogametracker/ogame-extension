@@ -4,21 +4,14 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { SettingsModule } from './SettingsModule';
-import { SettingsMessage, UpdateSettingsMessage } from '../../shared/messages/settings';
+import { SettingsMessage } from '../../shared/messages/settings';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class SettingsService implements MessageService {
     private readonly module = new SettingsModule();
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
-        switch(message.type) {
-            case MessageType.UpdateSettings: {
-                const msg = message as UpdateSettingsMessage;
-                await this.module.updateSettings(msg);
-                await this.broadcastSettings(message.ogameMeta, message.senderUuid);
-                break;
-            }
-            
+        switch(message.type) {            
             case MessageType.RequestSettings: {
                 await this.broadcastSettings(message.ogameMeta);
                 break;
