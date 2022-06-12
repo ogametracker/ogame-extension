@@ -1,12 +1,14 @@
 export enum LanguageKey {
-    de = 'de',
-    dk = 'dk',
+    de = 'de', // german
+    dk = 'dk', // danish
 
-    en = 'en',
-    us = en,
+    en = 'en', // org = english
+    us = en, // us = english
 
-    cz = 'cz',
+    cz = 'cz', // czech
 
-    hr = 'hr',
-    ba = hr,
+    hr = 'hr', //hungarian
+    ba = hr, // balkan = hungarian
+
+    si = 'si', // slovenian
 }

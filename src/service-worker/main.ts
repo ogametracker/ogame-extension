@@ -28,8 +28,8 @@ const services: MessageService[] = [
     new UniversesAndAccountsService(),
 ];
 
-const permits = 1000; // number of parallel processable messages
-const migrationLock = new Semaphore(permits);
+// const permits = 1000; // number of parallel processable messages
+// const migrationLock = new Semaphore(permits);
 try {
     chrome.runtime.onInstalled.addListener(() => performMigrations());
 
@@ -63,8 +63,8 @@ async function performMigrations() {
 }
 
 async function onMessage(message: Message<MessageType, any>) {
-    await migrationLock.acquire();
-    migrationLock.release();
+    // await migrationLock.acquire();
+    // migrationLock.release();
 
     _logDebug('got message', new Date(), message);
 
