@@ -13,11 +13,11 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Vores ekspedition gennemførte et */'unikt eksperiment'/*. Det var muligt at høste Mørk Materie fra en døende stjerne.'*/,
-            /*TODO: dk 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*TODO: dk 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Din ekspedition har */'lokaliseret en forhistorisk rumbase'/*, som tilsyneladende har fløjet ukontrolleret rundt i galaksen gennem længere tid. Selve rumbasen var ubrugelig men der blev fundet Mørk Materie som var blevet opbevaret i basens reaktor. Dine ingeniører prøver at redde så meget de kan.'*/,
+            /*'Vores ekspedition */'rapporterer om et spektakulært fænomen'/*. En sammenhobning af Mørk Materie i energilageret i skibets skjolde. Vores teknikere prøver at holde på så meget Mørk Materie de kan, mens fænomenet er foranstående.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*TODO: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*TODO: dk 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`),
@@ -33,8 +33,8 @@ export const dk: ExpeditionMessages = {
             /*'På en */'lille måne med egen atmosfære'/*, fandt din ekspedition nogle store ressourcelagre. Mandskabet prøver at laste ressourcerne.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: dk 'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /*TODO: dk 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /**/'Planetringene omkring planeten'/* indeholder uendelige mængder råstoffer. Ekspeditionsskibene vender tilbage med fyldte kamre!'*/,
+            /*'Din ekspeditionsflåde har fundet et */'gigantisk rumskib af ukendt oprindelse'/*. Vi kunne ikke lære noget fra teknologierne brugt i det, men det lykkedes os at opdele det i dets grundenheder og udvinde nogle brugbare ressourcer af det.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) er blevet taget.`),
     },
@@ -52,7 +52,7 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Vi fandt en */'enorm rumskibs gravplads'/*. Nogle af teknikerne fra ekspeditionen fik en del af skibene til at virke igen.'*/,
-            /*TODO: dk 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Vi har fundet en */'planet med rester fra en ukendt civilisation'/*. Vi kan se en gigantisk rumstation cirkulere omkring planeten. Nogen af vores piloter og teknikere er taget til overfladen for at lede efter skibe, som måske stadig kan bruges.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`e følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
@@ -75,18 +75,18 @@ export const dk: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*'Den sidste radiotransmission vi modtog fra ekspeditionsflåden var, at de var i gang med at tage billeder af et */'nyt sort hul'/*.'*/,
         /*TODO: dk 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        /*TODO: dk 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'En */'kernenedsmeltning i moderskibet førte til en kædereaktion'/*, som knuste hele din ekspeditionsflåde på et splitsekund.'*/,
         /*'*/'Ekspeditionsflåden kom ikke tilbage'/*. Vores flådeadmiraler prøver stadig at finde ud af hvad der er sket, men det ser ud til at flåden er tabt for evigt.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
         /*'Din ekspeditionsflåde har opnået kontakt med en hidtil ukendt race. De meddeler at de vil sende en af */'deres repræsentanter til din verden'/*, som du kan handle råstoffer med.'*/,
-        /*TODO: dk 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Din ekspeditionsflåde */'opsnappede et nødsignal'/*. Et enormt transportskib var blevet fanget af et stærkt gravitationsfelt - skabt af en asteroide. Efter at den store transporter var blevet bjerget, blev kaptajnen så glad at han meddelte, at dem som havde reddet dem var deres foretrukne og eksklusive klienter.'*/,
     ],
 
     [ExpeditionEventType.early]: [
         /*'En */'uforudset tilbagekobling i energispolen'/* på motoren gør, at din ekspedition vender tilbage tidligere end forventet. Den første rapport fortæller, at der ikke er nogen forklaring på fejlen.'*/,
-        /*TODO: dk 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'Din ekspedition har ikke rapporteret nogen uregelmæssigheder i den udforskede sektor. Men */'flåden kommer ind i noget solvind'/*. På grund af dette vender din ekspedition hjem en smule hurtigere.'*/,
         /*'Den nye og vovede kommandør har med succes */'rejst til et ustabilt ormehul'/* for at gøre rejsen hjem kortere! Dog bringer selve ekspedition intet nyt.'*/,
     ],
 
@@ -112,12 +112,12 @@ export const dk: ExpeditionMessages = {
             /*TODO: dk 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: dk 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            /*'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'Din ekspeditionsflåde */'havde et ufint sammenstød med nogle rumpirater'/*.'*/,
             /*'Vi faldt i baghold af */'nogle piratskibe'/* ! En kamp var uundgåelig.'*/,
+            /*'Ekspeditionsflåden fik fat i et nødsignal, */'hvilket viste sig til at være et baghold af nogle rumpirater'/*! Vi kunne ikke flygte uden at kæmpe.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: dk 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'Der er modtaget signaler som ikke stammer fra fremmede */'væsener men derimod kommer fra en skjult piratbase'/*! Piraterne var ikke glade for vores besøg i deres sektor.'*/,
             /*TODO: dk 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
     },
@@ -131,7 +131,7 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Et */'fremmedartet skib angriber din ekspeditionsflåde'/* uden varsel!'*/,
-            /*TODO: dk 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Din ekspeditionsflåde */'synes at have fløjet ind i et territorium'/*, som tilhører en ukendt og yderst aggressiv og krigerisk race.'*/,
             /*TODO: dk 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
