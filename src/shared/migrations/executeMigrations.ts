@@ -6,31 +6,33 @@ import { openDB } from "idb";
 
 
 export async function executeMigrations(): Promise<void> {
-    let dbExists = false;
-    try {
-        await openDB('ogame-tracker', undefined, {
-            upgrade(db, oldVersion, newVersion, transaction) {
-                dbExists = oldVersion != 0;
-                transaction.abort();
-            },
-        });
-    } catch { 
-        // intentionally do nothing because `transaction.abort()` will throw
-    }
-    console.log('does db exist?', dbExists);
+    //TODO: rework migrations to be triggered manually
 
-    const migrations: MigrationFunction[] = [
-        v1_1_v2_0_to_v2_0_1,
-    ];
+    // let dbExists = false;
+    // try {
+    //     await openDB('ogame-tracker', undefined, {
+    //         upgrade(db, oldVersion, newVersion, transaction) {
+    //             dbExists = oldVersion != 0;
+    //             transaction.abort();
+    //         },
+    //     });
+    // } catch { 
+    //     // intentionally do nothing because `transaction.abort()` will throw
+    // }
+    // console.log('does db exist?', dbExists);
 
-    if (!dbExists) {
-        migrations.unshift(
-            v0_to_v1,
-            v1_to_v1_1,
-        );
-    }
+    // const migrations: MigrationFunction[] = [
+    //     v1_1_v2_0_to_v2_0_1,
+    // ];
 
-    for (const migration of migrations) {
-        await migration();
-    }
+    // if (!dbExists) {
+    //     migrations.unshift(
+    //         v0_to_v1,
+    //         v1_to_v1_1,
+    //     );
+    // }
+
+    // for (const migration of migrations) {
+    //     await migration();
+    // }
 }

@@ -37,18 +37,21 @@ try {
 }
 
 async function performMigrations() {
-    const permits = migrationLock.drainPermits();
-    try {
-        _logDebug('performing migrations');
-        await executeMigrations();
-    } catch (error) {
-        //TODO: send notification with error
-        console.error(error);
-    }
+    //TODO: migrate manually => open window for migrations
+    // const permits = migrationLock.drainPermits();
+    // try {
+    //     _logDebug('performing migrations');
+    //     await executeMigrations();
+    // } catch (error) {
+    //     //TODO: send notification with error
+    //     console.error(error);
+    // }
 
-    for(let i = 0; i < permits; i++) {
-        migrationLock.release();
-    }
+    // console.log('migrations done');
+
+    // for(let i = 0; i < permits; i++) {
+    //     migrationLock.release();
+    // }
 }
 
 async function onMessage(message: Message<MessageType, any>) {
