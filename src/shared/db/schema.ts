@@ -106,8 +106,10 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
 
     //TODO: table for tracked accounts
     accounts: {
-        key: `s${number}-${string}-${number}`;
+        key: [number, string, number];
         value: {
+            serverId: number;
+            serverLanguage: string;
             id: number;
             name?: string;
         };
@@ -115,7 +117,7 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
 
     //TODO: table for known servers
     servers: {
-        key: `s${number}-${string}`,
+        key: [number, string],
         value: {
             id: number;
             name: string;
