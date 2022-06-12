@@ -39,7 +39,13 @@ try {
 }
 
 async function performMigrations() {
-    //TODO: migrate manually => open window for migrations
+    // await chrome.tabs.create({
+    //     active: true,
+    //     index: 0, 
+    //     url: 'https://ogame.de',
+    // });
+
+    //TODO: migrate manually => open window for migrations (see above)
     // const permits = migrationLock.drainPermits();
     // try {
     //     _logDebug('performing migrations');
