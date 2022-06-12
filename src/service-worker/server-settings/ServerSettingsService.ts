@@ -1,39 +1,23 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
+import { Message } from '../../shared/messages/Message';
 import { MessageType } from '../../shared/messages/MessageType';
 import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { ServerSettingsModule } from './ServerSettingsModule';
-import { ServerSettingsDataMessage } from '@/shared/messages/tracking/server-settings';
-import { serviceWorkerUuid } from '@/shared/uuid';
+import { getStorageKeyPrefix } from '@/shared/utils/getStorageKeyPrefix';
 
 export class ServerSettingsService implements MessageService {
-    private readonly module = new ServerSettingsModule();
+    private readonly modules: Record<string, ServerSettingsModule> = {};
 
-    constructor() {
-        this.module.addBroadcastNotifyListener(meta => this.broadcastServerSettings(meta));
-    }
+    public onMessage(message: Message<MessageType, any>): Promise<void> {
+        const key = getStorageKeyPrefix(message.ogameMeta, false);
 
-    public async onMessage(message: Message<MessageType, any>): Promise<void> {
-        this.module.wake(message.ogameMeta);
-
-        switch (message.type) {
-            case MessageType.RequestServerSettingsData: {
-                await this.broadcastServerSettings(message.ogameMeta);
-                break;
-            }
+        if (this.modules[key] != null) {
+            return Promise.resolve();
         }
-    }
 
-    private async broadcastServerSettings(meta: MessageOgameMeta): Promise<void> {
-        const history = await this.module.getServerSettings(meta);
+        const module = new ServerSettingsModule(message.ogameMeta);
+        this.modules[key] = module;
 
-        const message: ServerSettingsDataMessage = {
-            ogameMeta: meta,
-            type: MessageType.ServerSettingsData,
-            data: history,
-            senderUuid: serviceWorkerUuid,
-        };
-        await broadcastMessage(message);
+        return Promise.resolve();
     }
 }

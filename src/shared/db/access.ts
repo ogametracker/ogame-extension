@@ -42,9 +42,10 @@ export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
 
 export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerServerDbSchema>> {
     const name = `s${meta.serverId}-${meta.language}`;
-    return await getDatabase(name, () => {
-        //TODO: implement db upgrade
-        throw new Error('not implemented');
+    return await getDatabase(name, (db) => {
+        db.createObjectStore('serverSettings');
+
+        //TODO: implement db upgrade for universe history
     });
 }
 

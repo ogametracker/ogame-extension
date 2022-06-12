@@ -2,6 +2,9 @@
     <div>
         TODO: Help/FAQ here
         <hr />
+        TODO: proper values in tables (idb)
+        TODO: show last server settings update time
+        TODO: show last universe history update time
         <grid-table :items="items" :columns="columns" class="info-table" />
     </div>
 </template>
