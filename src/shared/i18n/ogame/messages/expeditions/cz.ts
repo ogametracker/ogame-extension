@@ -18,7 +18,7 @@ export const cz: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: cz 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: cz 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Naše expedice zaznamenala první kontakt s novou rasou. Stvoření vzniklé z energie prolétlo našimi loďmi a */'rozhodlo se pomoci našemu nerozvinutému druhu'/*. Na můstku po něm zůstala bedna s Temnou hmotou!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) bylo ukořistěno`),
     },
@@ -52,7 +52,7 @@ export const cz: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Nalezli jsme */'obrovský hřbitov vesmírných lodí'/*. Některým technikům z expedice se podařilo opět pár lodí zprovoznit.'*/,
-            /*TODO: cz 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Nalezli jsme */'planetu se zbytky civilizace'/*. Zahlédli jsme obrovskou neporušenou vesmírnou stanici na nízké orbitě. Nekteří technici a piloti se vydali na povrch hledat lodě, které by se ještě daly použít.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
