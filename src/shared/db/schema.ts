@@ -206,7 +206,7 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
             serverId: number;
             serverLanguage: string;
             id: number;
-            name?: string;
+            name: string;
         };
     };
 

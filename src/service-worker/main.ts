@@ -14,6 +14,7 @@ import { MessageService } from "./MessageService";
 import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
+import { UniversesAndAccountsService } from "./universes-and-accounts/UniversesAndAccountsService";
 
 const services: MessageService[] = [
     new KeepAliveService(),
@@ -24,6 +25,7 @@ const services: MessageService[] = [
     new SettingsService(),
     new UniverseHistoryService(),
     new ServerSettingsService(),
+    new UniversesAndAccountsService(),
 ];
 
 const permits = 1000; // number of parallel processable messages
