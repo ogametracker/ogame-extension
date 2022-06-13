@@ -58,10 +58,9 @@ type DbUniverseHistoryPlanetMoonState = null | 'deleted';
 
 type DbUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
 
-export type OgameTrackerUniverseHistoryDbSchema = DBSchema & {
-    //TODO: tables for universe history
+export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     _lastUpdate: {
-        key: '0';
+        key: 0;
         value: number;
     };
 

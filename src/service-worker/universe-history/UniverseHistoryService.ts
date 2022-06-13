@@ -1,39 +1,21 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
+import { Message } from '../../shared/messages/Message';
 import { MessageType } from '../../shared/messages/MessageType';
 import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-// import { UniverseHistoryModule } from './UniverseHistoryModule';
-import { UniverseHistoryDataMessage } from '../../shared/messages/tracking/universe-history';
-import { serviceWorkerUuid } from '@/shared/uuid';
+import { UniverseHistoryModule } from './UniverseHistoryModule';
+import { getStorageKeyPrefix } from '@/shared/utils/getStorageKeyPrefix';
 
 export class UniverseHistoryService implements MessageService {
-    // private readonly module = new UniverseHistoryModule();
-
-    constructor() {
-        // this.module.addBroadcastNotifyListener(meta => this.broadcastUniverseHistory(meta));
-    }
+    private readonly modules: Record<string, UniverseHistoryModule> = {};
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
-        // this.module.wake(message.ogameMeta);
+        const key = getStorageKeyPrefix(message.ogameMeta, false);
 
-        // switch (message.type) {
-        //     case MessageType.RequestUniverseHistoryData: {
-        //         await this.broadcastUniverseHistory(message.ogameMeta);
-        //         break;
-        //     }
-        // }
+        if (this.modules[key] != null) {
+            return;
+        }
+
+        const module = this.modules[key] = new UniverseHistoryModule(message.ogameMeta);
+        await module.init();
     }
-
-    // private async broadcastUniverseHistory(meta: MessageOgameMeta): Promise<void> {
-    //     const history = await this.module.getHistory(meta);
-
-    //     const message: UniverseHistoryDataMessage = {
-    //         ogameMeta: meta,
-    //         type: MessageType.UniverseHistoryData,
-    //         data: history,
-    //         senderUuid: serviceWorkerUuid,
-    //     };
-    //     await broadcastMessage(message);
-    // }
 }
