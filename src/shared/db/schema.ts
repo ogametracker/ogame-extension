@@ -149,6 +149,19 @@ type DbServerSettingsItem<T extends keyof DbServerSettings = keyof DbServerSetti
     value: DbServerSettings[T];
 };
 
+
+export interface DbAccount {
+    serverId: number;
+    serverLanguage: string;
+    id: number;
+    name: string;
+};
+export interface DbServer {
+    id: number;
+    name: string;
+    language: string;
+};
+
 export interface OgameTrackerPlayerDbSchema extends DBSchema {
     combatReports: {
         key: number;
@@ -202,22 +215,13 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
     //TODO: table for tracked accounts
     accounts: {
         key: [number, string, number];
-        value: {
-            serverId: number;
-            serverLanguage: string;
-            id: number;
-            name: string;
-        };
+        value: DbAccount;
     };
 
     //TODO: table for known servers
     servers: {
         key: [number, string],
-        value: {
-            id: number;
-            name: string;
-            language: string;
-        };
+        value: DbServer;
     };
 }
 

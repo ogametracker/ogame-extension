@@ -148,7 +148,7 @@
     import { parseIntSafe } from "@/shared/utils/parseNumbers";
     import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
-    import { EmpireDataModule } from "./data/EmpireDataModule";
+    import { UniversesAndAccountsDataModule } from "./data/UniversesAndAccountsDataModule";
     import { GlobalOgameMetaData } from "./data/global";
     import { getRGBString } from './utils/getRGBString';
     import { delay } from '@/shared/utils/delay';
@@ -181,8 +181,8 @@
         universeId: number;
         universeLanguage: string;
 
-        name?: string;
-        universeName?: string;
+        name: string;
+        universeName: string;
     }
 
     @Component({
@@ -402,11 +402,10 @@
                 }
             });
 
-            //TODO: await EmpireDataModule.load();
             await document.fonts.ready;
-            await delay(500);
+            await delay(100);
 
-            this.updateDocumentTitle();
+            await this.updateDocumentTitle();
 
             this.loading = false;
             await this.$nextTick();
@@ -438,79 +437,65 @@
             });
         }
 
-        private updateDocumentTitle() {
-            const ogameMeta = GlobalOgameMetaData;
+        private async updateDocumentTitle() {
+            await UniversesAndAccountsDataModule.ready;
+            
+            const meta = GlobalOgameMetaData;
 
-            const serverName = EmpireDataModule.empire!.universeName;//TODO: !
-            const serverId = ogameMeta.serverId;
-            const serverLang = ogameMeta.language;
+            const server = UniversesAndAccountsDataModule.servers.find(s => s.id == meta.serverId && s.language == meta.language)
+                ?? {
+                id: meta.serverId,
+                language: meta.language,
+                name: `${meta.language.toUpperCase()} ${meta.serverId}`,
+            };
+            const account = UniversesAndAccountsDataModule.accounts.find(a => a.serverId == meta.serverId && a.serverLanguage == meta.language && a.id == meta.playerId)
+                ?? {
+                serverId: meta.serverId,
+                serverLanguage: meta.language,
+                id: meta.playerId,
+                name: meta.playerId.toString(),
+            };
 
-            const playerName = EmpireDataModule.empire!.name;//TODO: !
-            const playerId = ogameMeta.playerId;
-
-            const playerText = playerName != null
-                ? `${playerName} (${playerId})`
-                : playerId.toString();
-
-            const serverText = serverName != null
-                ? `${serverLang.toUpperCase()} ${serverName} (${serverId})`
-                : `${serverLang.toUpperCase()} ${serverId}`;
-
-            document.title = `${playerText} - ${serverText}`;
+            document.title = `${account.name} - ${server.name}`;
         }
 
         private async loadKnownAccounts(): Promise<void> {
-            // TODO: load from idb
-            //
-            /////////////////////////////////////////////////////////////////////////////////////
-            //
-            // const all = await chrome.storage.local.get(null);
-            // const localPlayerKeys = Object.keys(all).filter(key => key.endsWith('-local-player'));
-            // const accounts: KnownAccount[] = localPlayerKeys.map(key => {
-            //     const split = key.split('-');
-            //     const localPlayer = all[key] as LocalPlayerData;
-            //     const id = parseIntSafe(split[2], 10);
-            //     const uniId = parseIntSafe(split[0].substring(1), 10);
-            //     const uniLang = split[1];
-            //     const { name, universeName } = localPlayer;
+            this.knownAccounts = UniversesAndAccountsDataModule.accounts
+                .map<KnownAccount>(acc => ({
+                    key: `${acc.serverLanguage}-${acc.serverId}-${acc.id}`,
+                    id: acc.id,
+                    universeId: acc.serverId,
+                    universeLanguage: acc.serverLanguage,
+                    name: acc.name,
+                    universeName: UniversesAndAccountsDataModule.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage)?.name ?? `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`,
+                })
+                ).sort((a, b) => {
+                    const lang = a.universeLanguage.localeCompare(b.universeLanguage);
+                    if (lang != 0) {
+                        return lang;
+                    }
 
-            //     return {
-            //         key: key.replace('-local-player', ''),
-            //         id,
-            //         universeId: uniId,
-            //         universeLanguage: uniLang,
-            //         name,
-            //         universeName,
-            //     };
-            // });
+                    if (a.universeName != null && b.universeName == null) {
+                        return -1;
+                    }
+                    if (a.universeName == null && b.universeName != null) {
+                        return 1;
+                    }
 
-            // this.knownAccounts = accounts.sort((a, b) => {
-            //     const lang = a.universeLanguage.localeCompare(b.universeLanguage);
-            //     if (lang != 0) {
-            //         return lang;
-            //     }
+                    const uniId = a.universeId - b.universeId;
+                    if (uniId != 0) {
+                        return uniId;
+                    }
 
-            //     if (a.universeName != null && b.universeName == null) {
-            //         return -1;
-            //     }
-            //     if (a.universeName == null && b.universeName != null) {
-            //         return 1;
-            //     }
+                    if (a.name != null && b.name == null) {
+                        return -1;
+                    }
+                    if (a.name == null && b.name != null) {
+                        return 1;
+                    }
 
-            //     const uniId = a.universeId - b.universeId;
-            //     if (uniId != 0) {
-            //         return uniId;
-            //     }
-
-            //     if (a.name != null && b.name == null) {
-            //         return -1;
-            //     }
-            //     if (a.name == null && b.name != null) {
-            //         return 1;
-            //     }
-
-            //     return a.id - b.id;
-            // });
+                    return a.id - b.id;
+                });
         }
 
         private gotoAccount(): void {

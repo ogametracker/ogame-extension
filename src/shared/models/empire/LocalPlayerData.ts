@@ -12,7 +12,4 @@ export interface LocalPlayerData {
     playerClass: PlayerClass;
     allianceClass: AllianceClass;
     officers: PlayerOfficers;
-    
-    name?: string; //TODO: move somewhere else
-    universeName?: string; //TODO: move somewhere else
 }
