@@ -1,7 +1,4 @@
-import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from "@/shared/db/schema";
-import { MessageOgameMeta } from "@/shared/messages/Message";
-import { IDBPDatabase, openDB } from "idb";
-import Semaphore, { Lock } from "semaphore-async-await";
+import { Lock } from "semaphore-async-await";
 import { _logDebug } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 

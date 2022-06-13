@@ -3,31 +3,21 @@ import Semaphore from "semaphore-async-await";
 import { MessageOgameMeta } from "../messages/Message";
 import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from "./schema";
 
-const databases: Partial<Record<string, IDBPDatabase<any>>> = {};
-const dbLocks: Partial<Record<string, Semaphore>> = {};
+const databases: Partial<Record<string, Promise<IDBPDatabase<any>>>> = {};
 
 async function getDatabase<TSchema>(
     name: string,
     upgrade: (db: IDBPDatabase<TSchema>, oldVersion: number, newVersion: number | null, transaction: IDBPTransaction<TSchema, StoreNames<TSchema>[], "versionchange">) => void
 ): Promise<IDBPDatabase<TSchema>> {
-    let lock = dbLocks[name];
-    if (lock == null) {
-        lock = new Semaphore(1000);
-        lock.drainPermits();
-    }
-    else {
-        await lock.acquire();
-    }
 
-    let db = databases[name];
-    if (db == null) {
-        db = await openDB<TSchema>(name, DbVersion, { upgrade });
+    let dbPromise = databases[name];
+    if (dbPromise == null) {
+        databases[name] = dbPromise = openDB<TSchema>(name, DbVersion, { upgrade });
+        const db = await dbPromise;
         db.addEventListener('close', ev => delete databases[name]);
-        databases[name] = db;
     }
 
-    lock.release();
-    return db;
+    return await dbPromise;
 }
 
 export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerPlayerDbSchema>> {

@@ -6,7 +6,6 @@ import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { Lock } from 'semaphore-async-await';
 import { getPlayerDatabase } from '@/shared/db/access';
 
 @Component
@@ -14,8 +13,6 @@ class CombatReportDataModuleClass extends Vue {
     public reports: CombatReport[] = [];
     public reportsPerDay: Record<number, CombatReport[]> = {};
     public firstDate: number | null = null;
-
-    private readonly lock = new Lock();
 
     private async created() {
         this.initCommunication();

@@ -6,7 +6,6 @@ import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { Settings } from '@/shared/models/settings/Settings';
 import { NotifySettingsUpdateMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { Lock } from 'semaphore-async-await';
 import { getGlobalDatabase } from '@/shared/db/access';
 import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
 import { LanguageKey } from '@/shared/i18n/LanguageKey';
@@ -15,7 +14,8 @@ import { LanguageKey } from '@/shared/i18n/LanguageKey';
 class SettingsDataModuleClass extends Vue {
     public settings: Settings = null!;
 
-    private readonly lock = new Lock();
+    public readonly ready = new Promise<void>(resolve => this._resolveReady = resolve);
+    private _resolveReady!: () => void;
 
     public updateSettings(settings: Settings) {
         console.debug('updating settings', settings);
@@ -35,16 +35,8 @@ class SettingsDataModuleClass extends Vue {
     }
 
     private async created() {
-        await this.lock.acquire();
-
         this.initCommunication();
         await this.loadData();
-        this.lock.release();
-    }
-
-    public async load(): Promise<void> {
-        await this.lock.acquire();
-        this.lock.release();
     }
 
     private initCommunication() {
@@ -56,6 +48,8 @@ class SettingsDataModuleClass extends Vue {
     private async loadData() {
         const db = await getGlobalDatabase();
         this.settings = await db.get('settings', 0) ?? getDefaultSettings(GlobalOgameMetaData.language as LanguageKey);
+
+        this._resolveReady();
     }
 
     private async onMessage(msg: Message) {

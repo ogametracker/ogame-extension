@@ -18,7 +18,7 @@ async function init() {
 }
 
 async function applyRouteSettings() {
-    await SettingsDataModule.load();
+    await SettingsDataModule.ready;
 
     const routeSettings = SettingsDataModule.settings.defaultRoutes;
     const allRoutes = router.getRoutes();
