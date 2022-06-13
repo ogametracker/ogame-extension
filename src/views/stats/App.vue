@@ -105,7 +105,7 @@
             <footer>
                 <router-link
                     :to="{ name: 'donate' }"
-                    style="text-decoration: none"
+                    class="made-with-love"
                 >
                     made with
                     <span class="mdi mdi-heart" style="color: #ff1f1f" /> by
@@ -114,38 +114,15 @@
             </footer>
         </template>
 
-        <custom-dialog
+        <switch-account-dialog 
             v-if="showAccountSwitchDialog"
-            show-close
+            :color="colors.switchAccount"
             @close="showAccountSwitchDialog = false"
-            :style="`--color: ${getColorVariable(colors.switchAccount)};`"
-        >
-            <span
-                v-if="knownAccounts.length == 0"
-                v-text="'LOCA: loading...'"
-            />
-            <div v-else>
-                <div v-text="'LOCA: Look at data of account'" />
-                <select @change="gotoAccount()" v-model="selectedAccountIndex">
-                    <option
-                        v-for="(account, i) in knownAccounts"
-                        :key="account.key"
-                        :value="i"
-                    >
-                        {{ account.name || account.id }} ({{
-                            account.universeName || account.universeId
-                        }}
-                        {{ account.universeLanguage.toUpperCase() }})
-                    </option>
-                </select>
-            </div>
-        </custom-dialog>
+        />
     </div>
 </template>
 
 <script lang="ts">
-    import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
-    import { parseIntSafe } from "@/shared/utils/parseNumbers";
     import { Component, Vue, Watch } from "vue-property-decorator";
     import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     import { UniversesAndAccountsDataModule } from "./data/UniversesAndAccountsDataModule";
@@ -155,6 +132,7 @@
     import { _throw } from "@/shared/utils/_throw";
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
+    import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
 
     interface Tab {
         key: string;
@@ -174,20 +152,10 @@
         keyboardIcon?: string;
     }
 
-    interface KnownAccount {
-        key: string;
-
-        id: number;
-        universeId: number;
-        universeLanguage: string;
-
-        name: string;
-        universeName: string;
-    }
-
     @Component({
         components: {
             SetDefaultRouteButton,
+            SwitchAccountDialog,
         },
     })
     export default class App extends Vue {
@@ -197,10 +165,6 @@
         };
 
         private loading = true;
-
-        private knownAccounts: KnownAccount[] = [];
-        private knownAccountsLoaded = false;
-        private selectedAccountIndex = -1;
         private showAccountSwitchDialog = false;
 
         private get isIframeMode() {
@@ -344,22 +308,13 @@
             if (!this.isIframeMode) {
                 tabs.push({
                     key: 'switch-account',
-                    customAction: async () => await this.initAccountDialog(),
+                    customAction: () => this.showAccountSwitchDialog = true,
                     icon: 'mdi mdi-account-multiple',
                     color: this.colors.switchAccount,
                 });
             }
 
             return tabs;
-        }
-
-        private async initAccountDialog() {
-            this.showAccountSwitchDialog = true;
-
-            if (!this.knownAccountsLoaded) {
-                await this.loadKnownAccounts();
-                this.knownAccountsLoaded = true;
-            }
         }
 
         private get activeColor(): string | null {
@@ -457,53 +412,6 @@
             };
 
             document.title = `${account.name} - ${server.name}`;
-        }
-
-        private async loadKnownAccounts(): Promise<void> {
-            this.knownAccounts = UniversesAndAccountsDataModule.accounts
-                .map<KnownAccount>(acc => ({
-                    key: `${acc.serverLanguage}-${acc.serverId}-${acc.id}`,
-                    id: acc.id,
-                    universeId: acc.serverId,
-                    universeLanguage: acc.serverLanguage,
-                    name: acc.name,
-                    universeName: UniversesAndAccountsDataModule.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage)?.name ?? `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`,
-                })
-                ).sort((a, b) => {
-                    const lang = a.universeLanguage.localeCompare(b.universeLanguage);
-                    if (lang != 0) {
-                        return lang;
-                    }
-
-                    if (a.universeName != null && b.universeName == null) {
-                        return -1;
-                    }
-                    if (a.universeName == null && b.universeName != null) {
-                        return 1;
-                    }
-
-                    const uniId = a.universeId - b.universeId;
-                    if (uniId != 0) {
-                        return uniId;
-                    }
-
-                    if (a.name != null && b.name == null) {
-                        return -1;
-                    }
-                    if (a.name == null && b.name != null) {
-                        return 1;
-                    }
-
-                    return a.id - b.id;
-                });
-        }
-
-        private gotoAccount(): void {
-            const account = this.knownAccounts[this.selectedAccountIndex];
-            const url = `/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
-            window.open(url, '_blank', 'noopener,noreferrer');
-
-            this.showAccountSwitchDialog = false;
         }
     }
 </script>
@@ -654,6 +562,14 @@
             left: 50%;
             top: 50%;
             z-index: 0 !important;
+        }
+    }
+
+    .made-with-love {
+        text-decoration: none;
+
+        &.router-link-active {
+            color: black;
         }
     }
 </style>
