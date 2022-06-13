@@ -23,7 +23,7 @@ const services: MessageService[] = [
     new DebrisFieldReportService(),
     new EmpireService(),
     new SettingsService(),
-    new UniverseHistoryService(),
+    // new UniverseHistoryService(),
     new ServerSettingsService(),
     new UniversesAndAccountsService(),
 ];

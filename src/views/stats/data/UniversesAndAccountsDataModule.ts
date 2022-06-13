@@ -4,14 +4,20 @@ import { DbAccount, DbServer } from '@/shared/db/schema';
 
 @Component
 class UniversesAndAccountsDataModuleClass extends Vue {
-    public readonly ready = new Promise<void>(resolve => this._resolveReady = resolve);
+    private _ready!: Promise<void>;
     private _resolveReady!: () => void;
 
     public accounts: DbAccount[] = [];
     public servers: DbServer[] = [];
 
-    private async created() {
+    private async created() { 
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         await this.loadData();
+    }
+
+    public get ready(): Promise<void> {
+        return this._ready;
     }
 
     private async loadData() {

@@ -14,7 +14,7 @@ import { LanguageKey } from '@/shared/i18n/LanguageKey';
 class SettingsDataModuleClass extends Vue {
     public settings: Settings = null!;
 
-    public readonly ready = new Promise<void>(resolve => this._resolveReady = resolve);
+    private _ready!: Promise<void>;
     private _resolveReady!: () => void;
 
     public updateSettings(settings: Settings) {
@@ -34,7 +34,13 @@ class SettingsDataModuleClass extends Vue {
         });
     }
 
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     private async created() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         this.initCommunication();
         await this.loadData();
     }
