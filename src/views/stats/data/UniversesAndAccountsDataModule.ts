@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { getGlobalDatabase } from '@/shared/db/access';
-import { DbAccount, DbServer } from '@/shared/db/schema';
+import { DbAccount, DbServer } from '@/shared/db/schema/global';
 
 @Component
 class UniversesAndAccountsDataModuleClass extends Vue {

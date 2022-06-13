@@ -12,7 +12,7 @@ import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
 import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetProductionSettings, DbShipAmounts } from '@/shared/db/schema';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetProductionSettings, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
 import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
 import { ShipType } from '@/shared/models/ogame/ships/ShipType';

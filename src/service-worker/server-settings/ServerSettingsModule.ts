@@ -6,7 +6,7 @@ import { broadcastMessage } from "@/shared/communication/broadcastMessage";
 import { NotifyServerSettingsUpdateMessage } from "@/shared/messages/tracking/server-settings";
 import { MessageType } from "@/shared/messages/MessageType";
 import { serviceWorkerUuid } from "@/shared/uuid";
-import { DbServerSettings } from "@/shared/db/schema";
+import { DbServerSettings } from "@/shared/db/schema/server";
 import { parseFloatSafe } from "@/shared/utils/parseNumbers";
 
 declare namespace OgameApi {

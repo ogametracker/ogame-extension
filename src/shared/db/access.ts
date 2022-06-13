@@ -1,7 +1,6 @@
 import { IDBPDatabase, IDBPTransaction, openDB, StoreNames, unwrap } from "idb";
-import Semaphore from "semaphore-async-await";
 import { MessageOgameMeta } from "../messages/Message";
-import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from "./schema";
+import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema, OgameTrackerUniverseHistoryDbSchema } from "./schema";
 
 const databases: Partial<Record<string, Promise<IDBPDatabase<any>>>> = {};
 
@@ -34,8 +33,14 @@ export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
     const name = `s${meta.serverId}-${meta.language}`;
     return await getDatabase(name, (db) => {
         db.createObjectStore('serverSettings');
+    });
+}
 
+export async function getUniverseHistoryDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerUniverseHistoryDbSchema>> {
+    const name = `s${meta.serverId}-${meta.language}.universeHistory`;
+    return await getDatabase(name, (db) => {
         //TODO: implement db upgrade for universe history
+        throw new Error('not implemented');
     });
 }
 

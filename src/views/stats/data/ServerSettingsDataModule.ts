@@ -5,7 +5,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { ServerSettings } from '@/shared/models/server-settings/ServerSettings';
 import { getServerDatabase } from '@/shared/db/access';
-import { DbServerSettings } from '@/shared/db/schema';
+import { DbServerSettings } from '@/shared/db/schema/server';
 
 @Component
 class ServerSettingsDataModuleClass extends Vue {

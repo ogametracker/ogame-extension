@@ -12,7 +12,7 @@ import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
 import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { getPlayerDatabase } from "../../shared/db/access";
-import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema";
+import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
 
 export class EmpireModule {
     public async updateOfficers(meta: MessageOgameMeta, data: PlayerOfficers): Promise<void> {
