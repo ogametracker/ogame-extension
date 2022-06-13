@@ -31,7 +31,7 @@ class SettingsDataModuleClass extends Vue {
                 type: MessageType.NotifySettingsUpdate,
             }
             await broadcastMessage(msg);
-        });
+        })();
     }
 
     public get ready(): Promise<void> {
