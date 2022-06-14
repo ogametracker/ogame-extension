@@ -8,11 +8,11 @@ import { NotifyUniverseHistoryUpdateMessage } from "@/shared/messages/tracking/u
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
 import { parseCoordinates } from "@/shared/utils/parseCoordinates";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { _logDebug } from "@/shared/utils/_log";
+import { _log, _logDebug } from "@/shared/utils/_log";
 import { _throw } from "@/shared/utils/_throw";
 import { serviceWorkerUuid } from "@/shared/uuid";
 import { XMLParser } from "fast-xml-parser";
-import { IDBPDatabase, IDBPObjectStore, IDBPTransaction, StoreNames } from "idb";
+import { IDBPTransaction, StoreNames } from "idb";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace OgameApi {
@@ -178,11 +178,8 @@ export class UniverseHistoryModule {
         const timeLeft = Math.max(0, lastUpdate + this.intervalInMs - now);
         _logDebug(`next universe history tracking in ${timeLeft} ms (${new Date(Date.now() + timeLeft)}) for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
 
-        if (timeLeft > 0) {
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(async () => await this.trackUniverseUpdates(), timeLeft);
-            return;
-        }
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(async () => await this.trackUniverseUpdates(), timeLeft);
     }
 
     private async trackUniverseUpdates() {
@@ -193,6 +190,7 @@ export class UniverseHistoryModule {
             const playerScores = await this.getAllPlayerScores();
             const planets = await this.getPlanets();
 
+            _logDebug('loaded current states, updating in db (this may take a while)');
             const db = await getUniverseHistoryDatabase(this.meta);
             const allStoreNames: UniverseHistoryDbStoreName[] = [
                 '_lastUpdate',
@@ -221,6 +219,8 @@ export class UniverseHistoryModule {
             ];
             const tx: UniverseHistoryDbTransaction = db.transaction(allStoreNames, 'readwrite');
             await this.updateHistory(tx, players, alliances, playerScores, planets);
+            await tx.done;
+            _logDebug('updated universe history');
 
             const notificationMessage: NotifyUniverseHistoryUpdateMessage = {
                 ogameMeta: this.meta,
@@ -241,9 +241,13 @@ export class UniverseHistoryModule {
         await this.updatePlayers(tx, players, now, playerScores);
         await this.updateAlliances(tx, alliances, now, players, playerScores);
         await this.updatePlanets(tx, planets, now);
+
+        await tx.objectStore('_lastUpdate').put(now, 0);
     }
 
     private async updateAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>) {
+        _logDebug('updating alliance history');
+
         await this.updateKnownAlliances(tx, alliances);
         await this.updateAllianceTags(tx, alliances, now);
         await this.updateAllianceNames(tx, alliances, now);
@@ -476,6 +480,7 @@ export class UniverseHistoryModule {
 
 
     private async updatePlayers(tx: UniverseHistoryDbTransaction, players: Player[], now: number, playerScores: Partial<Record<number, PlayerScorePositions>>) {
+        _logDebug('updating player history');
         await this.updateKnownPlayers(tx, players);
         await this.updatePlayerNames(tx, players, now);
         await this.updatePlayerAlliances(tx, players, now);
@@ -676,6 +681,8 @@ export class UniverseHistoryModule {
 
 
     private async updatePlanets(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
+        _logDebug('updating planet and moon history');
+
         await this.updateKnownPlanets(tx, planets);
         await this.updatePlanetNames(tx, planets, now);
         await this.updatePlanetStates(tx, planets, now);

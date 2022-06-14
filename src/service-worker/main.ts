@@ -1,5 +1,4 @@
 import Semaphore, { Lock } from "semaphore-async-await";
-import { v4 } from "uuid";
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
 import { executeMigrations } from "../shared/migrations/executeMigrations";
@@ -23,7 +22,7 @@ const services: MessageService[] = [
     new DebrisFieldReportService(),
     new EmpireService(),
     new SettingsService(),
-    // new UniverseHistoryService(),
+    new UniverseHistoryService(),
     new ServerSettingsService(),
     new UniversesAndAccountsService(),
 ];
