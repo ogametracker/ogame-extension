@@ -387,6 +387,11 @@
             return Object.values(this.planetSettings).sort((a, b) => compareCoordinates(a.coordinates!, b.coordinates!));
         }
 
+        @Watch('astrophysicsSettings.planet.position')
+        private onAstrophysicsSettingsPlanetPositionChanged(newPosition: number, oldPosition: number) {
+            this.astrophysicsSettings.planet.maxTemperature = this.getAverageTemperature(newPosition);
+        }
+
         private mounted() {
             this.initSettings();
 
