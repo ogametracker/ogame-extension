@@ -79,13 +79,13 @@ function getStatsPageUrl(iframe: boolean) {
 }
 
 function showOgameTrackerDialog() {
-    if (document.querySelector('#ogame-tracker-dialog') != null) {
+    if (document.querySelector('#ogame-tracker-dialog__v2') != null) {
         return;
     }
 
     const container = document.createElement('div');
     const url = getStatsPageUrl(true);
-    container.id = 'ogame-tracker-dialog';
+    container.id = 'ogame-tracker-dialog__v2';
     container.innerHTML = `<iframe src="${url}"></iframe>`;
     container.addEventListener('click', () => closeOgameTrackerDialog());
 
@@ -93,7 +93,7 @@ function showOgameTrackerDialog() {
 }
 
 function closeOgameTrackerDialog() {
-    const dialog = document.querySelector('#ogame-tracker-dialog');
+    const dialog = document.querySelector('#ogame-tracker-dialog__v2');
     dialog?.remove();
 }
 
