@@ -6,10 +6,10 @@
                     <tr>
                         <td />
                         <td />
-                        <td v-text="'LOCA: Label'" />
-                        <td v-text="'LOCA: Type'" />
-                        <td v-text="'LOCA: Range start'" />
-                        <td v-text="'LOCA: Range contains'" />
+                        <td v-text="$i18n.$t.settings.dateRanges.headers.label" />
+                        <td v-text="$i18n.$t.settings.dateRanges.headers.type" />
+                        <td v-text="$i18n.$t.settings.dateRanges.headers.rangeStart" />
+                        <td v-text="$i18n.$t.settings.dateRanges.headers.rangeContains" />
                         <td>
                             <reset-button @reset="resetDateRanges()" />
                         </td>
@@ -39,7 +39,10 @@
                                 v-model.lazy="range.label"
                                 @change="onItemsUpdated()"
                             />
-                            <span v-else v-text="'LOCA: Since <first day>'" />
+                            <span 
+                                v-else
+                                v-text="$i18n.$t.settings.dateRanges.since($i18n.$t.settings.dateRanges.firstDayTemplate)" 
+                            />
                         </td>
                         <td>
                             <select
@@ -51,7 +54,7 @@
                                     v-for="rangeType in rangeTypes"
                                     :key="rangeType"
                                     :value="rangeType"
-                                    v-text="`LOCA: ${rangeType}`"
+                                    v-text="$i18n.$t.settings.dateRanges[rangeType]"
                                 />
                             </select>
                         </td>
@@ -62,6 +65,7 @@
                                 v-model="range.skip"
                                 @change="onItemsUpdated()"
                             />
+                            <span v-text="$i18n.$t.settings.dateRanges[`${range.type}sAgo`]" />
                         </td>
                         <td>
                             <input
@@ -70,6 +74,7 @@
                                 v-model="range.take"
                                 @change="onItemsUpdated()"
                             />
+                            <span v-text="$i18n.$t.settings.dateRanges[`${range.type}s`]" />
                         </td>
                         <td v-text="getRangeText(range)" />
                     </tr>
@@ -92,10 +97,9 @@
 </template>
 
 <script lang="ts">
-    import { DateRange, DateRangeType, FullDateRangeType, NormalDateRange } from '@/shared/models/settings/DateRange';
+    import { DateRange, DateRangeType } from '@/shared/models/settings/DateRange';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { getRangeDays } from '../../utils/dateRanges';
     import ResetButton from './ResetButton.vue';
@@ -116,30 +120,6 @@
             'month',
             'year',
         ];
-
-        private get columns(): GridTableColumn<keyof NormalDateRange | 'delete' | 'drag' | 'rangeText'>[] {
-            return [
-                { key: 'drag' },
-                { key: 'delete' },
-                {
-                    key: 'label',
-                    label: 'LOCA: Label',
-                },
-                {
-                    key: 'type',
-                    label: 'LOCA: Type',
-                },
-                {
-                    key: 'skip',
-                    label: 'LOCA: Range starts',
-                },
-                {
-                    key: 'take',
-                    label: 'LOCA: Range ends',
-                },
-                { key: 'rangeText' },
-            ];
-        }
 
         private getRangeText(range: DateRange): string {
             if (range.type == 'all') {
@@ -168,7 +148,7 @@
                 type: 'day',
                 skip: 0,
                 take: 1,
-                label: 'LOCA: New Range',
+                label: this.$i18n.$t.settings.dateRanges.defaultNames.newRange,
             });
             this.onItemsUpdated();
         }

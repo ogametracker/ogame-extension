@@ -87,7 +87,7 @@
             };
 
             return Object.values(ResourceType).map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: reports => reports.reduce(
                     (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                         (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0)[resource] * factors[resource],
@@ -105,7 +105,7 @@
 
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {
@@ -117,7 +117,7 @@
                             }), 0),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {

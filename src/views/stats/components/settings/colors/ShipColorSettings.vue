@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="header"
+        :header="$i18n.$t.settings.colors.ships"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -23,29 +23,27 @@
         },
     })
     export default class ShipColorSettings extends Vue {
-        private get header() {
-            return 'LOCA: Ships';
-        }
 
         private get labels(): Record<ShipType, string> {
+
             return {
-                [ShipType.lightFighter]: 'LOCA: lightFighter',
-                [ShipType.heavyFighter]: 'LOCA: heavyFighter',
-                [ShipType.cruiser]: 'LOCA: cruiser',
-                [ShipType.battleship]: 'LOCA: battleship',
-                [ShipType.bomber]: 'LOCA: bomber',
-                [ShipType.battlecruiser]: 'LOCA: battlecruiser',
-                [ShipType.destroyer]: 'LOCA: destroyer',
-                [ShipType.reaper]: 'LOCA: reaper',
-                [ShipType.pathfinder]: 'LOCA: pathfinder',
-                [ShipType.smallCargo]: 'LOCA: smallCargo',
-                [ShipType.largeCargo]: 'LOCA: largeCargo',
-                [ShipType.espionageProbe]: 'LOCA: espionageProbe',
-                [ShipType.deathStar]: 'LOCA: deathStar',
-                [ShipType.recycler]: 'LOCA: recycler',
-                [ShipType.colonyShip]: 'LOCA: colonyShip',
-                [ShipType.crawler]: 'LOCA: crawler',
-                [ShipType.solarSatellite]: 'LOCA: solarSatellite',
+                [ShipType.lightFighter]: this.$i18n.$t.ships[ShipType.lightFighter],
+                [ShipType.heavyFighter]: this.$i18n.$t.ships[ShipType.heavyFighter],
+                [ShipType.cruiser]: this.$i18n.$t.ships[ShipType.cruiser],
+                [ShipType.battleship]: this.$i18n.$t.ships[ShipType.battleship],
+                [ShipType.bomber]: this.$i18n.$t.ships[ShipType.bomber],
+                [ShipType.battlecruiser]: this.$i18n.$t.ships[ShipType.battlecruiser],
+                [ShipType.destroyer]: this.$i18n.$t.ships[ShipType.destroyer],
+                [ShipType.reaper]: this.$i18n.$t.ships[ShipType.reaper],
+                [ShipType.pathfinder]: this.$i18n.$t.ships[ShipType.pathfinder],
+                [ShipType.smallCargo]: this.$i18n.$t.ships[ShipType.smallCargo],
+                [ShipType.largeCargo]: this.$i18n.$t.ships[ShipType.largeCargo],
+                [ShipType.espionageProbe]: this.$i18n.$t.ships[ShipType.espionageProbe],
+                [ShipType.deathStar]: this.$i18n.$t.ships[ShipType.deathStar],
+                [ShipType.recycler]: this.$i18n.$t.ships[ShipType.recycler],
+                [ShipType.colonyShip]: this.$i18n.$t.ships[ShipType.colonyShip],
+                [ShipType.crawler]: this.$i18n.$t.ships[ShipType.crawler],
+                [ShipType.solarSatellite]: this.$i18n.$t.ships[ShipType.solarSatellite],
             };
         }
 

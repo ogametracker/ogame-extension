@@ -80,7 +80,7 @@
         private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
             return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).map(ship => ({
                 key: `${ship}`,
-                label: `LOCA: ${ship}`, //LOCA
+                label: this.$i18n.$t.ships[ship],
                 color: this.colors[ship],
                 filled: true,
                 getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),

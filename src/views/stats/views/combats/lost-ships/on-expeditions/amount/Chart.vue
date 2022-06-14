@@ -81,7 +81,7 @@
         private get datasets(): StatsChartDataset<CombatReport>[] {
             return getNumericEnumValues<ShipType>(ShipType).map(ship => ({
                 key: ship.toString(),
-                label: `LOCA: ${ship}`, //LOCA
+                label: this.$i18n.$t.ships[ship],
                 color: this.colors[ship],
                 filled: true,
                 getValue: reports => reports.reduce((acc, report) => acc + report.lostShips[ship], 0),

@@ -1,7 +1,7 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="'LOCA: Extension Language'" />
+            <span v-text="$i18n.$t.settings.misc.extensionLanguage" />
         </div>
         <div class="fake-table-body">
             <select :value="language" @change="setLanguage($event)">

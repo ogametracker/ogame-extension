@@ -83,7 +83,7 @@
 
                     <set-default-route-button
                         v-if="tab.canBeDefault"
-                        :label="'LOCA: Set as default'"
+                        :label="$i18n.$t.settings.setDefaultRoute"
                         rootRouteName=""
                         :routeName="tab.to.name"
                     />

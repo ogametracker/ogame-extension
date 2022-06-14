@@ -159,6 +159,13 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
             return dataItemsByRange;
         }
 
+        private get firstDay() {
+            return this.dataItemsByRange.reduce((acc, cur) => Math.min(
+                acc, 
+                Math.min(...cur.map(t => t.date)),
+            ), Date.now());
+        }
+
         private get columns(): RangeStatsTableColumn[] {
             const columns: RangeStatsTableColumn[] = [
                 {
@@ -177,7 +184,7 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
 
             columns.push(...this.dateRanges.map((range, i) => ({
                 key: i,
-                label: range.label ?? 'LOCA: Since <first day>',
+                label: range.label ?? this.$i18n.$t.settings.dateRanges.since(this.$i18n.$d(this.firstDay, 'date')),
                 formatter: (value: number) => this.$number(value, this.numberFormatOptions),
             })));
 

@@ -69,7 +69,7 @@
             return [
                 ...resources.map(resource => ({
                     key: resource,
-                    label: `LOCA: ${resource}`, //LOCA
+                    label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report[resource], 0),
@@ -77,7 +77,7 @@
                 })),
                 {
                     key: 'total',
-                    label: 'LOCA: Total Units (MSU)',
+                    label: this.$i18n.$t.resources.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),

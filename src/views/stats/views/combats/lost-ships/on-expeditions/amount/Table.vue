@@ -55,7 +55,7 @@
 
         private get items(): RangedStatsTableItem<CombatReport>[] {
             return getNumericEnumValues<ShipType>(ShipType).map(ship => ({
-                label: ship.toString(),
+                label: this.$i18n.$t.ships[ship],
                 getValue: combats => combats.reduce((acc, combat) => acc + combat.lostShips[ship], 0),
             }));
         }

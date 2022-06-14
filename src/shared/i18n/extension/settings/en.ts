@@ -1,0 +1,60 @@
+import { SettingsTranslations } from "./type";
+
+export const en: SettingsTranslations = {
+    tabs: {
+        dateRanges: 'Date Ranges',
+        colors: 'Colors',
+        misc: 'Misc',
+        importExport: 'Import/Export',
+    },
+    dateRanges: {
+        defaultNames: {
+            today: 'Today',
+            yesterday: 'Yesterday',
+            currentWeek: 'Current week',
+            lastWeek: 'Last week',
+            currentMonth: 'Current ,onth',
+            newRange: 'new range',
+        },
+        since: (date) => `Since ${date}`,
+        firstDayTemplate: '<first day>',
+        headers: {
+            label: 'Label',
+            type: 'Type',
+            rangeStart: 'Range starts',
+            rangeContains: 'Range contains',
+        },
+        day: 'day',
+        days: 'days',
+        daysAgo: 'days ago',
+        week: 'week',
+        weeks: 'weeks',
+        weeksAgo: 'weeks ago',
+        month: 'month',
+        months: 'months',
+        monthsAgo: 'months ago',
+        year: 'year',
+        years: 'years',
+        yearsAgo: 'years ago',
+    },
+    colors: {
+        combatResults: 'Combat results',
+        expeditionEvents: 'Expedition events',
+        expeditionEventSizes: 'Expedition event sizes',
+        resources: 'Resources',
+        ships: 'Ships',
+    },
+    misc: {
+        detailedResourceBalance: {
+            header: 'Detailed resource balance',
+            checkboxLabel: 'show detailed resource balance',
+        },
+        extensionLanguage: 'UI language (within OGame Tracker)',
+        msuConversionRates: 'MSU conversion rates',
+        resourceUnitFactorsOfLostShips: 'Factor of resource units of ships lost in combat',
+        resourceUnitFactorsOfShipFoundOnExpeditions: 'Factors of resource units of ships found on expeditions',
+    },
+    reset: 'Reset settings',
+    setDefaultRoute: 'Set as default',
+    setDefaultSubRoute: 'Set as default for this area',
+};

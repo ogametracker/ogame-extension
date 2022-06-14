@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="header"
+        :header="$i18n.$t.settings.colors.expeditionEventSizes"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -23,9 +23,6 @@
         },
     })
     export default class ExpeditionEventSizeColorSettings extends Vue {
-        private get header() {
-            return 'LOCA: Expedition Event Sizes';
-        }
 
         private get labels(): Record<ExpeditionEventSize, string> {
             return {

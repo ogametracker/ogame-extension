@@ -11,19 +11,19 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Date Ranges',
+                    label: this.$i18n.$t.settings.tabs.dateRanges,
                     to: { name: 'settings/date-ranges' },
                 },
                 {
-                    label: 'LOCA: Colors',
+                    label: this.$i18n.$t.settings.tabs.colors,
                     to: { name: 'settings/colors' },
                 },
                 {
-                    label: 'LOCA: Misc',
+                    label: this.$i18n.$t.settings.tabs.misc,
                     to: { name: 'settings/misc' },
                 },
                 {
-                    label: 'LOCA: Import/Export',
+                    label: this.$i18n.$t.settings.tabs.importExport,
                     to: { name: 'settings/import-export' },
                 },
             ];

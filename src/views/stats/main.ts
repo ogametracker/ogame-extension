@@ -8,13 +8,23 @@ import { router } from './router';
 import './i18n/Localization-vue';
 import './extend-vue';
 import { SettingsDataModule } from './data/SettingsDataModule';
+import { $i18n } from '@/shared/i18n/extension/$i18n';
 
 void init();
 
 
 async function init() {
     await applyRouteSettings();
+    watchLanguage();
     mountVue();
+}
+
+function watchLanguage() {
+    new Vue().$watch(
+        () => SettingsDataModule.settings.extensionLanguage,
+        lang => $i18n.locale = lang,
+        { immediate: true }
+    );
 }
 
 async function applyRouteSettings() {
@@ -36,7 +46,7 @@ async function applyRouteSettings() {
 function mountVue() {
     Vue.config.productionTip = false;
 
-    new Vue({
+    const vue = new Vue({
         router,
         render: h => h(App)
     }).$mount('#app');

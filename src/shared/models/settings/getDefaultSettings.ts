@@ -1,3 +1,4 @@
+import { $i18n } from "@/shared/i18n/extension/$i18n";
 import { LanguageKey } from "../../i18n/LanguageKey";
 import { CombatResultType } from "../combat-reports/CombatResultType";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
@@ -7,34 +8,35 @@ import { ShipType } from "../ogame/ships/ShipType";
 import { Settings } from "./Settings";
 
 export function getDefaultSettings(language: LanguageKey): Settings {
+    $i18n.locale = language;
     return {
         dateRanges: [
             {
-                label: 'LOCA: Today',
+                label: $i18n.$t.settings.dateRanges.defaultNames.today,
                 type: 'day',
                 skip: 0,
                 take: 1,
             },
             {
-                label: 'LOCA: Yesterday',
+                label: $i18n.$t.settings.dateRanges.defaultNames.yesterday,
                 type: 'day',
                 skip: 1,
                 take: 1,
             },
             {
-                label: 'LOCA: Current Week',
+                label: $i18n.$t.settings.dateRanges.defaultNames.currentWeek,
                 type: 'week',
                 skip: 0,
                 take: 1,
             },
             {
-                label: 'LOCA: Last Week',
+                label: $i18n.$t.settings.dateRanges.defaultNames.lastWeek,
                 type: 'week',
                 skip: 1,
                 take: 1,
             },
             {
-                label: 'LOCA: Current Month',
+                label: $i18n.$t.settings.dateRanges.defaultNames.currentMonth,
                 type: 'month',
                 skip: 0,
                 take: 1,

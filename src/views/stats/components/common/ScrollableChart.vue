@@ -1072,6 +1072,8 @@
         }
         &-footer {
             margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(var(--color), 0.5);
         }
     }
 

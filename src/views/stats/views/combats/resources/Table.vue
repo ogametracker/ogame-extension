@@ -57,7 +57,7 @@
 
         private get items(): RangedStatsTableItem<CombatReport>[] {
             return Object.values(ResourceType).map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.loot[resource], 0),
             }));
         }
@@ -65,14 +65,14 @@
         private get footerItems(): RangedStatsTableItem<CombatReport>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + expo.loot.metal + expo.loot.crystal + expo.loot.deuterium,
                         0
                     ),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
                             + expo.loot.metal

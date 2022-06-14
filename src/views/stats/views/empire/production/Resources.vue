@@ -15,8 +15,8 @@
         <template #header-deuterium>
             <o-resource resource="deuterium" size="75px" />
         </template>
-        <template #header-total> LOCA: Total </template>
-        <template #header-totalMsu> LOCA: Total (MSU) </template>
+        <template #header-total> {{ $i18n.$t.resources.sum }} </template>
+        <template #header-totalMsu> {{ $i18n.$t.resources.sumMsu }} </template>
 
         <template #header-productionSettings>
             <div class="production-settings-mini-table">

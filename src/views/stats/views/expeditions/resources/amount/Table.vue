@@ -63,7 +63,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventResources>[] {
             return Object.values(ResourceType).map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.resources[resource], 0),
             }));
         }
@@ -71,14 +71,14 @@
         private get footerItems(): RangedStatsTableItem<ExpeditionEventResources>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + expo.resources.metal + expo.resources.crystal + expo.resources.deuterium,
                         0
                     ),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
                             + expo.resources.metal

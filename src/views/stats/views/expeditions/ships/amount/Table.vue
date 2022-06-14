@@ -63,7 +63,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return getNumericEnumValues(ExpeditionFindableShipType).map(ship => ({
-                label: ship.toString(),
+                label: this.$i18n.$t.ships[ship as ShipType],
                 getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
             }));
         }

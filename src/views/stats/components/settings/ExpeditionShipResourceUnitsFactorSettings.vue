@@ -2,9 +2,7 @@
     <div class="fake-table expedition-ship-resource-units-factor-settings">
         <div class="fake-table-header">
             <span
-                v-text="
-                    'LOCA: Resource unit factors of ships found on expeditions'
-                "
+                v-text="$i18n.$t.settings.misc.resourceUnitFactorsOfShipFoundOnExpeditions"
             />
         </div>
         <div class="fake-table-body">

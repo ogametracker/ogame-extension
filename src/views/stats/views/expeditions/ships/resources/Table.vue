@@ -70,7 +70,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return Object.values(ResourceType).map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: expos => expos.reduce(
                     (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource]
@@ -81,7 +81,7 @@
         private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
@@ -90,7 +90,7 @@
                             }), 0),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {

@@ -19,7 +19,7 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Units Found</div>
+                        <div v-text="$i18n.$t.resources.sum" />
 
                         <div
                             class="number"
@@ -27,17 +27,17 @@
                                 $number(getSumMsu(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Units Found (MSU)</div>
+                        <div v-text="$i18n.$t.resources.sumMsu" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div>LOCA: Units Found (Total)</div>
+                    <div v-text="$i18n.$t.resources.sum" />
 
                     <div class="number" v-text="$number(getSumMsu(datasets))" />
-                    <div>LOCA: Units Found (MSU, Total)</div>
+                    <div v-text="$i18n.$t.resources.sumMsu" />
                 </div>
             </template>
         </stats-chart>
@@ -107,7 +107,7 @@
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
-                    label: `LOCA: ${resource}`, //LOCA
+                    label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (expos: ExpeditionEventFleet[]) => expos.reduce(
@@ -118,7 +118,7 @@
                 })),
                 {
                     key: 'total',
-                    label: 'LOCA: Total Units (MSU)',
+                    label: this.$i18n.$t.resources.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: expos => expos.reduce(

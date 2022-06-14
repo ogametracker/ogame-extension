@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="header"
+        :header="$i18n.$t.settings.colors.resources"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -23,16 +23,13 @@
         },
     })
     export default class ResourceColorSettings extends Vue {
-        private get header() {
-            return 'LOCA: Resource';
-        }
 
         private get labels(): Record<ResourceType | 'totalMsu', string> {
             return {
-                [ResourceType.metal]: 'LOCA: metal',
-                [ResourceType.crystal]: 'LOCA: crystal',
-                [ResourceType.deuterium]: 'LOCA: deuterium',
-                totalMsu: 'LOCA: totalMsu',
+                [ResourceType.metal]: this.$i18n.$t.resources.metal,
+                [ResourceType.crystal]: this.$i18n.$t.resources.crystal,
+                [ResourceType.deuterium]: this.$i18n.$t.resources.deuterium,
+                totalMsu: this.$i18n.$t.resources.sumMsu,
             };
         }
 

@@ -124,7 +124,7 @@
                 };
 
                 return Object.values(ResourceType).map(resource => ({
-                    label: resource,
+                    label: this.$i18n.$t.resources[resource],
                     items: types[resource].map(eventType => ({
                         label: `LOCA: ${eventType}`,
                         getValue: events => events.filter(ev => ev.eventType == eventType).reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
@@ -195,7 +195,7 @@
 
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: events => events.reduce(
                         (acc, ev) => acc + Object.values(ResourceType).reduce(
                             (acc, resource) => acc + this.getEventResourceAmount(ev, resource),
@@ -205,7 +205,7 @@
                     ),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: events => events.reduce(
                         (acc, ev) => acc + Object.values(ResourceType).reduce(
                             (acc, resource) => acc + this.getEventResourceAmount(ev, resource) * msu[resource],

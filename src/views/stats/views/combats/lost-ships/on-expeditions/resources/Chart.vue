@@ -17,14 +17,14 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Ships lost</div>
+                        <div v-text="this.$i18n.$t.resources.sumMsu" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div>LOCA: Ships lost</div>
+                    <div v-text="this.$i18n.$t.resources.sumMsu" />
                 </div>
             </template>
         </stats-chart>
@@ -107,7 +107,7 @@
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
-                    label: `LOCA: ${resource}`, //LOCA
+                    label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (reports: CombatReport[]) => reports.reduce(
@@ -120,7 +120,7 @@
                 })),
                 {
                     key: 'total',
-                    label: 'LOCA: Total Units (MSU)',
+                    label: this.$i18n.$t.resources.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: (reports: CombatReport[]) => reports.reduce(
@@ -144,7 +144,7 @@
         }
 
         private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
+            return datasets.filter(d => d.key != 'total').reduce((acc, cur) => acc + cur.value, 0);
         }
     }
 </script>

@@ -32,7 +32,7 @@
                                 )
                             "
                         />
-                        <div>LOCA: Resources (MSU)</div>
+                        <div v-text="$i18n.$t.resources.sumMsu" />
                     </div>
                     <hr />
                 </template>
@@ -42,13 +42,13 @@
                         class="number"
                         v-text="$number(getResourcesAmount(datasets))"
                     />
-                    <div>LOCA: Resources (Total)</div>
+                    <div v-text="$i18n.$t.resources.sum" />
 
                     <div
                         class="number"
                         v-text="$number(getResourcesAmountInMsu(datasets))"
                     />
-                    <div>LOCA: Resources (Total, MSU)</div>
+                    <div v-text="$i18n.$t.resources.sumMsu" />
                 </div>
             </template>
         </stats-chart>
@@ -109,7 +109,7 @@
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
-                    label: `LOCA: ${resource}`, //LOCA
+                    label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (reports: CombatReport[]) => reports.reduce((acc, report) => acc + report.loot[resource], 0),
@@ -117,7 +117,7 @@
                 })),
                 {
                     key: 'total',
-                    label: 'LOCA: Total Units (MSU)',
+                    label: this.$i18n.$t.resources.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: reports => reports.reduce(

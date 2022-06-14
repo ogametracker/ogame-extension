@@ -61,7 +61,7 @@
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
             return resources.map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: reports => reports
                     .reduce((acc, report) => acc + report[resource], 0),
             }));
@@ -74,11 +74,11 @@
         private get footerItems(): RangedStatsTableItem<DebrisFieldReport>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.resources.sum,
                     getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal, 0),
                 },
                 {
-                    label: `LOCA: Total (MSU)`,
+                    label: this.$i18n.$t.resources.sumMsu,
                     getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
                 },
             ];

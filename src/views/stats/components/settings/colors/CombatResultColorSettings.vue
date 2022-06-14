@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="header"
+        :header="$i18n.$t.settings.colors.combatResults"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -23,10 +23,6 @@
         },
     })
     export default class CombatResultColorSettings extends Vue {
-        private get header() {
-            return 'LOCA: Combat Result';
-        }
-
         private get labels(): Record<CombatResultType, string> {
             return {
                 [CombatResultType.won]: 'LOCA: won',
