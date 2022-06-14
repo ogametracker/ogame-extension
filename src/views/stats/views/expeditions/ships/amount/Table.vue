@@ -9,7 +9,7 @@
             :averageNumberFormatOptions="avgFormat"
         >
             <template #cell-label="{ value }">
-                <span v-text="value" />
+                <span v-text="value" class="mr-2" />
 
                 <o-ship :ship="shipTable[value]" size="24px" />
             </template>
@@ -70,7 +70,7 @@
 
         private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return [{
-                label: `LOCA: Total`,
+                label: this.$i18n.$t.common.sum,
                 getValue: expos => expos.reduce(
                     (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
                         (acc, ship) => acc + (expo.fleet[ship] ?? 0)
@@ -79,25 +79,27 @@
             }];
         }
 
-        private readonly shipTable: Record<ShipType, OShipType> = {
-            [ShipType.lightFighter]: OShipType['light-fighter'],
-            [ShipType.heavyFighter]: OShipType['heavy-fighter'],
-            [ShipType.cruiser]: OShipType.cruiser,
-            [ShipType.battleship]: OShipType.battleship,
-            [ShipType.bomber]: OShipType.bomber,
-            [ShipType.battlecruiser]: OShipType.battlecruiser,
-            [ShipType.destroyer]: OShipType.destroyer,
-            [ShipType.reaper]: OShipType.reaper,
-            [ShipType.pathfinder]: OShipType.pathfinder,
-            [ShipType.smallCargo]: OShipType['small-cargo'],
-            [ShipType.largeCargo]: OShipType['large-cargo'],
-            [ShipType.espionageProbe]: OShipType['espionage-probe'],
-            [ShipType.recycler]: OShipType.recycler,
-            [ShipType.deathStar]: OShipType['death-star'],
-            [ShipType.crawler]: OShipType.crawler,
-            [ShipType.solarSatellite]: OShipType['solar-satellite'],
-            [ShipType.colonyShip]: OShipType['colony-ship'],
-        };
+        private get shipTable(): Record<string, OShipType> {
+            return {
+                [this.$i18n.$t.ships[ShipType.lightFighter]]: OShipType['light-fighter'],
+                [this.$i18n.$t.ships[ShipType.heavyFighter]]: OShipType['heavy-fighter'],
+                [this.$i18n.$t.ships[ShipType.cruiser]]: OShipType.cruiser,
+                [this.$i18n.$t.ships[ShipType.battleship]]: OShipType.battleship,
+                [this.$i18n.$t.ships[ShipType.bomber]]: OShipType.bomber,
+                [this.$i18n.$t.ships[ShipType.battlecruiser]]: OShipType.battlecruiser,
+                [this.$i18n.$t.ships[ShipType.destroyer]]: OShipType.destroyer,
+                [this.$i18n.$t.ships[ShipType.reaper]]: OShipType.reaper,
+                [this.$i18n.$t.ships[ShipType.pathfinder]]: OShipType.pathfinder,
+                [this.$i18n.$t.ships[ShipType.smallCargo]]: OShipType['small-cargo'],
+                [this.$i18n.$t.ships[ShipType.largeCargo]]: OShipType['large-cargo'],
+                [this.$i18n.$t.ships[ShipType.espionageProbe]]: OShipType['espionage-probe'],
+                [this.$i18n.$t.ships[ShipType.recycler]]: OShipType.recycler,
+                [this.$i18n.$t.ships[ShipType.deathStar]]: OShipType['death-star'],
+                [this.$i18n.$t.ships[ShipType.crawler]]: OShipType.crawler,
+                [this.$i18n.$t.ships[ShipType.solarSatellite]]: OShipType['solar-satellite'],
+                [this.$i18n.$t.ships[ShipType.colonyShip]]: OShipType['colony-ship'],
+            };
+        }
     }
 </script>
 <style lang="scss" scoped>

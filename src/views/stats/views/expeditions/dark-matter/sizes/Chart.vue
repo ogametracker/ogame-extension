@@ -19,14 +19,14 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Resource Discoveries</div>
+                        <div v-text="$i18n.$t.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div>LOCA: Resource Discoveries (Total)</div>
+                    <div v-text="`${$i18n.$t.expeditions.finds} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -79,7 +79,7 @@
         private get datasets(): StatsChartDataset<ExpeditionEventDarkMatter>[] {
             return Object.values(ExpeditionEventSize).map(size => ({
                 key: size,
-                label: `LOCA: ${size}`, //LOCA
+                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
                 color: this.colors[size],
                 filled: true,
                 getValue: expos => expos.filter(e => e.size == size).length,

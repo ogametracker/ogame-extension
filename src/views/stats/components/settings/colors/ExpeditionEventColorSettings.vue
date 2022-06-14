@@ -25,19 +25,7 @@
     export default class ExpeditionEventColorSettings extends Vue {
 
         private get labels(): Record<ExpeditionEventType, string> {
-            return {
-                [ExpeditionEventType.nothing]: 'LOCA: nothing',
-                [ExpeditionEventType.resources]: 'LOCA: resources',
-                [ExpeditionEventType.fleet]: 'LOCA: fleet',
-                [ExpeditionEventType.delay]: 'LOCA: delay',
-                [ExpeditionEventType.early]: 'LOCA: early',
-                [ExpeditionEventType.darkMatter]: 'LOCA: darkMatter',
-                [ExpeditionEventType.pirates]: 'LOCA: pirates',
-                [ExpeditionEventType.aliens]: 'LOCA: aliens',
-                [ExpeditionEventType.item]: 'LOCA: item',
-                [ExpeditionEventType.trader]: 'LOCA: trader',
-                [ExpeditionEventType.lostFleet]: 'LOCA: lostFleet',
-            };
+            return this.$i18n.$t.expeditions.expeditionEvents;
         }
 
         private readonly keys: ExpeditionEventType[] = [

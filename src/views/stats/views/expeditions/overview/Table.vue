@@ -10,59 +10,59 @@
             :averageNumberFormatOptions="avgFormat"
         >
             <template #cell-label="{ value }">
-                <span v-text="value" />
+                <span v-text="value" class="mr-2" />
 
                 <span
-                    v-if="value == ExpeditionEventType.nothing"
+                    v-if="value == $i18n.$t.expeditions.expeditionEvents.nothing"
                     class="mdi mdi-close"
                     :style="{ color: colors.nothing }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventType.resources"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.resources"
                     class="tri-resource"
                 >
                     <o-resource resource="metal" size="24px" />
                     <o-resource resource="crystal" size="24px" />
                     <o-resource resource="deuterium" size="24px" />
                 </span>
-                <span v-else-if="value == ExpeditionEventType.fleet">
+                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet">
                     <o-ship ship="battleship" size="24px" />
                 </span>
                 <span
-                    v-else-if="value == ExpeditionEventType.delay"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.delay"
                     class="mdi mdi-clock-outline"
                     :style="{ color: colors.delay }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventType.early"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.early"
                     class="mdi mdi-clock-outline"
                     :style="{ color: colors.early }"
                 />
                 <o-resource
-                    v-else-if="value == ExpeditionEventType.darkMatter"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.darkMatter"
                     resource="dark-matter"
                     size="24px"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventType.pirates"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.pirates"
                     class="mdi mdi-pirate"
                     :style="{ color: colors.pirates }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventType.aliens"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.aliens"
                     class="mdi mdi-alien"
                     :style="{ color: colors.aliens }"
                 />
-                <span v-else-if="value == ExpeditionEventType.item">
+                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.item">
                     <o-item :item="detroidItem" size="24px" />
                 </span>
                 <span
-                    v-else-if="value == ExpeditionEventType.trader"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.trader"
                     class="mdi mdi-swap-horizontal-bold"
                     :style="{ color: colors.trader }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventType.lostFleet"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.lostFleet"
                     class="mdi mdi-cross"
                     :style="{ color: colors.lostFleet }"
                 />
@@ -121,14 +121,14 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEvent>[] {
             return Object.keys(ExpeditionEventType).map(type => ({
-                label: type,
+                label: this.$i18n.$t.expeditions.expeditionEvents[type as ExpeditionEventType],
                 getValue: expos => expos.filter(expo => expo.type == type).length,
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<ExpeditionEvent>[] {
             return [{
-                label: `LOCA: Total`,
+                label: this.$i18n.$t.common.sum,
                 getValue: expos => expos.length,
             }];
         }

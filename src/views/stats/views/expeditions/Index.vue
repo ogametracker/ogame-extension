@@ -18,23 +18,23 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Übersicht',
+                    label: this.$i18n.$t.expeditions.tabHeaders.overview,
                     to: { name: 'expeditions/overview' },
                 },
                 {
-                    label: 'LOCA: Rohstofffunde',
+                    label: this.$i18n.$t.expeditions.tabHeaders.foundResources,
                     to: { name: 'expeditions/resources' },
                 },
                 {
-                    label: 'LOCA: Flottenfunde',
+                    label: this.$i18n.$t.expeditions.tabHeaders.foundShips,
                     to: { name: 'expeditions/ships' },
                 },
                 {
-                    label: 'LOCA: DM-Funde',
+                    label: this.$i18n.$t.expeditions.tabHeaders.foundDarkMatter,
                     to: { name: 'expeditions/dark-matter' },
                 },
                 {
-                    label: 'LOCA: Itemfunde',
+                    label: this.$i18n.$t.expeditions.tabHeaders.foundItems,
                     to: { name: 'expeditions/items' },
                 },
             ];

@@ -48,7 +48,7 @@
         private get datasets(): StatsChartDataset<ExpeditionEventDarkMatter>[] {
             return [{
                 key: 'dark-matter',
-                label: `LOCA: dark-matter`, //LOCA
+                label: this.$i18n.$t.common.darkMatter,
                 color: this.color,
                 filled: true,
                 getValue: (expos: ExpeditionEventDarkMatter[]) => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),

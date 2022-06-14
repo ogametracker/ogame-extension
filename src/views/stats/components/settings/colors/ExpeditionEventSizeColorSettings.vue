@@ -25,11 +25,7 @@
     export default class ExpeditionEventSizeColorSettings extends Vue {
 
         private get labels(): Record<ExpeditionEventSize, string> {
-            return {
-                [ExpeditionEventSize.small]: 'LOCA: small',
-                [ExpeditionEventSize.medium]: 'LOCA: medium',
-                [ExpeditionEventSize.large]: 'LOCA: large',
-            };
+            return this.$i18n.$t.expeditions.expeditionEventSizes;
         }
 
         private readonly keys: ExpeditionEventSize[] = [

@@ -19,14 +19,14 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Ships found</div>
+                    <div v-text="$i18n.$t.expeditions.shipsFound" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div>LOCA: Ships Found (Total)</div>
+                    <div v-text="`${$i18n.$t.expeditions.shipsFound} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>

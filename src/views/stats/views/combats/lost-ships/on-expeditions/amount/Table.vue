@@ -63,7 +63,7 @@
         private get footerItems(): RangedStatsTableItem<CombatReport>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.common.sum,
                     getValue: combats => combats.reduce(
                         (acc, combat) => acc + Object.values(combat.lostShips).reduce((acc, cur) => acc + cur, 0),
                         0

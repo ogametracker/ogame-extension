@@ -191,7 +191,7 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
             if (this.showAverage) {
                 columns.push({
                     key: 'average',
-                    label: '⌀ LOCA: per day',
+                    label: this.$i18n.$t.common.averagePerDay,
                     formatter: (value: number) => this.$number(value, this.averageNumberFormatOptions ?? this.numberFormatOptions)
                 });
             }

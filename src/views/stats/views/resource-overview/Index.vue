@@ -21,11 +21,11 @@
             return [
                 {
                     to: { name: 'resource-overview/chart' },
-                    label: 'LOCA: Chart',
+                    label: this.$i18n.$t.common.chart,
                 },
                 {
                     to: { name: 'resource-overview/table' },
-                    label: 'LOCA: Table',
+                    label: this.$i18n.$t.common.table,
                 },
             ];
         }

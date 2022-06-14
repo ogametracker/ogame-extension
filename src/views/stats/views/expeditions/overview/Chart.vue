@@ -17,14 +17,14 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Expeditions</div>
+                        <div v-text="$i18n.$t.expeditions.expeditions" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div>LOCA: Expeditions (Total)</div>
+                    <div v-text="`${$i18n.$t.expeditions.expeditions} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -80,7 +80,7 @@
         private get datasets(): StatsChartDataset<ExpeditionEvent>[] {
             return Object.values(ExpeditionEventType).map(type => ({
                 key: type,
-                label: `LOCA: ${type}`, //LOCA
+                label: this.$i18n.$t.expeditions.expeditionEvents[type],
                 color: this.colors[type],
                 filled: true,
                 getValue: expos => expos.filter(e => e.type == type).length,

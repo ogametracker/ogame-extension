@@ -8,7 +8,7 @@
             :averageNumberFormatOptions="avgFormat"
         >
             <template #cell-label="{ value }">
-                <span v-text="value" />
+                <span v-text="value" class="mr-2" />
 
                 <o-resource resource="dark-matter" size="24px" />
             </template>
@@ -59,7 +59,7 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventDarkMatter>[] {
             return [{
-                label: 'dark-matter',
+                label: this.$i18n.$t.common.darkMatter,
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),
             }];
         }

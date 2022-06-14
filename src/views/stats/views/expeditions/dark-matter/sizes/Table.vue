@@ -11,16 +11,19 @@
                 <span v-text="value" />
 
                 <span
-                    v-if="value == ExpeditionEventSize.small"
+                    v-if="value == $i18n.$t.expeditions.expeditionEventSizes.small"
                     class="mdi mdi-hexagon-slice-1"
+                    :style="{ color: colors.small }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventSize.medium"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.medium"
                     class="mdi mdi-hexagon-slice-3"
+                    :style="{ color: colors.medium }"
                 />
                 <span
-                    v-else-if="value == ExpeditionEventSize.large"
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.large"
                     class="mdi mdi-hexagon-slice-5"
+                    :style="{ color: colors.large }"
                 />
             </template>
         </ranged-stats-table>
@@ -45,6 +48,7 @@
     import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -55,6 +59,10 @@
     export default class Table extends Vue {
         private readonly ExpeditionEventSize = ExpeditionEventSize;
         private showSettings = false;
+        
+        private get colors() {
+            return SettingsDataModule.settings.colors.expeditions.sizes;
+        }
 
         private filterExpo(expo: ExpeditionEvent): boolean {
             return expo.type == ExpeditionEventType.darkMatter;
@@ -66,14 +74,14 @@
 
         private get items(): RangedStatsTableItem<ExpeditionEventDarkMatter>[] {
             return Object.values(ExpeditionEventSize).map(size => ({
-                label: size,
+                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
                 getValue: expos => expos.filter(expo => expo.size == size).length,
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<ExpeditionEventDarkMatter>[] {
             return [{
-                label: `LOCA: Total`,
+                label: this.$i18n.$t.common.sum,
                 getValue: expos => expos.length,
             }];
         }

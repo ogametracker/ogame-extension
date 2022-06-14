@@ -12,11 +12,11 @@
             return [
                 {
                     to: { name: 'expeditions/ships/amount/chart' },
-                    label: 'LOCA: Chart',
+                    label: this.$i18n.$t.common.chart,
                 },
                 {
                     to: { name: 'expeditions/ships/amount/table' },
-                    label: 'LOCA: Table',
+                    label: this.$i18n.$t.common.table,
                 },
             ];
         }

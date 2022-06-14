@@ -89,7 +89,7 @@
         private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
             return [
                 {
-                    label: this.$i18n.$t.resources.sum,
+                    label: this.$i18n.$t.common.sum,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {
@@ -98,7 +98,7 @@
                             }), 0),
                 },
                 {
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
                             (acc, ship) => {

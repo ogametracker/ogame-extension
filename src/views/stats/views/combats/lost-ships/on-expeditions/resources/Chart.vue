@@ -17,14 +17,14 @@
                                 $number(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="this.$i18n.$t.resources.sumMsu" />
+                        <div v-text="this.$i18n.$t.common.sumMsu" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$number(getSum(datasets))" />
-                    <div v-text="this.$i18n.$t.resources.sumMsu" />
+                    <div v-text="this.$i18n.$t.common.sumMsu" />
                 </div>
             </template>
         </stats-chart>
@@ -120,7 +120,7 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: (reports: CombatReport[]) => reports.reduce(

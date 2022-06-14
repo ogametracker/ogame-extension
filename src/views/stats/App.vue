@@ -199,7 +199,7 @@
                     key: 'expeditions',
                     to: { name: 'expeditions' },
                     icon: 'ogti ogti-expedition',
-                    label: 'LOCA: Expeditionen',
+                    label: this.$i18n.$t.expeditions.header,
                     keyboardKey: '1',
                     keyboardIcon: 'mdi mdi-numeric-1',
                     canBeDefault: true,

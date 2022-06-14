@@ -13,15 +13,15 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Count',
+                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.amount,
                     to: { name: 'expeditions/ships/amount' },
                 },
                 {
-                    label: 'LOCA: Sizes',
+                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.sizes,
                     to: { name: 'expeditions/ships/sizes' },
                 },
                 {
-                    label: 'LOCA: Resources',
+                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.resources,
                     to: { name: 'expeditions/ships/resources' },
                 },
             ];

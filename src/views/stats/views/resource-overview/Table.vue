@@ -203,7 +203,7 @@
 
             return [
                 {
-                    label: this.$i18n.$t.resources.sum,
+                    label: this.$i18n.$t.common.sum,
                     getValue: events => events.reduce(
                         (acc, ev) => acc + Object.values(ResourceType).reduce(
                             (acc, resource) => acc + this.getEventResourceAmount(ev, resource),
@@ -213,7 +213,7 @@
                     ),
                 },
                 {
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     getValue: events => events.reduce(
                         (acc, ev) => acc + Object.values(ResourceType).reduce(
                             (acc, resource) => acc + this.getEventResourceAmount(ev, resource) * msu[resource],

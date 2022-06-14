@@ -32,7 +32,7 @@
                                 )
                             "
                         />
-                        <div v-text="$i18n.$t.resources.sumMsu" />
+                        <div v-text="$i18n.$t.common.sumMsu" />
                     </div>
                     <hr />
                 </template>
@@ -42,13 +42,13 @@
                         class="number"
                         v-text="$number(getResourcesAmount(datasets))"
                     />
-                    <div v-text="$i18n.$t.resources.sum" />
+                    <div v-text="$i18n.$t.common.sum" />
 
                     <div
                         class="number"
                         v-text="$number(getResourcesAmountInMsu(datasets))"
                     />
-                    <div v-text="$i18n.$t.resources.sumMsu" />
+                    <div v-text="$i18n.$t.common.sumMsu" />
                 </div>
             </template>
         </stats-chart>
@@ -117,7 +117,7 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: reports => reports.reduce(

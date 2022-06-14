@@ -82,11 +82,11 @@
         private get footerItems(): RangedStatsTableItem<DebrisFieldReport>[] {
             return [
                 {
-                    label: this.$i18n.$t.resources.sum,
+                    label: this.$i18n.$t.common.sum,
                     getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal, 0),
                 },
                 {
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
                 },
             ];

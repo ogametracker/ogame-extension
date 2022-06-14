@@ -73,14 +73,14 @@
         private get footerItems(): RangedStatsTableItem<CombatReport>[] {
             return [
                 {
-                    label: this.$i18n.$t.resources.sum,
+                    label: this.$i18n.$t.common.sum,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + expo.loot.metal + expo.loot.crystal + expo.loot.deuterium,
                         0
                     ),
                 },
                 {
-                    label: this.$i18n.$t.resources.sumMsu,
+                    label: this.$i18n.$t.common.sumMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
                             + expo.loot.metal
