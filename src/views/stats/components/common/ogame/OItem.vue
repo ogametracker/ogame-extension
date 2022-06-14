@@ -25,10 +25,11 @@
     @Component({})
     export default class OItem extends Vue {
 
-        @Prop({ 
-            required: true, 
-            type: String as PropType<ItemHash>, 
-            validator: (value: string) => (Object.values(ItemHash).filter(h => h.length == 40) as string[]).includes(value)})
+        @Prop({
+            required: true,
+            type: String as PropType<ItemHash>,
+            validator: (value: string) => (Object.values(ItemHash).filter(h => h.length == 40) as string[]).includes(value)
+        })
         private item!: ItemHash;
 
         @Prop({ required: false, type: Boolean, default: false })

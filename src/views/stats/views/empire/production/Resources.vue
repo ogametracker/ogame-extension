@@ -4,6 +4,7 @@
         :items="items"
         :footerItems="footerItems"
         class="resources-production-table"
+        :style="`--item-count: ${maxItemCount}`"
     >
         <template #header-metal>
             <o-resource resource="metal" size="75px" />
@@ -22,11 +23,6 @@
                 <span
                     class="header"
                     v-text="'LOCA: used production settings'"
-                />
-                <!-- TODO: Settings as dropdowns to change? -->
-                <span
-                    class="header"
-                    v-text="'TODO: Settings as dropdowns to change?'"
                 />
                 <o-building building="metal-mine" />
                 <o-building building="crystal-mine" />
@@ -49,7 +45,7 @@
             </div>
         </template>
 
-        <template #cell-productionSettings="{ value: settings }">
+        <template #cell-productionSettings="{ value: settings, item }">
             <div class="production-settings-mini-table">
                 <span v-text="settings.metalMine" />
                 <span v-text="settings.crystalMine" />
@@ -58,6 +54,12 @@
                 <span v-text="settings.fusionReactor" />
                 <span v-text="settings.solarSatellite" />
                 <span v-text="settings.crawler" />
+                <o-item
+                    v-for="item in item.activeItems"
+                    :key="item"
+                    :item="item"
+                    size="24px"
+                />
             </div>
         </template>
 
@@ -164,6 +166,8 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import { Item } from '@/shared/models/ogame/items/Item';
+    import { Items } from '@/shared/models/ogame/items/Items';
 
     interface Production {
         metal: number;
@@ -183,6 +187,7 @@
         totalMsu: number;
 
         productionSettings: PoductionSettingsItem;
+        activeItems: ItemHash[];
 
         isResourcePackageRow?: boolean;
     }
@@ -234,6 +239,59 @@
             ];
         }
 
+        private readonly productionBoostItems: ItemHash[] = [
+            ItemHash.metalBooster_bronze_1day,
+            ItemHash.metalBooster_bronze_7days,
+            ItemHash.metalBooster_silver_7days,
+            ItemHash.metalBooster_silver_30days,
+            ItemHash.metalBooster_silver_90days,
+            ItemHash.metalBooster_gold_7days,
+            ItemHash.metalBooster_gold_30days,
+            ItemHash.metalBooster_gold_90days,
+            ItemHash.metalBooster_platinum_7days,
+            ItemHash.metalBooster_platinum_30days,
+            ItemHash.metalBooster_platinum_90days,
+
+            ItemHash.crystalBooster_bronze_1day,
+            ItemHash.crystalBooster_bronze_7days,
+            ItemHash.crystalBooster_silver_7days,
+            ItemHash.crystalBooster_silver_30days,
+            ItemHash.crystalBooster_silver_90days,
+            ItemHash.crystalBooster_gold_7days,
+            ItemHash.crystalBooster_gold_30days,
+            ItemHash.crystalBooster_gold_90days,
+            ItemHash.crystalBooster_platinum_7days,
+            ItemHash.crystalBooster_platinum_30days,
+            ItemHash.crystalBooster_platinum_90days,
+
+            ItemHash.deuteriumBooster_bronze_1day,
+            ItemHash.deuteriumBooster_bronze_7days,
+            ItemHash.deuteriumBooster_silver_7days,
+            ItemHash.deuteriumBooster_silver_30days,
+            ItemHash.deuteriumBooster_silver_90days,
+            ItemHash.deuteriumBooster_gold_7days,
+            ItemHash.deuteriumBooster_gold_30days,
+            ItemHash.deuteriumBooster_gold_90days,
+            ItemHash.deuteriumBooster_platinum_7days,
+            ItemHash.deuteriumBooster_platinum_30days,
+            ItemHash.deuteriumBooster_platinum_90days,
+
+            ItemHash.energyBooster_bronze_7days,
+            ItemHash.energyBooster_silver_7days,
+            ItemHash.energyBooster_silver_30days,
+            ItemHash.energyBooster_silver_90days,
+            ItemHash.energyBooster_gold_7days,
+            ItemHash.energyBooster_gold_30days,
+            ItemHash.energyBooster_gold_90days,
+            ItemHash.energyBooster_platinum_7days,
+            ItemHash.energyBooster_platinum_30days,
+            ItemHash.energyBooster_platinum_90days,
+        ];
+
+        private get maxItemCount() {
+            return Math.max(...this.items.map(i => i.activeItems.length));
+        }
+
         private get items(): ProductionItem[] {
             return this.planets.map(planet => {
                 const production = this.getProduction(planet);
@@ -254,12 +312,16 @@
                         solarSatellite: planet.productionSettings[ShipType.solarSatellite],
                         crawler: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
                     },
+
+                    activeItems: (Object.keys(planet.activeItems) as ItemHash[])
+                        .filter(itemHash => planet.activeItems[itemHash]! > Date.now() || planet.activeItems[itemHash] == 'permanent')
+                        .filter(itemHash => this.productionBoostItems.includes(itemHash)),
                 };
             });
         }
 
         private correctCrawlerProductionSettings(production: CrawlerProductionPercentage): CrawlerProductionPercentage {
-            if(EmpireDataModule.empire?.playerClass == PlayerClass.collector) {
+            if (EmpireDataModule.empire?.playerClass == PlayerClass.collector) {
                 return production;
             }
 
@@ -292,6 +354,7 @@
                     totalMsu: totalMsuPerHour / planets.length,
 
                     productionSettings: null!,
+                    activeItems: [],
                 },
                 {
                     planet: {
@@ -305,6 +368,7 @@
                     totalMsu: totalMsuPerHour,
 
                     productionSettings: null!,
+                    activeItems: [],
                 },
                 {
                     planet: {
@@ -318,6 +382,7 @@
                     totalMsu: totalMsuPerHour * 24,
 
                     productionSettings: null!,
+                    activeItems: [],
                 },
                 {
                     planet: {
@@ -331,6 +396,7 @@
                     totalMsu: totalMsuPerHour * 24 * 7,
 
                     productionSettings: null!,
+                    activeItems: [],
                 },
                 {
                     isResourcePackageRow: true,
@@ -345,6 +411,7 @@
                     totalMsu: metalPackages + crystalPackages * this.msuConversionRates.crystal + deuteriumPackages * this.msuConversionRates.deuterium,
 
                     productionSettings: null!,
+                    activeItems: [],
                 },
             ];
         }
@@ -405,12 +472,14 @@
 
     .production-settings-mini-table {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, 1fr) repeat(var(--item-count), 24px);
         width: 100%;
         justify-items: center;
+        align-items: center;
+        gap: 2px;
 
         > .header {
-            grid-column: 1 / span 7;
+            grid-column: 1 / span calc(7 + var(--item-count));
         }
         > * {
             padding: 0 4px;
