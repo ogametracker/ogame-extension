@@ -1,22 +1,7 @@
-// import { MessageOgameMeta } from '../../shared/messages/Message';
-// import { UniverseHistory } from '../../shared/models/universe-history/UniverseHistory';
-// import { _throw } from '../../shared/utils/_throw';
-// import { PersistentDataManager } from '../PersistentData';
-// import { parseIntSafe } from '../../shared/utils/parseNumbers';
-// import { compareCoordinates, Coordinates } from '../../shared/models/ogame/common/Coordinates';
-// import { parseCoordinates } from '../../shared/utils/parseCoordinates';
-// import { XMLParser } from 'fast-xml-parser';
-// import { AllianceHistory } from '../../shared/models/universe-history/AllianceHistory';
-// import { PlayerHistory, PlayerState, PlayerStateType } from '../../shared/models/universe-history/PlayerHistory';
-// import { HistoryItem } from '../../shared/models/universe-history/HistoryItem';
-// import { PlanetHistory } from '../../shared/models/universe-history/PlanetHistory';
-// import { MoonHistory } from '../../shared/models/universe-history/MoonHistory';
-// import { _logDebug } from '../../shared/utils/_log';
-
 import { broadcastMessage } from "@/shared/communication/broadcastMessage";
 import { getUniverseHistoryDatabase } from "@/shared/db/access";
 import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
-import { DbUniverseHistoryAllianceState } from "@/shared/db/schema/universe-history";
+import { DbUniverseHistoryAllianceState, DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState, DbUniverseHistoryPlayerState, DbUniverseHistoryPlayerStateItem, DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
 import { MessageOgameMeta } from "@/shared/messages/Message";
 import { MessageType } from "@/shared/messages/MessageType";
 import { NotifyUniverseHistoryUpdateMessage } from "@/shared/messages/tracking/universe-history";
@@ -146,6 +131,7 @@ interface Moon {
     id: number;
     name: string;
     size: number;
+    planetId: number;
 }
 
 
@@ -249,22 +235,24 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateHistory(tx: UniverseHistoryDbTransaction, players: Player[], alliances: Alliance[], playerScores: Record<number, PlayerScorePositions>, planets: Planet[]): Promise<void> {
+    private async updateHistory(tx: UniverseHistoryDbTransaction, players: Player[], alliances: Alliance[], playerScores: Partial<Record<number, PlayerScorePositions>>, planets: Planet[]): Promise<void> {
         const now = Date.now();
 
-        await this.updatePlayers(tx, players, now, playerScores, planets);
-        await this.updateAlliances(tx, alliances, now, players);
+        await this.updatePlayers(tx, players, now, playerScores);
+        await this.updateAlliances(tx, alliances, now, players, playerScores);
+        await this.updatePlanets(tx, planets, now);
     }
 
-    private async updateAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, players: Player[]) {
-        await this.updateKnownAlliances(alliances, tx);
+    private async updateAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>) {
+        await this.updateKnownAlliances(tx, alliances);
         await this.updateAllianceTags(tx, alliances, now);
         await this.updateAllianceNames(tx, alliances, now);
         await this.updateAllianceMembers(tx, alliances, players, now);
         await this.updateAllianceStates(tx, alliances, now);
+        await this.updateAllianceScores(tx, alliances, players, playerScores, now);
     }
 
-    private async updateKnownAlliances(alliances: Alliance[], tx: UniverseHistoryDbTransaction) {
+    private async updateKnownAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[]) {
         for (const ally of alliances) {
             await tx.objectStore('alliances').put({ id: ally.id });
         }
@@ -320,7 +308,7 @@ export class UniverseHistoryModule {
         }
 
         for (const ally of alliances) {
-            if (ally.tag == lastNames[ally.id]) {
+            if (ally.name == lastNames[ally.id]) {
                 continue;
             }
 
@@ -383,7 +371,7 @@ export class UniverseHistoryModule {
             cursor = await cursor.continue();
         }
 
-        for(const ally of alliances) {
+        for (const ally of alliances) {
             if (lastStates === null) {
                 continue;
             }
@@ -401,6 +389,10 @@ export class UniverseHistoryModule {
             .filter(id => !allyIds.includes(id));
 
         for (const allyId of deletedAllies) {
+            if (lastStates[allyId] == 'deleted') {
+                continue;
+            }
+
             await store.put({
                 allianceId: allyId,
                 date: now,
@@ -409,345 +401,513 @@ export class UniverseHistoryModule {
         }
     }
 
-    //     private updatePlayers(players: Player[], data: UniverseHistory, now: number, playerScores: Record<number, PlayerScorePositions>, planets: Planet[]): bit {
-    //         const knownPlayerIds = players.map(player => player.id);
-    //         let updated: bit = 0;
-    //         players.forEach(player => {
-    //             try {
-    //                 const playerHistory: PlayerHistory = data.players[player.id] ?? {
-    //                     id: player.id,
-    //                     name: [],
-    //                     planets: {},
-    //                     scores: {
-    //                         total: [],
-    //                         economy: [],
-    //                         research: [],
-    //                         military: [],
-    //                         militaryBuilt: [],
-    //                         militaryDestroyed: [],
-    //                         militaryLost: [],
-    //                         honor: [],
-    //                         numberOfShips: [],
-    //                     },
-    //                     scorePositions: {
-    //                         total: [],
-    //                         economy: [],
-    //                         research: [],
-    //                         military: [],
-    //                         militaryBuilt: [],
-    //                         militaryDestroyed: [],
-    //                         militaryLost: [],
-    //                         honor: [],
-    //                         numberOfShips: [],
-    //                     },
-    //                     state: [],
-    //                     alliance: [],
-    //                 };
+    private async updateAllianceScores(tx: UniverseHistoryDbTransaction, alliances: Alliance[], players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>, now: number) {
+        const lastScores: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, ScorePosition>> = {};
+        const lastScoreUpdates: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, number>> = {};
 
-    //                 updated = (updated | this.updatePlayer(
-    //                     now,
-    //                     playerHistory,
-    //                     player,
-    //                     playerScores[player.id] ?? this.defaultPlayerScores,
-    //                     planets.filter(p => p.player == player.id)
-    //                 )) as bit;
-    //                 data.players[player.id] = playerHistory;
-    //             } catch (error) {
-    //                 console.error(error);
-    //             }
-    //         });
+        const store = tx.objectStore('allianceScores');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
 
-    //         // mark known non-existing players as deleted
-    //         const deletedPlayerIds = Object.keys(data.players)
-    //             .map(playerId => parseIntSafe(playerId, 10))
-    //             .filter(playerId => !knownPlayerIds.includes(playerId) && !this.arraysEqual((data.players[playerId]!.state.slice(-1)[0]?.value ?? []), ['deleted']));
-    //         deletedPlayerIds.forEach(playerId => data.players[playerId]!.state.push({
-    //             value: ['deleted'],
-    //             date: now,
-    //         }));
+            const key: `${number}.${DbUniverseHistoryScoreType}` = `${dbValue.allianceId}.${dbValue.type}`;
+            const isNewer = (lastScoreUpdates[key] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastScoreUpdates[key] = dbValue.date;
+                lastScores[key] = {
+                    score: dbValue.score,
+                    position: dbValue.position,
+                };
+            }
 
-    //         updated = (updated | (deletedPlayerIds.length > 0 ? 1 : 0)) as bit;
-    //         return updated;
-    //     }
+            cursor = await cursor.continue();
+        }
 
-    //     private updatePlayer(now: number, playerHistory: PlayerHistory, player: Player, scores: PlayerScorePositions, planets: Planet[]): bit {
-    //         return (this.updatePlayerName(now, playerHistory, player)
-    //             | this.updatePlayerAlliance(now, playerHistory, player)
-    //             | this.updatePlayerState(now, playerHistory, player)
-    //             | this.updatePlayerScores(now, playerHistory, scores)
-    //             | this.updatePlayerPlanets(now, playerHistory, planets)) as bit;
-    //     }
+        const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        const scoresByType: Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>> = {} as any;
+        scoreTypes.forEach(type => scoresByType[type] = {});
 
-    //     private updatePlayerPlanets(now: number, playerHistory: PlayerHistory, planets: Planet[]): bit {
-    //         const planetIds = planets.map(p => p.id);
-    //         let updated: bit = 0;
-    //         planets.forEach(planet => updated = (updated | this.updatePlayerPlanet(now, playerHistory.planets, planet)) as bit);
+        for (const ally of alliances) {
+            const memberScores = players.filter(p => p.alliance == ally.id).map(p => playerScores[p.id]);
 
-    //         // mark known non-existing planets as deleted
-    //         const deletedPlanetIds = Object.keys(playerHistory.planets)
-    //             .map(planetId => parseIntSafe(planetId, 10))
-    //             .filter(planetId => !planetIds.includes(planetId) && playerHistory.planets[planetId]!.state.slice(-1)[0]?.value != 'deleted');
-    //         deletedPlanetIds.forEach(planetId => playerHistory.planets[planetId]!.state.push({
-    //             date: now,
-    //             value: 'deleted'
-    //         }));
+            for (const scoreType of scoreTypes) {
+                const scoresByAlly = scoresByType[scoreType];
 
-    //         updated = (updated | (deletedPlanetIds.length > 0 ? 1 : 0)) as bit;
-    //         return updated;
-    //     }
+                const score = memberScores
+                    .map(s => s?.[scoreType].score ?? 0)
+                    .reduce((total, score) => total + score, 0);
 
-    //     private updatePlayerPlanet(now: number, planetHistories: Partial<Record<number, PlanetHistory>>, planet: Planet): bit {
-    //         const planetHistory = planetHistories[planet.id];
+                scoresByAlly[ally.id] = score;
+            }
+        }
 
-    //         if (planetHistory == null) {
-    //             const moonHistory: Record<number, MoonHistory> = {};
-    //             if (planet.moon != null) {
-    //                 moonHistory[planet.moon.id] = this.getMoonHistory(now, planet.moon);
-    //             }
+        const sortedScoresByType: Record<DbUniverseHistoryScoreType, number[]> = {} as any;
+        scoreTypes.forEach(type => {
+            const allyScores = scoresByType[type];
+            const sortedScores = [...new Set<number>(
+                Object.values(allyScores).filter(score => score != null) as number[]
+            )].sort((a, b) => b - a);
 
-    //             planetHistories[planet.id] = {
-    //                 id: planet.id,
-    //                 coordinates: [{
-    //                     date: now,
-    //                     value: planet.coordinates,
-    //                 }],
-    //                 state: [{
-    //                     date: now,
-    //                     value: null,
-    //                 }],
-    //                 name: [{
-    //                     date: now,
-    //                     value: planet.name,
-    //                 }],
-    //                 moon: moonHistory,
-    //             };
-    //             return 1;
-    //         }
+            sortedScoresByType[type] = sortedScores;
+        });
 
-    //         return (this.updatePlanetCoordinates(now, planetHistory.coordinates, planet.coordinates)
-    //             | this.updatePlanetName(now, planetHistory.name, planet.name)
-    //             | this.updatePlanetMoon(now, planetHistory.moon, planet.moon)) as bit;
-    //     }
+        for (const ally of alliances) {
+            for (const type of scoreTypes) {
+                let score = scoresByType[type][ally.id];
+                const position = score == null
+                    ? 0
+                    : sortedScoresByType[type].indexOf(score) + 1;
+                score ??= 0;
 
-    //     private updatePlanetMoon(now: number, moonHistories: Partial<Record<number, MoonHistory>>, moon: Moon | undefined): bit {
-    //         // mark known non-existing moons as deleted
-    //         const deletedMoonIds = Object.keys(moonHistories)
-    //             .map(moonId => parseIntSafe(moonId, 10))
-    //             .filter(moonId => moonHistories[moonId]!.state.slice(-1)[0]?.value != 'deleted');
-    //         deletedMoonIds.forEach(moonId => moonHistories[moonId]!.state.push({
-    //             date: now,
-    //             value: 'deleted'
-    //         }));
 
-    //         if (moon != null) {
-    //             const moonHistoryOld = moonHistories[moon.id];
-    //             const moonHistory = (moonHistories[moon.id] ??= {
-    //                 id: moon.id,
-    //                 size: moon.size,
-    //                 name: [],
-    //                 state: [{
-    //                     date: now,
-    //                     value: null,
-    //                 }],
-    //             });
+                const lastAllyScore = lastScores[`${ally.id}.${type}`];
+                if (lastAllyScore?.score != score || lastAllyScore.position != position) {
+                    await store.put({
+                        allianceId: ally.id,
+                        date: now,
+                        type,
+                        position,
+                        score,
+                    });
+                }
+            }
+        }
+    }
 
-    //             if (moonHistory.name.slice(-1)[0]?.value != moon.name) {
-    //                 moonHistory.name.push({
-    //                     date: now,
-    //                     value: moon.name,
-    //                 });
-    //                 return 1;
-    //             }
 
-    //             if (moonHistoryOld == null) {
-    //                 return 1;
-    //             }
-    //         }
+    private async updatePlayers(tx: UniverseHistoryDbTransaction, players: Player[], now: number, playerScores: Partial<Record<number, PlayerScorePositions>>) {
+        await this.updateKnownPlayers(tx, players);
+        await this.updatePlayerNames(tx, players, now);
+        await this.updatePlayerAlliances(tx, players, now);
+        await this.updatePlayerStates(tx, players, now);
+        await this.updatePlayerScores(tx, players, playerScores, now);
+    }
 
-    //         return deletedMoonIds.length > 0 ? 1 : 0;
-    //     }
+    private async updateKnownPlayers(tx: UniverseHistoryDbTransaction, players: Player[]) {
+        for (const player of players) {
+            await tx.objectStore('players').put({ id: player.id });
+        }
+    }
 
-    //     private updatePlanetName(now: number, nameHistory: HistoryItem<string>[], name: string): bit {
-    //         if (nameHistory.slice(-1)[0]?.value != name) {
-    //             nameHistory.push({
-    //                 date: now,
-    //                 value: name,
-    //             });
+    private async updatePlayerNames(tx: UniverseHistoryDbTransaction, players: Player[], now: number) {
+        const lastNames: Partial<Record<number, string>> = {};
+        const lastNameUpdates: Partial<Record<number, number>> = {};
 
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+        const store = tx.objectStore('playerNames');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
 
-    //     private updatePlanetCoordinates(now: number, coordinatesHistory: HistoryItem<Coordinates>[], coordinates: Coordinates): bit {
-    //         const lastCoords = coordinatesHistory.slice(-1)[0]?.value;
+            const isNewer = (lastNameUpdates[dbValue.playerId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastNameUpdates[dbValue.playerId] = dbValue.date;
+                lastNames[dbValue.playerId] = dbValue.name;
+            }
 
-    //         if (lastCoords == null || compareCoordinates(lastCoords, coordinates) != 0) {
-    //             coordinatesHistory.push({
-    //                 date: now,
-    //                 value: coordinates,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+            cursor = await cursor.continue();
+        }
 
-    //     private getMoonHistory(now: number, moon: Moon): MoonHistory {
-    //         return {
-    //             id: moon.id,
-    //             size: moon.size,
-    //             name: [{
-    //                 date: now,
-    //                 value: moon.name,
-    //             }],
-    //             state: [{
-    //                 date: now,
-    //                 value: null
-    //             }],
-    //         };
-    //     }
+        for (const player of players) {
+            if (player.name == lastNames[player.id]) {
+                continue;
+            }
 
-    //     private updatePlayerScores(now: number, playerHistory: PlayerHistory, scores: PlayerScorePositions): bit {
-    //         return (this.updatePlayerScorePosition(now, playerHistory.scores.total, playerHistory.scorePositions.total, scores.total)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.economy, playerHistory.scorePositions.economy, scores.economy)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.research, playerHistory.scorePositions.research, scores.research)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.military, playerHistory.scorePositions.military, scores.military)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.militaryBuilt, playerHistory.scorePositions.militaryBuilt, scores.militaryBuilt)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.militaryDestroyed, playerHistory.scorePositions.militaryDestroyed, scores.militaryDestroyed)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.militaryLost, playerHistory.scorePositions.militaryLost, scores.militaryLost)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.honor, playerHistory.scorePositions.honor, scores.honor)
-    //             | this.updatePlayerScorePosition(now, playerHistory.scores.numberOfShips, playerHistory.scorePositions.numberOfShips, scores.numberOfShips)) as bit;
-    //     }
+            await store.put({
+                playerId: player.id,
+                date: now,
+                name: player.name,
+            });
+        }
+    }
 
-    //     private updatePlayerScorePosition(now: number, scoreHistory: HistoryItem<number>[], positionHistory: HistoryItem<number>[], scorePosition: ScorePosition): bit {
-    //         const { score, position } = scorePosition;
-    //         let updated: bit = 0;
+    private async updatePlayerAlliances(tx: UniverseHistoryDbTransaction, players: Player[], now: number) {
+        const lastAlliances: Partial<Record<number, number | null>> = {};
+        const lastAllianceUpdates: Partial<Record<number, number>> = {};
 
-    //         if (scoreHistory.slice(-1)[0]?.value != score) {
-    //             scoreHistory.push({
-    //                 date: now,
-    //                 value: score,
-    //             });
-    //             updated = 1;
-    //         }
+        const store = tx.objectStore('playerAlliances');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
 
-    //         if (positionHistory.slice(-1)[0]?.value != position) {
-    //             positionHistory.push({
-    //                 date: now,
-    //                 value: position,
-    //             });
-    //             updated = 1;
-    //         }
+            const isNewer = (lastAllianceUpdates[dbValue.playerId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastAllianceUpdates[dbValue.playerId] = dbValue.date;
+                lastAlliances[dbValue.playerId] = dbValue.allianceId;
+            }
 
-    //         return updated;
-    //     }
+            cursor = await cursor.continue();
+        }
 
-    //     private mapState(status: string | null): PlayerState {
-    //         if (status == null) {
-    //             return [null];
-    //         }
+        for (const player of players) {
+            if (player.alliance == lastAlliances[player.id]) {
+                continue;
+            }
 
-    //         const stateMap: Record<string, PlayerStateType> = {
-    //             a: 'admin',
-    //             b: 'banned',
-    //             v: 'vacation',
-    //             i: 'inactive',
-    //             I: 'inactive-long',
-    //             o: 'outlaw',
-    //         };
-    //         const states: PlayerStateType[] = [];
-    //         status.split('').forEach(c => states.push(stateMap[c] ?? _throw(`unknown player state '${c}'`)));
+            await store.put({
+                playerId: player.id,
+                date: now,
+                allianceId: player.alliance,
+            });
+        }
+    }
 
-    //         if (states.length == 0) {
-    //             throw new Error('number of player stats was zero');
-    //         }
+    private async updatePlayerStates(tx: UniverseHistoryDbTransaction, players: Player[], now: number) {
+        const lastStates: Partial<Record<number, DbUniverseHistoryPlayerState>> = {};
+        const lastStateUpdates: Partial<Record<number, number>> = {};
 
-    //         return states as PlayerState;
-    //     }
+        const store = tx.objectStore('playerStates');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
 
-    //     private updatePlayerState(now: number, playerHistory: PlayerHistory, player: Player): bit {
-    //         const states = this.mapState(player.status);
+            const isNewer = (lastStateUpdates[dbValue.playerId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastStateUpdates[dbValue.playerId] = dbValue.date;
+                lastStates[dbValue.playerId] = dbValue.state;
+            }
 
-    //         if (playerHistory.state.length == 0
-    //             || !this.arraysEqual(playerHistory.state.slice(-1)[0].value, states)
-    //         ) {
-    //             playerHistory.state.push({
-    //                 value: states,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+            cursor = await cursor.continue();
+        }
 
-    //     private updatePlayerAlliance(now: number, playerHistory: PlayerHistory, player: Player): bit {
-    //         if (playerHistory.alliance.slice(-1)[0]?.value != player.alliance
-    //         ) {
-    //             playerHistory.alliance.push({
-    //                 value: player.alliance,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+        for (const player of players) {
+            const state = this.mapState(player.status);
 
-    //     private updatePlayerName(now: number, playerHistory: PlayerHistory, player: Player): bit {
-    //         if (playerHistory.name.slice(-1)[0]?.value != player.name
-    //         ) {
-    //             playerHistory.name.push({
-    //                 value: player.name,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+            if (player.id in lastStates && this.playerStateEqual(state, lastStates[player.id]!)) {
+                continue;
+            }
 
-    //     private updateAlliance(now: number, allyHistory: AllianceHistory, allyData: Alliance, members: Player[]): bit {
-    //         return (this.updateAllianceName(now, allyHistory, allyData)
-    //             | this.updateAllianceTag(now, allyHistory, allyData)
-    //             | this.updateAllianceMembers(now, allyHistory, members)) as bit;
-    //     }
+            await store.put({
+                playerId: player.id,
+                date: now,
+                state,
+            });
+        }
 
-    //     private updateAllianceTag(now: number, allyHistory: AllianceHistory, allyData: Alliance) {
-    //         if (allyHistory.tag.slice(-1)[0]?.value != allyData.tag
-    //         ) {
-    //             allyHistory.tag.push({
-    //                 value: allyData.tag,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
 
-    //     private updateAllianceName(now: number, allyHistory: AllianceHistory, allyData: Alliance): bit {
-    //         if (allyHistory.name.slice(-1)[0]?.value != allyData.name
-    //         ) {
-    //             allyHistory.name.push({
-    //                 value: allyData.name,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+        const playerIds = players.map(p => p.id);
+        const deletedPlayers = Object.keys(lastStates)
+            .map(id => parseIntSafe(id, 10))
+            .filter(id => !playerIds.includes(id));
 
-    //     private updateAllianceMembers(now: number, allyHistory: AllianceHistory, members: Player[]): bit {
-    //         const memberIds = members.map(member => member.id);
+        for (const playerId of deletedPlayers) {
+            if (lastStates[playerId] == 'deleted') {
+                continue;
+            }
 
-    //         if (allyHistory.members.length == 0
-    //             || this.arraysEqual(allyHistory.members.slice(-1)[0].value, memberIds)
-    //         ) {
-    //             allyHistory.members.push({
-    //                 value: memberIds,
-    //                 date: now,
-    //             });
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
+            await store.put({
+                playerId,
+                date: now,
+                state: 'deleted',
+            });
+        }
+    }
+
+    private async updatePlayerScores(tx: UniverseHistoryDbTransaction, players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>, now: number) {
+        const lastScores: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, ScorePosition>> = {};
+        const lastScoreUpdates: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, number>> = {};
+
+        const store = tx.objectStore('playerScores');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const key: `${number}.${DbUniverseHistoryScoreType}` = `${dbValue.playerId}.${dbValue.type}`;
+            const isNewer = (lastScoreUpdates[key] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastScoreUpdates[key] = dbValue.date;
+                lastScores[key] = {
+                    score: dbValue.score,
+                    position: dbValue.position,
+                };
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        const scoresByType: Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>> = {} as any;
+        scoreTypes.forEach(type => scoresByType[type] = {});
+
+        for (const player of players) {
+            for (const type of scoreTypes) {
+                const { score, position } = playerScores[player.id]?.[type] ?? { score: 0, position: 0 };
+
+                await store.put({
+                    playerId: player.id,
+                    date: now,
+                    type,
+                    position,
+                    score,
+                });
+            }
+        }
+    }
+
+    private playerStateEqual(a: DbUniverseHistoryPlayerState, b: DbUniverseHistoryPlayerState) {
+        if (a == null || b == null || a == 'deleted' || b == 'deleted') {
+            return a == b;
+        }
+
+        return this.arraysEqual(a, b);
+    }
+
+    private mapState(status: string | null): DbUniverseHistoryPlayerState {
+        if (status == null) {
+            return null;
+        }
+
+        const stateMap: Record<string, DbUniverseHistoryPlayerStateItem> = {
+            a: 'admin',
+            b: 'banned',
+            v: 'vacation',
+            i: 'inactive',
+            I: 'inactive-long',
+            o: 'outlaw',
+        };
+        const states: DbUniverseHistoryPlayerStateItem[] = [];
+        status.split('').forEach(c => states.push(stateMap[c] ?? _throw(`unknown player state '${c}'`)));
+
+        if (states.length == 0) {
+            throw new Error('number of player stats was zero');
+        }
+
+        return states;
+    }
+
+
+    private async updatePlanets(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
+        await this.updateKnownPlanets(tx, planets);
+        await this.updatePlanetNames(tx, planets, now);
+        await this.updatePlanetStates(tx, planets, now);
+        await this.updatePlanetCoordinates(tx, planets, now);
+        
+        const moons = planets.map(p => p.moon).filter(m => m != null) as Moon[];
+        await this.updateKnownMoons(tx, moons);
+        await this.updateMoonNames(tx, moons, now);
+        await this.updateMoonStates(tx, moons, now);
+    }
+
+    private async updateKnownPlanets(tx: UniverseHistoryDbTransaction, planets: Planet[]) {
+        const planetStore = tx.objectStore('planets');
+
+        for (const planet of planets) {
+            await planetStore.put({ 
+                id: planet.id,
+                playerId: planet.player,
+            });
+        }
+    }
+
+    private async updatePlanetNames(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
+        const lastNames: Partial<Record<number, string>> = {};
+        const lastNameUpdates: Partial<Record<number, number>> = {};
+
+        const store = tx.objectStore('planetNames');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const isNewer = (lastNameUpdates[dbValue.planetId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastNameUpdates[dbValue.planetId] = dbValue.date;
+                lastNames[dbValue.planetId] = dbValue.name;
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        for (const planet of planets) {
+            if (planet.name == lastNames[planet.id]) {
+                continue;
+            }
+
+            await store.put({
+                planetId: planet.id,
+                date: now,
+                name: planet.name,
+            });
+        }
+    }
+
+    private async updatePlanetStates(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
+        const lastStates: Partial<Record<number, DbUniverseHistoryPlanetMoonState>> = {};
+        const lastStateUpdates: Partial<Record<number, number>> = {};
+
+        const store = tx.objectStore('planetStates');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const isNewer = (lastStateUpdates[dbValue.planetId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastStateUpdates[dbValue.planetId] = dbValue.date;
+                lastStates[dbValue.planetId] = dbValue.state;
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        for (const planet of planets) {
+            if (lastStates === null) {
+                continue;
+            }
+
+            await store.put({
+                planetId: planet.id,
+                date: now,
+                state: null,
+            });
+        }
+
+        const planetIds = planets.map(p => p.id);
+        const deletedPlanets = Object.keys(lastStates)
+            .map(id => parseIntSafe(id, 10))
+            .filter(id => !planetIds.includes(id));
+
+        for (const planetId of deletedPlanets) {
+            if (lastStates[planetId] == 'deleted') {
+                continue;
+            }
+
+            await store.put({
+                planetId: planetId,
+                date: now,
+                state: 'deleted',
+            });
+        }
+    }
+
+    private async updatePlanetCoordinates(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
+        const lastCoordinates: Partial<Record<number, DbUniverseHistoryCoordinates>> = {};
+        const lastCoordinatesUpdates: Partial<Record<number, number>> = {};
+
+        const store = tx.objectStore('planetCoordinates');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const isNewer = (lastCoordinatesUpdates[dbValue.planetId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastCoordinatesUpdates[dbValue.planetId] = dbValue.date;
+                lastCoordinates[dbValue.planetId] = dbValue.coordinates;
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        for (const planet of planets) {
+            if (planet.id in lastCoordinates && this.coordinatesEqual(planet.coordinates, lastCoordinates[planet.id]!)) {
+                continue;
+            }
+
+            await store.put({
+                planetId: planet.id,
+                date: now,
+                coordinates: {
+                    galaxy: planet.coordinates.galaxy,
+                    system: planet.coordinates.galaxy,
+                    position: planet.coordinates.position,
+                },
+            });
+        }
+    }
+
+    private async updateKnownMoons(tx: UniverseHistoryDbTransaction, moons: Moon[]) {
+        const store = tx.objectStore('moons');
+
+        for (const moon of moons) {
+            await store.put({ 
+                id: moon.id,
+                size: moon.size,
+                planetId: moon.planetId,
+            });
+        }
+    }
+
+    private async updateMoonNames(tx: UniverseHistoryDbTransaction, moons: Moon[], now: number) {
+        const lastNames: Partial<Record<number, string>> = {};
+        const lastNameUpdates: Partial<Record<number, number>> = {};
+
+        const store = tx.objectStore('moonNames');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const isNewer = (lastNameUpdates[dbValue.moonId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastNameUpdates[dbValue.moonId] = dbValue.date;
+                lastNames[dbValue.moonId] = dbValue.name;
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        for (const moon of moons) {
+            if (moon.name == lastNames[moon.id]) {
+                continue;
+            }
+
+            await store.put({
+                moonId: moon.id,
+                date: now,
+                name: moon.name,
+            });
+        }
+    }
+
+    private async updateMoonStates(tx: UniverseHistoryDbTransaction, moons: Moon[], now: number) {
+        const lastStates: Partial<Record<number, DbUniverseHistoryPlanetMoonState>> = {};
+        const lastStateUpdates: Partial<Record<number, number>> = {};
+
+        const store = tx.objectStore('moonStates');
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const dbValue = cursor.value;
+
+            const isNewer = (lastStateUpdates[dbValue.moonId] ?? -1) < dbValue.date;
+            if (isNewer) {
+                lastStateUpdates[dbValue.moonId] = dbValue.date;
+                lastStates[dbValue.moonId] = dbValue.state;
+            }
+
+            cursor = await cursor.continue();
+        }
+
+        for (const moon of moons) {
+            if (lastStates === null) {
+                continue;
+            }
+
+            await store.put({
+                moonId: moon.id,
+                date: now,
+                state: null,
+            });
+        }
+
+        const moonIds = moons.map(m => m.id);
+        const deletedMoons = Object.keys(lastStates)
+            .map(id => parseIntSafe(id, 10))
+            .filter(id => !moonIds.includes(id));
+
+        for (const moonId of deletedMoons) {
+            if (lastStates[moonId] == 'deleted') {
+                continue;
+            }
+
+            await store.put({
+                moonId,
+                date: now,
+                state: 'deleted',
+            });
+        }
+    }
+
+    private coordinatesEqual(a: DbUniverseHistoryCoordinates, b: DbUniverseHistoryCoordinates) {
+        return a.galaxy == b.galaxy
+            && a.system == b.system
+            && a.position == b.position;
+    }
 
     private arraysEqual<T>(a: T[], b: T[]): boolean {
         return a.length == b.length
@@ -787,6 +947,7 @@ export class UniverseHistoryModule {
                     id: moonId,
                     name: moonName,
                     size,
+                    planetId: id,
                 };
             }
 
@@ -842,8 +1003,8 @@ export class UniverseHistoryModule {
         return alliances;
     }
 
-    private async getAllPlayerScores(): Promise<Record<number, PlayerScorePositions>> {
-        const scores: Record<number, PlayerScorePositions> = {};
+    private async getAllPlayerScores(): Promise<Partial<Record<number, PlayerScorePositions>>> {
+        const scores: Partial<Record<number, PlayerScorePositions>> = {};
 
         const total = await this.getPlayerScorePositions(HighscoreType.total);
         const economy = await this.getPlayerScorePositions(HighscoreType.economy);

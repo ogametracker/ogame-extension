@@ -1,6 +1,6 @@
 import { DBSchema } from "idb";
 
-type DbUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
+export type DbUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
 
 export type DbUniverseHistoryPlayerState = null | DbUniverseHistoryPlayerStateItem[] | 'deleted';
 
@@ -48,15 +48,15 @@ interface DbUniverseHistoryItem<T> {
     value: T;
 }
 
-interface DbUniverseHistoryCoordinates {
+export interface DbUniverseHistoryCoordinates {
     galaxy: number;
     system: number;
     position: number;
 }
 
-type DbUniverseHistoryPlanetMoonState = null | 'deleted';
+export type DbUniverseHistoryPlanetMoonState = null | 'deleted';
 
-type DbUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
+export type DbUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     _lastUpdate: {
@@ -85,7 +85,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
         value: {
             playerId: number;
             date: number;
-            name: null | number;
+            allianceId: number | null;
         };
     };
     playerStates: {
@@ -114,7 +114,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
         key: number;
         value: {
             id: number;
-            planetId: number;
+            playerId: number;
         };
     };
     planetNames: {
@@ -141,7 +141,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
         value: {
             planetId: number;
             date: number;
-            state: DbUniverseHistoryCoordinates;
+            coordinates: DbUniverseHistoryCoordinates;
         };
     };
 

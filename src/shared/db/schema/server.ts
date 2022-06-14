@@ -1,3 +1,5 @@
+import { DBSchema } from "idb";
+
 export interface DbServerSettings {
     _lastUpdate: number;
 
@@ -92,6 +94,6 @@ type DbServerSettingsItem<T extends keyof DbServerSettings = keyof DbServerSetti
     value: DbServerSettings[T];
 };
 
-export interface OgameTrackerServerDbSchema {
+export interface OgameTrackerServerDbSchema extends DBSchema {
     serverSettings: DbServerSettingsItem;
 }
