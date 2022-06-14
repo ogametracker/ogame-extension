@@ -8,9 +8,9 @@
                 show-average
             >
                 <template #cell-label="{ value }">
-                    <span v-text="value" />
+                    <span v-text="value" class="mr-2" />
 
-                    <o-resource :resource="value" :size="resourceIconSize" />
+                    <o-resource :resource="resourceTypes[value]" :size="resourceIconSize" />
                 </template>
             </ranged-stats-table>
         </div>
@@ -94,6 +94,14 @@
 
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
+        }
+
+        private get resourceTypes(): Record<string, ResourceType> {
+            return {    
+                [this.$i18n.$t.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+            };
         }
 
         private get events(): Event[] {

@@ -4,7 +4,7 @@
             <span v-text="$i18n.$t.settings.misc.extensionLanguage" />
         </div>
         <div class="fake-table-body">
-            <select :value="language" @change="setLanguage($event)">
+            <select :value="language" @change="setLanguage($event.target.value)">
                 <option
                     v-for="lang in langs"
                     :key="lang"

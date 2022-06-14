@@ -8,9 +8,9 @@
             show-average
         >
             <template #cell-label="{ value }">
-                <span v-text="value" />
+                <span v-text="value" class="mr-2" />
 
-                <o-resource :resource="value" size="24px" />
+                <o-resource :resource="resourceTypes[value]" size="24px" />
             </template>
         </ranged-stats-table>
 
@@ -77,6 +77,14 @@
 
         private get reportsPerDay() {
             return CombatReportDataModule.reportsPerDay;
+        }
+
+        private get resourceTypes(): Record<string, ResourceType> {
+            return {    
+                [this.$i18n.$t.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+            };
         }
 
         private get items(): RangedStatsTableItem<CombatReport>[] {
