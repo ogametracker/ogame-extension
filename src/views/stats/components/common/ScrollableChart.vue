@@ -631,6 +631,10 @@
 
             this.xRange = xRange;
             this.yRange = yRange;
+
+            if((this.yRange.max - this.yRange.min) < this.internalConfig.grid.y.minLines) {
+                this.yRange.max = this.yRange.min + this.internalConfig.grid.y.minLines;
+            }
         }
 
         private get reversedDatasets() {
@@ -930,6 +934,7 @@
         grid-column: 1 / span 2;
         position: relative;
         overflow: hidden;
+        clip-path: polygon(100px 0, 100% 0, 100% 100%, 100px 100%);
 
         > .x-axis-labels {
             position: relative;

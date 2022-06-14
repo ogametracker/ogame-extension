@@ -12,7 +12,7 @@
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { addDays, differenceInDays, startOfDay } from 'date-fns';
+    import { addDays, differenceInDays, startOfDay, subDays } from 'date-fns';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
 
@@ -46,10 +46,19 @@
         @Prop({ required: true, type: Object as PropType<Record<number, T[]>> })
         private itemsPerDay!: Record<number, T[]>;
 
+        @Prop({ required: false, type: Number, default: () => 30 })
+        private minDays!: number;
+
+        private get minDay() {
+            const firstDay = typeof this.firstDay === 'number' ? this.firstDay : this.firstDay.getTime();
+            const today = startOfDay(Date.now());
+            return Math.min(firstDay, subDays(today, this.minDays - 1).getTime());
+        }
 
         private get computedDatasets(): ScrollableChartDataset[] {
-            const dayCount = differenceInDays(startOfDay(Date.now()), this.firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(this.firstDay, add).getTime());
+            const minDay = this.minDay;
+            const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
+            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
 
             const filteredItemsPerDay = days.map(day => (this.itemsPerDay[day] ?? []).filter(item => this.filter(item)));
 
@@ -76,7 +85,7 @@
         }
 
         private formatDate(index: number): string {
-            const day = addDays(this.firstDay, index);
+            const day = addDays(this.minDay, index);
             return this.$date(day);
         }
     }

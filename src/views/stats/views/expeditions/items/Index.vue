@@ -20,7 +20,7 @@
     import { ExpeditionEventItem } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { startOfDay } from 'date-fns';
+    import { startOfDay, subDays } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
@@ -30,9 +30,15 @@
     export default class Charts extends Vue {
         private readonly ticks = 30;
 
+        private get minDay() {
+            const firstDay = ExpeditionDataModule.firstDay;
+            const today = startOfDay(Date.now());
+            return Math.min(firstDay, subDays(today, this.ticks - 1).getTime());
+        }
+
         private get itemsPerDays(): ItemHash[][] {
             const perDay = ExpeditionDataModule.expeditionsPerDay;
-            const firstDay = ExpeditionDataModule.firstDay;
+            const firstDay = this.minDay;
             const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
             const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
 
@@ -51,7 +57,7 @@
         }
 
         private formatDate(x: number): string {
-            const firstDay = ExpeditionDataModule.firstDay;
+            const firstDay = this.minDay;
             const day = addDays(firstDay, x);
 
             return this.$date(day);
