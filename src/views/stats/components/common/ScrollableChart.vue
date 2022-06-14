@@ -317,6 +317,7 @@
         valuesByNormalizedX: Record<number, number>;
         normalizedValues: Point[];
         normalizedValuesByNormalizedX: Record<number, number>;
+        normalizedAverage: number | null;
         paths: {
             line: string;
             averageLine: string;
@@ -472,6 +473,7 @@
                 valuesByNormalizedX: {},
                 normalizedValues: [],
                 normalizedValuesByNormalizedX: {},
+                normalizedAverage: null,
                 svgPoints: [],
                 paths: {
                     line: '',
@@ -689,6 +691,10 @@
                 });
                 internalDataset.normalizedValues = normalizedValues.map(p => ({ x: p.xNormalized, y: p.yNormalized }));
 
+                if(internalDataset.average != null) {
+                    internalDataset.normalizedAverage = (internalDataset.average - this.yRange.min) / (this.yRange.max - this.yRange.min);
+                }
+
                 internalDataset.valuesByNormalizedX = {};
                 internalDataset.normalizedValuesByNormalizedX = {};
                 normalizedValues.forEach(point => {
@@ -744,8 +750,8 @@
                     + `L ${width * this.maxXNormalized} ${zeroY}`;
 
                 let avgLinePath = '';
-                if (dataset.average != null) {
-                    const avgSvgValue = this.computeSvgValues([{ x: 0, y: dataset.average }])[0].y;
+                if (dataset.normalizedAverage != null) {
+                    const avgSvgValue = this.computeSvgValues([{ x: 0, y: dataset.normalizedAverage }])[0].y;
                     avgLinePath = `M 0 ${avgSvgValue} L ${width * this.maxXNormalized} ${avgSvgValue}`;
                 }
 
