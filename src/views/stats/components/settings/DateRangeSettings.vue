@@ -8,8 +8,8 @@
                         <td />
                         <td v-text="$i18n.$t.settings.dateRanges.headers.label" />
                         <td v-text="$i18n.$t.settings.dateRanges.headers.type" />
-                        <td v-text="$i18n.$t.settings.dateRanges.headers.rangeStart" />
-                        <td v-text="$i18n.$t.settings.dateRanges.headers.rangeContains" />
+                        <td colspan="2" v-text="$i18n.$t.settings.dateRanges.headers.rangeStart" />
+                        <td colspan="2" v-text="$i18n.$t.settings.dateRanges.headers.rangeContains" />
                         <td>
                             <reset-button @reset="resetDateRanges()" />
                         </td>
@@ -65,6 +65,8 @@
                                 v-model="range.skip"
                                 @change="onItemsUpdated()"
                             />
+                        </td>
+                        <td style="text-align: left; padding-left: 0">
                             <span v-text="$i18n.$t.settings.dateRanges[`${range.type}sAgo`]" />
                         </td>
                         <td>
@@ -74,9 +76,11 @@
                                 v-model="range.take"
                                 @change="onItemsUpdated()"
                             />
+                        </td>
+                        <td style="text-align: left; padding-left: 0">
                             <span v-text="$i18n.$t.settings.dateRanges[`${range.type}s`]" />
                         </td>
-                        <td v-text="getRangeText(range)" />
+                        <td v-text="getRangeText(range)" style="font-style: italic;" />
                     </tr>
                 </draggable>
                 <tfoot>
@@ -88,7 +92,7 @@
                                 @click="addNewRange()"
                             />
                         </td>
-                        <td colspan="5" />
+                        <td colspan="7" />
                     </tr>
                 </tfoot>
             </table>
@@ -127,6 +131,10 @@
             }
 
             const rangeDays = getRangeDays(range);
+            if(rangeDays.firstDay == rangeDays.lastDay) {
+                return this.$date(rangeDays.firstDay);
+            }
+
             return `${this.$date(rangeDays.firstDay)} - ${this.$date(rangeDays.lastDay)}`;
         }
 
@@ -200,5 +208,10 @@
 
     .grab {
         cursor: grab;
+    }
+
+    input[type="number"] {
+        width: 64px;
+        margin-right: 0.5rem;
     }
 </style>

@@ -5,6 +5,7 @@
         TODO: proper values in tables (idb)
         TODO: show last server settings update time
         TODO: show last universe history update time
+        TODO: possibility to go to migration helper page
         <grid-table :items="items" :columns="columns" class="info-table" />
     </div>
 </template>
