@@ -288,7 +288,7 @@
                     key: 'donate',
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
-                    label: 'LOCA: Donate',
+                    label: this.$i18n.$t.donate.header,
                     class: 'donate',
                     appClass: 'donate-page',
                 },

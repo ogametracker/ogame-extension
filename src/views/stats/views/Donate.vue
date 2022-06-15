@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h2 v-text="'LOCA: DONATE'" />
+        <h2 v-text="$i18n.$t.donate.subHeader" />
 
         <div class="fake-table crypto-table">
             <div class="fake-table-header">
-                <span v-text="'LOCA: Donate using crypto'" />
+                <span v-text="$i18n.$t.donate.crypto.header" />
             </div>
             <div class="fake-table-body">
                 <span class="mdi mdi-bitcoin" />
@@ -19,9 +19,9 @@
 
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
-                <span v-text="'LOCA: Donate using PayPal or debit/credit card'" />
+                <span v-text="$i18n.$t.donate.kofi.header" />
             </div>
-            <div class="fake-table-body">
+            <div class="fake-table-body" style="justify-items: center">
                 <a
                     href="https://ko-fi.com/ogametracker"
                     target="_blank"
@@ -29,13 +29,9 @@
                     class="donate-button"
                 >
                     <img src="/img/extern/kofi-logo.svg" />
-                    LOCA: Donate on Ko-Fi
+                    {{ $i18n.$t.donate.kofi.buttonText }}
                 </a>
-                <small
-                    v-text="
-                        'LOCA: You don\'t need an account on Ko-Fi to support the development of this extension.'
-                    "
-                />
+                <small v-text="$i18n.$t.donate.kofi.message" />
             </div>
         </div>
     </div>
