@@ -955,7 +955,7 @@ import { _throw } from '@/shared/utils/_throw';
         grid-column: 1 / span 2;
         position: relative;
         overflow: hidden;
-        clip-path: polygon(100px 0, 100% 0, 100% 100%, 100px 100%);
+        clip-path: polygon(100px 0, 100% 0, 100% 100%, 0 100%);
 
         > .x-axis-labels {
             position: relative;
