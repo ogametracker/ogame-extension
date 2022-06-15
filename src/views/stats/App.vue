@@ -217,7 +217,7 @@
                     key: 'debris-fields',
                     to: { name: 'debris-fields' },
                     icon: 'ogti ogti-debris-field',
-                    label: 'LOCA: Trümmerfelder',
+                    label: this.$i18n.$t.debrisFields.header,
                     keyboardKey: '3',
                     keyboardIcon: 'mdi mdi-numeric-3',
                     canBeDefault: true,

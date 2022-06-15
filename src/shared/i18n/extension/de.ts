@@ -6,6 +6,7 @@ import { de as common } from './common/de';
 import { de as expeditions } from './expeditions/de';
 import { de as combats } from './combats/de';
 import { de as donate } from './donate/de';
+import { de as debrisFields } from './debrisFields/de';
 
 export const de: ExtensionTranslations = {
     common,
@@ -15,4 +16,5 @@ export const de: ExtensionTranslations = {
     expeditions,
     combats,
     donate,
+    debrisFields,
 };

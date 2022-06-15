@@ -8,7 +8,7 @@
 
         <div class="fake-table">
             <div class="fake-table-header">
-                <span v-text="'LOCA: add debris field manually'" />
+                <span v-text="$i18n.$t.debrisFields.addDebrisFieldManually.title" />
             </div>
             <div class="fake-table-body">
                 <span>
@@ -40,7 +40,7 @@
                 </span>
                 <button
                     class="add"
-                    v-text="'LOCA: Add'"
+                    v-text="$i18n.$t.debrisFields.addDebrisFieldManually.buttonText"
                     @click="addManualDebrisFieldReport()"
                     :disabled="(metal == 0 && crystal == 0) || datetime == null"
                 />

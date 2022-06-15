@@ -1,6 +1,7 @@
 import { ShipTranslations } from '../ogame/ships/types';
 import { CombatsTranslations } from './combats/type';
 import { CommonTranslations } from './common/type';
+import { DebrisFieldsTranslations } from './debrisFields/type';
 import { DonateTranslations } from './donate/type';
 import { ExpeditionsTranslations } from './expeditions/type';
 import { ResourceTranslations } from './resources/type';
@@ -14,4 +15,5 @@ export interface ExtensionTranslations {
     expeditions: ExpeditionsTranslations;
     combats: CombatsTranslations;
     donate: DonateTranslations;
+    debrisFields: DebrisFieldsTranslations;
 }

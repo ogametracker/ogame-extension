@@ -4,6 +4,7 @@
             :datasets="datasets"
             :firstDay="firstDay"
             :itemsPerDay="reportsPerDay"
+            no-tooltip-footer
         />
 
         <span class="multi-menu">
