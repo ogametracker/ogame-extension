@@ -116,34 +116,34 @@
             </span>
         </template>
         <template #cell-metal="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #cell-crystal="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #cell-deuterium="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #cell-total="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #cell-totalMsu="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #footer-metal="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #footer-crystal="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #footer-deuterium="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #footer-total="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
         <template #footer-totalMsu="{ value }">
-            {{ $i18n.$n(value) }}
+            {{ $i18n.$n(value, numberFormat) }}
         </template>
     </grid-table>
 </template>
@@ -158,7 +158,7 @@
     import { FusionReactor } from '@/shared/models/ogame/buildings/FusionReactor';
     import { ProductionBuildingDependencies } from '@/shared/models/ogame/buildings/ProductionBuilding';
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
@@ -166,8 +166,6 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { Item } from '@/shared/models/ogame/items/Item';
-    import { Items } from '@/shared/models/ogame/items/Items';
 
     interface Production {
         metal: number;
@@ -205,6 +203,10 @@
     @Component({})
     export default class Resources extends Vue {
         private readonly ItemHash = ItemHash;
+
+        private readonly numberFormat: Intl.NumberFormatOptions = {
+            maximumFractionDigits: 0,
+        };
 
         private readonly resourcePackageAmounts = {
             all: 0,
