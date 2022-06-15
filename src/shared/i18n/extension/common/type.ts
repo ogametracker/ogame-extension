@@ -7,4 +7,7 @@ export interface CommonTranslations {
     total: string;
     resourceUnits: string;
     resourceUnitsMsu: string;
+    
+    madeWithLove1: string;
+    madeWithLove2: string;
 }

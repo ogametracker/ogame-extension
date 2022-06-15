@@ -10,4 +10,7 @@ export const en: CommonTranslations = {
     total: 'total',
     resourceUnits: 'Resource units',
     resourceUnitsMsu: 'Resource units (MSU)',
+
+    madeWithLove1: 'Made with',
+    madeWithLove2: 'by Wonkydonky',
 };

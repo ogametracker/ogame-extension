@@ -10,4 +10,7 @@ export const de: CommonTranslations = {
     total: 'gesamt',
     resourceUnits: 'Rohstoffeinheiten',
     resourceUnitsMsu: 'Rohstoffeinheiten (MSE)',
+
+    madeWithLove1: 'Mit',
+    madeWithLove2: 'von Wonkydonky entwickelt',
 };

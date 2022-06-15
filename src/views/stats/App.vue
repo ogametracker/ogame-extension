@@ -107,9 +107,9 @@
                     :to="{ name: 'donate' }"
                     class="made-with-love"
                 >
-                    made with
-                    <span class="mdi mdi-heart" style="color: #ff1f1f" /> by
-                    Wonkydonky
+                    <span v-text="$i18n.$t.common.madeWithLove1" class="mr-1" />
+                    <span class="mdi mdi-heart" style="color: #ff1f1f" /> 
+                    <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
                 </router-link>
             </footer>
         </template>
