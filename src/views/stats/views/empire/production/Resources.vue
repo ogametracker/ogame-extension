@@ -235,6 +235,7 @@
                     key: 'productionSettings',
                     class: 'production-settings-column',
                     headerClass: 'production-settings-header-column',
+                    size: 'max-content',
                 },
             ];
         }
@@ -476,7 +477,7 @@
         width: 100%;
         justify-items: center;
         align-items: center;
-        gap: 2px;
+        gap: 8px;
 
         > .header {
             grid-column: 1 / span calc(7 + var(--item-count));

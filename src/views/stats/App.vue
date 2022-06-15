@@ -401,7 +401,7 @@
                 ?? {
                 id: meta.serverId,
                 language: meta.language,
-                name: `${meta.language.toUpperCase()} ${meta.serverId}`,
+                name: meta.serverId.toString(),
             };
             const account = UniversesAndAccountsDataModule.accounts.find(a => a.serverId == meta.serverId && a.serverLanguage == meta.language && a.id == meta.playerId)
                 ?? {
@@ -411,7 +411,7 @@
                 name: meta.playerId.toString(),
             };
 
-            document.title = `${account.name} - ${server.name}`;
+            document.title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
         }
     }
 </script>
