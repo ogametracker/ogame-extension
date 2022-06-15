@@ -224,7 +224,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         private get planets(): PlanetData[] {
             return Object.values(EmpireDataModule.empire!.planets)//TODO: !
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => compareCoordinates(a.coordinates, b.coordinates)) as PlanetData[];
+                .sort((a, b) => EmpireDataModule.empire!.planetOrder.indexOf(a.id) - EmpireDataModule.empire!.planetOrder.indexOf(b.id)) as PlanetData[]; //TODO: !
         }
     }
 </script>
