@@ -6,7 +6,8 @@ export const de: CommonTranslations = {
     chart: 'Diagramm',
     table: 'Tabelle',
     sum: 'Summe',
-    sumMsu: 'Summe (MSU)',
     darkMatter: ogamePremium.darkMatter,
     total: 'gesamt',
+    resourceUnits: 'Rohstoffeinheiten',
+    resourceUnitsMsu: 'Rohstoffeinheiten (MSE)',
 };

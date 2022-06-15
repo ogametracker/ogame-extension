@@ -19,7 +19,7 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.common.sum" />
+                        <div v-text="$i18n.$t.common.resourceUnits" />
 
                         <div
                             class="number"
@@ -27,17 +27,17 @@
                                 $i18n.$n(getSumMsu(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.common.sumMsu" />
+                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="$i18n.$t.common.sum" />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
                     <div class="number" v-text="$i18n.$n(getSumMsu(datasets))" />
-                    <div v-text="$i18n.$t.common.sumMsu" />
+                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -118,7 +118,7 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.sumMsu,
+                    label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: expos => expos.reduce(

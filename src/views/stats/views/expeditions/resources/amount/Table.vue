@@ -79,14 +79,14 @@
         private get footerItems(): RangedStatsTableItem<ExpeditionEventResources>[] {
             return [
                 {
-                    label: this.$i18n.$t.common.sum,
+                    label: this.$i18n.$t.common.resourceUnits,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + expo.resources.metal + expo.resources.crystal + expo.resources.deuterium,
                         0
                     ),
                 },
                 {
-                    label: this.$i18n.$t.common.sumMsu,
+                    label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
                             + expo.resources.metal

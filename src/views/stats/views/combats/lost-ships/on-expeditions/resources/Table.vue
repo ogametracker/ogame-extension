@@ -113,7 +113,7 @@
 
             return [
                 {
-                    label: this.$i18n.$t.common.sum,
+                    label: this.$i18n.$t.common.resourceUnits,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {
@@ -125,7 +125,7 @@
                             }), 0),
                 },
                 {
-                    label: this.$i18n.$t.common.sumMsu,
+                    label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
                             (acc, ship) => {

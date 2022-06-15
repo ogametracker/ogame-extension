@@ -6,7 +6,8 @@ export const en: CommonTranslations = {
     chart: 'Chart',
     table: 'Table',
     sum: 'Sum',
-    sumMsu: 'Sum (MSU)',
     darkMatter: ogamePremium.darkMatter,
     total: 'total',
+    resourceUnits: 'Resource units',
+    resourceUnitsMsu: 'Resource units (MSU)',
 };

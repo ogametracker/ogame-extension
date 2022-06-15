@@ -20,7 +20,7 @@
                                 )
                             "
                         />
-                        <div>LOCA: Resources</div>
+                        <div v-text="$i18n.$t.common.resourceUnits" />
 
                         <div
                             class="number"
@@ -32,7 +32,7 @@
                                 )
                             "
                         />
-                        <div v-text="$i18n.$t.common.sumMsu" />
+                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
                     </div>
                     <hr />
                 </template>
@@ -42,13 +42,13 @@
                         class="number"
                         v-text="$i18n.$n(getResourcesAmount(datasets))"
                     />
-                    <div v-text="$i18n.$t.common.sum" />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
                     <div
                         class="number"
                         v-text="$i18n.$n(getResourcesAmountInMsu(datasets))"
                     />
-                    <div v-text="$i18n.$t.common.sumMsu" />
+                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -117,7 +117,7 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.sumMsu,
+                    label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
                     getValue: reports => reports.reduce(

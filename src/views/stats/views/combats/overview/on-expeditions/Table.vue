@@ -55,7 +55,7 @@
         private get footerItems(): RangedStatsTableItem<CombatReport>[] {
             return [
                 {
-                    label: this.$i18n.$t.common.sum,
+                    label: this.$i18n.$t.common.resourceUnits,
                     getValue: combats => combats.length,
                 },
             ];

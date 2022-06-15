@@ -29,7 +29,7 @@
                 [ResourceType.metal]: this.$i18n.$t.resources.metal,
                 [ResourceType.crystal]: this.$i18n.$t.resources.crystal,
                 [ResourceType.deuterium]: this.$i18n.$t.resources.deuterium,
-                totalMsu: this.$i18n.$t.common.sumMsu,
+                totalMsu: this.$i18n.$t.common.resourceUnitsMsu,
             };
         }
 
