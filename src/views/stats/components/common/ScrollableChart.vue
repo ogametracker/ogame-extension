@@ -220,7 +220,7 @@
                         :key="`y-grid-label-${y}`"
                         class="y-axis-label"
                         :style="{ bottom: `${yData.fraction * 100}%` }"
-                        v-text="$number(y)"
+                        v-text="$i18n.$n(y)"
                     />
                 </div>
                 <div class="chart-x-axis">
@@ -281,10 +281,10 @@
 </template>
 
 <script lang="ts">
-    import { _throw } from '@/shared/utils/_throw';
+    import { $i18n } from '@/shared/i18n/extension/$i18n';
+import { _throw } from '@/shared/utils/_throw';
     import { PropType } from 'vue';
     import { Component, Prop, PropSync, Ref, Vue, Watch } from 'vue-property-decorator';
-    import { Localization } from '../../i18n/Localization';
 
     function findPrevious<T>(array: T[], maxIndex: number, predicate: (item: T) => boolean): T | null {
         for (let i = Math.min(maxIndex, array.length - 1); i >= 0; i--) {
@@ -381,10 +381,10 @@
         private tickList!: number[] | null;
 
 
-        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => $i18n.$n(value) })
         private xLabelFormatter!: (value: number) => string;
 
-        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => Localization.formatNumber(value) })
+        @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => $i18n.$n(value) })
         private tooltipValueFormatter!: (value: number) => string;
 
         @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })

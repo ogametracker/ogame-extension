@@ -167,19 +167,19 @@
 
                 <template #cell-cost="{ value }">
                     <div class="cost-grid">
-                        <span v-text="$number(value.metal)" />
-                        <span v-text="$number(value.crystal)" />
-                        <span v-text="$number(value.deuterium)" />
+                        <span v-text="$i18n.$n(value.metal)" />
+                        <span v-text="$i18n.$n(value.crystal)" />
+                        <span v-text="$i18n.$n(value.deuterium)" />
                     </div>
                 </template>
                 <template #cell-costMsu="{ value }">
-                    <span v-text="$number(value)" />
+                    <span v-text="$i18n.$n(value)" />
                 </template>
 
                 <template #cell-productionDelta="{ value }">
                     <span
                         v-text="
-                            $number(
+                            $i18n.$n(
                                 Math.max(
                                     value.metal,
                                     value.crystal,
@@ -190,11 +190,11 @@
                     />
                 </template>
                 <template #cell-productionDeltaMsu="{ value }">
-                    <span v-text="$number(value)" />
+                    <span v-text="$i18n.$n(value)" />
                 </template>
 
                 <template #cell-amortizationTimeInH="{ value }">
-                    <span v-text="$timespan(value * 60 * 60)" />
+                    <span v-text="$i18n.$timespan(value * 60 * 60)" />
                 </template>
             </grid-table>
         </div>

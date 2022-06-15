@@ -140,6 +140,36 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
         const formatter = new Intl.NumberFormat(this.locale, options);
         return formatter.format(number);
     }
+
+    public $timespan(valueInSeconds: number): string {
+        let totalTime = BigInt(Math.ceil(valueInSeconds));
+
+        const seconds = totalTime % 60n;
+        totalTime = (totalTime - seconds) / 60n;
+
+        const minutes = totalTime % 60n;
+        totalTime = (totalTime - minutes) / 60n;
+
+        const hours = totalTime % 24n;
+        totalTime = (totalTime - hours) / 24n;
+
+        const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (totalTime == 0n) {
+            return time;
+        }
+
+        const days = totalTime % 7n;
+        totalTime = (totalTime - days) / 7n;
+
+        const timeWithDays = `${days}d ` + time;
+        if (totalTime == 0n) {
+            return timeWithDays;
+        }
+
+        const weeks = totalTime;
+
+        return `${this.$n(Number(weeks))}w ` + timeWithDays;
+    }
 }
 
 export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>().init({
@@ -163,7 +193,6 @@ export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>
                 second: '2-digit',
             },
         },
-
     },
     fallbackLocale: LanguageKey.en,
 });

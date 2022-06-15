@@ -60,7 +60,7 @@
             const firstDay = this.minDay;
             const day = addDays(firstDay, x);
 
-            return this.$date(day);
+            return this.$i18n.$d(day, 'date');
         }
 
         private mounted() {

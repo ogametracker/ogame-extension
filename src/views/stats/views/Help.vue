@@ -88,15 +88,15 @@
                 },
                 {
                     label: 'LOCA: Number of tracked expeditions',
-                    value: this.$number(ExpeditionDataModule.expeditions.length),
+                    value: this.$i18n.$n(ExpeditionDataModule.expeditions.length),
                 },
                 {
                     label: 'LOCA: Number of tracked combats',
-                    value: this.$number(CombatReportDataModule.reports.length),
+                    value: this.$i18n.$n(CombatReportDataModule.reports.length),
                 },
                 {
                     label: 'LOCA: Number of tracked debris field reports',
-                    value: this.$number(DebrisFieldReportDataModule.reports.length),
+                    value: this.$i18n.$n(DebrisFieldReportDataModule.reports.length),
                 },
             ];
         }
@@ -124,7 +124,7 @@
                 unitIndex++;
             }
 
-            return `${this.$number(bytes)} ${units[unitIndex]}`;
+            return `${this.$i18n.$n(bytes)} ${units[unitIndex]}`;
         }
     }
 </script>

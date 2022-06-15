@@ -90,7 +90,7 @@
 
         private formatDate(index: number): string {
             const day = addDays(this.minDay, index);
-            return this.$date(day);
+            return this.$i18n.$d(day, 'date');
         }
     }
 </script>

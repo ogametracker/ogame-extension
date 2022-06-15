@@ -14,7 +14,7 @@
                         <div
                             class="number"
                             v-text="
-                                $number(getSum(getVisibleDatasets(datasets)))
+                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
                         <div>LOCA: Combats</div>
@@ -23,7 +23,7 @@
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$number(getSum(datasets))" />
+                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
                     <div>LOCA: Combats</div>
                 </div>
             </template>

@@ -185,14 +185,14 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
             columns.push(...this.dateRanges.map((range, i) => ({
                 key: i,
                 label: range.label ?? this.$i18n.$t.settings.dateRanges.since(this.$i18n.$d(this.firstDay, 'date')),
-                formatter: (value: number) => this.$number(value, this.numberFormatOptions),
+                formatter: (value: number) => this.$i18n.$n(value, this.numberFormatOptions),
             })));
 
             if (this.showAverage) {
                 columns.push({
                     key: 'average',
                     label: this.$i18n.$t.common.averagePerDay,
-                    formatter: (value: number) => this.$number(value, this.averageNumberFormatOptions ?? this.numberFormatOptions)
+                    formatter: (value: number) => this.$i18n.$n(value, this.averageNumberFormatOptions ?? this.numberFormatOptions)
                 });
             }
 
@@ -201,7 +201,7 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
                     key: 'percentage',
                     label: '%',
                     formatter: (value: number | '') => value != ''
-                        ? this.$number(value, {
+                        ? this.$i18n.$n(value, {
                             minimumFractionDigits: 3,
                             maximumFractionDigits: 3,
                         })

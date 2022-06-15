@@ -116,34 +116,34 @@
             </span>
         </template>
         <template #cell-metal="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #cell-crystal="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #cell-deuterium="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #cell-total="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #cell-totalMsu="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #footer-metal="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #footer-crystal="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #footer-deuterium="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #footer-total="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
         <template #footer-totalMsu="{ value }">
-            {{ $number(value) }}
+            {{ $i18n.$n(value) }}
         </template>
     </grid-table>
 </template>

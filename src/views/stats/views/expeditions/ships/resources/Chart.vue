@@ -16,7 +16,7 @@
                         <div
                             class="number"
                             v-text="
-                                $number(getSum(getVisibleDatasets(datasets)))
+                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
                         <div v-text="$i18n.$t.common.sum" />
@@ -24,7 +24,7 @@
                         <div
                             class="number"
                             v-text="
-                                $number(getSumMsu(getVisibleDatasets(datasets)))
+                                $i18n.$n(getSumMsu(getVisibleDatasets(datasets)))
                             "
                         />
                         <div v-text="$i18n.$t.common.sumMsu" />
@@ -33,10 +33,10 @@
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$number(getSum(datasets))" />
+                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
                     <div v-text="$i18n.$t.common.sum" />
 
-                    <div class="number" v-text="$number(getSumMsu(datasets))" />
+                    <div class="number" v-text="$i18n.$n(getSumMsu(datasets))" />
                     <div v-text="$i18n.$t.common.sumMsu" />
                 </div>
             </template>

@@ -34,8 +34,8 @@
                         :tick-list="days"
                         :min-tick="firstDay"
                         :max-tick="nextDay"
-                        :x-label-formatter="(x) => $date(x)"
-                        :x-label-tooltip-formatter="(x) => $datetime(x)"
+                        :x-label-formatter="(x) => $i18n.$d(x, 'date')"
+                        :x-label-tooltip-formatter="(x) => $i18n.$d(x, 'datetime')"
                     />
                 </template>
             </template>

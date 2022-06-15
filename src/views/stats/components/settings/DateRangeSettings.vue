@@ -132,10 +132,10 @@
 
             const rangeDays = getRangeDays(range);
             if(rangeDays.firstDay == rangeDays.lastDay) {
-                return this.$date(rangeDays.firstDay);
+                return this.$i18n.$d(rangeDays.firstDay, 'date');
             }
 
-            return `${this.$date(rangeDays.firstDay)} - ${this.$date(rangeDays.lastDay)}`;
+            return `${this.$i18n.$d(rangeDays.firstDay, 'date')} - ${this.$i18n.$d(rangeDays.lastDay, 'date')}`;
         }
 
         private mounted() {

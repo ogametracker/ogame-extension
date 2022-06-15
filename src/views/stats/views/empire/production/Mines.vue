@@ -35,7 +35,7 @@
             <div class="crawlers">
                 <span>
                     <span
-                        v-text="$number(value.active)"
+                        v-text="$i18n.$n(value.active)"
                         :class="{
                             'crawlers-good': value.active == value.maximum,
                             'crawlers-ok':
@@ -44,10 +44,10 @@
                             'crawlers-bad': value.active == 0,
                         }"
                     />
-                    <span>/{{ $number(value.maximum) }}</span>
+                    <span>/{{ $i18n.$n(value.maximum) }}</span>
                 </span>
                 <span
-                    v-text="`(${$number(value.available)} LOCA: available)`"
+                    v-text="`(${$i18n.$n(value.available)} LOCA: available)`"
                 />
             </div>
         </template>
@@ -55,29 +55,29 @@
         <template #footer-planet>⌀</template>
 
         <template #footer-metalMine="{ value }">
-            <span v-text="$number(value, avgNumberFormat)" />
+            <span v-text="$i18n.$n(value, avgNumberFormat)" />
         </template>
 
         <template #footer-crystalMine="{ value }">
-            <span v-text="$number(value, avgNumberFormat)" />
+            <span v-text="$i18n.$n(value, avgNumberFormat)" />
         </template>
 
         <template #footer-deuteriumSynthesizer="{ value }">
-            <span v-text="$number(value, avgNumberFormat)" />
+            <span v-text="$i18n.$n(value, avgNumberFormat)" />
         </template>
 
         <template #footer-solarPlant="{ value }">
-            <span v-text="$number(value, avgNumberFormat)" />
+            <span v-text="$i18n.$n(value, avgNumberFormat)" />
         </template>
 
         <template #footer-fusionReactor="{ value }">
-            <span v-text="$number(value, avgNumberFormat)" />
+            <span v-text="$i18n.$n(value, avgNumberFormat)" />
         </template>
 
         <template #footer-crawlers="{ value }">
             <div class="crawlers">
                 <span
-                    v-text="$number(value.active, avgNumberFormat)"
+                    v-text="$i18n.$n(value.active, avgNumberFormat)"
                     :class="{
                         'crawlers-good': value.active == value.maximum,
                         'crawlers-ok':
@@ -87,7 +87,7 @@
                 />
                 <span
                     v-text="
-                        `(${$number(
+                        `(${$i18n.$n(
                             value.available,
                             avgNumberFormat
                         )} LOCA: available)`
