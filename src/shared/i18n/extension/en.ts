@@ -8,6 +8,7 @@ import { en as combats } from './combats/en';
 import { en as donate } from './donate/en';
 import { en as debrisFields } from './debrisFields/en';
 import { en as resourceBalance } from './resourceBalance/en';
+import { en as empire } from './empire/en';
 
 export const en: ExtensionTranslations = {
     common,
@@ -19,4 +20,5 @@ export const en: ExtensionTranslations = {
     donate,
     debrisFields,
     resourceBalance,
+    empire,
 };

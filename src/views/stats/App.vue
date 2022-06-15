@@ -235,7 +235,7 @@
                     key: 'empire',
                     to: { name: 'empire' },
                     icon: 'ogti ogti-planet-moon',
-                    label: 'LOCA: Imperium',
+                    label: this.$i18n.$t.empire.header,
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',
                     canBeDefault: true,

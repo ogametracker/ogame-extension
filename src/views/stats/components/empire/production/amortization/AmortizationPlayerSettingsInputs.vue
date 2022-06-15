@@ -2,7 +2,7 @@
     <div class="player-settings">
         <msu-conversion-rate-settings class="msu-rate-settings" />
 
-        <span>LOCA: Officers</span>
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
             <o-officer
                 v-for="(active, officer) in settings.officers"
@@ -15,7 +15,7 @@
             />
         </span>
 
-        <span>LOCA: Player Class</span>
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
             <o-player-class
                 v-for="(classType, plClass) in playerClasses"
@@ -26,7 +26,7 @@
             />
         </span>
 
-        <span>LOCA: Alliance Class</span>
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
             <o-alliance-class
                 v-for="(classType, allyClass) in allianceClasses"
@@ -37,7 +37,7 @@
             />
         </span>
 
-        <span>LOCA: Current Level Plasmatechnology</span>
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelPlasmatech" />
         <span>
             <o-research research="plasma-technology" />
             <input
@@ -49,7 +49,7 @@
             />
         </span>
 
-        <span>LOCA: Current Level Astrophysics</span>
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelAstrophysics" />
         <span>
             <o-research research="astrophysics" />
             <input

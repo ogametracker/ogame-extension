@@ -12,11 +12,11 @@
             return [
                 {
                     to: { name: 'empire/production/resources' },
-                    label: 'LOCA: Resources',
+                    label: this.$i18n.$t.empire.production.subHeaders.resourceProduction,
                 },
                 {
                     to: { name: 'empire/production/mines' },
-                    label: 'LOCA: Mines',
+                    label: this.$i18n.$t.empire.production.subHeaders.mineOverview,
                 },
             ];
         }

@@ -22,7 +22,7 @@
             <div class="production-settings-mini-table">
                 <span
                     class="header"
-                    v-text="'LOCA: used production settings'"
+                    v-text="$i18n.$t.empire.production.activeProductionSettings"
                 />
                 <o-building building="metal-mine" />
                 <o-building building="crystal-mine" />
@@ -221,7 +221,7 @@
             return [
                 {
                     key: 'planet',
-                    label: 'LOCA: Planet',
+                    label: this.$i18n.$t.empire.planet,
                 },
                 { key: 'metal' },
                 { key: 'crystal' },
@@ -345,7 +345,7 @@
             return [
                 {
                     planet: {
-                        name: 'LOCA: ⌀ per hour',
+                        name: this.$i18n.$t.empire.production.averagePerHour,
                         coordinates: null!,
                     },
                     metal: metalPerHour / planets.length,
@@ -359,7 +359,7 @@
                 },
                 {
                     planet: {
-                        name: 'LOCA: total per hour',
+                        name: this.$i18n.$t.empire.production.totalPerHour,
                         coordinates: null!,
                     },
                     metal: metalPerHour,
@@ -373,7 +373,7 @@
                 },
                 {
                     planet: {
-                        name: 'LOCA: total per day',
+                        name: this.$i18n.$t.empire.production.totalPerDay,
                         coordinates: null!,
                     },
                     metal: metalPerHour * 24,
@@ -387,7 +387,7 @@
                 },
                 {
                     planet: {
-                        name: 'LOCA: total per week',
+                        name: this.$i18n.$t.empire.production.totalPerWeek,
                         coordinates: null!,
                     },
                     metal: metalPerHour * 24 * 7,
@@ -402,7 +402,7 @@
                 {
                     isResourcePackageRow: true,
                     planet: {
-                        name: 'TODO: Row for resource packages',
+                        name: 'row-for-resource-packages',
                         coordinates: null!,
                     },
                     metal: metalPackages,

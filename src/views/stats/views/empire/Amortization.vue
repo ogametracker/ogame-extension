@@ -6,25 +6,25 @@
                 <span class="mdi mdi-menu-down" v-if="!showSettings" />
                 <span class="mdi mdi-menu-up" v-else />
 
-                <span v-if="!showSettings" v-text="'LOCA: Settings'" />
-                <span v-else v-text="'LOCA: Apply and close'" />
+                <span v-if="!showSettings" v-text="$i18n.$t.empire.amortization.settings.header" />
+                <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
             </button>
 
             <div v-show="showSettings" style="overflow: auto">
                 <div class="flex-settings">
                     <div>
-                        <h3>LOCA: Player Settings</h3>
+                        <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
                         <amortization-player-settings-inputs
                             v-model="playerSettings"
                         />
                     </div>
 
                     <div>
-                        <h3>LOCA: Astrophysics</h3>
+                        <h3 v-text="$i18n.$t.empire.amortization.settings.astrophysicsSettings.header" />
                         <div class="astrophysics-settings">
                             <checkbox
                                 v-model="astrophysicsSettings.show"
-                                :label="'LOCA: Show astrophysics + new colony in result'"
+                                :label="$i18n.$t.empire.amortization.settings.astrophysicsSettings.showAstrophysics"
                             />
 
                             <amortization-planet-settings-inputs
@@ -34,17 +34,17 @@
                     </div>
 
                     <div>
-                        <h3>LOCA: Plasmatechnology</h3>
+                        <h3 v-text="$i18n.$t.empire.amortization.settings.plasmatechSettings.header" />
                         <div class="plasma-tech-settings">
                             <checkbox
                                 v-model="showPlasmaTechnology"
-                                :label="'LOCA: Show plasmatech in result'"
+                                :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.showPlasmatech"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <h3>LOCA: Planet Settings</h3>
+                        <h3 v-text="$i18n.$t.empire.amortization.settings.planetSettings.header" />
                         <div style="display: flex; gap: 8px; flex-wrap: wrap">
                             <amortization-planet-settings-inputs
                                 v-for="planetSetting in planetSettingsSorted"
@@ -67,7 +67,7 @@
             >
                 <template #header-cost>
                     <div class="cost-grid">
-                        <span v-text="'LOCA: Cost'" style="grid-column: 2" />
+                        <span v-text="$i18n.$t.empire.amortization.table.cost" style="grid-column: 2" />
                         <o-resource resource="metal" style="grid-column: 1" />
                         <o-resource resource="crystal" />
                         <o-resource resource="deuterium" />
@@ -100,7 +100,7 @@
                         </span>
                         <span
                             v-else
-                            v-text="`LOCA: new Colony ${-value.planetId}`"
+                            v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
                         />
 
                         <o-building :building="value.type" />
@@ -138,7 +138,7 @@
 
                         <span class="new-colony-mines">
                             <span
-                                v-text="`LOCA: new Colony ${-value.planetId}`"
+                                v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
                                 style="grid-column: 1 / span 3"
                             />
 
@@ -162,14 +162,14 @@
                             </span>
                         </span>
                     </div>
-                    <div v-else v-text="'???'" />
+                    <div v-else v-text="'??? contact developer'" />
                 </template>
 
                 <template #cell-cost="{ value }">
                     <div class="cost-grid">
-                        <span v-text="$i18n.$n(value.metal)" />
-                        <span v-text="$i18n.$n(value.crystal)" />
-                        <span v-text="$i18n.$n(value.deuterium)" />
+                        <span v-text="$i18n.$n(value.metal)" :class="{ zero: value.metal == 0 }" />
+                        <span v-text="$i18n.$n(value.crystal)" :class="{ zero: value.crystal == 0 }" />
+                        <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                     </div>
                 </template>
                 <template #cell-costMsu="{ value }">
@@ -202,35 +202,6 @@
 </template>
 
 <script lang="ts">
-    /* 
-     * - player wide settings
-     *      + MSU conversion rates
-     *      + active officers
-     *      + player class
-     *      + alliance class
-     *      + current level plasma tech
-     *      + current level astrophysics
-     * 
-     * - checkbox for each planet (on = use in calculation)
-     *      + for each planet there are the following settings
-     *          = position
-     *          = temperature
-     *          = active items (metal/crystal/deut)
-     *          = crawler settings
-     *              ~ on/off
-     *              ~ crawler overload
-     *              ~ toggle between "fix crawler count" and "max crawler count"
-     *          = current mine levels
-     * 
-     * - checkbox for plasma technology (on = use in calculation)
-     * 
-     * - checkbox to consider astrophysics (on = use in calculation)
-     *      + same settings as for planets EXCEPT current mine levels
-     *          = prefill temperature with avg. value based on position (see official list: https://board.de.ogame.gameforge.com/index.php?thread/193098-offizielle-planetengr%C3%B6%C3%9Fen-in-version-6-1/)
-     * 
-     * - max. levels for each mine, plasma tech, and astrophysics (higher = more computational expensive, defaults: [60/60/60, 28, 35])
-     */
-
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
@@ -316,7 +287,6 @@
     interface AmortizationGenerationSettings {
         player: AmortizationPlayerSettings;
         planets: Record<number, AmortizationPlanetSettings>;
-        maxLevels: AmortizationMaxLevels;
         astrophysics: AmortizationAstrophysicsSettings;
     }
 
@@ -349,11 +319,6 @@
             levelAstrophysics: 0,
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
-        private maxLevels: AmortizationMaxLevels = {
-            mine: 60,
-            plasmaTechnology: 30,
-            astrophysics: 37,
-        };
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
             show: true,
             planet: {
@@ -384,7 +349,8 @@
         }
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
-            return Object.values(this.planetSettings).sort((a, b) => compareCoordinates(a.coordinates!, b.coordinates!));
+            return Object.values(this.planetSettings)
+                .sort((a, b) => EmpireDataModule.empire!.planetOrder.indexOf(a.id) -  EmpireDataModule.empire!.planetOrder.indexOf(b.id)); //TODO: !
         }
 
         @Watch('astrophysicsSettings.planet.position')
@@ -412,7 +378,7 @@
 
             const generationSettings = this.getAmortizationGenerationSettings();
             this.generator = this.generateAmortizationItems(generationSettings);
-            this.insertNextAmortizationItems(100);
+            this.insertNextAmortizationItems(25);
         }
 
         private getAmortizationGenerationSettings(): AmortizationGenerationSettings {
@@ -422,7 +388,6 @@
                     msuConversionRates: SettingsDataModule.settings.msuConversionRates,
                 },
                 planets: this.planetSettings,
-                maxLevels: this.maxLevels,
                 astrophysics: this.astrophysicsSettings,
             };
 
@@ -494,7 +459,7 @@
                 planet: {
                     show: true,
                     id: -1,
-                    name: 'LOCA: new colony',
+                    name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
                     position: 8,
                     maxTemperature: this.getAverageTemperature(8),
                     activeItems: [],
@@ -535,11 +500,7 @@
 
             const itemsPerTimeout = 10;
             let curItems = 0;
-            while (
-                levelPlasmaTechnology < settings.maxLevels.plasmaTechnology
-                || levelAstrophysics < settings.maxLevels.astrophysics
-                || mineLevelsArray.some(l => l.metalMine < settings.maxLevels.mine || l.crystalMine < settings.maxLevels.mine || l.deuteriumSynthesizer < settings.maxLevels.mine)
-            ) {
+            while (true) {
                 const mineItems = planetIds.flatMap(planetId => [
                     this.getMineAmortizationItem(planetId, BuildingType.metalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
                     this.getMineAmortizationItem(planetId, BuildingType.crystalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
@@ -869,10 +830,26 @@
             return [
                 { key: 'what', size: '350px' },
                 { key: 'cost', size: '3fr' },
-                { key: 'costMsu', label: 'LOCA: Cost (MSU)', size: '1fr' },
-                { key: 'productionDelta', label: 'LOCA: Production plus', size: '1fr' },
-                { key: 'productionDeltaMsu', label: 'LOCA: Production plus (MSU)', size: '1fr' },
-                { key: 'amortizationTimeInH', label: 'LOCA: Amortization time', size: '1fr' },
+                { 
+                    key: 'costMsu', 
+                    label: this.$i18n.$t.empire.amortization.table.costMsu, 
+                    size: '1fr',
+                },
+                { 
+                    key: 'productionDelta', 
+                    label: this.$i18n.$t.empire.amortization.table.productionPlus, 
+                    size: '1fr',
+                },
+                { 
+                    key: 'productionDeltaMsu', 
+                    label: this.$i18n.$t.empire.amortization.table.productionPlusMsu, 
+                    size: '1fr',
+                },
+                { 
+                    key: 'amortizationTimeInH', 
+                    label: this.$i18n.$t.empire.amortization.table.amortizationTime,
+                    size: '1fr',
+                },
             ];
         }
 
@@ -1061,5 +1038,9 @@
         display: flex;
         flex-wrap: wrap;
         column-gap: 48px;
+    }
+
+    .zero  {
+        opacity: 0.4;
     }
 </style>

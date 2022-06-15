@@ -47,7 +47,7 @@
                     <span>/{{ $i18n.$n(value.maximum) }}</span>
                 </span>
                 <span
-                    v-text="`(${$i18n.$n(value.available)} LOCA: available)`"
+                    v-text="`(${$i18n.$n(value.available)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`"
                 />
             </div>
         </template>
@@ -90,7 +90,7 @@
                         `(${$i18n.$n(
                             value.available,
                             avgNumberFormat
-                        )} LOCA: available)`
+                        )} ${$i18n.$t.empire.production.mines.crawlersAvailable})`
                     "
                 />
             </div>
@@ -141,7 +141,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
             return [
                 {
                     key: 'planet',
-                    label: 'LOCA: Planet',
+                    label: this.$i18n.$t.empire.planet,
                     size: '1fr',
                 },
                 { key: 'metalMine', size: '1fr' },

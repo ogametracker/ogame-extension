@@ -3,6 +3,7 @@ import { CombatsTranslations } from './combats/type';
 import { CommonTranslations } from './common/type';
 import { DebrisFieldsTranslations } from './debrisFields/type';
 import { DonateTranslations } from './donate/type';
+import { EmpireTranslations } from './empire/type';
 import { ExpeditionsTranslations } from './expeditions/type';
 import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
@@ -18,4 +19,5 @@ export interface ExtensionTranslations {
     donate: DonateTranslations;
     debrisFields: DebrisFieldsTranslations;
     resourceBalance: ResourceBalanceTranslations;
+    empire: EmpireTranslations;
 }

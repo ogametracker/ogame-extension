@@ -5,8 +5,6 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '../../components/common/ListNav.vue';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
-    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
     @Component({})
     export default class Index extends Vue {
@@ -22,11 +20,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Production',
+                    label: this.$i18n.$t.empire.production.header,
                     to: { name: 'empire/production' },
                 },
                 {
-                    label: 'LOCA: Amortization',
+                    label: this.$i18n.$t.empire.amortization.header,
                     to: { name: 'empire/amortization' },
                 },
             ];

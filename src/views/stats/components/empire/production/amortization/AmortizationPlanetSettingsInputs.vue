@@ -11,11 +11,11 @@
 
         <div class="body">
             <template v-if="toggleable">
-                <span v-text="'LOCA: Show in result'" />
+                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.showInResult" />
                 <checkbox v-model="settings.show" />
             </template>
 
-            <span>LOCA: Position</span>
+            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.position" />
             <span>
                 <input
                     type="number"
@@ -26,7 +26,7 @@
                 />
             </span>
 
-            <span>LOCA: Temperature</span>
+            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.maxTemperature" />
             <span>
                 <input
                     type="number"
@@ -37,7 +37,7 @@
                 />
             </span>
 
-            <span>LOCA: Items</span>
+            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.activeItems" />
             <span class="item-grid">
                 <o-item
                     v-for="item in boosterItems.metal"
@@ -62,7 +62,7 @@
                 />
             </span>
 
-            <span>LOCA: Crawlers</span>
+            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
                     <o-ship
@@ -72,13 +72,14 @@
                             settings.crawlers.enabled =
                                 !settings.crawlers.enabled
                         "
+                        style="cursor: pointer"
                     />
                     <checkbox-button
                         v-model="settings.crawlers.overload"
                         color="#00ff00"
                         :disabled="!isCrawlerOverloadEnabled"
                     >
-                        LOCA: Overload
+                        {{ $i18n.$t.empire.amortization.settings.planetSettings.crawlers.overload }}
                     </checkbox-button>
                 </div>
                 <div class="crawler-grid-row">
@@ -93,9 +94,9 @@
                     >
                         <span
                             v-if="settings.crawlers.max"
-                            v-text="'LOCA: Max-Count'"
+                            v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.maxCount"
                         />
-                        <span v-else v-text="'LOCA: Fix Count'" />
+                        <span v-else v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.fixCount" />
                     </checkbox-button>
                     <input
                         type="number"
@@ -106,7 +107,7 @@
             </span>
 
             <template v-if="settings.mines != null">
-                <span>LOCA: Mines</span>
+                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
                     <o-building
                         building="metal-mine"
@@ -155,7 +156,7 @@
 <script lang="ts">
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
 
