@@ -4,19 +4,19 @@
         @close="$emit('close')"
         :style="`--color: ${getColorVariable(color)};`"
     >
-        <span v-if="!knownAccountsLoaded" v-text="'LOCA: loading...'" />
+        <span v-if="!knownAccountsLoaded" class="loader" />
         <div v-else>
-            <div v-text="'LOCA: Look at data of account'" />
+            <div v-text="$i18n.$t.switchAccounts.title" />
             <select @change="gotoAccount()" v-model="selectedAccountIndex">
                 <option
                     v-for="(account, i) in knownAccounts"
                     :key="account.key"
                     :value="i"
                 >
-                    {{ account.name || account.id }} ({{
-                        account.universeName || account.universeId
+                    {{ account.name }} ({{
+                        account.universeLanguage.toUpperCase()
                     }}
-                    {{ account.universeLanguage.toUpperCase() }})
+                    {{ account.universeName }})
                 </option>
             </select>
         </div>
@@ -110,3 +110,31 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    select {
+        width: 100%;
+    }
+
+    .loader {
+        font-size: 20px;
+        position: relative;
+        text-indent: -9999em;
+        border-radius: 50%;
+        width: 1em;
+        height: 1em;
+
+        border: 0.11em solid transparent;
+        border-left: 0.11em solid #ffffff;
+
+        transform: translateZ(0);
+        animation: load8 1s infinite ease-in-out;
+    }
+    @keyframes load8 {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>

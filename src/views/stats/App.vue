@@ -6,113 +6,109 @@
         }"
         :class="activeTab ? activeTab.appClass : ''"
     >
-        <span v-if="loading"> LOCA: loading... </span>
-
-        <template v-else>
-            <nav>
-                <floating-menu
-                    :value="tabWithMenu == tab"
-                    @input="tabWithMenu = null"
-                    v-for="tab in tabs"
-                    :key="tab.key"
-                    :style="tab.noNavItem ? tab.style : null"
-                    class="tab_floating-menu"
-                >
-                    <template #activator>
-                        <component
-                            :is="
-                                tab.to != null
-                                    ? 'router-link'
-                                    : tab.href != null
-                                    ? 'a'
-                                    : 'div'
-                            "
-                            :href="tab.href"
-                            :target="tab.href != null ? '_blank' : null"
-                            :to="tab.to"
-                            :active-class="
-                                tab.to != null ? 'nav-item-active' : null
-                            "
-                            :class="[
-                                {
-                                    'nav-item': tab.noNavItem != true,
-                                    'icon-only':
-                                        tab.label == null && tab.icon != null,
-                                },
-                                tab.class,
-                            ]"
-                            :style="[
-                                {
-                                    '--color': getColorVariable(getColor(tab)),
-                                },
-                                tab.noNavItem ? null : tab.style,
-                            ]"
-                            @click.left="
-                                () =>
-                                    tab.customAction != null
-                                        ? tab.customAction()
-                                        : null
-                            "
-                            :ref="`tab-${tab.key}`"
-                        >
-                            <span
-                                v-if="tab.icon != null"
-                                class="nav-item-icon"
-                                :class="tab.icon"
-                            />
-                            <span
-                                v-if="tab.label != null"
-                                class="nav-item-label"
-                            >
-                                <span v-text="tab.label" />
-                                <span
-                                    v-if="
-                                        tab.keyboardKey != null &&
-                                        tab.keyboardIcon != null
-                                    "
-                                    class="nav-item-keyboard-shortcut-icon"
-                                    :class="tab.keyboardIcon"
-                                />
-                            </span>
-                            <span
-                                v-if="isDefaultRoute(tab.to)"
-                                class="nav-item-home-icon mdi mdi-home"
-                            />
-                        </component>
-                    </template>
-
-                    <set-default-route-button
-                        v-if="tab.canBeDefault"
-                        :label="$i18n.$t.settings.setDefaultRoute"
-                        rootRouteName=""
-                        :routeName="tab.to.name"
-                    />
-                </floating-menu>
-
-                <template v-if="isIframeMode">
-                    <div style="width: 24px" />
-                    <div class="nav-item icon-only" style="--color: none">
+        <nav>
+            <floating-menu
+                :value="tabWithMenu == tab"
+                @input="tabWithMenu = null"
+                v-for="tab in tabs"
+                :key="tab.key"
+                :style="tab.noNavItem ? tab.style : null"
+                class="tab_floating-menu"
+            >
+                <template #activator>
+                    <component
+                        :is="
+                            tab.to != null
+                                ? 'router-link'
+                                : tab.href != null
+                                ? 'a'
+                                : 'div'
+                        "
+                        :href="tab.href"
+                        :target="tab.href != null ? '_blank' : null"
+                        :to="tab.to"
+                        :active-class="
+                            tab.to != null ? 'nav-item-active' : null
+                        "
+                        :class="[
+                            {
+                                'nav-item': tab.noNavItem != true,
+                                'icon-only':
+                                    tab.label == null && tab.icon != null,
+                            },
+                            tab.class,
+                        ]"
+                        :style="[
+                            {
+                                '--color': getColorVariable(getColor(tab)),
+                            },
+                            tab.noNavItem ? null : tab.style,
+                        ]"
+                        @click.left="
+                            () =>
+                                tab.customAction != null
+                                    ? tab.customAction()
+                                    : null
+                        "
+                        :ref="`tab-${tab.key}`"
+                    >
                         <span
-                            class="mdi mdi-close close-overlay"
-                            @click="closeOverlay()"
+                            v-if="tab.icon != null"
+                            class="nav-item-icon"
+                            :class="tab.icon"
                         />
-                    </div>
+                        <span
+                            v-if="tab.label != null"
+                            class="nav-item-label"
+                        >
+                            <span v-text="tab.label" />
+                            <span
+                                v-if="
+                                    tab.keyboardKey != null &&
+                                    tab.keyboardIcon != null
+                                "
+                                class="nav-item-keyboard-shortcut-icon"
+                                :class="tab.keyboardIcon"
+                            />
+                        </span>
+                        <span
+                            v-if="isDefaultRoute(tab.to)"
+                            class="nav-item-home-icon mdi mdi-home"
+                        />
+                    </component>
                 </template>
-            </nav>
-            <main>
-                <router-view />
-            </main>
-            <footer>
-                <router-link
-                    :to="{ name: 'donate' }"
-                    class="made-with-love"
-                >
-                    <span v-text="$i18n.$t.common.madeWithLove1" class="mr-1" />
-                    <span class="mdi mdi-heart" style="color: #ff1f1f" /> 
-                    <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
-                </router-link>
-            </footer>
-        </template>
+
+                <set-default-route-button
+                    v-if="tab.canBeDefault"
+                    :label="$i18n.$t.settings.setDefaultRoute"
+                    rootRouteName=""
+                    :routeName="tab.to.name"
+                />
+            </floating-menu>
+
+            <template v-if="isIframeMode">
+                <div style="width: 24px" />
+                <div class="nav-item icon-only" style="--color: none">
+                    <span
+                        class="mdi mdi-close close-overlay"
+                        @click="closeOverlay()"
+                    />
+                </div>
+            </template>
+        </nav>
+        <main>
+            <router-view />
+        </main>
+        <footer>
+            <router-link
+                :to="{ name: 'donate' }"
+                class="made-with-love"
+            >
+                <span v-text="$i18n.$t.common.madeWithLove1" class="mr-1" />
+                <span class="mdi mdi-heart" style="color: #ff1f1f" /> 
+                <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
+            </router-link>
+        </footer>
 
         <switch-account-dialog 
             v-if="showAccountSwitchDialog"
@@ -164,7 +160,6 @@
             discord: '#5865f2',
         };
 
-        private loading = true;
         private showAccountSwitchDialog = false;
 
         private get isIframeMode() {
@@ -362,7 +357,6 @@
 
             await this.updateDocumentTitle();
 
-            this.loading = false;
             await this.$nextTick();
             this.onRefsChanged();
             window.focus();
