@@ -197,7 +197,7 @@
                             />
                         </div>
 
-                        <div class="chart-tooltip-footer">
+                        <div class="chart-tooltip-footer" v-if="hasTooltipFooter">
                             <template v-if="tooltipFooterProvider != null">
                                 <div
                                     v-for="(footer, i) in footerTexts"
@@ -390,6 +390,9 @@
         @Prop({ required: false, type: Function as PropType<(values: Record<string, number>) => string | string[]>, default: null })
         private tooltipFooterProvider!: ((values: Record<string, number>) => string | string[]) | null;
 
+        @Prop({ required: false, type: Boolean, default: () => false })
+        private hideTooltipFooter!: boolean;
+
         @Prop({ required: false, type: Function as PropType<(value: number) => string>, default: null })
         private xLabelTooltipFormatter!: (value: number) => string;
 
@@ -405,6 +408,15 @@
         private isReady = false;
 
         private readonly resizeObserver = new ResizeObserver(() => this.onResize());
+
+        private get hasTooltipFooter() {
+            if(this.hideTooltipFooter) {
+                return false;
+            }
+
+            return this.tooltipFooterProvider != null
+                || (this.footerSlotDatasets.length > 0 && this.$scopedSlots['tooltip-footer'] != null);
+        }
 
         private getLastValue(dataset: ScrollableChartInternalDataset, xNormalized: number): number {
             const xs = this.xValuesNormalized;

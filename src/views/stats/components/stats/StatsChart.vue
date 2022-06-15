@@ -3,6 +3,7 @@
         :datasets="computedDatasets"
         :x-label-formatter="(index) => formatDate(index)"
         :no-legend="noLegend"
+        :hide-tooltip-footer="noTooltipFooter"
     >
         <template #tooltip-footer="{ datasets }">
             <slot name="tooltip-footer" :datasets="datasets" />
@@ -39,6 +40,9 @@
 
         @Prop({ required: false, type: Boolean })
         private noLegend!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private noTooltipFooter!: boolean;
 
         @Prop({ required: true, type: [Number, Date] })
         private firstDay!: number | Date;

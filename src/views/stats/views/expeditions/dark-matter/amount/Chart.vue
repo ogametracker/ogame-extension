@@ -8,6 +8,7 @@
             stacked
             show-average
             no-legend
+            no-tooltip-footer
         />
 
         <floating-menu v-model="showSettings" left>

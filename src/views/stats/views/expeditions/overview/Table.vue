@@ -25,9 +25,11 @@
                     <o-resource resource="crystal" size="24px" />
                     <o-resource resource="deuterium" size="24px" />
                 </span>
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet">
-                    <o-ship ship="battleship" size="24px" />
-                </span>
+                <o-ship 
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet"
+                    ship="battleship" 
+                    size="24px" 
+                />
                 <span
                     v-else-if="value == $i18n.$t.expeditions.expeditionEvents.delay"
                     class="mdi mdi-clock-outline"
@@ -53,9 +55,11 @@
                     class="mdi mdi-alien"
                     :style="{ color: colors.aliens }"
                 />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.item">
-                    <o-item :item="detroidItem" size="24px" />
-                </span>
+                <o-item 
+                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.item" 
+                    :item="detroidItem" 
+                    size="24px" 
+                />
                 <span
                     v-else-if="value == $i18n.$t.expeditions.expeditionEvents.trader"
                     class="mdi mdi-swap-horizontal-bold"
