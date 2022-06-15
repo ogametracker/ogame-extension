@@ -43,10 +43,6 @@ export interface DbUniverseHistoryAlliance {
     state: DbUniverseHistoryAllianceState;
     memberIds: number[];
 }
-interface DbUniverseHistoryItem<T> {
-    date: number;
-    value: T;
-}
 
 export interface DbUniverseHistoryCoordinates {
     galaxy: number;
@@ -57,6 +53,14 @@ export interface DbUniverseHistoryCoordinates {
 export type DbUniverseHistoryPlanetMoonState = null | 'deleted';
 
 export type DbUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
+
+export interface OgameTrackerUniverseHistoryPlayerScore {
+    playerId: number;
+    date: number;
+    type: DbUniverseHistoryScoreType;
+    score: number;
+    position: number;
+}
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     _lastUpdate: {
@@ -100,13 +104,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     playerScores: {
         /** PlayerId, DateTime, ScoreType */
         key: [number, number, DbUniverseHistoryScoreType];
-        value: {
-            playerId: number;
-            date: number;
-            type: DbUniverseHistoryScoreType;
-            score: number;
-            position: number;
-        };
+        value: OgameTrackerUniverseHistoryPlayerScore;
     };
 
     planets: {
