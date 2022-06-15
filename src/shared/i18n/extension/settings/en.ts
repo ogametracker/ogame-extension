@@ -13,7 +13,7 @@ export const en: SettingsTranslations = {
             yesterday: 'Yesterday',
             currentWeek: 'Current week',
             lastWeek: 'Last week',
-            currentMonth: 'Current ,onth',
+            currentMonth: 'Current month',
             newRange: 'new range',
         },
         since: (date) => `Since ${date}`,
