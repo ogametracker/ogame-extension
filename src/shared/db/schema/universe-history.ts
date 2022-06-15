@@ -82,6 +82,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             name: string;
         };
+        indexes: {
+            playerId: number;
+        };
     };
     playerAlliances: {
         /** PlayerId, DateTime */
@@ -90,6 +93,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             playerId: number;
             date: number;
             allianceId: number | null;
+        };
+        indexes: {
+            playerId: number;
         };
     };
     playerStates: {
@@ -100,11 +106,17 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             state: DbUniverseHistoryPlayerState;
         };
+        indexes: {
+            playerId: number;
+        };
     };
     playerScores: {
         /** PlayerId, DateTime, ScoreType */
         key: [number, number, DbUniverseHistoryScoreType];
         value: OgameTrackerUniverseHistoryPlayerScore;
+        indexes: {
+            playerId: number;
+        };
     };
 
     planets: {
@@ -112,6 +124,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
         key: number;
         value: {
             id: number;
+            playerId: number;
+        };
+        indexes: {
             playerId: number;
         };
     };
@@ -123,6 +138,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             name: string;
         };
+        indexes: {
+            planetId: number;
+        };
     };
     planetStates: {
         /** PlanetId, DateTime */
@@ -132,6 +150,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             state: DbUniverseHistoryPlanetMoonState;
         };
+        indexes: {
+            planetId: number;
+        };
     };
     planetCoordinates: {
         /** PlanetId, DateTime */
@@ -140,6 +161,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             planetId: number;
             date: number;
             coordinates: DbUniverseHistoryCoordinates;
+        };
+        indexes: {
+            planetId: number;
         };
     };
 
@@ -151,6 +175,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             planetId: number;
             size: number;
         };
+        indexes: {
+            planetId: number;
+        };
     };
     moonNames: {
         /** MoonId, DateTime */
@@ -160,6 +187,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             name: string;
         };
+        indexes: {
+            moonId: number;
+        };
     };
     moonStates: {
         /** MoonId, DateTime */
@@ -168,6 +198,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             moonId: number;
             date: number;
             state: DbUniverseHistoryPlanetMoonState;
+        };
+        indexes: {
+            moonId: number;
         };
     };
 
@@ -186,6 +219,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             tag: string;
         };
+        indexes: {
+            allianceId: number;
+        };
     };
     allianceNames: {
         /** AllianceId, DateTime */
@@ -194,6 +230,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             allianceId: number;
             date: number;
             name: string;
+        };
+        indexes: {
+            allianceId: number;
         };
     };
     allianceMembers: {
@@ -204,6 +243,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             date: number;
             members: number[];
         };
+        indexes: {
+            allianceId: number;
+        };
     };
     allianceStates: {
         /** AllianceId, DateTime */
@@ -212,6 +254,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             allianceId: number;
             date: number;
             state: DbUniverseHistoryAllianceState;
+        };
+        indexes: {
+            allianceId: number;
         };
     };
     allianceScores: {
@@ -223,6 +268,9 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             type: DbUniverseHistoryScoreType;
             score: number;
             position: number;
+        };
+        indexes: {
+            allianceId: number;
         };
     };
 }

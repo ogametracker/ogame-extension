@@ -65,15 +65,15 @@ class UniverseHistoryDataModuleClass extends Vue {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const tx = db.transaction('playerScores', 'readonly');
         const store = tx.objectStore('playerScores');
+        const index = store.index('playerId');
 
+        for (const playerId of playerIds) {
+            let cursor = await index.openCursor(playerId);
 
-        let cursor = await store.openCursor();
-        while(cursor != null) {
-            if(playerIds.includes(cursor.value.playerId)) {
+            while (cursor != null) {
                 scores.push(cursor.value);
+                cursor = await cursor.continue();
             }
-
-            cursor = await cursor.continue();
         }
 
         return scores;

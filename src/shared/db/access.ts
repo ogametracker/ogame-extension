@@ -53,26 +53,42 @@ export async function getUniverseHistoryDatabase(meta: MessageOgameMeta): Promis
             db.createObjectStore('_lastUpdate');
 
             db.createObjectStore('alliances', { keyPath: 'id' });
-            db.createObjectStore('allianceTags', { keyPath: ['allianceId', 'date'] });
-            db.createObjectStore('allianceNames', { keyPath: ['allianceId', 'date'] });
-            db.createObjectStore('allianceMembers', { keyPath: ['allianceId', 'date'] });
-            db.createObjectStore('allianceStates', { keyPath: ['allianceId', 'date'] });
-            db.createObjectStore('allianceScores', { keyPath: ['allianceId', 'date', 'type'] });
+            db.createObjectStore('allianceTags', { keyPath: ['allianceId', 'date'] })
+                .createIndex('allianceId', 'allianceId');
+            db.createObjectStore('allianceNames', { keyPath: ['allianceId', 'date'] })
+                .createIndex('allianceId', 'allianceId');
+            db.createObjectStore('allianceMembers', { keyPath: ['allianceId', 'date'] })
+                .createIndex('allianceId', 'allianceId');
+            db.createObjectStore('allianceStates', { keyPath: ['allianceId', 'date'] })
+                .createIndex('allianceId', 'allianceId');
+            db.createObjectStore('allianceScores', { keyPath: ['allianceId', 'date', 'type'] })
+                .createIndex('allianceId', 'allianceId');
 
             db.createObjectStore('players', { keyPath: 'id' });
-            db.createObjectStore('playerNames', { keyPath: ['playerId', 'date'] });
-            db.createObjectStore('playerStates', { keyPath: ['playerId', 'date'] });
-            db.createObjectStore('playerAlliances', { keyPath: ['playerId', 'date'] });
-            db.createObjectStore('playerScores', { keyPath: ['playerId', 'date', 'type'] });
+            db.createObjectStore('playerNames', { keyPath: ['playerId', 'date'] })
+                .createIndex('playerId', 'playerId');
+            db.createObjectStore('playerStates', { keyPath: ['playerId', 'date'] })
+                .createIndex('playerId', 'playerId');
+            db.createObjectStore('playerAlliances', { keyPath: ['playerId', 'date'] })
+                .createIndex('playerId', 'playerId');
+            db.createObjectStore('playerScores', { keyPath: ['playerId', 'date', 'type'] })
+                .createIndex('playerId', 'playerId');
 
-            db.createObjectStore('planets', { keyPath: 'id' });
-            db.createObjectStore('planetNames', { keyPath: ['planetId', 'date'] });
-            db.createObjectStore('planetStates', { keyPath: ['planetId', 'date'] });
-            db.createObjectStore('planetCoordinates', { keyPath: ['planetId', 'date'] });
+            db.createObjectStore('planets', { keyPath: 'id' })
+                .createIndex('playerId', 'playerId');
+            db.createObjectStore('planetNames', { keyPath: ['planetId', 'date'] })
+                .createIndex('planetId', 'planetId');
+            db.createObjectStore('planetStates', { keyPath: ['planetId', 'date'] })
+                .createIndex('planetId', 'planetId');
+            db.createObjectStore('planetCoordinates', { keyPath: ['planetId', 'date'] })
+                .createIndex('planetId', 'planetId');
 
-            db.createObjectStore('moons', { keyPath: 'id' });
-            db.createObjectStore('moonNames', { keyPath: ['moonId', 'date'] });
-            db.createObjectStore('moonStates', { keyPath: ['moonId', 'date'] });
+            db.createObjectStore('moons', { keyPath: 'id' })
+                .createIndex('planetId', 'planetId');
+            db.createObjectStore('moonNames', { keyPath: ['moonId', 'date'] })
+                .createIndex('moonId', 'moonId');
+            db.createObjectStore('moonStates', { keyPath: ['moonId', 'date'] })
+                .createIndex('moonId', 'moonId');
         }
         else {
             throw new Error('invalid db version');

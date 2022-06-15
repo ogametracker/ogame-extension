@@ -167,6 +167,16 @@
         }
 
         private async mounted() {
+            await this.redirectToMeIfNoPlayersSelected();
+
+            this.dataModuleLoading = true;
+            await UniverseHistoryDataModule.ready;
+            this.dataModuleLoading = false;
+
+            await this.loadPlayerScores();
+        }
+
+        private async redirectToMeIfNoPlayersSelected() {
             if (this.playerIds.length == 0) {
                 await this.$router.replace({
                     name: 'universe-history/players/highscore',
@@ -175,12 +185,6 @@
                     },
                 });
             }
-
-            this.dataModuleLoading = true;
-            await UniverseHistoryDataModule.ready;
-            this.dataModuleLoading = false;
-
-            await this.loadPlayerScores();
         }
 
 
@@ -262,14 +266,14 @@
         }
 
         private async onPlayerSelected(name: string) {
-            const player = this.players.find(p => p.name == name);
+            const player = this.players.find(p => p.name.toLowerCase() == name.toLowerCase());
             if (player == null) {
                 return;
             }
 
             await this.$nextTick();
             this.selectedPlayerName = '';
-            
+
             const playerIds = (this.$route.query.players as string | null)?.split(',') ?? [];
             await this.updatePlayerIdRoute([
                 ...playerIds.filter(pid => pid != player.id.toString()),
@@ -289,6 +293,7 @@
                     players: ids.join(','),
                 },
             });
+            await this.redirectToMeIfNoPlayersSelected();
         }
     }
 </script>
