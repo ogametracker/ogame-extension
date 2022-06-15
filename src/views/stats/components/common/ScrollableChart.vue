@@ -311,6 +311,7 @@ import { _throw } from '@/shared/utils/_throw';
     interface ScrollableChartInternalDataset extends ScrollableChartDataset {
         visible: boolean;
         svgPoints: Point[];
+        internalValues: Point[];
         originalValuesByX: Record<number, number>;
         originalValuesByNormalizedX: Record<number, number>;
         valuesByX: Record<number, number>;
@@ -483,6 +484,7 @@ import { _throw } from '@/shared/utils/_throw';
                 originalValuesByNormalizedX: {},
                 valuesByX: {},
                 valuesByNormalizedX: {},
+                internalValues: [],
                 normalizedValues: [],
                 normalizedValuesByNormalizedX: {},
                 normalizedAverage: null,
@@ -537,7 +539,7 @@ import { _throw } from '@/shared/utils/_throw';
         }
 
         private get xValues() {
-            const result = new Set(this.internalDatasets.flatMap(d => d.values.map(p => p.x)));
+            const result = new Set(this.internalDatasets.flatMap(d => d.internalValues.map(p => p.x)));
             return [...result].sort((a, b) => a - b);
         }
 
@@ -634,7 +636,7 @@ import { _throw } from '@/shared/utils/_throw';
             };
 
             this.internalDatasets.forEach(dataset => {
-                dataset.values.forEach(point => {
+                dataset.internalValues.forEach(point => {
                     xRange.min = Math.min(point.x, xRange.min);
                     xRange.max = Math.max(point.x, xRange.max);
 
@@ -680,7 +682,7 @@ import { _throw } from '@/shared/utils/_throw';
                     }
                     return { x, y };
                 });
-                internalDataset.values = values;
+                internalDataset.internalValues = values;
                 internalDataset.valuesByX = values.reduce((acc, point) => {
                     acc[point.x] = point.y;
                     return acc;
@@ -690,7 +692,7 @@ import { _throw } from '@/shared/utils/_throw';
 
         private updateNormalizedValues() {
             this.internalDatasets.forEach((internalDataset, i, internalDatasets) => {
-                const normalizedValues = internalDataset.values.map((point, i) => {
+                const normalizedValues = internalDataset.internalValues.map((point, i) => {
                     let { x, y } = point;
                     x = (x - this.xRange.min) / (this.tickInterval * this.visibleTickCount);
                     y = (y - this.yRange.min) / (this.yRange.max - this.yRange.min);
@@ -728,6 +730,7 @@ import { _throw } from '@/shared/utils/_throw';
             dataset.visible = !dataset.visible;
 
             if (dataset.stack) {
+                this.updateValues();
                 this.updateNormalizedValues();
                 this.updatePaths();
             }
