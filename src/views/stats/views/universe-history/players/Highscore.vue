@@ -285,6 +285,8 @@
 
         private async removePlayer(id: number) {
             await this.updatePlayerIdRoute(this.playerIds.filter(pid => pid != id));
+
+            await this.loadPlayerScores();
         }
 
         private async updatePlayerIdRoute(ids: (string | number)[]) {
