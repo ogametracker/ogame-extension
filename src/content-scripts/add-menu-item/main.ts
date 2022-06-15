@@ -3,6 +3,7 @@ import { _throw } from "../../shared/utils/_throw";
 import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
 import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
 import { getOgameMeta } from '../../shared/ogame-web/getOgameMeta';
+import { i18nTooltips } from "./tooltip-i18n";
 
 import './styles.scss';
 
@@ -19,21 +20,23 @@ const observer = new MutationObserver(() => {
         ogameTrackerMenu.classList.add('leftmenu');
         ogameTrackerMenu.id = 'ogame-tracker-menu';
 
+        const tooltip = i18nTooltips[ogameMeta.language] ?? i18nTooltips.en;
+
         let html = `
-            <li id="ogame-tracker-menu-item">
-                <span class="menu_icon">
+            <li id="ogame-tracker-menu-item__v2">
+                <span class="menu_icon tooltipRight" title="${tooltip}">
                     <span class="menuImage icon">
-                        <span class="mdi mdi-finance"></span>
+                        <span class="mdi mdi-radar"></span>
                     </span>
                 </span>
                 <div class="menubutton"></div>
                 ${supportsLanguage
                 ? ''
                 : `<div class="warning-lang-not-supported tooltip" title="The OGame language '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
-                        <span class="mdi mdi-warning"></span>
+                        <span class="mdi mdi-alert"></span>
                     </div>`
-            }
-                </li>
+                }
+            </li>
         `;
         ogameTrackerMenu.innerHTML = html;
         const link = ogameTrackerMenu.querySelector('.menubutton')! as HTMLAnchorElement;
