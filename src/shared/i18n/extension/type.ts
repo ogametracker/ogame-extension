@@ -4,6 +4,7 @@ import { CommonTranslations } from './common/type';
 import { DebrisFieldsTranslations } from './debrisFields/type';
 import { DonateTranslations } from './donate/type';
 import { ExpeditionsTranslations } from './expeditions/type';
+import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
 import { SettingsTranslations } from './settings/type';
 
@@ -16,4 +17,5 @@ export interface ExtensionTranslations {
     combats: CombatsTranslations;
     donate: DonateTranslations;
     debrisFields: DebrisFieldsTranslations;
+    resourceBalance: ResourceBalanceTranslations;
 }

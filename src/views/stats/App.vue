@@ -226,7 +226,7 @@
                     key: 'resource-overview',
                     to: { name: 'resource-overview' },
                     icon: 'ogti ogti-economy',
-                    label: 'LOCA: Rohstoffbilanz',
+                    label: this.$i18n.$t.resourceBalance.header,
                     keyboardKey: '4',
                     keyboardIcon: 'mdi mdi-numeric-4',
                     canBeDefault: true,

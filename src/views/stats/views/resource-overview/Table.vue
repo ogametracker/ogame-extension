@@ -134,7 +134,7 @@
                 return Object.values(ResourceType).map(resource => ({
                     label: this.$i18n.$t.resources[resource],
                     items: types[resource].map(eventType => ({
-                        label: `LOCA: ${eventType}`,
+                        label: this.$i18n.$t.resourceBalance[eventType],
                         getValue: events => events.filter(ev => ev.eventType == eventType).reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
                     }))
                 }));
