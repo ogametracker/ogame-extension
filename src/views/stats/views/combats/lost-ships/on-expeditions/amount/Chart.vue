@@ -17,14 +17,14 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Ships lost</div>
+                        <div v-text="$i18n.$t.combats.shipsLost" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div>LOCA: Ships lost</div>
+                    <div v-text="`${$i18n.$t.combats.shipsLost} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>

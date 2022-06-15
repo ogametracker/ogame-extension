@@ -4,6 +4,7 @@ import { de as ships } from '../ogame/ships/de';
 import { de as resources } from './resources/de';
 import { de as common } from './common/de';
 import { de as expeditions } from './expeditions/de';
+import { de as combats } from './combats/de';
 
 export const de: ExtensionTranslations = {
     common,
@@ -11,4 +12,5 @@ export const de: ExtensionTranslations = {
     ships,
     resources,
     expeditions,
+    combats,
 };

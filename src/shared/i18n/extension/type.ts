@@ -1,4 +1,5 @@
 import { ShipTranslations } from '../ogame/ships/types';
+import { CombatsTranslations } from './combats/type';
 import { CommonTranslations } from './common/type';
 import { ExpeditionsTranslations } from './expeditions/type';
 import { ResourceTranslations } from './resources/type';
@@ -10,4 +11,5 @@ export interface ExtensionTranslations {
     ships: ShipTranslations;
     resources: ResourceTranslations;
     expeditions: ExpeditionsTranslations;
+    combats: CombatsTranslations;
 }

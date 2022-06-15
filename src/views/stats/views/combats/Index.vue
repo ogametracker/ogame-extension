@@ -18,15 +18,15 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Overview',
+                    label: this.$i18n.$t.combats.tabHeaders.overview,
                     to: { name: 'combats/overview' },
                 },
                 {
-                    label: 'LOCA: Loot',
+                    label: this.$i18n.$t.combats.tabHeaders.loot,
                     to: { name: 'combats/resources' },
                 },
                 {
-                    label: 'LOCA: Lost Ships',
+                    label: this.$i18n.$t.combats.tabHeaders.lostShips,
                     to: { name: 'combats/lost-ships' },
                 },
             ];

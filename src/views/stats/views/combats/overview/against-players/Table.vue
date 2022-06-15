@@ -47,7 +47,7 @@
 
         private get items(): RangedStatsTableItem<CombatReport>[] {
             return Object.values(CombatResultType).map(result => ({
-                label: `LOCA: ${result}`,
+                label: this.$i18n.$t.combats.combatResults[result],
                 getValue: combats => combats.filter(combat => combat.result == result).length,
             }));
         }
@@ -55,7 +55,7 @@
         private get footerItems(): RangedStatsTableItem<CombatReport>[] {
             return [
                 {
-                    label: `LOCA: Total`,
+                    label: this.$i18n.$t.common.sum,
                     getValue: combats => combats.length,
                 },
             ];

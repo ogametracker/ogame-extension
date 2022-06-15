@@ -208,7 +208,7 @@
                     key: 'combats',
                     to: { name: 'combats' },
                     icon: 'ogti ogti-attack',
-                    label: 'LOCA: Kämpfe',
+                    label: this.$i18n.$t.combats.header,
                     keyboardKey: '2',
                     keyboardIcon: 'mdi mdi-numeric-2',
                     canBeDefault: true,

@@ -16,12 +16,12 @@ export const en: ExpeditionsTranslations = {
         subHeaders: {
             amount: 'Amount',
             sizes: 'Sizes',
-            resources: 'Rsource Units',
+            resources: 'Resource Units',
         },
     },
 
     expeditionEvents: {
-        [ExpeditionEventType.nothing]: 'no Event',
+        [ExpeditionEventType.nothing]: 'No Event',
         [ExpeditionEventType.resources]: 'Resources',
         [ExpeditionEventType.fleet]: 'Ships',
         [ExpeditionEventType.delay]: 'Delay',

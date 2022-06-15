@@ -17,14 +17,14 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div>LOCA: Combats</div>
+                        <div v-text="$i18n.$t.combats.combats" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div>LOCA: Combats</div>
+                    <div v-text="`${$i18n.$t.combats.shipsLost} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -80,7 +80,7 @@
         private get datasets(): StatsChartDataset<CombatReport>[] {
             return Object.values(CombatResultType).map(result => ({
                 key: result,
-                label: `LOCA: ${result}`, //LOCA
+                label: this.$i18n.$t.combats.combatResults[result],
                 color: this.colors[result],
                 filled: true,
                 getValue: reports => reports.filter(combat => combat.result == result).length,

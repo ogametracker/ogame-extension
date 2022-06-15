@@ -24,11 +24,7 @@
     })
     export default class CombatResultColorSettings extends Vue {
         private get labels(): Record<CombatResultType, string> {
-            return {
-                [CombatResultType.won]: 'LOCA: won',
-                [CombatResultType.lost]: 'LOCA: lost',
-                [CombatResultType.draw]: 'LOCA: draw',
-            };
+            return this.$i18n.$t.combats.combatResults;
         }
 
         private readonly keys: CombatResultType[] = [
