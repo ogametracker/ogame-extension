@@ -98,10 +98,12 @@
                                 "
                             />
                         </span>
-                        <span
-                            v-else
-                            v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
-                        />
+                        <span v-else>
+                            <span
+                                v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
+                            />
+                            <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                        </span>
 
                         <o-building :building="value.type" />
                         <span v-text="value.level" />
