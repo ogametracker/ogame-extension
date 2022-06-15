@@ -8,13 +8,13 @@ import { i18nTooltips } from "./tooltip-i18n";
 import './styles.scss';
 
 const observer = new MutationObserver(() => {
-    const menu = document.querySelector('#menuTable');
+    const menu = document.querySelector('#menuTableTools');
 
     if (menu != null) {
         const ogameMeta = getOgameMeta();
         const supportsLanguage = isSupportedLanguage(ogameMeta.language);
 
-        const parent = menu.parentElement ?? _throw('no parent element found');
+        const parent = menu;
 
         const ogameTrackerMenu = document.createElement('ul');
         ogameTrackerMenu.classList.add('leftmenu');
