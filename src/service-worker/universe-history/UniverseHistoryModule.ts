@@ -167,6 +167,7 @@ export class UniverseHistoryModule {
 
         if(!this.enabled) {
             _logDebug('universe history tracking is disabled');
+            clearTimeout(this.timeout);
             return;
         }
 
