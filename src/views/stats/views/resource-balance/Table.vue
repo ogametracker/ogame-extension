@@ -141,7 +141,7 @@
             }
 
             return Object.values(ResourceType).map(resource => ({
-                label: resource,
+                label: this.$i18n.$t.resources[resource],
                 getValue: events => events.reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
             }));
         }
