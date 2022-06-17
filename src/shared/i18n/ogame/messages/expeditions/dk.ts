@@ -54,7 +54,7 @@ export const dk: ExpeditionMessages = {
             /*'Vi fandt en */'enorm rumskibs gravplads'/*. Nogle af teknikerne fra ekspeditionen fik en del af skibene til at virke igen.'*/,
             /*'Vi har fundet en */'planet med rester fra en ukendt civilisation'/*. Vi kan se en gigantisk rumstation cirkulere omkring planeten. Nogen af vores piloter og teknikere er taget til overfladen for at lede efter skibe, som måske stadig kan bruges.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`e følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`De følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -118,7 +118,7 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Der er modtaget signaler som ikke stammer fra fremmede */'væsener men derimod kommer fra en skjult piratbase'/*! Piraterne var ikke glade for vores besøg i deres sektor.'*/,
-            /*TODO: dk 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Ekspeditionsflåden melder om kampe */'med ikke-identificerede piratskibe'/*!'*/,
         ],
     },
 
