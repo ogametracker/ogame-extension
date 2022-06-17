@@ -2,35 +2,49 @@
     <div class="highscores">
         <span v-if="dataModuleLoading">LOCA: Loading</span>
         <template v-else>
-            <div class="player-selection">
-                <input
-                    type="text"
-                    v-model="selectedPlayerName"
-                    placeholder="LOCA: Player search here"
-                    list="player-list"
-                    @change="onPlayerSelected($event.target.value)"
-                />
-                <datalist id="player-list">
-                    <option v-for="name in playerNames" :key="name">
-                        {{ name }}
-                    </option>
-                </datalist>
+            <grid-table
+                :columns="tableColumns"
+                :items="tableItems"
+                class="player-selection-table"
+            >
+                <template #cell-player="{ value: player }">
+                    <template v-if="player == null">
+                        <input
+                            type="text"
+                            v-model="selectedPlayerName"
+                            placeholder="LOCA: Player search here"
+                            list="player-list"
+                            @change="onPlayerSelected($event.target.value)"
+                            style="width: 100%"
+                        />
+                        <datalist id="player-list">
+                            <option v-for="name in playerNames" :key="name">
+                                {{ name }}
+                            </option>
+                        </datalist>
+                    </template>
 
-                <div v-for="player in selectedPlayers" :key="player.id">
-                    <span
-                        class="mdi mdi-delete"
-                        @click="removePlayer(player.id)"
-                    />
-                    <span v-text="player.name" />
-                </div>
-            </div>
+                    <div v-else class="list-item">
+                        <span
+                            class="mdi mdi-delete"
+                            @click="removePlayer(player.id)"
+                        />
+                        <span v-text="player.name" />
+                    </div>
+                </template>
+            </grid-table>
 
-            <span v-if="playerScoresLoading">LOCA:Loading</span>
-            <tabs :tabs="tabs" v-else>
+            <tabs :tabs="tabs">
                 <template v-for="key in keys">
                     <template :slot="`tab-content-${key}`">
+                        <span
+                            v-if="playerScoresLoading"
+                            :key="`score-${key}-loading`"
+                        >
+                            LOCA:Loading
+                        </span>
                         <scrollable-chart
-                            v-if="playerIds.length > 0"
+                            v-else-if="playerIds.length > 0"
                             :key="`score-${key}`"
                             :datasets="scoreDatasets[key]"
                             continue-last-value
@@ -56,10 +70,11 @@
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
+    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ScrollableChartDataset } from '@/views/stats/components/common/ScrollableChart.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
-    import { UniverseHistoryDataModule } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
     import { addDays } from 'date-fns';
     import startOfDay from 'date-fns/startOfDay';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -158,6 +173,23 @@
                 },
             ];
         }
+
+        private get tableColumns(): GridTableColumn<'player'>[] {
+            return [{
+                key: 'player',
+                label: 'LOCA: Player selection',
+                headerClass: 'player-selection-table-cell',
+                class: 'player-selection-table-cell',
+            }];
+        }
+
+        private get tableItems(): { player: UniverseHistoryPlayer | null }[] {
+            return [
+                { player: null },
+                ...this.selectedPlayers.map(player => ({ player })),
+            ];
+        }
+
 
         private get playerIds(): number[] {
             return (this.$route.query.players as string | null ?? '')
@@ -262,7 +294,7 @@
         }
 
         private get selectedPlayers() {
-            return this.playerIds.map(pid => this.players.find(p => p.id == pid));
+            return this.playerIds.map(pid => this.players.find(p => p.id == pid)!);
         }
 
         private async onPlayerSelected(name: string) {
@@ -304,5 +336,37 @@
         display: grid;
         grid-template-columns: 200px 1fr;
         height: 100%;
+    }
+
+    .player-selection {
+        margin-right: 16px;
+
+        &-table {
+            height: fit-content;
+            margin-right: 16px;
+            
+            &::v-deep {
+                .player-selection-table-cell {
+                    text-align: left;
+                    justify-content: start;
+                }
+            }
+        }
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+
+        &-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+
+            .mdi {
+                transform: scale(1.5);
+                cursor: pointer;
+            }
+        }
     }
 </style>
