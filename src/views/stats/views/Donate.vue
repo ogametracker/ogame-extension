@@ -9,11 +9,11 @@
             <div class="fake-table-body">
                 <span class="mdi mdi-bitcoin" />
                 <span class="crypto-name" v-text="'Bitcoin'" />
-                <span v-text="'3MrZ8FhWE7Ue8nqgkZTGd7fxUzCBNPKVwk'" />
+                <span v-text="btcAddress" />
 
                 <span class="mdi mdi-ethereum" />
                 <span class="crypto-name" v-text="'Ethereum'" />
-                <span v-text="'0x65fd2a29fc6ee5434b2587cf0fb515fa14cb1ff0'" />
+                <span v-text="ethAddress" />
             </div>
         </div>
 
@@ -23,7 +23,7 @@
             </div>
             <div class="fake-table-body" style="justify-items: center">
                 <a
-                    href="https://ko-fi.com/ogametracker"
+                    :href="kofiLink"
                     target="_blank"
                     rel="noreferrer noopener"
                     class="donate-button"
@@ -39,10 +39,13 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { _constants } from '../_constants';
 
     @Component({})
     export default class Donate extends Vue {
-
+        private readonly btcAddress = _constants.bitcoinAddress;
+        private readonly ethAddress = _constants.ethereumAddress;
+        private readonly kofiLink = _constants.kofiLink;
     }
 </script>
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 import { ShipTranslations } from '../ogame/ships/types';
+import { AboutTranslations } from './about/type';
 import { CombatsTranslations } from './combats/type';
 import { CommonTranslations } from './common/type';
 import { DebrisFieldsTranslations } from './debrisFields/type';
@@ -22,4 +23,5 @@ export interface ExtensionTranslations {
     resourceBalance: ResourceBalanceTranslations;
     empire: EmpireTranslations;
     switchAccounts: SwitchAccountsTranslations;
+    about: AboutTranslations;
 }

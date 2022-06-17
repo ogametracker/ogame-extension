@@ -1,6 +1,25 @@
 <template>
     <div>
-        <grid-table :items="items" :columns="columns" class="info-table" />
+        <h3 v-text="$i18n.$t.about.info.table.currentAccount.header" />
+        <grid-table
+            :items="itemsCurrentAccount"
+            :columns="columns"
+            class="info-table"
+            no-header
+            style="width: 400px"
+        />
+        <hr />
+
+        <h3 v-text="$i18n.$t.about.info.table.global.header" />
+        <grid-table
+            :items="itemsGlobal"
+            :columns="columns"
+            class="info-table"
+            no-header
+            style="width: 400px"
+        />
+        <hr />
+
         TODO: possibility to go to migration helper page
     </div>
 </template>
@@ -22,16 +41,6 @@
 
     @Component({})
     export default class Info extends Vue {
-
-        private readonly keysSuffixes = [
-            'battleReports',
-            'debrisFieldReports',
-            'expoEvents',
-            'local-player',
-            'server-settings',
-            'settings',
-            'version',
-        ];
 
         private get currentAccountExpeditions() {
             return ExpeditionDataModule.count;
@@ -57,34 +66,39 @@
             this.totalBytesInUse = (await navigator.storage.estimate()).usage ?? 0;
         }
 
-        private get items(): InfoItem[] {
+        private get itemsCurrentAccount(): InfoItem[] {
             return [
                 {
-                    label: 'LOCA: Number of tracked expeditions (this account)',
+                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedExpeditions,
                     value: this.$i18n.$n(this.currentAccountExpeditions),
                 },
                 {
-                    label: 'LOCA: Number of tracked combats (this account)',
+                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedCombatReports,
                     value: this.$i18n.$n(this.currentAccountCombats),
                 },
                 {
-                    label: 'LOCA: Number of tracked debris field reports (this account)',
+                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedDebrisFieldReports,
                     value: this.$i18n.$n(this.currentAccountDfReports),
                 },
                 {
-                    label: 'LOCA: Last server settings update for <current server>',
+                    label: this.$i18n.$t.about.info.table.currentAccount.lastUpdateServerSettings,
                     value: this.lastServerSettingsUpdate == null ? '-' : this.$i18n.$d(this.lastServerSettingsUpdate, 'date'),
                 },
                 {
-                    label: 'LOCA: Number of universe history entries <current server>',
+                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfUniverseHistoryEntries,
                     value: this.$i18n.$n(this.universeHistoryEntries),
                 },
+            ];
+        }
+
+        private get itemsGlobal(): InfoItem[] {
+            return [
                 {
-                    label: 'LOCA: Total number of tracked accounts',
+                    label: this.$i18n.$t.about.info.table.global.numberOfTrackedAccounts,
                     value: this.$i18n.$n(this.trackedAccounts),
                 },
                 {
-                    label: 'LOCA: Estimated size of saved data (all known accounts and universes) (+ message why "estimated")',
+                    label: this.$i18n.$t.about.info.table.global.estimatedSize,
                     value: this.formatBytes(this.totalBytesInUse),
                 },
             ];
@@ -94,11 +108,11 @@
             return [
                 {
                     key: 'label',
-                    label: 'LOCA: Label',
+                    label: '',
                 },
                 {
                     key: 'value',
-                    label: 'LOCA: Value',
+                    label: '',
                 },
             ];
         }

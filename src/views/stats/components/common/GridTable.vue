@@ -11,7 +11,7 @@
         @scroll="onScroll($event)"
         ref="element"
     >
-        <div class="grid-table-head">
+        <div class="grid-table-head" v-if="!noHeader">
             <div
                 v-for="(column, i) in columns"
                 :key="column.key"
@@ -136,6 +136,9 @@
 
         @Prop({ required: true, type: Array as PropType<Record<string, any>[]> })
         private items!: Record<string, any>[];
+
+        @Prop({ required: false, type: Boolean })
+        private noHeader!: boolean;
 
         @Prop({ required: false, type: Array as PropType<Record<string, any>[]>, default: () => [] })
         private footerItems!: Record<string, any>[];

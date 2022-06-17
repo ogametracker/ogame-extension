@@ -10,6 +10,7 @@ import { en as debrisFields } from './debrisFields/en';
 import { en as resourceBalance } from './resourceBalance/en';
 import { en as empire } from './empire/en';
 import { en as switchAccounts } from './switchAccounts/en';
+import { en as about } from './about/en';
 
 export const en: ExtensionTranslations = {
     common,
@@ -23,4 +24,5 @@ export const en: ExtensionTranslations = {
     resourceBalance,
     empire,
     switchAccounts,
+    about,
 };

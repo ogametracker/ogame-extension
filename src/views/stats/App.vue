@@ -57,10 +57,7 @@
                             class="nav-item-icon"
                             :class="tab.icon"
                         />
-                        <span
-                            v-if="tab.label != null"
-                            class="nav-item-label"
-                        >
+                        <span v-if="tab.label != null" class="nav-item-label">
                             <span v-text="tab.label" />
                             <span
                                 v-if="
@@ -100,17 +97,14 @@
             <router-view />
         </main>
         <footer>
-            <router-link
-                :to="{ name: 'donate' }"
-                class="made-with-love"
-            >
+            <router-link :to="{ name: 'donate' }" class="made-with-love">
                 <span v-text="$i18n.$t.common.madeWithLove1" class="mr-1" />
-                <span class="mdi mdi-heart" style="color: #ff1f1f" /> 
+                <span class="mdi mdi-heart" style="color: #ff1f1f" />
                 <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
             </router-link>
         </footer>
 
-        <switch-account-dialog 
+        <switch-account-dialog
             v-if="showAccountSwitchDialog"
             :color="colors.switchAccount"
             @close="showAccountSwitchDialog = false"
@@ -129,6 +123,7 @@
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
     import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
+    import { _constants } from '@stats/_constants';
 
     interface Tab {
         key: string;
@@ -289,7 +284,7 @@
                 },
                 {
                     key: 'discord',
-                    href: 'https://discord.gg/MZE9FrCwRj',
+                    href: _constants.discordInviteLink,
                     icon: 'ogti ogti-discord',
                     color: this.colors.discord,
                 },
@@ -385,7 +380,7 @@
 
         private async updateDocumentTitle() {
             await UniversesAndAccountsDataModule.ready;
-            
+
             const meta = GlobalOgameMetaData;
 
             const server = UniversesAndAccountsDataModule.servers.find(s => s.id == meta.serverId && s.language == meta.language)
