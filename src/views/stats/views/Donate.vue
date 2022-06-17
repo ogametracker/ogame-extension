@@ -76,7 +76,7 @@
     }
 
     .crypto-table {
-        margin-bottom: 16px;
+        margin-top: 16px;
 
         .fake-table-body {
             display: grid;
