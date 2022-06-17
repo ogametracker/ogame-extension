@@ -14,6 +14,10 @@ class ExpeditionDataModuleClass extends Vue {
     public expeditionsPerDay: Record<number, ExpeditionEvent[]> = {};
     public firstDate: number | null = null;
 
+    public get count() {
+        return this.expeditions.length;
+    }
+
     private async created() {
         this.initCommunication();
         await this.loadData();

@@ -11,6 +11,14 @@ import { DbServerSettings } from '@/shared/db/schema/server';
 class ServerSettingsDataModuleClass extends Vue {
     public serverSettings: ServerSettings | null = null;
 
+    public get lastUpdate():Date | null {
+        const lastUpdate = this.serverSettings?.lastUpdate;
+        if(lastUpdate == null) {
+            return null;
+        }
+        return new Date(lastUpdate);
+    }
+
     private async created() {
         this.initCommunication();
         await this.loadData();
@@ -22,7 +30,7 @@ class ServerSettingsDataModuleClass extends Vue {
     
     private mapServerSettings(serverData: DbServerSettings): ServerSettings {
         return {
-            lastUpdate: Date.now(),
+            lastUpdate: serverData._lastUpdate,
             speed: {
                 economy: serverData.speed,
                 research: serverData.researchDurationDivisor,

@@ -294,20 +294,17 @@
                     color: this.colors.discord,
                 },
                 {
-                    key: 'help',
-                    to: { name: 'help' },
+                    key: 'about',
+                    to: { name: 'about' },
                     icon: 'mdi mdi-help-box',
                 },
-            ];
-
-            if (!this.isIframeMode) {
-                tabs.push({
+                {
                     key: 'switch-account',
                     customAction: () => this.showAccountSwitchDialog = true,
                     icon: 'mdi mdi-account-multiple',
                     color: this.colors.switchAccount,
-                });
-            }
+                },
+            ];
 
             return tabs;
         }

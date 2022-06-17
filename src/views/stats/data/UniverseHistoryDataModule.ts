@@ -78,6 +78,34 @@ class UniverseHistoryDataModuleClass extends Vue {
 
         return scores;
     }
+
+    public async getNumberOfTotalEntries(): Promise<number> {
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+
+        const totalCount = await db.count('allianceMembers')
+            + await db.count('allianceNames')
+            + await db.count('allianceScores')
+            + await db.count('allianceStates')
+            + await db.count('allianceTags')
+            + await db.count('alliances')
+
+            + await db.count('moonNames')
+            + await db.count('moonStates')
+            + await db.count('moons')
+
+            + await db.count('planetCoordinates')
+            + await db.count('planetNames')
+            + await db.count('planetStates')
+            + await db.count('planets')
+
+            + await db.count('playerAlliances')
+            + await db.count('playerNames')
+            + await db.count('playerScores')
+            + await db.count('playerStates')
+            + await db.count('players');
+
+        return totalCount;
+    }
 }
 
 export const UniverseHistoryDataModule = new UniverseHistoryDataModuleClass();

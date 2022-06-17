@@ -1,7 +1,9 @@
 import viewsIndex from '@stats/views/Index.vue';
 import viewsDonate from '@stats/views/Donate.vue';
 import viewsExcelExport from '@stats/views/Excel-Export.vue';
-import viewsHelp from '@stats/views/Help.vue';
+import viewsaboutIndex from '@stats/views/about/Index.vue';
+import viewsaboutHelp from '@stats/views/about/Help.vue';
+import viewsaboutInfo from '@stats/views/about/Info.vue';
 import viewscombatsIndex from '@stats/views/combats/Index.vue';
 import viewscombatslostshipsIndex from '@stats/views/combats/lost-ships/Index.vue';
 import viewscombatslostshipsagainstplayersIndex from '@stats/views/combats/lost-ships/against-players/Index.vue';
@@ -115,12 +117,27 @@ const routes: RouteConfig[] = [
                 component: viewsExcelExport
             },
             {
+                redirect: {
+                    name: "about/help"
+                },
                 meta: {
                     color: "#8c8ce0"
                 },
-                path: "help",
-                name: "help",
-                component: viewsHelp
+                path: "about",
+                name: "about",
+                component: viewsaboutIndex,
+                children: [
+                    {
+                        path: "help",
+                        name: "about/help",
+                        component: viewsaboutHelp
+                    },
+                    {
+                        path: "info",
+                        name: "about/info",
+                        component: viewsaboutInfo
+                    }
+                ]
             },
             {
                 redirect: {

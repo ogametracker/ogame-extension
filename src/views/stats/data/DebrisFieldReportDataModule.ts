@@ -14,6 +14,10 @@ class DebrisFieldReportDataModuleClass extends Vue {
     public reportsPerDay: Record<number, DebrisFieldReport[]> = {};
     public firstDate: number | null = null;
 
+    public get count() {
+        return this.reports.length;
+    }
+
     private async created() {
         this.initCommunication();
         await this.loadData();
