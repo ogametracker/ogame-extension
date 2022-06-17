@@ -23,6 +23,10 @@
                     to: { name: 'settings/misc' },
                 },
                 {
+                    label: 'LOCA: Universe History',
+                    to: { name: 'settings/universe-history' },
+                },
+                {
                     label: this.$i18n.$t.settings.tabs.importExport,
                     to: { name: 'settings/import-export' },
                 },

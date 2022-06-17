@@ -131,7 +131,7 @@
                 linear-gradient(
                     0deg,
                     rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.5)
+                    rgba(var(--color), 0.7)
                 );
             justify-content: center;
         }

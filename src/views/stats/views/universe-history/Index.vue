@@ -1,17 +1,30 @@
 <template>
-    <page v-if="ready" :nav-items="navItems" :root-route-name="rootRoute" />
+    <page
+        v-if="ready && enabled"
+        :nav-items="navItems"
+        :root-route-name="rootRoute"
+    />
+    <universe-history-tracking-settings v-else />
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            UniverseHistoryTrackingSettings,
+        },
+    })
     export default class Expeditions extends Vue {
         private readonly rootRoute = 'universe-history';
         private ready = false;
+        private enabled = false;
 
         private async mounted() {
+            this.enabled = SettingsDataModule.settings.universeHistory.enabled
             //TODO: await UniverseHistoryDataModule.load();
             this.ready = true;
         }

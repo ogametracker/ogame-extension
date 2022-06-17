@@ -1,16 +1,22 @@
 import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getUniverseHistoryDatabase } from "@/shared/db/access";
+import { getGlobalDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
 import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
 import { DbUniverseHistoryAllianceState, DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState, DbUniverseHistoryPlayerState, DbUniverseHistoryPlayerStateItem, DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
+import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "@/shared/messages/Message";
 import { MessageType } from "@/shared/messages/MessageType";
 import { NotifyUniverseHistoryUpdateMessage } from "@/shared/messages/tracking/universe-history";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
+import { getDefaultSettings } from "@/shared/models/settings/getDefaultSettings";
+import { loadSettings } from "@/shared/models/settings/loadSettings";
+import { Settings } from "@/shared/models/settings/Settings";
+import { mergeDeep } from "@/shared/utils/mergeDeep";
 import { parseCoordinates } from "@/shared/utils/parseCoordinates";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { _log, _logDebug } from "@/shared/utils/_log";
 import { _throw } from "@/shared/utils/_throw";
 import { serviceWorkerUuid } from "@/shared/uuid";
+import { addDays, startOfDay } from "date-fns";
 import { XMLParser } from "fast-xml-parser";
 import { IDBPTransaction, StoreNames } from "idb";
 
@@ -140,24 +146,14 @@ type UniverseHistoryDbTransaction = IDBPTransaction<OgameTrackerUniverseHistoryD
 
 export class UniverseHistoryModule {
 
-    private readonly intervalInMs = 1000 * 60 * 60 * 12; //12h //TODO: interval from settings
+    private enabled = false;
+    private updateTimes: number[] = [];
+
     private readonly parser = new XMLParser({
         attributeNamePrefix: '',
         ignoreAttributes: false,
         parseAttributeValue: false,
     });
-
-    private readonly defaultPlayerScores: PlayerScorePositions = {
-        total: { score: 0, position: 0 },
-        economy: { score: 0, position: 0 },
-        research: { score: 0, position: 0 },
-        military: { score: 0, position: 0 },
-        militaryBuilt: { score: 0, position: 0 },
-        militaryDestroyed: { score: 0, position: 0 },
-        militaryLost: { score: 0, position: 0 },
-        numberOfShips: { score: 0, position: 0 },
-        honor: { score: 0, position: 0 },
-    };
 
     private readonly meta: MessageOgameMeta;
     private timeout: number | undefined = undefined;
@@ -167,15 +163,51 @@ export class UniverseHistoryModule {
     }
 
     public async init() {
+        await this.initSettings();
+
+        if(!this.enabled) {
+            _logDebug('universe history tracking is disabled');
+            return;
+        }
+
         await this.initTracking();
+    }
+
+    private async initSettings() {
+        const settings = await loadSettings('__internal__' as LanguageKey);
+        
+        this.enabled = settings.universeHistory.enabled;
+        this.updateTimes = [...settings.universeHistory.updateTimes];
     }
 
     private async initTracking() {
         const db = await getUniverseHistoryDatabase(this.meta);
         const lastUpdate = (await db.get('_lastUpdate', 0)) ?? 0;
         const now = Date.now();
+        const nextUpdates: number[] = [];
+        if (lastUpdate == 0) {
+            nextUpdates.push(now);
+        } else {
+            let day = startOfDay(lastUpdate).getTime();
+            let i = 0;
+            while (nextUpdates.length == 0 || nextUpdates[nextUpdates.length - 1] < now) {
+                const updateTime = day + this.updateTimes[i];
+                if (updateTime > lastUpdate) {
+                    nextUpdates.push(updateTime);
+                }
 
-        const timeLeft = Math.max(0, lastUpdate + this.intervalInMs - now);
+                i++;
+                if (i >= this.updateTimes.length) {
+                    i = 0;
+                    day = addDays(day, 1).getTime();
+                }
+            }
+        }
+
+        const nextUpdate = nextUpdates.length == 1
+            ? nextUpdates[0]
+            : nextUpdates.find((_, i) => nextUpdates[i + 1] >= now) ?? _throw('failed to find next update time for universe history');
+        const timeLeft = Math.max(0, nextUpdate - now);
         _logDebug(`next universe history tracking in ${timeLeft} ms (${new Date(Date.now() + timeLeft)}) for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
 
         clearTimeout(this.timeout);
@@ -687,7 +719,7 @@ export class UniverseHistoryModule {
         await this.updatePlanetNames(tx, planets, now);
         await this.updatePlanetStates(tx, planets, now);
         await this.updatePlanetCoordinates(tx, planets, now);
-        
+
         const moons = planets.map(p => p.moon).filter(m => m != null) as Moon[];
         await this.updateKnownMoons(tx, moons);
         await this.updateMoonNames(tx, moons, now);
@@ -698,7 +730,7 @@ export class UniverseHistoryModule {
         const planetStore = tx.objectStore('planets');
 
         for (const planet of planets) {
-            await planetStore.put({ 
+            await planetStore.put({
                 id: planet.id,
                 playerId: planet.player,
             });
@@ -823,7 +855,7 @@ export class UniverseHistoryModule {
         const store = tx.objectStore('moons');
 
         for (const moon of moons) {
-            await store.put({ 
+            await store.put({
                 id: moon.id,
                 size: moon.size,
                 planetId: moon.planetId,

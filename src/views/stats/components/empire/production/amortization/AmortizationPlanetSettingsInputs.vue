@@ -252,7 +252,7 @@
 
     .header {
         background: black
-            linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.5));
+            linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
         text-align: center;
     }
 

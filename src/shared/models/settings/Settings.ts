@@ -38,4 +38,10 @@ export interface Settings {
     expeditionFoundShipsResourceUnits: ShipResourceUnitsFactors;
 
     defaultRoutes: Record<string, string | undefined>;
+
+    universeHistory: {
+        enabled: boolean;
+        /** update times in milliseconds of a day (min = 0, max = 86399999) */
+        updateTimes: number[];
+    };
 }

@@ -76,6 +76,7 @@ import viewssettingsColors from '@stats/views/settings/Colors.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsMisc from '@stats/views/settings/Misc.vue';
+import viewssettingsUniverseHistory from '@stats/views/settings/Universe-History.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import viewstoolsConstructionQueue from '@stats/views/tools/Construction-Queue.vue';
 import viewstoolsCostCalculator from '@stats/views/tools/Cost-Calculator.vue';
@@ -662,6 +663,11 @@ const routes: RouteConfig[] = [
                         path: "misc",
                         name: "settings/misc",
                         component: viewssettingsMisc
+                    },
+                    {
+                        path: "universe-history",
+                        name: "settings/universe-history",
+                        component: viewssettingsUniverseHistory
                     }
                 ]
             },
