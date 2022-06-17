@@ -19,14 +19,20 @@
             color="#00ff00"
         />
 
-        <checkbox-button
-            v-for="(enabled, time) in timeSelection"
-            :key="time"
-            :value="enabled"
-            @input="setTimeEnabled(time, $event)"
-            :label="`LOCA: ${time}`"
-            color="#00ff00"
-        />
+        <hr />
+
+        <template v-for="(enabled, time) in timeSelection">
+            <br v-if="time == 12 * 60 * 60 * 1000" :key="`br-${time}`" />
+            <checkbox-button
+                :key="time"
+                :value="enabled"
+                @input="setTimeEnabled(time, $event)"
+                :label="formatTime(time)"
+                color="#00ff00"
+            />
+        </template>
+    </div>
+</template>
     </div>
 </template>
 
@@ -53,6 +59,11 @@
 
         private get settings() {
             return SettingsDataModule.settings.universeHistory;
+        }
+
+        private formatTime(timeStr: string) {
+            const time = parseIntSafe(timeStr, 10) + new Date(0).getTimezoneOffset() * 60 * 1000;
+            return this.$i18n.$d(time, 'time_hm');
         }
 
         private setEnabled(enabled: boolean) {

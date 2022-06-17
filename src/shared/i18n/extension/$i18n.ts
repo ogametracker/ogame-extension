@@ -5,10 +5,10 @@ import { LanguageKey } from "../LanguageKey";
 import { ExtensionTranslations } from "./type";
 import extensionMessages from './';
 
-type I18nDateTimeFormatKey = 'date' | 'datetime';
+type I18nDateTimeFormatKey = 'date' | 'datetime' | 'time' | 'time_hm';
 
 type I18nLanguageRootMap<TRoot> = Partial<Record<LanguageKey, TRoot>>;
-type I18nDateTimeFormats<T> = Record<I18nDateTimeFormatKey, T>;
+type I18nDateTimeFormats<T> = Partial<Record<I18nDateTimeFormatKey, T>>;
 export type I18nDateTimeFormat = string | Intl.DateTimeFormatOptions;
 
 export interface I18nOptions<TMessages, TDateTimeFormats> {
@@ -191,6 +191,30 @@ export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
+            },
+            time: {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
+            time_hm: {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+            },
+        },
+        en: {
+            time: {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
+            time_hm: {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
             },
         },
     },
