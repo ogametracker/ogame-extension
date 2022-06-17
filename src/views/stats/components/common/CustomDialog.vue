@@ -71,6 +71,7 @@
             );
         padding: 4px 16px 16px 16px;
         border-radius: 8px;
+        border: 1px solid rgba(var(--color), 0.25);
 
         &-header {
             display: grid;

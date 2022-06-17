@@ -2,21 +2,6 @@
     <div>
         <h2 v-text="$i18n.$t.donate.subHeader" />
 
-        <div class="fake-table crypto-table">
-            <div class="fake-table-header">
-                <span v-text="$i18n.$t.donate.crypto.header" />
-            </div>
-            <div class="fake-table-body">
-                <span class="mdi mdi-bitcoin" />
-                <span class="crypto-name" v-text="'Bitcoin'" />
-                <span v-text="btcAddress" />
-
-                <span class="mdi mdi-ethereum" />
-                <span class="crypto-name" v-text="'Ethereum'" />
-                <span v-text="ethAddress" />
-            </div>
-        </div>
-
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
                 <span v-text="$i18n.$t.donate.kofi.header" />
@@ -32,6 +17,21 @@
                     {{ $i18n.$t.donate.kofi.buttonText }}
                 </a>
                 <small v-text="$i18n.$t.donate.kofi.message" />
+            </div>
+        </div>
+
+        <div class="fake-table crypto-table">
+            <div class="fake-table-header">
+                <span v-text="$i18n.$t.donate.crypto.header" />
+            </div>
+            <div class="fake-table-body">
+                <span class="mdi mdi-bitcoin" />
+                <span class="crypto-name" v-text="'Bitcoin'" />
+                <span v-text="btcAddress" />
+
+                <span class="mdi mdi-ethereum" />
+                <span class="crypto-name" v-text="'Ethereum'" />
+                <span v-text="ethAddress" />
             </div>
         </div>
     </div>
