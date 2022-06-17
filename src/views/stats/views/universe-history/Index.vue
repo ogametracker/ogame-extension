@@ -1,6 +1,7 @@
 <template>
+    <span v-if="!ready" v-text="'LOCA: Loading...'" />
     <page
-        v-if="ready && enabled"
+        v-else-if="enabled"
         :nav-items="navItems"
         :root-route-name="rootRoute"
     />
@@ -12,6 +13,7 @@
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
+    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
 
     @Component({
         components: {
@@ -21,12 +23,14 @@
     export default class Expeditions extends Vue {
         private readonly rootRoute = 'universe-history';
         private ready = false;
-        private enabled = false;
 
         private async mounted() {
-            this.enabled = SettingsDataModule.settings.universeHistory.enabled
-            //TODO: await UniverseHistoryDataModule.load();
+            await UniverseHistoryDataModule.ready;
             this.ready = true;
+        }
+
+        private get enabled() {
+            return SettingsDataModule.settings.universeHistory.enabled;
         }
 
         private get navItems(): ListNavItem[] {
