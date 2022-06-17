@@ -1,5 +1,5 @@
 <template>
-    <tab-view :tabs="tabs" root-route-name="resource-overview" />
+    <tab-view :tabs="tabs" root-route-name="resource-balance" />
 </template>
 
 <script lang="ts">
@@ -20,11 +20,11 @@
         private get tabs(): Tab[] {
             return [
                 {
-                    to: { name: 'resource-overview/chart' },
+                    to: { name: 'resource-balance/chart' },
                     label: this.$i18n.$t.common.chart,
                 },
                 {
-                    to: { name: 'resource-overview/table' },
+                    to: { name: 'resource-balance/table' },
                     label: this.$i18n.$t.common.table,
                 },
             ];

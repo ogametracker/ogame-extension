@@ -68,9 +68,9 @@ import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/
 import viewsexpeditionsshipssizesIndex from '@stats/views/expeditions/ships/sizes/Index.vue';
 import viewsexpeditionsshipssizesChart from '@stats/views/expeditions/ships/sizes/Chart.vue';
 import viewsexpeditionsshipssizesTable from '@stats/views/expeditions/ships/sizes/Table.vue';
-import viewsresourceoverviewIndex from '@stats/views/resource-overview/Index.vue';
-import viewsresourceoverviewChart from '@stats/views/resource-overview/Chart.vue';
-import viewsresourceoverviewTable from '@stats/views/resource-overview/Table.vue';
+import viewsresourcebalanceIndex from '@stats/views/resource-balance/Index.vue';
+import viewsresourcebalanceChart from '@stats/views/resource-balance/Chart.vue';
+import viewsresourcebalanceTable from '@stats/views/resource-balance/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
 import viewssettingsColors from '@stats/views/settings/Colors.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
@@ -612,24 +612,24 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "resource-overview/chart"
+                    name: "resource-balance/chart"
                 },
                 meta: {
                     color: "#a9460c"
                 },
-                path: "resource-overview",
-                name: "resource-overview",
-                component: viewsresourceoverviewIndex,
+                path: "resource-balance",
+                name: "resource-balance",
+                component: viewsresourcebalanceIndex,
                 children: [
                     {
                         path: "chart",
-                        name: "resource-overview/chart",
-                        component: viewsresourceoverviewChart
+                        name: "resource-balance/chart",
+                        component: viewsresourcebalanceChart
                     },
                     {
                         path: "table",
-                        name: "resource-overview/table",
-                        component: viewsresourceoverviewTable
+                        name: "resource-balance/table",
+                        component: viewsresourcebalanceTable
                     }
                 ]
             },

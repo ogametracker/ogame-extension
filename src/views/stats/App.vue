@@ -213,8 +213,8 @@
                     canBeDefault: true,
                 },
                 {
-                    key: 'resource-overview',
-                    to: { name: 'resource-overview' },
+                    key: 'resource-balance',
+                    to: { name: 'resource-balance' },
                     icon: 'ogti ogti-economy',
                     label: this.$i18n.$t.resourceBalance.header,
                     keyboardKey: '4',
