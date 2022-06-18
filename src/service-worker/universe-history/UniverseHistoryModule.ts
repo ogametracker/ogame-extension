@@ -165,7 +165,7 @@ export class UniverseHistoryModule {
     public async init() {
         await this.initSettings();
 
-        if(!this.enabled) {
+        if (!this.enabled) {
             _logDebug('universe history tracking is disabled');
             clearTimeout(this.timeout);
             return;
@@ -176,9 +176,9 @@ export class UniverseHistoryModule {
 
     private async initSettings() {
         const settings = await loadSettings('__internal__' as LanguageKey);
-        
+
         this.enabled = settings.universeHistory.enabled;
-        this.updateTimes = [...settings.universeHistory.updateTimes];
+        this.updateTimes = [...settings.universeHistory.updateTimes].sort((a, b) => a - b);
     }
 
     private async initTracking() {
