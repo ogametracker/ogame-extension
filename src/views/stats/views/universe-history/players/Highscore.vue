@@ -349,6 +349,7 @@
                 .player-selection-table-cell {
                     text-align: left;
                     justify-content: start;
+                    border-bottom: 1px solid rgba(var(--color), 0.5);
                 }
             }
         }
