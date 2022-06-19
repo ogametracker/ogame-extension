@@ -102,6 +102,8 @@
                 <span class="mdi mdi-heart" style="color: #ff1f1f" />
                 <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
             </router-link>
+
+            <span v-text="accountAndServer" />
         </footer>
 
         <switch-account-dialog
@@ -156,6 +158,7 @@
         };
 
         private showAccountSwitchDialog = false;
+        private accountAndServer = '';
 
         private get isIframeMode() {
             const params = new URLSearchParams(location.search);
@@ -347,7 +350,7 @@
             await document.fonts.ready;
             await delay(100);
 
-            await this.updateDocumentTitle();
+            await this.setWindowTitleAndFooter();
 
             await this.$nextTick();
             this.onRefsChanged();
@@ -378,7 +381,7 @@
             });
         }
 
-        private async updateDocumentTitle() {
+        private async setWindowTitleAndFooter() {
             await UniversesAndAccountsDataModule.ready;
 
             const meta = GlobalOgameMetaData;
@@ -397,7 +400,10 @@
                 name: meta.playerId.toString(),
             };
 
-            document.title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
+            const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;;
+            document.title = title;
+
+            this.accountAndServer = title;
         }
     }
 </script>
@@ -490,11 +496,14 @@
     }
 
     main {
-        padding: 16px 16px 8px 16px;
+        padding: 16px 16px 0 16px;
         overflow: hidden;
     }
     footer {
-        padding: 0 8px 4px 16px;
+        padding: 4px 16px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
     }
 
     .close-overlay {
