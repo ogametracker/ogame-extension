@@ -114,6 +114,7 @@
     }
 
     .discord-message {
+        font-weight: bold;
         width: 450px;
         background-color: black;
         background-image: linear-gradient(
