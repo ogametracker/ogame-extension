@@ -234,21 +234,12 @@
                     canBeDefault: true,
                 },
                 {
-                    key: 'tools',
-                    to: { name: 'tools' },
-                    icon: 'mdi mdi-tools',
-                    label: 'LOCA: Tools',
-                    keyboardKey: '6',
-                    keyboardIcon: 'mdi mdi-numeric-6',
-                    canBeDefault: true,
-                },
-                {
                     key: 'universe-history',
                     to: { name: 'universe-history' },
                     icon: 'mdi mdi-chart-timeline-variant-shimmer',
                     label: 'LOCA: Universe History',
-                    keyboardKey: '7',
-                    keyboardIcon: 'mdi mdi-numeric-7',
+                    keyboardKey: '6',
+                    keyboardIcon: 'mdi mdi-numeric-6',
                     canBeDefault: true,
                 },
                 // {
@@ -266,6 +257,11 @@
                         'flex-grow': 1
                     },
                     noNavItem: true,
+                },
+                {
+                    key: 'tools',
+                    to: { name: 'tools' },
+                    icon: 'mdi mdi-hammer-wrench',
                 },
                 {
                     key: 'settings',
