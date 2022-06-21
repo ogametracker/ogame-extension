@@ -3,6 +3,7 @@
         class="grid-table"
         :class="{
             'grid-table--sticky-header': sticky != null,
+            'grid-table--inline': inline,
         }"
         :style="{
             'grid-template-columns': gridColumns,
@@ -140,6 +141,9 @@
         @Prop({ required: false, type: Boolean })
         private noHeader!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private inline!: boolean;
+
         @Prop({ required: false, type: Array as PropType<Record<string, any>[]>, default: () => [] })
         private footerItems!: Record<string, any>[];
 
@@ -187,6 +191,10 @@
         border-radius: var(--border-radius);
 
         z-index: 0;
+
+        &--inline {
+            display: inline-grid;
+        }
 
         &-head,
         &-body,

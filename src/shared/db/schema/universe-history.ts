@@ -61,6 +61,21 @@ export interface OgameTrackerUniverseHistoryPlayerScore {
     score: number;
     position: number;
 }
+export interface OgameTrackerUniverseHistoryPlayerState {
+    playerId: number;
+    date: number;
+    state: DbUniverseHistoryPlayerState;
+}
+export interface OgameTrackerUniverseHistoryPlayerAlliance {
+    playerId: number;
+    date: number;
+    allianceId: number | null;
+}
+export interface OgameTrackerUniverseHistoryPlayerName {
+    playerId: number;
+    date: number;
+    name: string;
+}
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     //TODO: add indexes by id+date to be able to traverse in reverse to get latest data
@@ -78,11 +93,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     playerNames: {
         /** PlayerId, DateTime */
         key: [number, number];
-        value: {
-            playerId: number;
-            date: number;
-            name: string;
-        };
+        value: OgameTrackerUniverseHistoryPlayerName;
         indexes: {
             playerId: number;
         };
@@ -90,11 +101,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     playerAlliances: {
         /** PlayerId, DateTime */
         key: [number, number];
-        value: {
-            playerId: number;
-            date: number;
-            allianceId: number | null;
-        };
+        value: OgameTrackerUniverseHistoryPlayerAlliance;
         indexes: {
             playerId: number;
         };
@@ -102,11 +109,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     playerStates: {
         /** PlayerId, DateTime */
         key: [number, number];
-        value: {
-            playerId: number;
-            date: number;
-            state: DbUniverseHistoryPlayerState;
-        };
+        value: OgameTrackerUniverseHistoryPlayerState;
         indexes: {
             playerId: number;
         };

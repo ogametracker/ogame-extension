@@ -312,7 +312,6 @@
                 player.id,
             ]);
             await this.loadPlayerScores();
-
         }
 
         private async removePlayer(id: number) {
