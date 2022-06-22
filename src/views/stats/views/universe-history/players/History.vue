@@ -334,7 +334,7 @@
         }
 
 
-        private readonly statusHistoryTickCount = 3;
+        private readonly statusHistoryTickCount = 30;
         private statusHistoryGraphOffset = 0;
 
         private get statusHistoryStartDate(): Date {
