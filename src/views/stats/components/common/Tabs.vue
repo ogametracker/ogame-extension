@@ -65,6 +65,7 @@
             text-align: center;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
+            overflow: hidden;
 
             > .tab {
                 display: flex;
