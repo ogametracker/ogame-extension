@@ -6,6 +6,8 @@ import { CombatReportModule } from './CombatReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
 import { serviceWorkerUuid } from '@/shared/uuid';
+import { WillNotBeTrackedMessage } from '@/shared/messages/tracking/misc';
+import { _logDebug } from '@/shared/utils/_log';
 
 export class CombatReportService implements MessageService {
     private readonly combatReportModule = new CombatReportModule();
@@ -42,14 +44,23 @@ export class CombatReportService implements MessageService {
                     _throw('failed to track combat report');
                 }
 
-                const { report, isAlreadyTracked } = tryResult.result;
+                if(tryResult.result.ignored) {
+                    const ignoreMessage: WillNotBeTrackedMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.WillNotBeTracked,
+                        data: tryResult.result.id,
+                        senderUuid: serviceWorkerUuid,
+                    };
+                    await broadcastMessage(ignoreMessage);
+                    break;
+                }
 
                 // broadcast "new combat report available"
-                if (!isAlreadyTracked) {
+                if (!tryResult.result.isAlreadyTracked) {
                     const newCombatReportMessage: NewCombatReportMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.NewCombatReport,
-                        data: report,
+                        data: tryResult.result.report,
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(newCombatReportMessage);
@@ -59,7 +70,7 @@ export class CombatReportService implements MessageService {
                     const combatReportMessage: CombatReportMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.CombatReport,
-                        data: report,
+                        data: tryResult.result.report,
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(combatReportMessage);

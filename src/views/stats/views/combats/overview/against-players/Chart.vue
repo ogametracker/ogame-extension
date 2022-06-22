@@ -36,6 +36,8 @@
                 </button>
             </template>
 
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <combat-result-color-settings />
         </floating-menu>
     </div>
@@ -50,11 +52,13 @@
     import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             CombatResultColorSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Charts extends Vue {

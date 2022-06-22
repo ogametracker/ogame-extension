@@ -40,6 +40,8 @@
             <hr />
             <lost-ship-resource-units-factor-settings />
             <hr />
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <ship-color-settings />
         </floating-menu>
     </div>
@@ -60,6 +62,7 @@
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
@@ -67,6 +70,7 @@
             ShipColorSettings,
             MsuConversionRateSettings,
             LostShipResourceUnitsFactorSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Charts extends Vue {

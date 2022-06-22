@@ -1,5 +1,5 @@
 module.exports = {
-    redirect: { name: 'settings/date-ranges' },
+    redirect: { name: 'settings/common' },
     meta: {
         color: '#888888',
     },

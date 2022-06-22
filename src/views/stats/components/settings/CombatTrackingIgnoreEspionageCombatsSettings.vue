@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.resourceBalance.detailedResourceBalance.header" />
+            <span v-text="$i18n.$t.settings.combats.ignoreEspionageCombats.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
-                :value="showDetailedBreakdown"
-                @input="toggleDetailedBreakdown($event)"
-                :label="$i18n.$t.settings.resourceBalance.detailedResourceBalance.checkboxLabel"
+                :value="ignoreEspionageCombats"
+                @input="setIgnoreEspionageCombats($event)"
+                :label="$i18n.$t.settings.combats.ignoreEspionageCombats.label"
             />
         </div>
     </div>
@@ -15,22 +15,23 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
-    export default class DetailedResourceBalanceSettings extends Vue {
+    export default class CombatTrackingIgnoreEspionageCombatsSettings extends Vue {
 
-        private get showDetailedBreakdown() {
-            return SettingsDataModule.settings.showDetailedResourceBalance;
+        private get ignoreEspionageCombats() {
+            return SettingsDataModule.settings.combatTracking.ignoreEspionageFights;
         }
 
-        private toggleDetailedBreakdown(showDetailedResourceBalance: boolean) {
+        private setIgnoreEspionageCombats(ignoreEspionageFights: boolean) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
-                showDetailedResourceBalance,
+                combatTracking: {
+                    ignoreEspionageFights,
+                },
             });
         }
-
     }
 </script>
 <style lang="scss" scoped>

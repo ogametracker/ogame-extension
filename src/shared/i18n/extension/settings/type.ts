@@ -2,8 +2,11 @@ export interface SettingsTranslations {
     tabs: {
         dateRanges: string;
         colors: string;
-        misc: string;
+        common: string;
         importExport: string;
+        expeditions: string;
+        combats: string;
+        resourceBalance: string;
     };
     dateRanges: {
         defaultNames: {
@@ -42,15 +45,25 @@ export interface SettingsTranslations {
         resources: string;
         ships: string;
     };
-    misc: {
+    common: {
         msuConversionRates: string;
+        extensionLanguage: string;
+    };
+    expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: string;
+    };
+    combats: {
         resourceUnitFactorsOfLostShips: string;
+        ignoreEspionageCombats: {
+            title: string;
+            label: string;
+        };
+    };
+    resourceBalance: {
         detailedResourceBalance: {
             header: string;
             checkboxLabel: string;
         };
-        extensionLanguage: string;
     };
     reset: string;
     setDefaultRoute: string;

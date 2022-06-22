@@ -1,7 +1,7 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logError } from "../../shared/utils/_log";
+import { _log, _logDebug, _logError } from "../../shared/utils/_log";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
@@ -12,11 +12,17 @@ import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
+import { settingsService } from "../main";
+import { OgameCombatReport, OgameCombatRound } from "@/shared/models/ogame/combats/OgameCombatReport";
 
-interface CombatReportResult {
+type CombatReportResult = {
     report: CombatReport;
     isAlreadyTracked: boolean;
-}
+    ignored: false;
+} | {
+    ignored: true;
+    id: number;
+};
 
 export class CombatReportModule {
     public async tryTrackCombatReport(message: TrackCombatReportMessage): Promise<TryActionResult<CombatReportResult>> {
@@ -31,6 +37,20 @@ export class CombatReportModule {
                 result: {
                     report: knownReport,
                     isAlreadyTracked: true,
+                    ignored: false,
+                },
+            };
+        }
+
+        const isEspionageCombat = this.isEspionageCombat(message.data.ogameCombatReport);
+        if (isEspionageCombat && settingsService.settings.combatTracking.ignoreEspionageFights) {
+            _logDebug(`ignoring espionage combat with id ${combatReportData.id}`);
+
+            return {
+                success: true,
+                result: {
+                    id: message.data.id,
+                    ignored: true,
                 },
             };
         }
@@ -51,12 +71,19 @@ export class CombatReportModule {
                 result: {
                     report,
                     isAlreadyTracked: false,
+                    ignored: false,
                 },
             };
         } catch (error) {
             _logError({ error, message });
             return { success: false };
         }
+    }
+
+    private isEspionageCombat(combat: OgameCombatReport) {
+        return Object.values(combat.combatRounds[0].attackerShips).every(
+            attackerShips => Object.keys(attackerShips).length == 1 && (attackerShips[ShipType.espionageProbe] ?? 0) > 0
+        );
     }
 
     public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReport>> {

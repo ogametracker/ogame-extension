@@ -11,6 +11,10 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
+                    label: this.$i18n.$t.settings.tabs.common,
+                    to: { name: 'settings/common' },
+                },
+                {
                     label: this.$i18n.$t.settings.tabs.dateRanges,
                     to: { name: 'settings/date-ranges' },
                 },
@@ -19,8 +23,16 @@
                     to: { name: 'settings/colors' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.misc,
-                    to: { name: 'settings/misc' },
+                    label: this.$i18n.$t.settings.tabs.expeditions,
+                    to: { name: 'settings/expeditions' },
+                },
+                {
+                    label: this.$i18n.$t.settings.tabs.combats,
+                    to: { name: 'settings/combats' },
+                },
+                {
+                    label: this.$i18n.$t.settings.tabs.resourceBalance,
+                    to: { name: 'settings/resource-balance' },
                 },
                 {
                     label: 'LOCA: Universe History',

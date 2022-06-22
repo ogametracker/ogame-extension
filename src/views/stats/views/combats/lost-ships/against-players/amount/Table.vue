@@ -21,6 +21,8 @@
                 </button>
             </template>
 
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -35,11 +37,13 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { OShipType } from '@/views/stats/components/common/ogame/OShip.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Table extends Vue {

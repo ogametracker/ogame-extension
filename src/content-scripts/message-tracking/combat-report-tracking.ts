@@ -15,6 +15,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 import { messageTrackingUuid } from "@/shared/uuid";
+import { WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -54,6 +55,20 @@ function onMessage(message: Message<MessageType, any>) {
             const { data: id } = message as CombatReportUnknownMessage;
             shouldTrackResolvers[id]?.(true);
             delete shouldTrackResolvers[id];
+            break;
+        }
+
+        case MessageType.WillNotBeTracked: {
+            const msg = message as WillNotBeTrackedMessage;
+            shouldTrackResolvers[msg.data]?.(false);
+            delete shouldTrackResolvers[msg.data];
+
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report with id '${msg.data}'`);
+            li.classList.add(cssClasses.messages.combatReport);
+            li.classList.add(cssClasses.messages.processed);
+            li.classList.add(cssClasses.messages.ignored);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             break;
         }
 

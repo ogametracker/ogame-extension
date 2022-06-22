@@ -22,6 +22,8 @@
 
             <msu-conversion-rate-settings />
             <hr />
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -36,12 +38,14 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
             MsuConversionRateSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Table extends Vue {

@@ -117,5 +117,8 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             enabled: false,
             trackHistory: false,
         },
+        combatTracking: {
+            ignoreEspionageFights: true,
+        },
     };
 }

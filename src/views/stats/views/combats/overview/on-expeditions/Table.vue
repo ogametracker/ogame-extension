@@ -15,6 +15,8 @@
                 </button>
             </template>
 
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -27,11 +29,13 @@
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Table extends Vue {

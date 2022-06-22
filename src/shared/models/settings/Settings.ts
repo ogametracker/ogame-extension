@@ -45,4 +45,8 @@ export interface Settings {
         /** update times in milliseconds of a day (min = 0, max = 86399999) */
         updateTimes: number[];
     };
+
+    combatTracking: {
+        ignoreEspionageFights: boolean;
+    };
 }

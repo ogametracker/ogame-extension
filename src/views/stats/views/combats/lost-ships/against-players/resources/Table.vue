@@ -24,6 +24,8 @@
             <msu-conversion-rate-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
+            <combat-tracking-ignore-espionage-combats-settings class="two-column" />
+            <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
     </div>
@@ -43,6 +45,7 @@
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
@@ -50,6 +53,7 @@
             DateRangeSettings,
             MsuConversionRateSettings,
             LostShipResourceUnitsFactorSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Table extends Vue {

@@ -73,9 +73,12 @@ import viewsresourcebalanceChart from '@stats/views/resource-balance/Chart.vue';
 import viewsresourcebalanceTable from '@stats/views/resource-balance/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
 import viewssettingsColors from '@stats/views/settings/Colors.vue';
+import viewssettingsCombats from '@stats/views/settings/Combats.vue';
+import viewssettingsCommon from '@stats/views/settings/Common.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
+import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
-import viewssettingsMisc from '@stats/views/settings/Misc.vue';
+import viewssettingsResourceBalance from '@stats/views/settings/Resource-Balance.vue';
 import viewssettingsUniverseHistory from '@stats/views/settings/Universe-History.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
 import viewstoolsConstructionQueue from '@stats/views/tools/Construction-Queue.vue';
@@ -635,7 +638,7 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "settings/date-ranges"
+                    name: "settings/common"
                 },
                 meta: {
                     color: "#888888"
@@ -650,9 +653,24 @@ const routes: RouteConfig[] = [
                         component: viewssettingsColors
                     },
                     {
+                        path: "combats",
+                        name: "settings/combats",
+                        component: viewssettingsCombats
+                    },
+                    {
+                        path: "common",
+                        name: "settings/common",
+                        component: viewssettingsCommon
+                    },
+                    {
                         path: "date-ranges",
                         name: "settings/date-ranges",
                         component: viewssettingsDateRanges
+                    },
+                    {
+                        path: "expeditions",
+                        name: "settings/expeditions",
+                        component: viewssettingsExpeditions
                     },
                     {
                         path: "import-export",
@@ -660,9 +678,9 @@ const routes: RouteConfig[] = [
                         component: viewssettingsImportExport
                     },
                     {
-                        path: "misc",
-                        name: "settings/misc",
-                        component: viewssettingsMisc
+                        path: "resource-balance",
+                        name: "settings/resource-balance",
+                        component: viewssettingsResourceBalance
                     },
                     {
                         path: "universe-history",

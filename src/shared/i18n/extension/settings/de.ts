@@ -4,8 +4,11 @@ export const de: SettingsTranslations = {
     tabs: {
         dateRanges: 'Datumsbereiche',
         colors: 'Farben',
-        misc: 'Diverse',
+        common: 'Allgemein',
         importExport: 'Import/Export',
+        expeditions: 'Expeditionen',
+        combats: 'Kämpfe',
+        resourceBalance: 'Rohstoffbilanz',
     },
     dateRanges: {
         defaultNames: {
@@ -44,15 +47,25 @@ export const de: SettingsTranslations = {
         resources: 'Rohstoffe',
         ships: 'Schiffe',
     },
-    misc: {
+    common: {
+        extensionLanguage: 'UI-Sprache (im OGame Tracker)',
+        msuConversionRates: 'MSE-Umrechnungskurse',
+    },
+    expeditions: {
+        resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
+    },
+    combats: {
+        resourceUnitFactorsOfLostShips: 'Faktoren der Rohstoffeinheiten in Kämpfen verlorener Schiffe',
+        ignoreEspionageCombats: {
+            title: 'Spionagekämpfe ignorieren',
+            label: 'Spionage-Kampfberichte für das Tracking ignorieren',
+        },
+    },
+    resourceBalance: {
         detailedResourceBalance: {
             header: 'Detaillierte Rohstoffbilanz',
             checkboxLabel: 'detaillierte Anzeige der Rohstoffbilanz',
         },
-        extensionLanguage: 'UI-Sprache (im OGame Tracker)',
-        msuConversionRates: 'MSE-Umrechnungskurse',
-        resourceUnitFactorsOfLostShips: 'Faktoren der Rohstoffeinheiten in Kämpfen verlorener Schiffe',
-        resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
     },
     reset: 'Einstellungen zurücksetzen',
     setDefaultRoute: 'als Standardauswahl festlegen',

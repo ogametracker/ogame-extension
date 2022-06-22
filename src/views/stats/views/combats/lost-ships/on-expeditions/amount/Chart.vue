@@ -36,6 +36,8 @@
                 </button>
             </template>
 
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <ship-color-settings />
         </floating-menu>
     </div>
@@ -51,11 +53,13 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             ShipColorSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Charts extends Vue {

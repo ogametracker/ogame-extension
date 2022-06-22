@@ -4,8 +4,11 @@ export const en: SettingsTranslations = {
     tabs: {
         dateRanges: 'Date Ranges',
         colors: 'Colors',
-        misc: 'Misc',
+        common: 'Common',
         importExport: 'Import/Export',
+        expeditions: 'Expeditions',
+        combats: 'Combats',
+        resourceBalance: 'Resource Balance',
     },
     dateRanges: {
         defaultNames: {
@@ -44,15 +47,25 @@ export const en: SettingsTranslations = {
         resources: 'Resources',
         ships: 'Ships',
     },
-    misc: {
+    common: {
+        msuConversionRates: 'MSU conversion rates',
+        extensionLanguage: 'UI language (within OGame Tracker)',
+    },
+    expeditions: {
+        resourceUnitFactorsOfShipFoundOnExpeditions: 'Factors of resource units of ships found on expeditions',
+    },
+    combats: {
+        resourceUnitFactorsOfLostShips: 'Factor of resource units of ships lost in combat',
+        ignoreEspionageCombats: {
+            title: 'Ignore espionage combats',
+            label: 'Ignore espionage combat reports for combat tracking',
+        },
+    },
+    resourceBalance: {
         detailedResourceBalance: {
             header: 'Detailed resource balance',
             checkboxLabel: 'show detailed resource balance',
         },
-        extensionLanguage: 'UI language (within OGame Tracker)',
-        msuConversionRates: 'MSU conversion rates',
-        resourceUnitFactorsOfLostShips: 'Factor of resource units of ships lost in combat',
-        resourceUnitFactorsOfShipFoundOnExpeditions: 'Factors of resource units of ships found on expeditions',
     },
     reset: 'Reset settings',
     setDefaultRoute: 'Set as default',

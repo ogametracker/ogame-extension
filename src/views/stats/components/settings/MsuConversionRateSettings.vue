@@ -1,7 +1,7 @@
 <template>
     <div class="msu-conversion-rate-settings fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.misc.msuConversionRates" />
+            <span v-text="$i18n.$t.settings.common.msuConversionRates" />
         </div>
         <div class="fake-table-body">
             <span class="msu-inputs">

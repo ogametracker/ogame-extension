@@ -2,7 +2,7 @@
     <div class="fake-table expedition-ship-resource-units-factor-settings">
         <div class="fake-table-header">
             <span
-                v-text="$i18n.$t.settings.misc.resourceUnitFactorsOfShipFoundOnExpeditions"
+                v-text="$i18n.$t.settings.expeditions.resourceUnitFactorsOfShipFoundOnExpeditions"
             />
         </div>
         <div class="fake-table-body">

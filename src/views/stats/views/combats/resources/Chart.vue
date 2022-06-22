@@ -62,6 +62,8 @@
 
             <msu-conversion-rate-settings />
             <hr />
+            <combat-tracking-ignore-espionage-combats-settings />
+            <hr />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -77,12 +79,14 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
             MsuConversionRateSettings,
+            CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
     export default class Charts extends Vue {
