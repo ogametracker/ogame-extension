@@ -41,6 +41,7 @@ export interface Settings {
 
     universeHistory: {
         enabled: boolean;
+        trackHistory: boolean;
         /** update times in milliseconds of a day (min = 0, max = 86399999) */
         updateTimes: number[];
     };

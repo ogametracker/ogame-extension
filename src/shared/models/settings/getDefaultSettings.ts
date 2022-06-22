@@ -115,6 +115,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 20 * 60 * 60 * 1000, // 20:00
             ],
             enabled: false,
+            trackHistory: false,
         },
     };
 }

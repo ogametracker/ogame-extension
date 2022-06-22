@@ -1,7 +1,5 @@
-import Semaphore, { Lock } from "semaphore-async-await";
 import { Message } from "../shared/messages/Message";
 import { MessageType } from "../shared/messages/MessageType";
-import { executeMigrations } from "../shared/migrations/executeMigrations";
 import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
 import { _throw } from "../shared/utils/_throw";
 import { CombatReportService } from "./combat-reports/CombatReportService";
@@ -15,13 +13,15 @@ import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 import { UniversesAndAccountsService } from "./universes-and-accounts/UniversesAndAccountsService";
 
+export const settingsService = new SettingsService();
+
 const services: MessageService[] = [
+    settingsService,
     new KeepAliveService(),
     new ExpeditionService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
     new EmpireService(),
-    new SettingsService(),
     new UniverseHistoryService(),
     new ServerSettingsService(),
     new UniversesAndAccountsService(),

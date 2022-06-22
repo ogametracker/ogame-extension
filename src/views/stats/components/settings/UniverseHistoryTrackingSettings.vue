@@ -14,8 +14,16 @@
 
         <checkbox-button
             :value="settings.enabled"
-            label="LOCA: Enable universe history tracking"
+            label="LOCA: Enable universe history tracking (highscore only)"
             @input="setEnabled($event)"
+            color="#00ff00"
+        />
+
+        <checkbox-button
+            v-if="settings.enabled"
+            :value="settings.trackHistory"
+            label="LOCA: Include all changes universe history tracking"
+            @input="setTrackHistory($event)"
             color="#00ff00"
         />
 
@@ -31,8 +39,6 @@
                 color="#00ff00"
             />
         </template>
-    </div>
-</template>
     </div>
 </template>
 
@@ -67,12 +73,17 @@
         }
 
         private setEnabled(enabled: boolean) {
+            const universeHistory = {
+                ...this.settings,
+                enabled,
+            };
+            if (!enabled) {
+                universeHistory.trackHistory = false;
+            }
+            
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
-                universeHistory: {
-                    ...this.settings,
-                    enabled,
-                },
+                universeHistory,
             });
         }
 
@@ -95,6 +106,16 @@
                 universeHistory: {
                     ...this.settings,
                     updateTimes,
+                },
+            });
+        }
+
+        private setTrackHistory(trackHistory: boolean) {
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                universeHistory: {
+                    ...this.settings,
+                    trackHistory,
                 },
             });
         }

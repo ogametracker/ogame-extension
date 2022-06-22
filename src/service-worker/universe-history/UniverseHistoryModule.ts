@@ -19,6 +19,7 @@ import { serviceWorkerUuid } from "@/shared/uuid";
 import { addDays, startOfDay } from "date-fns";
 import { XMLParser } from "fast-xml-parser";
 import { IDBPTransaction, StoreNames } from "idb";
+import { settingsService } from "../main";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace OgameApi {
@@ -145,8 +146,6 @@ type UniverseHistoryDbStoreName = StoreNames<OgameTrackerUniverseHistoryDbSchema
 type UniverseHistoryDbTransaction = IDBPTransaction<OgameTrackerUniverseHistoryDbSchema, StoreNames<OgameTrackerUniverseHistoryDbSchema>[], 'readwrite'>;
 
 export class UniverseHistoryModule {
-
-    private enabled = false;
     private updateTimes: number[] = [];
 
     private readonly parser = new XMLParser({
@@ -158,6 +157,10 @@ export class UniverseHistoryModule {
     private readonly meta: MessageOgameMeta;
     private timeout: number | undefined = undefined;
 
+    private get settings() {
+        return settingsService.settings.universeHistory;
+    }
+
     constructor(meta: MessageOgameMeta) {
         this.meta = meta;
     }
@@ -165,7 +168,7 @@ export class UniverseHistoryModule {
     public async init() {
         await this.initSettings();
 
-        if (!this.enabled) {
+        if (!this.settings.enabled) {
             _logDebug('universe history tracking is disabled');
             clearTimeout(this.timeout);
             return;
@@ -175,10 +178,7 @@ export class UniverseHistoryModule {
     }
 
     private async initSettings() {
-        const settings = await loadSettings('__internal__' as LanguageKey);
-
-        this.enabled = settings.universeHistory.enabled;
-        this.updateTimes = [...settings.universeHistory.updateTimes].sort((a, b) => a - b);
+        this.updateTimes = [...this.settings.updateTimes].sort((a, b) => a - b);
     }
 
     private async initTracking() {
@@ -221,7 +221,8 @@ export class UniverseHistoryModule {
             const players = await this.getPlayers();
             const alliances = await this.getAlliances();
             const playerScores = await this.getAllPlayerScores();
-            const planets = await this.getPlanets();
+
+            const planets = this.settings.trackHistory ? await this.getPlanets() : [];
 
             _logDebug('loaded current states, updating in db (this may take a while)');
             const db = await getUniverseHistoryDatabase(this.meta);
@@ -273,7 +274,10 @@ export class UniverseHistoryModule {
 
         await this.updatePlayers(tx, players, now, playerScores);
         await this.updateAlliances(tx, alliances, now, players, playerScores);
-        await this.updatePlanets(tx, planets, now);
+
+        if(this.settings.trackHistory) {
+            await this.updatePlanets(tx, planets, now);
+        }
 
         await tx.objectStore('_lastUpdate').put(now, 0);
     }
@@ -282,11 +286,14 @@ export class UniverseHistoryModule {
         _logDebug('updating alliance history');
 
         await this.updateKnownAlliances(tx, alliances);
-        await this.updateAllianceTags(tx, alliances, now);
-        await this.updateAllianceNames(tx, alliances, now);
-        await this.updateAllianceMembers(tx, alliances, players, now);
-        await this.updateAllianceStates(tx, alliances, now);
+        await this.updateAllianceTags(tx, alliances, now, !this.settings.trackHistory);
+        await this.updateAllianceNames(tx, alliances, now, !this.settings.trackHistory);
         await this.updateAllianceScores(tx, alliances, players, playerScores, now);
+
+        if (this.settings.trackHistory) {
+            await this.updateAllianceMembers(tx, alliances, players, now);
+            await this.updateAllianceStates(tx, alliances, now);
+        }
     }
 
     private async updateKnownAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[]) {
@@ -295,22 +302,27 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceTags(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number) {
+    private async updateAllianceTags(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, replace = false) {
         const lastTags: Partial<Record<number, string>> = {};
         const lastTagUpdates: Partial<Record<number, number>> = {};
 
         const store = tx.objectStore('allianceTags');
-        let cursor = await store.openCursor();
-        while (cursor != null) {
-            const dbValue = cursor.value;
+        if (replace) {
+            await store.clear();
+        }
+        else {
+            let cursor = await store.openCursor();
+            while (cursor != null) {
+                const dbValue = cursor.value;
 
-            const isNewer = (lastTagUpdates[dbValue.allianceId] ?? -1) < dbValue.date;
-            if (isNewer) {
-                lastTagUpdates[dbValue.allianceId] = dbValue.date;
-                lastTags[dbValue.allianceId] = dbValue.tag;
+                const isNewer = (lastTagUpdates[dbValue.allianceId] ?? -1) < dbValue.date;
+                if (isNewer) {
+                    lastTagUpdates[dbValue.allianceId] = dbValue.date;
+                    lastTags[dbValue.allianceId] = dbValue.tag;
+                }
+
+                cursor = await cursor.continue();
             }
-
-            cursor = await cursor.continue();
         }
 
         for (const ally of alliances) {
@@ -326,22 +338,27 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceNames(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number) {
+    private async updateAllianceNames(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, replace = false) {
         const lastNames: Partial<Record<number, string>> = {};
         const lastNameUpdates: Partial<Record<number, number>> = {};
 
         const store = tx.objectStore('allianceNames');
-        let cursor = await store.openCursor();
-        while (cursor != null) {
-            const dbValue = cursor.value;
+        if (replace) {
+            await store.clear();
+        }
+        else {
+            let cursor = await store.openCursor();
+            while (cursor != null) {
+                const dbValue = cursor.value;
 
-            const isNewer = (lastNameUpdates[dbValue.allianceId] ?? -1) < dbValue.date;
-            if (isNewer) {
-                lastNameUpdates[dbValue.allianceId] = dbValue.date;
-                lastNames[dbValue.allianceId] = dbValue.name;
+                const isNewer = (lastNameUpdates[dbValue.allianceId] ?? -1) < dbValue.date;
+                if (isNewer) {
+                    lastNameUpdates[dbValue.allianceId] = dbValue.date;
+                    lastNames[dbValue.allianceId] = dbValue.name;
+                }
+
+                cursor = await cursor.continue();
             }
-
-            cursor = await cursor.continue();
         }
 
         for (const ally of alliances) {
@@ -515,10 +532,13 @@ export class UniverseHistoryModule {
     private async updatePlayers(tx: UniverseHistoryDbTransaction, players: Player[], now: number, playerScores: Partial<Record<number, PlayerScorePositions>>) {
         _logDebug('updating player history');
         await this.updateKnownPlayers(tx, players);
-        await this.updatePlayerNames(tx, players, now);
-        await this.updatePlayerAlliances(tx, players, now);
-        await this.updatePlayerStates(tx, players, now);
         await this.updatePlayerScores(tx, players, playerScores, now);
+        await this.updatePlayerNames(tx, players, now, !this.settings.trackHistory);
+
+        if (this.settings.trackHistory) {
+            await this.updatePlayerAlliances(tx, players, now);
+            await this.updatePlayerStates(tx, players, now);
+        }
     }
 
     private async updateKnownPlayers(tx: UniverseHistoryDbTransaction, players: Player[]) {
@@ -527,22 +547,27 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updatePlayerNames(tx: UniverseHistoryDbTransaction, players: Player[], now: number) {
+    private async updatePlayerNames(tx: UniverseHistoryDbTransaction, players: Player[], now: number, replace = false) {
         const lastNames: Partial<Record<number, string>> = {};
         const lastNameUpdates: Partial<Record<number, number>> = {};
 
         const store = tx.objectStore('playerNames');
-        let cursor = await store.openCursor();
-        while (cursor != null) {
-            const dbValue = cursor.value;
+        if (replace) {
+            await store.clear();
+        }
+        else {
+            let cursor = await store.openCursor();
+            while (cursor != null) {
+                const dbValue = cursor.value;
 
-            const isNewer = (lastNameUpdates[dbValue.playerId] ?? -1) < dbValue.date;
-            if (isNewer) {
-                lastNameUpdates[dbValue.playerId] = dbValue.date;
-                lastNames[dbValue.playerId] = dbValue.name;
+                const isNewer = (lastNameUpdates[dbValue.playerId] ?? -1) < dbValue.date;
+                if (isNewer) {
+                    lastNameUpdates[dbValue.playerId] = dbValue.date;
+                    lastNames[dbValue.playerId] = dbValue.name;
+                }
+
+                cursor = await cursor.continue();
             }
-
-            cursor = await cursor.continue();
         }
 
         for (const player of players) {

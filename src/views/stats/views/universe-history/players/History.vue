@@ -1,5 +1,5 @@
 <template>
-    <div class="history">
+    <div class="history" v-if="historyTrackingEnabled">
         <span v-if="dataModuleLoading || loading">LOCA: Loading</span>
         <template v-else>
             <grid-table
@@ -176,6 +176,7 @@
             </tabs>
         </template>
     </div>
+    <universe-history-tracking-settings v-else />
 </template>
 
 <script lang="ts">
@@ -184,10 +185,12 @@
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
     import { addDays, startOfDay } from 'date-fns';
     import subDays from 'date-fns/subDays';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
+    import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
 
     interface NameHistoryItem {
         name: string;
@@ -207,8 +210,16 @@
     }
     type StatusHistoryItemClass = 'active' | DbUniverseHistoryPlayerStateItem | 'deleted';
 
-    @Component({})
+    @Component({
+        components: {
+            UniverseHistoryTrackingSettings,
+        },
+    })
     export default class Players extends Vue {
+
+        private get historyTrackingEnabled() {
+            return SettingsDataModule.settings.universeHistory.trackHistory;
+        }
 
         private get tableColumns(): GridTableColumn<'player'>[] {
             return [{
