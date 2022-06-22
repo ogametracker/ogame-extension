@@ -57,6 +57,13 @@
                                 }"
                             >
                                 <div
+                                    v-for="tick in statusHistoryTicks"
+                                    :key="`x-tick-line-${tick.date}`"
+                                    class="x-tick-line"
+                                    :style="`--x-tick: ${tick.position}`"
+                                />
+                                
+                                <div
                                     v-for="(item, i) in statusHistoryItems"
                                     :key="`status-item-${i}`"
                                     :style="{
@@ -67,13 +74,6 @@
                                     }"
                                     class="bar"
                                     :class="item.class"
-                                />
-
-                                <div
-                                    v-for="tick in statusHistoryTicks"
-                                    :key="`x-tick-line-${tick.date}`"
-                                    class="x-tick-line"
-                                    :style="`--x-tick: ${tick.position}`"
                                 />
                             </div>
                         </div>

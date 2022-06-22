@@ -426,7 +426,7 @@ export class UniverseHistoryModule {
         }
 
         for (const ally of alliances) {
-            if (lastStates === null) {
+            if (ally.id in lastStates && lastStates[ally.id] == null) {
                 continue;
             }
 
@@ -602,7 +602,7 @@ export class UniverseHistoryModule {
         }
 
         for (const player of players) {
-            if (player.alliance == lastAlliances[player.id]) {
+            if (player.id in lastAlliances && player.alliance == lastAlliances[player.id]) {
                 continue;
             }
 
@@ -813,7 +813,7 @@ export class UniverseHistoryModule {
         }
 
         for (const planet of planets) {
-            if (lastStates === null) {
+            if (planet.id in lastStates && lastStates[planet.id] == null) {
                 continue;
             }
 
@@ -939,7 +939,7 @@ export class UniverseHistoryModule {
         }
 
         for (const moon of moons) {
-            if (lastStates === null) {
+            if (moon.id in lastStates && lastStates[moon.id] == null) {
                 continue;
             }
 
