@@ -1,6 +1,6 @@
 <template>
     <div class="history">
-        <span v-if="dataModuleLoading">LOCA: Loading</span>
+        <span v-if="dataModuleLoading || loading">LOCA: Loading</span>
         <template v-else>
             <grid-table
                 :columns="tableColumns"
@@ -30,7 +30,7 @@
                 </template>
             </grid-table>
 
-            <tabs :tabs="tabs">
+            <tabs :tabs="tabs" @tab-selected="onTabSelected($event)">
                 <template #tab-content-status>
                     <div class="status-history-grid">
                         <div class="y-ticks">
@@ -43,31 +43,67 @@
 
                         <div class="graph">
                             <div
-                                :style="{ width: `${statusHistoryWidth}%` }"
-                                style="height: 1px"
-                            />
-                            <div
                                 v-for="(_, i) in statusHistoryLabels"
                                 :key="`status-label-${i}.2`"
                                 class="y-tick"
-                                :style="`--y-tick: ${i}`"
+                                :style="`--y-tick: ${i}; width: ${
+                                    statusHistoryWidth * 100
+                                }%`"
                             />
-
                             <div
-                                v-for="(item, i) in statusHistoryItems"
-                                :key="`status-item-${i}`"
+                                class="bars"
                                 :style="{
-                                    left: `${100 * item.start}%`,
-                                    width: `${100 * (item.end - item.start)}%`,
+                                    left: `${statusHistoryGraphOffset}px`,
                                 }"
-                                class="bar"
-                                :class="item.class"
-                            />
+                            >
+                                <div
+                                    v-for="(item, i) in statusHistoryItems"
+                                    :key="`status-item-${i}`"
+                                    :style="{
+                                        left: `${100 * item.start}%`,
+                                        width: `${
+                                            100 * (item.end - item.start)
+                                        }%`,
+                                    }"
+                                    class="bar"
+                                    :class="item.class"
+                                />
+
+                                <div
+                                    v-for="tick in statusHistoryTicks"
+                                    :key="`x-tick-line-${tick.date}`"
+                                    class="x-tick-line"
+                                    :style="`--x-tick: ${tick.position}`"
+                                />
+                            </div>
                         </div>
 
                         <div class="x-ticks">
                             <div
-                                :style="{ width: `${statusHistoryWidth}%` }"
+                                class="x-ticks-container"
+                                :style="{
+                                    left: `${statusHistoryGraphOffset}px`,
+                                }"
+                            >
+                                <div
+                                    v-for="tick in statusHistoryTicks"
+                                    :key="tick.date"
+                                    class="x-tick"
+                                    :style="`--x-tick: ${tick.position}`"
+                                    v-text="$i18n.$d(tick.date, 'date')"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="scrollbar"
+                            ref="statusHistoryXTicks"
+                            @scroll="onStatusHistoryScroll($event)"
+                        >
+                            <div
+                                :style="{
+                                    width: `${statusHistoryWidth * 100}%`,
+                                }"
                                 style="height: 1px"
                             />
                         </div>
@@ -149,8 +185,9 @@
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
     import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { addDays, startOfDay } from 'date-fns';
     import subDays from 'date-fns/subDays';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
 
     interface NameHistoryItem {
         name: string;
@@ -297,20 +334,21 @@
         }
 
 
-        private readonly statusHistoryTicks = 30;
+        private readonly statusHistoryTickCount = 3;
+        private statusHistoryGraphOffset = 0;
 
         private get statusHistoryStartDate(): Date {
-            const nowMinusTicks = subDays(Date.now(), this.statusHistoryTicks - 1);
+            const nowMinusTicks = subDays(Date.now(), this.statusHistoryTickCount - 2);
             if (this.stateHistory.length == 0) {
                 return nowMinusTicks;
             }
 
-            const firstDay = new Date(this.stateHistory[0].date);
+            const firstDay = startOfDay(this.stateHistory[0].date);
             return firstDay < nowMinusTicks ? firstDay : nowMinusTicks;
         }
 
         private get statusHistoryItems(): StatusHistoryItem[] {
-            const ticks = this.statusHistoryTicks * 24 * 60 * 60 * 1000;
+            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
             const startDate = this.statusHistoryStartDate.getTime();
 
             return this.stateHistory.flatMap<StatusHistoryItem>((item, i, history) => {
@@ -337,7 +375,7 @@
 
         private get statusHistoryWidth(): number {
             const time = Date.now() - this.statusHistoryStartDate.getTime();
-            const ticks = this.statusHistoryTicks * 24 * 60 * 60 * 1000;
+            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
 
             return time / ticks;
         }
@@ -355,6 +393,37 @@
             ];
         }
 
+        private get statusHistoryTicks(): { date: number; position: number }[] {
+            const now = Date.now();
+            const start = this.statusHistoryStartDate.getTime();
+            let cur = start;
+            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
+            const result: { date: number; position: number }[] = [];
+
+            while (cur <= now) {
+                result.push({
+                    date: cur,
+                    position: (cur - start) / ticks,
+                });
+
+                cur = addDays(cur, 1).getTime();
+            }
+
+            return result;
+        }
+
+        private onStatusHistoryScroll(event: Event) {
+            if (event.target == null) {
+                return;
+            }
+
+            const elem = event.target as HTMLElement;
+            this.statusHistoryGraphOffset = -elem.scrollLeft;
+        }
+
+        @Ref('statusHistoryXTicks')
+        private statusHistoryXTicks!: HTMLElement | null;
+
 
         private async mounted() {
             await this.redirectToMeIfNoPlayersSelected();
@@ -364,6 +433,13 @@
             this.dataModuleLoading = false;
 
             await this.loadPlayerHistory();
+        }
+
+        private async onTabSelected(tab: Tab) {
+            if (tab.key == 'status') {
+                await this.$nextTick();
+                this.statusHistoryXTicks!.scrollLeft = this.statusHistoryXTicks!.scrollWidth;
+            }
         }
 
         private async redirectToMeIfNoPlayersSelected() {
@@ -485,28 +561,43 @@
         grid-template-rows: #{$status-count * $status-bar-height + (
                 $status-count - 1
             ) * $status-bar-margin} 100px;
-        column-gap: 16px;
 
         > .graph,
         > .x-ticks {
             width: 100%;
             height: 100%;
-            overflow: auto;
             position: relative;
+            overflow: hidden;
         }
 
         > .graph {
-            > .bar {
+            > .bars {
                 position: absolute;
-                height: $status-bar-height;
-                border-radius: 4px;
+                width: 100%;
+                height: 100%;
+                top: 0;
 
-                @each $name, $color in $status {
-                    &.#{$name} {
-                        background: $color;
-                        top: #{($status-bar-height + $status-bar-margin) *
-                            map-get($status-offset, $name)};
+                > .bar {
+                    position: absolute;
+                    height: $status-bar-height;
+                    border-radius: 4px;
+
+                    @each $name, $color in $status {
+                        &.#{$name} {
+                            background: $color;
+                            top: #{($status-bar-height + $status-bar-margin) *
+                                map-get($status-offset, $name)};
+                        }
                     }
+                }
+
+                > .x-tick-line {
+                    height: 100%;
+                    left: calc(var(--x-tick) * 100%);
+                    top: 0;
+                    width: 1px;
+                    position: absolute;
+                    background: rgba(white, 0.15);
                 }
             }
 
@@ -526,7 +617,7 @@
                     top: calc(50% - 0.5px);
                     width: 100%;
                     display: block;
-                    background: rgba(white, 0.1);
+                    background: rgba(white, 0.2);
                 }
             }
         }
@@ -534,11 +625,39 @@
         > .y-ticks {
             width: 100%;
             height: 100%;
-            grid-row: 1 / span 2;
             display: grid;
             grid-template-rows: repeat($status-count, $status-bar-height);
             row-gap: $status-bar-margin;
             align-items: center;
+            color: #888;
+            font-size: 12px;
+        }
+
+        > .x-ticks {
+            grid-column: 1 / span 2;
+            clip-path: polygon(100px 0, 100% 0, 100% 100%, 0 100%);
+
+            > .x-ticks-container {
+                position: absolute;
+                top: 0;
+                width: 100%;
+
+                > .x-tick {
+                    position: absolute;
+                    top: 0;
+                    transform-origin: top right;
+                    transform: translateY(10px) translateX(-100%) translateX(-5px)
+                        rotate(-45deg);
+                    left: calc(100px + var(--x-tick) * (100% - 100px));
+                    color: #888;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        > .scrollbar {
+            overflow: auto;
+            grid-column: 2;
         }
     }
 </style>

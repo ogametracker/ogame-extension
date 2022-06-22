@@ -8,7 +8,7 @@
                 :class="{
                     'tab--active': tab == activeTab,
                 }"
-                @click="activeTab = tab"
+                @click="setActiveTab(tab)"
             >
                 <span class="tab-content">
                     <span v-text="tab.label" />
@@ -44,7 +44,12 @@
                 return;
             }
 
-            this.activeTab = this.tabs[0];
+            this.setActiveTab(this.tabs[0]);
+        }
+
+        private setActiveTab(tab: Tab) {
+            this.activeTab = tab;
+            this.$emit('tab-selected', tab);
         }
     }
 </script>
