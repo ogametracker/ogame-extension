@@ -275,7 +275,7 @@ export class UniverseHistoryModule {
         await this.updatePlayers(tx, players, now, playerScores);
         await this.updateAlliances(tx, alliances, now, players, playerScores);
 
-        if(this.settings.trackHistory) {
+        if (this.settings.trackHistory) {
             await this.updatePlanets(tx, planets, now);
         }
 
@@ -513,17 +513,18 @@ export class UniverseHistoryModule {
                     : sortedScoresByType[type].indexOf(score) + 1;
                 score ??= 0;
 
-
                 const lastAllyScore = lastScores[`${ally.id}.${type}`];
-                if (lastAllyScore?.score != score || lastAllyScore.position != position) {
-                    await store.put({
-                        allianceId: ally.id,
-                        date: now,
-                        type,
-                        position,
-                        score,
-                    });
+                if (lastAllyScore?.position == position && lastAllyScore?.score == score) {
+                    continue;
                 }
+
+                await store.put({
+                    allianceId: ally.id,
+                    date: now,
+                    type,
+                    position,
+                    score,
+                });
             }
         }
     }
@@ -694,6 +695,11 @@ export class UniverseHistoryModule {
         for (const player of players) {
             for (const type of scoreTypes) {
                 const { score, position } = playerScores[player.id]?.[type] ?? { score: 0, position: 0 };
+
+                const key: `${number}.${DbUniverseHistoryScoreType}` = `${player.id}.${type}`;
+                if (lastScores[key]?.position == position && lastScores[key]?.score == score) {
+                    continue;
+                }
 
                 await store.put({
                     playerId: player.id,
