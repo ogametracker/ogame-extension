@@ -4,7 +4,7 @@
         @close="$emit('close')"
         :style="`--color: ${getColorVariable(color)};`"
     >
-        <span v-if="!knownAccountsLoaded" class="loader" />
+        <loading-spinner v-if="!knownAccountsLoaded" />
         <div v-else>
             <div v-text="$i18n.$t.switchAccounts.title" />
             <select @change="gotoAccount()" v-model="selectedAccountIndex">
@@ -113,28 +113,5 @@
 <style lang="scss" scoped>
     select {
         width: 100%;
-    }
-
-    .loader {
-        font-size: 20px;
-        position: relative;
-        text-indent: -9999em;
-        border-radius: 50%;
-        width: 1em;
-        height: 1em;
-
-        border: 0.11em solid transparent;
-        border-left: 0.11em solid #ffffff;
-
-        transform: translateZ(0);
-        animation: load8 1s infinite ease-in-out;
-    }
-    @keyframes load8 {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
     }
 </style>

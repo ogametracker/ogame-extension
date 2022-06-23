@@ -1,6 +1,6 @@
 <template>
     <div class="highscores">
-        <span v-if="dataModuleLoading">LOCA: Loading</span>
+        <loading-spinner v-if="dataModuleLoading" />
         <template v-else>
             <grid-table
                 :columns="tableColumns"
@@ -40,9 +40,8 @@
                         <span
                             v-if="playerScoresLoading"
                             :key="`score-${key}-loading`"
-                        >
-                            LOCA:Loading
-                        </span>
+                            class="loading"
+                        />
                         <scrollable-chart
                             v-else-if="playerIds.length > 0"
                             :key="`score-${key}`"

@@ -1,5 +1,5 @@
 <template>
-    <span v-if="!ready" v-text="'LOCA: Loading...'" />
+    <loading-spinner v-if="!ready" />
     <page
         v-else-if="enabled"
         :nav-items="navItems"

@@ -1,6 +1,6 @@
 <template>
     <div class="history" v-if="historyTrackingEnabled">
-        <span v-if="dataModuleLoading || loading">LOCA: Loading</span>
+        <loading-spinner v-if="dataModuleLoading || loading" />
         <template v-else>
             <grid-table
                 :columns="tableColumns"
