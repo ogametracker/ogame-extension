@@ -31,7 +31,6 @@ const notificationIds = {
 const waitingForExpeditions: Record<number, true> = {};
 const failedToTrackExpeditions: Record<number, true> = {};
 const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
-    waiting: 0,
     resources: {
         [ResourceType.metal]: 0,
         [ResourceType.crystal]: 0,
@@ -108,34 +107,9 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.hideContent, cssClasses.messages.processed);
             addExpeditionResultContent(li, msg.data);
 
-
-            delete waitingForExpeditions[msg.data.id];
-            totalExpeditionResult.waiting--;
-            totalExpeditionResult.events[msg.data.type]++;
-            switch (msg.data.type) {
-                case ExpeditionEventType.resources: {
-                    const resources = msg.data.resources;
-                    [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
-                        .forEach(resource => totalExpeditionResult.resources.metal += resources[resource]);
-                    break;
-                }
-
-                case ExpeditionEventType.fleet: {
-                    const fleet = msg.data.fleet;
-                    Object.keys(fleet)
-                        .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
-                        .forEach(ship => totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0));
-                    break;
-                }
-
-                case ExpeditionEventType.darkMatter: {
-                    totalExpeditionResult.darkMatter += msg.data.darkMatter;
-                    break;
-                }
-
-                default: break;
+            if (message.type == MessageType.NewExpedition) {
+                updateExpeditionResults(msg);
             }
-            sendNotificationMessages();
             break;
         }
 
@@ -148,7 +122,6 @@ function onMessage(message: Message<MessageType, any>) {
             addOrSetCustomMessageContent(li, false);
 
             delete waitingForExpeditions[msg.data];
-            totalExpeditionResult.waiting--;
             failedToTrackExpeditions[msg.data] = true;
             sendNotificationMessages();
             break;
@@ -197,8 +170,6 @@ function trackExpeditions(elem: Element) {
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
             waitingForExpeditions[id] = true;
-            totalExpeditionResult.waiting++;
-            sendNotificationMessages();
         } catch (error) {
             console.error(error);
 
@@ -206,7 +177,6 @@ function trackExpeditions(elem: Element) {
             addOrSetCustomMessageContent(msg, false);
 
             delete waitingForExpeditions[id];
-            totalExpeditionResult.waiting--;
             failedToTrackExpeditions[id] = true;
             sendNotificationMessages();
         }
@@ -215,7 +185,7 @@ function trackExpeditions(elem: Element) {
 
 function sendNotificationMessages() {
     const failed = Object.keys(failedToTrackExpeditions).length;
-    if(failed > 0) {
+    if (failed > 0) {
         sendErrorNotificationMessage(failed);
     }
 
@@ -226,7 +196,6 @@ function sendNotificationMessages() {
         data: {
             type: NotificationType.ExpeditionTracking,
             messageId: notificationIds.result,
-            level: 'info',
             ...totalExpeditionResult,
         },
     };
@@ -238,10 +207,9 @@ function sendErrorNotificationMessage(failed: number) {
         type: MessageType.Notification,
         ogameMeta: getOgameMeta(),
         senderUuid: messageTrackingUuid,
-        data: { 
+        data: {
             type: NotificationType.MessageTrackingError,
             messageId: notificationIds.error,
-            level: 'error',
             count: failed,
         },
     };
@@ -399,4 +367,33 @@ function getResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize)
     }
 
     return `${cssClass} ogame-tracker-expedition-result--size-${size}`;
+}
+
+function updateExpeditionResults(msg: ExpeditionMessage) {
+    delete waitingForExpeditions[msg.data.id];
+    totalExpeditionResult.events[msg.data.type]++;
+    switch (msg.data.type) {
+        case ExpeditionEventType.resources: {
+            const resources = msg.data.resources;
+            [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
+                .forEach(resource => totalExpeditionResult.resources.metal += resources[resource]);
+            break;
+        }
+
+        case ExpeditionEventType.fleet: {
+            const fleet = msg.data.fleet;
+            Object.keys(fleet)
+                .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
+                .forEach(ship => totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0));
+            break;
+        }
+
+        case ExpeditionEventType.darkMatter: {
+            totalExpeditionResult.darkMatter += msg.data.darkMatter;
+            break;
+        }
+
+        default: break;
+    }
+    sendNotificationMessages();
 }

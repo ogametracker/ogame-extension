@@ -1,9 +1,10 @@
 <template>
-    <div id="app">
-        <div
+    <div id="app" :class="{ 'has-notifications': hasNotifications }">
+        <component
             v-for="(notification, id) in notifications"
             :key="id"
-            class="notification"
+            :is="componentNames[notification.type]"
+            :notification="notification"
         />
     </div>
 </template>
@@ -12,16 +13,26 @@
     import { ogameTrackerNotificationWindowResizeEventName } from '@/shared/messages/communication';
     import { Message, MessageOgameMeta } from '@/shared/messages/Message';
     import { MessageType } from '@/shared/messages/MessageType';
-    import { NotificationMessage } from '@/shared/messages/notifications';
+    import { NotificationMessage, NotificationType } from '@/shared/messages/notifications';
     import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { v4 } from 'uuid';
+    import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
 
-    @Component({})
+    @Component({
+        components: {
+            ExpeditionTrackingNotification,
+        }
+    })
     export default class App extends Vue {
-        private readonly notifications: Record<string, any> = {};
+        private readonly componentNames: Record<NotificationType, string> = {
+            [NotificationType.ExpeditionTracking]: 'expedition-tracking-notification',
+            [NotificationType.MessageTrackingError]: 'todo', //TODO: proper component name
+        };
+
+        private readonly notifications: Record<string, any & { type: NotificationType }> = {};
         private ogameMeta: MessageOgameMeta = {
             language: '',
             serverId: 0,
@@ -37,6 +48,10 @@
                 width: this.$el.clientWidth,
                 height: this.$el.clientHeight,
             }, '*');
+        }
+
+        private get hasNotifications() {
+            return Object.keys(this.notifications).length > 0;
         }
 
         private mounted() {
@@ -62,7 +77,7 @@
             }
 
             const msg = message as NotificationMessage;
-            this.$set(this.notifications, msg.data.messageId ?? v4(), {});
+            this.$set(this.notifications, msg.data.messageId ?? v4(), msg.data);
         }
     }
 </script>
@@ -70,11 +85,11 @@
 <style lang="scss" scoped>
     #app {
         width: max-content;
-    }
+        display: grid;
+        row-gap: 16px;
 
-    .notification {
-        width: 250px;
-        height: 100px;
-        background: red;
+        &.has-notifications {
+            padding: 8px;
+        }
     }
 </style>
