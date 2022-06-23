@@ -2,7 +2,7 @@ export enum MessageType {
     StayAlive = 'internal/stay-alive',
 
     // notifications
-    NewNotification = 'notification/new',
+    Notification = 'notification',
     
     // expeditions
     TrackExpedition = 'expedition/track-expedition',

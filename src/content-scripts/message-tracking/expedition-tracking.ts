@@ -18,8 +18,54 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
 import { messageTrackingUuid } from "@/shared/uuid";
+import { v4 } from "uuid";
+import { ShipType } from "@/shared/models/ogame/ships/ShipType";
+import { ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 
 let tabContent: Element | null = null;
+
+const notificationIds = {
+    result: v4(),
+    error: v4(),
+};
+const waitingForExpeditions: Record<number, true> = {};
+const failedToTrackExpeditions: Record<number, true> = {};
+const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
+    waiting: 0,
+    resources: {
+        [ResourceType.metal]: 0,
+        [ResourceType.crystal]: 0,
+        [ResourceType.deuterium]: 0,
+    },
+    ships: {
+        [ShipType.lightFighter]: 0,
+        [ShipType.heavyFighter]: 0,
+        [ShipType.cruiser]: 0,
+        [ShipType.battleship]: 0,
+        [ShipType.bomber]: 0,
+        [ShipType.battlecruiser]: 0,
+        [ShipType.destroyer]: 0,
+        [ShipType.reaper]: 0,
+        [ShipType.pathfinder]: 0,
+        [ShipType.smallCargo]: 0,
+        [ShipType.largeCargo]: 0,
+        [ShipType.espionageProbe]: 0,
+    },
+    darkMatter: 0,
+    events: {
+        [ExpeditionEventType.nothing]: 0,
+        [ExpeditionEventType.resources]: 0,
+        [ExpeditionEventType.fleet]: 0,
+        [ExpeditionEventType.delay]: 0,
+        [ExpeditionEventType.early]: 0,
+        [ExpeditionEventType.darkMatter]: 0,
+        [ExpeditionEventType.pirates]: 0,
+        [ExpeditionEventType.aliens]: 0,
+        [ExpeditionEventType.item]: 0,
+        [ExpeditionEventType.trader]: 0,
+        [ExpeditionEventType.lostFleet]: 0,
+    },
+};
 
 export function initExpeditionTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -28,7 +74,7 @@ export function initExpeditionTracking() {
     const initObserver = new MutationObserver(() => {
         if (tabContent?.isConnected != true) {
             setupExpeditionMessageObserver();
-        } 
+        }
     });
     initObserver.observe(contentElem, { subtree: true, childList: true });
 }
@@ -48,7 +94,7 @@ function setupExpeditionMessageObserver() {
 
 function onMessage(message: Message<MessageType, any>) {
     const ogameMeta = getOgameMeta();
-    if(!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
+    if (!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
         return;
     }
 
@@ -61,6 +107,35 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.hideContent, cssClasses.messages.processed);
             addExpeditionResultContent(li, msg.data);
+
+
+            delete waitingForExpeditions[msg.data.id];
+            totalExpeditionResult.waiting--;
+            totalExpeditionResult.events[msg.data.type]++;
+            switch (msg.data.type) {
+                case ExpeditionEventType.resources: {
+                    const resources = msg.data.resources;
+                    [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
+                        .forEach(resource => totalExpeditionResult.resources.metal += resources[resource]);
+                    break;
+                }
+
+                case ExpeditionEventType.fleet: {
+                    const fleet = msg.data.fleet;
+                    Object.keys(fleet)
+                        .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
+                        .forEach(ship => totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0));
+                    break;
+                }
+
+                case ExpeditionEventType.darkMatter: {
+                    totalExpeditionResult.darkMatter += msg.data.darkMatter;
+                    break;
+                }
+
+                default: break;
+            }
+            sendNotificationMessages();
             break;
         }
 
@@ -71,6 +146,11 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
+
+            delete waitingForExpeditions[msg.data];
+            totalExpeditionResult.waiting--;
+            failedToTrackExpeditions[msg.data] = true;
+            sendNotificationMessages();
             break;
         }
     }
@@ -81,13 +161,10 @@ function trackExpeditions(elem: Element) {
         .filter(elem => !elem.classList.contains(cssClasses.messages.base));
 
     messages.forEach(msg => {
+        const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
+
         try {
             // prepare message to service worker
-            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
-            if (isNaN(id)) {
-                _throw('Message id is NaN');
-            }
-
             const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
             const date = parse(dateText, dateTimeFormat, new Date()).getTime();
             if (isNaN(date)) {
@@ -118,14 +195,60 @@ function trackExpeditions(elem: Element) {
                 cssClasses.messages.waitingToBeProcessed,
             );
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
+
+            waitingForExpeditions[id] = true;
+            totalExpeditionResult.waiting++;
+            sendNotificationMessages();
         } catch (error) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
             addOrSetCustomMessageContent(msg, false);
+
+            delete waitingForExpeditions[id];
+            totalExpeditionResult.waiting--;
+            failedToTrackExpeditions[id] = true;
+            sendNotificationMessages();
         }
     });
 }
+
+function sendNotificationMessages() {
+    const failed = Object.keys(failedToTrackExpeditions).length;
+    if(failed > 0) {
+        sendErrorNotificationMessage(failed);
+    }
+
+    const msg: ExpeditionTrackingNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: {
+            type: NotificationType.ExpeditionTracking,
+            messageId: notificationIds.result,
+            level: 'info',
+            ...totalExpeditionResult,
+        },
+    };
+    sendMessage(msg);
+}
+
+function sendErrorNotificationMessage(failed: number) {
+    const msg: MessageTrackingErrorNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: { 
+            type: NotificationType.MessageTrackingError,
+            messageId: notificationIds.error,
+            level: 'error',
+            count: failed,
+        },
+    };
+    sendMessage(msg);
+}
+
+
 
 function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
     li.classList.add(cssClasses.messages.expedition);

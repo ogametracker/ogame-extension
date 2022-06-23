@@ -1,0 +1,8 @@
+#ogame-tracker-notifications__v2 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(1px * var(--width, 0));
+    height: calc(1px * var(--height, 0));
+    z-index: 1000002;
+}

@@ -116,7 +116,6 @@
 
 <script lang="ts">
     import { Component, Vue, Watch } from "vue-property-decorator";
-    import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
     import { UniversesAndAccountsDataModule } from "./data/UniversesAndAccountsDataModule";
     import { GlobalOgameMetaData } from "./data/global";
     import { getRGBString } from './utils/getRGBString';
@@ -126,6 +125,7 @@
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
     import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
     import { _constants } from '@stats/_constants';
+import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communication";
 
     interface Tab {
         key: string;
@@ -327,7 +327,7 @@
 
 
         private closeOverlay() {
-            window.parent.postMessage(closeOgameTrackerDialogEventName, '*');
+            window.parent.postMessage(ogameTrackerCloseDialogEventName, '*');
         }
 
         private async mounted() {

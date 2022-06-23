@@ -7,7 +7,6 @@ import { Settings } from '@/shared/models/settings/Settings';
 import { NotifySettingsUpdateMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getGlobalDatabase } from '@/shared/db/access';
-import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
 import { LanguageKey } from '@/shared/i18n/LanguageKey';
 import { loadSettings } from '@/shared/models/settings/loadSettings';
 

@@ -1,6 +1,6 @@
 import { _log, _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { closeOgameTrackerDialogEventName } from '../../shared/messages/communication';
+import { ogameTrackerCloseDialogEventName } from '../../shared/messages/communication';
 import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
 import { getOgameMeta } from '../../shared/ogame-web/getOgameMeta';
 import { i18nTooltips } from "./tooltip-i18n";
@@ -102,7 +102,7 @@ function closeOgameTrackerDialog() {
 
 // declare function in window to close overlay from within the iframe
 window.addEventListener('message', e => {
-    if (e.data == closeOgameTrackerDialogEventName) {
+    if (e.data == ogameTrackerCloseDialogEventName) {
         closeOgameTrackerDialog();
     }
 });

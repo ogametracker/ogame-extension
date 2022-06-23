@@ -1,6 +1,6 @@
 import { $i18n, I18n } from '@/shared/i18n/extension/$i18n';
 import Vue from 'vue';
-import { SettingsDataModule } from './data/SettingsDataModule';
+import { SettingsDataModule } from '../stats/data/SettingsDataModule';// yes, we import from the stats view. Should probably be in the "shared" directory
 
 Vue.prototype.$forceCompute = function(name: string) {
      this._computedWatchers[name]?.run();
