@@ -35,7 +35,7 @@
                     to: { name: 'settings/resource-balance' },
                 },
                 {
-                    label: 'LOCA: Universe History',
+                    label: this.$i18n.$t.settings.tabs.universeHistory,
                     to: { name: 'settings/universe-history' },
                 },
                 {

@@ -11,6 +11,7 @@ import { en as resourceBalance } from './resourceBalance/en';
 import { en as empire } from './empire/en';
 import { en as switchAccounts } from './switchAccounts/en';
 import { en as about } from './about/en';
+import { en as universeHistory } from './universeHistory/en';
 
 export const en: ExtensionTranslations = {
     common,
@@ -25,4 +26,5 @@ export const en: ExtensionTranslations = {
     empire,
     switchAccounts,
     about,
+    universeHistory,
 };

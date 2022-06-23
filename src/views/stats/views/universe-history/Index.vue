@@ -36,11 +36,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Players',
+                    label: this.$i18n.$t.universeHistory.tabs.players,
                     to: { name: 'universe-history/players' },
                 },
                 {
-                    label: 'LOCA: Alliances',
+                    label: this.$i18n.$t.universeHistory.tabs.alliances,
                     to: { name: 'universe-history/alliances' },
                 },
             ];

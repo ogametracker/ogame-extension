@@ -10,6 +10,7 @@ import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
 import { SettingsTranslations } from './settings/type';
 import { SwitchAccountsTranslations } from './switchAccounts/type';
+import { UniverseHistoryTranslations } from './universeHistory/type';
 
 export interface ExtensionTranslations {
     common: CommonTranslations;
@@ -24,4 +25,5 @@ export interface ExtensionTranslations {
     empire: EmpireTranslations;
     switchAccounts: SwitchAccountsTranslations;
     about: AboutTranslations;
+    universeHistory: UniverseHistoryTranslations;
 }

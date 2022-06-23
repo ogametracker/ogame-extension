@@ -12,7 +12,7 @@
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            placeholder="LOCA: Player search here"
+                            :placeholder="$i18n.$t.universeHistory.playerSelection.search"
                             list="player-list"
                             @change="onPlayerSelected($event.target.value)"
                             style="width: 100%"
@@ -131,7 +131,7 @@
                                 v-if="value != null"
                                 v-text="$i18n.$d(value, 'date')"
                             />
-                            <span v-else v-text="'LOCA: heute'" />
+                            <span v-else v-text="$i18n.$t.universeHistory.today" />
                         </template>
                     </grid-table>
                 </template>
@@ -147,7 +147,7 @@
                                 v-if="value != null"
                                 v-text="`[${value.tag}] ${value.name}`"
                             />
-                            <span v-else v-text="'LOCA: no alliance'" />
+                            <i v-else v-text="$i18n.$t.universeHistory.noAlliance" />
                         </template>
 
                         <template #cell-start="{ value }">
@@ -165,7 +165,7 @@
                                 v-if="value != null"
                                 v-text="$i18n.$d(value, 'date')"
                             />
-                            <span v-else v-text="'LOCA: heute'" />
+                            <span v-else v-text="$i18n.$t.universeHistory.today" />
                         </template>
                     </grid-table>
                 </template>
@@ -224,7 +224,7 @@
         private get tableColumns(): GridTableColumn<'player'>[] {
             return [{
                 key: 'player',
-                label: 'LOCA: Player selection',
+                label: this.$i18n.$t.universeHistory.playerSelection.header,
                 headerClass: 'player-selection-table-cell',
                 class: 'player-selection-table-cell',
             }];
@@ -241,19 +241,19 @@
             return [
                 {
                     key: 'status',
-                    label: 'LOCA: Status',
+                    label: this.$i18n.$t.universeHistory.historyTabs.status,
                 },
                 {
                     key: 'nickname',
-                    label: 'LOCA: Nicknames',
+                    label: this.$i18n.$t.universeHistory.historyTabs.nicknames,
                 },
                 {
                     key: 'alliance',
-                    label: 'LOCA: Alliances',
+                    label: this.$i18n.$t.universeHistory.historyTabs.alliances,
                 },
                 {
                     key: 'planet-moons',
-                    label: 'LOCA: Planet & Moons',
+                    label: this.$i18n.$t.universeHistory.historyTabs.planetAndMoons,
                 },
             ];
         }
@@ -282,18 +282,18 @@
             return [
                 {
                     key: 'name',
-                    label: 'LOCA: Name',
+                    label: this.$i18n.$t.universeHistory.name,
                 },
                 {
                     key: 'start',
-                    label: 'LOCA: From',
+                    label: this.$i18n.$t.universeHistory.from,
                 },
                 {
                     key: '-',
                 },
                 {
                     key: 'end',
-                    label: 'LOCA: Until',
+                    label: this.$i18n.$t.universeHistory.until,
                 },
             ];
         }
@@ -315,18 +315,18 @@
             return [
                 {
                     key: 'alliance',
-                    label: 'LOCA: Alliance',
+                    label: this.$i18n.$t.universeHistory.alliance,
                 },
                 {
                     key: 'start',
-                    label: 'LOCA: From',
+                    label: this.$i18n.$t.universeHistory.from,
                 },
                 {
                     key: '-',
                 },
                 {
                     key: 'end',
-                    label: 'LOCA: Until',
+                    label: this.$i18n.$t.universeHistory.until,
                 },
             ];
         }
@@ -393,14 +393,15 @@
 
         private get statusHistoryLabels(): string[] {
             return [
-                'LOCA: active',
-                'LOCA: vacation',
-                'LOCA: inactive',
-                'LOCA: inactive-long',
-                'LOCA: banned',
-                'LOCA: outlaw',
-                'LOCA: deleted',
-                'LOCA: admin',
+                this.$i18n.$t.universeHistory.status.active,
+                this.$i18n.$t.universeHistory.status.vacation,
+                this.$i18n.$t.universeHistory.status.inactive,
+                this.$i18n.$t.universeHistory.status.inactive,
+                this.$i18n.$t.universeHistory.status.inactiveLong,
+                this.$i18n.$t.universeHistory.status.banned,
+                this.$i18n.$t.universeHistory.status.outlaw,
+                this.$i18n.$t.universeHistory.status.deleted,
+                this.$i18n.$t.universeHistory.status.admin,
             ];
         }
 

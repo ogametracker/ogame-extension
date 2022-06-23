@@ -237,7 +237,7 @@
                     key: 'universe-history',
                     to: { name: 'universe-history' },
                     icon: 'mdi mdi-update',
-                    label: 'LOCA: Universe History',
+                    label: this.$i18n.$t.universeHistory.header,
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',
                     canBeDefault: true,

@@ -9,6 +9,7 @@ export const de: SettingsTranslations = {
         expeditions: 'Expeditionen',
         combats: 'Kämpfe',
         resourceBalance: 'Rohstoffbilanz',
+        universeHistory: 'Universumshistorie',
     },
     dateRanges: {
         defaultNames: {

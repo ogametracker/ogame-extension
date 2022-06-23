@@ -1,28 +1,27 @@
 <template>
     <div>
-        <div v-if="!settings.enabled">
-            LOCA: Universe history tracking is not enabled. Enabling this
-            feature will track changes in point distribution, planets and moons
-            including their names ands coordinates, names and more of players
-            and alliances. However, this will generate a lot of data which is
-            why this feature is disabled by default. If you enable this feature,
-            you can set below at which times in a day you want to update. The
-            more times you select the more data will be generated. You can
-            disable this feature later again but then you will not be able to
-            view already tracked data.
-        </div>
+        <div
+            v-if="!settings.enabled"
+            v-text="$i18n.$t.universeHistory.settings.messages.notEnabled"
+        />
 
         <checkbox-button
             :value="settings.enabled"
-            label="LOCA: Enable universe history tracking (highscore only)"
+            :label="$i18n.$t.universeHistory.settings.enableHighscoreTrackingOnly"
             @input="setEnabled($event)"
             color="#00ff00"
         />
 
+        <hr />
+
+        <div
+            v-if="settings.enabled && !settings.trackHistory"
+            v-text="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabled"
+        />
         <checkbox-button
             v-if="settings.enabled"
             :value="settings.trackHistory"
-            label="LOCA: Include all changes universe history tracking"
+            :label="$i18n.$t.universeHistory.settings.enableHistoryTracking"
             @input="setTrackHistory($event)"
             color="#00ff00"
         />
@@ -80,7 +79,7 @@
             if (!enabled) {
                 universeHistory.trackHistory = false;
             }
-            
+
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 universeHistory,

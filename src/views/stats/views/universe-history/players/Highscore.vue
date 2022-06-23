@@ -12,7 +12,7 @@
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            placeholder="LOCA: Player search here"
+                            :placeholder="$i18n.$t.universeHistory.playerSelection.search"
                             list="player-list"
                             @change="onPlayerSelected($event.target.value)"
                             style="width: 100%"
@@ -137,39 +137,39 @@
             return [
                 {
                     key: 'total',
-                    label: 'LOCA: total',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.total,
                 },
                 {
                     key: 'economy',
-                    label: 'LOCA: economy',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.economy,
                 },
                 {
                     key: 'research',
-                    label: 'LOCA: research',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.research,
                 },
                 {
                     key: 'military',
-                    label: 'LOCA: military',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.military,
                 },
                 {
                     key: 'militaryBuilt',
-                    label: 'LOCA: militaryBuilt',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryBuilt,
                 },
                 {
                     key: 'militaryDestroyed',
-                    label: 'LOCA: militaryDestroyed',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryDestroyed,
                 },
                 {
                     key: 'militaryLost',
-                    label: 'LOCA: militaryLost',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryLost,
                 },
                 {
                     key: 'honor',
-                    label: 'LOCA: honor',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.honor,
                 },
                 {
                     key: 'numberOfShips',
-                    label: 'LOCA: numberOfShips',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
                 },
             ];
         }
@@ -177,7 +177,7 @@
         private get tableColumns(): GridTableColumn<'player'>[] {
             return [{
                 key: 'player',
-                label: 'LOCA: Player selection',
+                label: this.$i18n.$t.universeHistory.playerSelection.header,
                 headerClass: 'player-selection-table-cell',
                 class: 'player-selection-table-cell',
             }];

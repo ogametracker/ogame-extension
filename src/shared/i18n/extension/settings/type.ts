@@ -7,6 +7,7 @@ export interface SettingsTranslations {
         expeditions: string;
         combats: string;
         resourceBalance: string;
+        universeHistory: string;
     };
     dateRanges: {
         defaultNames: {

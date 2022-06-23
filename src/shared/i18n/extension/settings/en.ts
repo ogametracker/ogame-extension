@@ -9,6 +9,7 @@ export const en: SettingsTranslations = {
         expeditions: 'Expeditions',
         combats: 'Combats',
         resourceBalance: 'Resource Balance',
+        universeHistory: 'Universe History',
     },
     dateRanges: {
         defaultNames: {
