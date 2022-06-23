@@ -4,8 +4,9 @@ export interface UniverseHistoryTranslations {
     header: string;
     settings: {  
         messages: {
-            notEnabled: string;
-            historyTrackingNotEnabled: string;
+            notEnabledHtml: string;
+            historyTrackingNotEnabledHtml: string;
+            trackingTimesHtml: string;
         };
         enableHighscoreTrackingOnly: string;
         enableHistoryTracking: string;

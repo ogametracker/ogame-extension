@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="universe-history-tracking">
         <div
             v-if="!settings.enabled"
-            v-text="$i18n.$t.universeHistory.settings.messages.notEnabled"
+            v-html="$i18n.$t.universeHistory.settings.messages.notEnabledHtml"
         />
 
         <checkbox-button
@@ -16,7 +16,7 @@
 
         <div
             v-if="settings.enabled && !settings.trackHistory"
-            v-text="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabled"
+            v-html="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabledHtml"
         />
         <checkbox-button
             v-if="settings.enabled"
@@ -28,16 +28,17 @@
 
         <hr />
 
-        <template v-for="(enabled, time) in timeSelection">
-            <br v-if="time == 12 * 60 * 60 * 1000" :key="`br-${time}`" />
+        <div v-html="$i18n.$t.universeHistory.settings.messages.trackingTimesHtml" />
+        <div class="time-grid">
             <checkbox-button
+                v-for="(enabled, time) in timeSelection"
                 :key="time"
                 :value="enabled"
                 @input="setTimeEnabled(time, $event)"
                 :label="formatTime(time)"
                 color="#00ff00"
             />
-        </template>
+        </div>
     </div>
 </template>
 
@@ -120,3 +121,10 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .time-grid {
+        display: inline-grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 4px;
+    }
+</style>

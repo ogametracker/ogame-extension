@@ -4,19 +4,28 @@ export const en: UniverseHistoryTranslations = {
     header: 'Universe History',
     settings: {  
         messages: {
-            notEnabled: `Universe history tracking is not enabled. Enabling this
-            feature will track changes in point distribution, planets and moons
-            including their names ands coordinates, names and more of players
-            and alliances. However, this will generate a lot of data which is
-            why this feature is disabled by default. If you enable this feature,
-            you can set below at which times in a day you want to update. The
-            more times you select the more data will be generated. You can
-            disable this feature later again but then you will not be able to
-            view already tracked data.`,
-            historyTrackingNotEnabled: 'LOCA: history tracking not enabled',
+            notEnabledHtml: `
+            <b>Universe highscore tracking is not enabled.</b><br/>
+            Enabling this feature will track highscore changes for players and alliances.
+            `,
+            historyTrackingNotEnabledHtml: `
+            <b>Universe history tracking is not enabled.</b><br/>
+            Enabling this feature will additionally track all changes for players and alliances.<br/>
+            This includes player and alliance name and tag changes, alliance membership changes, 
+            player status changes, and changes regarding planets and moons 
+            including names, coordinates, and abandoned/destroyed planets and moons.<br />
+            <i>This can generate a lot of data!
+            You can deactivate this feature <a href="#/settings/universe-history">in the settings menu</a> 
+            again.</i>
+            `,
+            trackingTimesHtml: `
+            At least once every day the highscores and universe data (if enabled) will be updated.<br/>
+            You can set the update times below.
+            If an update was missed then it will update as soon as possible afterwards.
+            `
         },
-        enableHighscoreTrackingOnly: 'Enable universe history tracking (highscore only)',
-        enableHistoryTracking: 'Include all changes universe history tracking',
+        enableHighscoreTrackingOnly: 'Enable universe highscore tracking',
+        enableHistoryTracking: 'Enable universe history tracking',
     },
 
     tabs: {

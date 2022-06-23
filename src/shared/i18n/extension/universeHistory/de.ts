@@ -4,19 +4,32 @@ export const de: UniverseHistoryTranslations = {
     header: 'Universumshistorie',
     settings: {  
         messages: {
-            notEnabled: `LOCA: Universe history tracking is not enabled. Enabling this
-            feature will track changes in point distribution, planets and moons
-            including their names ands coordinates, names and more of players
-            and alliances. However, this will generate a lot of data which is
-            why this feature is disabled by default. If you enable this feature,
-            you can set below at which times in a day you want to update. The
-            more times you select the more data will be generated. You can
-            disable this feature later again but then you will not be able to
-            view already tracked data.`,
-            historyTrackingNotEnabled: 'LOCA: history tracking not enabled',
+            notEnabledHtml: `
+            <b>Highscore-Tracking des Universums ist deaktiviert.</b><br/>
+            Aktivieren dieses Features sorgt dafür, dass Highscoreveränderungen 
+            für alle Spieler und Allianzen getrackt werden.
+            `,
+            historyTrackingNotEnabledHtml: `
+            <b>Tracking der Universumshistorie ist deaktiviert.</b><br/>
+            Ist dieses Feature aktiviert, werden zusätzlich alle Änderungen von Spieler-
+            und Allianzinformationen getrackt.<br />
+            Dies beinhaltet Änderungen an Spieler- und Allianznamen und -Tags, Allianzmitgliedschaften,
+            Veränderungen an Spielerstatus, sowie Änderungen zu Planeten und Monden inklusive
+            Veränderungen der Namen und Koordinaten, und verlassene/zerstörte Planeten und Monde.<br/>
+
+            <i>Dies kann eine Menge Daten generieren! 
+            Wird die Datenmenge zu groß, 
+            kann das Feature <a href="#/settings/universe-history">in den Einstellungen</a> 
+            wieder deaktiviert werden.</i>
+            `,
+            trackingTimesHtml: `
+            Mindestens einmal täglich werden Highscores und Universumsinformationen (sofern aktiviert) aktualisiert.<br/>
+            Die Uhrzeiten für die Aktualisierungen können unten eingestellt werden.
+            Falls eine Aktualisierung zu einer Uhrzeit verpasst wurde, wird das Update so früh wie möglich nachgeholt.
+            `
         },
-        enableHighscoreTrackingOnly: 'Enable universe history tracking (highscore only)',
-        enableHistoryTracking: 'Include all changes universe history tracking',
+        enableHighscoreTrackingOnly: 'Highscore-Tracking aktivieren',
+        enableHistoryTracking: 'Tracking der Universumshistorie aktivieren',
     },
 
     tabs: {
