@@ -236,7 +236,7 @@
                 {
                     key: 'universe-history',
                     to: { name: 'universe-history' },
-                    icon: 'mdi mdi-chart-timeline-variant-shimmer',
+                    icon: 'mdi mdi-update',
                     label: 'LOCA: Universe History',
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',
