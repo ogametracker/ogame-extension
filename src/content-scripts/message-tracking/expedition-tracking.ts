@@ -376,7 +376,7 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
         case ExpeditionEventType.resources: {
             const resources = msg.data.resources;
             [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
-                .forEach(resource => totalExpeditionResult.resources.metal += resources[resource]);
+                .forEach(resource => totalExpeditionResult.resources[resource] += resources[resource]);
             break;
         }
 

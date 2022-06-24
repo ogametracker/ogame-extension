@@ -204,6 +204,9 @@
     .result-grid {
         display: grid;
         grid-template-columns: 32px 1fr;
+        row-gap: 4px;
+        column-gap: 8px;
+        align-items: center;
 
         + .result-grid {
             margin-top: 8px;
