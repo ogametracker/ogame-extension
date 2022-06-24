@@ -12,16 +12,24 @@ import { loadSettings } from '@/shared/models/settings/loadSettings';
 export class SettingsService implements MessageService {
     private _settings: Settings = null!;
 
+    private _ready!: Promise<void>;
+    private _resolveReady!: () => void;
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     public get settings(): Settings {
         return this._settings;
     }
 
     constructor() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
         void this.initSettings();
     }
 
     private async initSettings() {
         this._settings = await loadSettings('__internal__' as LanguageKey);
+        this._resolveReady();
     }
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {

@@ -111,9 +111,6 @@
             display: grid;
             grid-template-columns: repeat(var(--tab-count), 1fr);
             text-align: center;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            overflow: hidden;
 
             > .tab_floating-menu {
                 display: flex;
@@ -150,6 +147,13 @@
                             transform: scale(1.5) translateX(-25%);
                         }
                     }
+                }
+
+                &:first-of-type > .tab {
+                    border-top-left-radius: 4px;
+                }
+                &:last-of-type > .tab {
+                    border-top-right-radius: 4px;
                 }
             }
         }

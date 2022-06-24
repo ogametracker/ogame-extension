@@ -166,6 +166,7 @@ export class UniverseHistoryModule {
     }
 
     public async init() {
+        await settingsService.ready;
         await this.initSettings();
 
         if (!this.settings.enabled) {
