@@ -68,8 +68,8 @@
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import { OPlayerClassType } from '../../../common/ogame/OPlayerClass.vue';
-    import { OAllianceClassType } from '../../../common/ogame/OAllianceClass.vue';
+    import { OPlayerClassType } from '@/views/_shared/components/ogame/OPlayerClass.vue';
+    import { OAllianceClassType } from '@/views/_shared/components/ogame/OAllianceClass.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
 
     export interface AmortizationPlayerSettings {

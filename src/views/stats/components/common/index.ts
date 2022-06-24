@@ -24,4 +24,4 @@ Vue.component('scrollable-chart', ScrollableChart);
 Vue.component('tab-view', TabView);
 Vue.component('tabs', Tabs);
 
-import './ogame';
+import '../../../_shared/components/ogame';

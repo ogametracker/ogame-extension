@@ -34,7 +34,7 @@
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { OShipType } from '@/views/stats/components/common/ogame/OShip.vue';
+    import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 

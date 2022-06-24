@@ -17,14 +17,10 @@
                     class="mdi mdi-close"
                     :style="{ color: colors.nothing }"
                 />
-                <span
+                <expedition-event-resources-icon 
                     v-else-if="value == $i18n.$t.expeditions.expeditionEvents.resources"
-                    class="tri-resource"
-                >
-                    <o-resource resource="metal" size="24px" />
-                    <o-resource resource="crystal" size="24px" />
-                    <o-resource resource="deuterium" size="24px" />
-                </span>
+                    size="24px"
+                />
                 <o-ship 
                     v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet"
                     ship="battleship" 
@@ -94,11 +90,13 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
+            ExpeditionEventResourcesIcon,
         },
     })
     export default class Table extends Vue {
@@ -139,29 +137,6 @@
     }
 </script>
 <style lang="scss" scoped>
-    .tri-resource {
-        position: relative;
-        display: flex;
-
-        > .o-resource:not(:last-of-type) {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        > .o-resource[resource="metal"] {
-            clip-path: polygon(0 0, 100% 0, 100% 25%, 50% 60%, 0 25%);
-        }
-
-        > .o-resource[resource="crystal"] {
-            clip-path: polygon(0 25%, 50% 60%, 50% 100%, 0 100%);
-        }
-
-        > .o-resource[resource="deuterium"] {
-            clip-path: polygon(100% 25%, 100% 100%, 50% 100%, 50% 60%);
-        }
-    }
-
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);
         width: 24px;

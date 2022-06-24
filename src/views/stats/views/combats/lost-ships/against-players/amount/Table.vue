@@ -35,7 +35,7 @@
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { OShipType } from '@/views/stats/components/common/ogame/OShip.vue';
+    import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
