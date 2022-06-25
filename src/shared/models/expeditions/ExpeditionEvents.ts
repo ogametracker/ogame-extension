@@ -93,5 +93,3 @@ export type ExpeditionEvent = ExpeditionEventDarkMatter
     | ExpeditionEventNothing
     | ExpeditionEventPirates
     | ExpeditionEventAliens;
-
-export type ExpeditionEventCollection = Record<number, ExpeditionEvent>;

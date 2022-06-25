@@ -88,16 +88,16 @@ interface Settings {
 //#endregion
 
 import { _logDebug } from "../utils/_log";
-import { MigrationFunction } from "./models";
 import { IDBPDatabase, openDB } from "idb";
 import { CombatReport } from "../models/combat-reports/CombatReport";
 import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema } from "../db/schema";
 import { DebrisFieldReport } from "../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../models/expeditions/ExpeditionEvents";
 import { getDefaultSettings } from "../models/settings/getDefaultSettings";
+import { getPlayerDatabase } from "../db/access";
 
 
-const migrate: MigrationFunction = async () => {
+const migrate = async () => {
     _logDebug('migrating from v1.1 to v2');
 
     const allData = await chrome.storage.local.get(null);
@@ -142,6 +142,8 @@ const migrate: MigrationFunction = async () => {
 export default migrate;
 
 async function initPlayerDatabase(prefix: string) {
+
+    getPlayerDatabase
     const db = await openDB<OgameTrackerPlayerDbSchema>(prefix, DbVersion, {
         upgrade(db) {
             db.createObjectStore('combatReports', { keyPath: 'id' });
