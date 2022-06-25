@@ -1,10 +1,11 @@
 <template>
     <div id="app" :class="{ 'has-notifications': hasNotifications }">
         <component
-            v-for="(notification, id) in notifications"
+            v-for="id in notificationOrder"
             :key="id"
-            :is="componentNames[notification.type]"
-            :notification="notification"
+            :is="componentNames[notifications[id].type]"
+            :notification="notifications[id]"
+            @remove="removeNotification(id)"
         />
     </div>
 </template>
@@ -20,26 +21,31 @@
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { v4 } from 'uuid';
     import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
+    import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';
 
     @Component({
         components: {
             ExpeditionTrackingNotification,
+            ExpeditionTrackingLostFleetNotification,
         }
     })
     export default class App extends Vue {
         private readonly componentNames: Record<NotificationType, string> = {
             [NotificationType.ExpeditionTracking]: 'expedition-tracking-notification',
+            [NotificationType.ExpeditionTrackingLostFleet]: 'expedition-tracking-lost-fleet-notification',
             [NotificationType.MessageTrackingError]: 'todo', //TODO: proper component name
         };
 
         private readonly notifications: Record<string, any & { type: NotificationType }> = {};
+        private notificationOrder: string[] = [];
+
         private ogameMeta: MessageOgameMeta = {
             language: '',
             serverId: 0,
             playerId: 0,
-        }
+        };
 
-        @Watch('notifications', { deep: true })
+        @Watch('notificationOrder')
         private async onNotificationChanged() {
             await this.$nextTick();
 
@@ -51,7 +57,7 @@
         }
 
         private get hasNotifications() {
-            return Object.keys(this.notifications).length > 0;
+            return this.notificationOrder.length > 0;
         }
 
         private mounted() {
@@ -77,7 +83,17 @@
             }
 
             const msg = message as NotificationMessage;
-            this.$set(this.notifications, msg.data.messageId ?? v4(), msg.data);
+            const messageId = msg.data.messageId ?? v4();
+            if (!(messageId in this.notifications)) {
+                this.notificationOrder.push(messageId);
+            }
+
+            this.notifications[messageId] = msg.data;
+        }
+
+        private removeNotification(id: string) {
+            this.notificationOrder = this.notificationOrder.filter(n => n != id);
+            delete this.notifications[id];
         }
     }
 </script>
@@ -86,7 +102,7 @@
     #app {
         width: max-content;
         display: grid;
-        row-gap: 16px;
+        overflow: hidden;
 
         &.has-notifications {
             padding: 8px;

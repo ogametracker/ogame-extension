@@ -6,18 +6,16 @@ import { MessageType } from "./MessageType";
 
 export enum NotificationType {
     ExpeditionTracking = 'message-tracking/expeditions',
+    ExpeditionTrackingLostFleet = 'message-tracking/expeditions/lost-fleet',
     MessageTrackingError = 'message-tracking/error',
 }
 
-export interface BasicNotificationData {
+export interface BasicNotificationData<T extends NotificationType> {
     messageId?: string;
-    type: NotificationType;
-
-    /** if not defined, notification will be visible until closed manually*/
-    timeout?: number;
+    type: T;
 }
 
-export type NotificationMessage<TData extends {} = {}> = Message<MessageType.Notification, TData & BasicNotificationData>;
+export type NotificationMessage<TType extends NotificationType = NotificationType, TData extends {} = {}> = Message<MessageType.Notification, TData & BasicNotificationData<TType>>;
 
 // notification messages for message tracking
 export interface ExpeditionTrackingNotificationMessageData {
@@ -26,6 +24,7 @@ export interface ExpeditionTrackingNotificationMessageData {
     darkMatter: number;
     events: Record<ExpeditionEventType, number>;
 }
-export type ExpeditionTrackingNotificationMessage = NotificationMessage<ExpeditionTrackingNotificationMessageData>;
+export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
+export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;
 
-export type MessageTrackingErrorNotificationMessage = NotificationMessage<{ count: number }>;
+export type MessageTrackingErrorNotificationMessage = NotificationMessage<NotificationType.MessageTrackingError, { count: number }>;

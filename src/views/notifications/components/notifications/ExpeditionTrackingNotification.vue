@@ -1,5 +1,10 @@
 <template>
-    <notification type="info" :title="`LOCA: ${count} new expeditions tracked`">
+    <notification
+        type="info"
+        :title="`LOCA: ${count} new expeditions tracked`"
+        :timeout="10000"
+        @remove="$emit('remove')"
+    >
         <template #message>
             <div class="result-grid resources-grid" v-if="foundResources">
                 <template v-if="notification.resources.metal > 0">
@@ -38,7 +43,11 @@
                 </template>
             </div>
 
-            <hr />
+            <hr
+                v-if="
+                    foundResources || notification.darkMatter > 0 || foundShips
+                "
+            />
             <h4 v-text="'LOCA Ereignisse'" />
             <div class="result-grid">
                 <template v-for="event in expeditionEvents">
