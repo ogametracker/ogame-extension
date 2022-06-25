@@ -97,7 +97,7 @@
                 this.notificationOrder.push(messageId);
             }
 
-            this.notifications[messageId] = msg.data;
+            this.$set(this.notifications, messageId, msg.data);
         }
 
         private removeNotification(id: string) {

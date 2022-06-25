@@ -23,7 +23,8 @@ function watchLanguage() {
     );
 }
 
-function main() {
+async function main() {
+    await SettingsDataModule.ready;
     watchLanguage();
 
     Vue.config.productionTip = false;
