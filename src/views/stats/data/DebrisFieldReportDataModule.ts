@@ -8,14 +8,19 @@ import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
 
+export interface DailyDebrisFieldReportResult {
+    metal: number;
+    crystal: number;
+}
+
 @Component
 class DebrisFieldReportDataModuleClass extends Vue {
-    public reports: DebrisFieldReport[] = [];
-    public reportsPerDay: Record<number, DebrisFieldReport[]> = {};
-    public firstDate: number | null = null;
+    public dailyResults: Partial<Record<number, DailyDebrisFieldReportResult>> = {};
+    private _firstDate: number | null = null;
+    private _count = 0;
 
     public get count() {
-        return this.reports.length;
+        return this._count;
     }
 
     private async created() {
@@ -25,23 +30,44 @@ class DebrisFieldReportDataModuleClass extends Vue {
 
     private async loadData() {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
-        const reports = await db.getAll('debrisFieldReports');
+        const tx = db.transaction('debrisFieldReports', 'readonly');
+        const store = tx.objectStore('debrisFieldReports');
 
-        this.reports = reports;
-        this.reportsPerDay = reports.reduce(
-            (perDay, report) => {
-                const day = startOfDay(report.date).getTime();
-                perDay[day] ??= [];
-                perDay[day].push(report);
-                return perDay;
-            },
-            {} as Record<number, DebrisFieldReport[]>
-        );
+        let minDate: number | null = null;
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const report = cursor.value;
+            this.addDebrisFieldReportToDailyResult(report);
 
-        this.firstDate = reports.reduce(
-            (date, report) => Math.min(date ?? report.date, report.date),
-            null as null | number
-        );
+            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
+
+            cursor = await cursor.continue();
+        }
+        this._firstDate = minDate;
+
+        await tx.done;
+    }
+    
+    private addDebrisFieldReportToDailyResult(report: DebrisFieldReport) {
+         this._count++;
+
+        const day = startOfDay(report.date).getTime();
+
+        let dailyResult = this.dailyResults[day];
+        if (dailyResult == null) {
+            dailyResult = this.getNewDailyResult();
+            this.$set(this.dailyResults, day, dailyResult);
+        }
+
+        dailyResult.metal += report.metal;
+        dailyResult.crystal += report.crystal;
+    }
+    
+    private getNewDailyResult(): DailyDebrisFieldReportResult {
+        return {
+            metal: 0,
+            crystal: 0,
+        };
     }
 
     private initCommunication() {
@@ -59,19 +85,14 @@ class DebrisFieldReportDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewDebrisFieldReport: {
                 const { data } = msg as NewDebrisFieldReportMessage;
-                this.reports = this.reports.concat(data);
-
-                const day = startOfDay(data.date).getTime();
-                const inDay = this.reportsPerDay[day] ?? [];
-                inDay.push(data);
-                this.reportsPerDay[day] = inDay;
+                this.addDebrisFieldReportToDailyResult(data);
                 break;
             }
         }
     }
 
     public get firstDay(): number {
-        return startOfDay(this.firstDate ?? Date.now()).getTime();
+        return startOfDay(this._firstDate ?? Date.now()).getTime();
     }
 }
 

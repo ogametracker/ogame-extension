@@ -68,7 +68,7 @@
     import { isInRange } from '@stats/utils/dateRanges';
     import { _throw } from '@/shared/utils/_throw';
     import startOfDay from 'date-fns/startOfDay/index';
-import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface RangeStatsTableItemWithDate {
         date: number;
@@ -76,7 +76,7 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     interface SingleRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
         label: string;
-        getValue: (item: T[]) => number;
+        getValue: (item: T) => number;
     }
 
     interface GroupedRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
@@ -107,8 +107,6 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
     export default class RangedStatsTable<T extends RangeStatsTableItemWithDate> extends Vue {
-        @Prop({ required: false, type: Function as PropType<(item: T) => boolean>, default: () => true })
-        private filter!: (item: T) => boolean;
 
         @Prop({ required: false, type: Boolean })
         private showPercentage!: boolean;
@@ -144,11 +142,6 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
             const dataItemsByRange: T[][] = this.dateRanges.map(() => []);
 
             dataItems.forEach(item => {
-                const isInFilter = this.filter(item);
-                if (!isInFilter) {
-                    return;
-                }
-
                 this.dateRanges.forEach((range, i) => {
                     if (isInRange(item.date, range)) {
                         dataItemsByRange[i].push(item);
@@ -161,7 +154,7 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
 
         private get firstDay() {
             return this.dataItemsByRange.reduce((acc, cur) => Math.min(
-                acc, 
+                acc,
                 Math.min(...cur.map(t => t.date)),
             ), Date.now());
         }

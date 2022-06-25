@@ -3,7 +3,6 @@
         <stats-chart
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             stacked
             show-average
@@ -24,7 +23,9 @@
                         <div
                             class="number"
                             v-text="
-                                $i18n.$n(getSumMsu(getVisibleDatasets(datasets)))
+                                $i18n.$n(
+                                    getSumMsu(getVisibleDatasets(datasets))
+                                )
                             "
                         />
                         <div v-text="$i18n.$t.common.resourceUnitsMsu" />
@@ -34,10 +35,21 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
+                        "
+                    />
 
-                    <div class="number" v-text="$i18n.$n(getSumMsu(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div
+                        class="number"
+                        v-text="$i18n.$n(getSumMsu(datasets))"
+                    />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </stats-chart>
@@ -67,7 +79,7 @@
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import { multiplyCost } from '@/shared/models/ogame/common/Cost';
@@ -100,20 +112,17 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (expos: ExpeditionEventFleet[]) => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                            (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource]
-                        ), 0),
+                    getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource],
                     showAverage: true,
                 })),
                 {
@@ -121,13 +130,9 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                            (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
-                            }
-                        ), 0),
+                    getValue: result => result.findings.fleetResourceUnits.metal
+                        + result.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal
+                        + result.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }

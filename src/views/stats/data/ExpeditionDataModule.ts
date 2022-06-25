@@ -1,4 +1,4 @@
-import { ExpeditionEvent } from '@/shared/models/expeditions/ExpeditionEvents';
+import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
 import { MessageType } from '@/shared/messages/MessageType';
 import { NewExpeditionMessage } from '@/shared/messages/tracking/expeditions';
 import { Message } from '@/shared/messages/Message';
@@ -7,15 +7,39 @@ import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
+import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
+import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
+import { Ships } from '@/shared/models/ogame/ships/Ships';
+import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+import { multiplyCost } from '@/shared/models/ogame/common/Cost';
+import { createRecord } from '@/shared/utils/createRecord';
+
+export interface DailyExpeditionResult {
+    events: Record<ExpeditionEventType, number>;
+    findings: {
+        resources: Record<ResourceType, number>;
+        fleet: Record<ExpeditionFindableShipType, number>;
+        fleetResourceUnits: Record<ResourceType, number>;
+        darkMatter: number;
+        items: ItemHash[];
+    };
+    eventSizes: {
+        resources: Record<ExpeditionEventSize, number>;
+        fleet: Record<ExpeditionEventSize, number>;
+        darkMatter: Record<ExpeditionEventSize, number>;
+    };
+}
 
 @Component
 class ExpeditionDataModuleClass extends Vue {
-    public expeditions: ExpeditionEvent[] = [];
-    public expeditionsPerDay: Record<number, ExpeditionEvent[]> = {};
-    public firstDate: number | null = null;
+    public dailyResults: Partial<Record<number, DailyExpeditionResult>> = {};
+    private _firstDate: number | null = null;
+    private _count = 0;
 
     public get count() {
-        return this.expeditions.length;
+        return this._count;
     }
 
     private async created() {
@@ -25,23 +49,92 @@ class ExpeditionDataModuleClass extends Vue {
 
     private async loadData() {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
-        const expeditions = await db.getAll('expeditions');
+        const tx = db.transaction('expeditions', 'readonly');
+        const store = tx.objectStore('expeditions');
 
-        this.expeditions = expeditions;
-        this.expeditionsPerDay = expeditions.reduce(
-            (perDay, expo) => {
-                const day = startOfDay(expo.date).getTime();
-                perDay[day] ??= [];
-                perDay[day].push(expo);
-                return perDay;
+        let minDate: number | null = null;
+        let cursor = await store.openCursor();
+        while (cursor != null) {
+            const expedition = cursor.value;
+            this.addExpeditionToDailyResult(expedition);
+
+            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
+
+            cursor = await cursor.continue();
+        }
+        this._firstDate = minDate;
+
+        await tx.done;
+    }
+
+    private addExpeditionToDailyResult(expedition: ExpeditionEvent) {
+        this._count++;
+
+        const day = startOfDay(expedition.date).getTime();
+
+        let dailyResult = this.dailyResults[day];
+        if (dailyResult == null) {
+            dailyResult = this.getNewDailyResult();
+            this.$set(this.dailyResults, day, dailyResult);
+        }
+
+        dailyResult.events[expedition.type]++;
+
+        if ('size' in expedition) {
+            dailyResult.eventSizes.resources[expedition.size]++;
+        }
+
+        switch (expedition.type) {
+            case ExpeditionEventType.resources: {
+                for(const resource of ResourceTypes) {
+                    dailyResult.findings.resources[resource] += expedition.resources[resource];
+                } 
+                break;
+            }
+
+            case ExpeditionEventType.darkMatter: {
+                dailyResult.findings.darkMatter += expedition.darkMatter;
+                break;
+            }
+
+            case ExpeditionEventType.item: {
+                dailyResult.findings.items.push(expedition.itemHash);
+                break;
+            }
+
+            case ExpeditionEventType.fleet: {
+                for(const ship of ExpeditionFindableShipTypes){
+                    const count = expedition.fleet[ship] ?? 0;
+                    dailyResult.findings.fleet[ship] += count;
+
+                    const shipData = Ships[ship as number as ShipType];
+                    const resourceUnits = multiplyCost(shipData.getCost(), count);
+
+                    for(const resource of ResourceTypes) {
+                        dailyResult.findings.fleetResourceUnits[resource] += resourceUnits[resource]
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    private getNewDailyResult(): DailyExpeditionResult {
+        return {
+            events: createRecord(ExpeditionEventTypes, 0),
+            eventSizes: {
+                resources: createRecord(ExpeditionEventSizes, 0),
+                fleet: createRecord(ExpeditionEventSizes, 0),
+                darkMatter: createRecord(ExpeditionEventSizes, 0),
             },
-            {} as Record<number, ExpeditionEvent[]>
-        );
-
-        this.firstDate = expeditions.reduce(
-            (date, expo) => Math.min(date ?? expo.date, expo.date),
-            null as null | number
-        );
+            findings: {
+                darkMatter: 0,
+                items: [],
+                fleet: createRecord(ExpeditionFindableShipTypes, 0),
+                fleetResourceUnits: createRecord(ResourceTypes, 0),
+                resources: createRecord(ResourceTypes, 0),
+            },
+        };
     }
 
     private initCommunication() {
@@ -56,20 +149,15 @@ class ExpeditionDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NewExpedition: {
-                const { data } = msg as NewExpeditionMessage;
-                this.expeditions = this.expeditions.concat(data);
-
-                const day = startOfDay(data.date).getTime();
-                const inDay = this.expeditionsPerDay[day] ?? [];
-                inDay.push(data);
-                this.expeditionsPerDay[day] = inDay;
+                const { data: expedition } = msg as NewExpeditionMessage;
+                this.addExpeditionToDailyResult(expedition);
                 break;
             }
         }
     }
 
     public get firstDay(): number {
-        return startOfDay(this.firstDate ?? Date.now()).getTime();
+        return startOfDay(this._firstDate ?? Date.now()).getTime();
     }
 }
 

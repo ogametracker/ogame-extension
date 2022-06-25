@@ -42,13 +42,21 @@
                         class="number"
                         v-text="$i18n.$n(getResourcesAmount(datasets))"
                     />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
+                        "
+                    />
 
                     <div
                         class="number"
                         v-text="$i18n.$n(getResourcesAmountInMsu(datasets))"
                     />
-                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </stats-chart>
@@ -72,10 +80,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -106,17 +113,17 @@
         }
 
         private get reportsPerDay() {
-            return CombatReportDataModule.reportsPerDay;
+            return CombatReportDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<CombatReport>[] {
+        private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
             return [
-                ...Object.values(ResourceType).map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (reports: CombatReport[]) => reports.reduce((acc, report) => acc + report.loot[resource], 0),
+                    getValue: (result: DailyCombatReportResult) => result.loot[resource],
                     showAverage: true,
                 })),
                 {
@@ -124,13 +131,10 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: reports => reports.reduce(
-                        (acc, report) => acc
-                            + report.loot.metal
-                            + report.loot.crystal * this.msuConversionRates.crystal
-                            + report.loot.deuterium * this.msuConversionRates.deuterium,
-                        0
-                    ),
+                    getValue: result =>
+                        result.loot.metal
+                        + result.loot.crystal * this.msuConversionRates.crystal
+                        + result.loot.deuterium * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }

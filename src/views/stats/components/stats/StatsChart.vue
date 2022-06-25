@@ -23,7 +23,7 @@
         key: string;
         label: string;
         color: string;
-        getValue: (items: T[]) => number;
+        getValue: (item: T) => number;
         filled?: boolean;
         stack?: boolean;
         showAverage?: boolean;
@@ -31,9 +31,6 @@
 
     @Component({})
     export default class StatsChart<T> extends Vue {
-
-        @Prop({ required: false, type: Function as PropType<StatsChartItemFilterFunction<T>>, default: () => true })
-        private filter!: StatsChartItemFilterFunction<T>;
 
         @Prop({ required: true, type: Array as PropType<StatsChartDataset<T>[]> })
         private datasets!: StatsChartDataset<T>[];
@@ -47,8 +44,8 @@
         @Prop({ required: true, type: [Number, Date] })
         private firstDay!: number | Date;
 
-        @Prop({ required: true, type: Object as PropType<Record<number, T[]>> })
-        private itemsPerDay!: Record<number, T[]>;
+        @Prop({ required: true, type: Object as PropType<Record<number, T>> })
+        private itemsPerDay!: Record<number, T>;
 
         @Prop({ required: false, type: Number, default: () => 30 })
         private minDays!: number;
@@ -64,15 +61,11 @@
             const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
             const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
 
-            const filteredItemsPerDay = days.map(day => (this.itemsPerDay[day] ?? []).filter(item => this.filter(item)));
-
-            const includeDaysWithoutDataInAvg = false; //TODO: from settings
-            const filteredItemDays = includeDaysWithoutDataInAvg
-                ? filteredItemsPerDay.length
-                : filteredItemsPerDay.filter(items => items.length > 0).length;
+            const itemByDay = days.map(day => this.itemsPerDay[day] ?? null);
+            const filteredItemDays = itemByDay.filter(items => items != null).length;
 
             return this.datasets.map(dataset => {
-                const values = filteredItemsPerDay.map(expos => dataset.getValue(expos));
+                const values = itemByDay.map(item => item == null ? 0 : dataset.getValue(item));
                 const total = values.reduce((acc, cur) => acc + cur, 0);
 
                 return {

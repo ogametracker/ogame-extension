@@ -17,4 +17,22 @@ export enum ShipType {
     reaper = 218,
     pathfinder = 219,
 }
-//REFACTOR: export array of all values
+export const ShipTypes = [
+    ShipType.smallCargo,
+    ShipType.largeCargo,
+    ShipType.lightFighter,
+    ShipType.heavyFighter,
+    ShipType.cruiser,
+    ShipType.battleship,
+    ShipType.colonyShip,
+    ShipType.recycler,
+    ShipType.espionageProbe,
+    ShipType.bomber,
+    ShipType.solarSatellite,
+    ShipType.destroyer,
+    ShipType.deathStar,
+    ShipType.battlecruiser,
+    ShipType.crawler,
+    ShipType.reaper,
+    ShipType.pathfinder,
+];

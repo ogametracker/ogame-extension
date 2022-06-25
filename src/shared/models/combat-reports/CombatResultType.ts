@@ -3,3 +3,8 @@ export enum CombatResultType {
     lost = 'lost',
     draw = 'draw',
  }
+ export const CombatResultTypes = [
+    CombatResultType.won,
+    CombatResultType.draw,
+    CombatResultType.lost,
+ ];

@@ -1,7 +1,6 @@
 <template>
     <div class="chart-container">
         <stats-chart
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
@@ -42,12 +41,11 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
 
@@ -70,26 +68,22 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
 
         private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
             return datasets.filter(d => d.visible);
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEvent>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return Object.values(ExpeditionEventType).map(type => ({
                 key: type,
                 label: this.$i18n.$t.expeditions.expeditionEvents[type],
                 color: this.colors[type],
                 filled: true,
-                getValue: expos => expos.filter(e => e.type == type).length,
+                getValue: result => result.events[type],
                 showAverage: true,
             }));
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return true;
         }
 
         private getSum(datasets: ScollableChartFooterDataset[]): number {

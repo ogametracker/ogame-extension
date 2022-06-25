@@ -3,7 +3,6 @@
         <stats-chart
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             stacked
             show-average
@@ -51,7 +50,7 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
 
@@ -74,22 +73,18 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).map(ship => ({
                 key: `${ship}`,
                 label: this.$i18n.$t.ships[ship],
                 color: this.colors[ship],
                 filled: true,
-                getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
+                getValue: result => result.findings.fleet[ship],
                 showAverage: true,
             }));
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
         }
 
         private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {

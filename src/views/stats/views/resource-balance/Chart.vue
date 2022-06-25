@@ -74,20 +74,19 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import min from 'date-fns/min/index';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+    import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import { addCost, Cost, multiplyCost, multiplyCostComponentWise, subCost } from '@/shared/models/ogame/common/Cost';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -95,9 +94,9 @@
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
 
     interface DayEvents {
-        expeditions: ExpeditionEvent[];
-        combatReports: CombatReport[];
-        debrisFieldReports: DebrisFieldReport[];
+        expeditions?: DailyExpeditionResult;
+        combatReports?: DailyCombatReportResult;
+        debrisFieldReports?: DailyDebrisFieldReportResult;
     }
 
     @Component({
@@ -147,35 +146,23 @@
             ]);
         }
 
-        private get eventsPerDay(): Record<number, DayEvents[]> {
-            const result: Record<number, [DayEvents]> = {};
+        private get eventsPerDay(): Record<number, DayEvents> {
+            const result: Record<number, DayEvents> = {};
 
-            Object.keys(ExpeditionDataModule.expeditionsPerDay).forEach(dayStr => {
+            Object.keys(ExpeditionDataModule.dailyResults).forEach(dayStr => {
                 const day = parseInt(dayStr, 10);
-                result[day] ??= [{
-                    expeditions: [],
-                    combatReports: [],
-                    debrisFieldReports: [],
-                }];
-                result[day][0].expeditions.push(...ExpeditionDataModule.expeditionsPerDay[day]);
+                result[day] ??= {};
+                result[day].expeditions = ExpeditionDataModule.dailyResults[day];
             });
-            Object.keys(CombatReportDataModule.reportsPerDay).forEach(dayStr => {
+            Object.keys(CombatReportDataModule.dailyResults).forEach(dayStr => {
                 const day = parseInt(dayStr, 10);
-                result[day] ??= [{
-                    expeditions: [],
-                    combatReports: [],
-                    debrisFieldReports: [],
-                }];
-                result[day][0].combatReports.push(...CombatReportDataModule.reportsPerDay[day]);
+                result[day] ??= {};
+                result[day].combatReports = CombatReportDataModule.dailyResults[day];
             });
-            Object.keys(DebrisFieldReportDataModule.reportsPerDay).forEach(dayStr => {
+            Object.keys(DebrisFieldReportDataModule.dailyResults).forEach(dayStr => {
                 const day = parseInt(dayStr, 10);
-                result[day] ??= [{
-                    expeditions: [],
-                    combatReports: [],
-                    debrisFieldReports: [],
-                }];
-                result[day][0].debrisFieldReports.push(...DebrisFieldReportDataModule.reportsPerDay[day]);
+                result[day] ??= {};
+                result[day].debrisFieldReports = DebrisFieldReportDataModule.dailyResults[day];
             });
 
             return result;
@@ -188,12 +175,12 @@
             };
 
             return [
-                ...Object.values(ResourceType).map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (dayEvents: DayEvents[]) => dayEvents.reduce(
+                    getValue: (dayEvents: DayEvents) => dayEvents.reduce(
                         (acc, events) => acc
                             + events.expeditions.reduce((acc, expo) => acc + this.getResourceAmount(expo, resource), 0)
                             + events.combatReports.reduce((acc, combat) => acc + this.getCombatResourceAmount(combat)[resource], 0)
@@ -207,7 +194,7 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: (dayEvents: DayEvents[]) => Object.values(ResourceType).reduce(
+                    getValue: dayEvents => ResourceTypes.reduce(
                         (acc, resource) => acc + dayEvents.reduce(
                             (acc, events) => acc
                                 + msu[resource] * (
@@ -258,7 +245,7 @@
                 }
 
                 case ExpeditionEventType.fleet: {
-                    return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
+                    return ExpeditionFindableShipTypes.reduce(
                         (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
                         0
                     );
@@ -274,7 +261,7 @@
                 ...combatReport.loot,
                 energy: 0,
             };
-            const lostShipsUnits = getNumericEnumValues<ShipType>(ShipType).reduce(
+            const lostShipsUnits = ShipTypes.reduce(
                 (acc, ship) => addCost(acc, multiplyCost(Ships[ship].getCost(), combatReport.lostShips[ship] ?? 0)),
                 { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
             );

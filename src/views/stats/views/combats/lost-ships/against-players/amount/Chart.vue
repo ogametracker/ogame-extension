@@ -2,7 +2,6 @@
     <div class="chart-container">
         <stats-chart
             :datasets="datasets"
-            :filter="(combat) => filterCombat(combat)"
             :firstDay="firstDay"
             :itemsPerDay="reportsPerDay"
         >
@@ -47,9 +46,9 @@
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
@@ -70,25 +69,21 @@
             return SettingsDataModule.settings.colors.ships;
         }
 
-        private filterCombat(combat: CombatReport): boolean {
-            return !combat.isExpedition;
-        }
-
         private get firstDay() {
             return CombatReportDataModule.firstDay;
         }
 
         private get reportsPerDay() {
-            return CombatReportDataModule.reportsPerDay;
+            return CombatReportDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<CombatReport>[] {
-            return getNumericEnumValues<ShipType>(ShipType).map(ship => ({
+        private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
+            return ShipTypes.map(ship => ({
                 key: ship.toString(),
                 label: this.$i18n.$t.ships[ship],
                 color: this.colors[ship],
                 filled: true,
-                getValue: reports => reports.reduce((acc, report) => acc + report.lostShips[ship], 0),
+                getValue: result => result.lostShips.againstPlayers.ships[ship],
             }));
         }
 

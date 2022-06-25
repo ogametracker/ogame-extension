@@ -3,7 +3,6 @@
         <stats-chart
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             stacked
             show-average
@@ -28,7 +27,7 @@
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
 
@@ -46,19 +45,15 @@
             return SettingsDataModule.settings.colors.expeditions.events.darkMatter;
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEventDarkMatter>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [{
                 key: 'dark-matter',
                 label: this.$i18n.$t.common.darkMatter,
                 color: this.color,
                 filled: true,
-                getValue: (expos: ExpeditionEventDarkMatter[]) => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),
+                getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,
                 showAverage: true,
             }];
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.darkMatter;
         }
 
         private get firstDay() {
@@ -66,7 +61,7 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
     }
 </script>

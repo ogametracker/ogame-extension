@@ -1,7 +1,6 @@
 <template>
     <div class="chart-container">
         <stats-chart
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
@@ -43,13 +42,21 @@
                         class="number"
                         v-text="$i18n.$n(getResourcesAmount(datasets))"
                     />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
+                        "
+                    />
 
                     <div
                         class="number"
                         v-text="$i18n.$n(getResourcesAmountInMsu(datasets))"
                     />
-                        <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </stats-chart>
@@ -75,7 +82,7 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -104,17 +111,17 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEventResources>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [
                 ...Object.values(ResourceType).map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (expos: ExpeditionEventResources[]) => expos.reduce((acc, expo) => acc + expo.resources[resource], 0),
+                    getValue: (result: DailyExpeditionResult) => result.findings.resources[resource],
                     showAverage: true,
                 })),
                 {
@@ -122,21 +129,13 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc
-                            + expo.resources.metal
-                            + expo.resources.crystal * this.msuConversionRates.crystal
-                            + expo.resources.deuterium * this.msuConversionRates.deuterium,
-                        0
-                    ),
+                    getValue: result => result.findings.fleetResourceUnits.metal
+                        + result.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal
+                        + result.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }
             ];
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.resources;
         }
 
         private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {

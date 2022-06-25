@@ -3,4 +3,9 @@ export enum ResourceType {
     crystal = 'crystal',
     deuterium = 'deuterium',
 }
-//REFACTOR: export array of all values
+
+export const ResourceTypes = [
+    ResourceType.metal,
+    ResourceType.crystal,
+    ResourceType.deuterium,
+];

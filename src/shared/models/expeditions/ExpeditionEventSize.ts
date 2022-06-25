@@ -3,3 +3,8 @@ export enum ExpeditionEventSize {
     medium = 'medium',
     large = 'large',
 }
+export const ExpeditionEventSizes = [
+    ExpeditionEventSize.small,
+    ExpeditionEventSize.medium,
+    ExpeditionEventSize.large,
+];

@@ -2,7 +2,6 @@
     <div class="chart-container">
         <stats-chart
             :datasets="datasets"
-            :filter="(combat) => filterCombat(combat)"
             :firstDay="firstDay"
             :itemsPerDay="reportsPerDay"
         >
@@ -47,9 +46,9 @@
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
+    import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
@@ -69,25 +68,21 @@
             return SettingsDataModule.settings.colors.combatResults;
         }
 
-        private filterCombat(combat: CombatReport): boolean {
-            return !combat.isExpedition;
-        }
-
         private get firstDay() {
             return CombatReportDataModule.firstDay;
         }
 
         private get reportsPerDay() {
-            return CombatReportDataModule.reportsPerDay;
+            return CombatReportDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<CombatReport>[] {
-            return Object.values(CombatResultType).map(result => ({
+        private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
+            return CombatResultTypes.map(result => ({
                 key: result,
                 label: this.$i18n.$t.combats.combatResults[result],
                 color: this.colors[result],
                 filled: true,
-                getValue: reports => reports.filter(combat => combat.result == result).length,
+                getValue: dailyResult => dailyResult.results.againstPlayers[result],
             }));
         }
 

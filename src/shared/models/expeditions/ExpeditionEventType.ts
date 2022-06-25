@@ -11,3 +11,16 @@ export enum ExpeditionEventType {
     trader = 'trader',
     lostFleet = 'lostFleet',
 }
+export const ExpeditionEventTypes = [
+    ExpeditionEventType.nothing,
+    ExpeditionEventType.resources,
+    ExpeditionEventType.fleet,
+    ExpeditionEventType.delay,
+    ExpeditionEventType.early,
+    ExpeditionEventType.darkMatter,
+    ExpeditionEventType.pirates,
+    ExpeditionEventType.aliens,
+    ExpeditionEventType.item,
+    ExpeditionEventType.trader,
+    ExpeditionEventType.lostFleet,
+];

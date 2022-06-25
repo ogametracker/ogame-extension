@@ -26,21 +26,34 @@ export type ExpeditionEventResources = ExpeditionEventBase & ExpeditionEventWith
     resources: ExpeditionEventResourcesAmount;
 };
 
-//REFACTOR: as type, export array of all values
-export enum ExpeditionFindableShipType {
-    lightFighter = ShipType.lightFighter,
-    heavyFighter = ShipType.heavyFighter,
-    cruiser = ShipType.cruiser,
-    battleship = ShipType.battleship,
-    bomber = ShipType.bomber,
-    battlecruiser = ShipType.battlecruiser,
-    destroyer = ShipType.destroyer,
-    reaper = ShipType.reaper,
-    pathfinder = ShipType.pathfinder,
-    smallCargo = ShipType.smallCargo,
-    largeCargo = ShipType.largeCargo,
-    espionageProbe = ShipType.espionageProbe,
-}
+export type ExpeditionFindableShipType =
+    | ShipType.lightFighter
+    | ShipType.heavyFighter
+    | ShipType.cruiser
+    | ShipType.battleship
+    | ShipType.bomber
+    | ShipType.battlecruiser
+    | ShipType.destroyer
+    | ShipType.reaper
+    | ShipType.pathfinder
+    | ShipType.smallCargo
+    | ShipType.largeCargo
+    | ShipType.espionageProbe
+;
+export const ExpeditionFindableShipTypes = [
+    ShipType.lightFighter,
+    ShipType.heavyFighter,
+    ShipType.cruiser,
+    ShipType.battleship,
+    ShipType.bomber,
+    ShipType.battlecruiser,
+    ShipType.destroyer,
+    ShipType.reaper,
+    ShipType.pathfinder,
+    ShipType.smallCargo,
+    ShipType.largeCargo,
+    ShipType.espionageProbe,
+];
 
 
 export type ExpeditionFindableFleet = Record<ExpeditionFindableShipType, number | undefined>;

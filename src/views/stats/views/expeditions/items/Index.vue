@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventItem } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { startOfDay, subDays } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
@@ -37,23 +35,17 @@
         }
 
         private get itemsPerDays(): ItemHash[][] {
-            const perDay = ExpeditionDataModule.expeditionsPerDay;
+            const perDay = ExpeditionDataModule.dailyResults;
             const firstDay = this.minDay;
             const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
             const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
 
-            const itemExposPerDay = days.map(
-                day => (perDay[day] ?? []).filter(
-                    expo => expo.type == ExpeditionEventType.item
-                ) as ExpeditionEventItem[]
-            );
-
-            const array = itemExposPerDay.map(expos => expos.map(expo => expo.itemHash));
-            while (array.length < this.ticks) {
-                array.push([]);
+            const itemsPerDay = days.map(day => (perDay[day] ?? null)?.findings.items ?? []);
+            while (itemsPerDay.length < this.ticks) {
+                itemsPerDay.push([]);
             }
 
-            return array;
+            return itemsPerDay;
         }
 
         private formatDate(x: number): string {

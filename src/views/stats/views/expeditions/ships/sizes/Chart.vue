@@ -3,7 +3,6 @@
         <stats-chart
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
-            :filter="(expo) => filterExpo(expo)"
             :datasets="datasets"
             stacked
             show-average
@@ -50,7 +49,7 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
 
@@ -73,22 +72,18 @@
         }
 
         private get exposPerDay() {
-            return ExpeditionDataModule.expeditionsPerDay;
+            return ExpeditionDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<ExpeditionEventFleet>[] {
+        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return Object.values(ExpeditionEventSize).map(size => ({
                 key: size,
                 label:  this.$i18n.$t.expeditions.expeditionEventSizes[size],
                 color: this.colors[size],
                 filled: true,
-                getValue: expos => expos.filter(e => e.size == size).length,
+                getValue: result => result.eventSizes.fleet[size],
                 showAverage: true,
             }));
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
         }
 
         private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {

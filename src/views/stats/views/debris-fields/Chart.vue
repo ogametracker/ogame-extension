@@ -30,7 +30,7 @@
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -61,10 +61,10 @@
         }
 
         private get reportsPerDay() {
-            return DebrisFieldReportDataModule.reportsPerDay;
+            return DebrisFieldReportDataModule.dailyResults;
         }
 
-        private get datasets(): StatsChartDataset<DebrisFieldReport>[] {
+        private get datasets(): StatsChartDataset<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
             return [
@@ -73,7 +73,7 @@
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report[resource], 0),
+                    getValue: (result: DailyDebrisFieldReportResult) => result[resource],
                     showAverage: true,
                 })),
                 {
@@ -81,7 +81,7 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: (reports: DebrisFieldReport[]) => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
+                    getValue: result => result.metal + result.crystal * this.msuConversionRates.crystal,
                     stack: false,
                     showAverage: true,
                 }
