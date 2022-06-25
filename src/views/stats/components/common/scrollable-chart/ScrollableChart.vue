@@ -342,8 +342,8 @@
             }));
         }
 
-        @Watch('datasets')
-        private onDatasetsChanged() {
+        @Watch('datasets', { immediate: true })
+        private async onDatasetsChanged(newValue: ScrollableChartDataset[], oldValue: ScrollableChartDataset[]) {
             const internalDatasets: ScrollableChartInternalDataset[] = this.datasets.map((dataset, i) => ({
                 ...dataset,
                 originalValuesByX: {},
@@ -376,13 +376,6 @@
 
             this.updateNormalizedValues();
             this.updatePaths();
-
-            this.$nextTick(() => {
-                if (this.scrollbarContainer == null) {
-                    throw new Error('scrollbar container is null');
-                }
-                this.scrollbarContainer.scrollLeft = this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth;
-            });
         }
 
         private get xAxisTicks(): number[] {
@@ -608,6 +601,8 @@
 
             this.updateYGridLines();
             this.updatePaths();
+
+            this.scrollbarContainer!.scrollLeft = this.scrolledFraction * (this.scrollbarContainer!.scrollWidth - this.scrollbarContainer!.clientWidth);
         }
 
         private updatePaths() {
@@ -653,10 +648,9 @@
         private async mounted() {
             this.isReady = true;
 
-            this.onDatasetsChanged();
-
             await this.$nextTick();
             this.resizeObserver.observe(this.svgContainer ?? _throw('svgContainer is null'));
+            this.scrollbarContainer!.scrollLeft = this.scrollbarContainer!.scrollWidth - this.scrollbarContainer!.clientWidth;
         }
 
         private destroyed() {
@@ -691,12 +685,13 @@
             },
         };
 
+        private scrolledFraction = 1;
         private updateTickOffset() {
             if (this.scrollbarContainer == null) {
                 throw new Error('scrollbar container is null');
             }
-            const scrolledFraction = this.scrollbarContainer.scrollLeft / (this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth);
-            this.leftX = (this.maxXNormalized - 1) * scrolledFraction;
+            this.scrolledFraction = this.scrollbarContainer.scrollLeft / (this.scrollbarContainer.scrollWidth - this.scrollbarContainer.clientWidth);
+            this.leftX = (this.maxXNormalized - 1) * this.scrolledFraction;
         }
     }
 </script>
