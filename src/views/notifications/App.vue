@@ -54,6 +54,7 @@
         };
 
         @Watch('notificationOrder')
+        @Watch('$i18n.locale')
         private async onNotificationChanged() {
             await this.$nextTick();
 
