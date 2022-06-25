@@ -1,5 +1,8 @@
 <template>
-    <div class="scrollable-chart">
+    <div
+        class="scrollable-chart"
+        :style="`--chart-x-translation: ${-leftX * width}px`"
+    >
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
             <div class="chart-content" v-if="isReady">
                 <div
@@ -7,22 +10,18 @@
                     ref="svg-container"
                     @mouseleave="activeXNormalized = null"
                 >
-                    <svg v-if="internalDatasets.length > 0">
-                        <scrollable-chart-svg-group
-                            :width="width"
-                            :height="height"
-                            :activeXNormalized.sync="activeXNormalized"
-                            :xValuesNormalized="xValuesNormalized"
-                            :xAxisTicksNormalized="xAxisTicksNormalized"
-                            :maxXNormalized="maxXNormalized"
-                            :yGridLines="yGridLines"
-                            :reversedDatasets="reversedDatasets"
-                            :showXValuesInGrid="showXValuesInGrid"
-                            :style="{
-                                transform: `translateX(${-leftX * width}px)`,
-                            }"
-                        />
-                    </svg>
+                    <scrollable-chart-svg
+                        v-if="internalDatasets.length > 0"
+                        :width="width"
+                        :height="height"
+                        :activeXNormalized.sync="activeXNormalized"
+                        :xValuesNormalized="xValuesNormalized"
+                        :xAxisTicksNormalized="xAxisTicksNormalized"
+                        :maxXNormalized="maxXNormalized"
+                        :yGridLines="yGridLines"
+                        :reversedDatasets="reversedDatasets"
+                        :showXValuesInGrid="showXValuesInGrid"
+                    />
 
                     <div
                         class="chart-tooltip"
@@ -94,25 +93,14 @@
                         v-text="$i18n.$n(y)"
                     />
                 </div>
-                <div class="chart-x-axis">
-                    <div
-                        class="x-axis-labels"
-                        :style="{
-                            width: `${maxXNormalized * width}px`,
-                            transform: `translateX(${-leftX * width}px)`,
-                        }"
-                    >
-                        <div
-                            v-for="(x, i) in xAxisTicks"
-                            :key="`x-grid-label-${x}`"
-                            class="x-axis-label"
-                            :style="{
-                                left: `${xAxisTicksNormalized[i] * width}px`,
-                            }"
-                            v-text="xLabelFormatter(x)"
-                        />
-                    </div>
-                </div>
+
+                <scrollable-chart-x-axis-labels
+                    :width="width"
+                    :maxXNormalized="maxXNormalized"
+                    :xAxisTicks="xAxisTicks"
+                    :xAxisTicksNormalized="xAxisTicksNormalized"
+                    :xLabelFormatter="xLabelFormatter"
+                />
             </div>
 
             <div class="chart-legend" v-if="!noLegend">
@@ -156,7 +144,8 @@
     import { _throw } from '@/shared/utils/_throw';
     import { PropType } from 'vue';
     import { Component, Prop, PropSync, Ref, Vue, Watch } from 'vue-property-decorator';
-    import ScrollableChartSvgGroup from './ScrollableChartSvgGroup.vue';
+    import ScrollableChartSvg from './ScrollableChartSvg.vue';
+    import ScrollableChartXAxisLabels from './ScrollableChartXAxisLabels.vue';
 
     function findPrevious<T>(array: T[], maxIndex: number, predicate: (item: T) => boolean): T | null {
         for (let i = Math.min(maxIndex, array.length - 1); i >= 0; i--) {
@@ -180,7 +169,7 @@
         average?: number;
     }
 
-    interface ScrollableChartInternalDataset extends ScrollableChartDataset {
+    export interface ScrollableChartInternalDataset extends ScrollableChartDataset {
         visible: boolean;
         svgPoints: Point[];
         internalValues: Point[];
@@ -198,7 +187,7 @@
         };
     }
 
-    type YGridLineData = Record<number, { svg: number; fraction: number }>;
+    export type YGridLineData = Record<number, { svg: number; fraction: number }>;
 
     export interface ScollableChartFooterDataset {
         key: string | number;
@@ -215,7 +204,8 @@
 
     @Component({
         components: {
-            ScrollableChartSvgGroup,
+            ScrollableChartSvg,
+            ScrollableChartXAxisLabels,
         },
     })
     export default class ScrollableChart extends Vue {
@@ -724,9 +714,6 @@
         overflow: visible;
     }
 
-    
-
-
     .chart-container {
         display: grid;
         grid-template-columns: 1fr 200px;
@@ -752,30 +739,6 @@
         position: relative;
         overflow: hidden;
         margin-right: 10px;
-    }
-
-    .chart-x-axis {
-        grid-row: 2;
-        grid-column: 1 / span 2;
-        position: relative;
-        overflow: hidden;
-        clip-path: polygon(100px 0, 100% 0, 100% 100%, 0 100%);
-
-        > .x-axis-labels {
-            position: relative;
-            margin-left: 100px;
-
-            > .x-axis-label {
-                position: absolute;
-                top: 0;
-                transform-origin: top right;
-                transform: translateY(10px) translateX(-100%) translateX(-5px)
-                    rotate(-45deg);
-                white-space: pre;
-                color: #888;
-                font-size: 12px;
-            }
-        }
     }
 
     .chart-y-axis {
