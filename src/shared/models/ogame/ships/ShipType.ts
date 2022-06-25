@@ -17,3 +17,4 @@ export enum ShipType {
     reaper = 218,
     pathfinder = 219,
 }
+//REFACTOR: export array of all values

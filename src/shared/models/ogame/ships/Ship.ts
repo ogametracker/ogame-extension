@@ -1,5 +1,6 @@
 import { Cost } from '../common/Cost';
 
+//REFACTOR: methods to getters
 export abstract class Ship {
     public abstract getCost(): Cost;
     public abstract baseHull(): number;

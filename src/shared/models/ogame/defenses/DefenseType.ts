@@ -11,3 +11,4 @@ export enum DefenseType {
     ballisticMissile = 502,
     interplanetaryMissile = 503,
 }
+//REFACTOR: export array of all values

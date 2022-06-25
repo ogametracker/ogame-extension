@@ -23,6 +23,7 @@ export enum BuildingType {
     sensorPhalanx = 42,
     jumpGate = 43,
 }
+//REFACTOR: export array of all values
 
 export type MoonBuildingType = (
     | BuildingType.metalStorage
@@ -35,6 +36,8 @@ export type MoonBuildingType = (
     | BuildingType.sensorPhalanx
     | BuildingType.jumpGate
 );
+//REFACTOR: export array of all values
+
 export type PlanetBuildingType = (
     | BuildingType.metalMine
     | BuildingType.crystalMine
@@ -54,3 +57,4 @@ export type PlanetBuildingType = (
     | BuildingType.terraformer
     | BuildingType.spaceDock
 );
+//REFACTOR: export array of all values

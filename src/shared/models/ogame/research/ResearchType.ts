@@ -16,3 +16,4 @@ export enum ResearchType {
     astrophysics = 124,
     gravitonTechnology = 199,
 }
+//REFACTOR: export array of all values

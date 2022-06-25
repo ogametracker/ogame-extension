@@ -26,6 +26,7 @@ export type ExpeditionEventResources = ExpeditionEventBase & ExpeditionEventWith
     resources: ExpeditionEventResourcesAmount;
 };
 
+//REFACTOR: as type, export array of all values
 export enum ExpeditionFindableShipType {
     lightFighter = ShipType.lightFighter,
     heavyFighter = ShipType.heavyFighter,
