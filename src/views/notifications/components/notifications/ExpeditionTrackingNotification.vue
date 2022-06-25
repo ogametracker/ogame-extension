@@ -1,11 +1,13 @@
 <template>
     <notification
         type="info"
-        :title="`LOCA: ${count} new expeditions tracked`"
+        :title="title"
         :timeout="10000"
         @remove="$emit('remove')"
     >
         <template #message>
+            <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.summary" />
+
             <div class="result-grid resources-grid" v-if="foundResources">
                 <template v-if="notification.resources.metal > 0">
                     <o-resource resource="metal" />
@@ -48,7 +50,7 @@
                     foundResources || notification.darkMatter > 0 || foundShips
                 "
             />
-            <h4 v-text="'LOCA Ereignisse'" />
+            <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.events" />
             <div class="result-grid">
                 <template v-for="event in expeditionEvents">
                     <template v-if="notification.events[event] > 0">
@@ -192,6 +194,10 @@
             [ExpeditionFindableShipType.largeCargo]: OShipType['large-cargo'],
             [ExpeditionFindableShipType.espionageProbe]: OShipType['espionage-probe'],
         };
+
+        private get title() {
+            return this.$i18n.$t.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
+        }
 
         private get foundResources() {
             return Object.values(this.notification.resources).some(r => r > 0);

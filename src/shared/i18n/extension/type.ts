@@ -6,6 +6,7 @@ import { DebrisFieldsTranslations } from './debrisFields/type';
 import { DonateTranslations } from './donate/type';
 import { EmpireTranslations } from './empire/type';
 import { ExpeditionsTranslations } from './expeditions/type';
+import { NotificationTranslations } from './notifications/type';
 import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
 import { SettingsTranslations } from './settings/type';
@@ -26,4 +27,5 @@ export interface ExtensionTranslations {
     switchAccounts: SwitchAccountsTranslations;
     about: AboutTranslations;
     universeHistory: UniverseHistoryTranslations;
+    notifications: NotificationTranslations;
 }

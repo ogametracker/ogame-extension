@@ -31,7 +31,6 @@ export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage
 
 export interface CombatTrackingNotificationMessageData {
     count: number;
-    ignoredEspionageCombats: number;
     resources: Record<ResourceType, number>;
 }
 export type CombatTrackingNotificationMessage = NotificationMessage<NotificationType.CombatTracking, CombatTrackingNotificationMessageData>;

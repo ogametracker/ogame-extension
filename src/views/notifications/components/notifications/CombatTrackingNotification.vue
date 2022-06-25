@@ -1,11 +1,12 @@
 <template>
-    <notification type="info" :title="title" @remove="$emit('remove')" :timeout="10000">
+    <notification
+        type="info"
+        :title="title"
+        @remove="$emit('remove')"
+        :timeout="10000"
+    >
         <template #message>
             <div v-if="notification.count > 0" v-text="message" />
-            <div
-                v-if="notification.ignoredEspionageCombats > 0"
-                v-text="messageIgnored"
-            />
 
             <template v-if="hasLoot">
                 <hr />
@@ -16,7 +17,7 @@
                             :class="{
                                 'negative-loot':
                                     notification.resources.metal < 0,
-                                    'fade': notification.resources.metal == 0,
+                                fade: notification.resources.metal == 0,
                             }"
                             v-text="$i18n.$n(notification.resources.metal)"
                         />
@@ -27,7 +28,7 @@
                             :class="{
                                 'negative-loot':
                                     notification.resources.crystal < 0,
-                                    'fade': notification.resources.crystal == 0,
+                                fade: notification.resources.crystal == 0,
                             }"
                             v-text="$i18n.$n(notification.resources.crystal)"
                         />
@@ -38,7 +39,7 @@
                             :class="{
                                 'negative-loot':
                                     notification.resources.deuterium < 0,
-                                    'fade': notification.resources.deuterium == 0,
+                                fade: notification.resources.deuterium == 0,
                             }"
                             v-text="$i18n.$n(notification.resources.deuterium)"
                         />
@@ -64,15 +65,11 @@
         private notification!: CombatTrackingNotificationMessageData;
 
         private get title() {
-            return `LOCA: ${this.notification.count + this.notification.ignoredEspionageCombats} combats processed.`;
+            return this.$i18n.$t.notifications.combatTracking.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return `LOCA: ${this.notification.count} combats were tracked.`;
-        }
-
-        private get messageIgnored() {
-            return `LOCA: ${this.notification.ignoredEspionageCombats} espionage combats were ignored.`;
+            return this.$i18n.$t.notifications.combatTracking.message(this.$i18n.$n(this.notification.count));
         }
 
         private get hasLoot() {

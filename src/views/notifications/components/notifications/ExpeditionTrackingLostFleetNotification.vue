@@ -23,11 +23,11 @@
         private notification!: ExpeditionTrackingLostFleetNotificationMessage['data'];
 
         private get title() {
-            return `LOCA: ${this.notification.count} fleets lost.`;
+            return this.$i18n.$t.notifications.expeditionTracking.fleetLost.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return `LOCA: ${this.notification.count} fleets did not return from their expeditions.`;
+            return this.$i18n.$t.notifications.expeditionTracking.fleetLost.message(this.$i18n.$n(this.notification.count));
         }
     }
 </script>

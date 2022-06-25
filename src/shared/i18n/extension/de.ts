@@ -12,6 +12,7 @@ import { de as empire } from './empire/de';
 import { de as switchAccounts } from './switchAccounts/de';
 import { de as about } from './about/de';
 import { de as universeHistory } from './universeHistory/de';
+import { de as notifications } from './notifications/de';
 
 export const de: ExtensionTranslations = {
     common,
@@ -27,4 +28,5 @@ export const de: ExtensionTranslations = {
     switchAccounts,
     about,
     universeHistory,
+    notifications,
 };

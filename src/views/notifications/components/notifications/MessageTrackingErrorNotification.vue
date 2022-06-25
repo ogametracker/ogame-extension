@@ -23,11 +23,11 @@
         private notification!: MessageTrackingErrorNotificationMessage['data'];
 
         private get title() {
-            return `LOCA: Tracking failed for ${this.notification.count} messages`;
+            return this.$i18n.$t.notifications.messageTrackingError.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return `LOCA: ${this.notification.count} messages caused an error and have not been tracked. The causing messages have been marked in red. Please contact the developer.`;
+            return this.$i18n.$t.notifications.messageTrackingError.message(this.$i18n.$n(this.notification.count));
         }
     }
 </script>

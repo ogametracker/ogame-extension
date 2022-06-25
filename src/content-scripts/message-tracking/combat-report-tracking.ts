@@ -32,7 +32,6 @@ const waitingForCombats: Record<number, true> = {};
 const failedToTrackCombats: Record<number, true> = {};
 const combatTrackingResult: CombatTrackingNotificationMessageData = {
     count: 0,
-    ignoredEspionageCombats: 0,
     resources: {
         metal: 0,
         crystal: 0,
@@ -121,12 +120,11 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
-
+            
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            addOrSetCustomMessageContent(li, false);
 
             delete waitingForCombats[msg.data.id];
-            combatTrackingResult.ignoredEspionageCombats++;
-            sendNotificationMessages();
             break;
         }
 

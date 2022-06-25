@@ -48,11 +48,11 @@
         private notification!: DebrisFieldReportTrackingNotificationMessageData;
 
         private get title() {
-            return `LOCA: ${this.notification.count} debris fields tracked.`;
+            return this.$i18n.$t.notifications.debrisFieldReportTracking.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return `LOCA: ${this.notification.count} debris fields were tracked.`;
+            return this.$i18n.$t.notifications.debrisFieldReportTracking.message(this.$i18n.$n(this.notification.count));
         }
     }
 </script>
