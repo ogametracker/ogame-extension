@@ -70,7 +70,7 @@
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ScrollableChartDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
     import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';

@@ -15,7 +15,7 @@
     import { PropType } from 'vue';
     import { addDays, differenceInDays, startOfDay, subDays } from 'date-fns';
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/ScrollableChart.vue';
+    import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
 
     export type StatsChartItemFilterFunction<T> = (item: T) => boolean;
 

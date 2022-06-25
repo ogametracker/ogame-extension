@@ -46,7 +46,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';

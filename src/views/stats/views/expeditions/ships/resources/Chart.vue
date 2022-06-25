@@ -65,7 +65,7 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/ScrollableChart.vue';
+    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';

@@ -8,7 +8,7 @@ import GridTable from './GridTable.vue';
 import ListNav from './ListNav.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 import Page from './Page.vue';
-import ScrollableChart from './ScrollableChart.vue';
+import ScrollableChart from './scrollable-chart/ScrollableChart.vue';
 import TabView from './TabView.vue';
 import Tabs from './Tabs.vue';
 
@@ -23,5 +23,3 @@ Vue.component('page', Page);
 Vue.component('scrollable-chart', ScrollableChart);
 Vue.component('tab-view', TabView);
 Vue.component('tabs', Tabs);
-
-import '../../../_shared/components/ogame';

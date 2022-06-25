@@ -1,6 +1,7 @@
 import '@mdi/font/css/materialdesignicons.min.css';
 import './styles/styles.scss';
 
+import '@/views/_shared/components/ogame';
 import './components/common';
 import Vue from 'vue';
 import App from './App.vue';
