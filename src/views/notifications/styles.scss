@@ -1,3 +1,16 @@
+body, a {
+    color: white;
+}
+
 body {
     font-size: 14px;
+}
+
+hr {
+    border-width: 1px;
+    border-color: rgba(var(--color), 0.4);
+}
+
+* {
+    box-sizing: border-box;
 }

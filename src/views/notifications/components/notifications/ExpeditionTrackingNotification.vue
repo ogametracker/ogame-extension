@@ -1,7 +1,7 @@
 <template>
     <notification type="info" :title="`LOCA: ${count} new expeditions tracked`">
         <template #message>
-            <div class="result-grid" v-if="foundResources">
+            <div class="result-grid resources-grid" v-if="foundResources">
                 <template v-if="notification.resources.metal > 0">
                     <o-resource resource="metal" />
                     <span v-text="$i18n.$n(notification.resources.metal)" />
@@ -11,7 +11,7 @@
                     <span v-text="$i18n.$n(notification.resources.crystal)" />
                 </template>
                 <template v-if="notification.resources.deuterium > 0">
-                    <o-resource resource="crystal" />
+                    <o-resource resource="deuterium" />
                     <span v-text="$i18n.$n(notification.resources.deuterium)" />
                 </template>
             </div>
@@ -38,6 +38,7 @@
                 </template>
             </div>
 
+            <hr />
             <h4 v-text="'LOCA Ereignisse'" />
             <div class="result-grid">
                 <template v-for="event in expeditionEvents">
@@ -56,7 +57,7 @@
                         <o-ship
                             v-else-if="event == 'fleet'"
                             :key="`event-icon-${event}`"
-                            ship="battleships"
+                            ship="battleship"
                             size="24px"
                         />
                         <span
@@ -202,8 +203,12 @@
 </script>
 <style lang="scss" scoped>
     .result-grid {
+        &.resources-grid {
+            grid-template-columns: repeat(2, 32px 1fr);
+        }
+
         display: grid;
-        grid-template-columns: 32px 1fr;
+        grid-template-columns: repeat(3, 32px 1fr);
         row-gap: 4px;
         column-gap: 8px;
         align-items: center;
@@ -213,9 +218,10 @@
         }
 
         .mdi {
-            transform: translateX(-30%) scale(1.6);
+            transform: scale(1.5);
             width: 24px;
-            display: inline-block;
+            text-align: center;
+            height: 20px;
         }
     }
 </style>
