@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="version">Version: {{ version }}</div>
+        <hr />
+
         <h3 v-text="$i18n.$t.about.info.table.currentAccount.header" />
         <grid-table
             :items="itemsCurrentAccount"
@@ -41,6 +44,10 @@
 
     @Component({})
     export default class Info extends Vue {
+
+        private get version() {
+            return chrome.runtime.getManifest().version;
+        }
 
         private get currentAccountExpeditions() {
             return ExpeditionDataModule.count;
@@ -134,5 +141,20 @@
 <style lang="scss" scoped>
     .info-table {
         width: fit-content;
+    }
+
+    .version {
+        font-weight: bold;
+        width: fit-content;
+        background-color: black;
+        background-image: linear-gradient(
+            0deg,
+            rgba(var(--color), 0.5),
+            rgba(var(--color), 0.7)
+        );
+        border: 1px solid rgba(var(--color), 0.5);
+        border-radius: 4px;
+        box-shadow: 0 0 6px 0 rgb(0 0 0 / 33%);
+        padding: 8px 16px;
     }
 </style>
