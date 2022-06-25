@@ -56,4 +56,13 @@ const dateFormat = new Intl.DateTimeFormat(undefined, {
     minute: '2-digit',
     second: '2-digit',
 });
-console.log(`Done (version ${version}, ${dateFormat.format(new Date())})`);
+console.log(`Build ready (version ${version}, ${dateFormat.format(new Date())})`);
+
+if(!isDev) {
+    console.log('Creating zip-archive');
+
+    const zipdir = require('zip-dir');
+    zipdir('./dist', { saveTo: `./dist/ogame-tracker-${browser}--${version}.zip` });
+}
+
+console.log('Done');
