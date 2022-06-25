@@ -6,51 +6,59 @@
         @remove="$emit('remove')"
     >
         <template #message>
-            <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.summary" />
+            <template v-if="hasSummary">
+                <h4
+                    v-text="
+                        $i18n.$t.notifications.expeditionTracking.result.summary
+                    "
+                />
 
-            <div class="result-grid resources-grid" v-if="foundResources">
-                <template v-if="notification.resources.metal > 0">
-                    <o-resource resource="metal" />
-                    <span v-text="$i18n.$n(notification.resources.metal)" />
-                </template>
-                <template v-if="notification.resources.crystal > 0">
-                    <o-resource resource="crystal" />
-                    <span v-text="$i18n.$n(notification.resources.crystal)" />
-                </template>
-                <template v-if="notification.resources.deuterium > 0">
-                    <o-resource resource="deuterium" />
-                    <span v-text="$i18n.$n(notification.resources.deuterium)" />
-                </template>
-            </div>
-
-            <div class="result-grid" v-if="notification.darkMatter > 0">
-                <template>
-                    <o-resource resource="dark-matter" />
-                    <span v-text="$i18n.$n(notification.darkMatter)" />
-                </template>
-            </div>
-
-            <div class="result-grid" v-if="foundShips">
-                <template v-for="ship in ships">
-                    <template v-if="notification.ships[ship] > 0">
-                        <o-ship
-                            :ship="shipTypes[ship]"
-                            :key="`ship-icon-${ship}`"
-                        />
+                <div class="result-grid resources-grid" v-if="foundResources">
+                    <template v-if="notification.resources.metal > 0">
+                        <o-resource resource="metal" />
+                        <span v-text="$i18n.$n(notification.resources.metal)" />
+                    </template>
+                    <template v-if="notification.resources.crystal > 0">
+                        <o-resource resource="crystal" />
                         <span
-                            v-text="$i18n.$n(notification.ships[ship])"
-                            :key="`ship-count-${ship}`"
+                            v-text="$i18n.$n(notification.resources.crystal)"
                         />
                     </template>
-                </template>
-            </div>
+                    <template v-if="notification.resources.deuterium > 0">
+                        <o-resource resource="deuterium" />
+                        <span
+                            v-text="$i18n.$n(notification.resources.deuterium)"
+                        />
+                    </template>
+                </div>
 
-            <hr
-                v-if="
-                    foundResources || notification.darkMatter > 0 || foundShips
-                "
+                <div class="result-grid" v-if="notification.darkMatter > 0">
+                    <template>
+                        <o-resource resource="dark-matter" />
+                        <span v-text="$i18n.$n(notification.darkMatter)" />
+                    </template>
+                </div>
+
+                <div class="result-grid" v-if="foundShips">
+                    <template v-for="ship in ships">
+                        <template v-if="notification.ships[ship] > 0">
+                            <o-ship
+                                :ship="shipTypes[ship]"
+                                :key="`ship-icon-${ship}`"
+                            />
+                            <span
+                                v-text="$i18n.$n(notification.ships[ship])"
+                                :key="`ship-count-${ship}`"
+                            />
+                        </template>
+                    </template>
+                </div>
+                <hr />
+            </template>
+
+            <h4
+                v-text="$i18n.$t.notifications.expeditionTracking.result.events"
             />
-            <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.events" />
             <div class="result-grid">
                 <template v-for="event in expeditionEvents">
                     <template v-if="notification.events[event] > 0">
@@ -194,6 +202,10 @@
             [ExpeditionFindableShipType.largeCargo]: OShipType['large-cargo'],
             [ExpeditionFindableShipType.espionageProbe]: OShipType['espionage-probe'],
         };
+
+        private get hasSummary() {
+            return this.foundResources || this.notification.darkMatter > 0 || this.foundShips;
+        }
 
         private get title() {
             return this.$i18n.$t.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
