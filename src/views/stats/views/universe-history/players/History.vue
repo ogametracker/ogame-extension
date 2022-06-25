@@ -396,7 +396,6 @@
                 this.$i18n.$t.universeHistory.status.active,
                 this.$i18n.$t.universeHistory.status.vacation,
                 this.$i18n.$t.universeHistory.status.inactive,
-                this.$i18n.$t.universeHistory.status.inactive,
                 this.$i18n.$t.universeHistory.status.inactiveLong,
                 this.$i18n.$t.universeHistory.status.banned,
                 this.$i18n.$t.universeHistory.status.outlaw,
