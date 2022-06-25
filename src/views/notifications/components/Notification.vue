@@ -58,7 +58,7 @@
             background: black
                 linear-gradient(
                     135deg,
-                    rgba(var(--color), 0.4),
+                    rgba(var(--color), 0.6),
                     rgba(var(--color), 0.7)
                 );
             font-weight: bold;
@@ -69,8 +69,8 @@
             background: black
                 linear-gradient(
                     135deg,
-                    rgba(var(--color), 0.2),
-                    rgba(var(--color), 0.25)
+                    rgba(var(--color), 0.5),
+                    rgba(var(--color), 0.4)
                 );
         }
     }

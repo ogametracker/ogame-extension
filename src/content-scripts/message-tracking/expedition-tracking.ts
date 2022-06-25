@@ -21,6 +21,9 @@ import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
+import { Ships } from "@/shared/models/ogame/ships/Ships";
+import { settingsWrapper } from "./main";
 
 let tabContent: Element | null = null;
 
@@ -249,15 +252,37 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                 .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
+            const units = ships.reduce((total, ship) => {
+                const shipCost = multiplyCost(Ships[ship as number as ShipType].getCost(), expedition.fleet[ship] ?? 0);
+                const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
+                return addCost(total, adjustedCost);
+            }, { metal: 0, crystal: 0, deuterium: 0 } as Cost)
+
             addOrSetCustomMessageContent(li, `
-                <div class="${getResultClass(ExpeditionEventType.fleet, expedition.size)}">
-                    <div class="${getSizeIconClass(expedition.size)}"></div>
-                    ${ships.map(ship => `
-                        <div class="ship-count-item">
-                            <div class="ogame-tracker-ship ship-${ship}"></div>
-                            <div>${formatNumber(expedition.fleet[ship] ?? 0)}</div>
-                        </div>
-                    `).join('')}
+                <div class="ogame-tracker-expedition-result--fleet_wrapper">
+                    <div class="${getResultClass(ExpeditionEventType.fleet, expedition.size)}">
+                        <div class="${getSizeIconClass(expedition.size)}"></div>
+                        ${ships.map(ship => `
+                            <div class="ship-count-item">
+                                <div class="ogame-tracker-ship ship-${ship}"></div>
+                                <div>${formatNumber(expedition.fleet[ship] ?? 0)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="resource-units">
+                        ${units.metal > 0 ? `
+                        <div class="ogame-tracker-resource metal"></div>
+                        <div class="metal">${formatNumber(units.metal)}</div>
+                        ` : ''}
+                        ${units.crystal > 0 ? `
+                        <div class="ogame-tracker-resource crystal"></div>
+                        <div class="crystal">${formatNumber(units.crystal)}</div>
+                        ` : ''}
+                        ${units.deuterium > 0 ? `
+                        <div class="ogame-tracker-resource deuterium"></div>
+                        <div class="deuterium">${formatNumber(units.deuterium)}</div>
+                        ` : ''}
+                    </div>
                 </div>
             `);
             break;

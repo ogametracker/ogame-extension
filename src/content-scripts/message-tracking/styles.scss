@@ -73,11 +73,42 @@ $image-size-small: 24px;
         }
 
         &--fleet {
+            &_wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
             .ship-count-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 row-gap: 4px;
+            }
+
+            + .resource-units {
+                display: flex;
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid rgba(white, 0.2);
+                column-gap: 8px;
+                align-items: center;
+                font-weight: bold;
+                margin-top: 8px;
+
+                .ogame-tracker-resource {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .metal {
+                    color: var(--ogame-tracker--resource--metal);
+                }
+                .crystal {
+                    color: var(--ogame-tracker--resource--crystal);
+                }
+                .deuterium {
+                    color: var(--ogame-tracker--resource--deuterium);
+                }
             }
         }
 
