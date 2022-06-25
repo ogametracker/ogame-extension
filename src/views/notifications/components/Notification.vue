@@ -143,6 +143,7 @@
         }
 
         .timer {
+            margin-top: -2px;
             height: 2px;
             background: rgb(var(--color));
             width: 0;
