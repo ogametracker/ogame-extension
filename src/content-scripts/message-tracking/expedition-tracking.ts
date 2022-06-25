@@ -118,14 +118,18 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.TrackingError: {
             const msg = message as MessageTrackingErrorMessage;
+            if(msg.data.type != 'expedition') {
+                break;
+            }
+            
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find expedition message with id '${msg.data}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
 
-            delete waitingForExpeditions[msg.data];
-            failedToTrackExpeditions[msg.data] = true;
+            delete waitingForExpeditions[msg.data.id];
+            failedToTrackExpeditions[msg.data.id] = true;
             sendNotificationMessages();
             break;
         }

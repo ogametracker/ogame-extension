@@ -21,7 +21,10 @@ export class ExpeditionService implements MessageService {
                     const errorMessage: MessageTrackingErrorMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.TrackingError,
-                        data: msg.data.id,
+                        data: {
+                            id: msg.data.id,
+                            type: 'expedition',
+                        },
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(errorMessage);

@@ -20,20 +20,28 @@
     import { _throw } from '@/shared/utils/_throw';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { v4 } from 'uuid';
+    import MessageTrackingErrorNotification from './components/notifications/MessageTrackingErrorNotification.vue';
     import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
     import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';
+    import CombatTrackingNotification from './components/notifications/CombatTrackingNotification.vue';
+    import DebrisFieldReportTrackingNotification from './components/notifications/DebrisFieldReportTrackingNotification.vue';
 
     @Component({
         components: {
+            MessageTrackingErrorNotification,
             ExpeditionTrackingNotification,
             ExpeditionTrackingLostFleetNotification,
-        }
+            CombatTrackingNotification,
+            DebrisFieldReportTrackingNotification,
+        },
     })
     export default class App extends Vue {
         private readonly componentNames: Record<NotificationType, string> = {
+            [NotificationType.MessageTrackingError]: 'message-tracking-error-notification',
             [NotificationType.ExpeditionTracking]: 'expedition-tracking-notification',
             [NotificationType.ExpeditionTrackingLostFleet]: 'expedition-tracking-lost-fleet-notification',
-            [NotificationType.MessageTrackingError]: 'todo', //TODO: proper component name
+            [NotificationType.CombatTracking]: 'combat-tracking-notification',
+            [NotificationType.DebrisFieldReportTracking]: 'debris-field-report-tracking-notification',
         };
 
         private readonly notifications: Record<string, any & { type: NotificationType }> = {};

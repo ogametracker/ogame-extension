@@ -7,14 +7,31 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
-import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { messageTrackingUuid } from "@/shared/uuid";
+import { v4 } from "uuid";
+import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 
 let tabContent: Element | null = null;
+
+const notificationIds = {
+    result: v4(),
+    error: v4(),
+};
+const waitingForReports: Record<number, true> = {};
+const failedToTrackReport: Record<number, true> = {};
+const totalDebrisFieldResult: DebrisFieldReportTrackingNotificationMessageData = {
+    count: 0,
+    resources: {
+        metal: 0,
+        crystal: 0,
+    },
+};
 
 export function initDebrisFieldReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -65,15 +82,43 @@ function onMessage(message: Message<MessageType, any>) {
                     <div class="">${formatNumber(msg.data.crystal)}</div>
                 </div>
             `);
+
+            delete waitingForReports[msg.data.id];
+            if (message.type == MessageType.NewDebrisFieldReport) {
+                updateReportResults(msg);
+            }
             break;
         }
 
         case MessageType.WillNotBeTracked: {
-            const msgId = (message as WillNotBeTrackedMessage).data;
-            const li = document.querySelector(`li.msg[data-msg-id="${msgId}"]`) ?? _throw(`failed to find debris field report with id '${msgId}'`);
+            const msg = (message as WillNotBeTrackedMessage).data;
+            if(msg.type != 'debris-field-report') {
+                break;
+            }
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             addOrSetCustomMessageContent(li, false);
+
+            delete waitingForReports[msg.id];
+            break;
+        }
+
+        case MessageType.TrackingError: {
+            const msg = message as MessageTrackingErrorMessage;
+            if (msg.data.type != 'debris-field-report') {
+                break;
+            }
+
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report message with id '${msg.data}'`);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.error);
+            addOrSetCustomMessageContent(li, false);
+
+            delete waitingForReports[msg.data.id];
+            failedToTrackReport[msg.data.id] = true;
+            sendNotificationMessages();
             break;
         }
     }
@@ -84,9 +129,10 @@ function trackDebrisFieldReports(elem: Element) {
         .filter(elem => !elem.classList.contains(cssClasses.messages.base));
 
     messages.forEach(msg => {
+        const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
+
         try {
             // prepare message to service worker
-            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
             }
@@ -121,11 +167,60 @@ function trackDebrisFieldReports(elem: Element) {
                 cssClasses.messages.waitingToBeProcessed,
             );
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
+
+            waitingForReports[id] = true;
         } catch (error) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
             addOrSetCustomMessageContent(msg, false);
+
+            delete waitingForReports[id];
+            failedToTrackReport[id] = true;
+            sendNotificationMessages();
         }
     });
+}
+
+function sendNotificationMessages() {
+    const failed = Object.keys(failedToTrackReport).length;
+    if (failed > 0) {
+        sendErrorNotificationMessage(failed);
+    }
+
+    const msg: DebrisFieldReportTrackingNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: {
+            type: NotificationType.DebrisFieldReportTracking,
+            messageId: notificationIds.result,
+            ...totalDebrisFieldResult,
+        },
+    };
+    sendMessage(msg);
+}
+
+function sendErrorNotificationMessage(failed: number) {
+    const msg: MessageTrackingErrorNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: {
+            type: NotificationType.MessageTrackingError,
+            messageId: notificationIds.error,
+            count: failed,
+        },
+    };
+    sendMessage(msg);
+}
+
+function updateReportResults(msg: DebrisFieldReportMessage) {
+    delete waitingForReports[msg.data.id];
+    totalDebrisFieldResult.count++;
+
+    ([ResourceType.metal, ResourceType.crystal] as [ResourceType.metal, ResourceType.crystal])
+        .forEach(resource => totalDebrisFieldResult.resources[resource] += msg.data[resource]);
+
+    sendNotificationMessages();
 }

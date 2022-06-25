@@ -8,6 +8,8 @@ export enum NotificationType {
     ExpeditionTracking = 'message-tracking/expeditions',
     ExpeditionTrackingLostFleet = 'message-tracking/expeditions/lost-fleet',
     MessageTrackingError = 'message-tracking/error',
+    CombatTracking = 'message-tracking/combats',
+    DebrisFieldReportTracking = 'message-tracking/debris-field-reports',
 }
 
 export interface BasicNotificationData<T extends NotificationType> {
@@ -26,5 +28,18 @@ export interface ExpeditionTrackingNotificationMessageData {
 }
 export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
 export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;
+
+export interface CombatTrackingNotificationMessageData {
+    count: number;
+    ignoredEspionageCombats: number;
+    resources: Record<ResourceType, number>;
+}
+export type CombatTrackingNotificationMessage = NotificationMessage<NotificationType.CombatTracking, CombatTrackingNotificationMessageData>;
+
+export interface DebrisFieldReportTrackingNotificationMessageData {
+    count: number;
+    resources: Record<Exclude<ResourceType, ResourceType.deuterium>, number>;
+}
+export type DebrisFieldReportTrackingNotificationMessage = NotificationMessage<NotificationType.DebrisFieldReportTracking, DebrisFieldReportTrackingNotificationMessageData>;
 
 export type MessageTrackingErrorNotificationMessage = NotificationMessage<NotificationType.MessageTrackingError, { count: number }>;

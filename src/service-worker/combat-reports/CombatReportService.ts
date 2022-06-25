@@ -6,7 +6,7 @@ import { CombatReportModule } from './CombatReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
 import { serviceWorkerUuid } from '@/shared/uuid';
-import { WillNotBeTrackedMessage } from '@/shared/messages/tracking/misc';
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '@/shared/messages/tracking/misc';
 import { _logDebug } from '@/shared/utils/_log';
 
 export class CombatReportService implements MessageService {
@@ -39,16 +39,30 @@ export class CombatReportService implements MessageService {
             }
 
             case MessageType.TrackCombatReport: {
-                const tryResult = await this.combatReportModule.tryTrackCombatReport(message as TrackCombatReportMessage);
+                const msg = message as TrackCombatReportMessage;
+                const tryResult = await this.combatReportModule.tryTrackCombatReport(msg);
                 if (!tryResult.success) {
-                    _throw('failed to track combat report');
+                    const errorMessage: MessageTrackingErrorMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.TrackingError,
+                        data: {
+                            id: msg.data.id,
+                            type: 'combat-report',
+                        },
+                        senderUuid: serviceWorkerUuid,
+                    };
+                    await broadcastMessage(errorMessage);
+                    return;
                 }
 
                 if(tryResult.result.ignored) {
                     const ignoreMessage: WillNotBeTrackedMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.WillNotBeTracked,
-                        data: tryResult.result.id,
+                        data: {
+                            id: tryResult.result.id,
+                            type: 'combat-report',
+                        },
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(ignoreMessage);

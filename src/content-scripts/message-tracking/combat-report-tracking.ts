@@ -15,12 +15,30 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 import { messageTrackingUuid } from "@/shared/uuid";
-import { WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
+import { v4 } from "uuid";
+import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
 
 let tabContent: Element | null = null;
+
+const notificationIds = {
+    result: v4(),
+    error: v4(),
+};
+const waitingForCombats: Record<number, true> = {};
+const failedToTrackCombats: Record<number, true> = {};
+const combatTrackingResult: CombatTrackingNotificationMessageData = {
+    count: 0,
+    ignoredEspionageCombats: 0,
+    resources: {
+        metal: 0,
+        crystal: 0,
+        deuterium: 0,
+    },
+};
 
 export function initCombatReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -44,6 +62,39 @@ function setupObserver() {
     observer.observe(tabContentElem, { childList: true, subtree: true });
 }
 
+function sendNotificationMessages() {
+    const failed = Object.keys(failedToTrackCombats).length;
+    if (failed > 0) {
+        sendErrorNotificationMessage(failed);
+    }
+
+    const msg: CombatTrackingNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: {
+            type: NotificationType.CombatTracking,
+            messageId: notificationIds.result,
+            ...combatTrackingResult,
+        },
+    };
+    sendMessage(msg);
+}
+
+function sendErrorNotificationMessage(failed: number) {
+    const msg: MessageTrackingErrorNotificationMessage = {
+        type: MessageType.Notification,
+        ogameMeta: getOgameMeta(),
+        senderUuid: messageTrackingUuid,
+        data: {
+            type: NotificationType.MessageTrackingError,
+            messageId: notificationIds.error,
+            count: failed,
+        },
+    };
+    sendMessage(msg);
+}
+
 function onMessage(message: Message<MessageType, any>) {
     const ogameMeta = getOgameMeta();
     if (!ogameMetasEqual(ogameMeta, message.ogameMeta)) {
@@ -60,15 +111,22 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.WillNotBeTracked: {
             const msg = message as WillNotBeTrackedMessage;
-            shouldTrackResolvers[msg.data]?.(false);
-            delete shouldTrackResolvers[msg.data];
+            if(msg.data.type != 'combat-report') {
+                break;
+            }
+            shouldTrackResolvers[msg.data.id]?.(false);
+            delete shouldTrackResolvers[msg.data.id];
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report with id '${msg.data}'`);
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+
+            delete waitingForCombats[msg.data.id];
+            combatTrackingResult.ignoredEspionageCombats++;
+            sendNotificationMessages();
             break;
         }
 
@@ -123,6 +181,28 @@ function onMessage(message: Message<MessageType, any>) {
 
             const outerHtml = `<div class="ogame-tracker-combat-report">${html == '' ? '-' : html}</div>`;
             addOrSetCustomMessageContent(li, outerHtml);
+
+            if (message.type == MessageType.NewCombatReport) {
+                updateCombatResults(msg);
+            }
+            break;
+        }
+
+        case MessageType.TrackingError: {
+            const msg = message as MessageTrackingErrorMessage;            
+            if(msg.data.type != 'combat-report') {
+                break;
+            }
+
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report message with id '${msg.data}'`);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.error);
+            addOrSetCustomMessageContent(li, false);
+
+            delete waitingForCombats[msg.data.id];
+            failedToTrackCombats[msg.data.id] = true;
+            sendNotificationMessages();
             break;
         }
     }
@@ -139,9 +219,10 @@ async function trackCombatReports(elem: Element) {
     const ogameMeta = getOgameMeta();
 
     const promises = messages.map(async msg => {
+        const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
+
         try {
             // prepare message to service worker
-            const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
             if (isNaN(id)) {
                 _throw('Message id is NaN');
             }
@@ -184,11 +265,16 @@ async function trackCombatReports(elem: Element) {
             };
             sendMessage(workerMessage);
 
+            waitingForCombats[id] = true;
         } catch (error) {
             console.error(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
             addOrSetCustomMessageContent(msg, false);
+
+            delete waitingForCombats[id];
+            failedToTrackCombats[id] = true;
+            sendNotificationMessages();
         }
     });
 
@@ -223,4 +309,16 @@ async function loadOgameCombatReport(url: string): Promise<OgameCombatReport> {
     const combatJson = combatJsonMatch.groups?.json ?? _throw('had combat json match but without content');
 
     return JSON.parse(combatJson) as OgameCombatReport;
+}
+
+
+function updateCombatResults(msg: CombatReportMessage) {
+    delete waitingForCombats[msg.data.id];
+    combatTrackingResult.count++;
+
+    const resources = msg.data.loot;
+    [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
+        .forEach(resource => combatTrackingResult.resources[resource] += resources[resource]);
+
+    sendNotificationMessages();
 }

@@ -5,7 +5,7 @@ import { MessageService } from '../MessageService';
 import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
-import { WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class DebrisFieldReportService implements MessageService {
@@ -17,14 +17,27 @@ export class DebrisFieldReportService implements MessageService {
                 const msg = message as TrackDebrisFieldReportMessage;
                 const tryResult = await this.dfModule.tryTrackDebrisFieldReport(msg);
                 if (!tryResult.success) {
-                    _throw('failed to track expedition');
+                    const errorMessage: MessageTrackingErrorMessage = {
+                        ogameMeta: message.ogameMeta,
+                        type: MessageType.TrackingError,
+                        data: {
+                            id: msg.data.id,
+                            type: 'debris-field-report',
+                        },
+                        senderUuid: serviceWorkerUuid,
+                    };
+                    await broadcastMessage(errorMessage);
+                    return;
                 }
 
                 if(tryResult.result.ignored) {
                     const ignoreMessage: WillNotBeTrackedMessage = {
                         ogameMeta: message.ogameMeta,
                         type: MessageType.WillNotBeTracked,
-                        data: msg.data.id,
+                        data: {
+                            id: msg.data.id,
+                            type: 'debris-field-report',
+                        },
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(ignoreMessage);
