@@ -97,10 +97,10 @@
         &.notification--remove {
             transform: translateX(150%);
             margin-bottom: -16px;
-            margin-top: calc(-1px * var(--self-height));
+            margin-top: calc(-1px * var(--self-height)) !important;
         }
 
-        &:not(.notification--remove) + .notification {
+        &:not(.notification--remove:first-of-type) + .notification {
             margin-top: 16px;
         }
 
