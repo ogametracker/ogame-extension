@@ -149,6 +149,7 @@
     import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 
     @Component({
         components: {
@@ -160,6 +161,7 @@
         @Prop({ required: true, type: Object })
         private notification!: ExpeditionTrackingNotificationMessageData;
 
+        private readonly detroidItem = ItemHash.detroid_bronze;
         private readonly expeditionEvents = [
             ExpeditionEventType.lostFleet,
             ExpeditionEventType.resources,
