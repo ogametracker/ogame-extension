@@ -53,11 +53,9 @@
             playerId: 0,
         };
 
-        @Watch('notificationOrder')
-        @Watch('$i18n.locale')
-        private async onNotificationChanged() {
-            await this.$nextTick();
+        private readonly resizeObserver = new ResizeObserver(() => this.onResize());
 
+        private onResize() {
             window.parent.postMessage({
                 type: ogameTrackerNotificationWindowResizeEventName,
                 width: this.$el.clientWidth,
@@ -69,7 +67,7 @@
             return this.notificationOrder.length > 0;
         }
 
-        private mounted() {
+        private async mounted() {
             document.querySelector('#splashscreen')?.remove();
 
             const params = new URLSearchParams(location.search);
@@ -81,6 +79,13 @@
 
 
             chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
+
+            await this.$nextTick();
+            this.resizeObserver.observe(this.$el);
+        }
+
+        private destroyed() {
+            this.resizeObserver.disconnect();
         }
 
         private async onMessage(message: Message<MessageType, any>) {
