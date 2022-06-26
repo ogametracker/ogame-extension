@@ -107,6 +107,15 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
+        private get factors() {
+            const factors = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return {
+                [ResourceType.metal]: factors.factor,
+                [ResourceType.crystal]: factors.factor,
+                [ResourceType.deuterium]: factors.deuteriumFactor,
+            };
+        }
+
         private get firstDay() {
             return ExpeditionDataModule.firstDay;
         }
@@ -122,7 +131,7 @@
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource],
+                    getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource] * this.factors[resource],
                     showAverage: true,
                 })),
                 {
@@ -130,17 +139,13 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: result => result.findings.fleetResourceUnits.metal
-                        + result.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal
-                        + result.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium,
+                    getValue: result => result.findings.fleetResourceUnits.metal * this.factors.metal
+                        + result.findings.fleetResourceUnits.crystal * this.factors.crystal * this.msuConversionRates.crystal
+                        + result.findings.fleetResourceUnits.deuterium  * this.factors.deuterium* this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }
             ];
-        }
-
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
         }
 
         private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {

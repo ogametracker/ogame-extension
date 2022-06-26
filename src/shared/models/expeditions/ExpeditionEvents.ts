@@ -39,8 +39,8 @@ export type ExpeditionFindableShipType =
     | ShipType.smallCargo
     | ShipType.largeCargo
     | ShipType.espionageProbe
-;
-export const ExpeditionFindableShipTypes = [
+    ;
+export const ExpeditionFindableShipTypes: ExpeditionFindableShipType[] = [
     ShipType.lightFighter,
     ShipType.heavyFighter,
     ShipType.cruiser,
@@ -56,7 +56,7 @@ export const ExpeditionFindableShipTypes = [
 ];
 
 
-export type ExpeditionFindableFleet = Record<ExpeditionFindableShipType, number | undefined>;
+export type ExpeditionFindableFleet = Partial<Record<ExpeditionFindableShipType, number>>;
 
 export type ExpeditionEventFleet = ExpeditionEventBase & ExpeditionEventWithSize & {
     type: ExpeditionEventType.fleet;

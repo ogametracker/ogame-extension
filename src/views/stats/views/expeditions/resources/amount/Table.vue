@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -33,8 +32,8 @@
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -53,35 +52,34 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.resources;
-        }
-
         private get expos() {
-            return ExpeditionDataModule.expeditions;
+            return ExpeditionDataModule.dailyResultsArray;
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
-        private get items(): RangedStatsTableItem<ExpeditionEventResources>[] {
-            return Object.values(ResourceType).map(resource => ({
+        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
+            return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.resources[resource], 0),
+                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resources[resource], 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<ExpeditionEventResources>[] {
+        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + expo.resources.metal + expo.resources.crystal + expo.resources.deuterium,
+                        (acc, expo) => acc
+                            + expo.findings.resources.metal
+                            + expo.findings.resources.crystal
+                            + expo.findings.resources.deuterium,
                         0
                     ),
                 },
@@ -89,9 +87,9 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
-                            + expo.resources.metal
-                            + expo.resources.crystal * this.msuConversionRates.crystal
-                            + expo.resources.deuterium * this.msuConversionRates.deuterium,
+                            + expo.findings.resources.metal
+                            + expo.findings.resources.crystal * this.msuConversionRates.crystal
+                            + expo.findings.resources.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                 },

@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -32,11 +31,11 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import { multiplyCost } from '@/shared/models/ogame/common/Cost';
@@ -60,51 +59,58 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
+        private get expos() {
+            return ExpeditionDataModule.dailyResultsArray;
         }
 
-        private get expos() {
-            return ExpeditionDataModule.expeditions;
+        private get factors() {
+            const factors = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            return {
+                [ResourceType.metal]: factors.factor,
+                [ResourceType.crystal]: factors.factor,
+                [ResourceType.deuterium]: factors.deuteriumFactor,
+            };
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
-        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
-            return Object.values(ResourceType).map(resource => ({
+        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
+            return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
                 getValue: expos => expos.reduce(
-                    (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource]
-                    ), 0),
+                    (acc, expo) => acc + expo.findings.fleetResourceUnits[resource] * this.factors[resource],
+                    0
+                ),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
+        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                            (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal + res.deuterium;
-                            }), 0),
+                        (acc, expo) => acc
+                            + expo.findings.fleetResourceUnits.metal * this.factors.metal
+                            + expo.findings.fleetResourceUnits.crystal * this.factors.crystal
+                            + expo.findings.fleetResourceUnits.deuterium * this.factors.deuterium,
+                        0
+                    ),
                 },
                 {
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                            (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0);
-                                return acc + res.metal + res.crystal * this.msuConversionRates.crystal + res.deuterium * this.msuConversionRates.deuterium;
-                            }), 0),
+                        (acc, expo) => acc
+                            + expo.findings.fleetResourceUnits.metal * this.factors.metal
+                            + expo.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal * this.factors.crystal
+                            + expo.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium * this.factors.deuterium,
+                        0
+                    ),
                 },
             ];
         }

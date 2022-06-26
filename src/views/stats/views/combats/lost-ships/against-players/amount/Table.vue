@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="combats"
-            :filter="(combat) => filterCombat(combat)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -31,10 +30,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
@@ -50,26 +47,23 @@
         private showSettings = false;
 
         private get combats() {
-            return CombatReportDataModule.reports;
+            return CombatReportDataModule.dailyResultsArray;
         }
 
-        private filterCombat(combat: CombatReport): boolean {
-            return !combat.isExpedition;
-        }
-
-        private get items(): RangedStatsTableItem<CombatReport>[] {
-            return getNumericEnumValues<ShipType>(ShipType).map(ship => ({
+        private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
+            return ShipTypes.map(ship => ({
                 label: this.$i18n.$t.ships[ship],
-                getValue: combats => combats.reduce((acc, combat) => acc + combat.lostShips[ship], 0),
+                getValue: combats => combats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<CombatReport>[] {
+        private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return [
                 {
                     label: this.$i18n.$t.common.sum,
-                    getValue: combats => combats.reduce(
-                        (acc, combat) => acc + Object.values(combat.lostShips).reduce((acc, cur) => acc + cur, 0),
+                    getValue: combats => ShipTypes.reduce(
+                        (total, ship) => total + combats.reduce(
+                            (acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
                         0
                     ),
                 },

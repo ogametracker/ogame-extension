@@ -10,7 +10,10 @@
                 <template #cell-label="{ value }">
                     <span v-text="value" class="mr-2" />
 
-                    <o-resource :resource="resourceTypes[value]" :size="resourceIconSize" />
+                    <o-resource
+                        :resource="resourceTypes[value]"
+                        :size="resourceIconSize"
+                    />
                 </template>
             </ranged-stats-table>
         </div>
@@ -36,30 +39,36 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { ExpeditionEvent, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
     import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
     import { addCost, Cost, multiplyCost, multiplyCostComponentWise, subCost } from '@/shared/models/ogame/common/Cost';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
+    import { addDays, differenceInDays, startOfDay } from 'date-fns';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
-    type Event =
-        | ({ eventType: 'expedition' } & ExpeditionEvent)
-        | ({ eventType: 'combat-report' } & CombatReport)
-        | ({ eventType: 'debris-field-report' } & DebrisFieldReport);
+    const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
+
+    interface DailyEvents {
+        date: number;
+
+        expeditions?: DailyExpeditionResult;
+        combats?: DailyCombatReportResult;
+        debrisFields?: DailyDebrisFieldReportResult;
+    };
 
     @Component({
         components: {
@@ -97,19 +106,24 @@
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
-        private get events(): Event[] {
-            return [
-                ...CombatReportDataModule.reports.map<Event>(report => ({ ...report, eventType: 'combat-report' })),
-                ...DebrisFieldReportDataModule.reports.map<Event>(report => ({ ...report, eventType: 'debris-field-report' })),
-                ...ExpeditionDataModule.expeditions.map<Event>(expo => ({ ...expo, eventType: 'expedition' })),
-            ];
+        private get events(): DailyEvents[] {
+            const minDay = Math.min(CombatReportDataModule.firstDay, DebrisFieldReportDataModule.firstDay, ExpeditionDataModule.firstDay);
+            const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
+            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
+
+            return days.map<DailyEvents>(day => ({
+                date: day,
+                expeditions: ExpeditionDataModule.dailyResults[day],
+                combats: CombatReportDataModule.dailyResults[day],
+                debrisFields: DebrisFieldReportDataModule.dailyResults[day],
+            })).filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
         }
 
         private get showDetailedBreakdown() {
@@ -123,7 +137,7 @@
             return '24px';
         }
 
-        private get items(): RangedStatsTableItem<Event>[] {
+        private get items(): RangedStatsTableItem<DailyEvents>[] {
             if (this.showDetailedBreakdown) {
                 const types: Record<ResourceType, EventType[]> = {
                     [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report'],
@@ -131,71 +145,77 @@
                     [ResourceType.deuterium]: ['expedition', 'combat-report'],
                 };
 
-                return Object.values(ResourceType).map(resource => ({
+                return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
                     label: this.$i18n.$t.resources[resource],
                     items: types[resource].map(eventType => ({
                         label: this.$i18n.$t.resourceBalance[eventType],
-                        getValue: events => events.filter(ev => ev.eventType == eventType).reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
-                    }))
+                        getValue: events => this.getResources(events, eventType, resource),
+                    })),
                 }));
             }
 
-            return Object.values(ResourceType).map(resource => ({
+            return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: events => events.reduce((acc, ev) => acc + this.getEventResourceAmount(ev, resource), 0),
+                getValue: events => events.reduce((acc, ev) => acc + this.getResource(ev, resource), 0),
             }));
         }
 
-        private getEventResourceAmount(ev: Event, resource: ResourceType): number {
-            switch (ev.eventType) {
-                case 'expedition':
-                    return this.getExpoResourceAmount(ev, resource);
-
-                case 'combat-report':
-                    return this.getCombatResourceAmount(ev)[resource];
-
-                case 'debris-field-report': {
-                    if (resource == ResourceType.deuterium) {
-                        return 0;
-                    }
-                    return ev[resource];
+        private getResources(events: DailyEvents[], eventType: EventType, resource: ResourceType): number {
+            return events.reduce((acc, event) => {
+                switch (eventType) {
+                    case 'expedition': return acc + this.getResource({ date: event.date, expeditions: event.expeditions }, resource);
+                    case 'combat-report': return acc + this.getResource({ date: event.date, combats: event.combats }, resource);
+                    case 'debris-field-report': return acc + this.getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
                 }
+            }, 0);
+        }
+
+        private getResource(dayEvents: DailyEvents, resource: ResourceType): number {
+            return this.getExpeditionResourceAmount(dayEvents.expeditions, resource)
+                + this.getCombatResourceAmount(dayEvents.combats, resource)
+                + this.getDebrisFieldResourceAmount(dayEvents.debrisFields, resource);
+        }
+
+        private getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
+            if (expeditions == null) {
+                return 0;
             }
+
+            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
+            const total = expeditions.findings.resources[resource]
+                + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
+
+            return total;
         }
-        private getExpoResourceAmount(expo: ExpeditionEvent, resource: ResourceType): number {
-            const includeFoundShipsFactor = this.includeFoundShipsFactor;
 
-            switch (expo.type) {
-                case ExpeditionEventType.resources: {
-                    return expo.resources[resource];
-                }
+        private getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefined, resource: ResourceType): number {
+            if (dailyReports == null) {
+                return 0;
 
-                case ExpeditionEventType.fleet: {
-                    return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
-                        0
-                    );
-                }
-
-                default: return 0;
             }
+            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
+
+            const total = dailyReports.loot[resource]
+                - (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+                    + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
+                ) * includeLostShipsFactor;
+
+            return total;
         }
 
-        private getCombatResourceAmount(combatReport: CombatReport) {
-            const includeLostShipsFactor = this.includeLostShipsFactor;
-            const loot: Cost = {
-                ...combatReport.loot,
-                energy: 0,
-            };
-            const lostShipsUnits = getNumericEnumValues<ShipType>(ShipType).reduce(
-                (acc, ship) => addCost(acc, multiplyCost(Ships[ship].getCost(), combatReport.lostShips[ship] ?? 0)),
-                { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
-            );
+        private getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
+            if (reports == null) {
+                return 0;
+            }
 
-            return subCost(loot, multiplyCostComponentWise(lostShipsUnits, { ...includeLostShipsFactor, energy: 0 }));
+            if (resource == ResourceType.deuterium) {
+                return 0;
+            }
+
+            return reports[resource];
         }
 
-        private get footerItems(): RangedStatsTableItem<Event>[] {
+        private get footerItems(): RangedStatsTableItem<DailyEvents>[] {
             const msu: Record<ResourceType, number> = {
                 [ResourceType.metal]: 1,
                 ...this.msuConversionRates,
@@ -204,9 +224,9 @@
             return [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
-                    getValue: events => events.reduce(
-                        (acc, ev) => acc + Object.values(ResourceType).reduce(
-                            (acc, resource) => acc + this.getEventResourceAmount(ev, resource),
+                    getValue: events => ResourceTypes.reduce(
+                        (total, resource) => total + EventTypes.reduce(
+                            (total, eventType) => total + this.getResources(events, eventType, resource),
                             0
                         ),
                         0
@@ -214,9 +234,9 @@
                 },
                 {
                     label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: events => events.reduce(
-                        (acc, ev) => acc + Object.values(ResourceType).reduce(
-                            (acc, resource) => acc + this.getEventResourceAmount(ev, resource) * msu[resource],
+                    getValue: events => ResourceTypes.reduce(
+                        (total, resource) => total + EventTypes.reduce(
+                            (total, eventType) => total + this.getResources(events, eventType, resource) * msu[resource],
                             0
                         ),
                         0

@@ -1,8 +1,7 @@
 <template>
     <div class="table-container">
         <ranged-stats-table
-            :dataItems="combats"
-            :filter="(combat) => filterCombat(combat)"
+            :dataItems="reportsPerDay"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -24,7 +23,9 @@
             <msu-conversion-rate-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
-            <combat-tracking-ignore-espionage-combats-settings class="two-column" />
+            <combat-tracking-ignore-espionage-combats-settings
+                class="two-column"
+            />
             <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
@@ -34,15 +35,10 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { multiplyCost } from '@/shared/models/ogame/common/Cost';
-    import { Ships } from '@/shared/models/ogame/ships/Ships';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
@@ -59,10 +55,6 @@
     export default class Table extends Vue {
         private showSettings = false;
 
-        private get combats() {
-            return CombatReportDataModule.reports;
-        }
-
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
         }
@@ -75,49 +67,40 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
-        private filterCombat(combat: CombatReport): boolean {
-            return !combat.isExpedition;
-        }
-
         private get firstDay() {
             return CombatReportDataModule.firstDay;
         }
 
         private get reportsPerDay() {
-            return CombatReportDataModule.reportsPerDay;
+            return CombatReportDataModule.dailyResultsArray;
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
-        private get items(): RangedStatsTableItem<CombatReport>[] {
+        private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
             const factors: Record<ResourceType, number> = {
                 [ResourceType.metal]: this.factors.factor,
                 [ResourceType.crystal]: this.factors.factor,
                 [ResourceType.deuterium]: this.factors.deuteriumFactor,
             };
 
-            return Object.values(ResourceType).map(resource => ({
+            return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
                 getValue: reports => reports.reduce(
-                    (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
-                        (acc, ship) => acc
-                            + multiplyCost(
-                                Ships[ship].getCost(),
-                                report.lostShips[ship] ?? 0
-                            )[resource]
-                            * factors[resource],
-                        0
-                    ), 0),
+                    (acc, report) => acc
+                        + report.lostShips.againstPlayers.resourceUnits[resource] * factors[resource],
+                    0
+                ),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<CombatReport>[] {
+        private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             const factors: Record<ResourceType, number> = {
                 [ResourceType.metal]: this.factors.factor,
                 [ResourceType.crystal]: this.factors.factor,
@@ -128,26 +111,22 @@
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: reports => reports.reduce(
-                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
-                            (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0);
-                                return acc
-                                    + res.metal * factors.metal
-                                    + res.crystal * factors.crystal
-                                    + res.deuterium * factors.deuterium;
-                            }), 0),
+                        (acc, report) => acc
+                            + report.lostShips.againstPlayers.resourceUnits.metal * factors.metal
+                            + report.lostShips.againstPlayers.resourceUnits.crystal * factors.crystal
+                            + report.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium,
+                        0
+                    ),
                 },
                 {
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: reports => reports.reduce(
-                        (acc, report) => acc + getNumericEnumValues<ShipType>(ShipType).reduce(
-                            (acc, ship) => {
-                                const res = multiplyCost(Ships[ship].getCost(), report.lostShips[ship] ?? 0);
-                                return acc
-                                    + res.metal * factors.metal
-                                    + res.crystal * this.msuConversionRates.crystal * factors.crystal
-                                    + res.deuterium * this.msuConversionRates.deuterium * factors.deuterium;
-                            }), 0),
+                        (acc, report) => acc
+                            + report.lostShips.againstPlayers.resourceUnits.metal * factors.metal
+                            + report.lostShips.againstPlayers.resourceUnits.crystal * factors.crystal * this.msuConversionRates.crystal
+                            + report.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium * this.msuConversionRates.deuterium,
+                        0
+                    ),
                 },
             ];
         }

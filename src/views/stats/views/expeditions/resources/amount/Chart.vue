@@ -76,11 +76,9 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
@@ -116,7 +114,7 @@
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [
-                ...Object.values(ResourceType).map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
@@ -129,9 +127,9 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: result => result.findings.fleetResourceUnits.metal
-                        + result.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal
-                        + result.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium,
+                    getValue: result => result.findings.resources.metal
+                        + result.findings.resources.crystal * this.msuConversionRates.crystal
+                        + result.findings.resources.deuterium * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }

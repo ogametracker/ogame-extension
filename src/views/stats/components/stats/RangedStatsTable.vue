@@ -76,7 +76,7 @@
 
     interface SingleRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
         label: string;
-        getValue: (item: T) => number;
+        getValue: (items: T[]) => number;
     }
 
     interface GroupedRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {

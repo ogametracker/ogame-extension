@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
             :items="items"
             :footerItems="footerItems"
             show-percentage
@@ -11,17 +10,24 @@
                 <span v-text="value" />
 
                 <span
-                    v-if="value == $i18n.$t.expeditions.expeditionEventSizes.small"
+                    v-if="
+                        value == $i18n.$t.expeditions.expeditionEventSizes.small
+                    "
                     class="mdi mdi-hexagon-slice-1"
                     :style="{ color: colors.small }"
                 />
                 <span
-                    v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.medium"
+                    v-else-if="
+                        value ==
+                        $i18n.$t.expeditions.expeditionEventSizes.medium
+                    "
                     class="mdi mdi-hexagon-slice-3"
                     :style="{ color: colors.medium }"
                 />
                 <span
-                    v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.large"
+                    v-else-if="
+                        value == $i18n.$t.expeditions.expeditionEventSizes.large
+                    "
                     class="mdi mdi-hexagon-slice-5"
                     :style="{ color: colors.large }"
                 />
@@ -45,10 +51,10 @@
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ExpeditionEvent, ExpeditionEventFleet } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     @Component({
         components: {
@@ -57,32 +63,30 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
         },
     })
     export default class Table extends Vue {
-        private readonly ExpeditionEventSize = ExpeditionEventSize;
         private showSettings = false;
-        
+
         private get colors() {
             return SettingsDataModule.settings.colors.expeditions.sizes;
         }
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
-        }
-
         private get expos() {
-            return ExpeditionDataModule.expeditions;
+            return ExpeditionDataModule.dailyResultsArray;
         }
 
-        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
-            return Object.values(ExpeditionEventSize).map(size => ({
+        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
+            return ExpeditionEventSizes.map(size => ({
                 label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
-                getValue: expos => expos.filter(expo => expo.size == size).length,
+                getValue: expos => expos.reduce((acc, expo) => acc + expo.eventSizes.fleet[size], 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
+        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
                 label: this.$i18n.$t.common.sum,
-                getValue: expos => expos.length,
+                getValue: expos => ExpeditionEventSizes.reduce(
+                    (acc, size) => acc + expos.reduce((acc, expo) => acc + expo.eventSizes.fleet[size], 0),
+                    0
+                ),
             }];
         }
     }

@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -30,10 +29,10 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
@@ -45,7 +44,6 @@
         },
     })
     export default class Table extends Vue {
-        private readonly ExpeditionFindableShipType = ExpeditionFindableShipType;
         private showSettings = false;
 
         private avgFormat: Intl.NumberFormatOptions = {
@@ -53,29 +51,27 @@
             maximumFractionDigits: 1,
         };
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.fleet;
-        }
-
         private get expos() {
-            return ExpeditionDataModule.expeditions;
+            return ExpeditionDataModule.dailyResultsArray;
         }
 
-        private get items(): RangedStatsTableItem<ExpeditionEventFleet>[] {
-            return getNumericEnumValues(ExpeditionFindableShipType).map(ship => ({
-                label: this.$i18n.$t.ships[ship as ShipType],
-                getValue: expos => expos.reduce((acc, expo) => acc + (expo.fleet[ship] ?? 0), 0),
+        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
+            return ExpeditionFindableShipTypes.map(ship => ({
+                label: this.$i18n.$t.ships[ship],
+                getValue: expos => expos.reduce((acc, expo) => acc + (expo.findings.fleet[ship] ?? 0), 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<ExpeditionEventFleet>[] {
+        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
                 label: this.$i18n.$t.common.sum,
                 getValue: expos => expos.reduce(
-                    (acc, expo) => acc + getNumericEnumValues(ExpeditionFindableShipType).reduce(
-                        (acc, ship) => acc + (expo.fleet[ship] ?? 0)
-                        , 0)
-                    , 0),
+                    (acc, expo) => acc + ExpeditionFindableShipTypes.reduce(
+                        (acc, ship) => acc + (expo.findings.fleet[ship] ?? 0),
+                        0
+                    ),
+                    0
+                ),
             }];
         }
 

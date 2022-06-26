@@ -36,7 +36,7 @@
     import { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
-    import { DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
+    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
@@ -65,7 +65,7 @@
             };
         }
 
-        private get items(): RangedStatsTableItem<DebrisFieldReport>[] {
+        private get items(): RangedStatsTableItem<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
             return resources.map(resource => ({
@@ -76,7 +76,7 @@
         }
 
         private get debrisFieldReports() {
-            return DebrisFieldReportDataModule.reports;
+            return DebrisFieldReportDataModule.dailyResultsArray;
         }
 
         private get footerItems(): RangedStatsTableItem<DebrisFieldReport>[] {

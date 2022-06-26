@@ -1,7 +1,7 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "../../shared/messages/Message";
-import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
@@ -216,18 +216,17 @@ export class ExpeditionModule {
             return null;
         }
 
-        const ships = getNumericEnumValues<ShipType>(ExpeditionFindableShipType);
-        const shipNames = ships.map(ship => i18nShips[language][ship]);
+        const shipNames = ExpeditionFindableShipTypes.map(ship => i18nShips[language][ship]);
         const regex = i18nMessages.regex(shipNames);
         const match = data.text.match(regex);
 
-        const foundShips: Record<ExpeditionFindableShipType, number | undefined> = {};
+        const foundShips: Partial<Record<ExpeditionFindableShipType, number>> = {};
 
         // there can be no match if no ships were found because the expedition fleet was too small
         if (match != null) {
             const textWithFoundFleet = match.groups!.ships;
 
-            ships.forEach(ship => {
+            ExpeditionFindableShipTypes.forEach(ship => {
                 const shipName = i18nShips[language][ship];
                 const shipRegex = new RegExp(`${shipName}: (\\d+)`);
                 const shipMatch = textWithFoundFleet.match(shipRegex);

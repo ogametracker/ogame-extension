@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
@@ -77,7 +77,7 @@
         }
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return getNumericEnumValues<ShipType>(ExpeditionFindableShipType).map(ship => ({
+            return ExpeditionFindableShipTypes.map(ship => ({
                 key: `${ship}`,
                 label: this.$i18n.$t.ships[ship],
                 color: this.colors[ship],

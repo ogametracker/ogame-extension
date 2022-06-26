@@ -67,7 +67,7 @@
 
 
         private get nextId() {
-            const minId = DebrisFieldReportDataModule.reports.reduce((min, report) => Math.min(min, report.id), 0);
+            const minId = Math.min(0, DebrisFieldReportDataModule.minId);
             return minId - 1;
         }
 

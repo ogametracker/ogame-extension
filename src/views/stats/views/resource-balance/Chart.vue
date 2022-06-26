@@ -77,18 +77,13 @@
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import min from 'date-fns/min/index';
     import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { Ships } from '@/shared/models/ogame/ships/Ships';
-    import { addCost, Cost, multiplyCost, multiplyCostComponentWise, subCost } from '@/shared/models/ogame/common/Cost';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
@@ -169,24 +164,13 @@
         }
 
         private get datasets(): StatsChartDataset<DayEvents>[] {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
-
             return [
                 ...ResourceTypes.map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (dayEvents: DayEvents) => dayEvents.reduce(
-                        (acc, events) => acc
-                            + events.expeditions.reduce((acc, expo) => acc + this.getResourceAmount(expo, resource), 0)
-                            + events.combatReports.reduce((acc, combat) => acc + this.getCombatResourceAmount(combat)[resource], 0)
-                            + events.debrisFieldReports.reduce((acc, report) => acc + (resource == ResourceType.deuterium ? 0 : report[resource]), 0),
-                        0
-                    ),
+                    getValue: (dayEvents: DayEvents) => this.getResource(dayEvents, resource),
                     showAverage: true,
                 })),
                 {
@@ -194,18 +178,9 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: dayEvents => ResourceTypes.reduce(
-                        (acc, resource) => acc + dayEvents.reduce(
-                            (acc, events) => acc
-                                + msu[resource] * (
-                                    events.expeditions.reduce((acc, expo) => acc + this.getResourceAmount(expo, resource), 0)
-                                    + events.combatReports.reduce((acc, combat) => acc + this.getCombatResourceAmount(combat)[resource], 0)
-                                    + events.debrisFieldReports.reduce((acc, report) => acc + (resource == ResourceType.deuterium ? 0 : report[resource]), 0)
-                                ),
-                            0
-                        ),
-                        0
-                    ),
+                    getValue: dayEvents => this.getResource(dayEvents, ResourceType.metal)
+                        + this.getResource(dayEvents, ResourceType.crystal) * this.msuConversionRates.crystal
+                        + this.getResource(dayEvents, ResourceType.deuterium) * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }
@@ -236,37 +211,49 @@
             }, 0);
         }
 
-        private getResourceAmount(expo: ExpeditionEvent, resource: ResourceType) {
-            const includeFoundShipsFactor = this.includeFoundShipsFactor;
-
-            switch (expo.type) {
-                case ExpeditionEventType.resources: {
-                    return expo.resources[resource];
-                }
-
-                case ExpeditionEventType.fleet: {
-                    return ExpeditionFindableShipTypes.reduce(
-                        (acc, ship) => acc + multiplyCost(Ships[ship].getCost(), expo.fleet[ship] ?? 0)[resource] * includeFoundShipsFactor[resource],
-                        0
-                    );
-                }
-
-                default: return 0;
-            }
+        private getResource(dayEvents: DayEvents, resource: ResourceType): number {
+            return this.getExpeditionResourceAmount(dayEvents.expeditions, resource)
+                + this.getCombatResourceAmount(dayEvents.combatReports, resource)
+                + this.getDebrisFieldResourceAmount(dayEvents.debrisFieldReports, resource);
         }
 
-        private getCombatResourceAmount(combatReport: CombatReport) {
-            const includeLostShipsFactor = this.includeLostShipsFactor;
-            const loot: Cost = {
-                ...combatReport.loot,
-                energy: 0,
-            };
-            const lostShipsUnits = ShipTypes.reduce(
-                (acc, ship) => addCost(acc, multiplyCost(Ships[ship].getCost(), combatReport.lostShips[ship] ?? 0)),
-                { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
-            );
+        private getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
+            if (expeditions == null) {
+                return 0;
+            }
 
-            return subCost(loot, multiplyCostComponentWise(lostShipsUnits, { ...includeLostShipsFactor, energy: 0 }));
+            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
+            const total = expeditions.findings.resources[resource]
+                + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
+
+            return total;
+        }
+
+        private getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefined, resource: ResourceType): number {
+            if (dailyReports == null) {
+                return 0;
+
+            }
+            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
+
+            const total = dailyReports.loot[resource]
+                - (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+                    + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
+                ) * includeLostShipsFactor;
+
+            return total;
+        }
+
+        private getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
+            if (reports == null) {
+                return 0;
+            }
+
+            if (resource == ResourceType.deuterium) {
+                return 0;
+            }
+
+            return reports[resource];
         }
     }
 </script>

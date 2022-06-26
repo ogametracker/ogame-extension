@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="expos"
-            :filter="(expo) => filterExpo(expo)"
             :items="items"
             show-average
             :averageNumberFormatOptions="avgFormat"
@@ -29,9 +28,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({
@@ -50,17 +47,13 @@
         };
 
         private get expos() {
-            return ExpeditionDataModule.expeditions;
+            return ExpeditionDataModule.dailyResultsArray;
         }
 
-        private filterExpo(expo: ExpeditionEvent): boolean {
-            return expo.type == ExpeditionEventType.darkMatter;
-        }
-
-        private get items(): RangedStatsTableItem<ExpeditionEventDarkMatter>[] {
+        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
                 label: this.$i18n.$t.common.darkMatter,
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.darkMatter, 0),
+                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
             }];
         }
     }

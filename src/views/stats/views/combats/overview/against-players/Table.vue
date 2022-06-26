@@ -2,7 +2,6 @@
     <div class="table-container">
         <ranged-stats-table
             :dataItems="combats"
-            :filter="(combat) => filterCombat(combat)"
             :items="items"
             :footerItems="footerItems"
             show-average
@@ -25,9 +24,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
+    import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
@@ -42,25 +41,24 @@
         private showSettings = false;
 
         private get combats() {
-            return CombatReportDataModule.reports;
+            return CombatReportDataModule.dailyResultsArray;
         }
 
-        private filterCombat(combat: CombatReport): boolean {
-            return !combat.isExpedition;
-        }
-
-        private get items(): RangedStatsTableItem<CombatReport>[] {
-            return Object.values(CombatResultType).map(result => ({
+        private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
+            return CombatResultTypes.map(result => ({
                 label: this.$i18n.$t.combats.combatResults[result],
-                getValue: combats => combats.filter(combat => combat.result == result).length,
+                getValue: combats => combats.reduce((acc, cur) => acc + cur.results.againstPlayers[result], 0),
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<CombatReport>[] {
+        private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return [
                 {
                     label: this.$i18n.$t.common.sum,
-                    getValue: combats => combats.length,
+                    getValue: combats => CombatResultTypes.reduce((acc, result) => acc + combats.reduce(
+                        (acc, cur) => acc + cur.results.againstPlayers[result], 0), 
+                        0
+                    ),
                 },
             ];
         }

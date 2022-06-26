@@ -32,8 +32,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { CombatReportDataModule } from '@/views/stats/data/CombatReportDataModule';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
@@ -56,7 +56,7 @@
         }
 
         private get combats() {
-            return CombatReportDataModule.reports;
+            return CombatReportDataModule.dailyResultsArray;
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
@@ -67,29 +67,29 @@
             };
         }
 
-        private get items(): RangedStatsTableItem<CombatReport>[] {
-            return Object.values(ResourceType).map(resource => ({
+        private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
+            return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.loot[resource], 0),
+                getValue: combats => combats.reduce((acc, combat) => acc + combat.loot[resource], 0) ,
             }));
         }
 
-        private get footerItems(): RangedStatsTableItem<CombatReport>[] {
+        private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc + expo.loot.metal + expo.loot.crystal + expo.loot.deuterium,
+                    getValue: combats => combats.reduce(
+                        (acc, combat) => acc + combat.loot.metal + combat.loot.crystal + combat.loot.deuterium,
                         0
                     ),
                 },
                 {
                     label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc
-                            + expo.loot.metal
-                            + expo.loot.crystal * this.msuConversionRates.crystal
-                            + expo.loot.deuterium * this.msuConversionRates.deuterium,
+                    getValue: combats => combats.reduce(
+                        (acc, combat) => acc
+                            + combat.loot.metal
+                            + combat.loot.crystal * this.msuConversionRates.crystal
+                            + combat.loot.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
                 },

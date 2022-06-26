@@ -141,13 +141,14 @@
 
 <script lang="ts">
     import { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
     import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 
     @Component({
         components: {
@@ -173,34 +174,21 @@
             ExpeditionEventType.nothing,
         ];
 
-        private readonly ships = [
-            ExpeditionFindableShipType.smallCargo,
-            ExpeditionFindableShipType.largeCargo,
-            ExpeditionFindableShipType.lightFighter,
-            ExpeditionFindableShipType.heavyFighter,
-            ExpeditionFindableShipType.cruiser,
-            ExpeditionFindableShipType.battleship,
-            ExpeditionFindableShipType.bomber,
-            ExpeditionFindableShipType.battlecruiser,
-            ExpeditionFindableShipType.destroyer,
-            ExpeditionFindableShipType.reaper,
-            ExpeditionFindableShipType.pathfinder,
-            ExpeditionFindableShipType.espionageProbe,
-        ].sort((a, b) => a - b);
+        private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
         private readonly shipTypes: Record<ExpeditionFindableShipType, OShipType> = {
-            [ExpeditionFindableShipType.lightFighter]: OShipType['light-fighter'],
-            [ExpeditionFindableShipType.heavyFighter]: OShipType['heavy-fighter'],
-            [ExpeditionFindableShipType.cruiser]: OShipType.cruiser,
-            [ExpeditionFindableShipType.battleship]: OShipType.battleship,
-            [ExpeditionFindableShipType.bomber]: OShipType.bomber,
-            [ExpeditionFindableShipType.battlecruiser]: OShipType.battlecruiser,
-            [ExpeditionFindableShipType.destroyer]: OShipType.destroyer,
-            [ExpeditionFindableShipType.reaper]: OShipType.reaper,
-            [ExpeditionFindableShipType.pathfinder]: OShipType.pathfinder,
-            [ExpeditionFindableShipType.smallCargo]: OShipType['small-cargo'],
-            [ExpeditionFindableShipType.largeCargo]: OShipType['large-cargo'],
-            [ExpeditionFindableShipType.espionageProbe]: OShipType['espionage-probe'],
+            [ShipType.lightFighter]: OShipType['light-fighter'],
+            [ShipType.heavyFighter]: OShipType['heavy-fighter'],
+            [ShipType.cruiser]: OShipType.cruiser,
+            [ShipType.battleship]: OShipType.battleship,
+            [ShipType.bomber]: OShipType.bomber,
+            [ShipType.battlecruiser]: OShipType.battlecruiser,
+            [ShipType.destroyer]: OShipType.destroyer,
+            [ShipType.reaper]: OShipType.reaper,
+            [ShipType.pathfinder]: OShipType.pathfinder,
+            [ShipType.smallCargo]: OShipType['small-cargo'],
+            [ShipType.largeCargo]: OShipType['large-cargo'],
+            [ShipType.espionageProbe]: OShipType['espionage-probe'],
         };
 
         private get hasSummary() {

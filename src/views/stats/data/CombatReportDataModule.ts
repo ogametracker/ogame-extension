@@ -15,6 +15,7 @@ import { Ships } from '@/shared/models/ogame/ships/Ships';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 
 export interface DailyCombatReportResult {
+    date: number;
     results: {
         onExpeditions: Record<CombatResultType, number>;
         againstPlayers: Record<CombatResultType, number>;
@@ -35,11 +36,15 @@ export interface DailyCombatReportResult {
 @Component
 class CombatReportDataModuleClass extends Vue {
     public dailyResults: Partial<Record<number, DailyCombatReportResult>> = {};
-    private _firstDate: number | null = null;
-    private _count = 0;
+    private internal_firstDate: number | null = null;
+    private internal_count = 0;
 
     public get count() {
-        return this._count;
+        return this.internal_count;
+    }
+
+    public get dailyResultsArray(): DailyCombatReportResult[] {
+        return Object.values(this.dailyResults) as DailyCombatReportResult[];
     }
 
     private async created() {
@@ -49,32 +54,25 @@ class CombatReportDataModuleClass extends Vue {
 
     private async loadData() {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
-        const tx = db.transaction('combatReports', 'readonly');
-        const store = tx.objectStore('combatReports');
 
         let minDate: number | null = null;
-        let cursor = await store.openCursor();
-        while (cursor != null) {
-            const combatReport = cursor.value;
-            this.addCombatReportToDailyResult(combatReport);
+        const reports = await db.getAll('combatReports');
+        reports.forEach(report => {
+            this.addCombatReportToDailyResult(report);
 
-            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, combatReport.date);
-
-            cursor = await cursor.continue();
-        }
-        this._firstDate = minDate;
-
-        await tx.done;
+            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
+        });
+        this.internal_firstDate = minDate;
     }
 
     private addCombatReportToDailyResult(report: CombatReport) {
-        this._count++;
+        this.internal_count++;
 
         const day = startOfDay(report.date).getTime();
 
         let dailyResult = this.dailyResults[day];
         if (dailyResult == null) {
-            dailyResult = this.getNewDailyResult();
+            dailyResult = this.getNewDailyResult(day);
             this.$set(this.dailyResults, day, dailyResult);
         }
 
@@ -100,8 +98,9 @@ class CombatReportDataModuleClass extends Vue {
         }
     }
 
-    private getNewDailyResult(): DailyCombatReportResult {
+    private getNewDailyResult(date: number): DailyCombatReportResult {
         return {
+            date,
             loot: createRecord(ResourceTypes, 0),
             lostShips: {
                 onExpeditions: {
@@ -142,7 +141,7 @@ class CombatReportDataModuleClass extends Vue {
     }
 
     public get firstDay(): number {
-        return startOfDay(this._firstDate ?? Date.now()).getTime();
+        return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
     }
 }
 

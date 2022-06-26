@@ -16,6 +16,16 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
+                        <div v-text="$i18n.$t.common.resourceUnits" />
+
+                        <div
+                            class="number"
+                            v-text="
+                                $i18n.$n(
+                                    getSumMsu(getVisibleDatasets(datasets))
+                                )
+                            "
+                        />
                         <div v-text="$i18n.$t.common.resourceUnitsMsu" />
                     </div>
                     <hr />
@@ -23,7 +33,21 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
+                        "
+                    />
+
+                    <div
+                        class="number"
+                        v-text="$i18n.$n(getSumMsu(datasets))"
+                    />
+                    <div
+                        v-text="
+                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </stats-chart>
@@ -116,9 +140,10 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: (result: DailyCombatReportResult) => result.lostShips.againstPlayers.resourceUnits.metal
-                        + result.lostShips.againstPlayers.resourceUnits.crystal  * factors.crystal
-                        + result.lostShips.againstPlayers.resourceUnits.deuterium  * factors.deuterium,
+                    getValue: (result: DailyCombatReportResult) =>
+                        result.lostShips.againstPlayers.resourceUnits.metal * factors.metal
+                        + result.lostShips.againstPlayers.resourceUnits.crystal * factors.crystal * this.msuConversionRates.crystal
+                        + result.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium * this.msuConversionRates.deuterium,
                     stack: false,
                     showAverage: true,
                 }
@@ -131,6 +156,19 @@
 
         private getSum(datasets: ScollableChartFooterDataset[]): number {
             return datasets.filter(d => d.key != 'total').reduce((acc, cur) => acc + cur.value, 0);
+        }
+
+        private getSumMsu(datasets: ScollableChartFooterDataset[]): number {
+            const msu: Record<ResourceType, number> = {
+                [ResourceType.metal]: 1,
+                ...this.msuConversionRates,
+            };
+            return datasets.reduce((acc, cur) => {
+                if (!(cur.key in msu)) {
+                    return acc;
+                }
+                return acc + cur.value * msu[cur.key as ResourceType];
+            }, 0);
         }
     }
 </script>
