@@ -1,5 +1,6 @@
 import { ExpeditionFindableShipType } from "../models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../models/expeditions/ExpeditionEventType";
+import { ItemHash } from "../models/ogame/items/ItemHash";
 import { ResourceType } from "../models/ogame/resources/ResourceType";
 import { Message } from "./Message";
 import { MessageType } from "./MessageType";
@@ -24,6 +25,7 @@ export interface ExpeditionTrackingNotificationMessageData {
     resources: Record<ResourceType, number>;
     ships: Record<ExpeditionFindableShipType, number>;
     darkMatter: number;
+    items: ItemHash[];
     events: Record<ExpeditionEventType, number>;
 }
 export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;

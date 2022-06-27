@@ -18,7 +18,7 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
     import { Items } from '@/shared/models/ogame/items/Items';
     import { Item } from '@/shared/models/ogame/items/Item';
 
@@ -28,7 +28,7 @@
         @Prop({
             required: true,
             type: String as PropType<ItemHash>,
-            validator: (value: string) => (Object.values(ItemHash).filter(h => h.length == 40) as string[]).includes(value)
+            validator: (value: string) => (ItemHashes as string[]).includes(value)
         })
         private item!: ItemHash;
 

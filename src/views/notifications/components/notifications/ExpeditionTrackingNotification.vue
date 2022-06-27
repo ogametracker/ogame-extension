@@ -39,6 +39,14 @@
                     </template>
                 </div>
 
+                <div class="result-flex" v-if="notification.items.length > 0">
+                    <o-item
+                        v-for="(item, i) in notification.items"
+                        :key="i"
+                        :item="item"
+                    />
+                </div>
+
                 <div class="result-grid" v-if="foundShips">
                     <template v-for="ship in ships">
                         <template v-if="notification.ships[ship] > 0">
@@ -230,7 +238,8 @@
         column-gap: 8px;
         align-items: center;
 
-        + .result-grid {
+        + .result-grid,
+        + .result-flex {
             margin-top: 8px;
         }
 
@@ -240,5 +249,12 @@
             text-align: center;
             height: 20px;
         }
+    }
+
+    .result-flex {
+        display: flex;
+        flex-direction: row;
+        column-gap: 8px;
+        row-gap: 4px;
     }
 </style>

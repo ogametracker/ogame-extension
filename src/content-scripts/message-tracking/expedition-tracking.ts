@@ -54,6 +54,7 @@ const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
         [ShipType.espionageProbe]: 0,
     },
     darkMatter: 0,
+    items: [],
     events: {
         [ExpeditionEventType.nothing]: 0,
         [ExpeditionEventType.resources]: 0,
@@ -419,6 +420,11 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
 
         case ExpeditionEventType.darkMatter: {
             totalExpeditionResult.darkMatter += msg.data.darkMatter;
+            break;
+        }
+
+        case ExpeditionEventType.item: {
+            totalExpeditionResult.items.push(msg.data.itemHash);
             break;
         }
 
