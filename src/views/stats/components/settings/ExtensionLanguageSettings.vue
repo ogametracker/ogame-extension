@@ -9,7 +9,7 @@
                     v-for="lang in langs"
                     :key="lang"
                     :value="lang"
-                    v-text="lang"
+                    v-text="languageNames[lang]"
                 />
             </select>
         </div>
@@ -21,12 +21,18 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
+    type SupportedUILanguage = LanguageKey.de | LanguageKey.en;
+
     @Component({})
     export default class DetailedResourceBalanceSettings extends Vue {
-        private langs: LanguageKey[] = [
-            LanguageKey.en,
+        private langs: SupportedUILanguage[] = [
             LanguageKey.de,
+            LanguageKey.en,
         ];
+        private languageNames: Record<SupportedUILanguage, string> = {
+            [LanguageKey.de]: 'Deutsch',
+            [LanguageKey.en]: 'English',
+        };
 
         private get language() {
             return SettingsDataModule.settings.extensionLanguage;
