@@ -18,6 +18,8 @@ import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
 import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
+import { Lock } from 'semaphore-async-await';
+import { delay } from '@/shared/utils/delay';
 
 @Component
 class EmpireDataModuleClass extends Vue {
@@ -25,6 +27,8 @@ class EmpireDataModuleClass extends Vue {
 
     private _ready!: Promise<void>;
     private _resolveReady!: () => void;
+    private loading = 0;
+    private lock = new Lock();
 
     public get ready(): Promise<void> {
         return this._ready;
@@ -44,6 +48,15 @@ class EmpireDataModuleClass extends Vue {
     }
 
     private async loadData() {
+        this.loading++;
+        if(this.loading > 1) {
+            return;
+        }
+
+        await this.lock.acquire();
+        await delay(200); // delay a bit because OGame empire view will cause many updates
+        console.log('loading');
+
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         const tx = db.transaction('empire', 'readonly');
         const store = tx.objectStore('empire');
@@ -228,6 +241,8 @@ class EmpireDataModuleClass extends Vue {
         };
 
         this._resolveReady();
+        this.loading = 0;
+        this.lock.release();
     }
 
     private async onMessage(msg: Message) {

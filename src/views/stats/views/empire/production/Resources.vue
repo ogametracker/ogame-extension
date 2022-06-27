@@ -51,7 +51,7 @@
             </div>
         </template>
 
-        <template #cell-productionSettings="{ value: settings, item }">
+        <template #cell-productionSettings="{ value: settings, item: prodItem }">
             <div class="production-settings-mini-table">
                 <span v-text="settings.metalMine" />
                 <span v-text="settings.crystalMine" />
@@ -61,9 +61,9 @@
                 <span v-text="settings.solarSatellite" />
                 <span v-text="settings.crawler" />
 
-                <template v-for="(item, i) in getActiveItems(item)">
+                <template v-for="(item, i) in getActiveItems(prodItem)">
                     <span v-if="item == null" :key="i" />
-                    <o-item :key="i" :item="item" size="24px" />
+                    <o-item v-else :key="i" :item="item" size="24px" />
                 </template>
             </div>
         </template>
@@ -189,13 +189,13 @@
         total: number;
         totalMsu: number;
 
-        productionSettings: PoductionSettingsItem;
+        productionSettings: ProductionSettingsItem;
         activeItems: ItemHash[];
 
         isResourcePackageRow?: boolean;
     }
 
-    interface PoductionSettingsItem {
+    interface ProductionSettingsItem {
         metalMine: number;
         crystalMine: number;
         deuteriumSynthesizer: number;
