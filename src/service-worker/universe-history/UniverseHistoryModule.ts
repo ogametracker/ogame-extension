@@ -479,7 +479,7 @@ export class UniverseHistoryModule {
         }
 
         const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
-        const scoresByType: Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>> = {} as any;
+        const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
         scoreTypes.forEach(type => scoresByType[type] = {});
 
         for (const ally of alliances) {
@@ -496,7 +496,7 @@ export class UniverseHistoryModule {
             }
         }
 
-        const sortedScoresByType: Record<DbUniverseHistoryScoreType, number[]> = {} as any;
+        const sortedScoresByType = {} as Record<DbUniverseHistoryScoreType, number[]>;
         scoreTypes.forEach(type => {
             const allyScores = scoresByType[type];
             const sortedScores = [...new Set<number>(
@@ -690,7 +690,7 @@ export class UniverseHistoryModule {
         }
 
         const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
-        const scoresByType: Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>> = {} as any;
+        const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
         scoreTypes.forEach(type => scoresByType[type] = {});
 
         for (const player of players) {

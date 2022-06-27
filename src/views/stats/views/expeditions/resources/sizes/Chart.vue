@@ -47,7 +47,7 @@
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
+    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
@@ -76,7 +76,7 @@
         }
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return Object.values(ExpeditionEventSize).map(size => ({
+            return ExpeditionEventSizes.map(size => ({
                 key: size,
                 label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
                 color: this.colors[size],

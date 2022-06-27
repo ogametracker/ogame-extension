@@ -43,12 +43,9 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';

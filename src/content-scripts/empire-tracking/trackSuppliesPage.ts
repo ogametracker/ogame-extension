@@ -1,8 +1,9 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { createRecord } from "@/shared/utils/createRecord";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetBuildingLevelsMessage, UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
-import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
+import { BuildingType, PlanetSupplyBuildingTypes } from "../../shared/models/ogame/buildings/BuildingType";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
@@ -24,17 +25,8 @@ export function trackSuppliesPage() {
                 return;
             }
 
-            const buildingTypes = [
-                BuildingType.metalMine,
-                BuildingType.metalStorage,
-                BuildingType.crystalMine,
-                BuildingType.crystalStorage,
-                BuildingType.deuteriumSynthesizer,
-                BuildingType.deuteriumTank,
-                BuildingType.solarPlant,
-                BuildingType.fusionReactor,
-            ];
-            const buildingLevels = {} as Partial<Record<BuildingType, number>>;
+            const buildingTypes = PlanetSupplyBuildingTypes;
+            const buildingLevels = createRecord(PlanetSupplyBuildingTypes, 0);
 
             buildingTypes.forEach(building => {
                 const levelText = element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value')
@@ -58,7 +50,7 @@ export function trackSuppliesPage() {
 
 
             const shipTypes = [ ShipType.solarSatellite, ShipType.crawler];
-            const shipCounts = {} as Partial<Record<ShipType, number>>;
+            const shipCounts = createRecord(shipTypes, 0) as Partial<Record<ShipType, number>>;
             shipTypes.forEach(ship => {
                 const amountText = element.querySelector(`[data-technology="${ship}"] .amount`)?.getAttribute('data-value')
                     ?? _throw(`did not find amount of ship '${ShipType[ship]}'`);

@@ -3,14 +3,12 @@ import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
-import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
-import { PlanetType } from "../../shared/models/ogame/common/PlanetType";
-import { DefenseType } from "../../shared/models/ogame/defenses/DefenseType";
+import { BuildingType, BuildingTypes } from "../../shared/models/ogame/buildings/BuildingType";
+import { DefenseType, DefenseTypes } from "../../shared/models/ogame/defenses/DefenseType";
 import { Items } from "../../shared/models/ogame/items/Items";
-import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ResearchType, ResearchTypes } from "../../shared/models/ogame/research/ResearchType";
+import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
@@ -63,11 +61,6 @@ export function trackEmpirePage() {
             const ogameEmpireData = JSON.parse(json) as OgameEmpireData;
             const ogameMeta = getOgameMeta();
 
-            const buildingTypes = getNumericEnumValues<BuildingType>(BuildingType);
-            const shipTypes = getNumericEnumValues<ShipType>(ShipType);
-            const defenseTypes = getNumericEnumValues<DefenseType>(DefenseType);
-            const researchTypes = getNumericEnumValues<ResearchType>(ResearchType);
-
             ogameEmpireData.planets.forEach(planet => {
                 /* ATTENTION! 
                 * Basic Planet data (IDs, positions, temperatures etc.) are NOT tracked here because we need to know ALL planets AND moons at once
@@ -77,7 +70,7 @@ export function trackEmpirePage() {
                 const isMoon = planet.type == 3;
                
                 // update building levels
-                const updateBuildings = buildingTypes.filter(building => planet[building] != null);
+                const updateBuildings = BuildingTypes.filter(building => planet[building] != null);
                 const buildingLevels = updateBuildings.reduce((acc, building) => {
                     acc[building] = parseIntSafe(planet[building].toString(), 10);
                     return acc;
@@ -96,7 +89,7 @@ export function trackEmpirePage() {
                 sendMessage(buildingsMessage);
 
                 // update ship counts
-                const shipCounts = shipTypes.reduce((acc, ship) => {
+                const shipCounts = ShipTypes.reduce((acc, ship) => {
                     acc[ship] = parseIntSafe(planet[ship].toString(), 10);
                     return acc;
                 }, {} as Partial<Record<ShipType, number>>);
@@ -114,7 +107,7 @@ export function trackEmpirePage() {
                 sendMessage(shipCountsMessage);
 
                 // update defense counts
-                const defenseCounts = defenseTypes.reduce((acc, def) => {
+                const defenseCounts = DefenseTypes.reduce((acc, def) => {
                     acc[def] = parseIntSafe(planet[def].toString(), 10);
                     return acc;
                 }, {} as Record<DefenseType, number>);
@@ -182,7 +175,7 @@ export function trackEmpirePage() {
 
 
             // update research levels
-            const researchLevels = researchTypes.reduce((acc, research) => {
+            const researchLevels = ResearchTypes.reduce((acc, research) => {
                 acc[research] = parseIntSafe(ogameEmpireData.planets[0][research].toString(), 10);
                 return acc;
             }, {} as Record<ResearchType, number>);

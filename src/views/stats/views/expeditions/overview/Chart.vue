@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
@@ -76,7 +76,7 @@
         }
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return Object.values(ExpeditionEventType).map(type => ({
+            return ExpeditionEventTypes.map(type => ({
                 key: type,
                 label: this.$i18n.$t.expeditions.expeditionEvents[type],
                 color: this.colors[type],

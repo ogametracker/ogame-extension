@@ -1,6 +1,5 @@
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
-import { MessageOgameMeta } from "../../shared/messages/Message";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError, _logWarning } from "../../shared/utils/_log";
@@ -9,14 +8,12 @@ import i18nExpeditions from '../../shared/i18n/ogame/messages/expeditions';
 import i18nPremium from '../../shared/i18n/ogame/premium';
 import i18nResources from '../../shared/i18n/ogame/resources';
 import i18nShips from '../../shared/i18n/ogame/ships';
-import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventSizes } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
-import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
+import { ResourceType, ResourceTypes } from "../../shared/models/ogame/resources/ResourceType";
 import { ItemHash } from "../../shared/models/ogame/items/ItemHash";
 import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
 import { RawMessageData } from "../../shared/messages/tracking/common";
-import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 
@@ -115,7 +112,7 @@ export class ExpeditionModule {
 
     private tryParsePiratesExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventPirates | null {
         const i18nMessages = i18nExpeditions[language].pirates;
-        const size = Object.values(ExpeditionEventSize).find(
+        const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
         if (size == null) {
@@ -132,7 +129,7 @@ export class ExpeditionModule {
 
     private tryParseAliensExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventAliens | null {
         const i18nMessages = i18nExpeditions[language].aliens;
-        const size = Object.values(ExpeditionEventSize).find(
+        const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
         if (size == null) {
@@ -209,7 +206,7 @@ export class ExpeditionModule {
 
     private tryParseFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventFleet | null {
         const i18nMessages = i18nExpeditions[language].fleet;
-        const size = Object.values(ExpeditionEventSize).find(
+        const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
         if (size == null) {
@@ -256,7 +253,7 @@ export class ExpeditionModule {
         }
 
         const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
-        const size = Object.values(ExpeditionEventSize).find(
+        const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
 
@@ -275,7 +272,7 @@ export class ExpeditionModule {
 
     private tryParseResourceExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventResources | null {
         const i18nMessages = i18nExpeditions[language].resources;
-        const resourceNames = Object.values(ResourceType);
+        const resourceNames = ResourceTypes;
         const regex = i18nMessages.regex(resourceNames.map(resource => i18nResources[language][resource]));
         const match = data.text.match(regex);
         if (match == null) {
@@ -284,7 +281,7 @@ export class ExpeditionModule {
 
         const resourceName = match[1];
         const amount = parseIntSafe(match[2].replace(/[^\d]/g, ''), 10);
-        const size = Object.values(ExpeditionEventSize).find(
+        const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );
 
@@ -292,7 +289,7 @@ export class ExpeditionModule {
             _throw('Found resource expedition event, but cannot detect event size');
         }
 
-        const resource = Object.values(ResourceType).find(resource => i18nResources[language][resource] == resourceName)
+        const resource = ResourceTypes.find(resource => i18nResources[language][resource] == resourceName)
             ?? _throw('[Should never happen] Failed to detect resource that was matched in regex earlier');
 
         return {

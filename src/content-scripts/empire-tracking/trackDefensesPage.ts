@@ -1,13 +1,13 @@
-import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { DefenseType } from '../../shared/models/ogame/defenses/DefenseType';
+import { DefenseType, DefenseTypes } from '../../shared/models/ogame/defenses/DefenseType';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { empireTrackingUuid } from "@/shared/uuid";
+import { createRecord } from "@/shared/utils/createRecord";
 
 export function trackDefensesPage() {
     observerCallbacks.push({
@@ -21,10 +21,9 @@ export function trackDefensesPage() {
                 ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
-            const defenseTypes = getNumericEnumValues<DefenseType>(DefenseType);
-            const defenseCounts = {} as Record<DefenseType, number>;
+            const defenseCounts = createRecord(DefenseTypes, 0);
 
-            defenseTypes.forEach(defense => {
+            DefenseTypes.forEach(defense => {
                 const amountText = element.querySelector(`[data-technology="${defense}"] .amount`)?.getAttribute('data-value')
                     ?? _throw(`did not find amount of defense '${DefenseType[defense]}'`);
 

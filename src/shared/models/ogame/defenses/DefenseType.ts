@@ -11,4 +11,16 @@ export enum DefenseType {
     ballisticMissile = 502,
     interplanetaryMissile = 503,
 }
-//REFACTOR: export array of all values
+export const DefenseTypes = [
+    DefenseType.rocketLauncher,
+    DefenseType.lightLaser,
+    DefenseType.heavyLaser,
+    DefenseType.gaussCannon,
+    DefenseType.ionCannon,
+    DefenseType.plasmaTurret,
+    DefenseType.smallShieldDome,
+    DefenseType.largeShieldDome,
+
+    DefenseType.ballisticMissile,
+    DefenseType.interplanetaryMissile,
+];

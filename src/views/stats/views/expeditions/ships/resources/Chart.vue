@@ -71,19 +71,13 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { Ships } from '@/shared/models/ogame/ships/Ships';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import { multiplyCost } from '@/shared/models/ogame/common/Cost';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
 
@@ -126,7 +120,7 @@
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [
-                ...Object.values(ResourceType).map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: resource,
                     label: this.$i18n.$t.resources[resource],
                     color: this.colors[resource],

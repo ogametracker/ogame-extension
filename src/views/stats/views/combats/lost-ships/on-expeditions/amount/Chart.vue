@@ -48,8 +48,7 @@
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';

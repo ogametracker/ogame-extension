@@ -23,7 +23,31 @@ export enum BuildingType {
     sensorPhalanx = 42,
     jumpGate = 43,
 }
-//REFACTOR: export array of all values
+export const BuildingTypes = [
+    BuildingType.metalMine,
+    BuildingType.crystalMine,
+    BuildingType.deuteriumSynthesizer,
+
+    BuildingType.metalStorage,
+    BuildingType.crystalStorage,
+    BuildingType.deuteriumTank,
+
+    BuildingType.solarPlant,
+    BuildingType.fusionReactor,
+
+    BuildingType.roboticsFactory,
+    BuildingType.shipyard,
+    BuildingType.researchLab,
+    BuildingType.allianceDepot,
+    BuildingType.missileSilo,
+    BuildingType.naniteFactory,
+    BuildingType.terraformer,
+    BuildingType.spaceDock,
+
+    BuildingType.lunarBase,
+    BuildingType.sensorPhalanx,
+    BuildingType.jumpGate,
+];
 
 export type MoonBuildingType = (
     | BuildingType.metalStorage
@@ -36,7 +60,41 @@ export type MoonBuildingType = (
     | BuildingType.sensorPhalanx
     | BuildingType.jumpGate
 );
-//REFACTOR: export array of all values
+export const MoonBuildingTypes: MoonBuildingType[] = [
+    BuildingType.metalStorage,
+    BuildingType.crystalStorage,
+    BuildingType.deuteriumTank,
+
+    BuildingType.roboticsFactory,
+    BuildingType.shipyard,
+    BuildingType.lunarBase,
+    BuildingType.sensorPhalanx,
+    BuildingType.jumpGate,
+];
+export type MoonSupplyBuildingType = (
+    | BuildingType.metalStorage
+    | BuildingType.crystalStorage
+    | BuildingType.deuteriumTank
+);
+export const MoonSupplyBuildingTypes: MoonSupplyBuildingType[] = [
+    BuildingType.metalStorage,
+    BuildingType.crystalStorage,
+    BuildingType.deuteriumTank,
+];
+export type MoonFacilityBuildingType = (
+    | BuildingType.roboticsFactory
+    | BuildingType.shipyard
+    | BuildingType.lunarBase
+    | BuildingType.sensorPhalanx
+    | BuildingType.jumpGate
+);
+export const MoonFacilityBuildingTypes: MoonFacilityBuildingType[] = [
+    BuildingType.roboticsFactory,
+    BuildingType.shipyard,
+    BuildingType.lunarBase,
+    BuildingType.sensorPhalanx,
+    BuildingType.jumpGate,
+];
 
 export type PlanetBuildingType = (
     | BuildingType.metalMine
@@ -57,4 +115,62 @@ export type PlanetBuildingType = (
     | BuildingType.terraformer
     | BuildingType.spaceDock
 );
-//REFACTOR: export array of all values
+export const PlanetBuildingTypes: PlanetBuildingType[] = [
+    BuildingType.metalMine,
+    BuildingType.crystalMine,
+    BuildingType.deuteriumSynthesizer,
+    BuildingType.metalStorage,
+    BuildingType.crystalStorage,
+    BuildingType.deuteriumTank,
+    BuildingType.solarPlant,
+    BuildingType.fusionReactor,
+
+    BuildingType.roboticsFactory,
+    BuildingType.shipyard,
+    BuildingType.researchLab,
+    BuildingType.allianceDepot,
+    BuildingType.missileSilo,
+    BuildingType.naniteFactory,
+    BuildingType.terraformer,
+    BuildingType.spaceDock,
+];
+export type PlanetSupplyBuildingType = (
+    | BuildingType.metalMine
+    | BuildingType.crystalMine
+    | BuildingType.deuteriumSynthesizer
+    | BuildingType.metalStorage
+    | BuildingType.crystalStorage
+    | BuildingType.deuteriumTank
+    | BuildingType.solarPlant
+    | BuildingType.fusionReactor
+);
+export const PlanetSupplyBuildingTypes: PlanetSupplyBuildingType[] = [
+    BuildingType.metalMine,
+    BuildingType.crystalMine,
+    BuildingType.deuteriumSynthesizer,
+    BuildingType.metalStorage,
+    BuildingType.crystalStorage,
+    BuildingType.deuteriumTank,
+    BuildingType.solarPlant,
+    BuildingType.fusionReactor,
+];
+export type PlanetFacilityBuildingType = (
+    | BuildingType.roboticsFactory
+    | BuildingType.shipyard
+    | BuildingType.researchLab
+    | BuildingType.allianceDepot
+    | BuildingType.missileSilo
+    | BuildingType.naniteFactory
+    | BuildingType.terraformer
+    | BuildingType.spaceDock
+);
+export const PlanetFacilityBuildingTypes: PlanetFacilityBuildingType[] = [
+    BuildingType.roboticsFactory,
+    BuildingType.shipyard,
+    BuildingType.researchLab,
+    BuildingType.allianceDepot,
+    BuildingType.missileSilo,
+    BuildingType.naniteFactory,
+    BuildingType.terraformer,
+    BuildingType.spaceDock,
+];

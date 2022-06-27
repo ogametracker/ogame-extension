@@ -1,12 +1,13 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { BuildingType } from '../../shared/models/ogame/buildings/BuildingType';
+import { BuildingType, MoonFacilityBuildingTypes, PlanetFacilityBuildingTypes } from '../../shared/models/ogame/buildings/BuildingType';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetBuildingLevelsMessage } from "../../shared/messages/tracking/empire";
 import { MessageType } from "../../shared/messages/MessageType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { empireTrackingUuid } from "@/shared/uuid";
+import { createRecord } from "@/shared/utils/createRecord";
 
 export function trackFacilitiesPage() {
     observerCallbacks.push({
@@ -21,23 +22,9 @@ export function trackFacilitiesPage() {
             const isMoon = planetType == 'moon';
 
             const buildingTypes = isMoon
-                ? [
-                    BuildingType.roboticsFactory,
-                    BuildingType.shipyard,
-                    BuildingType.lunarBase,
-                    BuildingType.sensorPhalanx,
-                    BuildingType.jumpGate,
-                ] : [
-                    BuildingType.roboticsFactory,
-                    BuildingType.shipyard,
-                    BuildingType.researchLab,
-                    BuildingType.allianceDepot,
-                    BuildingType.missileSilo,
-                    BuildingType.naniteFactory,
-                    BuildingType.terraformer,
-                    BuildingType.spaceDock,
-                ];
-            const buildingLevels = {} as Partial<Record<BuildingType, number>>;
+                ? MoonFacilityBuildingTypes
+                : PlanetFacilityBuildingTypes;
+            const buildingLevels = createRecord(buildingTypes, 0) as Partial<Record<BuildingType, number>>;
 
             buildingTypes.forEach(building => {
                 const levelText = element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value')

@@ -36,3 +36,4 @@ export const ShipTypes = [
     ShipType.reaper,
     ShipType.pathfinder,
 ];
+export const NonStationaryShipTypes = ShipTypes.filter(ship => ![ShipType.crawler, ShipType.solarSatellite].includes(ship));

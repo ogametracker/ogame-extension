@@ -75,14 +75,9 @@
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { multiplyCost } from '@/shared/models/ogame/common/Cost';
-    import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';

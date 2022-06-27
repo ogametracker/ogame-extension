@@ -1,10 +1,10 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { createRecord } from "@/shared/utils/createRecord";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { NonStationaryShipTypes, ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { getNumericEnumValues } from "../../shared/utils/getNumericEnumValues";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
@@ -21,11 +21,9 @@ export function trackFleetDispatchPage(): void {
                 ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
-            const shipTypes = getNumericEnumValues<ShipType>(ShipType)
-                .filter(ship => ![ShipType.solarSatellite, ShipType.crawler].includes(ship));
-            const shipCounts = {} as Record<ShipType, number>;
+            const shipCounts = createRecord(NonStationaryShipTypes, 0);
 
-            shipTypes.forEach(ship => {
+            NonStationaryShipTypes.forEach(ship => {
                 const amountText = element.querySelector(`[data-technology="${ship}"] .amount`)?.getAttribute('data-value')
                     ?? _throw(`did not find amount of ship '${ShipType[ship]}'`);
 

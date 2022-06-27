@@ -16,4 +16,21 @@ export enum ResearchType {
     astrophysics = 124,
     gravitonTechnology = 199,
 }
-//REFACTOR: export array of all values
+export const ResearchTypes = [
+    ResearchType.espionageTechnology,
+    ResearchType.computerTechnology,
+    ResearchType.weaponsTechnology,
+    ResearchType.shieldingTechnology,
+    ResearchType.armorTechnology,
+    ResearchType.energyTechnology,
+    ResearchType.hyperspaceTechnology,
+    ResearchType.combustionDrive,
+    ResearchType.impulseDrive,
+    ResearchType.hyperspaceDrive,
+    ResearchType.laserTechnology,
+    ResearchType.ionTechnology,
+    ResearchType.plasmaTechnology,
+    ResearchType.intergalacticResearchNetwork,
+    ResearchType.astrophysics,
+    ResearchType.gravitonTechnology,
+];

@@ -6,9 +6,8 @@ import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
 import { CombatResultType } from "../../shared/models/combat-reports/CombatResultType";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
-import { getNumericEnumValues } from '../../shared/utils/getNumericEnumValues';
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
@@ -166,7 +165,6 @@ export class CombatReportModule {
             [ShipType.solarSatellite]: 0,
         };
 
-        const ships = getNumericEnumValues<ShipType>(ShipType);
         const lastRound = ogameCombatReport.combatRounds[ogameCombatReport.combatRounds.length - 1];
         Object.keys(lastRound.attackerLosses ?? {}).forEach(fleetId => {
             const id = parseIntSafe(fleetId, 10);
@@ -177,7 +175,7 @@ export class CombatReportModule {
             if (loss == null)
                 return;
 
-            ships.forEach(ship => {
+            ShipTypes.forEach(ship => {
                 const countStr = loss![ship];
                 if (countStr == null)
                     return;
@@ -195,7 +193,7 @@ export class CombatReportModule {
             if (loss == null)
                 return;
 
-            ships.forEach(ship => {
+            ShipTypes.forEach(ship => {
                 const countStr = loss![ship];
                 if (countStr == null)
                     return;

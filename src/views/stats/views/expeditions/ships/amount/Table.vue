@@ -29,9 +29,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventFleet, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getNumericEnumValues } from '@/shared/utils/getNumericEnumValues';
+    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
