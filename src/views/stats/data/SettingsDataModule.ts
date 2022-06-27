@@ -46,8 +46,6 @@ class SettingsDataModuleClass extends Vue {
     }
 
     private initCommunication() {
-        console.log('connecting to background service');
-
         chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
 

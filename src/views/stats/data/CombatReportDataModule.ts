@@ -131,8 +131,6 @@ class CombatReportDataModuleClass extends Vue {
     }
 
     private initCommunication() {
-        console.log('connecting to background service');
-
         chrome.runtime.onMessage.addListener(message => this.onMessage(message));
     }
 

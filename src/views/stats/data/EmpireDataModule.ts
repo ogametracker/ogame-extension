@@ -42,8 +42,6 @@ class EmpireDataModuleClass extends Vue {
     }
 
     private initCommunication() {
-        console.log('connecting to background service');
-
         chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
 
@@ -55,7 +53,6 @@ class EmpireDataModuleClass extends Vue {
 
         await this.lock.acquire();
         await delay(200); // delay a bit because OGame empire view will cause many updates
-        console.log('loading');
 
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         const tx = db.transaction('empire', 'readonly');
