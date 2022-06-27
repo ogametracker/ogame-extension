@@ -12,7 +12,9 @@
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            :placeholder="$i18n.$t.universeHistory.playerSelection.search"
+                            :placeholder="
+                                $i18n.$t.universeHistory.playerSelection.search
+                            "
                             list="player-list"
                             @change="onPlayerSelected($event.target.value)"
                             style="width: 100%"
@@ -67,6 +69,7 @@
 
 <script lang="ts">
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
+import { createRecord } from '@/shared/utils/createRecord';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
@@ -245,13 +248,21 @@
             let minDate = Number.MAX_SAFE_INTEGER;
 
             const scores = await UniverseHistoryDataModule.getPlayerScoreHistory(this.playerIds);
-            scores.forEach(score => {
+            const types: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const lastScores = createRecord(types, null) as Record<DbUniverseHistoryScoreType, number | null>;
+
+            scores.forEach((score, i) => {
                 minDate = Math.min(minDate, score.date);
+
+                if (lastScores[score.type] == score.score) { //no duplicates if only position changed
+                    return;
+                }
 
                 datasetsByPlayer[score.playerId][score.type].values.push({
                     x: score.date,
                     y: score.score,
                 });
+                lastScores[score.type] = score.score;
             });
 
             this.keys.forEach(key => {
@@ -342,7 +353,7 @@
         &-table {
             height: fit-content;
             margin-right: 16px;
-            
+
             &::v-deep {
                 .player-selection-table-cell {
                     text-align: left;
