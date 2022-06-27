@@ -26,7 +26,7 @@ export interface AboutTranslations {
                 part2: string;
             };
             inlineSettings: string;
-            switchAccount: string;
+            switchAccountHtml: string;
         };
 
         messageDiscord: {

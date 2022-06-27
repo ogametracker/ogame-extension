@@ -32,7 +32,7 @@
             />
         </div>
         <div class="tip" v-text="$i18n.$t.about.faqHelp.tips.inlineSettings" />
-        <div class="tip" v-text="$i18n.$t.about.faqHelp.tips.switchAccount" />
+        <div class="tip" v-html="$i18n.$t.about.faqHelp.tips.switchAccount" />
 
         <hr />
 

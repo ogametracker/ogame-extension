@@ -7,28 +7,28 @@ export const de: AboutTranslations = {
             header: 'F.A.Q.',
             fleetLostOnExpedition: {
                 header: 'Warum werden deine Schiffe nicht getrackt, die du auf Expeditionen verloren hast?',
-                text: 'TODO:',
+                text: 'Das Tracking verlorener Schiffe erfordert dauerhaftes Flottentracking, was nicht möglich ist.',
             },
             syncBetweenDevices: {
                 header: 'Warum werden deine Daten nicht auf mehreren Geräten synchronisiert?',
-                text: 'TODO:',
+                text: 'Die Menge der vom Tracker erfassten Daten übersteigt die Größe der Daten, die über deinen Nutzeraccount (Google, Microsoft, o.ä.) synchronisiert werden können. Eine Synchronisierung über einen externen Server wird eventuell in der Zukunft möglich sein.',
             },
             productionInResourceBalance: {
                 header: 'Warum wird deine Rohstoffproduktion nicht in der Rohstoffbilanz berücksichtigt?',
-                text: 'TODO:',
+                text: 'Die Rohstoffproduktion hängt von vielen Faktoren ab, deren Änderungen dauerhaft getrackt werden müssten. Dies ist zwar möglich, jedoch übersteigt die Komplexität dieses Features die des zusätzlichen Nutzens.',
             },
         },
         tips: {
             header: 'Tipps',
-            rightClickDefaultRoute: 'TODO: Right click route',
-            numbersKeyboardNavigation: 'TODO: Keyboard numbers navigation',
+            rightClickDefaultRoute: 'Du kannst einen der linken Tabs im Hauptmenü sowie untergeordnete Menüs rechtsklicken, um dieses (Unter-)Menü als Standardmenü für die gewählte Route auszuwählen.',
+            numbersKeyboardNavigation: 'Die mit Ziffern versehenen Tabs können auch über die Tastatur geöffnet werden, indem man die passende Zifferntaste drückt.',
             amortizationTable: {
                 part1: 'Du möchtest wissen, was du als nächstes bauen oder forschen solltest, um deine Produktion möglichst effizient zu erhöhen? Probiere den\xa0',
                 name: 'interaktiven Amortisationsrechner',
                 part2: '.',
             },
-            inlineSettings: 'TODO: Inline settings',
-            switchAccount: 'TODO: Switch account',
+            inlineSettings: 'Du kannst dazugehörige Einstellungen direkt ändern, indem du auf einer passenden Seite das kleine Zahnrad-Icon auf dem rechten Seite klickst.',
+            switchAccountHtml: 'Du kannst das Interface des OGame Trackers für einen anderen getrackten Accounts ansehen, indem du im Menü das Icon <span class="mdi mdi-account-multiple"></span> klickst und den passenden Account wählst.',
         },
 
         messageDiscord: {
@@ -51,7 +51,7 @@ export const de: AboutTranslations = {
             global: {
                 header: 'Informationen über alle Daten im OGame Tracker',
                 numberOfTrackedAccounts: 'Anzahl getrackter Accounts',
-                estimatedSize: 'ungefähre Größe aller gespeichtern Daten',
+                estimatedSize: 'Größe aller gespeichtern Daten',
             },
         },
     },
