@@ -1,5 +1,6 @@
 <template>
-    <page :nav-items="navItems" :root-route-name="rootRoute" />
+    <loading-spinner v-if="loading" />
+    <page v-else :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
 <script lang="ts">
@@ -10,9 +11,11 @@
     @Component({})
     export default class Index extends Vue {
         private readonly rootRoute = 'combats';
+        private loading = true;
 
         private async mounted() {
-            //TODO: await CombatReportDataModule.load();
+            await CombatReportDataModule.ready;
+            this.loading = false;
         }
 
         private get navItems(): ListNavItem[] {

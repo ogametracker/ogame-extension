@@ -1,5 +1,6 @@
 <template>
-    <tab-view :tabs="tabs" root-route-name="resource-balance" />
+    <loading-spinner v-if="loading" />
+    <tab-view v-else :tabs="tabs" root-route-name="resource-balance" />
 </template>
 
 <script lang="ts">
@@ -11,10 +12,13 @@
 
     @Component({})
     export default class Index extends Vue {
+        private loading = true;
+
         private async mounted() {
-            //TODO: await CombatReportDataModule.load();
-            //TODO: await ExpeditionDataModule.load();
-            //TODO: await DebrisFieldReportDataModule.load();
+            await CombatReportDataModule.ready;
+            await ExpeditionDataModule.ready;
+            await DebrisFieldReportDataModule.ready;
+            this.loading = false;
         }
 
         private get tabs(): Tab[] {

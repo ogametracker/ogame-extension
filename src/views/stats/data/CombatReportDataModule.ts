@@ -39,6 +39,13 @@ class CombatReportDataModuleClass extends Vue {
     private internal_firstDate: number | null = null;
     private internal_count = 0;
 
+    private _ready!: Promise<void>;
+    private _resolveReady!: () => void;
+
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     public get count() {
         return this.internal_count;
     }
@@ -48,6 +55,8 @@ class CombatReportDataModuleClass extends Vue {
     }
 
     private async created() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         this.initCommunication();
         await this.loadData();
     }
@@ -63,6 +72,8 @@ class CombatReportDataModuleClass extends Vue {
             minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
         });
         this.internal_firstDate = minDate;
+
+        this._resolveReady();
     }
 
     private addCombatReportToDailyResult(report: CombatReport) {

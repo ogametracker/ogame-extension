@@ -23,7 +23,16 @@ import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 class EmpireDataModuleClass extends Vue {
     public empire: LocalPlayerData | null = null;
 
+    private _ready!: Promise<void>;
+    private _resolveReady!: () => void;
+
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     private async created() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         this.initCommunication();
         await this.loadData();
     }
@@ -217,6 +226,8 @@ class EmpireDataModuleClass extends Vue {
             planetOrder,
             planets,
         };
+
+        this._resolveReady();
     }
 
     private async onMessage(msg: Message) {

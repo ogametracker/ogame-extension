@@ -1,5 +1,6 @@
 <template>
-    <tab-view :tabs="tabs" root-route-name="debris-fields" />
+    <loading-spinner v-if="loading" />
+    <tab-view v-else :tabs="tabs" root-route-name="debris-fields" />
 </template>
 
 <script lang="ts">
@@ -9,8 +10,11 @@ import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataMod
 
     @Component({})
     export default class Index extends Vue {
+        private loading = true;
+
         private async mounted() {
-            //TODO: await DebrisFieldReportDataModule.load();
+            await DebrisFieldReportDataModule.ready;
+            this.loading = false;
         }
 
         private get tabs(): Tab[] {

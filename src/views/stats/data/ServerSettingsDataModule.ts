@@ -11,15 +11,24 @@ import { DbServerSettings } from '@/shared/db/schema/server';
 class ServerSettingsDataModuleClass extends Vue {
     public serverSettings: ServerSettings | null = null;
 
-    public get lastUpdate():Date | null {
+    private _ready!: Promise<void>;
+    private _resolveReady!: () => void;
+
+    public get lastUpdate(): Date | null {
         const lastUpdate = this.serverSettings?.lastUpdate;
-        if(lastUpdate == null) {
+        if (lastUpdate == null) {
             return null;
         }
         return new Date(lastUpdate);
     }
 
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     private async created() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         this.initCommunication();
         await this.loadData();
     }
@@ -27,7 +36,7 @@ class ServerSettingsDataModuleClass extends Vue {
     private initCommunication() {
         chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
-    
+
     private mapServerSettings(serverData: DbServerSettings): ServerSettings {
         return {
             lastUpdate: serverData._lastUpdate,
@@ -162,7 +171,7 @@ class ServerSettingsDataModuleClass extends Vue {
 
         let serverSettings = {} as DbServerSettings;
         const allKeys = await store.getAllKeys();
-        for(const key of allKeys) {
+        for (const key of allKeys) {
             const value = await store.get(key);
             serverSettings = {
                 ...serverSettings,
@@ -171,6 +180,8 @@ class ServerSettingsDataModuleClass extends Vue {
         }
 
         this.serverSettings = this.mapServerSettings(serverSettings);
+
+        this._resolveReady();
     }
 
     private async onMessage(msg: Message) {

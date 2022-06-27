@@ -21,6 +21,13 @@ class DebrisFieldReportDataModuleClass extends Vue {
     private internal_count = 0;
     private internal_minId = 0;
 
+    private _ready!: Promise<void>;
+    private _resolveReady!: () => void;
+
+    public get ready(): Promise<void> {
+        return this._ready;
+    }
+
     public get minId() {
         return this.internal_minId;
     }
@@ -34,6 +41,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
     }
 
     private async created() {
+        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+
         this.initCommunication();
         await this.loadData();
     }
@@ -49,6 +58,8 @@ class DebrisFieldReportDataModuleClass extends Vue {
             minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
         });
         this.internal_firstDate = minDate;
+
+        this._resolveReady();
     }
 
     private addDebrisFieldReportToDailyResult(report: DebrisFieldReport) {
