@@ -5,6 +5,7 @@
             :items="items"
             :footerItems="footerItems"
             show-average
+            :averageNumberFormatOptions="avgNumberFormat"
         >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
@@ -54,6 +55,11 @@
     })
     export default class Table extends Vue {
         private showSettings = false;
+        
+        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        };
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;

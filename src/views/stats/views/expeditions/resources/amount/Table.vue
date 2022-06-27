@@ -5,6 +5,7 @@
             :items="items"
             :footerItems="footerItems"
             show-average
+            :averageNumberFormatOptions="avgNumberFormat"
         >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
@@ -30,8 +31,6 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
@@ -47,6 +46,11 @@
     })
     export default class Table extends Vue {
         private showSettings = false;
+
+        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        };
 
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;

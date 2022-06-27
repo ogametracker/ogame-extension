@@ -5,6 +5,7 @@
             :items="items"
             :footerItems="footerItems"
             show-average
+            :averageNumberFormatOptions="avgNumberFormat"
         />
 
         <floating-menu v-model="showSettings" left>
@@ -25,8 +26,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
+    import { CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
@@ -39,6 +39,11 @@
     })
     export default class Table extends Vue {
         private showSettings = false;
+        
+        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        };
 
         private get combats() {
             return CombatReportDataModule.dailyResultsArray;
