@@ -4,7 +4,9 @@
         <hr />
 
         <h3 v-text="$i18n.$t.about.info.table.currentAccount.header" />
+        <loading-spinner v-if="loading" />
         <grid-table
+            v-else
             :items="itemsCurrentAccount"
             :columns="columns"
             class="info-table"
@@ -14,7 +16,9 @@
         <hr />
 
         <h3 v-text="$i18n.$t.about.info.table.global.header" />
+        <loading-spinner v-if="loading" />
         <grid-table
+            v-else
             :items="itemsGlobal"
             :columns="columns"
             class="info-table"
@@ -67,10 +71,12 @@
         private universeHistoryEntries = 0;
         private totalBytesInUse = 0;
 
+        private loading = true;
 
         private async mounted() {
             this.universeHistoryEntries = await UniverseHistoryDataModule.getNumberOfTotalEntries();
             this.totalBytesInUse = (await navigator.storage.estimate()).usage ?? 0;
+            this.loading = false;
         }
 
         private get itemsCurrentAccount(): InfoItem[] {
