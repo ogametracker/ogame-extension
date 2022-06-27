@@ -3,6 +3,11 @@ $image-size-small: 24px;
 
 .ogame-tracker {
     &-msg {
+        background: linear-gradient(90deg, #0c1318, #111a21) !important;
+        &.msg_new {
+            background: linear-gradient(90deg, #0e161c, #22313b) !important;
+        }
+
         &--hide-content .msg_content:not(&__content) {
             height: 0 !important;
             overflow: hidden !important;
@@ -17,7 +22,11 @@ $image-size-small: 24px;
         }
 
         &--error {
-            background: #500707 !important;
+            background: linear-gradient(90deg, #300000, #4c0707) !important;
+        }
+
+        &--ignored {
+            background: linear-gradient(90deg, #111111, #222222) !important;
         }
 
         &--combat-report &__content {
