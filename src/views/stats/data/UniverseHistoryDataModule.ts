@@ -1,5 +1,5 @@
 import { getUniverseHistoryDatabase } from '@/shared/db/access';
-import { DbUniverseHistoryPlayerState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+import { DbUniverseHistoryPlayerState, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
 import { parseIntSafe } from '@/shared/utils/parseNumbers';
 import { Component, Vue } from 'vue-property-decorator';
 import { GlobalOgameMetaData } from './global';
@@ -215,6 +215,27 @@ class UniverseHistoryDataModuleClass extends Vue {
             + await db.count('players');
 
         return totalCount;
+    }
+
+
+    public async getAllianceScoreHistory(allianceIds: number[]): Promise<OgameTrackerUniverseHistoryAllianceScore[]> {
+        const scores: OgameTrackerUniverseHistoryAllianceScore[] = [];
+
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const tx = db.transaction('allianceScores', 'readonly');
+        const store = tx.objectStore('allianceScores');
+        const index = store.index('allianceId');
+
+        for (const allyId of allianceIds) {
+            let cursor = await index.openCursor(allyId);
+
+            while (cursor != null) {
+                scores.push(cursor.value);
+                cursor = await cursor.continue();
+            }
+        }
+
+        return scores.sort((a, b) => a.date - b.date);
     }
 }
 

@@ -249,12 +249,12 @@ import { createRecord } from '@/shared/utils/createRecord';
 
             const scores = await UniverseHistoryDataModule.getPlayerScoreHistory(this.playerIds);
             const types: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
-            const lastScores = createRecord(types, null) as Record<DbUniverseHistoryScoreType, number | null>;
+            const lastScores = createRecord(this.playerIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
 
             scores.forEach((score, i) => {
                 minDate = Math.min(minDate, score.date);
 
-                if (lastScores[score.type] == score.score) { //no duplicates if only position changed
+                if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
                     return;
                 }
 
@@ -262,7 +262,7 @@ import { createRecord } from '@/shared/utils/createRecord';
                     x: score.date,
                     y: score.score,
                 });
-                lastScores[score.type] = score.score;
+                lastScores[score.playerId][score.type] = score.score;
             });
 
             this.keys.forEach(key => {

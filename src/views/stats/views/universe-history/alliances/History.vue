@@ -1,5 +1,6 @@
 <template>
-    <div>TODO: Alliance histories here: {{ allyIds }}</div>
+    <!-- TODO: Alliance history view -->
+    <h2>Coming soon&trade;</h2>
 </template>
 
 <script lang="ts">
@@ -16,17 +17,6 @@
         }
 
         private mounted() {
-            if (this.allyIds.length == 0) {
-                this.$router.replace({
-                    name: 'universe-history/alliances/history',
-                    query: {
-                        alliances: '0', //TODO: current alliance of current player
-                    },
-                });
-                return;
-            }
-
-
         }
     }
 </script>

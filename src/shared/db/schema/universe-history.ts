@@ -76,7 +76,13 @@ export interface OgameTrackerUniverseHistoryPlayerName {
     date: number;
     name: string;
 }
-
+export interface OgameTrackerUniverseHistoryAllianceScore {
+    allianceId: number;
+    date: number;
+    type: DbUniverseHistoryScoreType;
+    score: number;
+    position: number;
+}
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     //TODO: add indexes by id+date to be able to traverse in reverse to get latest data
     _lastUpdate: {
@@ -266,13 +272,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     allianceScores: {
         /** AllianceId, DateTime, ScoreType */
         key: [number, number, DbUniverseHistoryScoreType];
-        value: {
-            allianceId: number;
-            date: number;
-            type: DbUniverseHistoryScoreType;
-            score: number;
-            position: number;
-        };
+        value: OgameTrackerUniverseHistoryAllianceScore;
         indexes: {
             allianceId: number;
         };

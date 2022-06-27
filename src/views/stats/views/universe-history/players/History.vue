@@ -171,7 +171,8 @@
                 </template>
 
                 <template #tab-content-planet-moons>
-                    TODO: History of planets and moons
+                    <!-- TODO: History of moons and planets -->
+                    <h2>Coming soon&trade;</h2>
                 </template>
             </tabs>
         </template>

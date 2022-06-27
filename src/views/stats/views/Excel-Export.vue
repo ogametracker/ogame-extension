@@ -1,6 +1,6 @@
 <template>
     <!-- TODO: excel export page -->
-    <div>EXCEL EXPORT</div>
+    <h2>Back soon&trade;</h2>
 </template>
 
 <script lang="ts">
