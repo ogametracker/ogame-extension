@@ -218,7 +218,7 @@
         };
 
         private get isCrawlerOverloadEnabled() {
-             return ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled;//TODO: !
+             return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
         }
 
         private get activeBooster() {

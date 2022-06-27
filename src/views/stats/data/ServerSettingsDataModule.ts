@@ -9,7 +9,7 @@ import { DbServerSettings } from '@/shared/db/schema/server';
 
 @Component
 class ServerSettingsDataModuleClass extends Vue {
-    public serverSettings: ServerSettings | null = null;
+    public serverSettings: ServerSettings = null!;
 
     private _ready!: Promise<void>;
     private _resolveReady!: () => void;

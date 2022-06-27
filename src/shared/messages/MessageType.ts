@@ -37,8 +37,6 @@ export enum MessageType {
     UpdatePlayerClass = 'empire/update-player-class',
     UpdateAllianceClass = 'empire/update-alliance-class',
     UpdatePlanetProductionSettings = 'empire/update-planet-production-settings',
-    UpdatePlayerName = 'empire/update-player-name', //TODO: put somewhere else
-    UpdateUniverseName = 'empire/update-universe-name', //TODO: put somewhere else
     NotifyEmpireDataUpdate = 'empire/notify-update',
 
     // settings
@@ -51,4 +49,8 @@ export enum MessageType {
 
     // server settings
     NotifyServerSettingsUpdate = 'server-settings/notify-update',
+
+    // accounts & universes
+    UpdatePlayerName = 'accounts/update-player-name',
+    UpdateUniverseName = 'universes/update-universe-name', 
 }

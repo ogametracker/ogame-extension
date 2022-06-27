@@ -23,7 +23,7 @@ import { delay } from '@/shared/utils/delay';
 
 @Component
 class EmpireDataModuleClass extends Vue {
-    public empire: LocalPlayerData | null = null;
+    public empire: LocalPlayerData = null!;
 
     private _ready!: Promise<void>;
     private _resolveReady!: () => void;

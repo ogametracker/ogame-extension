@@ -196,7 +196,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
                         planet.buildings[BuildingType.deuteriumSynthesizer],
                         this.player.playerClass,
                         this.player.officers.geologist,
-                        ServerSettingsDataModule.serverSettings!,//TODO: !
+                        ServerSettingsDataModule.serverSettings,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 
@@ -217,14 +217,14 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         }
 
         private get player(): LocalPlayerData {
-            return EmpireDataModule.empire!;//TODO: !
+            return EmpireDataModule.empire;
         }
 
 
         private get planets(): PlanetData[] {
-            return Object.values(EmpireDataModule.empire!.planets)//TODO: !
+            return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => EmpireDataModule.empire!.planetOrder.indexOf(a.id) - EmpireDataModule.empire!.planetOrder.indexOf(b.id)) as PlanetData[]; //TODO: !
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[]; 
         }
     }
 </script>

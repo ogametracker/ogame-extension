@@ -27,7 +27,7 @@
         />
         <hr />
 
-        TODO: possibility to go to migration helper page
+        <!-- TODO: possibility to go to migration helper page -->
     </div>
 </template>
 

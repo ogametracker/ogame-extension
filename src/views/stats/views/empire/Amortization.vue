@@ -352,7 +352,7 @@
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
             return Object.values(this.planetSettings)
-                .sort((a, b) => EmpireDataModule.empire!.planetOrder.indexOf(a.id) -  EmpireDataModule.empire!.planetOrder.indexOf(b.id)); //TODO: !
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) -  EmpireDataModule.empire.planetOrder.indexOf(b.id));
         }
 
         @Watch('astrophysicsSettings.planet.position')
@@ -410,7 +410,7 @@
         }
 
         private initSettings() {
-            const empire = this.empire!;//TODO: !
+            const empire = this.empire;
 
             this.playerSettings = {
                 msuConversionRates: this.msuConversionRates,
@@ -418,10 +418,10 @@
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
-                levelAstrophysics: empire!.research[ResearchType.astrophysics],
+                levelAstrophysics: empire.research[ResearchType.astrophysics],
             };
 
-            this.planetSettings = (Object.values(empire!.planets).filter(p => !p.isMoon) as PlanetData[])//TODO: !
+            this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
                 .reduce((acc, planet) => {
                     const settings: AmortizationPlanetSettings = {
                         show: true,
@@ -447,7 +447,7 @@
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
                             enabled: true,
-                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled,//TODO: !
+                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -467,7 +467,7 @@
                     activeItems: [],
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
-                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings!.playerClasses.collector.crawlers.isOverloadEnabled,//TODO: !
+                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
@@ -482,7 +482,7 @@
 
             let { levelPlasmaTechnology, levelAstrophysics } = settings.player;
 
-            const planets = { ...this.empire!.planets };//TODO: !
+            const planets = { ...this.empire.planets };
 
             const mineLevels: Record<number, MineLevels> = {};
             const planetIds: number[] = [];
@@ -658,7 +658,7 @@
             const production = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire!.planets[planetSettings.id] as PlanetData, planetSettings, settings);//TODO: !
+                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -672,7 +672,7 @@
             const newProduction = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
                     const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, level, this.empire!.planets[planetSettings.id] as PlanetData, planetSettings, settings);//TODO: !
+                    const dependencies = this.buildProductionDependencies(levels, level, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
                     const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
                     const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
                     const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
@@ -736,7 +736,7 @@
 
         private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): ProductionBuildingDependencies {
             return {
-                serverSettings: ServerSettingsDataModule.serverSettings!,//TODO: !
+                serverSettings: ServerSettingsDataModule.serverSettings,
                 planet: {
                     ...planet,
                     coordinates: {
@@ -779,12 +779,12 @@
                     },
                 },
                 player: {
-                    ...this.empire!,//TODO: !
+                    ...this.empire,
                     playerClass: settings.player.playerClass,
                     allianceClass: settings.player.allianceClass,
                     officers: settings.player.officers,
                     research: {
-                        ...this.empire!.research,//TODO: !
+                        ...this.empire.research,
                         [ResearchType.plasmaTechnology]: levelPlasmaTechnology,
                     },
                 },

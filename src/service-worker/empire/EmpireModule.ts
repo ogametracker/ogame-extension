@@ -151,23 +151,5 @@ export class EmpireModule {
         const key: `planet.${number}.productionSettings` = `planet.${data.planetId}.productionSettings`;
         await db.put('empire', data.data, key);
     }
-
-    public async updateUniverseName(meta: MessageOgameMeta, name: string) {
-        //TODO: put somewhere else, doesn't have anything to do with empire data
-        // const manager = this.getManager(meta);
-        // await manager.updateInTransaction(localPlayerData => {
-        //     localPlayerData.universeName = name;
-        //     return localPlayerData;
-        // });
-    }
-
-    public async updatePlayerName(meta: MessageOgameMeta, universeName: string) {
-        //TODO: put somewhere else, doesn't have anything to do with empire data
-        // const manager = this.getManager(meta);
-        // await manager.updateInTransaction(localPlayerData => {
-        //     localPlayerData.name = universeName;
-        //     return localPlayerData;
-        // });
-    }
 }
 

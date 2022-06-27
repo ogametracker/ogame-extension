@@ -375,14 +375,14 @@
 
 
         private get planets(): PlanetData[] {
-            return Object.values(EmpireDataModule.empire!.planets)//TODO: !
+            return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => EmpireDataModule.empire!.planetOrder.indexOf(a.id) - EmpireDataModule.empire!.planetOrder.indexOf(b.id)) as PlanetData[]; //TODO: !
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[];
         }
 
         private getProduction(planet: PlanetData): Production {
             const deps: ProductionBuildingDependencies = {
-                serverSettings: ServerSettingsDataModule.serverSettings!,//TODO: !
+                serverSettings: ServerSettingsDataModule.serverSettings,
                 planet: {
                     ...planet,
                     productionSettings: {
@@ -390,7 +390,7 @@
                         [ShipType.crawler]: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
                     },
                 },
-                player: EmpireDataModule.empire!, //TODO: !
+                player: EmpireDataModule.empire, 
             };
 
             return {
