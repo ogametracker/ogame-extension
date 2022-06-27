@@ -18,6 +18,7 @@ export const de: EmpireTranslations = {
         mines: {
             crawlersAvailable: 'verfügbar',
         },
+        items: 'Aktive Items',
     },
     amortization: {
         header: 'Amortisation',

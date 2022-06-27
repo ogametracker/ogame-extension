@@ -16,6 +16,7 @@ export interface EmpireTranslations {
         mines: {
             crawlersAvailable: string;
         };
+        items: string;
     };
     amortization: {
         header: string;

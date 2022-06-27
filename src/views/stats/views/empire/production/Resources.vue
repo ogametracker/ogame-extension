@@ -16,7 +16,9 @@
             <o-resource resource="deuterium" size="75px" />
         </template>
         <template #header-total> {{ $i18n.$t.common.resourceUnits }} </template>
-        <template #header-totalMsu> {{ $i18n.$t.common.resourceUnitsMsu }} </template>
+        <template #header-totalMsu>
+            {{ $i18n.$t.common.resourceUnitsMsu }}
+        </template>
 
         <template #header-productionSettings>
             <div class="production-settings-mini-table">
@@ -31,6 +33,10 @@
                 <o-building building="fusion-reactor" />
                 <o-ship ship="solar-satellite" />
                 <o-ship ship="crawler" />
+                <span
+                    style="grid-column: auto / span 4"
+                    v-text="$i18n.$t.empire.production.items"
+                />
             </div>
         </template>
 
@@ -54,12 +60,11 @@
                 <span v-text="settings.fusionReactor" />
                 <span v-text="settings.solarSatellite" />
                 <span v-text="settings.crawler" />
-                <o-item
-                    v-for="item in item.activeItems"
-                    :key="item"
-                    :item="item"
-                    size="24px"
-                />
+
+                <template v-for="(item, i) in getActiveItems(item)">
+                    <span v-if="item == null" :key="i" />
+                    <o-item :key="i" :item="item" size="24px" />
+                </template>
             </div>
         </template>
 
@@ -161,7 +166,7 @@
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
@@ -242,55 +247,6 @@
             ];
         }
 
-        private readonly productionBoostItems: ItemHash[] = [
-            ItemHash.metalBooster_bronze_1day,
-            ItemHash.metalBooster_bronze_7days,
-            ItemHash.metalBooster_silver_7days,
-            ItemHash.metalBooster_silver_30days,
-            ItemHash.metalBooster_silver_90days,
-            ItemHash.metalBooster_gold_7days,
-            ItemHash.metalBooster_gold_30days,
-            ItemHash.metalBooster_gold_90days,
-            ItemHash.metalBooster_platinum_7days,
-            ItemHash.metalBooster_platinum_30days,
-            ItemHash.metalBooster_platinum_90days,
-
-            ItemHash.crystalBooster_bronze_1day,
-            ItemHash.crystalBooster_bronze_7days,
-            ItemHash.crystalBooster_silver_7days,
-            ItemHash.crystalBooster_silver_30days,
-            ItemHash.crystalBooster_silver_90days,
-            ItemHash.crystalBooster_gold_7days,
-            ItemHash.crystalBooster_gold_30days,
-            ItemHash.crystalBooster_gold_90days,
-            ItemHash.crystalBooster_platinum_7days,
-            ItemHash.crystalBooster_platinum_30days,
-            ItemHash.crystalBooster_platinum_90days,
-
-            ItemHash.deuteriumBooster_bronze_1day,
-            ItemHash.deuteriumBooster_bronze_7days,
-            ItemHash.deuteriumBooster_silver_7days,
-            ItemHash.deuteriumBooster_silver_30days,
-            ItemHash.deuteriumBooster_silver_90days,
-            ItemHash.deuteriumBooster_gold_7days,
-            ItemHash.deuteriumBooster_gold_30days,
-            ItemHash.deuteriumBooster_gold_90days,
-            ItemHash.deuteriumBooster_platinum_7days,
-            ItemHash.deuteriumBooster_platinum_30days,
-            ItemHash.deuteriumBooster_platinum_90days,
-
-            ItemHash.energyBooster_bronze_7days,
-            ItemHash.energyBooster_silver_7days,
-            ItemHash.energyBooster_silver_30days,
-            ItemHash.energyBooster_silver_90days,
-            ItemHash.energyBooster_gold_7days,
-            ItemHash.energyBooster_gold_30days,
-            ItemHash.energyBooster_gold_90days,
-            ItemHash.energyBooster_platinum_7days,
-            ItemHash.energyBooster_platinum_30days,
-            ItemHash.energyBooster_platinum_90days,
-        ];
-
         private get maxItemCount() {
             return Math.max(...this.items.map(i => i.activeItems.length));
         }
@@ -316,9 +272,7 @@
                         crawler: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
                     },
 
-                    activeItems: (Object.keys(planet.activeItems) as ItemHash[])
-                        .filter(itemHash => planet.activeItems[itemHash]! > Date.now() || planet.activeItems[itemHash] == 'permanent')
-                        .filter(itemHash => this.productionBoostItems.includes(itemHash)),
+                    activeItems: ItemHashes.filter(item => planet.activeItems[item]! > Date.now() || planet.activeItems[item] == 'permanent'),
                 };
             });
         }
@@ -446,6 +400,67 @@
                     - FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], deps).deuterium,
             };
         }
+
+        private readonly productionBoostItems_metal: ItemHash[] = [
+            ItemHash.metalBooster_bronze_1day,
+            ItemHash.metalBooster_bronze_7days,
+            ItemHash.metalBooster_silver_7days,
+            ItemHash.metalBooster_silver_30days,
+            ItemHash.metalBooster_silver_90days,
+            ItemHash.metalBooster_gold_7days,
+            ItemHash.metalBooster_gold_30days,
+            ItemHash.metalBooster_gold_90days,
+            ItemHash.metalBooster_platinum_7days,
+            ItemHash.metalBooster_platinum_30days,
+            ItemHash.metalBooster_platinum_90days,
+        ];
+        private readonly productionBoostItems_crystal: ItemHash[] = [
+            ItemHash.crystalBooster_bronze_1day,
+            ItemHash.crystalBooster_bronze_7days,
+            ItemHash.crystalBooster_silver_7days,
+            ItemHash.crystalBooster_silver_30days,
+            ItemHash.crystalBooster_silver_90days,
+            ItemHash.crystalBooster_gold_7days,
+            ItemHash.crystalBooster_gold_30days,
+            ItemHash.crystalBooster_gold_90days,
+            ItemHash.crystalBooster_platinum_7days,
+            ItemHash.crystalBooster_platinum_30days,
+            ItemHash.crystalBooster_platinum_90days,
+        ];
+        private readonly productionBoostItems_deuterium: ItemHash[] = [
+            ItemHash.deuteriumBooster_bronze_1day,
+            ItemHash.deuteriumBooster_bronze_7days,
+            ItemHash.deuteriumBooster_silver_7days,
+            ItemHash.deuteriumBooster_silver_30days,
+            ItemHash.deuteriumBooster_silver_90days,
+            ItemHash.deuteriumBooster_gold_7days,
+            ItemHash.deuteriumBooster_gold_30days,
+            ItemHash.deuteriumBooster_gold_90days,
+            ItemHash.deuteriumBooster_platinum_7days,
+            ItemHash.deuteriumBooster_platinum_30days,
+            ItemHash.deuteriumBooster_platinum_90days,
+        ];
+        private readonly productionBoostItems_energy: ItemHash[] = [
+            ItemHash.energyBooster_bronze_7days,
+            ItemHash.energyBooster_silver_7days,
+            ItemHash.energyBooster_silver_30days,
+            ItemHash.energyBooster_silver_90days,
+            ItemHash.energyBooster_gold_7days,
+            ItemHash.energyBooster_gold_30days,
+            ItemHash.energyBooster_gold_90days,
+            ItemHash.energyBooster_platinum_7days,
+            ItemHash.energyBooster_platinum_30days,
+            ItemHash.energyBooster_platinum_90days,
+        ];
+
+        private getActiveItems(item: ProductionItem): (ItemHash | null)[] {
+            return [
+                item.activeItems.find(item => this.productionBoostItems_metal.includes(item)) ?? null,
+                item.activeItems.find(item => this.productionBoostItems_crystal.includes(item)) ?? null,
+                item.activeItems.find(item => this.productionBoostItems_deuterium.includes(item)) ?? null,
+                item.activeItems.find(item => this.productionBoostItems_energy.includes(item)) ?? null,
+            ];
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -475,14 +490,14 @@
 
     .production-settings-mini-table {
         display: grid;
-        grid-template-columns: repeat(7, 1fr) repeat(var(--item-count), 24px);
+        grid-template-columns: repeat(7, 1fr) repeat(4, 24px);
         width: 100%;
         justify-items: center;
         align-items: center;
         gap: 8px;
 
         > .header {
-            grid-column: 1 / span calc(7 + var(--item-count));
+            grid-column: 1 / span 11;
         }
         > * {
             padding: 0 4px;
