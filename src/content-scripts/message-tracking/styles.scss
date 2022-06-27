@@ -21,11 +21,13 @@ $image-size-small: 24px;
             padding: 0 5px 5px 12px;
         }
 
-        &--error {
+        &--error,
+        &--error.msg_new {
             background: linear-gradient(90deg, #300000, #4c0707) !important;
         }
 
-        &--ignored {
+        &--ignored,
+        &--ignored.msg_new {
             background: linear-gradient(90deg, #111111, #222222) !important;
         }
 
