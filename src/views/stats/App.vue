@@ -259,14 +259,14 @@ import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communicatio
                     noNavItem: true,
                 },
                 {
-                    key: 'tools',
-                    to: { name: 'tools' },
-                    icon: 'mdi mdi-hammer-wrench',
-                },
-                {
                     key: 'settings',
                     to: { name: 'settings' },
                     icon: 'mdi mdi-cog',
+                },
+                {
+                    key: 'tools',
+                    to: { name: 'tools' },
+                    icon: 'mdi mdi-hammer-wrench',
                 },
                 {
                     key: 'excel-export',

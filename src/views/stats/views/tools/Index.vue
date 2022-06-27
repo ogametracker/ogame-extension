@@ -1,5 +1,7 @@
 <template>
-    <page :nav-items="navItems" :root-route-name="rootRoute" />
+    <h2>Coming very soon&trade;</h2>
+    <!-- TODO: Tools page -->
+    <!-- <page :nav-items="navItems" :root-route-name="rootRoute" /> -->
 </template>
 
 <script lang="ts">
