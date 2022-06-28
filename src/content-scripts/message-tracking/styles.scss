@@ -5,7 +5,7 @@ $image-size-small: 24px;
     &-msg {
         background: linear-gradient(90deg, #0c1318, #111a21) !important;
         &.msg_new {
-            background: linear-gradient(90deg, rgb(22 36 46), rgb(48 70 84)) !important;
+            background: linear-gradient(90deg, rgb(24 35 44), rgb(38 52 60)) !important;
         }
 
         &--hide-content .msg_content:not(&__content) {
