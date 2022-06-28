@@ -16,6 +16,10 @@
             <template #language>
                 <language />
             </template>
+
+            <template #beta>
+                <beta-export />
+            </template>
         </tab-view>
     </div>
 </template>
@@ -29,6 +33,7 @@
     import Language from './Language.vue';
     import ChartColors from './ChartColors.vue';
     import DateRanges from './DateRanges.vue';
+    import BetaExport from './BetaExport.vue';
 
     @Component({
         components: {
@@ -36,6 +41,7 @@
             Language,
             ChartColors,
             DateRanges,
+            BetaExport,
         },
     })
     export default class Settings extends Vue {
@@ -59,6 +65,10 @@
             {
                 name: 'language',
                 title: this.$i18n.$t.settings.language,
+            },
+            {
+                name: 'beta',
+                title: 'Beta',
             },
         ];
 
