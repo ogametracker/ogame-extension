@@ -42,6 +42,10 @@
                     label: this.$i18n.$t.settings.tabs.importExport,
                     to: { name: 'settings/import-export' },
                 },
+                {
+                    label: 'Beta',
+                    to: { name: 'settings/beta' },
+                },
             ];
         }
     }
