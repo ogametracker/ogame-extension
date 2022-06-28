@@ -124,8 +124,8 @@
             padding: 8px;
             background-color: rgba(var(--color), var(--saturate));
             background-image: linear-gradient(
-                135deg,
-                rgba(var(--color), 0.6),
+                -90deg,
+                rgba(var(--color), 0.8),
                 rgba(var(--color), 0.7)
             );
             font-weight: bold;
@@ -136,8 +136,8 @@
             padding: 8px;
             background-color: rgba(var(--color), var(--saturate));
             background-image: linear-gradient(
-                135deg,
-                rgba(var(--color), 0.4),
+                -90deg,
+                rgba(var(--color), 0.5),
                 rgba(var(--color), 0.3)
             );
         }

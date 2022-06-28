@@ -49,7 +49,7 @@ export const de: NotificationTranslations = {
                 : `Fehler beim Verarbeiten von ${value} Nachrichten`,
         message: (value: string) =>
             value == '1'
-                ? `${value} Nachrichten hat einen Fehler verursacht und wurde nicht getrackt. Die fehlerhafte Nachricht wurden rot markiert. Bitte kontaktiere den Entwickler.`
+                ? `${value} Nachricht hat einen Fehler verursacht und wurde nicht getrackt. Die fehlerhafte Nachricht wurden rot markiert. Bitte kontaktiere den Entwickler.`
                 : `${value} Nachrichten haben einen Fehler verursacht und wurden nicht getrackt. Die fehlerhaften Nachrichten wurden rot markiert. Bitte kontaktiere den Entwickler.`,
     },
 };
