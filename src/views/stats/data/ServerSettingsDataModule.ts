@@ -9,7 +9,7 @@ import { DbServerSettings } from '@/shared/db/schema/server';
 
 @Component
 class ServerSettingsDataModuleClass extends Vue {
-    public serverSettings: ServerSettings = null!;
+    public serverSettings: ServerSettings = this.mapServerSettings();
 
     private _ready!: Promise<void>;
     private _resolveReady!: () => void;
@@ -37,127 +37,127 @@ class ServerSettingsDataModuleClass extends Vue {
         chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
 
-    private mapServerSettings(serverData: DbServerSettings): ServerSettings {
+    private mapServerSettings(serverData?: DbServerSettings): ServerSettings {
         return {
-            lastUpdate: serverData._lastUpdate,
+            lastUpdate: serverData?._lastUpdate ?? 0,
             speed: {
-                economy: serverData.speed,
-                research: serverData.researchDurationDivisor,
+                economy: serverData?.speed ?? 1,
+                research: serverData?.researchDurationDivisor ?? 1,
                 fleet: {
-                    peaceful: serverData.speedFleetPeaceful,
-                    war: serverData.speedFleetWar,
-                    holding: serverData.speedFleetHolding,
+                    peaceful: serverData?.speedFleetPeaceful ?? 1,
+                    war: serverData?.speedFleetWar ?? 1,
+                    holding: serverData?.speedFleetHolding ?? 1,
                 },
             },
             universe: {
                 galaxies: {
-                    count: serverData.galaxies,
-                    isDonut: serverData.donutGalaxy == 1,
+                    count: serverData?.galaxies ?? 5,
+                    isDonut: (serverData?.donutGalaxy ?? 1) == 1,
                 },
                 systems: {
-                    count: serverData.systems,
-                    isDonut: serverData.donutSystem == 1,
+                    count: serverData?.systems ?? 499,
+                    isDonut: (serverData?.donutSystem ?? 1) == 1,
                 },
             },
-            darkMatterBonus: serverData.darkMatterNewAcount,
-            planetBonusFields: serverData.bonusFields,
+            darkMatterBonus: serverData?.darkMatterNewAcount ?? 0,
+            planetBonusFields: serverData?.bonusFields ?? 0,
             combats: {
                 debrisFieldFactors: {
-                    defense: serverData.debrisFactorDef,
-                    ships: serverData.debrisFactor,
+                    defense: serverData?.debrisFactorDef ?? 0,
+                    ships: serverData?.debrisFactor ?? 0,
                 },
-                defenseRepairFactor: serverData.repairFactor,
-                isAllianceCombatSystemEnabled: serverData.acs == 1,
-                isRapidfireEnabled: serverData.rapidFire == 1,
+                defenseRepairFactor: serverData?.repairFactor ?? 0.7,
+                isAllianceCombatSystemEnabled: (serverData?.acs ?? 1) == 1,
+                isRapidfireEnabled: (serverData?.rapidFire ?? 1) == 1,
                 wreckfields: {
-                    isEnabled: serverData.wfEnabled == 1,
-                    minLostPercentage: serverData.wfMinimumLossPercentage,
-                    minLostResources: serverData.wfMinimumRessLost,
-                    repairableBasePercentage: serverData.wfBasicPercentageRepairable,
+                    isEnabled: (serverData?.wfEnabled ?? 1) == 1,
+                    minLostPercentage: serverData?.wfMinimumLossPercentage ?? 5,
+                    minLostResources: serverData?.wfMinimumRessLost ?? 150_000,
+                    repairableBasePercentage: serverData?.wfBasicPercentageRepairable ?? 45,
                 },
             },
             fleet: {
-                deuteriumConsumptionFactor: serverData.globalDeuteriumSaveFactor,
-                hyperspaceCargoPercentageFactor: serverData.cargoHyperspaceTechMultiplier,
-                isProbeCargoEnabled: serverData.probeCargo == 1,
+                deuteriumConsumptionFactor: serverData?.globalDeuteriumSaveFactor ?? 1,
+                hyperspaceCargoPercentageFactor: serverData?.cargoHyperspaceTechMultiplier ?? 5,
+                isProbeCargoEnabled: (serverData?.probeCargo ?? 0) == 1,
             },
             marketplace: {
-                isEnabled: serverData.marketplaceEnabled == 1,
-                offerTimeoutInDays: serverData.marketplaceOfferTimeout,
+                isEnabled: (serverData?.marketplaceEnabled ?? 0) == 1,
+                offerTimeoutInDays: serverData?.marketplaceOfferTimeout ?? 3,
                 priceRanges: {
-                    upper: serverData.marketplacePriceRangeUpper,
-                    lower: serverData.marketplacePriceRangeLower,
+                    upper: serverData?.marketplacePriceRangeUpper ?? 0.2,
+                    lower: serverData?.marketplacePriceRangeLower ?? 0.2,
                 },
                 taxes: {
-                    default: serverData.marketplaceTaxNormalUser,
-                    admiral: serverData.marketplaceTaxAdmiral,
-                    canceledOffers: serverData.marketplaceTaxCancelOffer,
-                    unsoldOffers: serverData.marketplaceTaxNotSold,
+                    default: serverData?.marketplaceTaxNormalUser ?? 0.2,
+                    admiral: serverData?.marketplaceTaxAdmiral ?? 0.1,
+                    canceledOffers: serverData?.marketplaceTaxCancelOffer ?? 0.2,
+                    unsoldOffers: serverData?.marketplaceTaxNotSold ?? 0.2,
                 },
                 tradeRatios: {
-                    metal: serverData.marketplaceBasicTradeRatioMetal,
-                    crystal: serverData.marketplaceBasicTradeRatioCrystal,
-                    deuterium: serverData.marketplaceBasicTradeRatioDeuterium,
+                    metal: serverData?.marketplaceBasicTradeRatioMetal ?? 2.5,
+                    crystal: serverData?.marketplaceBasicTradeRatioCrystal ?? 1.5,
+                    deuterium: serverData?.marketplaceBasicTradeRatioDeuterium ?? 1,
                 },
             },
             resourceProduction: {
                 productionFactorBonus: {
                     crystal: {
-                        default: serverData.resourceProductionIncreaseCrystalDefault,
-                        pos1: serverData.resourceProductionIncreaseCrystalPos1,
-                        pos2: serverData.resourceProductionIncreaseCrystalPos2,
-                        pos3: serverData.resourceProductionIncreaseCrystalPos3,
+                        default: serverData?.resourceProductionIncreaseCrystalDefault ?? 0,
+                        pos1: serverData?.resourceProductionIncreaseCrystalPos1 ?? 0.4,
+                        pos2: serverData?.resourceProductionIncreaseCrystalPos2 ?? 0.3,
+                        pos3: serverData?.resourceProductionIncreaseCrystalPos3 ?? 0.2,
                     },
                 },
             },
             playerClasses: {
-                areEnabled: serverData.characterClassesEnabled == 1,
+                areEnabled: serverData?.characterClassesEnabled == 1,
                 crawlers: {
-                    energyComsumptionPerUnit: serverData.resourceBuggyEnergyConsumptionPerUnit,
-                    maxProductionFactor: serverData.resourceBuggyMaxProductionBoost,
-                    productionBoostFactorPerUnit: serverData.resourceBuggyProductionBoost,
+                    energyComsumptionPerUnit: serverData?.resourceBuggyEnergyConsumptionPerUnit ?? 50,
+                    maxProductionFactor: serverData?.resourceBuggyMaxProductionBoost ?? 0.5,
+                    productionBoostFactorPerUnit: serverData?.resourceBuggyProductionBoost ?? 0.0002,
                 },
                 reapers: {
-                    combatDebrisFieldMiningFactor: serverData.combatDebrisFieldLimit,
+                    combatDebrisFieldMiningFactor: serverData?.combatDebrisFieldLimit ?? 0.25,
                 },
                 collector: {
-                    bonusFleetSlots: serverData.minerBonusAdditionalFleetSlots,
-                    bonusMarketplaceSlots: serverData.minerBonusAdditionalMarketSlots,
-                    energyProductionFactorBonus: serverData.minerBonusEnergy,
-                    productionFactorBonus: serverData.minerBonusResourceProduction,
+                    bonusFleetSlots: serverData?.minerBonusAdditionalFleetSlots ?? 0,
+                    bonusMarketplaceSlots: serverData?.minerBonusAdditionalMarketSlots ?? 2,
+                    energyProductionFactorBonus: serverData?.minerBonusEnergy ?? 0.1,
+                    productionFactorBonus: serverData?.minerBonusResourceProduction ?? 0.25,
                     tradingShips: {
-                        speedFactorBonus: serverData.minerBonusFasterTradingShips,
-                        cargoCapacityFactorBonus: serverData.minerBonusIncreasedCargoCapacityForTradingShips,
+                        speedFactorBonus: serverData?.minerBonusFasterTradingShips ?? 1,
+                        cargoCapacityFactorBonus: serverData?.minerBonusIncreasedCargoCapacityForTradingShips ?? 0.25,
                     },
                     crawlers: {
-                        geologistActiveCrawlerFactorBonus: serverData.minerBonusMaxCrawler,
-                        isOverloadEnabled: serverData.minerBonusOverloadCrawler == 1,
-                        productionFactorBonus: serverData.minerBonusAdditionalCrawler,
+                        geologistActiveCrawlerFactorBonus: serverData?.minerBonusMaxCrawler ?? 0.1,
+                        isOverloadEnabled: (serverData?.minerBonusOverloadCrawler ?? 1) == 1 ,
+                        productionFactorBonus: serverData?.minerBonusAdditionalCrawler ?? 0.5,
                     },
                 },
                 discoverer: {
-                    bonusExpeditionSlots: serverData.explorerBonusAdditionalExpeditionSlots,
-                    researchSpeedFactor: serverData.explorerBonusIncreasedResearchSpeed,
-                    phalanxRangeFactorBonus: serverData.explorerBonusPhalanxRange,
-                    planetSizeFactorBonus: serverData.explorerBonusLargerPlanets,
-                    hasBonusPlunderForInactivePlayers: serverData.explorerBonusPlunderInactive == 1,
+                    bonusExpeditionSlots: serverData?.explorerBonusAdditionalExpeditionSlots ?? 2,
+                    researchSpeedFactor: serverData?.explorerBonusIncreasedResearchSpeed ?? 0.25,
+                    phalanxRangeFactorBonus: serverData?.explorerBonusPhalanxRange ?? 0.2,
+                    planetSizeFactorBonus: serverData?.explorerBonusLargerPlanets ?? 0.1,
+                    hasBonusPlunderForInactivePlayers: (serverData?.explorerBonusPlunderInactive ?? 1) == 1,
                     expeditions: {
-                        outcomeFactorBonus: serverData.explorerBonusIncreasedExpeditionOutcome,
-                        enemyFactorReduction: serverData.explorerBonusExpeditionEnemyReduction,
-                        maxItemsPerDay: serverData.explorerUnitItemsPerDay,
+                        outcomeFactorBonus: serverData?.explorerBonusIncreasedExpeditionOutcome ?? 0.5,
+                        enemyFactorReduction: serverData?.explorerBonusExpeditionEnemyReduction ?? 0.5,
+                        maxItemsPerDay: serverData?.explorerUnitItemsPerDay ?? 1,
                     },
                 },
                 general: {
-                    bonusFleetSlots: serverData.warriorBonusAdditionalFleetSlots,
-                    bonusMoonFields: serverData.warriorBonusAdditionalMoonFields,
-                    hasMorePreciseFleetSpeed: serverData.warriorBonusFleetHalfSpeed == 1,
-                    hasAttackerWreckfield: serverData.warriorBonusAttackerWreckfield == 1,
-                    combatShipSpeedFactorBonus: serverData.warriorBonusFasterCombatShips,
-                    deuteriumConsumptionFactorReduction: serverData.warriorBonusFuelConsumption,
+                    bonusFleetSlots: serverData?.warriorBonusAdditionalFleetSlots ?? 2,
+                    bonusMoonFields: serverData?.warriorBonusAdditionalMoonFields ?? 5,
+                    hasMorePreciseFleetSpeed: (serverData?.warriorBonusFleetHalfSpeed ?? 1) == 1,
+                    hasAttackerWreckfield: (serverData?.warriorBonusAttackerWreckfield ?? 1) == 1,
+                    combatShipSpeedFactorBonus: serverData?.warriorBonusFasterCombatShips ?? 1,
+                    deuteriumConsumptionFactorReduction: serverData?.warriorBonusFuelConsumption ?? 0.25,
                     recyclers: {
-                        cargoCapacityFactorBonus: serverData.warriorBonusRecyclerCargoCapacity,
-                        deuteriumConsumptionFactorReduction: serverData.warriorBonusRecyclerFuelConsumption,
-                        speedFactorBonus: serverData.warriorBonusFasterRecyclers,
+                        cargoCapacityFactorBonus: serverData?.warriorBonusRecyclerCargoCapacity ?? 0.2,
+                        deuteriumConsumptionFactorReduction: serverData?.warriorBonusRecyclerFuelConsumption ?? 0,
+                        speedFactorBonus: serverData?.warriorBonusFasterRecyclers ?? 1,
                     },
                 },
             },
