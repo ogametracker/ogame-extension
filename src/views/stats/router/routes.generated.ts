@@ -76,6 +76,7 @@ import viewssettingsBeta from '@stats/views/settings/Beta.vue';
 import viewssettingsColors from '@stats/views/settings/Colors.vue';
 import viewssettingsCombats from '@stats/views/settings/Combats.vue';
 import viewssettingsCommon from '@stats/views/settings/Common.vue';
+import viewssettingsDangerZone from '@stats/views/settings/Danger-Zone.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
 import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
@@ -667,6 +668,11 @@ const routes: RouteConfig[] = [
                         path: "common",
                         name: "settings/common",
                         component: viewssettingsCommon
+                    },
+                    {
+                        path: "danger-zone",
+                        name: "settings/danger-zone",
+                        component: viewssettingsDangerZone
                     },
                     {
                         path: "date-ranges",

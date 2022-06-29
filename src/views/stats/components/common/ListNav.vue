@@ -10,6 +10,7 @@
             <template #activator>
                 <router-link
                     class="nav-list-item"
+                    :class="item.class"
                     :to="item.to"
                     active-class="nav-list-item-active"
                     ref="links"
@@ -43,6 +44,7 @@
     export interface ListNavItem {
         label: string;
         to: RawLocation & { name: string };
+        class?: string;
     }
 
     @Component({
@@ -138,8 +140,8 @@
     .nav-list-item-active:hover {
         background: linear-gradient(
             to right,
-            rgba(var(--color), 0.7) 30%,
-            rgba(var(--color), 0.7)
+            rgba(var(--color), 0.8) 30%,
+            rgba(var(--color), 0.6)
         );
 
         .nav-list-item-home-icon {

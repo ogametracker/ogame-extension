@@ -1,5 +1,5 @@
 <template>
-    <page :nav-items="navItems" />
+    <page class="settings-page" :nav-items="navItems" />
 </template>
 
 <script lang="ts">
@@ -46,7 +46,19 @@
                     label: 'Beta',
                     to: { name: 'settings/beta' },
                 },
+                {
+                    label: 'LOCA: Danger zone',
+                    to: { name: 'settings/danger-zone' },
+                    class: 'danger-zone',
+                },
             ];
         }
     }
 </script>
+<style lang="scss" scoped>
+.settings-page::v-deep {
+    .danger-zone {
+        --color: 255, 0, 0;
+    }
+}
+</style>

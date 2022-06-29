@@ -35,8 +35,7 @@
 <script lang="ts">
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import { V1ToV2Export, V1ToV2ExportedAccount } from '@/shared/migrations/models';
-import { getGlobalDatabase, getPlayerDatabase } from '@/shared/db/access';
-import { MessageOgameMeta } from '@/shared/messages/Message';
+    import { getGlobalDatabase, getPlayerDatabase } from '@/shared/db/access';
 
     @Component({})
     export default class Beta extends Vue {
@@ -68,13 +67,13 @@ import { MessageOgameMeta } from '@/shared/messages/Message';
             }
 
             console.log(data);
-            for(const account of data.accounts) {
+            for (const account of data.accounts) {
                 await this.importAccount(account);
             }
 
             window.location.reload();
         }
-        
+
         private async importAccount(account: V1ToV2ExportedAccount) {
             console.log('importing from account', {
                 language: account.language,
@@ -100,17 +99,17 @@ import { MessageOgameMeta } from '@/shared/messages/Message';
             const tx = db.transaction(['expeditions', 'combatReports', 'debrisFieldReports'], 'readwrite');
 
             const expeditionStore = tx.objectStore('expeditions');
-            for(const expedition of Object.values(account.data.expeditions)) {
+            for (const expedition of Object.values(account.data.expeditions)) {
                 await expeditionStore.put(expedition);
             }
 
             const combatReportStore = tx.objectStore('combatReports');
-            for(const combatReport of Object.values(account.data.combatReports)) {
+            for (const combatReport of Object.values(account.data.combatReports)) {
                 await combatReportStore.put(combatReport);
             }
 
             const debrisFieldReportStore = tx.objectStore('debrisFieldReports');
-            for(const debrisFieldReport of Object.values(account.data.debrisFieldReports)) {
+            for (const debrisFieldReport of Object.values(account.data.debrisFieldReports)) {
                 await debrisFieldReportStore.put(debrisFieldReport);
             }
 
@@ -120,7 +119,7 @@ import { MessageOgameMeta } from '@/shared/messages/Message';
                 serverId: account.serverId,
                 playerId: account.playerId,
             });
-            
+
         }
     }
 </script>
