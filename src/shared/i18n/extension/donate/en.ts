@@ -10,6 +10,6 @@ export const en: DonateTranslations = {
     kofi: {
         header: 'Donate with PayPal or debit/credit card',
         buttonText: 'Donate on Ko-Fi',
-        message: 'You don\'t need to create an account on Ko-Fi to donate. All donations are forwarded directly and anonymously to the developer.',
+        message: 'You don\'t need to create an account on Ko-Fi to donate. All donations are forwarded directly to the developer.',
     },
 };

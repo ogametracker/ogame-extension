@@ -10,6 +10,6 @@ export const de: DonateTranslations = {
     kofi: {
         header: 'Mit PayPal oder Kredit-/Debitkarte spenden',
         buttonText: 'Auf Ko-Fi spenden',
-        message: 'Du brauchst keinen Account auf Ko-Fi, um dort zu spenden. Alle Spenden werden anynom direkt an den Entwickler weitergeleitet.',
+        message: 'Du brauchst keinen Account auf Ko-Fi, um dort zu spenden. Alle Spenden werden direkt an den Entwickler weitergeleitet.',
     },
 };
