@@ -255,6 +255,11 @@ class EmpireDataModuleClass extends Vue {
             }
         }
     }
+
+    public async clear(): Promise<void> {
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await db.clear('empire');
+    }
 }
 
 export const EmpireDataModule = new EmpireDataModuleClass();

@@ -5,7 +5,9 @@
                 <span class="ogti ogti-expedition" />
                 <span
                     v-text="
-                        'LOCA: Delete tracked expeditions (current account)'
+                        $i18n.$t.settings.dangerZone.deleteExpeditions.button(
+                            accountAndServer
+                        )
                     "
                 />
             </button>
@@ -13,7 +15,11 @@
             <button class="delete-button" @click="clearCombats()">
                 <span class="ogti ogti-attack" />
                 <span
-                    v-text="'LOCA: Delete tracked combats (current account)'"
+                    v-text="
+                        $i18n.$t.settings.dangerZone.deleteCombats.button(
+                            accountAndServer
+                        )
+                    "
                 />
             </button>
 
@@ -21,29 +27,49 @@
                 <span class="ogti ogti-debris-field" />
                 <span
                     v-text="
-                        'LOCA: Delete tracked debris field harvest reports (current account)'
+                        $i18n.$t.settings.dangerZone.deleteDebrisFieldReports.button(
+                            accountAndServer
+                        )
                     "
                 />
             </button>
-            TODO: delete tracked combats/expeditions/df reports => confirm
         </div>
+        <hr />
 
+        <button class="delete-button" @click="deleteAccount()">
+            <span class="mdi mdi-account" />
+            <span
+                v-text="
+                    $i18n.$t.settings.dangerZone.deleteAccount.button(
+                        accountAndServer
+                    )
+                "
+            />
+        </button>
         <hr />
-        <button class="delete-button" v-text="'LOCA: Delete current account'" />
-        TODO: Delete account related data (includes server related data if no
-        account for the server would erxist anymore) => confirm
+
+        <button class="delete-button">
+            <span class="mdi mdi-update" @click="deleteUniverseHistory()" />
+            <span
+                v-text="
+                    $i18n.$t.settings.dangerZone.deleteUniverseHistory.button(
+                        server
+                    )
+                "
+            />
+        </button>
         <hr />
-        <button
-            class="delete-button"
-            v-text="
-                'LOCA: Delete all universe history related data for this universe'
-            "
-        />
-        TODO: Delete all universe history related data for this universe =>
-        confirm
-        <hr />
-        <button class="delete-button" v-text="'LOCA: Delete everything'" />
-        TODO: delete everything => confirm TWICE
+
+        <button class="delete-button" @click="deleteEverything()">
+            <span class="mdi mdi-delete" />
+            <span
+                v-text="$i18n.$t.settings.dangerZone.deleteEverything.button"
+            />
+        </button>
+
+        <div class="danger-zone-overlay" v-if="isDeleting">
+            <loading-spinner />
+        </div>
     </div>
 </template>
 
@@ -52,10 +78,13 @@
     import { CombatReportDataModule } from '../../data/CombatReportDataModule';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { UniversesAndAccountsDataModule } from '../../data/UniversesAndAccountsDataModule';
 
     @Component({})
     export default class DangerZone extends Vue {
+
+        private isDeleting = false;
 
         private async mounted() {
             await ExpeditionDataModule.ready;
@@ -75,46 +104,119 @@
             return `${account.name} - ${this.server}`;
         }
 
-        private clearExpeditions() {
+        private async clearExpeditions() {
             const confirmed = window.confirm(
-                `LOCA: If you confirm, all ${this.$i18n.$n(ExpeditionDataModule.count)} tracked expeditions will be removed for the currently selected account (${this.accountAndServer}).\n`
-                + 'ARE YOU SURE YOU WANT TO CONTINUE?');
+                this.$i18n.$t.settings.dangerZone.deleteExpeditions.confirmationText(this.accountAndServer, this.$i18n.$n(ExpeditionDataModule.count))
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
 
+            if (confirmed) {
+                this.isDeleting = true;
+                await ExpeditionDataModule.clear();
+
+                window.location.hash = '';
+                window.location.reload();
+            }
+        }
+
+        private async clearCombats() {
+            const confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteCombats.confirmationText(this.accountAndServer, this.$i18n.$n(CombatReportDataModule.count))
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
+
+            if (confirmed) {
+                this.isDeleting = true;
+                await CombatReportDataModule.clear();
+
+                window.location.hash = '';
+                window.location.reload();
+            }
+        }
+
+        private async clearDebrisFieldReports() {
+            const confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteDebrisFieldReports.confirmationText(this.accountAndServer, this.$i18n.$n(DebrisFieldReportDataModule.count))
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
+
+            if (confirmed) {
+                this.isDeleting = true;
+                await DebrisFieldReportDataModule.clear();
+
+                window.location.hash = '';
+                window.location.reload();
+            }
+        }
+
+        private async deleteAccount() {
+            const confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteAccount.confirmationText(this.accountAndServer)
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
+
+
+            if (confirmed) {
+                this.isDeleting = true;
+                await UniversesAndAccountsDataModule.deleteCurrentAccount();
+
+                window.close();
+            }
+        }
+
+        private async deleteUniverseHistory() {
+            const confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteUniverseHistory.confirmationText(this.accountAndServer)
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
+
+
+            if (confirmed) {
+                this.isDeleting = true;
+                await UniverseHistoryDataModule.deleteCurrentServer();
+
+                window.location.hash = '';
+                window.location.reload();
+            }
+        }
+
+        private async deleteEverything() {
+            let confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteEverything.confirmationText1
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
             if (!confirmed) {
                 return;
             }
 
-            //TODO: delete expeditions from account
-        }
+            confirmed = window.confirm(
+                this.$i18n.$t.settings.dangerZone.deleteEverything.confirmationText2
+                + '\n\n'
+                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+            );
 
-        private clearCombats() {
-            const confirmed = window.confirm(
-                `LOCA: If you confirm, all ${this.$i18n.$n(CombatReportDataModule.count)} tracked combats will be removed for the currently selected account (${this.accountAndServer}).\n`
-                + 'ARE YOU SURE YOU WANT TO CONTINUE?');
 
-            if (!confirmed) {
-                return;
+            if (confirmed) {
+                this.isDeleting = true;
+                await UniversesAndAccountsDataModule.deleteEverything();
+
+                window.close();
             }
-
-            //TODO: delete combats from account
         }
-
-        private clearDebrisFieldReports() {
-            const confirmed = window.confirm(
-                `LOCA: If you confirm, all ${this.$i18n.$n(DebrisFieldReportDataModule.count)} tracked debris field reports will be removed for the currently selected account (${this.accountAndServer}).\n`
-                + 'ARE YOU SURE YOU WANT TO CONTINUE?');
-
-            if (!confirmed) {
-                return;
-            }
-
-            //TODO: delete debris field reports from account
-        }
-
     }
 </script>
 
 <style lang="scss" scoped>
+    hr {
+        width: 100%;
+    }
+
     .danger-zone-content {
         display: inline-flex;
         flex-direction: column;
@@ -128,15 +230,35 @@
 
     .delete-button {
         --color: 255, 0, 0;
-        padding: 8px;
-        display: flex;
+        padding: 4px;
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        column-gap: 4px;
         align-items: center;
-        max-width: 250px;
+        max-width: 350px;
+        text-align: left;
+        line-height: 1.25;
 
         .ogti {
-            transform: scale(1.5);
             font-size: 36px;
-            margin-right: 0.25em;
         }
+
+        .mdi {
+            font-size: 30px;
+        }
+    }
+
+    .danger-zone-overlay {
+        --color: 255, 0, 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgb(black, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
     }
 </style>

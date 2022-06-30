@@ -23,6 +23,9 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
     accounts: {
         key: [number, string, number];
         value: DbAccount;
+        indexes: {
+            server: [number, string];
+        };
     };
 
     servers: {

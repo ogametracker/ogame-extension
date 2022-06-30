@@ -4,6 +4,12 @@ import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, Ogam
 
 const databases: Partial<Record<string, Promise<IDBPDatabase<any>>>> = {};
 
+export function dropDatabaseConnections() {
+    for (const key of Object.keys(databases)) {
+        delete databases[key];
+    }
+}
+
 async function getDatabase<TSchema>(
     name: string,
     upgrade: (db: IDBPDatabase<TSchema>, oldVersion: number, newVersion: number | null, transaction: IDBPTransaction<TSchema, StoreNames<TSchema>[], "versionchange">) => void
@@ -19,37 +25,41 @@ async function getDatabase<TSchema>(
     return await dbPromise;
 }
 
+export function getPlayerDatabaseName(meta: MessageOgameMeta): string {
+    return `s${meta.serverId}-${meta.language}-${meta.playerId}`;
+}
 export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerPlayerDbSchema>> {
-    const name = `s${meta.serverId}-${meta.language}-${meta.playerId}`;
+    const name = getPlayerDatabaseName(meta);
     return await getDatabase(name, (db, oldVersion, newVersion, tx) => {
-        if (newVersion == 1) {
+        if (oldVersion < 1) {
             db.createObjectStore('combatReports', { keyPath: 'id' });
             db.createObjectStore('debrisFieldReports', { keyPath: 'id' });
             db.createObjectStore('expeditions', { keyPath: 'id' });
             db.createObjectStore('empire');
         }
-        else {
-            throw new Error('invalid db version');
-        }
     });
 }
 
+
+export function getServerDatabaseName(meta: MessageOgameMeta): string {
+    return `s${meta.serverId}-${meta.language}`;
+}
 export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerServerDbSchema>> {
-    const name = `s${meta.serverId}-${meta.language}`;
+    const name = getServerDatabaseName(meta);
     return await getDatabase(name, (db, oldVersion, newVersion, tx) => {
-        if (newVersion == 1) {
+        if (oldVersion < 1) {
             db.createObjectStore('serverSettings');
         }
-        else {
-            throw new Error('invalid db version');
-        }
     });
 }
 
+export function getUniverseHistoryDatabaseName(meta: MessageOgameMeta): string {
+    return `s${meta.serverId}-${meta.language}.universeHistory`;
+}
 export async function getUniverseHistoryDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerUniverseHistoryDbSchema>> {
-    const name = `s${meta.serverId}-${meta.language}.universeHistory`;
+    const name = getUniverseHistoryDatabaseName(meta);
     return await getDatabase(name, (db, oldVersion, newVersion, tx) => {
-        if (newVersion == 1) {
+        if (oldVersion < 1) {
             db.createObjectStore('_lastUpdate');
 
             db.createObjectStore('alliances', { keyPath: 'id' });
@@ -90,21 +100,20 @@ export async function getUniverseHistoryDatabase(meta: MessageOgameMeta): Promis
             db.createObjectStore('moonStates', { keyPath: ['moonId', 'date'] })
                 .createIndex('moonId', 'moonId');
         }
-        else {
-            throw new Error('invalid db version');
-        }
     });
 }
 
+export const globalDatabaseName = 'ogame-tracker';
+
 export async function getGlobalDatabase(): Promise<IDBPDatabase<OgameTrackerGlobalDbSchema>> {
-    return await getDatabase('ogame-tracker', (db, oldVersion, newVersion, tx) => {
-        if (newVersion == 1) {
+    return await getDatabase(globalDatabaseName, (db, oldVersion, newVersion, tx) => {
+        if (oldVersion < 1) {
             db.createObjectStore('settings');
             db.createObjectStore('accounts', { keyPath: ['serverId', 'serverLanguage', 'id'] });
             db.createObjectStore('servers', { keyPath: ['id', 'language'] });
         }
-        else {
-            throw new Error('invalid db version');
+        if (oldVersion < 2) {
+            tx.objectStore('accounts').createIndex('server', ['serverId', 'serverLanguage']);
         }
     });
 }

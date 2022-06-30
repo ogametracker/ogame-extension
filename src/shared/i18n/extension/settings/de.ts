@@ -10,6 +10,7 @@ export const de: SettingsTranslations = {
         combats: 'Kämpfe',
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
+        dangerZone: 'Gefahrenzone',
     },
     dateRanges: {
         defaultNames: {
@@ -71,4 +72,36 @@ export const de: SettingsTranslations = {
     reset: 'Einstellungen zurücksetzen',
     setDefaultRoute: 'als Standardauswahl festlegen',
     setDefaultSubRoute: 'als Standardauswahl für diesen Bereich auswählen',
+
+    dangerZone: {
+        doYouWantToContinue: 'BIST DU SICHER, DASS DU FORTFAHREN WILLST?',
+
+        deleteExpeditions: {
+            button: (account: string) => `Alle getrackten Expeditionen des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Expeditionen des aktuell gewählten Accounts (${account}) gelöscht.`,
+        },
+        deleteCombats: {
+            button: (account: string) => `Alle getrackten Kämpfe des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Kämpfe des aktuell gewählten Accounts (${account}) gelöscht.`,
+        },
+        deleteDebrisFieldReports: {
+            button: (account: string) => `Alle getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) gelöscht.`,
+        },
+        deleteAccount: {
+            button: (account: string) => `Alle Daten des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string) => `Nach dem Bestätigen dieser Aktion werden alle gespeicherten Daten des aktuell gewählten Accounts (${account}) gelöscht.\n`
+                + `Dies beinhaltet die getrackte Universumshistorie dieses Servers sofern kein anderer Account für diesen Server getrackt ist.`,
+        },
+        deleteUniverseHistory: {
+            button: (server: string) => `Universumshistorie des aktuell gewählten Universums (${server}) entfernen`,
+            confirmationText: (server: string) => `Nach dem Bestätigen dieser Aktion werden alle getrackten Daten zur Universumshistorie des aktuell gewählten Universums (${server}) gelöscht.`,
+        },
+        deleteEverything: {
+            button: 'Alle Daten entfernen',
+            confirmationText1: `Nach dem Bestätigen dieser Aktion werden alle Daten gelöscht.\n`
+                + 'Das heißt, alle Daten inklusive getrackter Expeditionen, Kämpfe, TF-Abbauberichte, Universumshistorie und mehr, werden entfernt.',
+            confirmationText2: 'Bitte bestätige erneut, dass du alle Daten löschen möchtest.',
+        },
+    },
 };

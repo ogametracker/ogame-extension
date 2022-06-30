@@ -152,6 +152,11 @@ class CombatReportDataModuleClass extends Vue {
     public get firstDay(): number {
         return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
     }
+
+    public async clear(): Promise<void> {
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await db.clear('combatReports');
+    }
 }
 
 export const CombatReportDataModule = new CombatReportDataModuleClass();

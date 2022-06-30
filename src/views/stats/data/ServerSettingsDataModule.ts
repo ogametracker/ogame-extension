@@ -197,6 +197,11 @@ class ServerSettingsDataModuleClass extends Vue {
             }
         }
     }
+
+    public async clear(): Promise<void> {
+        const db = await getServerDatabase(GlobalOgameMetaData);
+        await db.clear('serverSettings');
+    }
 }
 
 export const ServerSettingsDataModule = new ServerSettingsDataModuleClass();

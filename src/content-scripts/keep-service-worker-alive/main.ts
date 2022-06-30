@@ -2,7 +2,7 @@
 // Thus this script sends a message every 60 seconds to keep the service worker alive as long as an OGame page is open.
 
 import { sendMessage } from '@/shared/communication/sendMessage';
-import { StayAliveMessage } from '@/shared/messages/internal/StayAliveMessage';
+import { StayAliveMessage } from '@/shared/messages/internal';
 import { MessageType } from '@/shared/messages/MessageType';
 import { getOgameMeta } from '@/shared/ogame-web/getOgameMeta';
 import { internalUuid } from '@/shared/uuid';

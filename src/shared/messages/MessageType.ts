@@ -1,5 +1,6 @@
 export enum MessageType {
     StayAlive = 'internal/stay-alive',
+    DropDatabaseConnections = 'internal/drop-db-connections',
 
     // notifications
     Notification = 'notification',

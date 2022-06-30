@@ -6,7 +6,7 @@ import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
-import { KeepAliveService } from "./KeepAliveService";
+import { InternalService } from "./InternalService";
 import { MessageService } from "./MessageService";
 import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
@@ -17,7 +17,6 @@ export const settingsService = new SettingsService();
 
 const services: MessageService[] = [
     settingsService,
-    new KeepAliveService(),
     new ExpeditionService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
@@ -25,6 +24,8 @@ const services: MessageService[] = [
     new UniverseHistoryService(),
     new ServerSettingsService(),
     new UniversesAndAccountsService(),
+    
+    new InternalService(),
 ];
 
 // const permits = 1000; // number of parallel processable messages

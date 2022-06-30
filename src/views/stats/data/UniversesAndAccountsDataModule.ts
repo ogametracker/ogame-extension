@@ -1,7 +1,18 @@
 import { Component, Vue } from 'vue-property-decorator';
-import { getGlobalDatabase } from '@/shared/db/access';
+import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@/shared/db/access';
 import { DbAccount, DbServer } from '@/shared/db/schema/global';
-import { GlobalOgameMetaData } from './global';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
+import { CombatReportDataModule } from './CombatReportDataModule';
+import { deleteDB, StoreNames } from 'idb';
+import { sendMessage } from '@/shared/communication/sendMessage';
+import { DropDatabaseConnectionsMessage } from '@/shared/messages/internal';
+import { MessageType } from '@/shared/messages/MessageType';
+import { OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from '@/shared/db/schema';
+import { UniverseHistoryDataModule } from './UniverseHistoryDataModule';
+import { ExpeditionDataModule } from './ExpeditionDataModule';
+import { DebrisFieldReportDataModule } from './DebrisFieldReportDataModule';
+import { EmpireDataModule } from './EmpireDataModule';
+import { ServerSettingsDataModule } from './ServerSettingsDataModule';
 
 @Component
 class UniversesAndAccountsDataModuleClass extends Vue {
@@ -57,6 +68,50 @@ class UniversesAndAccountsDataModuleClass extends Vue {
         this.servers = await tx.objectStore('servers').getAll();
 
         this._resolveReady();
+    }
+
+    public async deleteCurrentAccount() {
+        await CombatReportDataModule.clear();
+        await ExpeditionDataModule.clear();
+        await DebrisFieldReportDataModule.clear();
+
+        await EmpireDataModule.clear();
+
+
+        const globalDb = await getGlobalDatabase();
+        await globalDb.delete('accounts', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language, GlobalOgameMetaData.playerId]);
+
+        const otherAccountsCount = await globalDb.countFromIndex('accounts', 'server', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language]);
+        if (otherAccountsCount > 0) {
+            return;
+        }
+
+        await ServerSettingsDataModule.clear();
+        await UniverseHistoryDataModule.deleteCurrentServer();
+
+        await globalDb.delete('servers', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language]);
+    }
+
+    private sendDropConnectionsMessage() {
+        const msg: DropDatabaseConnectionsMessage = {
+            ogameMeta: GlobalOgameMetaData,
+            type: MessageType.DropDatabaseConnections,
+            senderUuid: statsViewUuid,
+        };
+        sendMessage(msg);
+    }
+
+    public async deleteEverything() {
+        this.sendDropConnectionsMessage();
+        
+        const allDatabases = await indexedDB.databases();
+        for (const db of allDatabases) {
+            if (db.name == null) {
+                continue;
+            }
+
+            await deleteDB(db.name);
+        }
     }
 }
 

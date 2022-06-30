@@ -109,6 +109,11 @@ class DebrisFieldReportDataModuleClass extends Vue {
     public get firstDay(): number {
         return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
     }
+
+    public async clear(): Promise<void> {
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await db.clear('debrisFieldReports');
+    }
 }
 
 export const DebrisFieldReportDataModule = new DebrisFieldReportDataModuleClass();

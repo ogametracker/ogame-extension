@@ -10,6 +10,7 @@ export const en: SettingsTranslations = {
         combats: 'Combats',
         resourceBalance: 'Resource Balance',
         universeHistory: 'Universe History',
+        dangerZone: 'Danger Zone',
     },
     dateRanges: {
         defaultNames: {
@@ -71,4 +72,36 @@ export const en: SettingsTranslations = {
     reset: 'Reset settings',
     setDefaultRoute: 'Set as default',
     setDefaultSubRoute: 'Set as default for this area',
+
+    dangerZone: {
+        doYouWantToContinue: 'ARE YOU SURE YOU WANT TO CONTINUE?',
+
+        deleteExpeditions: {
+            button: (account: string) => `Delete all tracked expeditions for the currently selected account (${account})`,
+            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked expeditions will be deleted for the currently selected account (${account}).`,
+        },
+        deleteCombats: {
+            button: (account: string) => `Delete all tracked combats for the currently selected account (${account})`,
+            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked combats will be deleted for the currently selected account (${account}).`,
+        },
+        deleteDebrisFieldReports: {
+            button: (account: string) => `Delete all tracked debris field harvest reports for the currently selected account (${account})`,
+            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked debris field harvest reports will be deleted for the currently selected account (${account}).`,
+        },
+        deleteAccount: {
+            button: (account: string) => `Delete all data of the currently selected account (${account})`,
+            confirmationText: (account: string) => `If you confirm, all tracked data for the currently selected account (${account}) will be deleted.\n`
+                + `This includes tracked universe history data if there is no other account tracked for this universe.`,
+        },
+        deleteUniverseHistory: {
+            button: (server: string) => `Delete tracked universe history of currently selected universe (${server})`,
+            confirmationText: (server: string) => `If you confirm, all tracked universe history data for the currently selected universe (${server}) will be deleted.`,
+        },
+        deleteEverything: {
+            button: 'Delete all data',
+            confirmationText1: `If you confirm, all data will be deleted.\n`
+                + 'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
+            confirmationText2: 'Please confirm again that you want to delete all data.',
+        },
+    },
 };

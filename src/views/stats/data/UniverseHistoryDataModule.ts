@@ -1,6 +1,7 @@
 import { getUniverseHistoryDatabase } from '@/shared/db/access';
-import { DbUniverseHistoryPlayerState, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+import { OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
 import { parseIntSafe } from '@/shared/utils/parseNumbers';
+import { StoreNames } from 'idb';
 import { Component, Vue } from 'vue-property-decorator';
 import { GlobalOgameMetaData } from './global';
 
@@ -65,7 +66,7 @@ class UniverseHistoryDataModuleClass extends Vue {
             }));
         this.players.push(...players);
     }
-    
+
     private async loadAlliances() {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const tx = db.transaction(['allianceNames', 'allianceTags'], 'readonly');
@@ -236,6 +237,23 @@ class UniverseHistoryDataModuleClass extends Vue {
         }
 
         return scores.sort((a, b) => a.date - b.date);
+    }
+
+    public async deleteCurrentServer() {
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const storeNames: StoreNames<OgameTrackerUniverseHistoryDbSchema>[] = [
+            '_lastUpdate',
+            'allianceMembers', 'allianceNames', 'allianceScores', 'allianceStates', 'allianceTags', 'alliances',
+            'moonNames', 'moonStates', 'moons',
+            'planetCoordinates', 'planetNames', 'planetStates', 'planets',
+            'playerAlliances', 'playerNames', 'playerScores', 'playerStates', 'players'
+        ];
+        const tx = db.transaction(storeNames, 'readwrite');
+
+        for (const storeName of storeNames) {
+            const store = tx.objectStore(storeName);
+            await store.clear();
+        }
     }
 }
 

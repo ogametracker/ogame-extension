@@ -47,7 +47,7 @@
                     to: { name: 'settings/beta' },
                 },
                 {
-                    label: 'LOCA: Danger zone',
+                    label: this.$i18n.$t.settings.tabs.dangerZone,
                     to: { name: 'settings/danger-zone' },
                     class: 'danger-zone',
                 },

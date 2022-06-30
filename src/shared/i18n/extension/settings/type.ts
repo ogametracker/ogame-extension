@@ -8,6 +8,7 @@ export interface SettingsTranslations {
         combats: string;
         resourceBalance: string;
         universeHistory: string;
+        dangerZone: string;
     };
     dateRanges: {
         defaultNames: {
@@ -69,4 +70,34 @@ export interface SettingsTranslations {
     reset: string;
     setDefaultRoute: string;
     setDefaultSubRoute: string;
+
+    dangerZone: {
+        doYouWantToContinue: string;
+
+        deleteExpeditions: {
+            button: (account: string) => string;
+            confirmationText: (account: string, count: string) => string;
+        };
+        deleteCombats: {
+            button: (account: string) => string;
+            confirmationText: (account: string, count: string) => string;
+        };
+        deleteDebrisFieldReports: {
+            button: (account: string) => string;
+            confirmationText: (account: string, count: string) => string;
+        };
+        deleteAccount: {
+            button: (account: string) => string;
+            confirmationText: (account: string) => string;
+        };
+        deleteUniverseHistory: {
+            button: (server: string) => string;
+            confirmationText: (server: string) => string;
+        };
+        deleteEverything: {
+            button:string;
+            confirmationText1: string;
+            confirmationText2: string;
+        };
+    };
 }
