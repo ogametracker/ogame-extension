@@ -125,7 +125,7 @@
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
     import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
     import { _constants } from '@stats/_constants';
-import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communication";
+    import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communication";
 
     interface Tab {
         key: string;
@@ -380,23 +380,10 @@ import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communicatio
         private async setWindowTitleAndFooter() {
             await UniversesAndAccountsDataModule.ready;
 
-            const meta = GlobalOgameMetaData;
-
-            const server = UniversesAndAccountsDataModule.servers.find(s => s.id == meta.serverId && s.language == meta.language)
-                ?? {
-                id: meta.serverId,
-                language: meta.language,
-                name: meta.serverId.toString(),
-            };
-            const account = UniversesAndAccountsDataModule.accounts.find(a => a.serverId == meta.serverId && a.serverLanguage == meta.language && a.id == meta.playerId)
-                ?? {
-                serverId: meta.serverId,
-                serverLanguage: meta.language,
-                id: meta.playerId,
-                name: meta.playerId.toString(),
-            };
-
-            const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;;
+            const account = UniversesAndAccountsDataModule.currentAccount;
+            const server = UniversesAndAccountsDataModule.currentServer;
+            
+            const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
             document.title = title;
 
             this.accountAndServer = title;
