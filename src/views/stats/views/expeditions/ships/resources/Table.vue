@@ -1,12 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
-            :dataItems="expos"
-            :items="items"
-            :footerItems="footerItems"
-            show-average
-            :averageNumberFormatOptions="avgNumberFormat"
-        >
+        <ranged-stats-table :dataItems="expos" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -24,6 +18,8 @@
             <msu-conversion-rate-settings />
             <expedition-ship-resource-units-factor-settings />
             <hr class="two-column" />
+            <show-msu-cells-settings />
+            <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
     </div>
@@ -38,6 +34,7 @@
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     @Component({
         components: {
@@ -45,11 +42,12 @@
             DateRangeSettings,
             MsuConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
+            ShowMsuCellsSettings,
         },
     })
     export default class Table extends Vue {
         private showSettings = false;
-        
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -91,7 +89,7 @@
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [
+            const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: expos => expos.reduce(
@@ -102,7 +100,10 @@
                         0
                     ),
                 },
-                {
+            ];
+
+            if (SettingsDataModule.settings.showMsuCells) {
+                result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
@@ -111,8 +112,10 @@
                             + expo.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium * this.factors.deuterium,
                         0
                     ),
-                },
-            ];
+                });
+            }
+
+            return result;
         }
     }
 </script>

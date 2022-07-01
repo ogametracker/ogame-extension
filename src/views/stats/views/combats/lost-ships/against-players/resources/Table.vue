@@ -1,12 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
-            :dataItems="reportsPerDay"
-            :items="items"
-            :footerItems="footerItems"
-            show-average
-            :averageNumberFormatOptions="avgNumberFormat"
-        >
+        <ranged-stats-table :dataItems="reportsPerDay" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -24,9 +18,8 @@
             <msu-conversion-rate-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
-            <combat-tracking-ignore-espionage-combats-settings
-                class="two-column"
-            />
+            <combat-tracking-ignore-espionage-combats-settings />
+            <show-msu-cells-settings />
             <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
@@ -43,6 +36,7 @@
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     @Component({
         components: {
@@ -51,11 +45,12 @@
             MsuConversionRateSettings,
             LostShipResourceUnitsFactorSettings,
             CombatTrackingIgnoreEspionageCombatsSettings,
+            ShowMsuCellsSettings,
         },
     })
     export default class Table extends Vue {
         private showSettings = false;
-        
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -113,7 +108,7 @@
                 [ResourceType.deuterium]: this.factors.deuteriumFactor,
             };
 
-            return [
+            const result: RangedStatsTableItem<DailyCombatReportResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: reports => reports.reduce(
@@ -124,7 +119,10 @@
                         0
                     ),
                 },
-                {
+            ];
+
+            if(SettingsDataModule.settings.showMsuCells) {
+                result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc
@@ -133,8 +131,10 @@
                             + report.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
-                },
-            ];
+                });
+            }
+            
+            return result;
         }
     }
 </script>

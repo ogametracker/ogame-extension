@@ -775,30 +775,42 @@
 
 
         private get columns(): GridTableColumn<keyof AmortizationTableItem>[] {
-            return [
+            const showMsu = SettingsDataModule.settings.showMsuCells;
+
+            const result: GridTableColumn<keyof AmortizationTableItem>[] = [
                 { key: 'what', size: 'auto' },
                 { key: 'cost', size: '3fr' },
-                {
+            ];
+
+            if (showMsu) {
+                result.push({
                     key: 'costMsu',
                     label: this.$i18n.$t.empire.amortization.table.costMsu,
                     size: '1fr',
-                },
-                {
-                    key: 'productionDelta',
-                    label: this.$i18n.$t.empire.amortization.table.productionPlus,
-                    size: '1fr',
-                },
-                {
+                });
+            }
+
+            result.push({
+                key: 'productionDelta',
+                label: this.$i18n.$t.empire.amortization.table.productionPlus,
+                size: '1fr',
+            });
+
+            if (showMsu) {
+                result.push({
                     key: 'productionDeltaMsu',
                     label: this.$i18n.$t.empire.amortization.table.productionPlusMsu,
                     size: '1fr',
-                },
-                {
-                    key: 'amortizationTimeInH',
-                    label: this.$i18n.$t.empire.amortization.table.amortizationTime,
-                    size: '1fr',
-                },
-            ];
+                });
+            }
+
+            result.push({
+                key: 'amortizationTimeInH',
+                label: this.$i18n.$t.empire.amortization.table.amortizationTime,
+                size: '1fr',
+            });
+
+            return result;
         }
 
         private get items(): AmortizationTableItem[] {

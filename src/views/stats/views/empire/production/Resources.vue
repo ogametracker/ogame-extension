@@ -1,11 +1,5 @@
 <template>
-    <grid-table
-        :columns="columns"
-        :items="items"
-        :footerItems="footerItems"
-        class="resources-production-table"
-        :style="`--item-count: ${maxItemCount}`"
-    >
+    <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
         <template #header-metal>
             <o-resource resource="metal" size="75px" />
         </template>
@@ -22,10 +16,7 @@
 
         <template #header-productionSettings>
             <div class="production-settings-mini-table">
-                <span
-                    class="header"
-                    v-text="$i18n.$t.empire.production.activeProductionSettings"
-                />
+                <span class="header" v-text="$i18n.$t.empire.production.activeProductionSettings" />
                 <o-building building="metal-mine" />
                 <o-building building="crystal-mine" />
                 <o-building building="deuterium-synthesizer" />
@@ -33,21 +24,14 @@
                 <o-building building="fusion-reactor" />
                 <o-ship ship="solar-satellite" />
                 <o-ship ship="crawler" />
-                <span
-                    style="grid-column: auto / span 4"
-                    v-text="$i18n.$t.empire.production.items"
-                />
+                <span style="grid-column: auto / span 4" v-text="$i18n.$t.empire.production.items" />
             </div>
         </template>
 
         <template #cell-planet="{ value: planet }">
             <div class="planet-info">
                 <span v-text="planet.name" />
-                <span>
-                    [{{ planet.coordinates.galaxy }}:{{
-                        planet.coordinates.system
-                    }}:{{ planet.coordinates.position }}]
-                </span>
+                <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
             </div>
         </template>
 
@@ -71,53 +55,17 @@
         <template #footer-planet="{ value, item }">
             <span v-if="!item.isResourcePackageRow" v-text="value.name" />
             <span v-else class="resource-packages-cell">
-                <o-item
-                    :item="ItemHash.resourcePackage_all"
-                    size="32px"
-                    hide-item-grade
-                />
-                <input
-                    type="number"
-                    v-model.number="resourcePackageAmounts.all"
-                    min="0"
-                    step="1"
-                />
+                <o-item :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
+                <input type="number" v-model.number="resourcePackageAmounts.all" min="0" step="1" />
 
-                <o-item
-                    :item="ItemHash.resourcePackage_metal"
-                    size="32px"
-                    hide-item-grade
-                />
-                <input
-                    type="number"
-                    v-model.number="resourcePackageAmounts.metal"
-                    min="0"
-                    step="1"
-                />
+                <o-item :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
+                <input type="number" v-model.number="resourcePackageAmounts.metal" min="0" step="1" />
 
-                <o-item
-                    :item="ItemHash.resourcePackage_crystal"
-                    size="32px"
-                    hide-item-grade
-                />
-                <input
-                    type="number"
-                    v-model.number="resourcePackageAmounts.crystal"
-                    min="0"
-                    step="1"
-                />
+                <o-item :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
+                <input type="number" v-model.number="resourcePackageAmounts.crystal" min="0" step="1" />
 
-                <o-item
-                    :item="ItemHash.resourcePackage_deuterium"
-                    size="32px"
-                    hide-item-grade
-                />
-                <input
-                    type="number"
-                    v-model.number="resourcePackageAmounts.deuterium"
-                    min="0"
-                    step="1"
-                />
+                <o-item :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
+                <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
             </span>
         </template>
         <template #cell-metal="{ value }">
@@ -225,7 +173,7 @@
         }
 
         private get columns(): GridTableColumn<keyof ProductionItem>[] {
-            return [
+            const result: GridTableColumn<keyof ProductionItem>[] = [
                 {
                     key: 'planet',
                     label: this.$i18n.$t.empire.planet,
@@ -237,14 +185,20 @@
                     key: 'total',
                     class: 'total-column',
                 },
-                { key: 'totalMsu' },
-                {
-                    key: 'productionSettings',
-                    class: 'production-settings-column',
-                    headerClass: 'production-settings-header-column',
-                    size: 'max-content',
-                },
             ];
+
+            if (SettingsDataModule.settings.showMsuCells) {
+                result.push({ key: 'totalMsu' });
+            }
+
+            result.push({
+                key: 'productionSettings',
+                class: 'production-settings-column',
+                headerClass: 'production-settings-header-column',
+                size: 'max-content',
+            });
+
+            return result;
         }
 
         private get maxItemCount() {
@@ -390,7 +344,7 @@
                         [ShipType.crawler]: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
                     },
                 },
-                player: EmpireDataModule.empire, 
+                player: EmpireDataModule.empire,
             };
 
             return {

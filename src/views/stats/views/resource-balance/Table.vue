@@ -1,20 +1,11 @@
 <template>
     <div class="table-container">
         <div>
-            <ranged-stats-table
-                :dataItems="events"
-                :items="items"
-                :footerItems="footerItems"
-                show-average
-                :averageNumberFormatOptions="avgNumberFormat"
-            >
+            <ranged-stats-table :dataItems="events" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
                 <template #cell-label="{ value }">
                     <span v-text="value" class="mr-2" />
 
-                    <o-resource
-                        :resource="resourceTypes[value]"
-                        :size="resourceIconSize"
-                    />
+                    <o-resource :resource="resourceTypes[value]" :size="resourceIconSize" />
                 </template>
             </ranged-stats-table>
         </div>
@@ -30,7 +21,8 @@
             <expedition-ship-resource-units-factor-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="three-column" />
-            <detailed-resource-balance-settings class="three-column" />
+            <detailed-resource-balance-settings />
+            <show-msu-cells-settings />
             <hr class="three-column" />
             <date-range-settings class="three-column" />
         </floating-menu>
@@ -51,6 +43,7 @@
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import { addDays, differenceInDays, startOfDay } from 'date-fns';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
@@ -71,6 +64,7 @@
             MsuConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
             LostShipResourceUnitsFactorSettings,
+            ShowMsuCellsSettings,
         },
     })
     export default class Table extends Vue {
@@ -219,7 +213,7 @@
                 ...this.msuConversionRates,
             };
 
-            return [
+            const result: RangedStatsTableItem<DailyEvents>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: events => ResourceTypes.reduce(
@@ -230,7 +224,10 @@
                         0
                     ),
                 },
-                {
+            ];
+
+            if (SettingsDataModule.settings.showMsuCells) {
+                result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: events => ResourceTypes.reduce(
                         (total, resource) => total + EventTypes.reduce(
@@ -239,8 +236,10 @@
                         ),
                         0
                     ),
-                },
-            ];
+                });
+            }
+
+            return result;;
         }
     }
 

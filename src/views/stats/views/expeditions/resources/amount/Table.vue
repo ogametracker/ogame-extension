@@ -1,12 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
-            :dataItems="expos"
-            :items="items"
-            :footerItems="footerItems"
-            show-average
-            :averageNumberFormatOptions="avgNumberFormat"
-        >
+        <ranged-stats-table :dataItems="expos" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -23,6 +17,8 @@
 
             <msu-conversion-rate-settings />
             <hr />
+            <show-msu-cells-settings />
+            <hr />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -36,12 +32,14 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
             MsuConversionRateSettings,
+            ShowMsuCellsSettings,
         },
     })
     export default class Table extends Vue {
@@ -76,7 +74,7 @@
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [
+            const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: expos => expos.reduce(
@@ -87,7 +85,10 @@
                         0
                     ),
                 },
-                {
+            ];
+
+            if (SettingsDataModule.settings.showMsuCells) {
+                result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
@@ -96,8 +97,10 @@
                             + expo.findings.resources.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
-                },
-            ];
+                });
+            }
+
+            return result;
         }
     }
 </script>

@@ -32,6 +32,7 @@ export interface Settings {
     dateRanges: DateRange[];
     colors: ColorSettings;
     msuConversionRates: MsuConversionRates;
+    showMsuCells: boolean;
 
     lostShipsResourceUnits: ShipResourceUnitsFactors;
     showDetailedResourceBalance: boolean;

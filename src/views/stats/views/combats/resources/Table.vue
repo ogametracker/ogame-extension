@@ -14,7 +14,7 @@
             </template>
         </ranged-stats-table>
 
-        <floating-menu v-model="showSettings" left>
+        <floating-menu v-model="showSettings" left class="floating-settings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
@@ -22,9 +22,10 @@
             </template>
 
             <msu-conversion-rate-settings />
-            <hr />
             <combat-tracking-ignore-espionage-combats-settings />
-            <hr />
+            <hr class="two-column" />
+            <show-msu-cells-settings />
+            <hr class="two-column" />
             <date-range-settings />
         </floating-menu>
     </div>
@@ -35,11 +36,11 @@
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     @Component({
         components: {
@@ -47,6 +48,7 @@
             DateRangeSettings,
             MsuConversionRateSettings,
             CombatTrackingIgnoreEspionageCombatsSettings,
+            ShowMsuCellsSettings,
         },
     })
     export default class Table extends Vue {
@@ -81,7 +83,7 @@
         }
 
         private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
-            return [
+            const result: RangedStatsTableItem<DailyCombatReportResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: combats => combats.reduce(
@@ -89,7 +91,10 @@
                         0
                     ),
                 },
-                {
+            ];
+            
+            if(SettingsDataModule.settings.showMsuCells) {
+                result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: combats => combats.reduce(
                         (acc, combat) => acc
@@ -98,8 +103,10 @@
                             + combat.loot.deuterium * this.msuConversionRates.deuterium,
                         0
                     ),
-                },
-            ];
+                });
+            }
+
+            return result;
         }
     }
 </script>
@@ -110,5 +117,19 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+    }
+
+    .floating-settings::v-deep .floating-menu {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 8px;
+
+        .two-column {
+            grid-column: 1 / span 2;
+        }
+
+        hr {
+            width: 100%;
+        }
     }
 </style>

@@ -52,6 +52,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             crystal: 2,
             deuterium: 3,
         },
+        showMsuCells: true,
         expeditionFoundShipsResourceUnits: {
             factor: 0.35,
             deuteriumFactor: 0.35,
