@@ -10,7 +10,7 @@
                 <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
             </button>
 
-            <div v-show="showSettings" style="overflow: auto">
+            <div v-show="showSettings" class="amortization-settings-container">
                 <div class="flex-settings">
                     <div>
                         <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
@@ -1021,5 +1021,15 @@
 
     .zero {
         opacity: 0.4;
+    }
+
+    .amortization-settings-container {
+        overflow: auto;
+        border: 1px solid rgba(var(--color), 0.25);
+        padding: 12px;
+        overflow: auto;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background: rgba(var(--color), 0.05);
     }
 </style>
