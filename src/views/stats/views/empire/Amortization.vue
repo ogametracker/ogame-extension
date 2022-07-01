@@ -146,21 +146,17 @@
 
                             <span>
                                 <o-building building="metal-mine" />
-                                <span v-text="value.mineLevels.metalMine" />
+                                <span v-text="`1 - ${value.mineLevels.metalMine}`" />
                             </span>
 
                             <span>
                                 <o-building building="crystal-mine" />
-                                <span v-text="value.mineLevels.crystalMine" />
+                                <span v-text="`1 - ${value.mineLevels.crystalMine}`" />
                             </span>
 
                             <span>
                                 <o-building building="deuterium-synthesizer" />
-                                <span
-                                    v-text="
-                                        value.mineLevels.deuteriumSynthesizer
-                                    "
-                                />
+                                <span v-text="`1 - ${value.mineLevels.deuteriumSynthesizer}`" />
                             </span>
                         </span>
                     </div>
@@ -830,7 +826,7 @@
 
         private get columns(): GridTableColumn<keyof AmortizationTableItem>[] {
             return [
-                { key: 'what', size: '350px' },
+                { key: 'what', size: '400px' },
                 { key: 'cost', size: '3fr' },
                 { 
                     key: 'costMsu', 
