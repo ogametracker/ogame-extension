@@ -1,3 +1,5 @@
+import { BuildingTranslations } from '../ogame/buildings/types';
+import { ResearchTranslations } from '../ogame/research/types';
 import { ShipTranslations } from '../ogame/ships/types';
 import { AboutTranslations } from './about/type';
 import { CombatsTranslations } from './combats/type';
@@ -14,9 +16,12 @@ import { SwitchAccountsTranslations } from './switchAccounts/type';
 import { UniverseHistoryTranslations } from './universeHistory/type';
 
 export interface ExtensionTranslations {
+    ships: ShipTranslations;
+    buildings: BuildingTranslations;
+    research: ResearchTranslations;
+
     common: CommonTranslations;
     settings: SettingsTranslations;
-    ships: ShipTranslations;
     resources: ResourceTranslations;
     expeditions: ExpeditionsTranslations;
     combats: CombatsTranslations;

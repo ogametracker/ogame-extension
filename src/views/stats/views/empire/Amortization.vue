@@ -14,9 +14,7 @@
                 <div class="flex-settings">
                     <div>
                         <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
-                        <amortization-player-settings-inputs
-                            v-model="playerSettings"
-                        />
+                        <amortization-player-settings-inputs v-model="playerSettings" />
                     </div>
 
                     <div>
@@ -27,19 +25,14 @@
                                 :label="$i18n.$t.empire.amortization.settings.astrophysicsSettings.showAstrophysics"
                             />
 
-                            <amortization-planet-settings-inputs
-                                v-model="astrophysicsSettings.planet"
-                            />
+                            <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" />
                         </div>
                     </div>
 
                     <div>
                         <h3 v-text="$i18n.$t.empire.amortization.settings.plasmatechSettings.header" />
                         <div class="plasma-tech-settings">
-                            <checkbox
-                                v-model="showPlasmaTechnology"
-                                :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.showPlasmatech"
-                            />
+                            <checkbox v-model="showPlasmaTechnology" :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.showPlasmatech" />
                         </div>
                     </div>
 
@@ -59,12 +52,7 @@
         </div>
 
         <div class="amortization-table" v-if="!showSettings">
-            <grid-table
-                :items="items"
-                :columns="columns"
-                sticky="100%"
-                @scroll="onTableScroll($event)"
-            >
+            <grid-table :items="items" :columns="columns" sticky="100%" @scroll="onTableScroll($event)" :cellClassProvider="cellClassProvider">
                 <template #header-cost>
                     <div class="cost-grid">
                         <span v-text="$i18n.$t.empire.amortization.table.cost" style="grid-column: 2" />
@@ -75,89 +63,61 @@
                 </template>
 
                 <template #cell-what="{ value }">
-                    <div
-                        v-if="
-                            [
-                                'metal-mine',
-                                'crystal-mine',
-                                'deuterium-synthesizer',
-                            ].includes(value.type)
-                        "
-                        class="what-cell what-cell--mine"
-                    >
-                        <span v-if="value.planetId > 0">
-                            <span
-                                v-text="empire.planets[value.planetId].name"
-                            />
-                            <span
-                                v-text="
-                                    formatCoordinates(
-                                        empire.planets[value.planetId]
-                                            .coordinates
-                                    )
-                                "
-                            />
+                    <div v-if="['metal-mine', 'crystal-mine', 'deuterium-synthesizer'].includes(value.type)" class="what-cell what-cell--mine">
+                        <span v-if="value.planetId > 0" class="planet">
+                            <span v-text="empire.planets[value.planetId].name" />
+                            <span v-text="formatCoordinates(empire.planets[value.planetId].coordinates)" />
                         </span>
-                        <span v-else>
-                            <span
-                                v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
-                            />
+                        <span v-else class="planet">
+                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`" />
                             <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                         </span>
 
-                        <o-building :building="value.type" />
-                        <span v-text="value.level" />
+                        <o-building :building="value.type" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations[value.type]" />
+                            <span v-text="value.level" />
+                        </span>
                     </div>
-                    <div
-                        v-else-if="value.type == 'plasma-technology'"
-                        class="what-cell what-cell--plasma-technology"
-                    >
-                        <o-research research="plasma-technology" />
-                        <span v-text="value.level" />
+                    <div v-else-if="value.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
+                        <span />
+                        <o-research research="plasma-technology" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations[value.type]" />
+                            <span v-text="value.level" />
+                        </span>
                     </div>
-                    <div
-                        v-else-if="value.type == 'astrophysics-colony'"
-                        class="what-cell what-cell--colony"
-                    >
-                        <o-research
-                            research="astrophysics"
-                            :disabled="value.levels.length == 0"
-                        />
-                        <span v-if="value.levels.length == 0" v-text="'-'" />
-                        <span
-                            v-else-if="value.levels.length == 1"
-                            v-text="value.levels[0]"
-                        />
-                        <span
-                            v-else
-                            v-text="`${value.levels[0]}+${value.levels[1]}`"
-                        />
+                    <div v-else-if="value.type == 'astrophysics-colony'" class="what-cell what-cell--colony">
+                        <span class="planet">
+                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`" />
+                            <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                        </span>
 
-                        <span
-                            class="mdi mdi-arrow-right-thin"
-                            style="font-size: 20px"
-                        />
+                        <o-research research="astrophysics" :disabled="value.levels.length == 0" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations['astrophysics-colony']" />
 
-                        <span class="new-colony-mines">
-                            <span
-                                v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`"
-                                style="grid-column: 1 / span 3"
-                            />
+                            <span v-if="value.levels.length == 0" v-text="'-'" />
+                            <span v-else-if="value.levels.length == 1" v-text="value.levels[0]" />
+                            <span v-else v-text="`${value.levels[0]} + ${value.levels[1]}`" />
+                        </span>
 
-                            <span>
-                                <o-building building="metal-mine" />
-                                <span v-text="`1 - ${value.mineLevels.metalMine}`" />
-                            </span>
+                        <o-building building="metal-mine" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations['metal-mine']" />
+                            <span v-text="`1 - ${value.mineLevels.metalMine}`" />
+                        </span>
 
-                            <span>
-                                <o-building building="crystal-mine" />
-                                <span v-text="`1 - ${value.mineLevels.crystalMine}`" />
-                            </span>
+                        <o-building building="crystal-mine" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations['crystal-mine']" />
+                            <span v-text="`1 - ${value.mineLevels.crystalMine}`" />
+                        </span>
 
-                            <span>
-                                <o-building building="deuterium-synthesizer" />
-                                <span v-text="`1 - ${value.mineLevels.deuteriumSynthesizer}`" />
-                            </span>
+                        <o-building building="deuterium-synthesizer" size="36px" />
+                        <span class="name-and-level">
+                            <span v-text="buildableTranslations['deuterium-synthesizer']" />
+                            <span v-text="`1 - ${value.mineLevels.deuteriumSynthesizer}`" />
                         </span>
                     </div>
                     <div v-else v-text="'??? contact developer'" />
@@ -175,17 +135,7 @@
                 </template>
 
                 <template #cell-productionDelta="{ value }">
-                    <span
-                        v-text="
-                            $i18n.$n(
-                                Math.max(
-                                    value.metal,
-                                    value.crystal,
-                                    value.deuterium
-                                )
-                            )
-                        "
-                    />
+                    <span v-text="$i18n.$n(Math.max(value.metal, value.crystal, value.deuterium))" />
                 </template>
                 <template #cell-productionDeltaMsu="{ value }">
                     <span v-text="$i18n.$n(value)" />
@@ -219,7 +169,7 @@
     import { Astrophysics } from '@/shared/models/ogame/research/Astrophysics';
     import { PlasmaTechnology } from '@/shared/models/ogame/research/PlasmaTechnology';
     import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
-    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
@@ -348,7 +298,7 @@
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
             return Object.values(this.planetSettings)
-                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) -  EmpireDataModule.empire.planetOrder.indexOf(b.id));
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id));
         }
 
         @Watch('astrophysicsSettings.planet.position')
@@ -826,25 +776,25 @@
 
         private get columns(): GridTableColumn<keyof AmortizationTableItem>[] {
             return [
-                { key: 'what', size: '400px' },
+                { key: 'what', size: 'auto' },
                 { key: 'cost', size: '3fr' },
-                { 
-                    key: 'costMsu', 
-                    label: this.$i18n.$t.empire.amortization.table.costMsu, 
+                {
+                    key: 'costMsu',
+                    label: this.$i18n.$t.empire.amortization.table.costMsu,
                     size: '1fr',
                 },
-                { 
-                    key: 'productionDelta', 
-                    label: this.$i18n.$t.empire.amortization.table.productionPlus, 
+                {
+                    key: 'productionDelta',
+                    label: this.$i18n.$t.empire.amortization.table.productionPlus,
                     size: '1fr',
                 },
-                { 
-                    key: 'productionDeltaMsu', 
-                    label: this.$i18n.$t.empire.amortization.table.productionPlusMsu, 
+                {
+                    key: 'productionDeltaMsu',
+                    label: this.$i18n.$t.empire.amortization.table.productionPlusMsu,
                     size: '1fr',
                 },
-                { 
-                    key: 'amortizationTimeInH', 
+                {
+                    key: 'amortizationTimeInH',
                     label: this.$i18n.$t.empire.amortization.table.amortizationTime,
                     size: '1fr',
                 },
@@ -931,6 +881,25 @@
             this.timeout = null;
             this.updateTimeout();
         }
+
+        private get buildableTranslations(): Record<AmortizationTableItemWhat['type'], string> {
+            return {
+                'metal-mine': this.$i18n.$t.buildings[BuildingType.metalMine],
+                'crystal-mine': this.$i18n.$t.buildings[BuildingType.crystalMine],
+                'deuterium-synthesizer': this.$i18n.$t.buildings[BuildingType.deuteriumSynthesizer],
+                'plasma-technology': this.$i18n.$t.research[ResearchType.plasmaTechnology],
+                'astrophysics-colony': this.$i18n.$t.research[ResearchType.astrophysics],
+            };
+        }
+
+        private cellClassProvider(item: AmortizationTableItemWhat): string {
+            switch (item.type) {
+                case 'astrophysics-colony': return 'astrophysics-cell';
+                case 'plasma-technology': return 'plasmatech-cell';
+
+                default: return '';
+            }
+        }
     }
 
     type AmortizationMineTableItemType = 'metal-mine' | 'crystal-mine' | 'deuterium-synthesizer';
@@ -976,24 +945,24 @@
         justify-items: center;
         align-items: center;
         column-gap: 8px;
+        width: 100%;
 
-        &--mine {
-            grid-template-columns: 1fr auto 24px;
+        grid-template-columns: 150px auto 1fr;
 
-            & > span:first-of-type {
-                display: grid;
-                justify-items: end;
-            }
+        .planet {
+            display: grid;
+            justify-self: end;
         }
 
-        &--colony {
-            grid-template-columns: repeat(4, auto);
-            justify-items: start;
+        &--colony .planet {
+            grid-row: 1 / span 4;
         }
+    }
 
-        &--plasma-technology {
-            grid-template-columns: auto 24px;
-        }
+    .name-and-level {
+        display: grid;
+        text-align: left;
+        justify-self: start;
     }
 
     .new-colony-mines {
@@ -1020,6 +989,18 @@
         &-table {
             overflow: auto;
             min-height: 300px;
+
+            &::v-deep {
+                .astrophysics-cell,
+                .astrophysics-cell ~ .grid-table-cell {
+                    background-color: rgba(var(--color), 0.25) !important;
+                }
+
+                .plasmatech-cell,
+                .plasmatech-cell ~ .grid-table-cell {
+                    background-color: rgba(var(--color), 0.15) !important;
+                }
+            }
         }
 
         &-settings {
@@ -1038,7 +1019,7 @@
         column-gap: 48px;
     }
 
-    .zero  {
+    .zero {
         opacity: 0.4;
     }
 </style>

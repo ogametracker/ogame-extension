@@ -1,6 +1,9 @@
+import { en as ships } from '../ogame/ships/en';
+import { en as buildings } from '../ogame/buildings/en';
+import { en as research } from '../ogame/research/en';
+
 import { ExtensionTranslations } from "./type";
 import { en as settings } from './settings/en';
-import { en as ships } from '../ogame/ships/en';
 import { en as resources } from './resources/en';
 import { en as common } from './common/en';
 import { en as expeditions } from './expeditions/en';
@@ -15,9 +18,12 @@ import { en as universeHistory } from './universeHistory/en';
 import { en as notifications } from './notifications/en';
 
 export const en: ExtensionTranslations = {
+    ships,
+    buildings,
+    research,
+
     common,
     settings,
-    ships,
     resources,
     expeditions,
     combats,
