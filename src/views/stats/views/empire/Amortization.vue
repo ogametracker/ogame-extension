@@ -993,12 +993,12 @@
             &::v-deep {
                 .astrophysics-cell,
                 .astrophysics-cell ~ .grid-table-cell {
-                    background-color: rgba(var(--color), 0.25) !important;
+                    background-color: rgba(64, 129, 152, 0.25) !important;
                 }
 
                 .plasmatech-cell,
                 .plasmatech-cell ~ .grid-table-cell {
-                    background-color: rgba(var(--color), 0.15) !important;
+                    background-color: rgba(123, 255, 95, 0.1) !important;
                 }
             }
         }
