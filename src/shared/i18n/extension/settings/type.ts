@@ -67,6 +67,11 @@ export interface SettingsTranslations {
             checkboxLabel: string;
         };
     };
+    showMsuInTables: {
+        title: string;
+        label: string;
+    };
+
     reset: string;
     setDefaultRoute: string;
     setDefaultSubRoute: string;

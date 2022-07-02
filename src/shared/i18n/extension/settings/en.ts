@@ -66,9 +66,14 @@ export const en: SettingsTranslations = {
     resourceBalance: {
         detailedResourceBalance: {
             header: 'Detailed resource balance',
-            checkboxLabel: 'show detailed resource balance',
+            checkboxLabel: 'Show detailed resource balance',
         },
     },
+    showMsuInTables: {
+        title: 'MSU in tables',
+        label: 'Show MSU values in tables',
+    },
+
     reset: 'Reset settings',
     setDefaultRoute: 'Set as default',
     setDefaultSubRoute: 'Set as default for this area',

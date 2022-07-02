@@ -69,6 +69,11 @@ export const de: SettingsTranslations = {
             checkboxLabel: 'detaillierte Anzeige der Rohstoffbilanz',
         },
     },
+    showMsuInTables: {
+        title: 'MSE in Tabellen',
+        label: 'MSE-Werte in Tabellen anzeigen',
+    },
+
     reset: 'Einstellungen zurücksetzen',
     setDefaultRoute: 'als Standardauswahl festlegen',
     setDefaultSubRoute: 'als Standardauswahl für diesen Bereich auswählen',

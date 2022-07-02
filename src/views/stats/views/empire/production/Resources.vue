@@ -1,104 +1,116 @@
 <template>
-    <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
-        <template #header-metal>
-            <o-resource resource="metal" size="75px" />
-        </template>
-        <template #header-crystal>
-            <o-resource resource="crystal" size="75px" />
-        </template>
-        <template #header-deuterium>
-            <o-resource resource="deuterium" size="75px" />
-        </template>
-        <template #header-total> {{ $i18n.$t.common.resourceUnits }} </template>
-        <template #header-totalMsu>
-            {{ $i18n.$t.common.resourceUnitsMsu }}
-        </template>
+    <div class="table-container">
+        <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
+            <template #header-metal>
+                <o-resource resource="metal" size="75px" />
+            </template>
+            <template #header-crystal>
+                <o-resource resource="crystal" size="75px" />
+            </template>
+            <template #header-deuterium>
+                <o-resource resource="deuterium" size="75px" />
+            </template>
+            <template #header-total> {{ $i18n.$t.common.resourceUnits }} </template>
+            <template #header-totalMsu>
+                {{ $i18n.$t.common.resourceUnitsMsu }}
+            </template>
 
-        <template #header-productionSettings>
-            <div class="production-settings-mini-table">
-                <span class="header" v-text="$i18n.$t.empire.production.activeProductionSettings" />
-                <o-building building="metal-mine" />
-                <o-building building="crystal-mine" />
-                <o-building building="deuterium-synthesizer" />
-                <o-building building="solar-plant" />
-                <o-building building="fusion-reactor" />
-                <o-ship ship="solar-satellite" />
-                <o-ship ship="crawler" />
-                <span style="grid-column: auto / span 4" v-text="$i18n.$t.empire.production.items" />
-            </div>
-        </template>
+            <template #header-productionSettings>
+                <div class="production-settings-mini-table">
+                    <span class="header" v-text="$i18n.$t.empire.production.activeProductionSettings" />
+                    <o-building building="metal-mine" />
+                    <o-building building="crystal-mine" />
+                    <o-building building="deuterium-synthesizer" />
+                    <o-building building="solar-plant" />
+                    <o-building building="fusion-reactor" />
+                    <o-ship ship="solar-satellite" />
+                    <o-ship ship="crawler" />
+                    <span style="grid-column: auto / span 4" v-text="$i18n.$t.empire.production.items" />
+                </div>
+            </template>
 
-        <template #cell-planet="{ value: planet }">
-            <div class="planet-info">
-                <span v-text="planet.name" />
-                <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
-            </div>
-        </template>
+            <template #cell-planet="{ value: planet }">
+                <div class="planet-info">
+                    <span v-text="planet.name" />
+                    <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
+                </div>
+            </template>
 
-        <template #cell-productionSettings="{ value: settings, item: prodItem }">
-            <div class="production-settings-mini-table">
-                <span v-text="settings.metalMine" />
-                <span v-text="settings.crystalMine" />
-                <span v-text="settings.deuteriumSynthesizer" />
-                <span v-text="settings.solarPlant" />
-                <span v-text="settings.fusionReactor" />
-                <span v-text="settings.solarSatellite" />
-                <span v-text="settings.crawler" />
+            <template #cell-productionSettings="{ value: settings, item: prodItem }">
+                <div class="production-settings-mini-table">
+                    <span v-text="settings.metalMine" />
+                    <span v-text="settings.crystalMine" />
+                    <span v-text="settings.deuteriumSynthesizer" />
+                    <span v-text="settings.solarPlant" />
+                    <span v-text="settings.fusionReactor" />
+                    <span v-text="settings.solarSatellite" />
+                    <span v-text="settings.crawler" />
 
-                <template v-for="(item, i) in getActiveItems(prodItem)">
-                    <span v-if="item == null" :key="i" />
-                    <o-item v-else :key="i" :item="item" size="24px" />
-                </template>
-            </div>
-        </template>
+                    <template v-for="(item, i) in getActiveItems(prodItem)">
+                        <span v-if="item == null" :key="i" />
+                        <o-item v-else :key="i" :item="item" size="24px" />
+                    </template>
+                </div>
+            </template>
 
-        <template #footer-planet="{ value, item }">
-            <span v-if="!item.isResourcePackageRow" v-text="value.name" />
-            <span v-else class="resource-packages-cell">
-                <o-item :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
-                <input type="number" v-model.number="resourcePackageAmounts.all" min="0" step="1" />
+            <template #footer-planet="{ value, item }">
+                <span v-if="!item.isResourcePackageRow" v-text="value.name" />
+                <span v-else class="resource-packages-cell">
+                    <o-item :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
+                    <input type="number" v-model.number="resourcePackageAmounts.all" min="0" step="1" />
 
-                <o-item :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
-                <input type="number" v-model.number="resourcePackageAmounts.metal" min="0" step="1" />
+                    <o-item :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
+                    <input type="number" v-model.number="resourcePackageAmounts.metal" min="0" step="1" />
 
-                <o-item :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
-                <input type="number" v-model.number="resourcePackageAmounts.crystal" min="0" step="1" />
+                    <o-item :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
+                    <input type="number" v-model.number="resourcePackageAmounts.crystal" min="0" step="1" />
 
-                <o-item :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
-                <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
-            </span>
-        </template>
-        <template #cell-metal="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #cell-crystal="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #cell-deuterium="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #cell-total="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #cell-totalMsu="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #footer-metal="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #footer-crystal="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #footer-deuterium="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #footer-total="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-        <template #footer-totalMsu="{ value }">
-            {{ $i18n.$n(value, numberFormat) }}
-        </template>
-    </grid-table>
+                    <o-item :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
+                    <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
+                </span>
+            </template>
+            <template #cell-metal="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #cell-crystal="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #cell-deuterium="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #cell-total="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #cell-totalMsu="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #footer-metal="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #footer-crystal="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #footer-deuterium="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #footer-total="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #footer-totalMsu="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+        </grid-table>
+
+        <floating-menu v-model="showSettings" left>
+            <template #activator>
+                <button @click="showSettings = !showSettings">
+                    <span class="mdi mdi-cog" />
+                </button>
+            </template>
+
+            <show-msu-cells-settings />
+        </floating-menu>
+    </div>
 </template>
 
 <script lang="ts">
@@ -119,6 +131,7 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
 
     interface Production {
         metal: number;
@@ -153,9 +166,14 @@
         crawler: number;
     }
 
-    @Component({})
+    @Component({
+        components: {
+            ShowMsuCellsSettings,
+        },
+    })
     export default class Resources extends Vue {
         private readonly ItemHash = ItemHash;
+        private showSettings = false;
 
         private readonly numberFormat: Intl.NumberFormatOptions = {
             maximumFractionDigits: 0,
@@ -465,5 +483,13 @@
         > input[type="number"] {
             width: 60px;
         }
+    }
+
+    .table-container {
+        display: grid;
+        column-gap: 4px;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        height: 100%;
     }
 </style>

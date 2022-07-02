@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="'LOCA: Show MSU in tables'" />
+            <span v-text="$i18n.$t.settings.showMsuInTables.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="showMsuCells"
                 @input="toggleMsuCells($event)"
-                :label="'LOCA: Show MSU in tables'"
+                :label="$i18n.$t.settings.showMsuInTables.label"
             />
         </div>
     </div>
