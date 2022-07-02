@@ -72,6 +72,8 @@ export const de: SettingsTranslations = {
     showMsuInTables: {
         title: 'MSE in Tabellen',
         label: 'MSE-Werte in Tabellen anzeigen',
+
+        infoAmortization: 'Amotisationszeit wird weiterhin anhand von Kosten und Produktion in MSE errechnet',
     },
 
     reset: 'Einstellungen zurücksetzen',

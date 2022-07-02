@@ -70,6 +70,8 @@ export interface SettingsTranslations {
     showMsuInTables: {
         title: string;
         label: string;
+
+        infoAmortization: string;
     };
 
     reset: string;

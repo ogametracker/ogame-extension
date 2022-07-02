@@ -72,6 +72,8 @@ export const en: SettingsTranslations = {
     showMsuInTables: {
         title: 'MSU in tables',
         label: 'Show MSU values in tables',
+
+        infoAmortization: 'Amortization time will still be calculated using cost and production in MSU',
     },
 
     reset: 'Reset settings',
