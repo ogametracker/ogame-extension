@@ -18,8 +18,8 @@ export const de: NotificationTranslations = {
                 : `${value} neue TF-Abbauberichte getrackt`,
         message: (value: string) =>
             value == '1'
-                ? `Ex wurde ${value} neuer TF-Abbaubericht getrackt.`
-                : `Ex wurden ${value} neue TF-Abbauberichte getrackt.`,
+                ? `Es wurde ${value} neuer TF-Abbaubericht getrackt.`
+                : `Es wurden ${value} neue TF-Abbauberichte getrackt.`,
     },
     expeditionTracking: {
         fleetLost: {
