@@ -1,4 +1,4 @@
-$icon-prefix: 'ogti';
+$icon-prefix: "ogti";
 $icons: ("attack", "debris-field", "discord", "economy", "expedition", "planet-moon");
 
 .#{$icon-prefix} {
@@ -7,7 +7,7 @@ $icons: ("attack", "debris-field", "discord", "economy", "expedition", "planet-m
     height: 1em;
     font-size: 1em;
     position: relative;
-    
+
     &::before {
         content: "";
         background-repeat: no-repeat;
@@ -18,11 +18,15 @@ $icons: ("attack", "debris-field", "discord", "economy", "expedition", "planet-m
         left: 5%;
         width: 90%;
         height: 90%;
-    } 
+    }
 }
 
 @each $icon in $icons {
     .#{$icon-prefix}-#{$icon}::before {
         background-image: url(../assets/icons/#{$icon}.svg); //TODO: create icon font
     }
+}
+
+.#{$icon-prefix}-planet-moon::before {
+    transform: scale(1.2);
 }

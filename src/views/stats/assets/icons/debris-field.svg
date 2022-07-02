@@ -7,36 +7,35 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="512"
-   height="512"
-   viewBox="0 0 135.46666 135.46667"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866666 33.866668"
    version="1.1"
    id="svg8"
-   sodipodi:docname="debris-field.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1387"
-     id="namedview845"
-     showgrid="false"
-     inkscape:zoom="1.3085938"
-     inkscape:cx="345.40896"
-     inkscape:cy="333.18209"
-     inkscape:window-x="1912"
-     inkscape:window-y="1072"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg8"
-     inkscape:document-rotation="0" />
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="debris-field.svg">
   <defs
      id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="65.255919"
+     inkscape:cy="105.13056"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="2560"
+     inkscape:window-height="1387"
+     inkscape:window-x="1912"
+     inkscape:window-y="1072"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -45,16 +44,17 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1"
-     transform="matrix(1.203997,0,0,1.203997,-9.8581707,-12.019779)">
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
     <path
-       id="path1047"
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 60.665179,112.06994 19.843739,76.729167 27.781244,107.34524 Z M 57.263393,99.218747 41.199394,65.389881 41.010411,84.099706 Z m 48.947917,1.700893 2.83481,-32.316961 -37.230649,42.900301 z M 34.395833,20.41064 36.75693,27.043827 93.322467,46.110879 104.32128,20.41064 Z m 6.232694,17.511075 10.131166,28.46338 29.614211,9.982335 9.36842,-21.890654 z M 53.828756,75.007824 66.145832,109.61295 77.535835,82.999068 Z" />
+       id="path847"
+       style="fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:0.259099px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.3412173,4.8841589 3.8603747,15.0495521 6.216014,-4.972724 1.701368,-6.2160147 z m 12.1022647,0.1510868 -0.0727,10.3194423 2.906997,-1.235407 7.0494,-5.7412962 -3.99701,-3.0523898 z m 7.061662,8.2278763 -4.52866,2.420454 6.16828,4.060072 0.780833,-4.840906 z M 5.3006896,13.828931 1.018585,14.804207 9.1724506,21.521654 8.8702779,17.320568 Z m 9.8736264,3.959348 -8.5501944,5.945811 4.3600554,4.303562 4.24707,-1.189425 z m 8.772227,1.058483 -7.710679,0.288598 1.801655,12.466626 10.449071,-10.016831 z" />
   </g>
 </svg>
