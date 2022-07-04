@@ -28,8 +28,6 @@ const services: MessageService[] = [
     new InternalService(),
 ];
 
-// const permits = 1000; // number of parallel processable messages
-// const migrationLock = new Semaphore(permits);
 try {
     chrome.runtime.onInstalled.addListener(async () => await showMigrationWindow());
 
@@ -46,34 +44,7 @@ async function showMigrationWindow() {
     });
 }
 
-async function performMigrations() {
-    // await chrome.tabs.create({
-    //     active: true,
-    //     index: 0, 
-    //     url: 'https://ogame.de',
-    // });
-
-    //TODO: migrate manually => open window for migrations (see above)
-    // const permits = migrationLock.drainPermits();
-    // try {
-    //     _logDebug('performing migrations');
-    //     await executeMigrations();
-    // } catch (error) {
-    //     //TODO: send notification with error
-    //     console.error(error);
-    // }
-
-    // console.log('migrations done');
-
-    // for(let i = 0; i < permits; i++) {
-    //     migrationLock.release();
-    // }
-}
-
 async function onMessage(message: Message<MessageType, any>) {
-    // await migrationLock.acquire();
-    // migrationLock.release();
-
     _logDebug('got message', new Date(), message);
 
     for (const service of services) {
