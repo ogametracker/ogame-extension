@@ -37,6 +37,11 @@ try {
 }
 
 async function showMigrationWindow() {
+    const migrated = await chrome.storage.local.get('migration-v1-to-v2');
+    if(migrated['migration-v1-to-v2'] == true) {
+        return;
+    }
+
     await chrome.tabs.create({
         active: true,
         index: 0, 

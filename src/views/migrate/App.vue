@@ -21,7 +21,7 @@
         </template>
 
         <template v-else>
-            <button v-text="'LOCA: Migrate'" :disabled="isImporting" @click="migrateData()" />
+            <button v-text="'Migrate data'" :disabled="isImporting" @click="migrateData()" />
         </template>
 
         <template v-if="isImporting">
@@ -74,6 +74,8 @@
             } catch (err) {
                 alert(' Migration failed with the following error, please contact the developer:\n' + err);
             }
+
+            await chrome.storage.local.set({ 'migration-v1-to-v2': true });
 
             window.close();
         }
