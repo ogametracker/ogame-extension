@@ -41,7 +41,7 @@ export const si: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*'Našli smo */'ostanke prejšnjih ekspedicij'/*! Naši tehniki bodo poskusili popraviti nekatere ladje.'*/,
+            /*'Našli smo */'ostanke prejšnjih ekspedicij'/* ! Naši tehniki bodo poskusili popraviti nekatere ladje.'*/,
             /*'Ekspedicija je našla staro kolonijo, ki je */'bila zapuščena pred par leti'/*. V hangarjih so našli tudi nekaj ladij, katere zdaj tehniki poskušajo popraviti.'*/,
             /*'Ekspedicija je našla planet, kateri je bil */'skoraj uničen v prejšnjih misijah'/*. V njegovi orbiti letijo še nekatere ladje katere naši tehniki lahko popravijo.'*/,
             /*'Našli smo */'staro piratsko postajo'/* na kateri so še vedno ladje. Naši tehniki poskušajo ugotoviti ali so še uporabne.'*/,
@@ -113,8 +113,8 @@ export const si: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Tvoja ekspedicija je */'imela neprijetno srečanje s piratskimi'/* ladjami.'*/,
-            /**/'Ekspedicija je naletela na zasedo'/*! Bitki se ni bilo mogoče izogniti.'*/,
-            /*TODO: si 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /**/'Ekspedicija je naletela na zasedo'/* ! Bitki se ni bilo mogoče izogniti.'*/,
+            /*'Signal za pomoč kateremu je flota sledila, */'je bila v resnici zaseda piratov'/*. Bitki se ni bilo mogoče izogniti.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: si 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -130,7 +130,7 @@ export const si: ExpeditionMessages = {
             /*TODO: si 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /**/'Nepoznana rasa napada našo ekspedicijsko floto'/*!*/,
+            /**/'Nepoznana rasa napada našo ekspedicijsko floto'/* !*/,
             /*'Tvoja ekspedicijska */'flota je naletela na ozemlje'/*, ki pripada nepoznani vendar zelo agresivni, vesoljcem podobni rasi.'*/,
             /*'Povezava z našo ekspedicijsko */'floto je bila za kratek čas prekinjena'/*. Lahko dešifriramo zadnje sporočilo. Zgleda, da so v težkem napadu z nepoznano raso.'*/,
         ],

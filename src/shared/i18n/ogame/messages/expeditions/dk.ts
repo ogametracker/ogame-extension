@@ -114,11 +114,11 @@ export const dk: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Din ekspeditionsflåde */'havde et ufint sammenstød med nogle rumpirater'/*.'*/,
             /*'Vi faldt i baghold af */'nogle piratskibe'/* ! En kamp var uundgåelig.'*/,
-            /*'Ekspeditionsflåden fik fat i et nødsignal, */'hvilket viste sig til at være et baghold af nogle rumpirater'/*! Vi kunne ikke flygte uden at kæmpe.'*/,
+            /*'Ekspeditionsflåden fik fat i et nødsignal, */'hvilket viste sig til at være et baghold af nogle rumpirater'/* ! Vi kunne ikke flygte uden at kæmpe.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Der er modtaget signaler som ikke stammer fra fremmede */'væsener men derimod kommer fra en skjult piratbase'/*! Piraterne var ikke glade for vores besøg i deres sektor.'*/,
-            /*'Ekspeditionsflåden melder om kampe */'med ikke-identificerede piratskibe'/*!'*/,
+            /*'Der er modtaget signaler som ikke stammer fra fremmede */'væsener men derimod kommer fra en skjult piratbase'/* ! Piraterne var ikke glade for vores besøg i deres sektor.'*/,
+            /*'Ekspeditionsflåden melder om kampe */'med ikke-identificerede piratskibe'/* !'*/,
         ],
     },
 
