@@ -67,6 +67,10 @@ function sendNotificationMessages() {
         sendErrorNotificationMessage(failed);
     }
 
+    if (combatTrackingResult.count == 0) {
+        return;
+    }
+
     const msg: CombatTrackingNotificationMessage = {
         type: MessageType.Notification,
         ogameMeta: getOgameMeta(),
@@ -110,7 +114,7 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.WillNotBeTracked: {
             const msg = message as WillNotBeTrackedMessage;
-            if(msg.data.type != 'combat-report') {
+            if (msg.data.type != 'combat-report') {
                 break;
             }
             shouldTrackResolvers[msg.data.id]?.(false);
@@ -120,7 +124,7 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
-            
+
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             addOrSetCustomMessageContent(li, false);
 
@@ -187,19 +191,19 @@ function onMessage(message: Message<MessageType, any>) {
         }
 
         case MessageType.TrackingError: {
-            const msg = message as MessageTrackingErrorMessage;            
-            if(msg.data.type != 'combat-report') {
+            const { type, id } = (message as MessageTrackingErrorMessage).data;
+            if (type != 'combat-report') {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report message with id '${msg.data}'`);
+            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
 
-            delete waitingForCombats[msg.data.id];
-            failedToTrackCombats[msg.data.id] = true;
+            delete waitingForCombats[id];
+            failedToTrackCombats[id] = true;
             sendNotificationMessages();
             break;
         }

@@ -118,19 +118,19 @@ function onMessage(message: Message<MessageType, any>) {
         }
 
         case MessageType.TrackingError: {
-            const msg = message as MessageTrackingErrorMessage;
-            if(msg.data.type != 'expedition') {
+            const { type, id } = (message as MessageTrackingErrorMessage).data;
+            if (type != 'expedition') {
                 break;
             }
-            
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find expedition message with id '${msg.data}'`);
+
+            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find expedition message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
 
-            delete waitingForExpeditions[msg.data.id];
-            failedToTrackExpeditions[msg.data.id] = true;
+            delete waitingForExpeditions[id];
+            failedToTrackExpeditions[id] = true;
             sendNotificationMessages();
             break;
         }
@@ -195,6 +195,11 @@ function sendNotificationMessages() {
     const failed = Object.keys(failedToTrackExpeditions).length;
     if (failed > 0) {
         sendErrorNotificationMessage(failed);
+    }
+
+    const count = Object.values(totalExpeditionResult.events).reduce((acc, cur) => acc + cur, 0);
+    if (count == 0) {
+        return;
     }
 
     const msg: ExpeditionTrackingNotificationMessage = {

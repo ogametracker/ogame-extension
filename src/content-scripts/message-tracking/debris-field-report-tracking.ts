@@ -92,7 +92,7 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.WillNotBeTracked: {
             const msg = (message as WillNotBeTrackedMessage).data;
-            if(msg.type != 'debris-field-report') {
+            if (msg.type != 'debris-field-report') {
                 break;
             }
             const li = document.querySelector(`li.msg[data-msg-id="${msg.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.id}'`);
@@ -105,19 +105,19 @@ function onMessage(message: Message<MessageType, any>) {
         }
 
         case MessageType.TrackingError: {
-            const msg = message as MessageTrackingErrorMessage;
-            if (msg.data.type != 'debris-field-report') {
+            const { type, id } = (message as MessageTrackingErrorMessage).data;
+            if (type != 'debris-field-report') {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data}"]`) ?? _throw(`failed to find combat report message with id '${msg.data}'`);
+            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
 
-            delete waitingForReports[msg.data.id];
-            failedToTrackReport[msg.data.id] = true;
+            delete waitingForReports[id];
+            failedToTrackReport[id] = true;
             sendNotificationMessages();
             break;
         }
@@ -188,6 +188,10 @@ function sendNotificationMessages() {
         sendErrorNotificationMessage(failed);
     }
 
+    if(totalDebrisFieldResult.count == 0) {
+        return;
+    }
+    
     const msg: DebrisFieldReportTrackingNotificationMessage = {
         type: MessageType.Notification,
         ogameMeta: getOgameMeta(),
