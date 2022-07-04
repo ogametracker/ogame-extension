@@ -6,11 +6,8 @@ import { $i18n } from '@/shared/i18n/extension/$i18n';
 import './extend-vue';
 
 import '@mdi/font/css/materialdesignicons.min.css';
-import '@/styles/env.scss';
-import '@/styles/reset.scss';
-import './styles.scss';
-
-import '../_shared/components/ogame';
+import '@/views/_shared/styles/index.scss';
+import '@/views/_shared/components/ogame';
 
 main();
 

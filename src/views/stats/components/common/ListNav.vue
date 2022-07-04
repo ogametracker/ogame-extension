@@ -8,19 +8,19 @@
             class="nav-list_floating-menu"
         >
             <template #activator>
-                <router-link
+                <component
+                    :is="item.to != null ? 'router-link' : 'a'"
                     class="nav-list-item"
                     :class="item.class"
                     :to="item.to"
+                    :href="item.href"
+                    :target="item.target"
                     active-class="nav-list-item-active"
                     ref="links"
                 >
                     <span v-text="item.label" />
-                    <span
-                        v-if="isDefaultRoute(item.to)"
-                        class="nav-list-item-home-icon mdi mdi-home"
-                    />
-                </router-link>
+                    <span v-if="isDefaultRoute(item.to)" class="nav-list-item-home-icon mdi mdi-home" />
+                </component>
             </template>
 
             <set-default-route-button
@@ -41,11 +41,16 @@
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
-    export interface ListNavItem {
+    export type ListNavItem = {
         label: string;
-        to: RawLocation & { name: string };
         class?: string;
-    }
+    } & (
+            { to: RawLocation & { name: string } }
+            | {
+                href: string;
+                target?: string;
+            }
+        );
 
     @Component({
         components: {
@@ -74,8 +79,8 @@
 
         private async mounted() {
             await this.$nextTick();
-            (this.$refs.links as Vue[]).forEach((component, i) => {
-                const element = component.$el;
+            (this.$refs.links as (Vue | HTMLElement)[]).forEach((component, i) => {
+                const element = component instanceof HTMLElement ? component : component.$el;
                 element.addEventListener('contextmenu', e => {
                     e.preventDefault();
 
@@ -109,18 +114,10 @@
         text-decoration: none;
         min-width: 140px;
 
-        background: linear-gradient(
-            to right,
-            rgba(var(--color), 0.25) 30%,
-            rgba(var(--color), 0.15)
-        );
+        background: linear-gradient(to right, rgba(var(--color), 0.25) 30%, rgba(var(--color), 0.15));
 
         &:hover {
-            background: linear-gradient(
-                to right,
-                rgba(var(--color), 0.5) 30%,
-                rgba(var(--color), 0.3)
-            );
+            background: linear-gradient(to right, rgba(var(--color), 0.5) 30%, rgba(var(--color), 0.3));
         }
 
         + .nav-list-item {
@@ -138,11 +135,7 @@
 
     .nav-list-item-active,
     .nav-list-item-active:hover {
-        background: linear-gradient(
-            to right,
-            rgba(var(--color), 0.8) 30%,
-            rgba(var(--color), 0.6)
-        );
+        background: linear-gradient(to right, rgba(var(--color), 0.8) 30%, rgba(var(--color), 0.6));
 
         .nav-list-item-home-icon {
             opacity: 1;

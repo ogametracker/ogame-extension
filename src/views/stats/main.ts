@@ -1,8 +1,11 @@
 import '@mdi/font/css/materialdesignicons.min.css';
-import './styles/styles.scss';
+import '@/views/_shared/styles/index.scss';
+import './styles/index.scss'
 
+import '@/views/_shared/components/common';
 import '@/views/_shared/components/ogame';
 import './components/common';
+
 import Vue from 'vue';
 import App from './App.vue';
 import { router } from './router';

@@ -24,18 +24,26 @@ const services: MessageService[] = [
     new UniverseHistoryService(),
     new ServerSettingsService(),
     new UniversesAndAccountsService(),
-    
+
     new InternalService(),
 ];
 
 // const permits = 1000; // number of parallel processable messages
 // const migrationLock = new Semaphore(permits);
 try {
-    chrome.runtime.onInstalled.addListener(() => performMigrations());
+    chrome.runtime.onInstalled.addListener(async () => await showMigrationWindow());
 
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));
 } catch (error) {
     _logError(error);
+}
+
+async function showMigrationWindow() {
+    await chrome.tabs.create({
+        active: true,
+        index: 0, 
+        url: '/views/migrate.html',
+    });
 }
 
 async function performMigrations() {

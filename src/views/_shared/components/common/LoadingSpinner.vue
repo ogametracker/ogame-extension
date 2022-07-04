@@ -32,7 +32,7 @@
         position: relative;
         box-sizing: border-box;
 
-        animation: loading-animation-data-v-06b0dc5c 1.5s infinite linear;
+        animation: loading-animation 1.5s infinite linear;
 
         &::before {
             content: "";

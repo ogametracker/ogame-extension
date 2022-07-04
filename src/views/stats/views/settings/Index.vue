@@ -44,7 +44,8 @@
                 },
                 {
                     label: 'Beta',
-                    to: { name: 'settings/beta' },
+                    href: '/views/migrate.html',
+                    target: '_blank',
                 },
                 {
                     label: this.$i18n.$t.settings.tabs.dangerZone,
