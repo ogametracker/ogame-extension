@@ -1,5 +1,6 @@
 <template>
-    <div class="status-history-grid">
+    <loading-spinner v-if="loading" />
+    <div v-else class="status-history-grid">
         <div class="y-ticks">
             <span v-for="(label, i) in statusHistoryLabels" :key="`status-label-${i}`" v-text="label" />
         </div>
@@ -61,9 +62,10 @@
 </template>
 
 <script lang="ts">
-    import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+    import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
     import { addDays, startOfDay, subDays } from 'date-fns';
     import { Component, Prop, Vue, Ref } from 'vue-property-decorator';
+    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
 
     interface StatusHistoryItem {
         status: string | null;
@@ -76,8 +78,11 @@
     @Component({})
     export default class StatusHistoryChart extends Vue {
 
-        @Prop({ required: true, type: Array })
-        private history!: OgameTrackerUniverseHistoryPlayerState[];
+        @Prop({ required: true, type: Number })
+        private playerId!: number;
+
+        private history: OgameTrackerUniverseHistoryPlayerState[] = [];
+        private loading = true;
 
         private readonly statusHistoryTickCount = 30;
         private statusHistoryGraphOffset = 0;
@@ -158,6 +163,9 @@
         }
 
         private async mounted() {
+            this.history = await UniverseHistoryDataModule.getPlayerStateHistory(this.playerId);
+            this.loading = false;
+
             await this.$nextTick();
             this.statusHistoryXTicks!.scrollLeft = this.statusHistoryXTicks!.scrollWidth;
         }

@@ -1,6 +1,6 @@
 <template>
     <div class="history" v-if="historyTrackingEnabled">
-        <loading-spinner v-if="dataModuleLoading || loading" />
+        <loading-spinner v-if="dataModuleLoading" />
         <template v-else>
             <grid-table :columns="tableColumns" :items="tableItems" class="player-selection-table">
                 <template #cell-player="{ value: player }">
@@ -28,19 +28,19 @@
 
             <tabs :tabs="tabs">
                 <template #tab-content-status>
-                    <status-history-chart :history="stateHistory" />
+                    <status-history-chart v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-nickname>
-                    <player-name-history-table :history="nameHistory" />
+                    <player-name-history-table v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-alliance> 
-                    <player-alliance-history-table :history="allianceHistory" />
+                    <player-alliance-history-table v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-planet-moons>
-                    <!-- TODO: History of moons and planets -->
+                    <player-planets-and-moons-history v-if="playerId != null" :playerId="playerId" />
                 </template>
             </tabs>
         </template>
@@ -61,6 +61,7 @@
     import StatusHistoryChart from '@stats/components/universe-history/StatusHistoryChart.vue';
     import PlayerNameHistoryTable from '@stats/components/universe-history/PlayerNameHistoryTable.vue';
     import PlayerAllianceHistoryTable from '@stats/components/universe-history/PlayerAllianceHistoryTable.vue';
+    import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
 
 
     @Component({
@@ -69,6 +70,7 @@
             StatusHistoryChart,
             PlayerNameHistoryTable,
             PlayerAllianceHistoryTable,
+            PlayerPlanetsAndMoonsHistory,
         },
     })
     export default class Players extends Vue {
@@ -128,12 +130,7 @@
         }
 
         private dataModuleLoading = true;
-        private loading = true;
         private selectedPlayerName = '';
-
-        private stateHistory: OgameTrackerUniverseHistoryPlayerState[] = [];
-        private nameHistory: OgameTrackerUniverseHistoryPlayerName[] = [];
-        private allianceHistory: OgameTrackerUniverseHistoryPlayerAlliance[] = [];
 
         private async mounted() {
             await this.redirectToMeIfNoPlayersSelected();
@@ -141,8 +138,6 @@
             this.dataModuleLoading = true;
             await UniverseHistoryDataModule.ready;
             this.dataModuleLoading = false;
-
-            await this.loadPlayerHistory();
         }
 
         private async redirectToMeIfNoPlayersSelected() {
@@ -165,20 +160,6 @@
             await this.redirectToMeIfNoPlayersSelected();
         }
 
-        private async loadPlayerHistory() {
-            if (this.playerId == null) {
-                return;
-            }
-
-            this.loading = true;
-
-            this.stateHistory = await UniverseHistoryDataModule.getPlayerStateHistory(this.playerId);
-            this.nameHistory = await UniverseHistoryDataModule.getPlayerNameHistory(this.playerId);
-            this.allianceHistory = await UniverseHistoryDataModule.getPlayerAllianceHistory(this.playerId);
-
-            this.loading = false;
-        }
-
         private get playerNames() {
             return UniverseHistoryDataModule.players
                 .map(player => player.name)
@@ -195,7 +176,6 @@
             this.selectedPlayerName = '';
 
             await this.updatePlayerIdRoute(player.id);
-            await this.loadPlayerHistory();
         }
     }
 </script>

@@ -1,5 +1,6 @@
 <template>
-    <grid-table :columns="nameHistoryColumns" :items="nameHistoryItems" inline>
+    <loading-spinner v-if="loading" />
+    <grid-table v-else :columns="nameHistoryColumns" :items="nameHistoryItems" inline>
         <template #cell-start="{ value }">
             <span v-if="value != null" v-text="$i18n.$d(value, 'date')" />
             <span v-else v-text="'?'" />
@@ -17,6 +18,7 @@
 <script lang="ts">
     import { OgameTrackerUniverseHistoryPlayerName } from '@/shared/db/schema/universe-history';
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { GridTableColumn } from '../common/GridTable.vue';
 
     interface NameHistoryItem {
@@ -27,8 +29,16 @@
 
     @Component({})
     export default class PlayerNameHistoryTable extends Vue {
-        @Prop({ required: true, type: Array })
-        private history!: OgameTrackerUniverseHistoryPlayerName[];
+        @Prop({ required: true, type: Number })
+        private playerId!: number;
+
+        private history: OgameTrackerUniverseHistoryPlayerName[] = [];
+        private loading = true;
+
+        private async mounted() {
+            this.history = await UniverseHistoryDataModule.getPlayerNameHistory(this.playerId);
+            this.loading = false;
+        }
 
         private get nameHistoryColumns(): GridTableColumn<keyof NameHistoryItem | '-'>[] {
             return [

@@ -1,5 +1,6 @@
 <template>
-    <grid-table :columns="allianceHistoryColumns" :items="allianceHistoryItems" inline>
+    <loading-spinner v-if="loading" />
+    <grid-table v-else :columns="allianceHistoryColumns" :items="allianceHistoryItems" inline>
         <template #cell-alliance="{ value }">
             <span v-if="value != null" v-text="`[${value.tag}] ${value.name}`" />
             <i v-else v-text="$i18n.$t.universeHistory.noAlliance" />
@@ -22,7 +23,7 @@
 <script lang="ts">
     import { OgameTrackerUniverseHistoryPlayerAlliance } from '@/shared/db/schema/universe-history';
     import { Component, Prop, Vue } from 'vue-property-decorator';
-import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
+    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { GridTableColumn } from '../common/GridTable.vue';
 
     interface AllianceHistoryItem {
@@ -33,8 +34,16 @@ import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule'
 
     @Component({})
     export default class PlayerAllianceHistoryTable extends Vue {
-        @Prop({ required: true, type: Array })
-        private history!: OgameTrackerUniverseHistoryPlayerAlliance[];
+        @Prop({ required: true, type: Number })
+        private playerId!: number;
+
+        private history: OgameTrackerUniverseHistoryPlayerAlliance[] = [];
+        private loading = true;
+
+        private async mounted() {
+            this.history = await UniverseHistoryDataModule.getPlayerAllianceHistory(this.playerId);
+            this.loading = false;
+        }
 
         private get allianceHistoryColumns(): GridTableColumn<keyof AllianceHistoryItem | '-'>[] {
             return [

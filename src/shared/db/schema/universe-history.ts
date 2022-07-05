@@ -83,6 +83,44 @@ export interface OgameTrackerUniverseHistoryAllianceScore {
     score: number;
     position: number;
 }
+
+export interface OgameTrackerUniverseHistoryPlanet {
+    id: number;
+    playerId: number;
+}
+export interface OgameTrackerUniverseHistoryPlanetName {
+    planetId: number;
+    date: number;
+    name: string;
+}
+export interface OgameTrackerUniverseHistoryPlanetState {
+    planetId: number;
+    date: number;
+    state: DbUniverseHistoryPlanetMoonState;
+}
+export interface OgameTrackerUniverseHistoryPlanetCoordinates {
+    planetId: number;
+    date: number;
+    coordinates: DbUniverseHistoryCoordinates;
+}
+export interface OgameTrackerUniverseHistoryMoon {
+    id: number;
+    planetId: number;
+    size: number;
+}
+export interface OgameTrackerUniverseHistoryMoonName {
+    moonId: number;
+    date: number;
+    name: string;
+}
+export interface OgameTrackerUniverseHistoryMoonState {
+    moonId: number;
+    date: number;
+    state: DbUniverseHistoryPlanetMoonState;
+}
+
+
+
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     //TODO: add indexes by id+date to be able to traverse in reverse to get latest data
     _lastUpdate: {
@@ -132,10 +170,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     planets: {
         /** PlanetId */
         key: number;
-        value: {
-            id: number;
-            playerId: number;
-        };
+        value: OgameTrackerUniverseHistoryPlanet;
         indexes: {
             playerId: number;
         };
@@ -143,11 +178,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     planetNames: {
         /** PlanetId, DateTime */
         key: [number, number];
-        value: {
-            planetId: number;
-            date: number;
-            name: string;
-        };
+        value: OgameTrackerUniverseHistoryPlanetName;
         indexes: {
             planetId: number;
         };
@@ -155,11 +186,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     planetStates: {
         /** PlanetId, DateTime */
         key: [number, number];
-        value: {
-            planetId: number;
-            date: number;
-            state: DbUniverseHistoryPlanetMoonState;
-        };
+        value: OgameTrackerUniverseHistoryPlanetState;
         indexes: {
             planetId: number;
         };
@@ -167,11 +194,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     planetCoordinates: {
         /** PlanetId, DateTime */
         key: [number, number];
-        value: {
-            planetId: number;
-            date: number;
-            coordinates: DbUniverseHistoryCoordinates;
-        };
+        value: OgameTrackerUniverseHistoryPlanetCoordinates;
         indexes: {
             planetId: number;
         };
@@ -180,11 +203,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     moons: {
         /** MoonId */
         key: number;
-        value: {
-            id: number;
-            planetId: number;
-            size: number;
-        };
+        value: OgameTrackerUniverseHistoryMoon;
         indexes: {
             planetId: number;
         };
@@ -192,11 +211,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     moonNames: {
         /** MoonId, DateTime */
         key: [number, number];
-        value: {
-            moonId: number;
-            date: number;
-            name: string;
-        };
+        value: OgameTrackerUniverseHistoryMoonName;
         indexes: {
             moonId: number;
         };
@@ -204,11 +219,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     moonStates: {
         /** MoonId, DateTime */
         key: [number, number];
-        value: {
-            moonId: number;
-            date: number;
-            state: DbUniverseHistoryPlanetMoonState;
-        };
+        value: OgameTrackerUniverseHistoryMoonState;
         indexes: {
             moonId: number;
         };

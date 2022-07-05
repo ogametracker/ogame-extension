@@ -1,5 +1,5 @@
 import { getUniverseHistoryDatabase } from '@/shared/db/access';
-import { OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+import { OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
 import { parseIntSafe } from '@/shared/utils/parseNumbers';
 import { StoreNames } from 'idb';
 import { Component, Vue } from 'vue-property-decorator';
@@ -14,6 +14,23 @@ export interface UniverseHistoryAlliance {
     id: number;
     tag: string;
     name: string;
+}
+
+export interface UniverseHistoryPlanetHistory {
+    playerId: number;
+    id: number;
+    names: OgameTrackerUniverseHistoryPlanetName[];
+    coordinates: OgameTrackerUniverseHistoryPlanetCoordinates[];
+    states: OgameTrackerUniverseHistoryPlanetState[];
+
+    moons: UniverseHistoryMoonHistory[];
+}
+
+export interface UniverseHistoryMoonHistory {
+    id: number;
+    size: number;
+    names: OgameTrackerUniverseHistoryMoonName[];
+    states: OgameTrackerUniverseHistoryMoonState[];
 }
 
 @Component
@@ -239,7 +256,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return scores.sort((a, b) => a.date - b.date);
     }
 
-    public async deleteCurrentServer() {
+    public async deleteCurrentServer(): Promise<void> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const storeNames: StoreNames<OgameTrackerUniverseHistoryDbSchema>[] = [
             '_lastUpdate',
@@ -254,6 +271,53 @@ class UniverseHistoryDataModuleClass extends Vue {
             const store = tx.objectStore(storeName);
             await store.clear();
         }
+    }
+    
+    public async getPlayerPlanetsAndMoonsHistory(playerId: number): Promise<UniverseHistoryPlanetHistory[]> {
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const storeNames: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & (`${'planet' | 'moon'}${string}`))[] = [
+            'planetCoordinates', 'planetNames', 'planetStates', 'planets',
+            'moonNames', 'moonStates', 'moons',
+        ];
+        const tx = db.transaction(storeNames, 'readonly');
+
+        const planetHistories: UniverseHistoryPlanetHistory[] = [];
+
+        const planetStore = tx.objectStore('planets');
+        const playerPlanets = await planetStore.index('playerId').getAll(playerId);
+
+        for(const planet of playerPlanets) {
+            const planetCoordinatesHistory = await tx.objectStore('planetCoordinates').index('planetId').getAll(planet.id);
+            const planetNameHistory = await tx.objectStore('planetNames').index('planetId').getAll(planet.id);
+            const planetStateHistory = await tx.objectStore('planetStates').index('planetId').getAll(planet.id);
+
+            const planetHistory: UniverseHistoryPlanetHistory = {
+                id: planet.id,
+                playerId: planet.playerId,
+                coordinates: planetCoordinatesHistory,
+                names: planetNameHistory,
+                states: planetStateHistory,
+                moons: [],
+            };
+
+            const moons = await tx.objectStore('moons').index('planetId').getAll(planet.id);
+            for(const moon of moons) {
+                const moonNameHistory = await tx.objectStore('moonNames').index('moonId').getAll(moon.id);
+                const moonStateHistory = await tx.objectStore('moonStates').index('moonId').getAll(moon.id);
+
+                const moonHistory: UniverseHistoryMoonHistory = {
+                    id: moon.id,
+                    size: moon.size,
+                    names: moonNameHistory,
+                    states: moonStateHistory,
+                };
+                planetHistory.moons.push(moonHistory);
+            }
+
+            planetHistories.push(planetHistory);
+        }
+
+        return planetHistories;
     }
 }
 
