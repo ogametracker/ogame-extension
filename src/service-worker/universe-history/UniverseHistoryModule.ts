@@ -877,7 +877,7 @@ export class UniverseHistoryModule {
                 date: now,
                 coordinates: {
                     galaxy: planet.coordinates.galaxy,
-                    system: planet.coordinates.galaxy,
+                    system: planet.coordinates.system,
                     position: planet.coordinates.position,
                 },
             });
