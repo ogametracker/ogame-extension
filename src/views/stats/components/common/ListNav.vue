@@ -113,6 +113,7 @@
         border-radius: 4px;
         text-decoration: none;
         min-width: 140px;
+        cursor: pointer;
 
         background: linear-gradient(to right, rgba(var(--color), 0.25) 30%, rgba(var(--color), 0.15));
 
