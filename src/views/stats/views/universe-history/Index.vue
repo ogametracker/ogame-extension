@@ -1,10 +1,12 @@
 <template>
-    <loading-spinner v-if="!ready" />
-    <page
-        v-else-if="enabled"
-        :nav-items="navItems"
-        :root-route-name="rootRoute"
-    />
+    <div v-if="!ready">
+        <loading-spinner />
+        <div
+            v-if="showLoadingMessage"
+            v-text="'LOCA: This is taking longer than expected. The database is probably updating right now, please be patient or try again later.'"
+        />
+    </div>
+    <page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />
     <universe-history-tracking-settings v-else />
 </template>
 
@@ -23,10 +25,18 @@
     export default class Expeditions extends Vue {
         private readonly rootRoute = 'universe-history';
         private ready = false;
+        private loadingStart = 0;
+        private showLoadingMessage = false;
+        private timeout = 0;
 
         private async mounted() {
+            this.loadingStart = Date.now();
+            this.timeout = setTimeout(() => this.showLoadingMessage = true, 5_000);
+
             await UniverseHistoryDataModule.ready;
             this.ready = true;
+
+            clearTimeout(this.timeout);
         }
 
         private get enabled() {
