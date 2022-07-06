@@ -48,8 +48,8 @@
         </button>
         <hr />
 
-        <button class="delete-button">
-            <span class="mdi mdi-update" @click="deleteUniverseHistory()" />
+        <button class="delete-button" @click="deleteUniverseHistory()">
+            <span class="mdi mdi-update" />
             <span
                 v-text="
                     $i18n.$t.settings.dangerZone.deleteUniverseHistory.button(
