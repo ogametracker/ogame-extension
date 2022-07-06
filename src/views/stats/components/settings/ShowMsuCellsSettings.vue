@@ -32,13 +32,14 @@
 </script>
 <style lang="scss" scoped>
     .fake-table {
-        max-width: 300px;
+        max-width: 400px;
         border: 1px solid rgba(var(--color), 0.5);
         border-radius: 4px;
         display: grid;
         width: fit-content;
 
         &-header {
+            height: 100%;
             background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
             justify-content: center;
             align-items: center;
@@ -47,6 +48,7 @@
         }
 
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             flex-direction: column;

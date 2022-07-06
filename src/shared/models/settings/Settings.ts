@@ -35,7 +35,6 @@ export interface Settings {
     showMsuCells: boolean;
 
     lostShipsResourceUnits: ShipResourceUnitsFactors;
-    showDetailedResourceBalance: boolean;
     expeditionFoundShipsResourceUnits: ShipResourceUnitsFactors;
 
     defaultRoutes: Record<string, string | undefined>;
@@ -50,4 +49,10 @@ export interface Settings {
     combatTracking: {
         ignoreEspionageFights: boolean;
     };
+
+    resourceBalance: {
+        showDetailedBreakdown: boolean;
+        includeExpeditionFoundShipsResourceUnits: boolean;
+        includeLostShipsResourceUnits: boolean;
+    }
 }

@@ -66,6 +66,14 @@ export interface SettingsTranslations {
             header: string;
             checkboxLabel: string;
         };
+        includeShipsFoundOnExpeditions: {
+            header: string;
+            checkboxLabel: string;
+        };
+        includeShipsLostInCombats: {
+            header: string;
+            checkboxLabel: string;
+        };
     };
     showMsuInTables: {
         title: string;

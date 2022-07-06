@@ -47,7 +47,11 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             factor: 1,
             deuteriumFactor: 1,
         },
-        showDetailedResourceBalance: false,
+        resourceBalance: {
+            showDetailedBreakdown: false,
+            includeExpeditionFoundShipsResourceUnits: true,
+            includeLostShipsResourceUnits: true,
+        },
         msuConversionRates: {
             crystal: 2,
             deuterium: 3,

@@ -75,6 +75,7 @@
         display: flex;
         column-gap: 16px;
         align-items: center;
+        max-width: 400px;
 
         .msu-inputs {
             display: flex;
@@ -108,6 +109,7 @@
 
         &-header,
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             align-items: center;

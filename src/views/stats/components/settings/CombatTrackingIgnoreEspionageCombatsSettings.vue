@@ -15,7 +15,7 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
     export default class CombatTrackingIgnoreEspionageCombatsSettings extends Vue {
@@ -40,19 +40,16 @@ import { SettingsDataModule } from '../../data/SettingsDataModule';
         border-radius: 4px;
         display: grid;
         width: fit-content;
+        max-width: 400px;
 
         &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
+            background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
             justify-content: center;
         }
 
         &-header,
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             align-items: center;

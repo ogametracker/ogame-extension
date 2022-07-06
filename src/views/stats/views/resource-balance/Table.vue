@@ -18,13 +18,17 @@
             </template>
 
             <msu-conversion-rate-settings />
+            <show-msu-cells-settings />
+            <hr class="two-column" />
             <expedition-ship-resource-units-factor-settings />
             <lost-ship-resource-units-factor-settings />
-            <hr class="three-column" />
+            <hr class="two-column" />
+            <include-ships-found-on-expeditions-in-resource-balance-settings />
+            <include-ships-lost-in-combats-in-resource-balance />
+            <hr class="two-column" />
             <detailed-resource-balance-settings />
-            <show-msu-cells-settings />
-            <hr class="three-column" />
-            <date-range-settings class="three-column" />
+            <hr class="two-column" />
+            <date-range-settings class="two-column" />
         </floating-menu>
     </div>
 </template>
@@ -38,12 +42,14 @@
     import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import DetailedResourceBalanceSettings from '@stats/components/settings/DetailedResourceBalanceSettings.vue';
+    import DetailedResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import { addDays, differenceInDays, startOfDay } from 'date-fns';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
+    import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
@@ -65,6 +71,8 @@
             ExpeditionShipResourceUnitsFactorSettings,
             LostShipResourceUnitsFactorSettings,
             ShowMsuCellsSettings,
+            IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
+            IncludeShipsLostInCombatsInResourceBalance,
         },
     })
     export default class Table extends Vue {
@@ -82,6 +90,14 @@
                 [ResourceType.crystal]: factor,
                 [ResourceType.deuterium]: deuteriumFactor,
             };
+        }
+
+        private get includeFoundShips() {
+            return SettingsDataModule.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits;
+        }
+
+        private get includeLostShips() {
+            return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
         }
 
         private get includeLostShipsFactor(): Record<ResourceType, number> {
@@ -118,19 +134,19 @@
             })).filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
         }
 
-        private get showDetailedBreakdown() {
-            return SettingsDataModule.settings.showDetailedResourceBalance;
+        private get settings() {
+            return SettingsDataModule.settings.resourceBalance;
         }
 
         private get resourceIconSize() {
-            if (this.showDetailedBreakdown) {
+            if (this.settings.showDetailedBreakdown) {
                 return '36px';
             }
             return '24px';
         }
 
         private get items(): RangedStatsTableItem<DailyEvents>[] {
-            if (this.showDetailedBreakdown) {
+            if (this.settings.showDetailedBreakdown) {
                 const types: Record<ResourceType, EventType[]> = {
                     [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report'],
                     [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report'],
@@ -173,7 +189,7 @@
                 return 0;
             }
 
-            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
+            const includeFoundShipsFactor = this.includeFoundShips ? this.includeFoundShipsFactor[resource] : 0;
             const total = expeditions.findings.resources[resource]
                 + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
 
@@ -185,7 +201,7 @@
                 return 0;
 
             }
-            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
+            const includeLostShipsFactor = this.includeLostShips ? this.includeLostShipsFactor[resource] : 0;
 
             const total = dailyReports.loot[resource]
                 - (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
@@ -239,7 +255,7 @@
                 });
             }
 
-            return result;;
+            return result;
         }
     }
 
@@ -255,11 +271,11 @@
 
     .floating-settings::v-deep .floating-menu {
         display: grid;
-        grid-template-columns: auto auto auto;
+        grid-template-columns: auto auto;
         column-gap: 8px;
 
-        .three-column {
-            grid-column: 1 / span 3;
+        .two-column {
+            grid-column: 1 / span 2;
         }
 
         hr {

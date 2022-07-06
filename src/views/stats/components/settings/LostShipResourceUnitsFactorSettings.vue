@@ -86,6 +86,7 @@
         display: flex;
         align-items: center;
         column-gap: 16px;
+        max-width: 400px;
 
         > * {
             display: flex;
@@ -136,6 +137,7 @@
 
         &-header,
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             align-items: center;

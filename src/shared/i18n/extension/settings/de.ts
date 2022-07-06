@@ -68,6 +68,14 @@ export const de: SettingsTranslations = {
             header: 'Detaillierte Rohstoffbilanz',
             checkboxLabel: 'detaillierte Anzeige der Rohstoffbilanz',
         },
+        includeShipsFoundOnExpeditions: {
+            header: 'Auf Expeditionen gefundene Schiffe',
+            checkboxLabel: 'Rohstoffeinheiten auf Expeditionen gefundener Schiffe in die Rohstoffbilanz einbeziehen',
+        },
+        includeShipsLostInCombats: {
+            header: 'In Kämpfen verlorene Schiffe',
+            checkboxLabel: 'Rohstoffeinheiten in Kämpfen verlorener Schiffe in die Rohstoffbilanz einbeziehen',
+        },
     },
     showMsuInTables: {
         title: 'MSE in Tabellen',

@@ -52,6 +52,7 @@
         border-radius: 4px;
         display: grid;
         width: fit-content;
+        max-width: 400px;
 
         &-header {
             background: black
@@ -65,6 +66,7 @@
 
         &-header,
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             align-items: center;

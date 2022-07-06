@@ -15,19 +15,22 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+    import { SettingsDataModule } from '../../../data/SettingsDataModule';
 
     @Component({})
     export default class DetailedResourceBalanceSettings extends Vue {
 
         private get showDetailedBreakdown() {
-            return SettingsDataModule.settings.showDetailedResourceBalance;
+            return SettingsDataModule.settings.resourceBalance.showDetailedBreakdown;
         }
 
-        private toggleDetailedBreakdown(showDetailedResourceBalance: boolean) {
+        private toggleDetailedBreakdown(showDetailedBreakdown: boolean) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
-                showDetailedResourceBalance,
+                resourceBalance: {
+                    ...SettingsDataModule.settings.resourceBalance,
+                    showDetailedBreakdown,
+                },
             });
         }
 
@@ -39,6 +42,7 @@
         border-radius: 4px;
         display: grid;
         width: fit-content;
+        max-width: 400px;
 
         &-header {
             background: black
@@ -52,6 +56,7 @@
 
         &-header,
         &-body {
+            height: 100%;
             padding: 8px;
             display: flex;
             align-items: center;

@@ -68,6 +68,14 @@ export const en: SettingsTranslations = {
             header: 'Detailed resource balance',
             checkboxLabel: 'Show detailed resource balance',
         },
+        includeShipsFoundOnExpeditions: {
+            header: 'Ships found in expeditions',
+            checkboxLabel: 'Include resources of ships found on expeditions in resource balance',
+        },
+        includeShipsLostInCombats: {
+            header: 'Ships lost in combats',
+            checkboxLabel: 'Include resources of ships lost in combats in resource balance',
+        },
     },
     showMsuInTables: {
         title: 'MSU in tables',

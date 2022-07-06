@@ -53,7 +53,7 @@
             </template>
         </stats-chart>
 
-        <floating-menu v-model="showSettings" left>
+        <floating-menu v-model="showSettings" left class="floating-settings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
@@ -61,11 +61,13 @@
             </template>
 
             <msu-conversion-rate-settings />
-            <hr />
+            <hr class="two-column" />
             <expedition-ship-resource-units-factor-settings />
-            <hr />
             <lost-ship-resource-units-factor-settings />
-            <hr />
+            <hr class="two-column" />
+            <include-ships-found-on-expeditions-in-resource-balance-settings />
+            <include-ships-lost-in-combats-in-resource-balance />
+            <hr class="two-column" />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -82,11 +84,11 @@
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-    import { Ships } from '@/shared/models/ogame/ships/Ships';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
+    import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
+    import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
 
     interface DayEvents {
         expeditions?: DailyExpeditionResult;
@@ -101,6 +103,8 @@
             MsuConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
             LostShipResourceUnitsFactorSettings,
+            IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
+            IncludeShipsLostInCombatsInResourceBalance,
         },
     })
     export default class Charts extends Vue {
@@ -131,6 +135,14 @@
                 [ResourceType.crystal]: factor,
                 [ResourceType.deuterium]: deuteriumFactor,
             };
+        }
+
+        private get includeFoundShips() {
+            return SettingsDataModule.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits;
+        }
+
+        private get includeLostShips() {
+            return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
         }
 
         private get firstDay() {
@@ -222,7 +234,7 @@
                 return 0;
             }
 
-            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
+            const includeFoundShipsFactor = this.includeFoundShips ? this.includeFoundShipsFactor[resource] : 0;
             const total = expeditions.findings.resources[resource]
                 + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
 
@@ -234,7 +246,7 @@
                 return 0;
 
             }
-            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
+            const includeLostShipsFactor = this.includeLostShips ? this.includeLostShipsFactor[resource] : 0;
 
             const total = dailyReports.loot[resource]
                 - (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
@@ -273,5 +285,19 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+    }
+
+    .floating-settings::v-deep .floating-menu {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 8px;
+
+        .two-column {
+            grid-column: 1 / span 2;
+        }
+
+        hr {
+            width: 100%;
+        }
     }
 </style>
