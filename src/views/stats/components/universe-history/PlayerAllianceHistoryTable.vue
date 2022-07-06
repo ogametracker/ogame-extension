@@ -22,7 +22,7 @@
 
 <script lang="ts">
     import { OgameTrackerUniverseHistoryPlayerAlliance } from '@/shared/db/schema/universe-history';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { GridTableColumn } from '../common/GridTable.vue';
 
@@ -40,7 +40,8 @@
         private history: OgameTrackerUniverseHistoryPlayerAlliance[] = [];
         private loading = true;
 
-        private async mounted() {
+        @Watch('playerId', { immediate: true })
+        private async onPlayerIdChanged() {
             this.history = await UniverseHistoryDataModule.getPlayerAllianceHistory(this.playerId);
             this.loading = false;
         }

@@ -1,6 +1,6 @@
 <template>
     <loading-spinner v-if="loading" />
-    <div v-else>
+    <div v-else class="planets-moons-history" :style="`--planets: ${history.length}`">
         <div class="header-row">
             <div v-text="'LOCA: Date'" />
             <template v-for="planet in history">
@@ -11,7 +11,16 @@
 
         <div class="row" v-for="group in groups" :key="group.date">
             <div v-text="group.date" />
-            <div v-text="group.changes" />
+            <template v-for="planet in history">
+                <div :key="`planet-${planet.id}`">
+                    <span class="ogti ogti-planet" />
+                    <div v-text="[planet.names, planet.states, planet.coordinates]" />
+                </div>
+                <div :key="`moon-${planet.id}`">
+                    <span class="ogti ogti-moon" />
+                    <div v-text="planet.moons" />
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -19,7 +28,7 @@
 <script lang="ts">
     import { DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState } from '@/shared/db/schema/universe-history';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule, UniverseHistoryPlanetHistory } from '../../data/UniverseHistoryDataModule';
 
     interface PlanetChanges {
@@ -48,7 +57,8 @@
         private history: UniverseHistoryPlanetHistory[] = [];
         private loading = true;
 
-        private async mounted() {
+        @Watch('playerId', { immediate: true })
+        private async onPlayerIdChanged() {
             this.history = await UniverseHistoryDataModule.getPlayerPlanetsAndMoonsHistory(this.playerId);
             this.history.sort((a, b) => a.id - b.id);
 
@@ -95,3 +105,15 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .planets-moons-history {
+        display: grid;
+        grid-template-columns: repeat(calc(1 + 2 * var(--planets)), 1fr);
+        gap: 8px;
+
+        .header-row,
+        .row {
+            display: contents;
+        }
+    }
+</style>

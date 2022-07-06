@@ -64,7 +64,7 @@
 <script lang="ts">
     import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
     import { addDays, startOfDay, subDays } from 'date-fns';
-    import { Component, Prop, Vue, Ref } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Ref, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
 
     interface StatusHistoryItem {
@@ -162,7 +162,8 @@
             return result;
         }
 
-        private async mounted() {
+        @Watch('playerId', { immediate: true })
+        private async onPlayerIdChanged() {
             this.history = await UniverseHistoryDataModule.getPlayerStateHistory(this.playerId);
             this.loading = false;
 
