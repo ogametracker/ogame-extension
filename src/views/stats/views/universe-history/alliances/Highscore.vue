@@ -14,7 +14,7 @@
                             style="width: 100%"
                         />
                         <datalist id="alliance-list">
-                            <option v-for="name in allianceNames" :key="name">
+                            <option v-for="(name, i) in allianceNames" :key="i">
                                 {{ name }}
                             </option>
                         </datalist>
@@ -54,6 +54,7 @@
 
 <script lang="ts">
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
+    import { HighscoreTypeNames } from '@/shared/models/ogame/highscore';
     import { createRecord } from '@/shared/utils/createRecord';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
@@ -119,7 +120,7 @@
         private scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
         private firstDay = 0;
 
-        private readonly keys: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        private readonly keys = HighscoreTypeNames;
         private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
             return [
                 {
@@ -157,6 +158,22 @@
                 {
                     key: 'numberOfShips',
                     label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
+                },
+                {
+                    key: 'lifeform',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
+                },
+                {
+                    key: 'lifeformEconomy',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
+                },
+                {
+                    key: 'lifeformTechnology',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
+                },
+                {
+                    key: 'lifeformDiscoveries',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
                 },
             ];
         }
@@ -234,7 +251,7 @@
             let minDate = Number.MAX_SAFE_INTEGER;
 
             const scores = await UniverseHistoryDataModule.getAllianceScoreHistory(this.allianceIds);
-            const types: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const types = HighscoreTypeNames;
             const lastScores = createRecord(this.allianceIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
 
             scores.forEach((score, i) => {
