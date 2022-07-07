@@ -1,0 +1,1 @@
+//TODO: this building reduces cost for all resource production buildings (metal mine, crystal mine, deuterium synth, also energy plants?)
