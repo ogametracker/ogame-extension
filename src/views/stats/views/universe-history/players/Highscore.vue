@@ -2,19 +2,13 @@
     <div class="highscores">
         <loading-spinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table
-                :columns="tableColumns"
-                :items="tableItems"
-                class="player-selection-table"
-            >
+            <grid-table :columns="tableColumns" :items="tableItems" class="player-selection-table">
                 <template #cell-player="{ value: player }">
                     <template v-if="player == null">
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            :placeholder="
-                                $i18n.$t.universeHistory.playerSelection.search
-                            "
+                            :placeholder="$i18n.$t.universeHistory.playerSelection.search"
                             list="player-list"
                             @change="onPlayerSelected($event.target.value)"
                             style="width: 100%"
@@ -27,10 +21,7 @@
                     </template>
 
                     <div v-else class="list-item">
-                        <span
-                            class="mdi mdi-delete"
-                            @click="removePlayer(player.id)"
-                        />
+                        <span class="mdi mdi-delete" @click="removePlayer(player.id)" />
                         <span v-text="player.name" />
                     </div>
                 </template>
@@ -39,11 +30,7 @@
             <tabs :tabs="tabs">
                 <template v-for="key in keys">
                     <template :slot="`tab-content-${key}`">
-                        <span
-                            v-if="playerScoresLoading"
-                            :key="`score-${key}-loading`"
-                            class="loading"
-                        />
+                        <span v-if="playerScoresLoading" :key="`score-${key}-loading`" class="loading" />
                         <scrollable-chart
                             v-else-if="playerIds.length > 0"
                             :key="`score-${key}`"
@@ -56,9 +43,7 @@
                             :min-tick="firstDay"
                             :max-tick="nextDay"
                             :x-label-formatter="(x) => $i18n.$d(x, 'date')"
-                            :x-label-tooltip-formatter="
-                                (x) => $i18n.$d(x, 'datetime')
-                            "
+                            :x-label-tooltip-formatter="(x) => $i18n.$d(x, 'datetime')"
                         />
                     </template>
                 </template>
@@ -69,7 +54,8 @@
 
 <script lang="ts">
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
-import { createRecord } from '@/shared/utils/createRecord';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { mergeDeep } from '@/shared/utils/mergeDeep';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
@@ -77,6 +63,7 @@ import { createRecord } from '@/shared/utils/createRecord';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
     import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
     import { addDays } from 'date-fns';
     import startOfDay from 'date-fns/startOfDay';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -197,11 +184,13 @@ import { createRecord } from '@/shared/utils/createRecord';
             return (this.$route.query.players as string | null ?? '')
                 .split(',')
                 .filter(id => id.length > 0)
-                .map(playerId => parseIntSafe(playerId, 10));
+                .map(playerId => parseIntSafe(playerId, 10))
+                .filter(playerId => this.players.some(p => p.id == playerId));
         }
 
         private async mounted() {
-            await this.redirectToMeIfNoPlayersSelected();
+            await UniverseSpecificSettingsDataModule.ready;
+            await this.redirectToDefault();
 
             this.dataModuleLoading = true;
             await UniverseHistoryDataModule.ready;
@@ -210,15 +199,17 @@ import { createRecord } from '@/shared/utils/createRecord';
             await this.loadPlayerScores();
         }
 
-        private async redirectToMeIfNoPlayersSelected() {
-            if (this.playerIds.length == 0) {
-                await this.$router.replace({
-                    name: 'universe-history/players/highscore',
-                    query: {
-                        players: GlobalOgameMetaData.playerId.toString(),
-                    },
-                });
+        private async redirectToDefault() {
+            if (this.playerIds.length != 0) {
+                return;
             }
+
+            let defaultPlayerIds = UniverseSpecificSettingsDataModule.settings.universeHistory.players.highscore;
+            if (defaultPlayerIds.length == 0) {
+                defaultPlayerIds = [GlobalOgameMetaData.playerId];
+            }
+
+            await this.updatePlayerIdRoute(defaultPlayerIds);
         }
 
 
@@ -330,13 +321,29 @@ import { createRecord } from '@/shared/utils/createRecord';
             await this.loadPlayerScores();
         }
 
+        private updateSettings(playerIds: number[]) {
+            const settings = UniverseSpecificSettingsDataModule.settings;
+            UniverseSpecificSettingsDataModule.updateSettings({
+                ...settings,
+                universeHistory: {
+                    ...settings.universeHistory,
+                    players: {
+                        ...settings.universeHistory.players,
+                        highscore: playerIds,
+                    },
+                },
+            });
+        }
+
         private async updatePlayerIdRoute(ids: (string | number)[]) {
+            this.updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
+
             await this.$router.replace({
                 query: {
                     players: ids.join(','),
                 },
             });
-            await this.redirectToMeIfNoPlayersSelected();
+            await this.redirectToDefault();
         }
     }
 </script>

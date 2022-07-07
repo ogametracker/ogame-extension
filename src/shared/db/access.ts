@@ -37,6 +37,9 @@ export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
             db.createObjectStore('expeditions', { keyPath: 'id' });
             db.createObjectStore('empire');
         }
+        if(oldVersion < 3) {
+            db.createObjectStore('universeSpecificSettings');
+        }
     });
 }
 

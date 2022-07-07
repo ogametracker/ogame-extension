@@ -9,6 +9,7 @@ import { DefenseType } from "@/shared/models/ogame/defenses/DefenseType";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
+import { UniverseSpecificSettings } from "@/shared/models/universe-specific-settings/UniverseSpecificSettings";
 import { DBSchema } from "idb";
 
 export interface DbBasicMoonData {
@@ -97,4 +98,9 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
     };
 
     empire: DbEmpire;
+
+    universeSpecificSettings: {
+        key: 0;
+        value: UniverseSpecificSettings;
+    };
 };

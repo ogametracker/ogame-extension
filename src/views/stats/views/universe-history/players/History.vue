@@ -35,7 +35,7 @@
                     <player-name-history-table v-if="playerId != null" :playerId="playerId" />
                 </template>
 
-                <template #tab-content-alliance> 
+                <template #tab-content-alliance>
                     <player-alliance-history-table v-if="playerId != null" :playerId="playerId" />
                 </template>
 
@@ -62,6 +62,7 @@
     import PlayerNameHistoryTable from '@stats/components/universe-history/PlayerNameHistoryTable.vue';
     import PlayerAllianceHistoryTable from '@stats/components/universe-history/PlayerAllianceHistoryTable.vue';
     import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
+    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
 
 
     @Component({
@@ -133,31 +134,48 @@
         private selectedPlayerName = '';
 
         private async mounted() {
-            await this.redirectToMeIfNoPlayersSelected();
+            await UniverseSpecificSettingsDataModule.ready;
+            await this.redirectToDefault();
 
             this.dataModuleLoading = true;
             await UniverseHistoryDataModule.ready;
             this.dataModuleLoading = false;
         }
 
-        private async redirectToMeIfNoPlayersSelected() {
-            if (this.playerId == null) {
-                await this.$router.replace({
-                    name: 'universe-history/players/history',
-                    query: {
-                        player: GlobalOgameMetaData.playerId.toString(),
-                    },
-                });
+        private async redirectToDefault() {
+            if (this.playerId != null) {
+                return;
             }
+
+            const defaultPlayerId = UniverseSpecificSettingsDataModule.settings.universeHistory.players.history
+                ?? GlobalOgameMetaData.playerId;
+
+            await this.updatePlayerIdRoute(defaultPlayerId);
+        }
+
+        private updateSettings(playerId: number) {
+            const settings = UniverseSpecificSettingsDataModule.settings;
+            UniverseSpecificSettingsDataModule.updateSettings({
+                ...settings,
+                universeHistory: {
+                    ...settings.universeHistory,
+                    players: {
+                        ...settings.universeHistory.players,
+                        history: playerId,
+                    },
+                },
+            });
         }
 
         private async updatePlayerIdRoute(id: number) {
+            this.updateSettings(id);
+
             await this.$router.replace({
                 query: {
                     player: id.toString(),
                 },
             });
-            await this.redirectToMeIfNoPlayersSelected();
+            await this.redirectToDefault();
         }
 
         private get playerNames() {

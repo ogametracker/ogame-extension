@@ -54,4 +54,7 @@ export enum MessageType {
     // accounts & universes
     UpdatePlayerName = 'accounts/update-player-name',
     UpdateUniverseName = 'universes/update-universe-name', 
+
+    // Universe-specific settings
+    NotifyUniverseSpecificSettingsUpdate = 'universe-specific-settings/notify-update',
 }

@@ -2,19 +2,13 @@
     <div class="highscores">
         <loading-spinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table
-                :columns="tableColumns"
-                :items="tableItems"
-                class="alliance-selection-table"
-            >
+            <grid-table :columns="tableColumns" :items="tableItems" class="alliance-selection-table">
                 <template #cell-alliance="{ value: alliance }">
                     <template v-if="alliance == null">
                         <input
                             type="text"
                             v-model="selectedAllianceName"
-                            :placeholder="
-                                $i18n.$t.universeHistory.allianceSelection.search
-                            "
+                            :placeholder="$i18n.$t.universeHistory.allianceSelection.search"
                             list="alliance-list"
                             @change="onAllianceSelected($event.target.value)"
                             style="width: 100%"
@@ -27,10 +21,7 @@
                     </template>
 
                     <div v-else class="list-item">
-                        <span
-                            class="mdi mdi-delete"
-                            @click="removeAlliance(alliance.id)"
-                        />
+                        <span class="mdi mdi-delete" @click="removeAlliance(alliance.id)" />
                         <span v-text="getAllianceString(alliance)" />
                     </div>
                 </template>
@@ -39,11 +30,7 @@
             <tabs :tabs="tabs">
                 <template v-for="key in keys">
                     <template :slot="`tab-content-${key}`">
-                        <span
-                            v-if="allianceScoresLoading"
-                            :key="`score-${key}-loading`"
-                            class="loading"
-                        />
+                        <span v-if="allianceScoresLoading" :key="`score-${key}-loading`" class="loading" />
                         <scrollable-chart
                             v-else-if="allianceIds.length > 0"
                             :key="`score-${key}`"
@@ -56,9 +43,7 @@
                             :min-tick="firstDay"
                             :max-tick="nextDay"
                             :x-label-formatter="(x) => $i18n.$d(x, 'date')"
-                            :x-label-tooltip-formatter="
-                                (x) => $i18n.$d(x, 'datetime')
-                            "
+                            :x-label-tooltip-formatter="(x) => $i18n.$d(x, 'datetime')"
                         />
                     </template>
                 </template>
@@ -69,14 +54,14 @@
 
 <script lang="ts">
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
-import { createRecord } from '@/shared/utils/createRecord';
+    import { createRecord } from '@/shared/utils/createRecord';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { GlobalOgameMetaData } from '@/views/stats/data/global';
     import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
     import { addDays } from 'date-fns';
     import startOfDay from 'date-fns/startOfDay';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -201,11 +186,25 @@ import { createRecord } from '@/shared/utils/createRecord';
         }
 
         private async mounted() {
+            await UniverseSpecificSettingsDataModule.ready;
+            await this.redirectToDefault();
+
             this.dataModuleLoading = true;
             await UniverseHistoryDataModule.ready;
             this.dataModuleLoading = false;
 
             await this.loadAllianceScores();
+        }
+
+        private async redirectToDefault() {
+            if (this.allianceIds.length != 0) {
+                return;
+            }
+
+            const defaultIds = UniverseSpecificSettingsDataModule.settings.universeHistory.alliances.highscore;
+            if (defaultIds.length != 0) {
+                await this.updateAllianceIdRoute(defaultIds);
+            }
         }
 
 
@@ -284,7 +283,7 @@ import { createRecord } from '@/shared/utils/createRecord';
             return UniverseHistoryDataModule.alliances;
         }
 
-        private getAllianceString(ally:  UniverseHistoryAlliance) {
+        private getAllianceString(ally: UniverseHistoryAlliance) {
             return `[${ally.tag}] ${ally.name}`;
         }
 
@@ -321,7 +320,24 @@ import { createRecord } from '@/shared/utils/createRecord';
             await this.loadAllianceScores();
         }
 
+
+        private updateSettings(allyIds: number[]) {
+            const settings = UniverseSpecificSettingsDataModule.settings;
+            UniverseSpecificSettingsDataModule.updateSettings({
+                ...settings,
+                universeHistory: {
+                    ...settings.universeHistory,
+                    alliances: {
+                        ...settings.universeHistory.alliances,
+                        highscore: allyIds,
+                    },
+                },
+            });
+        }
+
         private async updateAllianceIdRoute(ids: (string | number)[]) {
+            this.updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
+
             await this.$router.replace({
                 query: {
                     alliances: ids.join(','),
