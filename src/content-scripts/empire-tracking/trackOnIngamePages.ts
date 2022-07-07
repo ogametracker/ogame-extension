@@ -160,7 +160,7 @@ function trackOfficers() {
 
 function trackSelectedLifeform() {
     observerCallbacks.push({
-        selector: '#lifeform',
+        selector: '#lifeform', // is only on page for planets
         callback: element => {
             const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
                 ?? _throw('no meta element found for ogame-planet-id');
@@ -183,8 +183,9 @@ function trackSelectedLifeform() {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdateSelectedLifeform,
                 data: {
+                    isMoon: false,
                     planetId,
-                    lifeform,
+                    data: lifeform,
                 },
                 senderUuid: empireTrackingUuid,
             };
