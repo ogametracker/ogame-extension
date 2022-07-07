@@ -1,49 +1,46 @@
 <template>
-    <notification
-        type="info"
-        :title="title"
-        @remove="$emit('remove')"
-        :timeout="10000"
-    >
+    <notification type="info" :title="title" @remove="$emit('remove')" :timeout="10000">
         <template #message>
             <div v-if="notification.count > 0" v-text="message" />
 
             <template v-if="hasLoot">
                 <hr />
                 <div class="resources-grid">
-                    <template v-if="notification.resources.metal > 0">
-                        <o-resource resource="metal" />
-                        <span
-                            :class="{
-                                'negative-loot':
-                                    notification.resources.metal < 0,
-                                fade: notification.resources.metal == 0,
-                            }"
-                            v-text="$i18n.$n(notification.resources.metal)"
-                        />
-                    </template>
-                    <template v-if="notification.resources.crystal > 0">
-                        <o-resource resource="crystal" />
-                        <span
-                            :class="{
-                                'negative-loot':
-                                    notification.resources.crystal < 0,
-                                fade: notification.resources.crystal == 0,
-                            }"
-                            v-text="$i18n.$n(notification.resources.crystal)"
-                        />
-                    </template>
-                    <template v-if="notification.resources.deuterium > 0">
-                        <o-resource resource="deuterium" />
-                        <span
-                            :class="{
-                                'negative-loot':
-                                    notification.resources.deuterium < 0,
-                                fade: notification.resources.deuterium == 0,
-                            }"
-                            v-text="$i18n.$n(notification.resources.deuterium)"
-                        />
-                    </template>
+                    <o-resource resource="metal" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.metal < 0,
+                            fade: notification.resources.metal == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.metal)"
+                    />
+
+                    <o-resource resource="crystal" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.crystal < 0,
+                            fade: notification.resources.crystal == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.crystal)"
+                    />
+
+                    <o-resource resource="deuterium" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.deuterium < 0,
+                            fade: notification.resources.deuterium == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.deuterium)"
+                    />
+
+                    <span class="mdi mdi-sigma" />
+                    <span
+                        :class="{
+                            'negative-loot': sum < 0,
+                            fade: sum == 0,
+                        }"
+                        v-text="$i18n.$n(sum)"
+                    />
                 </div>
             </template>
         </template>
@@ -75,6 +72,12 @@
         private get hasLoot() {
             return Object.values(this.notification.resources).reduce((acc, cur) => acc + cur, 0) > 0;
         }
+
+        private get sum() {
+            return this.notification.resources.metal
+                + this.notification.resources.crystal
+                + this.notification.resources.deuterium;
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -92,5 +95,13 @@
         row-gap: 4px;
         column-gap: 8px;
         align-items: center;
+        
+        .mdi {
+            transform: scale(1.5);
+            width: 24px;
+            text-align: center;
+            height: 20px;
+            justify-self: center;
+        }
     }
 </style>
