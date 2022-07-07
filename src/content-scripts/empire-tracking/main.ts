@@ -1,7 +1,4 @@
 import { getQueryParameters } from "../../shared/utils/getQueryParameters";
-import { trackOfficers } from "./trackOfficers";
-import { trackOwnedPlanets } from "./trackOwnedPlanets";
-import { trackPlayerClass } from "./trackPlayerClass";
 import { trackAlliancePage } from "./trackAlliancePage";
 import { trackResearchPage } from "./trackResearchPage";
 import { _throw } from "../../shared/utils/_throw";
@@ -13,6 +10,9 @@ import { trackDefensesPage } from "./trackDefensesPage";
 import { trackOverviewPage } from "./trackOverviewPage";
 import { trackResourceSettingsPage } from "./trackResourceSettingsPage";
 import { trackEmpirePage } from "./trackEmpirePage";
+import { trackOnIngamePages } from "./trackOnIngamePages";
+import { trackLifeformBuildingsPage } from "./trackLifeformBuildings";
+import { trackLifeformResearchPage } from "./trackLifeformResearchPage";
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -28,11 +28,7 @@ interface ObserverCallback {
 const queryParams = getQueryParameters(location.search);
 const pageTrackers: PageTracker[] = [
     {
-        action: () => {
-            trackOwnedPlanets();
-            trackOfficers();
-            trackPlayerClass();
-        },
+        action: () => trackOnIngamePages(),
         condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page),
     },
     {
@@ -70,6 +66,14 @@ const pageTrackers: PageTracker[] = [
     {
         action: () => trackResourceSettingsPage(),
         condition: query => query.page == 'resourceSettings',
+    },
+    {
+        action: () => trackLifeformBuildingsPage(),
+        condition: query => query.page == 'ingame' && query.component == 'lfbuildings',
+    },
+    {
+        action: () => trackLifeformResearchPage(),
+        condition: query => query.page == 'ingame' && query.component == 'lfresearch',
     },
     {
         action: () => trackEmpirePage(),
