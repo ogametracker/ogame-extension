@@ -57,7 +57,8 @@
     .tabs {
         display: grid;
         grid-template-rows: auto 1fr;
-        height: 100%;
+        height: 100%; 
+        overflow: auto;
 
         > header {
             display: grid;
