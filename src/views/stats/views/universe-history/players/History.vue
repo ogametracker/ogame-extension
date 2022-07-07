@@ -14,7 +14,7 @@
                             style="width: 100%"
                         />
                         <datalist id="player-list">
-                            <option v-for="name in playerNames" :key="name">
+                            <option v-for="(name, i) in playerNames" :key="i">
                                 {{ name }}
                             </option>
                         </datalist>

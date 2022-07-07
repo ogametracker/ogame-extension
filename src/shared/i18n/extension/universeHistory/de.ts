@@ -61,6 +61,10 @@ export const de: UniverseHistoryTranslations = {
         militaryLost: 'Militär verloren',
         honor: 'Ehrenpunkte',
         numberOfShips: 'Anzahl Schiffe',
+        lifeform: 'Lebensform',
+        lifeformDiscoveries: 'Lebensform-Entdeckungen',
+        lifeformEconomy: 'Lebensform-Ökonomie',
+        lifeformTechnology: 'Lebensform-Technologie',
     },
     historyTabs: {
         status: 'Status',

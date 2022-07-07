@@ -1,16 +1,12 @@
 import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getGlobalDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
+import { getUniverseHistoryDatabase } from "@/shared/db/access";
 import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
 import { DbUniverseHistoryAllianceState, DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState, DbUniverseHistoryPlayerState, DbUniverseHistoryPlayerStateItem, DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
-import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { MessageOgameMeta } from "@/shared/messages/Message";
 import { MessageType } from "@/shared/messages/MessageType";
 import { NotifyUniverseHistoryUpdateMessage } from "@/shared/messages/tracking/universe-history";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { getDefaultSettings } from "@/shared/models/settings/getDefaultSettings";
-import { loadSettings } from "@/shared/models/settings/loadSettings";
-import { Settings } from "@/shared/models/settings/Settings";
-import { mergeDeep } from "@/shared/utils/mergeDeep";
+import { HighscoreType, HighscoreTypeNames } from "@/shared/models/ogame/highscore";
 import { parseCoordinates } from "@/shared/utils/parseCoordinates";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { _log, _logDebug } from "@/shared/utils/_log";
@@ -113,17 +109,11 @@ interface PlayerScorePositions {
     militaryLost: ScorePosition;
     honor: ScorePosition;
     numberOfShips: ScorePosition;
-}
 
-enum HighscoreType {
-    total = 0,
-    economy = 1,
-    research = 2,
-    militaryAndNumberOfShips = 3,
-    militaryLost = 4,
-    militaryBuilt = 5,
-    militaryDestroyed = 6,
-    honor = 7,
+    lifeform: ScorePosition;
+    lifeformEconomy: ScorePosition;
+    lifeformTechnology: ScorePosition;
+    lifeformDiscoveries: ScorePosition;
 }
 
 interface Planet {
@@ -156,6 +146,7 @@ export class UniverseHistoryModule {
 
     private readonly meta: MessageOgameMeta;
     private timeout: number | undefined = undefined;
+    private inUpdate = false;
 
     private get settings() {
         return settingsService.settings.universeHistory;
@@ -217,6 +208,11 @@ export class UniverseHistoryModule {
     }
 
     private async trackUniverseUpdates() {
+        if(this.inUpdate) {
+            return;
+        }
+
+        this.inUpdate = true;
         try {
             _logDebug(`tracking universe history for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
             const players = await this.getPlayers();
@@ -267,6 +263,8 @@ export class UniverseHistoryModule {
             await this.initTracking();
         } catch (error) {
             setTimeout(async () => await this.initTracking(), 1000 * 60 * 5); // try in 5min again on error
+        } finally {
+            this.inUpdate = false;
         }
     }
 
@@ -478,7 +476,7 @@ export class UniverseHistoryModule {
             cursor = await cursor.continue();
         }
 
-        const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        const scoreTypes = HighscoreTypeNames;
         const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
         scoreTypes.forEach(type => scoresByType[type] = {});
 
@@ -689,7 +687,7 @@ export class UniverseHistoryModule {
             cursor = await cursor.continue();
         }
 
-        const scoreTypes: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        const scoreTypes = HighscoreTypeNames;
         const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
         scoreTypes.forEach(type => scoresByType[type] = {});
 
@@ -1087,6 +1085,11 @@ export class UniverseHistoryModule {
         const militaryLost = await this.getPlayerScorePositions(HighscoreType.militaryLost);
         const honor = await this.getPlayerScorePositions(HighscoreType.honor);
 
+        const lifeform = await this.getPlayerScorePositions(HighscoreType.lifeform);
+        const lifeformEconomy = await this.getPlayerScorePositions(HighscoreType.lifeformEconomy);
+        const lifeformTechnology = await this.getPlayerScorePositions(HighscoreType.lifeformTechnology);
+        const lifeformDiscoveries = await this.getPlayerScorePositions(HighscoreType.lifeformDiscoveries);
+
         Object.keys(total)
             .map(playerId => parseIntSafe(playerId, 10))
             .forEach(playerId => {
@@ -1100,6 +1103,11 @@ export class UniverseHistoryModule {
                     militaryDestroyed: militaryDestroyed[playerId],
                     militaryLost: militaryLost[playerId],
                     honor: honor[playerId],
+
+                    lifeform: lifeform[playerId],
+                    lifeformEconomy: lifeformEconomy[playerId],
+                    lifeformTechnology: lifeformTechnology[playerId],
+                    lifeformDiscoveries: lifeformDiscoveries[playerId],
                 };
             });
 
