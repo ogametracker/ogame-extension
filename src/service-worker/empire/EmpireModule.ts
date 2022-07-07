@@ -3,16 +3,17 @@ import { _throw } from "../../shared/utils/_throw";
 import { MessageOgameMeta } from "../../shared/messages/Message";
 import { PlayerOfficers } from "../../shared/models/empire/PlayerOfficers";
 import { AllianceClass } from "../../shared/models/ogame/classes/AllianceClass";
-import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../../shared/models/ogame/buildings/BuildingType";
+import { BuildingType, MoonBuildingType, MoonBuildingTypes, PlanetBuildingType, PlanetBuildingTypes } from "../../shared/models/ogame/buildings/BuildingType";
 import { BasicPlanetData, PlanetDataWrapper, PlanetDefenseCounts } from "../../shared/messages/tracking/empire";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
 import { PlayerClass } from "../../shared/models/ogame/classes/PlayerClass";
-import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
+import { ResearchType, ResearchTypes } from "../../shared/models/ogame/research/ResearchType";
 import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { getPlayerDatabase } from "../../shared/db/access";
 import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
+import { createRecord } from "@/shared/utils/createRecord";
 
 export class EmpireModule {
     public async updateOfficers(meta: MessageOgameMeta, data: PlayerOfficers): Promise<void> {
@@ -39,24 +40,30 @@ export class EmpireModule {
         if (data.isMoon) {
             const key: `moon.${number}.buildings` = `moon.${data.planetId}.buildings`;
             const storedLevels = (await store.get(key)) as DbMoonBuildingLevels | undefined;
-            const newLevels = { ...storedLevels };
+            const newLevels: DbMoonBuildingLevels = {
+                ...createRecord(MoonBuildingTypes, 0),
+                ...storedLevels,
+            };
             Object.keys(data.data)
                 .map(key => parseIntSafe(key, 10) as MoonBuildingType)
                 .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-            await db.put('empire', newLevels as DbMoonBuildingLevels, key);
+            await db.put('empire', newLevels, key);
         }
         else {
             const key: `planet.${number}.buildings` = `planet.${data.planetId}.buildings`;
             const storedLevels = (await store.get(key)) as DbPlanetBuildingLevels | undefined;
-            const newLevels = { ...storedLevels };
+            const newLevels: DbPlanetBuildingLevels = {
+                ...createRecord(PlanetBuildingTypes, 0),
+                ...storedLevels,
+            };
             Object.keys(data.data)
                 .map(key => parseIntSafe(key, 10) as PlanetBuildingType)
                 .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-            await db.put('empire', newLevels as DbPlanetBuildingLevels, key);
+            await db.put('empire', newLevels, key);
         }
-        
+
         await tx.done;
     }
 
@@ -113,12 +120,15 @@ export class EmpireModule {
         const key: (`planet.${number}.ships` | `moon.${number}.ships`) = `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.ships`;
 
         const storedAmounts = (await store.get(key)) as DbShipAmounts | undefined;
-        const newAmounts = { ...storedAmounts };
+        const newAmounts: DbShipAmounts = {
+            ...createRecord(ShipTypes, 0),
+            ...storedAmounts,
+        };
         Object.keys(data.data)
             .map(key => parseIntSafe(key, 10) as ShipType)
             .forEach(key => newAmounts[key] = data.data[key] ?? newAmounts[key] ?? 0);
 
-        await store.put(newAmounts as DbShipAmounts, key);
+        await store.put(newAmounts, key);
         await tx.done;
     }
 
@@ -133,17 +143,20 @@ export class EmpireModule {
         const store = tx.objectStore('empire');
 
         const storedLevels = (await store.get('research')) as DbPlayerResearchLevels | undefined;
-        const newLevels = { ...storedLevels };
+        const newLevels: DbPlayerResearchLevels = {
+            ...createRecord(ResearchTypes, 0),
+            ...storedLevels,
+        };
         Object.keys(researchLevels)
             .map(key => parseIntSafe(key, 10) as ResearchType)
             .forEach(key => newLevels[key] = researchLevels[key] ?? newLevels[key] ?? 0);
 
-        await store.put(newLevels as DbPlayerResearchLevels, 'research');
+        await store.put(newLevels, 'research');
         await tx.done;
     }
 
     public async updateProductionSettings(meta: MessageOgameMeta, data: PlanetDataWrapper<ProductionSettings>) {
-        if(data.isMoon) {
+        if (data.isMoon) {
             return;
         }
 
