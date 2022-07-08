@@ -1,7 +1,7 @@
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
+import { CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
-class VortexChamberClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {
+class VortexChamberClass extends LifeformBuilding implements LifeformTechnologyResearchBuilding {
     public constructor() {
         super({
             metal: {
@@ -23,7 +23,7 @@ class VortexChamberClass extends LifeformBuilding implements AnyBuildingCostAndT
         });
     }
     
-    public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
+    public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {
         // yep
         if(level == 1) {
             return { cost: 0, time: 0};

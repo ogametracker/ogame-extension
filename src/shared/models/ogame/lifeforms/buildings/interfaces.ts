@@ -25,3 +25,7 @@ export interface AnyBuildingCostAndTimeReductionLifeformBuilding {
 export interface ResourceConsumptionReductionLifeformBuilding {
     getConsumptionReduction(level: number): Cost;
 }
+
+export interface LifeformTechnologyResearchBuilding {
+    getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction;
+}

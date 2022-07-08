@@ -1,7 +1,7 @@
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
+import { CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
-class RuneTechnologiumClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {
+class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnologyResearchBuilding {
     public constructor() {
         super({
             metal: {
@@ -23,7 +23,7 @@ class RuneTechnologiumClass extends LifeformBuilding implements AnyBuildingCostA
         });
     }
     
-    public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
+    public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {
         // yep
         if(level == 1) {
             return { cost: 0, time: 0};
