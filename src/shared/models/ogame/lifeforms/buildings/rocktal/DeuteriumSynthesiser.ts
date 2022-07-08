@@ -1,14 +1,27 @@
 import { Cost } from "../../../common/Cost";
-import { LifeformProductionBonusBuilding } from "../LifeformProductionBonusBuilding";
+import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
+import { LifeformBuilding } from "../LifeformBuilding";
 
-class DeuteriumSynthesiserClass extends LifeformProductionBonusBuilding {
+class DeuteriumSynthesiserClass extends LifeformBuilding implements ResourceProductionBonusLifeformBuilding {
     public constructor() {
-        super(
-            120_000, 1.4,
-            50_000, 1.4,
-            20_000, 1.4,
-            90, 1.1
-        );
+        super({
+            metal: {
+                baseCost: 120_000,
+                increaseFactor: 1.4,
+            },
+            crystal: {
+                baseCost: 50_000,
+                increaseFactor: 1.4,
+            },
+            deuterium: {
+                baseCost: 20_000,
+                increaseFactor: 1.4,
+            },
+            energy: {
+                baseCost: 90,
+                increaseFactor: 1.1
+            },
+        });
     }
 
     public getProductionBonus(level: number): Cost {

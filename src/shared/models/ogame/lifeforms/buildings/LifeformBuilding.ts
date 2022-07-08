@@ -1,41 +1,36 @@
 import { Cost } from "../../common/Cost";
 
+interface CostAndIncreaseFactor {
+    baseCost: number;
+    increaseFactor: number;
+}
+interface LifeformBuildingConstructionParams {
+    metal: CostAndIncreaseFactor;
+    crystal: CostAndIncreaseFactor;
+    deuterium: CostAndIncreaseFactor;
+    energy: CostAndIncreaseFactor;
+    //TODO: lifeform cost missing
+}
+
 export abstract class LifeformBuilding {
-    #metalBaseCost: number;
-    #metalIncreaseFactor: number;
+    #metal: CostAndIncreaseFactor;
+    #crystal: CostAndIncreaseFactor;
+    #deuterium: CostAndIncreaseFactor;
+    #energy: CostAndIncreaseFactor;
 
-    #crystalBaseCost: number;
-    #crystalIncreaseFactor: number;
-
-    #deuteriumBaseCost: number;
-    #deuteriumIncreaseFactor: number;
-
-    #energyBaseCost: number;
-    #energyIncreaseFactor: number;
-
-    protected constructor(
-        metalBaseCost: number, metalIncreaseFactor: number,
-        crystalBaseCost: number, crystalIncreaseFactor: number,
-        deuteriumBaseCost: number, deuteriumIncreaseFactor: number,
-        energyBaseCost: number, energyIncreaseFactor: number,
-        //TODO: lifeform cost missing
-    ) {
-        this.#metalBaseCost = metalBaseCost;
-        this.#metalIncreaseFactor = metalIncreaseFactor;
-        this.#crystalBaseCost = crystalBaseCost;
-        this.#crystalIncreaseFactor = crystalIncreaseFactor;
-        this.#deuteriumBaseCost = deuteriumBaseCost;
-        this.#deuteriumIncreaseFactor = deuteriumIncreaseFactor;
-        this.#energyBaseCost = energyBaseCost;
-        this.#energyIncreaseFactor = energyIncreaseFactor;
+    protected constructor(data: LifeformBuildingConstructionParams) {
+        this.#metal = data.metal;
+        this.#crystal = data.crystal;
+        this.#deuterium = data.deuterium;
+        this.#energy = data.energy;
     }
 
     public getCost(level: number): Cost {
         return {
-            metal: this.getResourceCost(this.#metalBaseCost, this.#metalIncreaseFactor, level),
-            crystal: this.getResourceCost(this.#crystalBaseCost, this.#crystalIncreaseFactor, level),
-            deuterium: this.getResourceCost(this.#deuteriumBaseCost, this.#deuteriumIncreaseFactor, level),
-            energy: this.getResourceCost(this.#energyBaseCost, this.#energyIncreaseFactor, level),
+            metal: this.getResourceCost(this.#metal.baseCost, this.#metal.increaseFactor, level),
+            crystal: this.getResourceCost(this.#crystal.baseCost, this.#crystal.increaseFactor, level),
+            deuterium: this.getResourceCost(this.#deuterium.baseCost, this.#deuterium.increaseFactor, level),
+            energy: this.getResourceCost(this.#energy.baseCost, this.#energy.increaseFactor, level),
         };
     }
 

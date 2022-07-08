@@ -1,14 +1,27 @@
 import { Cost } from "../../../common/Cost";
-import { LifeformProductionBonusBuilding } from "../LifeformProductionBonusBuilding";
+import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
+import { LifeformBuilding } from "../LifeformBuilding";
 
-class MagmaForgeClass extends LifeformProductionBonusBuilding {
+class MagmaForgeClass extends LifeformBuilding implements ResourceProductionBonusLifeformBuilding {
     public constructor() {
-        super(
-            10_000, 1.4,
-            8_000, 1.4,
-            1_000, 1.4,
-            40, 1.1
-        );
+        super({
+            metal: {
+                baseCost: 10_000,
+                increaseFactor: 1.4,
+            },
+            crystal: {
+                baseCost: 8_000,
+                increaseFactor: 1.4,
+            },
+            deuterium: {
+                baseCost: 1_000,
+                increaseFactor: 1.4,
+            },
+            energy: {
+                baseCost: 40,
+                increaseFactor: 1.1
+            },
+        });
     }
 
     public getProductionBonus(level: number): Cost {
