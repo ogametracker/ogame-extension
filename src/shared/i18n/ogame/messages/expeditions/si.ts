@@ -18,7 +18,7 @@ export const si: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'*/'Spontana deformacija hiper prostora'/* ti je omogočila, da pobereš večje količine Črne materije!'*/,
-            /*TODO: si 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Naša ekspedicija je vzpostavila kontakt s posebno raso. Izgleda kot močno bitje, narejeno iz čiste energije, */'imenovano Legorian'/*, ki je preletelo skozi ekspedicijske ladje in se odločilo pomagati slabšim rasam. Kovček s Črno materijo te čaka na ladijskem mostu.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) je bilo zajeto.`),
     },
