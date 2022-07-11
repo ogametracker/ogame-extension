@@ -1,4 +1,0 @@
-{
-    "matches": ["https://*.ogame.gameforge.com/game/*"],
-    "run_at": "document_start"
-}

@@ -1,6 +1,4 @@
-import '@mdi/font/css/materialdesignicons.min.css';
 import '@/views/_shared/styles/index.scss';
-import './styles/index.scss'
 
 import '@/views/_shared/components/common';
 import '@/views/_shared/components/ogame';

@@ -1,0 +1,10 @@
+{
+    "matches": [
+        "https://*.ogame.gameforge.com/game/*"
+    ],
+    "run_at": "document_start",
+    "css": [
+        "mdi/style.css",
+        "ogti/style.css"
+    ]
+}

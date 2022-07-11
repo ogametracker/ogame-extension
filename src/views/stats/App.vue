@@ -17,24 +17,15 @@
             >
                 <template #activator>
                     <component
-                        :is="
-                            tab.to != null
-                                ? 'router-link'
-                                : tab.href != null
-                                ? 'a'
-                                : 'div'
-                        "
+                        :is="tab.to != null ? 'router-link' : tab.href != null ? 'a' : 'div'"
                         :href="tab.href"
                         :target="tab.href != null ? '_blank' : null"
                         :to="tab.to"
-                        :active-class="
-                            tab.to != null ? 'nav-item-active' : null
-                        "
+                        :active-class="tab.to != null ? 'nav-item-active' : null"
                         :class="[
                             {
                                 'nav-item': tab.noNavItem != true,
-                                'icon-only':
-                                    tab.label == null && tab.icon != null,
+                                'icon-only': tab.label == null && tab.icon != null,
                             },
                             tab.class,
                         ]"
@@ -44,52 +35,29 @@
                             },
                             tab.noNavItem ? null : tab.style,
                         ]"
-                        @click.left="
-                            () =>
-                                tab.customAction != null
-                                    ? tab.customAction()
-                                    : null
-                        "
+                        @click.left="() => (tab.customAction != null ? tab.customAction() : null)"
                         :ref="`tab-${tab.key}`"
                     >
-                        <span
-                            v-if="tab.icon != null"
-                            class="nav-item-icon"
-                            :class="tab.icon"
-                        />
+                        <span v-if="tab.icon != null" class="nav-item-icon" :class="tab.icon" />
                         <span v-if="tab.label != null" class="nav-item-label">
                             <span v-text="tab.label" />
                             <span
-                                v-if="
-                                    tab.keyboardKey != null &&
-                                    tab.keyboardIcon != null
-                                "
+                                v-if="tab.keyboardKey != null && tab.keyboardIcon != null"
                                 class="nav-item-keyboard-shortcut-icon"
                                 :class="tab.keyboardIcon"
                             />
                         </span>
-                        <span
-                            v-if="isDefaultRoute(tab.to)"
-                            class="nav-item-home-icon mdi mdi-home"
-                        />
+                        <span v-if="isDefaultRoute(tab.to)" class="nav-item-home-icon mdi mdi-home" />
                     </component>
                 </template>
 
-                <set-default-route-button
-                    v-if="tab.canBeDefault"
-                    :label="$i18n.$t.settings.setDefaultRoute"
-                    rootRouteName=""
-                    :routeName="tab.to.name"
-                />
+                <set-default-route-button v-if="tab.canBeDefault" :label="$i18n.$t.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
             </floating-menu>
 
             <template v-if="isIframeMode">
                 <div style="width: 24px" />
                 <div class="nav-item icon-only" style="--color: none">
-                    <span
-                        class="mdi mdi-close close-overlay"
-                        @click="closeOverlay()"
-                    />
+                    <span class="mdi mdi-close close-overlay" @click="closeOverlay()" />
                 </div>
             </template>
         </nav>
@@ -106,11 +74,7 @@
             <span v-text="accountAndServer" />
         </footer>
 
-        <switch-account-dialog
-            v-if="showAccountSwitchDialog"
-            :color="colors.switchAccount"
-            @close="showAccountSwitchDialog = false"
-        />
+        <switch-account-dialog v-if="showAccountSwitchDialog" :color="colors.switchAccount" @close="showAccountSwitchDialog = false" />
     </div>
 </template>
 
@@ -382,7 +346,7 @@
 
             const account = UniversesAndAccountsDataModule.currentAccount;
             const server = UniversesAndAccountsDataModule.currentServer;
-            
+
             const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
             document.title = title;
 
@@ -400,11 +364,7 @@
         grid-template-rows: auto 1fr;
 
         background-color: black;
-        background-image: linear-gradient(
-            52deg,
-            rgba(var(--color), 0.02),
-            rgba(var(--color), 0.08)
-        );
+        background-image: linear-gradient(52deg, rgba(var(--color), 0.02), rgba(var(--color), 0.08));
 
         overflow: auto;
     }
@@ -433,18 +393,10 @@
 
         &.nav-item-active,
         &.nav-item-active:hover {
-            background: linear-gradient(
-                to bottom,
-                rgba(var(--color), 0.7),
-                rgb(var(--color))
-            );
+            background: linear-gradient(to bottom, rgba(var(--color), 0.7), rgb(var(--color)));
         }
         &:hover {
-            background: linear-gradient(
-                to bottom,
-                rgba(var(--color), 0.25),
-                rgba(var(--color), 0.5)
-            );
+            background: linear-gradient(to bottom, rgba(var(--color), 0.25), rgba(var(--color), 0.5));
         }
 
         &-label {
@@ -507,8 +459,7 @@
 
         &:hover {
             background: rgba(var(--color), 0.5);
-            text-shadow: 0 0 3px black, 0 0 8px rgb(var(--color)),
-                0 0 16px rgb(var(--color)), 0 0 24px rgb(var(--color));
+            text-shadow: 0 0 3px black, 0 0 8px rgb(var(--color)), 0 0 16px rgb(var(--color)), 0 0 24px rgb(var(--color));
         }
 
         &.nav-item-active,
@@ -549,5 +500,9 @@
         &.router-link-active {
             color: black;
         }
+    }
+
+    .ogti-planet-moon::before {
+        transform: scale(1.2);
     }
 </style>
