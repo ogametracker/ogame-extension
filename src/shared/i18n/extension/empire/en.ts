@@ -14,6 +14,7 @@ export const en: EmpireTranslations = {
         totalPerDay: 'total per day',
         totalPerWeek: 'total per week',
         activeProductionSettings: 'Active Production Settings',
+        messageProduction100: 'The shown values refer to a production factor of 100% and do not take lack of energy into account.',
 
         mines: {
             crawlersAvailable: 'available',

@@ -1,5 +1,7 @@
 <template>
     <div class="table-container">
+        <div v-text="$i18n.$t.empire.production.messageProduction100" style="grid-column: 1 / span 2;" />
+        
         <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
             <template #header-metal>
                 <o-resource resource="metal" size="75px" />

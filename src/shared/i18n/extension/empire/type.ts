@@ -12,6 +12,7 @@ export interface EmpireTranslations {
         totalPerDay: string;
         totalPerWeek: string;
         activeProductionSettings: string;
+        messageProduction100: string;
 
         mines: {
             crawlersAvailable: string;
