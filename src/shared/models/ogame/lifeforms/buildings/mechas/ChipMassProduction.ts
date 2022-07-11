@@ -1,3 +1,4 @@
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class ChipMassProductionClass extends LifeformBuilding implements LifeformTechno
                 increaseFactor: 1.05,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.chipMassProduction;
     }
 
     public getLifeformTechnologyBonus(level: number): number {

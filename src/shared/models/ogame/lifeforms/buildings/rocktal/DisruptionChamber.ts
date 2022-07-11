@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -22,6 +23,10 @@ class DisruptionChamberClass extends LifeformBuilding implements ResourceProduct
                 increaseFactor: 0
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.disruptionChamber;
     }
 
     public getConsumptionReduction(level: number): Cost {

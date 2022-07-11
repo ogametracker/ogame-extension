@@ -15,80 +15,83 @@ import { ResearchCentre } from "./humans/ResearchCentre";
 import { RuneTechnologium } from "./rocktal/RuneTechnologium";
 import { RoboticsResearchCentre } from "./mechas/RoboticsResearchCentre";
 import { VortexChamber } from "./kaelesh/VortexChamber";
+import { LifeformType } from "../LifeformType";
+import { LifeformBuilding } from "./LifeformBuilding";
 
-export const ResourceProductionBonusLifeformBuildings: ResourceProductionBonusLifeformBuilding[] = [
-    // humans
-    FusionPoweredProduction,
-    HighEnergySmelting,
+export const ResourceProductionBonusLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & ResourceProductionBonusLifeformBuilding)[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [
+        FusionPoweredProduction,
+        HighEnergySmelting,
+    ],
+    [LifeformType.rocktal]: [
+        CrystalRefinery,
+        DeuteriumSynthesiser,
+        DisruptionChamber,
+        MagmaForge,
+    ],
+    [LifeformType.mechas]: [
+        HighPerformanceSynthesiser,
+        HighPerformanceTransformer,
+    ],
+    [LifeformType.kaelesh]: [],
+};
+export const ResourceProductionBonusLifeformBuildings = Object.values(ResourceProductionBonusLifeformBuildingsByLifeform).flatMap(r => r);
 
-    // rocktal
-    CrystalRefinery,
-    DeuteriumSynthesiser,
-    DisruptionChamber,
-    MagmaForge,
 
-    // mechas
-    HighPerformanceSynthesiser,
-    HighPerformanceTransformer,
+export const LifeformTechnologyBonusLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & LifeformTechnologyBonusLifeformBuilding)[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [
+        Metropolis,
+    ],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [
+        ChipMassProduction,
+        HighPerformanceTransformer,
+    ],
+    [LifeformType.kaelesh]: [],
+};
+export const LifeformTechnologyBonusLifeformBuildings = Object.values(LifeformTechnologyBonusLifeformBuildingsByLifeform).flatMap(r => r);
 
-    // kaelesh 
-    // none
-];
 
-export const LifeformTechnologyBonusLifeformBuildings: LifeformTechnologyBonusLifeformBuilding[] = [
-    // humans
-    Metropolis,
+export const AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & AnyBuildingCostAndTimeReductionLifeformBuilding)[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [
+        MineralResearchCentre,
+        Megalith,
+    ],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [],
+};
+export const AnyBuildingCostAndTimeReductionLifeformBuildings = Object.values(AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform).flatMap(r => r);
 
-    // rocktal
-    // none
 
-    // mechas
-    ChipMassProduction,
-    HighPerformanceTransformer,
+export const ResourceConsumptionReductionLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & ResourceConsumptionReductionLifeformBuilding)[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [
+        DisruptionChamber,
+    ],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [],
+};
+export const ResourceConsumptionReductionLifeformBuildings = Object.values(ResourceConsumptionReductionLifeformBuildingsByLifeform).flatMap(r => r);
 
-    // kaelesh
-    // none
-];
 
-export const AnyBuildingCostAndTimeReductionLifeformBuildings: AnyBuildingCostAndTimeReductionLifeformBuilding[] = [
-    // humans
-    // none
-
-    // rocktal
-    MineralResearchCentre,
-    Megalith,
-
-    // mechas
-    // none
-
-    // kaelesh
-    // none
-];
-
-export const ResourceConsumptionReductionLifeformBuildings: ResourceConsumptionReductionLifeformBuilding[] = [
-    // humans
-    // none
-
-    // rocktal
-    DisruptionChamber,
-
-    // mechas
-    // none
-
-    // kaelesh
-    // none
-];
-
-export const LifeformTechnologyResearchBuildings: LifeformTechnologyResearchBuilding[] = [
-    // humans
-    ResearchCentre,
-
-    // rocktal
-    RuneTechnologium,
-
-    // mechas
-    RoboticsResearchCentre,
-
-    // kaelesh
-    VortexChamber,
-];
+export const LifeformTechnologyResearchBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & LifeformTechnologyResearchBuilding)[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [
+        ResearchCentre,
+    ],
+    [LifeformType.rocktal]: [
+        RuneTechnologium,
+    ],
+    [LifeformType.mechas]: [
+        RoboticsResearchCentre,
+    ],
+    [LifeformType.kaelesh]: [
+        VortexChamber,
+    ],
+};
+export const LifeformTechnologyResearchBuildings = Object.values(LifeformTechnologyResearchBuildingsByLifeform).flatMap(r => r);

@@ -1,4 +1,4 @@
-import { RocktalLifeformBuildingTypes } from "../../LifeformBuildingType";
+import { LifeformBuildingType, RocktalLifeformBuildingTypes } from "../../LifeformBuildingType";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -22,6 +22,10 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
                 increaseFactor: 1.3,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.megalith;
     }
     
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {

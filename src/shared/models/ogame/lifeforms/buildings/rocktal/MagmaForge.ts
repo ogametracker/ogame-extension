@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -22,6 +23,10 @@ class MagmaForgeClass extends LifeformBuilding implements ResourceProductionBonu
                 increaseFactor: 1.1
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.magmaForge;
     }
 
     public getProductionBonus(level: number): Cost {

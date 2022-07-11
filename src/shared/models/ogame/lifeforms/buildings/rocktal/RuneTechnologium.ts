@@ -1,3 +1,4 @@
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnolo
                 increaseFactor: 1.1,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.runeTechnologium;
     }
     
     public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {

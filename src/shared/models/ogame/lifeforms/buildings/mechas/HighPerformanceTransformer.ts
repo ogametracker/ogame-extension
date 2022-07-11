@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -22,6 +23,10 @@ class HighPerformanceTransformerClass extends LifeformBuilding implements Resour
                 increaseFactor: 1.05,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.highPerformanceTransformer;
     }
 
     public getLifeformTechnologyBonus(level: number): number {

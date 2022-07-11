@@ -1,3 +1,4 @@
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class VortexChamberClass extends LifeformBuilding implements LifeformTechnologyR
                 increaseFactor: 1.08,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.vortexChamber;
     }
     
     public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {

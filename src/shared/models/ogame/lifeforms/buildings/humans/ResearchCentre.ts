@@ -1,3 +1,4 @@
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { AnyBuildingType, CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class ResearchCentreClass extends LifeformBuilding implements LifeformTechnology
                 increaseFactor: 1.1
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.researchCentre;
     }
     
     public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {

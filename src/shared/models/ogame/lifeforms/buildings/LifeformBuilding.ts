@@ -1,4 +1,5 @@
 import { Cost } from "../../common/Cost";
+import { LifeformBuildingType } from "../LifeformBuildingType";
 
 interface CostAndIncreaseFactor {
     baseCost: number;
@@ -24,6 +25,8 @@ export abstract class LifeformBuilding {
         this.#deuterium = data.deuterium;
         this.#energy = data.energy;
     }
+
+    public abstract get type(): LifeformBuildingType;
 
     public getCost(level: number): Cost {
         return {

@@ -1,4 +1,5 @@
 import { BuildingType } from "../../../buildings/BuildingType";
+import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -22,6 +23,10 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
                 increaseFactor: 1.08,
             },
         });
+    }
+    
+    public get type(): LifeformBuildingType {
+        return LifeformBuildingType.mineralResearchCentre;
     }
     
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
