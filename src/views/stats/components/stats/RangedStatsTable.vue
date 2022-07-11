@@ -1,51 +1,21 @@
 <template>
-    <grid-table
-        :columns="columns"
-        :items="rows"
-        :footer-items="footerRows"
-        :cell-class-provider="(value) => getCellClass(value)"
-        class="ranged-stats-table"
-    >
+    <grid-table :columns="columns" :items="rows" :footer-items="footerRows" :cell-class-provider="(value) => getCellClass(value)" class="ranged-stats-table">
         <!-- oh god this is ugly -->
-        <template
-            v-for="(column, i) in columns"
-            v-slot:[`cell-${column.key}`]="{ value, item }"
-        >
+        <template v-for="(column, i) in columns" v-slot:[`cell-${column.key}`]="{ value, item }">
             <span :key="column.key" class="ranged-stats-table-cell">
                 <template v-if="column.key == 'label'">
-                    <slot
-                        v-if="
-                            column.slotName != null &&
-                            $scopedSlots[column.slotName] != null
-                        "
-                        :name="column.slotName"
-                        :value="value"
-                    />
+                    <slot v-if="column.slotName != null && $scopedSlots[column.slotName] != null" :name="column.slotName" :value="value" />
                     <span v-else :key="i" v-text="value" />
                 </template>
                 <template v-else-if="column.key == 'subLabel'">
-                    <span v-for="(item, i) in item.items" :key="i">
-                        <slot
-                            v-if="
-                                column.slotName != null &&
-                                $scopedSlots[column.slotName] != null
-                            "
-                            :name="column.slotName"
-                            :value="item.label"
-                        />
+                    <span v-for="(item, i) in item.items" :key="i" :class="item.labelClass">
+                        <slot v-if="column.slotName != null && $scopedSlots[column.slotName] != null" :name="column.slotName" :value="item.label" />
                         <span v-else v-text="item.label" />
                     </span>
                 </template>
                 <template v-else>
-                    <span
-                        v-for="(item, i) in item.items || [item]"
-                        :key="i"
-                        :class="getCellClass(item[column.key])"
-                    >
-                        <span
-                            v-if="column.formatter != null"
-                            v-text="column.formatter(item[column.key])"
-                        />
+                    <span v-for="(item, i) in item.items || [item]" :key="i" :class="[getCellClass(item[column.key]), item.class]">
+                        <span v-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                         <span v-else v-text="item[column.key]" />
                     </span>
                 </template>
@@ -55,8 +25,6 @@
         <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
             <slot :name="name" v-bind="data" />
         </template>
-    </grid-table>
-</template>
     </grid-table>
 </template>
 
@@ -77,6 +45,8 @@
     interface SingleRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
         label: string;
         getValue: (items: T[]) => number;
+        class?: string;
+        labelClass?: string;
     }
 
     interface GroupedRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
@@ -205,7 +175,7 @@
             return columns;
         }
 
-        private get rows(): RangedStatsTableRow[] {
+        private get rows(): (RangedStatsTableRow & { class?: string })[] {
             const dataItemsByRange = this.dataItemsByRange;
 
             const allRangeIndex = this.dateRanges.findIndex(range => range.type == 'all')
@@ -224,10 +194,12 @@
             return this.items.map(item => this.mapItemToRow(item, dataItemsByRange, allRangeIndex, daysWithDataItems, totalValue));
         }
 
-        private mapItemToRow(item: RangedStatsTableItem<T>, dataItemsByRange: T[][], allRangeIndex: number, daysWithDataItems: number, totalValue: number): RangedStatsTableRow {
+        private mapItemToRow(item: RangedStatsTableItem<T>, dataItemsByRange: T[][], allRangeIndex: number, daysWithDataItems: number, totalValue: number): (RangedStatsTableRow & { class?: string; labelClass?: string }) {
             if ('getValue' in item) {
-                const row: SimpleRangedStatsTableRow = {
+                const row: SimpleRangedStatsTableRow & { class?: string; labelClass?: string } = {
                     label: item.label,
+                    class: item.class,
+                    labelClass: item.labelClass,
 
                     ...this.dateRanges.map((_, rangeIndex) => item.getValue(dataItemsByRange[rangeIndex])),
                 };
@@ -246,7 +218,7 @@
 
             return {
                 label: item.label,
-                items: item.items.map(subitem => this.mapItemToRow(subitem, dataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow),
+                items: item.items.map(subitem => this.mapItemToRow(subitem, dataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow & { class?: string; labelClass?: string }),
             };
         }
 
