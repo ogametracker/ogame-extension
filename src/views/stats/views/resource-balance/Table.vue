@@ -147,33 +147,36 @@
 
         private get items(): RangedStatsTableItem<DailyEvents>[] {
             if (this.settings.showDetailedBreakdown) {
-                const types: Record<ResourceType, EventType[]> = {
-                    [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report'],
-                    [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report'],
-                    [ResourceType.deuterium]: ['expedition', 'combat-report'],
+                const types: Record<ResourceType, (EventType | null)[]> = {
+                    [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report', null],
+                    [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report', null],
+                    [ResourceType.deuterium]: ['expedition', 'combat-report', null],
                 };
 
                 return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
                     label: this.$i18n.$t.resources[resource],
                     items: types[resource].map(eventType => ({
-                        label: this.$i18n.$t.resourceBalance[eventType],
+                        label: eventType == null ? 'LOCA: Summe' : this.$i18n.$t.resourceBalance[eventType],
                         getValue: events => this.getResources(events, eventType, resource),
+                        class: eventType == null ? 'sum-item' : '',
+                        labelClass: eventType == null ? 'sum-item' : '',
                     })),
                 }));
             }
 
             return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: events => events.reduce((acc, ev) => acc + this.getResource(ev, resource), 0),
+                getValue: events => this.getResources(events, null, resource),
             }));
         }
 
-        private getResources(events: DailyEvents[], eventType: EventType, resource: ResourceType): number {
+        private getResources(events: DailyEvents[], eventType: EventType | null, resource: ResourceType): number {
             return events.reduce((acc, event) => {
                 switch (eventType) {
                     case 'expedition': return acc + this.getResource({ date: event.date, expeditions: event.expeditions }, resource);
                     case 'combat-report': return acc + this.getResource({ date: event.date, combats: event.combats }, resource);
                     case 'debris-field-report': return acc + this.getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
+                    case null: return acc + this.getResource(event, resource);
                 }
             }, 0);
         }
@@ -267,6 +270,14 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+
+        &::v-deep {
+            .sum-item {
+                font-weight: bold;
+                border-top: 1px solid rgba(var(--color), 0.5);
+                margin-top: 1px;
+            }
+        }
     }
 
     .floating-settings::v-deep .floating-menu {

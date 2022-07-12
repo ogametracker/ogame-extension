@@ -1,5 +1,7 @@
 <template>
     <div class="table-container">
+        <div v-text="$i18n.$t.empire.production.messageProduction100" style="grid-column: 1 / span 2" />
+
         <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
             <template #header-metal>
                 <o-resource resource="metal" size="75px" />
@@ -436,20 +438,25 @@
     }
 </script>
 <style lang="scss" scoped>
-    .resources-production-table::v-deep {
-        .total-column {
-            border-left: 1px solid rgba(var(--color), 0.33);
-        }
+    .resources-production-table {
+        max-height: 100%;
+        overflow: auto;
 
-        .production-settings-column {
-            border-left: 3px double rgba(var(--color), 0.5);
-        }
-        .production-settings-header-column {
-            border-left: 3px solid transparent;
-        }
+        &::v-deep {
+            .total-column {
+                border-left: 1px solid rgba(var(--color), 0.33);
+            }
 
-        > .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell {
-            border-top: 3px double rgba(var(--color), 0.5);
+            .production-settings-column {
+                border-left: 3px double rgba(var(--color), 0.5);
+            }
+            .production-settings-header-column {
+                border-left: 3px solid transparent;
+            }
+
+            > .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell {
+                border-top: 3px double rgba(var(--color), 0.5);
+            }
         }
     }
 
@@ -489,6 +496,7 @@
         display: grid;
         column-gap: 4px;
         grid-template-columns: 1fr auto;
+        grid-template-rows: auto 1fr;
         align-items: start;
         height: 100%;
     }

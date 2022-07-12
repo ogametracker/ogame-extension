@@ -22,7 +22,8 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
                 return;
             }
 
-            options[type] = [`content-scripts/${file}`];
+            options[type] ??= [];
+            options[type].push(`content-scripts/${file}`);
         });
 
         return options;
@@ -50,7 +51,7 @@ const manifest = {
     ],
     web_accessible_resources: [
         {
-            resources: ['img/*', 'views/*', 'mdi/*', "icons/*"],
+            resources: ['img/*', 'views/*', 'mdi/*', "ogti/*"],
             matches: ['https://*.ogame.gameforge.com/*'],
         },
     ],

@@ -6,25 +6,25 @@
 
                 <div class="result-grid resources-grid" v-if="foundResources">
                     <template v-if="notification.resources.metal > 0">
-                        <o-resource resource="metal" />
+                        <o-resource resource="metal" class="icon" />
                         <span v-text="$i18n.$n(notification.resources.metal)" />
                     </template>
                     <template v-if="notification.resources.crystal > 0">
-                        <o-resource resource="crystal" />
+                        <o-resource resource="crystal" class="icon" />
                         <span v-text="$i18n.$n(notification.resources.crystal)" />
                     </template>
                     <template v-if="notification.resources.deuterium > 0">
-                        <o-resource resource="deuterium" />
+                        <o-resource resource="deuterium" class="icon" />
                         <span v-text="$i18n.$n(notification.resources.deuterium)" />
                     </template>
 
-                    <span class="mdi mdi-sigma" />
+                    <span class="mdi mdi-sigma icon" />
                     <span v-text="$i18n.$n(resourceSum)" />
                 </div>
 
                 <div class="result-grid" v-if="notification.darkMatter > 0">
                     <template>
-                        <o-resource resource="dark-matter" />
+                        <o-resource resource="dark-matter" class="icon" />
                         <span v-text="$i18n.$n(notification.darkMatter)" />
                     </template>
                 </div>
@@ -36,7 +36,7 @@
                 <div class="result-grid" v-if="foundShips">
                     <template v-for="ship in ships">
                         <template v-if="notification.ships[ship] > 0">
-                            <o-ship :ship="shipTypes[ship]" :key="`ship-icon-${ship}`" />
+                            <o-ship :ship="shipTypes[ship]" :key="`ship-icon-${ship}`" class="icon" />
                             <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
                         </template>
                     </template>
@@ -48,22 +48,22 @@
             <div class="result-grid">
                 <template v-for="event in expeditionEvents">
                     <template v-if="notification.events[event] > 0">
-                        <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close" :style="{ color: eventColors.nothing }" />
-                        <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" />
-                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" ship="battleship" size="24px" />
-                        <span v-else-if="event == 'delay'" :key="`event-icon-${event}`" class="mdi mdi-clock-outline" :style="{ color: eventColors.delay }" />
-                        <span v-else-if="event == 'early'" :key="`event-icon-${event}`" class="mdi mdi-clock-outline" :style="{ color: eventColors.early }" />
-                        <o-resource v-else-if="event == 'darkMatter'" :key="`event-icon-${event}`" resource="dark-matter" size="24px" />
-                        <span v-else-if="event == 'pirates'" :key="`event-icon-${event}`" class="mdi mdi-pirate" :style="{ color: eventColors.pirates }" />
-                        <span v-else-if="event == 'aliens'" :key="`event-icon-${event}`" class="mdi mdi-alien" :style="{ color: eventColors.aliens }" />
-                        <o-item v-else-if="event == 'item'" :key="`event-icon-${event}`" :item="detroidItem" size="24px" />
+                        <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close icon" :style="{ color: eventColors.nothing }" />
+                        <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" class="icon" />
+                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" ship="battleship" size="24px" class="icon" />
+                        <span v-else-if="event == 'delay'" :key="`event-icon-${event}`" class="mdi mdi-clock-outline icon" :style="{ color: eventColors.delay }" />
+                        <span v-else-if="event == 'early'" :key="`event-icon-${event}`" class="mdi mdi-clock-outline icon" :style="{ color: eventColors.early }" />
+                        <o-resource v-else-if="event == 'darkMatter'" :key="`event-icon-${event}`" resource="dark-matter" size="24px" class="icon" />
+                        <span v-else-if="event == 'pirates'" :key="`event-icon-${event}`" class="mdi mdi-pirate icon" :style="{ color: eventColors.pirates }" />
+                        <span v-else-if="event == 'aliens'" :key="`event-icon-${event}`" class="mdi mdi-alien icon" :style="{ color: eventColors.aliens }" />
+                        <o-item v-else-if="event == 'item'" :key="`event-icon-${event}`" :item="detroidItem" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'trader'"
                             :key="`event-icon-${event}`"
-                            class="mdi mdi-swap-horizontal-bold"
+                            class="mdi mdi-swap-horizontal-bold icon"
                             :style="{ color: eventColors.trader }"
                         />
-                        <span v-else-if="event == 'lostFleet'" :key="`event-icon-${event}`" class="mdi mdi-cross" :style="{ color: eventColors.lostFleet }" />
+                        <span v-else-if="event == 'lostFleet'" :key="`event-icon-${event}`" class="mdi mdi-cross icon" :style="{ color: eventColors.lostFleet }" />
 
                         <span v-text="$i18n.$n(notification.events[event])" :key="`event-count-${event}`" />
                     </template>
@@ -180,6 +180,9 @@
             width: 24px;
             text-align: center;
             height: 20px;
+        }
+
+        .icon {
             justify-self: center;
         }
     }

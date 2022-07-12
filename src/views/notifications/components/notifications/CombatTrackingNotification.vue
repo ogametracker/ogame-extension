@@ -101,6 +101,9 @@
             width: 24px;
             text-align: center;
             height: 20px;
+        }
+
+        .mdi, .o-resource {
             justify-self: center;
         }
     }
