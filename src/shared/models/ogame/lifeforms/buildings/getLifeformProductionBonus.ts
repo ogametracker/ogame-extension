@@ -20,8 +20,11 @@ export function getLifeformProductionBonus(player: LocalPlayerData, planet: Plan
         const bonus = building.getLifeformTechnologyBonus(level);
         return total + bonus;
     }, 0);
-
+    
+    //TODO: lifeform experience tech bonus
+    
     //TODO: lifeform technologies
+
 
 
     const technologyProductionBonus: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
