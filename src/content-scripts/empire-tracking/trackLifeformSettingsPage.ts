@@ -5,7 +5,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { empireTrackingUuid } from "@/shared/uuid";
-import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { getExperienceNeededForLevel } from "@/shared/models/ogame/lifeforms/experience";
 
@@ -22,7 +22,7 @@ export function trackLifeformSettingsPage() {
                 [LifeformType.mechas]: 3,
                 [LifeformType.kaelesh]: 4,
             };
-            LifeformTypes.forEach(lifeform => {
+            ValidLifeformTypes.forEach(lifeform => {
                 const selector = `.lifeform${index[lifeform]} + .levelinformation > .xpbar`;
                 const elem = element.querySelector(selector);
                 if(elem == null) {
@@ -38,8 +38,7 @@ export function trackLifeformSettingsPage() {
                 const currentExpText = match?.groups?.exp ?? _throw('no exp match');
                 const currentExp = parseIntSafe(currentExpText, 10);
 
-                const exp = Array.from({ length: level }).reduce<number>(
-                    (acc, _, i) => acc + getExperienceNeededForLevel(i + 1), currentExp);
+                const exp = getExperienceNeededForLevel(level) + currentExp;
                 
                 lifeformExperience[lifeform] = exp;
             });

@@ -15,7 +15,7 @@ import { getPlayerDatabase } from "../../shared/db/access";
 import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { createRecord } from "@/shared/utils/createRecord";
 
 export class EmpireModule {
@@ -185,7 +185,7 @@ export class EmpireModule {
 
         const storedExp = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined;
         const newExp: DbPlayerLifeformExperience = {
-            ...createRecord(LifeformTypes, 0),
+            ...createRecord(ValidLifeformTypes, 0),
             ...storedExp,
             ...data,
         };
