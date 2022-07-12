@@ -12,6 +12,7 @@ import { parseCoordinates } from "@/shared/utils/parseCoordinates";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { _throw } from "@/shared/utils/_throw";
 import { empireTrackingUuid } from "@/shared/uuid";
+import { getActiveLifeform } from "./getActiveLifeform";
 import { observerCallbacks } from "./main";
 
 export function trackOnIngamePages() {
@@ -166,18 +167,7 @@ function trackSelectedLifeform() {
                 ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
-            const classDiv = element.querySelector('div.lifeform-item-icon') ?? _throw('no character class element found');
-
-            let lifeform = LifeformType.none;
-            if (classDiv.classList.contains('lifeform1')) {
-                lifeform = LifeformType.humans;
-            } else if (classDiv.classList.contains('lifeform2')) {
-                lifeform = LifeformType.rocktal;
-            } else if (classDiv.classList.contains('lifeform3')) {
-                lifeform = LifeformType.mechas;
-            }else if (classDiv.classList.contains('lifeform4')) {
-                lifeform = LifeformType.kaelesh;
-            }
+            const lifeform = getActiveLifeform();
 
             const message: UpdateSelectedLifeformMessage = {
                 ogameMeta: getOgameMeta(),

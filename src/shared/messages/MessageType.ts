@@ -59,6 +59,7 @@ export enum MessageType {
     NotifyUniverseSpecificSettingsUpdate = 'universe-specific-settings/notify-update',
 
     // lifeforms
+    UpdateLifeformExperience = 'lifeforms/update-lifeform-experience',
     UpdateSelectedLifeform = 'lifeforms/update-selected-lifeform',
     UpdatePlanetActiveLifeformBuildingLevels = 'lifeforms/update-active-building-levels',
     UpdatePlanetLifeformBuildingLevels = 'lifeforms/update-all-building-levels',

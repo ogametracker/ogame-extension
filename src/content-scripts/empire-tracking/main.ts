@@ -13,6 +13,7 @@ import { trackEmpirePage } from "./trackEmpirePage";
 import { trackOnIngamePages } from "./trackOnIngamePages";
 import { trackLifeformBuildingsPage } from "./trackLifeformBuildings";
 import { trackLifeformResearchPage } from "./trackLifeformResearchPage";
+import { trackLifeformSettingsPage } from "./trackLifeformSettingsPage";
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -74,6 +75,10 @@ const pageTrackers: PageTracker[] = [
     {
         action: () => trackLifeformResearchPage(),
         condition: query => query.page == 'ingame' && query.component == 'lfresearch',
+    },
+    {
+        action: () => trackLifeformSettingsPage(),
+        condition: query => query.page == 'ingame' && query.component == 'lfsettings',
     },
     {
         action: () => trackEmpirePage(),

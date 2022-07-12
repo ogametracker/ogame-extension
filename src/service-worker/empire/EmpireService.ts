@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetActiveLifeformBuildingLevelsMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage, UpdateSelectedLifeformMessage, } from '../../shared/messages/tracking/empire';
+import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateLifeformExperienceMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetActiveLifeformBuildingLevelsMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage, UpdateSelectedLifeformMessage, } from '../../shared/messages/tracking/empire';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class EmpireService implements MessageService {
@@ -76,6 +76,12 @@ export class EmpireService implements MessageService {
             case MessageType.UpdateSelectedLifeform: {
                 const msg = message as UpdateSelectedLifeformMessage;
                 await this.empireModule.updateSelectedLifeform(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdateLifeformExperience: {
+                const msg = message as UpdateLifeformExperienceMessage;
+                await this.empireModule.updateLifeformExperience(msg.ogameMeta, msg.data);
                 break;
             }
 
