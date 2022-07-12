@@ -5,6 +5,7 @@ import { PlayerClass } from "../classes/PlayerClass";
 import { Cost } from "../common/Cost";
 import { ItemHash } from "../items/ItemHash";
 import { getLifeformCollectorClassBonus } from "../lifeforms/buildings/getLifeformCollectorClassBonus";
+import { getLifeformProductionBonus } from "../lifeforms/buildings/getLifeformProductionBonus";
 import { ResearchType } from "../research/ResearchType";
 import { ShipType } from "../ships/ShipType";
 import { BuildingType } from "./BuildingType";
@@ -31,6 +32,7 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
+        const lifeformProduction = mineProduction * getLifeformProductionBonus(dependencies.player)[dependencies.planet.id].deuterium;
 
         const maxCrawlers = getMaxActiveCrawlers(
             dependencies.planet.buildings[BuildingType.metalMine],
@@ -50,14 +52,17 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
-        const production = mineProduction
+        const production = Math.trunc(
+            mineProduction
             + geologistProduction
             + plasmaTechProduction
             + collectorProduction
             + commandStaffProduction
             + traderProduction
             + itemProduction
-            + crawlerProduction;
+            + crawlerProduction
+            + lifeformProduction
+        );
 
         return {
             metal: 0,

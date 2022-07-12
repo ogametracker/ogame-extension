@@ -31,7 +31,7 @@ class MetalMineClass extends ProductionBuilding {
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
-        const lifeformProduction = getLifeformProductionBonus(dependencies.player)[dependencies.planet.id].metal;
+        const lifeformProduction = mineProduction * getLifeformProductionBonus(dependencies.player)[dependencies.planet.id].metal;
 
         const maxCrawlers = getMaxActiveCrawlers(
             level,
