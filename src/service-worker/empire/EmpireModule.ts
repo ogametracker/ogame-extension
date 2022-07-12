@@ -12,10 +12,10 @@ import { ResearchType, ResearchTypes } from "../../shared/models/ogame/research/
 import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { getPlayerDatabase } from "../../shared/db/access";
-import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
+import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { createRecord } from "@/shared/utils/createRecord";
 
 export class EmpireModule {
@@ -51,7 +51,7 @@ export class EmpireModule {
                 .map(key => parseIntSafe(key, 10) as MoonBuildingType)
                 .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-            await db.put('empire', newLevels, key);
+            await store.put(newLevels, key);
         }
         else {
             const key: `planet.${number}.buildings` = `planet.${data.planetId}.buildings`;
@@ -64,7 +64,7 @@ export class EmpireModule {
                 .map(key => parseIntSafe(key, 10) as PlanetBuildingType)
                 .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-            await db.put('empire', newLevels, key);
+            await store.put(newLevels, key);
         }
 
         await tx.done;
@@ -178,6 +178,22 @@ export class EmpireModule {
         await db.put('empire', data.data, `planet.${data.planetId}.lifeform`);
     }
 
+    public async updateLifeformExperience(meta: MessageOgameMeta, data: Partial<Record<LifeformType, number>>) {
+        const db = await getPlayerDatabase(meta);
+        const tx = db.transaction('empire', 'readwrite');
+        const store = tx.objectStore('empire');
+
+        const storedExp = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined;
+        const newExp: DbPlayerLifeformExperience = {
+            ...createRecord(LifeformTypes, 0),
+            ...storedExp,
+            ...data,
+        };
+
+        await store.put(newExp, 'lifeformExperience');
+        await tx.done;
+    }
+
     public async updatePlanetLifeformBuildings(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<LifeformBuildingType, number>>>) {
         if(data.isMoon) {
             return;
@@ -197,7 +213,7 @@ export class EmpireModule {
             .map(key => parseIntSafe(key, 10) as LifeformBuildingType)
             .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-        await db.put('empire', newLevels, key);
+        await store.put(newLevels, key);
         
         await tx.done;
     }
@@ -233,7 +249,7 @@ export class EmpireModule {
             .map(key => parseIntSafe(key, 10) as LifeformTechnologyType)
             .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
-        await db.put('empire', newLevels, key);
+        await store.put(newLevels, key);
         
         await tx.done;
     }

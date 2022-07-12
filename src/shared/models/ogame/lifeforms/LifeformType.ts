@@ -5,3 +5,11 @@ export enum LifeformType {
     kaelesh = 'kaelesh',
     none = 'none',
 }
+
+/** excludes 'none' */
+export const LifeformTypes: LifeformType[] = [
+    LifeformType.humans,
+    LifeformType.rocktal,
+    LifeformType.mechas,
+    LifeformType.kaelesh,
+];

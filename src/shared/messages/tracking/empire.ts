@@ -79,6 +79,9 @@ export type UpdateUniverseNameMessage = Message<MessageType.UpdateUniverseName, 
 // lifeforms
 export type UpdateSelectedLifeformMessage = Message<MessageType.UpdateSelectedLifeform, PlanetDataWrapper<LifeformType>>;
 
+type LifeformExperience = Partial<Record<LifeformType, number>>;
+export type UpdateLifeformExperienceMessage = Message<MessageType.UpdateLifeformExperience, LifeformExperience>;
+
 type PlanetActiveLifeformBuildingLevels = Partial<Record<LifeformBuildingType, number>>;
 export type UpdatePlanetActiveLifeformBuildingLevelsMessage = Message<MessageType.UpdatePlanetActiveLifeformBuildingLevels, PlanetDataWrapper<PlanetActiveLifeformBuildingLevels>>;
 

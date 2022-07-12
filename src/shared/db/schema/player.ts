@@ -63,6 +63,7 @@ export type DbPlayerResearchLevels = Record<ResearchType, number>;
 export type DbPlayerPlanetIds = number[];
 
 
+export type DbPlayerLifeformExperience = Record<Exclude<LifeformType, LifeformType.none>, number>;
 export type DbPlanetSelectedLifeform = LifeformType;
 export type DbPlanetLifeformBuildingLevels = Record<LifeformBuildingType, number>;
 export type DbPlanetLifeformTechnologyLevels = Record<LifeformTechnologyType, number>;
@@ -74,6 +75,7 @@ type DbEmpire = (
     | { key: 'playerClass'; value: PlayerClass }
     | { key: 'research'; value: DbPlayerResearchLevels }
     | { key: 'planetOrder'; value: DbPlayerPlanetIds }
+    | { key: 'lifeformExperience'; value: DbPlayerLifeformExperience }
 
     | { key: `planet.${number}`; value: DbBasicPlanetData }
     | { key: `planet.${number}.buildings`; value: DbPlanetBuildingLevels }
