@@ -1,30 +1,28 @@
 import { Cost } from "../../common/Cost";
 import { CostAndIncreaseFactor } from "../common-interfaces";
-import { LifeformBuildingType } from "../LifeformBuildingType";
+import { LifeformTechnologyType } from "../LifeformTechnologyType";
 
-
-interface LifeformBuildingConstructionParams {
+interface LifeformTechnologyConstructionParams {
     metal: CostAndIncreaseFactor;
     crystal: CostAndIncreaseFactor;
     deuterium: CostAndIncreaseFactor;
     energy: CostAndIncreaseFactor;
-    //TODO: population cost missing
 }
 
-export abstract class LifeformBuilding {
+export abstract class LifeformTechnology {
     #metal: CostAndIncreaseFactor;
     #crystal: CostAndIncreaseFactor;
     #deuterium: CostAndIncreaseFactor;
     #energy: CostAndIncreaseFactor;
 
-    protected constructor(data: LifeformBuildingConstructionParams) {
+    protected constructor(data: LifeformTechnologyConstructionParams) {
         this.#metal = data.metal;
         this.#crystal = data.crystal;
         this.#deuterium = data.deuterium;
         this.#energy = data.energy;
     }
 
-    public abstract get type(): LifeformBuildingType;
+    public abstract get type(): LifeformTechnologyType;
 
     public getCost(level: number): Cost {
         return {
@@ -35,7 +33,7 @@ export abstract class LifeformBuilding {
         };
     }
 
-    private getResourceCost(baseCost: number, increaseFactor: number, level: number): number {
+    private getResourceCost(baseCost: number, increaseFactor: number, level: number): number { 
         return Math.floor(baseCost * increaseFactor ** (level - 1) * level);
     }
 }

@@ -1,5 +1,6 @@
 import { BuildingType } from "../../buildings/BuildingType";
 import { Cost } from "../../common/Cost";
+import { CostAndTimeReduction } from "../common-interfaces";
 import { LifeformBuildingType } from "../LifeformBuildingType";
 
 export interface ResourceProductionBonusLifeformBuilding {
@@ -10,13 +11,7 @@ export interface LifeformTechnologyBonusLifeformBuilding {
     getLifeformTechnologyBonus(level: number): number;
 }
 
-
-export interface CostAndTimeReduction {
-    cost: number;
-    time: number;
-}
 export type AnyBuildingType = BuildingType | LifeformBuildingType;
-
 export interface AnyBuildingCostAndTimeReductionLifeformBuilding {
     getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction;
 }
