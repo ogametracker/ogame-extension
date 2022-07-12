@@ -110,6 +110,7 @@
     import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
     import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
 import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+import { getLifeformCollectorClassBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
 
     interface ProductionMineItem {
         planet: {
@@ -188,6 +189,8 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         }
 
         private get items(): ProductionMineItem[] {
+            const collectorClassBonus = 1 + getLifeformCollectorClassBonus(this.player);
+
             return this.planets
                 .map(planet => {
                     const maxActiveCrawlers = getMaxActiveCrawlers(
@@ -197,6 +200,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
                         this.player.playerClass,
                         this.player.officers.geologist,
                         ServerSettingsDataModule.serverSettings,
+                        collectorClassBonus,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 

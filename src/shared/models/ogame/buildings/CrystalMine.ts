@@ -10,20 +10,29 @@ import { ProductionBuilding, ProductionBuildingDependencies } from "./Production
 import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
 import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
 import { ServerSettings } from "../../server-settings/ServerSettings";
+import { getLifeformCollectorClassBonus } from "../lifeforms/buildings/getLifeformCollectorClassBonus";
+import { getLifeformProductionBonus } from "../lifeforms/buildings/getLifeformProductionBonus";
 
+//TODO: refactor, production should only return mine production
 class CrystalMineClass extends ProductionBuilding {
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): Cost {
         const boost = this.getProductionBoost(dependencies.planet.coordinates.position, dependencies.serverSettings);
+        const collectorClassBonus = 1 + getLifeformCollectorClassBonus(dependencies.player);
 
         const baseProduction = Math.trunc(15 * dependencies.serverSettings.speed.economy * (1 + boost));
         const mineProduction = Math.trunc(20 * dependencies.serverSettings.speed.economy * (1 + boost) * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.crystalMine] / 100);
         const geologistProduction = Math.round(mineProduction * 0.1 * (dependencies.player.officers.geologist ? 1 : 0));
         const plasmaTechProduction = Math.round(mineProduction * 0.0066 * dependencies.player.research[ResearchType.plasmaTechnology]);
-        const collectorProduction = Math.round(mineProduction * dependencies.serverSettings.playerClasses.collector.productionFactorBonus * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0));
+        const collectorProduction = Math.round(
+            mineProduction
+            * dependencies.serverSettings.playerClasses.collector.productionFactorBonus
+            * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0)
+            * collectorClassBonus);
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
         const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
+        const lifeformProduction = getLifeformProductionBonus(dependencies.player)[dependencies.planet.id].crystal;
 
         const maxCrawlers = getMaxActiveCrawlers(
             dependencies.planet.buildings[BuildingType.metalMine],
@@ -32,12 +41,15 @@ class CrystalMineClass extends ProductionBuilding {
             dependencies.player.playerClass,
             dependencies.player.officers.geologist,
             dependencies.serverSettings,
+            collectorClassBonus,
         );
         const crawlerCount = Math.min(maxCrawlers, dependencies.planet.ships[ShipType.crawler]);
-        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector ? (1 + dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) : 1;
+        const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector
+            ? (1 + dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) * collectorClassBonus
+            : 1;
         const crawlerBoost = Math.min(
             dependencies.serverSettings.playerClasses.crawlers.maxProductionFactor,
-            dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit* crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
+            dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
         const production = Math.trunc(
@@ -50,6 +62,7 @@ class CrystalMineClass extends ProductionBuilding {
             + traderProduction
             + itemProduction
             + crawlerProduction
+            + lifeformProduction
         );
 
         return {

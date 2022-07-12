@@ -1,5 +1,6 @@
+import { CostAndTimeReduction } from "../../common-interfaces";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { CostAndTimeReduction, LifeformTechnologyResearchBuilding } from "../interfaces";
+import { LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
 class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnologyResearchBuilding {

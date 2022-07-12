@@ -12,7 +12,7 @@ import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
 import { ResearchType, ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbShipAmounts } from '@/shared/db/schema/player';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
 import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
 import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
@@ -23,7 +23,7 @@ import { delay } from '@/shared/utils/delay';
 import { createRecord } from '@/shared/utils/createRecord';
 import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 
 @Component
 class EmpireDataModuleClass extends Vue {
@@ -73,6 +73,8 @@ class EmpireDataModuleClass extends Vue {
         };
         const research = (await store.get('research')) as ResearchLevels | undefined ?? createRecord(ResearchTypes, 0);
         const planetOrder = (await store.get('planetOrder')) as number[] | undefined ?? [];
+        const lifeformExperience = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined 
+            ?? createRecord(ValidLifeformTypes, 0);
 
         const planets: Record<number, PlanetData | MoonData> = {};
         const allKeys = await store.getAllKeys();
@@ -154,6 +156,7 @@ class EmpireDataModuleClass extends Vue {
             research,
             planetOrder,
             planets,
+            lifeformExperience,
         };
 
         this._resolveReady();

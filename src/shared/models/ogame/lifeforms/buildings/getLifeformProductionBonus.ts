@@ -1,12 +1,12 @@
 import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { createRecord } from "@/shared/utils/createRecord";
-import { addCost, Cost } from "../../common/Cost";
-import { getLifeformLevel } from "../experience";
-import { LifeformType, LifeformTypes, ValidLifeformTypes } from "../LifeformType";
-import { LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
+import { addCost, Cost, multiplyCost } from "../../common/Cost";
+import { LifeformType } from "../LifeformType";
+import { ResourceProductionBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
+import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
+import { ResourceProductionBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
 
-//TODO get total production bonus by lifeform buildings and technologies
 /** returns production bonus by planet ids */
 export function getLifeformProductionBonus(player: LocalPlayerData): Record<number, Cost> {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
@@ -28,36 +28,35 @@ export function getLifeformProductionBonus(player: LocalPlayerData): Record<numb
     }
 
     // get technology bonus per planet (level + buildings)
-    const technologyBonusByPlanet = createRecord(planets.map(p => p.id), 0);
-    const techBonusPerLevel = 0.01; // 1.0%
-    const levelTechnologyBonus = createRecord(
-        ValidLifeformTypes,
-        lf => getLifeformLevel(player.lifeformExperience[lf]) * techBonusPerLevel
-    );
+    const technologyBonusByPlanet = getLifeformTechnologyBonus(player);
+
+
+    // production bonus
+    // calculate first
+    let techProductionBonus: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
     for (const planet of planets) {
         if (planet.activeLifeform == LifeformType.none) {
-            technologyBonusByPlanet[planet.id] = 0;
             continue;
         }
 
-        const levelBonus = levelTechnologyBonus[planet.activeLifeform];
+        const techFactor = 1 + technologyBonusByPlanet[planet.id];
+        const productionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
+        );
+        const baseProductionBonus = productionBonusTechnologies.reduce<Cost>((total, tech) => {
+            const level = planet.lifeformTechnologies[tech.type];
+            const bonus = tech.getProductionBonus(level);
 
-        const technologyBonusBuildings = LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.activeLifeform];
-        const technologyBonus = technologyBonusBuildings.reduce((total, building) => {
-            const level = planet.lifeformBuildings[building.type];
-            const bonus = building.getLifeformTechnologyBonus(level);
-            return total + bonus;
-        }, 0);
+            return addCost(total, bonus);
+        }, { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+        const productionBonus = multiplyCost(baseProductionBonus, techFactor);
 
-        const totalTechBonus = levelBonus + technologyBonus;
-        technologyBonusByPlanet[planet.id] = totalTechBonus;
+        techProductionBonus = addCost(techProductionBonus, productionBonus);
     }
 
-
-
-    //TODO: lifeform technologies
+    // then apply everywhere
     for (const planet of planets) {
-        const technologyProductionBonus: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+        productionBonusByPlanet[planet.id] = addCost(productionBonusByPlanet[planet.id], techProductionBonus);
     }
 
     return productionBonusByPlanet;

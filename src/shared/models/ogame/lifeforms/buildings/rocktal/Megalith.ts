@@ -1,5 +1,6 @@
+import { CostAndTimeReduction } from "../../common-interfaces";
 import { LifeformBuildingType, RocktalLifeformBuildingTypes } from "../../LifeformBuildingType";
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
 class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {

@@ -1,6 +1,7 @@
 import { BuildingType } from "../../../buildings/BuildingType";
+import { CostAndTimeReduction } from "../../common-interfaces";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, CostAndTimeReduction } from "../interfaces";
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
 class MineralResearchCentreClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {

@@ -7,10 +7,11 @@ export function getMaxActiveCrawlers(
     deuteriumSynthesizerLevel: number,
     playerClass: PlayerClass,
     geologist: boolean,
-    serverSettings: ServerSettings
+    serverSettings: ServerSettings,
+    collectorClassBonus: number
 ) {
     const maxCrawlerFactor = geologist && playerClass == PlayerClass.collector
-        ? (1 + serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus)
+        ? (1 + serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus) * collectorClassBonus
         : 1;
     const maxCrawlers = Math.floor(
         (metalMineLevel + crystalMineLevel + deuteriumSynthesizerLevel) 
