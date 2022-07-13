@@ -4,4 +4,4 @@ export type { OgameTrackerServerDbSchema } from './server';
 export type { OgameTrackerPlayerDbSchema } from './player';
 
 
-export const DbVersion = 3;
+export const DbVersion = 6;

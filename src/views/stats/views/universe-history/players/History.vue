@@ -64,7 +64,6 @@
     import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
     import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
 
-
     @Component({
         components: {
             UniverseHistoryTrackingSettings,
@@ -74,7 +73,7 @@
             PlayerPlanetsAndMoonsHistory,
         },
     })
-    export default class Players extends Vue {
+    export default class History extends Vue {
 
         private get historyTrackingEnabled() {
             return SettingsDataModule.settings.universeHistory.trackHistory;
@@ -93,7 +92,7 @@
             return [
                 { player: null },
                 { player: this.selectedPlayer },
-            ];
+            ].filter((value, i, array) => array.findIndex(v => v.player == value.player) == i);
         }
 
         private get tabs(): Tab[] {
@@ -118,7 +117,7 @@
         }
 
         private get selectedPlayer() {
-            return UniverseHistoryDataModule.players.find(p => p.id == this.playerId)!;
+            return UniverseHistoryDataModule.players.find(p => p.id == this.playerId) ?? null;
         }
 
         private get playerId(): number | null {

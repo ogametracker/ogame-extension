@@ -1,5 +1,5 @@
 import { getUniverseHistoryDatabase } from '@/shared/db/access';
-import { OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+import { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
 import { parseIntSafe } from '@/shared/utils/parseNumbers';
 import { StoreNames } from 'idb';
 import { Component, Vue } from 'vue-property-decorator';
@@ -272,7 +272,7 @@ class UniverseHistoryDataModuleClass extends Vue {
             await store.clear();
         }
     }
-    
+
     public async getPlayerPlanetsAndMoonsHistory(playerId: number): Promise<UniverseHistoryPlanetHistory[]> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const storeNames: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & (`${'planet' | 'moon'}${string}`))[] = [
@@ -286,7 +286,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         const planetStore = tx.objectStore('planets');
         const playerPlanets = await planetStore.index('playerId').getAll(playerId);
 
-        for(const planet of playerPlanets) {
+        for (const planet of playerPlanets) {
             const planetCoordinatesHistory = await tx.objectStore('planetCoordinates').index('planetId').getAll(planet.id);
             const planetNameHistory = await tx.objectStore('planetNames').index('planetId').getAll(planet.id);
             const planetStateHistory = await tx.objectStore('planetStates').index('planetId').getAll(planet.id);
@@ -301,7 +301,7 @@ class UniverseHistoryDataModuleClass extends Vue {
             };
 
             const moons = await tx.objectStore('moons').index('planetId').getAll(planet.id);
-            for(const moon of moons) {
+            for (const moon of moons) {
                 const moonNameHistory = await tx.objectStore('moonNames').index('moonId').getAll(moon.id);
                 const moonStateHistory = await tx.objectStore('moonStates').index('moonId').getAll(moon.id);
 
@@ -318,6 +318,84 @@ class UniverseHistoryDataModuleClass extends Vue {
         }
 
         return planetHistories;
+    }
+
+    public async getAllianceTagHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceTag[]> {
+        const tags: OgameTrackerUniverseHistoryAllianceTag[] = [];
+
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const tx = db.transaction('allianceTags', 'readonly');
+        const store = tx.objectStore('allianceTags');
+        const index = store.index('allianceId');
+
+        let cursor = await index.openCursor(allianceId);
+
+        while (cursor != null) {
+            tags.push(cursor.value);
+            cursor = await cursor.continue();
+        }
+
+        return tags.sort((a, b) => a.date - b.date);
+    }
+
+    public async getAllianceNameHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceName[]> {
+        const names: OgameTrackerUniverseHistoryAllianceName[] = [];
+
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const tx = db.transaction('allianceNames', 'readonly');
+        const store = tx.objectStore('allianceNames');
+        const index = store.index('allianceId');
+
+        let cursor = await index.openCursor(allianceId);
+
+        while (cursor != null) {
+            names.push(cursor.value);
+            cursor = await cursor.continue();
+        }
+
+        return names.sort((a, b) => a.date - b.date);
+    }
+
+    public async getAllianceMemberHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceMembers[]> {
+        const members: OgameTrackerUniverseHistoryAllianceMembers[] = [];
+
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const tx = db.transaction('allianceMembers', 'readonly');
+        const store = tx.objectStore('allianceMembers');
+        const index = store.index('allianceId');
+
+        let cursor = await index.openCursor(allianceId);
+
+        while (cursor != null) {
+            members.push(cursor.value);
+            cursor = await cursor.continue();
+        }
+
+        return members.sort((a, b) => a.date - b.date);
+    }
+
+    public async getLatestPlayerNamesById(): Promise<Record<number, string>> {
+        const players: Record<number, string> = {};
+
+        const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
+        const tx = db.transaction(['playerNames', 'players'], 'readonly');
+
+        const playerStore = tx.objectStore('players');
+        const playerIds = await playerStore.getAll();
+
+        const playerNameStore = tx.objectStore('playerNames');
+        const index = playerNameStore.index('playerId');
+
+        for(const player of playerIds) {
+            const cursor = await index.openCursor(player.id, 'prev');
+            if(cursor == null) {
+                throw new Error(`failed to open cursor for player ${player.id}`);
+            }
+            const { playerId, name } = cursor.value;
+            players[playerId] = name;
+        }
+
+        return players;
     }
 }
 

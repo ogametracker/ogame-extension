@@ -170,6 +170,9 @@
             await this.$nextTick();
             this.observer.observe(this.container);
             this.observer.observe(this.parentContainer);
+
+            await this.$nextTick();
+            this.parentContainer.scrollTop = this.parentContainer.scrollHeight;
         }
 
         private style: HTMLStyleElement | null = null;

@@ -37,11 +37,17 @@ export interface UniverseHistoryTranslations {
         nicknames: string;
         alliances: string;
         planetAndMoons: string;
+
+        tags: string;
+        names: string;
+        members: string;
     };
 
     today: string;
     noAlliance: string;
     name: string;
+    tag: string;
+    members: string;
     alliance: string;
     from: string;
     until: string;
