@@ -259,6 +259,11 @@
                     const oldState = currentPlanetStates[planetId];
                     const change = changes[planetId]!;
 
+                    if(change.state == 'deleted') {
+                        delete currentPlanetStates[planetId];
+                        return;
+                    }
+
                     const newState = getNewPlanetState(planetId, oldState, change);
 
                     const item: PlanetItem = {
