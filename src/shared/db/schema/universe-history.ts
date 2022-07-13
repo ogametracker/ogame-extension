@@ -120,7 +120,21 @@ export interface OgameTrackerUniverseHistoryMoonState {
     state: DbUniverseHistoryPlanetMoonState;
 }
 
-
+export interface OgameTrackerUniverseHistoryAllianceTag {
+    allianceId: number;
+    date: number;
+    tag: string;
+}
+export interface OgameTrackerUniverseHistoryAllianceName {
+    allianceId: number;
+    date: number;
+    name: string;
+}
+export interface OgameTrackerUniverseHistoryAllianceMembers {
+    allianceId: number;
+    date: number;
+    members: number[];
+}
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     //TODO: add indexes by id+date to be able to traverse in reverse to get latest data
@@ -236,11 +250,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     allianceTags: {
         /** AllianceId, DateTime */
         key: [number, number];
-        value: {
-            allianceId: number;
-            date: number;
-            tag: string;
-        };
+        value: OgameTrackerUniverseHistoryAllianceTag;
         indexes: {
             allianceId: number;
         };
@@ -248,11 +258,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     allianceNames: {
         /** AllianceId, DateTime */
         key: [number, number];
-        value: {
-            allianceId: number;
-            date: number;
-            name: string;
-        };
+        value: OgameTrackerUniverseHistoryAllianceName;
         indexes: {
             allianceId: number;
         };
@@ -260,11 +266,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     allianceMembers: {
         /** AllianceId, DateTime */
         key: [number, number];
-        value: {
-            allianceId: number;
-            date: number;
-            members: number[];
-        };
+        value: OgameTrackerUniverseHistoryAllianceMembers;
         indexes: {
             allianceId: number;
         };

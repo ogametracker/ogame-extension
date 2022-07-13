@@ -28,6 +28,8 @@
                         <div v-text="`${$i18n.$n(planet.moon.size)} km`" />
                     </div>
                 </div>
+
+                <div class="planet--empty" :style="`--start: ${item.items.length + 2};`" />
             </div>
         </div>
         <div class="scroller" />
@@ -168,6 +170,9 @@
             await this.$nextTick();
             this.observer.observe(this.container);
             this.observer.observe(this.parentContainer);
+
+            await this.$nextTick();
+            this.parentContainer.scrollTop = this.parentContainer.scrollHeight;
         }
 
         private style: HTMLStyleElement | null = null;
@@ -256,6 +261,11 @@
                 planetIdsWithChange.forEach(planetId => {
                     const oldState = currentPlanetStates[planetId];
                     const change = changes[planetId]!;
+
+                    if(change.state == 'deleted') {
+                        delete currentPlanetStates[planetId];
+                        return;
+                    }
 
                     const newState = getNewPlanetState(planetId, oldState, change);
 
@@ -420,12 +430,18 @@
         color: orange;
     }
 
-    .row > div {
-        position: sticky;
-        top: 0;
-        background: rgb(var(--color));
-        padding: 8px;
-        background: black linear-gradient(0deg, rgba(var(--color), 0.1), rgba(var(--color), 0.1));
+    .row {
+        > div {
+            position: sticky;
+            top: 0;
+            background: rgb(var(--color));
+            padding: 8px;
+            background: black linear-gradient(0deg, rgba(var(--color), 0.1), rgba(var(--color), 0.1));
+        }
+
+        &:nth-of-type(odd) > div {
+            background: black linear-gradient(0deg, rgba(var(--color), 0.15), rgba(var(--color), 0.15));
+        }
     }
 
     .planet,
@@ -446,6 +462,10 @@
 
     .planet {
         grid-template-rows: repeat(2, 3fr) repeat(2, 2fr);
+
+        &--empty {
+            grid-column: var(--start) / calc(2 + var(--planets));
+        }
     }
 
     .moon {

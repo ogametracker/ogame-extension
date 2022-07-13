@@ -67,11 +67,17 @@ export const en: UniverseHistoryTranslations = {
         nicknames: 'Nicknames',
         alliances: 'Alliances',
         planetAndMoons: 'Planets & Moons',
+
+        tags: 'Tags',
+        names: 'Names',
+        members: 'Members',
     },
 
     noAlliance: 'no alliance',
     today: 'today',
     name: 'Name',
+    tag: 'Tag',
+    members: 'Members',
     alliance: 'Alliance',
     from: 'From',
     until: 'Until',

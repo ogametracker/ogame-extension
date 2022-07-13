@@ -68,7 +68,7 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({})
-    export default class Alliances extends Vue {
+    export default class Highscore extends Vue {
         private readonly colors = [
             '#F48FB1', // pink lighten-3
             '#673AB7', // deep-purple
@@ -395,6 +395,7 @@
             display: grid;
             grid-template-columns: auto 1fr;
             gap: 12px;
+            align-items: center;
 
             .mdi {
                 transform: scale(1.5);

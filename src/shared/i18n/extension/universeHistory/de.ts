@@ -71,11 +71,17 @@ export const de: UniverseHistoryTranslations = {
         nicknames: 'Nicknamen',
         alliances: 'Allianzen',
         planetAndMoons: 'Planeten & Monde',
+
+        tags: 'Tags',
+        names: 'Namen',
+        members: 'Mitglieder',
     },
 
     noAlliance: 'keine Allianz',
     today: 'heute',
     name: 'Name',
+    tag: 'Tag',
+    members: 'Mitglieder',
     alliance: 'Allianz',
     from: 'Von',
     until: 'Bis',
