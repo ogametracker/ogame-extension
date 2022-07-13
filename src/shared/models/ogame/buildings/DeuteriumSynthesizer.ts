@@ -4,8 +4,9 @@ import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";
 import { Cost } from "../common/Cost";
 import { ItemHash } from "../items/ItemHash";
+import { getLifeformBuildingProductionBonuses } from "../lifeforms/buildings/getLifeformBuildingProductionBonuses";
 import { getLifeformCollectorClassBonus } from "../lifeforms/buildings/getLifeformCollectorClassBonus";
-import { getLifeformProductionBonus } from "../lifeforms/buildings/getLifeformProductionBonus";
+import { getLifeformTechnologyProductionBonuses } from "../lifeforms/buildings/getLifeformTechnologyProductionBonuses";
 import { ResearchType } from "../research/ResearchType";
 import { ShipType } from "../ships/ShipType";
 import { BuildingType } from "./BuildingType";
@@ -23,7 +24,7 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             * dependencies.planet.productionSettings[BuildingType.deuteriumSynthesizer] / 100
         );
         const geologistProduction = Math.round(mineProduction * 0.1 * (dependencies.player.officers.geologist ? 1 : 0));
-        const plasmaTechProduction = Math.round(mineProduction * 0.0033 * dependencies.player.research[ResearchType.plasmaTechnology]);
+        const plasmaTechProduction = Math.floor(mineProduction * 0.0033 * dependencies.player.research[ResearchType.plasmaTechnology]);
         const collectorProduction = Math.round(
             mineProduction
             * dependencies.serverSettings.playerClasses.collector.productionFactorBonus
@@ -31,8 +32,17 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             * collectorClassBonus);
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
-        const itemProduction = Math.round(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
-        const lifeformProduction = mineProduction * getLifeformProductionBonus(dependencies.player)[dependencies.planet.id].deuterium;
+        const itemProduction = Math.floor(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
+
+        const lifeformBuildingProduction = Math.floor(
+            getLifeformBuildingProductionBonuses(dependencies.planet)
+                .map(bonus => mineProduction * bonus.deuterium)
+                .reduce((acc, cur) => acc + cur, 0)
+        );
+        const lifeformTechProduction = Math.floor(
+            mineProduction
+            * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.deuterium, 0)
+        );
 
         const maxCrawlers = getMaxActiveCrawlers(
             dependencies.planet.buildings[BuildingType.metalMine],
@@ -61,7 +71,8 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             + traderProduction
             + itemProduction
             + crawlerProduction
-            + lifeformProduction
+            + lifeformBuildingProduction
+            + lifeformTechProduction
         );
 
         return {
