@@ -5,7 +5,7 @@
             'o-lifeform-technology--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/lifeforms/technologies/${image}.jpg)`,
+            'background-image': `url(/img/ogame/lifeforms/technologies/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"

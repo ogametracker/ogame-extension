@@ -5,7 +5,7 @@
             'o-lifeform--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/lifeforms/${image}.jpg)`,
+            'background-image': `url(/img/ogame/lifeforms/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
