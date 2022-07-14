@@ -1,5 +1,5 @@
 <template>
-    <h2>Coming very soon&trade;</h2>
+    <h2>Still coming soon&trade; :(</h2>
     <!-- TODO: Tools page -->
     <!-- <page :nav-items="navItems" :root-route-name="rootRoute" /> -->
 </template>
