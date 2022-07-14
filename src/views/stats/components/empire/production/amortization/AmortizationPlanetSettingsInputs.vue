@@ -80,21 +80,21 @@
                 <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
                     <o-building
-                        building="metal-mine"
+                        :building="BuildingType.metalMine"
                         :disabled="!settings.mines.metalMine.show"
                         @click="settings.mines.metalMine.show = !settings.mines.metalMine.show"
                     />
                     <input type="number" v-model="settings.mines.metalMine.level" />
 
                     <o-building
-                        building="crystal-mine"
+                        :building="BuildingType.crystalMine"
                         :disabled="!settings.mines.crystalMine.show"
                         @click="settings.mines.crystalMine.show = !settings.mines.crystalMine.show"
                     />
                     <input type="number" v-model="settings.mines.crystalMine.level" />
 
                     <o-building
-                        building="deuterium-synthesizer"
+                        :building="BuildingType.deuteriumSynthesizer"
                         :disabled="!settings.mines.deuteriumSynthesizer.show"
                         @click="settings.mines.deuteriumSynthesizer.show = !settings.mines.deuteriumSynthesizer.show"
                     />
@@ -106,7 +106,8 @@
 </template>
 
 <script lang="ts">
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
@@ -144,6 +145,7 @@
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
         private readonly ShipType = ShipType;
+        private readonly BuildingType = BuildingType;
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
