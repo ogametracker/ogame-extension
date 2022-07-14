@@ -39,7 +39,7 @@
         }
         private readonly imageMap: Record<PlayerClass, string> = {
             [PlayerClass.collector]: 'collector',
-            [PlayerClass.discoverer]: 'discoverer',
+            [PlayerClass.discoverer]: 'explorer',
             [PlayerClass.general]: 'general',
             [PlayerClass.none]: 'none',
         };
