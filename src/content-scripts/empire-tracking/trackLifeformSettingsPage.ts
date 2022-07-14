@@ -7,7 +7,7 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { getExperienceNeededForLevel } from "@/shared/models/ogame/lifeforms/experience";
+import { getLifeformExperienceNeededForLevel } from "@/shared/models/ogame/lifeforms/experience";
 
 export function trackLifeformSettingsPage() {
     observerCallbacks.push({
@@ -38,7 +38,7 @@ export function trackLifeformSettingsPage() {
                 const currentExpText = match?.groups?.exp ?? _throw('no exp match');
                 const currentExp = parseIntSafe(currentExpText, 10);
 
-                const exp = getExperienceNeededForLevel(level) + currentExp;
+                const exp = getLifeformExperienceNeededForLevel(level) + currentExp;
                 
                 lifeformExperience[lifeform] = exp;
             });

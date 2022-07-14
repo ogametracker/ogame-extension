@@ -30,6 +30,10 @@
                     label: this.$i18n.$t.empire.amortization.header,
                     to: { name: 'empire/amortization' },
                 },
+                {
+                    label: 'LOCA: lifeforms',
+                    to: { name: 'empire/lifeforms' },
+                },
             ];
         }
     }
