@@ -10,11 +10,14 @@ import { router } from './router';
 import './extend-vue';
 import { SettingsDataModule } from './data/SettingsDataModule';
 import { $i18n } from '@/shared/i18n/extension/$i18n';
+import { addIconFonts } from '../_shared/addIconFonts';
 
 void init();
 
 
 async function init() {
+    addIconFonts();
+    
     await applyRouteSettings();
     watchLanguage();
     mountVue();

@@ -44,7 +44,7 @@ fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 
 // generate manifest
 console.log(`Generating manifest`);
-execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''}`, { stdio: 'inherit' });
+execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''} --browser=${browser}`, { stdio: 'inherit' });
 
 const version = JSON.parse(fs.readFileSync('./dist/manifest.json')).version;
 const dateFormat = new Intl.DateTimeFormat(undefined, {

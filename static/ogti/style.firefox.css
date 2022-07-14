@@ -1,14 +1,8 @@
 @font-face {
   font-family: 'ogame-tracker-icons';
-  src:  url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo'),
-        url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo');
+  src:  url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo');
 
-  src:  url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo#iefix') format('embedded-opentype'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.ttf?txngo') format('truetype'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.woff?txngo') format('woff'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.svg?txngo#icomoon') format('svg'),
-
-        url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo#iefix') format('embedded-opentype'),
+  src:  url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo#iefix') format('embedded-opentype'),
         url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.ttf?txngo') format('truetype'),
         url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.woff?txngo') format('woff'),
         url('moz-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.svg?txngo#icomoon') format('svg');
