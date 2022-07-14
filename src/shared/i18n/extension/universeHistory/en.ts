@@ -88,4 +88,6 @@ export const en: UniverseHistoryTranslations = {
         deleted: 'Deleted',
         admin: 'Admin',
     },
+
+    loadingTakingLong: 'Loading the data is taking longer than expected. The database is probably updating right now, so please be patient or try again later.',
 };

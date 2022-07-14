@@ -84,8 +84,8 @@
                     text: this.$i18n.$t.about.faqHelp.faq.productionInResourceBalance.text,
                 },
                 {
-                    header: 'LOCA: What do the averages in the charts and tables mean?',
-                    text: 'LOCA: Sum / days with at least one tracked event.'
+                    header: this.$i18n.$t.about.faqHelp.faq.whatAreAverages.header,
+                    text: this.$i18n.$t.about.faqHelp.faq.whatAreAverages.text,
                 },
             ];
         }

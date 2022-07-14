@@ -3,7 +3,7 @@
         <loading-spinner />
         <div
             v-if="showLoadingMessage"
-            v-text="'LOCA: This is taking longer than expected. The database is probably updating right now, please be patient or try again later.'"
+            v-text="$i18n.$t.universeHistory.loadingTakingLong"
         />
     </div>
     <page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />

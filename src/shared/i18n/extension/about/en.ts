@@ -17,6 +17,10 @@ export const en: AboutTranslations = {
                 header: 'Why does the resource balance not include my resource production?',
                 text: 'Your resource production depends on various factors, and their changes would have to be tracked permanently. While this is possible, an implementation of this feature would be much more complex than it would be of use for its users.',
             },
+            whatAreAverages: {
+                header: 'What does the \'⌀ per day\' mean?',
+                text: 'This is the average over all days with at least one tracked event.',
+            },
         },
         tips: {
             header: 'Tipps',

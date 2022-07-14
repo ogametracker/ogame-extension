@@ -62,4 +62,6 @@ export interface UniverseHistoryTranslations {
         deleted: string;
         admin: string;
     };
+
+    loadingTakingLong: string;
 }

@@ -17,6 +17,10 @@ export const de: AboutTranslations = {
                 header: 'Warum wird deine Rohstoffproduktion nicht in der Rohstoffbilanz berücksichtigt?',
                 text: 'Die Rohstoffproduktion hängt von vielen Faktoren ab, deren Änderungen dauerhaft getrackt werden müssten. Dies ist zwar möglich, jedoch übersteigt die Komplexität dieses Features die des zusätzlichen Nutzens.',
             },
+            whatAreAverages: {
+                header: 'Was bedeutet \'⌀ pro Tag\'?',
+                text: 'Dies ist der Durchschnitt über alle Tage mit mindestens einem getrackten Ereignis.',
+            },
         },
         tips: {
             header: 'Tipps',
