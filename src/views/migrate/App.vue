@@ -21,7 +21,28 @@
         </template>
 
         <template v-else>
-            <button v-text="'Migrate data'" :disabled="isImporting" @click="migrateData()" />
+            <h3>(DE) Daten-Migration</h3>
+            <div>
+                Willkommen zur neuen Version vom OGame Tracker!<br />
+                Einiges hat sich im Hintergrund geändert, weshalb du deine bestehenden Daten migrieren musst.<br />
+                Die Migration der Daten ist jedoch einmalig und deine Altdaten werden nicht entfernt, sollte bei der Migration ein Fehler auftreten.<br />
+                <br />
+                Bitte beginne die Migration der Daten, indem du den Button unter dieser Nachricht klickst.<br />
+                Ist die Migration abgeschlossen, sollte sich dieses Fenster von selbst schließen.
+            </div>
+            <hr />
+            <h3>(EN) Data migration</h3>
+            <div>
+                Welcome to the new OGame Tracker version!<br />
+                A lot changed in the background which is why you have to migrate already tracked data.<br />
+                However, you only have to do this once and your existing data will be not be deleted in case an error occurs.<br />
+                <br />
+                Please start the migration by clicking the button below.<br />
+                When the migration is done this window should close by itself.
+            </div>
+            <br />
+
+            <button v-text="'Daten migrieren/Migrate data'" :disabled="isImporting" @click="migrateData()" />
         </template>
 
         <template v-if="isImporting">
@@ -84,8 +105,8 @@
             const splashscreen = document.querySelector('#splashscreen');
             splashscreen?.classList.add('fade');
             setTimeout(() => splashscreen?.remove(), 500);
-        } 
-        
+        }
+
         private async importData() {
             if (this.file == null) {
                 return;

@@ -43,7 +43,7 @@
                     to: { name: 'settings/import-export' },
                 },
                 {
-                    label: 'Beta',
+                    label: this.$i18n.$t.settings.tabs.migrateOldData,
                     href: '/views/migrate.html',
                     target: '_blank',
                 },
