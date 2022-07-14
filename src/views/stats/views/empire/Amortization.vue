@@ -64,7 +64,10 @@
                     </template>
 
                     <template #cell-what="{ value }">
-                        <div v-if="['metal-mine', 'crystal-mine', 'deuterium-synthesizer'].includes(value.type)" class="what-cell what-cell--mine">
+                        <div
+                            v-if="[BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer].includes(value.type)"
+                            class="what-cell what-cell--mine"
+                        >
                             <span v-if="value.planetId > 0" class="planet">
                                 <span v-text="empire.planets[value.planetId].name" />
                                 <span v-text="formatCoordinates(empire.planets[value.planetId].coordinates)" />
@@ -82,7 +85,7 @@
                         </div>
                         <div v-else-if="value.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
                             <span />
-                            <o-research research="plasma-technology" size="36px" />
+                            <o-research :research="ResearchType.plasmaTechnology" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations[value.type]" />
                                 <span v-text="value.level" />
@@ -94,7 +97,7 @@
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <o-research research="astrophysics" :disabled="value.levels.length == 0" size="36px" />
+                            <o-research :research="ResearchType.astrophysics" :disabled="value.levels.length == 0" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['astrophysics-colony']" />
 
@@ -103,19 +106,19 @@
                                 <span v-else v-text="`${value.levels[0]} + ${value.levels[1]}`" />
                             </span>
 
-                            <o-building building="metal-mine" size="36px" />
+                            <o-building :building="BuildingType.metalMine" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['metal-mine']" />
                                 <span v-text="`1 - ${value.mineLevels.metalMine}`" />
                             </span>
 
-                            <o-building building="crystal-mine" size="36px" />
+                            <o-building :building="BuildingType.crystalMine" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['crystal-mine']" />
                                 <span v-text="`1 - ${value.mineLevels.crystalMine}`" />
                             </span>
 
-                            <o-building building="deuterium-synthesizer" size="36px" />
+                            <o-building :building="BuildingType.deuteriumSynthesizer" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['deuterium-synthesizer']" />
                                 <span v-text="`1 - ${value.mineLevels.deuteriumSynthesizer}`" />
@@ -259,6 +262,8 @@
     })
     export default class Amortization extends Vue {
         private showSettingsMenu = false;
+        private readonly BuildingType = BuildingType;
+        private readonly ResearchType = ResearchType;
 
         /**********************************/
         /* START amortization calculation */
@@ -831,12 +836,7 @@
             function getWhat(item: AmortizationItem): AmortizationTableItemWhat {
                 switch (item.type) {
                     case 'mine': {
-                        const types: Record<MineBuildingType, AmortizationMineTableItemType> = {
-                            [BuildingType.metalMine]: 'metal-mine',
-                            [BuildingType.crystalMine]: 'crystal-mine',
-                            [BuildingType.deuteriumSynthesizer]: 'deuterium-synthesizer',
-                        };
-                        const type = types[item.mine];
+                        const type = item.mine;
 
                         return {
                             type,
@@ -910,9 +910,9 @@
 
         private get buildableTranslations(): Record<AmortizationTableItemWhat['type'], string> {
             return {
-                'metal-mine': this.$i18n.$t.buildings[BuildingType.metalMine],
-                'crystal-mine': this.$i18n.$t.buildings[BuildingType.crystalMine],
-                'deuterium-synthesizer': this.$i18n.$t.buildings[BuildingType.deuteriumSynthesizer],
+                [BuildingType.metalMine]: this.$i18n.$t.buildings[BuildingType.metalMine],
+                [BuildingType.crystalMine]: this.$i18n.$t.buildings[BuildingType.crystalMine],
+                [BuildingType.deuteriumSynthesizer]: this.$i18n.$t.buildings[BuildingType.deuteriumSynthesizer],
                 'plasma-technology': this.$i18n.$t.research[ResearchType.plasmaTechnology],
                 'astrophysics-colony': this.$i18n.$t.research[ResearchType.astrophysics],
             };
@@ -928,7 +928,7 @@
         }
     }
 
-    type AmortizationMineTableItemType = 'metal-mine' | 'crystal-mine' | 'deuterium-synthesizer';
+    type AmortizationMineTableItemType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
     interface AmortizationMineTableItem {
         type: AmortizationMineTableItemType;
         level: number;

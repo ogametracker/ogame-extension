@@ -20,13 +20,13 @@
             <template #header-productionSettings>
                 <div class="production-settings-mini-table">
                     <span class="header" v-text="$i18n.$t.empire.production.activeProductionSettings" />
-                    <o-building building="metal-mine" />
-                    <o-building building="crystal-mine" />
-                    <o-building building="deuterium-synthesizer" />
-                    <o-building building="solar-plant" />
-                    <o-building building="fusion-reactor" />
-                    <o-ship ship="solar-satellite" />
-                    <o-ship ship="crawler" />
+                    <o-building :building="BuildingType.metalMine" />
+                    <o-building :building="BuildingType.crystalMine" />
+                    <o-building :building="BuildingType.deuteriumSynthesizer" />
+                    <o-building :building="BuildingType.solarPlant" />
+                    <o-building :building="BuildingType.fusionReactor" />
+                    <o-ship :ship="ShipType.solarSatellite" />
+                    <o-ship :ship="ShipType.crawler" />
                     <span style="grid-column: auto / span 4" v-text="$i18n.$t.empire.production.items" />
                 </div>
             </template>
@@ -175,6 +175,8 @@
     })
     export default class Resources extends Vue {
         private readonly ItemHash = ItemHash;
+        private readonly BuildingType = BuildingType;
+        private readonly ShipType = ShipType;
         private showSettings = false;
 
         private readonly numberFormat: Intl.NumberFormatOptions = {

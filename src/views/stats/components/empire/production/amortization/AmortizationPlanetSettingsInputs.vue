@@ -3,9 +3,7 @@
         <div class="header">
             <span v-text="settings.name" />
             <span v-if="settings.coordinates != null">
-                [{{ settings.coordinates.galaxy }}:{{
-                    settings.coordinates.system
-                }}:{{ settings.coordinates.position }}]
+                [{{ settings.coordinates.galaxy }}:{{ settings.coordinates.system }}:{{ settings.coordinates.position }}]
             </span>
         </div>
 
@@ -17,24 +15,12 @@
 
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.position" />
             <span>
-                <input
-                    type="number"
-                    v-model.number="settings.position"
-                    min="1"
-                    max="15"
-                    step="1"
-                />
+                <input type="number" v-model.number="settings.position" min="1" max="15" step="1" />
             </span>
 
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.maxTemperature" />
             <span>
-                <input
-                    type="number"
-                    v-model.number="settings.maxTemperature"
-                    min="-130"
-                    max="260"
-                    step="1"
-                />
+                <input type="number" v-model.number="settings.maxTemperature" min="-130" max="260" step="1" />
             </span>
 
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.activeItems" />
@@ -66,19 +52,12 @@
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
                     <o-ship
-                        ship="crawler"
+                        :ship="ShipType.crawler"
                         :disabled="settings.crawlers.enabled"
-                        @click="
-                            settings.crawlers.enabled =
-                                !settings.crawlers.enabled
-                        "
+                        @click="settings.crawlers.enabled = !settings.crawlers.enabled"
                         style="cursor: pointer"
                     />
-                    <checkbox-button
-                        v-model="settings.crawlers.overload"
-                        color="#00ff00"
-                        :disabled="!isCrawlerOverloadEnabled"
-                    >
+                    <checkbox-button v-model="settings.crawlers.overload" color="#00ff00" :disabled="!isCrawlerOverloadEnabled">
                         {{ $i18n.$t.empire.amortization.settings.planetSettings.crawlers.overload }}
                     </checkbox-button>
                 </div>
@@ -87,22 +66,13 @@
                         v-model="settings.crawlers.max"
                         :unchecked-color="null"
                         :style="{
-                            '--color': settings.crawlers.max
-                                ? '0, 255, 0'
-                                : null,
+                            '--color': settings.crawlers.max ? '0, 255, 0' : null,
                         }"
                     >
-                        <span
-                            v-if="settings.crawlers.max"
-                            v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.maxCount"
-                        />
+                        <span v-if="settings.crawlers.max" v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.maxCount" />
                         <span v-else v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.fixCount" />
                     </checkbox-button>
-                    <input
-                        type="number"
-                        :value="settings.crawlers.count"
-                        :disabled="settings.crawlers.max"
-                    />
+                    <input type="number" :value="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
             </span>
 
@@ -112,41 +82,23 @@
                     <o-building
                         building="metal-mine"
                         :disabled="!settings.mines.metalMine.show"
-                        @click="
-                            settings.mines.metalMine.show =
-                                !settings.mines.metalMine.show
-                        "
+                        @click="settings.mines.metalMine.show = !settings.mines.metalMine.show"
                     />
-                    <input
-                        type="number"
-                        v-model="settings.mines.metalMine.level"
-                    />
+                    <input type="number" v-model="settings.mines.metalMine.level" />
 
                     <o-building
                         building="crystal-mine"
                         :disabled="!settings.mines.crystalMine.show"
-                        @click="
-                            settings.mines.crystalMine.show =
-                                !settings.mines.crystalMine.show
-                        "
+                        @click="settings.mines.crystalMine.show = !settings.mines.crystalMine.show"
                     />
-                    <input
-                        type="number"
-                        v-model="settings.mines.crystalMine.level"
-                    />
+                    <input type="number" v-model="settings.mines.crystalMine.level" />
 
                     <o-building
                         building="deuterium-synthesizer"
                         :disabled="!settings.mines.deuteriumSynthesizer.show"
-                        @click="
-                            settings.mines.deuteriumSynthesizer.show =
-                                !settings.mines.deuteriumSynthesizer.show
-                        "
+                        @click="settings.mines.deuteriumSynthesizer.show = !settings.mines.deuteriumSynthesizer.show"
                     />
-                    <input
-                        type="number"
-                        v-model="settings.mines.deuteriumSynthesizer.level"
-                    />
+                    <input type="number" v-model="settings.mines.deuteriumSynthesizer.level" />
                 </span>
             </template>
         </div>
@@ -156,6 +108,7 @@
 <script lang="ts">
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
@@ -190,6 +143,8 @@
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
+        private readonly ShipType = ShipType;
+
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
 
@@ -218,7 +173,7 @@
         };
 
         private get isCrawlerOverloadEnabled() {
-             return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
+            return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
         }
 
         private get activeBooster() {
@@ -251,8 +206,7 @@
     }
 
     .header {
-        background: black
-            linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
         text-align: center;
     }
 

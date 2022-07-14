@@ -5,7 +5,7 @@
             'o-player-class--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/player-classes/${playerClass}.png)`,
+            'background-image': `url(/img/ogame/player-classes/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,29 +16,33 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-
-    export enum OPlayerClassType {
-        none = 'none',
-        collector = 'collector',
-        explorer = 'explorer',
-        general = 'general',
-    }
+    import { PlayerClass, PlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
 
     @Component({})
     export default class OPlayerClass extends Vue {
-
         @Prop({
             required: true,
-            type: String as PropType<OPlayerClassType>,
-            validator: (value: string) => (Object.values(OPlayerClassType) as string[]).includes(value)
+            type: String as PropType<PlayerClass>,
+            validator: (value: string) => (PlayerClasses as string[]).includes(value)
         })
-        private playerClass!: OPlayerClassType;
+        private playerClass!: PlayerClass;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+
+        private get image() {
+            return this.imageMap[this.playerClass];
+        }
+        private readonly imageMap: Record<PlayerClass, string> = {
+            [PlayerClass.collector]: 'collector',
+            [PlayerClass.discoverer]: 'discoverer',
+            [PlayerClass.general]: 'general',
+            [PlayerClass.none]: 'none',
+        };
     }
 </script>
 <style lang="scss" scoped>

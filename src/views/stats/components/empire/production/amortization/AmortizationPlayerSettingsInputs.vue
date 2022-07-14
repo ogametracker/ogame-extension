@@ -9,29 +9,27 @@
                 :key="officer"
                 :officer="officer"
                 :disabled="!active"
-                @click="
-                    settings.officers[officer] = !settings.officers[officer]
-                "
+                @click="settings.officers[officer] = !settings.officers[officer]"
             />
         </span>
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
             <o-player-class
-                v-for="(classType, plClass) in playerClasses"
-                :key="plClass"
-                :player-class="classType"
-                :disabled="settings.playerClass != plClass"
-                @click="togglePlayerClass(plClass)"
+                v-for="playerClass in playerClasses"
+                :key="playerClass"
+                :player-class="playerClass"
+                :disabled="settings.playerClass != playerClass"
+                @click="togglePlayerClass(playerClass)"
             />
         </span>
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
             <o-alliance-class
-                v-for="(classType, allyClass) in allianceClasses"
+                v-for="allyClass in allianceClasses"
                 :key="allyClass"
-                :alliance-class="classType"
+                :alliance-class="allyClass"
                 :disabled="settings.allianceClass != allyClass"
                 @click="toggleAllianceClass(allyClass)"
             />
@@ -39,38 +37,25 @@
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelPlasmatech" />
         <span>
-            <o-research research="plasma-technology" />
-            <input
-                type="number"
-                v-model.number="settings.levelPlasmaTechnology"
-                min="0"
-                max="50"
-                step="1"
-            />
+            <o-research :research="ResearchType.plasmaTechnology" />
+            <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelAstrophysics" />
         <span>
-            <o-research research="astrophysics" />
-            <input
-                type="number"
-                v-model.number="settings.levelAstrophysics"
-                min="0"
-                max="50"
-                step="1"
-            />
+            <o-research :research="ResearchType.astrophysics" />
+            <input type="number" v-model.number="settings.levelAstrophysics" min="0" max="50" step="1" />
         </span>
     </div>
 </template>
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import { AllianceClass, SelectableAllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
+    import { PlayerClass, SelectablePlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import { OPlayerClassType } from '@/views/_shared/components/ogame/OPlayerClass.vue';
-    import { OAllianceClassType } from '@/views/_shared/components/ogame/OAllianceClass.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
 
     export interface AmortizationPlayerSettings {
         msuConversionRates: {
@@ -100,17 +85,9 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
 
-
-        private readonly playerClasses: Partial<Record<PlayerClass, OPlayerClassType>> = {
-            [PlayerClass.collector]: OPlayerClassType.collector,
-            [PlayerClass.discoverer]: OPlayerClassType.explorer,
-            [PlayerClass.general]: OPlayerClassType.general,
-        };
-        private readonly allianceClasses: Partial<Record<AllianceClass, OAllianceClassType>> = {
-            [AllianceClass.trader]: OAllianceClassType.trader,
-            [AllianceClass.researcher]: OAllianceClassType.researcher,
-            [AllianceClass.warrior]: OAllianceClassType.warrior,
-        };
+        private readonly ResearchType = ResearchType;
+        private readonly playerClasses = SelectablePlayerClasses;
+        private readonly allianceClasses = SelectableAllianceClasses;
 
 
         private togglePlayerClass(playerClass: PlayerClass): void {

@@ -33,7 +33,6 @@
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-    import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
@@ -76,25 +75,25 @@
             ];
         }
 
-        private get shipTable(): Record<string, OShipType> {
+        private get shipTable(): Record<string, ShipType> {
             return {
-                [this.$i18n.$t.ships[ShipType.lightFighter]]: OShipType['light-fighter'],
-                [this.$i18n.$t.ships[ShipType.heavyFighter]]: OShipType['heavy-fighter'],
-                [this.$i18n.$t.ships[ShipType.cruiser]]: OShipType.cruiser,
-                [this.$i18n.$t.ships[ShipType.battleship]]: OShipType.battleship,
-                [this.$i18n.$t.ships[ShipType.bomber]]: OShipType.bomber,
-                [this.$i18n.$t.ships[ShipType.battlecruiser]]: OShipType.battlecruiser,
-                [this.$i18n.$t.ships[ShipType.destroyer]]: OShipType.destroyer,
-                [this.$i18n.$t.ships[ShipType.reaper]]: OShipType.reaper,
-                [this.$i18n.$t.ships[ShipType.pathfinder]]: OShipType.pathfinder,
-                [this.$i18n.$t.ships[ShipType.smallCargo]]: OShipType['small-cargo'],
-                [this.$i18n.$t.ships[ShipType.largeCargo]]: OShipType['large-cargo'],
-                [this.$i18n.$t.ships[ShipType.espionageProbe]]: OShipType['espionage-probe'],
-                [this.$i18n.$t.ships[ShipType.recycler]]: OShipType.recycler,
-                [this.$i18n.$t.ships[ShipType.deathStar]]: OShipType['death-star'],
-                [this.$i18n.$t.ships[ShipType.crawler]]: OShipType.crawler,
-                [this.$i18n.$t.ships[ShipType.solarSatellite]]: OShipType['solar-satellite'],
-                [this.$i18n.$t.ships[ShipType.colonyShip]]: OShipType['colony-ship'],
+                [this.$i18n.$t.ships[ShipType.lightFighter]]: ShipType.lightFighter,
+                [this.$i18n.$t.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
+                [this.$i18n.$t.ships[ShipType.cruiser]]: ShipType.cruiser,
+                [this.$i18n.$t.ships[ShipType.battleship]]: ShipType.battleship,
+                [this.$i18n.$t.ships[ShipType.bomber]]: ShipType.bomber,
+                [this.$i18n.$t.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
+                [this.$i18n.$t.ships[ShipType.destroyer]]: ShipType.destroyer,
+                [this.$i18n.$t.ships[ShipType.reaper]]: ShipType.reaper,
+                [this.$i18n.$t.ships[ShipType.pathfinder]]: ShipType.pathfinder,
+                [this.$i18n.$t.ships[ShipType.smallCargo]]: ShipType.smallCargo,
+                [this.$i18n.$t.ships[ShipType.largeCargo]]: ShipType.largeCargo,
+                [this.$i18n.$t.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
+                [this.$i18n.$t.ships[ShipType.recycler]]: ShipType.recycler,
+                [this.$i18n.$t.ships[ShipType.deathStar]]: ShipType.deathStar,
+                [this.$i18n.$t.ships[ShipType.crawler]]: ShipType.crawler,
+                [this.$i18n.$t.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
+                [this.$i18n.$t.ships[ShipType.colonyShip]]: ShipType.colonyShip,
             };
         }
     }
