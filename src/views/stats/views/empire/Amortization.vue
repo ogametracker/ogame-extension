@@ -171,7 +171,7 @@
 
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType, BuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
     import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
     import { DeuteriumSynthesizer } from '@/shared/models/ogame/buildings/DeuteriumSynthesizer';
     import { MetalMine } from '@/shared/models/ogame/buildings/MetalMine';
@@ -181,7 +181,7 @@
     import { addCost, Cost, subCost } from '@/shared/models/ogame/common/Cost';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import AmortizationPlanetSettingsInputs, { AmortizationPlanetSettings } from '../../components/empire/production/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs, { AmortizationPlayerSettings } from '../../components/empire/production/amortization/AmortizationPlayerSettingsInputs.vue';
@@ -193,6 +193,13 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
+    import { DefenseCount } from '@/shared/models/empire/DefenseCount';
+    import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 
     interface AmortizationAstrophysicsSettings {
         show: boolean;
@@ -301,6 +308,8 @@
                     count: 0,
                     max: false,
                 },
+                lifeform: LifeformType.rocktal,
+                activeLifeformTechnologies: [],
             },
         };
         private showPlasmaTechnology = true;
@@ -416,6 +425,8 @@
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
+                        lifeform: planet.activeLifeform,
+                        activeLifeformTechnologies: planet.activeLifeformTechnologies,
                     };
                     acc[planet.id] = settings;
                     return acc;
@@ -429,6 +440,7 @@
                     name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
                     position: 8,
                     maxTemperature: this.getAverageTemperature(8),
+                    lifeform: LifeformType.rocktal,
                     activeItems: [],
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
@@ -436,6 +448,7 @@
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
+                    activeLifeformTechnologies: [],
                 },
             };
         }
@@ -521,7 +534,7 @@
                         mineLevels[bestItem.newPlanetId] = newPlanetMineLevels;
                         mineLevelsArray.push(newPlanetMineLevels);
 
-                        const fakePlanet = { buildings: {} } as PlanetData;
+                        const fakePlanet = this.getFakePlanet();
                         planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
 
                         yieldItem = this.astrophysicsSettings.show;
@@ -540,7 +553,32 @@
             }
         }
 
-        private getAstrophysicsAmortizationItem(levelAstrophysics: number, levelPlasmaTechnology: number, curPlanetCount: number, newPlanetId: number, settings: AmortizationGenerationSettings): AstrophysicsAmortizationItem {
+        private getFakePlanet(): PlanetData {
+            return {
+                isMoon: false,
+                maxTemperature: 0,
+                buildings: createRecord(BuildingTypes, 0),
+                ships: createRecord(ShipTypes, 0),
+                activeLifeform: LifeformType.none,
+                lifeformBuildings: createRecord(LifeformBuildingTypes, 0),
+                lifeformTechnologies: createRecord(LifeformTechnologyTypes, 0),
+                productionSettings: {} as ProductionSettings,
+                activeLifeformTechnologies: [],
+                id: 0,
+                name: '',
+                coordinates: {} as Coordinates,
+                defense: {} as DefenseCount,
+                activeItems: {},
+            };
+        }
+
+        private getAstrophysicsAmortizationItem(
+            levelAstrophysics: number,
+            levelPlasmaTechnology: number,
+            curPlanetCount: number,
+            newPlanetId: number,
+            settings: AmortizationGenerationSettings
+        ): AstrophysicsAmortizationItem {
 
             const maxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
             const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
@@ -557,9 +595,7 @@
                 }
             }
 
-            const fakePlanet = {
-                buildings: {},
-            } as PlanetData;
+            const fakePlanet = this.getFakePlanet();
 
             const mineLevels: MineLevels = {
                 metalMine: 0,
@@ -614,7 +650,11 @@
             };
         }
 
-        private getPlasmaTechnologyAmortizationItem(mineLevels: Record<number, MineLevels>, levelPlasmaTechnology: number, settings: AmortizationGenerationSettings): PlasmaTechnologyAmortizationItem {
+        private getPlasmaTechnologyAmortizationItem(
+            mineLevels: Record<number, MineLevels>,
+            levelPlasmaTechnology: number,
+            settings: AmortizationGenerationSettings
+        ): PlasmaTechnologyAmortizationItem {
             const level = levelPlasmaTechnology + 1;
 
             const cost = PlasmaTechnology.getCost(level);
@@ -663,7 +703,15 @@
             };
         }
 
-        private getMineAmortizationItem(planetId: number, mineType: MineBuildingType, levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): MineAmortizationItem {
+        private getMineAmortizationItem(
+            planetId: number,
+            mineType: MineBuildingType,
+            levels: MineLevels,
+            levelPlasmaTechnology: number,
+            planet: PlanetData,
+            planetSettings: AmortizationPlanetSettings,
+            settings: AmortizationGenerationSettings
+        ): MineAmortizationItem {
             const mineLevel = {
                 [BuildingType.metalMine]: levels.metalMine,
                 [BuildingType.crystalMine]: levels.crystalMine,
@@ -699,11 +747,18 @@
             };
         }
 
-        private buildProductionDependencies(levels: MineLevels, levelPlasmaTechnology: number, planet: PlanetData, planetSettings: AmortizationPlanetSettings, settings: AmortizationGenerationSettings): ProductionBuildingDependencies {
+        private buildProductionDependencies(
+            levels: MineLevels,
+            levelPlasmaTechnology: number,
+            planet: PlanetData,
+            planetSettings: AmortizationPlanetSettings,
+            settings: AmortizationGenerationSettings
+        ): ProductionBuildingDependencies {
             return {
                 serverSettings: ServerSettingsDataModule.serverSettings,
                 planet: {
                     ...planet,
+                    activeLifeform: planetSettings.lifeform,
                     coordinates: {
                         ...planet.coordinates,
                         position: planetSettings.position,

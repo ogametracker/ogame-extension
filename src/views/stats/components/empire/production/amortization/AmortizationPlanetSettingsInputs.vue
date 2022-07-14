@@ -101,14 +101,32 @@
                     <input type="number" v-model="settings.mines.deuteriumSynthesizer.level" />
                 </span>
             </template>
+
+            <span v-text="'LOCA: Lifeform'" />
+            <span class="lifeform-grid">
+                <o-lifeform
+                    v-for="lifeform in lifeforms"
+                    :key="lifeform"
+                    :lifeform="lifeform"
+                    :disabled="lifeform != settings.lifeform"
+                    @click="toggleLifeform(lifeform)"
+                />
+            </span>
+
+            <span v-text="'LOCA: Lifeform Technologies'" />
+            <span>
+                TODO: Toggle lifeform technologies + collapse whole area
+            </span>
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
@@ -140,12 +158,15 @@ import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
             crystalMine: MineSettings;
             deuteriumSynthesizer: MineSettings;
         };
+        lifeform: LifeformType;
+        activeLifeformTechnologies: LifeformTechnologyType[];
     }
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
         private readonly ShipType = ShipType;
         private readonly BuildingType = BuildingType;
+        private readonly lifeforms = ValidLifeformTypes;
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
@@ -194,6 +215,15 @@ import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
             } else {
                 this.settings.activeItems = [...active, item];
             }
+        }
+
+        private toggleLifeform(lifeform: LifeformType) {
+            if (this.settings.lifeform == lifeform) {
+                this.settings.lifeform = LifeformType.none;
+                return;
+            }
+
+            this.settings.lifeform = lifeform;
         }
     }
 </script>
@@ -258,6 +288,17 @@ import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
             display: flex;
             column-gap: 4px;
             height: 32px;
+        }
+    }
+
+    .lifeform-grid {
+        display: grid;
+        gap: 4px;
+        grid-template-columns: repeat(4, auto);
+        width: max-content;
+
+        .o-lifeform {
+            cursor: pointer;
         }
     }
 </style>
