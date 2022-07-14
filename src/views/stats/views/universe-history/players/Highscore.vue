@@ -14,7 +14,7 @@
                             style="width: 100%"
                         />
                         <datalist id="player-list">
-                            <option v-for="name in playerNames" :key="name">
+                            <option v-for="(name, i) in playerNames" :key="i">
                                 {{ name }}
                             </option>
                         </datalist>
@@ -247,6 +247,9 @@
 
                 if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
                     return;
+                }
+                if(!types.includes(score.type)) {
+                    return; // happens if beta data available
                 }
 
                 datasetsByPlayer[score.playerId][score.type].values.push({

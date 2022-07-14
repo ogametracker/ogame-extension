@@ -14,7 +14,7 @@
                             style="width: 100%"
                         />
                         <datalist id="alliance-list">
-                            <option v-for="name in allianceNames" :key="name">
+                            <option v-for="(name, i) in allianceNames" :key="i">
                                 {{ name }}
                             </option>
                         </datalist>
@@ -242,6 +242,9 @@
 
                 if (lastScores[score.allianceId][score.type] == score.score) { //no duplicates if only position changed
                     return;
+                }
+                if(!types.includes(score.type)) {
+                    return; // happens if beta data available
                 }
 
                 datasetsByAlliance[score.allianceId][score.type].values.push({
