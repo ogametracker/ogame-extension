@@ -53,7 +53,19 @@
             </div>
 
             <div class="amortization-table" v-if="!showSettings">
-                <grid-table :items="items" :columns="columns" sticky="100%" @scroll="onTableScroll($event)" :cellClassProvider="cellClassProvider">
+                <grid-table
+                    :items="items"
+                    :columns="columns"
+                    :footerItems="footerItems"
+                    sticky="100%"
+                    sticky-footer
+                    @scroll="onTableScroll($event)"
+                    :cellClassProvider="cellClassProvider"
+                >
+                    <template #header-checkbox>
+                        <checkbox :value="selectedItemIndizes.length == items.length" @input="toggleItemSelection()" />
+                    </template>
+
                     <template #header-cost>
                         <div class="cost-grid">
                             <span v-text="$i18n.$t.empire.amortization.table.cost" style="grid-column: 2" />
@@ -63,6 +75,9 @@
                         </div>
                     </template>
 
+                    <template #cell-checkbox="{ index }">
+                        <checkbox :value="selectedItemIndizes.includes(index)" @input="toggleItemSelection(index)" />
+                    </template>
                     <template #cell-what="{ item }">
                         <div v-if="item.type == 'mine' || item.type == 'lifeform-building'" class="what-cell" :class="`what-cell--${item.type}`">
                             <span v-if="item.planetId > 0" class="planet">
@@ -361,6 +376,8 @@
         private readonly empire = EmpireDataModule.empire;
         private amortizationItems: AmortizationItem[] = [];
         private generator: Generator<AmortizationItem, void, unknown> = null!;
+        private selectedItemIndizes: number[] = [];
+        private generationSettings: AmortizationGenerationSettings = this.getAmortizationGenerationSettings();
 
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
@@ -394,8 +411,8 @@
         private initItems(): void {
             this.amortizationItems = [];
 
-            const generationSettings = this.getAmortizationGenerationSettings();
-            this.generator = this.generateAmortizationItems(generationSettings);
+            this.generationSettings = this.getAmortizationGenerationSettings();
+            this.generator = this.generateAmortizationItems(this.generationSettings);
             this.insertNextAmortizationItems(25);
         }
 
@@ -955,10 +972,11 @@
 
 
 
-        private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what'>[] {
+        private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] {
             const showMsu = SettingsDataModule.settings.showMsuCells;
 
-            const result: GridTableColumn<keyof BaseAmortizationItem | 'what'>[] = [
+            const result: GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] = [
+                { key: 'checkbox', size: 'auto' },
                 { key: 'what', size: 'auto' },
                 { key: 'cost', size: '3fr' },
             ];
@@ -996,6 +1014,26 @@
 
         private get items(): AmortizationItem[] {
             return this.amortizationItems;
+        }
+
+        private get footerItems(): AmortizationItem[] {
+            const zeroCost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+
+            const cost = this.selectedItemIndizes
+                .map(i => this.amortizationItems[i])
+                .reduce<Cost>((total, cur) => addCost(total, cur.cost), zeroCost);
+
+            return [{
+                type: 'mine',
+                planetId: 0,
+                mine: BuildingType.metalMine,
+                level: 0,
+                cost,
+                costMsu: this.getMsu(cost, this.generationSettings),
+                productionDelta: zeroCost,
+                productionDeltaMsu: 0,
+                timeInHours: 0,
+            }];
         }
 
         private formatCoordinates(coordinates: Coordinates): string {
@@ -1042,6 +1080,25 @@
                 case 'plasma-technology': return 'plasmatech-cell';
 
                 default: return '';
+            }
+        }
+
+        private toggleItemSelection(index?: number) {
+            if (index == null) {
+                if (this.selectedItemIndizes.length == this.items.length) {
+                    this.selectedItemIndizes = [];
+                }
+                else {
+                    this.selectedItemIndizes = this.items.map((_, i) => i);
+                }
+                return;
+            }
+
+            if (this.selectedItemIndizes.includes(index)) {
+                this.selectedItemIndizes = this.selectedItemIndizes.filter(i => i != index);
+            }
+            else {
+                this.selectedItemIndizes.push(index);
             }
         }
     }
