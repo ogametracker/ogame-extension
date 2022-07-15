@@ -64,7 +64,7 @@
                     </template>
 
                     <template #cell-what="{ item }">
-                        <div v-if="item.type == 'mine'" class="what-cell what-cell--mine">
+                        <div v-if="item.type == 'mine' || item.type == 'lifeform-building'" class="what-cell" :class="`what-cell--${item.type}`">
                             <span v-if="item.planetId > 0" class="planet">
                                 <span v-text="empire.planets[item.planetId].name" />
                                 <span v-text="formatCoordinates(empire.planets[item.planetId].coordinates)" />
@@ -74,11 +74,21 @@
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <o-building :building="item.mine" size="36px" />
-                            <span class="name-and-level">
-                                <span v-text="buildableTranslations[item.mine]" />
-                                <span v-text="item.level" />
-                            </span>
+                            <template v-if="item.type == 'mine'">
+                                <o-building :building="item.mine" size="36px" />
+                                <span class="name-and-level">
+                                    <span v-text="buildableTranslations[item.mine]" />
+                                    <span v-text="item.level" />
+                                </span>
+                            </template>
+                            <template v-else-if="item.type == 'lifeform-building'">
+                                <o-lifeform-building :building="item.building" size="36px" />
+                                <span class="name-and-level">
+                                    <span v-text="buildableTranslations[item.building]" />
+                                    <span v-text="item.level" />
+                                </span>
+                            </template>
+                            <span v-else v-text="'??? contact developer'" />
                         </div>
                         <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
                             <span />
@@ -142,7 +152,7 @@
                         <span v-text="$i18n.$n(value)" />
                     </template>
 
-                    <template #cell-amortizationTimeInH="{ value }">
+                    <template #cell-timeInHours="{ value }">
                         <span v-text="$i18n.$timespan(value * 60 * 60)" />
                     </template>
                 </grid-table>
@@ -192,9 +202,8 @@
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { LifeformBuildingType, LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
+    import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { DefenseCount } from '@/shared/models/empire/DefenseCount';
     import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
     import { LifeformBuildingsByType, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
@@ -294,6 +303,10 @@
             ...LifeformTechnologyBonusLifeformBuildings,
         ].map(b => b.type);
 
+        private getApplicableLifeformBuildingTypesByLifeform(lifeform: LifeformType): LifeformBuildingType[] {
+            return this.applicableLifeformBuildingTypes.filter(type => LifeformBuildingTypesByLifeform[lifeform].includes(type));
+        }
+
         private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
         private readonly minesByType: Record<MineBuildingType, ProductionBuilding> = {
             [BuildingType.metalMine]: MetalMine,
@@ -338,7 +351,7 @@
                     max: false,
                 },
                 lifeform: LifeformType.rocktal,
-                activeLifeformTechnologies: [],
+                activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
             },
         };
         private showPlasmaTechnology = true;
@@ -446,9 +459,9 @@
                             max: empire.playerClass == PlayerClass.collector,
                         },
                         lifeform: planet.activeLifeform,
-                        activeLifeformTechnologies: planet.activeLifeformTechnologies,
-                        lifeformTechnologyLevels: planet.lifeformTechnologies,
-                        lifeformBuildingLevels: planet.lifeformBuildings,
+                        activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
+                        lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
+                        lifeformBuildingLevels: { ...planet.lifeformBuildings },
                     };
                     acc[planet.id] = settings;
                     return acc;
@@ -462,7 +475,6 @@
                     name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
                     position: 8,
                     maxTemperature: this.getAverageTemperature(8),
-                    lifeform: LifeformType.rocktal,
                     activeItems: [],
                     crawlers: {
                         enabled: empire.playerClass == PlayerClass.collector,
@@ -470,7 +482,8 @@
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
-                    activeLifeformTechnologies: [],
+                    lifeform: LifeformType.rocktal,
+                    activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
                 },
             };
         }
@@ -520,7 +533,7 @@
                 const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(calculationData, levelPlasmaTechnology, settings);
                 const astrophysicsItem = this.getAstrophysicsAmortizationItem(levelAstrophysics, levelPlasmaTechnology, planetIds.length, -(newPlanets + 1), settings);
                 const lifeformBuildingItems = planetIds.flatMap(
-                    planetId => this.applicableLifeformBuildingTypes.map(
+                    planetId => this.getApplicableLifeformBuildingTypesByLifeform(planets[planetId].activeLifeform).map(
                         building => this.getLifeformBuildingAmortizationItem(
                             planetId,
                             building,
@@ -1012,11 +1025,11 @@
 
         private get buildableTranslations() {
             return {
-                [BuildingType.metalMine]: this.$i18n.$t.buildings[BuildingType.metalMine],
-                [BuildingType.crystalMine]: this.$i18n.$t.buildings[BuildingType.crystalMine],
-                [BuildingType.deuteriumSynthesizer]: this.$i18n.$t.buildings[BuildingType.deuteriumSynthesizer],
                 'plasma-technology': this.$i18n.$t.research[ResearchType.plasmaTechnology],
                 'astrophysics-colony': this.$i18n.$t.research[ResearchType.astrophysics],
+                ...this.$i18n.$t.buildings,
+                ...this.$i18n.$t.lifeformBuildings,
+                ...this.$i18n.$t.lifeformTechnologies,
             };
         }
 
