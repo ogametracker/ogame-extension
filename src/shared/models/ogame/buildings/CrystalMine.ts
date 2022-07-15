@@ -24,25 +24,20 @@ class CrystalMineClass extends ProductionBuilding {
         const baseProduction = Math.trunc(15 * dependencies.serverSettings.speed.economy * (1 + boost));
         const mineProduction = Math.trunc(20 * dependencies.serverSettings.speed.economy * (1 + boost) * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.crystalMine] / 100);
         const geologistProduction = Math.round(mineProduction * 0.1 * (dependencies.player.officers.geologist ? 1 : 0));
-        const plasmaTechProduction = Math.floor(mineProduction * 0.0066 * dependencies.player.research[ResearchType.plasmaTechnology]);
-        const collectorProduction = Math.round(
-            mineProduction
+        const plasmaTechProduction = mineProduction * 0.0066 * dependencies.player.research[ResearchType.plasmaTechnology];
+        const collectorProduction = mineProduction
             * dependencies.serverSettings.playerClasses.collector.productionFactorBonus
             * (dependencies.player.playerClass == PlayerClass.collector ? 1 : 0)
-            * collectorClassBonus);
+            * collectorClassBonus;
         const commandStaffProduction = Math.round(mineProduction * 0.02 * (this.hasCommandStaff(dependencies.player.officers) ? 1 : 0));
         const traderProduction = Math.round(mineProduction * 0.05 * (dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0));
-        const itemProduction = Math.floor(mineProduction * this.getItemBoost(dependencies.planet.activeItems));
+        const itemProduction = mineProduction * this.getItemBoost(dependencies.planet.activeItems);
 
-        const lifeformBuildingProduction = Math.floor(
-            getLifeformBuildingProductionBonuses(dependencies.planet)
-                .map(bonus => mineProduction * bonus.crystal)
-                .reduce((acc, cur) => acc + cur, 0)
-        );
-        const lifeformTechProduction = Math.floor(
-            mineProduction
-            * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.crystal, 0)
-        );
+        const lifeformBuildingProduction = getLifeformBuildingProductionBonuses(dependencies.planet)
+            .map(bonus => mineProduction * bonus.crystal)
+            .reduce((acc, cur) => acc + cur, 0);
+        const lifeformTechProduction = mineProduction
+            * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.crystal, 0);
 
         const maxCrawlers = getMaxActiveCrawlers(
             dependencies.planet.buildings[BuildingType.metalMine],
