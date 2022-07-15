@@ -84,21 +84,21 @@
                         :disabled="!settings.mines.metalMine.show"
                         @click="settings.mines.metalMine.show = !settings.mines.metalMine.show"
                     />
-                    <input type="number" v-model="settings.mines.metalMine.level" />
+                    <input type="number" v-model.number="settings.mines.metalMine.level" />
 
                     <o-building
                         :building="BuildingType.crystalMine"
                         :disabled="!settings.mines.crystalMine.show"
                         @click="settings.mines.crystalMine.show = !settings.mines.crystalMine.show"
                     />
-                    <input type="number" v-model="settings.mines.crystalMine.level" />
+                    <input type="number" v-model.number="settings.mines.crystalMine.level" />
 
                     <o-building
                         :building="BuildingType.deuteriumSynthesizer"
                         :disabled="!settings.mines.deuteriumSynthesizer.show"
                         @click="settings.mines.deuteriumSynthesizer.show = !settings.mines.deuteriumSynthesizer.show"
                     />
-                    <input type="number" v-model="settings.mines.deuteriumSynthesizer.level" />
+                    <input type="number" v-model.number="settings.mines.deuteriumSynthesizer.level" />
                 </span>
             </template>
 
@@ -113,10 +113,40 @@
                 />
             </span>
 
-            <span v-text="'LOCA: Lifeform Technologies'" />
+            <span />
             <span>
-                TODO: Toggle lifeform technologies + collapse whole area
+                <button @click="showLifeformSettings = !showLifeformSettings" v-text="'LOCA: Show/hide lifeform settings'" />
             </span>
+
+            <template v-if="showLifeformSettings">
+                <span v-text="'LOCA: Lifeform Buildings'" />
+                <span> TODO: Toggle lifeform buildings </span>
+
+                <span v-text="'LOCA: Lifeform Technologies'" />
+                <span>
+                    <span class="lifeform-tech-grid">
+                        <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">
+                            <hr v-if="slot == 7 || slot == 13" />
+
+                            <o-lifeform-technology
+                                v-for="lifeform in lifeforms"
+                                :key="lifeformTechBySlot[slot][lifeform]"
+                                :technology="lifeformTechBySlot[slot][lifeform]"
+                                :disabled="getSelectedLifeformTechBySlot(slot) != lifeformTechBySlot[slot][lifeform]"
+                                @click="toggleLifeformTech(lifeformTechBySlot[slot][lifeform])"
+                            />
+
+                            <span v-if="settings.lifeformTechnologyLevels == null" />
+                            <input
+                                v-else-if="getSelectedLifeformTechBySlot(slot) != null"
+                                type="number"
+                                v-model.number="settings.lifeformTechnologyLevels[getSelectedLifeformTechBySlot(slot)]"
+                            />
+                            <input v-else type="number" disabled />
+                        </span>
+                    </span>
+                </span>
+            </template>
         </div>
     </div>
 </template>
@@ -125,9 +155,11 @@
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { _throw } from '@/shared/utils/_throw';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
@@ -160,6 +192,7 @@
         };
         lifeform: LifeformType;
         activeLifeformTechnologies: LifeformTechnologyType[];
+        lifeformTechnologyLevels?: Record<LifeformTechnologyType, number>;
     }
 
     @Component({})
@@ -167,6 +200,19 @@
         private readonly ShipType = ShipType;
         private readonly BuildingType = BuildingType;
         private readonly lifeforms = ValidLifeformTypes;
+
+        private readonly lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechnologyType>> = createRecord(
+            Array.from({ length: 18 }).map((_, i) => i + 1),
+            slot => createRecord(
+                ValidLifeformTypes,
+                lf => LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ?? _throw('invalid slot')
+            )
+        );
+
+        private getSelectedLifeformTechBySlot(slot: number): LifeformTechnologyType | null {
+            const techs = Object.values(this.lifeformTechBySlot[slot]);
+            return techs.find(tech => this.settings.activeLifeformTechnologies.includes(tech)) ?? null;
+        }
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
@@ -195,6 +241,9 @@
             ],
         };
 
+        private showLifeformSettings = false;
+
+
         private get isCrawlerOverloadEnabled() {
             return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
         }
@@ -220,10 +269,22 @@
         private toggleLifeform(lifeform: LifeformType) {
             if (this.settings.lifeform == lifeform) {
                 this.settings.lifeform = LifeformType.none;
+                this.settings.activeLifeformTechnologies = [];
                 return;
             }
 
             this.settings.lifeform = lifeform;
+            this.settings.activeLifeformTechnologies = LifeformTechnologyTypesByLifeform[this.settings.lifeform];
+        }
+
+        private toggleLifeformTech(tech: LifeformTechnologyType) {
+            if (this.settings.activeLifeformTechnologies.includes(tech)) {
+                this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(t => t != tech);
+            }
+            else {
+                this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(t => LifeformTechnologySlots[t] != LifeformTechnologySlots[tech]);
+                this.settings.activeLifeformTechnologies.push(tech);
+            }
         }
     }
 </script>
@@ -249,7 +310,7 @@
 
     .body {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: minmax(auto, 100px) 1fr;
         align-items: center;
         gap: 8px 16px;
     }
@@ -298,6 +359,26 @@
         width: max-content;
 
         .o-lifeform {
+            cursor: pointer;
+        }
+    }
+
+    .lifeform-tech-grid {
+        display: grid;
+        grid-template-columns: repeat(4, auto) 1fr;
+        width: max-content;
+        gap: 4px;
+
+        .row {
+            display: contents;
+        }
+
+        hr {
+            grid-column: 1 / 6;
+            width: 100%;
+        }
+
+        .o-lifeform-technology {
             cursor: pointer;
         }
     }

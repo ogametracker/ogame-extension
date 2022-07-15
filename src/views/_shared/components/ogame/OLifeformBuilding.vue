@@ -1,9 +1,12 @@
 <template>
     <div
         class="o-lifeform-building"
-        :class="{
-            'o-lifeform-building--disabled': disabled,
-        }"
+        :class="[
+            {
+                'o-lifeform-building--disabled': disabled,
+            },
+            `o-lifeform-building--${lifeform}`,
+        ]"
         :style="{
             'background-image': `url(/img/ogame/lifeforms/buildings/${image}.png)`,
             'font-size': size,
@@ -16,7 +19,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { LifeformBuildingType, LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTypes, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 
     @Component({})
     export default class OLifeformBuilding extends Vue {
@@ -89,6 +93,9 @@
             [LifeformBuildingType.shipManufacturingHall]: 'ship-manufacturing-hall',
             [LifeformBuildingType.supraRefractor]: 'supra-refractor',
         };
+        private get lifeform() {
+            return ValidLifeformTypes.find(lf => LifeformBuildingTypesByLifeform[lf].includes(this.building));
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -101,9 +108,23 @@
         image-rendering: -webkit-optimize-contrast;
         image-rendering: -moz-crisp-edges;
         border-radius: 4px;
+        border: 1px solid;
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+
+        &--humans {
+            border-color: #7ec000;
+        }
+        &--rocktal {
+            border-color: #df6642;
+        }
+        &--mechas {
+            border-color: #4b91e7;
+        }
+        &--kaelesh {
+            border-color: #9863e9;
         }
     }
 </style>

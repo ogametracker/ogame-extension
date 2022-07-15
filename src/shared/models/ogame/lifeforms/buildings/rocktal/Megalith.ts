@@ -1,5 +1,6 @@
 import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBuildingType, RocktalLifeformBuildingTypes } from "../../LifeformBuildingType";
+import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from "../../LifeformBuildingType";
+import { LifeformType } from "../../LifeformType";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -30,7 +31,7 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
     }
     
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
-        const buildings: AnyBuildingType[] = RocktalLifeformBuildingTypes;
+        const buildings: AnyBuildingType[] = LifeformBuildingTypesByLifeform[LifeformType.rocktal];
         
         if(!buildings.includes(building)) {
             return { cost: 0, time: 0 };

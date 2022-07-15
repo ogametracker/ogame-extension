@@ -1,9 +1,12 @@
 <template>
     <div
         class="o-lifeform-technology"
-        :class="{
-            'o-lifeform-technology--disabled': disabled,
-        }"
+        :class="[
+            {
+                'o-lifeform-technology--disabled': disabled,
+            },
+            `o-lifeform-technology--${lifeform}`,
+        ]"
         :style="{
             'background-image': `url(/img/ogame/lifeforms/technologies/${image}.png)`,
             'font-size': size,
@@ -16,7 +19,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 
     @Component({})
     export default class OLifeformTechnology extends Vue {
@@ -113,6 +117,9 @@
             [LifeformTechnologyType.psionicShieldMatrix]: 'psionic-shield-matrix',
             [LifeformTechnologyType.kaeleshDiscovererEnhancement]: 'kaelesh-discoverer-enhancement',
         };
+        private get lifeform() {
+            return ValidLifeformTypes.find(lf => LifeformTechnologyTypesByLifeform[lf].includes(this.technology));
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -125,9 +132,23 @@
         image-rendering: -webkit-optimize-contrast;
         image-rendering: -moz-crisp-edges;
         border-radius: 4px;
+        border: 1px solid;
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+
+        &--humans {
+            border-color: #7ec000;
+        }
+        &--rocktal {
+            border-color: #df6642;
+        }
+        &--mechas {
+            border-color: #4b91e7;
+        }
+        &--kaelesh {
+            border-color: #9863e9;
         }
     }
 </style>

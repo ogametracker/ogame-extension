@@ -427,6 +427,7 @@
                         },
                         lifeform: planet.activeLifeform,
                         activeLifeformTechnologies: planet.activeLifeformTechnologies,
+                        lifeformTechnologyLevels: planet.lifeformTechnologies,
                     };
                     acc[planet.id] = settings;
                     return acc;
@@ -1094,12 +1095,15 @@
         }
 
         &-settings {
-            margin-bottom: 4px;
             max-height: 100%;
             overflow: auto;
             display: grid;
             grid-template-rows: auto 1fr;
             justify-items: start;
+
+            > button {
+                margin-bottom: 4px;
+            }
         }
     }
 
