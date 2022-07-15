@@ -1024,13 +1024,16 @@
         }
 
         private get buildableTranslations() {
-            return {
+            const translations: Record<any, string> = {
                 'plasma-technology': this.$i18n.$t.research[ResearchType.plasmaTechnology],
                 'astrophysics-colony': this.$i18n.$t.research[ResearchType.astrophysics],
-                ...this.$i18n.$t.buildings,
-                ...this.$i18n.$t.lifeformBuildings,
-                ...this.$i18n.$t.lifeformTechnologies,
             };
+
+            BuildingTypes.forEach(building => translations[building] = this.$i18n.$t.buildings[building]);
+            LifeformBuildingTypes.forEach(building => translations[building] = this.$i18n.$t.lifeformBuildings[building]);
+            LifeformTechnologyTypes.forEach(tech => translations[tech] = this.$i18n.$t.lifeformTechnologies[tech]);
+
+            return translations;
         }
 
         private cellClassProvider(_: any, item: AmortizationItem): string {
