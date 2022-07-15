@@ -405,18 +405,9 @@
                         coordinates: planet.coordinates,
                         position: planet.coordinates.position,
                         mines: {
-                            metalMine: {
-                                level: planet.buildings[BuildingType.metalMine],
-                                show: true,
-                            },
-                            crystalMine: {
-                                level: planet.buildings[BuildingType.crystalMine],
-                                show: true,
-                            },
-                            deuteriumSynthesizer: {
-                                level: planet.buildings[BuildingType.deuteriumSynthesizer],
-                                show: true,
-                            },
+                            metalMine: planet.buildings[BuildingType.metalMine],
+                            crystalMine: planet.buildings[BuildingType.crystalMine],
+                            deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
@@ -428,6 +419,7 @@
                         lifeform: planet.activeLifeform,
                         activeLifeformTechnologies: planet.activeLifeformTechnologies,
                         lifeformTechnologyLevels: planet.lifeformTechnologies,
+                        lifeformBuildingLevels: planet.lifeformBuildings,
                     };
                     acc[planet.id] = settings;
                     return acc;
@@ -468,9 +460,9 @@
             const planetSettings = { ...settings.planets };
             Object.values(planetSettings).forEach(planet => {
                 mineLevels[planet.id] = {
-                    metalMine: planet.mines?.metalMine.level ?? 0,
-                    crystalMine: planet.mines?.crystalMine.level ?? 0,
-                    deuteriumSynthesizer: planet.mines?.deuteriumSynthesizer.level ?? 0,
+                    metalMine: planet.mines?.metalMine ?? 0,
+                    crystalMine: planet.mines?.crystalMine ?? 0,
+                    deuteriumSynthesizer: planet.mines?.deuteriumSynthesizer ?? 0,
                 };
                 planetIds.push(planet.id);
             });
@@ -513,7 +505,7 @@
                         mineLevels[bestItem.planetId][mine] = bestItem.level;
 
                         const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings | undefined;
-                        yieldItem = (planetSettings?.show && planetSettings?.mines![mine].show) ?? this.astrophysicsSettings.show;
+                        yieldItem = planetSettings?.show ?? this.astrophysicsSettings.show;
                         break;
                     }
 

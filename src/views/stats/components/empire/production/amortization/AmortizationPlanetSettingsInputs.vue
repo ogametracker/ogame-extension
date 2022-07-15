@@ -79,26 +79,14 @@
             <template v-if="settings.mines != null">
                 <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
-                    <o-building
-                        :building="BuildingType.metalMine"
-                        :disabled="!settings.mines.metalMine.show"
-                        @click="settings.mines.metalMine.show = !settings.mines.metalMine.show"
-                    />
-                    <input type="number" v-model.number="settings.mines.metalMine.level" />
+                    <o-building :building="BuildingType.metalMine" />
+                    <input type="number" v-model.number="settings.mines.metalMine" />
 
-                    <o-building
-                        :building="BuildingType.crystalMine"
-                        :disabled="!settings.mines.crystalMine.show"
-                        @click="settings.mines.crystalMine.show = !settings.mines.crystalMine.show"
-                    />
-                    <input type="number" v-model.number="settings.mines.crystalMine.level" />
+                    <o-building :building="BuildingType.crystalMine" />
+                    <input type="number" v-model.number="settings.mines.crystalMine" />
 
-                    <o-building
-                        :building="BuildingType.deuteriumSynthesizer"
-                        :disabled="!settings.mines.deuteriumSynthesizer.show"
-                        @click="settings.mines.deuteriumSynthesizer.show = !settings.mines.deuteriumSynthesizer.show"
-                    />
-                    <input type="number" v-model.number="settings.mines.deuteriumSynthesizer.level" />
+                    <o-building :building="BuildingType.deuteriumSynthesizer" />
+                    <input type="number" v-model.number="settings.mines.deuteriumSynthesizer" />
                 </span>
             </template>
 
@@ -119,8 +107,15 @@
             </span>
 
             <template v-if="showLifeformSettings">
-                <span v-text="'LOCA: Lifeform Buildings'" />
-                <span> TODO: Toggle lifeform buildings </span>
+                <template v-if="settings.lifeformTechnologyLevels != null">
+                    <span v-text="'LOCA: Relevant Lifeform Buildings'" />
+                    <span class="lifeform-building-grid">
+                        <template v-for="building in applicableLifeformBuildings">
+                            <o-lifeform-building :key="`${building}-icon`" :building="building" />
+                            <input :key="`${building}-input`" type="number" v-model.number="settings.lifeformBuildingLevels[building]" />
+                        </template>
+                    </span>
+                </template>
 
                 <span v-text="'LOCA: Lifeform Technologies'" />
                 <span>
@@ -155,6 +150,8 @@
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
@@ -163,11 +160,6 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
-
-    interface MineSettings {
-        level: number;
-        show: boolean;
-    }
 
     export interface AmortizationPlanetSettings {
         show: boolean;
@@ -186,12 +178,13 @@
         };
 
         mines?: {
-            metalMine: MineSettings;
-            crystalMine: MineSettings;
-            deuteriumSynthesizer: MineSettings;
+            metalMine: number;
+            crystalMine: number;
+            deuteriumSynthesizer: number;
         };
         lifeform: LifeformType;
         activeLifeformTechnologies: LifeformTechnologyType[];
+        lifeformBuildingLevels?: Record<LifeformBuildingType, number>;
         lifeformTechnologyLevels?: Record<LifeformTechnologyType, number>;
     }
 
@@ -212,6 +205,16 @@
         private getSelectedLifeformTechBySlot(slot: number): LifeformTechnologyType | null {
             const techs = Object.values(this.lifeformTechBySlot[slot]);
             return techs.find(tech => this.settings.activeLifeformTechnologies.includes(tech)) ?? null;
+        }
+
+        private readonly applicableBuildingTypes = [
+            ...ResourceProductionBonusLifeformBuildings,
+            ...LifeformTechnologyBonusLifeformBuildings,
+        ].map(b => b.type);
+
+        private get applicableLifeformBuildings(): LifeformBuildingType[] {
+            const lfBuildings = LifeformBuildingTypesByLifeform[this.settings.lifeform];
+            return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
         }
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
@@ -335,10 +338,6 @@
         grid-template-columns: auto 1fr;
         row-gap: 4px;
         align-items: stretch;
-
-        .o-building {
-            cursor: pointer;
-        }
     }
 
     .crawler-grid {
@@ -381,5 +380,12 @@
         .o-lifeform-technology {
             cursor: pointer;
         }
+    }
+
+    .lifeform-building-grid {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        width: max-content;
+        gap: 4px;
     }
 </style>
