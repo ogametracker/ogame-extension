@@ -533,7 +533,7 @@
                 const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(calculationData, levelPlasmaTechnology, settings);
                 const astrophysicsItem = this.getAstrophysicsAmortizationItem(levelAstrophysics, levelPlasmaTechnology, planetIds.length, -(newPlanets + 1), settings);
                 const lifeformBuildingItems = planetIds.flatMap(
-                    planetId => this.getApplicableLifeformBuildingTypesByLifeform(planets[planetId].activeLifeform).map(
+                    planetId => this.getApplicableLifeformBuildingTypesByLifeform(planetSettings[planetId].lifeform).map(
                         building => this.getLifeformBuildingAmortizationItem(
                             planetId,
                             building,
