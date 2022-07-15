@@ -79,7 +79,11 @@
                         <checkbox :value="selectedItemIndizes.includes(index)" @input="toggleItemSelection(index)" />
                     </template>
                     <template #cell-what="{ item }">
-                        <div v-if="item.type == 'mine' || item.type == 'lifeform-building'" class="what-cell" :class="`what-cell--${item.type}`">
+                        <div
+                            v-if="item.type == 'mine' || item.type == 'lifeform-building' || item.type == 'lifeform-technology'"
+                            class="what-cell"
+                            :class="`what-cell--${item.type}`"
+                        >
                             <span v-if="item.planetId > 0" class="planet">
                                 <span v-text="empire.planets[item.planetId].name" />
                                 <span v-text="formatCoordinates(empire.planets[item.planetId].coordinates)" />
@@ -100,6 +104,13 @@
                                 <o-lifeform-building :building="item.building" size="36px" />
                                 <span class="name-and-level">
                                     <span v-text="buildableTranslations[item.building]" />
+                                    <span v-text="item.level" />
+                                </span>
+                            </template>
+                            <template v-else-if="item.type == 'lifeform-technology'">
+                                <o-lifeform-technology :technology="item.technology" size="36px" />
+                                <span class="name-and-level">
+                                    <span v-text="buildableTranslations[item.technology]" />
                                     <span v-text="item.level" />
                                 </span>
                             </template>
@@ -170,6 +181,20 @@
                     <template #cell-timeInHours="{ value }">
                         <span v-text="$i18n.$timespan(value * 60 * 60)" />
                     </template>
+
+                    <template #footer-cost="{ value }">
+                        <div class="cost-grid">
+                            <span v-text="$i18n.$n(value.metal)" :class="{ zero: value.metal == 0 }" />
+                            <span v-text="$i18n.$n(value.crystal)" :class="{ zero: value.crystal == 0 }" />
+                            <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
+                        </div>
+                    </template>
+                    <template #footer-costMsu="{ value }">
+                        <span v-text="$i18n.$n(value)" :class="{ zero: value == 0 }" />
+                    </template>
+                    <template #footer-productionDelta />
+                    <template #footer-productionDeltaMsu />
+                    <template #footer-timeInHours />
                 </grid-table>
             </div>
         </div>
@@ -223,6 +248,7 @@
     import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
     import { LifeformBuildingsByType, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { _throw } from '@/shared/utils/_throw';
+    import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, LifeformTechnologiesByType, ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 
     interface AmortizationAstrophysicsSettings {
         show: boolean;
@@ -321,6 +347,12 @@
         private getApplicableLifeformBuildingTypesByLifeform(lifeform: LifeformType): LifeformBuildingType[] {
             return this.applicableLifeformBuildingTypes.filter(type => LifeformBuildingTypesByLifeform[lifeform].includes(type));
         }
+
+        private readonly applicableLifeformTechnologyTypes = [
+            ...ResourceProductionBonusLifeformTechnologies,
+            ...CollectorClassBonusLifeformTechnologies,
+            ...CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies,
+        ].map(tech => tech.type);
 
         private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
         private readonly minesByType: Record<MineBuildingType, ProductionBuilding> = {
@@ -562,13 +594,27 @@
                         ),
                     ),
                 );
+                const lifeformTechnologyItems = planetIds.flatMap(
+                    planetId => planetSettings[planetId].activeLifeformTechnologies
+                        .filter(tech => this.applicableLifeformTechnologyTypes.includes(tech))
+                        .map(tech => this.getLifeformTechnologyAmortizationItem(
+                            planetId,
+                            tech,
+                            calculationData[planetId],
+                            levelPlasmaTechnology,
+                            planets[planetId] as PlanetData,
+                            planetSettings[planetId],
+                            settings,
+                        )),
+                );
 
                 const items = [
                     ...mineItems,
                     plasmaTechItem,
                     astrophysicsItem,
                     ...lifeformBuildingItems,
-                ].filter(item => item.productionDeltaMsu > 0); //remove items with production delta = 0, because plasmatech can have no effect if there are no mines at all
+                    ...lifeformTechnologyItems,
+                ].filter(item => item.productionDeltaMsu > 0); //remove items with production delta = 0, because plasmatech and others can have no effect if there are no mines at all
 
                 const bestItem = items.reduce(
                     (best, item) => item.timeInHours < best.timeInHours ? item : best,
@@ -580,15 +626,12 @@
                 switch (bestItem.type) {
                     case 'mine': {
                         calculationData[bestItem.planetId].mineLevels[bestItem.mine] = bestItem.level;
-
-                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings;
-                        yieldItem = planetSettings.show ?? _throw('This is just a test. Does this happen?');
+                        yieldItem = this.planetSettings[bestItem.planetId].show;
                         break;
                     }
 
                     case 'plasma-technology': {
                         levelPlasmaTechnology = bestItem.level;
-
                         yieldItem = this.showPlasmaTechnology;
                         break;
                     }
@@ -611,14 +654,14 @@
 
                     case 'lifeform-building': {
                         calculationData[bestItem.planetId].lifeformBuildingLevels[bestItem.building] = bestItem.level;
-
-                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings;
-                        yieldItem = planetSettings.show ?? _throw('This is just a test. Does this happen (2)?');
+                        yieldItem = this.planetSettings[bestItem.planetId].show;
                         break;
                     }
 
                     case 'lifeform-technology': {
-                        throw new Error('not implemented'); //TODO: yield lifeform tech item
+                        calculationData[bestItem.planetId].lifeformTechnologyLevels[bestItem.technology] = bestItem.level;
+                        yieldItem = this.planetSettings[bestItem.planetId].show;
+                        break;
                     }
                 }
 
@@ -826,6 +869,55 @@
             };
         }
 
+        private getLifeformTechnologyAmortizationItem(
+            planetId: number,
+            technologyType: LifeformTechnologyType,
+            data: AmortizationCalculationData,
+            levelPlasmaTechnology: number,
+            planet: PlanetData,
+            planetSettings: AmortizationPlanetSettings,
+            settings: AmortizationGenerationSettings
+        ): LifeformTechnologyAmortizationItem {
+            const technology = LifeformTechnologiesByType[technologyType];
+            const newLevel = data.lifeformTechnologyLevels[technologyType] + 1;
+
+            const cost = technology.getCost(newLevel);
+            const costMsu = this.getMsu(cost, settings);
+
+            const curDependencies = this.buildProductionDependencies(data, levelPlasmaTechnology, planet, planetSettings, settings);
+            const curProduction = this.mineBuildingTypes
+                .map(mineType => this.minesByType[mineType].getProduction(data.mineLevels[mineType], curDependencies))
+                .reduce<Cost>((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+
+            const newDependencies = this.buildProductionDependencies({
+                ...data,
+                lifeformTechnologyLevels: {
+                    ...data.lifeformTechnologyLevels,
+                    [technologyType]: newLevel,
+                },
+            }, levelPlasmaTechnology, planet, planetSettings, settings);
+
+            const newProduction = this.mineBuildingTypes
+                .map(mineType => this.minesByType[mineType].getProduction(data.mineLevels[mineType], newDependencies))
+                .reduce<Cost>((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+
+            const productionDelta = subCost(newProduction, curProduction);
+            const productionDeltaMsu = this.getMsu(productionDelta, settings);
+
+            return {
+                type: 'lifeform-technology',
+                planetId,
+                technology: technologyType,
+                level: newLevel,
+
+                cost,
+                costMsu,
+                productionDelta,
+                productionDeltaMsu,
+                timeInHours: costMsu / productionDeltaMsu,
+            };
+        }
+
         private getMineAmortizationItem(
             planetId: number,
             mineType: MineBuildingType,
@@ -872,56 +964,70 @@
             planet: PlanetData,
             planetSettings: AmortizationPlanetSettings,
             settings: AmortizationGenerationSettings,
-
         ): ProductionBuildingDependencies {
+            const builtPlanet: PlanetData = {
+                ...planet,
+                activeLifeform: planetSettings.lifeform,
+                coordinates: {
+                    ...planet.coordinates,
+                    position: planetSettings.position,
+                },
+                maxTemperature: planetSettings.maxTemperature,
+                productionSettings: {
+                    [BuildingType.metalMine]: 100,
+                    [BuildingType.crystalMine]: 100,
+                    [BuildingType.deuteriumSynthesizer]: 100,
+                    [BuildingType.solarPlant]: 100,
+                    [BuildingType.fusionReactor]: 100,
+                    [ShipType.crawler]: planetSettings.crawlers.enabled
+                        ? planetSettings.crawlers.overload
+                            ? 150
+                            : 100
+                        : 0,
+                    [ShipType.solarSatellite]: 100,
+                },
+                activeItems: {
+                    ...planet.activeItems,
+                    ...planetSettings.activeItems.reduce(
+                        (acc, item) => {
+                            acc[item] = 'permanent';
+                            return acc;
+                        },
+                        {} as Partial<Record<ItemHash, number | "permanent">>
+                    ),
+                },
+                buildings: {
+                    ...planet.buildings,
+                    ...data.mineLevels,
+                },
+                ships: {
+                    ...planet.ships,
+                    [ShipType.crawler]: planetSettings.crawlers.max ? 10_000 : planetSettings.crawlers.count,
+                },
+                lifeformBuildings: {
+                    ...data.lifeformBuildingLevels,
+                },
+                activeLifeformTechnologies: [...planetSettings.activeLifeformTechnologies],
+                lifeformTechnologies: {
+                    ...data.lifeformTechnologyLevels,
+                },
+            };
+
+            const planets = { ...this.empire.planets } as Record<number, PlanetData>;
+
+            Object.values(settings.planets).forEach(planetSettings =>
+                planets[planetSettings.id] = {
+                    ...planets[planetSettings.id],
+                    activeLifeform: planetSettings.lifeform,
+                    activeLifeformTechnologies: planetSettings.activeLifeformTechnologies,
+                    lifeformTechnologies: planetSettings.lifeformTechnologyLevels ?? createRecord(LifeformTechnologyTypes, 0),
+                }
+            );
+
+            planets[builtPlanet.id] = builtPlanet;
             return {
                 serverSettings: ServerSettingsDataModule.serverSettings,
-                planet: {
-                    ...planet,
-                    activeLifeform: planetSettings.lifeform,
-                    coordinates: {
-                        ...planet.coordinates,
-                        position: planetSettings.position,
-                    },
-                    maxTemperature: planetSettings.maxTemperature,
-                    productionSettings: {
-                        [BuildingType.metalMine]: 100,
-                        [BuildingType.crystalMine]: 100,
-                        [BuildingType.deuteriumSynthesizer]: 100,
-                        [BuildingType.solarPlant]: 100,
-                        [BuildingType.fusionReactor]: 100,
-                        [ShipType.crawler]: planetSettings.crawlers.enabled
-                            ? planetSettings.crawlers.overload
-                                ? 150
-                                : 100
-                            : 0,
-                        [ShipType.solarSatellite]: 100,
-                    },
-                    activeItems: {
-                        ...planet.activeItems,
-                        ...planetSettings.activeItems.reduce(
-                            (acc, item) => {
-                                acc[item] = 'permanent';
-                                return acc;
-                            },
-                            {} as Partial<Record<ItemHash, number | "permanent">>
-                        ),
-                    },
-                    buildings: {
-                        ...planet.buildings,
-                        ...data.mineLevels,
-                    },
-                    ships: {
-                        ...planet.ships,
-                        [ShipType.crawler]: planetSettings.crawlers.max ? 10_000 : planetSettings.crawlers.count,
-                    },
-                    lifeformBuildings: {
-                        ...data.lifeformBuildingLevels,
-                    },
-                    lifeformTechnologies: {
-                        ...data.lifeformTechnologyLevels,
-                    },
-                },
+                planet: builtPlanet,
                 player: {
                     ...this.empire,
                     playerClass: settings.player.playerClass,
@@ -931,6 +1037,7 @@
                         ...this.empire.research,
                         [ResearchType.plasmaTechnology]: levelPlasmaTechnology,
                     },
+                    planets,
                 },
             };
         }

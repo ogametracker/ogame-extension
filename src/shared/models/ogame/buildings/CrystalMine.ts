@@ -57,8 +57,7 @@ class CrystalMineClass extends ProductionBuilding {
             dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit * crawlerCount * crawlerProductivity * dependencies.planet.productionSettings[ShipType.crawler] / 100);
         const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
-        const production = Math.trunc(
-            baseProduction
+        const production = baseProduction
             + mineProduction
             + geologistProduction
             + plasmaTechProduction
@@ -68,8 +67,7 @@ class CrystalMineClass extends ProductionBuilding {
             + itemProduction
             + crawlerProduction
             + lifeformBuildingProduction
-            + lifeformTechProduction
-        );
+            + lifeformTechProduction;
 
         return {
             metal: 0,
