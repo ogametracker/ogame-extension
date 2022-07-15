@@ -45,7 +45,7 @@
                     :key="column.key"
                     class="grid-table-cell"
                     :class="[
-                        cellClassProvider(item[column.key]),
+                        cellClassProvider(item[column.key], item),
                         column.class,
                         {
                             first: footerItems.length == 0 && i == 0,
@@ -147,8 +147,8 @@
         @Prop({ required: false, type: Array as PropType<Record<string, any>[]>, default: () => [] })
         private footerItems!: Record<string, any>[];
 
-        @Prop({ required: false, type: Function as PropType<(value: any) => string>, default: (value: any) => '' })
-        private cellClassProvider!: (value: any) => string;
+        @Prop({ required: false, type: Function as PropType<(value: any, item: any) => string>, default: () => '' })
+        private cellClassProvider!: (value: any, item: any) => string;
 
         @Prop({ required: false, type: String, default: null })
         private sticky!: string | null;

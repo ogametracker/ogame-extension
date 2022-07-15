@@ -63,65 +63,62 @@
                         </div>
                     </template>
 
-                    <template #cell-what="{ value }">
-                        <div
-                            v-if="[BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer].includes(value.type)"
-                            class="what-cell what-cell--mine"
-                        >
-                            <span v-if="value.planetId > 0" class="planet">
-                                <span v-text="empire.planets[value.planetId].name" />
-                                <span v-text="formatCoordinates(empire.planets[value.planetId].coordinates)" />
+                    <template #cell-what="{ item }">
+                        <div v-if="item.type == 'mine'" class="what-cell what-cell--mine">
+                            <span v-if="item.planetId > 0" class="planet">
+                                <span v-text="empire.planets[item.planetId].name" />
+                                <span v-text="formatCoordinates(empire.planets[item.planetId].coordinates)" />
                             </span>
                             <span v-else class="planet">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`" />
+                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <o-building :building="value.type" size="36px" />
+                            <o-building :building="item.mine" size="36px" />
                             <span class="name-and-level">
-                                <span v-text="buildableTranslations[value.type]" />
-                                <span v-text="value.level" />
+                                <span v-text="buildableTranslations[item.mine]" />
+                                <span v-text="item.level" />
                             </span>
                         </div>
-                        <div v-else-if="value.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
+                        <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
                             <span />
                             <o-research :research="ResearchType.plasmaTechnology" size="36px" />
                             <span class="name-and-level">
-                                <span v-text="buildableTranslations[value.type]" />
-                                <span v-text="value.level" />
+                                <span v-text="buildableTranslations[item.type]" />
+                                <span v-text="item.level" />
                             </span>
                         </div>
-                        <div v-else-if="value.type == 'astrophysics-colony'" class="what-cell what-cell--colony">
+                        <div v-else-if="item.type == 'astrophysics-colony'" class="what-cell what-cell--colony">
                             <span class="planet">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-value.planetId}`" />
+                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <o-research :research="ResearchType.astrophysics" :disabled="value.levels.length == 0" size="36px" />
+                            <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['astrophysics-colony']" />
 
-                                <span v-if="value.levels.length == 0" v-text="'-'" />
-                                <span v-else-if="value.levels.length == 1" v-text="value.levels[0]" />
-                                <span v-else v-text="`${value.levels[0]} + ${value.levels[1]}`" />
+                                <span v-if="item.levels.length == 0" v-text="'-'" />
+                                <span v-else-if="item.levels.length == 1" v-text="item.levels[0]" />
+                                <span v-else v-text="`${item.levels[0]} + ${item.levels[1]}`" />
                             </span>
 
                             <o-building :building="BuildingType.metalMine" size="36px" />
                             <span class="name-and-level">
-                                <span v-text="buildableTranslations['metal-mine']" />
-                                <span v-text="`1 - ${value.mineLevels.metalMine}`" />
+                                <span v-text="buildableTranslations[BuildingType.metalMine]" />
+                                <span v-text="`1 - ${item.mineLevels.metalMine}`" />
                             </span>
 
                             <o-building :building="BuildingType.crystalMine" size="36px" />
                             <span class="name-and-level">
-                                <span v-text="buildableTranslations['crystal-mine']" />
-                                <span v-text="`1 - ${value.mineLevels.crystalMine}`" />
+                                <span v-text="buildableTranslations[BuildingType.crystalMine]" />
+                                <span v-text="`1 - ${item.mineLevels.crystalMine}`" />
                             </span>
 
                             <o-building :building="BuildingType.deuteriumSynthesizer" size="36px" />
                             <span class="name-and-level">
-                                <span v-text="buildableTranslations['deuterium-synthesizer']" />
-                                <span v-text="`1 - ${value.mineLevels.deuteriumSynthesizer}`" />
+                                <span v-text="buildableTranslations[BuildingType.deuteriumSynthesizer]" />
+                                <span v-text="`1 - ${item.mineLevels.deuteriumSynthesizer}`" />
                             </span>
                         </div>
                         <div v-else v-text="'??? contact developer'" />
@@ -175,7 +172,7 @@
     import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
     import { DeuteriumSynthesizer } from '@/shared/models/ogame/buildings/DeuteriumSynthesizer';
     import { MetalMine } from '@/shared/models/ogame/buildings/MetalMine';
-    import { ProductionBuildingDependencies } from '@/shared/models/ogame/buildings/ProductionBuilding';
+    import { ProductionBuilding, ProductionBuildingDependencies } from '@/shared/models/ogame/buildings/ProductionBuilding';
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { addCost, Cost, subCost } from '@/shared/models/ogame/common/Cost';
@@ -195,11 +192,13 @@
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformBuildingType, LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
     import { DefenseCount } from '@/shared/models/empire/DefenseCount';
     import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
+    import { LifeformBuildingsByType, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { _throw } from '@/shared/utils/_throw';
 
     interface AmortizationAstrophysicsSettings {
         show: boolean;
@@ -208,56 +207,74 @@
 
     type MineBuildingType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
 
-    interface MineAmortizationItem {
+    interface BaseAmortizationItem {
+        cost: Cost;
+        costMsu: number;
+        productionDelta: Cost;
+        productionDeltaMsu: number;
+        timeInHours: number;
+    }
+
+
+    interface MineAmortizationItem extends BaseAmortizationItem {
         type: 'mine';
         planetId: number;
         mine: MineBuildingType;
         level: number;
-
-        cost: Cost;
-        costMsu: number;
-        productionDelta: Cost;
-        productionDeltaMsu: number;
-        timeInHours: number;
     }
 
-    interface PlasmaTechnologyAmortizationItem {
+    interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {
         type: 'plasma-technology';
         level: number;
-
-        cost: Cost;
-        costMsu: number;
-        productionDelta: Cost;
-        productionDeltaMsu: number;
-        timeInHours: number;
     }
 
-    interface AstrophysicsAmortizationItem {
+    interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
         type: 'astrophysics-and-colony';
         levels: number[];
         newPlanetId: number;
 
-        mineLevels: MineLevels;
-
-        cost: Cost;
-        costMsu: number;
-        productionDelta: Cost;
-        productionDeltaMsu: number;
-        timeInHours: number;
+        builtLevels: AmortizationCalculationData;
     }
 
-    type AmortizationItem = MineAmortizationItem | PlasmaTechnologyAmortizationItem | AstrophysicsAmortizationItem;
+    interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {
+        type: 'lifeform-building';
+        planetId: number;
+        building: LifeformBuildingType;
+        level: number;
+    }
+
+    interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem {
+        type: 'lifeform-technology';
+        planetId: number;
+        technology: LifeformTechnologyType;
+        level: number;
+    }
+
+    type AmortizationItem =
+        | MineAmortizationItem
+        | PlasmaTechnologyAmortizationItem
+        | AstrophysicsAmortizationItem
+        | LifeformBuildingAmortizationItem
+        | LifeformTechnologyAmortizationItem;
+
 
     interface MineLevels {
-        metalMine: number;
-        crystalMine: number;
-        deuteriumSynthesizer: number;
+        [BuildingType.metalMine]: number;
+        [BuildingType.crystalMine]: number;
+        [BuildingType.deuteriumSynthesizer]: number;
     }
 
     interface AmortizationGenerationSettings {
         player: AmortizationPlayerSettings;
         planets: Record<number, AmortizationPlanetSettings>;
         astrophysics: AmortizationAstrophysicsSettings;
+    }
+
+
+    interface AmortizationCalculationData {
+        mineLevels: MineLevels;
+        lifeformBuildingLevels: Record<LifeformBuildingType, number>;
+        lifeformTechnologyLevels: Record<LifeformTechnologyType, number>;
     }
 
     @Component({
@@ -271,6 +288,18 @@
         private showSettingsMenu = false;
         private readonly BuildingType = BuildingType;
         private readonly ResearchType = ResearchType;
+
+        private readonly applicableLifeformBuildingTypes = [
+            ...ResourceProductionBonusLifeformBuildings,
+            ...LifeformTechnologyBonusLifeformBuildings,
+        ].map(b => b.type);
+
+        private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
+        private readonly minesByType: Record<MineBuildingType, ProductionBuilding> = {
+            [BuildingType.metalMine]: MetalMine,
+            [BuildingType.crystalMine]: CrystalMine,
+            [BuildingType.deuteriumSynthesizer]: DeuteriumSynthesizer,
+        };
 
         /**********************************/
         /* START amortization calculation */
@@ -453,39 +482,62 @@
 
             let { levelPlasmaTechnology, levelAstrophysics } = settings.player;
 
-            const planets = { ...this.empire.planets };
-
-            const mineLevels: Record<number, MineLevels> = {};
-            const planetIds: number[] = [];
+            const planets = { ...this.empire.planets } as Record<number, PlanetData>;
             const planetSettings = { ...settings.planets };
+            const planetIds: number[] = Object.values(planetSettings).map(planet => planet.id);
+
+            const calculationData: Record<number, AmortizationCalculationData> = {};
             Object.values(planetSettings).forEach(planet => {
-                mineLevels[planet.id] = {
-                    metalMine: planet.mines?.metalMine ?? 0,
-                    crystalMine: planet.mines?.crystalMine ?? 0,
-                    deuteriumSynthesizer: planet.mines?.deuteriumSynthesizer ?? 0,
+                calculationData[planet.id] = {
+                    mineLevels: {
+                        [BuildingType.metalMine]: planet.mines?.metalMine ?? 0,
+                        [BuildingType.crystalMine]: planet.mines?.crystalMine ?? 0,
+                        [BuildingType.deuteriumSynthesizer]: planet.mines?.deuteriumSynthesizer ?? 0,
+                    },
+                    lifeformBuildingLevels: createRecord(LifeformBuildingTypes, type => planet.lifeformBuildingLevels?.[type] ?? 0),
+                    lifeformTechnologyLevels: createRecord(LifeformTechnologyTypes, type => planet.lifeformTechnologyLevels?.[type] ?? 0),
                 };
-                planetIds.push(planet.id);
             });
-            const mineLevelsArray = Object.values(mineLevels);
 
             let newPlanets = 0;
-
 
             const itemsPerTimeout = 10;
             let curItems = 0;
             while (true) {
-                const mineItems = planetIds.flatMap(planetId => [
-                    this.getMineAmortizationItem(planetId, BuildingType.metalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
-                    this.getMineAmortizationItem(planetId, BuildingType.crystalMine, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
-                    this.getMineAmortizationItem(planetId, BuildingType.deuteriumSynthesizer, mineLevels[planetId], levelPlasmaTechnology, planets[planetId] as PlanetData, planetSettings[planetId], settings),
-                ]);
-                const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(mineLevels, levelPlasmaTechnology, settings);
+                const mineItems = planetIds.flatMap(
+                    planetId => this.mineBuildingTypes.map(
+                        building => this.getMineAmortizationItem(
+                            planetId,
+                            building,
+                            calculationData[planetId],
+                            levelPlasmaTechnology,
+                            planets[planetId] as PlanetData,
+                            planetSettings[planetId],
+                            settings,
+                        ),
+                    ),
+                );
+                const plasmaTechItem = this.getPlasmaTechnologyAmortizationItem(calculationData, levelPlasmaTechnology, settings);
                 const astrophysicsItem = this.getAstrophysicsAmortizationItem(levelAstrophysics, levelPlasmaTechnology, planetIds.length, -(newPlanets + 1), settings);
+                const lifeformBuildingItems = planetIds.flatMap(
+                    planetId => this.applicableLifeformBuildingTypes.map(
+                        building => this.getLifeformBuildingAmortizationItem(
+                            planetId,
+                            building,
+                            calculationData[planetId],
+                            levelPlasmaTechnology,
+                            planets[planetId] as PlanetData,
+                            planetSettings[planetId],
+                            settings,
+                        ),
+                    ),
+                );
 
                 const items = [
                     ...mineItems,
                     plasmaTechItem,
                     astrophysicsItem,
+                    ...lifeformBuildingItems,
                 ].filter(item => item.productionDeltaMsu > 0); //remove items with production delta = 0, because plasmatech can have no effect if there are no mines at all
 
                 const bestItem = items.reduce(
@@ -497,15 +549,10 @@
 
                 switch (bestItem.type) {
                     case 'mine': {
-                        const mine = (<Record<MineBuildingType, keyof MineLevels>>{
-                            [BuildingType.metalMine]: 'metalMine',
-                            [BuildingType.crystalMine]: 'crystalMine',
-                            [BuildingType.deuteriumSynthesizer]: 'deuteriumSynthesizer',
-                        })[bestItem.mine];
-                        mineLevels[bestItem.planetId][mine] = bestItem.level;
+                        calculationData[bestItem.planetId].mineLevels[bestItem.mine] = bestItem.level;
 
-                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings | undefined;
-                        yieldItem = planetSettings?.show ?? this.astrophysicsSettings.show;
+                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings;
+                        yieldItem = planetSettings.show ?? _throw('This is just a test. Does this happen?');
                         break;
                     }
 
@@ -523,15 +570,25 @@
                         // add new planet that has to be considered for future amortization items
                         planetIds.push(bestItem.newPlanetId);
                         planetSettings[bestItem.newPlanetId] = this.astrophysicsSettings.planet;
-                        const newPlanetMineLevels = { ...bestItem.mineLevels };
-                        mineLevels[bestItem.newPlanetId] = newPlanetMineLevels;
-                        mineLevelsArray.push(newPlanetMineLevels);
+                        calculationData[bestItem.newPlanetId] = { ...bestItem.builtLevels };
 
                         const fakePlanet = this.getFakePlanet();
-                        planets[bestItem.newPlanetId] = this.buildProductionDependencies(bestItem.mineLevels, 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
+                        planets[bestItem.newPlanetId] = this.buildProductionDependencies(calculationData[bestItem.newPlanetId], 0, fakePlanet, this.astrophysicsSettings.planet, settings).planet;
 
                         yieldItem = this.astrophysicsSettings.show;
                         break;
+                    }
+
+                    case 'lifeform-building': {
+                        calculationData[bestItem.planetId].lifeformBuildingLevels[bestItem.building] = bestItem.level;
+
+                        const planetSettings = this.planetSettings[bestItem.planetId] as AmortizationPlanetSettings;
+                        yieldItem = planetSettings.show ?? _throw('This is just a test. Does this happen (2)?');
+                        break;
+                    }
+
+                    case 'lifeform-technology': {
+                        throw new Error('not implemented'); //TODO: yield lifeform tech item
                     }
                 }
 
@@ -590,19 +647,20 @@
 
             const fakePlanet = this.getFakePlanet();
 
-            const mineLevels: MineLevels = {
-                metalMine: 0,
-                crystalMine: 0,
-                deuteriumSynthesizer: 0,
+            const calcData: AmortizationCalculationData = {
+                mineLevels: createRecord(this.mineBuildingTypes, 0),
+                lifeformBuildingLevels: createRecord(LifeformBuildingTypes, 0),
+                lifeformTechnologyLevels: createRecord(LifeformTechnologyTypes, 0),
             };
             let totalCost: Cost = { ...cost };
             let production: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
             let timeInHours = Infinity;
             do {
-                const metalMineItem = this.getMineAmortizationItem(-1, BuildingType.metalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
-                const crystalMineItem = this.getMineAmortizationItem(-1, BuildingType.crystalMine, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
-                const deutSynthItem = this.getMineAmortizationItem(-1, BuildingType.deuteriumSynthesizer, mineLevels, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const metalMineItem = this.getMineAmortizationItem(-1, BuildingType.metalMine, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const crystalMineItem = this.getMineAmortizationItem(-1, BuildingType.crystalMine, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const deutSynthItem = this.getMineAmortizationItem(-1, BuildingType.deuteriumSynthesizer, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
 
+                //TODO: lf buildings and tech
                 const bestItem = [metalMineItem, crystalMineItem, deutSynthItem].reduce(
                     (best, item) => item.timeInHours < best.timeInHours ? item : best,
                     { timeInHours: Infinity } as MineAmortizationItem
@@ -622,18 +680,14 @@
                 timeInHours = newTimeInHours;
                 production = newProduction;
                 totalCost = newTotalCost;
-                const mine = (<Record<MineBuildingType, keyof MineLevels>>{
-                    [BuildingType.metalMine]: 'metalMine',
-                    [BuildingType.crystalMine]: 'crystalMine',
-                    [BuildingType.deuteriumSynthesizer]: 'deuteriumSynthesizer',
-                })[bestItem.mine];
-                mineLevels[mine]++;
+
+                calcData.mineLevels[bestItem.mine]++;
             } while (true);
 
             return {
                 type: 'astrophysics-and-colony',
                 levels,
-                mineLevels,
+                builtLevels: calcData,
                 cost: totalCost,
                 costMsu: this.getMsu(totalCost, settings),
                 productionDelta: production,
@@ -644,24 +698,23 @@
         }
 
         private getPlasmaTechnologyAmortizationItem(
-            mineLevels: Record<number, MineLevels>,
+            data: Record<number, AmortizationCalculationData>,
             levelPlasmaTechnology: number,
             settings: AmortizationGenerationSettings
         ): PlasmaTechnologyAmortizationItem {
-            const level = levelPlasmaTechnology + 1;
+            const newLevel = levelPlasmaTechnology + 1;
 
-            const cost = PlasmaTechnology.getCost(level);
+            const cost = PlasmaTechnology.getCost(newLevel);
             const costMsu = this.getMsu(cost, settings);
 
             const production = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
-                    const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
-                    const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
-                    const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
-                    const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
+                    const levels = data[planetSettings.id].mineLevels;
+                    const dependencies = this.buildProductionDependencies(data[planetSettings.id], levelPlasmaTechnology, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
 
-                    return [prodMetalMine, prodCrystalMine, prodDeuteriumSynthesizer];
+                    return this.mineBuildingTypes.map(mineType =>
+                        this.minesByType[mineType].getProduction(levels[mineType], dependencies)
+                    );
                 }).reduce(
                     (total, prod) => addCost(total, prod),
                     { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
@@ -669,13 +722,11 @@
 
             const newProduction = Object.values(this.planetSettings)
                 .flatMap(planetSettings => {
-                    const levels = mineLevels[planetSettings.id];
-                    const dependencies = this.buildProductionDependencies(levels, level, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
-                    const prodMetalMine = MetalMine.getProduction(levels.metalMine, dependencies);
-                    const prodCrystalMine = CrystalMine.getProduction(levels.crystalMine, dependencies);
-                    const prodDeuteriumSynthesizer = DeuteriumSynthesizer.getProduction(levels.deuteriumSynthesizer, dependencies);
-
-                    return [prodMetalMine, prodCrystalMine, prodDeuteriumSynthesizer];
+                    const levels = data[planetSettings.id].mineLevels;
+                    const dependencies = this.buildProductionDependencies(data[planetSettings.id], newLevel, this.empire.planets[planetSettings.id] as PlanetData, planetSettings, settings);
+                    return this.mineBuildingTypes.map(mineType =>
+                        this.minesByType[mineType].getProduction(levels[mineType], dependencies)
+                    );
                 }).reduce(
                     (total, prod) => addCost(total, prod),
                     { metal: 0, crystal: 0, deuterium: 0, energy: 0 } as Cost
@@ -686,7 +737,56 @@
 
             return {
                 type: 'plasma-technology',
-                level,
+                level: newLevel,
+
+                cost,
+                costMsu,
+                productionDelta,
+                productionDeltaMsu,
+                timeInHours: costMsu / productionDeltaMsu,
+            };
+        }
+
+        private getLifeformBuildingAmortizationItem(
+            planetId: number,
+            buildingType: LifeformBuildingType,
+            data: AmortizationCalculationData,
+            levelPlasmaTechnology: number,
+            planet: PlanetData,
+            planetSettings: AmortizationPlanetSettings,
+            settings: AmortizationGenerationSettings
+        ): LifeformBuildingAmortizationItem {
+            const building = LifeformBuildingsByType[buildingType];
+            const newLevel = data.lifeformBuildingLevels[buildingType] + 1;
+
+            const cost = building.getCost(newLevel);
+            const costMsu = this.getMsu(cost, settings);
+
+            const curDependencies = this.buildProductionDependencies(data, levelPlasmaTechnology, planet, planetSettings, settings);
+            const curProduction = this.mineBuildingTypes
+                .map(mineType => this.minesByType[mineType].getProduction(data.mineLevels[mineType], curDependencies))
+                .reduce<Cost>((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+
+            const newDependencies = this.buildProductionDependencies({
+                ...data,
+                lifeformBuildingLevels: {
+                    ...data.lifeformBuildingLevels,
+                    [buildingType]: newLevel,
+                },
+            }, levelPlasmaTechnology, planet, planetSettings, settings);
+
+            const newProduction = this.mineBuildingTypes
+                .map(mineType => this.minesByType[mineType].getProduction(data.mineLevels[mineType], newDependencies))
+                .reduce<Cost>((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+
+            const productionDelta = subCost(newProduction, curProduction);
+            const productionDeltaMsu = this.getMsu(productionDelta, settings);
+
+            return {
+                type: 'lifeform-building',
+                planetId,
+                building: buildingType,
+                level: newLevel,
 
                 cost,
                 costMsu,
@@ -699,17 +799,13 @@
         private getMineAmortizationItem(
             planetId: number,
             mineType: MineBuildingType,
-            levels: MineLevels,
+            data: AmortizationCalculationData,
             levelPlasmaTechnology: number,
             planet: PlanetData,
             planetSettings: AmortizationPlanetSettings,
             settings: AmortizationGenerationSettings
         ): MineAmortizationItem {
-            const mineLevel = {
-                [BuildingType.metalMine]: levels.metalMine,
-                [BuildingType.crystalMine]: levels.crystalMine,
-                [BuildingType.deuteriumSynthesizer]: levels.deuteriumSynthesizer,
-            }[mineType];
+            const mineLevel = data.mineLevels[mineType];
 
             const mine = {
                 [BuildingType.metalMine]: MetalMine,
@@ -720,7 +816,7 @@
             const cost = mine.getCost(mineLevel + 1);
             const costMsu = this.getMsu(cost, settings);
 
-            const dependencies = this.buildProductionDependencies(levels, levelPlasmaTechnology, planet, planetSettings, settings);
+            const dependencies = this.buildProductionDependencies(data, levelPlasmaTechnology, planet, planetSettings, settings);
             const curProduction = mine.getProduction(mineLevel, dependencies);
             const newProduction = mine.getProduction(mineLevel + 1, dependencies);
             const productionDelta = subCost(newProduction, curProduction);
@@ -741,11 +837,12 @@
         }
 
         private buildProductionDependencies(
-            levels: MineLevels,
+            data: AmortizationCalculationData,
             levelPlasmaTechnology: number,
             planet: PlanetData,
             planetSettings: AmortizationPlanetSettings,
-            settings: AmortizationGenerationSettings
+            settings: AmortizationGenerationSettings,
+
         ): ProductionBuildingDependencies {
             return {
                 serverSettings: ServerSettingsDataModule.serverSettings,
@@ -782,13 +879,17 @@
                     },
                     buildings: {
                         ...planet.buildings,
-                        [BuildingType.metalMine]: levels.metalMine,
-                        [BuildingType.crystalMine]: levels.crystalMine,
-                        [BuildingType.deuteriumSynthesizer]: levels.deuteriumSynthesizer,
+                        ...data.mineLevels,
                     },
                     ships: {
                         ...planet.ships,
                         [ShipType.crawler]: planetSettings.crawlers.max ? 10_000 : planetSettings.crawlers.count,
+                    },
+                    lifeformBuildings: {
+                        ...data.lifeformBuildingLevels,
+                    },
+                    lifeformTechnologies: {
+                        ...data.lifeformTechnologyLevels,
                     },
                 },
                 player: {
@@ -841,10 +942,10 @@
 
 
 
-        private get columns(): GridTableColumn<keyof AmortizationTableItem>[] {
+        private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what'>[] {
             const showMsu = SettingsDataModule.settings.showMsuCells;
 
-            const result: GridTableColumn<keyof AmortizationTableItem>[] = [
+            const result: GridTableColumn<keyof BaseAmortizationItem | 'what'>[] = [
                 { key: 'what', size: 'auto' },
                 { key: 'cost', size: '3fr' },
             ];
@@ -872,7 +973,7 @@
             }
 
             result.push({
-                key: 'amortizationTimeInH',
+                key: 'timeInHours',
                 label: this.$i18n.$t.empire.amortization.table.amortizationTime,
                 size: '1fr',
             });
@@ -880,83 +981,36 @@
             return result;
         }
 
-        private get items(): AmortizationTableItem[] {
-            function getWhat(item: AmortizationItem): AmortizationTableItemWhat {
-                switch (item.type) {
-                    case 'mine': {
-                        const type = item.mine;
-
-                        return {
-                            type,
-                            level: item.level,
-                            planetId: item.planetId,
-                        };
-                    }
-
-                    case 'plasma-technology': return {
-                        type: 'plasma-technology',
-                        level: item.level,
-                    };
-
-                    case 'astrophysics-and-colony': return {
-                        type: 'astrophysics-colony',
-                        levels: item.levels,
-                        planetId: item.newPlanetId,
-                        mineLevels: item.mineLevels,
-                    };
-                }
-            };
-
-            return this.amortizationItems
-                .map(item => ({
-                    cost: item.cost,
-                    costMsu: item.costMsu,
-                    productionDelta: item.productionDelta,
-                    productionDeltaMsu: item.productionDeltaMsu,
-                    amortizationTimeInH: item.timeInHours,
-                    what: getWhat(item),
-                }));
+        private get items(): AmortizationItem[] {
+            return this.amortizationItems;
         }
 
         private formatCoordinates(coordinates: Coordinates): string {
             return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
         }
 
+        private timeout: number | undefined = undefined;
         @Watch('items')
-        private onItemsChanged(items: AmortizationTableItem[]) {
-            if (items.length < 100) {
-                this.queueTimeout(() => this.insertNextAmortizationItems(20));
+        private onItemsChanged() {
+            if (this.items.length < 25) {
+                console.log('items changed');
+                this.setTimeout(() => this.insertNextAmortizationItems(25 - this.items.length));
             }
         }
 
         private onTableScroll(event: GridTableScrollEvent): void {
-            if (event.y.max - event.y.current < 150) {
-                this.queueTimeout(() => this.insertNextAmortizationItems(20));
+            if (event.y.max - event.y.current < 50) {
+                console.log('table scroll');
+                this.setTimeout(() => this.insertNextAmortizationItems(10));
             }
         }
 
-        private timeoutQueue: (() => any)[] = [];
-        private timeout: number | null = null;
-        private queueTimeout(action: () => any) {
-            this.timeoutQueue.push(action);
-            this.updateTimeout();
+        private setTimeout(action: () => any) {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(action, 250);
         }
 
-        private updateTimeout() {
-            if (this.timeout == null) {
-                this.timeout = setTimeout(() => this.invokeNextTimeoutQueueAction(), 250);
-            }
-        }
-
-        private invokeNextTimeoutQueueAction() {
-            const action = this.timeoutQueue.shift();
-            action?.();
-
-            this.timeout = null;
-            this.updateTimeout();
-        }
-
-        private get buildableTranslations(): Record<AmortizationTableItemWhat['type'], string> {
+        private get buildableTranslations() {
             return {
                 [BuildingType.metalMine]: this.$i18n.$t.buildings[BuildingType.metalMine],
                 [BuildingType.crystalMine]: this.$i18n.$t.buildings[BuildingType.crystalMine],
@@ -966,44 +1020,14 @@
             };
         }
 
-        private cellClassProvider(item: AmortizationTableItemWhat): string {
+        private cellClassProvider(_: any, item: AmortizationItem): string {
             switch (item.type) {
-                case 'astrophysics-colony': return 'astrophysics-cell';
+                case 'astrophysics-and-colony': return 'astrophysics-cell';
                 case 'plasma-technology': return 'plasmatech-cell';
 
                 default: return '';
             }
         }
-    }
-
-    type AmortizationMineTableItemType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
-    interface AmortizationMineTableItem {
-        type: AmortizationMineTableItemType;
-        level: number;
-        planetId: number;
-    }
-
-    interface AmortizationPlasmaTechnologyTableItem {
-        type: 'plasma-technology';
-        level: number;
-    }
-
-    interface AmortizationAstrophysicsTableItem {
-        type: 'astrophysics-colony';
-        levels: number[];
-        planetId: number;
-        mineLevels: MineLevels;
-    }
-
-    type AmortizationTableItemWhat = AmortizationMineTableItem | AmortizationPlasmaTechnologyTableItem | AmortizationAstrophysicsTableItem;
-
-    interface AmortizationTableItem {
-        what: AmortizationTableItemWhat;
-        cost: Cost;
-        costMsu: number;
-        productionDelta: Cost;
-        productionDeltaMsu: number;
-        amortizationTimeInH: number;
     }
 </script>
 <style lang="scss" scoped>
