@@ -3,6 +3,7 @@
         class="grid-table"
         :class="{
             'grid-table--sticky-header': sticky != null,
+            'grid-table--sticky-footer': stickyFooter,
             'grid-table--inline': inline,
         }"
         :style="{
@@ -25,21 +26,12 @@
                     },
                 ]"
             >
-                <slot
-                    v-if="$scopedSlots[`header-${column.key}`] != null"
-                    :name="`header-${column.key}`"
-                    :label="column.label"
-                />
+                <slot v-if="$scopedSlots[`header-${column.key}`] != null" :name="`header-${column.key}`" :label="column.label" />
                 <span v-else v-text="column.label" />
             </div>
         </div>
         <div class="grid-table-body">
-            <div
-                class="grid-table-row"
-                v-for="(item, i) in items"
-                :key="i"
-                v-show="!hideRow(item)"
-            >
+            <div class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
                 <div
                     v-for="column in columns"
                     :key="column.key"
@@ -49,32 +41,18 @@
                         column.class,
                         {
                             first: footerItems.length == 0 && i == 0,
-                            last:
-                                footerItems.length == 0 &&
-                                i == columns.length - 1,
+                            last: footerItems.length == 0 && i == columns.length - 1,
                         },
                     ]"
                 >
-                    <slot
-                        v-if="$scopedSlots[`cell-${column.key}`] != null"
-                        :name="`cell-${column.key}`"
-                        :value="item[column.key]"
-                        :item="item"
-                    />
-                    <span
-                        v-else-if="column.formatter != null"
-                        v-text="column.formatter(item[column.key])"
-                    />
+                    <slot v-if="$scopedSlots[`cell-${column.key}`] != null" :name="`cell-${column.key}`" :value="item[column.key]" :item="item" :index="i" />
+                    <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
             </div>
         </div>
         <div class="grid-table-foot">
-            <div
-                class="grid-table-row"
-                v-for="(item, i) in footerItems"
-                :key="i"
-            >
+            <div class="grid-table-row" v-for="(item, i) in footerItems" :key="i">
                 <div
                     v-for="(column, c) in columns"
                     :key="column.key"
@@ -87,16 +65,8 @@
                         },
                     ]"
                 >
-                    <slot
-                        v-if="$scopedSlots[`footer-${column.key}`] != null"
-                        :name="`footer-${column.key}`"
-                        :value="item[column.key]"
-                        :item="item"
-                    />
-                    <span
-                        v-else-if="column.formatter != null"
-                        v-text="column.formatter(item[column.key])"
-                    />
+                    <slot v-if="$scopedSlots[`footer-${column.key}`] != null" :name="`footer-${column.key}`" :value="item[column.key]" :item="item" />
+                    <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
             </div>
@@ -153,6 +123,9 @@
         @Prop({ required: false, type: String, default: null })
         private sticky!: string | null;
 
+        @Prop({ required: false, type: Boolean, default: false })
+        private stickyFooter!: boolean;
+
         @Prop({ required: false, type: Function as PropType<(item: any) => boolean>, default: () => false })
         private hideRow!: (item: any) => boolean;
 
@@ -206,11 +179,7 @@
         &-head .grid-table-cell {
             z-index: 1;
             background-color: black;
-            background-image: linear-gradient(
-                0deg,
-                rgba(var(--color), 0.5),
-                rgba(var(--color), 0.7)
-            );
+            background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
         }
 
         &-body {
@@ -229,7 +198,7 @@
             }
 
             .grid-table-cell {
-                background: rgba(var(--color), 0.2) !important;
+                background: black linear-gradient(0deg, rgba(var(--color), 0.2), rgba(var(--color), 0.2)) !important;
             }
         }
 
@@ -248,6 +217,11 @@
         &--sticky-header {
             max-height: var(--grid-table--sticky-height);
             overflow: auto;
+        }
+
+        &--sticky-footer > &-foot &-cell {
+            position: sticky;
+            bottom: 0;
         }
     }
     .grid-table-head {
