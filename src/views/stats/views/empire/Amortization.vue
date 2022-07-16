@@ -3,13 +3,28 @@
         <div class="amortization-container">
             <div class="amortization-settings">
                 <button @click="toggleSettings()">
-                    <span class="mdi mdi-cog" />
+                    <span class="mdi mdi-cogs" />
                     <span class="mdi mdi-menu-down" v-if="!showSettings" />
                     <span class="mdi mdi-menu-up" v-else />
 
                     <span v-if="!showSettings" v-text="$i18n.$t.empire.amortization.settings.header" />
                     <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
                 </button>
+
+                <floating-menu v-model="showSettingsMenu" left>
+                    <template #activator>
+                        <button @click="showSettingsMenu = !showSettingsMenu">
+                            <span class="mdi mdi-cog" />
+                        </button>
+                    </template>
+
+                    <show-msu-cells-settings>
+                        <div class="msu-settings-amortization-info">
+                            <span class="mdi mdi-alert" />
+                            <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
+                        </div>
+                    </show-msu-cells-settings>
+                </floating-menu>
 
                 <div v-show="showSettings" class="amortization-settings-container">
                     <div class="flex-settings">
@@ -198,21 +213,6 @@
                 </grid-table>
             </div>
         </div>
-
-        <floating-menu v-model="showSettingsMenu" left>
-            <template #activator>
-                <button @click="showSettingsMenu = !showSettingsMenu">
-                    <span class="mdi mdi-cog" />
-                </button>
-            </template>
-
-            <show-msu-cells-settings>
-                <div class="msu-settings-amortization-info">
-                    <span class="mdi mdi-alert" />
-                    <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
-                </div>
-            </show-msu-cells-settings>
-        </floating-menu>
     </div>
 </template>
 
@@ -1291,6 +1291,7 @@
             overflow: auto;
             display: grid;
             grid-template-rows: auto 1fr;
+            grid-template-columns: 1fr auto;
             justify-items: start;
 
             > button {
@@ -1317,6 +1318,7 @@
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
         background: rgba(var(--color), 0.05);
+        grid-column: 1 / span 2;
     }
 
     .msu-settings-amortization-info {
