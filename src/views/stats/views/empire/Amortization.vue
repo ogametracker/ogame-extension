@@ -403,7 +403,7 @@
         };
         private showPlasmaTechnology = true;
 
-        private showSettings = false;
+        private showSettings = true;
 
         private readonly empire = EmpireDataModule.empire;
         private amortizationItems: AmortizationItem[] = [];
@@ -427,8 +427,6 @@
 
         private mounted() {
             this.initSettings();
-
-            this.initItems();
         }
 
         private toggleSettings() {
@@ -441,11 +439,9 @@
         }
 
         private initItems(): void {
-            this.amortizationItems = [];
-
             this.generationSettings = this.getAmortizationGenerationSettings();
             this.generator = this.generateAmortizationItems(this.generationSettings);
-            this.insertNextAmortizationItems(25);
+            this.amortizationItems = [];
         }
 
         private getAmortizationGenerationSettings(): AmortizationGenerationSettings {
