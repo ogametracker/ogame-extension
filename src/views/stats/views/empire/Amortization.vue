@@ -11,7 +11,11 @@
                     <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
                 </button>
 
-                <span v-text="'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'" />
+                <span
+                    v-text="
+                        'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
+                    "
+                />
 
                 <floating-menu v-model="showSettingsMenu" left>
                     <template #activator>
@@ -80,7 +84,12 @@
                     :cellClassProvider="cellClassProvider"
                 >
                     <template #header-checkbox>
-                        <checkbox :value="selectedItemIndizes.length == items.length" @input="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
+                        <checkbox
+                            :value="selectedItemIndizes.length == items.length"
+                            @input="toggleItemSelection()"
+                            check-color="rgb(var(--color))"
+                            color="white"
+                        />
                     </template>
 
                     <template #header-cost>
@@ -141,9 +150,9 @@
                                 <span v-text="item.level" />
                             </span>
                         </div>
-                        <div v-else-if="item.type == 'astrophysics-colony'" class="what-cell what-cell--colony">
+                        <div v-else-if="item.type == 'astrophysics-and-colony'" class="what-cell what-cell--colony">
                             <span class="planet">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
@@ -156,22 +165,38 @@
                                 <span v-else v-text="`${item.levels[0]} + ${item.levels[1]}`" />
                             </span>
 
-                            <o-building :building="BuildingType.metalMine" size="36px" />
-                            <span class="name-and-level">
-                                <span v-text="buildableTranslations[BuildingType.metalMine]" />
-                                <span v-text="`1 - ${item.mineLevels.metalMine}`" />
+                            <span class="colony-mines" style="display: contents">
+                                <template v-for="building in mineBuildingTypes">
+                                    <template v-if="item.builtLevels.mineLevels[building] > 0">
+                                        <o-building :key="`${building}-icon`" :building="building" size="36px" />
+                                        <span :key="`${building}-name-level`" class="name-and-level">
+                                            <span v-text="buildableTranslations[building]" />
+                                            <span v-text="`0 - ${item.builtLevels.mineLevels[building]}`" />
+                                        </span>
+                                    </template>
+                                </template>
                             </span>
-
-                            <o-building :building="BuildingType.crystalMine" size="36px" />
-                            <span class="name-and-level">
-                                <span v-text="buildableTranslations[BuildingType.crystalMine]" />
-                                <span v-text="`1 - ${item.mineLevels.crystalMine}`" />
+                            <span class="colony-lifeform-buildings" style="display: contents">
+                                <template v-for="building in applicableLifeformBuildingTypes">
+                                    <template v-if="item.builtLevels.lifeformBuildingLevels[building] > 0">
+                                        <o-lifeform-building :key="`${building}-icon`" :building="building" size="36px" />
+                                        <span :key="`${building}-name-level`" class="name-and-level">
+                                            <span v-text="buildableTranslations[building]" />
+                                            <span v-text="`0 - ${item.builtLevels.lifeformBuildingLevels[building]}`" />
+                                        </span>
+                                    </template>
+                                </template>
                             </span>
-
-                            <o-building :building="BuildingType.deuteriumSynthesizer" size="36px" />
-                            <span class="name-and-level">
-                                <span v-text="buildableTranslations[BuildingType.deuteriumSynthesizer]" />
-                                <span v-text="`1 - ${item.mineLevels.deuteriumSynthesizer}`" />
+                            <span class="colony-lifeform-technologies" style="display: contents">
+                                <template v-for="tech in applicableLifeformTechnologyTypes">
+                                    <template v-if="item.builtLevels.lifeformTechnologyLevels[tech] > 0">
+                                        <o-lifeform-technology :key="`${tech}-icon`" :technology="tech" size="36px" />
+                                        <span :key="`${tech}-name-level`" class="name-and-level">
+                                            <span v-text="buildableTranslations[tech]" />
+                                            <span v-text="`0 - ${item.builtLevels.lifeformTechnologyLevels[tech]}`" />
+                                        </span>
+                                    </template>
+                                </template>
                             </span>
                         </div>
                         <div v-else v-text="'??? contact developer'" />
@@ -731,10 +756,23 @@
             let production: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
             let timeInHours = Infinity;
             do {
-                const mineItems = this.mineBuildingTypes.map(mineType => this.getMineAmortizationItem(-1, mineType, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings));
+                const mineItems = this.mineBuildingTypes.map(mineType =>
+                    this.getMineAmortizationItem(-1, mineType, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings)
+                );
+                const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.planet.lifeform]
+                    .filter(building => this.applicableLifeformBuildingTypes.includes(building));
+                const lfBuildingItems = lfBuildings.map(building =>
+                    this.getLifeformBuildingAmortizationItem(-1, building, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings)
+                );
+                const lfTechs = LifeformTechnologyTypesByLifeform[this.astrophysicsSettings.planet.lifeform]
+                    .filter(tech => this.applicableLifeformTechnologyTypes.includes(tech));
+                const lfTechItems = lfTechs.map(tech =>
+                    this.getLifeformTechnologyAmortizationItem(-1, tech, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings)
+                );
 
-                //TODO: lf buildings and tech
-                const bestItem = mineItems.reduce(
+                const items = [...mineItems, ...lfBuildingItems, ...lfTechItems];
+
+                const bestItem = items.reduce(
                     (best, item) => item.timeInHours < best.timeInHours ? item : best,
                     { timeInHours: Infinity } as MineAmortizationItem
                 );
@@ -754,7 +792,15 @@
                 production = newProduction;
                 totalCost = newTotalCost;
 
-                calcData.mineLevels[bestItem.mine]++;
+                if (bestItem.type == 'mine') {
+                    calcData.mineLevels[bestItem.mine]++;
+                } else if (bestItem.type == 'lifeform-building') {
+                    calcData.lifeformBuildingLevels[bestItem.building]++;
+                } else if (bestItem.type == 'lifeform-technology') {
+                    calcData.lifeformTechnologyLevels[bestItem.technology]++;
+                } else {
+                    throw new Error('got unexpected item in astrophysics item calculation');
+                }
             } while (true);
 
             return {
