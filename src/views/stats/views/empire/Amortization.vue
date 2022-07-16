@@ -80,7 +80,7 @@
                     :cellClassProvider="cellClassProvider"
                 >
                     <template #header-checkbox>
-                        <checkbox :value="selectedItemIndizes.length == items.length" @input="toggleItemSelection()" />
+                        <checkbox :value="selectedItemIndizes.length == items.length" @input="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
                     </template>
 
                     <template #header-cost>
@@ -189,10 +189,10 @@
                     </template>
 
                     <template #cell-productionDelta="{ value }">
-                        <span v-text="$i18n.$n(Math.max(value.metal, value.crystal, value.deuterium))" />
+                        <span v-text="$i18n.$n(Math.max(value.metal, value.crystal, value.deuterium), numberFormat)" />
                     </template>
                     <template #cell-productionDeltaMsu="{ value }">
-                        <span v-text="$i18n.$n(value)" />
+                        <span v-text="$i18n.$n(value, numberFormat)" />
                     </template>
 
                     <template #cell-timeInHours="{ value }">
@@ -337,6 +337,10 @@
         },
     })
     export default class Amortization extends Vue {
+        private readonly numberFormat: Intl.NumberFormatOptions = {
+            maximumFractionDigits: 0,
+        };
+
         private showSettingsMenu = false;
         private readonly BuildingType = BuildingType;
         private readonly ResearchType = ResearchType;
@@ -727,12 +731,10 @@
             let production: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
             let timeInHours = Infinity;
             do {
-                const metalMineItem = this.getMineAmortizationItem(-1, BuildingType.metalMine, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
-                const crystalMineItem = this.getMineAmortizationItem(-1, BuildingType.crystalMine, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
-                const deutSynthItem = this.getMineAmortizationItem(-1, BuildingType.deuteriumSynthesizer, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings);
+                const mineItems = this.mineBuildingTypes.map(mineType => this.getMineAmortizationItem(-1, mineType, calcData, levelPlasmaTechnology, fakePlanet, this.astrophysicsSettings.planet, settings));
 
                 //TODO: lf buildings and tech
-                const bestItem = [metalMineItem, crystalMineItem, deutSynthItem].reduce(
+                const bestItem = mineItems.reduce(
                     (best, item) => item.timeInHours < best.timeInHours ? item : best,
                     { timeInHours: Infinity } as MineAmortizationItem
                 );
