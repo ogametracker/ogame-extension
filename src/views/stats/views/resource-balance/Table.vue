@@ -156,7 +156,7 @@
                 return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
                     label: this.$i18n.$t.resources[resource],
                     items: types[resource].map(eventType => ({
-                        label: eventType == null ? 'LOCA: Summe' : this.$i18n.$t.resourceBalance[eventType],
+                        label: eventType == null ? this.$i18n.$t.common.sum : this.$i18n.$t.resourceBalance[eventType],
                         getValue: events => this.getResources(events, eventType, resource),
                         class: eventType == null ? 'sum-item' : '',
                         labelClass: eventType == null ? 'sum-item' : '',

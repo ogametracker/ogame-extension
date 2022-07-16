@@ -137,7 +137,6 @@ export interface OgameTrackerUniverseHistoryAllianceMembers {
 }
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
-    //TODO: add indexes by id+date to be able to traverse in reverse to get latest data
     _lastUpdate: {
         key: 0;
         value: number;

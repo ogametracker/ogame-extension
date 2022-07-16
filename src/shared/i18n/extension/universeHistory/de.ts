@@ -96,4 +96,6 @@ export const de: UniverseHistoryTranslations = {
         deleted: 'Gelöscht',
         admin: 'Admin',
     },
+    
+    loadingTakingLong: 'Das Laden der Daten dauert länger als erwartet. Vermutlich wird die Datenbank gerade aktualisiert, bitte warte oder versuch es später erneut.',
 };

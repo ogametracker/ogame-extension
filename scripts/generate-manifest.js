@@ -3,6 +3,10 @@ const fs = require('fs');
 const process = require('process');
 
 const isDev = process.argv.includes('--dev');
+const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
+if (browser == null) {
+    throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
+}
 
 const contentScriptDir = './src/content-scripts';
 const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
@@ -26,12 +30,21 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
             options[type].push(`content-scripts/${file}`);
         });
 
+        ['js', 'css'].forEach(type => {
+            const files = options[type];
+            if(files == null) {
+                return;
+            }
+
+            options[type] = files.map(file => file.replace('${browser}', browser));
+        });
+
         return options;
     });
 
 const now = new Date();
 const manifest = {
-    name: 'OGame Tracker Beta' + (isDev ? ' DEV' : ''),
+    name: 'OGame Tracker' + (isDev ? ' DEV' : ''),
     description: '__MSG_appDesc__',
     manifest_version: 3,
     default_locale: 'de',

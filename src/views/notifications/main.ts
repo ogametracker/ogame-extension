@@ -8,6 +8,7 @@ import './extend-vue';
 import '@mdi/font/css/materialdesignicons.min.css';
 import '@/views/_shared/styles/index.scss';
 import '@/views/_shared/components/ogame';
+import { addIconFonts } from '../_shared/addIconFonts';
 
 main();
 
@@ -21,6 +22,8 @@ function watchLanguage() {
 }
 
 async function main() {
+    addIconFonts();
+    
     await SettingsDataModule.ready;
     watchLanguage();
 

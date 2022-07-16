@@ -14,14 +14,14 @@
                             style="width: 100%"
                         />
                         <datalist id="alliance-list">
-                            <option v-for="name in allianceNames" :key="name">
+                            <option v-for="(name, i) in allianceNames" :key="i">
                                 {{ name }}
                             </option>
                         </datalist>
                     </template>
 
                     <div class="list-item" v-else>
-                        <span v-text="alliance.name" />
+                        <span v-text="`[${alliance.tag}] ${alliance.name}`" />
                     </div>
                 </template>
             </grid-table>

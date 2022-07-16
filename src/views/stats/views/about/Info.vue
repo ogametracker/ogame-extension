@@ -25,9 +25,6 @@
             no-header
             style="width: 400px"
         />
-        <hr />
-
-        <!-- TODO: possibility to go to migration helper page -->
     </div>
 </template>
 

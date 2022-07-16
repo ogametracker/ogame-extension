@@ -11,6 +11,8 @@ export const de: SettingsTranslations = {
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',
+
+        migrateOldData: 'Altdaten migrieren',
     },
     dateRanges: {
         defaultNames: {

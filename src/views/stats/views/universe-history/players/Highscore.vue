@@ -265,6 +265,9 @@
                 if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
                     return;
                 }
+                if(!types.includes(score.type)) {
+                    return; // happens if beta data available
+                }
 
                 datasetsByPlayer[score.playerId][score.type].values.push({
                     x: score.date,

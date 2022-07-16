@@ -9,6 +9,8 @@ export interface SettingsTranslations {
         resourceBalance: string;
         universeHistory: string;
         dangerZone: string;
+
+        migrateOldData: string;
     };
     dateRanges: {
         defaultNames: {

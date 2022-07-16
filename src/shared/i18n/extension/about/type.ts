@@ -15,6 +15,10 @@ export interface AboutTranslations {
                 header: string;
                 text: string;
             };
+            whatAreAverages: {
+                header: string;
+                text: string;
+            };
         };
         tips: {
             header: string;
