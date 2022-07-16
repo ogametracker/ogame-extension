@@ -159,7 +159,7 @@
     import { _throw } from '@/shared/utils/_throw';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
-    import { Component, Prop, VModel, Vue } from 'vue-property-decorator';
+    import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
 
     export interface AmortizationPlanetSettings {
         show: boolean;
@@ -193,9 +193,10 @@
         private readonly ShipType = ShipType;
         private readonly BuildingType = BuildingType;
         private readonly lifeforms = ValidLifeformTypes;
+        private readonly slots: number[] = Array.from({ length: 18 }).map((_, i) => i + 1);
 
         private readonly lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechnologyType>> = createRecord(
-            Array.from({ length: 18 }).map((_, i) => i + 1),
+            this.slots,
             slot => createRecord(
                 ValidLifeformTypes,
                 lf => LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ?? _throw('invalid slot')
@@ -219,6 +220,27 @@
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
+
+        @Watch('settings', { immediate: true, deep: true })
+        private onSettingsChanged() {
+            const lifeform = this.settings.lifeform;
+            if (lifeform == LifeformType.none) {
+                return;
+            }
+
+            const usedSlots = new Set<number>();
+            this.settings.activeLifeformTechnologies.forEach(tech => {
+                usedSlots.add(LifeformTechnologySlots[tech]);
+            });
+
+            this.slots.forEach(slot => {
+                if (usedSlots.has(slot)) {
+                    return;
+                }
+
+                this.settings.activeLifeformTechnologies.push(this.lifeformTechBySlot[slot][lifeform]);
+            });
+        }
 
         @Prop({ required: false, type: Boolean })
         private toggleable!: boolean;
