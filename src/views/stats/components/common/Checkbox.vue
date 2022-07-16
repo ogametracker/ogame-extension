@@ -1,18 +1,10 @@
 <template>
     <span class="checkbox" @click="checked = !checked">
         <span class="checkmark">
-            <span
-                class="mdi"
-                :style="{ color: color }"
-                :class="
-                    checked
-                        ? 'mdi-checkbox-blank'
-                        : 'mdi-checkbox-blank-outline'
-                "
-            />
-            <span class="check-icon mdi mdi-check" v-if="checked" />
+            <span class="mdi" :style="{ color: color }" :class="checked ? 'mdi-checkbox-blank' : 'mdi-checkbox-blank-outline'" />
+            <span class="check-icon mdi mdi-check" v-if="checked" :style="{ color: checkColor }"/>
         </span>
-        
+
         <span v-if="label != null" v-text="label" />
     </span>
 </template>
@@ -28,6 +20,9 @@
 
         @Prop({ required: false, type: String, default: () => null })
         private color!: string | null;
+
+        @Prop({ required: false, type: String, default: () => null })
+        private checkColor!: string | null;
 
         @Prop({ required: false, type: String, default: () => null })
         private label!: string | null;
