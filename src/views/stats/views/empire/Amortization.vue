@@ -11,6 +11,8 @@
                     <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
                 </button>
 
+                <span v-text="'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'" />
+
                 <floating-menu v-model="showSettingsMenu" left>
                     <template #activator>
                         <button @click="showSettingsMenu = !showSettingsMenu">
@@ -1291,7 +1293,7 @@
             overflow: auto;
             display: grid;
             grid-template-rows: auto 1fr;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: auto 1fr auto;
             justify-items: start;
 
             > button {
@@ -1318,7 +1320,7 @@
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
         background: rgba(var(--color), 0.05);
-        grid-column: 1 / span 2;
+        grid-column: 1 / span 3;
     }
 
     .msu-settings-amortization-info {
