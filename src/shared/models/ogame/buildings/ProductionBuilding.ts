@@ -5,9 +5,16 @@ import { Cost } from "../common/Cost";
 import { ServerSettings } from "../../server-settings/ServerSettings";
 
 export interface ProductionBuildingDependencies {
-    planet: PlanetData;
-    player: LocalPlayerData;
-    serverSettings: ServerSettings;
+    planet: {
+        position: number;
+        temperature: number;
+    };
+    economySpeed: number;
+    productionSettings: {
+        metalMine: number;
+        crystalMine: number;
+        deuteriumSynthesizer: number;
+    };
 }
 
 export abstract class ProductionBuilding extends Building {
