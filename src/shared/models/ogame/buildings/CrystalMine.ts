@@ -1,47 +1,34 @@
-import { PlayerOfficers } from "../../empire/PlayerOfficers";
-import { AllianceClass } from "../classes/AllianceClass";
-import { PlayerClass } from "../classes/PlayerClass";
 import { Cost } from "../common/Cost";
-import { ItemHash } from "../items/ItemHash";
-import { ResearchType } from "../research/ResearchType";
-import { ShipType } from "../ships/ShipType";
-import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
-import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
-import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
-import { ServerSettings } from "../../server-settings/ServerSettings";
-import { getLifeformCollectorClassBonus } from "../lifeforms/buildings/getLifeformCollectorClassBonus";
-import { getLifeformTechnologyProductionBonuses } from "../lifeforms/buildings/getLifeformTechnologyProductionBonuses";
-import { getLifeformBuildingProductionBonuses } from "../lifeforms/buildings/getLifeformBuildingProductionBonuses";
-
-//TODO: refactor, production should only return mine production
 class CrystalMineClass extends ProductionBuilding {
 
-    public getProduction(level: number, dependencies: ProductionBuildingDependencies): Cost {
-        const boost = this.getProductionBoost(dependencies.planet.coordinates.position, dependencies.serverSettings);
-        const mineProduction = Math.trunc(20 * dependencies.serverSettings.speed.economy * (1 + boost) * level * 1.1 ** level * dependencies.planet.productionSettings[BuildingType.crystalMine] / 100);
+    public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
+        const boost = this.getProductionBoost(dependencies.planet.position, dependencies.serverSettings);
+        const mineProduction = Math.trunc(
+            20
+            * dependencies.serverSettings.economySpeed
+            * (1 + boost)
+            * level
+            * 1.1 ** level
+            * dependencies.productionSettings.crystalMine / 100
+        );
 
-        return {
-            metal: 0,
-            crystal: mineProduction,
-            deuterium: 0,
-            energy: 0,
-        };
+        return mineProduction;
     }
 
-    private getProductionBoost(position: number, serverSettings: ServerSettings) {
+    private getProductionBoost(position: number, serverSettings: ProductionBuildingDependencies['serverSettings']) {
         switch (position) {
             case 1:
-                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos1;
+                return serverSettings.crystalBoost.pos1;
 
             case 2:
-                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos2;
+                return serverSettings.crystalBoost.pos2;
 
             case 3:
-                return serverSettings.resourceProduction.productionFactorBonus.crystal.pos3;
+                return serverSettings.crystalBoost.pos3;
         }
 
-        return serverSettings.resourceProduction.productionFactorBonus.crystal.default;
+        return serverSettings.crystalBoost.default;
     }
 
     public getConsumption(level: number, dependencies: ProductionBuildingDependencies): Cost {

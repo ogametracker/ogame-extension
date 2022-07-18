@@ -14,14 +14,15 @@ import { getCrawlerBoost } from "./getCrawlerBoost";
 import { ServerSettings } from "../../server-settings/ServerSettings";
 import { CrystalMine } from "../buildings/CrystalMine";
 import { getProductionBuildingDependencies } from "./getProductionBuildingDependencies";
+import { DeuteriumSynthesizer } from "../buildings/DeuteriumSynthesizer";
 
-function getCrystalItemBoost(activeItems: PlanetActiveItems) {
+function getDeuteriumItemBoost(activeItems: PlanetActiveItems) {
     const now = Date.now();
 
-    const items10 = [ItemHash.crystalBooster_bronze_1day, ItemHash.crystalBooster_bronze_7days];
-    const items20 = [ItemHash.crystalBooster_silver_7days, ItemHash.crystalBooster_silver_30days, ItemHash.crystalBooster_silver_90days];
-    const items30 = [ItemHash.crystalBooster_gold_7days, ItemHash.crystalBooster_gold_30days, ItemHash.crystalBooster_gold_90days];
-    const items40 = [ItemHash.crystalBooster_platinum_7days, ItemHash.crystalBooster_platinum_30days, ItemHash.crystalBooster_platinum_90days];
+    const items10 = [ItemHash.deuteriumBooster_bronze_1day, ItemHash.deuteriumBooster_bronze_7days];
+    const items20 = [ItemHash.deuteriumBooster_silver_7days, ItemHash.deuteriumBooster_silver_30days, ItemHash.deuteriumBooster_silver_90days];
+    const items30 = [ItemHash.deuteriumBooster_gold_7days, ItemHash.deuteriumBooster_gold_30days, ItemHash.deuteriumBooster_gold_90days];
+    const items40 = [ItemHash.deuteriumBooster_platinum_7days, ItemHash.deuteriumBooster_platinum_30days, ItemHash.deuteriumBooster_platinum_90days];
 
     if (items10.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
         return 0.1;
@@ -39,34 +40,15 @@ function getCrystalItemBoost(activeItems: PlanetActiveItems) {
     return 0;
 }
 
-function getCrystalProductionBoost(position: number, serverSettings: ServerSettings) {
-    switch (position) {
-        case 1:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos1;
-
-        case 2:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos2;
-
-        case 3:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos3;
-    }
-
-    return serverSettings.resourceProduction.productionFactorBonus.crystal.default;
-}
-
-export function getCrystalProduction(dependencies: ProductionDependencies): ProductionBreakdown {
-    const boost = getCrystalProductionBoost(dependencies.planet.coordinates.position, dependencies.serverSettings);
-
-    const baseProduction = 15 * dependencies.serverSettings.speed.economy * (1 + boost);
-
-    const mineLevel = dependencies.planet.buildings[BuildingType.crystalMine];
-    const mineProduction = CrystalMine.getProduction(mineLevel, getProductionBuildingDependencies(dependencies));
+export function getDeuteriumProduction(dependencies: ProductionDependencies): ProductionBreakdown {
+    const mineLevel = dependencies.planet.buildings[BuildingType.deuteriumSynthesizer];
+    const mineProduction = DeuteriumSynthesizer.getProduction(mineLevel, getProductionBuildingDependencies(dependencies));
 
     const geologistFactor = dependencies.player.officers.geologist ? 1 : 0;
     const geologistBonus = 0.1; //10%
     const geologistProduction = Math.round(geologistFactor * mineProduction * geologistBonus);
 
-    const plasmaTechBonusPerLevel = 0.0066; //0.66%
+    const plasmaTechBonusPerLevel = 0.0033; //0.33%
     const plasmaTechProduction = mineProduction * plasmaTechBonusPerLevel * dependencies.player.research[ResearchType.plasmaTechnology];
 
     const collectorClassFactor = 1 + getLifeformCollectorClassBonus(dependencies.player);
@@ -84,20 +66,20 @@ export function getCrystalProduction(dependencies: ProductionDependencies): Prod
     const allianceClassFactor = dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0;
     const allianceClassProduction = Math.round(allianceClassFactor * mineProduction * traderBonus);
 
-    const itemProduction = mineProduction * getCrystalItemBoost(dependencies.planet.activeItems);
+    const itemProduction = mineProduction * getDeuteriumItemBoost(dependencies.planet.activeItems);
 
     const lifeformBuildingProduction = getLifeformBuildingProductionBonuses(dependencies.planet)
-        .map(bonus => mineProduction * bonus.crystal)
+        .map(bonus => mineProduction * bonus.deuterium)
         .reduce((acc, cur) => acc + cur, 0);
 
     const lifeformTechProduction = mineProduction
-        * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.crystal, 0);
+        * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.deuterium, 0);
 
     const crawlerBoost = getCrawlerBoost(dependencies, collectorClassFactor);
     const crawlerProduction = Math.round(mineProduction * crawlerBoost);
 
     return createProductionBreakdown({
-        base: baseProduction,
+        base: 0,
         mine: mineProduction,
         plasmaTechnology: plasmaTechProduction,
         geologist: geologistProduction,

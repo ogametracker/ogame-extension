@@ -6,7 +6,7 @@ export function createProductionBreakdown(breakdown: Omit<ProductionBreakdown, '
         get total() {
             return Object.keys(this)
                 .filter(k => k != 'total')
-                .reduce((acc, cur) => acc + this[cur] as number, 0),
+                .reduce((acc, cur) => acc + this[cur as Exclude<keyof ProductionBreakdown, 'total'>], 0);
         },
     };
 }

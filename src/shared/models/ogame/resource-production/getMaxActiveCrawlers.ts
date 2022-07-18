@@ -1,21 +1,22 @@
 import { ServerSettings } from "../../server-settings/ServerSettings";
-import { PlayerClass } from "../classes/PlayerClass";
 
 export function getMaxActiveCrawlers(
     metalMineLevel: number,
     crystalMineLevel: number,
     deuteriumSynthesizerLevel: number,
-    playerClass: PlayerClass,
-    geologist: boolean,
+    isCollector: boolean,
+    hasGeologist: boolean,
     serverSettings: ServerSettings,
-    collectorClassBonus: number
+    collectorClassFactor: number
 ) {
-    const maxCrawlerFactor = geologist && playerClass == PlayerClass.collector
-        ? (1 + serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus) * collectorClassBonus
+    const maxCrawlerFactor = hasGeologist && isCollector
+        ? (1 + serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus) * collectorClassFactor
         : 1;
+        
+    const crawlersPerLevel = 8;
     const maxCrawlers = Math.floor(
         (metalMineLevel + crystalMineLevel + deuteriumSynthesizerLevel) 
-        * 8
+        * crawlersPerLevel
         * maxCrawlerFactor
     );
 

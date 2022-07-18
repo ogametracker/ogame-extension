@@ -3,17 +3,12 @@ import { ProductionBuilding, ProductionBuildingDependencies } from "./Production
 
 class MetalMineClass extends ProductionBuilding {
 
-    public getProduction(level: number, dependencies: ProductionBuildingDependencies): Cost {
+    public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const boost = this.getProductionBoost(dependencies.planet.position);
-        const baseProduction = 30 * dependencies.economySpeed * (1 + boost);
+        const baseProduction = 30 * dependencies.serverSettings.economySpeed * (1 + boost);
         const mineProduction = Math.trunc(baseProduction * level * 1.1 ** level * dependencies.productionSettings.metalMine / 100);
         
-        return {
-            metal: mineProduction,
-            crystal: 0,
-            deuterium: 0,
-            energy: 0,
-        };
+        return mineProduction;
     }
 
 

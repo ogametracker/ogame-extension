@@ -90,11 +90,12 @@
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { getMaxActiveCrawlers } from '@/shared/models/ogame/buildings/getMaxActiveCrawlers';
     import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
     import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { getLifeformCollectorClassBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
+    import { getMaxActiveCrawlers } from '@/shared/models/ogame/resource-production/getMaxActiveCrawlers';
+    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
 
     interface ProductionMineItem {
         planet: {
@@ -176,7 +177,7 @@
         }
 
         private get items(): ProductionMineItem[] {
-            const collectorClassBonus = 1 + getLifeformCollectorClassBonus(this.player);
+            const collectorClassFactor = 1 + getLifeformCollectorClassBonus(this.player);
 
             return this.planets
                 .map(planet => {
@@ -184,10 +185,10 @@
                         planet.buildings[BuildingType.metalMine],
                         planet.buildings[BuildingType.crystalMine],
                         planet.buildings[BuildingType.deuteriumSynthesizer],
-                        this.player.playerClass,
+                        this.player.playerClass == PlayerClass.collector,
                         this.player.officers.geologist,
                         ServerSettingsDataModule.serverSettings,
-                        collectorClassBonus,
+                        collectorClassFactor,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 

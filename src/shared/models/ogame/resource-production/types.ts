@@ -1,3 +1,7 @@
+import { LocalPlayerData } from "../../empire/LocalPlayerData";
+import { PlanetData } from "../../empire/PlanetData";
+import { ServerSettings } from "../../server-settings/ServerSettings";
+
 export interface ProductionBreakdown {
     base: number;
     mine: number;
@@ -14,4 +18,10 @@ export interface ProductionBreakdown {
     lifeformTechnologies: number;
 
     get total(): number;
+}
+
+export interface ProductionDependencies {
+    planet: PlanetData;
+    player: LocalPlayerData;
+    serverSettings: ServerSettings;
 }
