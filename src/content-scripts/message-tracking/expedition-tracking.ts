@@ -8,7 +8,7 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionEventResources, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
@@ -108,7 +108,10 @@ function onMessage(message: Message<MessageType, any>) {
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.hideContent, cssClasses.messages.processed);
+            li.classList.add(cssClasses.messages.processed);
+            if(settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+                li.classList.add(cssClasses.messages.hideContent);
+            }
             addExpeditionResultContent(li, msg.data);
 
             if (message.type == MessageType.NewExpedition) {
@@ -263,7 +266,7 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
             const units = ships.reduce((total, ship) => {
-                const shipCost = multiplyCost(Ships[ship as number as ShipType].getCost(), expedition.fleet[ship] ?? 0);
+                const shipCost = multiplyCost(Ships[ship as ShipType].getCost(), expedition.fleet[ship] ?? 0);
                 const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
                 return addCost(total, adjustedCost);
             }, { metal: 0, crystal: 0, deuterium: 0 } as Cost)

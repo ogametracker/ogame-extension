@@ -11,6 +11,7 @@ export const en: SettingsTranslations = {
         resourceBalance: 'Resource Balance',
         universeHistory: 'Universe History',
         dangerZone: 'Danger Zone',
+        accessbility: 'Accessibility',
 
         migrateOldData: 'Migrate old data',
     },
@@ -151,6 +152,12 @@ export const en: SettingsTranslations = {
             importingBasicData: 'Importing basic account and server data',
             importingAccounts: 'Importing accounts',
             importingUniverseHistories: 'Importing server universe history',
+        },
+    },
+    accessibility: {
+        showSimplifiedResults: {
+            title: 'Simplified visualization',
+            label: 'Simplified visualization, hides original messages of expedition results and DF harvest reports, and shows icons instead of texts in notifications.',
         },
     },
 };

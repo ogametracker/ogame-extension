@@ -11,6 +11,7 @@ export const de: SettingsTranslations = {
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',
+        accessbility: 'Barrierefreiheit',
 
         migrateOldData: 'Altdaten migrieren',
     },
@@ -151,6 +152,12 @@ export const de: SettingsTranslations = {
             importingBasicData: 'Grundlegende Account- und Server-Informationen werden importiert',
             importingAccounts: 'Accounts werden importiert',
             importingUniverseHistories: 'Universumshistorien werden importiert',
+        },
+    },
+    accessibility: {
+        showSimplifiedResults: {
+            title: 'Vereinfachte Ansicht',
+            label: 'Vereinfachte Ansicht, versteckt Originaltexte von Expeditionsergebnissen und TF-Abbauberichten, und zeigt Icons anstatt Texten in den Benachrichtigungen.',
         },
     },
 };

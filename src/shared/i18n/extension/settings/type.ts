@@ -9,6 +9,7 @@ export interface SettingsTranslations {
         resourceBalance: string;
         universeHistory: string;
         dangerZone: string;
+        accessbility: string;
 
         migrateOldData: string;
     };
@@ -147,6 +148,13 @@ export interface SettingsTranslations {
             importingBasicData: string;
             importingAccounts: string;
             importingUniverseHistories: string;
+        };
+    };
+
+    accessibility: {
+        showSimplifiedResults: {
+            title: string;
+            label: string;
         };
     };
 }

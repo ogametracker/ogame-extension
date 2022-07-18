@@ -2,24 +2,48 @@ import { getQueryParameters } from "../../shared/utils/getQueryParameters";
 import { initExpeditionTracking } from "./expedition-tracking";
 import { initDebrisFieldReportTracking } from "./debris-field-report-tracking";
 import { initCombatReportTracking } from "./combat-report-tracking";
-import { loadSettings } from "@/shared/models/settings/loadSettings";
-import { LanguageKey } from "@/shared/i18n/LanguageKey";
-import { getDefaultSettings } from "@/shared/models/settings/getDefaultSettings";
+import { Settings } from "@/shared/models/settings/Settings";
+import { RequestSettingsMessage, SettingsMessage } from "@/shared/messages/settings";
+import { MessageType } from "@/shared/messages/MessageType";
+import { messageTrackingUuid } from "@/shared/uuid";
+import { sendMessage } from "@/shared/communication/sendMessage";
+import { Message } from "@/shared/messages/Message";
 
 import './styles.scss';
 
 const queryParams = getQueryParameters(location.search);
 export const settingsWrapper = {
-    settings: getDefaultSettings('__internal__' as LanguageKey),
+    settings: {} as Settings,
 };
-if(queryParams.page == 'messages') {
+if (queryParams.page == 'messages') {
     init();
 }
 
 async function init() {
+    settingsWrapper.settings = await getSettings();
+
     initExpeditionTracking();
     initCombatReportTracking();
     initDebrisFieldReportTracking();
+}
 
-    settingsWrapper.settings = await loadSettings('__internal__' as LanguageKey);
+function getSettings(): Promise<Settings> {
+    return new Promise<Settings>(resolve => {
+        chrome.runtime.onMessage.addListener(msg => {
+            const message = msg as Message;
+            if(message.type != MessageType.Settings) {
+                return;
+            }
+
+            const settingsMsg = message as SettingsMessage;
+            resolve(settingsMsg.data);
+        });
+
+        const requestMessage: RequestSettingsMessage = {
+            type: MessageType.RequestSettings,
+            ogameMeta: { language: 'de', playerId: 0, serverId: 0 },
+            senderUuid: messageTrackingUuid,
+        };
+        sendMessage(requestMessage);
+    });
 }

@@ -1,6 +1,7 @@
 import { de as ships } from '../ogame/ships/de';
 import { de as buildings } from '../ogame/buildings/de';
 import { de as research } from '../ogame/research/de';
+import { de as premium } from '../ogame/premium/de';
 
 import { ExtensionTranslations } from "./type";
 import { de as settings } from './settings/de';
@@ -21,6 +22,7 @@ export const de: ExtensionTranslations = {
     ships,
     buildings,
     research,
+    premium,
 
     common,
     settings,
