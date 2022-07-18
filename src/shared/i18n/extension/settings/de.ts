@@ -121,4 +121,36 @@ export const de: SettingsTranslations = {
             confirmationText2: 'Bitte bestätige erneut, dass du alle Daten löschen möchtest.',
         },
     },
+
+    importExport: {
+        export: {
+            header: 'Export',
+            description: 'Hier kannst du deine Daten exportieren. Der Export enthält alle relevanten Daten deiner getrackten Accounts und dazugehörigen Servern.',
+            includeUniverseHistory: 'auch Universumshistorie exportieren (kann die Dateigröße und Importzeit deutlich erhöhen!)',
+            button: 'Export starten',
+            wait: 'Bitte warte während deine Daten für den Export vorbereitet werden...',
+
+            errors: {
+                unexpectedError: 'Ein unerwarteter Fehler ist während des Exports aufgetreten.',
+            },
+        },
+        import: {
+            header: 'Import',
+            description: 'Hier kannst du deine Daten aus einer Datei importieren. Bitte wähle die Importdatei.',
+            button: 'Import starten',
+            wait: 'Bitte warte während deine Daten importiert werden...',
+
+            errors: {
+                invalidFormat: 'Das Dateiformat ist ungültig.',
+                unexpectedError: 'Ein unerwarteter Fehler ist während des Imports aufgetreten.',
+            },
+        },
+
+        importCallbacks: {
+            importingSettings: 'Einstellungen werden imporiert',
+            importingBasicData: 'Grundlegende Account- und Server-Informationen werden importiert',
+            importingAccounts: 'Accounts werden importiert',
+            importingUniverseHistories: 'Universumshistorien werden importiert',
+        },
+    },
 };

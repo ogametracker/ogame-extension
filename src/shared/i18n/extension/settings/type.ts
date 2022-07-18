@@ -112,9 +112,41 @@ export interface SettingsTranslations {
             confirmationText: (server: string) => string;
         };
         deleteEverything: {
-            button:string;
+            button: string;
             confirmationText1: string;
             confirmationText2: string;
+        };
+    };
+
+    importExport: {
+        export: {
+            header: string;
+            description: string;
+            includeUniverseHistory: string;
+            button: string;
+            wait: string;
+
+            errors: {
+                unexpectedError: string;
+            };
+        };
+        import: {
+            header: string;
+            description: string;
+            button: string;
+            wait: string;
+
+            errors: {
+                invalidFormat: string;
+                unexpectedError: string;
+            };
+        };
+
+        importCallbacks: {
+            importingSettings: string;
+            importingBasicData: string;
+            importingAccounts: string;
+            importingUniverseHistories: string;
         };
     };
 }
