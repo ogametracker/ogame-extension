@@ -16,6 +16,7 @@ import { TrackExpeditionMessage } from "../../shared/messages/tracking/expeditio
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -43,11 +44,8 @@ export class ExpeditionModule {
         // otherwise parse and save result
         let expedition: ExpeditionEvent;
         try {
-            if (!isSupportedLanguage(language)) {
-                throw new Error(`unsupported language '${language}'`);
-            }
-
-            expedition = this.parseExpedition(language as LanguageKey, expeditionEventData);
+            const languageKey = getLanguage(language, true);
+            expedition = this.parseExpedition(languageKey, expeditionEventData);
 
             await db.put('expeditions', expedition);
 
