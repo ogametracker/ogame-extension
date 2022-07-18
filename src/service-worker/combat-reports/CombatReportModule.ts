@@ -13,6 +13,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { settingsService } from "../main";
 import { OgameCombatReport, OgameCombatRound } from "@/shared/models/ogame/combats/OgameCombatReport";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 
 type CombatReportResult = {
     report: CombatReport;
@@ -102,11 +103,10 @@ export class CombatReportModule {
     private parseCombatReport(language: string, playerId: number, rawCombatReportData: RawCombatReportData): CombatReport {
         const { id, ogameCombatReport } = rawCombatReportData;
 
-        if (ogameCombatReport.isExpedition && !isSupportedLanguage(language)) {
-            throw new Error(`unsupported language '${language}'`);
+        const languageKey = getLanguage(language);
+        if(ogameCombatReport.isExpedition && languageKey == null) {
+            _throw(`unsupported language '${language}'`);
         }
-        const languageKey = language as LanguageKey;
-
         const attackingFleets = Object.values(ogameCombatReport.attacker);
         // lootFactor if player is one of the attackers = 1
         // if player a defending fleet but not the owner of the planet = 0
@@ -130,7 +130,7 @@ export class CombatReportModule {
 
 
         const expeditionAttackType = ogameCombatReport.isExpedition
-            ? ogameCombatReport.attacker[0].ownerName == i18nFactions[languageKey].pirates
+            ? ogameCombatReport.attacker[0].ownerName == i18nFactions[languageKey!].pirates
                 ? 'pirates'
                 : 'aliens'
             : null;

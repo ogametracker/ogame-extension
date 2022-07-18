@@ -11,6 +11,7 @@ export const en: SettingsTranslations = {
         resourceBalance: 'Resource Balance',
         universeHistory: 'Universe History',
         dangerZone: 'Danger Zone',
+        accessbility: 'Accessibility',
 
         migrateOldData: 'Migrate old data',
     },
@@ -119,6 +120,44 @@ export const en: SettingsTranslations = {
             confirmationText1: `If you confirm, all data will be deleted.\n`
                 + 'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
             confirmationText2: 'Please confirm again that you want to delete all data.',
+        },
+    },
+
+    importExport: {
+        export: {
+            header: 'Export',
+            description: 'Here you can export your data. This will include relevant data of all your tracked accounts and their servers.',
+            includeUniverseHistory: 'include universe history in export (this may greatly increase file size and import time!)',
+            button: 'Start export',
+            wait: 'Please wait while your data is being prepared for the export...',
+
+            errors: {
+                unexpectedError: 'An unexpected error occured while exporting your data.',
+            },
+        },
+        import: {
+            header: 'Import',
+            description: 'Here you can import your data from a file. Please select your file.',
+            button: 'Start import',
+            wait: 'Please wait while your data is being imported...',
+
+            errors: {
+                invalidFormat: 'The file format is invalid.',
+                unexpectedError: 'An unexpected error occured while importing your data.',
+            },
+        },
+
+        importCallbacks: {
+            importingSettings: 'Importing your settings',
+            importingBasicData: 'Importing basic account and server data',
+            importingAccounts: 'Importing accounts',
+            importingUniverseHistories: 'Importing server universe history',
+        },
+    },
+    accessibility: {
+        showSimplifiedResults: {
+            title: 'Simplified visualization',
+            label: 'Simplified visualization, hides original messages of expedition results and DF harvest reports, and shows icons instead of texts in notifications.',
         },
     },
 };

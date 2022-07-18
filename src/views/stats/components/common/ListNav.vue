@@ -106,6 +106,8 @@
         flex-direction: column;
         min-width: 125px;
         gap: 2px;
+        max-height: 100%;
+        overflow: auto;
     }
 
     .nav-list-item {

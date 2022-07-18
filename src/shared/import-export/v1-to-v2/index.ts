@@ -1,6 +1,6 @@
-import { CombatReport } from "../models/combat-reports/CombatReport";
-import { DebrisFieldReport } from "../models/debris-field-reports/DebrisFieldReport";
-import { ExpeditionEvent } from "../models/expeditions/ExpeditionEvents";
+import { CombatReport } from "../../models/combat-reports/CombatReport";
+import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
+import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
 
 export interface V1ToV2ExportedAccount {
     language: string;
