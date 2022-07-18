@@ -40,7 +40,8 @@ const observer = new MutationObserver(() => {
         `;
         ogameTrackerMenu.innerHTML = html;
         const link = ogameTrackerMenu.querySelector('.menubutton')! as HTMLAnchorElement;
-        link.addEventListener('click', e => showOgameTrackerDialog());
+        //TODO: disabled until "indexeddb access blocked by user": link.addEventListener('click', e => showOgameTrackerDialog());
+        link.addEventListener('click', e => window.open(getStatsPageUrl(false), '_blank'));
 
         const miniLink = ogameTrackerMenu.querySelector('.menu_icon')! as HTMLAnchorElement;
         miniLink.addEventListener('click', e => window.open(getStatsPageUrl(false), '_blank'));
