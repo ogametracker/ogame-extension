@@ -56,24 +56,7 @@
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-
-    export interface AmortizationPlayerSettings {
-        msuConversionRates: {
-            crystal: number;
-            deuterium: number;
-        };
-        officers: {
-            admiral: boolean;
-            commander: boolean;
-            engineer: boolean;
-            geologist: boolean;
-            technocrat: boolean;
-        };
-        playerClass: PlayerClass;
-        allianceClass: AllianceClass;
-        levelPlasmaTechnology: number;
-        levelAstrophysics: number;
-    }
+    import { AmortizationPlayerSettings } from '@stats/models/empire/amortization/AmortizationPlayerSettings';
 
     @Component({
         components: {

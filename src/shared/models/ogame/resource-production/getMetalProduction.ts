@@ -1,43 +1,17 @@
-import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
 import { BuildingType } from "../buildings/BuildingType";
 import { MetalMine } from "../buildings/MetalMine";
-import { AllianceClass } from "../classes/AllianceClass";
-import { PlayerClass } from "../classes/PlayerClass";
-import { ItemHash } from "../items/ItemHash";
-import { getLifeformBuildingProductionBonuses } from "../lifeforms/buildings/getLifeformBuildingProductionBonuses";
 import { getLifeformCollectorClassBonus } from "../lifeforms/buildings/getLifeformCollectorClassBonus";
-import { getLifeformTechnologyProductionBonuses } from "../lifeforms/buildings/getLifeformTechnologyProductionBonuses";
-import { hasCommandStaff } from "../premium/hasCommandStaff";
-import { ResearchType } from "../research/ResearchType";
-import { createProductionBreakdown } from "./createProductionBreakdown";
 import { ProductionBreakdown, ProductionDependencies } from "./types";
-import { getCrawlerBoost } from "./getCrawlerBoost";
 import { getProductionBuildingDependencies } from "./getProductionBuildingDependencies";
-import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
-
-function getMetalItemBoost(activeItems: PlanetActiveItems) {
-    const now = Date.now();
-
-    const items10 = [ItemHash.metalBooster_bronze_1day, ItemHash.metalBooster_bronze_7days];
-    const items20 = [ItemHash.metalBooster_silver_7days, ItemHash.metalBooster_silver_30days, ItemHash.metalBooster_silver_90days];
-    const items30 = [ItemHash.metalBooster_gold_7days, ItemHash.metalBooster_gold_30days, ItemHash.metalBooster_gold_90days];
-    const items40 = [ItemHash.metalBooster_platinum_7days, ItemHash.metalBooster_platinum_30days, ItemHash.metalBooster_platinum_90days];
-
-    if (items10.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
-        return 0.1;
-    }
-    if (items20.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
-        return 0.2;
-    }
-    if (items30.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
-        return 0.3;
-    }
-    if (items40.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
-        return 0.4;
-    }
-
-    return 0;
-}
+import { ResourceType } from "../resources/ResourceType";
+import { _throw } from "@/shared/utils/_throw";
+import { ResearchType } from "../research/ResearchType";
+import { hasCommandStaff } from "../premium/hasCommandStaff";
+import { ShipType } from "../ships/ShipType";
+import { getItemBonus } from "./getItemBonus";
+import { getCrawlerBoost } from "./getCrawlerBoost";
+import { getLifeformBuildingProductionBonus } from "../lifeforms/buildings/getLifeformBuildingProductionBonuses";
+import { getLifeformTechnologyProductionBonus } from "../lifeforms/buildings/getLifeformTechnologyProductionBonuses";
 
 function getMetalProductionBoost(position: number) {
     switch (position) {
@@ -56,56 +30,39 @@ function getMetalProductionBoost(position: number) {
     return 0;
 }
 
+
 export function getMetalProduction(dependencies: ProductionDependencies): ProductionBreakdown {
     const boost = getMetalProductionBoost(dependencies.planet.coordinates.position);
-
     const baseProduction = 30 * dependencies.serverSettings.speed.economy * (1 + boost);
-
     const mineLevel = dependencies.planet.buildings[BuildingType.metalMine];
     const mineProduction = MetalMine.getProduction(mineLevel, getProductionBuildingDependencies(dependencies));
 
-    const geologistFactor = dependencies.player.officers.geologist ? 1 : 0;
-    const geologistProduction = geologistFactor * mineProduction * GeologistProductionBonus;
+    const collectorClassBonus = getLifeformCollectorClassBonus(dependencies.player);
 
-    const plasmaTechProduction = mineProduction * PlasmaTechnologyProductionBonus.metal * dependencies.player.research[ResearchType.plasmaTechnology];
-
-    const collectorClassFactor = 1 + getLifeformCollectorClassBonus(dependencies.player);
-    const collectorFactor = dependencies.player.playerClass == PlayerClass.collector ? 1 : 0;
-    const playerClassProduction = collectorFactor
-        * mineProduction
-        * dependencies.serverSettings.playerClasses.collector.productionFactorBonus
-        * collectorClassFactor;
-
-    const commandStaffFactor = hasCommandStaff(dependencies.player.officers) ? 1 : 0;
-    const commandStaffProduction = commandStaffFactor * mineProduction * CommandStaffProductionBonus;
-
-    const allianceClassFactor = dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0;
-    const allianceClassProduction = allianceClassFactor * mineProduction * AllianceClassTraderProductionBonus;
-
-    const itemProduction = mineProduction * getMetalItemBoost(dependencies.planet.activeItems);
-
-    const lifeformBuildingProduction = getLifeformBuildingProductionBonuses(dependencies.planet)
-        .map(bonus => mineProduction * bonus.metal)
-        .reduce((acc, cur) => acc + cur, 0);
-
-    const lifeformTechProduction = mineProduction
-        * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.metal, 0);
-
-    const crawlerBoost = getCrawlerBoost(dependencies, collectorClassFactor);
-    const crawlerProduction = mineProduction * crawlerBoost;
-
-    return createProductionBreakdown({
-        base: baseProduction,
-        mine: mineProduction,
-        plasmaTechnology: plasmaTechProduction,
-        geologist: geologistProduction,
-        commandStaff: commandStaffProduction,
-        allianceClass: allianceClassProduction,
-        playerClass: playerClassProduction,
-        crawlers: crawlerProduction,
-        item: itemProduction,
-        lifeformBuildings: lifeformBuildingProduction,
-        lifeformTechnologies: lifeformTechProduction,
-    });
-
+    return new ProductionBreakdown(
+        baseProduction,
+        mineProduction,
+        ResourceType.metal,
+        dependencies.player.research[ResearchType.plasmaTechnology],
+        dependencies.player.playerClass,
+        dependencies.player.allianceClass,
+        dependencies.player.officers.geologist,
+        hasCommandStaff(dependencies.player.officers),
+        getItemBonus(ResourceType.metal, dependencies.planet.activeItems),
+        getCrawlerBoost({
+            availableCrawlers: dependencies.planet.ships[ShipType.crawler],
+            collectorClassBonus: collectorClassBonus,
+            crawlerProductionSetting: dependencies.planet.productionSettings[ShipType.crawler],
+            hasGeologist: dependencies.player.officers.geologist,
+            playerClass: dependencies.player.playerClass,
+            levelMetalMine: dependencies.planet.buildings[BuildingType.metalMine],
+            levelCrystalMine: dependencies.planet.buildings[BuildingType.crystalMine],
+            levelDeuteriumSynthesizer: dependencies.planet.buildings[BuildingType.deuteriumSynthesizer],
+            serverSettings: dependencies.serverSettings,
+        }), 
+        getLifeformBuildingProductionBonus(dependencies.planet).metal,
+        getLifeformTechnologyProductionBonus(dependencies.player).metal,
+        collectorClassBonus,
+        { collectorProductionFactor: dependencies.serverSettings.playerClasses.collector.productionFactorBonus },
+    );
 }

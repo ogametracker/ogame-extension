@@ -160,33 +160,8 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
-
-    export interface AmortizationPlanetSettings {
-        show: boolean;
-        id: number;
-        name: string;
-        coordinates?: Coordinates;
-        position: number;
-        maxTemperature: number;
-
-        activeItems: ItemHash[];
-        crawlers: {
-            enabled: boolean;
-            overload: boolean;
-            count: number;
-            max: boolean;
-        };
-
-        mines?: {
-            metalMine: number;
-            crystalMine: number;
-            deuteriumSynthesizer: number;
-        };
-        lifeform: LifeformType;
-        activeLifeformTechnologies: LifeformTechnologyType[];
-        lifeformBuildingLevels?: Record<LifeformBuildingType, number>;
-        lifeformTechnologyLevels?: Record<LifeformTechnologyType, number>;
-    }
+    import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
+    import { AmortizationPlanetSettings } from '@stats/models/empire/amortization/AmortizationPlanetSettings';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -240,6 +215,11 @@
 
                 this.settings.activeLifeformTechnologies.push(this.lifeformTechBySlot[slot][lifeform]);
             });
+        }
+
+        @Watch('settings.position')
+        private onAstrophysicsSettingsPlanetPositionChanged(newPosition: number) {
+            this.settings.maxTemperature = getAverageTemperature(newPosition);
         }
 
         @Prop({ required: false, type: Boolean })

@@ -5,14 +5,11 @@ import { LifeformType } from "../LifeformType";
 import { ResourceProductionBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
 import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
 
-
-/** returns lifeform tech production bonus by planet ids */
-export function getLifeformTechnologyProductionBonuses(player: LocalPlayerData): Cost[] {
+export function getLifeformTechnologyProductionBonus(player: LocalPlayerData): Cost {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
 
     // get technology bonus per planet (level + buildings)
     const technologyBonusByPlanet = getLifeformTechnologyBonus(player);
-
 
     // production bonus
     // calculate first
@@ -37,5 +34,8 @@ export function getLifeformTechnologyProductionBonuses(player: LocalPlayerData):
         techProductionBonuses.push(productionBonus);
     }
 
-    return techProductionBonuses;
+    return techProductionBonuses.reduce(
+        (acc, cur) => addCost(acc, cur),
+        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+    );;
 }

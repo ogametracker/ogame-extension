@@ -1,29 +1,40 @@
-import { BuildingType } from "../buildings/BuildingType";
+import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
+import { ServerSettings } from "../../server-settings/ServerSettings";
 import { PlayerClass } from "../classes/PlayerClass";
-import { ShipType } from "../ships/ShipType";
 import { getMaxActiveCrawlers } from "./getMaxActiveCrawlers";
-import { ProductionDependencies } from "./types";
 
-export function getCrawlerBoost(dependencies: ProductionDependencies, collectorClassFactor: number): number {
+export interface CrawlerBoostCalculationData {
+    availableCrawlers: number;
+    crawlerProductionSetting: CrawlerProductionPercentage;
+    levelMetalMine: number;
+    levelCrystalMine: number;
+    levelDeuteriumSynthesizer: number;
+    playerClass: PlayerClass;
+    hasGeologist: boolean;
+    collectorClassBonus: number;
+    serverSettings: ServerSettings;
+}
+
+export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
     const maxCrawlers = getMaxActiveCrawlers(
-        dependencies.planet.buildings[BuildingType.metalMine],
-        dependencies.planet.buildings[BuildingType.crystalMine],
-        dependencies.planet.buildings[BuildingType.deuteriumSynthesizer],
-        dependencies.player.playerClass == PlayerClass.collector,
-        dependencies.player.officers.geologist,
-        dependencies.serverSettings,
-        collectorClassFactor,
+        data.levelMetalMine,
+        data.levelCrystalMine,
+        data.levelDeuteriumSynthesizer,
+        data.playerClass == PlayerClass.collector,
+        data.hasGeologist,
+        data.serverSettings,
+        data.collectorClassBonus,
     );
-    const crawlerCount = Math.min(maxCrawlers, dependencies.planet.ships[ShipType.crawler]);
-    const crawlerProductivity = dependencies.player.playerClass == PlayerClass.collector
-        ? (1 + dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) * collectorClassFactor
+    const crawlerCount = Math.min(maxCrawlers, data.availableCrawlers);
+    const crawlerProductivity = data.playerClass == PlayerClass.collector
+        ? (1 + data.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) * (1 + data.collectorClassBonus)
         : 1;
 
     const potentialCrawlerBoost =
-        dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit
+        data.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit
         * crawlerCount
         * crawlerProductivity
-        * dependencies.planet.productionSettings[ShipType.crawler] / 100;
+        * data.crawlerProductionSetting / 100;
 
-    return Math.min(potentialCrawlerBoost, dependencies.serverSettings.playerClasses.crawlers.maxProductionFactor);
+    return Math.min(potentialCrawlerBoost, data.serverSettings.playerClasses.crawlers.maxProductionFactor);
 }

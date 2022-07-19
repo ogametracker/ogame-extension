@@ -2,8 +2,8 @@ import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { addCost, Cost } from "../../common/Cost";
 import { ResourceProductionBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
 
-export function getLifeformBuildingProductionBonuses(planet: PlanetData): Cost[] {
-    
+export function getLifeformBuildingProductionBonus(planet: PlanetData): Cost {
+
     const productionBonusBuildings = ResourceProductionBonusLifeformBuildingsByLifeform[planet.activeLifeform];
     const buildingProductionBonus = productionBonusBuildings.map<Cost>(building => {
         const level = planet.lifeformBuildings[building.type];
@@ -11,5 +11,8 @@ export function getLifeformBuildingProductionBonuses(planet: PlanetData): Cost[]
         return bonus;
     });
 
-    return buildingProductionBonus;
+    return buildingProductionBonus.reduce(
+        (acc, cur) => addCost(acc, cur),
+        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+    );
 }
