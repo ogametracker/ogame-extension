@@ -72,13 +72,13 @@
                 </span>
             </template>
             <template #cell-metal="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(Math.floor(value), numberFormat) }}
             </template>
             <template #cell-crystal="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(Math.floor(value), numberFormat) }}
             </template>
             <template #cell-deuterium="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(Math.floor(value), numberFormat) }}
             </template>
             <template #cell-total="{ value }">
                 {{ $i18n.$n(value, numberFormat) }}

@@ -10,7 +10,7 @@ import { DeuteriumSynthesizer } from "@/shared/models/ogame/buildings/DeuteriumS
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuilding, ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
+import { Cost, multiplyCost, multiplyCostInt } from "@/shared/models/ogame/common/Cost";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { getLifeformCollectorClassBonus } from "@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
@@ -262,7 +262,7 @@ export class AmortizationItemGenerator {
 
         const mineCost = mine.getCost(newLevel);
         const mineCostMsu = this.#getMsu(mineCost);
-        let reducedCostMsu = this.#getMsu(multiplyCost(mineCost, 1 - costReduction));
+        let reducedCostMsu = this.#getMsu(multiplyCostInt(mineCost, 1 - costReduction));
         const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
 
         // take best reduction lifeform building level as long as the reduced cost + lf building cost is less than the original cost
@@ -270,7 +270,7 @@ export class AmortizationItemGenerator {
             const bestReductionBuilding = lfMineCostReductionBuildings.map(building => {
                 //TODO: include cost reduction of cost reduction building
                 const level = localLifeformBuildingLevels[building.type];
-                const cost = multiplyCost(building.getCost(level + 1), 1 - lfBuildingCostReduction[building.type]);
+                const cost = multiplyCostInt(building.getCost(level + 1), 1 - lfBuildingCostReduction[building.type]);
                 const costMsu = this.#getMsu(cost);
                 const newCostReduction = costReduction
                     - building.getCostAndTimeReduction(mineType, level).cost
@@ -279,7 +279,7 @@ export class AmortizationItemGenerator {
                 return {
                     building: building.type,
                     level: level + 1,
-                    reducedCostMsu: this.#getMsu(multiplyCost(mineCost, 1 - newCostReduction)) + costMsu,
+                    reducedCostMsu: this.#getMsu(multiplyCostInt(mineCost, 1 - newCostReduction)) + costMsu,
                 };
             }).sort((a, b) => a.reducedCostMsu - b.reducedCostMsu)[0];
 
