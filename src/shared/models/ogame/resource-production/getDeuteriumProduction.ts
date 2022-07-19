@@ -15,6 +15,7 @@ import { ServerSettings } from "../../server-settings/ServerSettings";
 import { CrystalMine } from "../buildings/CrystalMine";
 import { getProductionBuildingDependencies } from "./getProductionBuildingDependencies";
 import { DeuteriumSynthesizer } from "../buildings/DeuteriumSynthesizer";
+import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
 
 function getDeuteriumItemBoost(activeItems: PlanetActiveItems) {
     const now = Date.now();
@@ -45,11 +46,9 @@ export function getDeuteriumProduction(dependencies: ProductionDependencies): Pr
     const mineProduction = DeuteriumSynthesizer.getProduction(mineLevel, getProductionBuildingDependencies(dependencies));
 
     const geologistFactor = dependencies.player.officers.geologist ? 1 : 0;
-    const geologistBonus = 0.1; //10%
-    const geologistProduction = geologistFactor * mineProduction * geologistBonus;
+    const geologistProduction = geologistFactor * mineProduction * GeologistProductionBonus;
 
-    const plasmaTechBonusPerLevel = 0.0033; //0.33%
-    const plasmaTechProduction = mineProduction * plasmaTechBonusPerLevel * dependencies.player.research[ResearchType.plasmaTechnology];
+    const plasmaTechProduction = mineProduction * PlasmaTechnologyProductionBonus.deuterium * dependencies.player.research[ResearchType.plasmaTechnology];
 
     const collectorClassFactor = 1 + getLifeformCollectorClassBonus(dependencies.player);
     const collectorFactor = dependencies.player.playerClass == PlayerClass.collector ? 1 : 0;
@@ -59,12 +58,10 @@ export function getDeuteriumProduction(dependencies: ProductionDependencies): Pr
         * collectorClassFactor;
 
     const commandStaffFactor = hasCommandStaff(dependencies.player.officers) ? 1 : 0;
-    const commandStaffBonus = 0.02; //2%
-    const commandStaffProduction = commandStaffFactor * mineProduction * commandStaffBonus;
+    const commandStaffProduction = commandStaffFactor * mineProduction * CommandStaffProductionBonus;
 
-    const traderBonus = 0.05; //5%
     const allianceClassFactor = dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0;
-    const allianceClassProduction = allianceClassFactor * mineProduction * traderBonus;
+    const allianceClassProduction = allianceClassFactor * mineProduction * AllianceClassTraderProductionBonus;
 
     const itemProduction = mineProduction * getDeuteriumItemBoost(dependencies.planet.activeItems);
 

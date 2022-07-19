@@ -13,6 +13,7 @@ import { createProductionBreakdown } from "./createProductionBreakdown";
 import { ProductionBreakdown, ProductionDependencies } from "./types";
 import { getCrawlerBoost } from "./getCrawlerBoost";
 import { getProductionBuildingDependencies } from "./getProductionBuildingDependencies";
+import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
 
 function getMetalItemBoost(activeItems: PlanetActiveItems) {
     const now = Date.now();
@@ -64,11 +65,9 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
     const mineProduction = MetalMine.getProduction(mineLevel, getProductionBuildingDependencies(dependencies));
 
     const geologistFactor = dependencies.player.officers.geologist ? 1 : 0;
-    const geologistBonus = 0.1; //10%
-    const geologistProduction = geologistFactor * mineProduction * geologistBonus;
+    const geologistProduction = geologistFactor * mineProduction * GeologistProductionBonus;
 
-    const plasmaTechBonusPerLevel = 0.01; //1%
-    const plasmaTechProduction = mineProduction * plasmaTechBonusPerLevel * dependencies.player.research[ResearchType.plasmaTechnology];
+    const plasmaTechProduction = mineProduction * PlasmaTechnologyProductionBonus.metal * dependencies.player.research[ResearchType.plasmaTechnology];
 
     const collectorClassFactor = 1 + getLifeformCollectorClassBonus(dependencies.player);
     const collectorFactor = dependencies.player.playerClass == PlayerClass.collector ? 1 : 0;
@@ -78,12 +77,10 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
         * collectorClassFactor;
 
     const commandStaffFactor = hasCommandStaff(dependencies.player.officers) ? 1 : 0;
-    const commandStaffBonus = 0.02; //2%
-    const commandStaffProduction = commandStaffFactor * mineProduction * commandStaffBonus;
+    const commandStaffProduction = commandStaffFactor * mineProduction * CommandStaffProductionBonus;
 
-    const traderBonus = 0.05; //5%
     const allianceClassFactor = dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0;
-    const allianceClassProduction = allianceClassFactor * mineProduction * traderBonus;
+    const allianceClassProduction = allianceClassFactor * mineProduction * AllianceClassTraderProductionBonus;
 
     const itemProduction = mineProduction * getMetalItemBoost(dependencies.planet.activeItems);
 
