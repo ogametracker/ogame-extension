@@ -23,12 +23,23 @@ export function subCost(a: Cost, b: Cost): Cost {
     };
 }
 
-export function multiplyCost(cost: Cost, factor: number): Cost {
-    return {
+export function multiplyCost(cost: Cost, factor: number, integerValues = true): Cost {
+    const result: Cost = {
         metal: cost.metal * factor,
         crystal: cost.crystal * factor,
         deuterium: cost.deuterium * factor,
         energy: cost.energy * factor,
+    };
+
+    if(!integerValues) {
+        return result;
+    }
+
+    return {
+        metal: Math.round(result.metal),
+        crystal: Math.round(result.crystal),
+        deuterium: Math.round(result.deuterium),
+        energy: Math.round(result.energy),
     };
 }
 

@@ -120,6 +120,14 @@
                             </span>
 
                             <template v-if="item.type == 'mine'">
+                                <template v-for="(additionaLifeformBuilding, i) in item.additionalLifeformBuildings">
+                                    <o-lifeform-building :key="`icon-${i}`" :building="additionaLifeformBuilding.building" size="32px" />
+                                    <span class="name-and-level" :key="`name-level-${i}`">
+                                        <span v-text="buildableTranslations[additionaLifeformBuilding.building]" />
+                                        <span v-text="additionaLifeformBuilding.level" />
+                                    </span>
+                                </template>
+
                                 <o-building :building="item.mine" size="36px" />
                                 <span class="name-and-level">
                                     <span v-text="buildableTranslations[item.mine]" />
@@ -498,7 +506,7 @@
             return this.amortizationItems;
         }
 
-        private get footerItems(): AmortizationItem[] {
+        private get footerItems(): BaseAmortizationItem[] {
             const zeroCost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
             const cost = this.selectedItemIndizes
@@ -506,10 +514,6 @@
                 .reduce<Cost>((total, cur) => addCost(total, cur.cost), zeroCost);
 
             return [{
-                type: 'mine',
-                planetId: 0,
-                mine: BuildingType.metalMine,
-                level: 0,
                 cost,
                 costMsu: this.getMsu(cost),
                 productionDelta: zeroCost,

@@ -5,6 +5,17 @@ import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/Lifeform
 
 export type MineBuildingType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
 
+export interface LifeformBuildingLevel {
+    building: LifeformBuildingType;
+    level: number;
+}
+
+export interface LifeformTechnologyLevel {
+    technology: LifeformTechnologyType;
+    level: number;
+}
+
+
 export interface BaseAmortizationItem {
     cost: Cost;
     costMsu: number;
@@ -18,11 +29,13 @@ export interface MineAmortizationItem extends BaseAmortizationItem {
     planetId: number;
     mine: MineBuildingType;
     level: number;
+    additionalLifeformBuildings: LifeformBuildingLevel[];
 }
 
 export interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {
     type: 'plasma-technology';
     level: number;
+    additionalLifeformTechnologies: LifeformTechnologyLevel[];
 }
 
 export interface AstrophysicsAmortizationLevels {
@@ -36,6 +49,7 @@ export interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
     newPlanetId: number;
 
     builtLevels: AstrophysicsAmortizationLevels;
+    additionalLifeformTechnologies: LifeformTechnologyLevel[];
 }
 
 export interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {
@@ -43,6 +57,7 @@ export interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {
     planetId: number;
     building: LifeformBuildingType;
     level: number;
+    additionalLifeformBuildings: LifeformBuildingLevel[];
 }
 
 export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem {
@@ -50,6 +65,7 @@ export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem
     planetId: number;
     technology: LifeformTechnologyType;
     level: number;
+    additionalLifeformBuildings: LifeformBuildingLevel[];
 }
 
 export type AmortizationItem =

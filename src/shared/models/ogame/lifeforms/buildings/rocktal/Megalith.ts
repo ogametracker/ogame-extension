@@ -25,15 +25,13 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
             },
         });
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.megalith;
     }
-    
+
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
-        const buildings: AnyBuildingType[] = LifeformBuildingTypesByLifeform[LifeformType.rocktal];
-        
-        if(!buildings.includes(building)) {
+        if (!this.appliesTo(building)) {
             return { cost: 0, time: 0 };
         }
 
@@ -43,6 +41,11 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
             cost: costReduction * level,
             time: timeReduction * level,
         };
+    }
+
+    public appliesTo(building: AnyBuildingType): boolean {
+        const buildings: AnyBuildingType[] = LifeformBuildingTypesByLifeform[LifeformType.rocktal];
+        return buildings.includes(building);
     }
 }
 

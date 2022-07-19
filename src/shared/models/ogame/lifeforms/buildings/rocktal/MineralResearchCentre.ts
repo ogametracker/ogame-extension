@@ -12,11 +12,11 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
                 increaseFactor: 1.8,
             },
             crystal: {
-                baseCost: 20_000,
+                baseCost: 150_000,
                 increaseFactor: 1.8,
             },
             deuterium: {
-                baseCost: 30_000,
+                baseCost: 100_000,
                 increaseFactor: 1.8,
             },
             energy: {
@@ -25,19 +25,13 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
             },
         });
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.mineralResearchCentre;
     }
-    
+
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
-        const buildings: AnyBuildingType[] = [
-            BuildingType.metalMine,
-            BuildingType.crystalMine,
-            BuildingType.deuteriumSynthesizer,
-        ];
-        
-        if(!buildings.includes(building)) {
+        if (!this.appliesTo(building)) {
             return { cost: 0, time: 0 };
         }
 
@@ -46,6 +40,16 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
             cost: costReduction * level,
             time: 0,
         };
+    }
+
+    public appliesTo(building: AnyBuildingType): boolean {
+        const buildings: AnyBuildingType[] = [
+            BuildingType.metalMine,
+            BuildingType.crystalMine,
+            BuildingType.deuteriumSynthesizer,
+        ];
+
+        return buildings.includes(building);
     }
 }
 

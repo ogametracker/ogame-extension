@@ -10,10 +10,11 @@ import { DeuteriumSynthesizer } from "@/shared/models/ogame/buildings/DeuteriumS
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuilding, ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { Cost } from "@/shared/models/ogame/common/Cost";
+import { Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { getLifeformCollectorClassBonus } from "@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus";
-import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
+import { AnyBuildingCostAndTimeReductionLifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
+import { AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformBuildingsByType, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
 import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
@@ -32,7 +33,7 @@ import { createRecord } from "@/shared/utils/createRecord";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, AstrophysicsAmortizationItem, LifeformBuildingAmortizationItem, LifeformTechnologyAmortizationItem, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, LifeformBuildingLevel, MineAmortizationItem, MineBuildingType } from "./models";
 
 
 
@@ -242,8 +243,58 @@ export class AmortizationItemGenerator {
         const newLevel = planet.buildings[mineType] + 1;
 
         const mine = $minesByType[mineType];
-        const cost = mine.getCost(newLevel);
-        const costMsu = this.#getMsu(cost);
+
+        const lfCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.activeLifeform];
+        const lfMineCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.activeLifeform].filter(b => b.appliesTo(mineType));
+        const localLifeformBuildingLevels = { ...planet.lifeformBuildings };
+        let costReduction = lfCostReductionBuildings.reduce(
+            (total, building) => total
+                + building.getCostAndTimeReduction(mineType, localLifeformBuildingLevels[building.type]).cost,
+            0
+        );
+        const lfBuildingCostReduction = createRecord(
+            lfMineCostReductionBuildings.map(b => b.type),
+            buildingType => lfCostReductionBuildings.reduce(
+                (acc, cur) => acc + cur.getCostAndTimeReduction(buildingType, localLifeformBuildingLevels[cur.type]).cost,
+                0
+            ),
+        );
+
+        const mineCost = mine.getCost(newLevel);
+        const mineCostMsu = this.#getMsu(mineCost);
+        let reducedCostMsu = this.#getMsu(multiplyCost(mineCost, 1 - costReduction));
+        const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
+
+        // take best reduction lifeform building level as long as the reduced cost + lf building cost is less than the original cost
+        while (lfCostReductionBuildings.length > 0) {
+            const bestReductionBuilding = lfMineCostReductionBuildings.map(building => {
+                //TODO: include cost reduction of cost reduction building
+                const level = localLifeformBuildingLevels[building.type];
+                const cost = multiplyCost(building.getCost(level + 1), 1 - lfBuildingCostReduction[building.type]);
+                const costMsu = this.#getMsu(cost);
+                const newCostReduction = costReduction
+                    - building.getCostAndTimeReduction(mineType, level).cost
+                    + building.getCostAndTimeReduction(mineType, level + 1).cost;
+
+                return {
+                    building: building.type,
+                    level: level + 1,
+                    reducedCostMsu: this.#getMsu(multiplyCost(mineCost, 1 - newCostReduction)) + costMsu,
+                };
+            }).sort((a, b) => a.reducedCostMsu - b.reducedCostMsu)[0];
+
+            if (bestReductionBuilding.reducedCostMsu > reducedCostMsu) {
+                break;
+            }
+
+            reducedCostMsu = bestReductionBuilding.reducedCostMsu;
+            additionalLifeformBuildings.push({
+                building: bestReductionBuilding.building,
+                level: bestReductionBuilding.level,
+            });
+            localLifeformBuildingLevels[bestReductionBuilding.building]++;
+        }
+
 
         const newMineProduction = mine.getProduction(newLevel, this.#buildProductionBuildingDependencies(planetId));
         const newCrawlerBoost = getCrawlerBoost({
@@ -276,12 +327,13 @@ export class AmortizationItemGenerator {
             planetId,
             mine: mineType,
             level: newLevel,
+            additionalLifeformBuildings,
 
-            cost,
-            costMsu,
+            cost: mineCost,
+            costMsu: mineCostMsu,
             productionDelta,
             productionDeltaMsu,
-            timeInHours: costMsu / productionDeltaMsu,
+            timeInHours: mineCostMsu / productionDeltaMsu,
         };
     }
 
