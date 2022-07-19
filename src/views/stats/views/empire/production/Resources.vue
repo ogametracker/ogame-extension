@@ -134,6 +134,11 @@
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import { getMetalProduction } from '@/shared/models/ogame/resource-production/getMetalProduction';
+    import { getCrystalProduction } from '@/shared/models/ogame/resource-production/getCrystalProduction';
+    import { getDeuteriumProduction } from '@/shared/models/ogame/resource-production/getDeuteriumProduction';
+    import { ProductionDependencies } from '@/shared/models/ogame/resource-production/types';
+    import { getProductionBuildingDependencies } from '@/shared/models/ogame/resource-production/getProductionBuildingDependencies';
 
     interface Production {
         metal: number;
@@ -357,7 +362,7 @@
         }
 
         private getProduction(planet: PlanetData): Production {
-            const deps: ProductionBuildingDependencies = {
+            const deps: ProductionDependencies = {
                 serverSettings: ServerSettingsDataModule.serverSettings,
                 planet: {
                     ...planet,
@@ -369,11 +374,15 @@
                 player: EmpireDataModule.empire,
             };
 
+            const metalProduction = getMetalProduction(deps);
+            const crystalProduction = getCrystalProduction(deps);
+            const deuteriumProduction = getDeuteriumProduction(deps);
+            const deuteriumConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], getProductionBuildingDependencies(deps)).deuterium;
+
             return {
-                metal: MetalMine.getProduction(planet.buildings[BuildingType.metalMine], deps).metal,
-                crystal: CrystalMine.getProduction(planet.buildings[BuildingType.crystalMine], deps).crystal,
-                deuterium: DeuteriumSynthesizer.getProduction(planet.buildings[BuildingType.deuteriumSynthesizer], deps).deuterium
-                    - FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], deps).deuterium,
+                metal: metalProduction.total,
+                crystal: crystalProduction.total,
+                deuterium: deuteriumProduction.total - deuteriumConsumption,
             };
         }
 

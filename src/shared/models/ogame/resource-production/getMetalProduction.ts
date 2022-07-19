@@ -65,7 +65,7 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
 
     const geologistFactor = dependencies.player.officers.geologist ? 1 : 0;
     const geologistBonus = 0.1; //10%
-    const geologistProduction = Math.round(geologistFactor * mineProduction * geologistBonus);
+    const geologistProduction = geologistFactor * mineProduction * geologistBonus;
 
     const plasmaTechBonusPerLevel = 0.01; //1%
     const plasmaTechProduction = mineProduction * plasmaTechBonusPerLevel * dependencies.player.research[ResearchType.plasmaTechnology];
@@ -79,11 +79,11 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
 
     const commandStaffFactor = hasCommandStaff(dependencies.player.officers) ? 1 : 0;
     const commandStaffBonus = 0.02; //2%
-    const commandStaffProduction = Math.round(commandStaffFactor * mineProduction * commandStaffBonus);
+    const commandStaffProduction = commandStaffFactor * mineProduction * commandStaffBonus;
 
     const traderBonus = 0.05; //5%
     const allianceClassFactor = dependencies.player.allianceClass == AllianceClass.trader ? 1 : 0;
-    const allianceClassProduction = Math.round(allianceClassFactor * mineProduction * traderBonus);
+    const allianceClassProduction = allianceClassFactor * mineProduction * traderBonus;
 
     const itemProduction = mineProduction * getMetalItemBoost(dependencies.planet.activeItems);
 
@@ -95,7 +95,7 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
         * getLifeformTechnologyProductionBonuses(dependencies.player).reduce((acc, cur) => acc + cur.metal, 0);
 
     const crawlerBoost = getCrawlerBoost(dependencies, collectorClassFactor);
-    const crawlerProduction = Math.round(mineProduction * crawlerBoost);
+    const crawlerProduction = mineProduction * crawlerBoost;
 
     return createProductionBreakdown({
         base: baseProduction,
