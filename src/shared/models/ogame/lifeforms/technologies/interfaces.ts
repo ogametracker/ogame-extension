@@ -11,6 +11,7 @@ export interface BuildingCostAndTimeReductionLifeformTechnology {
     getBuildingCostAndTimeReduction(building: BuildingType, level: number): CostAndTimeReduction;
 }
 export interface ResearchCostAndTimeReductionLifeformTechnology {
+    appliesTo(research: ResearchType): boolean;
     getResearchCostAndTimeReduction(research: ResearchType, level: number): CostAndTimeReduction;
 }
 

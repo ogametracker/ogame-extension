@@ -5,6 +5,7 @@
             'grid-table--sticky-header': sticky != null,
             'grid-table--sticky-footer': stickyFooter,
             'grid-table--inline': inline,
+            'grid-table--has-row-borders': rowBorders,
         }"
         :style="{
             'grid-template-columns': gridColumns,
@@ -129,6 +130,9 @@
         @Prop({ required: false, type: Function as PropType<(item: any) => boolean>, default: () => false })
         private hideRow!: (item: any) => boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private rowBorders!: boolean;
+
 
         private get gridColumns(): string {
             return this.columns
@@ -222,6 +226,12 @@
         &--sticky-footer > &-foot &-cell {
             position: sticky;
             bottom: 0;
+        }
+
+        &--has-row-borders {
+            .grid-table-row + .grid-table-row > .grid-table-cell {
+                border-top: 1px solid rgba(var(--color), 0.3333);
+            }
         }
     }
     .grid-table-head {

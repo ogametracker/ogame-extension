@@ -2,7 +2,7 @@ import { LifeformTechnologyType } from "../LifeformTechnologyType";
 import { LifeformType } from "../LifeformType";
 import { EnhancedProductionTechnologies } from "./humans/EnhancedProductionTechnologies";
 import { HighPerformanceExtractors } from "./humans/HighPerformanceExtractors";
-import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "./interfaces";
+import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "./interfaces";
 import { Psychoharmoniser } from "./kaelesh/Psychoharmoniser";
 import { SulphideProcess } from "./kaelesh/SulphideProcess";
 import { LifeformTechnology } from "./LifeformTechnology";
@@ -74,6 +74,17 @@ export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesBy
     [LifeformType.kaelesh]: [],
 };
 export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies = Object.values(CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform).flatMap(r => r);
+
+
+export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, (LifeformTechnology & ResearchCostAndTimeReductionLifeformTechnology)[]> = {    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [
+        ImprovedStellarator,
+    ],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [],
+};
+export const ResearchCostAndTimeReductionLifeformTechnologies = Object.values(ResearchCostAndTimeReductionLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
 

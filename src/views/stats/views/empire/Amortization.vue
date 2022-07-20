@@ -1,7 +1,7 @@
 <template>
     <div class="amortization">
         <div class="amortization-container">
-            <div class="amortization-settings">
+            <div class="amortization-settings" :style="{ overflow: showSettings ? 'auto' : null }">
                 <button @click="toggleSettings()">
                     <span class="mdi mdi-cogs" />
                     <span class="mdi mdi-menu-down" v-if="!showSettings" />
@@ -82,6 +82,7 @@
                     sticky-footer
                     @scroll="onTableScroll($event)"
                     :cellClassProvider="cellClassProvider"
+                    row-borders
                 >
                     <template #header-checkbox>
                         <checkbox
@@ -119,9 +120,9 @@
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <template v-if="item.type == 'mine'">
+                            <div class="levels" v-if="item.type == 'mine'">
                                 <template v-for="(additionaLifeformBuilding, i) in item.additionalLifeformBuildings">
-                                    <o-lifeform-building :key="`icon-${i}`" :building="additionaLifeformBuilding.building" size="32px" />
+                                    <o-lifeform-building :key="`icon-${i}`" :building="additionaLifeformBuilding.building" size="36px" />
                                     <span class="name-and-level" :key="`name-level-${i}`">
                                         <span v-text="buildableTranslations[additionaLifeformBuilding.building]" />
                                         <span v-text="additionaLifeformBuilding.level" />
@@ -133,21 +134,21 @@
                                     <span v-text="buildableTranslations[item.mine]" />
                                     <span v-text="item.level" />
                                 </span>
-                            </template>
-                            <template v-else-if="item.type == 'lifeform-building'">
+                            </div>
+                            <div class="levels" v-else-if="item.type == 'lifeform-building'">
                                 <o-lifeform-building :building="item.building" size="36px" />
                                 <span class="name-and-level">
                                     <span v-text="buildableTranslations[item.building]" />
                                     <span v-text="item.level" />
                                 </span>
-                            </template>
-                            <template v-else-if="item.type == 'lifeform-technology'">
+                            </div>
+                            <div class="levels" v-else-if="item.type == 'lifeform-technology'">
                                 <o-lifeform-technology :technology="item.technology" size="36px" />
                                 <span class="name-and-level">
                                     <span v-text="buildableTranslations[item.technology]" />
                                     <span v-text="item.level" />
                                 </span>
-                            </template>
+                            </div>
                             <span v-else v-text="'??? contact developer'" />
                         </div>
                         <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
@@ -605,12 +606,11 @@
 
     .what-cell {
         display: grid;
+        grid-template-columns: 150px 1fr;
         justify-items: center;
         align-items: center;
         column-gap: 8px;
         width: 100%;
-
-        grid-template-columns: 150px auto 1fr;
 
         .planet {
             display: grid;
@@ -619,6 +619,16 @@
 
         &--colony .planet {
             grid-row: 1 / span 4;
+        }
+
+        .levels {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            width: 100%;
+            column-gap: 8px;
+            row-gap: 4px;
+            align-items: center;
+            line-height: 1.1;
         }
     }
 
@@ -677,7 +687,6 @@
 
         &-settings {
             max-height: 100%;
-            overflow: auto;
             display: grid;
             grid-template-rows: auto 1fr;
             grid-template-columns: auto 1fr auto;

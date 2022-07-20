@@ -1,4 +1,3 @@
-import { Cost } from "../../../common/Cost";
 import { ResearchType } from "../../../research/ResearchType";
 import { CostAndTimeReduction } from "../../common-interfaces";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
@@ -31,8 +30,12 @@ class ImprovedStellaratorClass extends LifeformTechnology implements ResearchCos
         return LifeformTechnologyType.improvedStellarator;
     }
     
+    public appliesTo(research: ResearchType): boolean {
+        return research == ResearchType.plasmaTechnology;
+    }
+    
     public getResearchCostAndTimeReduction(research: ResearchType, level: number): CostAndTimeReduction {
-        if(research != ResearchType.plasmaTechnology) {
+        if(!this.appliesTo(research)) {
             return { cost: 0, time: 0};
         }
 
