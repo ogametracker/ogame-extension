@@ -138,8 +138,9 @@ export class AmortizationItemGenerator {
 
             this.#init_planetData(planet);
 
-            this.#init_lifeformBuildingCostReduction(planet);
-            this.#init_mineCostReductionsByPlanet(planet);
+            this.#init_lifeformBuildingCostReductions(planet);
+            this.#init_mineCostReductions(planet);
+            this.#init_plasmaTechnologyCostReductions(planet);
         });
         this.#state.research[ResearchType.plasmaTechnology] = this.#settings.player.levelPlasmaTechnology;
         this.#state.research[ResearchType.astrophysics] = this.#settings.player.levelAstrophysics;
@@ -180,7 +181,22 @@ export class AmortizationItemGenerator {
         return this.#generator = generator;
     }
 
-    #init_lifeformBuildingCostReduction(planet: AmortizationPlanetSettings) {
+    #init_plasmaTechnologyCostReductions(planet: AmortizationPlanetSettings) {
+        let plasmaTechCostReduction = 0;
+        const plasmaTechCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
+                && tech.appliesTo(ResearchType.plasmaTechnology)
+        );
+        plasmaTechCostReductionTechnologies.forEach(tech => {
+            const level = planet.lifeformTechnologyLevels?.[tech.type] ?? 0;
+            plasmaTechCostReduction += tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, level).cost;
+        });
+
+        this.#state.planets[planet.id].plasmaTechnologyCostReduction = plasmaTechCostReduction;
+        this.#state.planets[planet.id].plasmaTechnologyCostReductionTechnologies = plasmaTechCostReductionTechnologies;
+    }
+
+    #init_lifeformBuildingCostReductions(planet: AmortizationPlanetSettings) {
         const lifeformBuildingCostReduction = createRecord(LifeformBuildingTypes, 0);
 
         const lfCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform];
@@ -198,7 +214,7 @@ export class AmortizationItemGenerator {
         this.#state.planets[planet.id].lifeformBuildingCostReductionBuildings = lfCostReductionBuildings;
     }
 
-    #init_mineCostReductionsByPlanet(planet: AmortizationPlanetSettings) {
+    #init_mineCostReductions(planet: AmortizationPlanetSettings) {
         const lfMineCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform]
             .filter(b => $mineBuildingTypes.some(mineType => b.appliesTo(mineType)));
 
@@ -355,9 +371,24 @@ export class AmortizationItemGenerator {
     #getPlasmaTechnologyAmortizationItem(): PlasmaTechnologyAmortizationItem {
         const newLevel = this.#state.research[ResearchType.plasmaTechnology] + 1;
 
-        const resarchCost = PlasmaTechnology.getCost(newLevel);
-        const researchCostMsu = this.#getMsu(resarchCost);
+        const researchCost = PlasmaTechnology.getCost(newLevel);
 
+        let technologyBonus = 0; //TODO: apply technology bonuses
+        let costReduction = this.#state.totalPlasmaTechnologyCostReduction;
+        let reducedResearchCost = multiplyCostInt(researchCost, 1 - costReduction * (1 + technologyBonus));
+        let reducedResearchCostMsu = this.#getMsu(reducedResearchCost);
+
+        const planetStates = Object.values(this.#state.planets);
+        while (true) {
+            //TODO: take best of
+            //      - plasmaTech cost reduction technology level(s), while cost <= plasmaTech cost reduction
+            //          - + research building level(s), while building cost <= plasmaTech cost reduction tech cost reduction
+            //              - + lifeform building cost reduction level(s)...
+            //      - lifeform technology bonus building level(s), while cost <= plasmaTech cost reduction through additional tech bonus 
+            //          - + lifeform building cost reduction level(s)...
+
+            break;
+        }
         /* TODO: include cost reduction through lifeform technologies (also include cost reduction of technologies through lf-research lab, which itself can also have reduced cost again)
         const lfCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(r => r.appliesTo(ResearchType.plasmaTechnology));
         let reducedCostMsu
@@ -406,11 +437,11 @@ export class AmortizationItemGenerator {
             newLifeformBuildingCostReduction: createRecord(LifeformBuildingTypes, 0),
             newLifeformTechnologyCostReduction: createRecord(LifeformTechnologyTypes, 0),
 
-            cost: resarchCost,
-            costMsu: researchCostMsu,
+            cost: researchCost,
+            costMsu: reducedResearchCostMsu,
             productionDelta,
             productionDeltaMsu,
-            timeInHours: researchCostMsu / productionDeltaMsu,
+            timeInHours: reducedResearchCostMsu / productionDeltaMsu,
         };
     }
 
@@ -439,9 +470,28 @@ export class AmortizationItemGenerator {
         const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
 
         // take best reduction lifeform building level as long as the reduced cost + lf building cost is less than the original cost
+        {
+            this.#_test(planetState);
+        }
+
         while (lifeformBuildingCostReductionBuildings.length > 0) {
+
+
+            //TODO: take best of
+            //      - mine cost reduction building level(s), while cost <= mine cost reduction
+            //          - + lifeform building cost reduction level(s)...
+            //HOW?
+            /* 
+            do {
+                a = getCost of mineCostReductionBuilding
+
+                do {
+                    b = getCost of costReductionBuiling
+                }
+            }
+            */
+
             const bestMineCostReductionBuilding = mineCostReductionBuildings.map(building => {
-                //TODO: include cost reduction of cost reduction building
                 const level = localLifeformBuildingLevels[building.type];
                 const cost = multiplyCostInt(building.getCost(level + 1), 1 - lifeformBuildingCostReduction[building.type]);
                 const newCostReduction = mineCostReduction
@@ -524,6 +574,70 @@ export class AmortizationItemGenerator {
             productionDeltaMsu,
             timeInHours: reducedCostMsu / productionDeltaMsu,
         };
+    }
+
+    #_test(planetState: AmortizationPlanetState, mineType: MineBuildingType) {
+        interface PotentialMineCostReductionBuilding {
+            building: LifeformBuildingType;
+            level: number;
+            buildingCost: Cost;
+            additionalMineCostReduction: number;
+            score: number;
+        }
+
+        const planetData = planetState.data;
+
+        const mineCostReductionBuildings = planetState.mineCostReductionBuildings;
+        if (mineCostReductionBuildings.length == 0) {
+            return;
+        }
+
+        const newLevel = planetData.buildings[mineType] + 1;
+        const mine = $minesByType[mineType];
+        let mineCostReduction = planetState.mineCostReductions[mineType];
+
+        const lifeformBuildingCostReductionBuildings = planetState.lifeformBuildingCostReductionBuildings;
+        const lifeformBuildingCostReduction = planetState.lifeformBuildingCostReduction;
+
+
+
+        const mineCost = mine.getCost(newLevel);
+        let reducedCost = multiplyCostInt(mineCost, 1 - mineCostReduction);
+        let reducedCostMsu = this.#getMsu(reducedCost);
+
+        const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
+
+        let hadMineCostReduction: boolean;
+        const tmpLifeformBuildingLevels_outer = { ...planetData.lifeformBuildings };
+        do {
+            mineCostReductionBuildings.reduce((best, building) => {
+                if (!building.appliesTo(mineType)) {
+                    return best;
+                }
+
+                const level = tmpLifeformBuildingLevels_outer[building.type] + 1;
+                const buildingCost = building.getCost(level);
+                const additionalMineCostReduction = building.getCostAndTimeReduction(mineType, level).cost
+                    - building.getCostAndTimeReduction(mineType, level - 1).cost;
+
+                const potentialBuilding: PotentialMineCostReductionBuilding = {
+                    building: building.type,
+                    level,
+                    buildingCost,
+                    additionalMineCostReduction,
+                    score: this.#getMsu(addCost(multiplyCostInt(mineCost, additionalMineCostReduction), buildingCost)),
+                };
+                if(best == null) {
+                    return potentialBuilding;
+                }
+
+                if(potentialBuilding.score < best.score) {
+                    return potentialBuilding;
+                }
+                return best;
+            }, null as PotentialMineCostReductionBuilding | null)!;
+
+        } while (hadMineCostReduction);
     }
 
     #buildProductionBuildingDependencies(planetId: number): ProductionBuildingDependencies {
