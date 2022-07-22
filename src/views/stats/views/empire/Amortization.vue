@@ -125,7 +125,11 @@
                                     <o-lifeform-building :key="`icon-${i}`" :building="additionaLifeformBuilding.building" size="36px" />
                                     <span class="name-and-level" :key="`name-level-${i}`">
                                         <span v-text="buildableTranslations[additionaLifeformBuilding.building]" />
-                                        <span v-text="additionaLifeformBuilding.level" />
+                                        <span
+                                            v-if="additionaLifeformBuilding.levels.from != additionaLifeformBuilding.levels.to"
+                                            v-text="`${additionaLifeformBuilding.levels.from} - ${additionaLifeformBuilding.levels.to}`"
+                                        />
+                                        <span v-else v-text="additionaLifeformBuilding.levels.from" />
                                     </span>
                                 </template>
 

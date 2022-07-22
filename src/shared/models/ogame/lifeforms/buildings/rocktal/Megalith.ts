@@ -30,6 +30,8 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
         return LifeformBuildingType.megalith;
     }
 
+    public readonly affectedBuildings: AnyBuildingType[]=  LifeformBuildingTypesByLifeform[LifeformType.rocktal];
+
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
         if (!this.appliesTo(building)) {
             return { cost: 0, time: 0 };
@@ -44,8 +46,7 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
     }
 
     public appliesTo(building: AnyBuildingType): boolean {
-        const buildings: AnyBuildingType[] = LifeformBuildingTypesByLifeform[LifeformType.rocktal];
-        return buildings.includes(building);
+        return this.affectedBuildings.includes(building);
     }
 }
 

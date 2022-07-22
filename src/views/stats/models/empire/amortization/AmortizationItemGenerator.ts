@@ -4,18 +4,17 @@ import { PlanetBuildingLevels } from "@/shared/models/empire/PlanetBuildingLevel
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { PlanetShipCount } from "@/shared/models/empire/PlanetShipCount";
 import { ProductionSettings } from "@/shared/models/empire/ProductionSettings";
-import { BuildingType, PlanetBuildingType, PlanetBuildingTypes } from "@/shared/models/ogame/buildings/BuildingType";
+import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { CrystalMine } from "@/shared/models/ogame/buildings/CrystalMine";
 import { DeuteriumSynthesizer } from "@/shared/models/ogame/buildings/DeuteriumSynthesizer";
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuilding, ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { addCost, Cost, multiplyCost, multiplyCostInt, subCost } from "@/shared/models/ogame/common/Cost";
+import { addCost, Cost, multiplyCostInt, subCost } from "@/shared/models/ogame/common/Cost";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
-import { getLifeformCollectorClassBonus } from "@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus";
-import { AnyBuildingCostAndTimeReductionLifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
 import { LifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuilding";
-import { AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformBuildingsByType, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
+import { AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
 import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
@@ -28,7 +27,6 @@ import { getCrawlerBoost } from "@/shared/models/ogame/resource-production/getCr
 import { getCrystalProduction } from "@/shared/models/ogame/resource-production/getCrystalProduction";
 import { getDeuteriumProduction } from "@/shared/models/ogame/resource-production/getDeuteriumProduction";
 import { getMetalProduction } from "@/shared/models/ogame/resource-production/getMetalProduction";
-import { getProductionBuildingDependencies } from "@/shared/models/ogame/resource-production/getProductionBuildingDependencies";
 import { ProductionBreakdown, ProductionDependencies } from "@/shared/models/ogame/resource-production/types";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
@@ -37,7 +35,7 @@ import { createRecord } from "@/shared/utils/createRecord";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, LifeformBuildingLevel, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, LifeformBuildingLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
 
 
 
@@ -306,7 +304,7 @@ export class AmortizationItemGenerator {
                     planetData.buildings[bestItem.mine] = bestItem.level;
                     // apply new lf building levels
                     bestItem.additionalLifeformBuildings.forEach(b => {
-                        planetData.lifeformBuildings[b.building] = b.level;
+                        planetData.lifeformBuildings[b.building] = b.levels.to;
                     });
 
                     // save new mine production
@@ -326,9 +324,9 @@ export class AmortizationItemGenerator {
                     bestItem.additionalLifeformStuff.forEach(bt => {
                         const planetData = this.#state.planets[bt.planetId].data;
                         if ('building' in bt) {
-                            planetData.lifeformBuildings[bt.building] = bt.level;
+                            planetData.lifeformBuildings[bt.building] = bt.levels.to;
                         } else {
-                            planetData.lifeformTechnologies[bt.technology] = bt.level;
+                            planetData.lifeformTechnologies[bt.technology] = bt.levels.to;
                         }
                     });
 
@@ -458,72 +456,39 @@ export class AmortizationItemGenerator {
 
         const mine = $minesByType[mineType];
         let mineCostReduction = planetState.mineCostReductions[mineType];
-        const lifeformBuildingCostReductionBuildings = planetState.lifeformBuildingCostReductionBuildings;
-        const lifeformBuildingCostReduction = planetState.lifeformBuildingCostReduction;
-
-        const mineCostReductionBuildings = planetState.mineCostReductionBuildings;
-        const localLifeformBuildingLevels = { ...planetData.lifeformBuildings };
+        let lifeformBuildingCostReduction = planetState.lifeformBuildingCostReduction;
 
         const mineCost = mine.getCost(newLevel);
         let reducedCost = multiplyCostInt(mineCost, 1 - mineCostReduction);
         let reducedCostMsu = this.#getMsu(reducedCost);
-        const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
+        const additionalLifeformBuildings: LifeformBuildingLevels[] = [];
 
-        // take best reduction lifeform building level as long as the reduced cost + lf building cost is less than the original cost
-        {
-            this.#_test(planetState);
-        }
+        const result = this.#getMineAmortization_costReduction(planetState, mineType);
+        if (result != null) {
+            reducedCost = result.totalReducedCost;
+            reducedCostMsu = result.totalReducedCostMsu;
+            mineCostReduction = result.mineCostReduction;
+            lifeformBuildingCostReduction = result.lifeformBuildingCostReduction;
 
-        while (lifeformBuildingCostReductionBuildings.length > 0) {
-
-
-            //TODO: take best of
-            //      - mine cost reduction building level(s), while cost <= mine cost reduction
-            //          - + lifeform building cost reduction level(s)...
-            //HOW?
-            /* 
-            do {
-                a = getCost of mineCostReductionBuilding
-
-                do {
-                    b = getCost of costReductionBuiling
+            const additionalLifeformBuildingsByBuilding: Partial<Record<LifeformBuildingType, LifeformBuildingLevels>> = {};
+            result.additionalLifeformBuildings.forEach(item => {
+                let levels = additionalLifeformBuildingsByBuilding[item.building];
+                if(levels == null) {
+                    levels = {
+                        planetId: planetData.id,
+                        building: item.building,
+                        levels: {
+                            from: item.level,
+                            to: item.level,
+                        },
+                    };
+                    additionalLifeformBuildingsByBuilding[item.building] = levels;
+                    additionalLifeformBuildings.push(levels);
                 }
-            }
-            */
 
-            const bestMineCostReductionBuilding = mineCostReductionBuildings.map(building => {
-                const level = localLifeformBuildingLevels[building.type];
-                const cost = multiplyCostInt(building.getCost(level + 1), 1 - lifeformBuildingCostReduction[building.type]);
-                const newCostReduction = mineCostReduction
-                    - building.getCostAndTimeReduction(mineType, level).cost
-                    + building.getCostAndTimeReduction(mineType, level + 1).cost;
-
-                const newReducedCost = addCost(multiplyCostInt(mineCost, 1 - newCostReduction), cost);
-                return {
-                    building: building.type,
-                    level: level + 1,
-                    reducedCost: newReducedCost,
-                    reducedCostMsu: this.#getMsu(reducedCost),
-                    newCostReduction,
-                };
-            }).sort((a, b) => this.#getMsu(a.reducedCost) - this.#getMsu(b.reducedCost))[0];
-
-            if (bestMineCostReductionBuilding.reducedCostMsu > reducedCostMsu) {
-                break;
-            }
-
-            reducedCost = bestMineCostReductionBuilding.reducedCost;
-            reducedCostMsu = bestMineCostReductionBuilding.reducedCostMsu;
-
-            additionalLifeformBuildings.push({
-                planetId: planetData.id,
-                building: bestMineCostReductionBuilding.building,
-                level: bestMineCostReductionBuilding.level,
+                levels.levels.to = item.level;
             });
-            localLifeformBuildingLevels[bestMineCostReductionBuilding.building]++;
-            mineCostReduction = bestMineCostReductionBuilding.newCostReduction;
         }
-
 
         const newMineProduction = mine.getProduction(newLevel, this.#buildProductionBuildingDependencies(planetId));
         const newCrawlerBoost = getCrawlerBoost({
@@ -565,7 +530,12 @@ export class AmortizationItemGenerator {
             additionalLifeformBuildings,
 
             newMineProduction: newProductionBreakdown.mineProduction,
-            newMineCostReduction: createRecord($mineBuildingTypes, mineCostReduction),
+            newMineCostReduction: createRecord(
+                $mineBuildingTypes,
+                type => type == mineType
+                    ? mineCostReduction
+                    : planetState.mineCostReductions[type]
+            ),
             newLifeformBuildingCostReduction: lifeformBuildingCostReduction,
 
             cost: reducedCost,
@@ -576,13 +546,13 @@ export class AmortizationItemGenerator {
         };
     }
 
-    #_test(planetState: AmortizationPlanetState, mineType: MineBuildingType) {
+    #getMineAmortization_costReduction(planetState: AmortizationPlanetState, mineType: MineBuildingType) {
         interface PotentialMineCostReductionBuilding {
-            building: LifeformBuildingType;
+            building: LifeformBuilding & AnyBuildingCostAndTimeReductionLifeformBuilding;
             level: number;
-            buildingCost: Cost;
-            additionalMineCostReduction: number;
-            score: number;
+            cost: Cost;
+            newTotalReducedCost: Cost;
+            newTotalReducedCostMsu: number;
         }
 
         const planetData = planetState.data;
@@ -592,52 +562,126 @@ export class AmortizationItemGenerator {
             return;
         }
 
+        let mineCostReduction = planetState.mineCostReductions[mineType];
+        const lifeformBuildingCostReduction = { ...planetState.lifeformBuildingCostReduction };
+        const lifeformBuildingLevels = { ...planetData.lifeformBuildings };
+
         const newLevel = planetData.buildings[mineType] + 1;
         const mine = $minesByType[mineType];
-        let mineCostReduction = planetState.mineCostReductions[mineType];
-
-        const lifeformBuildingCostReductionBuildings = planetState.lifeformBuildingCostReductionBuildings;
-        const lifeformBuildingCostReduction = planetState.lifeformBuildingCostReduction;
-
-
 
         const mineCost = mine.getCost(newLevel);
-        let reducedCost = multiplyCostInt(mineCost, 1 - mineCostReduction);
-        let reducedCostMsu = this.#getMsu(reducedCost);
+        const reducedMineCost = multiplyCostInt(mineCost, 1 - mineCostReduction);
 
-        const additionalLifeformBuildings: LifeformBuildingLevel[] = [];
+        const costs: { building: MineBuildingType | LifeformBuildingType; level: number; cost: Cost }[] = [{
+            building: mineType,
+            cost: mineCost,
+            level: newLevel,
+        }];
+        let totalReducedCost = reducedMineCost;
+        let totalReducedCostMsu = this.#getMsu(reducedMineCost);
 
-        let hadMineCostReduction: boolean;
-        const tmpLifeformBuildingLevels_outer = { ...planetData.lifeformBuildings };
-        do {
-            mineCostReductionBuildings.reduce((best, building) => {
-                if (!building.appliesTo(mineType)) {
-                    return best;
+
+        const lifeformBuildingCostReductionBuildings = planetState.lifeformBuildingCostReductionBuildings;
+        const costReductionBuildings = [...mineCostReductionBuildings, ...lifeformBuildingCostReductionBuildings];
+
+        while (costReductionBuildings.length > 0) {
+            const possibleBuildings = costReductionBuildings.filter(building => costs.some(c => building.appliesTo(c.building))); //HACK: could be optimized if necessary
+            if (possibleBuildings.length == 0) {
+                break;
+            }
+
+            const bestBuilding = possibleBuildings.reduce<PotentialMineCostReductionBuilding | null>((best, building) => {
+                const newLevel = lifeformBuildingLevels[building.type] + 1;
+                const cost = building.getCost(newLevel);
+                const reducedCost = multiplyCostInt(cost, 1 - lifeformBuildingCostReduction[building.type]);
+
+
+                const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
+                    const costReduction = cur.building == mineType
+                        ? mineCostReduction
+                        : lifeformBuildingCostReduction[building.type];
+
+                    const additionalCostReduction = cur.building != building.type
+                        ? (building.getCostAndTimeReduction(cur.building, newLevel).cost
+                            - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost)
+                        : 0; // no additional cost reduction for ealier levels of itself
+
+                    const newCostReduction = costReduction + additionalCostReduction;
+                    const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
+
+                    return addCost(total, curReducedCost);
+                }, reducedCost);
+
+                const newTotalReducedCostMsu = this.#getMsu(newTotalReducedCost);
+
+                if (newTotalReducedCostMsu <= totalReducedCostMsu && (best == null || newTotalReducedCostMsu < best.newTotalReducedCostMsu)) {
+                    return {
+                        building,
+                        level: newLevel,
+                        cost,
+                        newTotalReducedCost,
+                        newTotalReducedCostMsu,
+                    };
                 }
 
-                const level = tmpLifeformBuildingLevels_outer[building.type] + 1;
-                const buildingCost = building.getCost(level);
-                const additionalMineCostReduction = building.getCostAndTimeReduction(mineType, level).cost
-                    - building.getCostAndTimeReduction(mineType, level - 1).cost;
-
-                const potentialBuilding: PotentialMineCostReductionBuilding = {
-                    building: building.type,
-                    level,
-                    buildingCost,
-                    additionalMineCostReduction,
-                    score: this.#getMsu(addCost(multiplyCostInt(mineCost, additionalMineCostReduction), buildingCost)),
-                };
-                if(best == null) {
-                    return potentialBuilding;
-                }
-
-                if(potentialBuilding.score < best.score) {
-                    return potentialBuilding;
-                }
                 return best;
-            }, null as PotentialMineCostReductionBuilding | null)!;
+            }, null);
 
-        } while (hadMineCostReduction);
+            if (bestBuilding == null) {
+                break;
+            }
+
+            costs.push({
+                building: bestBuilding.building.type,
+                cost: bestBuilding.cost,
+                level: bestBuilding.level,
+            });
+            totalReducedCost = bestBuilding.newTotalReducedCost;
+            totalReducedCostMsu = bestBuilding.newTotalReducedCostMsu;
+
+            lifeformBuildingLevels[bestBuilding.building.type]++;
+
+            bestBuilding.building.affectedBuildings.forEach(affectedBuildingType => {
+                const additionalCostReduction = bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level).cost
+                    - bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
+
+                if (($mineBuildingTypes as AnyBuildingType[]).includes(affectedBuildingType)) {
+                    mineCostReduction += additionalCostReduction
+                }
+                else {
+                    lifeformBuildingCostReduction[affectedBuildingType as LifeformBuildingType] += additionalCostReduction;
+                }
+            });
+        }
+
+        const additionalLifeformBuildings = costs
+            .filter(c => (LifeformBuildingTypes as AnyBuildingType[]).includes(c.building))
+            .map(c => ({
+                building: c.building as LifeformBuildingType,
+                level: c.level,
+            })).sort((a, b) => {
+                const aIsMineReduction = mineCostReductionBuildings.some(mb => mb.type == a.building);
+                const bIsMineReduction = mineCostReductionBuildings.some(mb => mb.type == b.building);
+                if (aIsMineReduction) {
+                    if (!bIsMineReduction) {
+                        return 1;
+                    }
+                    return a.level - b.level;
+                }
+                if (bIsMineReduction) {
+                    return -1;
+                }
+
+                return a.level - b.level;
+            });
+
+        return {
+            totalReducedCost,
+            totalReducedCostMsu,
+            mineCostReduction,
+            lifeformBuildingCostReduction,
+            additionalLifeformBuildings,
+        };
     }
 
     #buildProductionBuildingDependencies(planetId: number): ProductionBuildingDependencies {

@@ -26,6 +26,12 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
         });
     }
 
+    public readonly affectedBuildings: AnyBuildingType[] = [
+        BuildingType.metalMine,
+        BuildingType.crystalMine,
+        BuildingType.deuteriumSynthesizer,
+    ];
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.mineralResearchCentre;
     }
@@ -43,13 +49,7 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
     }
 
     public appliesTo(building: AnyBuildingType): boolean {
-        const buildings: AnyBuildingType[] = [
-            BuildingType.metalMine,
-            BuildingType.crystalMine,
-            BuildingType.deuteriumSynthesizer,
-        ];
-
-        return buildings.includes(building);
+        return this.affectedBuildings.includes(building);
     }
 }
 

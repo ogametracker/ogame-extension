@@ -13,6 +13,7 @@ export interface LifeformTechnologyBonusLifeformBuilding {
 
 export type AnyBuildingType = BuildingType | LifeformBuildingType;
 export interface AnyBuildingCostAndTimeReductionLifeformBuilding {
+    get affectedBuildings(): AnyBuildingType[];
     appliesTo(building: AnyBuildingType): boolean;
     getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction;
 }
