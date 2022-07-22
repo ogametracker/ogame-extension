@@ -82,16 +82,16 @@ interface AmortizationPlanetState {
     productionBreakdowns: ProductionBreakdowns;
 
     mineCostReductions: Record<MineBuildingType, number>;
-    mineCostReductionBuildings: (LifeformBuilding & AnyBuildingCostAndTimeReductionLifeformBuilding)[];
+    mineCostReductionBuildings: AnyBuildingCostAndTimeReductionLifeformBuilding[];
 
     lifeformBuildingCostReduction: Record<LifeformBuildingType, number>;
-    lifeformBuildingCostReductionBuildings: (LifeformBuilding & AnyBuildingCostAndTimeReductionLifeformBuilding)[];
+    lifeformBuildingCostReductionBuildings: AnyBuildingCostAndTimeReductionLifeformBuilding[];
 
     plasmaTechnologyCostReduction: number;
-    plasmaTechnologyCostReductionTechnologies: (LifeformTechnology & ResearchCostAndTimeReductionLifeformTechnology)[];
+    plasmaTechnologyCostReductionTechnologies: ResearchCostAndTimeReductionLifeformTechnology[];
 
     collectorClassBonus: number;
-    collectorClassBonusTechnologies: (LifeformTechnology & CollectorClassBonusLifeformTechnology)[];
+    collectorClassBonusTechnologies: CollectorClassBonusLifeformTechnology[];
 }
 
 export class AmortizationItemGenerator {
@@ -467,13 +467,13 @@ export class AmortizationItemGenerator {
         if (result != null) {
             reducedCost = result.totalReducedCost;
             reducedCostMsu = result.totalReducedCostMsu;
-            mineCostReduction = result.mineCostReduction;
+            mineCostReduction = result.mineCostReduction[mineType];
             lifeformBuildingCostReduction = result.lifeformBuildingCostReduction;
 
             const additionalLifeformBuildingsByBuilding: Partial<Record<LifeformBuildingType, LifeformBuildingLevels>> = {};
             result.additionalLifeformBuildings.forEach(item => {
                 let levels = additionalLifeformBuildingsByBuilding[item.building];
-                if(levels == null) {
+                if (levels == null) {
                     levels = {
                         planetId: planetData.id,
                         building: item.building,
@@ -562,7 +562,7 @@ export class AmortizationItemGenerator {
             return;
         }
 
-        let mineCostReduction = planetState.mineCostReductions[mineType];
+        let mineCostReduction = planetState.mineCostReductions;
         const lifeformBuildingCostReduction = { ...planetState.lifeformBuildingCostReduction };
         const lifeformBuildingLevels = { ...planetData.lifeformBuildings };
 
@@ -570,7 +570,7 @@ export class AmortizationItemGenerator {
         const mine = $minesByType[mineType];
 
         const mineCost = mine.getCost(newLevel);
-        const reducedMineCost = multiplyCostInt(mineCost, 1 - mineCostReduction);
+        const reducedMineCost = multiplyCostInt(mineCost, 1 - mineCostReduction[mineType]);
 
         const costs: { building: MineBuildingType | LifeformBuildingType; level: number; cost: Cost }[] = [{
             building: mineType,
@@ -582,50 +582,46 @@ export class AmortizationItemGenerator {
 
 
         const lifeformBuildingCostReductionBuildings = planetState.lifeformBuildingCostReductionBuildings;
-        const costReductionBuildings = [...mineCostReductionBuildings, ...lifeformBuildingCostReductionBuildings];
+        const potentialMineReductionBuildingReduceFunction = (best: PotentialMineCostReductionBuilding | null, building: AnyBuildingCostAndTimeReductionLifeformBuilding) => {
+            const newLevel = lifeformBuildingLevels[building.type] + 1;
+            const cost = building.getCost(newLevel);
+            const reducedCost = multiplyCostInt(cost, 1 - lifeformBuildingCostReduction[building.type]);
 
-        while (costReductionBuildings.length > 0) {
-            const possibleBuildings = costReductionBuildings.filter(building => costs.some(c => building.appliesTo(c.building))); //HACK: could be optimized if necessary
-            if (possibleBuildings.length == 0) {
-                break;
+            const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
+                const costReduction = cur.building == mineType
+                    ? mineCostReduction[mineType]
+                    : lifeformBuildingCostReduction[building.type];
+
+                const additionalCostReduction = cur.building != building.type
+                    ? (building.getCostAndTimeReduction(cur.building, newLevel).cost
+                        - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost)
+                    : 0; // no additional cost reduction for ealier levels of itself
+
+                const newCostReduction = costReduction + additionalCostReduction;
+                const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
+
+                return addCost(total, curReducedCost);
+            }, reducedCost);
+
+            const newTotalReducedCostMsu = this.#getMsu(newTotalReducedCost);
+
+            if (newTotalReducedCostMsu <= totalReducedCostMsu && (best == null || newTotalReducedCostMsu < best.newTotalReducedCostMsu)) {
+                return {
+                    building,
+                    level: newLevel,
+                    cost,
+                    newTotalReducedCost,
+                    newTotalReducedCostMsu,
+                };
             }
 
-            const bestBuilding = possibleBuildings.reduce<PotentialMineCostReductionBuilding | null>((best, building) => {
-                const newLevel = lifeformBuildingLevels[building.type] + 1;
-                const cost = building.getCost(newLevel);
-                const reducedCost = multiplyCostInt(cost, 1 - lifeformBuildingCostReduction[building.type]);
+            return best;
+        };
 
-
-                const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
-                    const costReduction = cur.building == mineType
-                        ? mineCostReduction
-                        : lifeformBuildingCostReduction[building.type];
-
-                    const additionalCostReduction = cur.building != building.type
-                        ? (building.getCostAndTimeReduction(cur.building, newLevel).cost
-                            - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost)
-                        : 0; // no additional cost reduction for ealier levels of itself
-
-                    const newCostReduction = costReduction + additionalCostReduction;
-                    const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
-
-                    return addCost(total, curReducedCost);
-                }, reducedCost);
-
-                const newTotalReducedCostMsu = this.#getMsu(newTotalReducedCost);
-
-                if (newTotalReducedCostMsu <= totalReducedCostMsu && (best == null || newTotalReducedCostMsu < best.newTotalReducedCostMsu)) {
-                    return {
-                        building,
-                        level: newLevel,
-                        cost,
-                        newTotalReducedCost,
-                        newTotalReducedCostMsu,
-                    };
-                }
-
-                return best;
-            }, null);
+        while (true) {
+            //TODO: check with excel sheet, does not return the expected value
+            const bestBuilding = mineCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(potentialMineReductionBuildingReduceFunction, null)
+                ?? lifeformBuildingCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(potentialMineReductionBuildingReduceFunction, null);
 
             if (bestBuilding == null) {
                 break;
@@ -646,7 +642,7 @@ export class AmortizationItemGenerator {
                     - bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
 
                 if (($mineBuildingTypes as AnyBuildingType[]).includes(affectedBuildingType)) {
-                    mineCostReduction += additionalCostReduction
+                    mineCostReduction[affectedBuildingType as MineBuildingType] += additionalCostReduction
                 }
                 else {
                     lifeformBuildingCostReduction[affectedBuildingType as LifeformBuildingType] += additionalCostReduction;

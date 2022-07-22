@@ -22,7 +22,7 @@ import { RocktalCollectorEnhancement } from "./rocktal/RocktalCollectorEnhanceme
 import { SeismicMiningTechnology } from "./rocktal/SeismicMiningTechnology";
 import { VolcanicBatteries } from "./rocktal/VolcanicBatteries";
 
-export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<LifeformType, (LifeformTechnology & ResourceProductionBonusLifeformTechnology)[]> = {
+export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<LifeformType, ResourceProductionBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [
         EnhancedProductionTechnologies,
@@ -52,7 +52,7 @@ export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<Lifef
 export const ResourceProductionBonusLifeformTechnologies = Object.values(ResourceProductionBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
-export const CollectorClassBonusLifeformTechnologiesByLifeform: Record<LifeformType, (LifeformTechnology & CollectorClassBonusLifeformTechnology)[]> = {
+export const CollectorClassBonusLifeformTechnologiesByLifeform: Record<LifeformType, CollectorClassBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
@@ -64,7 +64,7 @@ export const CollectorClassBonusLifeformTechnologiesByLifeform: Record<LifeformT
 export const CollectorClassBonusLifeformTechnologies = Object.values(CollectorClassBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
-export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform: Record<LifeformType, (LifeformTechnology & CrawlerProductionBonusAndConsumptionReductionLifeformTechnology)[]> = {
+export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform: Record<LifeformType, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
@@ -76,7 +76,8 @@ export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesBy
 export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies = Object.values(CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
-export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, (LifeformTechnology & ResearchCostAndTimeReductionLifeformTechnology)[]> = {    [LifeformType.none]: [],
+export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, ResearchCostAndTimeReductionLifeformTechnology[]> = {
+    [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
         ImprovedStellarator,

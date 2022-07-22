@@ -19,7 +19,7 @@ import { LifeformType } from "../LifeformType";
 import { LifeformBuilding } from "./LifeformBuilding";
 import { LifeformBuildingType } from "../LifeformBuildingType";
 
-export const ResourceProductionBonusLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & ResourceProductionBonusLifeformBuilding)[]> = {
+export const ResourceProductionBonusLifeformBuildingsByLifeform: Record<LifeformType, ResourceProductionBonusLifeformBuilding[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [
         FusionPoweredProduction,
@@ -40,7 +40,7 @@ export const ResourceProductionBonusLifeformBuildingsByLifeform: Record<Lifeform
 export const ResourceProductionBonusLifeformBuildings = Object.values(ResourceProductionBonusLifeformBuildingsByLifeform).flatMap(r => r);
 
 
-export const LifeformTechnologyBonusLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & LifeformTechnologyBonusLifeformBuilding)[]> = {
+export const LifeformTechnologyBonusLifeformBuildingsByLifeform: Record<LifeformType, LifeformTechnologyBonusLifeformBuilding[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [
         Metropolis,
@@ -55,7 +55,7 @@ export const LifeformTechnologyBonusLifeformBuildingsByLifeform: Record<Lifeform
 export const LifeformTechnologyBonusLifeformBuildings = Object.values(LifeformTechnologyBonusLifeformBuildingsByLifeform).flatMap(r => r);
 
 
-export const AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & AnyBuildingCostAndTimeReductionLifeformBuilding)[]> = {
+export const AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform: Record<LifeformType, AnyBuildingCostAndTimeReductionLifeformBuilding[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
@@ -68,7 +68,7 @@ export const AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform: Record<
 export const AnyBuildingCostAndTimeReductionLifeformBuildings = Object.values(AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform).flatMap(r => r);
 
 
-export const ResourceConsumptionReductionLifeformBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & ResourceConsumptionReductionLifeformBuilding)[]> = {
+export const ResourceConsumptionReductionLifeformBuildingsByLifeform: Record<LifeformType, ResourceConsumptionReductionLifeformBuilding[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
@@ -80,7 +80,7 @@ export const ResourceConsumptionReductionLifeformBuildingsByLifeform: Record<Lif
 export const ResourceConsumptionReductionLifeformBuildings = Object.values(ResourceConsumptionReductionLifeformBuildingsByLifeform).flatMap(r => r);
 
 
-export const LifeformTechnologyResearchBuildingsByLifeform: Record<LifeformType, (LifeformBuilding & LifeformTechnologyResearchBuilding)[]> = {
+export const LifeformTechnologyResearchBuildingsByLifeform: Record<LifeformType, LifeformTechnologyResearchBuilding[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [
         ResearchCentre,
