@@ -619,7 +619,6 @@ export class AmortizationItemGenerator {
         };
 
         while (true) {
-            //TODO: check with excel sheet, does not return the expected value
             const bestBuilding = mineCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(potentialMineReductionBuildingReduceFunction, null)
                 ?? lifeformBuildingCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(potentialMineReductionBuildingReduceFunction, null);
 
