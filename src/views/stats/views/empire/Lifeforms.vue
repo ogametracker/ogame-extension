@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="lifeform-table">
+    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky>
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
@@ -15,10 +15,19 @@
             </div>
         </template>
 
+        <template #cell-buildings="{ value, item }">
+            <div class="building-levels">
+                <span v-for="building in value" :key="building">
+                    <o-lifeform-building :building="building" size="28px" :disabled="item.buildingLevels[building] == 0" />
+                    <span v-text="item.buildingLevels[building]" />
+                </span>
+            </div>
+        </template>
+
         <template #cell-lifeformTechsTier1="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" size="40px" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -27,7 +36,7 @@
         <template #cell-lifeformTechsTier2="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" size="40px" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -36,7 +45,7 @@
         <template #cell-lifeformTechsTier3="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" size="40px" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -49,6 +58,7 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -66,6 +76,8 @@
             levelExperience: number;
             totalExperience: number;
         };
+        buildings: LifeformBuildingType[];
+        buildingLevels: Record<LifeformBuildingType, number>;
         lifeformTechsTier1: (LifeformTechnologyType | null)[];
         lifeformTechsTier2: (LifeformTechnologyType | null)[];
         lifeformTechsTier3: (LifeformTechnologyType | null)[];
@@ -92,6 +104,15 @@
                     },
                     headerClass: 'left-text',
                     class: 'left-text',
+                },
+                {
+                    key: 'buildings',
+                    label: 'LOCA: Buildings',
+                    size: '1fr',
+                    style: {
+                        'justify-items': 'start',
+                    },
+                    headerClass: 'center-text',
                 },
                 {
                     key: 'lifeformTechsTier1',
@@ -147,6 +168,8 @@
                         levelExperience: lfExp - getLifeformExperienceNeededForLevel(lfLevel),
                         totalExperience: lfExp,
                     },
+                    buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
+                    buildingLevels: planet.lifeformBuildings,
                     lifeformTechsTier1: Array.from({ length: 6 }).map(
                         (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6)
                             ?? null
@@ -187,13 +210,33 @@
         line-height: 1.1;
     }
 
-    .lifeform-table::v-deep {
-        .left-text {
-            justify-content: start;
-        }
+    .lifeform-table {
+        max-height: 100%;
 
-        .center-text {
-            justify-content: center;
+        &::v-deep {
+            .left-text {
+                text-align: left;
+                justify-content: start;
+            }
+
+            .center-text {
+                text-align: center;
+                justify-content: center;
+            }
+
+            .building-levels {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                gap: 4px;
+
+                > span {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
         }
     }
 </style>
