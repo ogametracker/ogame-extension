@@ -6,6 +6,7 @@ import { dk } from './dk';
 import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
+import { pt } from './pt';
 
 const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     de,
@@ -14,5 +15,6 @@ const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     cz,
     hr,
     si,
+    pt,
 };
 export default translations;
