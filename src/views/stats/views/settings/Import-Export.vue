@@ -321,6 +321,8 @@
 
                 this.file = null;
                 this.fileInput.value = '';
+
+                window.location.reload();
             }
             catch (error) {
                 _logDebug(error);
