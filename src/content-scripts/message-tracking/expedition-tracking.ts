@@ -20,7 +20,7 @@ import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
-import { ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
@@ -29,6 +29,7 @@ let tabContent: Element | null = null;
 
 const notificationIds = {
     result: v4(),
+    lostFleet: v4(),
     error: v4(),
 };
 const waitingForExpeditions: Record<number, true> = {};
@@ -216,6 +217,20 @@ function sendNotificationMessages() {
         },
     };
     sendMessage(msg);
+
+    if(totalExpeditionResult.events.lostFleet > 0) {
+        const msg: ExpeditionTrackingLostFleetNotificationMessage = {
+            type: MessageType.Notification,
+            ogameMeta: getOgameMeta(),
+            senderUuid: messageTrackingUuid,
+            data: {
+                type: NotificationType.ExpeditionTrackingLostFleet,
+                messageId: notificationIds.lostFleet,
+                count: totalExpeditionResult.events.lostFleet,
+            },
+        };
+        sendMessage(msg);
+    }
 }
 
 function sendErrorNotificationMessage(failed: number) {
