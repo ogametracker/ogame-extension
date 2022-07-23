@@ -8,6 +8,7 @@ import { MessageType } from "@/shared/messages/MessageType";
 import { serviceWorkerUuid } from "@/shared/uuid";
 import { DbServerSettings } from "@/shared/db/schema/server";
 import { parseFloatSafe } from "@/shared/utils/parseNumbers";
+import { _throw } from "@/shared/utils/_throw";
 
 declare namespace OgameApi {
     interface ServerSettingsXml {
@@ -102,6 +103,97 @@ declare namespace OgameApi {
     }
 }
 
+const $keyTypes: Record<keyof OgameApi.ServerData, StringConstructor | NumberConstructor | BooleanConstructor> = {
+    name: String,
+    number: String,
+    language: String,
+    timezone: String,
+    timezoneOffset: String,
+    domain: String,
+    version: String,
+
+    speed: Number,
+    speedFleetPeaceful: Number,
+    speedFleetWar: Number,
+    speedFleetHolding: Number,
+    galaxies: Number,
+    systems: Number,
+    acs: Boolean,
+    rapidFire: Boolean,
+    defToTF: Boolean,
+    debrisFactor: Number,
+    debrisFactorDef: Number,
+    repairFactor: Number,
+    newbieProtectionLimit: Number,
+    newbieProtectionHigh: Number,
+    topScore: Number,
+    bonusFields: Number,
+    donutGalaxy: Boolean,
+    donutSystem: Boolean,
+    wfEnabled: Boolean,
+    wfMinimumRessLost: Number,
+    wfMinimumLossPercentage: Number,
+    wfBasicPercentageRepairable: Number,
+    globalDeuteriumSaveFactor: Number,
+    bashlimit: Number,
+    probeCargo: Number,
+    researchDurationDivisor: Number,
+    darkMatterNewAcount: Number,
+    cargoHyperspaceTechMultiplier: Number,
+
+    marketplaceEnabled: Boolean,
+    marketplaceBasicTradeRatioMetal: Number,
+    marketplaceBasicTradeRatioCrystal: Number,
+    marketplaceBasicTradeRatioDeuterium: Number,
+    marketplacePriceRangeLower: Number,
+    marketplacePriceRangeUpper: Number,
+    marketplaceTaxNormalUser: Number,
+    marketplaceTaxAdmiral: Number,
+    marketplaceTaxCancelOffer: Number,
+    marketplaceTaxNotSold: Number,
+    marketplaceOfferTimeout: Number,
+
+    characterClassesEnabled: Boolean,
+    minerBonusResourceProduction: Number,
+    minerBonusFasterTradingShips: Number,
+    minerBonusIncreasedCargoCapacityForTradingShips: Number,
+    minerBonusAdditionalFleetSlots: Number,
+    minerBonusAdditionalMarketSlots: Number,
+    minerBonusAdditionalCrawler: Number,
+    minerBonusMaxCrawler: Number,
+    minerBonusEnergy: Number,
+    minerBonusOverloadCrawler: Boolean,
+    resourceBuggyProductionBoost: Number,
+    resourceBuggyMaxProductionBoost: Number,
+    resourceBuggyEnergyConsumptionPerUnit: Number,
+    warriorBonusFasterCombatShips: Number,
+    warriorBonusFasterRecyclers: Number,
+    warriorBonusFuelConsumption: Number,
+    warriorBonusRecyclerFuelConsumption: Number,
+    warriorBonusRecyclerCargoCapacity: Number,
+    warriorBonusAdditionalFleetSlots: Number,
+    warriorBonusAdditionalMoonFields: Number,
+    warriorBonusFleetHalfSpeed: Boolean,
+    warriorBonusAttackerWreckfield: Boolean,
+    combatDebrisFieldLimit: Number,
+    explorerBonusIncreasedResearchSpeed: Number,
+    explorerBonusIncreasedExpeditionOutcome: Number,
+    explorerBonusLargerPlanets: Number,
+    explorerUnitItemsPerDay: Number,
+    explorerBonusPhalanxRange: Number,
+    explorerBonusPlunderInactive: Boolean,
+    explorerBonusExpeditionEnemyReduction: Number,
+    explorerBonusAdditionalExpeditionSlots: Number,
+    resourceProductionIncreaseCrystalDefault: Number,
+    resourceProductionIncreaseCrystalPos1: Number,
+    resourceProductionIncreaseCrystalPos2: Number,
+    resourceProductionIncreaseCrystalPos3: Number,
+
+    exodusRatioMetal: Number,
+    exodusRatioCrystal: Number,
+    exodusRatioDeuterium: Number,
+};
+
 export class ServerSettingsModule {
     private readonly interval = 1000 * 60 * 60 * 12; // 12h
 
@@ -139,25 +231,29 @@ export class ServerSettingsModule {
 
     private async updateServerSettings(): Promise<void> {
         // load and parse server settings
-        const { serverData } = await this.getXml<OgameApi.ServerSettingsXml & {'xmlns:xsi': string, 'xsi:noNamespaceSchemaLocation': string, timestamp: string, serverId: string}>('serverData.xml');
+        const { serverData } = await this.getXml<OgameApi.ServerSettingsXml & { 'xmlns:xsi': string, 'xsi:noNamespaceSchemaLocation': string, timestamp: string, serverId: string }>('serverData.xml');
 
         // update settings in db
         const db = await getServerDatabase(this.meta);
         const tx = db.transaction('serverSettings', 'readwrite');
         const store = tx.objectStore('serverSettings');
 
-        const stringKeys: (keyof DbServerSettings)[] = [
-            'name',
-            'number',
-            'language',
-            'timezone',
-            'timezoneOffset',
-            'domain',
-            'version',
-        ];
-        const ignoreKeys = ['xmlns:xsi', 'xsi:noNamespaceSchemaLocation', 'timestamp', 'serverId'];
-        for(const key of Object.keys(serverData).filter(k => !ignoreKeys.includes(k)) as (keyof OgameApi.ServerData)[]) {
-            const value = stringKeys.includes(key) ? serverData[key] : parseFloatSafe(serverData[key]);
+        for (const key of Object.keys($keyTypes) as (keyof OgameApi.ServerData)[]) {
+            const type = $keyTypes[key];
+            let value: string | number | boolean;
+            if(type == String) {
+                value = serverData[key];
+            } 
+            else if(type == Number) {
+                value = parseFloatSafe(serverData[key]);
+            } 
+            else if(type == Boolean) {
+                value = serverData[key] == '1';
+            }
+            else {
+                _throw('invalid type', type);
+            }
+
             await store.put(value, key);
         }
         await store.put(Date.now(), '_lastUpdate');
