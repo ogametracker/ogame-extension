@@ -121,15 +121,15 @@
                             </span>
 
                             <div class="levels" v-if="item.type == 'mine'">
-                                <template v-for="(additionaLifeformBuilding, i) in item.additionalLifeformBuildings">
-                                    <o-lifeform-building :key="`icon-${i}`" :building="additionaLifeformBuilding.building" size="36px" />
+                                <template v-for="(additionalLifeformBuilding, i) in item.additionalLifeformBuildings">
+                                    <o-lifeform-building :key="`icon-${i}`" :building="additionalLifeformBuilding.building" size="36px" />
                                     <span class="name-and-level" :key="`name-level-${i}`">
-                                        <span v-text="buildableTranslations[additionaLifeformBuilding.building]" />
+                                        <span v-text="buildableTranslations[additionalLifeformBuilding.building]" />
                                         <span
-                                            v-if="additionaLifeformBuilding.levels.from != additionaLifeformBuilding.levels.to"
-                                            v-text="`${additionaLifeformBuilding.levels.from} - ${additionaLifeformBuilding.levels.to}`"
+                                            v-if="additionalLifeformBuilding.levels.from != additionalLifeformBuilding.levels.to"
+                                            v-text="`${additionalLifeformBuilding.levels.from} - ${additionalLifeformBuilding.levels.to}`"
                                         />
-                                        <span v-else v-text="additionaLifeformBuilding.levels.from" />
+                                        <span v-else v-text="additionalLifeformBuilding.levels.from" />
                                     </span>
                                 </template>
 
@@ -156,6 +156,35 @@
                             <span v-else v-text="'??? contact developer'" />
                         </div>
                         <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
+                            <template v-for="(additionalLifeformStuff, i) in item.additionalLifeformStuff">
+                                <span class="planet" :key="`planet-${i}`">
+                                    <span v-text="empire.planets[additionalLifeformStuff.planetId].name" />
+                                    <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
+                                </span>
+
+                                <o-lifeform-building
+                                    v-if="additionalLifeformStuff.building != null"
+                                    :key="`icon-${i}`"
+                                    :building="additionalLifeformStuff.building"
+                                    size="36px"
+                                />
+                                <o-lifeform-technology 
+                                    v-else 
+                                    :key="`icon-${i}`" 
+                                    :technology="additionalLifeformStuff.technology" 
+                                    size="36px" 
+                                />
+
+                                <span class="name-and-level" :key="`name-level-${i}`">
+                                    <span v-text="buildableTranslations[additionalLifeformStuff.building || additionalLifeformStuff.technology]" />
+                                    <span
+                                        v-if="additionalLifeformStuff.levels.from != additionalLifeformStuff.levels.to"
+                                        v-text="`${additionalLifeformStuff.levels.from} - ${additionalLifeformStuff.levels.to}`"
+                                    />
+                                    <span v-else v-text="additionalLifeformStuff.levels.from" />
+                                </span>
+                            </template>
+
                             <span />
                             <o-research :research="ResearchType.plasmaTechnology" size="36px" />
                             <span class="name-and-level">
@@ -624,6 +653,10 @@
 
         &--colony .planet {
             grid-row: 1 / span 4;
+        }
+
+        &--plasma-technology {
+            grid-template-columns: 150px auto 1fr;
         }
 
         .levels {
