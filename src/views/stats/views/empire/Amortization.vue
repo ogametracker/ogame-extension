@@ -369,6 +369,7 @@
             } else {
                 this.showSettings = false;
                 this.initItems();
+                this.selectedItemIndizes = [];
             }
         }
 
