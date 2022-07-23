@@ -54,5 +54,9 @@ export interface Settings {
         showDetailedBreakdown: boolean;
         includeExpeditionFoundShipsResourceUnits: boolean;
         includeLostShipsResourceUnits: boolean;
-    }
+    };
+
+    messageTracking: {
+        showSimplifiedResults: boolean;
+    };
 }

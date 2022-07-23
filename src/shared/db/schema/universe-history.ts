@@ -5,45 +5,7 @@ export type DbUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' |
 
 export type DbUniverseHistoryPlayerState = null | DbUniverseHistoryPlayerStateItem[] | 'deleted';
 
-export interface DbUniverseHistoryPlayer {
-    id: number;
-    name: string;
-    state: DbUniverseHistoryPlayerState;
-    score: {
-        total: number;
-        economy: number;
-        research: number;
-        military: number;
-        militaryBuilt: number;
-        militaryDestroyed: number;
-        militaryLost: number;
-        honor: number;
-        numberOfShips: number;
-    };
-    scorePosition: {
-        total: number;
-        economy: number;
-        research: number;
-        military: number;
-        militaryBuilt: number;
-        militaryDestroyed: number;
-        militaryLost: number;
-        honor: number;
-        numberOfShips: number;
-    };
-    allianceId: number | null;
-    planetIds: number[];
-}
-
 export type DbUniverseHistoryAllianceState = null | 'deleted';
-
-export interface DbUniverseHistoryAlliance {
-    id: number;
-    tag: string;
-    name: string;
-    state: DbUniverseHistoryAllianceState;
-    memberIds: number[];
-}
 
 export interface DbUniverseHistoryCoordinates {
     galaxy: number;
@@ -134,6 +96,11 @@ export interface OgameTrackerUniverseHistoryAllianceMembers {
     allianceId: number;
     date: number;
     members: number[];
+}
+export interface OgameTrackerUniverseHistoryAllianceState {
+    allianceId: number;
+    date: number;
+    state: DbUniverseHistoryAllianceState;
 }
 
 export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
@@ -273,11 +240,7 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
     allianceStates: {
         /** AllianceId, DateTime */
         key: [number, number];
-        value: {
-            allianceId: number;
-            date: number;
-            state: DbUniverseHistoryAllianceState;
-        };
+        value: OgameTrackerUniverseHistoryAllianceState;
         indexes: {
             allianceId: number;
         };

@@ -4,6 +4,7 @@ import { de as research } from '../ogame/research/de';
 import { de as lifeforms } from '../ogame/lifeforms/de';
 import { de as lifeformBuildings } from '../ogame/lifeforms/buildings/de';
 import { de as lifeformTechnologies } from '../ogame/lifeforms/technologies/de';
+import { de as premium } from '../ogame/premium/de';
 
 import { ExtensionTranslations } from "./type";
 import { de as settings } from './settings/de';
@@ -27,6 +28,7 @@ export const de: ExtensionTranslations = {
     lifeforms,
     lifeformBuildings,
     lifeformTechnologies,
+    premium,
 
     common,
     settings,

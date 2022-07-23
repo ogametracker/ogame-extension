@@ -16,6 +16,7 @@ import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
+import { settingsWrapper } from "./main";
 
 let tabContent: Element | null = null;
 
@@ -73,7 +74,10 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.debrisFieldReport);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.processed, cssClasses.messages.hideContent);
+            li.classList.add(cssClasses.messages.processed);
+            if(settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+                li.classList.add(cssClasses.messages.hideContent);
+            }
             addOrSetCustomMessageContent(li, `
                 <div class="ogame-tracker-debris-field-report">
                     <div class="ogame-tracker-resource metal"></div>

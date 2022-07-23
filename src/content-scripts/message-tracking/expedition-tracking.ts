@@ -8,7 +8,7 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionEventResources, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
@@ -20,7 +20,7 @@ import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
-import { ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
@@ -29,6 +29,7 @@ let tabContent: Element | null = null;
 
 const notificationIds = {
     result: v4(),
+    lostFleet: v4(),
     error: v4(),
 };
 const waitingForExpeditions: Record<number, true> = {};
@@ -108,7 +109,10 @@ function onMessage(message: Message<MessageType, any>) {
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.hideContent, cssClasses.messages.processed);
+            li.classList.add(cssClasses.messages.processed);
+            if(settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+                li.classList.add(cssClasses.messages.hideContent);
+            }
             addExpeditionResultContent(li, msg.data);
 
             if (message.type == MessageType.NewExpedition) {
@@ -213,6 +217,20 @@ function sendNotificationMessages() {
         },
     };
     sendMessage(msg);
+
+    if(totalExpeditionResult.events.lostFleet > 0) {
+        const msg: ExpeditionTrackingLostFleetNotificationMessage = {
+            type: MessageType.Notification,
+            ogameMeta: getOgameMeta(),
+            senderUuid: messageTrackingUuid,
+            data: {
+                type: NotificationType.ExpeditionTrackingLostFleet,
+                messageId: notificationIds.lostFleet,
+                count: totalExpeditionResult.events.lostFleet,
+            },
+        };
+        sendMessage(msg);
+    }
 }
 
 function sendErrorNotificationMessage(failed: number) {
@@ -263,7 +281,7 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
             const units = ships.reduce((total, ship) => {
-                const shipCost = multiplyCost(Ships[ship as number as ShipType].getCost(), expedition.fleet[ship] ?? 0);
+                const shipCost = multiplyCost(Ships[ship as ShipType].getCost(), expedition.fleet[ship] ?? 0);
                 const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
                 return addCost(total, adjustedCost);
             }, { metal: 0, crystal: 0, deuterium: 0 } as Cost)

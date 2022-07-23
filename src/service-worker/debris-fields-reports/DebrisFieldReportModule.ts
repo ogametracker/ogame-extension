@@ -9,6 +9,7 @@ import { DebrisFieldReport } from "../../shared/models/debris-field-reports/Debr
 import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 
 type DebrisFieldReportResult = {
     ignored: true;
@@ -49,11 +50,9 @@ export class DebrisFieldReportModule {
         // otherwise parse and save result
         let report: DebrisFieldReport;
 
-        try {
-            if (!isSupportedLanguage(language)) {
-                throw new Error(`unsupported language '${language}'`);
-            }
-            const parseResult = this.tryParseDebrisFieldReport(language as LanguageKey, messageData);
+        try {            
+            const languageKey = getLanguage(language, true);
+            const parseResult = this.tryParseDebrisFieldReport(languageKey, messageData);
             if (!parseResult.success) {
                 return {
                     success: true,

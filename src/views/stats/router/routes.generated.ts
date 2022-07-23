@@ -73,6 +73,7 @@ import viewsresourcebalanceIndex from '@stats/views/resource-balance/Index.vue';
 import viewsresourcebalanceChart from '@stats/views/resource-balance/Chart.vue';
 import viewsresourcebalanceTable from '@stats/views/resource-balance/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
+import viewssettingsAccessibility from '@stats/views/settings/Accessibility.vue';
 import viewssettingsColors from '@stats/views/settings/Colors.vue';
 import viewssettingsCombats from '@stats/views/settings/Combats.vue';
 import viewssettingsCommon from '@stats/views/settings/Common.vue';
@@ -654,6 +655,11 @@ const routes: RouteConfig[] = [
                 name: "settings",
                 component: viewssettingsIndex,
                 children: [
+                    {
+                        path: "accessibility",
+                        name: "settings/accessibility",
+                        component: viewssettingsAccessibility
+                    },
                     {
                         path: "colors",
                         name: "settings/colors",
