@@ -14,7 +14,7 @@ export const pt: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             //TODO: pt /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
             //TODO: pt /*'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            //TODO: pt /*'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'A nossa frota em expedição envia-nos notícias de um fenómeno espectacular. A acumulação de Matéria Negra */'nas baterias de energia dos escudos da nave'/*. Os nossos engenheiros estão a tentar recolher o máximo de Matéria Negra que podem antes do fenómeno acabar.'*/,
         ],
         [ExpeditionEventSize.large]: [
             //TODO: pt /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -25,7 +25,7 @@ export const pt: ExpeditionMessages = {
 
     [ExpeditionEventType.resources]: {
         [ExpeditionEventSize.small]: [
-            //TODO: pt /*'Deine Expedition hat einen */'kleinen Asteroidenschwarm'/* entdeckt, aus dem einige Ressourcen gewonnen werden können.'*/,
+            /*'A tua expedição */'encontrou um pequeno asteróide'/* de onde conseguiram resgatar alguns recursos.'*/,
             //TODO: pt /*'Auf einem abgelegenen Planetoiden wurden */'einige leicht zugängliche Ressourcenfelder'/* gefunden und erfolgreich Rohstoffe gewonnen'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -47,7 +47,7 @@ export const pt: ExpeditionMessages = {
             //TODO: pt /*'Wir haben eine */'verlassene Piratenbasis'/* gefunden. Im Hangar liegen noch einige alte Schiffe. Unsere Techniker schauen nach, ob einige davon noch zu gebrauchen sind.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            //TODO: pt /*'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'A nossa expedição encontrou um */'velho hangar automatizado'/*. Algumas das naves ainda estavam em fase de produção e os nossos técnicos estão a tentar reactivar os geradores eléctricos para tentar acabá-las'*/,
             //TODO: pt /*'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -58,45 +58,45 @@ export const pt: ExpeditionMessages = {
     },
 
     [ExpeditionEventType.nothing]: [
-        //TODO: pt /*'Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider */'mit leeren Händen'/* zurück.'*/,
-        //TODO: pt /*'Außer einiger kurioser kleiner Tierchen von einem */'unbekannten Sumpfplaneten'/* bringt diese Expedition nichts Aufregendes von ihrer Reise mit.'*/,
-        //TODO: pt /*'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
-        //TODO: pt /*'Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf */'die hypnotischen Muster'/* auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.'*/,
-        //TODO: pt /*'Ein */'Reaktorfehler des Führungsschiffes'/* hätte beinahe die gesamte Expedition vernichtet. Zum Glück waren die Techniker mehr als fähig und konnten das Schlimmste verhindern. Die Reparatur nahm jedoch so viel Zeit in Anspruch, dass die Expedition unverrichteter Dinge wieder zurückkehren musste.'*/,
-        //TODO: pt /*'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
-        //TODO: pt /*'Deine Expeditionsflotte folgte einige Zeit seltsamen Signalen. Schließlich musste sie feststellen, dass die */'Signale zu einer uralten Sonde'/* gehören, die wohl vor einigen Generationen losgeschickt wurde, um fremde Spezies zu begrüßen. Die Sonde wurde geborgen und mehrere Museen deines Hauptplaneten haben schon Interesse daran verlauten lassen.'*/,
-        //TODO: pt /*'Nun, zumindest weiß man jetzt, dass */'rote Anomalien der Klasse 5'/* nicht nur chaotische Auswirkungen auf die Schiffssysteme haben, sondern auch massive Halluzinationen bei der Crew auslösen können. Viel mehr hat diese Expedition aber nicht gebracht.'*/,
-        //TODO: pt /*'Deine Expeditionsflotte geriet gefährlich nahe an */'das Gravitationsfeld eines Neutronensterns'/* und musste einige Zeit kämpfen, um sich daraus zu befreien. Dadurch wurde sehr viel Deuterium verbraucht und die Expeditionsflotte kehrte schließlich unverrichteter Dinge zurück.'*/,
-        //TODO: pt /*'Ein */'seltsames Computervirus'/* legte kurz nach Verlassen des Sonnensystems die Navigation lahm. Dies führte dazu, dass die gesamte Expeditionsflotte die ganze Zeit im Kreis flog. Überflüssig zu sagen, dass die Expedition nicht besonders erfolgreich war.'*/,
-        //TODO: pt /*'Vielleicht hätte man den */'Geburtstag des Captains'/* nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.'*/,
-        //TODO: pt /*'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
+        /*'Embora este sector tenha mostrado */'resultados interessantes nos relatórios primários'/*, a missão não teve a mesma sorte. A frota voltou de mãos vazias.'*/,
+        /*'Para além de uns pequenos e esquisitos */'animais de um planeta pantanoso'/*, esta expedição não trouxe nada de especial desta viagem.'*/,
+        /*'A tripulação descobriu o */'significado da expressão "universo vasto"'/*. O relatório da missão não teve nenhum ponto interessante.'*/,
+        /*'Um ser */'feito de energia hipnotizou toda'/* a tripulação da missão. Quanto esta acordou estava longe e à deriva e quase sem Deutério. Devido a este encontro a missão teve de ser cancelada.'*/,
+        /*'Um */'problema no reactor da nave principal quase'/* que destruiu toda a frota de expedição. Felizmente os técnicos foram muito competentes e evitaram o pior. A reparação demorou algum tempo e forçou o retorno prematuro da frota.'*/,
+        /*'A expedição tirou */'lindas fotos de uma super nova'/*. Nada de novo foi encontrado na viagem mas pelo menos poderemos tentar ganhar o prémio de "melhor fotografia" este ano.'*/,
+        /*'A tua frota de expedição */'seguiu uns sinais estranhos por algum tempo'/*. No final, descobriram que era uma sonda enviada à muitas gerações atrás para cumprimentar espécies desconhecidas A sonda foi resgatada e alguns museus já demonstraram interesse por ela'*/,
+        /*'Bem, agora sabemos que aquelas */'anomalias vermelhas de classe 5'/* para além de ter efeitos caóticos nos sistemas de navegação também são altamente alucinogénos.'*/,
+        /*'A tua frota entrou no campo */'gravitacional de uma estrela de neutrões'/*. Para conseguir escapar à enorme força da gravidade teve de gastar grande parte do Deutério e cancelar a expedição.'*/,
+        /*'Um */'virus de computador atacou o sistema de navegação mesmo'/* antes da frota sair do nosso sistema solar. O virus fez com que a frota andasse a voar em círculo. Não deverá ser necessário dizer que a missão falhou.'*/,
+        /*'Provavelmente a */'festa de aniversário do capitão não deveria'/* ter sido realizada naquele planeta isolado. Uma terrível e desconhecida febre atacou os tripulantes e devido à falta de pessoal a missão teve de ser cancelada.'*/,
+        /*'Alguém */'instalou um velho jogo de estratégia nos computadores'/* da nave. Esta expedição esteve algum tempo fora mas não trouxe nenhuma notícia em especial.'*/,
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        //TODO: pt /*'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
-        //TODO: pt /*'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        //TODO: pt /*'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        //TODO: pt /*'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'As últimas imagens que obtivemos da frota em expedição foram umas imagens */'bastante próximas de um buraco negro a nascer',
+        /*'O último contacto que tivemos da */'frota em missão foi a seguinte mensagem'/*: Zzzrrt Deus! Krrrzzzzt Aquilo zrrrtrzt Parece krgzzzz uma Krzzzzzzzztzzzz...'*/,
+        /*'Uma falha no núcleo do motor da nave-mãe leva a uma reacção em cadeia que */'destrói, de uma forma espectacular'/*, toda a frota.'*/,
+        /*'A frota em missão */'não conseguiu voltar do salto de hiperespaço'/*. Os nossos cientistas ainda estão a tentar compreender o que aconteceu mas pelo que parece a frota foi totalmente perdida.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
-        //TODO: pt /*'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        //TODO: pt /*'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'A tua frota */'contactou com uma raça alienígena tímida'/*. Eles anunciaram que irão enviar um representante com mercadorias para trocar nos nossos mundos.'*/,
+        /*'A tua expedição recebeu um sinal de emergência. Um enorme cargueiro foi apanhado dentro dum poderoso campo gravitacional gerado por um planetóide. Depois de ajudar o cargueiro a libertar-se o capitão da nave anunciou que iria visitar os */'nossos planetas e iria fazer descontos especiais'/* em trocas de recursos.'*/,
     ],
 
     [ExpeditionEventType.early]: [
         //TODO: pt /*'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        //TODO: pt /*'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
-        //TODO: pt /*'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'A tua expedição não reportou qualquer anomalia no sector explorado. Mas a frota enquanto voltava, */'apanhou um pouco de vento solar'/*. Devido a esta ocorrência a viagem de volta foi mais rápida. A tua frota de expedição volta ao ponto de partida um pouco mais cedo.'*/,
+        /*'Um comandante novo e destemido */'conseguiu atravessar um wormhole instável'/* diminuindo assim a duração do voo! Contudo, a expedição não trouxe nada de novo.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
-        //TODO: pt /*'Ein böser Patzer des Navigators führte zu einer */'Fehlkalkulation beim Sprung'/* der Expedition.'*/,
-        //TODO: pt /*'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
-        //TODO: pt /*'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        //TODO: pt /*'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
-        //TODO: pt /*'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
-        //TODO: pt /*'Das Führungsschiff deiner */'Expeditionsflotte kollidierte mit einem fremden Schiff'/*, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.'*/,
+        /*'Um */'erro no sistema de navegação fez'/* com que o salto de hiperespaço fosse mal calculado. Devido a esta falha a frota aterrou no local errado e devido a isso irá demorar mais tempo a voltar.'*/,
+        /*'A missão entrou num */'sector com tempestades de plasma'/*. Devido a isto as baterias de energia da frota sofreram um curto-circuito e tiveram de aterrar num planeta próximo. Os mecânicos conseguiram resolver o problema mas a missão irá voltar com um grande atraso.'*/,
+        /*'Devido a */'razões ainda desconhecidas o salto da frota de exploração'/* correu mal. Quase que aterrou perto de uma estrela. Nem tudo correu mal pois aterraram num sistema planetário conhecido. A viagem de retorno demorará mais um pouco que o previsto.'*/,
+        /*'O vento */'solar de uma gigante vermelha fez com que o computador'/* se enganasse nas coordenadas do salto de hiperespaço. O computador irá precisar de mais tempo para conseguir recalcular o salto de volta. Para além disso não encontramos nada na zona para onde saltamos.'*/,
+        /*'O */'novo módulo de navegação ainda tem alguns problemas'/*, devido a isso o salto foi para um sítio completamente diferente do previsto e o Deutério foi quase todo gasto. Quanto ao salto, este calhou próximo da lua do planeta de saída. Obrigados a utilizar os motores secundários a equipa irá demorar mais do que pensavam a voltar ao planeta.'*/,
+        /*'A nave */'principal colidiu com uma nave estranha que tinha acabado'/* de sair do salto de hiperespaço. A nave estranha explodiu com o impacto causando danos substanciais no casco da nave principal. Os mecânicos/engenheiros estão a fazer turnos de 20 horas para conseguir reparar os recursos principais para que possamos voltar e fazer reparações necessárias.'*/,
     ],
 
     [ExpeditionEventType.item]: {
@@ -105,39 +105,46 @@ export const pt: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            //TODO: pt /*'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
-            //TODO: pt /*'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
-            //TODO: pt /*'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
-            //TODO: pt /*'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Alguns */'piratas desesperados tentaram capturar'/* a nossa frota de expedição.'*/,
+            /*'Uns */'bárbaros primitivos estão nos a atacar'/* com uma espécie de naves espaciais. Se os nossos escudos ficarem a 50% seremos obrigados a disparar contra eles.'*/,
+            /*'Apanhamos umas */'mensagens via rádio e estas eram de uns piratas'/* bêbados. Parece que vamos ser atacados.'*/,
+            /*'Tivemos de combater com uns piratas */'que por sorte não eram muito fortes',
             //TODO: pt /*'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            //TODO: pt /*'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            //TODO: pt /*'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            //TODO: pt /*'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'A tua expedição deparou-se com uma, */'não muito agradável, frota pirata',
+            /*'Nós fomos directos para uma */'emboscada efectuada por alguns piratas estelares'/*. Tentamos resolver pela via diplomática mas só com as armas é que conseguimos dialogar.'*/,
+            /*'O*/' sinal de emergência que a expedição recebeu'/* era um engodo colocado por uns piratas estelares. Não pudemos evitar o confronto!'*/,
         ],
         [ExpeditionEventSize.large]: [
-            //TODO: pt /*'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            //TODO: pt /*'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Os sinais gravados não foram emitidos por um ser estranho mas sim por uma */'base pirata secreta'/*! Eles tão ficaram surpreendidos com a nossa presença neste quadrante.'*/,
+            /*'O relatório de expedição */'relata batalhas épicas contra naves-pirata'/* não identificadas!'*/,
         ],
     },
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            //TODO: pt /*'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
-            //TODO: pt /*'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
-            //TODO: pt /*'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Algumas */'naves exóticas atacaram a frota de exploração'/* sem qualquer aviso prévio!'*/,
+            /*'A tua frota de exploração teve um */'primeiro contacto com espécies desconhecidas'/* não muito amigável.'*/,
+            /*'A nossa missão foi */'atacada por um pequeno número de naves desconhecidas'/*!'*/,
             //TODO: pt /*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            //TODO: pt /*'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            //TODO: pt /*'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            //TODO: pt /*'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Uma */'espécie desconhecida atacou a nossa'/* missão exploratória!'*/,
+            /*'Tudo indica que a tua frota entrou em */'território de uma espécie de raça alienígena extremamente agressiva'/*.'*/,
+            /*'A ligação com nossa frota exploratória foi interrompida durante um curto espaço de tempo. Pelo que conseguimos entender pela última mensagem enviada, ela está a ser atacada. Até */'agora não conseguiram identificar o agressor'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            //TODO: pt /*'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            //TODO: pt /*'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
-            //TODO: pt /*'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'A tua frota de exploração foi atacada por uma Frota Invasora Alienígena. Há */'relatórios de grandes confrontos'/*!'*/,
+            /*'Encontrámos algumas */'dificuldades em pronunciar correctamente o dialecto da raça extraterrestre'/*. Acidentalmente, o nosso diplomata gritou "Fogo!" em vez de "Paz!".'*/,
+            /*'Uma grande Frota de */'naves cristalinas de origem desconhecida'/* está em rota de ataque contra a tua frota de exploração. Por agora temos de assumir o pior.'*/,
         ],
     },
+
+    /*TODO: pt: depletionMessages: {
+        ?: 'Parece que esta parte do universo ainda não foi explorada.',
+        ?: 'É estranho saber que somos os primeiros a entrar neste sector.',
+        
+        regex: /Entrada do diário dos Engenheiros de Comunicações: (?<message>.+)/,
+    }*/
 };

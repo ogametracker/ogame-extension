@@ -45,4 +45,9 @@ export interface ExpeditionMessages {
     [ExpeditionEventType.item]: {
         regex: RegExp;
     };
+
+    /*TODO: depletionMessages: {
+        Record<ExpeditionDepletionLevel, string>; //string[]?
+        regex: RegExp;
+    };*/
 }
