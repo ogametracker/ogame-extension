@@ -103,7 +103,7 @@
 
             <span />
             <span>
-                <button @click="showLifeformSettings = !showLifeformSettings" v-text="'LOCA: Show/hide lifeform settings'" />
+                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" v-text="'LOCA: Show/hide lifeform settings'" />
             </span>
 
             <template v-if="showLifeformSettings">
