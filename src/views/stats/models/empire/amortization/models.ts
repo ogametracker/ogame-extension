@@ -34,18 +34,12 @@ export interface MineAmortizationItem extends BaseAmortizationItem {
     additionalLifeformBuildings: LifeformBuildingLevels[];
 
     newMineProduction: number;
-    newMineCostReduction: Record<MineBuildingType, number>;
-    newLifeformBuildingCostReduction: Record<LifeformBuildingType, number>;
 }
 
 export interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {
     type: 'plasma-technology';
     level: number;
     additionalLifeformStuff: (LifeformTechnologyLevels | LifeformBuildingLevels)[];
-
-    newPlasmaTechnologyCostReduction: number;
-    newLifeformBuildingCostReduction: Record<LifeformBuildingType, number>;
-    newLifeformTechnologyCostReduction: Record<LifeformTechnologyType, number>;
 }
 
 export interface AstrophysicsAmortizationLevels {

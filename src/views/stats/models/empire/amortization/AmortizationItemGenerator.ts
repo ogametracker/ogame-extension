@@ -13,15 +13,13 @@ import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
 import { addCost, Cost, multiplyCostInt, subCost } from "@/shared/models/ogame/common/Cost";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, LifeformTechnologyBonusLifeformBuilding, LifeformTechnologyResearchBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
-import { LifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuilding";
-import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildings, LifeformTechnologyResearchBuildingsByLifeform, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
-import { getLifeformLevel, getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
+import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildingsByLifeform, ResourceProductionBonusLifeformBuildings } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
+import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
 import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, LifeformTypes, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { CollectorClassBonusLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
-import { CollectorClassBonusLifeformTechnologies, CollectorClassBonusLifeformTechnologiesByLifeform, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologiesByLifeform, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
-import { LifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnology";
+import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { PlasmaTechnology } from "@/shared/models/ogame/research/PlasmaTechnology";
 import { ResearchType, ResearchTypes } from "@/shared/models/ogame/research/ResearchType";
 import { getCrawlerBoost } from "@/shared/models/ogame/resource-production/getCrawlerBoost";
@@ -363,10 +361,6 @@ export class AmortizationItemGenerator {
                     const resource = $resourceByMineType[bestItem.mine];
                     planetState.productionBreakdowns[resource].mineProduction = bestItem.newMineProduction;
 
-                    // save new reduction values
-                    planetState.mineCostReductions = bestItem.newMineCostReduction;
-                    planetState.lifeformBuildingCostReduction = bestItem.newLifeformBuildingCostReduction;
-
                     yieldItem = this.#settings.planets[planetData.id].show;
                     break;
                 }
@@ -392,8 +386,6 @@ export class AmortizationItemGenerator {
                         breakdowns.deuterium.plasmaTechnologyLevel = bestItem.level;
                     });
 
-                    //TODO: apply bestItem.newPlasmaTechnologyCostReduction, bestItem.newLifeformTechnologyCostReduction, bestItem.newLifeformBuildingCostReduction
-
                     yieldItem = this.#settings.showPlasmaTechnology;
                     break;
                 }
@@ -401,6 +393,8 @@ export class AmortizationItemGenerator {
                 //TODO: handle best item type
                 default: throw new Error('not implemented');
             }
+
+            //TODO: generalized update of mine cost reductions, lifeform building cost reductions, lifeform technology cost reduction, lifeform technology bonus, plasmatech cost reduction
 
             if (yieldItem) {
                 yield bestItem;
@@ -501,16 +495,10 @@ export class AmortizationItemGenerator {
             levels.levels.to = item.level;
         });
 
-        // TODO: add info to returned object: new plasmatech cost reduction, new lf research cost reduction
         return {
             type: 'plasma-technology',
             level: newLevel,
             additionalLifeformStuff,
-
-            //TODO: set cost reductions
-            newPlasmaTechnologyCostReduction: 0,
-            newLifeformBuildingCostReduction: createRecord(LifeformBuildingTypes, 0),
-            newLifeformTechnologyCostReduction: createRecord(LifeformTechnologyTypes, 0),
 
             cost: reducedResearchCost,
             costMsu: reducedResearchCostMsu,
@@ -1017,8 +1005,6 @@ export class AmortizationItemGenerator {
             additionalLifeformBuildings,
 
             newMineProduction: newProductionBreakdown.mineProduction,
-            newMineCostReduction: result?.mineCostReduction ?? planetState.mineCostReductions,
-            newLifeformBuildingCostReduction: lifeformBuildingCostReduction,
 
             cost: reducedCost,
             costMsu: reducedCostMsu,
