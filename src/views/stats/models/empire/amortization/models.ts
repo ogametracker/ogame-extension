@@ -62,6 +62,8 @@ export interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {
     building: LifeformBuildingType;
     level: number;
     additionalLifeformBuildings: LifeformBuildingLevels[];
+
+    additionalProductionBonus: Cost;
 }
 
 export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem {

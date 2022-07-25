@@ -177,13 +177,21 @@
 
                                     <span class="name-and-level">
                                         <i v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]" />
-                                        <i v-text="`LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`" />
+                                        <i
+                                            v-text="
+                                                `LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`
+                                            "
+                                        />
                                     </span>
                                 </template>
 
                                 <div
-                                    v-if="additionalLifeformStuffGroup.planetIds.size == 1 || showAmotizationGroup[`item-${index}_group-${i}`]"
-                                    style="display: contents"
+                                    :style="{
+                                        display:
+                                            additionalLifeformStuffGroup.planetIds.size == 1 || showAmotizationGroup[`item-${index}_group-${i}`]
+                                                ? 'contents'
+                                                : 'none',
+                                    }"
                                 >
                                     <div v-for="(additionalLifeformStuff, i) in additionalLifeformStuffGroup.items" :key="i" style="display: contents">
                                         <span class="planet">

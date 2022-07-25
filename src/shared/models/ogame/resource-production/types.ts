@@ -70,9 +70,6 @@ export class ProductionBreakdown {
     public get baseProduction() {
         return this.#base;
     }
-    public get mineProduction() {
-        return this.#mine;
-    }
     public get plasmaTechnologyProduction() {
         return this.#mine * this.#plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource];
     }
@@ -125,21 +122,45 @@ export class ProductionBreakdown {
     public set mineProduction(value: number) {
         this.#mine = value;
     }
+    public get mineProduction() {
+        return this.#mine;
+    }
+
     public set plasmaTechnologyLevel(value: number) {
         this.#plasmaTechnologyLevel = value;
     }
+    public get plasmaTechnologyLevel() {
+        return this.#plasmaTechnologyLevel;
+    }
+
     public set crawlerBonus(value: number) {
         this.#crawlerBonus = value;
     }
+    public get crawlerBonus() {
+        return this.#crawlerBonus;
+    }
+
     public set lifeformBuildingBonus(value: number) {
         this.#lifeformBuildingBonus = value;
     }
+    public get lifeformBuildingBonus() {
+        return this.#lifeformBuildingBonus;
+    }
+
     public set lifeformTechnologyBonus(value: number) {
         this.#lifeformTechnologyBonus = value;
     }
+    public get lifeformTechnologyBonus() {
+        return this.#lifeformTechnologyBonus;
+    }
+
     public set collectorClassBonus(value: number) {
         this.#collectorClassBonus = value;
     }
+    public get collectorClassBonus() {
+        return this.#collectorClassBonus;
+    }
+
 
     public clone(): ProductionBreakdown {
         return new ProductionBreakdown(
