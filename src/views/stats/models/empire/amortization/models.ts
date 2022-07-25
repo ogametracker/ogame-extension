@@ -45,7 +45,7 @@ export interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {
 export interface AstrophysicsAmortizationLevels {
     mines: Record<MineBuildingType, number>;
     lifeformBuildings: Record<LifeformBuildingType, number>;
-    lifeformTechnologie: Record<LifeformTechnologyType, number>;
+    lifeformTechnologies: Record<LifeformTechnologyType, number>;
 }
 export interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
     type: 'astrophysics-and-colony';
