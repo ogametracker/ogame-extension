@@ -96,6 +96,7 @@ interface AmortizationPlanetState {
     lifeformTechnologyBonus: number;
     lifeformTechnologyBonusBuildings: LifeformTechnologyBonusLifeformBuilding[];
 
+    lifeformTechnologyCostReduction: number;
     lifeformResearchBuildings: LifeformTechnologyResearchBuilding[];
 }
 
@@ -226,7 +227,15 @@ export class AmortizationItemGenerator {
     }
 
     #init_lifeformResearchBuildings(planet: AmortizationPlanetSettings) {
-        this.#state.planets[planet.id].lifeformResearchBuildings = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform];
+        let technologyResearchCostReduction = 0;
+        const lifeformResearchBuildings = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform];
+        lifeformResearchBuildings.forEach(building => {
+            const level = planet.lifeformBuildingLevels?.[building.type] ?? 0;
+            technologyResearchCostReduction += building.getLifeformTechnologyResearchCostAndTimeReduction(level).cost;
+        });
+
+        this.#state.planets[planet.id].plasmaTechnologyCostReduction = technologyResearchCostReduction;
+        this.#state.planets[planet.id].lifeformResearchBuildings = lifeformResearchBuildings;
     }
 
     #init_plasmaTechnologyCostReductions(planet: AmortizationPlanetSettings) {
@@ -378,14 +387,6 @@ export class AmortizationItemGenerator {
                         }
                     });
 
-                    // apply new plasma technology level
-                    Object.values(this.#state.planets).forEach(planet => {
-                        const breakdowns = planet.productionBreakdowns;
-                        breakdowns.metal.plasmaTechnologyLevel = bestItem.level;
-                        breakdowns.crystal.plasmaTechnologyLevel = bestItem.level;
-                        breakdowns.deuterium.plasmaTechnologyLevel = bestItem.level;
-                    });
-
                     yieldItem = this.#settings.showPlasmaTechnology;
                     break;
                 }
@@ -394,12 +395,61 @@ export class AmortizationItemGenerator {
                 default: throw new Error('not implemented');
             }
 
-            //TODO: generalized update of mine cost reductions, lifeform building cost reductions, lifeform technology cost reduction, lifeform technology bonus, plasmatech cost reduction
+            this.#updateState();
 
             if (yieldItem) {
                 yield bestItem;
             }
         }
+    }
+
+    /** generalized update of mine cost reductions, lifeform building cost reductions, lifeform technology cost reduction, lifeform technology bonus, plasmatech cost reduction, etc */
+    #updateState() {
+        const plasmaTechLevel = this.#state.research[ResearchType.plasmaTechnology];
+
+        const planetStates = Object.values(this.#state.planets);
+        planetStates.forEach(planetState => {
+            // set new plasmatech level for production breakdowns
+            const breakdowns = planetState.productionBreakdowns;
+            breakdowns.metal.plasmaTechnologyLevel = plasmaTechLevel;
+            breakdowns.crystal.plasmaTechnologyLevel = plasmaTechLevel;
+            breakdowns.deuterium.plasmaTechnologyLevel = plasmaTechLevel;
+
+            planetState.collectorClassBonus = planetState.collectorClassBonusTechnologies.reduce(
+                (total, tech) => total + tech.getCollectorClassBonus(planetState.data.lifeformTechnologies[tech.type]),
+                0
+            );
+            planetState.lifeformTechnologyBonus = planetState.lifeformTechnologyBonusBuildings.reduce(
+                (total, building) => total + building.getLifeformTechnologyBonus(planetState.data.lifeformBuildings[building.type]),
+                0
+            );
+            planetState.mineCostReductions = planetState.mineCostReductionBuildings.reduce(
+                (total, building) => {
+                    $mineBuildingTypes.forEach(mineType => total[mineType] += building.getCostAndTimeReduction(mineType, planetState.data.lifeformBuildings[building.type]).cost);
+                    return total;
+                },
+                <Record<MineBuildingType, number>>{
+                    [BuildingType.metalMine]: 0,
+                    [BuildingType.crystalMine]: 0,
+                    [BuildingType.deuteriumSynthesizer]: 0,
+                },
+            );
+            planetState.plasmaTechnologyCostReduction = planetState.plasmaTechnologyCostReductionTechnologies.reduce(
+                (total, tech) => total + tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, planetState.data.lifeformTechnologies[tech.type]).cost,
+                0
+            );
+            planetState.lifeformBuildingCostReduction = planetState.lifeformBuildingCostReductionBuildings.reduce(
+                (total, building) => {
+                    LifeformBuildingTypes.forEach(lfBuildingType => total[lfBuildingType] += building.getCostAndTimeReduction(lfBuildingType, planetState.data.lifeformBuildings[building.type]).cost);
+                    return total;
+                },
+                createRecord(LifeformBuildingTypes, 0),
+            );
+            planetState.lifeformTechnologyCostReduction = planetState.lifeformResearchBuildings.reduce(
+                (total, building) => total + building.getLifeformTechnologyResearchCostAndTimeReduction(planetState.data.lifeformBuildings[building.type]).cost,
+                0
+            );
+        });
     }
 
     // #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
@@ -578,16 +628,10 @@ export class AmortizationItemGenerator {
                 id: planetState.data.id,
                 lifeformBuildingLevels: { ...planetState.data.lifeformBuildings },
                 lifeformTechnologyLevels: { ...planetState.data.lifeformTechnologies },
-                lifeformTechnologyCostReduction: planetState.lifeformResearchBuildings.reduce((acc, cur) => {
-                    const level = planetState.data.lifeformBuildings[cur.type];
-                    return acc + cur.getLifeformTechnologyResearchCostAndTimeReduction(level).cost;
-                }, 0),
+                lifeformTechnologyCostReduction: planetState.lifeformTechnologyCostReduction,
                 lifeformBuildingCostReduction: { ...planetState.lifeformBuildingCostReduction },
                 plasmaTechnologyCostReduction: planetState.plasmaTechnologyCostReduction,
-                lifeformTechnologyBonus: planetState.lifeformTechnologyBonusBuildings.reduce((acc, cur) => {
-                    const level = planetState.data.lifeformBuildings[cur.type];
-                    return acc + cur.getLifeformTechnologyBonus(level);
-                }, 0),
+                lifeformTechnologyBonus: planetState.lifeformTechnologyBonus,
             };
         });
 
@@ -943,7 +987,6 @@ export class AmortizationItemGenerator {
         const result = this.#getMineAmortizationItem_costReduction(planetState, mineType);
         const reducedCost = result.totalReducedCost;
         const reducedCostMsu = result.totalReducedCostMsu;
-        const lifeformBuildingCostReduction = result.lifeformBuildingCostReduction;
         const additionalLifeformBuildings: LifeformBuildingLevels[] = [];
 
         const additionalLifeformBuildingsByBuilding: Partial<Record<LifeformBuildingType, LifeformBuildingLevels>> = {};

@@ -176,14 +176,8 @@
                                     <o-lifeform-technology v-else :technology="additionalLifeformStuffGroup.technology" size="36px" />
 
                                     <span class="name-and-level">
-                                        <i
-                                            v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]"
-                                        />
-                                        <i
-                                            v-text="
-                                                `LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`
-                                            "
-                                        />
+                                        <i v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]" />
+                                        <i v-text="`LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`" />
                                     </span>
                                 </template>
 
