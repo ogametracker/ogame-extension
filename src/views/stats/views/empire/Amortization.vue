@@ -105,7 +105,7 @@
                     <template #cell-checkbox="{ index }">
                         <checkbox :value="selectedItemIndizes.includes(index)" @input="toggleItemSelection(index)" />
                     </template>
-                    <template #cell-what="{ item }">
+                    <template #cell-what="{ item, index }">
                         <div
                             v-if="item.type == 'mine' || item.type == 'lifeform-building' || item.type == 'lifeform-technology'"
                             class="what-cell"
@@ -156,34 +156,65 @@
                             <span v-else v-text="'??? contact developer'" />
                         </div>
                         <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
-                            <template v-for="(additionalLifeformStuff, i) in item.additionalLifeformStuff">
-                                <span class="planet" :key="`planet-${i}`">
-                                    <span v-text="empire.planets[additionalLifeformStuff.planetId].name" />
-                                    <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
-                                </span>
-
-                                <o-lifeform-building
-                                    v-if="additionalLifeformStuff.building != null"
-                                    :key="`icon-${i}`"
-                                    :building="additionalLifeformStuff.building"
-                                    size="36px"
-                                />
-                                <o-lifeform-technology 
-                                    v-else 
-                                    :key="`icon-${i}`" 
-                                    :technology="additionalLifeformStuff.technology" 
-                                    size="36px" 
-                                />
-
-                                <span class="name-and-level" :key="`name-level-${i}`">
-                                    <span v-text="buildableTranslations[additionalLifeformStuff.building || additionalLifeformStuff.technology]" />
+                            <div
+                                v-for="(additionalLifeformStuffGroup, i) in getAdditionalLifeformStuffGroups(item.additionalLifeformStuff)"
+                                :key="i"
+                                style="display: contents"
+                            >
+                                <template v-if="additionalLifeformStuffGroup.planetIds.size > 1">
                                     <span
-                                        v-if="additionalLifeformStuff.levels.from != additionalLifeformStuff.levels.to"
-                                        v-text="`${additionalLifeformStuff.levels.from} - ${additionalLifeformStuff.levels.to}`"
+                                        class="mdi expand-amortization-group"
+                                        :class="showAmotizationGroup[`item-${index}_group-${i}`] ? 'mdi-menu-up' : 'mdi-menu-down'"
+                                        @click="toggleAmortizationGroup(`item-${index}_group-${i}`)"
                                     />
-                                    <span v-else v-text="additionalLifeformStuff.levels.from" />
-                                </span>
-                            </template>
+
+                                    <o-lifeform-building
+                                        v-if="additionalLifeformStuffGroup.building != null"
+                                        :building="additionalLifeformStuffGroup.building"
+                                        size="36px"
+                                    />
+                                    <o-lifeform-technology v-else :technology="additionalLifeformStuffGroup.technology" size="36px" />
+
+                                    <span class="name-and-level">
+                                        <i
+                                            v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]"
+                                        />
+                                        <i
+                                            v-text="
+                                                `LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`
+                                            "
+                                        />
+                                    </span>
+                                </template>
+
+                                <div
+                                    v-if="additionalLifeformStuffGroup.planetIds.size == 1 || showAmotizationGroup[`item-${index}_group-${i}`]"
+                                    style="display: contents"
+                                >
+                                    <div v-for="(additionalLifeformStuff, i) in additionalLifeformStuffGroup.items" :key="i" style="display: contents">
+                                        <span class="planet">
+                                            <span v-text="empire.planets[additionalLifeformStuff.planetId].name" />
+                                            <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
+                                        </span>
+
+                                        <o-lifeform-building
+                                            v-if="additionalLifeformStuff.building != null"
+                                            :building="additionalLifeformStuff.building"
+                                            size="36px"
+                                        />
+                                        <o-lifeform-technology v-else :technology="additionalLifeformStuff.technology" size="36px" />
+
+                                        <span class="name-and-level">
+                                            <span v-text="buildableTranslations[additionalLifeformStuff.building || additionalLifeformStuff.technology]" />
+                                            <span
+                                                v-if="additionalLifeformStuff.levels.from != additionalLifeformStuff.levels.to"
+                                                v-text="`${additionalLifeformStuff.levels.from} - ${additionalLifeformStuff.levels.to}`"
+                                            />
+                                            <span v-else v-text="additionalLifeformStuff.levels.from" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
 
                             <span />
                             <o-research :research="ResearchType.plasmaTechnology" size="36px" />
@@ -304,15 +335,23 @@
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformBuildingType, LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '../../models/empire/amortization/AmortizationPlanetSettings';
     import { AmortizationPlayerSettings } from '../../models/empire/amortization/AmortizationPlayerSettings';
     import { AmortizationAstrophysicsSettings } from '../../models/empire/amortization/AmortizationAstrophysicsSettings';
-    import { AmortizationItem, BaseAmortizationItem } from '@stats/models/empire/amortization/models';
+    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels } from '@stats/models/empire/amortization/models';
     import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
+
+    interface AdditionalLifeformStuffGroup {
+        items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
+        totalLevels: number;
+        planetIds: Set<number>;
+        building?: LifeformBuildingType;
+        technology?: LifeformTechnologyType;
+    }
 
     @Component({
         components: {
@@ -628,6 +667,44 @@
                 this.selectedItemIndizes.push(index);
             }
         }
+
+        private getAdditionalLifeformStuffGroups(additionalLifeformStuff: (LifeformBuildingLevels | LifeformTechnologyLevels)[]): AdditionalLifeformStuffGroup[] {
+            const groups: AdditionalLifeformStuffGroup[] = [];
+            const groupsByType: Record<number, AdditionalLifeformStuffGroup> = {};
+
+            additionalLifeformStuff.forEach(stuff => {
+                const type = 'building' in stuff ? stuff.building : stuff.technology;
+
+                let group = groupsByType[type];
+                if (group == null) {
+                    group = groupsByType[type] = {
+                        items: [],
+                        planetIds: new Set<number>(),
+                        building: 'building' in stuff ? stuff.building : undefined,
+                        technology: 'technology' in stuff ? stuff.technology : undefined,
+                        totalLevels: 0,
+                    };
+                    groups.push(group);
+                }
+
+                group.planetIds.add(stuff.planetId);
+                group.items.push(stuff);
+                group.totalLevels += stuff.levels.to - stuff.levels.from + 1;
+            });
+
+            return groups;
+        }
+
+        private readonly showAmotizationGroup: Partial<Record<string, boolean>> = {};
+
+        private toggleAmortizationGroup(groupName: string) {
+            if (this.showAmotizationGroup[groupName] == null) {
+                this.$set(this.showAmotizationGroup, groupName, true);
+            }
+            else {
+                this.showAmotizationGroup[groupName] = !this.showAmotizationGroup[groupName];
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -767,5 +844,11 @@
         .mdi {
             font-size: 1.333rem;
         }
+    }
+
+    .expand-amortization-group {
+        justify-self: end;
+        font-size: 24px;
+        cursor: pointer;
     }
 </style>
