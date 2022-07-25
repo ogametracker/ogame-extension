@@ -35,7 +35,7 @@
                     <div class="result-grid" v-if="foundShips">
                         <template v-for="ship in ships">
                             <template v-if="notification.ships[ship] > 0">
-                                <o-ship :ship="shipTypes[ship]" :key="`ship-icon-${ship}`" class="icon" />
+                                <o-ship :ship="ship" :key="`ship-icon-${ship}`" class="icon" />
                                 <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
                             </template>
                         </template>
@@ -93,7 +93,7 @@
                     <template v-if="notification.events[event] > 0">
                         <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close icon" :style="{ color: eventColors.nothing }" />
                         <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" class="icon" />
-                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" ship="battleship" size="24px" class="icon" />
+                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'delay'"
                             :key="`event-icon-${event}`"
