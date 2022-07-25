@@ -120,7 +120,7 @@
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
-                            <div class="levels" v-if="item.type == 'mine'">
+                            <div class="levels">
                                 <template v-for="(additionalLifeformBuilding, i) in item.additionalLifeformBuildings">
                                     <o-lifeform-building :key="`icon-${i}`" :building="additionalLifeformBuilding.building" size="36px" />
                                     <span class="name-and-level" :key="`name-level-${i}`">
@@ -133,27 +133,29 @@
                                     </span>
                                 </template>
 
-                                <o-building :building="item.mine" size="36px" />
-                                <span class="name-and-level">
-                                    <span v-text="buildableTranslations[item.mine]" />
-                                    <span v-text="item.level" />
-                                </span>
+                                <template v-if="item.type == 'mine'">
+                                    <o-building :building="item.mine" size="36px" />
+                                    <span class="name-and-level">
+                                        <span v-text="buildableTranslations[item.mine]" />
+                                        <span v-text="item.level" />
+                                    </span>
+                                </template>
+                                <template v-else-if="item.type == 'lifeform-building'">
+                                    <o-lifeform-building :building="item.building" size="36px" />
+                                    <span class="name-and-level">
+                                        <span v-text="buildableTranslations[item.building]" />
+                                        <span v-text="item.level" />
+                                    </span>
+                                </template>
+                                <template v-else-if="item.type == 'lifeform-technology'">
+                                    <o-lifeform-technology :technology="item.technology" size="36px" />
+                                    <span class="name-and-level">
+                                        <span v-text="buildableTranslations[item.technology]" />
+                                        <span v-text="item.level" />
+                                    </span>
+                                </template>
+                                <span v-else v-text="'??? contact developer'" />
                             </div>
-                            <div class="levels" v-else-if="item.type == 'lifeform-building'">
-                                <o-lifeform-building :building="item.building" size="36px" />
-                                <span class="name-and-level">
-                                    <span v-text="buildableTranslations[item.building]" />
-                                    <span v-text="item.level" />
-                                </span>
-                            </div>
-                            <div class="levels" v-else-if="item.type == 'lifeform-technology'">
-                                <o-lifeform-technology :technology="item.technology" size="36px" />
-                                <span class="name-and-level">
-                                    <span v-text="buildableTranslations[item.technology]" />
-                                    <span v-text="item.level" />
-                                </span>
-                            </div>
-                            <span v-else v-text="'??? contact developer'" />
                         </div>
                         <div v-else-if="item.type == 'plasma-technology'" class="what-cell what-cell--plasma-technology">
                             <div

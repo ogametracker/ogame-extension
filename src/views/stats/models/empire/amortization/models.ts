@@ -72,6 +72,8 @@ export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem
     technology: LifeformTechnologyType;
     level: number;
     additionalLifeformBuildings: LifeformBuildingLevels[];
+
+    additionalProductionBonus: Cost;
 }
 
 export type AmortizationItem =
