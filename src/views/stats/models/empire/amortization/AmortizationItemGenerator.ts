@@ -18,7 +18,7 @@ import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/expe
 import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, LifeformTypes, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { CollectorClassBonusLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
+import { CollectorClassBonusLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
 import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { PlasmaTechnology } from "@/shared/models/ogame/research/PlasmaTechnology";
 import { ResearchType, ResearchTypes } from "@/shared/models/ogame/research/ResearchType";
@@ -35,7 +35,7 @@ import { _throw } from "@/shared/utils/_throw";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
 
 
 
@@ -152,7 +152,10 @@ export class AmortizationItemGenerator {
 
             this.#init_planetData(planet);
 
+            
+
             this.#init_lifeformBuildingCostReductions(planet);
+            this.#init_lifeformTechnologyCostReductions(planet);
             this.#init_mineCostReductions(planet);
             this.#init_plasmaTechnologyCostReductions(planet);
             this.#init_lifeformResearchBuildings(planet);
@@ -253,6 +256,19 @@ export class AmortizationItemGenerator {
         this.#state.planets[planet.id].plasmaTechnologyCostReductionTechnologies = plasmaTechCostReductionTechnologies;
     }
 
+    #init_lifeformTechnologyCostReductions(planet: AmortizationPlanetSettings) {
+        const lifeformTechnologyCostReduction = 0;
+        const costReduction = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform].reduce(
+            (total, building) => {
+                const level = planet.lifeformBuildingLevels?.[building.type] ?? 0;
+                const costReduction = building.getLifeformTechnologyResearchCostAndTimeReduction(level).cost;
+                return total + costReduction;
+            }, 0);
+
+        this.#state.planets[planet.id].lifeformTechnologyCostReduction = lifeformTechnologyCostReduction;
+        this.#state.planets[planet.id].lifeformBuildingCostReductionBuildings = lfResearchBuildings;
+    }
+
     #init_lifeformBuildingCostReductions(planet: AmortizationPlanetSettings) {
         const lifeformBuildingCostReduction = createRecord(LifeformBuildingTypes, 0);
 
@@ -334,14 +350,14 @@ export class AmortizationItemGenerator {
             const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
             // const astrophysicsItem = this.#getAstrophysicsAmortizationItem();
             const lifeformBuildingItems = this.#getLifeformBuildingAmortizationItems();
-            // const lifeformTechnologyItems = this.#getLifeformTechnologyItems();
+            const lifeformTechnologyItems = this.#getLifeformTechnologyItems();
 
             const items: AmortizationItem[] = [
                 ...mineItems,
                 plasmaTechItem,
                 // astrophysicsItem,
                 ...lifeformBuildingItems,
-                // ...lifeformTechnologyItems,
+                ...lifeformTechnologyItems,
             ].filter(item => item.productionDeltaMsu > 0) //remove items with production delta = 0, because plasmatech and others can have no effect if there are no mines at all
                 .sort((a, b) => {
                     // sort by amortization time, then by cost
@@ -471,9 +487,339 @@ export class AmortizationItemGenerator {
         });
     }
 
-    // #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
+    #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
+        return Object.values(this.#state.planets).flatMap(
+            planet => ResourceProductionBonusLifeformTechnologies
+                .filter(tech => planet.data.activeLifeformTechnologies.includes(tech.type))
+                .map(tech => this.#getLifeformTechnologyItem(planet.data.id, tech))
+        );
+    }
+    #getLifeformTechnologyItem(planetId: number, technology: ResourceProductionBonusLifeformTechnology): LifeformTechnologyAmortizationItem {
+        const planetState = this.#state.planets[planetId];
+        const planetData = planetState.data;
+        const newLevel = planetData.lifeformTechnologies[technology.type] + 1;
 
-    // }
+        const result = this.#getLifeformTechnologyItem_costReduction(planetState, technology);
+        const reducedCost = result.totalReducedCost;
+        const reducedCostMsu = result.totalReducedCostMsu;
+
+        const additionalLifeformBuildings: LifeformBuildingLevels[] = [];
+        const additionalLifeformBuildingsByBuilding: Partial<Record<LifeformBuildingType, LifeformBuildingLevels>> = {};
+        result.additionalLifeformBuildings.forEach(item => {
+            let levels = additionalLifeformBuildingsByBuilding[item.building];
+            if (levels == null) {
+                levels = {
+                    planetId: planetData.id,
+                    building: item.building,
+                    levels: {
+                        from: item.level,
+                        to: item.level,
+                    },
+                };
+                additionalLifeformBuildingsByBuilding[item.building] = levels;
+                additionalLifeformBuildings.push(levels);
+            }
+
+            levels.levels.to = item.level;
+        });
+
+        const curProduction = Object.values(this.#state.planets).reduce<Cost>(
+            (acc, cur) => {
+                const breakdowns = cur.productionBreakdowns;
+                acc.metal += breakdowns.metal.total;
+                acc.crystal += breakdowns.crystal.total;
+                acc.deuterium += breakdowns.deuterium.total;
+                return acc;
+            },
+            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+        );
+
+        const additionalTechBonus = result.newPlanetState.lifeformTechnologyBonus - planetState.lifeformTechnologyBonus;
+        const additionalProductionBonus = subCost(technology.getProductionBonus(newLevel), technology.getProductionBonus(newLevel - 1));
+
+        const newProduction = Object.values(this.#state.planets).reduce<Cost>(
+            (acc, cur) => {
+                const breakdowns = cur.productionBreakdowns;
+                if (cur.data.id == planetId) {
+                    const metalProduction = breakdowns.metal.clone();
+                    const crystalProduction = breakdowns.crystal.clone();
+                    const deuteriumProduction = breakdowns.deuterium.clone();
+
+                    metalProduction.lifeformTechnologyBonus += additionalTechBonus * additionalProductionBonus.metal;
+                    crystalProduction.lifeformTechnologyBonus += additionalTechBonus * additionalProductionBonus.crystal;
+                    deuteriumProduction.lifeformTechnologyBonus += additionalTechBonus * additionalProductionBonus.deuterium;
+
+                    acc.metal += metalProduction.total;
+                    acc.crystal += crystalProduction.total;
+                    acc.deuterium += deuteriumProduction.total;
+                }
+                else {
+                    acc.metal += breakdowns.metal.total;
+                    acc.crystal += breakdowns.crystal.total;
+                    acc.deuterium += breakdowns.deuterium.total;
+                }
+                return acc;
+            },
+            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+        );
+
+        const productionDelta = subCost(newProduction, curProduction);
+        const productionDeltaMsu = this.#getMsu(productionDelta);
+
+        return {
+            type: 'lifeform-technology',
+            planetId,
+            technology: technology.type,
+            level: newLevel,
+
+            additionalLifeformBuildings,
+
+            cost: reducedCost,
+            costMsu: reducedCostMsu,
+            productionDelta,
+            productionDeltaMsu,
+            timeInHours: reducedCostMsu / productionDeltaMsu,
+        };
+    }
+    #getLifeformTechnologyItem_costReduction(planetState: AmortizationPlanetState, technology: ResourceProductionBonusLifeformTechnology) {
+        interface PotentialLifeformTechnologyCostReductionItemBase {
+            planetId: number;
+            level: number;
+            cost: Cost;
+            newTotalReducedCost: Cost;
+            newTotalReducedCostMsu: number;
+        };
+        type PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding = PotentialLifeformTechnologyCostReductionItemBase & { building: LifeformTechnologyResearchBuilding };
+        type PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding = PotentialLifeformTechnologyCostReductionItemBase & { building: LifeformTechnologyBonusLifeformBuilding };
+        type PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding = PotentialLifeformTechnologyCostReductionItemBase & { building: AnyBuildingCostAndTimeReductionLifeformBuilding };
+        type PotentialLifeformResourceBonusProductionTechnology = PotentialLifeformTechnologyCostReductionItemBase & { technology: ResourceProductionBonusLifeformTechnology };
+
+        type PotentialLifeformTechnologyCostReductionItem =
+            | PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding
+            | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding
+            | PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding
+            | PotentialLifeformResourceBonusProductionTechnology;
+
+        type LifeformTechnologyAmortizationPartItem = {
+            level: number;
+            cost: Cost;
+        } & (
+                | { building: LifeformBuildingType; planetId: number }
+                | { technology: LifeformTechnologyType; planetId: number }
+            );
+
+        const planetData = planetState.data;
+
+        const localPlanetState = {
+            lifeformBuildingLevels: { ...planetState.data.lifeformBuildings },
+            lifeformTechnologyLevels: { ...planetState.data.lifeformTechnologies },
+            lifeformTechnologyCostReduction: planetState.lifeformTechnologyCostReduction,
+            lifeformBuildingCostReduction: { ...planetState.lifeformBuildingCostReduction },
+            plasmaTechnologyCostReduction: planetState.plasmaTechnologyCostReduction,
+            lifeformTechnologyBonus: planetState.lifeformTechnologyBonus,
+        };
+
+        const newLevel = planetData.lifeformTechnologies[technology.type] + 1;
+        const currentTechnologyCostReduction = localPlanetState.lifeformTechnologyCostReduction;
+        const technologyCost = technology.getCost(newLevel);
+        const reducedTechnologyCost = multiplyCostInt(technologyCost, 1 - currentTechnologyCostReduction);
+
+        const costs: LifeformTechnologyAmortizationPartItem[] = [{
+            planetId: planetData.id,
+            technology: technology.type,
+            cost: technologyCost,
+            level: newLevel,
+        }];
+        let totalReducedCost = reducedTechnologyCost;
+        let totalReducedCostMsu = this.#getMsu(totalReducedCost);
+
+
+        const potentialLifeformTechnologyCostReductionOrTechBonusBuildingReduceFunction = (
+            best: PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null,
+            building: LifeformTechnologyResearchBuilding | LifeformTechnologyBonusLifeformBuilding,
+        ): PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null => {
+            const newLevel = localPlanetState.lifeformBuildingLevels[building.type] + 1;
+            const cost = building.getCost(newLevel);
+            const reducedCost = multiplyCostInt(cost, 1 - localPlanetState.lifeformBuildingCostReduction[building.type]);
+
+            let additionalCostReduction = 0;
+            let additionalTechBonus = 0;
+            if ('getLifeformTechnologyResearchCostAndTimeReduction' in building) {
+                additionalCostReduction = building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost
+                    - building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
+            } else {
+                additionalTechBonus = building.getLifeformTechnologyBonus(newLevel) - building.getLifeformTechnologyBonus(newLevel - 1);
+            }
+            const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
+                if ('building' in cur) {
+                    const curReducedCost = multiplyCostInt(cur.cost, 1 - localPlanetState.lifeformBuildingCostReduction[cur.building]);
+                    return addCost(total, curReducedCost);
+                }
+
+                const technologyCostReduction = localPlanetState.lifeformTechnologyCostReduction + additionalCostReduction;
+                const technologyBonus = planetState.lifeformTechnologyBonus + additionalTechBonus;
+                const xpTechBonus = this.#state.lifeformExperienceBonus[planetData.activeLifeform];
+                const costReduction = technologyCostReduction * (1 + technologyBonus) * (1 + xpTechBonus);
+
+                const curReducedCost = multiplyCostInt(cur.cost, 1 - costReduction);
+
+                return addCost(total, curReducedCost);
+            }, reducedCost);
+
+            const newTotalReducedCostMsu = this.#getMsu(newTotalReducedCost);
+
+            if (newTotalReducedCostMsu <= totalReducedCostMsu && (best == null || newTotalReducedCostMsu < best.newTotalReducedCostMsu)) {
+                const resultBase: PotentialLifeformTechnologyCostReductionItemBase = {
+                    planetId: planetData.id,
+                    level: newLevel,
+                    cost,
+                    newTotalReducedCost,
+                    newTotalReducedCostMsu,
+                };
+
+                // Typescript compiler throws error otherwise (update/upgrade needed?)
+                if ('getLifeformTechnologyResearchCostAndTimeReduction' in building) {
+                    return {
+                        ...resultBase,
+                        building,
+                    };
+                } else {
+                    return {
+                        ...resultBase,
+                        building,
+                    };
+                }
+            }
+
+            return best;
+        };
+
+        //  - lf building cost reduction building (to reduce cost of lf buildings above with A)
+        const potentialLifeformTechnologyCostIndirectReductionBuildingReduceFunction = (
+            best: PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding | null,
+            building: AnyBuildingCostAndTimeReductionLifeformBuilding,
+        ): PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding | null => {
+            const newLevel = localPlanetState.lifeformBuildingCostReduction[building.type] + 1;
+            const cost = building.getCost(newLevel);
+            const reducedCost = multiplyCostInt(cost, 1 - localPlanetState.lifeformBuildingCostReduction[building.type]);
+
+            const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
+                if ('technology' in cur) {
+                    const curReducedCost = multiplyCostInt(cur.cost, 1 - localPlanetState.lifeformTechnologyCostReduction);
+                    return addCost(total, curReducedCost);
+                }
+
+                const costReduction = localPlanetState.lifeformTechnologyCostReduction;
+                const additionalCostReduction = cur.building != building.type
+                    ? (building.getCostAndTimeReduction(cur.building, newLevel).cost
+                        - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost)
+                    : 0; // no additional cost reduction for ealier levels of itself
+
+                const newCostReduction = costReduction + additionalCostReduction;
+                const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
+
+                return addCost(total, curReducedCost);
+            }, reducedCost);
+
+            const newTotalReducedCostMsu = this.#getMsu(newTotalReducedCost);
+
+            if (newTotalReducedCostMsu <= totalReducedCostMsu && (best == null || newTotalReducedCostMsu < best.newTotalReducedCostMsu)) {
+                return {
+                    planetId: planetData.id,
+                    building,
+                    level: newLevel,
+                    cost,
+                    newTotalReducedCost,
+                    newTotalReducedCostMsu,
+                };
+            }
+
+            return best;
+        };
+
+
+        const bestItems: PotentialLifeformTechnologyCostReductionItem[] = [];
+        while (true) {
+            const bestItem =
+                [...planetState.lifeformResearchBuildings, ...planetState.lifeformTechnologyBonusBuildings].reduce(
+                    (best, cur) => potentialLifeformTechnologyCostReductionOrTechBonusBuildingReduceFunction(best, cur),
+                    null as PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null,
+                )
+                ?? planetState.lifeformBuildingCostReductionBuildings.reduce(
+                    (best, cur) => potentialLifeformTechnologyCostIndirectReductionBuildingReduceFunction(best, cur),
+                    null as PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding | null,
+                );
+
+            if (bestItem == null) {
+                break;
+            }
+
+            const newCostItem = {
+                cost: bestItem.cost,
+                level: bestItem.level,
+                building: bestItem.building.type,
+                planetId: bestItem.planetId,
+            };
+
+            localPlanetState.lifeformBuildingLevels[bestItem.building.type]++;
+
+            if ('affectedBuildings' in bestItem.building) {
+                const bestBuilding = bestItem.building;
+                bestBuilding.affectedBuildings.forEach(affectedBuildingType => {
+                    const additionalCostReduction = bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level).cost
+                        - bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level - 1).cost;
+
+                    localPlanetState.lifeformBuildingCostReduction[affectedBuildingType as LifeformBuildingType] += additionalCostReduction;
+                });
+            }
+            else if ('getLifeformTechnologyResearchCostAndTimeReduction' in bestItem.building) {
+                const additionalCostReduction = bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level).cost
+                    - bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level - 1).cost;
+
+                localPlanetState.lifeformTechnologyCostReduction += additionalCostReduction;
+            }
+            else {
+                const additionalTechBonus = bestItem.building.getLifeformTechnologyBonus(bestItem.level)
+                    - bestItem.building.getLifeformTechnologyBonus(bestItem.level - 1);
+
+                localPlanetState.lifeformTechnologyBonus += additionalTechBonus;
+            }
+
+            costs.push(newCostItem);
+            totalReducedCost = bestItem.newTotalReducedCost;
+            totalReducedCostMsu = bestItem.newTotalReducedCostMsu;
+
+            bestItems.push(bestItem);
+        }
+
+        const additionalLifeformBuildings = (costs.filter(c => 'building' in c) as (LifeformTechnologyAmortizationPartItem & { building: LifeformBuildingType; planetId: number })[])
+            .map(c => ({
+                building: c.building,
+                level: c.level,
+                planetId: c.planetId,
+
+                // order: 1) cost reduction  2) tech bonus  3) lf research building
+                order: AnyBuildingCostAndTimeReductionLifeformBuildings.some(b => b.type == c.building)
+                    ? 1
+                    : LifeformTechnologyBonusLifeformBuildings.some(b => b.type == c.building)
+                        ? 2
+                        : 3,
+            })).sort((a, b) => {
+                const orderDiff = a.order - b.order;
+                if (orderDiff != 0) {
+                    return orderDiff;
+                }
+
+                return a.level - b.level;
+            });
+
+        return {
+            totalReducedCost,
+            totalReducedCostMsu,
+            newPlanetState: localPlanetState,
+            additionalLifeformBuildings,
+        };
+    }
 
     #getLifeformBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
         return Object.values(this.#state.planets).flatMap(
