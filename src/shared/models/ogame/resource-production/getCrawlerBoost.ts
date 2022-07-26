@@ -1,5 +1,4 @@
 import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
-import { ServerSettings } from "../../server-settings/ServerSettings";
 import { PlayerClass } from "../classes/PlayerClass";
 import { getMaxActiveCrawlers } from "./getMaxActiveCrawlers";
 
@@ -12,7 +11,12 @@ export interface CrawlerBoostCalculationData {
     playerClass: PlayerClass;
     hasGeologist: boolean;
     collectorClassBonus: number;
-    serverSettings: ServerSettings;
+    serverSettings: {
+        geologistActiveCrawlerFactorBonus: number;
+        collectorCrawlerProductionFactorBonus: number;
+        crawlerProductionFactorPerUnit: number;
+        crawlerMaxProductionFactor: number;
+    };
 }
 
 export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
@@ -22,19 +26,19 @@ export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
         data.levelDeuteriumSynthesizer,
         data.playerClass == PlayerClass.collector,
         data.hasGeologist,
-        data.serverSettings,
+        data.serverSettings.geologistActiveCrawlerFactorBonus,
         data.collectorClassBonus,
     );
     const crawlerCount = Math.min(maxCrawlers, data.availableCrawlers);
     const crawlerProductivity = data.playerClass == PlayerClass.collector
-        ? (1 + data.serverSettings.playerClasses.collector.crawlers.productionFactorBonus) * (1 + data.collectorClassBonus)
+        ? (1 + data.serverSettings.collectorCrawlerProductionFactorBonus) * (1 + data.collectorClassBonus)
         : 1;
 
     const potentialCrawlerBoost =
-        data.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit
+        data.serverSettings.crawlerProductionFactorPerUnit
         * crawlerCount
         * crawlerProductivity
         * data.crawlerProductionSetting / 100;
 
-    return Math.min(potentialCrawlerBoost, data.serverSettings.playerClasses.crawlers.maxProductionFactor);
+    return Math.min(potentialCrawlerBoost, data.serverSettings.crawlerMaxProductionFactor);
 }

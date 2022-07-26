@@ -34,6 +34,7 @@ export interface MineAmortizationItem extends BaseAmortizationItem {
     additionalLifeformBuildings: LifeformBuildingLevels[];
 
     newMineProduction: number;
+    newCrawlerBonus: number;
 }
 
 export interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {

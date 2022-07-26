@@ -37,7 +37,12 @@ export function getDeuteriumProduction(dependencies: ProductionDependencies): Pr
             levelMetalMine: dependencies.planet.buildings[BuildingType.metalMine],
             levelCrystalMine: dependencies.planet.buildings[BuildingType.crystalMine],
             levelDeuteriumSynthesizer: dependencies.planet.buildings[BuildingType.deuteriumSynthesizer],
-            serverSettings: dependencies.serverSettings,
+            serverSettings: {
+                collectorCrawlerProductionFactorBonus: dependencies.serverSettings.playerClasses.collector.crawlers.productionFactorBonus,
+                crawlerMaxProductionFactor: dependencies.serverSettings.playerClasses.crawlers.maxProductionFactor,
+                crawlerProductionFactorPerUnit: dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit,
+                geologistActiveCrawlerFactorBonus: dependencies.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+            },
         }), 
         getLifeformBuildingProductionBonus(dependencies.planet).deuterium,
         getLifeformTechnologyProductionBonus(dependencies.player).deuterium,

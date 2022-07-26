@@ -187,7 +187,7 @@
                         planet.buildings[BuildingType.deuteriumSynthesizer],
                         this.player.playerClass == PlayerClass.collector,
                         this.player.officers.geologist,
-                        ServerSettingsDataModule.serverSettings,
+                        ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
                         collectorClassFactor,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
