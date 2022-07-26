@@ -291,7 +291,7 @@
                     </template>
 
                     <template #cell-productionDelta="{ value }">
-                        <span v-text="$i18n.$n(Math.max(value.metal, value.crystal, value.deuterium), numberFormat)" />
+                        <span v-text="$i18n.$n(value.metal + value.crystal + value.deuterium, numberFormat)" />
                     </template>
                     <template #cell-productionDeltaMsu="{ value }">
                         <span v-text="$i18n.$n(value, numberFormat)" />

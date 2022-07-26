@@ -31,6 +31,7 @@ import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/Res
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { ServerSettings } from "@/shared/models/server-settings/ServerSettings";
 import { createRecord } from "@/shared/utils/createRecord";
+import { __measure } from "@/shared/utils/performance/__measure";
 import { _throw } from "@/shared/utils/_throw";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
@@ -136,7 +137,8 @@ export class AmortizationItemGenerator {
 
     public nextItem(): AmortizationItem | null {
         const generator = this.#generator ?? this.#initGenerator();
-        const result = generator.next();
+
+        const result = __measure(() => generator.next(), 'generate next amortization item');
         if (result.done) {
             return null;
         }
