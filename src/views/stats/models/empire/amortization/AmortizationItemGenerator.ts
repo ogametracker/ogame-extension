@@ -1,35 +1,31 @@
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { CrawlerProductionPercentage } from "@/shared/models/empire/CrawlerProductionPercentage";
 import { DefenseCount } from "@/shared/models/empire/DefenseCount";
 import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
 import { PlanetBuildingLevels } from "@/shared/models/empire/PlanetBuildingLevels";
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { PlanetShipCount } from "@/shared/models/empire/PlanetShipCount";
 import { ProductionSettings } from "@/shared/models/empire/ProductionSettings";
-import { BuildingType, PlanetBuildingType } from "@/shared/models/ogame/buildings/BuildingType";
+import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { CrystalMine } from "@/shared/models/ogame/buildings/CrystalMine";
 import { DeuteriumSynthesizer } from "@/shared/models/ogame/buildings/DeuteriumSynthesizer";
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuilding, ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { addCost, Cost, multiplyCost, multiplyCostInt, subCost } from "@/shared/models/ogame/common/Cost";
+import { addCost, Cost, multiplyCostInt, subCost } from "@/shared/models/ogame/common/Cost";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, LifeformTechnologyBonusLifeformBuilding, LifeformTechnologyResearchBuilding, ResourceProductionBonusLifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
-import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildings, LifeformTechnologyResearchBuildingsByLifeform, ResourceProductionBonusLifeformBuildings, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
+import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildings, LifeformTechnologyResearchBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
 import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
-import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, LifeformTypes, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
-import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologiesByLifeform } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
+import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
 import { PlasmaTechnology } from "@/shared/models/ogame/research/PlasmaTechnology";
-import { ResearchType, ResearchTypes } from "@/shared/models/ogame/research/ResearchType";
-import { getCrawlerBoost } from "@/shared/models/ogame/resource-production/getCrawlerBoost";
-import { getCrystalBaseProduction, getCrystalProduction } from "@/shared/models/ogame/resource-production/getCrystalProduction";
-import { getDeuteriumProduction } from "@/shared/models/ogame/resource-production/getDeuteriumProduction";
+import { ResearchType, } from "@/shared/models/ogame/research/ResearchType";
+import { getCrystalBaseProduction } from "@/shared/models/ogame/resource-production/getCrystalProduction";
 import { getItemBonus } from "@/shared/models/ogame/resource-production/getItemBonus";
-import { getMetalBaseProduction, getMetalProduction } from "@/shared/models/ogame/resource-production/getMetalProduction";
+import { getMetalBaseProduction } from "@/shared/models/ogame/resource-production/getMetalProduction";
 import { EmpireProductionBreakdown, EmpireProductionPlanetState } from "@/shared/models/ogame/resource-production/types";
 import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
@@ -617,7 +613,7 @@ export class AmortizationItemGenerator {
                 case 'lifeform-building': {
                     const planetState = this.#state.planets[bestItem.planetId];
                     const planetData = planetState.data;
-                    
+
                     // save new lf building level
                     planetData.lifeformBuildings[bestItem.building] = bestItem.level;
 

@@ -134,11 +134,19 @@
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
-    import { getMetalProduction } from '@/shared/models/ogame/resource-production/getMetalProduction';
-    import { getCrystalProduction } from '@/shared/models/ogame/resource-production/getCrystalProduction';
-    import { getDeuteriumProduction } from '@/shared/models/ogame/resource-production/getDeuteriumProduction';
-    import { ProductionDependencies } from '@/shared/models/ogame/resource-production/types';
-    import { getProductionBuildingDependencies } from '@/shared/models/ogame/resource-production/getProductionBuildingDependencies';
+    import { EmpireProductionBreakdown, EmpireProductionPlanetState } from '@/shared/models/ogame/resource-production/types';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
+    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
+    import { hasCommandStaff } from '@/shared/models/ogame/premium/hasCommandStaff';
+    import { LifeformType, LifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { getLifeformTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
+    import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { getMetalBaseProduction } from '@/shared/models/ogame/resource-production/getMetalProduction';
+    import { getCrystalBaseProduction } from '@/shared/models/ogame/resource-production/getCrystalProduction';
+    import { getItemBonus } from '@/shared/models/ogame/resource-production/getItemBonus';
 
     interface Production {
         metal: number;
@@ -171,6 +179,11 @@
         fusionReactor: number;
         solarSatellite: number;
         crawler: number;
+    }
+
+
+    interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
+        getTotal(): Cost;
     }
 
     @Component({
@@ -232,9 +245,219 @@
             return Math.max(...this.items.map(i => i.activeItems.length));
         }
 
+        get_planetCollectorClassBonusFactor(planet: PlanetData) {
+            return CollectorClassBonusLifeformTechnologies
+                .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
+                .reduce(
+                    (total, tech) => total + tech.getCollectorClassBonus(planet.lifeformTechnologies[tech.type]),
+                    0
+                );
+        }
+
+        get_planetLifeformTechnologyBoost(planet: PlanetData) {
+            return LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.activeLifeform]
+                .reduce(
+                    (total, building) => total + building.getLifeformTechnologyBonus(planet.lifeformBuildings[building.type]),
+                    0
+                );
+        }
+
+        get_planetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetData) {
+            return CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies
+                .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
+                .reduce(
+                    (total, tech) => total + tech.getCrawlerProductionBonus(planet.lifeformTechnologies[tech.type]),
+                    0
+                );
+        }
+
+        get_planetLifeformBuildingBonusProductionFactor(planet: PlanetData): Cost {
+            return ResourceProductionBonusLifeformBuildingsByLifeform[planet.activeLifeform].reduce<Cost>(
+                (total, building) => addCost(total, building.getProductionBonus(planet.lifeformBuildings[building.type])),
+                { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+            );
+        }
+
+        get_planetLifeformTechnologyBonusProductionFactor(planet: PlanetData): Cost {
+            return ResourceProductionBonusLifeformTechnologies
+                .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
+                .reduce<Cost>(
+                    (total, tech) => addCost(total, tech.getProductionBonus(planet.lifeformTechnologies[tech.type])),
+                    { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                );
+        }
+
+        private get productionBreakdowns() {
+            const empire = EmpireDataModule.empire;
+            const plasmaTechLevel = empire.research[ResearchType.plasmaTechnology];
+
+            const serverSettings = ServerSettingsDataModule.serverSettings;
+            const productionServerSettings = {
+                collectorProductionFactor: serverSettings.playerClasses.collector.productionFactorBonus,
+                geologistActiveCrawlerFactorBonus: serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+                collectorCrawlerProductionFactorBonus: serverSettings.playerClasses.collector.crawlers.productionFactorBonus,
+                crawlerProductionFactorPerUnit: serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit,
+                crawlerMaxProductionFactor: serverSettings.playerClasses.crawlers.maxProductionFactor,
+            };
+
+            const empireProductionPlanetStates = {
+                metal: {} as Record<number, EmpireProductionPlanetState>,
+                crystal: {} as Record<number, EmpireProductionPlanetState>,
+                deuterium: {} as Record<number, EmpireProductionPlanetState>,
+            };
+            const lifeformXpBoost = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(empire.lifeformExperience[lf]));
+
+            this.planets.forEach(planet => {
+                const levelMetalMine = planet.buildings[BuildingType.metalMine];
+                const levelCrystalMine = planet.buildings[BuildingType.crystalMine];
+                const levelDeuteriumSynthesizer = planet.buildings[BuildingType.deuteriumSynthesizer];
+                const totalMineLevel = levelMetalMine + levelCrystalMine + levelDeuteriumSynthesizer;
+
+                const crawlerConfig = {
+                    available: planet.ships[ShipType.crawler],
+                    percentage: planet.productionSettings[ShipType.crawler],
+                    totalMineLevel,
+                };
+
+                const baseProductionConfig = {
+                    crawlers: crawlerConfig,
+                    lifeformExperienceBoost: lifeformXpBoost[planet.activeLifeform],
+                    collectorClassBonusFactor: this.get_planetCollectorClassBonusFactor(planet),
+                    lifeformBuildingBonusProductionFactor: this.get_planetLifeformBuildingBonusProductionFactor(planet),
+                    lifeformTechnologyBonusProductionFactor: this.get_planetLifeformTechnologyBonusProductionFactor(planet),
+                    lifeformTechnologyCrawlerProductionBonusFactor: this.get_planetLifeformTechnologyCrawlerProductionBonusFactor(planet),
+                    lifeformTechnologyBoost: this.get_planetLifeformTechnologyBoost(planet),
+                };
+
+                const productionBuildingDependencies: ProductionBuildingDependencies = {
+                    planet: {
+                        position: planet.coordinates.position,
+                        temperature: planet.maxTemperature,
+                    },
+                    serverSettings: {
+                        economySpeed: serverSettings.speed.economy,
+                        crystalBoost: {
+                            default: serverSettings.resourceProduction.productionFactorBonus.crystal.default,
+                            pos1: serverSettings.resourceProduction.productionFactorBonus.crystal.pos1,
+                            pos2: serverSettings.resourceProduction.productionFactorBonus.crystal.pos2,
+                            pos3: serverSettings.resourceProduction.productionFactorBonus.crystal.pos3,
+                        },
+                    },
+                    productionSettings: {
+                        metalMine: planet.productionSettings[BuildingType.metalMine],
+                        crystalMine: planet.productionSettings[BuildingType.crystalMine],
+                        deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
+                        fusionReactor: 0,
+                    },
+                };
+
+
+                empireProductionPlanetStates.metal[planet.id] = {
+                    baseProduction: getMetalBaseProduction({
+                        planetPosition: planet.coordinates.position,
+                        serverEconomySpeed: serverSettings.speed.economy,
+                    }),
+                    mineProduction: MetalMine.getProduction(levelMetalMine, productionBuildingDependencies),
+                    itemBonusProductionFactor: getItemBonus(ResourceType.metal, planet.activeItems),
+                    ...baseProductionConfig,
+                    lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.metal,
+                    lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.metal,
+                };
+
+                empireProductionPlanetStates.crystal[planet.id] = {
+                    baseProduction: getCrystalBaseProduction({
+                        planetPosition: planet.coordinates.position,
+                        serverEconomySpeed: serverSettings.speed.economy,
+                        serverPositionBoost: serverSettings.resourceProduction.productionFactorBonus.crystal,
+                    }),
+                    mineProduction: CrystalMine.getProduction(levelCrystalMine, productionBuildingDependencies),
+                    itemBonusProductionFactor: getItemBonus(ResourceType.crystal, planet.activeItems),
+                    ...baseProductionConfig,
+                    lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.crystal,
+                    lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.crystal,
+                };
+
+                empireProductionPlanetStates.deuterium[planet.id] = {
+                    baseProduction: 0,
+                    mineProduction: DeuteriumSynthesizer.getProduction(levelDeuteriumSynthesizer, productionBuildingDependencies),
+                    itemBonusProductionFactor: getItemBonus(ResourceType.deuterium, planet.activeItems),
+                    ...baseProductionConfig,
+                    lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.deuterium,
+                    lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.deuterium,
+                };
+            });
+
+            const empireProductionBreakdowns: EmpireProductionBreakdowns = {
+                metal: new EmpireProductionBreakdown(
+                    ResourceType.metal,
+                    plasmaTechLevel,
+                    empire.playerClass,
+                    empire.allianceClass,
+                    empire.officers.geologist,
+                    hasCommandStaff(empire.officers),
+                    productionServerSettings,
+                    empireProductionPlanetStates.metal,
+                ),
+                crystal: new EmpireProductionBreakdown(
+                    ResourceType.crystal,
+                    plasmaTechLevel,
+                    empire.playerClass,
+                    empire.allianceClass,
+                    empire.officers.geologist,
+                    hasCommandStaff(empire.officers),
+                    productionServerSettings,
+                    empireProductionPlanetStates.crystal,
+                ),
+                deuterium: new EmpireProductionBreakdown(
+                    ResourceType.deuterium,
+                    plasmaTechLevel,
+                    empire.playerClass,
+                    empire.allianceClass,
+                    empire.officers.geologist,
+                    hasCommandStaff(empire.officers),
+                    productionServerSettings,
+                    empireProductionPlanetStates.deuterium,
+                ),
+
+                getTotal(): Cost {
+                    return {
+                        metal: this.metal.getTotal(),
+                        crystal: this.crystal.getTotal(),
+                        deuterium: this.deuterium.getTotal(),
+                        energy: 0,
+                    };
+                },
+            };
+
+            return empireProductionBreakdowns;
+        }
+
         private get items(): ProductionItem[] {
+            const productionBreakdowns = this.productionBreakdowns;
+
             return this.planets.map(planet => {
-                const production = this.getProduction(planet);
+                const fusionReactorConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], {
+                    planet: {
+                        position: planet.coordinates.position,
+                        temperature: planet.maxTemperature,
+                    },
+                    productionSettings: {
+                        metalMine: planet.productionSettings[BuildingType.metalMine],
+                        crystalMine: planet.productionSettings[BuildingType.crystalMine],
+                        deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
+                        fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
+                    },
+                    serverSettings: {
+                        economySpeed: ServerSettingsDataModule.serverSettings.speed.economy,
+                        crystalBoost: ServerSettingsDataModule.serverSettings.resourceProduction.productionFactorBonus.crystal,
+                    },
+                }).deuterium;
+
+                const production = {
+                    metal: productionBreakdowns.metal.getPlanetProduction(planet.id),
+                    crystal: productionBreakdowns.crystal.getPlanetProduction(planet.id),
+                    deuterium: productionBreakdowns.deuterium.getPlanetProduction(planet.id) - fusionReactorConsumption,
+                };
 
                 return {
                     planet,
@@ -267,11 +490,12 @@
         }
 
         private get footerItems(): ProductionItem[] {
-            const planets = this.planets;
+            const productionBreakdowns = this.productionBreakdowns;
+            const productionPerHour = productionBreakdowns.getTotal();
 
-            const metalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).metal, 0);
-            const crystalPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).crystal, 0);
-            const deuteriumPerHour = planets.reduce((acc, cur) => acc + this.getProduction(cur).deuterium, 0);
+            const metalPerHour = productionPerHour.metal;
+            const crystalPerHour = productionPerHour.crystal;
+            const deuteriumPerHour = productionPerHour.deuterium;
             const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
             const totalMsuPerHour = metalPerHour + crystalPerHour * this.msuConversionRates.crystal + deuteriumPerHour * this.msuConversionRates.deuterium;
 
@@ -285,11 +509,11 @@
                         name: this.$i18n.$t.empire.production.averagePerHour,
                         coordinates: null!,
                     },
-                    metal: metalPerHour / planets.length,
-                    crystal: crystalPerHour / planets.length,
-                    deuterium: deuteriumPerHour / planets.length,
-                    total: totalPerHour / planets.length,
-                    totalMsu: totalMsuPerHour / planets.length,
+                    metal: metalPerHour / this.planets.length,
+                    crystal: crystalPerHour / this.planets.length,
+                    deuterium: deuteriumPerHour / this.planets.length,
+                    total: totalPerHour / this.planets.length,
+                    totalMsu: totalMsuPerHour / this.planets.length,
 
                     productionSettings: null!,
                     activeItems: [],
@@ -359,31 +583,6 @@
             return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon)
                 .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[];
-        }
-
-        private getProduction(planet: PlanetData): Production {
-            const deps: ProductionDependencies = {
-                serverSettings: ServerSettingsDataModule.serverSettings,
-                planet: {
-                    ...planet,
-                    productionSettings: {
-                        ...planet.productionSettings,
-                        [ShipType.crawler]: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
-                    },
-                },
-                player: EmpireDataModule.empire,
-            };
-
-            const metalProduction = getMetalProduction(deps);
-            const crystalProduction = getCrystalProduction(deps);
-            const deuteriumProduction = getDeuteriumProduction(deps);
-            const deuteriumConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], getProductionBuildingDependencies(deps)).deuterium;
-
-            return {
-                metal: metalProduction.total,
-                crystal: crystalProduction.total,
-                deuterium: deuteriumProduction.total - deuteriumConsumption,
-            };
         }
 
         private readonly productionBoostItems_metal: ItemHash[] = [
