@@ -31,5 +31,5 @@ export function getCrystalBaseProduction(dependencies: {
     const boost = getCrystalProductionBoost(dependencies.planetPosition, dependencies.serverPositionBoost);
     const baseProduction = 15 * dependencies.serverEconomySpeed * (1 + boost);
 
-    return baseProduction;
+    return Math.trunc(baseProduction);
 }

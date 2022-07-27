@@ -31,7 +31,7 @@ const queryParams = getQueryParameters(location.search);
 const pageTrackers: PageTracker[] = [
     {
         action: () => trackOnIngamePages(),
-        condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium'].includes(query.page?.toLowerCase()),
+        condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page?.toLowerCase()),
     },
     {
         action: () => trackResearchPage(),
@@ -67,7 +67,7 @@ const pageTrackers: PageTracker[] = [
     },
     {
         action: () => trackResourceSettingsPage(),
-        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings',
+        condition: query => (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings') || query.page?.toLowerCase() == 'resourcesettings',
     },
     {
         action: () => trackLifeformBuildingsPage(),

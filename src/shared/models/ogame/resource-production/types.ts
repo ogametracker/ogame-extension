@@ -16,6 +16,22 @@ interface GlobalProductionBonuses {
     lifeformTechnologyCrawlerProductionBonusFactor: number;
 }
 
+export interface PlanetProductionBreakdown {
+    baseProduction: number;
+    mineProduction: number;
+    plasmaTechnologyProduction: number;
+    crawlerProduction: number;
+    playerClassProduction: number;
+    allianceClassProduction: number;
+    geologistProduction: number;
+    commandStaffProduction: number;
+    itemProduction: number;
+    lifeformBuildingsProduction: number;
+    lifeformTechnologiesProduction: number;
+
+    total: number;
+}
+
 export interface EmpireProductionPlanetState {
     baseProduction: number;
     mineProduction: number;
@@ -109,11 +125,11 @@ export class EmpireProductionBreakdown {
         };
     }
 
-    public getPlanetProduction(planetId: number): number {
-        return this.#getProduction(planetId, this.#getLifeformBonusFactors());
+    public getProductionBreakdown(planetId: number) {
+        return this.#getPlanetProductionBreakdown(planetId, this.#getLifeformBonusFactors());
     }
 
-    #getProduction(planetId: number, globalBonuses: GlobalProductionBonuses): number {
+    #getPlanetProductionBreakdown(planetId: number, globalBonuses: GlobalProductionBonuses) {
         const {
             collectorClassBonusFactor,
             lifeformTechnologyProductionBonusFactor,
@@ -150,28 +166,53 @@ export class EmpireProductionBreakdown {
             },
         });
 
-        const planetProduction =
-            this.planets[planetId].baseProduction // base production
-            + mineProduction // mine production
-            + (mineProduction * this.plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource]) // plasma technology bonus production
-            + (mineProduction * crawlerProductionFactor) // crawler bonus production
-            + (mineProduction * playerClassFactor) // player class bonus production
-            + (mineProduction * allianceClassFactor) // alliance class bonus production
-            + (mineProduction * geologistFactor) // geologist bonus production
-            + (mineProduction * commandStaffFactor) // command staff bonus production
-            + (mineProduction * this.planets[planetId].itemBonusProductionFactor) // item bonus production
-            + (mineProduction * this.planets[planetId].lifeformBuildingBonusProductionFactor) // lifeform buildings bonus production
-            + (mineProduction * lifeformTechnologyProductionBonusFactor) // lifeform technology bonus production
+        const baseProduction = this.planets[planetId].baseProduction; // base production
+        const plasmaTechnologyProduction = (mineProduction * this.plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource]); // plasma technology bonus production
+        const crawlerProduction = mineProduction * crawlerProductionFactor; // crawler bonus production
+        const playerClassProduction = mineProduction * playerClassFactor; // player class bonus production
+        const allianceClassProduction = mineProduction * allianceClassFactor; // alliance class bonus production
+        const geologistProduction = mineProduction * geologistFactor; // geologist bonus production
+        const commandStaffProduction = mineProduction * commandStaffFactor; // command staff bonus production
+        const itemProduction = mineProduction * this.planets[planetId].itemBonusProductionFactor; // item bonus production
+        const lifeformBuildingsProduction = mineProduction * this.planets[planetId].lifeformBuildingBonusProductionFactor; // lifeform buildings bonus production
+        const lifeformTechnologiesProduction = mineProduction * lifeformTechnologyProductionBonusFactor; // lifeform technology bonus production
+
+        const total =
+            baseProduction
+            + mineProduction
+            + plasmaTechnologyProduction
+            + crawlerProduction
+            + playerClassProduction
+            + allianceClassProduction
+            + geologistProduction
+            + commandStaffProduction
+            + itemProduction
+            + lifeformBuildingsProduction
+            + lifeformTechnologiesProduction
             ;
 
-        return planetProduction;
+        return {
+            baseProduction,
+            mineProduction,
+            plasmaTechnologyProduction,
+            crawlerProduction,
+            playerClassProduction,
+            allianceClassProduction,
+            geologistProduction,
+            commandStaffProduction,
+            itemProduction,
+            lifeformBuildingsProduction,
+            lifeformTechnologiesProduction,
+
+            total,
+        };
     }
 
     public getTotal() {
         const globalBonuses = this.#getLifeformBonusFactors();
 
         return this.#planetIds.reduce((total, planetId) => {
-            return total + this.#getProduction(planetId, globalBonuses);
+            return total + this.#getPlanetProductionBreakdown(planetId, globalBonuses).total;
         }, 0);
     }
 

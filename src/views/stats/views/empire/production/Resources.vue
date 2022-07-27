@@ -2,7 +2,14 @@
     <div class="table-container">
         <div v-text="$i18n.$t.empire.production.messageProduction100" style="grid-column: 1 / span 2" />
 
-        <grid-table :columns="columns" :items="items" :footerItems="footerItems" class="resources-production-table" :style="`--item-count: ${maxItemCount}`">
+        <grid-table
+            :columns="columns"
+            :items="items"
+            sticky
+            :footerItems="footerItems"
+            class="resources-production-table"
+            :style="`--item-count: ${maxItemCount}`"
+        >
             <template #header-metal>
                 <o-resource resource="metal" size="75px" />
             </template>
@@ -35,6 +42,11 @@
                 <div class="planet-info">
                     <span v-text="planet.name" />
                     <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
+                    <span
+                        class="mdi toggle-breakdown"
+                        :class="showBreakdown[planet.id] ? 'mdi-menu-up' : 'mdi-menu-down'"
+                        @click="toggleBreakdown(planet.id)"
+                    />
                 </div>
             </template>
 
@@ -55,6 +67,238 @@
                 </div>
             </template>
 
+            <template #cell-breakdown="{ item }">
+                <div v-if="showBreakdown[item.planet.id]" class="breakdown-list">
+                    <div v-text="'LOCA: Basic Income'" />
+                    <div v-text="'LOCA: Mine'" />
+                    <div v-text="'LOCA: Consumption'" />
+                    <div v-text="'LOCA: Lifeform Buildings'" />
+                    <div v-text="'LOCA: Crawlers'" />
+                    <div v-text="'LOCA: Plasma Technology'" />
+                    <div v-text="'LOCA: Items'" />
+                    <div v-text="'LOCA: Geologist'" />
+                    <div v-text="'LOCA: Command Staff'" />
+                    <div v-text="'LOCA: Class'" />
+                    <div v-text="'LOCA: Alliance Class'" />
+                    <div v-text="'LOCA: Lifeform Technologies'" />
+                    <div class="breakdown-sum" v-text="'LOCA: Sum'" />
+                </div>
+            </template>
+            <template #cell-metal="{ value, item }">
+                <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
+                    <template v-if="showBreakdown[item.planet.id]">
+                        <div
+                            :class="{ 'fade-value': value.baseProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.baseProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.mineProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div class="fade-value" v-text="0" :fraction="$i18n.$n(0, fractionNumberFormat).substring(1)" />
+                        <div
+                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.itemProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.geologistProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                    </template>
+                    <div
+                        class="breakdown-sum"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
+            </template>
+            <template #cell-crystal="{ value, item }">
+                <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
+                    <template v-if="showBreakdown[item.planet.id]">
+                        <div
+                            :class="{ 'fade-value': value.baseProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.baseProduction - Math.trunc(value.baseProduction), fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.mineProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div class="fade-value" v-text="0" :fraction="$i18n.$n(0, fractionNumberFormat).substring(1)" />
+                        <div
+                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.itemProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.geologistProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                    </template>
+                    <div
+                        class="breakdown-sum"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
+            </template>
+            <template #cell-deuterium="{ value, item }">
+                <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
+                    <template v-if="showBreakdown[item.planet.id]">
+                        <div
+                            :class="{ 'fade-value': value.baseProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.baseProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.mineProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{
+                                'fade-value': item.fusionReactorConsumption == 0,
+                                'negative-value': -item.fusionReactorConsumption < 0,
+                            }"
+                            v-text="$i18n.$n(Math.trunc(-item.fusionReactorConsumption), numberFormat)"
+                            :fraction="$i18n.$n(item.fusionReactorConsumption % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.itemProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.geologistProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                        <div
+                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
+                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
+                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
+                        />
+                    </template>
+                    <div
+                        class="breakdown-sum"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
+            </template>
+            <template #cell-total="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+            <template #cell-totalMsu="{ value }">
+                {{ $i18n.$n(value, numberFormat) }}
+            </template>
+
             <template #footer-planet="{ value, item }">
                 <span v-if="!item.isResourcePackageRow" v-text="value.name" />
                 <span v-else class="resource-packages-cell">
@@ -71,29 +315,14 @@
                     <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
                 </span>
             </template>
-            <template #cell-metal="{ value }">
-                {{ $i18n.$n(Math.floor(value), numberFormat) }}
-            </template>
-            <template #cell-crystal="{ value }">
-                {{ $i18n.$n(Math.floor(value), numberFormat) }}
-            </template>
-            <template #cell-deuterium="{ value }">
-                {{ $i18n.$n(Math.floor(value), numberFormat) }}
-            </template>
-            <template #cell-total="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
-            </template>
-            <template #cell-totalMsu="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
-            </template>
             <template #footer-metal="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(value.total, numberFormat) }}
             </template>
             <template #footer-crystal="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(value.total, numberFormat) }}
             </template>
             <template #footer-deuterium="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                {{ $i18n.$n(value.total, numberFormat) }}
             </template>
             <template #footer-total="{ value }">
                 {{ $i18n.$n(value, numberFormat) }}
@@ -118,7 +347,7 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue, Watch } from 'vue-property-decorator';
     import { MetalMine } from '@/shared/models/ogame/buildings/MetalMine';
     import { CrystalMine } from '@/shared/models/ogame/buildings/CrystalMine';
     import { DeuteriumSynthesizer } from '@/shared/models/ogame/buildings/DeuteriumSynthesizer';
@@ -134,7 +363,7 @@
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
-    import { EmpireProductionBreakdown, EmpireProductionPlanetState } from '@/shared/models/ogame/resource-production/types';
+    import { EmpireProductionBreakdown, EmpireProductionPlanetState, PlanetProductionBreakdown } from '@/shared/models/ogame/resource-production/types';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
@@ -148,20 +377,16 @@
     import { getCrystalBaseProduction } from '@/shared/models/ogame/resource-production/getCrystalProduction';
     import { getItemBonus } from '@/shared/models/ogame/resource-production/getItemBonus';
 
-    interface Production {
-        metal: number;
-        crystal: number;
-        deuterium: number;
-    }
-
     interface ProductionItem {
         planet: {
+            id: number;
             name: string;
             coordinates: Coordinates;
         };
-        metal: number;
-        crystal: number;
-        deuterium: number;
+        metal: PlanetProductionBreakdown;
+        crystal: PlanetProductionBreakdown;
+        deuterium: PlanetProductionBreakdown;
+        fusionReactorConsumption: number;
         total: number;
         totalMsu: number;
 
@@ -200,6 +425,10 @@
         private readonly numberFormat: Intl.NumberFormatOptions = {
             maximumFractionDigits: 0,
         };
+        private readonly fractionNumberFormat: Intl.NumberFormatOptions = {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        };
 
         private readonly resourcePackageAmounts = {
             all: 0,
@@ -212,12 +441,13 @@
             return SettingsDataModule.settings.msuConversionRates;
         }
 
-        private get columns(): GridTableColumn<keyof ProductionItem>[] {
-            const result: GridTableColumn<keyof ProductionItem>[] = [
+        private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
+            const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
                 {
                     key: 'planet',
                     label: this.$i18n.$t.empire.planet,
                 },
+                { key: 'breakdown', size: '200px' },
                 { key: 'metal' },
                 { key: 'crystal' },
                 { key: 'deuterium' },
@@ -432,10 +662,10 @@
             return empireProductionBreakdowns;
         }
 
-        private get items(): ProductionItem[] {
-            const productionBreakdowns = this.productionBreakdowns;
+        private get fusionReactorConsumptions(): Record<number, number> {
+            const result: Record<number, number> = {};
 
-            return this.planets.map(planet => {
+            this.planets.forEach(planet => {
                 const fusionReactorConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], {
                     planet: {
                         position: planet.coordinates.position,
@@ -453,17 +683,29 @@
                     },
                 }).deuterium;
 
+                result[planet.id] = fusionReactorConsumption;
+            });
+
+            return result;
+        }
+
+        private get items(): ProductionItem[] {
+            const productionBreakdowns = this.productionBreakdowns;
+            const fusionReactorConsumptions = this.fusionReactorConsumptions;
+
+            return this.planets.map(planet => {
                 const production = {
-                    metal: productionBreakdowns.metal.getPlanetProduction(planet.id),
-                    crystal: productionBreakdowns.crystal.getPlanetProduction(planet.id),
-                    deuterium: productionBreakdowns.deuterium.getPlanetProduction(planet.id) - fusionReactorConsumption,
+                    metal: productionBreakdowns.metal.getProductionBreakdown(planet.id),
+                    crystal: productionBreakdowns.crystal.getProductionBreakdown(planet.id),
+                    deuterium: productionBreakdowns.deuterium.getProductionBreakdown(planet.id),
                 };
 
                 return {
                     planet,
                     ...production,
-                    total: production.metal + production.crystal + production.deuterium,
-                    totalMsu: production.metal + production.crystal * this.msuConversionRates.crystal + production.deuterium * this.msuConversionRates.deuterium,
+                    fusionReactorConsumption: fusionReactorConsumptions[planet.id],
+                    total: production.metal.total + production.crystal.total + production.deuterium.total,
+                    totalMsu: production.metal.total + production.crystal.total * this.msuConversionRates.crystal + production.deuterium.total * this.msuConversionRates.deuterium,
 
                     productionSettings: {
                         metalMine: planet.productionSettings[BuildingType.metalMine],
@@ -495,7 +737,7 @@
 
             const metalPerHour = productionPerHour.metal;
             const crystalPerHour = productionPerHour.crystal;
-            const deuteriumPerHour = productionPerHour.deuterium;
+            const deuteriumPerHour = productionPerHour.deuterium - Object.values(this.fusionReactorConsumptions).reduce((total, cur) => total + cur, 0);
             const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
             const totalMsuPerHour = metalPerHour + crystalPerHour * this.msuConversionRates.crystal + deuteriumPerHour * this.msuConversionRates.deuterium;
 
@@ -506,12 +748,14 @@
             return [
                 {
                     planet: {
+                        id: 0,
                         name: this.$i18n.$t.empire.production.averagePerHour,
                         coordinates: null!,
                     },
-                    metal: metalPerHour / this.planets.length,
-                    crystal: crystalPerHour / this.planets.length,
-                    deuterium: deuteriumPerHour / this.planets.length,
+                    metal: { total: metalPerHour / this.planets.length } as PlanetProductionBreakdown,
+                    crystal: { total: crystalPerHour / this.planets.length } as PlanetProductionBreakdown,
+                    deuterium: { total: deuteriumPerHour / this.planets.length } as PlanetProductionBreakdown,
+                    fusionReactorConsumption: 0,
                     total: totalPerHour / this.planets.length,
                     totalMsu: totalMsuPerHour / this.planets.length,
 
@@ -520,12 +764,14 @@
                 },
                 {
                     planet: {
+                        id: 0,
                         name: this.$i18n.$t.empire.production.totalPerHour,
                         coordinates: null!,
                     },
-                    metal: metalPerHour,
-                    crystal: crystalPerHour,
-                    deuterium: deuteriumPerHour,
+                    metal: { total: metalPerHour } as PlanetProductionBreakdown,
+                    crystal: { total: crystalPerHour } as PlanetProductionBreakdown,
+                    deuterium: { total: deuteriumPerHour } as PlanetProductionBreakdown,
+                    fusionReactorConsumption: 0,
                     total: totalPerHour,
                     totalMsu: totalMsuPerHour,
 
@@ -534,12 +780,14 @@
                 },
                 {
                     planet: {
+                        id: 0,
                         name: this.$i18n.$t.empire.production.totalPerDay,
                         coordinates: null!,
                     },
-                    metal: metalPerHour * 24,
-                    crystal: crystalPerHour * 24,
-                    deuterium: deuteriumPerHour * 24,
+                    metal: { total: metalPerHour * 24 } as PlanetProductionBreakdown,
+                    crystal: { total: crystalPerHour * 24 } as PlanetProductionBreakdown,
+                    deuterium: { total: deuteriumPerHour * 24 } as PlanetProductionBreakdown,
+                    fusionReactorConsumption: 0,
                     total: totalPerHour * 24,
                     totalMsu: totalMsuPerHour * 24,
 
@@ -548,12 +796,14 @@
                 },
                 {
                     planet: {
+                        id: 0,
                         name: this.$i18n.$t.empire.production.totalPerWeek,
                         coordinates: null!,
                     },
-                    metal: metalPerHour * 24 * 7,
-                    crystal: crystalPerHour * 24 * 7,
-                    deuterium: deuteriumPerHour * 24 * 7,
+                    metal: { total: metalPerHour * 24 * 7 } as PlanetProductionBreakdown,
+                    crystal: { total: crystalPerHour * 24 * 7 } as PlanetProductionBreakdown,
+                    deuterium: { total: deuteriumPerHour * 24 * 7 } as PlanetProductionBreakdown,
+                    fusionReactorConsumption: 0,
                     total: totalPerHour * 24 * 7,
                     totalMsu: totalMsuPerHour * 24 * 7,
 
@@ -563,12 +813,14 @@
                 {
                     isResourcePackageRow: true,
                     planet: {
+                        id: 0,
                         name: 'row-for-resource-packages',
                         coordinates: null!,
                     },
-                    metal: metalPackages,
-                    crystal: crystalPackages,
-                    deuterium: deuteriumPackages,
+                    metal: { total: metalPackages } as PlanetProductionBreakdown,
+                    crystal: { total: crystalPackages } as PlanetProductionBreakdown,
+                    deuterium: { total: deuteriumPackages } as PlanetProductionBreakdown,
+                    fusionReactorConsumption: 0,
                     total: metalPackages + crystalPackages + deuteriumPackages,
                     totalMsu: metalPackages + crystalPackages * this.msuConversionRates.crystal + deuteriumPackages * this.msuConversionRates.deuterium,
 
@@ -578,6 +830,20 @@
             ];
         }
 
+        private showBreakdown: Record<number, boolean> = {};
+
+        @Watch('planets', { immediate: true })
+        private onPlanetsChanged() {
+            this.planets.forEach(planet => {
+                if (this.showBreakdown[planet.id] == null) {
+                    this.$set(this.showBreakdown, planet.id, false);
+                }
+            });
+        }
+
+        private toggleBreakdown(planetId: number) {
+            this.showBreakdown[planetId] = !this.showBreakdown[planetId];
+        }
 
         private get planets(): PlanetData[] {
             return Object.values(EmpireDataModule.empire.planets)
@@ -672,7 +938,7 @@
 
     .planet-info {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
         justify-items: end;
         column-gap: 8px;
     }
@@ -709,5 +975,38 @@
         grid-template-rows: auto 1fr;
         align-items: start;
         height: 100%;
+    }
+
+    .toggle-breakdown {
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+
+    .breakdown-list {
+        display: flex;
+        flex-direction: column;
+
+        &--expanded .breakdown-sum {
+            font-weight: bold;
+            border-top: 1px solid rgba(var(--color), 0.5);
+            margin-top: 1px;
+        }
+
+        .fade-value {
+            color: rgba(white, 0.1);
+
+            &[fraction]::after {
+                color: rgba(white, 0.1);
+            }
+        }
+
+        .negative-value {
+            color: rgb(209, 21, 21);
+        }
+
+        [fraction]::after {
+            content: attr(fraction);
+            color: rgba(white, 0.333);
+        }
     }
 </style>

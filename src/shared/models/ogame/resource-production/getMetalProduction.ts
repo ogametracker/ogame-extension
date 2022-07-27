@@ -24,5 +24,5 @@ export function getMetalBaseProduction(dependencies: {
     const boost = getMetalProductionBoost(dependencies.planetPosition);
     const baseProduction = 30 * dependencies.serverEconomySpeed * (1 + boost);
 
-    return baseProduction;
+    return Math.trunc(baseProduction);
 }
