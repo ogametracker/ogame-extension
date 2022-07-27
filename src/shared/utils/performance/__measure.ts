@@ -1,6 +1,6 @@
 import { _logDebug } from "../_log";
 
-export function __measure<T>(action: () => T, name: string): T {
+export function __measure<T>(name: string, action: () => T): T {
     const start = performance.now();
     const result = action();
     const end = performance.now();

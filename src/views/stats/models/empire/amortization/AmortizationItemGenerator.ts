@@ -126,7 +126,7 @@ export class AmortizationItemGenerator {
     public nextItem(): AmortizationItem | null {
         const generator = this.#generator ?? this.#initGenerator();
 
-        const result = __measure(() => generator.next(), 'generate next amortization item');
+        const result = __measure('generate next amortization item', () => generator.next());
         if (result.done) {
             return null;
         }
