@@ -30,6 +30,16 @@ function getMetalProductionBoost(position: number) {
     return 0;
 }
 
+export function getMetalBaseProduction(dependencies: {
+    planetPosition: number;
+    serverEconomySpeed: number;
+}) {
+    const boost = getMetalProductionBoost(dependencies.planetPosition);
+    const baseProduction = 30 * dependencies.serverEconomySpeed * (1 + boost);
+
+    return baseProduction;
+}
+
 
 export function getMetalProduction(dependencies: ProductionDependencies): ProductionBreakdown {
     const boost = getMetalProductionBoost(dependencies.planet.coordinates.position);
@@ -51,7 +61,10 @@ export function getMetalProduction(dependencies: ProductionDependencies): Produc
         getItemBonus(ResourceType.metal, dependencies.planet.activeItems),
         getCrawlerBoost({
             availableCrawlers: dependencies.planet.ships[ShipType.crawler],
-            collectorClassBonus: collectorClassBonus,
+            lifeformTechnologies: {
+                collectorClassBonus: collectorClassBonus,
+                crawlerProductionBonus: 0,
+            },
             crawlerProductionSetting: dependencies.planet.productionSettings[ShipType.crawler],
             hasGeologist: dependencies.player.officers.geologist,
             playerClass: dependencies.player.playerClass,

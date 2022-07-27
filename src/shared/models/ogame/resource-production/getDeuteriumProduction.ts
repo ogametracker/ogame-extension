@@ -30,7 +30,10 @@ export function getDeuteriumProduction(dependencies: ProductionDependencies): Pr
         getItemBonus(ResourceType.deuterium, dependencies.planet.activeItems),
         getCrawlerBoost({
             availableCrawlers: dependencies.planet.ships[ShipType.crawler],
-            collectorClassBonus: collectorClassBonus,
+            lifeformTechnologies: {
+                collectorClassBonus: collectorClassBonus,
+                crawlerProductionBonus: 0,
+            },
             crawlerProductionSetting: dependencies.planet.productionSettings[ShipType.crawler],
             hasGeologist: dependencies.player.officers.geologist,
             playerClass: dependencies.player.playerClass,

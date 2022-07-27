@@ -1,7 +1,12 @@
 import { Cost } from "../common/Cost";
+import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
 class CrystalMineClass extends ProductionBuilding {
 
+    public get type() {
+        return BuildingType.crystalMine;
+    }
+    
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const boost = this.getProductionBoost(dependencies.planet.position, dependencies.serverSettings);
         const mineProduction = Math.trunc(

@@ -1,7 +1,12 @@
 import { Cost } from "../common/Cost";
+import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
 
 class DeuteriumSynthesizerClass extends ProductionBuilding {
+
+    public get type() {
+        return BuildingType.deuteriumSynthesizer;
+    }
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const mineProduction = Math.trunc(

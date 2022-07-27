@@ -14,19 +14,40 @@ import { getLifeformBuildingProductionBonus } from "../lifeforms/buildings/getLi
 import { getLifeformTechnologyProductionBonus } from "../lifeforms/buildings/getLifeformTechnologyProductionBonuses";
 
 
-function getCrystalProductionBoost(position: number, serverSettings: ServerSettings) {
+function getCrystalProductionBoost(position: number, serverPositionBoost: {
+    default: number;
+    pos1: number;
+    pos2: number;
+    pos3: number;
+}) {
     switch (position) {
         case 1:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos1;
+            return serverPositionBoost.pos1;
 
         case 2:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos2;
+            return serverPositionBoost.pos2;
 
         case 3:
-            return serverSettings.resourceProduction.productionFactorBonus.crystal.pos3;
+            return serverPositionBoost.pos3;
     }
 
-    return serverSettings.resourceProduction.productionFactorBonus.crystal.default;
+    return serverPositionBoost.default;
+}
+
+export function getCrystalBaseProduction(dependencies: {
+    planetPosition: number;
+    serverEconomySpeed: number;
+    serverPositionBoost: {
+        default: number;
+        pos1: number;
+        pos2: number;
+        pos3: number;
+    };
+}) {
+    const boost = getCrystalProductionBoost(dependencies.planetPosition, dependencies.serverPositionBoost);
+    const baseProduction = 15 * dependencies.serverEconomySpeed * (1 + boost);
+
+    return baseProduction;
 }
 
 export function getCrystalProduction(dependencies: ProductionDependencies): ProductionBreakdown {
@@ -49,7 +70,10 @@ export function getCrystalProduction(dependencies: ProductionDependencies): Prod
         getItemBonus(ResourceType.crystal, dependencies.planet.activeItems),
         getCrawlerBoost({
             availableCrawlers: dependencies.planet.ships[ShipType.crawler],
-            collectorClassBonus: collectorClassBonus,
+            lifeformTechnologies: {
+                collectorClassBonus: collectorClassBonus,
+                crawlerProductionBonus: 0,
+            },
             crawlerProductionSetting: dependencies.planet.productionSettings[ShipType.crawler],
             hasGeologist: dependencies.player.officers.geologist,
             playerClass: dependencies.player.playerClass,
@@ -62,7 +86,7 @@ export function getCrystalProduction(dependencies: ProductionDependencies): Prod
                 crawlerProductionFactorPerUnit: dependencies.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit,
                 geologistActiveCrawlerFactorBonus: dependencies.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
             },
-        }), 
+        }),
         getLifeformBuildingProductionBonus(dependencies.planet).crystal,
         getLifeformTechnologyProductionBonus(dependencies.player).crystal,
         collectorClassBonus,

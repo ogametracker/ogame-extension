@@ -1,3 +1,5 @@
+import { parseIntSafe } from "@/shared/utils/parseNumbers";
+import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
 import { LocalPlayerData } from "../../empire/LocalPlayerData";
 import { PlanetData } from "../../empire/PlanetData";
 import { ServerSettings } from "../../server-settings/ServerSettings";
@@ -5,188 +7,198 @@ import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";
 import { ResourceType } from "../resources/ResourceType";
 import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
+import { getCrawlerBoost } from "./getCrawlerBoost";
 
-export class ProductionBreakdown {
-    #base: number;
-    #mine: number;
 
-    #resource: ResourceType;
-    #plasmaTechnologyLevel: number;
-    #playerClass: PlayerClass;
-    #allianceClass: AllianceClass;
-    #geologist: boolean;
-    #commandStaff: boolean;
+interface GlobalProductionBonuses {
+    collectorClassBonusFactor: number;
+    lifeformTechnologyProductionBonusFactor: number;
+    lifeformTechnologyCrawlerProductionBonusFactor: number;
+}
 
-    #itemBonus: number;
-    #crawlerBonus: number;
-    #lifeformBuildingBonus: number;
-    #lifeformTechnologyBonus: number;
-    #collectorClassBonus: number;
-
-    #serverSettings: {
-        collectorProductionFactor: number;
+export interface EmpireProductionPlanetState {
+    baseProduction: number;
+    mineProduction: number;
+    crawlers: {
+        available: number;
+        totalMineLevel: number;
+        percentage: CrawlerProductionPercentage;
     };
 
-    public constructor(
-        base: number,
-        mine: number,
+    itemBonusProductionFactor: number;
+    lifeformBuildingBonusProductionFactor: number;
+    lifeformTechnologyBonusProductionFactor: number;
+    lifeformTechnologyCrawlerProductionBonusFactor: number;
+    collectorClassBonusFactor: number;
 
+    lifeformTechnologyBoost: number;
+    lifeformExperienceBoost: number;
+}
+
+export class EmpireProductionBreakdown {
+    #planetIds: number[];
+
+    #resource: ResourceType;
+
+    plasmaTechnologyLevel: number;
+    playerClass: PlayerClass;
+    allianceClass: AllianceClass;
+    geologist: boolean;
+    commandStaff: boolean;
+
+    planets: Record<number, EmpireProductionPlanetState>;
+
+    serverSettings: {
+        collectorProductionFactor: number;
+        geologistActiveCrawlerFactorBonus: number;
+        collectorCrawlerProductionFactorBonus: number;
+        crawlerProductionFactorPerUnit: number;
+        crawlerMaxProductionFactor: number;
+    };
+
+
+    public constructor(
         resource: ResourceType,
+
         plasmaTechnologyLevel: number,
         playerClass: PlayerClass,
         allianceClass: AllianceClass,
         geologist: boolean,
         commandStaff: boolean,
 
-        itemBonus: number,
-        crawlerBonus: number,
-        lifeformBuildingBonus: number,
-        lifeformTechnologyBonus: number,
-
-        collectorClassBonus: number,
         serverSettings: {
-            collectorProductionFactor: number,
+            collectorProductionFactor: number;
+            geologistActiveCrawlerFactorBonus: number;
+            collectorCrawlerProductionFactorBonus: number;
+            crawlerProductionFactorPerUnit: number;
+            crawlerMaxProductionFactor: number;
         },
+
+        planets: Record<number, EmpireProductionPlanetState>,
     ) {
-        this.#base = base;
-        this.#mine = mine;
-
         this.#resource = resource;
-        this.#plasmaTechnologyLevel = plasmaTechnologyLevel;
-        this.#playerClass = playerClass;
-        this.#allianceClass = allianceClass;
-        this.#geologist = geologist;
-        this.#commandStaff = commandStaff;
+        this.plasmaTechnologyLevel = plasmaTechnologyLevel;
+        this.playerClass = playerClass;
+        this.allianceClass = allianceClass;
+        this.geologist = geologist;
+        this.commandStaff = commandStaff;
 
-        this.#itemBonus = itemBonus;
-        this.#crawlerBonus = crawlerBonus;
-        this.#lifeformBuildingBonus = lifeformBuildingBonus;
-        this.#lifeformTechnologyBonus = lifeformTechnologyBonus;
-        this.#collectorClassBonus = collectorClassBonus;
+        this.serverSettings = serverSettings;
 
-        this.#serverSettings = serverSettings;
+        this.planets = planets;
+        this.#planetIds = Object.keys(planets).map(id => parseIntSafe(id));
     }
 
-    public get baseProduction() {
-        return this.#base;
-    }
-    public get plasmaTechnologyProduction() {
-        return this.#mine * this.#plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource];
-    }
-    public get playerClassProduction() {
-        const collectorClassFactor = 1 + this.#collectorClassBonus;
-        const collectorFactor = this.#playerClass == PlayerClass.collector ? 1 : 0;
-        return collectorFactor
-            * this.#mine
-            * this.#serverSettings.collectorProductionFactor
-            * collectorClassFactor;
-    }
-    public get allianceClassProduction() {
-        const allianceClassFactor = this.#allianceClass == AllianceClass.trader ? 1 : 0;
-        return allianceClassFactor * this.#mine * AllianceClassTraderProductionBonus;
-    }
-    public get geologistProduction() {
-        const geologistFactor = this.#geologist ? 1 : 0;
-        return geologistFactor * this.#mine * GeologistProductionBonus;
-    }
-    public get commandStaffProduction() {
-        const commandStaffFactor = this.#commandStaff ? 1 : 0;
-        return commandStaffFactor * this.#mine * CommandStaffProductionBonus;
-    }
-    public get itemProduction() {
-        return this.#mine * this.#itemBonus;
-    }
-    public get lifeformBuildingProduction() {
-        return this.#mine * this.#lifeformBuildingBonus;
-    }
-    public get lifeformTechnologyProduction() {
-        return this.#mine * this.#lifeformTechnologyBonus;
-    }
-    public get crawlerProduction() {
-        return this.#mine * this.#crawlerBonus;
-    }
-    public get total() {
-        return this.baseProduction
-            + this.mineProduction
-            + this.plasmaTechnologyProduction
-            + this.playerClassProduction
-            + this.allianceClassProduction
-            + this.geologistProduction
-            + this.commandStaffProduction
-            + this.itemProduction
-            + this.lifeformBuildingProduction
-            + this.lifeformTechnologyProduction
-            + this.crawlerProduction;
+    #getLifeformBonusFactors(): GlobalProductionBonuses {
+        let collectorClassBonusFactor = 0;
+        let lifeformTechnologyProductionBonusFactor = 0;
+        let lifeformTechnologyCrawlerProductionBonusFactor = 0;
+
+        this.#planetIds.forEach(planetId => {
+            const techBonusFactor = (1 + this.planets[planetId].lifeformTechnologyBoost) * (1 + this.planets[planetId].lifeformExperienceBoost);
+
+            collectorClassBonusFactor += this.planets[planetId].collectorClassBonusFactor * techBonusFactor;
+            lifeformTechnologyProductionBonusFactor += this.planets[planetId].lifeformTechnologyBonusProductionFactor * techBonusFactor;
+            lifeformTechnologyCrawlerProductionBonusFactor += this.planets[planetId].lifeformTechnologyCrawlerProductionBonusFactor * techBonusFactor;
+        });
+
+        return {
+            collectorClassBonusFactor,
+            lifeformTechnologyProductionBonusFactor,
+            lifeformTechnologyCrawlerProductionBonusFactor,
+        };
     }
 
-    public set mineProduction(value: number) {
-        this.#mine = value;
-    }
-    public get mineProduction() {
-        return this.#mine;
+    public getPlanetProduction(planetId: number): number {
+        return this.#getProduction(planetId, this.#getLifeformBonusFactors());
     }
 
-    public set plasmaTechnologyLevel(value: number) {
-        this.#plasmaTechnologyLevel = value;
-    }
-    public get plasmaTechnologyLevel() {
-        return this.#plasmaTechnologyLevel;
+    #getProduction(planetId: number, globalBonuses: GlobalProductionBonuses): number {
+        const {
+            collectorClassBonusFactor,
+            lifeformTechnologyProductionBonusFactor,
+            lifeformTechnologyCrawlerProductionBonusFactor
+        } = globalBonuses;
+
+        const mineProduction = this.planets[planetId].mineProduction;
+
+        const playerClassFactor = (this.playerClass == PlayerClass.collector ? 1 : 0)
+            * this.serverSettings.collectorProductionFactor
+            * (1 + collectorClassBonusFactor);
+        const allianceClassFactor = (this.allianceClass == AllianceClass.trader ? 1 : 0) * AllianceClassTraderProductionBonus;
+        const geologistFactor = this.geologist ? GeologistProductionBonus : 0;
+        const commandStaffFactor = this.commandStaff ? CommandStaffProductionBonus : 0;
+
+        const crawlerConfig = this.planets[planetId].crawlers;
+        const crawlerProductionFactor = getCrawlerBoost({
+            hasGeologist: this.geologist,
+            availableCrawlers: crawlerConfig.available,
+            levelMetalMine: crawlerConfig.totalMineLevel,
+            levelCrystalMine: 0,
+            levelDeuteriumSynthesizer: 0,
+            crawlerProductionSetting: crawlerConfig.percentage,
+            lifeformTechnologies: {
+                collectorClassBonus: collectorClassBonusFactor,
+                crawlerProductionBonus: lifeformTechnologyCrawlerProductionBonusFactor,
+            },
+            playerClass: this.playerClass,
+            serverSettings: {
+                collectorCrawlerProductionFactorBonus: this.serverSettings.collectorCrawlerProductionFactorBonus,
+                crawlerMaxProductionFactor: this.serverSettings.crawlerMaxProductionFactor,
+                crawlerProductionFactorPerUnit: this.serverSettings.crawlerProductionFactorPerUnit,
+                geologistActiveCrawlerFactorBonus: this.serverSettings.geologistActiveCrawlerFactorBonus,
+            },
+        });
+
+        const planetProduction =
+            this.planets[planetId].baseProduction // base production
+            + mineProduction // mine production
+            + (mineProduction * this.plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource]) // plasma technology bonus production
+            + (mineProduction * crawlerProductionFactor) // crawler bonus production
+            + (mineProduction * playerClassFactor) // player class bonus production
+            + (mineProduction * allianceClassFactor) // alliance class bonus production
+            + (mineProduction * geologistFactor) // geologist bonus production
+            + (mineProduction * commandStaffFactor) // command staff bonus production
+            + (mineProduction * this.planets[planetId].itemBonusProductionFactor) // item bonus production
+            + (mineProduction * this.planets[planetId].lifeformBuildingBonusProductionFactor) // lifeform buildings bonus production
+            + (mineProduction * lifeformTechnologyProductionBonusFactor) // lifeform technology bonus production
+            ;
+
+        return planetProduction;
     }
 
-    public set crawlerBonus(value: number) {
-        this.#crawlerBonus = value;
-    }
-    public get crawlerBonus() {
-        return this.#crawlerBonus;
-    }
+    public getTotal() {
+        const globalBonuses = this.#getLifeformBonusFactors();
 
-    public set lifeformBuildingBonus(value: number) {
-        this.#lifeformBuildingBonus = value;
-    }
-    public get lifeformBuildingBonus() {
-        return this.#lifeformBuildingBonus;
-    }
-
-    public set lifeformTechnologyBonus(value: number) {
-        this.#lifeformTechnologyBonus = value;
-    }
-    public get lifeformTechnologyBonus() {
-        return this.#lifeformTechnologyBonus;
-    }
-
-    public set collectorClassBonus(value: number) {
-        this.#collectorClassBonus = value;
-    }
-    public get collectorClassBonus() {
-        return this.#collectorClassBonus;
+        return this.#planetIds.reduce((total, planetId) => {
+            return total + this.#getProduction(planetId, globalBonuses);
+        }, 0);
     }
 
 
-    public clone(): ProductionBreakdown {
-        return new ProductionBreakdown(
-            this.#base,
-            this.#mine,
+    public clone(): EmpireProductionBreakdown {
+        const planetStatesClone: Record<number, EmpireProductionPlanetState> = {};
+        this.#planetIds.forEach(planetId => {
+            planetStatesClone[planetId] = {
+                ...this.planets[planetId],
+                crawlers: {
+                    ...this.planets[planetId].crawlers,
+                },
+            };
+        });
 
+        return new EmpireProductionBreakdown(
             this.#resource,
-            this.#plasmaTechnologyLevel,
-            this.#playerClass,
-            this.#allianceClass,
-            this.#geologist,
-            this.#commandStaff,
 
-            this.#itemBonus,
-            this.#crawlerBonus,
-            this.#lifeformBuildingBonus,
-            this.#lifeformTechnologyBonus,
+            this.plasmaTechnologyLevel,
+            this.playerClass,
+            this.allianceClass,
+            this.geologist,
+            this.commandStaff,
 
-            this.#collectorClassBonus,
-            { ...this.#serverSettings },
+            this.serverSettings,
+
+            planetStatesClone,
         );
     }
-}
-
-export interface ProductionDependencies {
-    planet: PlanetData;
-    player: LocalPlayerData;
-    serverSettings: ServerSettings;
 }

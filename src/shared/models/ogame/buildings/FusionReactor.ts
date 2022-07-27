@@ -3,6 +3,10 @@ import { BuildingType } from "./BuildingType";
 import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
 
 class FusionReactorClass extends ProductionBuilding {
+    
+    public get type() {
+        return BuildingType.fusionReactor;
+    }
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         //TODO: fusion reactor production

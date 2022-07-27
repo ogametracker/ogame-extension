@@ -32,9 +32,6 @@ export interface MineAmortizationItem extends BaseAmortizationItem {
     mine: MineBuildingType;
     level: number;
     additionalLifeformBuildings: LifeformBuildingLevels[];
-
-    newMineProduction: number;
-    newCrawlerBonus: number;
 }
 
 export interface PlasmaTechnologyAmortizationItem extends BaseAmortizationItem {
@@ -63,8 +60,6 @@ export interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {
     building: LifeformBuildingType;
     level: number;
     additionalLifeformBuildings: LifeformBuildingLevels[];
-
-    additionalProductionBonus: Cost;
 }
 
 export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem {
@@ -73,8 +68,6 @@ export interface LifeformTechnologyAmortizationItem extends BaseAmortizationItem
     technology: LifeformTechnologyType;
     level: number;
     additionalLifeformBuildings: LifeformBuildingLevels[];
-
-    additionalProductionBonus: Cost;
 }
 
 export type AmortizationItem =
