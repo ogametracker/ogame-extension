@@ -11,11 +11,18 @@
                     <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
                 </button>
 
-                <span
-                    v-text="
-                        'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
-                    "
-                />
+                <div>
+                    <span
+                        v-text="
+                            'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
+                        "
+                    />
+                    <span
+                        v-text="
+                            'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'
+                        "
+                    />
+                </div>
 
                 <floating-menu v-model="showSettingsMenu" left>
                     <template #activator>
@@ -103,7 +110,7 @@
                     </template>
 
                     <template #cell-checkbox="{ index }">
-                        <checkbox :value="selectedItemIndizes.includes(index)" @input="toggleItemSelection(index)" />
+                        <checkbox :value="selectedItemIndizes.includes(index)" @input-extended="toggleItemSelection(index, $event.ctrl)" />
                     </template>
                     <template #cell-what="{ item, index }">
                         <div
@@ -653,7 +660,7 @@
             }
         }
 
-        private toggleItemSelection(index?: number) {
+        private toggleItemSelection(index?: number, selectAllUntilIndex?: boolean) {
             if (index == null) {
                 if (this.selectedItemIndizes.length == this.items.length) {
                     this.selectedItemIndizes = [];
@@ -664,11 +671,17 @@
                 return;
             }
 
-            if (this.selectedItemIndizes.includes(index)) {
-                this.selectedItemIndizes = this.selectedItemIndizes.filter(i => i != index);
-            }
-            else {
-                this.selectedItemIndizes.push(index);
+            const select = !this.selectedItemIndizes.includes(index);
+            const min = selectAllUntilIndex ? 0 : index;
+            const max = index;
+            for (let index = min; index <= max; index++) {
+                const selected = this.selectedItemIndizes.includes(index);
+                if (!select && selected) {
+                    this.selectedItemIndizes = this.selectedItemIndizes.filter(i => i != index);
+                }
+                else if (select && !selected) {
+                    this.selectedItemIndizes.push(index);
+                }
             }
         }
 

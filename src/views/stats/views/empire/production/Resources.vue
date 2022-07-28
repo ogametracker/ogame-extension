@@ -293,10 +293,22 @@
                 </div>
             </template>
             <template #cell-total="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
+                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
             <template #cell-totalMsu="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
+                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
 
             <template #footer-planet="{ value, item }">
@@ -316,19 +328,49 @@
                 </span>
             </template>
             <template #footer-metal="{ value }">
-                {{ $i18n.$n(value.total, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value.total == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
             <template #footer-crystal="{ value }">
-                {{ $i18n.$n(value.total, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value.total == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
             <template #footer-deuterium="{ value }">
-                {{ $i18n.$n(value.total, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value.total == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
+                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
             <template #footer-total="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
+                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
             <template #footer-totalMsu="{ value }">
-                {{ $i18n.$n(value, numberFormat) }}
+                <div class="breakdown-list">
+                    <div
+                        :class="{ 'fade-value': value == 0 }"
+                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
+                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
+                    />
+                </div>
             </template>
         </grid-table>
 
@@ -1007,6 +1049,7 @@
         [fraction]::after {
             content: attr(fraction);
             color: rgba(white, 0.333);
+            font-size: 0.65em;
         }
     }
 </style>
