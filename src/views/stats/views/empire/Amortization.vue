@@ -458,16 +458,20 @@
             }
         }
 
+        private clone<T>(data: T): T {
+            return JSON.parse(JSON.stringify(data)) as T;
+        }
+
         private initItems(): void {
             this.generator = new AmortizationItemGenerator(
                 {
-                    player: this.playerSettings,
-                    planets: this.planetSettings,
-                    astrophysics: this.astrophysicsSettings,
-                    showPlasmaTechnology: this.showPlasmaTechnology,
+                    player: this.clone(this.playerSettings),
+                    planets: this.clone(this.planetSettings),
+                    astrophysics: this.clone(this.astrophysicsSettings),
+                    showPlasmaTechnology: this.clone(this.showPlasmaTechnology),
                 },
-                this.empire,
-                ServerSettingsDataModule.serverSettings
+                this.clone(this.empire.lifeformExperience),
+                this.clone(ServerSettingsDataModule.serverSettings),
             );
             this.amortizationItems = [];
         }

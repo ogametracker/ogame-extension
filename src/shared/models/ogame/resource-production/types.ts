@@ -111,11 +111,12 @@ export class EmpireProductionBreakdown {
         let lifeformTechnologyCrawlerProductionBonusFactor = 0;
 
         this.#planetIds.forEach(planetId => {
-            const techBonusFactor = (1 + this.planets[planetId].lifeformTechnologyBoost) * (1 + this.planets[planetId].lifeformExperienceBoost);
+            const planet = this.planets[planetId];
+            const techBonusFactor = (1 + planet.lifeformTechnologyBoost) * (1 + planet.lifeformExperienceBoost);
 
-            collectorClassBonusFactor += this.planets[planetId].collectorClassBonusFactor * techBonusFactor;
-            lifeformTechnologyProductionBonusFactor += this.planets[planetId].lifeformTechnologyBonusProductionFactor * techBonusFactor;
-            lifeformTechnologyCrawlerProductionBonusFactor += this.planets[planetId].lifeformTechnologyCrawlerProductionBonusFactor * techBonusFactor;
+            collectorClassBonusFactor += planet.collectorClassBonusFactor * techBonusFactor;
+            lifeformTechnologyProductionBonusFactor += planet.lifeformTechnologyBonusProductionFactor * techBonusFactor;
+            lifeformTechnologyCrawlerProductionBonusFactor += planet.lifeformTechnologyCrawlerProductionBonusFactor * techBonusFactor;
         });
 
         return {
@@ -123,6 +124,11 @@ export class EmpireProductionBreakdown {
             lifeformTechnologyProductionBonusFactor,
             lifeformTechnologyCrawlerProductionBonusFactor,
         };
+    }
+
+    public addPlanet(planetId: number, planetState: EmpireProductionPlanetState) {
+        this.#planetIds.push(planetId);
+        this.planets[planetId] = planetState;
     }
 
     public getProductionBreakdown(planetId: number) {

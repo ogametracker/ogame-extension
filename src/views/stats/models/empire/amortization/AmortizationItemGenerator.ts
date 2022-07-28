@@ -17,7 +17,7 @@ import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTim
 import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, LifeformTypes, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
 import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
@@ -37,7 +37,7 @@ import { _throw } from "@/shared/utils/_throw";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, AstrophysicsAmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, AstrophysicsAmortizationItem, AstrophysicsAmortizationLevels, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
 
 
 const $mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
@@ -45,6 +45,11 @@ const $minesByType: Record<MineBuildingType, ProductionBuilding> = {
     [BuildingType.metalMine]: MetalMine,
     [BuildingType.crystalMine]: CrystalMine,
     [BuildingType.deuteriumSynthesizer]: DeuteriumSynthesizer,
+};
+const $minesByResource: Record<ResourceType, ProductionBuilding> = {
+    metal: MetalMine,
+    crystal: CrystalMine,
+    deuterium: DeuteriumSynthesizer,
 };
 const $resourceByMineType: Record<MineBuildingType, ResourceType> = {
     [BuildingType.metalMine]: ResourceType.metal,
@@ -64,7 +69,7 @@ interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProducti
     clone(): EmpireProductionBreakdowns;
 }
 
-interface AmortizationPlanetState {
+export interface AmortizationPlanetState {
     data: PlanetData;
 
     lifeformExperienceBoost: number;
@@ -105,7 +110,7 @@ interface AmortizationItemGeneratorState {
  */
 export class AmortizationItemGenerator {
     readonly #settings: AmortizationGenerationSettings;
-    readonly #playerData: LocalPlayerData;
+    readonly #lifeformExperience: Record<ValidLifeformType, number>;
     readonly #serverSettings: ServerSettings;
 
     #generator: Generator<AmortizationItem, void, unknown> | null = null;
@@ -118,9 +123,9 @@ export class AmortizationItemGenerator {
         },
     } as AmortizationItemGeneratorState;
 
-    public constructor(settings: AmortizationGenerationSettings, playerData: LocalPlayerData, serverSettings: ServerSettings) {
+    public constructor(settings: AmortizationGenerationSettings, lifeformExperience: Record<ValidLifeformType, number>, serverSettings: ServerSettings) {
         this.#settings = settings;
-        this.#playerData = playerData;
+        this.#lifeformExperience = lifeformExperience;
         this.#serverSettings = serverSettings;
     }
 
@@ -141,127 +146,7 @@ export class AmortizationItemGenerator {
         const planets = Object.values(this.#settings.planets);
         const planetStates: Record<number, AmortizationPlanetState> = {};
         planets.forEach(planet => {
-            const planetData = this.#init_getPlanetData(planet);
-
-            const lifeformResourceProductionBonusBuildings = ResourceProductionBonusLifeformBuildingsByLifeform[planet.lifeform];
-
-            // lf building cost reduction
-            const lifeformBuildingCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform];
-
-            // mine cost reduction
-            const mineCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform]
-                .filter(b => $mineBuildingTypes.some(mineType => b.appliesTo(mineType)));
-
-            // plasma tech cost reduction
-            const plasmaTechnologyCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(
-                tech => planet.activeLifeformTechnologies.includes(tech.type)
-                    && tech.appliesTo(ResearchType.plasmaTechnology)
-            );
-
-            // lf research buildings
-            const lifeformTechnologyResearchBuildings = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform];
-
-            // collector class bonuses
-            const collectorClassBonusTechnologies = CollectorClassBonusLifeformTechnologies.filter(
-                tech => planet.activeLifeformTechnologies.includes(tech.type)
-            );
-
-            // crawler bonuses
-            const crawlerProductionBonusTechnologies = CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies.filter(
-                tech => planet.activeLifeformTechnologies.includes(tech.type)
-            );
-
-            // production bonuses
-            const lifeformResourceProductionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(
-                tech => planet.activeLifeformTechnologies.includes(tech.type)
-            );
-
-            // technology bonus buildings
-            const lifeformTechnologyBoostBuildings = LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.lifeform];
-
-            // init mine cost reductions
-            const mineCostReductions = createRecord(
-                $mineBuildingTypes,
-                mineType => mineCostReductionBuildings.reduce(
-                    (total, building) => total + building.getCostAndTimeReduction(mineType, planetData.lifeformBuildings[building.type]).cost,
-                    0,
-                ),
-            );
-            // init lf building cost reductions
-            const lifeformBuildingCostReductions = createRecord(
-                LifeformBuildingTypes,
-                mineType => lifeformBuildingCostReductionBuildings.reduce(
-                    (total, building) => total + building.getCostAndTimeReduction(mineType, planetData.lifeformBuildings[building.type]).cost,
-                    0,
-                ),
-            );
-            // init lf tech cost reductions
-            const lifeformTechnologyCostReduction = lifeformTechnologyResearchBuildings.reduce(
-                (total, building) => total + building.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[building.type]).cost,
-                0,
-            );
-            // init plasmatech cost reductions
-            const plasmaTechnologyCostReduction = plasmaTechnologyCostReductionTechnologies.reduce(
-                (total, tech) => total + tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, planetData.lifeformTechnologies[tech.type]).cost,
-                0,
-            );
-
-            // init lifeform technology boost
-            const lifeformTechnologyBoost = lifeformTechnologyBoostBuildings.reduce(
-                (total, boostBuilding) => total + boostBuilding.getLifeformTechnologyBonus(planetData.lifeformBuildings[boostBuilding.type]),
-                0,
-            );
-
-            const productionBuildingDependencies: ProductionBuildingDependencies = {
-                planet: {
-                    position: planetData.coordinates.position,
-                    temperature: planetData.maxTemperature,
-                },
-                serverSettings: {
-                    economySpeed: this.#serverSettings.speed.economy,
-                    crystalBoost: {
-                        default: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.default,
-                        pos1: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos1,
-                        pos2: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos2,
-                        pos3: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos3,
-                    },
-                },
-                productionSettings: {
-                    metalMine: planetData.productionSettings[BuildingType.metalMine],
-                    crystalMine: planetData.productionSettings[BuildingType.crystalMine],
-                    deuteriumSynthesizer: planetData.productionSettings[BuildingType.deuteriumSynthesizer],
-                    fusionReactor: 0,
-                },
-            };
-
-            const lifeformExperienceBoost = planet.lifeform == LifeformType.none
-                ? 0
-                : getLifeformTechnologyBonus(this.#playerData.lifeformExperience[planet.lifeform]);
-
-            planetStates[planet.id] = {
-                data: planetData,
-
-                lifeformExperienceBoost,
-                lifeformTechnologyBoost,
-
-                productionBuildingDependencies,
-
-                mineCostReductionBuildings,
-                lifeformBuildingCostReductionBuildings,
-                lifeformTechnologyResearchBuildings,
-                lifeformTechnologyBoostBuildings,
-                lifeformResourceProductionBonusBuildings,
-
-                collectorClassBonusTechnologies,
-                plasmaTechnologyCostReductionTechnologies,
-                crawlerProductionBonusTechnologies,
-                lifeformResourceProductionBonusTechnologies,
-
-                mineCostReductions,
-                lifeformBuildingCostReductions,
-                lifeformTechnologyCostReduction,
-                plasmaTechnologyCostReduction,
-            };
+            planetStates[planet.id] = this.#init_getPlanetState(planet);
         });
 
         const researchLevels = {
@@ -269,7 +154,7 @@ export class AmortizationItemGenerator {
             [ResearchType.astrophysics]: this.#settings.player.levelAstrophysics,
         } as Record<ResearchType, number>;
 
-        const lifeformExperienceBonus = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(this.#playerData.lifeformExperience[lf]));
+        const lifeformExperienceBonus = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(this.#lifeformExperience[lf]));
 
         const empireProductionPlanetStates = {
             metal: {} as Record<number, EmpireProductionPlanetState>,
@@ -294,11 +179,11 @@ export class AmortizationItemGenerator {
             const baseProductionConfig = {
                 crawlers: crawlerConfig,
                 lifeformExperienceBoost: lifeformExperienceBonus[planetState.data.activeLifeform],
-                collectorClassBonusFactor: this.#get_planetCollectorClassBonusFactor(planetState),
-                lifeformBuildingBonusProductionFactor: this.#get_planetLifeformBuildingBonusProductionFactor(planetState),
-                lifeformTechnologyBonusProductionFactor: this.#get_planetLifeformTechnologyBonusProductionFactor(planetState),
-                lifeformTechnologyCrawlerProductionBonusFactor: this.#get_planetLifeformTechnologyCrawlerProductionBonusFactor(planetState),
-                lifeformTechnologyBoost: this.#get_planetLifeformTechnologyBoost(planetState),
+                collectorClassBonusFactor: this.#init_getPlanetCollectorClassBonusFactor(planetState),
+                lifeformBuildingBonusProductionFactor: this.#init_getPlanetLifeformBuildingBonusProductionFactor(planetState),
+                lifeformTechnologyBonusProductionFactor: this.#init_getPlanetLifeformTechnologyBonusProductionFactor(planetState),
+                lifeformTechnologyCrawlerProductionBonusFactor: this.#init_getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planetState),
+                lifeformTechnologyBoost: this.#init_getPlanetLifeformTechnologyBoost(planetState),
             };
 
             empireProductionPlanetStates.metal[planetId] = {
@@ -407,35 +292,128 @@ export class AmortizationItemGenerator {
         return this.#generator = generator;
     }
 
-    #get_planetCollectorClassBonusFactor(planetState: AmortizationPlanetState) {
-        return planetState.collectorClassBonusTechnologies.reduce(
-            (total, tech) => total + tech.getCollectorClassBonus(planetState.data.lifeformTechnologies[tech.type] ?? 0),
-            0
+    #init_getPlanetState(planet: AmortizationPlanetSettings): AmortizationPlanetState {
+        const planetData = this.#init_getPlanetData(planet);
+
+        const lifeformResourceProductionBonusBuildings = ResourceProductionBonusLifeformBuildingsByLifeform[planet.lifeform];
+
+        // lf building cost reduction
+        const lifeformBuildingCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform];
+
+        // mine cost reduction
+        const mineCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform]
+            .filter(b => $mineBuildingTypes.some(mineType => b.appliesTo(mineType)));
+
+        // plasma tech cost reduction
+        const plasmaTechnologyCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
+                && tech.appliesTo(ResearchType.plasmaTechnology)
         );
-    }
-    #get_planetLifeformTechnologyBoost(planetState: AmortizationPlanetState) {
-        return planetState.lifeformTechnologyBoostBuildings.reduce(
-            (total, building) => total + building.getLifeformTechnologyBonus(planetState.data.lifeformBuildings[building.type]),
-            0
+
+        // lf research buildings
+        const lifeformTechnologyResearchBuildings = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform];
+
+        // collector class bonuses
+        const collectorClassBonusTechnologies = CollectorClassBonusLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
-    }
-    #get_planetLifeformTechnologyCrawlerProductionBonusFactor(planetState: AmortizationPlanetState) {
-        return planetState.crawlerProductionBonusTechnologies.reduce(
-            (total, tech) => total + tech.getCrawlerProductionBonus(planetState.data.lifeformTechnologies[tech.type]),
-            0
+
+        // crawler bonuses
+        const crawlerProductionBonusTechnologies = CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
-    }
-    #get_planetLifeformBuildingBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
-        return planetState.lifeformResourceProductionBonusBuildings.reduce<Cost>(
-            (total, building) => addCost(total, building.getProductionBonus(planetState.data.lifeformBuildings[building.type])),
-            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+
+        // production bonuses
+        const lifeformResourceProductionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(
+            tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
-    }
-    #get_planetLifeformTechnologyBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
-        return planetState.lifeformResourceProductionBonusTechnologies.reduce<Cost>(
-            (total, tech) => addCost(total, tech.getProductionBonus(planetState.data.lifeformTechnologies[tech.type])),
-            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+
+        // technology bonus buildings
+        const lifeformTechnologyBoostBuildings = LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.lifeform];
+
+        // init mine cost reductions
+        const mineCostReductions = createRecord(
+            $mineBuildingTypes,
+            mineType => mineCostReductionBuildings.reduce(
+                (total, building) => total + building.getCostAndTimeReduction(mineType, planetData.lifeformBuildings[building.type]).cost,
+                0,
+            ),
         );
+        // init lf building cost reductions
+        const lifeformBuildingCostReductions = createRecord(
+            LifeformBuildingTypes,
+            mineType => lifeformBuildingCostReductionBuildings.reduce(
+                (total, building) => total + building.getCostAndTimeReduction(mineType, planetData.lifeformBuildings[building.type]).cost,
+                0,
+            ),
+        );
+        // init lf tech cost reductions
+        const lifeformTechnologyCostReduction = lifeformTechnologyResearchBuildings.reduce(
+            (total, building) => total + building.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[building.type]).cost,
+            0,
+        );
+        // init plasmatech cost reductions
+        const plasmaTechnologyCostReduction = plasmaTechnologyCostReductionTechnologies.reduce(
+            (total, tech) => total + tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, planetData.lifeformTechnologies[tech.type]).cost,
+            0,
+        );
+
+        // init lifeform technology boost
+        const lifeformTechnologyBoost = lifeformTechnologyBoostBuildings.reduce(
+            (total, boostBuilding) => total + boostBuilding.getLifeformTechnologyBonus(planetData.lifeformBuildings[boostBuilding.type]),
+            0,
+        );
+
+        const productionBuildingDependencies: ProductionBuildingDependencies = {
+            planet: {
+                position: planetData.coordinates.position,
+                temperature: planetData.maxTemperature,
+            },
+            serverSettings: {
+                economySpeed: this.#serverSettings.speed.economy,
+                crystalBoost: {
+                    default: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.default,
+                    pos1: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos1,
+                    pos2: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos2,
+                    pos3: this.#serverSettings.resourceProduction.productionFactorBonus.crystal.pos3,
+                },
+            },
+            productionSettings: {
+                metalMine: planetData.productionSettings[BuildingType.metalMine],
+                crystalMine: planetData.productionSettings[BuildingType.crystalMine],
+                deuteriumSynthesizer: planetData.productionSettings[BuildingType.deuteriumSynthesizer],
+                fusionReactor: 0,
+            },
+        };
+
+        const lifeformExperienceBoost = planet.lifeform == LifeformType.none
+            ? 0
+            : getLifeformTechnologyBonus(this.#lifeformExperience[planet.lifeform]);
+
+        return {
+            data: planetData,
+
+            lifeformExperienceBoost,
+            lifeformTechnologyBoost,
+
+            productionBuildingDependencies,
+
+            mineCostReductionBuildings,
+            lifeformBuildingCostReductionBuildings,
+            lifeformTechnologyResearchBuildings,
+            lifeformTechnologyBoostBuildings,
+            lifeformResourceProductionBonusBuildings,
+
+            collectorClassBonusTechnologies,
+            plasmaTechnologyCostReductionTechnologies,
+            crawlerProductionBonusTechnologies,
+            lifeformResourceProductionBonusTechnologies,
+
+            mineCostReductions,
+            lifeformBuildingCostReductions,
+            lifeformTechnologyCostReduction,
+            plasmaTechnologyCostReduction,
+        };
     }
     #init_getPlanetData(planet: AmortizationPlanetSettings): PlanetData {
         return {
@@ -475,6 +453,36 @@ export class AmortizationItemGenerator {
             } as PlanetShipCount,
         };
     }
+    #init_getPlanetCollectorClassBonusFactor(planetState: AmortizationPlanetState) {
+        return planetState.collectorClassBonusTechnologies.reduce(
+            (total, tech) => total + tech.getCollectorClassBonus(planetState.data.lifeformTechnologies[tech.type] ?? 0),
+            0
+        );
+    }
+    #init_getPlanetLifeformTechnologyBoost(planetState: AmortizationPlanetState) {
+        return planetState.lifeformTechnologyBoostBuildings.reduce(
+            (total, building) => total + building.getLifeformTechnologyBonus(planetState.data.lifeformBuildings[building.type]),
+            0
+        );
+    }
+    #init_getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planetState: AmortizationPlanetState) {
+        return planetState.crawlerProductionBonusTechnologies.reduce(
+            (total, tech) => total + tech.getCrawlerProductionBonus(planetState.data.lifeformTechnologies[tech.type]),
+            0
+        );
+    }
+    #init_getPlanetLifeformBuildingBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
+        return planetState.lifeformResourceProductionBonusBuildings.reduce<Cost>(
+            (total, building) => addCost(total, building.getProductionBonus(planetState.data.lifeformBuildings[building.type])),
+            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+        );
+    }
+    #init_getPlanetLifeformTechnologyBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
+        return planetState.lifeformResourceProductionBonusTechnologies.reduce<Cost>(
+            (total, tech) => addCost(total, tech.getProductionBonus(planetState.data.lifeformTechnologies[tech.type])),
+            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+        );
+    }
 
     #updateState() {
         const levelPlasmaTechnology = this.#state.research[ResearchType.plasmaTechnology];
@@ -483,64 +491,61 @@ export class AmortizationItemGenerator {
         ResourceTypes.forEach(resource => {
             const productionBreakdown = this.#state.productionBreakdowns[resource];
 
-            const mine = {
-                metal: MetalMine,
-                crystal: CrystalMine,
-                deuterium: DeuteriumSynthesizer,
-            }[resource];
-            const mineType = mine.type as MineBuildingType;
+            const mine = $minesByResource[resource];
 
-            Object.values(this.#state.planets).forEach(planetState => {
-                const planetData = planetState.data;
-
-                // update production
-                {
-                    const empireProductionState = productionBreakdown.planets[planetData.id];
-
-                    // update mine production
-                    empireProductionState.mineProduction = mine.getProduction(planetData.buildings[mineType], planetState.productionBuildingDependencies);
-
-                    // update lifeform-related bonuses
-                    empireProductionState.lifeformBuildingBonusProductionFactor = this.#get_planetLifeformBuildingBonusProductionFactor(planetState)[resource];
-
-                    empireProductionState.collectorClassBonusFactor = this.#get_planetCollectorClassBonusFactor(planetState);
-                    empireProductionState.lifeformTechnologyBonusProductionFactor = this.#get_planetLifeformTechnologyBonusProductionFactor(planetState)[resource];
-
-                    empireProductionState.lifeformTechnologyCrawlerProductionBonusFactor = this.#get_planetLifeformTechnologyCrawlerProductionBonusFactor(planetState);
-                    empireProductionState.crawlers.totalMineLevel = $mineBuildingTypes.reduce((total, mineType) => total + planetData.buildings[mineType], 0);
-
-                    empireProductionState.lifeformTechnologyBoost = this.#get_planetLifeformTechnologyBoost(planetState);
-                }
-
-                // update lifeform building cost reduction
-                LifeformBuildingTypes.forEach(building => {
-                    planetState.lifeformBuildingCostReductions[building] = planetState.lifeformBuildingCostReductionBuildings.reduce(
-                        (total, costReductionBuilding) => total + costReductionBuilding.getCostAndTimeReduction(building, planetData.lifeformBuildings[costReductionBuilding.type]).cost,
-                        0,
-                    );
-                });
-
-                // update lifeform technology cost reduction
-                planetState.lifeformTechnologyCostReduction = planetState.lifeformTechnologyResearchBuildings.reduce(
-                    (total, researchBuilding) => total + researchBuilding.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[researchBuilding.type]).cost,
-                    0,
-                );
-
-                // update mine cost reduction
-                $mineBuildingTypes.forEach(mine => {
-                    planetState.mineCostReductions[mine] = planetState.mineCostReductionBuildings.reduce(
-                        (total, costReductionBuilding) => total + costReductionBuilding.getCostAndTimeReduction(mine, planetData.lifeformBuildings[costReductionBuilding.type]).cost,
-                        0,
-                    );
-                });
-
-                // update plasmatech cost reduction
-                planetState.plasmaTechnologyCostReduction = planetState.plasmaTechnologyCostReductionTechnologies.reduce(
-                    (total, costReductionTech) => total + costReductionTech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, planetData.lifeformTechnologies[costReductionTech.type]).cost,
-                    0,
-                );
-            });
+            Object.values(this.#state.planets).forEach(planetState => this.#update_planetState(planetState, productionBreakdown, resource, mine));
         });
+    }
+    #update_planetState(planetState: AmortizationPlanetState, productionBreakdown: EmpireProductionBreakdown, resource: ResourceType, mine: typeof MetalMine | typeof CrystalMine | typeof DeuteriumSynthesizer) {
+        const mineType = mine.type as MineBuildingType;
+        const planetData = planetState.data;
+
+        // update production
+        {
+            const empireProductionState = productionBreakdown.planets[planetData.id];
+
+            // update mine production
+            empireProductionState.mineProduction = mine.getProduction(planetData.buildings[mineType], planetState.productionBuildingDependencies);
+
+            // update lifeform-related bonuses
+            empireProductionState.lifeformBuildingBonusProductionFactor = this.#init_getPlanetLifeformBuildingBonusProductionFactor(planetState)[resource];
+
+            empireProductionState.collectorClassBonusFactor = this.#init_getPlanetCollectorClassBonusFactor(planetState);
+            empireProductionState.lifeformTechnologyBonusProductionFactor = this.#init_getPlanetLifeformTechnologyBonusProductionFactor(planetState)[resource];
+
+            empireProductionState.lifeformTechnologyCrawlerProductionBonusFactor = this.#init_getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planetState);
+            empireProductionState.crawlers.totalMineLevel = $mineBuildingTypes.reduce((total, mineType) => total + planetData.buildings[mineType], 0);
+
+            empireProductionState.lifeformTechnologyBoost = this.#init_getPlanetLifeformTechnologyBoost(planetState);
+        }
+
+        // update lifeform building cost reduction
+        LifeformBuildingTypes.forEach(building => {
+            planetState.lifeformBuildingCostReductions[building] = planetState.lifeformBuildingCostReductionBuildings.reduce(
+                (total, costReductionBuilding) => total + costReductionBuilding.getCostAndTimeReduction(building, planetData.lifeformBuildings[costReductionBuilding.type]).cost,
+                0,
+            );
+        });
+
+        // update lifeform technology cost reduction
+        planetState.lifeformTechnologyCostReduction = planetState.lifeformTechnologyResearchBuildings.reduce(
+            (total, researchBuilding) => total + researchBuilding.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[researchBuilding.type]).cost,
+            0,
+        );
+
+        // update mine cost reduction
+        $mineBuildingTypes.forEach(mine => {
+            planetState.mineCostReductions[mine] = planetState.mineCostReductionBuildings.reduce(
+                (total, costReductionBuilding) => total + costReductionBuilding.getCostAndTimeReduction(mine, planetData.lifeformBuildings[costReductionBuilding.type]).cost,
+                0,
+            );
+        });
+
+        // update plasmatech cost reduction
+        planetState.plasmaTechnologyCostReduction = planetState.plasmaTechnologyCostReductionTechnologies.reduce(
+            (total, costReductionTech) => total + costReductionTech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, planetData.lifeformTechnologies[costReductionTech.type]).cost,
+            0,
+        );
     }
 
     * #generateNextItem(): Generator<AmortizationItem, void, unknown> {
@@ -549,14 +554,14 @@ export class AmortizationItemGenerator {
         while (true) {
             const mineItems = this.#getMineAmortizationItems();
             const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
-            // const astrophysicsItem = this.#getAstrophysicsAmortizationItem();
+            const astrophysicsItem = this.#getAstrophysicsAmortizationItem(newPlanets - 1);
             const lifeformBuildingItems = this.#getLifeformBuildingAmortizationItems();
             const lifeformTechnologyItems = this.#getLifeformTechnologyItems();
 
             const items: AmortizationItem[] = [
                 ...mineItems,
                 plasmaTechItem,
-                // astrophysicsItem,
+                astrophysicsItem,
                 ...lifeformBuildingItems,
                 ...lifeformTechnologyItems,
             ].filter(item => item.productionDeltaMsu > 0) //remove items with production delta = 0, because plasmatech and others can have no effect if there are no mines at all
@@ -638,8 +643,20 @@ export class AmortizationItemGenerator {
                     break;
                 }
 
-                //TODO: handle best item type
-                default: throw new Error('not implemented');
+                case 'astrophysics-and-colony': {
+                    const newAstroLevel = bestItem.levels.reduce((max, cur) => Math.max(max, cur), 0);
+                    this.#state.research[ResearchType.astrophysics] = newAstroLevel;
+
+                    this.#state.planets[bestItem.newPlanetId] = bestItem.planetState;
+                    ResourceTypes.forEach(resource => {
+                        this.#state.productionBreakdowns[resource].addPlanet(bestItem.newPlanetId, bestItem.newPlanetProductionStates[resource]);
+                    });
+
+                    yieldItem = this.#settings.astrophysics.show;
+                    break;
+                }
+
+                default: _throw('invalid item type');
             }
 
             this.#updateState();
@@ -647,28 +664,188 @@ export class AmortizationItemGenerator {
             if (yieldItem) {
                 yield bestItem;
             }
+
+            throw 1;
         }
     }
 
     //#region astrophysics amortization item calculation
-    // #getAstrophysicsAmortizationItem(): AstrophysicsAmortizationItem {
-    //     const levelAstrophysics = this.#state.research[ResearchType.astrophysics];
-    //     const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
-    //     const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
-    //     const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
+    #getAstrophysicsAmortizationItem(planetId: number): AstrophysicsAmortizationItem {
+        console.log('hello');
+        const levelAstrophysics = this.#state.research[ResearchType.astrophysics];
+        const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
+        const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
+        const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
 
-    //     const newLevels: number[] = [];
-    //     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-    //     // we don't need to reserch astrophysics if we have less colonies than we can have
-    //     if (currentPlanetCount == currentMaxPlanetCount) {
-    //         for (let l = levelAstrophysics + 1; l <= nextLevelAstrophysics; l++) {
-    //             newLevels.push(l);
+        const newAstrophysicsLevels: number[] = [];
+        let totalCost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+        // we don't need to reserch astrophysics if we have less colonies than we can have
+        if (currentPlanetCount == currentMaxPlanetCount) {
+            for (let l = levelAstrophysics + 1; l <= nextLevelAstrophysics; l++) {
+                newAstrophysicsLevels.push(l);
 
-    //             const levelCost = Astrophysics.getCost(l);
-    //             cost = addCost(cost, levelCost);
-    //         }
-    //     }
-    // }
+                const levelCost = Astrophysics.getCost(l);
+                totalCost = addCost(totalCost, levelCost);
+            }
+        }
+
+        let planetState = this.#init_getPlanetState(this.#settings.astrophysics.planet);
+
+        const planetSettings = this.#settings.astrophysics.planet;
+        const position = planetSettings.position;
+        const items = planetSettings.activeItems.reduce<Partial<Record<ItemHash, "permanent">>>((acc, cur) => {
+            acc[cur] = 'permanent';
+            return acc;
+        }, {});
+
+        const lifeformExperienceBonus = createRecord(
+            LifeformTypes,
+            lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(this.#lifeformExperience[lf])
+        );
+        const baseProductionConfig: Omit<EmpireProductionPlanetState, 'baseProduction' | 'mineProduction' | 'itemBonusProductionFactor'> = {
+            crawlers: {
+                available: planetSettings.crawlers.enabled
+                    ? planetSettings.crawlers.max
+                        ? 10_000
+                        : planetSettings.crawlers.count
+                    : 0,
+                percentage: planetSettings.crawlers.overload ? 150 : 100,
+                totalMineLevel: 0,
+            },
+            lifeformExperienceBoost: lifeformExperienceBonus[planetSettings.lifeform],
+            collectorClassBonusFactor: 0,
+            lifeformTechnologyCrawlerProductionBonusFactor: 0,
+            lifeformTechnologyBoost: 0,
+            lifeformBuildingBonusProductionFactor: 0,
+            lifeformTechnologyBonusProductionFactor: 0,
+        };
+        const newPlanetProductionStates: Record<ResourceType, EmpireProductionPlanetState> = {
+            metal: {
+                baseProduction: getMetalBaseProduction({
+                    planetPosition: position,
+                    serverEconomySpeed: this.#serverSettings.speed.economy,
+                }),
+                mineProduction: 0,
+                itemBonusProductionFactor: getItemBonus(ResourceType.metal, items),
+                ...baseProductionConfig,
+            },
+            crystal: {
+                baseProduction: getCrystalBaseProduction({
+                    planetPosition: position,
+                    serverEconomySpeed: this.#serverSettings.speed.economy,
+                    serverPositionBoost: this.#serverSettings.resourceProduction.productionFactorBonus.crystal,
+                }),
+                mineProduction: 0,
+                itemBonusProductionFactor: getItemBonus(ResourceType.crystal, items),
+                ...baseProductionConfig,
+            },
+            deuterium: {
+                baseProduction: 0,
+                mineProduction: 0,
+                itemBonusProductionFactor: getItemBonus(ResourceType.deuterium, items),
+                ...baseProductionConfig,
+            },
+        };
+
+        const currentProduction = this.#state.productionBreakdowns.getTotal();
+
+        const newProductionBreakdowns = this.#state.productionBreakdowns.clone();
+        newProductionBreakdowns.metal.addPlanet(planetId, newPlanetProductionStates.metal);
+        newProductionBreakdowns.crystal.addPlanet(planetId, newPlanetProductionStates.crystal);
+        newProductionBreakdowns.deuterium.addPlanet(planetId, newPlanetProductionStates.deuterium);
+
+        let timeInHours = Infinity;
+        do {
+            const mineItems = $mineBuildingTypes.map(mine => this.#getMineAmortizationItem(newProductionBreakdowns, planetState, mine));
+            const lfBuildingItems = ResourceProductionBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
+                .map(lfBuilding => this.#getLifeformBuildingAmortizationItem(newProductionBreakdowns, planetState, lfBuilding));
+            const lfTechnologyItems = [
+                ...planetState.lifeformResourceProductionBonusTechnologies,
+                ...planetState.crawlerProductionBonusTechnologies,
+                ...planetState.collectorClassBonusTechnologies,
+            ].map(tech => this.#getLifeformTechnologyItem(newProductionBreakdowns, planetState, tech));
+
+            const items = [...mineItems, ...lfBuildingItems, ...lfTechnologyItems];
+            const bestItem = items.reduce<MineAmortizationItem | LifeformBuildingAmortizationItem | LifeformTechnologyAmortizationItem>(
+                (best, item) => item.timeInHours < best.timeInHours ? item : best,
+                { timeInHours: Infinity } as MineAmortizationItem | LifeformBuildingAmortizationItem | LifeformTechnologyAmortizationItem,
+            );
+
+            const newTotalCost = addCost(totalCost, bestItem.cost);
+            const newTotalCostMsu = this.#getMsu(newTotalCost);
+
+            const planetStateClone = this.#clonePlanetState(planetState);
+            switch (bestItem.type) {
+                case 'mine': {
+                    planetStateClone.data.buildings[bestItem.mine] = bestItem.level;
+                    bestItem.additionalLifeformBuildings.forEach(levels => {
+                        planetStateClone.data.lifeformBuildings[levels.building] = levels.levels.to;
+                    });
+                    break;
+                }
+
+                case 'lifeform-building': {
+                    planetStateClone.data.lifeformBuildings[bestItem.building] = bestItem.level;
+                    bestItem.additionalLifeformBuildings.forEach(levels => {
+                        planetStateClone.data.lifeformBuildings[levels.building] = levels.levels.to;
+                    });
+                    break;
+                }
+
+                case 'lifeform-technology': {
+                    planetStateClone.data.lifeformTechnologies[bestItem.technology] = bestItem.level;
+                    bestItem.additionalLifeformBuildings.forEach(levels => {
+                        planetStateClone.data.lifeformBuildings[levels.building] = levels.levels.to;
+                    });
+                    break;
+                }
+
+                default: _throw(`Invalid amortization item '${bestItem}'`);
+            }
+            ResourceTypes.forEach(resource => {
+                this.#update_planetState(planetStateClone, newProductionBreakdowns[resource], resource, $minesByResource[resource]);
+            });
+
+            const newProductionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
+            const newProductionDeltaMsu = this.#getMsu(newProductionDelta);
+
+            const newTimeInHours = newTotalCostMsu / newProductionDeltaMsu;
+            if (newTimeInHours > timeInHours) {
+                break;
+            }
+
+            timeInHours = newTimeInHours;
+            totalCost = newTotalCost;
+            planetState = planetStateClone;
+        } while (true);
+
+        const totalCostMsu = this.#getMsu(totalCost);
+        const productionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
+        const productionDeltaMsu = this.#getMsu(productionDelta);
+
+        return {
+            type: 'astrophysics-and-colony',
+            newPlanetId: planetId,
+            levels: newAstrophysicsLevels,
+            planetState,
+            newPlanetProductionStates,
+
+            cost: totalCost,
+            costMsu: totalCostMsu,
+            productionDelta,
+            productionDeltaMsu,
+            timeInHours,
+        };
+    }
+    #clonePlanetState(planetState: AmortizationPlanetState): AmortizationPlanetState {
+        return {
+            ...planetState,
+
+            lifeformBuildingCostReductions: { ...planetState.lifeformBuildingCostReductions },
+            mineCostReductions: { ...planetState.mineCostReductions },
+            data: JSON.parse(JSON.stringify(planetState.data)) as PlanetData,
+        };
+    }
     //#endregion
 
 
@@ -679,12 +856,12 @@ export class AmortizationItemGenerator {
                 ...planet.lifeformResourceProductionBonusTechnologies,
                 ...planet.crawlerProductionBonusTechnologies,
                 ...planet.collectorClassBonusTechnologies,
-            ].map(tech => this.#getLifeformTechnologyItem(planet.data.id, tech))
+            ].map(tech => this.#getLifeformTechnologyItem(this.#state.productionBreakdowns, planet, tech))
         );
     }
-    #getLifeformTechnologyItem(planetId: number, technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology): LifeformTechnologyAmortizationItem {
-        const planetState = this.#state.planets[planetId];
+    #getLifeformTechnologyItem(productionBreakdowns: EmpireProductionBreakdowns, planetState: AmortizationPlanetState, technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology): LifeformTechnologyAmortizationItem {
         const planetData = planetState.data;
+        const planetId = planetData.id;
         const newLevel = planetData.lifeformTechnologies[technology.type] + 1;
 
         const result = this.#getLifeformTechnologyItem_costReduction(planetState, technology);
@@ -728,9 +905,9 @@ export class AmortizationItemGenerator {
             additionalCollectorClassBonus = bonus;
         }
 
-        const curProduction = this.#state.productionBreakdowns.getTotal();
+        const curProduction = productionBreakdowns.getTotal();
 
-        const newProductionBreakdowns = this.#state.productionBreakdowns.clone();
+        const newProductionBreakdowns = productionBreakdowns.clone();
         ResourceTypes.forEach(resource => {
             const planetProductionState = newProductionBreakdowns[resource].planets[planetId];
 
@@ -1005,13 +1182,13 @@ export class AmortizationItemGenerator {
     #getLifeformBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
         return this.#planets.flatMap(
             planet => ResourceProductionBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
-                lfBuilding => this.#getLifeformBuildingAmortizationItem(planet.data.id, lfBuilding)
+                lfBuilding => this.#getLifeformBuildingAmortizationItem(this.#state.productionBreakdowns, planet, lfBuilding)
             )
         );
     }
-    #getLifeformBuildingAmortizationItem(planetId: number, lfBuilding: ResourceProductionBonusLifeformBuilding): LifeformBuildingAmortizationItem {
-        const planetState = this.#state.planets[planetId];
+    #getLifeformBuildingAmortizationItem(productionBreakdowns: EmpireProductionBreakdowns, planetState: AmortizationPlanetState, lfBuilding: ResourceProductionBonusLifeformBuilding): LifeformBuildingAmortizationItem {
         const planetData = planetState.data;
+        const planetId = planetData.id;
         const newLevel = planetData.lifeformBuildings[lfBuilding.type] + 1;
 
         const result = this.#getLifeformBuildingAmortizationItem_costReduction(planetState, lfBuilding);
@@ -1040,7 +1217,7 @@ export class AmortizationItemGenerator {
 
         let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
         ResourceTypes.forEach(resource => {
-            const productionBreakdown = this.#state.productionBreakdowns[resource];
+            const productionBreakdown = productionBreakdowns[resource];
             const newProductionBreakdown = productionBreakdown.clone();
 
             const additionalProductionBonusForResource = lfBuilding.getProductionBonus(newLevel)[resource] - lfBuilding.getProductionBonus(newLevel - 1)[resource];
@@ -1676,13 +1853,13 @@ export class AmortizationItemGenerator {
     #getMineAmortizationItems(): MineAmortizationItem[] {
         return this.#planets.flatMap(
             planet => $mineBuildingTypes.map(
-                mineType => this.#getMineAmortizationItem(planet.data.id, mineType)
+                mineType => this.#getMineAmortizationItem(this.#state.productionBreakdowns, planet, mineType)
             )
         );
     }
-    #getMineAmortizationItem(planetId: number, mineType: MineBuildingType): MineAmortizationItem {
-        const planetState = this.#state.planets[planetId];
+    #getMineAmortizationItem(productionBreakdowns: EmpireProductionBreakdowns, planetState: AmortizationPlanetState, mineType: MineBuildingType): MineAmortizationItem {
         const planetData = planetState.data;
+        const planetId = planetData.id;
         const newLevel = planetData.buildings[mineType] + 1;
         const mine = $minesByType[mineType];
 
@@ -1711,7 +1888,7 @@ export class AmortizationItemGenerator {
         });
 
         const resource = $resourceByMineType[mineType];
-        const productionBreakdown = this.#state.productionBreakdowns[resource];
+        const productionBreakdown = productionBreakdowns[resource];
         const newProductionBreakdown = productionBreakdown.clone();
         newProductionBreakdown.planets[planetId].mineProduction = mine.getProduction(newLevel, planetState.productionBuildingDependencies);
         newProductionBreakdown.planets[planetId].crawlers.totalMineLevel += 1;
