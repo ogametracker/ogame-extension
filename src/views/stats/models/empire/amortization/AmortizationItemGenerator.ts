@@ -664,14 +664,11 @@ export class AmortizationItemGenerator {
             if (yieldItem) {
                 yield bestItem;
             }
-
-            throw 1;
         }
     }
 
     //#region astrophysics amortization item calculation
     #getAstrophysicsAmortizationItem(planetId: number): AstrophysicsAmortizationItem {
-        console.log('hello');
         const levelAstrophysics = this.#state.research[ResearchType.astrophysics];
         const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
         const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
