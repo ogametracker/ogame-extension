@@ -6,6 +6,7 @@ import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 
 export interface AmortizationPlanetSettings {
     show: boolean;
+    ignore: boolean;
     id: number;
     name: string;
     coordinates?: Coordinates;

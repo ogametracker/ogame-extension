@@ -51,7 +51,6 @@ export interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
     newPlanetId: number;
 
     builtLevels: AstrophysicsAmortizationLevels;
-    additionalLifeformTechnologies: LifeformTechnologyLevels[];
 }
 
 export interface LifeformBuildingAmortizationItem extends BaseAmortizationItem {

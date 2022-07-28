@@ -21,6 +21,7 @@ import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/Lif
 import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
 import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
+import { Astrophysics } from "@/shared/models/ogame/research/Astrophysics";
 import { PlasmaTechnology } from "@/shared/models/ogame/research/PlasmaTechnology";
 import { ResearchType, } from "@/shared/models/ogame/research/ResearchType";
 import { getCrystalBaseProduction } from "@/shared/models/ogame/resource-production/getCrystalProduction";
@@ -36,7 +37,7 @@ import { _throw } from "@/shared/utils/_throw";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, AstrophysicsAmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
 
 
 const $mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
@@ -412,35 +413,30 @@ export class AmortizationItemGenerator {
             0
         );
     }
-
     #get_planetLifeformTechnologyBoost(planetState: AmortizationPlanetState) {
         return planetState.lifeformTechnologyBoostBuildings.reduce(
             (total, building) => total + building.getLifeformTechnologyBonus(planetState.data.lifeformBuildings[building.type]),
             0
         );
     }
-
     #get_planetLifeformTechnologyCrawlerProductionBonusFactor(planetState: AmortizationPlanetState) {
         return planetState.crawlerProductionBonusTechnologies.reduce(
             (total, tech) => total + tech.getCrawlerProductionBonus(planetState.data.lifeformTechnologies[tech.type]),
             0
         );
     }
-
     #get_planetLifeformBuildingBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
         return planetState.lifeformResourceProductionBonusBuildings.reduce<Cost>(
             (total, building) => addCost(total, building.getProductionBonus(planetState.data.lifeformBuildings[building.type])),
             { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
         );
     }
-
     #get_planetLifeformTechnologyBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
         return planetState.lifeformResourceProductionBonusTechnologies.reduce<Cost>(
             (total, tech) => addCost(total, tech.getProductionBonus(planetState.data.lifeformTechnologies[tech.type])),
             { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
         );
     }
-
     #init_getPlanetData(planet: AmortizationPlanetSettings): PlanetData {
         return {
             id: planet.id,
@@ -654,8 +650,31 @@ export class AmortizationItemGenerator {
         }
     }
 
+    //#region astrophysics amortization item calculation
+    // #getAstrophysicsAmortizationItem(): AstrophysicsAmortizationItem {
+    //     const levelAstrophysics = this.#state.research[ResearchType.astrophysics];
+    //     const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
+    //     const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
+    //     const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
+
+    //     const newLevels: number[] = [];
+    //     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+    //     // we don't need to reserch astrophysics if we have less colonies than we can have
+    //     if (currentPlanetCount == currentMaxPlanetCount) {
+    //         for (let l = levelAstrophysics + 1; l <= nextLevelAstrophysics; l++) {
+    //             newLevels.push(l);
+
+    //             const levelCost = Astrophysics.getCost(l);
+    //             cost = addCost(cost, levelCost);
+    //         }
+    //     }
+    // }
+    //#endregion
+
+
+    //#region lifeform technology amortization item calculation
     #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
-        return Object.values(this.#state.planets).flatMap(
+        return this.#planets.flatMap(
             planet => [
                 ...planet.lifeformResourceProductionBonusTechnologies,
                 ...planet.crawlerProductionBonusTechnologies,
@@ -979,9 +998,12 @@ export class AmortizationItemGenerator {
             additionalLifeformBuildings,
         };
     }
+    //#endregion
 
+
+    //#region lifeform building amortization item calculation
     #getLifeformBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
-        return Object.values(this.#state.planets).flatMap(
+        return this.#planets.flatMap(
             planet => ResourceProductionBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
                 lfBuilding => this.#getLifeformBuildingAmortizationItem(planet.data.id, lfBuilding)
             )
@@ -1161,11 +1183,10 @@ export class AmortizationItemGenerator {
             additionalLifeformBuildings,
         };
     }
+    //#endregion
 
-    // #getAstrophysicsAmortizationItem(): AstrophysicsAmortizationItem {
 
-    // }
-
+    //#region plasma technology research amortization item calculation
     #getPlasmaTechnologyAmortizationItem(): PlasmaTechnologyAmortizationItem {
         const newLevel = this.#state.research[ResearchType.plasmaTechnology] + 1;
 
@@ -1648,12 +1669,14 @@ export class AmortizationItemGenerator {
             additionalLifeformTechnologies,
         };
     }
+    //#endregion
 
 
+    //#region mine amortization item calculation
     #getMineAmortizationItems(): MineAmortizationItem[] {
-        return Object.values(this.#settings.planets).flatMap(
+        return this.#planets.flatMap(
             planet => $mineBuildingTypes.map(
-                mineType => this.#getMineAmortizationItem(planet.id, mineType)
+                mineType => this.#getMineAmortizationItem(planet.data.id, mineType)
             )
         );
     }
@@ -1842,10 +1865,16 @@ export class AmortizationItemGenerator {
             additionalLifeformBuildings,
         };
     }
+    //#endregion
 
     #getMsu(cost: Cost): number {
         return cost.metal
             + cost.crystal * this.#settings.player.msuConversionRates.crystal
             + cost.deuterium * this.#settings.player.msuConversionRates.deuterium;
+    }
+
+    get #planets() {
+        return Object.values(this.#state.planets)
+            .filter(planet => !this.#settings.planets[planet.data.id].ignore);
     }
 }

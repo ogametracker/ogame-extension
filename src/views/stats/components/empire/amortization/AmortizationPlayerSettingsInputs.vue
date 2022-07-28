@@ -44,7 +44,12 @@
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelAstrophysics" />
         <span>
             <o-research :research="ResearchType.astrophysics" />
-            <input type="number" v-model.number="settings.levelAstrophysics" min="0" max="50" step="1" />
+            <input type="number" :value="settings.levelAstrophysics" disabled />
+        </span>
+
+        <span v-text="'LOCA: currently unused raid colony slots'" />
+        <span>
+            <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="raidColonies" :max="100" step="1" />
         </span>
     </div>
 </template>
@@ -67,6 +72,9 @@
 
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
+
+        @Prop({ required: true, type: Number })
+        private raidColonies!: number;
 
         private readonly ResearchType = ResearchType;
         private readonly playerClasses = SelectablePlayerClasses;

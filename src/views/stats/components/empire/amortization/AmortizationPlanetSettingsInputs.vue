@@ -11,6 +11,9 @@
             <template v-if="toggleable">
                 <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.showInResult" />
                 <checkbox v-model="settings.show" />
+
+                <span v-text="'LOCA: Is raidkolo? Will be ignored for amortisation calculation'" />
+                <checkbox v-model="settings.ignore" />
             </template>
 
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.position" />

@@ -17,4 +17,5 @@ export interface AmortizationPlayerSettings {
     allianceClass: AllianceClass;
     levelPlasmaTechnology: number;
     levelAstrophysics: number;
+    numberOfUnusedRaidColonySlots: number;
 }

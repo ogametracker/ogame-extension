@@ -43,7 +43,7 @@
                     <div class="flex-settings">
                         <div>
                             <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
-                            <amortization-player-settings-inputs v-model="playerSettings" />
+                            <amortization-player-settings-inputs v-model="playerSettings" :raidColonies="numberOfRaidColonies" />
                         </div>
 
                         <div>
@@ -399,12 +399,14 @@
             allianceClass: AllianceClass.none,
             levelPlasmaTechnology: 0,
             levelAstrophysics: 0,
+            numberOfUnusedRaidColonySlots: 0,
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
             show: true,
             planet: {
                 show: true,
+                ignore: false,
                 id: -1,
                 name: '',
                 position: 0,
@@ -431,6 +433,10 @@
 
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
+        }
+
+        private get numberOfRaidColonies() {
+            return this.planetSettingsSorted.reduce((total, planet) => total + (planet.ignore ? 1 : 0), 0);
         }
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
@@ -489,12 +495,14 @@
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
                 levelAstrophysics: empire.research[ResearchType.astrophysics],
+                numberOfUnusedRaidColonySlots: 0,
             };
 
             this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
                 .reduce((acc, planet) => {
                     const settings: AmortizationPlanetSettings = {
                         show: true,
+                        ignore: false,
                         id: planet.id,
                         name: planet.name,
                         maxTemperature: planet.maxTemperature,
@@ -525,6 +533,7 @@
                 show: true,
                 planet: {
                     show: true,
+                    ignore: false,
                     id: -1,
                     name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
                     position: 8,
