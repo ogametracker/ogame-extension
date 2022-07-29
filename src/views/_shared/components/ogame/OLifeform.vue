@@ -1,9 +1,12 @@
 <template>
     <div
         class="o-lifeform"
-        :class="{
-            'o-lifeform--disabled': disabled,
-        }"
+        :class="[
+            {
+                'o-lifeform--disabled': disabled,
+            },
+            `o-lifeform--${lifeform}`,
+        ]"
         :style="{
             'background-image': `url(/img/ogame/lifeforms/${image}.png)`,
             'font-size': size,
@@ -55,9 +58,23 @@
         image-rendering: -webkit-optimize-contrast;
         image-rendering: -moz-crisp-edges;
         border-radius: 4px;
+        border: 1px solid;
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+
+        &--humans {
+            border-color: #7ec000;
+        }
+        &--rocktal {
+            border-color: #df6642;
+        }
+        &--mechas {
+            border-color: #4b91e7;
+        }
+        &--kaelesh {
+            border-color: #9863e9;
         }
     }
 </style>
