@@ -646,7 +646,8 @@ export class AmortizationItemGenerator {
                 case 'astrophysics-and-colony': {
                     newPlanets++;
 
-                    const newAstroLevel = bestItem.levels.reduce((max, cur) => Math.max(max, cur), 0);
+
+                    const newAstroLevel = Math.max(this.#state.research[ResearchType.astrophysics], ...bestItem.levels);
                     this.#state.research[ResearchType.astrophysics] = newAstroLevel;
 
                     this.#state.planets[bestItem.newPlanetId] = bestItem.planetState;
@@ -839,9 +840,9 @@ export class AmortizationItemGenerator {
             newPlanetProductionStates,
 
             builtLevels: {
-                mines: planetState.data.buildings,
-                lifeformBuildings: planetState.data.lifeformBuildings,
-                lifeformTechnologies: planetState.data.lifeformTechnologies,
+                mines: { ...planetState.data.buildings },
+                lifeformBuildings: { ...planetState.data.lifeformBuildings },
+                lifeformTechnologies: { ...planetState.data.lifeformTechnologies },
             },
 
             cost: totalCost,

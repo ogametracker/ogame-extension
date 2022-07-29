@@ -516,6 +516,10 @@
         }
 
         private async insertNextAmortizationItems(count: number): Promise<void> {
+            if(this.generatingItemCount != null) {
+                return;
+            }
+            
             this.generatingItemCount = { total: count, count: 0 };
             await this.$nextTick();
 
