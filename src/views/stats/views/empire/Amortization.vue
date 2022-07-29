@@ -2,39 +2,52 @@
     <div class="amortization">
         <div class="amortization-container">
             <div class="amortization-settings" :style="{ overflow: showSettings ? 'auto' : null }">
-                <button @click="toggleSettings()">
-                    <span class="mdi mdi-cogs" />
-                    <span class="mdi mdi-menu-down" v-if="!showSettings" />
-                    <span class="mdi mdi-menu-up" v-else />
+                <div class="amortization-settings-header">
+                    <button @click="toggleSettings()">
+                        <span class="mdi mdi-cogs" />
+                        <span class="mdi mdi-menu-down" v-if="!showSettings" />
+                        <span class="mdi mdi-menu-up" v-else />
 
-                    <span v-if="!showSettings" v-text="$i18n.$t.empire.amortization.settings.header" />
-                    <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
-                </button>
+                        <span v-if="!showSettings" v-text="$i18n.$t.empire.amortization.settings.header" />
+                        <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
+                    </button>
 
-                <div>
-                    <span v-if="generatingItemCount != null" v-text="`LOCA: Generating items: ${generatingItemCount.count}/${generatingItemCount.total}`" />
-                    <span
-                        v-text="
-                            'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
-                        "
-                    />
-                    <span v-text="'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'" />
-                </div>
+                    <div class="generating-count">
+                        <span v-if="generatingItemCount != null" v-text="`LOCA: Generating items: ${generatingItemCount.count}/${generatingItemCount.total}`" />
+                    </div>
 
-                <floating-menu v-model="showSettingsMenu" left>
-                    <template #activator>
-                        <button @click="showSettingsMenu = !showSettingsMenu">
-                            <span class="mdi mdi-cog" />
-                        </button>
-                    </template>
+                    <floating-menu v-model="showInfoMenu" left>
+                        <template #activator>
+                            <button @click="showInfoMenu = !showInfoMenu">
+                                <span class="mdi mdi-help" />
+                            </button>
+                        </template>
 
-                    <show-msu-cells-settings>
-                        <div class="msu-settings-amortization-info">
-                            <span class="mdi mdi-alert" />
-                            <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
+                        <div class="infos">
+                            <span
+                                v-text="
+                                    'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
+                                "
+                            />
+                            <span v-text="'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'" />
                         </div>
-                    </show-msu-cells-settings>
-                </floating-menu>
+                    </floating-menu>
+
+                    <floating-menu v-model="showSettingsMenu" left>
+                        <template #activator>
+                            <button @click="showSettingsMenu = !showSettingsMenu">
+                                <span class="mdi mdi-cog" />
+                            </button>
+                        </template>
+
+                        <show-msu-cells-settings>
+                            <div class="msu-settings-amortization-info">
+                                <span class="mdi mdi-alert" />
+                                <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
+                            </div>
+                        </show-msu-cells-settings>
+                    </floating-menu>
+                </div>
 
                 <div v-show="showSettings" class="amortization-settings-container">
                     <div class="flex-settings">
@@ -205,7 +218,13 @@
                                             <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
                                         </span>
                                         <span v-else class="planet">
-                                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-additionalLifeformStuff.planetId}`" />
+                                            <span
+                                                v-text="
+                                                    `${
+                                                        $i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony
+                                                    } ${-additionalLifeformStuff.planetId}`
+                                                "
+                                            />
                                             <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                                         </span>
 
@@ -382,6 +401,8 @@
         };
 
         private showSettingsMenu = false;
+        private showInfoMenu = false;
+
         private readonly BuildingType = BuildingType;
         private readonly ResearchType = ResearchType;
         private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
@@ -862,7 +883,7 @@
             max-height: 100%;
             display: grid;
             grid-template-rows: auto 1fr;
-            grid-template-columns: auto 1fr auto;
+            gap: 4px;
             justify-items: start;
 
             > button {
@@ -882,14 +903,19 @@
     }
 
     .amortization-settings-container {
-        overflow: auto;
         border: 1px solid rgba(var(--color), 0.25);
         padding: 12px;
         overflow: auto;
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
         background: rgba(var(--color), 0.05);
-        grid-column: 1 / span 3;
+    }
+
+    .amortization-settings-header {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        gap: 8px;
+        width: 100%;
     }
 
     .msu-settings-amortization-info {
@@ -908,5 +934,24 @@
         justify-self: end;
         font-size: 24px;
         cursor: pointer;
+    }
+
+    .infos {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        & > span {
+            width: 450px;
+            border: 1px solid rgba(var(--color), 0.5);
+            border-radius: 4px;
+            background: rgba(var(--color), 0.1);
+            padding: 8px 16px;
+        }
+    }
+
+    .generating-count {
+        display: flex;
+        align-items: center;
     }
 </style>
