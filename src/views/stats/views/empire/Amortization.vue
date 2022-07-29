@@ -235,16 +235,18 @@
                             </span>
                         </div>
                         <div v-else-if="item.type == 'astrophysics-and-colony'" class="what-cell what-cell--colony">
-                            <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" />
-                            <span class="name-and-level">
-                                <span v-text="buildableTranslations['astrophysics-colony']" />
+                            <span style="display: contents">
+                                <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" style="grid-column: 2" />
+                                <span class="name-and-level">
+                                    <span v-text="buildableTranslations['astrophysics-colony']" />
 
-                                <span v-if="item.levels.length == 0" v-text="'-'" />
-                                <span v-else-if="item.levels.length == 1" v-text="item.levels[0]" />
-                                <span v-else v-text="`${item.levels[0]} + ${item.levels[1]}`" />
+                                    <span v-if="item.levels.length == 0" v-text="'-'" />
+                                    <span v-else-if="item.levels.length == 1" v-text="item.levels[0]" />
+                                    <span v-else v-text="`${item.levels[0]} + ${item.levels[1]}`" />
+                                </span>
                             </span>
 
-                            <span class="planet">
+                            <span class="planet" style="align-self: start; grid-row: 2">
                                 <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
@@ -775,7 +777,8 @@
             grid-row: 1 / span 4;
         }
 
-        &--plasma-technology {
+        &--plasma-technology,
+        &--colony {
             grid-template-columns: 150px auto 1fr;
         }
 
