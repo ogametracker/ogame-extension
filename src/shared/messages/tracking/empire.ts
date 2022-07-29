@@ -11,6 +11,9 @@ import { BuildingType } from '../../models/ogame/buildings/BuildingType';
 import { ResearchType } from '../../models/ogame/research/ResearchType';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 import { PlanetActiveItems } from '@/shared/models/empire/PlanetActiveItems';
+import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
 
 // basic planet/moon data
@@ -71,6 +74,26 @@ export type UpdatePlanetProductionSettingsMessage = Message<MessageType.UpdatePl
 // player and universe name
 export type UpdatePlayerNameMessage = Message<MessageType.UpdatePlayerName, string>;
 export type UpdateUniverseNameMessage = Message<MessageType.UpdateUniverseName, string>;
+
+
+// lifeforms
+export type UpdateSelectedLifeformMessage = Message<MessageType.UpdateSelectedLifeform, PlanetDataWrapper<LifeformType>>;
+
+type LifeformExperience = Partial<Record<LifeformType, number>>;
+export type UpdateLifeformExperienceMessage = Message<MessageType.UpdateLifeformExperience, LifeformExperience>;
+
+type PlanetActiveLifeformBuildingLevels = Partial<Record<LifeformBuildingType, number>>;
+export type UpdatePlanetActiveLifeformBuildingLevelsMessage = Message<MessageType.UpdatePlanetActiveLifeformBuildingLevels, PlanetDataWrapper<PlanetActiveLifeformBuildingLevels>>;
+
+type PlanetLifeformBuildingLevels = Record<LifeformBuildingType, number>;
+export type UpdatePlanetLifeformBuildingLevelsMessage = Message<MessageType.UpdatePlanetLifeformBuildingLevels, PlanetDataWrapper<PlanetLifeformBuildingLevels>>;
+
+type PlanetActiveLifeformTechnologyLevels = Partial<Record<LifeformTechnologyType, number>>;
+export type UpdatePlanetActiveLifeformTechnologyLevelsMessage = Message<MessageType.UpdatePlanetActiveLifeformTechnologyLevels, PlanetDataWrapper<PlanetActiveLifeformTechnologyLevels>>;
+
+type PlanetLifeformTechnologyLevels = Record<LifeformTechnologyType, number>;
+export type UpdatePlanetLifeformTechnologyLevelsMessage = Message<MessageType.UpdatePlanetLifeformTechnologyLevels, PlanetDataWrapper<PlanetLifeformTechnologyLevels>>;
+
 
 
 // notifications

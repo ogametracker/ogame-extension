@@ -35,6 +35,7 @@ import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
+import viewsempireLifeforms from '@stats/views/empire/Lifeforms.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -72,6 +73,7 @@ import viewsresourcebalanceIndex from '@stats/views/resource-balance/Index.vue';
 import viewsresourcebalanceChart from '@stats/views/resource-balance/Chart.vue';
 import viewsresourcebalanceTable from '@stats/views/resource-balance/Table.vue';
 import viewssettingsIndex from '@stats/views/settings/Index.vue';
+import viewssettingsAccessibility from '@stats/views/settings/Accessibility.vue';
 import viewssettingsColors from '@stats/views/settings/Colors.vue';
 import viewssettingsCombats from '@stats/views/settings/Combats.vue';
 import viewssettingsCommon from '@stats/views/settings/Common.vue';
@@ -377,6 +379,11 @@ const routes: RouteConfig[] = [
                         component: viewsempireAmortization
                     },
                     {
+                        path: "lifeforms",
+                        name: "empire/lifeforms",
+                        component: viewsempireLifeforms
+                    },
+                    {
                         redirect: {
                             name: "empire/production/resources"
                         },
@@ -648,6 +655,11 @@ const routes: RouteConfig[] = [
                 name: "settings",
                 component: viewssettingsIndex,
                 children: [
+                    {
+                        path: "accessibility",
+                        name: "settings/accessibility",
+                        component: viewssettingsAccessibility
+                    },
                     {
                         path: "colors",
                         name: "settings/colors",

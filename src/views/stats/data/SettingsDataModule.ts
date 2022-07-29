@@ -9,6 +9,7 @@ import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getGlobalDatabase } from '@/shared/db/access';
 import { LanguageKey } from '@/shared/i18n/LanguageKey';
 import { loadSettings } from '@/shared/models/settings/loadSettings';
+import { getLanguage } from '@/shared/i18n/getLanguage';
 
 @Component
 class SettingsDataModuleClass extends Vue {
@@ -50,7 +51,8 @@ class SettingsDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        this.settings = await loadSettings(GlobalOgameMetaData.language as LanguageKey);
+        const languageKey = getLanguage(GlobalOgameMetaData.language) ?? LanguageKey.en;
+        this.settings = await loadSettings(languageKey);
 
         this._resolveReady();
     }

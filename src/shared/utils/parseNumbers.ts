@@ -1,4 +1,4 @@
-export function parseIntSafe(text: string, radix: number): number {
+export function parseIntSafe(text: string, radix = 10): number {
     const value = parseInt(text, radix);
     if(isNaN(value)) {
         throw new Error(`'${text}' is not a valid integer value`);

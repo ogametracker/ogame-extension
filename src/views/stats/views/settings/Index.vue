@@ -15,6 +15,10 @@
                     to: { name: 'settings/common' },
                 },
                 {
+                    label: this.$i18n.$t.settings.tabs.accessbility,
+                    to: { name: 'settings/accessibility' },
+                },
+                {
                     label: this.$i18n.$t.settings.tabs.dateRanges,
                     to: { name: 'settings/date-ranges' },
                 },

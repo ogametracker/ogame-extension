@@ -5,7 +5,7 @@
 
             <template v-if="hasLoot">
                 <hr />
-                <div class="resources-grid">
+                <div class="resources-grid" v-if="showSimplified">
                     <o-resource resource="metal" />
                     <span
                         :class="{
@@ -42,6 +42,43 @@
                         v-text="$i18n.$n(sum)"
                     />
                 </div>
+                <div v-else>
+                    <span v-text="$i18n.$t.resources[ResourceType.metal]" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.metal < 0,
+                            fade: notification.resources.metal == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.metal)"
+                    />
+
+                    <span v-text="$i18n.$t.resources[ResourceType.crystal]" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.crystal < 0,
+                            fade: notification.resources.crystal == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.crystal)"
+                    />
+
+                    <span v-text="$i18n.$t.resources[ResourceType.deuterium]" />
+                    <span
+                        :class="{
+                            'negative-loot': notification.resources.deuterium < 0,
+                            fade: notification.resources.deuterium == 0,
+                        }"
+                        v-text="$i18n.$n(notification.resources.deuterium)"
+                    />
+
+                    <span v-text="$i18n.$t.common.sum" />
+                    <span
+                        :class="{
+                            'negative-loot': sum < 0,
+                            fade: sum == 0,
+                        }"
+                        v-text="$i18n.$n(sum)"
+                    />
+                </div>
             </template>
         </template>
     </notification>
@@ -49,6 +86,8 @@
 
 <script lang="ts">
     import { CombatTrackingNotificationMessageData } from '@/shared/messages/notifications';
+import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
 
@@ -60,6 +99,12 @@
     export default class CombatTrackingNotification extends Vue {
         @Prop({ required: true, type: Object })
         private notification!: CombatTrackingNotificationMessageData;
+
+        private readonly ResourceType = ResourceType;
+
+        private get showSimplified() {
+            return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
+        }
 
         private get title() {
             return this.$i18n.$t.notifications.combatTracking.title(this.$i18n.$n(this.notification.count));
@@ -95,7 +140,7 @@
         row-gap: 4px;
         column-gap: 8px;
         align-items: center;
-        
+
         .mdi {
             transform: scale(1.5);
             width: 24px;
@@ -103,8 +148,17 @@
             height: 20px;
         }
 
-        .mdi, .o-resource {
+        .mdi,
+        .o-resource {
             justify-self: center;
         }
+    }
+
+    .text-grid {
+        display: grid;
+        grid-template-columns: auto fr;
+        row-gap: 4px;
+        column-gap: 8px;
+        align-items: center;
     }
 </style>

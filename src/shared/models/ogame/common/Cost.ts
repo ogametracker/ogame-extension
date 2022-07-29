@@ -31,6 +31,15 @@ export function multiplyCost(cost: Cost, factor: number): Cost {
         energy: cost.energy * factor,
     };
 }
+export function multiplyCostInt(cost: Cost, factor: number): Cost {
+    const newCost = multiplyCost(cost, factor);
+    return {
+        metal: Math.round(newCost.metal),
+        crystal: Math.round(newCost.crystal),
+        deuterium: Math.round(newCost.deuterium),
+        energy: Math.round(newCost.energy),
+    };
+}
 
 export function multiplyCostComponentWise(cost: Cost, factors: Cost): Cost {
     return {

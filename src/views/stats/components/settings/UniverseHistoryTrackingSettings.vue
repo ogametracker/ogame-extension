@@ -1,9 +1,6 @@
 <template>
     <div class="universe-history-tracking">
-        <div
-            v-if="!settings.enabled"
-            v-html="$i18n.$t.universeHistory.settings.messages.notEnabledHtml"
-        />
+        <div v-if="!settings.enabled" v-html="$i18n.$t.universeHistory.settings.messages.notEnabledHtml" />
 
         <checkbox-button
             :value="settings.enabled"
@@ -14,10 +11,7 @@
 
         <hr />
 
-        <div
-            v-if="settings.enabled && !settings.trackHistory"
-            v-html="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabledHtml"
-        />
+        <div v-if="settings.enabled && !settings.trackHistory" v-html="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
         <checkbox-button
             v-if="settings.enabled"
             :value="settings.trackHistory"
@@ -43,7 +37,8 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
+    import { getLanguage } from '@/shared/i18n/getLanguage';
+import { LanguageKey } from '@/shared/i18n/LanguageKey';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -98,7 +93,8 @@
             }
 
             if (updateTimes.length == 0) {
-                updateTimes = getDefaultSettings(GlobalOgameMetaData.language as LanguageKey).universeHistory.updateTimes;
+                const languageKey = getLanguage(GlobalOgameMetaData.language) ?? LanguageKey.en;
+                updateTimes = getDefaultSettings(languageKey).universeHistory.updateTimes;
             }
 
             SettingsDataModule.updateSettings({

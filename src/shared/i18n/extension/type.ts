@@ -1,4 +1,8 @@
 import { BuildingTranslations } from '../ogame/buildings/types';
+import { LifeformBuildingsTranslations } from '../ogame/lifeforms/buildings/types';
+import { LifeformTechnologiesTranslations } from '../ogame/lifeforms/technologies/types';
+import { LifeformTranslations } from '../ogame/lifeforms/types';
+import { PremiumTranslations } from '../ogame/premium/types';
 import { ResearchTranslations } from '../ogame/research/types';
 import { ShipTranslations } from '../ogame/ships/types';
 import { AboutTranslations } from './about/type';
@@ -19,6 +23,10 @@ export interface ExtensionTranslations {
     ships: ShipTranslations;
     buildings: BuildingTranslations;
     research: ResearchTranslations;
+    lifeforms: LifeformTranslations;
+    lifeformBuildings: LifeformBuildingsTranslations;
+    lifeformTechnologies: LifeformTechnologiesTranslations;
+    premium: PremiumTranslations;
 
     common: CommonTranslations;
     settings: SettingsTranslations;

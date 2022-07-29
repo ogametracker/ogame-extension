@@ -39,7 +39,7 @@ interface ServerWreckfieldSettings {
 
 interface ServerFleetSettings {
     deuteriumConsumptionFactor: number;
-    isProbeCargoEnabled: boolean;
+    espionageProbeCargo: number;
     hyperspaceCargoPercentageFactor: number;
 }
 
