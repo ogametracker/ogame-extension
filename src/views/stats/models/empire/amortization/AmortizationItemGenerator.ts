@@ -645,7 +645,7 @@ export class AmortizationItemGenerator {
 
                 case 'astrophysics-and-colony': {
                     newPlanets++;
-                    
+
                     const newAstroLevel = bestItem.levels.reduce((max, cur) => Math.max(max, cur), 0);
                     this.#state.research[ResearchType.astrophysics] = newAstroLevel;
 
@@ -873,7 +873,11 @@ export class AmortizationItemGenerator {
             ].map(tech => this.#getLifeformTechnologyItem(this.#state.productionBreakdowns, planet, tech))
         );
     }
-    #getLifeformTechnologyItem(productionBreakdowns: EmpireProductionBreakdowns, planetState: AmortizationPlanetState, technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology): LifeformTechnologyAmortizationItem {
+    #getLifeformTechnologyItem(
+        productionBreakdowns: EmpireProductionBreakdowns,
+        planetState: AmortizationPlanetState,
+        technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology,
+    ): LifeformTechnologyAmortizationItem {
         const planetData = planetState.data;
         const planetId = planetData.id;
         const newLevel = planetData.lifeformTechnologies[technology.type] + 1;
@@ -1494,7 +1498,6 @@ export class AmortizationItemGenerator {
 
 
 
-        const planetStates = Object.values(this.#state.planets);
         const localPlanetStates: Record<number, {
             id: number;
             lifeformTechnologyLevels: Record<LifeformTechnologyType, number>;
@@ -1515,6 +1518,7 @@ export class AmortizationItemGenerator {
             }, 0);
         };
 
+        const planetStates = this.#planets;
         planetStates.forEach(planetState => {
             localPlanetStates[planetState.data.id] = {
                 id: planetState.data.id,
