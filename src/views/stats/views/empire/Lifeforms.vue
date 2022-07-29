@@ -7,11 +7,12 @@
         </template>
 
         <template #cell-lifeform="{ value }">
-            <o-lifeform :lifeform="value.type" size="48px" />
+            <o-lifeform :lifeform="value.type" size="64px" />
             <div class="level-list">
-                <span v-text="`LOCA: Level ${value.level}`" />
-                <span v-text="`LOCA: Experience ${$i18n.$n(value.levelExperience)}`" />
-                <span v-text="`LOCA: Total Experience ${$i18n.$n(value.totalExperience)}`" />
+                <span v-text="$i18n.$t.lifeforms[value.type]" :class="value.type" />
+                <span v-text="`${$i18n.$t.empire.lifeforms.lifeformLevel}: ${value.level}`" />
+                <span v-text="`${$i18n.$t.empire.lifeforms.lifeformExperience}: ${$i18n.$n(value.levelExperience)}/${$i18n.$n(value.totalLevelExperience)}`" />
+                <span v-text="`${$i18n.$t.empire.lifeforms.totalLifeformExperience}: ${$i18n.$n(value.totalExperience)}`" />
             </div>
         </template>
 
@@ -27,7 +28,13 @@
         <template #cell-lifeformTechsTier1="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
+                    <o-lifeform-technology
+                        v-if="tech != null"
+                        :key="`icon-${i}`"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                        size="40px"
+                    />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -36,7 +43,13 @@
         <template #cell-lifeformTechsTier2="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
+                    <o-lifeform-technology
+                        v-if="tech != null"
+                        :key="`icon-${i}`"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                        size="40px"
+                    />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -45,7 +58,13 @@
         <template #cell-lifeformTechsTier3="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" size="40px" />
+                    <o-lifeform-technology
+                        v-if="tech != null"
+                        :key="`icon-${i}`"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                        size="40px"
+                    />
                     <span v-else :key="`icon-${i}`" />
                 </template>
                 <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
@@ -74,6 +93,7 @@
             type: LifeformType;
             level: number;
             levelExperience: number;
+            totalLevelExperience: number;
             totalExperience: number;
         };
         buildings: LifeformBuildingType[];
@@ -92,12 +112,12 @@
             return [
                 {
                     key: 'planet',
-                    label: 'LOCA: Planet',
+                    label: this.$i18n.$t.empire.lifeforms.planet,
                     size: '200px',
                 },
                 {
                     key: 'lifeform',
-                    label: 'LOCA: Lifeform',
+                    label: this.$i18n.$t.empire.lifeforms.lifeform,
                     size: '1fr',
                     style: {
                         'justify-items': 'start',
@@ -107,7 +127,7 @@
                 },
                 {
                     key: 'buildings',
-                    label: 'LOCA: Buildings',
+                    label: this.$i18n.$t.empire.lifeforms.buildings,
                     size: '1fr',
                     style: {
                         'justify-items': 'start',
@@ -116,7 +136,7 @@
                 },
                 {
                     key: 'lifeformTechsTier1',
-                    label: 'LOCA: Techs (Tier 1)',
+                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 1)`,
                     size: '276px',
                     style: {
                         'justify-items': 'start',
@@ -125,7 +145,7 @@
                 },
                 {
                     key: 'lifeformTechsTier2',
-                    label: 'LOCA: Techs (Tier 2)',
+                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 2)`,
                     size: '276px',
                     style: {
                         'justify-items': 'start',
@@ -134,7 +154,7 @@
                 },
                 {
                     key: 'lifeformTechsTier3',
-                    label: 'LOCA: Techs (Tier 3)',
+                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 3)`,
                     size: '276px',
                     style: {
                         'justify-items': 'start',
@@ -165,7 +185,8 @@
                     lifeform: {
                         type: planet.activeLifeform,
                         level: lfLevel,
-                        levelExperience: lfExp - getLifeformExperienceNeededForLevel(lfLevel),
+                        levelExperience: Math.max(0, lfExp - getLifeformExperienceNeededForLevel(lfLevel)),
+                        totalLevelExperience: getLifeformExperienceNeededForLevel(lfLevel + 1) - getLifeformExperienceNeededForLevel(lfLevel),
                         totalExperience: lfExp,
                     },
                     buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
@@ -238,5 +259,22 @@
                 }
             }
         }
+    }
+
+    .humans {
+        color: #7ec000;
+        font-weight: bold;
+    }
+    .rocktal {
+        color: #df6642;
+        font-weight: bold;
+    }
+    .mechas {
+        color: #4b91e7;
+        font-weight: bold;
+    }
+    .kaelesh {
+        color: #9863e9;
+        font-weight: bold;
     }
 </style>

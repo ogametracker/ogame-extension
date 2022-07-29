@@ -82,4 +82,16 @@ export interface EmpireTranslations {
             };
         };
     };
+    lifeforms: {
+        header: string;
+
+        planet: string;
+        lifeform: string;
+        buildings: string;
+        technologies: string;
+        tier: string;
+        lifeformLevel: string;
+        lifeformExperience: string;
+        totalLifeformExperience: string;
+    };
 }

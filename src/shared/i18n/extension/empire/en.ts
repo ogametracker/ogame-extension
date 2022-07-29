@@ -84,4 +84,16 @@ export const en: EmpireTranslations = {
             },
         },
     },
+    lifeforms: {
+        header: 'Lifeforms',
+
+        planet: 'Planet',
+        lifeform: 'Lifeform',
+        buildings: 'Lifeform Buildings',
+        technologies: 'Lifeform Technologies',
+        tier: 'Tier',
+        lifeformLevel: 'Level',
+        lifeformExperience: 'Experience',
+        totalLifeformExperience: 'Experience (total)',
+    },
 };

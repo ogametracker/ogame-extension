@@ -31,7 +31,7 @@
                     to: { name: 'empire/amortization' },
                 },
                 {
-                    label: 'LOCA: lifeforms',
+                    label: this.$i18n.$t.empire.lifeforms.header,
                     to: { name: 'empire/lifeforms' },
                 },
             ];
