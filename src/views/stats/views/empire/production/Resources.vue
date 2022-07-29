@@ -983,6 +983,7 @@
         grid-template-columns: 1fr auto auto;
         justify-items: end;
         column-gap: 8px;
+        align-self: start;
     }
 
     .production-settings-mini-table {
