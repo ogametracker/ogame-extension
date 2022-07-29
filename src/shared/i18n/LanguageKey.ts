@@ -6,4 +6,5 @@ export enum LanguageKey {
     hr = 'hr', // hungarian
     si = 'si', // slovenian
     pt = 'pt', // portuguese
+    it = 'it', // italian
 }
