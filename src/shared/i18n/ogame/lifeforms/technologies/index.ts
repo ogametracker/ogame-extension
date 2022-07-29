@@ -6,6 +6,7 @@ import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
 import { pt } from './pt';
+import { it } from './it';
 import { LifeformTechnologiesTranslations } from './types';
 
 const translations: Record<LanguageKey, LifeformTechnologiesTranslations> = {
@@ -14,6 +15,7 @@ const translations: Record<LanguageKey, LifeformTechnologiesTranslations> = {
     dk,
     cz,
     hr,
+    it,
     pt,
     si,
 };
