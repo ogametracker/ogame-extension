@@ -44,6 +44,8 @@ export const en: EmpireTranslations = {
             productionPlus: 'Production Plus',
             productionPlusMsu: 'Production Plus (MSE)',
             amortizationTime: 'Amortization Time',
+
+            levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
         },
 
         settings: {
@@ -57,6 +59,8 @@ export const en: EmpireTranslations = {
                 allianceClass: 'Alliance Class',
                 currentLevelPlasmatech: 'Current Level of Plasmatechnology',
                 currentLevelAstrophysics: 'Current Level of Astrophysics',
+
+                unusedRaidColonySlots: 'Currently unused raid colony slots',
             },
             astrophysicsSettings: {
                 header: 'Astrophysics Settings',
@@ -71,6 +75,7 @@ export const en: EmpireTranslations = {
                 header: 'Planet Settings',
 
                 showInResult: 'Show in result',
+                ignore: 'Ignore for calulation',
                 position: 'Position',
                 maxTemperature: 'Max. Temperature',
                 activeItems: 'Active Items',
@@ -81,7 +86,19 @@ export const en: EmpireTranslations = {
                     maxCount: 'Max. Count',
                 },
                 mines: 'Current Mine Levels',
+
+                lifeform: 'Lifeform',
+                lifeformSettings: 'Lifeform settings',
+                relevantLifeformBuildings: 'Relevant Lifeform Buildings',
+                lifeformTechnologies: 'Lifeform Technologies',
             },
+        },
+
+        info: {
+            generatingItems: 'Calculation next best items',
+
+            slowCalculation: 'The amortization calculation became pretty slow now that it includes lifeform buildings and technologies. This will hopefully be improved in the future.',
+            ctrlClick: 'Ctrl + Click on a check to (de)select all items up to the selected one.',
         },
     },
     lifeforms: {

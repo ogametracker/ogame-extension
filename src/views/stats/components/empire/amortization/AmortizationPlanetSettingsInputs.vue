@@ -12,7 +12,7 @@
                 <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.showInResult" />
                 <checkbox v-model="settings.show" />
 
-                <span v-text="'LOCA: Is raidkolo? Will be ignored for amortisation calculation'" />
+                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.ignore" />
                 <checkbox v-model="settings.ignore" />
             </template>
 
@@ -93,7 +93,7 @@
                 </span>
             </template>
 
-            <span v-text="'LOCA: Lifeform'" />
+            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeform" />
             <span class="lifeform-grid">
                 <o-lifeform
                     v-for="lifeform in lifeforms"
@@ -106,12 +106,15 @@
 
             <span />
             <span>
-                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" v-text="'LOCA: Show/hide lifeform settings'" />
+                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings">
+                    <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
+                    <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeformSettings" />
+                </button>
             </span>
 
             <template v-if="showLifeformSettings">
                 <template v-if="settings.lifeformTechnologyLevels != null">
-                    <span v-text="'LOCA: Relevant Lifeform Buildings'" />
+                    <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
                         <template v-for="building in applicableLifeformBuildings">
                             <o-lifeform-building :key="`${building}-icon`" :building="building" />
@@ -120,7 +123,7 @@
                     </span>
                 </template>
 
-                <span v-text="'LOCA: Lifeform Technologies'" />
+                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeformTechnologies" />
                 <span>
                     <span class="lifeform-tech-grid">
                         <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">

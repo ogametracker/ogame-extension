@@ -42,6 +42,8 @@ export interface EmpireTranslations {
             productionPlus: string;
             productionPlusMsu: string;
             amortizationTime: string;
+
+            levelsOnPlanets: (levels: number, planets: number) => string;
         };
 
         settings: {
@@ -55,6 +57,8 @@ export interface EmpireTranslations {
                 allianceClass: string;
                 currentLevelPlasmatech: string;
                 currentLevelAstrophysics: string;
+
+                unusedRaidColonySlots: string;
             };
             astrophysicsSettings: {
                 header: string;
@@ -69,6 +73,7 @@ export interface EmpireTranslations {
                 header: string;
 
                 showInResult: string;
+                ignore: string;
                 position: string;
                 maxTemperature: string;
                 activeItems: string;
@@ -79,7 +84,19 @@ export interface EmpireTranslations {
                     maxCount: string;
                 };
                 mines: string;
+
+                lifeform: string;
+                lifeformSettings: string;
+                relevantLifeformBuildings: string;
+                lifeformTechnologies: string;
             };
+        };
+
+        info: {
+            generatingItems: string;
+
+            slowCalculation: string;
+            ctrlClick: string;
         };
     };
     lifeforms: {

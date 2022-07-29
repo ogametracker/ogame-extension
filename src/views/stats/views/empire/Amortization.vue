@@ -13,7 +13,10 @@
                     </button>
 
                     <div class="generating-count">
-                        <span v-if="generatingItemCount != null" v-text="`LOCA: Generating items: ${generatingItemCount.count}/${generatingItemCount.total}`" />
+                        <span
+                            v-if="generatingItemCount != null"
+                            v-text="`${$i18n.$t.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
+                        />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -24,12 +27,8 @@
                         </template>
 
                         <div class="infos">
-                            <span
-                                v-text="
-                                    'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
-                                "
-                            />
-                            <span v-text="'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'" />
+                            <span v-text="$i18n.$t.empire.amortization.info.slowCalculation" />
+                            <span v-text="$i18n.$t.empire.amortization.info.ctrlClick" />
                         </div>
                     </floating-menu>
 
@@ -53,7 +52,7 @@
                     <div class="flex-settings">
                         <div>
                             <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
-                            <amortization-player-settings-inputs v-model="playerSettings" :raidColonies="numberOfRaidColonies" />
+                            <amortization-player-settings-inputs v-model="playerSettings" />
                         </div>
 
                         <div>
@@ -198,7 +197,10 @@
                                         <i v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]" />
                                         <i
                                             v-text="
-                                                `LOCA: ${additionalLifeformStuffGroup.totalLevels} level(s) on ${additionalLifeformStuffGroup.planetIds.size} planet(s)`
+                                                $i18n.$t.empire.amortization.table.levelsOnPlanets(
+                                                    additionalLifeformStuffGroup.totalLevels,
+                                                    additionalLifeformStuffGroup.planetIds.size
+                                                )
                                             "
                                         />
                                     </span>
@@ -473,10 +475,6 @@
 
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
-        }
-
-        private get numberOfRaidColonies() {
-            return this.planetSettingsSorted.reduce((total, planet) => total + (planet.ignore ? 1 : 0), 0);
         }
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
