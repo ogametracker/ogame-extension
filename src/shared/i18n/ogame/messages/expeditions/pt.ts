@@ -142,9 +142,11 @@ export const pt: ExpeditionMessages = {
     },
 
     /*TODO: pt: depletionMessages: {
-        ?: 'Parece que esta parte do universo ainda não foi explorada.',
-        ?: 'É estranho saber que somos os primeiros a entrar neste sector.',
-        
+        0?: 'Parece que esta parte do universo ainda não foi explorada.',
+        1?: 'É estranho saber que somos os primeiros a entrar neste sector.',
+        2?: 'Encontramos os destroços de algumas naves antigas. Não somos os primeiros neste quadrante.',
+        3?: 'Quase que chocamos contra uma outra frota em expedição. Pensei que não iríamos encontrar mais ninguém por aqui.',
+
         regex: /Entrada do diário dos Engenheiros de Comunicações: (?<message>.+)/,
     }*/
 };
