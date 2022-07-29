@@ -17,11 +17,7 @@
                             'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
                         "
                     />
-                    <span
-                        v-text="
-                            'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'
-                        "
-                    />
+                    <span v-text="'LOCA: Ctrl + Click on checkbox selects all items up tp the selected one'" />
                 </div>
 
                 <floating-menu v-model="showSettingsMenu" left>
@@ -203,9 +199,13 @@
                                     }"
                                 >
                                     <div v-for="(additionalLifeformStuff, i) in additionalLifeformStuffGroup.items" :key="i" style="display: contents">
-                                        <span class="planet">
+                                        <span v-if="additionalLifeformStuff.planetId > 0" class="planet">
                                             <span v-text="empire.planets[additionalLifeformStuff.planetId].name" />
                                             <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
+                                        </span>
+                                        <span v-else class="planet">
+                                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                                            <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                                         </span>
 
                                         <o-lifeform-building
@@ -235,11 +235,6 @@
                             </span>
                         </div>
                         <div v-else-if="item.type == 'astrophysics-and-colony'" class="what-cell what-cell--colony">
-                            <span class="planet">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
-                                <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
-                            </span>
-
                             <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" />
                             <span class="name-and-level">
                                 <span v-text="buildableTranslations['astrophysics-colony']" />
@@ -249,35 +244,40 @@
                                 <span v-else v-text="`${item.levels[0]} + ${item.levels[1]}`" />
                             </span>
 
+                            <span class="planet">
+                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
+                                <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                            </span>
+
                             <span class="colony-mines" style="display: contents">
                                 <template v-for="building in mineBuildingTypes">
-                                    <template v-if="item.builtLevels.mineLevels[building] > 0">
-                                        <o-building :key="`${building}-icon`" :building="building" size="36px" />
+                                    <template v-if="item.builtLevels.mines[building] > 0">
+                                        <o-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                         <span :key="`${building}-name-level`" class="name-and-level">
                                             <span v-text="buildableTranslations[building]" />
-                                            <span v-text="`0 - ${item.builtLevels.mineLevels[building]}`" />
+                                            <span v-text="`0 - ${item.builtLevels.mines[building]}`" />
                                         </span>
                                     </template>
                                 </template>
                             </span>
                             <span class="colony-lifeform-buildings" style="display: contents">
                                 <template v-for="building in applicableLifeformBuildingTypes">
-                                    <template v-if="item.builtLevels.lifeformBuildingLevels[building] > 0">
-                                        <o-lifeform-building :key="`${building}-icon`" :building="building" size="36px" />
+                                    <template v-if="item.builtLevels.lifeformBuildings[building] > 0">
+                                        <o-lifeform-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                         <span :key="`${building}-name-level`" class="name-and-level">
                                             <span v-text="buildableTranslations[building]" />
-                                            <span v-text="`0 - ${item.builtLevels.lifeformBuildingLevels[building]}`" />
+                                            <span v-text="`0 - ${item.builtLevels.lifeformBuildings[building]}`" />
                                         </span>
                                     </template>
                                 </template>
                             </span>
                             <span class="colony-lifeform-technologies" style="display: contents">
                                 <template v-for="tech in applicableLifeformTechnologyTypes">
-                                    <template v-if="item.builtLevels.lifeformTechnologyLevels[tech] > 0">
-                                        <o-lifeform-technology :key="`${tech}-icon`" :technology="tech" size="36px" />
+                                    <template v-if="item.builtLevels.lifeformTechnologies[tech] > 0">
+                                        <o-lifeform-technology :key="`${tech}-icon`" :technology="tech" size="36px" style="grid-column: 2" />
                                         <span :key="`${tech}-name-level`" class="name-and-level">
                                             <span v-text="buildableTranslations[tech]" />
-                                            <span v-text="`0 - ${item.builtLevels.lifeformTechnologyLevels[tech]}`" />
+                                            <span v-text="`0 - ${item.builtLevels.lifeformTechnologies[tech]}`" />
                                         </span>
                                     </template>
                                 </template>
@@ -346,15 +346,16 @@
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { LifeformBuildingType, LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '../../models/empire/amortization/AmortizationPlanetSettings';
     import { AmortizationPlayerSettings } from '../../models/empire/amortization/AmortizationPlayerSettings';
     import { AmortizationAstrophysicsSettings } from '../../models/empire/amortization/AmortizationAstrophysicsSettings';
-    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels } from '@stats/models/empire/amortization/models';
+    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@stats/models/empire/amortization/models';
     import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
+    import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -379,6 +380,18 @@
         private showSettingsMenu = false;
         private readonly BuildingType = BuildingType;
         private readonly ResearchType = ResearchType;
+        private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
+
+        private readonly applicableBuildingTypes = [
+            ...ResourceProductionBonusLifeformBuildings,
+            ...LifeformTechnologyBonusLifeformBuildings,
+        ].map(b => b.type);
+
+        private get applicableLifeformBuildingTypes(): LifeformBuildingType[] {
+            const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.planet.lifeform];
+            return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
+        }
+        private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
 
         /**********************************/
         /* START amortization calculation */

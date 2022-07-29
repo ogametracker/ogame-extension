@@ -53,6 +53,8 @@ export interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
     levels: number[];
     newPlanetId: number;
 
+    builtLevels: AstrophysicsAmortizationLevels;
+
     planetState: AmortizationPlanetState;
     newPlanetProductionStates: Record<ResourceType, EmpireProductionPlanetState>;
 }
