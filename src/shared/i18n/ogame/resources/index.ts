@@ -6,15 +6,17 @@ import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
 import { pt } from './pt';
+import { it } from './it';
 import { ResourceTranslations } from "./types";
 
 const translations: Record<LanguageKey, ResourceTranslations> = {
-    de,
-    en,
-    dk,
     cz,
+    de,
+    dk,
+    en,
     hr,
-    si,
+    it,
     pt,
+    si,
 };
 export default translations;
