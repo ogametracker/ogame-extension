@@ -5,6 +5,7 @@ import { dk } from './dk';
 import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
+import { pt } from './pt';
 import { LifeformTechnologiesTranslations } from './types';
 
 const translations: Record<LanguageKey, LifeformTechnologiesTranslations> = {
@@ -13,6 +14,7 @@ const translations: Record<LanguageKey, LifeformTechnologiesTranslations> = {
     dk,
     cz,
     hr,
+    pt,
     si,
 };
 export default translations;
