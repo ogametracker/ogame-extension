@@ -12,6 +12,7 @@
                 </button>
 
                 <div>
+                    <span v-if="generatingItemCount != null" v-text="`LOCA: Generating items: ${generatingItemCount.count}/${generatingItemCount.total}`" />
                     <span
                         v-text="
                             'LOCA: Amortization calculation is pretty slow now that it includes lifeform buildings and technologies. This will be optimized, but may later still be relatively slow.'
@@ -204,7 +205,7 @@
                                             <span v-text="formatCoordinates(empire.planets[additionalLifeformStuff.planetId].coordinates)" />
                                         </span>
                                         <span v-else class="planet">
-                                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                                            <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-additionalLifeformStuff.planetId}`" />
                                             <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                                         </span>
 
@@ -358,6 +359,7 @@
     import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@stats/models/empire/amortization/models';
     import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { delay } from '@/shared/utils/delay';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -446,6 +448,8 @@
         private amortizationItems: AmortizationItem[] = [];
         private selectedItemIndizes: number[] = [];
 
+        private generatingItemCount: { total: number; count: number } | null = null;
+
         private get msuConversionRates() {
             return SettingsDataModule.settings.msuConversionRates;
         }
@@ -466,7 +470,8 @@
         private toggleSettings() {
             if (!this.showSettings) {
                 this.showSettings = true;
-            } else {
+            }
+            else {
                 this.showSettings = false;
                 this.initItems();
                 this.selectedItemIndizes = [];
@@ -491,7 +496,10 @@
             this.amortizationItems = [];
         }
 
-        private insertNextAmortizationItems(count: number): void {
+        private async insertNextAmortizationItems(count: number): Promise<void> {
+            this.generatingItemCount = { total: count, count: 0 };
+            await this.$nextTick();
+
             while (count > 0) {
                 const next = this.generator.nextItem();
 
@@ -501,7 +509,13 @@
 
                 this.amortizationItems.push(next);
                 count--;
+
+                this.generatingItemCount.count++;
+                await this.$nextTick();
+                await delay(10);
             }
+
+            this.generatingItemCount = null;
         }
 
         private initSettings() {
@@ -649,14 +663,12 @@
         @Watch('items')
         private onItemsChanged() {
             if (this.items.length < 25) {
-                console.log('items changed');
                 this.setTimeout(() => this.insertNextAmortizationItems(25 - this.items.length));
             }
         }
 
         private onTableScroll(event: GridTableScrollEvent): void {
             if (event.y.max - event.y.current < 50) {
-                console.log('table scroll');
                 this.setTimeout(() => this.insertNextAmortizationItems(10));
             }
         }
