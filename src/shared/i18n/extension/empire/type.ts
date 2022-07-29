@@ -18,6 +18,20 @@ export interface EmpireTranslations {
             crawlersAvailable: string;
         };
         items: string;
+        breakdown: {
+            basicIncome: string;
+            mineProduction: string;
+            consumption: string;
+            lifeformBuildings: string;
+            crawlers: string;
+            plasmaTechnology: string;
+            items: string;
+            geologist: string;
+            commandStaff: string;
+            playerClass: string;
+            allianceClass: string;
+            lifeformTechnologies: string;
+        };
     };
     amortization: {
         header: string;

@@ -69,19 +69,19 @@
 
             <template #cell-breakdown="{ item }">
                 <div v-if="showBreakdown[item.planet.id]" class="breakdown-list">
-                    <div v-text="'LOCA: Basic Income'" />
-                    <div v-text="'LOCA: Mine'" />
-                    <div v-text="'LOCA: Consumption'" />
-                    <div v-text="'LOCA: Lifeform Buildings'" />
-                    <div v-text="'LOCA: Crawlers'" />
-                    <div v-text="'LOCA: Plasma Technology'" />
-                    <div v-text="'LOCA: Items'" />
-                    <div v-text="'LOCA: Geologist'" />
-                    <div v-text="'LOCA: Command Staff'" />
-                    <div v-text="'LOCA: Class'" />
-                    <div v-text="'LOCA: Alliance Class'" />
-                    <div v-text="'LOCA: Lifeform Technologies'" />
-                    <div class="breakdown-sum" v-text="'LOCA: Sum'" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.basicIncome" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.mineProduction" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.consumption" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.lifeformBuildings" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.crawlers" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.plasmaTechnology" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.items" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.geologist" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.commandStaff" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.playerClass" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.allianceClass" />
+                    <div v-text="$i18n.$t.empire.production.breakdown.lifeformTechnologies" />
+                    <div class="breakdown-sum" v-text="$i18n.$t.common.sum" />
                 </div>
             </template>
             <template #cell-metal="{ value, item }">
