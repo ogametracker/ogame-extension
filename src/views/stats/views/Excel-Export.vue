@@ -16,7 +16,7 @@
                     <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="'LOCA: Found resources per day'" />
                     <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="'LOCA: Sizes of resource findings per day'" />
 
-                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.aount" :label="'LOCA: Found ships per day'" />
+                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="'LOCA: Found ships per day'" />
                     <checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="'LOCA: Sizes of fleet findings per day'" />
 
                     <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="'LOCA: Found dark matter per day'" />
@@ -49,8 +49,10 @@
             </div>
         </div>
 
-        <button v-text="'LOCA: Generate Excel file'" @click="generateExport()" :disabled="isExporting" />
-        <loading-spinner v-if="isExporting" />
+        <div class="export-area">
+            <button v-text="'LOCA: Generate Excel file'" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
+            <loading-spinner v-if="isExporting" />
+        </div>
     </div>
 </template>
 
@@ -95,6 +97,19 @@
 
         private isExporting = false;
 
+        private get isAnyOptionSet() {
+            const isSet = (obj: Record<string, any>): boolean => {
+                return Object.values(obj).some(value => {
+                    if(typeof value === 'boolean') {
+                        return value;
+                    }
+                    return isSet(value);
+                });
+            }
+
+            return isSet(this.exportOptions);
+        }
+
 
         private async generateExport() {
             this.isExporting = true;
@@ -109,6 +124,12 @@
         display: flex;
         flex-direction: row;
         gap: 16px;
+    }
+
+    .export-area {
+        margin-top: 8px;
+        display: inline-flex;
+        flex-direction: column;
     }
 
     .fake-table {
@@ -133,7 +154,7 @@
             padding: 8px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: start;
         }
     }
 </style>

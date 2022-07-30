@@ -57,7 +57,7 @@ class ExcelExportClass {
         await this.#writeCombats(workbook, options.combats);
         await this.#writeDebrisFields(workbook, options.debrisFields);
 
-        await xlsx.writeFileAsync(filename, workbook, {});
+        xlsx.writeFile(workbook, filename);
     }
 
     async #writeDebrisFields(workbook: xlsx.WorkBook, options: ExcelExportOptions_DebrisFields) {
@@ -80,7 +80,7 @@ class ExcelExportClass {
             ]);
             const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
     
-            xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Combats - Daily Lost Ships');
+            xlsx.utils.book_append_sheet(workbook, sheet, 'DF - Daily Resources'); //LOCA:
         }
     }
     async #writeDebrisFields_rawData(workbook: xlsx.WorkBook) {
@@ -99,7 +99,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Raw Data');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'DF - Raw Data'); //LOCA:
     }
 
     async #writeCombats(workbook: xlsx.WorkBook, options: ExcelExportOptions_Combats) {
@@ -132,7 +132,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Combats - Daily Lost Ships');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'CR - Daily Lost Ships'); //LOCA:
     }
     #writeCombats_dailyLoot(workbook: xlsx.WorkBook) {
         const dailyResults = CombatReportDataModule.dailyResultsArray;
@@ -147,7 +147,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Combats - Daily Loot Balance');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'CR - Daily Loot'); //LOCA:
     }
     #writeCombats_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = CombatReportDataModule.dailyResultsArray;
@@ -164,7 +164,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Combats - Daily Results');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'CR - Daily Results'); //LOCA:
     }
     async #writeCombats_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
@@ -202,7 +202,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Combats - Raw Data');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'CR - Raw Data'); //LOCA:
     }
 
     async #writeExpeditions(workbook: xlsx.WorkBook, options: ExcelExportOptions_Expeditions) {
@@ -239,7 +239,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Daily Dark Matter Findings');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'EX - Daily Dark Matter'); //LOCA:
     }
     #writeExpeditions_dailyShips(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
@@ -254,7 +254,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Daily Fleet Findings');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'EX - Daily Fleet'); //LOCA:
     }
     #writeExpeditions_dailyResources(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
@@ -269,7 +269,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Daily Resource Findings');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'EX - Daily Resources'); //LOCA:
     }
     #writeExpeditions_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
@@ -284,7 +284,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Daily Results');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'EX - Daily Results'); //LOCA:
     }
     async #writeExpeditions_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
@@ -310,7 +310,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, 'LOCA: Expeditions - Raw Data');
+        xlsx.utils.book_append_sheet(workbook, sheet, 'EX - Raw Data'); //LOCA:
     }
 }
 
