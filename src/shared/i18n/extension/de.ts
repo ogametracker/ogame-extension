@@ -18,6 +18,8 @@ import { de as about } from './about/de';
 import { de as universeHistory } from './universeHistory/de';
 import { de as notifications } from './notifications/de';
 
+import { de as excelExport } from './excelExport/de';
+
 export const de: ExtensionTranslations = {
     ships,
     buildings,
@@ -37,4 +39,6 @@ export const de: ExtensionTranslations = {
     about,
     universeHistory,
     notifications,
+
+    excelExport,
 };
