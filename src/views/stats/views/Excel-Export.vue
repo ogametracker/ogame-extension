@@ -1,56 +1,56 @@
 <template>
     <div>
-        <h2 v-text="'LOCA: Excel Export'" />
-        <span v-text="'LOCA: Choose below what data you want to export:'" />
+        <h2 v-text="$i18n.$t.excelExport.header" />
+        <span v-text="$i18n.$t.excelExport.chooseBelowMessage" />
 
         <div class="export-settings">
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="'LOCA: Expeditions'" />
+                    <span v-text="$i18n.$t.excelExport.groups.expeditions.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.expeditions.rawData" :label="'LOCA: Raw Data (includes all tracked expedition data)'" />
+                    <checkbox v-model="exportOptions.expeditions.rawData" :label="$i18n.$t.excelExport.groups.expeditions.rawData" />
 
-                    <checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="'LOCA: Overview of results per day'" />
+                    <checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="$i18n.$t.excelExport.groups.expeditions.dailyOverview" />
 
-                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="'LOCA: Found resources per day'" />
-                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="'LOCA: Sizes of resource findings per day'" />
+                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="$i18n.$t.excelExport.groups.expeditions.dailyResources" />
+                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="$i18n.$t.excelExport.groups.expeditions.dailyResourceSizes" />
 
-                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="'LOCA: Found ships per day'" />
-                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="'LOCA: Sizes of fleet findings per day'" />
+                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="$i18n.$t.excelExport.groups.expeditions.dailyShips" />
+                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="$i18n.$t.excelExport.groups.expeditions.dailyShipSizes" />
 
-                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="'LOCA: Found dark matter per day'" />
-                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.sizes" :label="'LOCA: Sizes of dark matter findings per day'" />
+                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="$i18n.$t.excelExport.groups.expeditions.dailyDarkMatter" />
+                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.sizes" :label="$i18n.$t.excelExport.groups.expeditions.dailyDarkMatterSizes" />
                 </div>
             </div>
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="'LOCA: Combats'" />
+                    <span v-text="$i18n.$t.excelExport.groups.combats.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.combats.rawData" :label="'LOCA: Raw Data (includes all tracked combat data)'" />
+                    <checkbox v-model="exportOptions.combats.rawData" :label="$i18n.$t.excelExport.groups.combats.rawData" />
 
-                    <checkbox v-model="exportOptions.combats.overviewPerDay" :label="'LOCA: Combat results per day'" />
-                    <checkbox v-model="exportOptions.combats.lootBalancePerDay" :label="'LOCA: Loot balance per day'" />
-                    <checkbox v-model="exportOptions.combats.lostShipsPerDay" :label="'LOCA: Lost ships per day'" />
+                    <checkbox v-model="exportOptions.combats.overviewPerDay" :label="$i18n.$t.excelExport.groups.combats.dailyResults" />
+                    <checkbox v-model="exportOptions.combats.lootBalancePerDay" :label="$i18n.$t.excelExport.groups.combats.dailyLoot" />
+                    <checkbox v-model="exportOptions.combats.lostShipsPerDay" :label="$i18n.$t.excelExport.groups.combats.dailyLostShips" />
                 </div>
             </div>
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="'LOCA: Debris Fields'" />
+                    <span v-text="$i18n.$t.excelExport.groups.debrisFields.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.debrisFields.rawData" :label="'LOCA: Raw Data (includes all tracked debris field report data)'" />
+                    <checkbox v-model="exportOptions.debrisFields.rawData" :label="$i18n.$t.excelExport.groups.debrisFields.rawData" />
 
-                    <checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="'LOCA: Harvested resources per day'" />
+                    <checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="$i18n.$t.excelExport.groups.debrisFields.dailyResources" />
                 </div>
             </div>
         </div>
 
         <div class="export-area">
-            <button v-text="'LOCA: Generate Excel file'" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
+            <button v-text="$i18n.$t.excelExport.generateButton" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
             <loading-spinner v-if="isExporting" />
         </div>
     </div>
