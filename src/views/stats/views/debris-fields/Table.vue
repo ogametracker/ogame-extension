@@ -58,7 +58,7 @@
     })
     export default class Table extends Vue {
         private showSettings = false;
-        
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -69,20 +69,39 @@
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
+        private get separate() {
+            return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
+        }
+
         private get items(): RangedStatsTableItem<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
+            if (this.separate) {
+                return resources.map(resource => ({
+                    label: this.$i18n.$t.resources[resource],
+                    items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
+                        label: {
+                            normal: 'LOCA:Normal',
+                            expedition: 'LOCA: Position 16',
+                            total: this.$i18n.$t.common.sum,
+                        }[key],
+                        getValue: reports => reports.reduce((acc, report) => acc + report[key][resource], 0),
+                        class: key == 'total' ? 'sum-item' : '',
+                        labelClass: key == 'total' ? 'sum-item' : '',
+                    })),
+                }));
+            }
+
             return resources.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: reports => reports
-                    .reduce((acc, report) => acc + report.total[resource], 0),
+                getValue: reports => reports.reduce((acc, report) => acc + report.total[resource], 0),
             }));
         }
 
@@ -98,7 +117,7 @@
                 },
             ];
 
-            if(SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showMsuCells) {
                 result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal * this.msuConversionRates.crystal, 0),
@@ -116,6 +135,14 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+
+        &::v-deep {
+            .sum-item {
+                font-weight: bold;
+                border-top: 1px solid rgba(var(--color), 0.5);
+                margin-top: 1px;
+            }
+        }
     }
 
     .multi-menu {
