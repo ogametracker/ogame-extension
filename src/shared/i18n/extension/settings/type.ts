@@ -6,6 +6,7 @@ export interface SettingsTranslations {
         importExport: string;
         expeditions: string;
         combats: string;
+        debrisFields: string;
         resourceBalance: string;
         universeHistory: string;
         dangerZone: string;

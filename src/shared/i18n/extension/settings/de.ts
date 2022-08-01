@@ -8,6 +8,7 @@ export const de: SettingsTranslations = {
         importExport: 'Import/Export',
         expeditions: 'Expeditionen',
         combats: 'Kämpfe',
+        debrisFields: 'Trümmerfelder',
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',

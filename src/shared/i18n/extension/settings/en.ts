@@ -8,6 +8,7 @@ export const en: SettingsTranslations = {
         importExport: 'Import/Export',
         expeditions: 'Expeditions',
         combats: 'Combats',
+        debrisFields: 'Debris Fields',
         resourceBalance: 'Resource Balance',
         universeHistory: 'Universe History',
         dangerZone: 'Danger Zone',
