@@ -78,6 +78,7 @@ import viewssettingsCombats from '@stats/views/settings/Combats.vue';
 import viewssettingsCommon from '@stats/views/settings/Common.vue';
 import viewssettingsDangerZone from '@stats/views/settings/Danger-Zone.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
+import viewssettingsDebrisFields from '@stats/views/settings/Debris-Fields.vue';
 import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsResourceBalance from '@stats/views/settings/Resource-Balance.vue';
@@ -678,6 +679,11 @@ const routes: RouteConfig[] = [
                         path: "date-ranges",
                         name: "settings/date-ranges",
                         component: viewssettingsDateRanges
+                    },
+                    {
+                        path: "debris-fields",
+                        name: "settings/debris-fields",
+                        component: viewssettingsDebrisFields
                     },
                     {
                         path: "expeditions",

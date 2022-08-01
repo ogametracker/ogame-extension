@@ -8,10 +8,16 @@ import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
 
-export interface DailyDebrisFieldReportResult {
-    date: number;
+export interface DebrisFieldResources {
     metal: number;
     crystal: number;
+}
+
+export interface DailyDebrisFieldReportResult {
+    date: number;
+    total: DebrisFieldResources;
+    normal: DebrisFieldResources;
+    expedition: DebrisFieldResources;
 }
 
 @Component
@@ -73,8 +79,17 @@ class DebrisFieldReportDataModuleClass extends Vue {
             this.$set(this.dailyResults, day, dailyResult);
         }
 
-        dailyResult.metal += report.metal;
-        dailyResult.crystal += report.crystal;
+        dailyResult.total.metal += report.metal;
+        dailyResult.total.crystal += report.crystal;
+
+        if (report.isExpeditionDebrisField) {
+            dailyResult.expedition.metal += report.metal;
+            dailyResult.expedition.crystal += report.crystal;
+        } 
+        else {
+            dailyResult.normal.metal += report.metal;
+            dailyResult.normal.crystal += report.crystal;
+        }
 
         this.internal_minId = Math.min(this.internal_minId, report.id);
     }
@@ -82,8 +97,18 @@ class DebrisFieldReportDataModuleClass extends Vue {
     private getNewDailyResult(date: number): DailyDebrisFieldReportResult {
         return {
             date,
-            metal: 0,
-            crystal: 0,
+            total: {
+                metal: 0,
+                crystal: 0,
+            },
+            normal: {
+                metal: 0,
+                crystal: 0,
+            },
+            expedition: {
+                metal: 0,
+                crystal: 0,
+            },
         };
     }
 

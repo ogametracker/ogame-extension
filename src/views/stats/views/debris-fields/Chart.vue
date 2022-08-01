@@ -1,14 +1,9 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :datasets="datasets"
-            :firstDay="firstDay"
-            :itemsPerDay="reportsPerDay"
-            no-tooltip-footer
-        />
+        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay" no-tooltip-footer />
 
         <span class="multi-menu">
-            <floating-menu v-model="showSettings" left>
+            <floating-menu v-model="showSettings" left class="floating-settings">
                 <template #activator>
                     <button @click="showSettings = !showSettings">
                         <span class="mdi mdi-cog" />
@@ -16,7 +11,8 @@
                 </template>
 
                 <msu-conversion-rate-settings />
-                <hr />
+                <separate-expedition-and-normal-debris-field-settings />
+                <hr class="two-column" />
                 <resource-color-settings />
             </floating-menu>
 
@@ -29,12 +25,13 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
+    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
+    import { getRGB, getRGBString } from '../../utils/getRGBString';
 
     @Component({
         components: {
@@ -42,6 +39,7 @@
             ResourceColorSettings,
             MsuConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
+            SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
     export default class Charts extends Vue {
@@ -64,16 +62,55 @@
             return DebrisFieldReportDataModule.dailyResults;
         }
 
+        private get separateResults() {
+            return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
+        }
+
+        private readonly alternativeColors = {
+            metal: '#fbbc04',
+            crystal: '#4b17da',
+        }
+
         private get datasets(): StatsChartDataset<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
+            if (!this.separateResults) {
+                return [
+                    ...resources.map(resource => ({
+                        key: resource,
+                        label: this.$i18n.$t.resources[resource],
+                        color: this.colors[resource],
+                        filled: true,
+                        getValue: (result: DailyDebrisFieldReportResult) => result.total[resource],
+                        showAverage: true,
+                    })),
+                    {
+                        key: 'total',
+                        label: this.$i18n.$t.common.resourceUnitsMsu,
+                        color: this.colors.totalMsu,
+                        filled: false,
+                        getValue: result => result.total.metal + result.total.crystal * this.msuConversionRates.crystal,
+                        stack: false,
+                        showAverage: true,
+                    }
+                ];
+            }
+
             return [
                 ...resources.map(resource => ({
-                    key: resource,
-                    label: this.$i18n.$t.resources[resource],
+                    key: `${resource}-normal`,
+                    label: `${this.$i18n.$t.resources[resource]} (${this.$i18n.$t.debrisFields.position} 1-15)`,
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (result: DailyDebrisFieldReportResult) => result[resource],
+                    getValue: (result: DailyDebrisFieldReportResult) => result.normal[resource],
+                    showAverage: true,
+                })),
+                ...resources.map(resource => ({
+                    key: `${resource}-pos16`,
+                    label: `${this.$i18n.$t.resources[resource]} (${this.$i18n.$t.debrisFields.position} 16)`,
+                    color: this.alternativeColors[resource],
+                    filled: true,
+                    getValue: (result: DailyDebrisFieldReportResult) => result.expedition[resource],
                     showAverage: true,
                 })),
                 {
@@ -81,7 +118,7 @@
                     label: this.$i18n.$t.common.resourceUnitsMsu,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: result => result.metal + result.crystal * this.msuConversionRates.crystal,
+                    getValue: result => result.total.metal + result.total.crystal * this.msuConversionRates.crystal,
                     stack: false,
                     showAverage: true,
                 }
@@ -101,5 +138,19 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+    }
+
+    .floating-settings::v-deep .floating-menu {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        column-gap: 8px;
+
+        .two-column {
+            grid-column: 1 / span 2;
+        }
+
+        hr {
+            width: 100%;
+        }
     }
 </style>

@@ -137,10 +137,6 @@ function trackDebrisFieldReports(elem: Element) {
 
         try {
             // prepare message to service worker
-            if (isNaN(id)) {
-                _throw('Message id is NaN');
-            }
-
             const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
             const date = parse(dateText, dateTimeFormat, new Date()).getTime();
             if (isNaN(date)) {
