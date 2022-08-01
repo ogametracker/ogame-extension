@@ -4,4 +4,5 @@ export interface DebrisFieldsTranslations {
         title: string;
         buttonText: string;
     };
+    position: string;
 }

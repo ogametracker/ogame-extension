@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="'LOCA: Show expedition debris fields separately'" />
+            <span v-text="$i18n.$t.settings.debrisFields.separateExpeditionDebrisFields.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="separateExpeditionDebrisFields"
                 @input="toggle($event)"
-                :label="'LOCA: Show expedition debris fields separately'"
+                :label="$i18n.$t.settings.debrisFields.separateExpeditionDebrisFields.label"
             />
         </div>
     </div>

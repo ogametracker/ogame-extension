@@ -160,4 +160,11 @@ export const de: SettingsTranslations = {
             label: 'Vereinfachte Ansicht, versteckt Originaltexte von Expeditionsergebnissen und TF-Abbauberichten, und zeigt Icons anstatt Texten in den Benachrichtigungen.',
         },
     },
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
+            title: 'TFs von Position 16 separat anzeigen',
+            label: 'TFs von Position 16 separat anzeigen',
+        },
+    },
 };

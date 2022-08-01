@@ -99,7 +99,7 @@
             return [
                 ...resources.map(resource => ({
                     key: `${resource}-normal`,
-                    label: this.$i18n.$t.resources[resource],
+                    label: `${this.$i18n.$t.resources[resource]} (${this.$i18n.$t.debrisFields.position} 1-15)`,
                     color: this.colors[resource],
                     filled: true,
                     getValue: (result: DailyDebrisFieldReportResult) => result.normal[resource],
@@ -107,7 +107,7 @@
                 })),
                 ...resources.map(resource => ({
                     key: `${resource}-pos16`,
-                    label: `${this.$i18n.$t.resources[resource]} (LOCA: position 16)`,
+                    label: `${this.$i18n.$t.resources[resource]} (${this.$i18n.$t.debrisFields.position} 16)`,
                     color: this.alternativeColors[resource],
                     filled: true,
                     getValue: (result: DailyDebrisFieldReportResult) => result.expedition[resource],

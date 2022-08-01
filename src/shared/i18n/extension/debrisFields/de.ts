@@ -6,4 +6,5 @@ export const de: DebrisFieldsTranslations = {
         title: 'Trümmerfeld manuell hinzufügen',
         buttonText: 'Hinzufügen',
     },
+    position: 'Position',
 };

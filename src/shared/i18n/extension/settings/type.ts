@@ -157,4 +157,11 @@ export interface SettingsTranslations {
             label: string;
         };
     };
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
+            title: string;
+            label: string;
+        };
+    };
 }

@@ -88,8 +88,8 @@
                     label: this.$i18n.$t.resources[resource],
                     items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
                         label: {
-                            normal: 'LOCA:Normal',
-                            expedition: 'LOCA: Position 16',
+                            normal: `${this.$i18n.$t.debrisFields.position} 1-15`,
+                            expedition: `${this.$i18n.$t.debrisFields.position} 16`,
                             total: this.$i18n.$t.common.sum,
                         }[key],
                         getValue: reports => reports.reduce((acc, report) => acc + report[key][resource], 0),
