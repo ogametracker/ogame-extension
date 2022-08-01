@@ -24,8 +24,9 @@
 
                 <msu-conversion-rate-settings />
                 <show-msu-cells-settings />
-                <hr class="two-column" />
-                <date-range-settings />
+                <separate-expedition-and-normal-debris-field-settings />
+                <hr class="three-column" />
+                <date-range-settings class="three-column" />
             </floating-menu>
             <manually-add-debris-field-menu />
         </span>
@@ -36,7 +37,6 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
@@ -44,6 +44,7 @@
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
 
     @Component({
         components: {
@@ -52,6 +53,7 @@
             MsuConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
             ShowMsuCellsSettings,
+            SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
     export default class Table extends Vue {
@@ -124,11 +126,11 @@
 
     .floating-settings::v-deep .floating-menu {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: repeat(3, auto);
         column-gap: 8px;
 
-        .two-column {
-            grid-column: 1 / span 2;
+        .three-column {
+            grid-column: 1 / span 3;
         }
 
         hr {

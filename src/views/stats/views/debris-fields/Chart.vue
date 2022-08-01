@@ -1,14 +1,9 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :datasets="datasets"
-            :firstDay="firstDay"
-            :itemsPerDay="reportsPerDay"
-            no-tooltip-footer
-        />
+        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay" no-tooltip-footer />
 
         <span class="multi-menu">
-            <floating-menu v-model="showSettings" left>
+            <floating-menu v-model="showSettings" left class="floating-settings">
                 <template #activator>
                     <button @click="showSettings = !showSettings">
                         <span class="mdi mdi-cog" />
@@ -16,7 +11,8 @@
                 </template>
 
                 <msu-conversion-rate-settings />
-                <hr />
+                <separate-expedition-and-normal-debris-field-settings />
+                <hr class="two-column" />
                 <resource-color-settings />
             </floating-menu>
 
@@ -29,12 +25,12 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
+    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
 
     @Component({
         components: {
@@ -42,6 +38,7 @@
             ResourceColorSettings,
             MsuConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
+            SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
     export default class Charts extends Vue {
@@ -101,5 +98,19 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+    }
+
+    .floating-settings::v-deep .floating-menu {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        column-gap: 8px;
+
+        .two-column {
+            grid-column: 1 / span 2;
+        }
+
+        hr {
+            width: 100%;
+        }
     }
 </style>

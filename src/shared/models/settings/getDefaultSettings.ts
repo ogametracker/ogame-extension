@@ -128,5 +128,8 @@ export function getDefaultSettings(language: LanguageKey): Settings {
         messageTracking: {
             showSimplifiedResults: true,
         },
+        debrisFields: {
+            separateExpeditionDebrisFields: false,
+        },
     };
 }
