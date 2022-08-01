@@ -82,7 +82,7 @@
             return resources.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
                 getValue: reports => reports
-                    .reduce((acc, report) => acc + report[resource], 0),
+                    .reduce((acc, report) => acc + report.total[resource], 0),
             }));
         }
 
@@ -94,14 +94,14 @@
             const result: RangedStatsTableItem<DailyDebrisFieldReportResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal, 0),
+                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal, 0),
                 },
             ];
 
             if(SettingsDataModule.settings.showMsuCells) {
                 result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
+                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal * this.msuConversionRates.crystal, 0),
                 });
             }
 
