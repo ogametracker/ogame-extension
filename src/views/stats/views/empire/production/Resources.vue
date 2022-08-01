@@ -287,8 +287,8 @@
                     </template>
                     <div
                         class="breakdown-sum"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
+                        v-text="$i18n.$n(Math.trunc(value.total - item.fusionReactorConsumption), numberFormat)"
+                        :fraction="$i18n.$n((value.total - item.fusionReactorConsumption) % 1, fractionNumberFormat).substring(1)"
                     />
                 </div>
             </template>
@@ -746,8 +746,8 @@
                     planet,
                     ...production,
                     fusionReactorConsumption: fusionReactorConsumptions[planet.id],
-                    total: production.metal.total + production.crystal.total + production.deuterium.total,
-                    totalMsu: production.metal.total + production.crystal.total * this.msuConversionRates.crystal + production.deuterium.total * this.msuConversionRates.deuterium,
+                    total: production.metal.total + production.crystal.total + production.deuterium.total - fusionReactorConsumptions[planet.id],
+                    totalMsu: production.metal.total + production.crystal.total * this.msuConversionRates.crystal + (production.deuterium.total - fusionReactorConsumptions[planet.id]) * this.msuConversionRates.deuterium,
 
                     productionSettings: {
                         metalMine: planet.productionSettings[BuildingType.metalMine],
