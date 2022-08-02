@@ -142,10 +142,24 @@ export const de: ExpeditionMessages = {
         ],
     },
 
-    // depletionMessages: {
-    //     [ExpeditionDepletionLevel.none]: '',
-    //     [ExpeditionDepletionLevel.low]: '',
-    //     [ExpeditionDepletionLevel.medium]: '',
-    //     [ExpeditionDepletionLevel.high]: '',
-    // },
+    logbookRegex: /Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+        ],
+    },
 };

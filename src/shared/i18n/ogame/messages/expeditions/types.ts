@@ -47,5 +47,6 @@ export interface ExpeditionMessages {
         regex: RegExp;
     };
 
-    depletionMessages: Record<ExpeditionDepletionLevel, string>;
+    logbookRegex: RegExp;
+    depletionMessages: Record<ExpeditionDepletionLevel, string[]>;
 }

@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -138,6 +139,27 @@ export const cz: ExpeditionMessages = {
             /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/* !'*/,
             /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
             /*TODO: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+    },
+
+    logbookRegex: /*TODO: cz *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*TODO: cz 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*TODO: cz 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*TODO: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*TODO: cz 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*TODO: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*TODO: cz 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*TODO: cz 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*TODO: cz 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO: cz 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };
