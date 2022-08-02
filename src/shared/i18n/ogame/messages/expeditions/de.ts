@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -140,4 +141,11 @@ export const de: ExpeditionMessages = {
             /*'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
+
+    // depletionMessages: {
+    //     [ExpeditionDepletionLevel.none]: '',
+    //     [ExpeditionDepletionLevel.low]: '',
+    //     [ExpeditionDepletionLevel.medium]: '',
+    //     [ExpeditionDepletionLevel.high]: '',
+    // },
 };
