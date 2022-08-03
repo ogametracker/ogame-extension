@@ -1,4 +1,3 @@
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
@@ -81,7 +80,9 @@ export class ExpeditionModule {
         }
 
         const depletion = this.tryParseDepletion(language, data);
-        result.depletion = depletion;
+        if(depletion != null) {
+            result.depletion = depletion;
+        }
 
         return result;
     }

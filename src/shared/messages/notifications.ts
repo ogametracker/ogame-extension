@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "../models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionFindableShipType } from "../models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../models/expeditions/ExpeditionEventType";
 import { ItemHash } from "../models/ogame/items/ItemHash";
@@ -27,6 +28,7 @@ export interface ExpeditionTrackingNotificationMessageData {
     darkMatter: number;
     items: ItemHash[];
     events: Record<ExpeditionEventType, number>;
+    depletion: Record<ExpeditionDepletionLevel, number>;
 }
 export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
 export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;

@@ -70,6 +70,12 @@ const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
         [ExpeditionEventType.trader]: 0,
         [ExpeditionEventType.lostFleet]: 0,
     },
+    depletion: {
+        [ExpeditionDepletionLevel.none]: 0,
+        [ExpeditionDepletionLevel.low]: 0,
+        [ExpeditionDepletionLevel.medium]: 0,
+        [ExpeditionDepletionLevel.high]: 0,
+    },
 };
 
 export function initExpeditionTracking() {
@@ -440,6 +446,11 @@ function getResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize)
 function updateExpeditionResults(msg: ExpeditionMessage) {
     delete waitingForExpeditions[msg.data.id];
     totalExpeditionResult.events[msg.data.type]++;
+
+    if(msg.data.depletion != null) {
+        totalExpeditionResult.depletion[msg.data.depletion]++;
+    }
+
     switch (msg.data.type) {
         case ExpeditionEventType.resources: {
             const resources = msg.data.resources;
