@@ -11,7 +11,7 @@ export interface ColorSettings {
     expeditions: {
         events: Record<ExpeditionEventType, string>;
         sizes: Record<ExpeditionEventSize, string>;
-        depletion: Record<ExpeditionDepletionLevel, string>;
+        depletion: Record<ExpeditionDepletionLevel | 'unknown', string>;
     };
     resources: Record<ResourceType | 'totalMsu', string>;
     ships: Record<ShipType, string>;

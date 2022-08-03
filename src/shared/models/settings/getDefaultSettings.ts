@@ -119,6 +119,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionDepletionLevel.low]: '#fbbc04',
                     [ExpeditionDepletionLevel.medium]: '#ff5e00',
                     [ExpeditionDepletionLevel.high]: '#c72525',
+                    unknown: '#404040',
                 },
             },
         },
