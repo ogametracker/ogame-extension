@@ -97,7 +97,7 @@ export class ExpeditionModule {
         const depletionLevel = ExpeditionDepletionLevels.find(level =>
             i18nDepletionMessages[level].some(msg => logbookEntry.includes(msg))
         );
-        return depletionLevel;
+        return depletionLevel ?? _throw('failed to detect depletion level');
     }
 
     private tryParseNoEventExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventNothing | null {
