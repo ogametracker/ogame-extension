@@ -24,6 +24,7 @@ import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotif
 import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 
 let tabContent: Element | null = null;
 
@@ -110,9 +111,10 @@ function onMessage(message: Message<MessageType, any>) {
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
-            if(settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+            if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
                 li.classList.add(cssClasses.messages.hideContent);
             }
+
             addExpeditionResultContent(li, msg.data);
 
             if (message.type == MessageType.NewExpedition) {
@@ -218,7 +220,7 @@ function sendNotificationMessages() {
     };
     sendMessage(msg);
 
-    if(totalExpeditionResult.events.lostFleet > 0) {
+    if (totalExpeditionResult.events.lostFleet > 0) {
         const msg: ExpeditionTrackingLostFleetNotificationMessage = {
             type: MessageType.Notification,
             ogameMeta: getOgameMeta(),
@@ -247,11 +249,26 @@ function sendErrorNotificationMessage(failed: number) {
     sendMessage(msg);
 }
 
-
-
 function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
     li.classList.add(cssClasses.messages.expedition);
 
+    const resultHtml = getExpeditionResultContentHtml(expedition);
+    const depletionHtml = getExpeditionDepletionHtml(expedition);
+    const html = resultHtml + depletionHtml;
+
+    addOrSetCustomMessageContent(li, html);
+}
+
+function getExpeditionDepletionHtml(expedition: ExpeditionEvent): string {
+    if (expedition.depletion == null) {
+        return '';
+    }
+
+    const depletionLevelClass = getDepletionLevelClass(expedition.depletion);
+    return `<span class="${depletionLevelClass}"></span>`
+}
+
+function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
     switch (expedition.type) {
         case ExpeditionEventType.resources: {
             const resources = expedition.resources;
@@ -265,14 +282,13 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                 [resource, amount] = [ResourceType.deuterium, resources.deuterium];
             }
 
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.resources, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource ${resource}"></div>
                     <div class="${resource}">${formatNumber(amount)}</div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.fleet: {
@@ -286,7 +302,7 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                 return addCost(total, adjustedCost);
             }, { metal: 0, crystal: 0, deuterium: 0 } as Cost)
 
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">
                     <div class="${getResultClass(ExpeditionEventType.fleet, expedition.size)}">
                         <div class="${getSizeIconClass(expedition.size)}"></div>
@@ -312,97 +328,96 @@ function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
                         ` : ''}
                     </div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.darkMatter: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource dark-matter"></div>
                     <div class="dark-matter">${formatNumber(expedition.darkMatter)}</div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.delay: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.delay)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.early: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.early)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.pirates: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.pirates, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-pirate"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.aliens: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.aliens, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-alien"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.lostFleet: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.lostFleet)}">
                     <div class="mdi mdi-cross"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.nothing: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.nothing)}">
                     <div class="mdi mdi-close"></div>
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.item: {
             const item = Items[expedition.itemHash];
             const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.item)}">
                     <img src="${imageUrl}" class="item-grade--${item.grade}" />
                 </div>
-            `);
-            break;
+            `;
         }
 
         case ExpeditionEventType.trader: {
-            addOrSetCustomMessageContent(li, `
+            return `
                 <div class="${getResultClass(ExpeditionEventType.trader)}">
                     <div class="mdi mdi-swap-horizontal-bold"></div>
                 </div>
-            `);
-            break;
+            `;
         }
     }
+}
+
+function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
+    return `ogame-tracker-expedition-result--depletion-level ogame-tracker-expedition-result--depletion-level-${level} mdi ` + ({
+        [ExpeditionDepletionLevel.none]: 'mdi-signal-cellular-outline',
+        [ExpeditionDepletionLevel.low]: 'mdi-signal-cellular-1',
+        [ExpeditionDepletionLevel.medium]: 'mdi-signal-cellular-2',
+        [ExpeditionDepletionLevel.high]: 'mdi-signal-cellular-3',
+    }[level]);
 }
 
 function getSizeIconClass(size: ExpeditionEventSize) {
