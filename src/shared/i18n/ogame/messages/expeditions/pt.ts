@@ -142,7 +142,7 @@ export const pt: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /*TODO: pt *//Entrada do diário dos Engenheiros de Comunicações:(?<text>.+)/,
+    logbookRegex: /Entrada do diário dos Engenheiros de Comunicações:(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Parece que esta */'parte do universo ainda não foi explorada',
