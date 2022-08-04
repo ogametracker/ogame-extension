@@ -11,6 +11,7 @@ import { CommonTranslations } from './common/type';
 import { DebrisFieldsTranslations } from './debrisFields/type';
 import { DonateTranslations } from './donate/type';
 import { EmpireTranslations } from './empire/type';
+import { ExcelExportTranslations } from './excelExport/type';
 import { ExpeditionsTranslations } from './expeditions/type';
 import { NotificationTranslations } from './notifications/type';
 import { ResourceBalanceTranslations } from './resourceBalance/type';
@@ -41,4 +42,6 @@ export interface ExtensionTranslations {
     about: AboutTranslations;
     universeHistory: UniverseHistoryTranslations;
     notifications: NotificationTranslations;
+
+    excelExport: ExcelExportTranslations;
 }

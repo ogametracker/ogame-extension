@@ -223,7 +223,7 @@
                 return 0;
             }
 
-            return reports[resource];
+            return reports.total[resource];
         }
 
         private get footerItems(): RangedStatsTableItem<DailyEvents>[] {

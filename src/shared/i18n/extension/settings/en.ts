@@ -8,6 +8,7 @@ export const en: SettingsTranslations = {
         importExport: 'Import/Export',
         expeditions: 'Expeditions',
         combats: 'Combats',
+        debrisFields: 'Debris Fields',
         resourceBalance: 'Resource Balance',
         universeHistory: 'Universe History',
         dangerZone: 'Danger Zone',
@@ -159,6 +160,13 @@ export const en: SettingsTranslations = {
         showSimplifiedResults: {
             title: 'Simplified visualization',
             label: 'Simplified visualization, hides original messages of expedition results and DF harvest reports, and shows icons instead of texts in notifications.',
+        },
+    },
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
+            title: 'Separate position 16',
+            label: 'Separate debris fields harvested at position 16 from position 1-15',
         },
     },
 };

@@ -24,8 +24,9 @@
 
                 <msu-conversion-rate-settings />
                 <show-msu-cells-settings />
-                <hr class="two-column" />
-                <date-range-settings />
+                <separate-expedition-and-normal-debris-field-settings />
+                <hr class="three-column" />
+                <date-range-settings class="three-column" />
             </floating-menu>
             <manually-add-debris-field-menu />
         </span>
@@ -43,6 +44,7 @@
     import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
     import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
 
     @Component({
         components: {
@@ -51,11 +53,12 @@
             MsuConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
             ShowMsuCellsSettings,
+            SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
     export default class Table extends Vue {
         private showSettings = false;
-        
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
@@ -66,20 +69,39 @@
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
+        private get separate() {
+            return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
+        }
+
         private get items(): RangedStatsTableItem<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
+            if (this.separate) {
+                return resources.map(resource => ({
+                    label: this.$i18n.$t.resources[resource],
+                    items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
+                        label: {
+                            normal: `${this.$i18n.$t.debrisFields.position} 1-15`,
+                            expedition: `${this.$i18n.$t.debrisFields.position} 16`,
+                            total: this.$i18n.$t.common.sum,
+                        }[key],
+                        getValue: reports => reports.reduce((acc, report) => acc + report[key][resource], 0),
+                        class: key == 'total' ? 'sum-item' : '',
+                        labelClass: key == 'total' ? 'sum-item' : '',
+                    })),
+                }));
+            }
+
             return resources.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: reports => reports
-                    .reduce((acc, report) => acc + report[resource], 0),
+                getValue: reports => reports.reduce((acc, report) => acc + report.total[resource], 0),
             }));
         }
 
@@ -91,14 +113,14 @@
             const result: RangedStatsTableItem<DailyDebrisFieldReportResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal, 0),
+                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal, 0),
                 },
             ];
 
-            if(SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showMsuCells) {
                 result.push({
                     label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
+                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal * this.msuConversionRates.crystal, 0),
                 });
             }
 
@@ -113,6 +135,14 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+
+        &::v-deep {
+            .sum-item {
+                font-weight: bold;
+                border-top: 1px solid rgba(var(--color), 0.5);
+                margin-top: 1px;
+            }
+        }
     }
 
     .multi-menu {
@@ -123,11 +153,11 @@
 
     .floating-settings::v-deep .floating-menu {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: repeat(3, auto);
         column-gap: 8px;
 
-        .two-column {
-            grid-column: 1 / span 2;
+        .three-column {
+            grid-column: 1 / span 3;
         }
 
         hr {

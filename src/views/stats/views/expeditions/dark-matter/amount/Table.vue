@@ -52,7 +52,7 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.darkMatter,
+                label: this.$i18n.$t.premium.darkMatter,
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
             }];
         }

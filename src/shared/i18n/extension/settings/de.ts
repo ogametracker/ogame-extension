@@ -8,6 +8,7 @@ export const de: SettingsTranslations = {
         importExport: 'Import/Export',
         expeditions: 'Expeditionen',
         combats: 'Kämpfe',
+        debrisFields: 'Trümmerfelder',
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',
@@ -159,6 +160,13 @@ export const de: SettingsTranslations = {
         showSimplifiedResults: {
             title: 'Vereinfachte Ansicht',
             label: 'Vereinfachte Ansicht, versteckt Originaltexte von Expeditionsergebnissen und TF-Abbauberichten, und zeigt Icons anstatt Texten in den Benachrichtigungen.',
+        },
+    },
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
+            title: 'TFs von Position 16 separat anzeigen',
+            label: 'TFs von Position 16 separat anzeigen',
         },
     },
 };

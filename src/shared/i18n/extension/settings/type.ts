@@ -6,6 +6,7 @@ export interface SettingsTranslations {
         importExport: string;
         expeditions: string;
         combats: string;
+        debrisFields: string;
         resourceBalance: string;
         universeHistory: string;
         dangerZone: string;
@@ -154,6 +155,13 @@ export interface SettingsTranslations {
 
     accessibility: {
         showSimplifiedResults: {
+            title: string;
+            label: string;
+        };
+    };
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
             title: string;
             label: string;
         };

@@ -58,6 +58,10 @@ export interface Settings {
         includeLostShipsResourceUnits: boolean;
     };
 
+    debrisFields: {
+        separateExpeditionDebrisFields: boolean;
+    };
+
     messageTracking: {
         showSimplifiedResults: boolean;
     };
