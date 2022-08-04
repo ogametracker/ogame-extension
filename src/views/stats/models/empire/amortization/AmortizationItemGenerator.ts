@@ -676,9 +676,10 @@ export class AmortizationItemGenerator {
 
     //#region astrophysics amortization item calculation
     #getAstrophysicsAmortizationItem(planetId: number): AstrophysicsAmortizationItem {
-        const levelAstrophysics = this.#state.research[ResearchType.astrophysics];
-        const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
         const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
+        const minAstroLevel = (currentPlanetCount - 1) * 2 - 1;
+        const levelAstrophysics = Math.max(minAstroLevel, this.#state.research[ResearchType.astrophysics]);
+        const currentMaxPlanetCount = Math.ceil(levelAstrophysics / 2) + 1;
         const nextLevelAstrophysics = levelAstrophysics + levelAstrophysics % 2 + 1;
 
         const newAstrophysicsLevels: number[] = [];
