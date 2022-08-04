@@ -45,7 +45,7 @@ export const de: ExpeditionsTranslations = {
         [ExpeditionDepletionLevel.low]: 'Gering',
         [ExpeditionDepletionLevel.medium]: 'Mittel',
         [ExpeditionDepletionLevel.high]: 'Hoch',
-        unknown: 'Unknown',
+        unknown: 'Unbekannt',
     },
 
     expeditions: 'Expeditionen',

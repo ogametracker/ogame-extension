@@ -47,6 +47,9 @@ import viewsexpeditionsdarkmatteramountTable from '@stats/views/expeditions/dark
 import viewsexpeditionsdarkmattersizesIndex from '@stats/views/expeditions/dark-matter/sizes/Index.vue';
 import viewsexpeditionsdarkmattersizesChart from '@stats/views/expeditions/dark-matter/sizes/Chart.vue';
 import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-matter/sizes/Table.vue';
+import viewsexpeditionsdepletionIndex from '@stats/views/expeditions/depletion/Index.vue';
+import viewsexpeditionsdepletionChart from '@stats/views/expeditions/depletion/Chart.vue';
+import viewsexpeditionsdepletionTable from '@stats/views/expeditions/depletion/Table.vue';
 import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
 import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
@@ -465,6 +468,26 @@ const routes: RouteConfig[] = [
                                         component: viewsexpeditionsdarkmattersizesTable
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "expeditions/depletion/chart"
+                        },
+                        path: "depletion",
+                        name: "expeditions/depletion",
+                        component: viewsexpeditionsdepletionIndex,
+                        children: [
+                            {
+                                path: "chart",
+                                name: "expeditions/depletion/chart",
+                                component: viewsexpeditionsdepletionChart
+                            },
+                            {
+                                path: "table",
+                                name: "expeditions/depletion/table",
+                                component: viewsexpeditionsdepletionTable
                             }
                         ]
                     },
