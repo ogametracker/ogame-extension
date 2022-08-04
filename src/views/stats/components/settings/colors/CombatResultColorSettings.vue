@@ -49,14 +49,7 @@
 
         private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    combatResults: defaultColors,
-                },
-            });
+            this.updateColors(defaultColors);
         }
     }
 </script>

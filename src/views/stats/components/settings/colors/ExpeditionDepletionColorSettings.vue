@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.expeditionEvents"
+        :header="$i18n.$t.settings.colors.expeditionDepletions"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -11,8 +11,9 @@
 
 <script lang="ts">
     import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
+    import { createRecord } from '@/shared/utils/createRecord';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
@@ -22,45 +23,35 @@
             ColorSettingsTable,
         },
     })
-    export default class ExpeditionEventColorSettings extends Vue {
+    export default class ExpeditionDepletionColorSettings extends Vue {
 
-        private get labels(): Record<ExpeditionEventType, string> {
-            return this.$i18n.$t.expeditions.expeditionEvents;
+        private readonly depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+
+        private get labels(): Record<ExpeditionDepletionLevel | 'unknown', string> {
+            return createRecord(this.depletionLevels, level => this.$i18n.$t.expeditions.depletionLevels[level]);
         }
 
-        private readonly keys: ExpeditionEventType[] = [
-            ExpeditionEventType.nothing,
-            ExpeditionEventType.resources,
-            ExpeditionEventType.fleet,
-            ExpeditionEventType.delay,
-            ExpeditionEventType.early,
-            ExpeditionEventType.darkMatter,
-            ExpeditionEventType.pirates,
-            ExpeditionEventType.aliens,
-            ExpeditionEventType.item,
-            ExpeditionEventType.trader,
-            ExpeditionEventType.lostFleet,
-        ];
+        private readonly keys = this.depletionLevels;
 
         private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.events;
+            return SettingsDataModule.settings.colors.expeditions.depletion;
         }
 
-        private updateColors(value: Record<ExpeditionEventType, string>) {
+        private updateColors(value: Record<ExpeditionDepletionLevel | 'unknown', string>) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
                     expeditions: {
                         ...SettingsDataModule.settings.colors.expeditions,
-                        events: value,
+                        depletion: value,
                     },
                 },
             });
         }
 
         private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.events;
+            const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.depletion;
             this.updateColors(defaultColors);
         }
     }

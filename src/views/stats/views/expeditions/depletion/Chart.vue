@@ -24,7 +24,7 @@
                 </button>
             </template>
 
-            <expedition-event-color-settings />
+            <expedition-depletion-color-settings />
         </floating-menu>
     </div>
 </template>
@@ -35,13 +35,13 @@
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
+    import ExpeditionDepletionColorSettings from '@stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
     import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
     @Component({
         components: {
             StatsChart,
-            ExpeditionEventColorSettings,
+            ExpeditionDepletionColorSettings,
         },
     })
     export default class Charts extends Vue {
