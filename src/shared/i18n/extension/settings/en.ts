@@ -49,6 +49,7 @@ export const en: SettingsTranslations = {
         combatResults: 'Combat results',
         expeditionEvents: 'Expedition events',
         expeditionEventSizes: 'Expedition event sizes',
+        expeditionDepletionLevels: 'System Depletion',
         resources: 'Resources',
         ships: 'Ships',
     },

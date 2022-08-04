@@ -28,7 +28,7 @@ export interface ExpeditionTrackingNotificationMessageData {
     darkMatter: number;
     items: ItemHash[];
     events: Record<ExpeditionEventType, number>;
-    depletion: Record<ExpeditionDepletionLevel, number>;
+    depletion: Record<ExpeditionDepletionLevel | 'unknown', number>;
 }
 export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
 export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;

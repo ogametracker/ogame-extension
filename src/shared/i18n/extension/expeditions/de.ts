@@ -51,4 +51,5 @@ export const de: ExpeditionsTranslations = {
     expeditions: 'Expeditionen',
     finds: 'Funde',
     shipsFound: 'Schiffe gefunden',
+    depletion: 'Systemauslastung',
 };

@@ -46,6 +46,7 @@ export interface SettingsTranslations {
     colors: {
         expeditionEvents: string;
         expeditionEventSizes: string;
+        expeditionDepletionLevels: string;
         combatResults: string;
         resources: string;
         ships: string;

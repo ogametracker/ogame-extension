@@ -26,4 +26,5 @@ export interface ExpeditionsTranslations {
     expeditions: string;
     finds: string;
     shipsFound: string;
+    depletion: string;
 }

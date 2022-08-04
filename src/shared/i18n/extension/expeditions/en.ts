@@ -51,4 +51,5 @@ export const en: ExpeditionsTranslations = {
     expeditions: 'Expeditions',
     finds: 'Finds',
     shipsFound: 'Ships found',
+    depletion: 'System depletion',
 };

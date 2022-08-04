@@ -138,7 +138,7 @@
 
             <template v-if="hasDepletion">
                 <hr />
-                <h4 v-text="'LOCA: Depletion'" />
+                <h4 v-text="$i18n.$t.expeditions.depletion" />
                 <div class="result-grid" v-if="showSimplified">
                     <template v-for="level in DepletionLevels">
                         <template v-if="notification.depletion[level] > 0">
@@ -147,6 +147,7 @@
                                 class="icon mdi"
                                 :class="
                                     {
+                                        unknown: 'mdi-help',
                                         none: 'mdi-signal-cellular-outline',
                                         low: 'mdi-signal-cellular-1',
                                         medium: 'mdi-signal-cellular-2',
@@ -162,7 +163,7 @@
                 <div v-else class="text-grid events">
                     <template v-for="level in DepletionLevels">
                         <template v-if="notification.depletion[level] > 0">
-                            <span v-text="`LOCA: Depletion ${level}`" :key="`depletion-name-${level}`" />
+                            <span v-text="$i18n.$t.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
                             <span v-text="$i18n.$n(notification.depletion[level])" :key="`depletion-count-${level}`" />
                         </template>
                     </template>
@@ -184,7 +185,7 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
+    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
     @Component({
         components: {
@@ -211,7 +212,7 @@
             ExpeditionEventType.nothing,
         ];
 
-        private readonly DepletionLevels = ExpeditionDepletionLevels;
+        private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
         private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 

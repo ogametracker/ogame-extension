@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.expeditionDepletions"
+        :header="$i18n.$t.settings.colors.expeditionDepletionLevels"
         :labels="labels"
         :keys="keys"
         :value="colors"
