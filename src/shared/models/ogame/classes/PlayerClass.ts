@@ -4,3 +4,15 @@ export enum PlayerClass {
     general = 'general',
     none = 'none',
 }
+
+export const PlayerClasses: PlayerClass[] = [
+    PlayerClass.collector,
+    PlayerClass.discoverer,
+    PlayerClass.general,
+    PlayerClass.none,
+];
+export const SelectablePlayerClasses: PlayerClass[] = [
+    PlayerClass.collector,
+    PlayerClass.discoverer,
+    PlayerClass.general,
+];

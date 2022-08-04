@@ -1,4 +1,5 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { _logError } from "@/shared/utils/_log";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
 import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
@@ -25,80 +26,104 @@ export function trackResourceSettingsPage(): void {
                 ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
-
-            const buildingsMessage: UpdatePlanetBuildingLevelsMessage = {
-                ogameMeta: getOgameMeta(),
-                type: MessageType.UpdatePlanetBuildingLevels,
-                data: {
-                    isMoon,
-                    planetId,
+            try {
+                const buildingsMessage: UpdatePlanetBuildingLevelsMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdatePlanetBuildingLevels,
                     data: {
-                        [BuildingType.metalMine]: getLevelOrAmount(element, BuildingType.metalMine),
-                        [BuildingType.crystalMine]: getLevelOrAmount(element, BuildingType.crystalMine),
-                        [BuildingType.deuteriumSynthesizer]: getLevelOrAmount(element, BuildingType.deuteriumSynthesizer),
-                        [BuildingType.fusionReactor]: getLevelOrAmount(element, BuildingType.fusionReactor),
-                        [BuildingType.solarPlant]: getLevelOrAmount(element, BuildingType.solarPlant),
+                        isMoon,
+                        planetId,
+                        data: {
+                            [BuildingType.metalMine]: getLevelOrAmount(element, BuildingType.metalMine),
+                            [BuildingType.crystalMine]: getLevelOrAmount(element, BuildingType.crystalMine),
+                            [BuildingType.deuteriumSynthesizer]: getLevelOrAmount(element, BuildingType.deuteriumSynthesizer),
+                            [BuildingType.fusionReactor]: getLevelOrAmount(element, BuildingType.fusionReactor),
+                            [BuildingType.solarPlant]: getLevelOrAmount(element, BuildingType.solarPlant),
+                        },
                     },
-                },
-                senderUuid: empireTrackingUuid,
-            };
-            sendMessage(buildingsMessage);
+                    senderUuid: empireTrackingUuid,
+                };
+                sendMessage(buildingsMessage);
+            }
+            catch (err) {
+                _logError(err);
+            }
 
 
-            const solSatMessage: UpdatePlanetShipCountsMessage = {
-                ogameMeta: getOgameMeta(),
-                type: MessageType.UpdatePlanetShipCounts,
-                data: {
-                    isMoon,
-                    planetId,
+            try {
+                const solSatMessage: UpdatePlanetShipCountsMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdatePlanetShipCounts,
                     data: {
-                        [ShipType.solarSatellite]: getLevelOrAmount(element, ShipType.solarSatellite),
+                        isMoon,
+                        planetId,
+                        data: {
+                            [ShipType.solarSatellite]: getLevelOrAmount(element, ShipType.solarSatellite),
+                        },
                     },
-                },
-                senderUuid: empireTrackingUuid,
-            };
-            sendMessage(solSatMessage);
+                    senderUuid: empireTrackingUuid,
+                };
+                sendMessage(solSatMessage);
+            }
+            catch (err) {
+                _logError(err);
+            }
 
 
-            const researchMessage: UpdateResearchLevelsMessage = {
-                ogameMeta: getOgameMeta(),
-                type: MessageType.UpdateResearchLevels,
-                data: {
-                    [ResearchType.plasmaTechnology]: getLevelOrAmount(element, ResearchType.plasmaTechnology),
-                },
-                senderUuid: empireTrackingUuid,
-            };
-            sendMessage(researchMessage);
-
-
-            const allyClassMessage: UpdateAllianceClassMessage = {
-                ogameMeta: getOgameMeta(),
-                type: MessageType.UpdateAllianceClass,
-                data: getAllianceClass(element),
-                senderUuid: empireTrackingUuid,
-            };
-            sendMessage(allyClassMessage);
-
-
-            const productionSettingsMessage: UpdatePlanetProductionSettingsMessage = {
-                ogameMeta: getOgameMeta(),
-                type: MessageType.UpdatePlanetProductionSettings,
-                data: {
-                    isMoon,
-                    planetId,
+            try {
+                const researchMessage: UpdateResearchLevelsMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdateResearchLevels,
                     data: {
-                        [BuildingType.metalMine]: getProductionPercentage(element, BuildingType.metalMine) as ProductionPercentage,
-                        [BuildingType.crystalMine]: getProductionPercentage(element, BuildingType.crystalMine) as ProductionPercentage,
-                        [BuildingType.deuteriumSynthesizer]: getProductionPercentage(element, BuildingType.deuteriumSynthesizer) as ProductionPercentage,
-                        [BuildingType.solarPlant]: getProductionPercentage(element, BuildingType.solarPlant) as ProductionPercentage,
-                        [BuildingType.fusionReactor]: getProductionPercentage(element, BuildingType.fusionReactor) as ProductionPercentage,
-                        [ShipType.solarSatellite]: getProductionPercentage(element, ShipType.solarSatellite) as ProductionPercentage,
-                        [ShipType.crawler]: getProductionPercentage(element, ShipType.crawler) as CrawlerProductionPercentage,
+                        [ResearchType.plasmaTechnology]: getLevelOrAmount(element, ResearchType.plasmaTechnology),
                     },
-                },
-                senderUuid: empireTrackingUuid,
-            };
-            sendMessage(productionSettingsMessage);
+                    senderUuid: empireTrackingUuid,
+                };
+                sendMessage(researchMessage);
+            }
+            catch (err) {
+                _logError(err);
+            }
+
+
+            try {
+                const allyClassMessage: UpdateAllianceClassMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdateAllianceClass,
+                    data: getAllianceClass(element),
+                    senderUuid: empireTrackingUuid,
+                };
+                sendMessage(allyClassMessage);
+            }
+            catch (err) {
+                _logError(err);
+            }
+
+
+            try {
+                const productionSettingsMessage: UpdatePlanetProductionSettingsMessage = {
+                    ogameMeta: getOgameMeta(),
+                    type: MessageType.UpdatePlanetProductionSettings,
+                    data: {
+                        isMoon,
+                        planetId,
+                        data: {
+                            [BuildingType.metalMine]: getProductionPercentage(element, BuildingType.metalMine) as ProductionPercentage,
+                            [BuildingType.crystalMine]: getProductionPercentage(element, BuildingType.crystalMine) as ProductionPercentage,
+                            [BuildingType.deuteriumSynthesizer]: getProductionPercentage(element, BuildingType.deuteriumSynthesizer) as ProductionPercentage,
+                            [BuildingType.solarPlant]: getProductionPercentage(element, BuildingType.solarPlant) as ProductionPercentage,
+                            [BuildingType.fusionReactor]: getProductionPercentage(element, BuildingType.fusionReactor) as ProductionPercentage,
+                            [ShipType.solarSatellite]: getProductionPercentage(element, ShipType.solarSatellite) as ProductionPercentage,
+                            [ShipType.crawler]: getProductionPercentage(element, ShipType.crawler) as CrawlerProductionPercentage,
+                        },
+                    },
+                    senderUuid: empireTrackingUuid,
+                };
+                sendMessage(productionSettingsMessage);
+            }
+            catch (err) {
+                _logError(err);
+            }
         },
     });
 }

@@ -5,7 +5,7 @@
             'o-ship--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/ships/${ship}.jpg)`,
+            'background-image': `url(/img/ogame/ships/${image}.jpg)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,42 +16,47 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-
-    export enum OShipType {
-        "small-cargo" = "small-cargo",
-        "large-cargo" = "large-cargo",
-        "light-fighter" = "light-fighter",
-        "heavy-fighter" = "heavy-fighter",
-        "cruiser" = "cruiser",
-        "battleship" = "battleship",
-        "colony-ship" = "colony-ship",
-        "recycler" = "recycler",
-        "espionage-probe" = "espionage-probe",
-        "bomber" = "bomber",
-        "solar-satellite" = "solar-satellite",
-        "destroyer" = "destroyer",
-        "death-star" = "death-star",
-        "battlecruiser" = "battlecruiser",
-        "crawler" = "crawler",
-        "reaper" = "reaper",
-        "pathfinder" = "pathfinder",
-    }
+    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
 
     @Component({})
     export default class OShip extends Vue {
 
         @Prop({
             required: true,
-            type: String as PropType<OShipType>,
-            validator: (value: string) => (Object.values(OShipType) as string[]).includes(value)
+            type: Number as PropType<ShipType>,
+            validator: (value: number) => (ShipTypes as number[]).includes(value),
         })
-        private ship!: OShipType;
+        private ship!: ShipType;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+
+        private get image() {
+            return this.imageMap[this.ship];
+        }
+        private readonly imageMap: Record<ShipType, string> = {
+            [ShipType.smallCargo]: 'small-cargo',
+            [ShipType.largeCargo]: 'large-cargo',
+            [ShipType.lightFighter]: 'light-fighter',
+            [ShipType.heavyFighter]: 'heavy-fighter',
+            [ShipType.cruiser]: 'cruiser',
+            [ShipType.battleship]: 'battleship',
+            [ShipType.colonyShip]: 'colony-ship',
+            [ShipType.recycler]: 'recycler',
+            [ShipType.espionageProbe]: 'espionage-probe',
+            [ShipType.bomber]: 'bomber',
+            [ShipType.solarSatellite]: 'solar-satellite',
+            [ShipType.destroyer]: 'destroyer',
+            [ShipType.deathStar]: 'death-star',
+            [ShipType.battlecruiser]: 'battlecruiser',
+            [ShipType.crawler]: 'crawler',
+            [ShipType.reaper]: 'reaper',
+            [ShipType.pathfinder]: 'pathfinder',
+        };
     }
 </script>
 <style lang="scss" scoped>

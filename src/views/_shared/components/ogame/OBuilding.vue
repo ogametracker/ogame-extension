@@ -5,7 +5,7 @@
             'o-building--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/buildings/${building}.jpg)`,
+            'background-image': `url(/img/ogame/buildings/${image}.jpg)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,48 +16,51 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-
-    export enum OBuildingType {
-        'metal-mine' = 'metal-mine',
-        'crystal-mine' = 'crystal-mine',
-        'deuterium-synthesizer' = 'deuterium-synthesizer',
-
-        'metal-storage' = 'metal-storage',
-        'crystal-storage' = 'crystal-storage',
-        'deuterium-tank' = 'deuterium-tank',
-
-        'solar-plant' = 'solar-plant',
-        'fusion-reactor' = 'fusion-reactor',
-
-        'robotics-factory' = 'robotics-factory',
-        'shipyard' = 'shipyard',
-        'research-lab' = 'research-lab',
-        'alliance-depot' = 'alliance-depot',
-        'missile-silo' = 'missile-silo',
-        'nanite-factory' = 'nanite-factory',
-        'terraformer' = 'terraformer',
-        'space-dock' = 'space-dock',
-
-        'lunar-base' = 'lunar-base',
-        'sensor-phalanx' = 'sensor-phalanx',
-        'jump-gate' = 'jump-gate',
-    }
+    import { BuildingType, BuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
 
     @Component({})
     export default class OBuilding extends Vue {
-
         @Prop({
             required: true,
-            type: String as PropType<OBuildingType>,
-            validator: (value: string) => (Object.values(OBuildingType) as string[]).includes(value)
+            type: Number as PropType<BuildingType>,
+            validator: (value: number) => (BuildingTypes as number[]).includes(value)
         })
-        private building!: OBuildingType;
+        private building!: BuildingType;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+        private get image() {
+            return this.imageMap[this.building];
+        }
+        private readonly imageMap: Record<BuildingType, string> = {
+            [BuildingType.metalMine]: 'metal-mine',
+            [BuildingType.crystalMine]: 'crystal-mine',
+            [BuildingType.deuteriumSynthesizer]: 'deuterium-synthesizer',
+
+            [BuildingType.metalStorage]: 'metal-storage',
+            [BuildingType.crystalStorage]: 'crystal-storage',
+            [BuildingType.deuteriumTank]: 'deuterium-tank',
+
+            [BuildingType.solarPlant]: 'solar-plant',
+            [BuildingType.fusionReactor]: 'fusion-reactor',
+
+            [BuildingType.roboticsFactory]: 'robotics-factory',
+            [BuildingType.shipyard]: 'shipyard',
+            [BuildingType.researchLab]: 'research-lab',
+            [BuildingType.allianceDepot]: 'alliance-depot',
+            [BuildingType.missileSilo]: 'missile-silo',
+            [BuildingType.naniteFactory]: 'nanite-factory',
+            [BuildingType.terraformer]: 'terraformer',
+            [BuildingType.spaceDock]: 'space-dock',
+
+            [BuildingType.lunarBase]: 'lunar-base',
+            [BuildingType.sensorPhalanx]: 'sensor-phalanx',
+            [BuildingType.jumpGate]: 'jump-gate',
+        };
     }
 </script>
 <style lang="scss" scoped>

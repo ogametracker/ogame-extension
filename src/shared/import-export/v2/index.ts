@@ -1,3 +1,4 @@
+import { HighscoreTypeName } from "@/shared/models/ogame/highscore";
 import { CombatReport } from "../../models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
@@ -90,12 +91,10 @@ export interface V2ExportedUniverseHistoryCoordinates {
 
 export type V2ExportedUniverseHistoryPlanetMoonState = null | 'deleted';
 
-export type V2ExportedUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
-
 export interface V2ExportedUniverseHistoryPlayerScore {
     playerId: number;
     date: number;
-    type: V2ExportedUniverseHistoryScoreType;
+    type: HighscoreTypeName;
     score: number;
     position: number;
 }
@@ -117,7 +116,7 @@ export interface V2ExportedUniverseHistoryPlayerName {
 export interface V2ExportedUniverseHistoryAllianceScore {
     allianceId: number;
     date: number;
-    type: V2ExportedUniverseHistoryScoreType;
+    type: HighscoreTypeName;
     score: number;
     position: number;
 }

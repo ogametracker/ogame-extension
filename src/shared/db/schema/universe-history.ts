@@ -1,3 +1,4 @@
+import { HighscoreType, HighscoreTypeName } from "@/shared/models/ogame/highscore";
 import { DBSchema } from "idb";
 
 export type DbUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
@@ -14,7 +15,7 @@ export interface DbUniverseHistoryCoordinates {
 
 export type DbUniverseHistoryPlanetMoonState = null | 'deleted';
 
-export type DbUniverseHistoryScoreType = 'total' | 'economy' | 'research' | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost' | 'honor' | 'numberOfShips';
+export type DbUniverseHistoryScoreType = HighscoreTypeName;
 
 export interface OgameTrackerUniverseHistoryPlayerScore {
     playerId: number;

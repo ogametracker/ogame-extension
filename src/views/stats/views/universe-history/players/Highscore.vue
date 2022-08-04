@@ -54,6 +54,7 @@
 
 <script lang="ts">
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
+    import { HighscoreTypeNames } from '@/shared/models/ogame/highscore';
     import { createRecord } from '@/shared/utils/createRecord';
     import { mergeDeep } from '@/shared/utils/mergeDeep';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
@@ -121,7 +122,7 @@
         private scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
         private firstDay = 0;
 
-        private readonly keys: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        private readonly keys = HighscoreTypeNames;
         private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
             return [
                 {
@@ -159,6 +160,22 @@
                 {
                     key: 'numberOfShips',
                     label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
+                },
+                {
+                    key: 'lifeform',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
+                },
+                {
+                    key: 'lifeformEconomy',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
+                },
+                {
+                    key: 'lifeformTechnology',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
+                },
+                {
+                    key: 'lifeformDiscoveries',
+                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
                 },
             ];
         }
@@ -239,7 +256,7 @@
             let minDate = Number.MAX_SAFE_INTEGER;
 
             const scores = await UniverseHistoryDataModule.getPlayerScoreHistory(this.playerIds);
-            const types: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const types = HighscoreTypeNames;
             const lastScores = createRecord(this.playerIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
 
             scores.forEach((score, i) => {

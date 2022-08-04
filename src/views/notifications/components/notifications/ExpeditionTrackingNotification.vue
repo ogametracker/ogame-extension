@@ -35,7 +35,7 @@
                     <div class="result-grid" v-if="foundShips">
                         <template v-for="ship in ships">
                             <template v-if="notification.ships[ship] > 0">
-                                <o-ship :ship="shipTypes[ship]" :key="`ship-icon-${ship}`" class="icon" />
+                                <o-ship :ship="ship" :key="`ship-icon-${ship}`" class="icon" />
                                 <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
                             </template>
                         </template>
@@ -93,7 +93,7 @@
                     <template v-if="notification.events[event] > 0">
                         <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close icon" :style="{ color: eventColors.nothing }" />
                         <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" class="icon" />
-                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" ship="battleship" size="24px" class="icon" />
+                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'delay'"
                             :key="`event-icon-${event}`"
@@ -175,15 +175,14 @@
 
 <script lang="ts">
     import { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
     import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
@@ -211,27 +210,13 @@
             ExpeditionEventType.trader,
             ExpeditionEventType.nothing,
         ];
+        private readonly ShipType = ShipType;
+        private readonly ResourceType = ResourceType;
 
         private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
         private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
-        private readonly shipTypes: Record<ExpeditionFindableShipType, OShipType> = {
-            [ShipType.lightFighter]: OShipType['light-fighter'],
-            [ShipType.heavyFighter]: OShipType['heavy-fighter'],
-            [ShipType.cruiser]: OShipType.cruiser,
-            [ShipType.battleship]: OShipType.battleship,
-            [ShipType.bomber]: OShipType.bomber,
-            [ShipType.battlecruiser]: OShipType.battlecruiser,
-            [ShipType.destroyer]: OShipType.destroyer,
-            [ShipType.reaper]: OShipType.reaper,
-            [ShipType.pathfinder]: OShipType.pathfinder,
-            [ShipType.smallCargo]: OShipType['small-cargo'],
-            [ShipType.largeCargo]: OShipType['large-cargo'],
-            [ShipType.espionageProbe]: OShipType['espionage-probe'],
-        };
-
-        private readonly ResourceType = ResourceType;
 
         private get showSimplified() {
             return SettingsDataModule.settings.messageTracking.showSimplifiedResults;

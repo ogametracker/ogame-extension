@@ -35,6 +35,7 @@ import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
+import viewsempireLifeforms from '@stats/views/empire/Lifeforms.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -379,6 +380,11 @@ const routes: RouteConfig[] = [
                         path: "amortization",
                         name: "empire/amortization",
                         component: viewsempireAmortization
+                    },
+                    {
+                        path: "lifeforms",
+                        name: "empire/lifeforms",
+                        component: viewsempireLifeforms
                     },
                     {
                         redirect: {
