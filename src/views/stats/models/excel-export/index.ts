@@ -1,6 +1,7 @@
 import { getPlayerDatabase } from '@/shared/db/access';
 import { $i18n } from '@/shared/i18n/extension/$i18n';
 import { CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
 import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
 import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
@@ -15,6 +16,7 @@ import { GlobalOgameMetaData } from '../../data/global';
 interface ExcelExportOptions_Expeditions {
     rawData: boolean;
     overviewPerDay: boolean;
+    depletionPerDay: boolean;
 
     resourcesPerDay: {
         amount: boolean;
@@ -72,12 +74,30 @@ class ExcelExportClass {
                 $i18n.$t.common.date,
                 $i18n.$t.resources[ResourceType.metal],
                 $i18n.$t.resources[ResourceType.crystal],
+                $i18n.$t.debrisFields.position,
             ];
-            const data = dailyResults.map(day => [
-                $i18n.$d(day.date, 'date'),
-                day.metal,
-                day.crystal,
-            ]);
+            const data = dailyResults.flatMap(day => {
+                const rows: [string, number, number, string][] = [];
+
+                if (day.normal.metal > 0 || day.normal.crystal > 0) {
+                    rows.push([
+                        $i18n.$d(day.date, 'date'),
+                        day.normal.metal,
+                        day.normal.crystal,
+                        '1-15',
+                    ]);
+                }
+                if (day.expedition.metal > 0 || day.expedition.crystal > 0) {
+                    rows.push([
+                        $i18n.$d(day.date, 'date'),
+                        day.expedition.metal,
+                        day.expedition.crystal,
+                        '16',
+                    ]);
+                }
+
+                return rows;
+            });
             const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
             xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.debrisFields.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.dailyResources}`);
@@ -91,11 +111,16 @@ class ExcelExportClass {
             $i18n.$t.common.dateTime,
             $i18n.$t.resources[ResourceType.metal],
             $i18n.$t.resources[ResourceType.crystal],
+            $i18n.$t.debrisFields.position,
         ];
         const data = allDfReports.map(report => [
             $i18n.$d(report.date, 'datetime'),
             report.metal,
             report.crystal,
+            report.isExpeditionDebrisField == null ? ''
+                : report.isExpeditionDebrisField
+                    ? '16'
+                    : '1-15'
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
@@ -225,6 +250,27 @@ class ExcelExportClass {
         if (options.darkMatterPerDay) {
             this.#writeExpeditions_dailyDarkMatter(workbook);
         }
+
+        if (options.depletionPerDay) {
+            this.#writeExpeditions_dailyDepletion(workbook);
+        }
+    }
+    #writeExpeditions_dailyDepletion(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...depletionLevels.map(level => $i18n.$t.expeditions.depletionLevels[level]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...depletionLevels.map(level => day.depletion[level]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDepletion}`);
     }
     #writeExpeditions_dailyDarkMatter(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
@@ -294,6 +340,7 @@ class ExcelExportClass {
             $i18n.$t.common.dateTime,
             $i18n.$t.excelExport.expeditions.eventType,
             $i18n.$t.excelExport.expeditions.eventSize,
+            $i18n.$t.expeditions.depletion,
             ...ResourceTypes.map(resource => $i18n.$t.resources[resource]),
             ...ExpeditionFindableShipTypes.map(ship => $i18n.$t.ships[ship]),
             $i18n.$t.premium.darkMatter,
@@ -303,6 +350,7 @@ class ExcelExportClass {
             $i18n.$d(expo.date, 'datetime'),
             $i18n.$t.expeditions.expeditionEvents[expo.type],
             'size' in expo ? $i18n.$t.expeditions.expeditionEventSizes[expo.size] : '',
+            $i18n.$t.expeditions.depletionLevels[expo.depletion ?? 'unknown'],
             ...ResourceTypes.map(resource => expo.type == ExpeditionEventType.resources ? expo.resources[resource] : ''),
             ...ExpeditionFindableShipTypes.map(ship => expo.type == ExpeditionEventType.fleet ? expo.fleet[ship] : ''),
             expo.type == ExpeditionEventType.darkMatter ? expo.darkMatter : '',

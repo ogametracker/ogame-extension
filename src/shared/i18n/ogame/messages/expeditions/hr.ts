@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -138,6 +139,27 @@ export const hr: ExpeditionMessages = {
             /*TODO: hr 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*TODO: hr 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*TODO: hr 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+    },
+
+    logbookRegex: /Izvadak iz dnevnika oficira za komunikaciju:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*'Izgleda da */'ovaj dio univerzuma nije'/* jo istraen'*/,
+            /*'Izvandredan je osjećaj */'putovati dijelom sektora koji'/* jo nije istraen'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*'Izgleda da */'nijedan čovjek nije bio u ovom dijelu galaksije'/* prije nas'*/,
+            /*'Nali smo ostatke prastarih svemirskih brodova. */'Netko je bio ovdje prije nas',
+            /*'Skoro smo se susreli sa drugom ekspedicijskom flotom. */'Nisam očekivao da bi nekoga'/* moglo biti ovdje'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*'Susreli smo članove druge ekspedicijske flote. */'Nisu nam rekli ništa korisno',
+            /*'Našli smo dokaz da ima još */'ekspedicijskih flota prisutnih ovdije',
+            /*'Uspostavili smo */'prijateljski kontakt sa drugom ekspedicijskom flotom',
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO: hr 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };

@@ -50,6 +50,7 @@ export const de: SettingsTranslations = {
         combatResults: 'Kampfergebnis',
         expeditionEvents: 'Expeditionsereignisse',
         expeditionEventSizes: 'Ereignisgrößen',
+        expeditionDepletionLevels: 'Systemauslastung',
         resources: 'Rohstoffe',
         ships: 'Schiffe',
     },

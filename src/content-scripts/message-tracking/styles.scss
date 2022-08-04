@@ -19,7 +19,10 @@ $image-size-small: 24px;
 
         &__content {
             display: flex !important;
+            flex-wrap: wrap;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             margin: -10px 0;
             padding: 0 5px 5px 12px;
         }
@@ -48,6 +51,23 @@ $image-size-small: 24px;
         align-items: center;
         column-gap: 8px;
         color: white;
+
+        &--depletion-level {
+            font-size: 24px;
+
+            &-none {
+                color: var(--ogame-tracker--depletion-level--none);
+            }
+            &-low {
+                color: var(--ogame-tracker--depletion-level--low);
+            }
+            &-medium {
+                color: var(--ogame-tracker--depletion-level--medium);
+            }
+            &-high {
+                color: var(--ogame-tracker--depletion-level--high);
+            }
+        }
 
         &--resources,
         &--darkMatter {

@@ -40,6 +40,10 @@
                     label: this.$i18n.$t.expeditions.tabHeaders.foundItems,
                     to: { name: 'expeditions/items' },
                 },
+                {
+                    label: this.$i18n.$t.expeditions.tabHeaders.depletion,
+                    to: { name: 'expeditions/depletion' },
+                },
             ];
         }
     }

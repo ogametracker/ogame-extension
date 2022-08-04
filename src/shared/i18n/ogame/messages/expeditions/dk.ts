@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -138,6 +139,27 @@ export const dk: ExpeditionMessages = {
             /*TODO: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*TODO: dk 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*TODO: dk 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+    },
+    
+    logbookRegex: /*TODO: dk *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*TODO: dk 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*TODO: dk 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*TODO: dk 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*TODO: dk 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*TODO: dk 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*TODO: dk 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*TODO: dk 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*TODO: dk 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO: dk 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };

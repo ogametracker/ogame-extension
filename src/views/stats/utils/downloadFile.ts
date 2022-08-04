@@ -1,7 +1,11 @@
-export function downloadFile(filename: string, content: string): void {
+export function downloadFile(filename: string, content: string, type = 'data:text/plain;chartset=utf-8'): void {
+    const blob = new Blob([content], { type });
+    const url = window.URL.createObjectURL(blob);
+
     const link = document.createElement('a');
-    link.setAttribute('download', filename);
-    link.setAttribute('href', `data:test/plain;charset=utf-8,${encodeURIComponent(content)}`);
-    
+    link.download = filename;
+    link.href = url;
     link.click();
+
+    window.URL.revokeObjectURL(url);
 }

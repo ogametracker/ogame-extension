@@ -135,6 +135,40 @@
                     </template>
                 </template>
             </div>
+
+            <template v-if="hasDepletion">
+                <hr />
+                <h4 v-text="$i18n.$t.expeditions.depletion" />
+                <div class="result-grid" v-if="showSimplified">
+                    <template v-for="level in DepletionLevels">
+                        <template v-if="notification.depletion[level] > 0">
+                            <span
+                                :key="`icon-${level}`"
+                                class="icon mdi"
+                                :class="
+                                    {
+                                        unknown: 'mdi-help',
+                                        none: 'mdi-signal-cellular-outline',
+                                        low: 'mdi-signal-cellular-1',
+                                        medium: 'mdi-signal-cellular-2',
+                                        high: 'mdi-signal-cellular-3',
+                                    }[level]
+                                "
+                                :style="{ color: depletionColors[level] }"
+                            />
+                            <span :key="`amount-${level}`" v-text="$i18n.$n(notification.depletion[level])" />
+                        </template>
+                    </template>
+                </div>
+                <div v-else class="text-grid events">
+                    <template v-for="level in DepletionLevels">
+                        <template v-if="notification.depletion[level] > 0">
+                            <span v-text="$i18n.$t.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
+                            <span v-text="$i18n.$n(notification.depletion[level])" :key="`depletion-count-${level}`" />
+                        </template>
+                    </template>
+                </div>
+            </template>
         </template>
     </notification>
 </template>
@@ -150,6 +184,7 @@
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
     @Component({
         components: {
@@ -178,6 +213,8 @@
         private readonly ShipType = ShipType;
         private readonly ResourceType = ResourceType;
 
+        private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+
         private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
 
@@ -191,6 +228,10 @@
 
         private get title() {
             return this.$i18n.$t.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
+        }
+
+        private get hasDepletion() {
+            return Object.values(this.notification.depletion).some(c => c > 0);
         }
 
         private get foundResources() {
@@ -207,6 +248,10 @@
 
         private get eventColors() {
             return SettingsDataModule.settings.colors.expeditions.events;
+        }
+
+        private get depletionColors() {
+            return SettingsDataModule.settings.colors.expeditions.depletion;
         }
 
         private get resourceSum() {
@@ -250,6 +295,10 @@
         flex-direction: row;
         column-gap: 8px;
         row-gap: 4px;
+
+        + .result-grid {
+            margin-top: 8px;
+        }
     }
 
     .text-grid {

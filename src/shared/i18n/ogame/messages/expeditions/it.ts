@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -142,12 +143,25 @@ export const it: ExpeditionMessages = {
         ],
     },
 
-    /*TODO: it: depletionMessages: {
-        0?: 'Sembra che questa parte di universo non sia ancora stata esplorata.',
-        1?: 'E` emozionante essere i primi ad attraversare un settore inesplorato.',
-        2?: 'Encontramos os destroços de algumas naves antigas. Não somos os primeiros neste quadrante.',
-        3?: 'Quase que chocamos contra uma outra frota em expedição. Pensei que não iríamos encontrar mais ninguém por aqui.',
-
-        regex: /Rapporto dell`ufficiale alle comunicazioni: (?<message>.+)/,
-    }*/
+    
+    logbookRegex: /Rapporto dell`ufficiale alle comunicazioni:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*TODO it: 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*TODO it: 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*TODO it: 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*TODO it: 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*TODO it: 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*TODO it: 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*TODO it: 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*TODO it: 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO it: 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+        ],
+    },
 };

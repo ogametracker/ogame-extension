@@ -6,6 +6,7 @@ export interface ExcelExportTranslations {
             header: string;
             rawData: string;
             dailyOverview: string;
+            dailyDepletion: string;
             dailyResources: string;
             dailyResourceSizes: string;
             dailyShips: string;
@@ -34,6 +35,7 @@ export interface ExcelExportTranslations {
         sheets: {
             rawData: string;
             dailyResults: string;
+            dailyDepletion: string;
             dailyResources: string;
             dailyShips: string;
             dailyDarkMatter: string;

@@ -5,11 +5,13 @@ import { ResourceType } from '../ogame/resources/ResourceType';
 import { ShipType } from '../ogame/ships/ShipType';
 import { DateRange } from './DateRange';
 import { CombatResultType } from '../combat-reports/CombatResultType';
+import { ExpeditionDepletionLevel } from '../expeditions/ExpeditionDepletionLevel';
 
 export interface ColorSettings {
     expeditions: {
         events: Record<ExpeditionEventType, string>;
         sizes: Record<ExpeditionEventSize, string>;
+        depletion: Record<ExpeditionDepletionLevel | 'unknown', string>;
     };
     resources: Record<ResourceType | 'totalMsu', string>;
     ships: Record<ShipType, string>;

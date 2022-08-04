@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 
@@ -46,8 +47,6 @@ export interface ExpeditionMessages {
         regex: RegExp;
     };
 
-    /*TODO: depletionMessages: {
-        Record<ExpeditionDepletionLevel, string>; //string[]?
-        regex: RegExp;
-    };*/
+    logbookRegex: RegExp;
+    depletionMessages: Record<ExpeditionDepletionLevel, string[]>;
 }

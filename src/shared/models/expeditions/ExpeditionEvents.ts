@@ -1,6 +1,7 @@
 import { ItemHash } from '../ogame/items/ItemHash';
 import { ResourceType } from '../ogame/resources/ResourceType';
 import { ShipType } from '../ogame/ships/ShipType';
+import { ExpeditionDepletionLevel } from './ExpeditionDepletionLevel';
 import { ExpeditionEventSize } from './ExpeditionEventSize';
 import { ExpeditionEventType } from './ExpeditionEventType';
 
@@ -8,6 +9,8 @@ interface ExpeditionEventBase {
     id: number;
     date: number;
     type: ExpeditionEventType;
+
+    depletion?: ExpeditionDepletionLevel;
 }
 
 interface ExpeditionEventWithSize {

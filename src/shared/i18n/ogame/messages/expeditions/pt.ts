@@ -1,3 +1,4 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
@@ -140,13 +141,25 @@ export const pt: ExpeditionMessages = {
             /*'Uma grande Frota de */'naves cristalinas de origem desconhecida'/* está em rota de ataque contra a tua frota de exploração. Por agora temos de assumir o pior.'*/,
         ],
     },
-
-    /*TODO: pt: depletionMessages: {
-        0?: 'Parece que esta parte do universo ainda não foi explorada.',
-        1?: 'É estranho saber que somos os primeiros a entrar neste sector.',
-        2?: 'Encontramos os destroços de algumas naves antigas. Não somos os primeiros neste quadrante.',
-        3?: 'Quase que chocamos contra uma outra frota em expedição. Pensei que não iríamos encontrar mais ninguém por aqui.',
-
-        regex: /Entrada do diário dos Engenheiros de Comunicações: (?<message>.+)/,
-    }*/
+    
+    logbookRegex: /Entrada do diário dos Engenheiros de Comunicações:(?<text>.+)/,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*'Parece que esta */'parte do universo ainda não foi explorada',
+            /*'É estranho saber que */'somos os primeiros a entrar neste sector',
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*'Ao que parece, somos os */'primeiros humanos a entrar nesta parte'/* da galáxia'*/,
+            /*'Encontramos os destroços de algumas naves antigas. Não */'somos os primeiros neste quadrante',
+            /*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*TODO: pt 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*TODO: pt 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*TODO: pt 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO: pt 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+        ],
+    },
 };

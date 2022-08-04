@@ -15,6 +15,7 @@ import { Ships } from '@/shared/models/ogame/ships/Ships';
 import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 import { createRecord } from '@/shared/utils/createRecord';
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
 export interface DailyExpeditionResult {
     date: number;
@@ -31,6 +32,7 @@ export interface DailyExpeditionResult {
         fleet: Record<ExpeditionEventSize, number>;
         darkMatter: Record<ExpeditionEventSize, number>;
     };
+    depletion: Record<ExpeditionDepletionLevel | 'unknown', number>;
 }
 
 @Component
@@ -88,6 +90,7 @@ class ExpeditionDataModuleClass extends Vue {
         }
 
         dailyResult.events[expedition.type]++;
+        dailyResult.depletion[expedition.depletion ?? 'unknown']++;
 
         switch (expedition.type) {
             case ExpeditionEventType.resources: {
@@ -144,6 +147,10 @@ class ExpeditionDataModuleClass extends Vue {
                 fleet: createRecord(ExpeditionFindableShipTypes, 0),
                 fleetResourceUnits: createRecord(ResourceTypes, 0),
                 resources: createRecord(ResourceTypes, 0),
+            },
+            depletion: {
+                ...createRecord(ExpeditionDepletionLevels, 0),
+                unknown: 0,
             },
         };
     }

@@ -3,6 +3,7 @@ import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEvent
 import { ExpeditionsTranslations } from "./type";
 import { en as ogamePremium } from '../../ogame/premium/en';
 import { en as ogameFactions } from '../../ogame/factions/en';
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 
 export const en: ExpeditionsTranslations = {
     header: 'Expeditions',
@@ -12,6 +13,7 @@ export const en: ExpeditionsTranslations = {
         foundShips: 'Ships',
         foundDarkMatter: ogamePremium.darkMatter,
         foundItems: 'Items',
+        depletion: 'Depletion',
 
         subHeaders: {
             amount: 'Amount',
@@ -38,8 +40,16 @@ export const en: ExpeditionsTranslations = {
         [ExpeditionEventSize.medium]: 'Large Find',
         [ExpeditionEventSize.large]: 'Huge Find',
     },
+    depletionLevels: {
+        [ExpeditionDepletionLevel.none]: 'Very Low',
+        [ExpeditionDepletionLevel.low]: 'Low',
+        [ExpeditionDepletionLevel.medium]: 'Medium',
+        [ExpeditionDepletionLevel.high]: 'High',
+        unknown: 'Unknown',
+    },
 
     expeditions: 'Expeditions',
     finds: 'Finds',
     shipsFound: 'Ships found',
+    depletion: 'System depletion',
 };

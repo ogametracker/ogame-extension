@@ -83,14 +83,7 @@
 
         private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.ships;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    ships: defaultColors,
-                },
-            });
+            this.updateColors(defaultColors);
         }
     }
 </script>

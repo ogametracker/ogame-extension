@@ -56,14 +56,7 @@
 
         private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.resources;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    resources: defaultColors,
-                },
-            });
+            this.updateColors(defaultColors);
         }
     }
 </script>

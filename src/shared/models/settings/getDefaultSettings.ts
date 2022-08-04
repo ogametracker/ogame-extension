@@ -1,6 +1,7 @@
 import { $i18n } from "@/shared/i18n/extension/$i18n";
 import { LanguageKey } from "../../i18n/LanguageKey";
 import { CombatResultType } from "../combat-reports/CombatResultType";
+import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
 import { ResourceType } from "../ogame/resources/ResourceType";
@@ -112,6 +113,13 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionEventSize.small]: '#404040',
                     [ExpeditionEventSize.medium]: '#3e85fe',
                     [ExpeditionEventSize.large]: '#e01a76',
+                },
+                depletion: {
+                    [ExpeditionDepletionLevel.none]: '#00c23a',
+                    [ExpeditionDepletionLevel.low]: '#fbbc04',
+                    [ExpeditionDepletionLevel.medium]: '#ff5e00',
+                    [ExpeditionDepletionLevel.high]: '#c72525',
+                    unknown: '#404040',
                 },
             },
         },
