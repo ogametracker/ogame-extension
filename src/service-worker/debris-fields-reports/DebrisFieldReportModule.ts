@@ -91,6 +91,8 @@ export class DebrisFieldReportModule {
         const metal = parseIntSafe(metalText, 10);
         const crystal = parseIntSafe(crystalText, 10);
 
+        const isExpeditionDebrisField = /\[\d+:\d+:16\]/.test(data.text);
+
         return {
             success: true,
             report: {
@@ -98,6 +100,7 @@ export class DebrisFieldReportModule {
                 date: data.date,
                 metal,
                 crystal,
+                isExpeditionDebrisField,
             },
         };
     }

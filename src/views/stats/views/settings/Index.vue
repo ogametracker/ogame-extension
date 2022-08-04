@@ -35,6 +35,10 @@
                     to: { name: 'settings/combats' },
                 },
                 {
+                    label: this.$i18n.$t.settings.tabs.debrisFields,
+                    to: { name: 'settings/debris-fields' },
+                },
+                {
                     label: this.$i18n.$t.settings.tabs.resourceBalance,
                     to: { name: 'settings/resource-balance' },
                 },

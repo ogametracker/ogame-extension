@@ -265,7 +265,7 @@
                 return 0;
             }
 
-            return reports[resource];
+            return reports.total[resource];
         }
     }
 </script>
