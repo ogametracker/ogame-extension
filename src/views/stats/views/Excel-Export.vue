@@ -12,6 +12,7 @@
                     <checkbox v-model="exportOptions.expeditions.rawData" :label="$i18n.$t.excelExport.groups.expeditions.rawData" />
 
                     <checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="$i18n.$t.excelExport.groups.expeditions.dailyOverview" />
+                    <checkbox v-model="exportOptions.expeditions.depletionPerDay" :label="$i18n.$t.excelExport.groups.expeditions.dailyDepletion" />
 
                     <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="$i18n.$t.excelExport.groups.expeditions.dailyResources" />
                     <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="$i18n.$t.excelExport.groups.expeditions.dailyResourceSizes" />
@@ -67,6 +68,7 @@
             expeditions: {
                 rawData: false,
                 overviewPerDay: false,
+                depletionPerDay: false,
 
                 resourcesPerDay: {
                     amount: false,

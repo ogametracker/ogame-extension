@@ -8,6 +8,7 @@ export const en: ExcelExportTranslations = {
             header: 'Expeditions',
             rawData: 'Raw data (every single tracked expedition)',
             dailyOverview: 'Overview of results per day',
+            dailyDepletion: 'Overview of system depletion per day',
             dailyResources: 'Resource findings per day',
             dailyResourceSizes: 'Sizes of resource findings per day',
             dailyShips: 'Ship findings per day',
@@ -35,6 +36,7 @@ export const en: ExcelExportTranslations = {
 
         sheets: {
             rawData: 'Raw Data',
+            dailyDepletion: 'Daily System Depletion',
             dailyResults: 'Daily Results',
             dailyResources: 'Daily Resources',
             dailyShips: 'Daily Ships',

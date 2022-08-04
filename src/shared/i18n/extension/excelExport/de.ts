@@ -8,6 +8,7 @@ export const de: ExcelExportTranslations = {
             header: 'Expeditionen',
             rawData: 'Rohdaten (jede einzelne getrackte Expedition)',
             dailyOverview: 'Übersicht über Ergebnisse pro Tag',
+            dailyDepletion: 'Übersicht über Systemauslastung pro Tag',
             dailyResources: 'Rohstofffunde pro Tag',
             dailyResourceSizes: 'Größen der Rohstofffunde pro Tag',
             dailyShips: 'Schiffsfunde pro Tag',
@@ -35,6 +36,7 @@ export const de: ExcelExportTranslations = {
 
         sheets: {
             rawData: 'Rohdaten',
+            dailyDepletion: 'Tägliche Systemauslastung',
             dailyResults: 'Tägliche Ergebnisse',
             dailyResources: 'Tägliche Rohstoffe',
             dailyShips: 'Tägliche Schiffe',
