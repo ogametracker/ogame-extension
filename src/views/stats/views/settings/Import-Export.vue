@@ -87,7 +87,7 @@
             try {
                 const data = await this.getExportData();
 
-                downloadFile(`OGame-Tracker-Export_${format(Date.now(), 'yyyy-MM-dd_hh-mm-ss')}.json`, JSON.stringify(data));
+                downloadFile(`OGame-Tracker-Export_${format(Date.now(), 'yyyy-MM-dd_HH-mm-ss')}.json`, JSON.stringify(data));
             }
             catch (error) {
                 _logError(error);
