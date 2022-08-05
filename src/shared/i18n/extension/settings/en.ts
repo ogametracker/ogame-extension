@@ -55,7 +55,13 @@ export const en: SettingsTranslations = {
         ships: 'Ships',
     },
     common: {
-        msuConversionRates: 'MSU conversion rates',
+        conversionRates: {
+            title: 'Conversion rates',
+            mode: {
+                msuLong: 'Convert to Metal',
+                dsuLong: 'Convert to Deuterium',
+            },
+        },
         extensionLanguage: 'UI language (within OGame Tracker)',
     },
     expeditions: {
@@ -82,11 +88,11 @@ export const en: SettingsTranslations = {
             checkboxLabel: 'Include resources of ships lost in combats in resource balance',
         },
     },
-    showMsuInTables: {
-        title: 'MSU in tables',
-        label: 'Show MSU values in tables',
+    showConvertedUnitsInTables: {
+        title: 'MSU/DSU in tables',
+        label: 'Show converted MSU/DSU values in tables',
 
-        infoAmortization: 'Amortization time will still be calculated using cost and production in MSU',
+        infoAmortization: 'Amortization time will still be calculated using cost and production in MSU/DSU',
     },
 
     reset: 'Reset settings',

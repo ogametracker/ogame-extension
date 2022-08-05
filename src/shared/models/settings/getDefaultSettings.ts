@@ -53,11 +53,18 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             includeExpeditionFoundShipsResourceUnits: true,
             includeLostShipsResourceUnits: true,
         },
-        msuConversionRates: {
-            crystal: 2,
-            deuterium: 3,
+        conversionRates: {
+            mode: 'msu',
+            msu: {
+                crystal: 2,
+                deuterium: 3,
+            },
+            dsu: {
+                metal: 3,
+                crystal: 2,
+            },
         },
-        showMsuCells: true,
+        showCellsWithConvertedResourceUnits: true,
         expeditionFoundShipsResourceUnits: {
             factor: 1,
             deuteriumFactor: 1,

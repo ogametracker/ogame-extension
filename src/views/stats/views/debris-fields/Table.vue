@@ -22,8 +22,8 @@
                     </button>
                 </template>
 
-                <msu-conversion-rate-settings />
-                <show-msu-cells-settings />
+                <conversion-rate-settings />
+                <show-converted-resources-in-cells-settings />
                 <separate-expedition-and-normal-debris-field-settings />
                 <hr class="three-column" />
                 <date-range-settings class="three-column" />
@@ -41,18 +41,19 @@
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
+    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
             SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
@@ -63,10 +64,6 @@
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
         };
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
-        }
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
@@ -117,10 +114,10 @@
                 },
             ];
 
-            if (SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal * this.msuConversionRates.crystal, 0),
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    getValue: reports => reports.reduce((acc, report) => acc + getMsuOrDsu(report.total), 0),
                 });
             }
 

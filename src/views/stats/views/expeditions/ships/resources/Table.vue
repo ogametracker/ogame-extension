@@ -15,10 +15,10 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
+            <conversion-rate-settings />
             <expedition-ship-resource-units-factor-settings />
             <hr class="two-column" />
-            <show-msu-cells-settings />
+            <show-converted-resources-in-cells-settings />
             <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
@@ -32,17 +32,18 @@
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
         },
     })
     export default class Table extends Vue {
@@ -52,10 +53,6 @@
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
         };
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
-        }
 
         private get expos() {
             return ExpeditionDataModule.dailyResultsArray;
@@ -102,14 +99,11 @@
                 },
             ];
 
-            if (SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     getValue: expos => expos.reduce(
-                        (acc, expo) => acc
-                            + expo.findings.fleetResourceUnits.metal * this.factors.metal
-                            + expo.findings.fleetResourceUnits.crystal * this.msuConversionRates.crystal * this.factors.crystal
-                            + expo.findings.fleetResourceUnits.deuterium * this.msuConversionRates.deuterium * this.factors.deuterium,
+                        (acc, expo) => acc + getMsuOrDsu(expo.findings.fleetResourceUnits, this.factors),
                         0
                     ),
                 });

@@ -1,6 +1,6 @@
 <template>
     <div class="player-settings">
-        <msu-conversion-rate-settings class="msu-rate-settings" />
+        <conversion-rate-settings class="msu-rate-settings" />
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
@@ -59,13 +59,13 @@
     import { AllianceClass, SelectableAllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
     import { PlayerClass, SelectablePlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { AmortizationPlayerSettings } from '@stats/models/empire/amortization/AmortizationPlayerSettings';
 
     @Component({
         components: {
-            MsuConversionRateSettings,
+            ConversionRateSettings,
         },
     })
     export default class AmortizationPlayerSettingsInputs extends Vue {

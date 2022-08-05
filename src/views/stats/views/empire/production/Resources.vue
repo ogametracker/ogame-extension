@@ -381,7 +381,7 @@
                 </button>
             </template>
 
-            <show-msu-cells-settings />
+            <show-converted-resources-in-cells-settings />
         </floating-menu>
     </div>
 </template>
@@ -404,7 +404,7 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import { EmpireProductionBreakdown, EmpireProductionPlanetState, PlanetProductionBreakdown } from '@/shared/models/ogame/resource-production/types';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
@@ -455,7 +455,7 @@
 
     @Component({
         components: {
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
         },
     })
     export default class Resources extends Vue {

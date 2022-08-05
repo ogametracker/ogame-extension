@@ -15,11 +15,11 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
+            <conversion-rate-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
             <combat-tracking-ignore-espionage-combats-settings />
-            <show-msu-cells-settings />
+            <show-converted-resources-in-cells-settings />
             <hr class="two-column" />
             <date-range-settings class="two-column" />
         </floating-menu>
@@ -33,19 +33,20 @@
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             LostShipResourceUnitsFactorSettings,
             CombatTrackingIgnoreEspionageCombatsSettings,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
         },
     })
     export default class Table extends Vue {
@@ -62,10 +63,6 @@
 
         private get factors() {
             return SettingsDataModule.settings.lostShipsResourceUnits;
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get firstDay() {
@@ -112,28 +109,22 @@
                 {
                     label: this.$i18n.$t.common.resourceUnits,
                     getValue: reports => reports.reduce(
-                        (acc, report) => acc
-                            + report.lostShips.againstPlayers.resourceUnits.metal * factors.metal
-                            + report.lostShips.againstPlayers.resourceUnits.crystal * factors.crystal
-                            + report.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium,
+                        (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, factors),
                         0
                     ),
                 },
             ];
 
-            if(SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     getValue: reports => reports.reduce(
-                        (acc, report) => acc
-                            + report.lostShips.againstPlayers.resourceUnits.metal * factors.metal
-                            + report.lostShips.againstPlayers.resourceUnits.crystal * factors.crystal * this.msuConversionRates.crystal
-                            + report.lostShips.againstPlayers.resourceUnits.deuterium * factors.deuterium * this.msuConversionRates.deuterium,
+                        (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, factors),
                         0
                     ),
                 });
             }
-            
+
             return result;
         }
     }

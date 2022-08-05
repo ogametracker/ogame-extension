@@ -56,7 +56,13 @@ export const de: SettingsTranslations = {
     },
     common: {
         extensionLanguage: 'UI-Sprache (im OGame Tracker)',
-        msuConversionRates: 'MSE-Umrechnungskurse',
+        conversionRates: {
+            title: 'Umrechnungskurse',
+            mode: {
+                msuLong: 'Umrechnung nach Metall',
+                dsuLong: 'Umrechnung nach Deuterium',
+            },
+        },
     },
     expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
@@ -82,11 +88,11 @@ export const de: SettingsTranslations = {
             checkboxLabel: 'Rohstoffeinheiten in Kämpfen verlorener Schiffe in die Rohstoffbilanz einbeziehen',
         },
     },
-    showMsuInTables: {
-        title: 'MSE in Tabellen',
-        label: 'MSE-Werte in Tabellen anzeigen',
+    showConvertedUnitsInTables: {
+        title: 'MSE/DSE in Tabellen',
+        label: 'Umgerechnete MSE/DSE-Werte in Tabellen anzeigen',
 
-        infoAmortization: 'Amotisationszeit wird weiterhin anhand von Kosten und Produktion in MSE errechnet',
+        infoAmortization: 'Amotisationszeit wird weiterhin anhand von Kosten und Produktion in MSE/DSE errechnet',
     },
 
     reset: 'Einstellungen zurücksetzen',

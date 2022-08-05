@@ -38,9 +38,7 @@ export interface EmpireTranslations {
 
         table: {
             cost: string;
-            costMsu: string;
             productionPlus: string;
-            productionPlusMsu: string;
             amortizationTime: string;
 
             levelsOnPlanets: (levels: number, planets: number) => string;

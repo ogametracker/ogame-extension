@@ -1,62 +1,24 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :datasets="datasets"
-            :firstDay="firstDay"
-            :itemsPerDay="reportsPerDay"
-        >
+        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay">
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(
-                                    getResourcesAmount(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
-                            "
-                        />
+                        <div class="number" v-text="$i18n.$n(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(
-                                    getResourcesAmountInMsu(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
-                            "
-                        />
+                        <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnitsMsu" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$i18n.$n(getResourcesAmount(datasets))"
-                    />
-                    <div
-                        v-text="
-                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
-                        "
-                    />
+                    <div class="number" v-text="$i18n.$n(getResourcesAmount(datasets))" />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
-                    <div
-                        class="number"
-                        v-text="$i18n.$n(getResourcesAmountInMsu(datasets))"
-                    />
-                    <div
-                        v-text="
-                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
-                        "
-                    />
+                    <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(datasets))" />
+                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -68,7 +30,7 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
+            <conversion-rate-settings />
             <hr />
             <combat-tracking-ignore-espionage-combats-settings />
             <hr />
@@ -85,14 +47,15 @@
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             CombatTrackingIgnoreEspionageCombatsSettings,
         },
     })
@@ -102,10 +65,6 @@
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get firstDay() {
@@ -128,13 +87,10 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     color: this.colors.totalMsu,
                     filled: false,
-                    getValue: result =>
-                        result.loot.metal
-                        + result.loot.crystal * this.msuConversionRates.crystal
-                        + result.loot.deuterium * this.msuConversionRates.deuterium,
+                    getValue: result => getMsuOrDsu(result.loot),
                     stack: false,
                     showAverage: true,
                 }
@@ -153,15 +109,11 @@
         }
 
         private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
             return datasets.reduce((acc, cur) => {
-                if (!(cur.key in msu)) {
+                if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;
                 }
-                return acc + cur.value * msu[cur.key as ResourceType];
+                return acc + getMsuOrDsu({ [cur.key as ResourceType]: cur.value });
             }, 0);
         }
     }

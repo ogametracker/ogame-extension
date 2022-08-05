@@ -17,8 +17,8 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
-            <show-msu-cells-settings />
+            <conversion-rate-settings />
+            <show-converted-resources-in-cells-settings />
             <hr class="two-column" />
             <expedition-ship-resource-units-factor-settings />
             <lost-ship-resource-units-factor-settings />
@@ -43,13 +43,14 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import DetailedResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import { addDays, differenceInDays, startOfDay } from 'date-fns';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
     import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
+    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
     const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
@@ -67,10 +68,10 @@
             RangedStatsTable,
             DateRangeSettings,
             DetailedResourceBalanceSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
             LostShipResourceUnitsFactorSettings,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
             IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
             IncludeShipsLostInCombatsInResourceBalance,
         },
@@ -107,10 +108,6 @@
                 [ResourceType.crystal]: factor,
                 [ResourceType.deuterium]: deuteriumFactor,
             };
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
@@ -227,11 +224,6 @@
         }
 
         private get footerItems(): RangedStatsTableItem<DailyEvents>[] {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
-
             const result: RangedStatsTableItem<DailyEvents>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
@@ -245,12 +237,14 @@
                 },
             ];
 
-            if (SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     getValue: events => ResourceTypes.reduce(
                         (total, resource) => total + EventTypes.reduce(
-                            (total, eventType) => total + this.getResources(events, eventType, resource) * msu[resource],
+                            (total, eventType) => total + getMsuOrDsu({
+                                [resource]: this.getResources(events, eventType, resource)
+                            }),
                             0
                         ),
                         0
