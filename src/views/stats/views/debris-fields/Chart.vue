@@ -10,7 +10,7 @@
                     </button>
                 </template>
 
-                <msu-conversion-rate-settings />
+                <conversion-rate-settings />
                 <separate-expedition-and-normal-debris-field-settings />
                 <hr class="two-column" />
                 <resource-color-settings />
@@ -28,16 +28,17 @@
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
     import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
     import { getRGB, getRGBString } from '../../utils/getRGBString';
+import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
             SeparateExpeditionAndNormalDebrisFieldSettings,
         },
@@ -48,10 +49,6 @@
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get firstDay() {
@@ -86,10 +83,10 @@
                     })),
                     {
                         key: 'total',
-                        label: this.$i18n.$t.common.resourceUnitsMsu,
-                        color: this.colors.totalMsu,
+                        label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                        color: this.colors.totalConverted,
                         filled: false,
-                        getValue: result => result.total.metal + result.total.crystal * this.msuConversionRates.crystal,
+                        getValue: result => getMsuOrDsu(result.total),
                         stack: false,
                         showAverage: true,
                     }
@@ -115,10 +112,10 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
-                    color: this.colors.totalMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    color: this.colors.totalConverted,
                     filled: false,
-                    getValue: result => result.total.metal + result.total.crystal * this.msuConversionRates.crystal,
+                    getValue: result => getMsuOrDsu(result.total),
                     stack: false,
                     showAverage: true,
                 }

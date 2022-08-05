@@ -23,9 +23,9 @@ export interface LifeformTechnologyLevels {
 
 export interface BaseAmortizationItem {
     cost: Cost;
-    costMsu: number;
+    costConverted: number;
     productionDelta: Cost;
-    productionDeltaMsu: number;
+    productionDeltaConverted: number;
     timeInHours: number;
 }
 

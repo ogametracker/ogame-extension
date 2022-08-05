@@ -40,9 +40,7 @@ export const de: EmpireTranslations = {
 
         table: {
             cost: 'Kosten',
-            costMsu: 'Kosten (MSE)',
             productionPlus: 'Produktionsplus',
-            productionPlusMsu: 'Produktionsplus (MSE)',
             amortizationTime: 'Amortisationszeit',
 
             levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'Level' : 'Levels'} auf ${planets} Planeten`,

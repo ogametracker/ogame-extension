@@ -53,11 +53,18 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             includeExpeditionFoundShipsResourceUnits: true,
             includeLostShipsResourceUnits: true,
         },
-        msuConversionRates: {
-            crystal: 2,
-            deuterium: 3,
+        conversionRates: {
+            mode: 'msu',
+            msu: {
+                crystal: 2,
+                deuterium: 3,
+            },
+            dsu: {
+                metal: 3,
+                crystal: 2,
+            },
         },
-        showMsuCells: true,
+        showCellsWithConvertedResourceUnits: true,
         expeditionFoundShipsResourceUnits: {
             factor: 1,
             deuteriumFactor: 1,
@@ -74,7 +81,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 [ResourceType.metal]: '#ff5e00',
                 [ResourceType.crystal]: '#1a9fff',
                 [ResourceType.deuterium]: '#1bee8f',
-                totalMsu: '#999999',
+                totalConverted: '#999999',
             },
             ships: {
                 [ShipType.lightFighter]: '#2472f3',

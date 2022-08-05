@@ -1,10 +1,10 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.showMsuInTables.title" />
+            <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox :value="showMsuCells" @input="toggleMsuCells($event)" :label="$i18n.$t.settings.showMsuInTables.label" />
+            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.settings.showConvertedUnitsInTables.label" />
             <slot />
         </div>
     </div>
@@ -15,16 +15,16 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
-    export default class ShowMsuCellsSettings extends Vue {
+    export default class ShowConvertedResourcesInCellsSettings extends Vue {
 
-        private get showMsuCells() {
-            return SettingsDataModule.settings.showMsuCells;
+        private get showCellsWithConvertedResourceUnits() {
+            return SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
         }
 
-        private toggleMsuCells(showMsuCells: boolean) {
+        private toggle(showCellsWithConvertedResourceUnits: boolean) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
-                showMsuCells,
+                showCellsWithConvertedResourceUnits,
             });
         }
 

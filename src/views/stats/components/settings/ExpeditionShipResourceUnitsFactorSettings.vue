@@ -16,7 +16,7 @@
                     <input
                         type="number"
                         v-model.number.lazy="factor"
-                        @change="updateMsuConversionRates()"
+                        @change="updateFactors()"
                         @focus="isFocused = true"
                         @blur="onBlur()"
                         min="0"
@@ -30,7 +30,7 @@
                     <input
                         type="number"
                         v-model.number.lazy="deuteriumFactor"
-                        @change="updateMsuConversionRates()"
+                        @change="updateFactors()"
                         @focus="isFocused = true"
                         @blur="onBlur()"
                         min="0"
@@ -67,7 +67,7 @@
             }
         }
 
-        private updateMsuConversionRates() {
+        private updateFactors() {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 expeditionFoundShipsResourceUnits: {

@@ -1,55 +1,24 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :firstDay="firstDay"
-            :itemsPerDay="exposPerDay"
-            :datasets="datasets"
-            stacked
-            show-average
-        >
+        <stats-chart :firstDay="firstDay" :itemsPerDay="exposPerDay" :datasets="datasets" stacked show-average>
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
-                            "
-                        />
+                        <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(
-                                    getSumMsu(getVisibleDatasets(datasets))
-                                )
-                            "
-                        />
-                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                        <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div
-                        v-text="
-                            `${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`
-                        "
-                    />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
-                    <div
-                        class="number"
-                        v-text="$i18n.$n(getSumMsu(datasets))"
-                    />
-                    <div
-                        v-text="
-                            `${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`
-                        "
-                    />
+                    <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(datasets))" />
+                    <div v-text="`${`${$i18n.$t.common.resourceUnits} (${conversionModeText})`} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -61,7 +30,7 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
+            <conversion-rate-settings />
             <hr />
             <expedition-ship-resource-units-factor-settings />
             <hr />
@@ -78,14 +47,15 @@
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             StatsChart,
             ResourceColorSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
         },
     })
@@ -95,10 +65,6 @@
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get factors() {
@@ -118,6 +84,12 @@
             return ExpeditionDataModule.dailyResults;
         }
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [
                 ...ResourceTypes.map(resource => ({
@@ -130,15 +102,13 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
-                    color: this.colors.totalMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    color: this.colors.totalConverted,
                     filled: false,
-                    getValue: result => result.findings.fleetResourceUnits.metal * this.factors.metal
-                        + result.findings.fleetResourceUnits.crystal * this.factors.crystal * this.msuConversionRates.crystal
-                        + result.findings.fleetResourceUnits.deuterium  * this.factors.deuterium* this.msuConversionRates.deuterium,
+                    getValue: result => getMsuOrDsu(result.findings.fleetResourceUnits, this.factors),
                     stack: false,
                     showAverage: true,
-                }
+                },
             ];
         }
 
@@ -153,16 +123,12 @@
                 .reduce((acc, cur) => acc + cur.value, 0);
         }
 
-        private getSumMsu(datasets: ScollableChartFooterDataset[]): number {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
+        private getConvertedResourceUnits(datasets: ScollableChartFooterDataset[]): number {
             return datasets.reduce((acc, cur) => {
-                if (!(cur.key in msu)) {
+                if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;
                 }
-                return acc + cur.value * msu[cur.key as ResourceType];
+                return acc + getMsuOrDsu({ [cur.key as ResourceType]: cur.value });
             }, 0);
         }
     }

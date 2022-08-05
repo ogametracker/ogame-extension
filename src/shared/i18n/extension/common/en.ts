@@ -7,7 +7,8 @@ export const en: CommonTranslations = {
     sum: 'Sum',
     total: 'total',
     resourceUnits: 'Resource units',
-    resourceUnitsMsu: 'Resource units (MSU)',
+    dsu: 'DSU',
+    msu: 'MSU',
     date: 'Date',
     dateTime: 'Date & Time',
 

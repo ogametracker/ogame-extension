@@ -53,7 +53,11 @@ export interface SettingsTranslations {
         ships: string;
     };
     common: {
-        msuConversionRates: string;
+        conversionRates: {
+            title: string;
+            msuLong: string;
+            dsuLong: string;
+        };
         extensionLanguage: string;
     };
     expeditions: {
@@ -80,7 +84,7 @@ export interface SettingsTranslations {
             checkboxLabel: string;
         };
     };
-    showMsuInTables: {
+    showConvertedUnitsInTables: {
         title: string;
         label: string;
 

@@ -5,7 +5,8 @@ export interface CommonTranslations {
     averagePerDay: string;
     total: string;
     resourceUnits: string;
-    resourceUnitsMsu: string;
+    msu: string;
+    dsu: string;
     date: string;
     dateTime: string;
     

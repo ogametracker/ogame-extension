@@ -1,54 +1,24 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :datasets="datasets"
-            :firstDay="firstDay"
-            :itemsPerDay="eventsPerDay"
-        >
+        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="eventsPerDay">
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(
-                                    getResourcesAmount(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
-                            "
-                        />
+                        <div class="number" v-text="$i18n.$n(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(
-                                    getResourcesAmountInMsu(
-                                        getVisibleDatasets(datasets)
-                                    )
-                                )
-                            "
-                        />
-                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                        <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div
-                        class="number"
-                        v-text="$i18n.$n(getResourcesAmount(datasets))"
-                    />
+                    <div class="number" v-text="$i18n.$n(getResourcesAmount(datasets))" />
                     <div v-text="$i18n.$t.common.resourceUnits" />
 
-                    <div
-                        class="number"
-                        v-text="$i18n.$n(getResourcesAmountInMsu(datasets))"
-                    />
-                    <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                    <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(datasets))" />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                 </div>
             </template>
         </stats-chart>
@@ -60,14 +30,13 @@
                 </button>
             </template>
 
-            <msu-conversion-rate-settings />
-            <hr class="two-column" />
             <expedition-ship-resource-units-factor-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
             <include-ships-found-on-expeditions-in-resource-balance-settings />
             <include-ships-lost-in-combats-in-resource-balance />
             <hr class="two-column" />
+            <conversion-rate-settings />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -84,11 +53,12 @@
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
     import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
+    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     interface DayEvents {
         expeditions?: DailyExpeditionResult;
@@ -100,7 +70,7 @@
         components: {
             StatsChart,
             ResourceColorSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ExpeditionShipResourceUnitsFactorSettings,
             LostShipResourceUnitsFactorSettings,
             IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
@@ -113,10 +83,6 @@
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
-        }
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
         }
 
         private get includeFoundShipsFactor(): Record<ResourceType, number> {
@@ -143,6 +109,12 @@
 
         private get includeLostShips() {
             return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
+        }
+
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
         }
 
         private get firstDay() {
@@ -187,12 +159,14 @@
                 })),
                 {
                     key: 'total',
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
-                    color: this.colors.totalMsu,
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    color: this.colors.totalConverted,
                     filled: false,
-                    getValue: dayEvents => this.getResource(dayEvents, ResourceType.metal)
-                        + this.getResource(dayEvents, ResourceType.crystal) * this.msuConversionRates.crystal
-                        + this.getResource(dayEvents, ResourceType.deuterium) * this.msuConversionRates.deuterium,
+                    getValue: dayEvents => getMsuOrDsu({
+                        metal: this.getResource(dayEvents, ResourceType.metal),
+                        crystal: this.getResource(dayEvents, ResourceType.crystal),
+                        deuterium: this.getResource(dayEvents, ResourceType.deuterium),
+                    }),
                     stack: false,
                     showAverage: true,
                 }
@@ -210,16 +184,12 @@
                 .reduce((acc, cur) => acc + cur.value, 0);
         }
 
-        private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
-            const msu: Record<ResourceType, number> = {
-                [ResourceType.metal]: 1,
-                ...this.msuConversionRates,
-            };
+        private getConvertedResourcesAmount(datasets: ScollableChartFooterDataset[]): number {
             return datasets.reduce((acc, cur) => {
-                if (!(cur.key in msu)) {
+                if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;
                 }
-                return acc + cur.value * msu[cur.key as ResourceType];
+                return acc + getMsuOrDsu({ [cur.key as ResourceType]: cur.value });
             }, 0);
         }
 

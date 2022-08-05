@@ -24,27 +24,27 @@
     })
     export default class ResourceColorSettings extends Vue {
 
-        private get labels(): Record<ResourceType | 'totalMsu', string> {
+        private get labels(): Record<ResourceType | 'totalConverted', string> {
             return {
                 [ResourceType.metal]: this.$i18n.$t.resources.metal,
                 [ResourceType.crystal]: this.$i18n.$t.resources.crystal,
                 [ResourceType.deuterium]: this.$i18n.$t.resources.deuterium,
-                totalMsu: this.$i18n.$t.common.resourceUnitsMsu,
+                totalConverted: `${this.$i18n.$t.common.resourceUnits} (${this.$i18n.$t.common.msu}/${this.$i18n.$t.common.dsu})`,
             };
         }
 
-        private readonly keys: (ResourceType | 'totalMsu')[] = [
+        private readonly keys: (ResourceType | 'totalConverted')[] = [
             ResourceType.metal,
             ResourceType.crystal,
             ResourceType.deuterium,
-            'totalMsu',
+            'totalConverted',
         ];
 
         private get colors() {
             return SettingsDataModule.settings.colors.resources;
         }
 
-        private updateColors(value: Record<ResourceType | 'totalMsu', string>) {
+        private updateColors(value: Record<ResourceType | 'totalConverted', string>) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {

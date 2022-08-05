@@ -39,12 +39,12 @@
                             </button>
                         </template>
 
-                        <show-msu-cells-settings>
+                        <show-converted-resources-in-cells-settings>
                             <div class="msu-settings-amortization-info">
                                 <span class="mdi mdi-alert" />
-                                <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
+                                <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.infoAmortization" />
                             </div>
-                        </show-msu-cells-settings>
+                        </show-converted-resources-in-cells-settings>
                     </floating-menu>
                 </div>
 
@@ -317,14 +317,14 @@
                             <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                         </div>
                     </template>
-                    <template #cell-costMsu="{ value }">
+                    <template #cell-costConverted="{ value }">
                         <span v-text="$i18n.$n(value)" />
                     </template>
 
                     <template #cell-productionDelta="{ value }">
                         <span v-text="$i18n.$n(value.metal + value.crystal + value.deuterium, numberFormat)" />
                     </template>
-                    <template #cell-productionDeltaMsu="{ value }">
+                    <template #cell-productionDeltaConverted="{ value }">
                         <span v-text="$i18n.$n(value, numberFormat)" />
                     </template>
 
@@ -339,11 +339,11 @@
                             <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                         </div>
                     </template>
-                    <template #footer-costMsu="{ value }">
+                    <template #footer-costConverted="{ value }">
                         <span v-text="$i18n.$n(value)" :class="{ zero: value == 0 }" />
                     </template>
                     <template #footer-productionDelta />
-                    <template #footer-productionDeltaMsu />
+                    <template #footer-productionDeltaConverted />
                     <template #footer-timeInHours />
                 </grid-table>
             </div>
@@ -368,7 +368,7 @@
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
@@ -381,6 +381,7 @@
     import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
+import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -394,7 +395,7 @@
         components: {
             AmortizationPlanetSettingsInputs,
             AmortizationPlayerSettingsInputs,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
         },
     })
     export default class Amortization extends Vue {
@@ -424,10 +425,6 @@
         /* START amortization calculation */
         /**********************************/
         private playerSettings: AmortizationPlayerSettings = {
-            msuConversionRates: {
-                crystal: 2,
-                deuterium: 3,
-            },
             officers: {
                 admiral: false,
                 commander: false,
@@ -472,10 +469,6 @@
         private selectedItemIndizes: number[] = [];
 
         private generatingItemCount: { total: number; count: number } | null = null;
-
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
-        }
 
         private get planetSettingsSorted(): AmortizationPlanetSettings[] {
             return Object.values(this.planetSettings)
@@ -545,7 +538,6 @@
             const empire = this.empire;
 
             this.playerSettings = {
-                msuConversionRates: this.msuConversionRates,
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
@@ -613,7 +605,7 @@
 
 
         private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] {
-            const showMsu = SettingsDataModule.settings.showMsuCells;
+            const showConversion = SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
 
             const result: GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] = [
                 { key: 'checkbox', size: 'auto' },
@@ -621,10 +613,10 @@
                 { key: 'cost', size: '3fr' },
             ];
 
-            if (showMsu) {
+            if (showConversion) {
                 result.push({
-                    key: 'costMsu',
-                    label: this.$i18n.$t.empire.amortization.table.costMsu,
+                    key: 'costConverted',
+                    label: `${this.$i18n.$t.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     size: '1fr',
                 });
             }
@@ -635,10 +627,10 @@
                 size: '1fr',
             });
 
-            if (showMsu) {
+            if (showConversion) {
                 result.push({
-                    key: 'productionDeltaMsu',
-                    label: this.$i18n.$t.empire.amortization.table.productionPlusMsu,
+                    key: 'productionDeltaConverted',
+                    label: `${this.$i18n.$t.empire.amortization.table.productionPlus} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     size: '1fr',
                 });
             }
@@ -665,17 +657,11 @@
 
             return [{
                 cost,
-                costMsu: this.getMsu(cost),
+                costConverted: getMsuOrDsu(cost),
                 productionDelta: zeroCost,
-                productionDeltaMsu: 0,
+                productionDeltaConverted: 0,
                 timeInHours: 0,
             }];
-        }
-
-        private getMsu(cost: Cost): number {
-            return cost.metal
-                + cost.crystal * this.playerSettings.msuConversionRates.crystal
-                + cost.deuterium * this.playerSettings.msuConversionRates.deuterium;
         }
 
         private formatCoordinates(coordinates: Coordinates): string {
