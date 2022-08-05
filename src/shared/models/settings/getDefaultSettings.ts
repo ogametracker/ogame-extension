@@ -81,7 +81,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 [ResourceType.metal]: '#ff5e00',
                 [ResourceType.crystal]: '#1a9fff',
                 [ResourceType.deuterium]: '#1bee8f',
-                totalMsu: '#999999',
+                totalConverted: '#999999',
             },
             ships: {
                 [ShipType.lightFighter]: '#2472f3',

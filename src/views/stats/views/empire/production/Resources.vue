@@ -20,8 +20,8 @@
                 <o-resource resource="deuterium" size="75px" />
             </template>
             <template #header-total> {{ $i18n.$t.common.resourceUnits }} </template>
-            <template #header-totalMsu>
-                {{ $i18n.$t.common.resourceUnitsMsu }}
+            <template #header-totalConverted>
+                {{ `${$i18n.$t.common.resourceUnits} (${conversionModeText})` }}
             </template>
 
             <template #header-productionSettings>
@@ -301,7 +301,7 @@
                     />
                 </div>
             </template>
-            <template #cell-totalMsu="{ value }">
+            <template #cell-totalConverted="{ value }">
                 <div class="breakdown-list">
                     <div
                         :class="{ 'fade-value': value == 0 }"
@@ -363,7 +363,7 @@
                     />
                 </div>
             </template>
-            <template #footer-totalMsu="{ value }">
+            <template #footer-totalCnoverted="{ value }">
                 <div class="breakdown-list">
                     <div
                         :class="{ 'fade-value': value == 0 }"
@@ -418,6 +418,7 @@
     import { getMetalBaseProduction } from '@/shared/models/ogame/resource-production/getMetalProduction';
     import { getCrystalBaseProduction } from '@/shared/models/ogame/resource-production/getCrystalProduction';
     import { getItemBonus } from '@/shared/models/ogame/resource-production/getItemBonus';
+    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     interface ProductionItem {
         planet: {
@@ -430,7 +431,7 @@
         deuterium: PlanetProductionBreakdown;
         fusionReactorConsumption: number;
         total: number;
-        totalMsu: number;
+        totalConverted: number;
 
         productionSettings: ProductionSettingsItem;
         activeItems: ItemHash[];
@@ -479,10 +480,6 @@
             deuterium: 0,
         };
 
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
-        }
-
         private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
             const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
                 {
@@ -499,8 +496,8 @@
                 },
             ];
 
-            if (SettingsDataModule.settings.showMsuCells) {
-                result.push({ key: 'totalMsu' });
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
+                result.push({ key: 'totalConverted' });
             }
 
             result.push({
@@ -747,7 +744,11 @@
                     ...production,
                     fusionReactorConsumption: fusionReactorConsumptions[planet.id],
                     total: production.metal.total + production.crystal.total + production.deuterium.total - fusionReactorConsumptions[planet.id],
-                    totalMsu: production.metal.total + production.crystal.total * this.msuConversionRates.crystal + (production.deuterium.total - fusionReactorConsumptions[planet.id]) * this.msuConversionRates.deuterium,
+                    totalConverted: getMsuOrDsu({
+                        metal: production.metal.total,
+                        crystal: production.crystal.total,
+                        deuterium: production.deuterium.total - fusionReactorConsumptions[planet.id],
+                    }),
 
                     productionSettings: {
                         metalMine: planet.productionSettings[BuildingType.metalMine],
@@ -781,7 +782,11 @@
             const crystalPerHour = productionPerHour.crystal;
             const deuteriumPerHour = productionPerHour.deuterium - Object.values(this.fusionReactorConsumptions).reduce((total, cur) => total + cur, 0);
             const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
-            const totalMsuPerHour = metalPerHour + crystalPerHour * this.msuConversionRates.crystal + deuteriumPerHour * this.msuConversionRates.deuterium;
+            const totalConvertedPerHour = getMsuOrDsu({
+                metal: metalPerHour,
+                crystal: crystalPerHour,
+                deuterium: deuteriumPerHour,
+            });
 
             const metalPackages = metalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.metal);
             const crystalPackages = crystalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.crystal);
@@ -799,7 +804,7 @@
                     deuterium: { total: deuteriumPerHour / this.planets.length } as PlanetProductionBreakdown,
                     fusionReactorConsumption: 0,
                     total: totalPerHour / this.planets.length,
-                    totalMsu: totalMsuPerHour / this.planets.length,
+                    totalConverted: totalConvertedPerHour / this.planets.length,
 
                     productionSettings: null!,
                     activeItems: [],
@@ -815,7 +820,7 @@
                     deuterium: { total: deuteriumPerHour } as PlanetProductionBreakdown,
                     fusionReactorConsumption: 0,
                     total: totalPerHour,
-                    totalMsu: totalMsuPerHour,
+                    totalConverted: totalConvertedPerHour,
 
                     productionSettings: null!,
                     activeItems: [],
@@ -831,7 +836,7 @@
                     deuterium: { total: deuteriumPerHour * 24 } as PlanetProductionBreakdown,
                     fusionReactorConsumption: 0,
                     total: totalPerHour * 24,
-                    totalMsu: totalMsuPerHour * 24,
+                    totalConverted: totalConvertedPerHour * 24,
 
                     productionSettings: null!,
                     activeItems: [],
@@ -847,7 +852,7 @@
                     deuterium: { total: deuteriumPerHour * 24 * 7 } as PlanetProductionBreakdown,
                     fusionReactorConsumption: 0,
                     total: totalPerHour * 24 * 7,
-                    totalMsu: totalMsuPerHour * 24 * 7,
+                    totalConverted: totalConvertedPerHour * 24 * 7,
 
                     productionSettings: null!,
                     activeItems: [],
@@ -864,7 +869,11 @@
                     deuterium: { total: deuteriumPackages } as PlanetProductionBreakdown,
                     fusionReactorConsumption: 0,
                     total: metalPackages + crystalPackages + deuteriumPackages,
-                    totalMsu: metalPackages + crystalPackages * this.msuConversionRates.crystal + deuteriumPackages * this.msuConversionRates.deuterium,
+                    totalConverted: getMsuOrDsu({
+                        metal: metalPackages,
+                        crystal: crystalPackages,
+                        deuterium: deuteriumPackages,
+                    }),
 
                     productionSettings: null!,
                     activeItems: [],

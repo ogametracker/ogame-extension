@@ -7,8 +7,8 @@
                         <div class="number" v-text="$i18n.$n(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                        <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
@@ -17,8 +17,8 @@
                     <div class="number" v-text="$i18n.$n(getResourcesAmount(datasets))" />
                     <div v-text="$i18n.$t.common.resourceUnits" />
 
-                    <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(datasets))" />
-                    <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                    <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(datasets))" />
+                    <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                 </div>
             </template>
         </stats-chart>
@@ -30,14 +30,13 @@
                 </button>
             </template>
 
-            <conversion-rate-settings />
-            <hr class="two-column" />
             <expedition-ship-resource-units-factor-settings />
             <lost-ship-resource-units-factor-settings />
             <hr class="two-column" />
             <include-ships-found-on-expeditions-in-resource-balance-settings />
             <include-ships-lost-in-combats-in-resource-balance />
             <hr class="two-column" />
+            <conversion-rate-settings />
             <resource-color-settings />
         </floating-menu>
     </div>
@@ -59,7 +58,7 @@
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
     import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
-import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     interface DayEvents {
         expeditions?: DailyExpeditionResult;
@@ -112,6 +111,12 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
             return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
         }
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get firstDay() {
             return min([
                 ExpeditionDataModule.firstDay,
@@ -155,7 +160,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 {
                     key: 'total',
                     label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
-                    color: this.colors.totalMsu,
+                    color: this.colors.totalConverted,
                     filled: false,
                     getValue: dayEvents => getMsuOrDsu({
                         metal: this.getResource(dayEvents, ResourceType.metal),
@@ -179,7 +184,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 .reduce((acc, cur) => acc + cur.value, 0);
         }
 
-        private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
+        private getConvertedResourcesAmount(datasets: ScollableChartFooterDataset[]): number {
             return datasets.reduce((acc, cur) => {
                 if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;

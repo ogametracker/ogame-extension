@@ -42,7 +42,7 @@
                         <show-converted-resources-in-cells-settings>
                             <div class="msu-settings-amortization-info">
                                 <span class="mdi mdi-alert" />
-                                <span v-text="$i18n.$t.settings.showMsuInTables.infoAmortization" />
+                                <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.infoAmortization" />
                             </div>
                         </show-converted-resources-in-cells-settings>
                     </floating-menu>
@@ -317,14 +317,14 @@
                             <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                         </div>
                     </template>
-                    <template #cell-costMsu="{ value }">
+                    <template #cell-costConverted="{ value }">
                         <span v-text="$i18n.$n(value)" />
                     </template>
 
                     <template #cell-productionDelta="{ value }">
                         <span v-text="$i18n.$n(value.metal + value.crystal + value.deuterium, numberFormat)" />
                     </template>
-                    <template #cell-productionDeltaMsu="{ value }">
+                    <template #cell-productionDeltaConverted="{ value }">
                         <span v-text="$i18n.$n(value, numberFormat)" />
                     </template>
 
@@ -339,11 +339,11 @@
                             <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                         </div>
                     </template>
-                    <template #footer-costMsu="{ value }">
+                    <template #footer-costConverted="{ value }">
                         <span v-text="$i18n.$n(value)" :class="{ zero: value == 0 }" />
                     </template>
                     <template #footer-productionDelta />
-                    <template #footer-productionDeltaMsu />
+                    <template #footer-productionDeltaConverted />
                     <template #footer-timeInHours />
                 </grid-table>
             </div>
@@ -605,7 +605,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
 
         private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] {
-            const showMsu = SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
+            const showConversion = SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
 
             const result: GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] = [
                 { key: 'checkbox', size: 'auto' },
@@ -613,9 +613,9 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 { key: 'cost', size: '3fr' },
             ];
 
-            if (showMsu) {
+            if (showConversion) {
                 result.push({
-                    key: 'costMsu',
+                    key: 'costConverted',
                     label: `${this.$i18n.$t.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     size: '1fr',
                 });
@@ -627,9 +627,9 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 size: '1fr',
             });
 
-            if (showMsu) {
+            if (showConversion) {
                 result.push({
-                    key: 'productionDeltaMsu',
+                    key: 'productionDeltaConverted',
                     label: `${this.$i18n.$t.empire.amortization.table.productionPlus} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
                     size: '1fr',
                 });
@@ -657,9 +657,9 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
             return [{
                 cost,
-                costMsu: getMsuOrDsu(cost),
+                costConverted: getMsuOrDsu(cost),
                 productionDelta: zeroCost,
-                productionDeltaMsu: 0,
+                productionDeltaConverted: 0,
                 timeInHours: 0,
             }];
         }

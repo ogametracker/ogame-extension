@@ -7,8 +7,8 @@
                         <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div class="number" v-text="$i18n.$n(getSumMsu(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                        <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
@@ -17,8 +17,8 @@
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
                     <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
-                    <div class="number" v-text="$i18n.$n(getSumMsu(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(datasets))" />
+                    <div v-text="`${`${$i18n.$t.common.resourceUnits} (${conversionModeText})`} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -83,6 +83,12 @@
             return CombatReportDataModule.dailyResults;
         }
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
             const factors: Record<ResourceType, number> = {
                 [ResourceType.metal]: this.factors.factor,
@@ -101,7 +107,7 @@
                 {
                     key: 'total',
                     label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
-                    color: this.colors.totalMsu,
+                    color: this.colors.totalConverted,
                     filled: false,
                     getValue: (result: DailyCombatReportResult) => getMsuOrDsu(result.lostShips.onExpeditions.resourceUnits, factors),
                     stack: false,
@@ -118,7 +124,7 @@
             return datasets.filter(d => d.key != 'total').reduce((acc, cur) => acc + cur.value, 0);
         }
 
-        private getSumMsu(datasets: ScollableChartFooterDataset[]): number {
+        private getConvertedResourceUnits(datasets: ScollableChartFooterDataset[]): number {
             return datasets.reduce((acc, cur) => {
                 if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;

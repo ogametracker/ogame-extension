@@ -13,7 +13,7 @@ export interface ColorSettings {
         sizes: Record<ExpeditionEventSize, string>;
         depletion: Record<ExpeditionDepletionLevel | 'unknown', string>;
     };
-    resources: Record<ResourceType | 'totalMsu', string>;
+    resources: Record<ResourceType | 'totalConverted', string>;
     ships: Record<ShipType, string>;
     combatResults: Record<CombatResultType, string>;
 }

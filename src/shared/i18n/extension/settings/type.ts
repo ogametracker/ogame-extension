@@ -55,10 +55,8 @@ export interface SettingsTranslations {
     common: {
         conversionRates: {
             title: string;
-            mode: {
-                msuLong: string;
-                dsuLong: string;
-            };
+            msuLong: string;
+            dsuLong: string;
         };
         extensionLanguage: string;
     };

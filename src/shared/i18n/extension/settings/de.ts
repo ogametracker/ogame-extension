@@ -58,10 +58,8 @@ export const de: SettingsTranslations = {
         extensionLanguage: 'UI-Sprache (im OGame Tracker)',
         conversionRates: {
             title: 'Umrechnungskurse',
-            mode: {
-                msuLong: 'Umrechnung nach Metall',
-                dsuLong: 'Umrechnung nach Deuterium',
-            },
+            msuLong: 'Umrechnung nach Metall',
+            dsuLong: 'Umrechnung nach Deuterium',
         },
     },
     expeditions: {

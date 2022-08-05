@@ -21,5 +21,5 @@ export function getMsuOrDsu(resources: Partial<Record<ResourceType, number>>, fa
         return cost.metal + cost.crystal * msu.crystal + cost.deuterium * msu.deuterium;
     }
 
-    return cost.deuterium + cost.crystal * dsu.crystal + cost.metal * dsu.metal;
+    return cost.deuterium + cost.crystal / dsu.crystal + cost.metal / dsu.metal;
 }

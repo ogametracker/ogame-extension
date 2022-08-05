@@ -4,7 +4,7 @@
             <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.settings.showMsuInTables.label" />
+            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.settings.showConvertedUnitsInTables.label" />
             <slot />
         </div>
     </div>

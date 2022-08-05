@@ -84,7 +84,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                     {
                         key: 'total',
                         label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
-                        color: this.colors.totalMsu,
+                        color: this.colors.totalConverted,
                         filled: false,
                         getValue: result => getMsuOrDsu(result.total),
                         stack: false,
@@ -113,7 +113,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 {
                     key: 'total',
                     label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
-                    color: this.colors.totalMsu,
+                    color: this.colors.totalConverted,
                     filled: false,
                     getValue: result => getMsuOrDsu(result.total),
                     stack: false,

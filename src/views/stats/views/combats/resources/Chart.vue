@@ -7,8 +7,8 @@
                         <div class="number" v-text="$i18n.$n(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.common.resourceUnits" />
 
-                        <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.common.resourceUnitsMsu" />
+                        <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
@@ -17,8 +17,8 @@
                     <div class="number" v-text="$i18n.$n(getResourcesAmount(datasets))" />
                     <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
 
-                    <div class="number" v-text="$i18n.$n(getResourcesAmountInMsu(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnitsMsu} (${$i18n.$t.common.total})`" />
+                    <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(datasets))" />
+                    <div v-text="`${`${$i18n.$t.common.resourceUnits} (${conversionModeText})`} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -75,6 +75,12 @@
             return CombatReportDataModule.dailyResults;
         }
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
             return [
                 ...ResourceTypes.map(resource => ({
@@ -88,7 +94,7 @@
                 {
                     key: 'total',
                     label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
-                    color: this.colors.totalMsu,
+                    color: this.colors.totalConverted,
                     filled: false,
                     getValue: result => getMsuOrDsu(result.loot),
                     stack: false,
@@ -108,7 +114,7 @@
                 .reduce((acc, cur) => acc + cur.value, 0);
         }
 
-        private getResourcesAmountInMsu(datasets: ScollableChartFooterDataset[]): number {
+        private getConvertedResourcesAmount(datasets: ScollableChartFooterDataset[]): number {
             return datasets.reduce((acc, cur) => {
                 if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
                     return acc;

@@ -1,6 +1,6 @@
 <template>
     <div class="player-settings">
-        <conversion-rate-settings class="msu-rate-settings" />
+        <conversion-rate-settings class="conversion-rate-settings" />
 
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
@@ -131,7 +131,7 @@
         }
     }
 
-    .msu-rate-settings {
+    .conversion-rate-settings {
         display: contents;
 
         &::v-deep {

@@ -20,7 +20,7 @@
             <hr class="two-column" />
             <show-converted-resources-in-cells-settings />
             <hr class="two-column" />
-            <date-range-settings />
+            <date-range-settings class="two-column"  />
         </floating-menu>
     </div>
 </template>

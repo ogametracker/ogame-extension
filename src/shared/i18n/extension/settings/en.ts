@@ -57,10 +57,8 @@ export const en: SettingsTranslations = {
     common: {
         conversionRates: {
             title: 'Conversion rates',
-            mode: {
-                msuLong: 'Convert to Metal',
-                dsuLong: 'Convert to Deuterium',
-            },
+            msuLong: 'Convert to Metal',
+            dsuLong: 'Convert to Deuterium',
         },
         extensionLanguage: 'UI language (within OGame Tracker)',
     },

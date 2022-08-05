@@ -4,29 +4,44 @@
             <span v-text="$i18n.$t.settings.common.conversionRates.title" />
         </div>
         <div class="fake-table-body">
-            <select :value="conversionMode" @input="setConversionMode($event)">
+            <select :value="conversionMode" @input="setConversionMode($event.target.value)">
                 <option value="msu" v-text="`${$i18n.$t.settings.common.conversionRates.msuLong} (${$i18n.$t.common.msu})`" />
                 <option value="dsu" v-text="`${$i18n.$t.settings.common.conversionRates.dsuLong} (${$i18n.$t.common.dsu})`" />
             </select>
 
-            <span class="conversion-inputs" v-if="mode == 'msu'">
-                <span>
-                    <o-resource resource="metal" />
-                    <input type="number" value="1" readonly />
-                </span>
-
+            <span class="inputs" v-if="conversionMode == 'msu'">
                 <span>
                     <o-resource resource="crystal" />
-                    <input type="number" v-model.number.lazy="crystal" @change="updateMsuConversionRates()" min="1" max="3" step="0.01" />
+                    <input type="number" :value="1" readonly />
+                    <span class="equal mdi mdi-equal" />
+                    <input type="number" v-model.number.lazy="msu.crystal" @change="updateMsuConversionRates()" min="1" max="3" step="0.01" />
+                    <o-resource resource="metal" />
                 </span>
 
                 <span>
                     <o-resource resource="deuterium" />
-                    <input type="number" v-model.number.lazy="deuterium" @change="updateMsuConversionRates()" min="2" max="5" step="0.01" />
+                    <input type="number" :value="1" readonly />
+                    <span class="equal mdi mdi-equal" />
+                    <input type="number" v-model.number.lazy="msu.deuterium" @change="updateMsuConversionRates()" min="2" max="5" step="0.01" />
+                    <o-resource resource="metal" />
                 </span>
             </span>
-            <span class="conversion-input" v-else>
-                TODO: DSU conversion rates here
+            <span class="inputs" v-else>
+                <span>
+                    <o-resource resource="metal" />
+                    <input type="number" v-model.number.lazy="dsu.metal" @change="updateDsuConversionRates()" min="2" max="5" step="0.01" />
+                    <span class="equal mdi mdi-equal" />
+                    <input type="number" :value="1" readonly />
+                    <o-resource resource="deuterium" />
+                </span>
+
+                <span>
+                    <o-resource resource="crystal" />
+                    <input type="number" v-model.number.lazy="dsu.crystal" @change="updateDsuConversionRates()" min="1" max="3" step="0.01" />
+                    <span class="equal mdi mdi-equal" />
+                    <input type="number" :value="1" readonly />
+                    <o-resource resource="deuterium" />
+                </span>
             </span>
         </div>
     </div>
@@ -113,7 +128,8 @@
 
         .inputs {
             display: flex;
-            column-gap: 8px;
+            flex-direction: column;
+            row-gap: 8px;
 
             > * {
                 display: flex;
@@ -122,6 +138,14 @@
 
         input[type="number"] {
             width: 60px;
+            &:read-only {
+                background: rgba(var(--color), 0.1);
+            }
+        }
+
+        .equal {
+            font-size: 1rem;
+            align-self: center;
         }
     }
 
@@ -142,6 +166,12 @@
             padding: 8px;
             display: flex;
             align-items: center;
+        }
+
+        &-body {
+            flex-direction: column;
+            align-items: start;
+            row-gap: 8px;
         }
     }
 </style>
