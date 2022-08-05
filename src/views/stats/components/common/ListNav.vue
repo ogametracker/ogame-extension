@@ -1,5 +1,5 @@
 <template>
-    <div class="nav-list">
+    <div class="nav-list" :style="{ overflow: showsAnyMenu ? 'visible' : null }">
         <floating-menu
             v-for="(item, i) in items"
             :key="i"
@@ -65,6 +65,10 @@
         private rootRouteName!: string | null;
 
         private showMenu: Record<number, boolean> = {};
+
+        private get showsAnyMenu() {
+            return Object.values(this.showMenu).some(b => b);
+        }
 
         private get defaultRouteName() {
             const routes = this.$router.getRoutes();
