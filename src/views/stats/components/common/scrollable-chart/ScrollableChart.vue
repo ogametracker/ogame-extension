@@ -1,15 +1,8 @@
 <template>
-    <div
-        class="scrollable-chart"
-        :style="`--chart-x-translation: ${-leftX * width}px`"
-    >
+    <div class="scrollable-chart" :style="`--chart-x-translation: ${-leftX * width}px`">
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
             <div class="chart-content" v-if="isReady">
-                <div
-                    class="svg-container"
-                    ref="svg-container"
-                    @mouseleave="activeXNormalized = null"
-                >
+                <div class="svg-container" ref="svg-container" @mouseleave="activeXNormalized = null">
                     <scrollable-chart-svg
                         v-if="internalDatasets.length > 0"
                         :width="width"
@@ -30,10 +23,7 @@
                             '--x': activeXNormalized - leftX,
                         }"
                     >
-                        <div
-                            v-text="xValueTooltipFormatter(activeX)"
-                            class="chart-tooltip-header"
-                        />
+                        <div v-text="xValueTooltipFormatter(activeX)" class="chart-tooltip-header" />
 
                         <div
                             v-for="dataset in internalDatasets"
@@ -41,45 +31,19 @@
                             :key="`tooltip-${dataset.key}`"
                             class="chart-tooltip-item"
                             :class="{
-                                zero:
-                                    getLastValue(dataset, activeXNormalized) ==
-                                    0,
+                                zero: getLastValue(dataset, activeXNormalized) == 0,
                             }"
                         >
-                            <span
-                                class="chart-tooltip-item-color"
-                                :style="{ color: dataset.color }"
-                            />
-                            <span
-                                class="chart-tooltip-item-value"
-                                v-text="
-                                    tooltipValueFormatter(
-                                        getLastValue(dataset, activeXNormalized)
-                                    )
-                                "
-                            />
-                            <span
-                                class="chart-tooltip-item-label"
-                                v-text="dataset.label"
-                            />
+                            <span class="chart-tooltip-item-color" :style="{ color: dataset.color }" />
+                            <span class="chart-tooltip-item-value" v-text="tooltipValueFormatter(getLastValue(dataset, activeXNormalized))" />
+                            <span class="chart-tooltip-item-label" v-text="dataset.label" />
                         </div>
 
-                        <div
-                            class="chart-tooltip-footer"
-                            v-if="hasTooltipFooter"
-                        >
+                        <div class="chart-tooltip-footer" v-if="hasTooltipFooter">
                             <template v-if="tooltipFooterProvider != null">
-                                <div
-                                    v-for="(footer, i) in footerTexts"
-                                    :key="`footer-texts-${i}`"
-                                    v-text="footer"
-                                />
+                                <div v-for="(footer, i) in footerTexts" :key="`footer-texts-${i}`" v-text="footer" />
                             </template>
-                            <slot
-                                v-else
-                                name="tooltip-footer"
-                                :datasets="footerSlotDatasets"
-                            />
+                            <slot v-else name="tooltip-footer" :datasets="footerSlotDatasets" />
                         </div>
                     </div>
                 </div>
@@ -113,25 +77,15 @@
                     }"
                     @click="toggleVisibility(dataset)"
                 >
-                    <div
-                        class="legend-item-color"
-                        :style="{ color: dataset.color }"
-                    />
+                    <div class="legend-item-color" :style="{ color: dataset.color }" />
                     <div class="legend-item-label" v-text="dataset.label" />
                 </div>
             </div>
 
-            <div
-                class="scrollbar-container"
-                ref="scrollbar-container"
-                @scroll="updateTickOffset()"
-            >
+            <div class="scrollbar-container" ref="scrollbar-container" @scroll="updateTickOffset()">
                 <div
                     :style="{
-                        width: `${
-                            (100 * (xRange.max - xRange.min)) /
-                            (tickInterval * visibleTickCount)
-                        }%`,
+                        width: `${(100 * (xRange.max - xRange.min)) / (tickInterval * visibleTickCount)}%`,
                     }"
                 />
             </div>
@@ -171,7 +125,6 @@
 
     export interface ScrollableChartInternalDataset extends ScrollableChartDataset {
         visible: boolean;
-        svgPoints: Point[];
         internalValues: Point[];
         originalValuesByX: Record<number, number>;
         originalValuesByNormalizedX: Record<number, number>;
@@ -354,7 +307,6 @@
                 normalizedValues: [],
                 normalizedValuesByNormalizedX: {},
                 normalizedAverage: null,
-                svgPoints: [],
                 paths: {
                     line: '',
                     averageLine: '',
@@ -609,17 +561,18 @@
             const width = this.width;
 
             const normalizedZeroY = -this.yRange.min / (this.yRange.max - this.yRange.min);
-            const zeroY = this.computeSvgValues([{ x: 0, y: normalizedZeroY }])[0].y;
+            const zeroY = this.computeSvgPathSegments([{ x: 0, y: normalizedZeroY }], false)[0][0].y;
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
-                const svgPoints = this.computeSvgValues(dataset.normalizedValues);
+                const svgPathSegments = this.computeSvgPathSegments(dataset.normalizedValues);
                 if (this.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < this.maxXNormalized) {
-                    svgPoints.push({
+                    const lastSegment = svgPathSegments[svgPathSegments.length - 1];
+                    lastSegment.push({
                         x: this.maxXNormalized * width,
-                        y: svgPoints[svgPoints.length - 1].y,
+                        y: lastSegment[lastSegment.length - 1].y,
                     });
                 }
-                const linePath = this.getSvgPath(svgPoints);
+                const linePath = this.getSvgPath(svgPathSegments);
 
                 const bgPath = `M 0 ${zeroY} `
                     + `L${linePath.substring(1)} `
@@ -627,14 +580,13 @@
 
                 let avgLinePath = '';
                 if (dataset.normalizedAverage != null) {
-                    const avgSvgValue = this.computeSvgValues([{ x: 0, y: dataset.normalizedAverage }])[0].y;
+                    const avgSvgValue = this.computeSvgPathSegments([{ x: 0, y: dataset.normalizedAverage }], false)[0][0].y;
                     avgLinePath = `M 0 ${avgSvgValue} L ${width * this.maxXNormalized} ${avgSvgValue}`;
                 }
 
                 const internalDataset: ScrollableChartInternalDataset = {
                     ...dataset,
 
-                    svgPoints: svgPoints,
                     paths: {
                         line: linePath,
                         averageLine: avgLinePath,
@@ -657,20 +609,52 @@
             this.resizeObserver.disconnect();
         }
 
-        private getSvgPath(values: Point[], close = false) {
-            const svgCommands = values.map((point, i) => `${i == 0 ? 'M' : 'L'} ${point.x} ${point.y}`);
-            return svgCommands.join(' ') + (close ? ' Z' : '');
+        private getSvgPath(segments: Point[][]) {
+            const svgCommands = segments.map(
+                points => points.map(
+                    (point, i) => `${i == 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                ).join(' ')
+            );
+            return svgCommands.join(' ');
         }
 
-        private computeSvgValues(values: Point[]): Point[] {
+        private computeSvgPathSegments(values: Point[], splitSegmentsOnConsecutiveZeros = true): Point[][] {
             const width = this.width;
             const height = this.height;
 
-            return values.map(point => {
-                const x = width * point.x;
-                const y = height * (1 - point.y);
-                return { x, y };
-            });
+            const segments: Point[][] = [];
+            let currentSegment: Point[] = [];
+            for (let i = 0; i < values.length; i++) {
+
+                const value = values[i];
+                const nextValue: Point | undefined = values[i + 1];
+                const prevValue: Point | undefined = values[i - 1];
+
+                if (value.y == 0 && splitSegmentsOnConsecutiveZeros) {
+                    if (prevValue?.y == 0 || (nextValue?.y ?? 0) == 0) {
+                        if (currentSegment.length > 0) {
+                            currentSegment.push(value);
+                            segments.push(currentSegment);
+                            currentSegment = [];
+                        }
+                    }
+                }
+
+                if (value.y != 0 || (nextValue?.y ?? 0) != 0 || !splitSegmentsOnConsecutiveZeros) {
+                    currentSegment.push(value);
+                }
+            }
+            if (currentSegment.length) {
+                segments.push(currentSegment);
+            }
+
+            return segments.map(segment =>
+                segment.map(point => {
+                    const x = width * point.x;
+                    const y = height * (1 - point.y);
+                    return { x, y };
+                })
+            );
         }
 
         private readonly internalConfig = {
@@ -797,11 +781,7 @@
         top: 0;
         border: 1px solid rgba(var(--color), 0.5);
         background-color: rgba(black, 0.9);
-        background-image: linear-gradient(
-            to right,
-            rgba(var(--color), 0.2),
-            rgba(var(--color), 0.2)
-        );
+        background-image: linear-gradient(to right, rgba(var(--color), 0.2), rgba(var(--color), 0.2));
 
         padding: 12px;
         border-radius: 4px;
