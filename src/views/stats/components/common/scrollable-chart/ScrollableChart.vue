@@ -561,10 +561,10 @@
             const width = this.width;
 
             const normalizedZeroY = -this.yRange.min / (this.yRange.max - this.yRange.min);
-            const zeroY = this.computeSvgPathSegments([{ x: 0, y: normalizedZeroY }], false)[0][0].y;
+            const zeroY = this.computeSvgPathSegments([{ x: 0, y: normalizedZeroY }], [{ x: 0, y: normalizedZeroY }], false)[0][0].y;
 
             this.internalDatasets = this.internalDatasets.map(dataset => {
-                const svgPathSegments = this.computeSvgPathSegments(dataset.normalizedValues);
+                const svgPathSegments = this.computeSvgPathSegments(dataset.normalizedValues, dataset.internalValues);
                 if (this.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < this.maxXNormalized) {
                     const lastSegment = svgPathSegments[svgPathSegments.length - 1];
                     lastSegment.push({
@@ -580,7 +580,7 @@
 
                 let avgLinePath = '';
                 if (dataset.normalizedAverage != null) {
-                    const avgSvgValue = this.computeSvgPathSegments([{ x: 0, y: dataset.normalizedAverage }], false)[0][0].y;
+                    const avgSvgValue = this.computeSvgPathSegments([{ x: 0, y: dataset.normalizedAverage }], [{ x: 0, y: normalizedZeroY }], false)[0][0].y;
                     avgLinePath = `M 0 ${avgSvgValue} L ${width * this.maxXNormalized} ${avgSvgValue}`;
                 }
 
@@ -618,14 +618,14 @@
             return svgCommands.join(' ');
         }
 
-        private computeSvgPathSegments(values: Point[], splitSegmentsOnConsecutiveZeros = true): Point[][] {
+        private computeSvgPathSegments(normalizedValues: Point[], values: Point[], splitSegmentsOnConsecutiveZeros = true): Point[][] {
             const width = this.width;
             const height = this.height;
 
             const segments: Point[][] = [];
             let currentSegment: Point[] = [];
-            for (let i = 0; i < values.length; i++) {
-
+            for (let i = 0; i < normalizedValues.length; i++) {
+                const normalizedValue = normalizedValues[i];
                 const value = values[i];
                 const nextValue: Point | undefined = values[i + 1];
                 const prevValue: Point | undefined = values[i - 1];
@@ -633,7 +633,7 @@
                 if (value.y == 0 && splitSegmentsOnConsecutiveZeros) {
                     if (prevValue?.y == 0 || (nextValue?.y ?? 0) == 0) {
                         if (currentSegment.length > 0) {
-                            currentSegment.push(value);
+                            currentSegment.push(normalizedValue);
                             segments.push(currentSegment);
                             currentSegment = [];
                         }
@@ -641,7 +641,7 @@
                 }
 
                 if (value.y != 0 || (nextValue?.y ?? 0) != 0 || !splitSegmentsOnConsecutiveZeros) {
-                    currentSegment.push(value);
+                    currentSegment.push(normalizedValue);
                 }
             }
             if (currentSegment.length) {
