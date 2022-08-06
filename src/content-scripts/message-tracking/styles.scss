@@ -220,6 +220,43 @@ $image-size-small: 24px;
         }
     }
 
+    &-lifeform-discovery-result {
+
+        &--nothing {
+            color: var(--ogame-tracker--lifeform-discovery-event--nothing);
+
+            > .mdi {
+                font-size: 16px !important;
+            }
+        }
+
+        &--lostShip {
+            color: var(--ogame-tracker--lifeform-discovery-event--lostShip);
+
+            .mdi {
+                font-size: 20px !important;
+            }
+        }
+
+        &--knownLifeformFound,
+        &--newLifeformFound {
+            display: inline-flex;
+            column-gap: 4px;
+            align-items: center;
+        }
+
+        &--knownLifeformFound {
+            color: var(--ogame-tracker--lifeform-discovery-event--knownLifeformFound);
+        }
+        &--newLifeformFound {
+            color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
+        }
+
+        .mdi {
+            font-size: 32px;
+        }
+    }
+
     &-debris-field-report {
         display: inline-grid;
         grid-template-columns: repeat(2, 1fr);

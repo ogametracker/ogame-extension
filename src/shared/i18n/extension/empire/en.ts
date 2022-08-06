@@ -101,6 +101,9 @@ export const en: EmpireTranslations = {
     },
     lifeforms: {
         header: 'Lifeforms',
+        subHeaders: {
+            overview: 'Overview',
+        },
 
         planet: 'Planet',
         lifeform: 'Lifeform',

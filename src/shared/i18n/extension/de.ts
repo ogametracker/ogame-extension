@@ -11,6 +11,7 @@ import { de as settings } from './settings/de';
 import { de as resources } from './resources/de';
 import { de as common } from './common/de';
 import { de as expeditions } from './expeditions/de';
+import { de as lifeformDiscoveries } from './lifeformDiscoveries/de';
 import { de as combats } from './combats/de';
 import { de as donate } from './donate/de';
 import { de as debrisFields } from './debrisFields/de';
@@ -36,6 +37,7 @@ export const de: ExtensionTranslations = {
     settings,
     resources,
     expeditions,
+    lifeformDiscoveries,
     combats,
     donate,
     debrisFields,

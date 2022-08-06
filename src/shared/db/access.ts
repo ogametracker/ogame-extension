@@ -47,6 +47,9 @@ export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
         if(oldVersion < 3) {
             db.createObjectStore('universeSpecificSettings');
         }
+        if(oldVersion < 7) {
+            db.createObjectStore('lifeformDiscoveries', { keyPath: 'id' });
+        }
     });
 }
 

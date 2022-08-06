@@ -65,4 +65,7 @@ export enum MessageType {
     UpdatePlanetLifeformBuildingLevels = 'lifeforms/update-all-building-levels',
     UpdatePlanetActiveLifeformTechnologyLevels = 'lifeforms/update-active-technology-levels',
     UpdatePlanetLifeformTechnologyLevels = 'lifeforms/update-all-technology-levels',
+    TrackLifeformDiscovery = 'lifeforms/track-discovery',
+    LifeformDiscovery = 'lifeforms/discovery',
+    NewLifeformDiscovery = 'lifeforms/new-discovery',
 }

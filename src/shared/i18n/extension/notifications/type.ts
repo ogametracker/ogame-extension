@@ -18,6 +18,10 @@ export interface NotificationTranslations {
             events: string;
         };
     };
+    lifeformDiscoveryTracking: {
+        title: (value: string) => string;
+        message: (value: string) => string;
+    };
 
     messageTrackingError: {
         title: (value: string) => string;

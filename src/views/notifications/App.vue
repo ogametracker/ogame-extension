@@ -25,6 +25,7 @@
     import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';
     import CombatTrackingNotification from './components/notifications/CombatTrackingNotification.vue';
     import DebrisFieldReportTrackingNotification from './components/notifications/DebrisFieldReportTrackingNotification.vue';
+    import LifeformDiscoveryTrackingNotification from './components/notifications/LifeformDiscoveryTrackingNotification.vue';
 
     @Component({
         components: {
@@ -33,6 +34,7 @@
             ExpeditionTrackingLostFleetNotification,
             CombatTrackingNotification,
             DebrisFieldReportTrackingNotification,
+            LifeformDiscoveryTrackingNotification,
         },
     })
     export default class App extends Vue {
@@ -42,6 +44,7 @@
             [NotificationType.ExpeditionTrackingLostFleet]: 'expedition-tracking-lost-fleet-notification',
             [NotificationType.CombatTracking]: 'combat-tracking-notification',
             [NotificationType.DebrisFieldReportTracking]: 'debris-field-report-tracking-notification',
+            [NotificationType.LifeformDiscoveryTracking]: 'lifeform-discovery-tracking-notification',
         };
 
         private readonly notifications: Record<string, any & { type: NotificationType }> = {};

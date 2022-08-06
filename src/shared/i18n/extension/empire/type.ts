@@ -99,6 +99,9 @@ export interface EmpireTranslations {
     };
     lifeforms: {
         header: string;
+        subHeaders: {
+            overview: string;
+        };
 
         planet: string;
         lifeform: string;

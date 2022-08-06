@@ -480,6 +480,12 @@
             deuterium: 0,
         };
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
             const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
                 {

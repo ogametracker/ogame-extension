@@ -51,6 +51,8 @@ export const en: SettingsTranslations = {
         expeditionEvents: 'Expedition events',
         expeditionEventSizes: 'Expedition event sizes',
         expeditionDepletionLevels: 'System Depletion',
+        lifeformDiscoveries: 'Lifeform discovery events',
+        lifeforms: 'Lifeforms',
         resources: 'Resources',
         ships: 'Ships',
     },

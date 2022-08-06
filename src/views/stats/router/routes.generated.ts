@@ -35,7 +35,15 @@ import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
-import viewsempireLifeforms from '@stats/views/empire/Lifeforms.vue';
+import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
+import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
+import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
+import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
+import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
+import viewsempirelifeformsdiscoveriesexperienceTable from '@stats/views/empire/lifeforms/discoveries/experience/Table.vue';
+import viewsempirelifeformsdiscoveriesoverviewIndex from '@stats/views/empire/lifeforms/discoveries/overview/Index.vue';
+import viewsempirelifeformsdiscoveriesoverviewChart from '@stats/views/empire/lifeforms/discoveries/overview/Chart.vue';
+import viewsempirelifeformsdiscoveriesoverviewTable from '@stats/views/empire/lifeforms/discoveries/overview/Table.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -383,9 +391,69 @@ const routes: RouteConfig[] = [
                         component: viewsempireAmortization
                     },
                     {
+                        redirect: {
+                            name: "empire/lifeforms/overview"
+                        },
                         path: "lifeforms",
                         name: "empire/lifeforms",
-                        component: viewsempireLifeforms
+                        component: viewsempirelifeformsIndex,
+                        children: [
+                            {
+                                path: "overview",
+                                name: "empire/lifeforms/overview",
+                                component: viewsempirelifeformsOverview
+                            },
+                            {
+                                redirect: {
+                                    name: "empire/lifeforms/discoveries/overview"
+                                },
+                                path: "discoveries",
+                                name: "empire/lifeforms/discoveries",
+                                component: viewsempirelifeformsdiscoveriesIndex,
+                                children: [
+                                    {
+                                        redirect: {
+                                            name: "empire/lifeforms/discoveries/experience/chart"
+                                        },
+                                        path: "experience",
+                                        name: "empire/lifeforms/discoveries/experience",
+                                        component: viewsempirelifeformsdiscoveriesexperienceIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "empire/lifeforms/discoveries/experience/chart",
+                                                component: viewsempirelifeformsdiscoveriesexperienceChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "empire/lifeforms/discoveries/experience/table",
+                                                component: viewsempirelifeformsdiscoveriesexperienceTable
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        redirect: {
+                                            name: "empire/lifeforms/discoveries/overview/chart"
+                                        },
+                                        path: "overview",
+                                        name: "empire/lifeforms/discoveries/overview",
+                                        component: viewsempirelifeformsdiscoveriesoverviewIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "empire/lifeforms/discoveries/overview/chart",
+                                                component: viewsempirelifeformsdiscoveriesoverviewChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "empire/lifeforms/discoveries/overview/table",
+                                                component: viewsempirelifeformsdiscoveriesoverviewTable
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         redirect: {

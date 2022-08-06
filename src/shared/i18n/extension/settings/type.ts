@@ -48,6 +48,8 @@ export interface SettingsTranslations {
         expeditionEvents: string;
         expeditionEventSizes: string;
         expeditionDepletionLevels: string;
+        lifeformDiscoveries: string;
+        lifeforms: string;
         combatResults: string;
         resources: string;
         ships: string;
