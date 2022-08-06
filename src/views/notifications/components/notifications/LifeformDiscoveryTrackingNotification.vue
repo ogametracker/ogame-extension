@@ -19,7 +19,10 @@
                     <template v-for="lifeform in LifeformTypes">
                         <template v-if="notification.lifeformExperience[lifeform] > 0">
                             <o-lifeform :lifeform="lifeform" class="icon" :key="`icon-${lifeform}`" />
-                            <span v-text="`+${$i18n.$n(notification.lifeformExperience[lifeform])} XP`" :key="`amount-${lifeform}`" />
+                            <div :key="`amount-${lifeform}`" class="xp-column">
+                                <span v-text="$i18n.$t.lifeforms[lifeform]" />
+                                <span v-text="`+${$i18n.$n(notification.lifeformExperience[lifeform])} XP`" />
+                            </div>
                         </template>
                     </template>
                 </div>
@@ -165,5 +168,11 @@
             padding-top: 4px;
             border-top: 1px solid rgba(var(--color));
         }
+    }
+
+    .xp-column {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
     }
 </style>
