@@ -20,7 +20,7 @@ import { MessageTrackingErrorMessage } from "@/shared/messages/tracking/misc";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
-import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, LifeformDiscoveryTrackingNotificationMessage, LifeformDiscoveryTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
@@ -42,14 +42,14 @@ const notificationIds = {
 };
 const waitingForMessageResult: Record<number, true> = {};
 const failedToTrackMessages: Record<number, true> = {};
-const totalLifeformDiscoveryResult = {
+const totalLifeformDiscoveryResult: LifeformDiscoveryTrackingNotificationMessageData = {
     events: {
         [LifeformDiscoveryEventType.nothing]: 0,
         [LifeformDiscoveryEventType.lostShip]: 0,
         [LifeformDiscoveryEventType.newLifeformFound]: 0,
         [LifeformDiscoveryEventType.knownLifeformFound]: 0,
     },
-    newLifeforms: [] as ValidLifeformType[],
+    newLifeforms: [],
     lifeformExperience: {
         [LifeformType.humans]: 0,
         [LifeformType.rocktal]: 0,
@@ -313,8 +313,18 @@ function sendNotificationMessages() {
 
 
     const lifeformDiscoveryCount = Object.values(totalLifeformDiscoveryResult.events).reduce((acc, cur) => acc + cur, 0);
-    if (expeditionCount > 0) {
-        //TODO: send lifeform discovery notification
+    if (lifeformDiscoveryCount > 0) {
+        const msg: LifeformDiscoveryTrackingNotificationMessage = {
+            type: MessageType.Notification,
+            ogameMeta: getOgameMeta(),
+            senderUuid: messageTrackingUuid,
+            data: {
+                type: NotificationType.LifeformDiscoveryTracking,
+                messageId: notificationIds.result,
+                ...totalLifeformDiscoveryResult,
+            },
+        };
+        sendMessage(msg);
     }
 }
 
@@ -366,7 +376,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             `;
         }
 
-        case LifeformDiscoveryEventType.newLifeformFound:{
+        case LifeformDiscoveryEventType.newLifeformFound: {
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
                     <span class="mdi mdi-new-box></span>

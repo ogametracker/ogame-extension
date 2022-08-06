@@ -1,7 +1,9 @@
 import { ExpeditionDepletionLevel } from "../models/expeditions/ExpeditionDepletionLevel";
 import { ExpeditionFindableShipType } from "../models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../models/expeditions/ExpeditionEventType";
+import { LifeformDiscoveryEventType } from "../models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { ItemHash } from "../models/ogame/items/ItemHash";
+import { ValidLifeformType } from "../models/ogame/lifeforms/LifeformType";
 import { ResourceType } from "../models/ogame/resources/ResourceType";
 import { Message } from "./Message";
 import { MessageType } from "./MessageType";
@@ -12,6 +14,7 @@ export enum NotificationType {
     MessageTrackingError = 'message-tracking/error',
     CombatTracking = 'message-tracking/combats',
     DebrisFieldReportTracking = 'message-tracking/debris-field-reports',
+    LifeformDiscoveryTracking = 'message-tracking/lifeform-discoveries',
 }
 
 export interface BasicNotificationData<T extends NotificationType> {
@@ -32,6 +35,13 @@ export interface ExpeditionTrackingNotificationMessageData {
 }
 export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
 export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;
+
+export interface LifeformDiscoveryTrackingNotificationMessageData {
+    events: Record<LifeformDiscoveryEventType, number>;
+    newLifeforms: ValidLifeformType[];
+    lifeformExperience: Record<ValidLifeformType, number>;
+}
+export type LifeformDiscoveryTrackingNotificationMessage = NotificationMessage<NotificationType.LifeformDiscoveryTracking, LifeformDiscoveryTrackingNotificationMessageData>;
 
 export interface CombatTrackingNotificationMessageData {
     count: number;
