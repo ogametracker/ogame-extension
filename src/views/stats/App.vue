@@ -191,7 +191,7 @@
                 {
                     key: 'empire',
                     to: { name: 'empire' },
-                    icon: 'ogti ogti-planet-moon',
+                    icon: 'ogti ogti-planet-moondna',
                     label: this.$i18n.$t.empire.header,
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',

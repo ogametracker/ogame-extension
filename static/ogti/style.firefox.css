@@ -29,6 +29,9 @@
     display: inline-block;
 }
 
+.ogti-planet-moondna:before {
+  content: "\e908";
+}
 .ogti-attack:before {
   content: "\e900";
 }
