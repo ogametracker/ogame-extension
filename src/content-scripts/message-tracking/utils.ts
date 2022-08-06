@@ -18,6 +18,7 @@ export const cssClasses = {
         hideContent: `${cssBase}-msg--hide-content`,
     
         expedition: `${cssBase}-msg--expedition`,
+        lifeformDiscovery: `${cssBase}-msg--lifeform-discovery`,
         debrisFieldReport: `${cssBase}-msg--debris-field-report`,
         combatReport:  `${cssBase}-msg--combat-report`,
 

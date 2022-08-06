@@ -1,6 +1,7 @@
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "@/shared/models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "@/shared/models/expeditions/ExpeditionEvents";
+import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { BuildingType, MoonBuildingType, PlanetBuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { AllianceClass } from "@/shared/models/ogame/classes/AllianceClass";
 import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
@@ -110,6 +111,11 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
     expeditions: {
         key: number;
         value: ExpeditionEvent;
+    };
+
+    lifeformDiscoveries: {
+        key: number;
+        value: LifeformDiscoveryEvent;
     };
 
     empire: DbEmpire;

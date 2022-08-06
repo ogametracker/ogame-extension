@@ -1,5 +1,5 @@
 import { getQueryParameters } from "../../shared/utils/getQueryParameters";
-import { initExpeditionTracking } from "./expedition-tracking";
+import { initExpeditionAndLifeformDiscoveryTracking } from "./expedition-and-lifeform-discovery-tracking";
 import { initDebrisFieldReportTracking } from "./debris-field-report-tracking";
 import { initCombatReportTracking } from "./combat-report-tracking";
 import { Settings } from "@/shared/models/settings/Settings";
@@ -20,11 +20,13 @@ if (queryParams.page == 'messages') {
 }
 
 async function init() {
-    settingsWrapper.settings = await getSettings();
+    const settingsPromise = getSettings();
 
-    initExpeditionTracking();
+    initExpeditionAndLifeformDiscoveryTracking();
     initCombatReportTracking();
     initDebrisFieldReportTracking();
+
+    settingsWrapper.settings = await settingsPromise;
 }
 
 function getSettings(): Promise<Settings> {

@@ -6,6 +6,7 @@ import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
+import { LifeformDiscoveryService } from "./lifeform-discoveries/LifeformDiscoveryService";
 import { InternalService } from "./InternalService";
 import { MessageService } from "./MessageService";
 import { ServerSettingsService } from "./server-settings/ServerSettingsService";
@@ -18,6 +19,7 @@ export const settingsService = new SettingsService();
 const services: MessageService[] = [
     settingsService,
     new ExpeditionService(),
+    new LifeformDiscoveryService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
     new EmpireService(),

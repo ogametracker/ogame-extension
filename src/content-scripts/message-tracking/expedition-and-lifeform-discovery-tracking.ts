@@ -25,6 +25,13 @@ import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
 import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { getLanguage } from "@/shared/i18n/getLanguage";
+import { messageHeaders } from "./expedition-tab-i18n";
+import { LanguageKey } from "@/shared/i18n/LanguageKey";
+import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
+import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
+import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 
 let tabContent: Element | null = null;
 
@@ -33,8 +40,23 @@ const notificationIds = {
     lostFleet: v4(),
     error: v4(),
 };
-const waitingForExpeditions: Record<number, true> = {};
-const failedToTrackExpeditions: Record<number, true> = {};
+const waitingForMessageResult: Record<number, true> = {};
+const failedToTrackMessages: Record<number, true> = {};
+const totalLifeformDiscoveryResult = {
+    events: {
+        [LifeformDiscoveryEventType.nothing]: 0,
+        [LifeformDiscoveryEventType.lostShip]: 0,
+        [LifeformDiscoveryEventType.newLifeformFound]: 0,
+        [LifeformDiscoveryEventType.knownLifeformFound]: 0,
+    },
+    newLifeforms: [] as ValidLifeformType[],
+    lifeformExperience: {
+        [LifeformType.humans]: 0,
+        [LifeformType.rocktal]: 0,
+        [LifeformType.mechas]: 0,
+        [LifeformType.kaelesh]: 0,
+    },
+};
 const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
     resources: {
         [ResourceType.metal]: 0,
@@ -79,7 +101,7 @@ const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
     },
 };
 
-export function initExpeditionTracking() {
+export function initExpeditionAndLifeformDiscoveryTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
     const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
@@ -99,7 +121,7 @@ function setupExpeditionMessageObserver() {
 
     const meta = getOgameMeta();
     if (isSupportedLanguage(meta.language)) {
-        const observer = new MutationObserver(() => trackExpeditions(tabContentElement));
+        const observer = new MutationObserver(() => trackMessages(tabContentElement));
         observer.observe(tabContentElement, { childList: true, subtree: true });
     }
 }
@@ -130,6 +152,25 @@ function onMessage(message: Message<MessageType, any>) {
             break;
         }
 
+        case MessageType.LifeformDiscovery:
+        case MessageType.NewLifeformDiscovery: {
+            const msg = message as LifeformDiscoveryMessage;
+            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
+
+            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            li.classList.add(cssClasses.messages.processed);
+            if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+                li.classList.add(cssClasses.messages.hideContent);
+            }
+
+            addLifeformDiscoveryResultContent(li, msg.data);
+
+            if (message.type == MessageType.NewLifeformDiscovery) {
+                updateLifeformDiscoveryResults(msg);
+            }
+            break;
+        }
+
         case MessageType.TrackingError: {
             const { type, id } = (message as MessageTrackingErrorMessage).data;
             if (type != 'expedition') {
@@ -142,17 +183,40 @@ function onMessage(message: Message<MessageType, any>) {
             li.classList.add(cssClasses.messages.error);
             addOrSetCustomMessageContent(li, false);
 
-            delete waitingForExpeditions[id];
-            failedToTrackExpeditions[id] = true;
+            delete waitingForMessageResult[id];
+            failedToTrackMessages[id] = true;
             sendNotificationMessages();
             break;
         }
     }
 }
 
-function trackExpeditions(elem: Element) {
-    const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
+function trackMessages(elem: Element) {
+    const ogameMeta = getOgameMeta();
+    const lang = getLanguage(ogameMeta.language);
+
+    let messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
         .filter(elem => !elem.classList.contains(cssClasses.messages.base));
+
+    if (lang != null) {
+        messages = trackExpeditionsOrLifeformDiscoveries(lang, messages);
+    }
+
+    messages.forEach(msg => {
+        const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
+
+        msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
+        addOrSetCustomMessageContent(msg, false);
+
+        delete waitingForMessageResult[id];
+        failedToTrackMessages[id] = true;
+        sendNotificationMessages();
+    });
+}
+
+function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Element[]) {
+    const unprocessedMessages: Element[] = [];
+    const headers = messageHeaders[lang];
 
     messages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
@@ -169,9 +233,21 @@ function trackExpeditions(elem: Element) {
             const text = messageTextElem.textContent ?? '';
             const html = messageTextElem.innerHTML;
 
+            const messageTypeHeaders = {
+                [MessageType.TrackExpedition]: headers.expedition,
+                [MessageType.TrackLifeformDiscovery]: headers.lifeformDiscovery,
+            };
+
+            const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
+            const messageType = (Object.keys(messageTypeHeaders) as (keyof typeof messageTypeHeaders)[])
+                .find(msgType => messageTitle.includes(messageTypeHeaders[msgType]) == true);
+            if (messageType == null) {
+                _throw(`unknown message type '${messageTitle}'`);
+            }
+
             // send message to service worker
-            const workerMessage: TrackExpeditionMessage = {
-                type: MessageType.TrackExpedition,
+            const workerMessage: TrackExpeditionMessage | TrackLifeformDiscoveryMessage = {
+                type: messageType,
                 ogameMeta: getOgameMeta(),
                 data: {
                     id,
@@ -190,55 +266,55 @@ function trackExpeditions(elem: Element) {
             );
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
-            waitingForExpeditions[id] = true;
+            waitingForMessageResult[id] = true;
         } catch (error) {
             console.error(error);
-
-            msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
-            addOrSetCustomMessageContent(msg, false);
-
-            delete waitingForExpeditions[id];
-            failedToTrackExpeditions[id] = true;
-            sendNotificationMessages();
+            unprocessedMessages.push(msg);
         }
     });
+
+    return unprocessedMessages;
 }
 
 function sendNotificationMessages() {
-    const failed = Object.keys(failedToTrackExpeditions).length;
+    const failed = Object.keys(failedToTrackMessages).length;
     if (failed > 0) {
         sendErrorNotificationMessage(failed);
     }
 
-    const count = Object.values(totalExpeditionResult.events).reduce((acc, cur) => acc + cur, 0);
-    if (count == 0) {
-        return;
-    }
-
-    const msg: ExpeditionTrackingNotificationMessage = {
-        type: MessageType.Notification,
-        ogameMeta: getOgameMeta(),
-        senderUuid: messageTrackingUuid,
-        data: {
-            type: NotificationType.ExpeditionTracking,
-            messageId: notificationIds.result,
-            ...totalExpeditionResult,
-        },
-    };
-    sendMessage(msg);
-
-    if (totalExpeditionResult.events.lostFleet > 0) {
-        const msg: ExpeditionTrackingLostFleetNotificationMessage = {
+    const expeditionCount = Object.values(totalExpeditionResult.events).reduce((acc, cur) => acc + cur, 0);
+    if (expeditionCount > 0) {
+        const msg: ExpeditionTrackingNotificationMessage = {
             type: MessageType.Notification,
             ogameMeta: getOgameMeta(),
             senderUuid: messageTrackingUuid,
             data: {
-                type: NotificationType.ExpeditionTrackingLostFleet,
-                messageId: notificationIds.lostFleet,
-                count: totalExpeditionResult.events.lostFleet,
+                type: NotificationType.ExpeditionTracking,
+                messageId: notificationIds.result,
+                ...totalExpeditionResult,
             },
         };
         sendMessage(msg);
+
+        if (totalExpeditionResult.events.lostFleet > 0) {
+            const msg: ExpeditionTrackingLostFleetNotificationMessage = {
+                type: MessageType.Notification,
+                ogameMeta: getOgameMeta(),
+                senderUuid: messageTrackingUuid,
+                data: {
+                    type: NotificationType.ExpeditionTrackingLostFleet,
+                    messageId: notificationIds.lostFleet,
+                    count: totalExpeditionResult.events.lostFleet,
+                },
+            };
+            sendMessage(msg);
+        }
+    }
+
+
+    const lifeformDiscoveryCount = Object.values(totalLifeformDiscoveryResult.events).reduce((acc, cur) => acc + cur, 0);
+    if (expeditionCount > 0) {
+        //TODO: send lifeform discovery notification
     }
 }
 
@@ -254,6 +330,58 @@ function sendErrorNotificationMessage(failed: number) {
         },
     };
     sendMessage(msg);
+}
+
+function addLifeformDiscoveryResultContent(li: Element, lifeformDiscovery: LifeformDiscoveryEvent) {
+    li.classList.add(cssClasses.messages.lifeformDiscovery);
+
+    const html = getLifeformDiscoveryResultContentHtml(lifeformDiscovery);
+    addOrSetCustomMessageContent(li, html);
+}
+
+function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscoveryEvent) {
+    switch (lifeformDiscovery.type) {
+        case LifeformDiscoveryEventType.lostShip: {
+            return `
+                <div class="${getLifeformDiscoveryResultClass(LifeformDiscoveryEventType.lostShip)}">
+                    <div class="mdi mdi-cross"></div>
+                </div>
+            `;
+        }
+
+        case LifeformDiscoveryEventType.nothing: {
+            return `
+                <div class="${getLifeformDiscoveryResultClass(LifeformDiscoveryEventType.nothing)}">
+                    <div class="mdi mdi-close"></div>
+                </div>
+            `;
+        }
+
+        case LifeformDiscoveryEventType.knownLifeformFound:
+        case LifeformDiscoveryEventType.newLifeformFound: {
+            return `
+                <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
+                    <div class="${getLifeformClass(lifeformDiscovery.lifeform)}"></div>
+                    ${lifeformDiscovery.type == LifeformDiscoveryEventType.knownLifeformFound ? `<span>+${lifeformDiscovery.experience} XP</span>` : ''}
+                </div>
+            `;
+        }
+
+        default: _throw('unknown lifeform discovery type');
+    }
+}
+
+function getLifeformDiscoveryResultClass(result: LifeformDiscoveryEventType) {
+    return `ogame-tracker-lifeform-discovery-result ogame-tracker-lifeform-discovery-result--${result}`;
+}
+
+function getLifeformClass(lifeform: ValidLifeformType) {
+    return {
+        [LifeformType.humans]: 'lifeform-item-icon small lifeform1',
+        [LifeformType.rocktal]: 'lifeform-item-icon small lifeform2',
+        [LifeformType.mechas]: 'lifeform-item-icon small lifeform3',
+        [LifeformType.kaelesh]: 'lifeform-item-icon small lifeform4',
+    }[lifeform];
 }
 
 function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
@@ -290,7 +418,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             }
 
             return `
-                <div class="${getResultClass(ExpeditionEventType.resources, expedition.size)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.resources, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource ${resource}"></div>
                     <div class="${resource}">${formatNumber(amount)}</div>
@@ -311,7 +439,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
             return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">
-                    <div class="${getResultClass(ExpeditionEventType.fleet, expedition.size)}">
+                    <div class="${getExpeditionResultClass(ExpeditionEventType.fleet, expedition.size)}">
                         <div class="${getSizeIconClass(expedition.size)}"></div>
                         ${ships.map(ship => `
                             <div class="ship-count-item">
@@ -340,7 +468,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.darkMatter: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource dark-matter"></div>
                     <div class="dark-matter">${formatNumber(expedition.darkMatter)}</div>
@@ -350,7 +478,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.delay: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.delay)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.delay)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
             `;
@@ -358,7 +486,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.early: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.early)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.early)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
             `;
@@ -366,7 +494,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.pirates: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.pirates, expedition.size)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.pirates, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-pirate"></div>
                 </div>
@@ -375,7 +503,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.aliens: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.aliens, expedition.size)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.aliens, expedition.size)}">
                     <div class="${getSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-alien"></div>
                 </div>
@@ -384,7 +512,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.lostFleet: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.lostFleet)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.lostFleet)}">
                     <div class="mdi mdi-cross"></div>
                 </div>
             `;
@@ -392,7 +520,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.nothing: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.nothing)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.nothing)}">
                     <div class="mdi mdi-close"></div>
                 </div>
             `;
@@ -402,7 +530,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             const item = Items[expedition.itemHash];
             const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
             return `
-                <div class="${getResultClass(ExpeditionEventType.item)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.item)}">
                     <img src="${imageUrl}" class="item-grade--${item.grade}" />
                 </div>
             `;
@@ -410,11 +538,12 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.trader: {
             return `
-                <div class="${getResultClass(ExpeditionEventType.trader)}">
+                <div class="${getExpeditionResultClass(ExpeditionEventType.trader)}">
                     <div class="mdi mdi-swap-horizontal-bold"></div>
                 </div>
             `;
         }
+        default: _throw('unknown expedition type');
     }
 }
 
@@ -435,7 +564,7 @@ function getSizeIconClass(size: ExpeditionEventSize) {
     }[size]);
 }
 
-function getResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize) {
+function getExpeditionResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize) {
     const cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${result}`;
     if (size == null) {
         return cssClass;
@@ -444,8 +573,28 @@ function getResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize)
     return `${cssClass} ogame-tracker-expedition-result--size-${size}`;
 }
 
+function updateLifeformDiscoveryResults(msg: LifeformDiscoveryMessage) {
+    delete waitingForMessageResult[msg.data.id];
+    totalLifeformDiscoveryResult.events[msg.data.type]++;
+
+    switch (msg.data.type) {
+        case LifeformDiscoveryEventType.newLifeformFound: {
+            totalLifeformDiscoveryResult.newLifeforms.push(msg.data.lifeform);
+            break;
+        }
+
+        case LifeformDiscoveryEventType.knownLifeformFound: {
+            totalLifeformDiscoveryResult.lifeformExperience[msg.data.lifeform] += msg.data.experience;
+            break;
+        }
+
+        default: break;
+    }
+    sendNotificationMessages();
+}
+
 function updateExpeditionResults(msg: ExpeditionMessage) {
-    delete waitingForExpeditions[msg.data.id];
+    delete waitingForMessageResult[msg.data.id];
     totalExpeditionResult.events[msg.data.type]++;
 
     totalExpeditionResult.depletion[msg.data.depletion ?? 'unknown']++;
