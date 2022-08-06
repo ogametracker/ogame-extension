@@ -8,3 +8,10 @@ export enum LifeformDiscoveryEventType {
     /** discovered a known lifeform and gathered some XP */
     knownLifeformFound = 'knownLifeformFound',
 }
+
+export const LifeformDiscoveryEventTypes: LifeformDiscoveryEventType[] = [
+    LifeformDiscoveryEventType.nothing,
+    LifeformDiscoveryEventType.lostShip,
+    LifeformDiscoveryEventType.newLifeformFound,
+    LifeformDiscoveryEventType.knownLifeformFound,
+];

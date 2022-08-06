@@ -43,7 +43,7 @@ export const de: EmpireTranslations = {
             productionPlus: 'Produktionsplus',
             amortizationTime: 'Amortisationszeit',
 
-            levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'Level' : 'Levels'} auf ${planets} Planeten`,
+            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Level' : 'Levels'} auf ${planets} Planeten`,
         },
 
         settings: {
@@ -101,6 +101,9 @@ export const de: EmpireTranslations = {
     },
     lifeforms: {
         header: 'Lebensformen',
+        subHeaders: {
+            overview: 'Übersicht',
+        },
 
         planet: 'Planet',
         lifeform: 'Lebensform',

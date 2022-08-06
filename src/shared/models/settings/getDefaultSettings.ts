@@ -5,6 +5,7 @@ import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLeve
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
 import { LifeformDiscoveryEventType } from "../lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformType } from "../ogame/lifeforms/LifeformType";
 import { ResourceType } from "../ogame/resources/ResourceType";
 import { ShipType } from "../ogame/ships/ShipType";
 import { Settings } from "./Settings";
@@ -135,6 +136,12 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 [LifeformDiscoveryEventType.lostShip]: '#d11515',
                 [LifeformDiscoveryEventType.knownLifeformFound]: '#33bcdb',
                 [LifeformDiscoveryEventType.newLifeformFound]: '#00c23a',
+            },
+            lifeforms: {
+                [LifeformType.humans]: '#7ec000',
+                [LifeformType.rocktal]: '#df6642',
+                [LifeformType.mechas]: '#4b91e7',
+                [LifeformType.kaelesh]: '#9863e9',
             },
         },
         universeHistory: {

@@ -81,8 +81,8 @@
     import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { GridTableColumn } from '../../components/common/GridTable.vue';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
 
     interface PlanetLifeformItem {
         planet: {
@@ -106,7 +106,7 @@
     }
 
     @Component({})
-    export default class Lifeforms extends Vue {
+    export default class Overview extends Vue {
 
         private get columns(): GridTableColumn<keyof PlanetLifeformItem>[] {
             return [
@@ -118,7 +118,7 @@
                 {
                     key: 'lifeform',
                     label: this.$i18n.$t.empire.lifeforms.lifeform,
-                    size: '1fr',
+                    size: 'auto',
                     style: {
                         'justify-items': 'start',
                     },
