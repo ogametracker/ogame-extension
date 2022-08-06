@@ -173,11 +173,11 @@ function onMessage(message: Message<MessageType, any>) {
 
         case MessageType.TrackingError: {
             const { type, id } = (message as MessageTrackingErrorMessage).data;
-            if (type != 'expedition') {
+            if (!['expedition', 'lifeform-discovery'].includes(type)) {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find expedition message with id '${id}'`);
+            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
@@ -344,7 +344,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
         case LifeformDiscoveryEventType.lostShip: {
             return `
                 <div class="${getLifeformDiscoveryResultClass(LifeformDiscoveryEventType.lostShip)}">
-                    <div class="mdi mdi-cross"></div>
+                    <div class="mdi mdi-skull-crossbones-outline"></div>
                 </div>
             `;
         }
@@ -357,12 +357,20 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             `;
         }
 
-        case LifeformDiscoveryEventType.knownLifeformFound:
-        case LifeformDiscoveryEventType.newLifeformFound: {
+        case LifeformDiscoveryEventType.knownLifeformFound: {
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
                     <div class="${getLifeformClass(lifeformDiscovery.lifeform)}"></div>
-                    ${lifeformDiscovery.type == LifeformDiscoveryEventType.knownLifeformFound ? `<span>+${lifeformDiscovery.experience} XP</span>` : ''}
+                    <span>+${lifeformDiscovery.experience} XP</span>
+                </div>
+            `;
+        }
+
+        case LifeformDiscoveryEventType.newLifeformFound:{
+            return `
+                <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
+                    <span class="mdi mdi-new-box></span>
+                    <div class="${getLifeformClass(lifeformDiscovery.lifeform)}"></div>
                 </div>
             `;
         }

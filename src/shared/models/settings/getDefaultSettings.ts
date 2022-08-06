@@ -4,6 +4,7 @@ import { CombatResultType } from "../combat-reports/CombatResultType";
 import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
+import { LifeformDiscoveryEventType } from "../lifeform-discoveries/LifeformDiscoveryEventType";
 import { ResourceType } from "../ogame/resources/ResourceType";
 import { ShipType } from "../ogame/ships/ShipType";
 import { Settings } from "./Settings";
@@ -128,6 +129,12 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionDepletionLevel.high]: '#c72525',
                     unknown: '#404040',
                 },
+            },
+            lifeformDiscoveries: {
+                [LifeformDiscoveryEventType.nothing]: '#404040',
+                [LifeformDiscoveryEventType.lostShip]: '#d11515',
+                [LifeformDiscoveryEventType.knownLifeformFound]: '#33bcdb',
+                [LifeformDiscoveryEventType.newLifeformFound]: '#00c23a',
             },
         },
         universeHistory: {

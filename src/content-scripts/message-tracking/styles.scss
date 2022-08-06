@@ -232,12 +232,24 @@ $image-size-small: 24px;
 
         &--lostShip {
             color: var(--ogame-tracker--lifeform-discovery-event--lostShip);
+
+            .mdi {
+                font-size: 20px !important;
+            }
         }
 
-        &--knownLifeformFound {
+        &--knownLifeformFound,
+        &--newLifeformFound {
             display: inline-flex;
             column-gap: 4px;
             align-items: center;
+        }
+
+        &--knownLifeformFound {
+            color: var(--ogame-tracker--lifeform-discovery-event--knownLifeformFound);
+        }
+        &--newLifeformFound {
+            color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
         }
 
         .mdi {
