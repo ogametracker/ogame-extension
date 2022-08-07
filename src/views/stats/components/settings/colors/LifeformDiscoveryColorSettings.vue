@@ -24,14 +24,22 @@
     })
     export default class LifeformDiscoveryColorSettings extends Vue {
 
-        private get labels(): Record<LifeformDiscoveryEventType, string> {
-            return this.$i18n.$t.lifeformDiscoveries.eventTypes;
+        private get labels(): Record<Exclude<LifeformDiscoveryEventType, LifeformDiscoveryEventType.newLifeformFound>, string> {
+            return {
+                [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.lifeformDiscoveries.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.lifeformDiscoveries.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.lifeformDiscoveries.lifeformFound,
+            };
         }
 
-        private readonly keys = LifeformDiscoveryEventTypes;
+        private readonly keys: LifeformDiscoveryEventType[] = [
+            LifeformDiscoveryEventType.nothing,
+            LifeformDiscoveryEventType.lostShip,
+            LifeformDiscoveryEventType.knownLifeformFound,
+        ];
 
         private get colors() {
-            return SettingsDataModule.settings.colors.resources;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries;
         }
 
         private updateColors(value: Record<LifeformDiscoveryEventType, string>) {
