@@ -7,6 +7,8 @@
             <combat-result-color-settings />
             <resource-color-settings />
             <ship-color-settings />
+            <lifeform-discovery-color-settings />
+            <lifeform-color-settings />
         </div>
     </div>
 </template>
@@ -19,6 +21,8 @@
     import CombatResultColorSettings from '@/views/stats/components/settings/colors/CombatResultColorSettings.vue';
     import ResourceColorSettings from '@/views/stats/components/settings/colors/ResourceColorSettings.vue';
     import ShipColorSettings from '@/views/stats/components/settings/colors/ShipColorSettings.vue';
+    import LifeformColorSettings from '@/views/stats/components/settings/colors/LifeformColorSettings.vue';
+    import LifeformDiscoveryColorSettings from '@/views/stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
 
     @Component({
         components: {
@@ -28,6 +32,8 @@
             CombatResultColorSettings,
             ResourceColorSettings,
             ShipColorSettings,
+            LifeformColorSettings,
+            LifeformDiscoveryColorSettings,
         },
     })
     export default class Colors extends Vue {
