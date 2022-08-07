@@ -15,6 +15,10 @@
                     label: this.$i18n.$t.empire.lifeforms.subHeaders.overview,
                 },
                 {
+                    to: { name: 'empire/lifeforms/progress' },
+                    label: this.$i18n.$t.empire.lifeforms.subHeaders.progress,
+                },
+                {
                     to: { name: 'empire/lifeforms/discoveries' },
                     label: this.$i18n.$t.lifeformDiscoveries.header,
                 },

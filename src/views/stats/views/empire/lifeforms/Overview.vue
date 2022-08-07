@@ -173,6 +173,7 @@
 
             const lifeformExperience: Partial<Record<LifeformType, number>> = player.lifeformExperience;
 
+            //TODO: don't show lifeform level+exp (shown in progress view), show total possible population (T1/T2/T3) instead (take food into account!)
             return planets.map<PlanetLifeformItem>(planet => {
                 const lfExp = lifeformExperience[planet.activeLifeform] ?? 0;
                 const lfLevel = getLifeformLevel(lfExp);

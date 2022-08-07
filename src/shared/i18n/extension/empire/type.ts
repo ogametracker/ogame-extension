@@ -101,6 +101,7 @@ export interface EmpireTranslations {
         header: string;
         subHeaders: {
             overview: string;
+            progress: string;
         };
 
         planet: string;

@@ -103,6 +103,7 @@ export const en: EmpireTranslations = {
         header: 'Lifeforms',
         subHeaders: {
             overview: 'Overview',
+            progress: 'Progress',
         },
 
         planet: 'Planet',

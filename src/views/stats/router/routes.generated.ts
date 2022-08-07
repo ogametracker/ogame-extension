@@ -37,6 +37,7 @@ import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
 import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
 import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
+import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
 import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
 import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
@@ -402,6 +403,11 @@ const routes: RouteConfig[] = [
                                 path: "overview",
                                 name: "empire/lifeforms/overview",
                                 component: viewsempirelifeformsOverview
+                            },
+                            {
+                                path: "progress",
+                                name: "empire/lifeforms/progress",
+                                component: viewsempirelifeformsProgress
                             },
                             {
                                 redirect: {
