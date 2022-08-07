@@ -41,11 +41,14 @@ export const de: ExcelExportTranslations = {
 
         sheets: {
             rawData: 'Rohdaten',
-            dailyDepletion: 'Tägliche Systemauslastung',
-            dailyResults: 'Tägliche Ergebnisse',
-            dailyResources: 'Tägliche Rohstoffe',
-            dailyShips: 'Tägliche Schiffe',
-            dailyDarkMatter: 'Tägliche Dunkle Materie',
+            dailyDepletion: 'Tägl. Systemauslastung',
+            dailyResults: 'Tägl. Ergebnisse',
+            dailyResources: 'Tägl. Rohstoffe',
+            dailyResourcesSize: 'Tägl. Rohstoffe (Größen',
+            dailyShips: 'Tägl. Schiffe',
+            dailyShipsSize: 'Tägl. Schiffe (Größe)',
+            dailyDarkMatter: 'Tägl. DM',
+            dailyDarkMatterSize: 'Tägl. DM (Größe)',
         },
 
         eventType: 'Typ',
@@ -94,7 +97,7 @@ export const de: ExcelExportTranslations = {
     lifeformDiscoveries: {
         prefix: 'LF',
 
-        sheets:{
+        sheets: {
             rawData: 'Rohdaten',
             dailyExperience: 'Tägliche Erfahrung',
         },

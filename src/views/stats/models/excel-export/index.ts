@@ -3,6 +3,7 @@ import { $i18n } from '@/shared/i18n/extension/$i18n';
 import { CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+import { ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
 import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
 import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
@@ -304,16 +305,25 @@ class ExcelExportClass {
             this.#writeExpeditions_dailyOverview(workbook);
         }
 
-        if (options.resourcesPerDay) {
-            this.#writeExpeditions_dailyResources(workbook);
+        if (options.resourcesPerDay.amount) {
+            this.#writeExpeditions_dailyResources_amount(workbook);
+        }
+        if (options.resourcesPerDay.sizes) {
+            this.#writeExpeditions_dailyResources_sizes(workbook);
         }
 
-        if (options.shipsPerDay) {
-            this.#writeExpeditions_dailyShips(workbook);
+        if (options.shipsPerDay.amount) {
+            this.#writeExpeditions_dailyShips_amount(workbook);
+        }
+        if (options.shipsPerDay.sizes) {
+            this.#writeExpeditions_dailyShips_sizes(workbook);
         }
 
-        if (options.darkMatterPerDay) {
-            this.#writeExpeditions_dailyDarkMatter(workbook);
+        if (options.darkMatterPerDay.amount) {
+            this.#writeExpeditions_dailyDarkMatter_amount(workbook);
+        }
+        if (options.darkMatterPerDay.sizes) {
+            this.#writeExpeditions_dailyDarkMatter_sizes(workbook);
         }
 
         if (options.depletionPerDay) {
@@ -337,7 +347,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDepletion}`);
     }
-    #writeExpeditions_dailyDarkMatter(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyDarkMatter_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.darkMatter[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatterSize}`);
+    }
+    #writeExpeditions_dailyDarkMatter_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
@@ -352,7 +377,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatter}`);
     }
-    #writeExpeditions_dailyShips(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyShips_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.fleet[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShipsSize}`);
+    }
+    #writeExpeditions_dailyShips_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
@@ -367,7 +407,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShips}`);
     }
-    #writeExpeditions_dailyResources(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyResources_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.resources[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyResourcesSize}`);
+    }
+    #writeExpeditions_dailyResources_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [

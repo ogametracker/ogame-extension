@@ -44,8 +44,11 @@ export const en: ExcelExportTranslations = {
             dailyDepletion: 'Daily System Depletion',
             dailyResults: 'Daily Results',
             dailyResources: 'Daily Resources',
+            dailyResourcesSize: 'Daily Resources (Size)',
             dailyShips: 'Daily Ships',
+            dailyShipsSize: 'Daily Ships (Size)',
             dailyDarkMatter: 'Daily Dark Matter',
+            dailyDarkMatterSize: 'Daily Dark Matter (Size)',
         },
 
         eventType: 'Type',

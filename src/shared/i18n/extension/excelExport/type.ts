@@ -42,8 +42,11 @@ export interface ExcelExportTranslations {
             dailyResults: string;
             dailyDepletion: string;
             dailyResources: string;
+            dailyResourcesSize: string;
             dailyShips: string;
+            dailyShipsSize: string;
             dailyDarkMatter: string;
+            dailyDarkMatterSize: string;
         };
 
         eventType: string;
