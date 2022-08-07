@@ -48,6 +48,17 @@
                     <checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="$i18n.$t.excelExport.groups.debrisFields.dailyResources" />
                 </div>
             </div>
+
+            <div class="fake-table">
+                <div class="fake-table-header">
+                    <span v-text="$i18n.$t.excelExport.groups.lifeformDiscoveries.header" /><!-- LOCA -->
+                </div>
+                <div class="fake-table-body">
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.rawData" /><!-- LOCA -->
+
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.dailyExperience" /><!-- LOCA -->
+                </div>
+            </div>
         </div>
 
         <div class="export-area">
@@ -94,6 +105,11 @@
             debrisFields: {
                 rawData: false,
                 resourcesPerDay: false,
+            },
+
+            lifeformDiscoveries: {
+                rawData: false,
+                experiencePerDay: false,
             },
         };
 

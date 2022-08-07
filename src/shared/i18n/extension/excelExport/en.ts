@@ -28,6 +28,11 @@ export const en: ExcelExportTranslations = {
             rawData: 'Raw data (every single tracked harvest report)',
             dailyResources: 'Harvested resources per day',
         },
+        lifeformDiscoveries: {
+            header: 'Discovery Missions',
+            rawData: 'Raw data (every single tracked discovery mission)',
+            dailyExperience: 'Gained experience per day',
+        },
     },
     generateButton: 'Generate Excel export',
 
@@ -84,6 +89,14 @@ export const en: ExcelExportTranslations = {
         sheets: {
             rawData: 'Raw Data',
             dailyResources: 'Daily Resources',
+        },
+    },
+    lifeformDiscoveries: {
+        prefix: 'LF',
+
+        sheets:{
+            rawData: 'Raw Data',
+            dailyExperience: 'Daily Experience',
         },
     },
 };

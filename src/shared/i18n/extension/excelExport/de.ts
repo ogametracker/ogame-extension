@@ -28,6 +28,11 @@ export const de: ExcelExportTranslations = {
             rawData: 'Rohdaten (jeder einzelne getrackte TF-Abbaubericht)',
             dailyResources: 'Abgebaute Rohstoffe pro Tag',
         },
+        lifeformDiscoveries: {
+            header: 'Entdeckungsmissionen',
+            rawData: 'Rohdaten (jede einzelne getrackte Mission)',
+            dailyExperience: 'Gesammelte Erfahrung pro Tag',
+        },
     },
     generateButton: 'Excel-Export generieren',
 
@@ -86,6 +91,12 @@ export const de: ExcelExportTranslations = {
             dailyResources: 'Tägliche Rohstoffe',
         },
     },
+    lifeformDiscoveries: {
+        prefix: 'LF',
 
-
+        sheets:{
+            rawData: 'Rohdaten',
+            dailyExperience: 'Tägliche Erfahrung',
+        },
+    },
 };

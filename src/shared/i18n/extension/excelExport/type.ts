@@ -26,6 +26,11 @@ export interface ExcelExportTranslations {
             rawData: string;
             dailyResources: string;
         };
+        lifeformDiscoveries: {
+            header: string;
+            rawData: string;
+            dailyExperience: string;
+        };
     };
     generateButton: string;
 
@@ -82,6 +87,14 @@ export interface ExcelExportTranslations {
         sheets: {
             rawData: string;
             dailyResources: string;
+        };
+    };
+    lifeformDiscoveries: {
+        prefix: string;
+
+        sheets: {
+            rawData: string;
+            dailyExperience: string;
         };
     };
 }
