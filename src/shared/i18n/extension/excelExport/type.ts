@@ -99,5 +99,9 @@ export interface ExcelExportTranslations {
             rawData: string;
             dailyExperience: string;
         };
+
+        result: string;
+        lifeform: string;
+        experience: string;
     };
 }

@@ -104,9 +104,9 @@ class ExcelExportClass {
 
         const headers = [
             $i18n.$t.common.dateTime,
-            'LOCA: Event',
-            'LOCA: Lifeform',
-            'LOCA: Experience',
+            $i18n.$t.excelExport.lifeformDiscoveries.result,
+            $i18n.$t.excelExport.lifeformDiscoveries.lifeform,
+            $i18n.$t.excelExport.lifeformDiscoveries.experience,
         ];
         const data = allDiscoveries.map(disc => [
             $i18n.$d(disc.date, 'datetime'),

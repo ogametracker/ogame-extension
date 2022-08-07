@@ -101,5 +101,9 @@ export const en: ExcelExportTranslations = {
             rawData: 'Raw Data',
             dailyExperience: 'Daily Experience',
         },
+
+        result: 'Finding',
+        experience: 'Experience',
+        lifeform: 'Lifeform',
     },
 };

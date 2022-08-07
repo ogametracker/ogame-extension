@@ -101,5 +101,9 @@ export const de: ExcelExportTranslations = {
             rawData: 'Rohdaten',
             dailyExperience: 'Tägliche Erfahrung',
         },
+
+        result: 'Fund',
+        experience: 'Erfahrung',
+        lifeform: 'Lebensform',
     },
 };

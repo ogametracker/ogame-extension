@@ -51,12 +51,12 @@
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="$i18n.$t.excelExport.groups.lifeformDiscoveries.header" /><!-- LOCA -->
+                    <span v-text="$i18n.$t.excelExport.groups.lifeformDiscoveries.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.rawData" /><!-- LOCA -->
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.rawData" />
 
-                    <checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.dailyExperience" /><!-- LOCA -->
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="$i18n.$t.excelExport.groups.lifeformDiscoveries.dailyExperience" />
                 </div>
             </div>
         </div>
