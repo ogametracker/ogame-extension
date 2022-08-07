@@ -32,6 +32,7 @@ export const en: LifeformDiscoveryMessages = {
         /*'The crew of this exploration ship had already earned themselves a reputation as a somewhat maverick outfit, brave to the extent of being foolhardy, which is why they looked to be the perfect match for this mission. Maybe they thought */'they could just fly straight through the asteroid field'/*? Sadly, it will be difficult to piece together answers from the wreckage of their ship.'*/,
         /*'It appears that the */'exploration ship has been lost in a hitherto'/* unknown singularity. There has been no sign of life from the crew since.'*/,
         /*'The exploration fleet flew into */'an ambush laid by a belligerent alien species'/*. They utterly pulverised the exploration ship before initial contact could even be established.'*/,
+        /*'The exploration ship detected some promising signals. But after hunting down the source of signal, */'it suddenly stopped transmitting'/*. Search teams were dispatched, but couldn’t find any trace of the ship’s location. It must be lost to the void.'*/,
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /Bei den Koordinaten .+ wurde die Lebensform .+ gefunden und der Lebensformverwaltung hinzugefügt/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /our envoys were able to improve our knowledge about them by (?<xp>\d+) XP/i,
