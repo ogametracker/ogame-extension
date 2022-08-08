@@ -110,11 +110,12 @@
                     language: account.serverLanguage,
                     playerId: account.id,
                 });
-                const tx = db.transaction(['combatReports', 'expeditions', 'debrisFieldReports', 'universeSpecificSettings', 'empire'], 'readonly');
+                const tx = db.transaction(['combatReports', 'expeditions', 'debrisFieldReports', 'lifeformDiscoveries', 'universeSpecificSettings', 'empire'], 'readonly');
 
                 const combatReports = await tx.objectStore('combatReports').getAll();
                 const expeditions = await tx.objectStore('expeditions').getAll();
                 const debrisFieldReports = await tx.objectStore('debrisFieldReports').getAll();
+                const lifeformDiscoveries = await tx.objectStore('lifeformDiscoveries').getAll();
                 const universeSpecificSettings = await tx.objectStore('universeSpecificSettings').get(0);
                 const empire = await this.getExportEmpire(tx);
                 await tx.done;
@@ -128,6 +129,7 @@
                     combatReports,
                     expeditions,
                     debrisFieldReports,
+                    lifeformDiscoveries,
                     universeSpecificSettings,
                     empire,
                 });
@@ -208,7 +210,7 @@
             return history;
         }
 
-        private async getExportEmpire(tx: IDBPTransaction<OgameTrackerPlayerDbSchema, ("combatReports" | "expeditions" | "debrisFieldReports" | "universeSpecificSettings" | "empire")[], "readonly">): Promise<V2ExportedEmpire> {
+        private async getExportEmpire(tx: IDBPTransaction<OgameTrackerPlayerDbSchema, ("combatReports" | "expeditions" | "debrisFieldReports" | "lifeformDiscoveries" | "universeSpecificSettings" | "empire")[], "readonly">): Promise<V2ExportedEmpire> {
             const store = tx.objectStore('empire');
             const allianceClass = await store.get('allianceClass') as AllianceClass | undefined ?? AllianceClass.none;
             const playerClass = await store.get('playerClass') as PlayerClass | undefined ?? PlayerClass.none;

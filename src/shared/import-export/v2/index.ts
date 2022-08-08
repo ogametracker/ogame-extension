@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { HighscoreTypeName } from "@/shared/models/ogame/highscore";
 import { CombatReport } from "../../models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
@@ -22,6 +23,7 @@ export interface V2ExportedAccount {
     combatReports: CombatReport[];
     expeditions: ExpeditionEvent[];
     debrisFieldReports: DebrisFieldReport[];
+    lifeformDiscoveries?: LifeformDiscoveryEvent[];
     empire: V2ExportedEmpire;
     universeSpecificSettings?: UniverseSpecificSettings;
 }
