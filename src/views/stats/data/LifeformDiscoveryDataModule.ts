@@ -18,9 +18,17 @@ export interface DailyLifeformDiscoveryResult {
     lifeformExperience: Record<ValidLifeformType, number>;
 }
 
+export interface LifeformDiscoveryProgressInfo {
+    discoveredDate?: number;
+    discoveriesCount: number;
+}
+
 @Component
 class LifeformDiscoveryDataModuleClass extends Vue {
     public dailyResults: Partial<Record<number, DailyLifeformDiscoveryResult>> = {};
+    public readonly lifeforms: Record<ValidLifeformType, LifeformDiscoveryProgressInfo> = createRecord(ValidLifeformTypes, lf => ({
+        discoveriesCount: 0,
+    }));
     private internal_firstDate: number | null = null;
     private internal_count = 0;
 
@@ -53,12 +61,23 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         const lifeformDiscoveries = await db.getAll('lifeformDiscoveries');
         lifeformDiscoveries.forEach(discovery => {
             this.addLifeformDiscoveryToDailyResult(discovery);
+            this.addLifeformDiscoveryToLifeformInfos(discovery);
 
             minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, discovery.date);
         });
         this.internal_firstDate = minDate;
 
         this._resolveReady();
+    }
+
+    private addLifeformDiscoveryToLifeformInfos(discovery: LifeformDiscoveryEvent) {
+        if(discovery.type == LifeformDiscoveryEventType.newLifeformFound) {
+            this.lifeforms[discovery.lifeform].discoveredDate = discovery.date;
+            this.lifeforms[discovery.lifeform].discoveriesCount++;
+        }
+        else if (discovery.type == LifeformDiscoveryEventType.knownLifeformFound) {
+            this.lifeforms[discovery.lifeform].discoveriesCount++;
+        }
     }
 
     private addLifeformDiscoveryToDailyResult(discovery: LifeformDiscoveryEvent) {

@@ -3,8 +3,11 @@ import { $i18n } from '@/shared/i18n/extension/$i18n';
 import { CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+import { ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
 import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
+import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
+import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 import { ShipTypes } from '@/shared/models/ogame/ships/ShipType';
 import * as xlsx from 'xlsx';
@@ -12,6 +15,7 @@ import { CombatReportDataModule } from '../../data/CombatReportDataModule';
 import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
 import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
 import { GlobalOgameMetaData } from '../../data/global';
+import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataModule';
 
 interface ExcelExportOptions_Expeditions {
     rawData: boolean;
@@ -44,10 +48,16 @@ interface ExcelExportOptions_DebrisFields {
     resourcesPerDay: boolean;
 }
 
+interface ExcelExportOptions_LifeformDiscoveries {
+    rawData: boolean;
+    experiencePerDay: boolean;
+}
+
 export interface ExcelExportOptions {
     expeditions: ExcelExportOptions_Expeditions;
     combats: ExcelExportOptions_Combats;
     debrisFields: ExcelExportOptions_DebrisFields;
+    lifeformDiscoveries: ExcelExportOptions_LifeformDiscoveries;
 }
 
 class ExcelExportClass {
@@ -58,8 +68,60 @@ class ExcelExportClass {
         await this.#writeExpeditions(workbook, options.expeditions);
         await this.#writeCombats(workbook, options.combats);
         await this.#writeDebrisFields(workbook, options.debrisFields);
+        await this.#writeLifeformDiscoveries(workbook, options.lifeformDiscoveries);
 
         xlsx.writeFile(workbook, filename);
+    }
+
+    async #writeLifeformDiscoveries(workbook: xlsx.WorkBook, options: ExcelExportOptions_LifeformDiscoveries) {
+        if (options.rawData) {
+            await this.#writeLifeformDiscoveries_rawData(workbook);
+        }
+
+        if (options.experiencePerDay) {
+            this.#writeLifeformDiscoveries_dailyExperience(workbook);
+        }
+    }
+    #writeLifeformDiscoveries_dailyExperience(workbook: xlsx.WorkBook) {
+        const dailyResults = LifeformDiscoveryDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ValidLifeformTypes.map(lf => $i18n.$t.lifeforms[lf]),
+        ];
+        const data = dailyResults.map(result => [
+            $i18n.$d(result.date, 'date'),
+            ...ValidLifeformTypes.map(lf => result.lifeformExperience[lf]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.excelExport.lifeformDiscoveries.sheets.dailyExperience}`);
+    }
+
+    async #writeLifeformDiscoveries_rawData(workbook: xlsx.WorkBook) {
+        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        const allDiscoveries = await db.getAll('lifeformDiscoveries');
+
+        const headers = [
+            $i18n.$t.common.dateTime,
+            $i18n.$t.excelExport.lifeformDiscoveries.result,
+            $i18n.$t.excelExport.lifeformDiscoveries.lifeform,
+            $i18n.$t.excelExport.lifeformDiscoveries.experience,
+        ];
+        const data = allDiscoveries.map(disc => [
+            $i18n.$d(disc.date, 'datetime'),
+            ({
+                [LifeformDiscoveryEventType.nothing]: $i18n.$t.empire.lifeforms.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: $i18n.$t.empire.lifeforms.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
+            }[disc.type]),
+            'lifeform' in disc ? $i18n.$t.lifeforms[disc.lifeform] : '',
+            'experience' in disc ? disc.experience : '',
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.rawData}`);
     }
 
     async #writeDebrisFields(workbook: xlsx.WorkBook, options: ExcelExportOptions_DebrisFields) {
@@ -68,41 +130,45 @@ class ExcelExportClass {
         }
 
         if (options.resourcesPerDay) {
-            const dailyResults = DebrisFieldReportDataModule.dailyResultsArray;
-
-            const headers = [
-                $i18n.$t.common.date,
-                $i18n.$t.resources[ResourceType.metal],
-                $i18n.$t.resources[ResourceType.crystal],
-                $i18n.$t.debrisFields.position,
-            ];
-            const data = dailyResults.flatMap(day => {
-                const rows: [string, number, number, string][] = [];
-
-                if (day.normal.metal > 0 || day.normal.crystal > 0) {
-                    rows.push([
-                        $i18n.$d(day.date, 'date'),
-                        day.normal.metal,
-                        day.normal.crystal,
-                        '1-15',
-                    ]);
-                }
-                if (day.expedition.metal > 0 || day.expedition.crystal > 0) {
-                    rows.push([
-                        $i18n.$d(day.date, 'date'),
-                        day.expedition.metal,
-                        day.expedition.crystal,
-                        '16',
-                    ]);
-                }
-
-                return rows;
-            });
-            const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
-
-            xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.debrisFields.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.dailyResources}`);
+            this.#writeDebrisFields_dailyResources(workbook);
         }
     }
+    #writeDebrisFields_dailyResources(workbook: xlsx.WorkBook) {
+        const dailyResults = DebrisFieldReportDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            $i18n.$t.resources[ResourceType.metal],
+            $i18n.$t.resources[ResourceType.crystal],
+            $i18n.$t.debrisFields.position,
+        ];
+        const data = dailyResults.flatMap(day => {
+            const rows: [string, number, number, string][] = [];
+
+            if (day.normal.metal > 0 || day.normal.crystal > 0) {
+                rows.push([
+                    $i18n.$d(day.date, 'date'),
+                    day.normal.metal,
+                    day.normal.crystal,
+                    '1-15',
+                ]);
+            }
+            if (day.expedition.metal > 0 || day.expedition.crystal > 0) {
+                rows.push([
+                    $i18n.$d(day.date, 'date'),
+                    day.expedition.metal,
+                    day.expedition.crystal,
+                    '16',
+                ]);
+            }
+
+            return rows;
+        });
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.debrisFields.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.dailyResources}`);
+    }
+
     async #writeDebrisFields_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         const allDfReports = await db.getAll('debrisFieldReports');
@@ -239,16 +305,25 @@ class ExcelExportClass {
             this.#writeExpeditions_dailyOverview(workbook);
         }
 
-        if (options.resourcesPerDay) {
-            this.#writeExpeditions_dailyResources(workbook);
+        if (options.resourcesPerDay.amount) {
+            this.#writeExpeditions_dailyResources_amount(workbook);
+        }
+        if (options.resourcesPerDay.sizes) {
+            this.#writeExpeditions_dailyResources_sizes(workbook);
         }
 
-        if (options.shipsPerDay) {
-            this.#writeExpeditions_dailyShips(workbook);
+        if (options.shipsPerDay.amount) {
+            this.#writeExpeditions_dailyShips_amount(workbook);
+        }
+        if (options.shipsPerDay.sizes) {
+            this.#writeExpeditions_dailyShips_sizes(workbook);
         }
 
-        if (options.darkMatterPerDay) {
-            this.#writeExpeditions_dailyDarkMatter(workbook);
+        if (options.darkMatterPerDay.amount) {
+            this.#writeExpeditions_dailyDarkMatter_amount(workbook);
+        }
+        if (options.darkMatterPerDay.sizes) {
+            this.#writeExpeditions_dailyDarkMatter_sizes(workbook);
         }
 
         if (options.depletionPerDay) {
@@ -272,7 +347,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDepletion}`);
     }
-    #writeExpeditions_dailyDarkMatter(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyDarkMatter_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.darkMatter[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatterSize}`);
+    }
+    #writeExpeditions_dailyDarkMatter_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
@@ -287,7 +377,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatter}`);
     }
-    #writeExpeditions_dailyShips(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyShips_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.fleet[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShipsSize}`);
+    }
+    #writeExpeditions_dailyShips_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
@@ -302,7 +407,22 @@ class ExcelExportClass {
 
         xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShips}`);
     }
-    #writeExpeditions_dailyResources(workbook: xlsx.WorkBook) {
+    #writeExpeditions_dailyResources_sizes(workbook: xlsx.WorkBook) {
+        const dailyResults = ExpeditionDataModule.dailyResultsArray;
+
+        const headers = [
+            $i18n.$t.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+        ];
+        const data = dailyResults.map(day => [
+            $i18n.$d(day.date, 'date'),
+            ...ExpeditionEventSizes.map(size => day.eventSizes.resources[size]),
+        ]);
+        const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
+
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyResourcesSize}`);
+    }
+    #writeExpeditions_dailyResources_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [

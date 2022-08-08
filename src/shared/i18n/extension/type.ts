@@ -13,7 +13,6 @@ import { DonateTranslations } from './donate/type';
 import { EmpireTranslations } from './empire/type';
 import { ExcelExportTranslations } from './excelExport/type';
 import { ExpeditionsTranslations } from './expeditions/type';
-import { LifeformDiscoveriesTranslations } from './lifeformDiscoveries/type';
 import { NotificationTranslations } from './notifications/type';
 import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
@@ -34,7 +33,6 @@ export interface ExtensionTranslations {
     settings: SettingsTranslations;
     resources: ResourceTranslations;
     expeditions: ExpeditionsTranslations;
-    lifeformDiscoveries: LifeformDiscoveriesTranslations;
     combats: CombatsTranslations;
     donate: DonateTranslations;
     debrisFields: DebrisFieldsTranslations;

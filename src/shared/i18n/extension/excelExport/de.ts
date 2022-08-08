@@ -28,6 +28,11 @@ export const de: ExcelExportTranslations = {
             rawData: 'Rohdaten (jeder einzelne getrackte TF-Abbaubericht)',
             dailyResources: 'Abgebaute Rohstoffe pro Tag',
         },
+        lifeformDiscoveries: {
+            header: 'Entdeckungsmissionen',
+            rawData: 'Rohdaten (jede einzelne getrackte Mission)',
+            dailyExperience: 'Gesammelte Erfahrung pro Tag',
+        },
     },
     generateButton: 'Excel-Export generieren',
 
@@ -36,11 +41,14 @@ export const de: ExcelExportTranslations = {
 
         sheets: {
             rawData: 'Rohdaten',
-            dailyDepletion: 'Tägliche Systemauslastung',
-            dailyResults: 'Tägliche Ergebnisse',
-            dailyResources: 'Tägliche Rohstoffe',
-            dailyShips: 'Tägliche Schiffe',
-            dailyDarkMatter: 'Tägliche Dunkle Materie',
+            dailyDepletion: 'Tägl. Systemauslastung',
+            dailyResults: 'Tägl. Ergebnisse',
+            dailyResources: 'Tägl. Rohstoffe',
+            dailyResourcesSize: 'Tägl. Rohstoffe (Größen',
+            dailyShips: 'Tägl. Schiffe',
+            dailyShipsSize: 'Tägl. Schiffe (Größe)',
+            dailyDarkMatter: 'Tägl. DM',
+            dailyDarkMatterSize: 'Tägl. DM (Größe)',
         },
 
         eventType: 'Typ',
@@ -86,6 +94,16 @@ export const de: ExcelExportTranslations = {
             dailyResources: 'Tägliche Rohstoffe',
         },
     },
+    lifeformDiscoveries: {
+        prefix: 'LF',
 
+        sheets: {
+            rawData: 'Rohdaten',
+            dailyExperience: 'Tägliche Erfahrung',
+        },
 
+        result: 'Fund',
+        experience: 'Erfahrung',
+        lifeform: 'Lebensform',
+    },
 };

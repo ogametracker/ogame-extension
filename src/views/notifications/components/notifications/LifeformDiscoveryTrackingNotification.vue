@@ -45,15 +45,15 @@
             </div>
             <div v-else class="text-grid">
                 <template v-if="notification.events.lostShip > 0">
-                    <span v-text="$i18n.$t.lifeformDiscoveries.eventTypes.lostShip" />
+                    <span v-text="$i18n.$t.empire.lifeforms.eventTypes.lostShip" />
                     <span v-text="$i18n.$n(notification.events.lostShip)" />
                 </template>
                 <template v-if="lifeformFindingCount > 0">
-                    <span v-text="$i18n.$t.lifeformDiscoveries.lifeformFound" />
+                    <span v-text="$i18n.$t.empire.lifeforms.lifeformFound" />
                     <span v-text="$i18n.$n(lifeformFindingCount)" />
                 </template>
                 <template v-if="notification.events.nothing > 0">
-                    <span v-text="$i18n.$t.lifeformDiscoveries.eventTypes.nothing" />
+                    <span v-text="$i18n.$t.empire.lifeforms.eventTypes.nothing" />
                     <span v-text="$i18n.$n(notification.events.nothing)" />
                 </template>
             </div>

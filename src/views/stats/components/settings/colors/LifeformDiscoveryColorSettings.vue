@@ -11,7 +11,7 @@
 
 <script lang="ts">
     import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+    import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -24,14 +24,22 @@
     })
     export default class LifeformDiscoveryColorSettings extends Vue {
 
-        private get labels(): Record<LifeformDiscoveryEventType, string> {
-            return this.$i18n.$t.lifeformDiscoveries.eventTypes;
+        private get labels(): Record<Exclude<LifeformDiscoveryEventType, LifeformDiscoveryEventType.newLifeformFound>, string> {
+            return {
+                [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.empire.lifeforms.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.empire.lifeforms.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.empire.lifeforms.lifeformFound,
+            };
         }
 
-        private readonly keys = LifeformDiscoveryEventTypes;
+        private readonly keys: LifeformDiscoveryEventType[] = [
+            LifeformDiscoveryEventType.nothing,
+            LifeformDiscoveryEventType.lostShip,
+            LifeformDiscoveryEventType.knownLifeformFound,
+        ];
 
         private get colors() {
-            return SettingsDataModule.settings.colors.resources;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries;
         }
 
         private updateColors(value: Record<LifeformDiscoveryEventType, string>) {

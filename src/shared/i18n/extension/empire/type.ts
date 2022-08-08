@@ -1,3 +1,5 @@
+import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+
 export interface EmpireTranslations {
     header: string;
     planet: string;
@@ -101,6 +103,11 @@ export interface EmpireTranslations {
         header: string;
         subHeaders: {
             overview: string;
+            progress: string;
+            discoveryMissions: string;
+
+            discoveryResults: string;
+            experience: string;
         };
 
         planet: string;
@@ -108,8 +115,13 @@ export interface EmpireTranslations {
         buildings: string;
         technologies: string;
         tier: string;
-        lifeformLevel: string;
-        lifeformExperience: string;
+        level: string;
+        discoveryDateUnknown: string;
+        notDiscoveredYet: string;
         totalLifeformExperience: string;
+
+        discoveryMissions: string;
+        lifeformFound: string;
+        eventTypes: Record<LifeformDiscoveryEventType, string>;
     };
 }
