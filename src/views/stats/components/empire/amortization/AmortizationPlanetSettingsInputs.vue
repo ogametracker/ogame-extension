@@ -106,7 +106,7 @@
 
             <span />
             <span>
-                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings">
+                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
                     <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeformSettings" />
                 </button>
@@ -154,7 +154,6 @@
 
 <script lang="ts">
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
@@ -301,6 +300,7 @@
 </script>
 <style lang="scss" scoped>
     .planet-settings {
+        width: 330px;
         border: 1px solid rgba(var(--color), 0.5);
         display: flex;
         flex-direction: column;
@@ -387,6 +387,10 @@
 
         .o-lifeform-technology {
             cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 50px;
         }
     }
 

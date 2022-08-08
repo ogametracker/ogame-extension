@@ -96,7 +96,6 @@
                     :footerItems="footerItems"
                     sticky="100%"
                     sticky-footer
-                    @scroll="onTableScroll($event)"
                     :cellClassProvider="cellClassProvider"
                     row-borders
                 >
@@ -346,6 +345,18 @@
                     <template #footer-productionDeltaConverted />
                     <template #footer-timeInHours />
                 </grid-table>
+
+                <div style="display: flex; gap: 8px">
+                    <button
+                        v-for="count in [25, 50, 100, 500]"
+                        :key="count"
+                        @click="insertNextAmortizationItems(count)"
+                        :disabled="generatingItemCount != null"
+                    >
+                        <span class="mdi mdi-plus" />
+                        <span v-text="$i18n.$t.empire.amortization.generateItems($i18n.$n(count))" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -360,11 +371,11 @@
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs from '../../components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
-    import { GridTableColumn, GridTableScrollEvent } from '../../components/common/GridTable.vue';
+    import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
@@ -381,7 +392,7 @@
     import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
-import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -487,6 +498,8 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                 this.showSettings = false;
                 this.initItems();
                 this.selectedItemIndizes = [];
+
+                void this.insertNextAmortizationItems(25);
             }
         }
 
@@ -509,10 +522,10 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
         }
 
         private async insertNextAmortizationItems(count: number): Promise<void> {
-            if(this.generatingItemCount != null) {
+            if (this.generatingItemCount != null) {
                 return;
             }
-            
+
             this.generatingItemCount = { total: count, count: 0 };
             await this.$nextTick();
 
@@ -666,25 +679,6 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
         private formatCoordinates(coordinates: Coordinates): string {
             return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
-        }
-
-        private timeout: number | undefined = undefined;
-        @Watch('items')
-        private onItemsChanged() {
-            if (this.items.length < 25) {
-                this.setTimeout(() => this.insertNextAmortizationItems(25 - this.items.length));
-            }
-        }
-
-        private onTableScroll(event: GridTableScrollEvent): void {
-            if (event.y.max - event.y.current < 50) {
-                this.setTimeout(() => this.insertNextAmortizationItems(10));
-            }
-        }
-
-        private setTimeout(action: () => any) {
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(action, 250);
         }
 
         private get buildableTranslations() {
@@ -853,6 +847,9 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
         &-table {
             overflow: auto;
             min-height: 300px;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            gap: 8px;
 
             &::v-deep {
                 .astrophysics-cell,
