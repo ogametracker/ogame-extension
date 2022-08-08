@@ -17,6 +17,17 @@
                             v-if="generatingItemCount != null"
                             v-text="`${$i18n.$t.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
                         />
+                        <button
+                            :disabled="generatingItemCount != null || items.length == 0 || showSettings"
+                            class="mr-1"
+                            v-text="'LOCA: save calculated amortization results (will overwrite existing save)'"
+                            @click="saveItems()"
+                        />
+                        <button
+                            :disabled="generatingItemCount != null || !hasSavedAmortizationItems"
+                            v-text="'LOCA: load calculated amortization results'"
+                            @click="loadItems()"
+                        />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -346,7 +357,7 @@
                     <template #footer-timeInHours />
                 </grid-table>
 
-                <div style="display: flex; gap: 8px">
+                <div style="display: flex; gap: 8px" v-if="generator != null">
                     <button
                         v-for="count in [25, 50, 100, 500]"
                         :key="count"
@@ -393,6 +404,7 @@
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+    import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -431,6 +443,26 @@
             return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
         }
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
+
+        private get hasSavedAmortizationItems() {
+            const items = UniverseSpecificSettingsDataModule.settings.savedAmortizationItems ?? [];
+            return items.length > 0;
+        }
+
+        private async saveItems() {
+            await UniverseSpecificSettingsDataModule.updateSettings({
+                ...UniverseSpecificSettingsDataModule.settings,
+                savedAmortizationItems: this.items,
+            });
+        }
+
+        private loadItems() {
+            this.showSettings = false;
+            this.generator = null;
+
+            const items = UniverseSpecificSettingsDataModule.settings.savedAmortizationItems ?? [];
+            this.amortizationItems = [...items];
+        }
 
         /**********************************/
         /* START amortization calculation */
@@ -475,7 +507,7 @@
         private showSettings = true;
 
         private readonly empire = EmpireDataModule.empire;
-        private generator: AmortizationItemGenerator = null!;
+        private generator: AmortizationItemGenerator | null = null;
         private amortizationItems: AmortizationItem[] = [];
         private selectedItemIndizes: number[] = [];
 
@@ -534,7 +566,7 @@
             await this.$nextTick();
 
             while (count > 0) {
-                const next = this.generator.nextItem();
+                const next = this.generator?.nextItem();
 
                 if (next == null || this.stopGenerating) {
                     break;
