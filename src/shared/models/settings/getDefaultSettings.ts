@@ -63,7 +63,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             },
             dsu: {
                 metal: 3,
-                crystal: 2,
+                crystal: 1.5,
             },
         },
         showCellsWithConvertedResourceUnits: true,
