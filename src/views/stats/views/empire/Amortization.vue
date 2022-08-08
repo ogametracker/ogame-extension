@@ -385,11 +385,11 @@
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '../../models/empire/amortization/AmortizationPlanetSettings';
-    import { AmortizationPlayerSettings } from '../../models/empire/amortization/AmortizationPlayerSettings';
-    import { AmortizationAstrophysicsSettings } from '../../models/empire/amortization/AmortizationAstrophysicsSettings';
-    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@stats/models/empire/amortization/models';
-    import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
+    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { AmortizationAstrophysicsSettings } from '@/shared/models/empire/amortization/AmortizationAstrophysicsSettings';
+    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@/shared/models/empire/amortization/models';
+    import { AmortizationItemGenerator } from '@/shared/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
@@ -492,9 +492,11 @@
 
         private toggleSettings() {
             if (!this.showSettings) {
+                this.stopGenerating = true;
                 this.showSettings = true;
             }
             else {
+                this.stopGenerating = false;
                 this.showSettings = false;
                 this.initItems();
                 this.selectedItemIndizes = [];
@@ -508,19 +510,21 @@
         }
 
         private initItems(): void {
-            this.generator = new AmortizationItemGenerator(
-                {
+            this.generator = new AmortizationItemGenerator({
+                settings: {
                     player: this.clone(this.playerSettings),
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
                     showPlasmaTechnology: this.clone(this.showPlasmaTechnology),
                 },
-                this.clone(this.empire.lifeformExperience),
-                this.clone(ServerSettingsDataModule.serverSettings),
-            );
+                lifeformExperience: this.clone(this.empire.lifeformExperience),
+                serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
+                getMsuOrDsu,
+            });
             this.amortizationItems = [];
         }
 
+        private stopGenerating = false;
         private async insertNextAmortizationItems(count: number): Promise<void> {
             if (this.generatingItemCount != null) {
                 return;
@@ -532,7 +536,7 @@
             while (count > 0) {
                 const next = this.generator.nextItem();
 
-                if (next == null) {
+                if (next == null || this.stopGenerating) {
                     break;
                 }
 

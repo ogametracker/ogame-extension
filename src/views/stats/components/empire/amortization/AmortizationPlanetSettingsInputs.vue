@@ -166,7 +166,7 @@
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '@stats/models/empire/amortization/AmortizationPlanetSettings';
+    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
