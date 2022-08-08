@@ -99,6 +99,8 @@ export const de: EmpireTranslations = {
             slowCalculation: 'Die Amortisationsberechnung ist leider etwas langsam geworden, seitdem Lebensformen und deren Gebäude und Technologien berücksichtigt werden. Die Performance wird weiterhin untersucht und wird hoffentlich in der Zukunft verbessert.',
             ctrlClick: 'Strg + Klick auf eine Checkbox, um alle Elemente bis zum gewählten Element an-/abzuwählen.',
         },
+
+        generateItems: value => `${value} Einträge`,
     },
     lifeforms: {
         header: 'Lebensformen',

@@ -99,6 +99,8 @@ export const en: EmpireTranslations = {
             slowCalculation: 'The amortization calculation became pretty slow now that it includes lifeform buildings and technologies. This will hopefully be improved in the future.',
             ctrlClick: 'Ctrl + Click on a check to (de)select all items up to the selected one.',
         },
+
+        generateItems: value => `${value} entries`,
     },
     lifeforms: {
         header: 'Lifeforms',

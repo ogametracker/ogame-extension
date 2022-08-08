@@ -98,6 +98,8 @@ export interface EmpireTranslations {
             slowCalculation: string;
             ctrlClick: string;
         };
+
+        generateItems: (value: string) => string;
     };
     lifeforms: {
         header: string;
