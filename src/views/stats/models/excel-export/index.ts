@@ -5,7 +5,7 @@ import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/mo
 import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
 import { ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
 import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
-import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
 import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
@@ -111,10 +111,10 @@ class ExcelExportClass {
         const data = allDiscoveries.map(disc => [
             $i18n.$d(disc.date, 'datetime'),
             ({
-                [LifeformDiscoveryEventType.nothing]: $i18n.$t.lifeformDiscoveries.eventTypes.nothing,
-                [LifeformDiscoveryEventType.lostShip]: $i18n.$t.lifeformDiscoveries.eventTypes.lostShip,
-                [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.lifeformDiscoveries.lifeformFound,
-                [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.lifeformDiscoveries.lifeformFound,
+                [LifeformDiscoveryEventType.nothing]: $i18n.$t.empire.lifeforms.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: $i18n.$t.empire.lifeforms.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
             }[disc.type]),
             'lifeform' in disc ? $i18n.$t.lifeforms[disc.lifeform] : '',
             'experience' in disc ? disc.experience : '',

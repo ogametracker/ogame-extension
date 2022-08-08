@@ -5,14 +5,14 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getTotal(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.lifeformDiscoveries.discoveryMissions" />
+                        <div v-text="$i18n.$t.empire.lifeforms.discoveryMissions" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getTotal(datasets))" />
-                    <div v-text="`${$i18n.$t.lifeformDiscoveries.discoveryMissions} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.empire.lifeforms.discoveryMissions} (${$i18n.$t.common.total})`" />
                 </div>
             </template>
         </stats-chart>

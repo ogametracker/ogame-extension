@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { EmpireTranslations } from "./type";
 
 export const en: EmpireTranslations = {
@@ -104,6 +105,10 @@ export const en: EmpireTranslations = {
         subHeaders: {
             overview: 'Overview',
             progress: 'Progress',
+            discoveryMissions: 'Missions',
+
+            discoveryResults: 'Results',
+            experience: 'Experience',
         },
 
         planet: 'Planet',
@@ -111,8 +116,17 @@ export const en: EmpireTranslations = {
         buildings: 'Lifeform Buildings',
         technologies: 'Lifeform Technologies',
         tier: 'Tier',
-        lifeformLevel: 'Level',
-        lifeformExperience: 'Experience',
+        level: 'Level',
         totalLifeformExperience: 'Experience (total)',
+        discoveryDateUnknown: 'Unknown',
+        notDiscoveredYet: 'Not discovered yet',
+        discoveryMissions: 'Discovery Missions',
+        eventTypes: {
+            [LifeformDiscoveryEventType.nothing]: 'No finding',
+            [LifeformDiscoveryEventType.lostShip]: 'Lost exploration ship',
+            [LifeformDiscoveryEventType.newLifeformFound]: 'New lifeform',
+            [LifeformDiscoveryEventType.knownLifeformFound]: 'Lifeform experience',
+        },
+        lifeformFound: 'Lifeform found',
     },
 };

@@ -20,7 +20,7 @@
                 },
                 {
                     to: { name: 'empire/lifeforms/discoveries' },
-                    label: this.$i18n.$t.lifeformDiscoveries.header,
+                    label: this.$i18n.$t.empire.lifeforms.subHeaders.discoveryMissions,
                 },
             ];
         }
