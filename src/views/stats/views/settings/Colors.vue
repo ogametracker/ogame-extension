@@ -1,15 +1,13 @@
 <template>
-    <div>
-        <div style="display: flex; align-items: flex-start; column-gap: 8px">
-            <expedition-event-color-settings />
-            <expedition-event-size-color-settings />
-            <expedition-depletion-color-settings />
-            <combat-result-color-settings />
-            <resource-color-settings />
-            <ship-color-settings />
-            <lifeform-discovery-color-settings />
-            <lifeform-color-settings />
-        </div>
+    <div class="colors">
+        <expedition-event-color-settings />
+        <expedition-event-size-color-settings />
+        <expedition-depletion-color-settings />
+        <combat-result-color-settings />
+        <resource-color-settings />
+        <ship-color-settings />
+        <lifeform-discovery-color-settings />
+        <lifeform-color-settings />
     </div>
 </template>
 
@@ -39,3 +37,11 @@
     export default class Colors extends Vue {
     }
 </script>
+<style lang="scss" scoped>
+    .colors {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+</style>
