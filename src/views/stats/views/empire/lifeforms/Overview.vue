@@ -7,20 +7,15 @@
         </template>
 
         <template #cell-lifeform="{ value }">
-            <o-lifeform :lifeform="value.type" size="64px" />
-            <div class="level-list">
-                <span v-text="$i18n.$t.lifeforms[value.type]" :class="value.type" />
-                <span v-text="`${$i18n.$t.empire.lifeforms.lifeformLevel}: ${value.level}`" />
-                <span v-text="`${$i18n.$t.empire.lifeforms.lifeformExperience}: ${$i18n.$n(value.levelExperience)}/${$i18n.$n(value.totalLevelExperience)}`" />
-                <span v-text="`${$i18n.$t.empire.lifeforms.totalLifeformExperience}: ${$i18n.$n(value.totalExperience)}`" />
-            </div>
+            <o-lifeform :lifeform="value" size="48px" />
+            <span v-text="$i18n.$t.lifeforms[value]" class="ml-1" />
         </template>
 
         <template #cell-buildings="{ value, item }">
             <div class="building-levels">
                 <span v-for="building in value" :key="building">
-                    <o-lifeform-building :building="building" size="28px" :disabled="item.buildingLevels[building] == 0" />
-                    <span v-text="item.buildingLevels[building]" />
+                    <o-lifeform-building :building="building" :disabled="item.buildingLevels[building] == 0" />
+                    <span v-text="item.buildingLevels[building]" :class="{ fade: item.buildingLevels[building] == 0 }" />
                 </span>
             </div>
         </template>
@@ -28,46 +23,43 @@
         <template #cell-lifeformTechsTier1="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology
-                        v-if="tech != null"
-                        :key="`icon-${i}`"
-                        :technology="tech"
-                        :disabled="item.lifeformTechnologies[tech] == 0"
-                        size="40px"
-                    />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
-                <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
+                <span
+                    v-for="(tech, i) in value"
+                    :key="`level-${i}`"
+                    v-text="item.lifeformTechnologies[tech]"
+                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                />
             </div>
         </template>
         <template #cell-lifeformTechsTier2="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology
-                        v-if="tech != null"
-                        :key="`icon-${i}`"
-                        :technology="tech"
-                        :disabled="item.lifeformTechnologies[tech] == 0"
-                        size="40px"
-                    />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
-                <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
+                <span
+                    v-for="(tech, i) in value"
+                    :key="`level-${i}`"
+                    v-text="item.lifeformTechnologies[tech]"
+                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                />
             </div>
         </template>
         <template #cell-lifeformTechsTier3="{ value, item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in value">
-                    <o-lifeform-technology
-                        v-if="tech != null"
-                        :key="`icon-${i}`"
-                        :technology="tech"
-                        :disabled="item.lifeformTechnologies[tech] == 0"
-                        size="40px"
-                    />
+                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else :key="`icon-${i}`" />
                 </template>
-                <span v-for="(tech, i) in value" :key="`level-${i}`" v-text="item.lifeformTechnologies[tech]" />
+                <span
+                    v-for="(tech, i) in value"
+                    :key="`level-${i}`"
+                    v-text="item.lifeformTechnologies[tech]"
+                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                />
             </div>
         </template>
     </grid-table>
@@ -89,13 +81,7 @@
             name: string;
             coordinates: string;
         };
-        lifeform: {
-            type: LifeformType;
-            level: number;
-            levelExperience: number;
-            totalLevelExperience: number;
-            totalExperience: number;
-        };
+        lifeform: LifeformType;
         buildings: LifeformBuildingType[];
         buildingLevels: Record<LifeformBuildingType, number>;
         lifeformTechsTier1: (LifeformTechnologyType | null)[];
@@ -118,7 +104,7 @@
                 {
                     key: 'lifeform',
                     label: this.$i18n.$t.empire.lifeforms.lifeform,
-                    size: 'auto',
+                    size: '1fr',
                     style: {
                         'justify-items': 'start',
                     },
@@ -128,7 +114,6 @@
                 {
                     key: 'buildings',
                     label: this.$i18n.$t.empire.lifeforms.buildings,
-                    size: '1fr',
                     style: {
                         'justify-items': 'start',
                     },
@@ -137,7 +122,6 @@
                 {
                     key: 'lifeformTechsTier1',
                     label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 1)`,
-                    size: '276px',
                     style: {
                         'justify-items': 'start',
                     },
@@ -146,7 +130,6 @@
                 {
                     key: 'lifeformTechsTier2',
                     label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 2)`,
-                    size: '276px',
                     style: {
                         'justify-items': 'start',
                     },
@@ -155,7 +138,6 @@
                 {
                     key: 'lifeformTechsTier3',
                     label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 3)`,
-                    size: '276px',
                     style: {
                         'justify-items': 'start',
                     },
@@ -183,13 +165,7 @@
                         name: planet.name,
                         coordinates: this.formatCoordinates(planet.coordinates),
                     },
-                    lifeform: {
-                        type: planet.activeLifeform,
-                        level: lfLevel,
-                        levelExperience: Math.max(0, lfExp - getLifeformExperienceNeededForLevel(lfLevel)),
-                        totalLevelExperience: getLifeformExperienceNeededForLevel(lfLevel + 1) - getLifeformExperienceNeededForLevel(lfLevel),
-                        totalExperience: lfExp,
-                    },
+                    lifeform: planet.activeLifeform,
                     buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
                     buildingLevels: planet.lifeformBuildings,
                     lifeformTechsTier1: Array.from({ length: 6 }).map(
@@ -224,14 +200,6 @@
         justify-items: center;
     }
 
-    .level-list {
-        display: grid;
-        grid-template-rows: repeat(3, 1fr);
-        justify-items: start;
-        margin-left: 8px;
-        line-height: 1.1;
-    }
-
     .lifeform-table {
         max-height: 100%;
 
@@ -248,8 +216,7 @@
 
             .building-levels {
                 display: grid;
-                grid-template-columns: repeat(6, 1fr);
-                grid-template-rows: repeat(2, 1fr);
+                grid-template-columns: repeat(12, 1fr);
                 gap: 4px;
 
                 > span {
@@ -259,23 +226,10 @@
                     justify-content: center;
                 }
             }
-        }
-    }
 
-    .humans {
-        color: #7ec000;
-        font-weight: bold;
-    }
-    .rocktal {
-        color: #df6642;
-        font-weight: bold;
-    }
-    .mechas {
-        color: #4b91e7;
-        font-weight: bold;
-    }
-    .kaelesh {
-        color: #9863e9;
-        font-weight: bold;
+            .fade {
+                opacity: 0.1;
+            }
+        }
     }
 </style>
