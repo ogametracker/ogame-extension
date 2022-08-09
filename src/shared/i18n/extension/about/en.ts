@@ -49,6 +49,7 @@ export const en: AboutTranslations = {
                 numberOfTrackedExpeditions: 'Number of tracked expeditions',
                 numberOfTrackedCombatReports: 'Number of tracked combat reports',
                 numberOfTrackedDebrisFieldReports: 'Number of tracked harvest reports',
+                numberOfTrackedLifeformDiscoveries: 'Number of tracked discovery missiongs',
                 lastUpdateServerSettings: 'Latest server settings update',
                 numberOfUniverseHistoryEntries: 'Number of entries in universe history',
             },

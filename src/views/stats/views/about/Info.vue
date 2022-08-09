@@ -34,6 +34,7 @@
     import { CombatReportDataModule } from '../../data/CombatReportDataModule';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { UniversesAndAccountsDataModule } from '../../data/UniversesAndAccountsDataModule';
@@ -58,6 +59,9 @@
         }
         private get currentAccountDfReports() {
             return DebrisFieldReportDataModule.count;
+        }
+        private get currentAccountLfDiscoveries() {
+            return LifeformDiscoveryDataModule.count;
         }
         private get trackedAccounts() {
             return UniversesAndAccountsDataModule.accounts.length;
@@ -89,6 +93,10 @@
                 {
                     label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedDebrisFieldReports,
                     value: this.$i18n.$n(this.currentAccountDfReports),
+                },
+                {
+                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedLifeformDiscoveries,
+                    value: this.$i18n.$n(this.currentAccountLfDiscoveries),
                 },
                 {
                     label: this.$i18n.$t.about.info.table.currentAccount.lastUpdateServerSettings,
