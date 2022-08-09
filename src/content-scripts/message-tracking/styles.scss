@@ -334,6 +334,10 @@ $image-size-small: 24px;
                 grid-column: 1 / span 4;
                 justify-self: center;
             }
+
+            .ogti-debris-field {
+                font-size: 24px;
+            }
         }
 
         &--negative-loot {
@@ -414,12 +418,5 @@ $image-size-small: 24px;
         100% {
             transform: rotate(360deg);
         }
-    }
-
-    &-debris-field-icon {
-        width: $image-size-small;
-        height: $image-size-small;
-        background-size: cover;
-        background-image: url(#{$base-url}/img/ogame/misc/debris-field-icon.svg);
     }
 }
