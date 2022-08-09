@@ -11,5 +11,9 @@ export interface UniverseSpecificSettings {
             history?: number;
         };
     };
-    savedAmortizationItems?: AmortizationItem[];
+
+    savedAmortization?: {
+        date: number;
+        items: AmortizationItem[];
+    };
 }

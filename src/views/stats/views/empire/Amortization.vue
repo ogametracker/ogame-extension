@@ -17,17 +17,22 @@
                             v-if="generatingItemCount != null"
                             v-text="`${$i18n.$t.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
                         />
-                        <button
-                            :disabled="generatingItemCount != null || items.length == 0 || showSettings"
-                            class="mr-1"
-                            v-text="'LOCA: save calculated amortization results (will overwrite existing save)'"
-                            @click="saveItems()"
-                        />
-                        <button
-                            :disabled="generatingItemCount != null || !hasSavedAmortizationItems"
-                            v-text="'LOCA: load calculated amortization results'"
-                            @click="loadItems()"
-                        />
+                        <template v-if="saveStateDate == null">
+                            <button
+                                v-if="items.length > 0"
+                                :disabled="generatingItemCount != null || items.length == 0 || showSettings"
+                                class="mr-1"
+                                v-text="'LOCA: save calculated amortization results (will overwrite existing save)'"
+                                @click="saveItems()"
+                            />
+                            <button
+                                v-if="hasSavedAmortizationItems"
+                                :disabled="generatingItemCount != null"
+                                v-text="'LOCA: load calculated amortization results'"
+                                @click="loadItems()"
+                            />
+                        </template>
+                        <span v-else v-text="`LOCA: Loaded save from ${$i18n.$d(saveStateDate, 'datetime')}`" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -138,8 +143,8 @@
                             :class="`what-cell--${item.type}`"
                         >
                             <span v-if="item.planetId > 0" class="planet">
-                                <span v-text="empire.planets[item.planetId].name" />
-                                <span v-text="formatCoordinates(empire.planets[item.planetId].coordinates)" />
+                                <span v-text="getPlanetName(item.planetId)" />
+                                <span v-text="formatPlanetCoordinates(item.planetId)" />
                             </span>
                             <span v-else class="planet">
                                 <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
@@ -405,6 +410,8 @@
     import { delay } from '@/shared/utils/delay';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
     import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
+    import { UniverseSpecificSettings } from '@/shared/models/universe-specific-settings/UniverseSpecificSettings';
+    import { createRecord } from '@/shared/utils/createRecord';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -445,24 +452,48 @@
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
 
         private get hasSavedAmortizationItems() {
-            const items = UniverseSpecificSettingsDataModule.settings.savedAmortizationItems ?? [];
-            return items.length > 0;
+            const savedAmortization = UniverseSpecificSettingsDataModule.settings.savedAmortization;
+            return savedAmortization != null;
         }
 
         private async saveItems() {
+            const savedAmortization: UniverseSpecificSettings['savedAmortization'] = {
+                date: Date.now(),
+                items: this.items,
+            };
+
             await UniverseSpecificSettingsDataModule.updateSettings({
                 ...UniverseSpecificSettingsDataModule.settings,
-                savedAmortizationItems: this.items,
+                savedAmortization,
             });
         }
 
         private loadItems() {
+            const savedAmortization = UniverseSpecificSettingsDataModule.settings.savedAmortization;
+            if (savedAmortization == null) {
+                return;
+            }
+
             this.showSettings = false;
             this.generator = null;
 
-            const items = UniverseSpecificSettingsDataModule.settings.savedAmortizationItems ?? [];
-            this.amortizationItems = [...items];
+            this.saveStateDate = savedAmortization.date;
+            this.amortizationItems = savedAmortization.items;
         }
+
+        private getPlanetName(id: number): string {
+            return this.empire.planets[id]?.name ?? `LOCA: Abandoned Planet (${id})`;
+        }
+        private formatPlanetCoordinates(id: number): string {
+            const coordinates = this.empire.planets[id]?.coordinates as Coordinates | undefined;
+            if (coordinates == null) {
+                return '';
+            }
+
+            return this.formatCoordinates(coordinates);
+        }
+
+        private saveStateDate: number | null = null;
 
         /**********************************/
         /* START amortization calculation */
