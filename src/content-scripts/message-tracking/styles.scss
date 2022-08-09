@@ -221,7 +221,6 @@ $image-size-small: 24px;
     }
 
     &-lifeform-discovery-result {
-
         &--nothing {
             color: var(--ogame-tracker--lifeform-discovery-event--nothing);
 
@@ -243,11 +242,38 @@ $image-size-small: 24px;
             display: inline-flex;
             column-gap: 4px;
             align-items: center;
+
+            .ogame-tracker_lifeform-icon {
+                border-radius: 4px;
+                border: 1px solid;
+
+                &--humans {
+                    border-color: var(--ogame-tracker--lifeform--humans);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--humans);
+                    }
+                }
+                &--rocktal {
+                    border-color: var(--ogame-tracker--lifeform--rocktal);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--rocktal);
+                    }
+                }
+                &--mechas {
+                    border-color: var(--ogame-tracker--lifeform--mechas);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--mechas);
+                    }
+                }
+                &--kaelesh {
+                    border-color: var(--ogame-tracker--lifeform--kaelesh);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--kaelesh);
+                    }
+                }
+            }
         }
 
-        &--knownLifeformFound {
-            color: var(--ogame-tracker--lifeform-discovery-event--knownLifeformFound);
-        }
         &--newLifeformFound {
             color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
         }

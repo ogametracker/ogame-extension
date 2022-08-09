@@ -1,6 +1,7 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+import { ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { internalUuid } from "@/shared/uuid";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
@@ -68,6 +69,9 @@ function generateCssVariables(colors: ColorSettings) {
 
     (Object.keys(colors.lifeformDiscoveries) as LifeformDiscoveryEventType[])
         .forEach(event => cssVariables[`--ogame-tracker--lifeform-discovery-event--${event}`] = colors.lifeformDiscoveries[event]);
+
+    (Object.keys(colors.lifeforms) as ValidLifeformType[])
+        .forEach(lifeform => cssVariables[`--ogame-tracker--lifeform--${lifeform}`] = colors.lifeforms[lifeform]);
 
 
     const css = Object.keys(cssVariables)

@@ -371,7 +371,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
                     <div class="${getLifeformClass(lifeformDiscovery.lifeform)}"></div>
-                    <span>+${lifeformDiscovery.experience} XP</span>
+                    <span style="font-weight: bold;">+${lifeformDiscovery.experience} XP</span>
                 </div>
             `;
         }
@@ -394,12 +394,14 @@ function getLifeformDiscoveryResultClass(result: LifeformDiscoveryEventType) {
 }
 
 function getLifeformClass(lifeform: ValidLifeformType) {
-    return {
+    const ogameClass = {
         [LifeformType.humans]: 'lifeform-item-icon small lifeform1',
         [LifeformType.rocktal]: 'lifeform-item-icon small lifeform2',
         [LifeformType.mechas]: 'lifeform-item-icon small lifeform3',
         [LifeformType.kaelesh]: 'lifeform-item-icon small lifeform4',
     }[lifeform];
+
+    return `${ogameClass} ogame-tracker_lifeform-icon ogame-tracker_lifeform-icon--${lifeform}`;
 }
 
 function addExpeditionResultContent(li: Element, expedition: ExpeditionEvent) {
