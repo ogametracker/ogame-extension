@@ -125,9 +125,11 @@ export interface EmpireTranslations {
         technologies: string;
         tier: string;
         level: string;
+        discoveredOn: string;
         discoveryDateUnknown: string;
         notDiscoveredYet: string;
         totalLifeformExperience: string;
+        numberOfLifeformDiscoveries: string;
 
         discoveryMissions: string;
         lifeformFound: string;

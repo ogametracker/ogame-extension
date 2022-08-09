@@ -137,5 +137,8 @@ export const en: EmpireTranslations = {
             [LifeformDiscoveryEventType.knownLifeformFound]: 'Lifeform experience',
         },
         lifeformFound: 'Lifeform found',
+
+        discoveredOn: 'Lifeform discovered on',
+        numberOfLifeformDiscoveries: 'Number of discoveries',
     },
 };

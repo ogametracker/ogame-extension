@@ -6,8 +6,8 @@
         </template>
         <template #cell-discoverDate="{ value, item }">
             <span v-if="value != null" v-text="$i18n.$d(value, 'datetime')" />
-            <span v-else-if="item.totalExperience > 0" v-text="'LOCA: Unknown'" />
-            <i v-else v-text="'LOCA: Not discovered yet'" />
+            <span v-else-if="item.totalExperience > 0" v-text="$i18n.$t.empire.lifeforms.discoveryDateUnknown" />
+            <i v-else v-text="$i18n.$t.empire.lifeforms.notDiscoveredYet" />
         </template>
         <template #cell-level="{ item }">
             <span v-text="`${item.level} (${$i18n.$n(item.levelExperience)}/${$i18n.$n(item.neededLevelExperience)} XP)`" />
@@ -45,23 +45,23 @@
             return [
                 {
                     key: 'lifeform',
-                    label: 'LOCA: Lifeform',
+                    label: this.$i18n.$t.empire.lifeforms.lifeform,
                 },
                 {
                     key: 'discoverDate',
-                    label: 'LOCA: Discovered on',
+                    label: this.$i18n.$t.empire.lifeforms.discoveredOn,
                 },
                 {
                     key: 'level',
-                    label: 'LOCA: Level',
+                    label: this.$i18n.$t.empire.lifeforms.level,
                 },
                 {
                     key: 'totalExperience',
-                    label: 'LOCA: Total Experience',
+                    label: this.$i18n.$t.empire.lifeforms.totalLifeformExperience,
                 },
                 {
                     key: 'findingCount',
-                    label: 'Number of discoveries',
+                    label: this.$i18n.$t.empire.lifeforms.numberOfLifeformDiscoveries,
                 },
             ];
         }
