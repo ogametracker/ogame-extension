@@ -33,11 +33,11 @@ import { ServerSettings } from "@/shared/models/server-settings/ServerSettings";
 import { createRecord } from "@/shared/utils/createRecord";
 import { __measure } from "@/shared/utils/performance/__measure";
 import { _throw } from "@/shared/utils/_throw";
-import { getMsuOrDsu } from "../../settings/getMsuOrDsu";
+import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
-import { AmortizationItem, AstrophysicsAmortizationItem, AstrophysicsAmortizationLevels, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
+import { AmortizationItem, AstrophysicsAmortizationItem, LifeformBuildingAmortizationItem, LifeformBuildingLevels, LifeformTechnologyAmortizationItem, LifeformTechnologyLevels, MineAmortizationItem, MineBuildingType, PlasmaTechnologyAmortizationItem } from "./models";
 
 
 const $mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
@@ -122,11 +122,18 @@ export class AmortizationItemGenerator {
             );
         },
     } as AmortizationItemGeneratorState;
+    readonly #getMsuOrDsu: (cost: Cost) => number;
 
-    public constructor(settings: AmortizationGenerationSettings, lifeformExperience: Record<ValidLifeformType, number>, serverSettings: ServerSettings) {
-        this.#settings = settings;
-        this.#lifeformExperience = lifeformExperience;
-        this.#serverSettings = serverSettings;
+    public constructor(data: {
+        settings: AmortizationGenerationSettings;
+        lifeformExperience: Record<ValidLifeformType, number>;
+        serverSettings: ServerSettings
+        getMsuOrDsu: (cost: Cost) => number;
+    }) {
+        this.#settings = data.settings;
+        this.#lifeformExperience = data.lifeformExperience;
+        this.#serverSettings = data.serverSettings;
+        this.#getMsuOrDsu = getMsuOrDsu;
     }
 
     public nextItem(): AmortizationItem | null {
@@ -450,7 +457,7 @@ export class AmortizationItemGenerator {
                 [ShipType.crawler]: planet.crawlers.overload ? 150 : 100,
             } as ProductionSettings,
             ships: {
-                [ShipType.crawler]: planet.crawlers.enabled ? planet.crawlers.max ? 10000 : planet.crawlers.count : 0,
+                [ShipType.crawler]: planet.crawlers.max ? 10000 : planet.crawlers.count,
             } as PlanetShipCount,
         };
     }
@@ -713,11 +720,9 @@ export class AmortizationItemGenerator {
         );
         const baseProductionConfig: Omit<EmpireProductionPlanetState, 'baseProduction' | 'mineProduction' | 'itemBonusProductionFactor'> = {
             crawlers: {
-                available: planetSettings.crawlers.enabled
-                    ? planetSettings.crawlers.max
-                        ? 10_000
-                        : planetSettings.crawlers.count
-                    : 0,
+                available: planetSettings.crawlers.max
+                    ? 10_000
+                    : planetSettings.crawlers.count,
                 percentage: planetSettings.crawlers.overload ? 150 : 100,
                 totalMineLevel: 0,
             },
@@ -2066,10 +2071,6 @@ export class AmortizationItemGenerator {
         };
     }
     //#endregion
-
-    #getMsuOrDsu(cost: Cost): number {
-        return getMsuOrDsu(cost);
-    }
 
     get #planets() {
         return Object.values(this.#state.planets)

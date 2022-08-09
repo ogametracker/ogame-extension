@@ -61,7 +61,7 @@
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
     import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { AmortizationPlayerSettings } from '@stats/models/empire/amortization/AmortizationPlayerSettings';
+    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
 
     @Component({
         components: {

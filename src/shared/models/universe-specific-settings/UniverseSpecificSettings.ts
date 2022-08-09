@@ -1,3 +1,5 @@
+import { AmortizationItem } from "../empire/amortization/models";
+
 export interface UniverseSpecificSettings {
     universeHistory: {
         players: {
@@ -8,5 +10,10 @@ export interface UniverseSpecificSettings {
             highscore: number[];
             history?: number;
         };
+    };
+
+    savedAmortization?: {
+        date: number;
+        items: AmortizationItem[];
     };
 }

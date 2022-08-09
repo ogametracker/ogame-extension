@@ -17,6 +17,22 @@
                             v-if="generatingItemCount != null"
                             v-text="`${$i18n.$t.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
                         />
+                        <template v-if="saveStateDate == null">
+                            <button
+                                v-if="items.length > 0"
+                                :disabled="generatingItemCount != null || items.length == 0 || showSettings"
+                                class="mr-1"
+                                v-text="$i18n.$t.empire.amortization.saveLoad.saveButton"
+                                @click="saveItems()"
+                            />
+                            <button
+                                v-if="savedAmortization != null"
+                                :disabled="generatingItemCount != null"
+                                v-text="$i18n.$t.empire.amortization.saveLoad.loadButton($i18n.$d(savedAmortization.date, 'datetime'))"
+                                @click="loadItems()"
+                            />
+                        </template>
+                        <span v-else v-text="$i18n.$t.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'))" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -127,8 +143,8 @@
                             :class="`what-cell--${item.type}`"
                         >
                             <span v-if="item.planetId > 0" class="planet">
-                                <span v-text="empire.planets[item.planetId].name" />
-                                <span v-text="formatCoordinates(empire.planets[item.planetId].coordinates)" />
+                                <span v-text="getPlanetName(item.planetId)" />
+                                <span v-text="formatPlanetCoordinates(item.planetId)" />
                             </span>
                             <span v-else class="planet">
                                 <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
@@ -346,7 +362,7 @@
                     <template #footer-timeInHours />
                 </grid-table>
 
-                <div style="display: flex; gap: 8px">
+                <div style="display: flex; gap: 8px" v-if="generator != null">
                     <button
                         v-for="count in [25, 50, 100, 500]"
                         :key="count"
@@ -385,14 +401,17 @@
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '../../models/empire/amortization/AmortizationPlanetSettings';
-    import { AmortizationPlayerSettings } from '../../models/empire/amortization/AmortizationPlayerSettings';
-    import { AmortizationAstrophysicsSettings } from '../../models/empire/amortization/AmortizationAstrophysicsSettings';
-    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@stats/models/empire/amortization/models';
-    import { AmortizationItemGenerator } from '@stats/models/empire/amortization/AmortizationItemGenerator';
+    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { AmortizationAstrophysicsSettings } from '@/shared/models/empire/amortization/AmortizationAstrophysicsSettings';
+    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@/shared/models/empire/amortization/models';
+    import { AmortizationItemGenerator } from '@/shared/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+    import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
+    import { UniverseSpecificSettings } from '@/shared/models/universe-specific-settings/UniverseSpecificSettings';
+    import { createRecord } from '@/shared/utils/createRecord';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -432,6 +451,50 @@
         }
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
 
+        private get savedAmortization() {
+            return UniverseSpecificSettingsDataModule.settings.savedAmortization;;
+        }
+
+        private async saveItems() {
+            const savedAmortization: UniverseSpecificSettings['savedAmortization'] = {
+                date: Date.now(),
+                items: this.items,
+            };
+
+            await UniverseSpecificSettingsDataModule.updateSettings({
+                ...UniverseSpecificSettingsDataModule.settings,
+                savedAmortization,
+            });
+        }
+
+        private loadItems() {
+            const savedAmortization = UniverseSpecificSettingsDataModule.settings.savedAmortization;
+            if (savedAmortization == null) {
+                return;
+            }
+
+            this.showSettings = false;
+            this.generator = null;
+
+            this.saveStateDate = savedAmortization.date;
+            this.amortizationItems = savedAmortization.items;
+        }
+
+        private getPlanetName(id: number): string {
+            return this.empire.planets[id]?.name 
+                ?? `${this.$i18n.$t.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
+        }
+        private formatPlanetCoordinates(id: number): string {
+            const coordinates = this.empire.planets[id]?.coordinates as Coordinates | undefined;
+            if (coordinates == null) {
+                return '';
+            }
+
+            return this.formatCoordinates(coordinates);
+        }
+
+        private saveStateDate: number | null = null;
+
         /**********************************/
         /* START amortization calculation */
         /**********************************/
@@ -461,7 +524,6 @@
                 maxTemperature: 0,
                 activeItems: [],
                 crawlers: {
-                    enabled: false,
                     overload: false,
                     count: 0,
                     max: false,
@@ -475,7 +537,7 @@
         private showSettings = true;
 
         private readonly empire = EmpireDataModule.empire;
-        private generator: AmortizationItemGenerator = null!;
+        private generator: AmortizationItemGenerator | null = null;
         private amortizationItems: AmortizationItem[] = [];
         private selectedItemIndizes: number[] = [];
 
@@ -491,10 +553,14 @@
         }
 
         private toggleSettings() {
+            this.saveStateDate = null;
+
             if (!this.showSettings) {
+                this.stopGenerating = true;
                 this.showSettings = true;
             }
             else {
+                this.stopGenerating = false;
                 this.showSettings = false;
                 this.initItems();
                 this.selectedItemIndizes = [];
@@ -508,19 +574,21 @@
         }
 
         private initItems(): void {
-            this.generator = new AmortizationItemGenerator(
-                {
+            this.generator = new AmortizationItemGenerator({
+                settings: {
                     player: this.clone(this.playerSettings),
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
                     showPlasmaTechnology: this.clone(this.showPlasmaTechnology),
                 },
-                this.clone(this.empire.lifeformExperience),
-                this.clone(ServerSettingsDataModule.serverSettings),
-            );
+                lifeformExperience: this.clone(this.empire.lifeformExperience),
+                serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
+                getMsuOrDsu,
+            });
             this.amortizationItems = [];
         }
 
+        private stopGenerating = false;
         private async insertNextAmortizationItems(count: number): Promise<void> {
             if (this.generatingItemCount != null) {
                 return;
@@ -530,9 +598,9 @@
             await this.$nextTick();
 
             while (count > 0) {
-                const next = this.generator.nextItem();
+                const next = this.generator?.nextItem();
 
-                if (next == null) {
+                if (next == null || this.stopGenerating) {
                     break;
                 }
 
@@ -576,7 +644,6 @@
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
-                            enabled: true,
                             overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
@@ -601,7 +668,6 @@
                     maxTemperature: getAverageTemperature(8),
                     activeItems: [],
                     crawlers: {
-                        enabled: empire.playerClass == PlayerClass.collector,
                         overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
