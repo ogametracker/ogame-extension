@@ -20,6 +20,7 @@ import { en as switchAccounts } from './switchAccounts/en';
 import { en as about } from './about/en';
 import { en as universeHistory } from './universeHistory/en';
 import { en as notifications } from './notifications/en';
+import { en as tools } from './tools/en';
 
 import { en as excelExport } from './excelExport/en';
 
@@ -45,6 +46,7 @@ export const en: ExtensionTranslations = {
     about,
     universeHistory,
     notifications,
+    tools,
 
     excelExport,
 };

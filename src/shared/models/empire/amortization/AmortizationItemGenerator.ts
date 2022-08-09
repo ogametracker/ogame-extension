@@ -203,6 +203,7 @@ export class AmortizationItemGenerator {
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.metal,
                 lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.metal,
+                fusionReactorConsumption: 0,
             };
             empireProductionPlanetStates.crystal[planetId] = {
                 baseProduction: getCrystalBaseProduction({
@@ -215,6 +216,7 @@ export class AmortizationItemGenerator {
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.crystal,
                 lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.crystal,
+                fusionReactorConsumption: 0,
             };
             empireProductionPlanetStates.deuterium[planetId] = {
                 baseProduction: 0,
@@ -223,6 +225,7 @@ export class AmortizationItemGenerator {
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.deuterium,
                 lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.deuterium,
+                fusionReactorConsumption: 0,
             };
         });
 
@@ -732,6 +735,7 @@ export class AmortizationItemGenerator {
             lifeformTechnologyBoost: 0,
             lifeformBuildingBonusProductionFactor: 0,
             lifeformTechnologyBonusProductionFactor: 0,
+            fusionReactorConsumption: 0,
         };
         const newPlanetProductionStates: Record<ResourceType, EmpireProductionPlanetState> = {
             metal: {

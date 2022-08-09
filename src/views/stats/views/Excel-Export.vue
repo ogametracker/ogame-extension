@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 v-text="$i18n.$t.excelExport.header" />
+        <h3 v-text="$i18n.$t.excelExport.header" />
         <span v-text="$i18n.$t.excelExport.chooseBelowMessage" />
 
         <div class="export-settings">

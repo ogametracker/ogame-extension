@@ -35,6 +35,7 @@ export interface PlanetProductionBreakdown {
 export interface EmpireProductionPlanetState {
     baseProduction: number;
     mineProduction: number;
+    fusionReactorConsumption: number;
     crawlers: {
         available: number;
         totalMineLevel: number;
@@ -214,12 +215,17 @@ export class EmpireProductionBreakdown {
         };
     }
 
-    public getTotal() {
+    public getTotal(includeConsumption = false) {
         const globalBonuses = this.#getLifeformBonusFactors();
 
         return this.#planetIds.reduce((total, planetId) => {
-            return total + this.#getPlanetProductionBreakdown(planetId, globalBonuses).total;
+            const consumption = includeConsumption ? this.planets[planetId].fusionReactorConsumption : 0;
+            return total + this.#getPlanetProductionBreakdown(planetId, globalBonuses).total - consumption;
         }, 0);
+    }
+
+    public getAverage(includeConsumption = false) {
+        return this.getTotal(includeConsumption) / this.#planetIds.length;
     }
 
 
