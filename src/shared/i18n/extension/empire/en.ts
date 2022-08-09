@@ -100,6 +100,13 @@ export const en: EmpireTranslations = {
             ctrlClick: 'Ctrl + Click on a check to (de)select all items up to the selected one.',
         },
 
+        saveLoad: {
+            saveButton: 'Save calculated amortization results',
+            loadButton: (date: string) => `Load save (${date})`,
+            loadedSave: (date: string) => `Viewing saved results (${date})`,
+            abandonedPlanet: 'Abandoned Planet',
+        },
+
         generateItems: value => `${value} entries`,
     },
     lifeforms: {

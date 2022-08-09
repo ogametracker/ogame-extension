@@ -99,6 +99,13 @@ export interface EmpireTranslations {
             ctrlClick: string;
         };
 
+        saveLoad: {
+            saveButton: string;
+            loadButton: (date: string) => string;
+            loadedSave: (date: string) => string;
+            abandonedPlanet: string;
+        };
+
         generateItems: (value: string) => string;
     };
     lifeforms: {

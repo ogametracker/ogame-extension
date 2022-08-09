@@ -100,6 +100,13 @@ export const de: EmpireTranslations = {
             ctrlClick: 'Strg + Klick auf eine Checkbox, um alle Elemente bis zum gewählten Element an-/abzuwählen.',
         },
 
+        saveLoad: {
+            saveButton: 'Amortisationsergebnisse speichern',
+            loadButton: (date: string) => `Speicherstand laden (${date})`,
+            loadedSave: (date: string) => `Speicherstand wird angezeigt (${date})`,
+            abandonedPlanet: 'Aufgegebener Planet',
+        },
+
         generateItems: value => `${value} Einträge`,
     },
     lifeforms: {

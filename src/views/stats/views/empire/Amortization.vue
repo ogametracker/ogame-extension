@@ -22,17 +22,17 @@
                                 v-if="items.length > 0"
                                 :disabled="generatingItemCount != null || items.length == 0 || showSettings"
                                 class="mr-1"
-                                v-text="'LOCA: save calculated amortization results (will overwrite existing save)'"
+                                v-text="$i18n.$t.empire.amortization.saveLoad.saveButton"
                                 @click="saveItems()"
                             />
                             <button
-                                v-if="hasSavedAmortizationItems"
+                                v-if="savedAmortization != null"
                                 :disabled="generatingItemCount != null"
-                                v-text="'LOCA: load calculated amortization results'"
+                                v-text="$i18n.$t.empire.amortization.saveLoad.loadButton($i18n.$d(savedAmortization.date, 'datetime'))"
                                 @click="loadItems()"
                             />
                         </template>
-                        <span v-else v-text="`LOCA: Loaded save from ${$i18n.$d(saveStateDate, 'datetime')}`" />
+                        <span v-else v-text="$i18n.$t.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'))" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -451,9 +451,8 @@
         }
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
 
-        private get hasSavedAmortizationItems() {
-            const savedAmortization = UniverseSpecificSettingsDataModule.settings.savedAmortization;
-            return savedAmortization != null;
+        private get savedAmortization() {
+            return UniverseSpecificSettingsDataModule.settings.savedAmortization;;
         }
 
         private async saveItems() {
@@ -482,7 +481,8 @@
         }
 
         private getPlanetName(id: number): string {
-            return this.empire.planets[id]?.name ?? `LOCA: Abandoned Planet (${id})`;
+            return this.empire.planets[id]?.name 
+                ?? `${this.$i18n.$t.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
         }
         private formatPlanetCoordinates(id: number): string {
             const coordinates = this.empire.planets[id]?.coordinates as Coordinates | undefined;
@@ -553,6 +553,8 @@
         }
 
         private toggleSettings() {
+            this.saveStateDate = null;
+
             if (!this.showSettings) {
                 this.stopGenerating = true;
                 this.showSettings = true;
