@@ -102,6 +102,7 @@ import viewstoolsCostCalculator from '@stats/views/tools/Cost-Calculator.vue';
 import viewstoolsExpeditionCalculator from '@stats/views/tools/Expedition-Calculator.vue';
 import viewstoolsProductionCalculator from '@stats/views/tools/Production-Calculator.vue';
 import viewstoolsResourceConversion from '@stats/views/tools/Resource-Conversion.vue';
+import viewstoolsSignatureGenerator from '@stats/views/tools/Signature-Generator.vue';
 import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
 import viewsuniversehistoryalliancesIndex from '@stats/views/universe-history/alliances/Index.vue';
 import viewsuniversehistoryalliancesHighscore from '@stats/views/universe-history/alliances/Highscore.vue';
@@ -812,7 +813,7 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "tools/expedition-calculator"
+                    name: "tools/signature-generator"
                 },
                 meta: {
                     color: "#008c85"
@@ -845,6 +846,11 @@ const routes: RouteConfig[] = [
                         path: "resource-conversion",
                         name: "tools/resource-conversion",
                         component: viewstoolsResourceConversion
+                    },
+                    {
+                        path: "signature-generator",
+                        name: "tools/signature-generator",
+                        component: viewstoolsSignatureGenerator
                     }
                 ]
             },

@@ -1,7 +1,5 @@
 <template>
-    <h2>Still coming soon&trade; :(</h2>
-    <!-- TODO: Tools page -->
-    <!-- <page :nav-items="navItems" :root-route-name="rootRoute" /> -->
+    <page :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
 <script lang="ts">
@@ -14,6 +12,11 @@
 
         private get navItems(): ListNavItem[] {
             return [
+                {
+                    label: this.$i18n.$t.tools.signatureGenerator.header,
+                    to: { name: 'tools/signature-generator' },
+                },
+                /*TODO: tools 
                 {
                     label: 'LOCA: Expedition Calculator',
                     to: { name: 'tools/expedition-calculator' },
@@ -34,6 +37,7 @@
                     label: 'LOCA: Resource Conversion',
                     to: { name: 'tools/resource-conversion' },
                 },
+                */
             ];
         }
     }

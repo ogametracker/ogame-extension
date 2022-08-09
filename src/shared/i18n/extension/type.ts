@@ -18,6 +18,7 @@ import { ResourceBalanceTranslations } from './resourceBalance/type';
 import { ResourceTranslations } from './resources/type';
 import { SettingsTranslations } from './settings/type';
 import { SwitchAccountsTranslations } from './switchAccounts/type';
+import { ToolsTranslations } from './tools/type';
 import { UniverseHistoryTranslations } from './universeHistory/type';
 
 export interface ExtensionTranslations {
@@ -42,6 +43,7 @@ export interface ExtensionTranslations {
     about: AboutTranslations;
     universeHistory: UniverseHistoryTranslations;
     notifications: NotificationTranslations;
+    tools: ToolsTranslations;
 
     excelExport: ExcelExportTranslations;
 }
