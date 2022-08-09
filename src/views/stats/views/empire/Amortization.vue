@@ -493,7 +493,6 @@
                 maxTemperature: 0,
                 activeItems: [],
                 crawlers: {
-                    enabled: false,
                     overload: false,
                     count: 0,
                     max: false,
@@ -612,7 +611,6 @@
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
-                            enabled: true,
                             overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
@@ -637,7 +635,6 @@
                     maxTemperature: getAverageTemperature(8),
                     activeItems: [],
                     crawlers: {
-                        enabled: empire.playerClass == PlayerClass.collector,
                         overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,

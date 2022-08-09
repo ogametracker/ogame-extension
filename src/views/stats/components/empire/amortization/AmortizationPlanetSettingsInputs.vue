@@ -54,12 +54,7 @@
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
-                    <o-ship
-                        :ship="ShipType.crawler"
-                        :disabled="settings.crawlers.enabled"
-                        @click="settings.crawlers.enabled = !settings.crawlers.enabled"
-                        style="cursor: pointer"
-                    />
+                    <o-ship :ship="ShipType.crawler" />
                     <checkbox-button v-model="settings.crawlers.overload" color="#00ff00" :disabled="!isCrawlerOverloadEnabled">
                         {{ $i18n.$t.empire.amortization.settings.planetSettings.crawlers.overload }}
                     </checkbox-button>
@@ -306,7 +301,6 @@
         flex-direction: column;
         border-radius: 4px;
         overflow: hidden;
-        width: max-content;
     }
 
     .header {

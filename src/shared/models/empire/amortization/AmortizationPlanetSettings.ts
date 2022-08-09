@@ -15,7 +15,6 @@ export interface AmortizationPlanetSettings {
 
     activeItems: ItemHash[];
     crawlers: {
-        enabled: boolean;
         overload: boolean;
         count: number;
         max: boolean;

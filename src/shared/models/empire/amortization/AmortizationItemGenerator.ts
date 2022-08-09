@@ -457,7 +457,7 @@ export class AmortizationItemGenerator {
                 [ShipType.crawler]: planet.crawlers.overload ? 150 : 100,
             } as ProductionSettings,
             ships: {
-                [ShipType.crawler]: planet.crawlers.enabled ? planet.crawlers.max ? 10000 : planet.crawlers.count : 0,
+                [ShipType.crawler]: planet.crawlers.max ? 10000 : planet.crawlers.count,
             } as PlanetShipCount,
         };
     }
@@ -720,11 +720,9 @@ export class AmortizationItemGenerator {
         );
         const baseProductionConfig: Omit<EmpireProductionPlanetState, 'baseProduction' | 'mineProduction' | 'itemBonusProductionFactor'> = {
             crawlers: {
-                available: planetSettings.crawlers.enabled
-                    ? planetSettings.crawlers.max
-                        ? 10_000
-                        : planetSettings.crawlers.count
-                    : 0,
+                available: planetSettings.crawlers.max
+                    ? 10_000
+                    : planetSettings.crawlers.count,
                 percentage: planetSettings.crawlers.overload ? 150 : 100,
                 totalMineLevel: 0,
             },
