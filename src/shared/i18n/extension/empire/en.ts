@@ -94,7 +94,7 @@ export const en: EmpireTranslations = {
         },
 
         info: {
-            generatingItems: 'Calculation next best items',
+            generatingItems: 'Calculating next best items',
 
             slowCalculation: 'The amortization calculation became pretty slow now that it includes lifeform buildings and technologies. This will hopefully be improved in the future.',
             ctrlClick: 'Ctrl + Click on a check to (de)select all items up to the selected one.',
