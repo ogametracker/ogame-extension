@@ -67,10 +67,10 @@
         }
 
         private get items(): LifeformProgressItem[] {
-            const empire = EmpireDataModule.empire;
+            const lifeformExperience = EmpireDataModule.lifeformExperience;
 
             return ValidLifeformTypes.map<LifeformProgressItem>(lifeform => {
-                const exp = empire.lifeformExperience[lifeform];
+                const exp = lifeformExperience[lifeform];
                 const level = getLifeformLevel(exp);
                 const lifeformInfo = LifeformDiscoveryDataModule.lifeforms;
 

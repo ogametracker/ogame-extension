@@ -564,6 +564,7 @@
 
         private get productionBreakdowns() {
             const empire = EmpireDataModule.empire;
+            const lifeformExperience = EmpireDataModule.lifeformExperience;
             const plasmaTechLevel = empire.research[ResearchType.plasmaTechnology];
 
             const serverSettings = ServerSettingsDataModule.serverSettings;
@@ -580,7 +581,7 @@
                 crystal: {} as Record<number, EmpireProductionPlanetState>,
                 deuterium: {} as Record<number, EmpireProductionPlanetState>,
             };
-            const lifeformXpBoost = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(empire.lifeformExperience[lf]));
+            const lifeformXpBoost = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(lifeformExperience[lf]));
 
             this.planets.forEach(planet => {
                 const levelMetalMine = planet.buildings[BuildingType.metalMine];

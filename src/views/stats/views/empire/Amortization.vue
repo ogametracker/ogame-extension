@@ -581,7 +581,7 @@
                     astrophysics: this.clone(this.astrophysicsSettings),
                     showPlasmaTechnology: this.clone(this.showPlasmaTechnology),
                 },
-                lifeformExperience: this.clone(this.empire.lifeformExperience),
+                lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
                 getMsuOrDsu,
             });

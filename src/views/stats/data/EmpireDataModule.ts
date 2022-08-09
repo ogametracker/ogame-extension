@@ -24,6 +24,7 @@ import { createRecord } from '@/shared/utils/createRecord';
 import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryDataModule } from './LifeformDiscoveryDataModule';
 
 @Component
 class EmpireDataModuleClass extends Vue {
@@ -36,6 +37,15 @@ class EmpireDataModuleClass extends Vue {
 
     public get ready(): Promise<void> {
         return this._ready;
+    }
+
+    public get lifeformExperience() {
+        const missionProgress = LifeformDiscoveryDataModule.lifeforms;
+        
+        return createRecord(
+            ValidLifeformTypes,
+            lf => Math.max(this.empire.lifeformExperience[lf], missionProgress[lf].gainedExperience),
+        );
     }
 
     private async created() {
@@ -73,7 +83,7 @@ class EmpireDataModuleClass extends Vue {
         };
         const research = (await store.get('research')) as ResearchLevels | undefined ?? createRecord(ResearchTypes, 0);
         const planetOrder = (await store.get('planetOrder')) as number[] | undefined ?? [];
-        const lifeformExperience = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined 
+        const lifeformExperience = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined
             ?? createRecord(ValidLifeformTypes, 0);
 
         const planets: Record<number, PlanetData | MoonData> = {};
