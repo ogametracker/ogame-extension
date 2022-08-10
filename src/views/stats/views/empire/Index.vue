@@ -17,11 +17,12 @@
         async mounted() {
             await EmpireDataModule.ready;
             await ServerSettingsDataModule.ready;
+
             this.loading = false;
         }
 
         private get navItems(): ListNavItem[] {
-            return [
+            const items: ListNavItem[] = [
                 {
                     label: this.$i18n.$t.empire.production.header,
                     to: { name: 'empire/production' },
@@ -30,11 +31,16 @@
                     label: this.$i18n.$t.empire.amortization.header,
                     to: { name: 'empire/amortization' },
                 },
-                {
+            ];
+
+            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
+                items.push({
                     label: this.$i18n.$t.empire.lifeforms.header,
                     to: { name: 'empire/lifeforms' },
-                },
-            ];
+                });
+            }
+
+            return items;
         }
     }
 </script>

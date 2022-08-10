@@ -61,6 +61,7 @@
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@/views/stats/data/UniverseHistoryDataModule';
     import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
     import { addDays } from 'date-fns';
@@ -122,7 +123,7 @@
 
         private readonly keys = HighscoreTypeNames;
         private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
-            return [
+            const tabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
                 {
                     key: 'total',
                     label: this.$i18n.$t.universeHistory.highscoreTabs.total,
@@ -159,23 +160,30 @@
                     key: 'numberOfShips',
                     label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
                 },
-                {
-                    key: 'lifeform',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
-                },
-                {
-                    key: 'lifeformEconomy',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
-                },
-                {
-                    key: 'lifeformTechnology',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
-                },
-                {
-                    key: 'lifeformDiscoveries',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
-                },
             ];
+
+            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
+                tabs.push(
+                    {
+                        key: 'lifeform',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
+                    },
+                    {
+                        key: 'lifeformEconomy',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
+                    },
+                    {
+                        key: 'lifeformTechnology',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
+                    },
+                    {
+                        key: 'lifeformDiscoveries',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
+                    }
+                );
+            }
+
+            return tabs;
         }
 
         private get tableColumns(): GridTableColumn<'alliance'>[] {
@@ -260,7 +268,7 @@
                 if (lastScores[score.allianceId][score.type] == score.score) { //no duplicates if only position changed
                     return;
                 }
-                if(!types.includes(score.type)) {
+                if (!types.includes(score.type)) {
                     return; // happens if beta data available
                 }
 
