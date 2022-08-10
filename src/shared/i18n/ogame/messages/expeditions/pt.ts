@@ -45,7 +45,7 @@ export const pt: ExpeditionMessages = {
             //TODO: pt /*'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
             //TODO: pt /*'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
             //TODO: pt /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
-            //TODO: pt /*'Wir haben eine */'verlassene Piratenbasis'/* gefunden. Im Hangar liegen noch einige alte Schiffe. Unsere Techniker schauen nach, ob einige davon noch zu gebrauchen sind.'*/,
+            /*'Descobrimos */'uma estação espacial pirata'/*! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'A nossa expedição encontrou um */'velho hangar automatizado'/*. Algumas das naves ainda estavam em fase de produção e os nossos técnicos estão a tentar reactivar os geradores eléctricos para tentar acabá-las'*/,

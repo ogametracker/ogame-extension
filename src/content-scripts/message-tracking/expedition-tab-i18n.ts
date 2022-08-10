@@ -10,7 +10,7 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
         lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.dk]: {
-        /*TODO: dk*/expedition: 'Expeditionsergebnis',
+        expedition: 'Ekspeditionsresultat',
         /*TODO: dk*/lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.en]: {
