@@ -100,7 +100,8 @@ declare namespace OgameApi {
         exodusRatioMetal: string;
         exodusRatioCrystal: string;
         exodusRatioDeuterium: string;
-
+        
+        //remove ? when lifeform on all servers
         lifeformSettings?: Record<string, any>;
     }
 }
