@@ -54,6 +54,7 @@
             'rewards',
             'shipyard',
             'space',
+            'space-dock',
             'supplies',
         ];
         private readonly backgroundImages: Record<string, HTMLImageElement> = {};
