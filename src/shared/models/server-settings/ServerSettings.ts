@@ -129,6 +129,10 @@ interface ServerResourceProductionSettings {
     };
 }
 
+interface ServerLifeformSettings {
+    enabled: boolean;
+}
+
 export interface ServerSettings {
     lastUpdate: number;
 
@@ -141,4 +145,6 @@ export interface ServerSettings {
     playerClasses: ServerPlayerClassSettings;
     marketplace: ServerMarketplaceSettings;
     resourceProduction: ServerResourceProductionSettings;
+
+    lifeforms: ServerLifeformSettings;
 }

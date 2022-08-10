@@ -88,6 +88,8 @@ export interface DbServerSettings {
     exodusRatioMetal: number;
     exodusRatioCrystal: number;
     exodusRatioDeuterium: number;
+
+    lifeformsEnabled: boolean;
 };
 type DbServerSettingsItem<T extends keyof DbServerSettings = keyof DbServerSettings> = {
     key: T;

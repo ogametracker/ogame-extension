@@ -51,7 +51,7 @@ export const de: SettingsTranslations = {
         expeditionEvents: 'Expeditionsereignisse',
         expeditionEventSizes: 'Ereignisgrößen',
         expeditionDepletionLevels: 'Systemauslastung',
-        lifeformDiscoveries: 'Ereignisse Lebensformentdeckungen',
+        lifeformDiscoveries: 'Entdeckungsmissionen',
         lifeforms: 'Lebensformen',
         resources: 'Rohstoffe',
         ships: 'Schiffe',

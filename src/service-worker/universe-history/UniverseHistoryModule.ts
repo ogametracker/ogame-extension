@@ -1,5 +1,5 @@
 import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getUniverseHistoryDatabase } from "@/shared/db/access";
+import { getServerDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
 import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
 import { DbUniverseHistoryAllianceState, DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState, DbUniverseHistoryPlayerState, DbUniverseHistoryPlayerStateItem, DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
 import { MessageOgameMeta } from "@/shared/messages/Message";
@@ -110,10 +110,11 @@ interface PlayerScorePositions {
     honor: ScorePosition;
     numberOfShips: ScorePosition;
 
-    lifeform: ScorePosition;
-    lifeformEconomy: ScorePosition;
-    lifeformTechnology: ScorePosition;
-    lifeformDiscoveries: ScorePosition;
+    //TODO: remove ? when lifeform on all servers
+    lifeform?: ScorePosition;
+    lifeformEconomy?: ScorePosition;
+    lifeformTechnology?: ScorePosition;
+    lifeformDiscoveries?: ScorePosition;
 }
 
 interface Planet {
@@ -154,6 +155,12 @@ export class UniverseHistoryModule {
 
     constructor(meta: MessageOgameMeta) {
         this.meta = meta;
+    }
+
+    private async isLifeformsEnabled() {
+        const db = await getServerDatabase(this.meta);
+        const value = await db.get('serverSettings', 'lifeformsEnabled');
+        return value as boolean;
     }
 
     public async init() {
@@ -208,16 +215,18 @@ export class UniverseHistoryModule {
     }
 
     private async trackUniverseUpdates() {
-        if(this.inUpdate) {
+        if (this.inUpdate) {
             return;
         }
 
         this.inUpdate = true;
         try {
+            const isLifeformsEnabled = await this.isLifeformsEnabled();
+
             _logDebug(`tracking universe history for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
             const players = await this.getPlayers();
             const alliances = await this.getAlliances();
-            const playerScores = await this.getAllPlayerScores();
+            const playerScores = await this.getAllPlayerScores(isLifeformsEnabled);
 
             const planets = this.settings.trackHistory ? await this.getPlanets() : [];
 
@@ -487,7 +496,7 @@ export class UniverseHistoryModule {
                 const scoresByAlly = scoresByType[scoreType];
 
                 const score = memberScores
-                    .map(s => s?.[scoreType].score ?? 0)
+                    .map(s => s?.[scoreType]?.score ?? 0)
                     .reduce((total, score) => total + score, 0);
 
                 scoresByAlly[ally.id] = score;
@@ -1073,7 +1082,7 @@ export class UniverseHistoryModule {
         return alliances;
     }
 
-    private async getAllPlayerScores(): Promise<Partial<Record<number, PlayerScorePositions>>> {
+    private async getAllPlayerScores(isLifeformsEnabled: boolean): Promise<Partial<Record<number, PlayerScorePositions>>> {
         const scores: Partial<Record<number, PlayerScorePositions>> = {};
 
         const total = await this.getPlayerScorePositions(HighscoreType.total);
@@ -1085,10 +1094,17 @@ export class UniverseHistoryModule {
         const militaryLost = await this.getPlayerScorePositions(HighscoreType.militaryLost);
         const honor = await this.getPlayerScorePositions(HighscoreType.honor);
 
-        const lifeform = await this.getPlayerScorePositions(HighscoreType.lifeform);
-        const lifeformEconomy = await this.getPlayerScorePositions(HighscoreType.lifeformEconomy);
-        const lifeformTechnology = await this.getPlayerScorePositions(HighscoreType.lifeformTechnology);
-        const lifeformDiscoveries = await this.getPlayerScorePositions(HighscoreType.lifeformDiscoveries);
+        // TODO: remove check when lifeforms are live
+        let lifeform: Record<number, ScorePosition> | undefined;
+        let lifeformEconomy: Record<number, ScorePosition> | undefined;
+        let lifeformTechnology: Record<number, ScorePosition> | undefined;
+        let lifeformDiscoveries: Record<number, ScorePosition> | undefined;
+        if (isLifeformsEnabled) {
+            lifeform = await this.getPlayerScorePositions(HighscoreType.lifeform);
+            lifeformEconomy = await this.getPlayerScorePositions(HighscoreType.lifeformEconomy);
+            lifeformTechnology = await this.getPlayerScorePositions(HighscoreType.lifeformTechnology);
+            lifeformDiscoveries = await this.getPlayerScorePositions(HighscoreType.lifeformDiscoveries);
+        }
 
         Object.keys(total)
             .map(playerId => parseIntSafe(playerId, 10))
@@ -1104,10 +1120,11 @@ export class UniverseHistoryModule {
                     militaryLost: militaryLost[playerId],
                     honor: honor[playerId],
 
-                    lifeform: lifeform[playerId],
-                    lifeformEconomy: lifeformEconomy[playerId],
-                    lifeformTechnology: lifeformTechnology[playerId],
-                    lifeformDiscoveries: lifeformDiscoveries[playerId],
+                    // TODO: remove nullability when lifeforms are live
+                    lifeform: lifeform?.[playerId],
+                    lifeformEconomy: lifeformEconomy?.[playerId],
+                    lifeformTechnology: lifeformTechnology?.[playerId],
+                    lifeformDiscoveries: lifeformDiscoveries?.[playerId],
                 };
             });
 

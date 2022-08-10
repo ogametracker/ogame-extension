@@ -1,10 +1,7 @@
 <template>
     <div v-if="!ready">
         <loading-spinner />
-        <div
-            v-if="showLoadingMessage"
-            v-text="$i18n.$t.universeHistory.loadingTakingLong"
-        />
+        <div v-if="showLoadingMessage" v-text="$i18n.$t.universeHistory.loadingTakingLong" />
     </div>
     <page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />
     <universe-history-tracking-settings v-else />
@@ -16,6 +13,7 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
+    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
     @Component({
         components: {
@@ -33,6 +31,7 @@
             this.loadingStart = Date.now();
             this.timeout = setTimeout(() => this.showLoadingMessage = true, 5_000);
 
+            await ServerSettingsDataModule.ready;
             await UniverseHistoryDataModule.ready;
             this.ready = true;
 

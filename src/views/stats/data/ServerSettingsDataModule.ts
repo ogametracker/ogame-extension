@@ -161,6 +161,10 @@ class ServerSettingsDataModuleClass extends Vue {
                     },
                 },
             },
+
+            lifeforms: {
+                enabled: serverData?.lifeformsEnabled ?? false,
+            },
         };
     }
 
