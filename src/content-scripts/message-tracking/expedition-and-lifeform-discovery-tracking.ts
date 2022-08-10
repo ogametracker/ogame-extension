@@ -379,7 +379,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
         case LifeformDiscoveryEventType.newLifeformFound: {
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type)}">
-                    <span class="mdi mdi-new-box></span>
+                    <span class="mdi mdi-new-box"></span>
                     <div class="${getLifeformClass(lifeformDiscovery.lifeform)}"></div>
                 </div>
             `;
