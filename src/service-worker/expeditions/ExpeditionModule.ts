@@ -292,12 +292,12 @@ export class ExpeditionModule {
         const resourceNames = ResourceTypes;
         const regex = i18nMessages.regex(resourceNames.map(resource => i18nResources[language][resource]));
         const match = data.text.match(regex);
-        if (match == null) {
+        if (match?.groups == null) {
             return null;
         }
 
-        const resourceName = match[1];
-        const amount = parseIntSafe(match[2].replace(/[^\d]/g, ''), 10);
+        const resourceName = match.groups.name;
+        const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
         const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );

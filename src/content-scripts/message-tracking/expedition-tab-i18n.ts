@@ -2,7 +2,7 @@ import { LanguageKey } from "@/shared/i18n/LanguageKey";
 
 export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeformDiscovery', string>> = {
     [LanguageKey.cz]: {
-        /*TODO: cz*/expedition: 'Expeditionsergebnis',
+        expedition: 'Výsledek expedice',
         /*TODO: cz*/lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.de]: {
@@ -26,11 +26,11 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
         /*TODO: it*/lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.pt]: {
-        /*TODO: pt*/expedition: 'Expeditionsergebnis',
+        expedition: 'Resultado da Exploração Espacial',
         /*TODO: pt*/lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.si]: {
-        /*TODO: si*/expedition: 'Expeditionsergebnis',
+        expedition: 'Rezultat ekspedicije',
         /*TODO: si*/lifeformDiscovery: 'Lebensformbericht',
     },
 };

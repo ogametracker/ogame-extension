@@ -27,7 +27,7 @@ export const pt: ExpeditionMessages = {
     [ExpeditionEventType.resources]: {
         [ExpeditionEventSize.small]: [
             /*'A tua expedição */'encontrou um pequeno asteróide'/* de onde conseguiram resgatar alguns recursos.'*/,
-            //TODO: pt /*'Auf einem abgelegenen Planetoiden wurden */'einige leicht zugängliche Ressourcenfelder'/* gefunden und erfolgreich Rohstoffe gewonnen'*/,
+            /*'Num planetóide isolado */'encontrámos um campo de recursos'/*. Conseguimos recolhê-los e estamos a voltar para descarregá-los.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             //TODO: pt /*'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
