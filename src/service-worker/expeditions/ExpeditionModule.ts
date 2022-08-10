@@ -242,11 +242,11 @@ export class ExpeditionModule {
 
             ExpeditionFindableShipTypes.forEach(ship => {
                 const shipName = i18nShips[language][ship];
-                const shipRegex = new RegExp(`${shipName}: (\\d+)`);
+                const shipRegex = new RegExp(`${shipName}: (?<amount>\\d+)`);
                 const shipMatch = textWithFoundFleet.match(shipRegex);
 
-                if (shipMatch != null) {
-                    foundShips[ship] = parseIntSafe(shipMatch[1], 10);
+                if (shipMatch?.groups != null) {
+                    foundShips[ship] = parseIntSafe(shipMatch.groups.amount, 10);
                 }
             });
         }
