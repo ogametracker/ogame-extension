@@ -22,7 +22,7 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
         /*TODO: hr*/lifeformDiscovery: 'Lebensformbericht',
     },
     [LanguageKey.it]: {
-        /*TODO: it*/expedition: 'Expeditionsergebnis',
+        expedition: 'Risultato della Spedizione',
         lifeformDiscovery: 'Resoconto Forme di vita',
     },
     [LanguageKey.pt]: {
