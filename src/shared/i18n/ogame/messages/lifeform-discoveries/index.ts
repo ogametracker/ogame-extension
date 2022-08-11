@@ -2,7 +2,7 @@ import { LanguageKey } from "../../../LanguageKey";
 import { LifeformDiscoveryMessages } from "./types";
 import { de } from './de';
 import { en } from './en';
-import { en as dk } from './en';//'./dk';
+import { dk } from './dk';
 import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';

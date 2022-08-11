@@ -14,7 +14,7 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
         lifeformDiscovery: 'Livsform Rapport',
     },
     [LanguageKey.en]: {
-        expedition: 'Expeditionsergebnis',
+        expedition: 'Expedition Result',
         lifeformDiscovery: 'Lifeform Report',
     },
     [LanguageKey.hr]: {
@@ -23,7 +23,7 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
     },
     [LanguageKey.it]: {
         /*TODO: it*/expedition: 'Expeditionsergebnis',
-        /*TODO: it*/lifeformDiscovery: 'Lebensformbericht',
+        lifeformDiscovery: 'Resoconto Forme di vita',
     },
     [LanguageKey.pt]: {
         expedition: 'Resultado da Exploração Espacial',

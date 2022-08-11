@@ -10,7 +10,7 @@ export const it: ExpeditionMessages = {
             /*TODO: it 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
             /*TODO: it 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'La nostra spedizione si è imbattuta in una */'nave fantasma che trasportava un piccolo carico di Materia Oscura'/*. Non abbiamo scoperto cosa possa essere successo all`equipaggio della nave, ma i nostri tecnici sono stati in grado di recuperare la Materia Oscura.'*/,
-            /*TODO: it 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'La spedizione ha seguito alcuni */'deboli segnali e ha trovato un asteroide'/*. Nel cuore dell`asteroide era racchiusa una piccola quantità di Materia Oscura. L`asteroide è stato rimorchiato e successivamente la Materia Oscura è stata estratta.'*/,
             /*wtf? :D*/ /*'Durante la nostra spedizione */'odierna siamo passati vicini ad un pianeta intorno al quale carcasse'/* di navi distrutte, e uno sciame di meteore restavano a testimoniare una recente e catastrofica battaglia. Dalla superficie del pianeta proveniva un segnale che non siamo riusciti a decifrare molto bene, spero che non ci sia un guasto ai nostri sofisticati sistemi di comunicazione... Con il caro deuterio, il mutuo per acquistare la morte nera, l`ipoteca sulle navi da battaglia per pagare gli stipendi ai vostri ufficiali, non ci potremmo permettere di sostituire il walkie talkie attuale con uno nuovo... Comunque i nostri tecnici sono già al lavoro per verificare la cosa e credo che non sia il caso di tediarla oltre con i problemi economici del nostro impero, li conoscete senz`altro meglio di me. Ritornando al rapporto della nostra missione di esplorazione, questo è il messaggio che abbiamo intercettato: "@°[*+£ la mia flotta... @°[*+£ la mia luna (versi simili a urla di rabbia e pianti)". Poiché quei versi erano così strazianti abbiamo deciso di atterrare sul pianeta e portare aiuto agli abitanti del luogo. Qui abbiamo incontrato uno strano alieno, molto probabilmente l`imperatore di quello che un tempo era un piccolo ma prospero regno e che ora è un cumulo di macerie. Alla nostra richiesta di spiegarci cosa fosse accaduto, cosa avesse creato un disastro di proporzioni così immani, ci ha risposto che un marrano, che un codardo e vigliacco imperatore nemico aveva razziato i suoi pianeti e distrutto le sue flotte mentre lui si trovava altrove, a riposarsi su un noto pianeta di villeggiatura "Mondo Reale" assieme alla sua mezza dozzina di concubine. Mentre l`alieno ci raccontava queste cose, il nostro ufologo, grazie ai dati che gli inviavamo dalla superficie è riuscito a scoprire che l`alieno appartiene alla razza dei "Castori Minori" meglio nota come "Niubbus Rosikantes". Così provando una gran pena per la razza dell`alieno, prima di ripartire gli abbiamo donato un manualetto "OGame for Dummies" e gli abbiamo spiegato le leggi fisiche alla base del fleetsave; ci siamo rovinati e gli abbiamo lasciato anche un bignamino intitolato "Fleetsave: 1001 modi per non farsi piallare quando si va al bagno". L`alieno, visibilmente commosso dalla nostra generosità, per ringraziarci ci ha dato un cofanetto contenente un discreto quantitativo di Materia Oscura. Dalla nave ammiraglia "I love n00bs" passo e chiudo.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -43,13 +43,13 @@ export const it: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*TODO: it 'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
+            /*'Ci siamo imbattuti nei */'resti di una precedente spedizione'/* ! I nostri tecnici stanno cercando di rimettere in funzione alcune navi.'*/,
             /*TODO: it 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
             /*'La nostra spedizione ha trovato un pianeta che fu quasi */'completamente distrutto durante una serie di guerre'/*. Ci sono numerose navi abbandonate in orbita. I tecnici stanno cercando di ripararne alcune. Forse riusciremo ad ottenere anche informazioni su che cosa è accaduto.'*/,
             /*'Abbiamo */'trovato una stazione pirata deserta'/*. Ci sono alcune vecchie navi che giacciono nell`hangar. I nostri tecnici stanno cercando di capire se sono ancora utilizzabili o meno.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: it 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'La nostra spedizione si è imbattuta in un */'vecchio cantiere navale automatizzato'/*. Alcune navi sono ancora nella fase di produzione e i nostri tecnici stanno cercando di riattivare i generatori del cantiere.'*/,
             /*'Abbiamo */'trovato i resti di un`armata'/*. I tecnici si sono diretti verso le navi più intatte e le hanno rimesse in funzione.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -147,8 +147,8 @@ export const it: ExpeditionMessages = {
     logbookRegex: /Rapporto dell`ufficiale alle comunicazioni:(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO it: 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO it: 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Sembra che questa parte di */'universo non sia ancora stata esplorata',
+            /*'E` emozionante essere i */'primi ad attraversare un settore inesplorato',
         ],
         [ExpeditionDepletionLevel.low]: [
             /*TODO it: 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
