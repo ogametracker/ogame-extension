@@ -5,7 +5,8 @@
             <span class="ml-1" v-text="$i18n.$t.lifeforms[value]" />
         </template>
         <template #cell-discoverDate="{ value, item }">
-            <span v-if="value != null" v-text="$i18n.$d(value, 'datetime')" />
+            <i v-if="item.lifeform == 'humans'" v-text="$i18n.$t.empire.lifeforms.alwaysAvailable" />
+            <span v-else-if="value != null" v-text="$i18n.$d(value, 'datetime')" />
             <span v-else-if="item.totalExperience > 0" v-text="$i18n.$t.empire.lifeforms.discoveryDateUnknown" />
             <i v-else v-text="$i18n.$t.empire.lifeforms.notDiscoveredYet" />
         </template>

@@ -130,6 +130,7 @@ export interface EmpireTranslations {
         notDiscoveredYet: string;
         totalLifeformExperience: string;
         numberOfLifeformDiscoveries: string;
+        alwaysAvailable: string;
 
         discoveryMissions: string;
         lifeformFound: string;
