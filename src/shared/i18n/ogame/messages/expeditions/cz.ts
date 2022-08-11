@@ -142,11 +142,11 @@ export const cz: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /*TODO: cz *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    logbookRegex: /Záznam z lodního deníku obsluhy komunikace:(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: cz 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: cz 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Zdá se, že tato část vesmíru */'nebyla zatím prozkoumána.',
+            /*'Je to skvělý pocit */'poprvé prolétat neprozkoumaným sektorem',
         ],
         [ExpeditionDepletionLevel.low]: [
             /*TODO: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,

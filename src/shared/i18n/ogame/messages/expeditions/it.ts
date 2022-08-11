@@ -32,7 +32,7 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: it 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
-            /*TODO: it 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Su una piccola luna con la sua atmosfera, la tua spedizione ha trovato alcuni */'grandi giacimenti di risorse grezze'/*. L`equipaggio sta cercando di estrarre e caricare quel tesoro naturale.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: it 'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
