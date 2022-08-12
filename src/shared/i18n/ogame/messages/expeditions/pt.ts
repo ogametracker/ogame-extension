@@ -45,7 +45,7 @@ export const pt: ExpeditionMessages = {
             //TODO: pt /*'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
             //TODO: pt /*'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
             //TODO: pt /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
-            /*'Descobrimos */'uma estação espacial pirata'/*! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
+            /*'Descobrimos */'uma estação espacial pirata'/* ! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'A nossa expedição encontrou um */'velho hangar automatizado'/*. Algumas das naves ainda estavam em fase de produção e os nossos técnicos estão a tentar reactivar os geradores eléctricos para tentar acabá-las'*/,
@@ -118,7 +118,7 @@ export const pt: ExpeditionMessages = {
             /*'O*/' sinal de emergência que a expedição recebeu'/* era um engodo colocado por uns piratas estelares. Não pudemos evitar o confronto!'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'Os sinais gravados não foram emitidos por um ser estranho mas sim por uma */'base pirata secreta'/*! Eles tão ficaram surpreendidos com a nossa presença neste quadrante.'*/,
+            /*'Os sinais gravados não foram emitidos por um ser estranho mas sim por uma */'base pirata secreta'/* ! Eles tão ficaram surpreendidos com a nossa presença neste quadrante.'*/,
             /*'O relatório de expedição */'relata batalhas épicas contra naves-pirata'/* não identificadas!'*/,
         ],
     },
@@ -127,7 +127,7 @@ export const pt: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Algumas */'naves exóticas atacaram a frota de exploração'/* sem qualquer aviso prévio!'*/,
             /*'A tua frota de exploração teve um */'primeiro contacto com espécies desconhecidas'/* não muito amigável.'*/,
-            /*'A nossa missão foi */'atacada por um pequeno número de naves desconhecidas'/*!'*/,
+            /*'A nossa missão foi */'atacada por um pequeno número de naves desconhecidas'/* !'*/,
             //TODO: pt /*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -136,7 +136,7 @@ export const pt: ExpeditionMessages = {
             /*'A ligação com nossa frota exploratória foi interrompida durante um curto espaço de tempo. Pelo que conseguimos entender pela última mensagem enviada, ela está a ser atacada. Até */'agora não conseguiram identificar o agressor'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'A tua frota de exploração foi atacada por uma Frota Invasora Alienígena. Há */'relatórios de grandes confrontos'/*!'*/,
+            /*'A tua frota de exploração foi atacada por uma Frota Invasora Alienígena. Há */'relatórios de grandes confrontos'/* !'*/,
             /*'Encontrámos algumas */'dificuldades em pronunciar correctamente o dialecto da raça extraterrestre'/*. Acidentalmente, o nosso diplomata gritou "Fogo!" em vez de "Paz!".'*/,
             /*'Uma grande Frota de */'naves cristalinas de origem desconhecida'/* está em rota de ataque contra a tua frota de exploração. Por agora temos de assumir o pior.'*/,
         ],

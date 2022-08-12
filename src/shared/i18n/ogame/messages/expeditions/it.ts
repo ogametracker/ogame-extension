@@ -31,7 +31,7 @@ export const it: ExpeditionMessages = {
             /*'Su un */'planetoide isolato abbiamo trovato alcuni campi di risorse'/* facilmente accessibili e ne abbiamo raccolte alcune'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: it 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'La tua spedizione ha trovato un antico convoglio, */'deserto ma carico di risorse'/*. Alcune risorse sono state recuperate.'*/,
             /*'Su una piccola luna con la sua atmosfera, la tua spedizione ha trovato alcuni */'grandi giacimenti di risorse grezze'/*. L`equipaggio sta cercando di estrarre e caricare quel tesoro naturale.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -115,11 +115,11 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'La tua spedizione ha */'avuto uno spiacevole incontro con alcuni pirati dello spazio',
-            /*'Siamo incappati in */'un`imboscata tesa da alcuni pirati dello spazio'/*! Non è stato possibile evitare il combattimento.'*/,
+            /*'Siamo incappati in */'un`imboscata tesa da alcuni pirati dello spazio'/* ! Non è stato possibile evitare il combattimento.'*/,
             /*'La richiesta di aiuto a cui la spedizione ha risposto si è */'rivelata essere una trappola di alcuni bucanieri'/* dello spazio. Non abbiamo potuto evitare il combattimento.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'I segnali registrati non provenivano da un */'alieno ma da una base spaziale pirata'/*! Non erano nemmeno sorpresi dalla nostra presenza nel loro settore...'*/,
+            /*'I segnali registrati non provenivano da un */'alieno ma da una base spaziale pirata'/* ! Non erano nemmeno sorpresi dalla nostra presenza nel loro settore...'*/,
             /*'La spedizione riporta */'feroci scontri contro delle navi pirata non identificate',
         ],
     },
