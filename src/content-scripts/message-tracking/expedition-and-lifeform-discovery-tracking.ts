@@ -26,7 +26,7 @@ import { Ships } from "@/shared/models/ogame/ships/Ships";
 import { settingsWrapper } from "./main";
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { getLanguage } from "@/shared/i18n/getLanguage";
-import { messageHeaders } from "./expedition-tab-i18n";
+import { messageHeaders } from "./i18n";
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";

@@ -5,7 +5,7 @@ import { MessageService } from '../MessageService';
 import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
-import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { MessageTrackingErrorMessage } from '../../shared/messages/tracking/misc';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class DebrisFieldReportService implements MessageService {
@@ -28,20 +28,6 @@ export class DebrisFieldReportService implements MessageService {
                     };
                     await broadcastMessage(errorMessage);
                     return;
-                }
-
-                if(tryResult.result.ignored) {
-                    const ignoreMessage: WillNotBeTrackedMessage = {
-                        ogameMeta: message.ogameMeta,
-                        type: MessageType.WillNotBeTracked,
-                        data: {
-                            id: msg.data.id,
-                            type: 'debris-field-report',
-                        },
-                        senderUuid: serviceWorkerUuid,
-                    };
-                    await broadcastMessage(ignoreMessage);
-                    break;
                 }
 
                 const { report, isAlreadyTracked } = tryResult.result;

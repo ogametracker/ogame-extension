@@ -1,5 +1,4 @@
 import { parse } from "date-fns";
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
@@ -7,7 +6,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
-import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '../../shared/messages/tracking/misc';
+import { MessageTrackingErrorMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
@@ -17,6 +16,9 @@ import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
+import { messageHeaders } from "./i18n";
+import { LanguageKey } from "@/shared/i18n/LanguageKey";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 
 let tabContent: Element | null = null;
 
@@ -53,8 +55,9 @@ function setupObserver() {
     const tabContentElem = tabContent ?? _throw('Cannot find content element of misc messages');
 
     const meta = getOgameMeta();
-    if (isSupportedLanguage(meta.language)) {
-        const observer = new MutationObserver(() => trackDebrisFieldReports(tabContentElem));
+    const lang = getLanguage(meta.language);
+    if (lang != null) {
+        const observer = new MutationObserver(() => trackDebrisFieldReports(lang, tabContentElem));
         observer.observe(tabContentElem, { childList: true, subtree: true });
     }
 }
@@ -94,20 +97,6 @@ function onMessage(message: Message<MessageType, any>) {
             break;
         }
 
-        case MessageType.WillNotBeTracked: {
-            const msg = (message as WillNotBeTrackedMessage).data;
-            if (msg.type != 'debris-field-report') {
-                break;
-            }
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.id}'`);
-
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            addOrSetCustomMessageContent(li, false);
-
-            delete waitingForReports[msg.id];
-            break;
-        }
-
         case MessageType.TrackingError: {
             const { type, id } = (message as MessageTrackingErrorMessage).data;
             if (type != 'debris-field-report') {
@@ -128,9 +117,10 @@ function onMessage(message: Message<MessageType, any>) {
     }
 }
 
-function trackDebrisFieldReports(elem: Element) {
+function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
     const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
         .filter(elem => !elem.classList.contains(cssClasses.messages.base));
+    const headers = messageHeaders[lang];
 
     messages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
@@ -146,6 +136,12 @@ function trackDebrisFieldReports(elem: Element) {
             const messageTextElem = msg.querySelector('.msg_content') ?? _throw('Cannot find message content element');
             const text = messageTextElem.textContent ?? '';
             const html = messageTextElem.innerHTML;
+
+            const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
+            if (!messageTitle.includes(headers.debrisField)) {
+                //ignore anything that's not a DF harvest report
+                return;
+            }
 
             // send message to service worker
             const workerMessage: TrackDebrisFieldReportMessage = {

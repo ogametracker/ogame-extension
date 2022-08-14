@@ -11,12 +11,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { getLanguage } from "@/shared/i18n/getLanguage";
 
-type DebrisFieldReportResult = {
-    ignored: true;
-    report?: undefined;
-    isAlreadyTracked?: undefined;
-} | {
-    ignored: false;
+interface DebrisFieldReportResult {
     report: DebrisFieldReport;
     isAlreadyTracked: boolean;
 };
@@ -40,7 +35,6 @@ export class DebrisFieldReportModule {
             return {
                 success: true,
                 result: {
-                    ignored: false,
                     report: knownReport,
                     isAlreadyTracked: true,
                 },
@@ -53,12 +47,6 @@ export class DebrisFieldReportModule {
         try {            
             const languageKey = getLanguage(language, true);
             const parseResult = this.tryParseDebrisFieldReport(languageKey, messageData);
-            if (!parseResult.success) {
-                return {
-                    success: true,
-                    result: { ignored: true },
-                };
-            }
 
             report = parseResult.report;
 
@@ -67,7 +55,6 @@ export class DebrisFieldReportModule {
             return {
                 success: true,
                 result: {
-                    ignored: false,
                     report,
                     isAlreadyTracked: false,
                 },
@@ -78,15 +65,15 @@ export class DebrisFieldReportModule {
         }
     }
 
-    private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): ({ success: false } | { success: true, report: DebrisFieldReport }) {
+    private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): { success: true, report: DebrisFieldReport } {
         const regex = i18nDebrisFieldReports[language].regex;
         const match = regex.exec(data.text);
-        if (match == null) {
-            return { success: false };
+        if (match?.groups == null) {
+            _throw('found no debris field report match');
         }
 
-        const metalText = match.groups?.metal.replace(/\./g, '') ?? _throw('metal not found');
-        const crystalText = match.groups?.crystal.replace(/\./g, '') ?? _throw('crystal not found');
+        const metalText = match.groups.metal.replace(/\./g, '') ?? _throw('metal not found');
+        const crystalText = match.groups.crystal.replace(/\./g, '') ?? _throw('crystal not found');
 
         const metal = parseIntSafe(metalText, 10);
         const crystal = parseIntSafe(crystalText, 10);

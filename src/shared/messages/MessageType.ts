@@ -24,7 +24,7 @@ export enum MessageType {
     CombatReportUnknown = 'combat-reports/is-unknown',
 
     // message tracking
-    WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report
+    WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is ignored for some reason (e.g. espionage combats)
     TrackingError = 'message-tracking/error',
 
     // empire tracking
