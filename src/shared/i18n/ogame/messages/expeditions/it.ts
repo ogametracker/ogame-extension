@@ -7,7 +7,7 @@ export const it: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             /*'La spedizione è stata in */'grado di catturare e conservare della Materia Oscura',
-            /*TODO: it 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
+            /*'Abbiamo */'trovato i resti di una nave aliena'/*. Nella stiva vi era un piccolo container con della Materia Oscura!'*/,
             /*TODO: it 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'La nostra spedizione si è imbattuta in una */'nave fantasma che trasportava un piccolo carico di Materia Oscura'/*. Non abbiamo scoperto cosa possa essere successo all`equipaggio della nave, ma i nostri tecnici sono stati in grado di recuperare la Materia Oscura.'*/,
             /*'La spedizione ha seguito alcuni */'deboli segnali e ha trovato un asteroide'/*. Nel cuore dell`asteroide era racchiusa una piccola quantità di Materia Oscura. L`asteroide è stato rimorchiato e successivamente la Materia Oscura è stata estratta.'*/,

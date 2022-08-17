@@ -29,7 +29,7 @@ export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeform
     [LanguageKey.it]: {
         expedition: 'Risultato della Spedizione',
         lifeformDiscovery: 'Resoconto Forme di vita',
-        /*TODO: it*/debrisField: 'Schürfbericht von TF',
+        debrisField: 'Rapporto raccolta detriti',
     },
     [LanguageKey.pt]: {
         expedition: 'Resultado da Exploração Espacial',

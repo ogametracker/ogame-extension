@@ -35,11 +35,13 @@ import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms
 
 let tabContent: Element | null = null;
 
-const notificationIds = {
+const errorId = v4();
+const expeditionNotificationIds = {
     result: v4(),
     lostFleet: v4(),
-    error: v4(),
 };
+const lifeformDiscoveriesId = v4();
+
 const waitingForMessageResult: Record<number, true> = {};
 const failedToTrackMessages: Record<number, true> = {};
 const totalLifeformDiscoveryResult: LifeformDiscoveryTrackingNotificationMessageData = {
@@ -290,7 +292,7 @@ function sendNotificationMessages() {
             senderUuid: messageTrackingUuid,
             data: {
                 type: NotificationType.ExpeditionTracking,
-                messageId: notificationIds.result,
+                messageId: expeditionNotificationIds.result,
                 ...totalExpeditionResult,
             },
         };
@@ -303,7 +305,7 @@ function sendNotificationMessages() {
                 senderUuid: messageTrackingUuid,
                 data: {
                     type: NotificationType.ExpeditionTrackingLostFleet,
-                    messageId: notificationIds.lostFleet,
+                    messageId: expeditionNotificationIds.lostFleet,
                     count: totalExpeditionResult.events.lostFleet,
                 },
             };
@@ -320,7 +322,7 @@ function sendNotificationMessages() {
             senderUuid: messageTrackingUuid,
             data: {
                 type: NotificationType.LifeformDiscoveryTracking,
-                messageId: notificationIds.result,
+                messageId: lifeformDiscoveriesId,
                 ...totalLifeformDiscoveryResult,
             },
         };
@@ -335,7 +337,7 @@ function sendErrorNotificationMessage(failed: number) {
         senderUuid: messageTrackingUuid,
         data: {
             type: NotificationType.MessageTrackingError,
-            messageId: notificationIds.error,
+            messageId: errorId,
             count: failed,
         },
     };
