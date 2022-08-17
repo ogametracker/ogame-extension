@@ -59,7 +59,7 @@ const domParser = new DOMParser();
 export function trackEmpirePage() {
     observerCallbacks.push({
         selector: '#siteFooter',
-        callback: () => {
+        callback: async () => {
             const ogameNowText = (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content
                 ?? _throw('no meta element found for ogame-timestamp');
             const ogameNow = parseIntSafe(ogameNowText, 10) * 1000;
@@ -227,7 +227,7 @@ function trackPlanetBuildingLevels(planet: OgameEmpirePlanet, ogameMeta: Message
 
 function trackPlanetLifeformBuildingLevels(planet: OgameEmpirePlanet, ogameMeta: MessageOgameMeta) {
     const lifeformBuildingLevels = LifeformBuildingTypes.reduce((acc, type) => {
-        acc[type] = parseIntSafe(planet[type].toString(), 10);
+        acc[type] = parseIntSafe(planet[type]?.toString() ?? '0', 10); //TODO: remove nullability check when lifeforms live everywhere
         return acc;
     }, {} as Record<LifeformBuildingType, number>);
 
@@ -245,8 +245,8 @@ function trackPlanetLifeformBuildingLevels(planet: OgameEmpirePlanet, ogameMeta:
 }
 
 function trackPlanetLifeformTechnologyLevels(planet: OgameEmpirePlanet, ogameMeta: MessageOgameMeta) {
-    const lifeformTechLevels = LifeformTechnologyTypes.reduce((acc, type) => {
-        acc[type] = parseIntSafe(planet[type].toString(), 10);
+    const lifeformTechLevels = LifeformTechnologyTypes.reduce((acc, type) => {        
+        acc[type] = parseIntSafe(planet[type]?.toString() ?? '0', 10); //TODO: remove nullability check when lifeforms live everywhere
         return acc;
     }, {} as Record<LifeformTechnologyType, number>);
 
