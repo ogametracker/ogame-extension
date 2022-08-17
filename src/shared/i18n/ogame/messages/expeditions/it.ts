@@ -44,7 +44,7 @@ export const it: ExpeditionMessages = {
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
             /*'Ci siamo imbattuti nei */'resti di una precedente spedizione'/* ! I nostri tecnici stanno cercando di rimettere in funzione alcune navi.'*/,
-            /*TODO: it 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
+            /*'La tua spedizione si è */'imbattuta in un avamposto abbandonato'/* da molto tempo. Nell`hangar dell`avamposto ci sono ancora alcune navi che i nostri tecnici stanno cercando di far volare.'*/,
             /*'La nostra spedizione ha trovato un pianeta che fu quasi */'completamente distrutto durante una serie di guerre'/*. Ci sono numerose navi abbandonate in orbita. I tecnici stanno cercando di ripararne alcune. Forse riusciremo ad ottenere anche informazioni su che cosa è accaduto.'*/,
             /*'Abbiamo */'trovato una stazione pirata deserta'/*. Ci sono alcune vecchie navi che giacciono nell`hangar. I nostri tecnici stanno cercando di capire se sono ancora utilizzabili o meno.'*/,
         ],

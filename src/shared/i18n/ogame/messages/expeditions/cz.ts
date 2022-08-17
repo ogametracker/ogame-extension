@@ -150,7 +150,7 @@ export const cz: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.low]: [
             /*TODO: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: cz 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*'Nalezli */'jsme trosky prastarých vesmírných'/* lodí. Nedostali jsme se sem první.'*/,
             /*TODO: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [

@@ -37,5 +37,5 @@ export const dk: LifeformDiscoveryMessages = {
         /*TODO: dk 'Bei der Verfolgung starker kosmischer Signale war der Navigator offenbar so abgelenkt, dass er das in der */'Nähe befindliche schwarze Loch vollkommen aus den Augen'/* verlor. Das Schiff geriet in das Gravitationsfeld und alle Anstrengungen der Crew konnten nicht verhindern, dass es hineingesogen wurde. Um einen weiteren Verlust dieser Art zu vermeiden, wurde vorgeschlagen, automatische Warnsignale vor schwarzen Löchern als Standard zu integrieren.'*/
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /og blev tilføjet til Livsformer menuen/i,
-    [LifeformDiscoveryEventType.knownLifeformFound]: /forbedre vores viden omkring dem med (?<xp>\d+) XP/g,
+    [LifeformDiscoveryEventType.knownLifeformFound]: /forbedre vores viden omkring dem med (?<xp>\d+) XP/i,
 };
