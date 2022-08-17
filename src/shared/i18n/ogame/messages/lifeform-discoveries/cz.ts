@@ -34,7 +34,7 @@ export const cz: LifeformDiscoveryMessages = {
         /*'Zdá se, že průzkumná loď se */'ztratila v dosud neznámé singularitě'/*. Posádka od té doby nejevila žádné známky života.'*/,
         /*'Průzkumná letka vletěla do zálohy, */'kterou vedl agresivní mimozemský druh'/*. Zcela rozdrtili průzkumnou loď ještě předtím, než se vůbec podařilo navázat první kontakt.'*/,
         /*'Průzkumná loď zaznamenala několik slibných signálů. Ale poté, co vypátrala jejich zdroj, */'tak ten náhle přestal vysílat'/*. Byly vyslány pátrací týmy, ale nemohly najít žádnou stopu o poloze lodi. Musela se ztratit v prázdnotě.'*/,
-        /*TODO: cz 'Bei der Verfolgung starker kosmischer Signale war der Navigator offenbar so abgelenkt, dass er das in der */'Nähe befindliche schwarze Loch vollkommen aus den Augen'/* verlor. Das Schiff geriet in das Gravitationsfeld und alle Anstrengungen der Crew konnten nicht verhindern, dass es hineingesogen wurde. Um einen weiteren Verlust dieser Art zu vermeiden, wurde vorgeschlagen, automatische Warnsignale vor schwarzen Löchern als Standard zu integrieren.'*/
+        /*'Lodní navigátor se musel tak hluboce soustředit na sledování podivného signálu, že ztratil ze zřetele skutečnost, že operují poblíž černé díry. Loď se přiblížila příliš blízko své */'gravitační studni a navzdory maximální snaze posádky'/* nic nebránilo jejímu vtažení dovnitř. Aby se předešlo dalším zbytečným ztrátám, zpráva navrhuje, aby byly v budoucnu standardně integrovány automatické alarmy černých děr.'*/
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /byla objevena forma života .+ a byla přidána do nabídky forem života/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /schopni zlepšit naši znalost o nich o (?<xp>\d+) ZK/i,
