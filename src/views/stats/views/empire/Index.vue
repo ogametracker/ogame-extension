@@ -31,6 +31,10 @@
                     label: this.$i18n.$t.empire.amortization.header,
                     to: { name: 'empire/amortization' },
                 },
+                {
+                    label: 'LOCA: Point Distribution',
+                    to: { name: 'empire/point-distribution' },
+                },
             ];
 
             if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
