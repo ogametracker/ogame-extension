@@ -5,15 +5,16 @@ import { parseIntSafe } from "./parseNumbers";
 const coordsRegex = /^\[?(?<galaxy>\d+):(?<system>\d+):(?<position>\d+)\]?$/;
 
 export function parseCoordinates(coords: string, type = PlanetType.planet): Coordinates {
-    const match = coords.match(coordsRegex)
-    if (match == null || match.groups == null) {
+    const match = coords.match(coordsRegex);
+
+    if (match?.groups == null) {
         throw new Error(`invalid coordinates '${coords}'`);
     }
 
     return {
-        galaxy: parseIntSafe(match.groups.galaxy, 10),
-        system: parseIntSafe(match.groups.system, 10),
-        position: parseIntSafe(match.groups.position, 10),
+        galaxy: parseIntSafe(match.groups.galaxy),
+        system: parseIntSafe(match.groups.system),
+        position: parseIntSafe(match.groups.position),
         type,
     };
 }
