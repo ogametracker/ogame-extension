@@ -16,7 +16,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { BuildingType, BuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
 
     @Component({})
     export default class OBuilding extends Vue {

@@ -55,12 +55,13 @@
     import { _throw } from '@/shared/utils/_throw';
     import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetProductionSettings, DbPlayerResearchLevels, DbShipAmounts } from '@/shared/db/schema/player';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
     import { DefenseType, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
-    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
+    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
     import { DbServer } from '@/shared/db/schema/global';
     import { importData as importData_v1ToV2 } from '@/shared/import-export/v1-to-v2/importData';
     import { ImportCallbackInfo, importData as importData_v2 } from '@/shared/import-export/v2/importData';

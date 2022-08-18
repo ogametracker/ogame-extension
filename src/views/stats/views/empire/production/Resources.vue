@@ -87,227 +87,75 @@
             <template #cell-metal="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <div
-                            :class="{ 'fade-value': value.baseProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.baseProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.mineProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div class="fade-value" v-text="0" :fraction="$i18n.$n(0, fractionNumberFormat).substring(1)" />
-                        <div
-                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.itemProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.geologistProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
-                        />
+                        <decimal-number :value="value.baseProduction" />
+                        <decimal-number :value="value.mineProduction" />
+                        <decimal-number :value="0" />
+                        <decimal-number :value="value.lifeformBuildingsProduction" />
+                        <decimal-number :value="value.crawlerProduction" />
+                        <decimal-number :value="value.plasmaTechnologyProduction" />
+                        <decimal-number :value="value.itemProduction" />
+                        <decimal-number :value="value.geologistProduction" />
+                        <decimal-number :value="value.commandStaffProduction" />
+                        <decimal-number :value="value.playerClassProduction" />
+                        <decimal-number :value="value.allianceClassProduction" />
+                        <decimal-number :value="value.lifeformTechnologiesProduction" />
                     </template>
-                    <div
-                        class="breakdown-sum"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
-                    />
+
+                    <decimal-number class="breakdown-sum" :value="value.total" />
                 </div>
             </template>
             <template #cell-crystal="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <div
-                            :class="{ 'fade-value': value.baseProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.baseProduction - Math.trunc(value.baseProduction), fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.mineProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div class="fade-value" v-text="0" :fraction="$i18n.$n(0, fractionNumberFormat).substring(1)" />
-                        <div
-                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.itemProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.geologistProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
-                        />
+                        <decimal-number :value="value.baseProduction" />
+                        <decimal-number :value="value.mineProduction" />
+                        <decimal-number :value="0" />
+                        <decimal-number :value="value.lifeformBuildingsProduction" />
+                        <decimal-number :value="value.crawlerProduction" />
+                        <decimal-number :value="value.plasmaTechnologyProduction" />
+                        <decimal-number :value="value.itemProduction" />
+                        <decimal-number :value="value.geologistProduction" />
+                        <decimal-number :value="value.commandStaffProduction" />
+                        <decimal-number :value="value.playerClassProduction" />
+                        <decimal-number :value="value.allianceClassProduction" />
+                        <decimal-number :value="value.lifeformTechnologiesProduction" />
                     </template>
-                    <div
-                        class="breakdown-sum"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
-                    />
+
+                    <decimal-number class="breakdown-sum" :value="value.total" />
                 </div>
             </template>
             <template #cell-deuterium="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <div
-                            :class="{ 'fade-value': value.baseProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.baseProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.baseProduction % 1, fractionNumberFormat).substring(1)"
+                        <decimal-number :value="value.baseProduction" />
+                        <decimal-number :value="value.mineProduction" />
+                        <decimal-number
+                            :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }"
+                            :value="-item.fusionReactorConsumption"
+                           
                         />
-                        <div
-                            :class="{ 'fade-value': value.mineProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.mineProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.mineProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{
-                                'fade-value': item.fusionReactorConsumption == 0,
-                                'negative-value': -item.fusionReactorConsumption < 0,
-                            }"
-                            v-text="$i18n.$n(Math.trunc(-item.fusionReactorConsumption), numberFormat)"
-                            :fraction="$i18n.$n(item.fusionReactorConsumption % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.lifeformBuildingsProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformBuildingsProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformBuildingsProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.crawlerProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.crawlerProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.crawlerProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.plasmaTechnologyProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.plasmaTechnologyProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.plasmaTechnologyProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.itemProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.itemProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.itemProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.geologistProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.geologistProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.geologistProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.commandStaffProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.commandStaffProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.commandStaffProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.playerClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.playerClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.playerClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.allianceClassProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.allianceClassProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.allianceClassProduction % 1, fractionNumberFormat).substring(1)"
-                        />
-                        <div
-                            :class="{ 'fade-value': value.lifeformTechnologiesProduction == 0 }"
-                            v-text="$i18n.$n(Math.trunc(value.lifeformTechnologiesProduction), numberFormat)"
-                            :fraction="$i18n.$n(value.lifeformTechnologiesProduction % 1, fractionNumberFormat).substring(1)"
-                        />
+                        <decimal-number :value="value.lifeformBuildingsProduction" />
+                        <decimal-number :value="value.crawlerProduction" />
+                        <decimal-number :value="value.plasmaTechnologyProduction" />
+                        <decimal-number :value="value.itemProduction" />
+                        <decimal-number :value="value.geologistProduction" />
+                        <decimal-number :value="value.commandStaffProduction" />
+                        <decimal-number :value="value.playerClassProduction" />
+                        <decimal-number :value="value.allianceClassProduction" />
+                        <decimal-number :value="value.lifeformTechnologiesProduction" />
                     </template>
-                    <div
-                        class="breakdown-sum"
-                        v-text="$i18n.$n(Math.trunc(value.total - item.fusionReactorConsumption), numberFormat)"
-                        :fraction="$i18n.$n((value.total - item.fusionReactorConsumption) % 1, fractionNumberFormat).substring(1)"
-                    />
+
+                    <decimal-number class="breakdown-sum" :value="value.total - item.fusionReactorConsumption" />
                 </div>
             </template>
             <template #cell-total="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
-                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value" />
                 </div>
             </template>
             <template #cell-totalConverted="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
-                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value" />
                 </div>
             </template>
 
@@ -329,47 +177,27 @@
             </template>
             <template #footer-metal="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value.total == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value.total" />
                 </div>
             </template>
             <template #footer-crystal="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value.total == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value.total" />
                 </div>
             </template>
             <template #footer-deuterium="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value.total == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value.total), numberFormat)"
-                        :fraction="$i18n.$n(value.total % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value.total" />
                 </div>
             </template>
             <template #footer-total="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
-                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value" />
                 </div>
             </template>
-            <template #footer-totalCnoverted="{ value }">
+            <template #footer-totalConverted="{ value }">
                 <div class="breakdown-list">
-                    <div
-                        :class="{ 'fade-value': value == 0 }"
-                        v-text="$i18n.$n(Math.trunc(value), numberFormat)"
-                        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
-                    />
+                    <decimal-number :value="value" />
                 </div>
             </template>
         </grid-table>
@@ -445,14 +273,6 @@
         private readonly BuildingType = BuildingType;
         private readonly ShipType = ShipType;
         private showSettings = false;
-
-        private readonly numberFormat: Intl.NumberFormatOptions = {
-            maximumFractionDigits: 0,
-        };
-        private readonly fractionNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        };
 
         private readonly resourcePackageAmounts = {
             all: 0,
@@ -848,22 +668,8 @@
             margin-top: 1px;
         }
 
-        .fade-value {
-            color: rgba(white, 0.1);
-
-            &[fraction]::after {
-                color: rgba(white, 0.1);
-            }
-        }
-
         .negative-value {
             color: rgb(209, 21, 21);
-        }
-
-        [fraction]::after {
-            content: attr(fraction);
-            color: rgba(white, 0.333);
-            font-size: 0.65em;
         }
     }
 </style>

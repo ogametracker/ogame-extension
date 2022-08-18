@@ -1,8 +1,11 @@
 <template>
     <div class="point-distribution">
-        <grid-table :columns="columns" :items="items" inline>
+        <grid-table :columns="columns" :items="items" :footerItems="footerItems" inline>
             <template #cell-points="{ value }">
-                <span v-text="$i18n.$n(value)" />
+                <decimal-number :value="value" />
+            </template>
+            <template #footer-points="{ value }">
+                <decimal-number :value="value" />
             </template>
         </grid-table>
     </div>
@@ -11,13 +14,17 @@
 <script lang="ts">
     import { MoonData } from '@/shared/models/empire/MoonData';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { BuildingsByType, BuildingType, MoonBuildingTypes, PlanetBuildingType, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
-    import { Cost } from '@/shared/models/ogame/common/Cost';
+    import { BuildingType, PlanetBuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { MoonBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
+    import { BuildingsByType, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
+    import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
     import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { ResearchByTypes, ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
+    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
     interface PlanetPointDistributionItem {
         planetId: number;
@@ -25,8 +32,10 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
         productionBuildings: number;
         otherBuildings: number;
 
-        lifeformBuildings: number;
-        lifeformTechnologies: number;
+        lifeformBuildingsActive: number;
+        lifeformBuildingsInactive: number;
+        lifeformTechnologiesActive: number;
+        lifeformTechnologiesInactive: number;
 
         defense: number;
         ships: number;
@@ -54,30 +63,44 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
             ];
         }
 
-        private get items(): PointDistributionRow[] {
+        private get pointDistribution() {
+            const researchPoints = this.researchPoints;
+
             const total = {
-                research: this.researchPoints,
+                research: researchPoints,
 
                 productionBuildings: 0,
                 planetBuildings: 0,
                 moonBuildings: 0,
 
-                lifeformBuildings: 0,
-                lifeformTechnologies: 0,
+                lifeformBuildingsActive: 0,
+                lifeformBuildingsInactive: 0,
+                lifeformTechnologiesActive: 0,
+                lifeformTechnologiesInactive: 0,
 
                 defense: 0,
                 ships: 0,
+
+                total: researchPoints,
             };
 
             this.planetPointDistributions.forEach(planet => {
                 total.productionBuildings += planet.productionBuildings;
                 total.planetBuildings += planet.otherBuildings;
 
-                total.lifeformBuildings += planet.lifeformBuildings;
-                total.lifeformTechnologies += planet.lifeformTechnologies;
+                total.lifeformBuildingsActive += planet.lifeformBuildingsActive;
+                total.lifeformBuildingsInactive += planet.lifeformBuildingsInactive;
+                total.lifeformTechnologiesActive += planet.lifeformTechnologiesActive;
+                total.lifeformTechnologiesInactive += planet.lifeformTechnologiesInactive;
 
                 total.defense += planet.defense;
                 total.ships += planet.ships;
+
+                (Object.keys(planet) as (keyof PlanetPointDistributionItem)[]).forEach(key => {
+                    if (key != 'planetId') {
+                        total.total += planet[key];
+                    }
+                });
             });
 
             this.moonPointDistributions.forEach(moon => {
@@ -85,42 +108,79 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
 
                 total.defense += moon.defense;
                 total.ships += moon.ships;
-            })
 
-            return [
+                (Object.keys(moon) as (keyof MoonPointDistributionItem)[]).forEach(key => {
+                    if (key != 'moonId') {
+                        total.total += moon[key];
+                    }
+                });
+            });
+
+            return total;
+        }
+
+        private get footerItems(): PointDistributionRow[] {
+            return [{
+                label: 'LOCA: Total',
+                points: this.pointDistribution.total,
+            }];
+        }
+
+        private get items(): PointDistributionRow[] {
+            const total = this.pointDistribution;
+
+            const result: PointDistributionRow[] = [
                 {
                     label: 'LOCA: Production Buildings (Mines + LF Production Buildings)',
-                    points: Math.floor(total.productionBuildings),
+                    points: total.productionBuildings,
                 },
                 {
                     label: 'LOCA: Planet Buildings',
-                    points: Math.floor(total.planetBuildings),
+                    points: total.planetBuildings,
                 },
-                {
-                    label: 'LOCA: Lifeform Buildings',
-                    points: Math.floor(total.lifeformBuildings),
-                },
-                {
-                    label: 'LOCA: Lifeform Technologies',
-                    points: Math.floor(total.lifeformTechnologies),
-                },
+            ];
+
+            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
+                result.push(
+                    {
+                        label: 'LOCA: Lifeform Buildings (active)',
+                        points: total.lifeformBuildingsActive,
+                    },
+                    {
+                        label: 'LOCA: Lifeform Buildings (inactive)',
+                        points: total.lifeformBuildingsInactive,
+                    },
+                    {
+                        label: 'LOCA: Lifeform Technologiess (active)',
+                        points: total.lifeformTechnologiesActive,
+                    },
+                    {
+                        label: 'LOCA: Lifeform Technologiess (inactive)',
+                        points: total.lifeformTechnologiesInactive,
+                    },
+                );
+            };
+
+            result.push(
                 {
                     label: 'LOCA: Moon Buildings',
-                    points: Math.floor(total.moonBuildings),
+                    points: total.moonBuildings,
                 },
                 {
                     label: 'LOCA: Research',
-                    points: Math.floor(total.research),
+                    points: total.research,
                 },
                 {
                     label: 'LOCA: Defense',
-                    points: Math.floor(total.defense),
+                    points: total.defense,
                 },
                 {
                     label: 'LOCA: Ships',
-                    points: Math.floor(total.ships),
+                    points: total.ships,
                 },
-            ];
+            );
+
+            return result;
         }
 
         private get planetPointDistributions(): PlanetPointDistributionItem[] {
@@ -131,81 +191,85 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
                 productionBuildings: this.getProductionBuildingPoints(planet),
                 otherBuildings: this.getOtherPlanetBuildingPoints(planet),
 
-                lifeformBuildings: this.getOtherLifeformBuildingPoints(planet),
-                lifeformTechnologies: 0,
+                lifeformBuildingsActive: this.getOtherLifeformBuildingPoints(planet, true),
+                lifeformBuildingsInactive: this.getOtherLifeformBuildingPoints(planet, false),
+                lifeformTechnologiesActive: 0,
+                lifeformTechnologiesInactive: 0,
 
                 defense: 0,
                 ships: 0,
             }));
         }
 
-        
-        private getOtherLifeformBuildingPoints(planet: PlanetData): number {
-            const exclude = ResourceProductionBonusLifeformBuildings.map(b => b.type);
-            const lfBuildingTypes = LifeformBuildingTypes.filter(type => !exclude.includes(type));
 
-            return lfBuildingTypes.reduce((total, type) => {
-                let points = 0;
+        private getOtherLifeformBuildingPoints(planet: PlanetData, active: boolean): number {
+            const allLifeformBuildingTypes = active
+                ? LifeformBuildingTypesByLifeform[planet.activeLifeform]
+                : LifeformBuildingTypes.filter(b => !LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(b));
+            const exclude = ResourceProductionBonusLifeformBuildings.map(b => b.type);
+
+            const lfBuildingTypes = allLifeformBuildingTypes.filter(type => !exclude.includes(type));
+
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            lfBuildingTypes.forEach((type) => {
                 const building = LifeformBuildingsByType[type];
 
-                for(let level = 1; level <= planet.lifeformBuildings[type]; level++) {
-                    points += this.getPoints(building.getCost(level));
+                for (let level = 1; level <= planet.lifeformBuildings[type]; level++) {
+                    cost = addCost(cost, building.getCost(level));
                 }
-
-                return total + points;
             }, 0);
+
+            return this.getPoints(cost);
         }
 
         private getOtherPlanetBuildingPoints(planet: PlanetData): number {
             const mines = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
             const buildings = PlanetBuildingTypes.filter(p => !mines.includes(p));
 
-            return buildings.reduce((total, buildingType) => {
-                const building = BuildingsByType[buildingType];
-                let points = 0;
-                for (let level = 1; level <= planet.buildings[buildingType]; level++) {
-                    points += this.getPoints(building.getCost(level));
-                }
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-                return total + points;
-            }, 0);
+            buildings.forEach((buildingType) => {
+                const building = BuildingsByType[buildingType];
+                for (let level = 1; level <= planet.buildings[buildingType]; level++) {
+                    cost = addCost(cost, building.getCost(level));
+                }
+            });
+
+            return this.getPoints(cost);
         }
 
         private getProductionBuildingPoints(planet: PlanetData): number {
-            const mines: PlanetBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
-            const minePoints = mines.reduce((total, mine) => {
-                const building = BuildingsByType[mine];
-                let points = 0;
-                for (let level = 1; level <= planet.buildings[mine]; level++) {
-                    points += this.getPoints(building.getCost(level));
-                }
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-                return total + points;
-            }, 0);
+            const mines: PlanetBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
+            mines.forEach((mine) => {
+                const building = BuildingsByType[mine];
+                for (let level = 1; level <= planet.buildings[mine]; level++) {
+                    cost = addCost(cost, building.getCost(level));
+                }
+            });
 
             const lifeformProductionBuildings = ResourceProductionBonusLifeformBuildings;
-            const lfProductionBuildingsPoints = lifeformProductionBuildings.reduce((total, lfBuilding) => {
-                let points = 0;
-                for(let level = 1; level <= planet.lifeformBuildings[lfBuilding.type]; level++) {
-                    points += this.getPoints(lfBuilding.getCost(level));
+            lifeformProductionBuildings.forEach((lfBuilding) => {
+                for (let level = 1; level <= planet.lifeformBuildings[lfBuilding.type]; level++) {
+                    cost = addCost(cost, lfBuilding.getCost(level));
                 }
+            });
 
-                return total + points;
-            }, 0);
-
-            return minePoints + lfProductionBuildingsPoints;
+            return this.getPoints(cost);
         }
 
         private getMoonBuildingPoints(moon: MoonData): number {
-            return MoonBuildingTypes.reduce((total, buildingType) => {
-                const building = BuildingsByType[buildingType];
-                let points = 0;
-                for (let level = 1; level <= moon.buildings[buildingType]; level++) {
-                    points += this.getPoints(building.getCost(level));
-                }
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-                return total + points;
-            }, 0);
+            MoonBuildingTypes.forEach(buildingType => {
+                const building = BuildingsByType[buildingType];
+                for (let level = 1; level <= moon.buildings[buildingType]; level++) {
+                    cost = addCost(cost, building.getCost(level));
+                }
+            });
+
+            return this.getPoints(cost);
         }
 
         private get moonPointDistributions(): MoonPointDistributionItem[] {
@@ -220,7 +284,17 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
         }
 
         private get researchPoints(): number {
-            return 0;
+            const researchLevels = EmpireDataModule.empire.research;
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+
+            ResearchTypes.forEach((researchType) => {
+                const research = ResearchByTypes[researchType];
+                for (let level = 1; level <= researchLevels[researchType]; level++) {
+                    cost = addCost(cost, research.getCost(level));
+                }
+            });
+
+            return this.getPoints(cost);
         }
 
         private getPoints(cost: Cost): number {

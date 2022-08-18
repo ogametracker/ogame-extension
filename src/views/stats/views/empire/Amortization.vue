@@ -380,7 +380,8 @@
 
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { BuildingType, BuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
