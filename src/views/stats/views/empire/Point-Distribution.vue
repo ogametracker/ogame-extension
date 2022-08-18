@@ -134,7 +134,7 @@
 
             const result: PointDistributionRow[] = [
                 {
-                    label: 'LOCA: Production Buildings (Mines + LF Production Buildings)',
+                    label: 'LOCA: Production Buildings',
                     points: total.productionBuildings,
                 },
                 {
