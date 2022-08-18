@@ -13,7 +13,8 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { BuildingsByType, BuildingType, MoonBuildingTypes, PlanetBuildingType, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
     import { Cost } from '@/shared/models/ogame/common/Cost';
-    import { ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
@@ -128,9 +129,9 @@
                 planetId: planet.id,
 
                 productionBuildings: this.getProductionBuildingPoints(planet),
-                otherBuildings: this.getPlanetBuildingPoints(planet),
+                otherBuildings: this.getOtherPlanetBuildingPoints(planet),
 
-                lifeformBuildings: 0,
+                lifeformBuildings: this.getOtherLifeformBuildingPoints(planet),
                 lifeformTechnologies: 0,
 
                 defense: 0,
@@ -138,7 +139,24 @@
             }));
         }
 
-        private getPlanetBuildingPoints(planet: PlanetData): number {
+        
+        private getOtherLifeformBuildingPoints(planet: PlanetData): number {
+            const exclude = ResourceProductionBonusLifeformBuildings.map(b => b.type);
+            const lfBuildingTypes = LifeformBuildingTypes.filter(type => !exclude.includes(type));
+
+            return lfBuildingTypes.reduce((total, type) => {
+                let points = 0;
+                const building = LifeformBuildingsByType[type];
+
+                for(let level = 1; level <= planet.lifeformBuildings[type]; level++) {
+                    points += this.getPoints(building.getCost(level));
+                }
+
+                return total + points;
+            }, 0);
+        }
+
+        private getOtherPlanetBuildingPoints(planet: PlanetData): number {
             const mines = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
             const buildings = PlanetBuildingTypes.filter(p => !mines.includes(p));
 
@@ -168,10 +186,9 @@
             const lifeformProductionBuildings = ResourceProductionBonusLifeformBuildings;
             const lfProductionBuildingsPoints = lifeformProductionBuildings.reduce((total, lfBuilding) => {
                 let points = 0;
-                //TODO: points calculation for lifeform buildings
-                // for(let level = 1; level <= planet.lifeformBuildings[lfBuilding.type]; level++) {
-                //     points += this.getPoints(lfBuilding.getCost(level));
-                // }
+                for(let level = 1; level <= planet.lifeformBuildings[lfBuilding.type]; level++) {
+                    points += this.getPoints(lfBuilding.getCost(level));
+                }
 
                 return total + points;
             }, 0);
