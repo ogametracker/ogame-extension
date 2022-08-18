@@ -26,7 +26,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 

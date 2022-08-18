@@ -16,8 +16,10 @@ import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, Db
 import { _throw } from '@/shared/utils/_throw';
 import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
 import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
-import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-import { DefenseType, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
+import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
+import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 import { Lock } from 'semaphore-async-await';
 import { delay } from '@/shared/utils/delay';

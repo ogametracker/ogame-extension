@@ -8,11 +8,13 @@ import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, Upda
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
 import { BuildingTypes } from "../../shared/models/ogame/buildings/BuildingTypes";
-import { DefenseType, DefenseTypes } from "../../shared/models/ogame/defenses/DefenseType";
+import { DefenseType } from "../../shared/models/ogame/defenses/DefenseType";
+import { DefenseTypes } from "../../shared/models/ogame/defenses/DefenseTypes";
 import { Items } from "../../shared/models/ogame/items/Items";
 import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
 import { ResearchTypes } from "../../shared/models/ogame/research/ResearchTypes";
-import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { _logError } from "../../shared/utils/_log";

@@ -7,7 +7,8 @@ import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../../shared
 import { MoonBuildingTypes, PlanetBuildingTypes } from "../../shared/models/ogame/buildings/BuildingTypes";
 import { BasicPlanetData, PlanetDataWrapper, PlanetDefenseCounts } from "../../shared/messages/tracking/empire";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
 import { PlayerClass } from "../../shared/models/ogame/classes/PlayerClass";
 import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
 import { ResearchTypes } from "../../shared/models/ogame/research/ResearchTypes";

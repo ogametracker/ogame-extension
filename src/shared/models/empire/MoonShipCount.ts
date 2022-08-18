@@ -1,4 +1,3 @@
-import { ShipType } from '../ogame/ships/ShipType';
-import { PlanetShipCount } from './PlanetShipCount';
+import { MoonShipType } from '../ogame/ships/ShipType';
 
-export type MoonShipCount = Omit<PlanetShipCount, ShipType.crawler>;
+export type MoonShipCount = Record<MoonShipType, number>;

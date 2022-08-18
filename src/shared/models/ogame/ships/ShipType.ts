@@ -17,23 +17,8 @@ export enum ShipType {
     reaper = 218,
     pathfinder = 219,
 }
-export const ShipTypes = [
-    ShipType.smallCargo,
-    ShipType.largeCargo,
-    ShipType.lightFighter,
-    ShipType.heavyFighter,
-    ShipType.cruiser,
-    ShipType.battleship,
-    ShipType.colonyShip,
-    ShipType.recycler,
-    ShipType.espionageProbe,
-    ShipType.bomber,
-    ShipType.solarSatellite,
-    ShipType.destroyer,
-    ShipType.deathStar,
-    ShipType.battlecruiser,
-    ShipType.crawler,
-    ShipType.reaper,
-    ShipType.pathfinder,
-];
-export const NonStationaryShipTypes = ShipTypes.filter(ship => ![ShipType.crawler, ShipType.solarSatellite].includes(ship));
+export type StationaryShipType = ShipType.crawler | ShipType.solarSatellite;
+export type NonStationaryShipType = Exclude<ShipType, StationaryShipType>;
+
+export type PlanetShipType = ShipType;
+export type MoonShipType = Exclude<ShipType, ShipType.crawler>;

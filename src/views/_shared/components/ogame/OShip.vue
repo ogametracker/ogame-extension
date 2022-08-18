@@ -16,7 +16,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
 
     @Component({})
     export default class OShip extends Vue {

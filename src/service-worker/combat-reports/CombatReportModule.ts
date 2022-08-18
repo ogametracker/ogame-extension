@@ -1,18 +1,17 @@
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
-import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logDebug, _logError } from "../../shared/utils/_log";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
 import { CombatResultType } from "../../shared/models/combat-reports/CombatResultType";
-import { ShipType, ShipTypes } from "../../shared/models/ogame/ships/ShipType";
+import { ShipType } from "../../shared/models/ogame/ships/ShipType";
+import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { settingsService } from "../main";
-import { OgameCombatReport, OgameCombatRound } from "@/shared/models/ogame/combats/OgameCombatReport";
+import { OgameCombatReport } from "@/shared/models/ogame/combats/OgameCombatReport";
 import { getLanguage } from "@/shared/i18n/getLanguage";
 
 type CombatReportResult = {
