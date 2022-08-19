@@ -15,11 +15,12 @@ import { ResearchTypes } from "../../shared/models/ogame/research/ResearchTypes"
 import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { getPlayerDatabase } from "../../shared/db/access";
-import { DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
+import { DbDefenseAmounts, DbFleets, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { createRecord } from "@/shared/utils/createRecord";
+import { Fleets } from "@/shared/models/ogame/fleets/types";
 
 export class EmpireModule {
     public async updateOfficers(meta: MessageOgameMeta, data: PlayerOfficers): Promise<void> {
@@ -253,6 +254,16 @@ export class EmpireModule {
             .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
 
         await store.put(newLevels, key);
+        
+        await tx.done;
+    }
+
+    public async updateFleets(meta: MessageOgameMeta, data: Fleets) {
+        const db = await getPlayerDatabase(meta);
+        const tx = db.transaction('empire', 'readwrite');
+        const store = tx.objectStore('empire');
+
+        await store.put(data, 'fleets');
         
         await tx.done;
     }

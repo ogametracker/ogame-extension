@@ -1,7 +1,7 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { getLanguage } from "@/shared/i18n/getLanguage";
 import { MessageType } from "@/shared/messages/MessageType";
-import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateActiveOfficersMessage, UpdateOwnedPlanetsMessage, UpdatePlayerClassMessage } from "@/shared/messages/tracking/empire";
+import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateActiveOfficersMessage, UpdateFleetsMessage, UpdateOwnedPlanetsMessage, UpdatePlayerClassMessage } from "@/shared/messages/tracking/empire";
 import { UpdateSelectedLifeformMessage } from "@/shared/messages/tracking/empire";
 import { PlayerOfficers } from "@/shared/models/empire/PlayerOfficers";
 import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
@@ -204,7 +204,8 @@ function trackFleets() {
     observer.observe(document.documentElement, { subtree: true, childList: true });
 }
 
-const $trackedFleetIds: number[] = [];
+const $trackedFleets: Record<number, Fleet> = {};
+
 function updateFleetTracking() {
     const eventTable = document.querySelector('#eventContent');
     if (eventTable == null) {
@@ -221,9 +222,10 @@ function updateFleetTracking() {
     const resourceNames = i18nResources[language];
 
     const fleetRows = eventTable.querySelectorAll('.eventFleet');
+    let trackedNewFleet = false;
     fleetRows.forEach(row => {
         const id = parseIntSafe(row.id.replace('eventRow-', ''));
-        if ($trackedFleetIds.includes(id)) {
+        if ($trackedFleets[id] != null) {
             return;
         }
 
@@ -281,10 +283,20 @@ function updateFleetTracking() {
             cargo,
             ships,
         };
+        $trackedFleets[id] = fleet;
 
-        console.log(fleet);
-        $trackedFleetIds.push(id);
+        trackedNewFleet = true;
     });
+
+    if(trackedNewFleet) {
+        const msg: UpdateFleetsMessage = {
+            ogameMeta: getOgameMeta(),
+            type: MessageType.UpdateFleets,
+            data: Object.values($trackedFleets),
+            senderUuid: empireTrackingUuid,
+        };
+        sendMessage(msg);
+    }
 }
 
 function getCoordinateType(elem: Element): PlanetType {
