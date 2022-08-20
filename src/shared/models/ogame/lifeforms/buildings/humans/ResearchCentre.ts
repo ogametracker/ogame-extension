@@ -7,20 +7,20 @@ class ResearchCentreClass extends LifeformBuilding implements LifeformTechnology
     public constructor() {
         super({
             metal: {
-                baseCost: 80_000,
-                increaseFactor: 1.5,
+                baseCost: 20_000,
+                increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 35_000,
-                increaseFactor: 1.5,
+                baseCost: 25_000,
+                increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 60_000,
-                increaseFactor: 1.5,
+                baseCost: 10_000,
+                increaseFactor: 1.3,
             },
             energy: {
-                baseCost: 90,
-                increaseFactor: 1.1
+                baseCost: 10,
+                increaseFactor: 1.08,
             },
         });
     }

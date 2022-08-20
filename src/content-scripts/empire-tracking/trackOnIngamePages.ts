@@ -248,7 +248,7 @@ function updateFleetTracking() {
 
         const ships = createRecord(NonStationaryShipTypes, shipType => {
             const name = shipNames[shipType];
-            const regex = new RegExp(`${name}:\\s*(?<count>[^\s]+)`);
+            const regex = new RegExp(`${name}:\\s*(?<count>[^\\s]+)`);
             const match = tooltipText.match(regex);
 
             if(match?.groups == null) {
@@ -260,7 +260,7 @@ function updateFleetTracking() {
         });
         const cargo = createRecord(ResourceTypes, resourceType => {
             const name = resourceNames[resourceType];
-            const regex = new RegExp(`${name}:\\s*(?<amount>[^\s]+)`);
+            const regex = new RegExp(`${name}:\\s*(?<amount>[^\\s]+)`);
             const match = tooltipText.match(regex);
 
             if(match?.groups == null) {

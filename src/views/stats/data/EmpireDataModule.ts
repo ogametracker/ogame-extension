@@ -12,7 +12,7 @@ import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
 import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
 import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
 import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
@@ -162,6 +162,7 @@ class EmpireDataModuleClass extends Vue {
             }
         }
 
+        const fleets = (await store.get('fleets') as DbFleets | undefined) ?? [];
         this.empire = {
             allianceClass,
             playerClass,
@@ -170,6 +171,7 @@ class EmpireDataModuleClass extends Vue {
             planetOrder,
             planets,
             lifeformExperience,
+            fleets,
         };
 
         this._resolveReady();

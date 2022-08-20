@@ -5,6 +5,7 @@ import { PlanetData } from './PlanetData';
 import { ResearchLevels } from './ResearchLevels';
 import { PlayerOfficers } from './PlayerOfficers';
 import { LifeformType } from '../ogame/lifeforms/LifeformType';
+import { Fleets } from '../ogame/fleets/types';
 
 export interface LocalPlayerData {
     planets: Record<number, PlanetData | MoonData>;
@@ -15,4 +16,6 @@ export interface LocalPlayerData {
     officers: PlayerOfficers;
 
     lifeformExperience: Record<Exclude<LifeformType, LifeformType.none>, number>;
+
+    fleets: Fleets;
 }
