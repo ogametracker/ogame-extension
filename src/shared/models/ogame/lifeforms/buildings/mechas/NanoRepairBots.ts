@@ -5,15 +5,15 @@ class NanoRepairBotsClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 250000,
+                baseCost: 250_000,
                 increaseFactor: 1.4,
             },
             crystal: {
-                baseCost: 125000,
+                baseCost: 125_000,
                 increaseFactor: 1.4,
             },
             deuterium: {
-                baseCost: 125000,
+                baseCost: 125_000,
                 increaseFactor: 1.4,
             },
             energy: {

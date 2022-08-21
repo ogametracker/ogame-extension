@@ -5,15 +5,15 @@ class PsionicModulatorClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 150000,
+                baseCost: 150_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.5,
             },
             energy: {

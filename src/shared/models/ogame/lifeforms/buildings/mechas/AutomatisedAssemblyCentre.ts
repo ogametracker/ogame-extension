@@ -5,15 +5,15 @@ class AutomatisedAssemblyCentreClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 7500,
+                baseCost: 7_500,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 7000,
+                baseCost: 7_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 1000,
+                baseCost: 1_000,
                 increaseFactor: 1.3,
             },
             energy: {

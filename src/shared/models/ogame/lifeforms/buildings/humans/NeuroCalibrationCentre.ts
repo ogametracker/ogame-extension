@@ -5,15 +5,15 @@ class NeuroCalibrationCentreClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.7,
             },
             crystal: {
-                baseCost: 40000,
+                baseCost: 40_000,
                 increaseFactor: 1.7,
             },
             deuterium: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.7,
             },
             energy: {

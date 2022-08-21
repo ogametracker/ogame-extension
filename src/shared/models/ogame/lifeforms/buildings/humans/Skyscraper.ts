@@ -5,15 +5,15 @@ class SkyscraperClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 75000,
+                baseCost: 75_000,
                 increaseFactor: 1.09,
             },
             crystal: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.09,
             },
             deuterium: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.09,
             },
             energy: {

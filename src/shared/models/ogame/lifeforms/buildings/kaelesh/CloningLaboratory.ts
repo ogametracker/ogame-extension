@@ -5,15 +5,15 @@ class CloningLaboratoryClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 15000,
+                baseCost: 15_000,
                 increaseFactor: 1.2,
             },
             crystal: {
-                baseCost: 15000,
+                baseCost: 15_000,
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.2,
             },
             energy: {

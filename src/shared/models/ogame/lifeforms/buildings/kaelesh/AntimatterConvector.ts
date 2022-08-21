@@ -5,15 +5,15 @@ class AntimatterConvectorClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 8500,
+                baseCost: 8_500,
                 increaseFactor: 1.25,
             },
             crystal: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.25,
             },
             deuterium: {
-                baseCost: 3000,
+                baseCost: 3_000,
                 increaseFactor: 1.25,
             },
             energy: {

@@ -20,7 +20,7 @@ class MagmaForgeClass extends LifeformBuilding implements ResourceProductionBonu
             },
             energy: {
                 baseCost: 40,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }

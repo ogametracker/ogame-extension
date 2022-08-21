@@ -5,15 +5,15 @@ class FoodSiloClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.09,
             },
             crystal: {
-                baseCost: 13000,
+                baseCost: 13_000,
                 increaseFactor: 1.09,
             },
             deuterium: {
-                baseCost: 7000,
+                baseCost: 7_000,
                 increaseFactor: 1.09,
             },
             energy: {

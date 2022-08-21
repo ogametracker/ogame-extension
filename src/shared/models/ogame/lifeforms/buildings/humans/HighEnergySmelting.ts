@@ -7,11 +7,11 @@ class HighEnergySmeltingClass extends LifeformBuilding implements ResourceProduc
     public constructor() {
         super({
             metal: {
-                baseCost: 6_000,
+                baseCost: 9_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 3_000,
+                baseCost: 6_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
@@ -20,7 +20,7 @@ class HighEnergySmeltingClass extends LifeformBuilding implements ResourceProduc
             },
             energy: {
                 baseCost: 40,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }

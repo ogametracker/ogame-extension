@@ -5,15 +5,15 @@ class ShipManufacturingHallClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 75000,
+                baseCost: 75_000,
                 increaseFactor: 1.2,
             },
             crystal: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 55000,
+                baseCost: 55_000,
                 increaseFactor: 1.2,
             },
             energy: {

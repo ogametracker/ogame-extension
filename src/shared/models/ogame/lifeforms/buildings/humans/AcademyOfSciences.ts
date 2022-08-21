@@ -5,15 +5,15 @@ class AcademyOfSciencesClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.7,
             },
             crystal: {
-                baseCost: 3200,
+                baseCost: 3_200,
                 increaseFactor: 1.7,
             },
             deuterium: {
-                baseCost: 1500,
+                baseCost: 1_500,
                 increaseFactor: 1.7,
             },
             energy: {

@@ -5,15 +5,15 @@ class ChrysalisAcceleratorClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 75000,
+                baseCost: 75_000,
                 increaseFactor: 1.05,
             },
             crystal: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.05,
             },
             deuterium: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.05,
             },
             energy: {

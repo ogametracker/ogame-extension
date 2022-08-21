@@ -5,15 +5,15 @@ class UpdateNetworkClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.8,
             },
             crystal: {
-                baseCost: 3800,
+                baseCost: 3_800,
                 increaseFactor: 1.8,
             },
             deuterium: {
-                baseCost: 1000,
+                baseCost: 1_000,
                 increaseFactor: 1.8,
             },
             energy: {

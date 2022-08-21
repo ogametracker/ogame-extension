@@ -5,11 +5,11 @@ class HallsOfRealisationClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 7500,
+                baseCost: 7_500,
                 increaseFactor: 1.8,
             },
             crystal: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.8,
             },
             deuterium: {

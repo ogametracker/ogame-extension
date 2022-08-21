@@ -5,15 +5,15 @@ class ProductionAssemblyHallClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 100000,
+                baseCost: 100_000,
                 increaseFactor: 1.14,
             },
             crystal: {
-                baseCost: 10000,
+                baseCost: 10_000,
                 increaseFactor: 1.14,
             },
             deuterium: {
-                baseCost: 3000,
+                baseCost: 3_000,
                 increaseFactor: 1.14,
             },
             energy: {

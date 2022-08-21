@@ -5,15 +5,15 @@ class ForumOfTranscendenceClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 60000,
+                baseCost: 60_000,
                 increaseFactor: 1.8,
             },
             crystal: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.8,
             },
             deuterium: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.8,
             },
             energy: {

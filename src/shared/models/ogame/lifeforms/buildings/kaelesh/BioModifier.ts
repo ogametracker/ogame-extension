@@ -5,15 +5,15 @@ class BioModifierClass extends LifeformBuilding {
     public constructor() {
         super({
             metal: {
-                baseCost: 87500,
+                baseCost: 87_500,
                 increaseFactor: 1.2,
             },
             crystal: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.2,
             },
             energy: {

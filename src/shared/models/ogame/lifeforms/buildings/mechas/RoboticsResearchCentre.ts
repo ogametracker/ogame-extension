@@ -7,7 +7,7 @@ class RoboticsResearchCentreClass extends LifeformBuilding implements LifeformTe
     public constructor() {
         super({
             metal: {
-                baseCost: 20_000,
+                baseCost: 30_000,
                 increaseFactor: 1.3,
             },
             crystal: {
@@ -15,11 +15,11 @@ class RoboticsResearchCentreClass extends LifeformBuilding implements LifeformTe
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 30_000,
+                baseCost: 10_000,
                 increaseFactor: 1.3,
             },
             energy: {
-                baseCost: 10,
+                baseCost: 13,
                 increaseFactor: 1.08,
             },
         });
