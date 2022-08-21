@@ -8,7 +8,7 @@
                 <decimal-number :value="value" />
             </template>
         </grid-table>
-        <grid-table :columns="columns" :items="highscoreItems" inline>
+        <grid-table :columns="columns" :items="highscoreItems" :footerItems="highscoreFooterItems" inline>
             <template #cell-points="{ value }">
                 <decimal-number :value="value" />
             </template>
@@ -27,26 +27,27 @@
     import { MoonBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { BuildingsByType, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { SensorPhalanx } from '@/shared/models/ogame/buildings/SensorPhalanx';
-    import { compareCoordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { compareCoordinates, coordinatesEqual } from '@/shared/models/ogame/common/Coordinates';
     import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
     import { DefenseByTypes, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
-    import { Fleets } from '@/shared/models/ogame/fleets/types';
+    import { Fleet, Fleets } from '@/shared/models/ogame/fleets/types';
     import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologiesByType } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { ResearchByTypes, ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { CivilShipTypes, MilitaryShipTypes, MoonShipTypes, NonStationaryShipTypes, PlanetShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
+    import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 
     interface PlanetPointDistributionItem {
         planetId: number;
 
-        productionBuildings: number;
-        otherBuildings: number;
-
+        buildings: number;
         lifeformBuildingsActive: number;
         lifeformBuildingsInactive: number;
         lifeformTechnologiesActive: number;
@@ -84,7 +85,6 @@
             const total = {
                 research: researchPoints,
 
-                productionBuildings: 0,
                 planetBuildings: 0,
                 moonBuildings: 0,
 
@@ -95,14 +95,13 @@
 
                 defense: 0,
                 ships: 0,
-                shipsInTransit: this.getFleetsShipPoints(EmpireDataModule.empire.fleets),
+                shipsInTransit: this.fleetsShipPoints,
 
                 total: researchPoints,
             };
 
             this.planetPointDistributions.forEach(planet => {
-                total.productionBuildings += planet.productionBuildings;
-                total.planetBuildings += planet.otherBuildings;
+                total.planetBuildings += planet.buildings;
 
                 total.lifeformBuildingsActive += planet.lifeformBuildingsActive;
                 total.lifeformBuildingsInactive += planet.lifeformBuildingsInactive;
@@ -135,17 +134,17 @@
             return total;
         }
 
-        private get footerItems(): PointDistributionRow[] {
-            return [{
-                label: 'LOCA: Total',
-                points: this.pointDistribution.total,
-            }];
+        private get highscorePoints() {
+            return {
+                economy: this.getEconomyPoints(),
+                research: this.researchPoints,
+                military: this.getMilitaryPoints(),
+                lifeforms: this.getLifeformPoints(),
+            };
         }
 
         private get highscoreItems(): PointDistributionRow[] {
-            const economy = this.getEconomyPoints();
-            const research = this.researchPoints;
-            const military = this.getMilitaryPoints();
+            const { economy, research, military, lifeforms } = this.highscorePoints;
 
             const result: PointDistributionRow[] = [
                 {
@@ -163,27 +162,28 @@
             ];
 
             if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
-                const lifeforms = this.getLifeformPoints();
-
-                result.push(
-                    {
-                        label: 'LOCA: Lifeforms',
-                        points: lifeforms,
-                    },
-                );
+                result.push({
+                    label: 'LOCA: Lifeforms',
+                    points: lifeforms,
+                });
             };
 
             return result;
+        }
+
+        private get highscoreFooterItems(): PointDistributionRow[] {
+            const total = Object.values(this.highscorePoints).reduce((total, points) => total + points, 0);
+
+            return [{
+                label: 'LOCA: Total Points',
+                points: total,
+            }];
         }
 
         private get items(): PointDistributionRow[] {
             const total = this.pointDistribution;
 
             const result: PointDistributionRow[] = [
-                {
-                    label: 'LOCA: Production Buildings',
-                    points: total.productionBuildings,
-                },
                 {
                     label: 'LOCA: Planet Buildings',
                     points: total.planetBuildings,
@@ -237,6 +237,13 @@
             return result;
         }
 
+        private get footerItems(): PointDistributionRow[] {
+            return [{
+                label: 'LOCA: Actual Total Points',
+                points: this.pointDistribution.total,
+            }];
+        }
+
         private get planets() {
             return this.planetAndMoons.filter(p => !p.isMoon) as PlanetData[];
         }
@@ -257,9 +264,20 @@
                 return total + points;
             }, 0);
 
-            //TODO: technology points
+            const technologyPoints = this.planets.reduce((total, planet) => {
+                const points = LifeformTechnologyTypes.reduce((total, technologyType) => {
+                    const lfTech = LifeformTechnologiesByType[technologyType];
+                    const cost = this.getAccumulativeCost(planet.lifeformTechnologies[technologyType], lfTech);
 
-            return buildingPoints;
+                    return total + this.getPoints(cost);
+                }, 0);
+
+                return total + points;
+            }, 0);
+
+            const lifeformDiscoveries = Object.values(LifeformDiscoveryDataModule.lifeforms).reduce((total, info) => total + info.discoveriesCount, 0);
+
+            return buildingPoints + technologyPoints + lifeformDiscoveries;
         }
 
         private getEconomyPoints(): number {
@@ -342,6 +360,7 @@
                     return total + points;
                 }, 0);
 
+            const militaryShipTypes = NonStationaryShipTypes.filter(shipType => (MilitaryShipTypes as ShipType[]).includes(shipType));
             const militaryShips = this.planetAndMoons.reduce((total, planet) => {
                 let points: number;
 
@@ -367,8 +386,19 @@
                 }
 
                 return total + points;
+            }, 0) + this.ownReturningFleets.reduce((total, fleet) => {
+                const points = militaryShipTypes.reduce((total, shipType) => {
+                    const count = fleet.ships[shipType];
+                    const ship = ShipByTypes[shipType];
+
+                    const cost = multiplyCost(ship.getCost(), count);
+                    return total + this.getPoints(cost);
+                }, 0);
+
+                return total + points;
             }, 0);
 
+            const civilShipTypes = NonStationaryShipTypes.filter(shipType => (CivilShipTypes as ShipType[]).includes(shipType));
             const civilShips = this.planetAndMoons.reduce((total, planet) => {
                 let points: number;
 
@@ -394,6 +424,16 @@
                 }
 
                 return total + points;
+            }, 0) + this.ownReturningFleets.reduce((total, fleet) => {
+                const points = civilShipTypes.reduce((total, shipType) => {
+                    const count = fleet.ships[shipType];
+                    const ship = ShipByTypes[shipType];
+
+                    const cost = multiplyCost(ship.getCost(), count);
+                    return total + this.getPoints(cost);
+                }, 0);
+
+                return total + points;
             }, 0);
 
             return defense + phalanxesAndJumpGates / 2 + militaryShips + civilShips / 2;
@@ -403,17 +443,28 @@
             return this.planets.map<PlanetPointDistributionItem>(planet => ({
                 planetId: planet.id,
 
-                productionBuildings: this.getProductionBuildingPoints(planet),
-                otherBuildings: this.getOtherPlanetBuildingPoints(planet),
+                buildings: this.getPlanetBuildingPoints(planet),
 
                 lifeformBuildingsActive: this.getOtherLifeformBuildingPoints(planet, true),
                 lifeformBuildingsInactive: this.getOtherLifeformBuildingPoints(planet, false),
-                lifeformTechnologiesActive: 0,
-                lifeformTechnologiesInactive: 0,
+                lifeformTechnologiesActive: this.getLifeformTechnologyPoints(planet, true),
+                lifeformTechnologiesInactive: this.getLifeformTechnologyPoints(planet, false),
 
                 defense: this.getDefensePoints(planet),
                 ships: this.getPlanetShipPoints(planet),
             }));
+        }
+
+        private getLifeformTechnologyPoints(planet: PlanetData, active: boolean): number {
+            const lifeformTechnologyTypes = LifeformTechnologyTypes.filter(type => planet.activeLifeformTechnologies.includes(type) == active);
+
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            lifeformTechnologyTypes.forEach((type) => {
+                const technology = LifeformTechnologiesByType[type];
+                cost = addCost(cost, this.getAccumulativeCost(planet.lifeformTechnologies[type], technology));
+            }, 0);
+
+            return this.getPoints(cost);
         }
 
         private get moonPointDistributions(): MoonPointDistributionItem[] {
@@ -461,13 +512,16 @@
             return this.getPoints(cost);
         }
 
-        private getFleetsShipPoints(fleets: Fleets): number {
+        private get ownReturningFleets(): Fleet[] {
+            const fleets = EmpireDataModule.empire.fleets;
+            const planets = this.planetAndMoons;
+            return fleets.filter(fleet => fleet.isReturnFlight && planets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates)));
+        }
+
+        private get fleetsShipPoints(): number {
             let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-            const planets = this.planetAndMoons;
-            const ownReturningFleets = fleets.filter(fleet => fleet.isReturnFlight && planets.some(p => compareCoordinates(p.coordinates, fleet.originCoordinates) == 0));
-
-            ownReturningFleets.forEach(fleet => {
+            this.ownReturningFleets.forEach(fleet => {
                 NonStationaryShipTypes.forEach(shipType => {
                     const count = fleet.ships[shipType];
                     const ship = ShipByTypes[shipType];
@@ -528,20 +582,6 @@
             return this.getPoints(cost);
         }
 
-        private getOtherPlanetBuildingPoints(planet: PlanetData): number {
-            const mines = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
-            const buildings = PlanetBuildingTypes.filter(p => !mines.includes(p));
-
-            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-
-            buildings.forEach((buildingType) => {
-                const building = BuildingsByType[buildingType];
-                cost = addCost(cost, this.getAccumulativeCost(planet.buildings[buildingType], building));
-            });
-
-            return this.getPoints(cost);
-        }
-
         private getAccumulativeCost(level: number, buildable: { getCost(level: number): Cost }): Cost {
             let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
@@ -552,18 +592,12 @@
             return cost;
         }
 
-        private getProductionBuildingPoints(planet: PlanetData): number {
+        private getPlanetBuildingPoints(planet: PlanetData): number {
             let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-            const mines: PlanetBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
-            mines.forEach((mine) => {
+            PlanetBuildingTypes.forEach((mine) => {
                 const building = BuildingsByType[mine];
                 cost = addCost(cost, this.getAccumulativeCost(planet.buildings[mine], building));
-            });
-
-            const lifeformProductionBuildings = ResourceProductionBonusLifeformBuildings;
-            lifeformProductionBuildings.forEach((lfBuilding) => {
-                cost = addCost(cost, this.getAccumulativeCost(planet.lifeformBuildings[lfBuilding.type], lfBuilding));
             });
 
             return this.getPoints(cost);

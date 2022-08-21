@@ -22,3 +22,7 @@ export function compareCoordinates(a: Coordinates, b: Coordinates): number {
     }
     return 0;
 }
+
+export function coordinatesEqual(a: Coordinates, b: Coordinates): boolean {
+    return compareCoordinates(a, b) == 0;
+}
