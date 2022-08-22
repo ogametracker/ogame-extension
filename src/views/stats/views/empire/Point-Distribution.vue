@@ -172,7 +172,7 @@
         }
 
         private get highscoreFooterItems(): PointDistributionRow[] {
-            const total = Object.values(this.highscorePoints).reduce((total, points) => total + points, 0);
+            const total = Object.values(this.highscorePoints).reduce((total, points) => total + points, 0); //TODO: dont include defenses twice
 
             return [{
                 label: 'LOCA: Total Points',
@@ -292,6 +292,7 @@
                     return total + points;
                 }, 0);
 
+            const civilShipTypes = NonStationaryShipTypes.filter(shipType => (CivilShipTypes as ShipType[]).includes(shipType));
             const civilShips = this.planetAndMoons.reduce((total, planet) => {
                 let points: number;
 
@@ -315,6 +316,16 @@
                             return total + this.getPoints(cost);
                         }, 0);
                 }
+
+                return total + points;
+            }, 0) + this.ownReturningFleets.reduce((total, fleet) => {
+                const points = civilShipTypes.reduce((total, shipType) => {
+                    const count = fleet.ships[shipType];
+                    const ship = ShipByTypes[shipType];
+
+                    const cost = multiplyCost(ship.getCost(), count);
+                    return total + this.getPoints(cost);
+                }, 0);
 
                 return total + points;
             }, 0);
