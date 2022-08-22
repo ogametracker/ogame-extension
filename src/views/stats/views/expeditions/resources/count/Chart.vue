@@ -1,11 +1,11 @@
 <template>
     <div class="chart-container">
-        <stats-chart :firstDay="firstDay" :itemsPerDay="exposPerDay" :datasets="datasets" stacked show-average>
+        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="exposPerDay">
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.expeditions.finds" />
+                    <div v-text="$i18n.$t.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
@@ -24,26 +24,28 @@
                 </button>
             </template>
 
-            <expedition-event-size-color-settings />
+            <conversion-rate-settings />
+            <hr />
+            <resource-color-settings />
         </floating-menu>
     </div>
 </template>
 
 <script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventFleet } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
+    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
 
     @Component({
         components: {
             StatsChart,
-            ExpeditionEventSizeColorSettings,
+            ResourceColorSettings,
+            ConversionRateSettings,
         },
     })
     export default class Charts extends Vue {
@@ -51,7 +53,7 @@
         private showSettings = false;
 
         private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.sizes;
+            return SettingsDataModule.settings.colors.resources;
         }
 
         private get firstDay() {
@@ -62,13 +64,19 @@
             return ExpeditionDataModule.dailyResults;
         }
 
+        private get conversionModeText() {
+            return SettingsDataModule.settings.conversionRates.mode == 'msu'
+                ? this.$i18n.$t.common.msu
+                : this.$i18n.$t.common.dsu;
+        }
+
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return ExpeditionEventSizes.map(size => ({
-                key: size,
-                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
-                color: this.colors[size],
+            return ResourceTypes.map(resource => ({
+                key: resource,
+                label: this.$i18n.$t.resources[resource],
+                color: this.colors[resource],
                 filled: true,
-                getValue: result => result.eventSizes.fleet[size],
+                getValue: (result: DailyExpeditionResult) => result.findings.resourceCount[resource],
                 showAverage: true,
             }));
         }
@@ -78,7 +86,10 @@
         }
 
         private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
+            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
+            return datasets
+                .filter(d => resources.includes(d.key.toString()))
+                .reduce((acc, cur) => acc + cur.value, 0);
         }
     }
 </script>
