@@ -68,6 +68,9 @@ import viewsexpeditionsresourcesIndex from '@stats/views/expeditions/resources/I
 import viewsexpeditionsresourcesamountIndex from '@stats/views/expeditions/resources/amount/Index.vue';
 import viewsexpeditionsresourcesamountChart from '@stats/views/expeditions/resources/amount/Chart.vue';
 import viewsexpeditionsresourcesamountTable from '@stats/views/expeditions/resources/amount/Table.vue';
+import viewsexpeditionsresourcescountIndex from '@stats/views/expeditions/resources/count/Index.vue';
+import viewsexpeditionsresourcescountChart from '@stats/views/expeditions/resources/count/Chart.vue';
+import viewsexpeditionsresourcescountTable from '@stats/views/expeditions/resources/count/Table.vue';
 import viewsexpeditionsresourcessizesIndex from '@stats/views/expeditions/resources/sizes/Index.vue';
 import viewsexpeditionsresourcessizesChart from '@stats/views/expeditions/resources/sizes/Chart.vue';
 import viewsexpeditionsresourcessizesTable from '@stats/views/expeditions/resources/sizes/Table.vue';
@@ -623,6 +626,26 @@ const routes: RouteConfig[] = [
                                         path: "table",
                                         name: "expeditions/resources/amount/table",
                                         component: viewsexpeditionsresourcesamountTable
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "expeditions/resources/count/chart"
+                                },
+                                path: "count",
+                                name: "expeditions/resources/count",
+                                component: viewsexpeditionsresourcescountIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "expeditions/resources/count/chart",
+                                        component: viewsexpeditionsresourcescountChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "expeditions/resources/count/table",
+                                        component: viewsexpeditionsresourcescountTable
                                     }
                                 ]
                             },
