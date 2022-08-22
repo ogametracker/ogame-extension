@@ -23,14 +23,15 @@
     import { MoonData } from '@/shared/models/empire/MoonData';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { PlanetDataBase } from '@/shared/models/empire/PlanetDataBase';
-    import { BuildingType, PlanetBuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { MoonBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { BuildingsByType, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { SensorPhalanx } from '@/shared/models/ogame/buildings/SensorPhalanx';
-    import { compareCoordinates, coordinatesEqual } from '@/shared/models/ogame/common/Coordinates';
+    import { coordinatesEqual } from '@/shared/models/ogame/common/Coordinates';
     import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
     import { DefenseByTypes, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
-    import { Fleet, Fleets } from '@/shared/models/ogame/fleets/types';
+import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType';
+    import { Fleet } from '@/shared/models/ogame/fleets/types';
     import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
@@ -38,7 +39,7 @@
     import { ResearchByTypes, ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { CivilShipTypes, MilitaryShipTypes, MoonShipTypes, NonStationaryShipTypes, PlanetShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
     import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataModule';
@@ -526,7 +527,12 @@
         private get ownReturningFleets(): Fleet[] {
             const fleets = EmpireDataModule.empire.fleets;
             const planets = this.planetAndMoons;
-            return fleets.filter(fleet => fleet.isReturnFlight && planets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates)));
+            return fleets.filter(fleet =>
+                (
+                    fleet.isReturnFlight
+                    || fleet.mission == FleetMissionType.deployment
+                ) && planets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates))
+            );
         }
 
         private get fleetsShipPoints(): number {
