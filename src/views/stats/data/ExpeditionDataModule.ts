@@ -22,6 +22,7 @@ export interface DailyExpeditionResult {
     events: Record<ExpeditionEventType, number>;
     findings: {
         resources: Record<ResourceType, number>;
+        resourceCount: Record<ResourceType, number>;
         fleet: Record<ExpeditionFindableShipType, number>;
         fleetResourceUnits: Record<ResourceType, number>;
         darkMatter: number;
@@ -29,6 +30,7 @@ export interface DailyExpeditionResult {
     };
     eventSizes: {
         resources: Record<ExpeditionEventSize, number>;
+        resourceCount: Record<ResourceType, Record<ExpeditionEventSize, number>>;
         fleet: Record<ExpeditionEventSize, number>;
         darkMatter: Record<ExpeditionEventSize, number>;
     };
@@ -94,10 +96,17 @@ class ExpeditionDataModuleClass extends Vue {
 
         switch (expedition.type) {
             case ExpeditionEventType.resources: {
+                const resource = ResourceTypes.find(res => expedition.resources[res] > 0);
+
                 dailyResult.eventSizes.resources[expedition.size]++;
 
                 for (const resource of ResourceTypes) {
                     dailyResult.findings.resources[resource] += expedition.resources[resource];
+                }
+
+                if(resource != null) {
+                    dailyResult.eventSizes.resourceCount[resource][expedition.size]++;
+                    dailyResult.findings.resourceCount[resource]++;
                 }
                 break;
             }
@@ -138,6 +147,7 @@ class ExpeditionDataModuleClass extends Vue {
             events: createRecord(ExpeditionEventTypes, 0),
             eventSizes: {
                 resources: createRecord(ExpeditionEventSizes, 0),
+                resourceCount: createRecord(ResourceTypes, () => createRecord(ExpeditionEventSizes, 0)),
                 fleet: createRecord(ExpeditionEventSizes, 0),
                 darkMatter: createRecord(ExpeditionEventSizes, 0),
             },
@@ -147,6 +157,7 @@ class ExpeditionDataModuleClass extends Vue {
                 fleet: createRecord(ExpeditionFindableShipTypes, 0),
                 fleetResourceUnits: createRecord(ResourceTypes, 0),
                 resources: createRecord(ResourceTypes, 0),
+                resourceCount: createRecord(ResourceTypes, 0),
             },
             depletion: {
                 ...createRecord(ExpeditionDepletionLevels, 0),
