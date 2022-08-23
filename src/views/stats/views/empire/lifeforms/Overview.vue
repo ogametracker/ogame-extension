@@ -7,8 +7,8 @@
         </template>
 
         <template #cell-lifeform="{ value }">
+            <span v-text="$i18n.$t.lifeforms[value]" class="mr-2" />
             <o-lifeform :lifeform="value" size="48px" />
-            <span v-text="$i18n.$t.lifeforms[value]" class="ml-1" />
         </template>
 
         <template #cell-buildings="{ value, item }">

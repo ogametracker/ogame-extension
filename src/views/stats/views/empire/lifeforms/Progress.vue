@@ -1,8 +1,8 @@
 <template>
     <grid-table :columns="columns" :items="items" sticky>
         <template #cell-lifeform="{ value }">
+            <span class="mr-2" v-text="$i18n.$t.lifeforms[value]" />
             <o-lifeform :lifeform="value" />
-            <span class="ml-1" v-text="$i18n.$t.lifeforms[value]" />
         </template>
         <template #cell-discoverDate="{ value, item }">
             <i v-if="item.lifeform == 'humans'" v-text="$i18n.$t.empire.lifeforms.alwaysAvailable" />
