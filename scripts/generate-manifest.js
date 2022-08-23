@@ -44,7 +44,7 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
 
 const now = new Date();
 const manifest = {
-    name: 'OGame Tracker Beta' + (isDev ? ' DEV' : ''),
+    name: 'OGame Tracker' + (isDev ? ' DEV' : ''),
     description: '__MSG_appDesc__',
     manifest_version: 3,
     default_locale: 'de',
