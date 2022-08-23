@@ -137,7 +137,7 @@ export const si: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: si 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*TODO: si 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*'Imeli smo nekaj težav pri pravilni izgovorjavi narečja vesoljcev. naš */'diplomat je po nesreči zaklical'/* `Ogenj!` namesto `Mir!`.'*/,
             /*TODO: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
