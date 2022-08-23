@@ -1,12 +1,16 @@
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "@/shared/models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "@/shared/models/expeditions/ExpeditionEvents";
+import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { BuildingType, MoonBuildingType, PlanetBuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { AllianceClass } from "@/shared/models/ogame/classes/AllianceClass";
 import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
 import { DefenseType } from "@/shared/models/ogame/defenses/DefenseType";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
+import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { UniverseSpecificSettings } from "@/shared/models/universe-specific-settings/UniverseSpecificSettings";
@@ -59,12 +63,20 @@ export type DbPlayerResearchLevels = Record<ResearchType, number>;
 
 export type DbPlayerPlanetIds = number[];
 
+
+export type DbPlayerLifeformExperience = Record<Exclude<LifeformType, LifeformType.none>, number>;
+export type DbPlanetSelectedLifeform = LifeformType;
+export type DbPlanetLifeformBuildingLevels = Record<LifeformBuildingType, number>;
+export type DbPlanetLifeformTechnologyLevels = Record<LifeformTechnologyType, number>;
+export type DbPlanetActiveLifeformTechnologies = LifeformTechnologyType[];
+
 type DbEmpire = (
     | { key: 'allianceClass'; value: AllianceClass }
     | { key: 'officers'; value: DbPlayerOfficers }
     | { key: 'playerClass'; value: PlayerClass }
     | { key: 'research'; value: DbPlayerResearchLevels }
     | { key: 'planetOrder'; value: DbPlayerPlanetIds }
+    | { key: 'lifeformExperience'; value: DbPlayerLifeformExperience }
 
     | { key: `planet.${number}`; value: DbBasicPlanetData }
     | { key: `planet.${number}.buildings`; value: DbPlanetBuildingLevels }
@@ -72,6 +84,10 @@ type DbEmpire = (
     | { key: `planet.${number}.defenses`; value: DbDefenseAmounts }
     | { key: `planet.${number}.activeItems`; value: DbActiveItems }
     | { key: `planet.${number}.productionSettings`; value: DbPlanetProductionSettings }
+    | { key: `planet.${number}.lifeform`; value: DbPlanetSelectedLifeform }
+    | { key: `planet.${number}.lifeformBuildings`; value: DbPlanetLifeformBuildingLevels }
+    | { key: `planet.${number}.lifeformTechnologies`; value: DbPlanetLifeformTechnologyLevels }
+    | { key: `planet.${number}.activeLifeformTechnologies`; value: DbPlanetActiveLifeformTechnologies }
 
     | { key: `moon.${number}`; value: DbBasicMoonData }
     | { key: `moon.${number}.buildings`; value: DbMoonBuildingLevels }
@@ -95,6 +111,11 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
     expeditions: {
         key: number;
         value: ExpeditionEvent;
+    };
+
+    lifeformDiscoveries: {
+        key: number;
+        value: LifeformDiscoveryEvent;
     };
 
     empire: DbEmpire;

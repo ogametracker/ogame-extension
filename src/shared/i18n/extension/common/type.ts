@@ -3,10 +3,12 @@ export interface CommonTranslations {
     chart: string;
     table: string;
     averagePerDay: string;
-    darkMatter: string;
     total: string;
     resourceUnits: string;
-    resourceUnitsMsu: string;
+    msu: string;
+    dsu: string;
+    date: string;
+    dateTime: string;
     
     madeWithLove1: string;
     madeWithLove2: string;

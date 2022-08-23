@@ -1,22 +1,22 @@
 <template>
     <div class="common-settings">
         <extension-language-settings />
-        <msu-conversion-rate-settings />
-        <show-msu-cells-settings />
+        <conversion-rate-settings />
+        <show-converted-resources-in-cells-settings />
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ExtensionLanguageSettings from '@stats/components/settings/ExtensionLanguageSettings.vue';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
 
     @Component({
         components: {
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ExtensionLanguageSettings,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
         },
     })
     export default class Misc extends Vue {

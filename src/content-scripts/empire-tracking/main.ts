@@ -1,7 +1,4 @@
 import { getQueryParameters } from "../../shared/utils/getQueryParameters";
-import { trackOfficers } from "./trackOfficers";
-import { trackOwnedPlanets } from "./trackOwnedPlanets";
-import { trackPlayerClass } from "./trackPlayerClass";
 import { trackAlliancePage } from "./trackAlliancePage";
 import { trackResearchPage } from "./trackResearchPage";
 import { _throw } from "../../shared/utils/_throw";
@@ -13,6 +10,10 @@ import { trackDefensesPage } from "./trackDefensesPage";
 import { trackOverviewPage } from "./trackOverviewPage";
 import { trackResourceSettingsPage } from "./trackResourceSettingsPage";
 import { trackEmpirePage } from "./trackEmpirePage";
+import { trackOnIngamePages } from "./trackOnIngamePages";
+import { trackLifeformBuildingsPage } from "./trackLifeformBuildings";
+import { trackLifeformResearchPage } from "./trackLifeformResearchPage";
+import { trackLifeformSettingsPage } from "./trackLifeformSettingsPage";
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -26,54 +27,63 @@ interface ObserverCallback {
 }
 
 const queryParams = getQueryParameters(location.search);
+
 const pageTrackers: PageTracker[] = [
     {
-        action: () => {
-            trackOwnedPlanets();
-            trackOfficers();
-            trackPlayerClass();
-        },
-        condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page),
+        action: () => trackOnIngamePages(),
+        condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page?.toLowerCase()),
     },
     {
         action: () => trackResearchPage(),
-        condition: query => query.page == 'ingame' && query.component == 'research',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'research',
     },
     {
         action: () => trackSuppliesPage(),
-        condition: query => query.page == 'ingame' && query.component == 'supplies',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'supplies',
     },
     {
         action: () => trackFacilitiesPage(),
-        condition: query => query.page == 'ingame' && query.component == 'facilities',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'facilities',
     },
     {
         action: () => trackShipyardPage(),
-        condition: query => query.page == 'ingame' && query.component == 'shipyard',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'shipyard',
     },
     {
         action: () => trackFleetDispatchPage(),
-        condition: query => query.page == 'ingame' && query.component == 'fleetdispatch',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'fleetdispatch',
     },
     {
         action: () => trackDefensesPage(),
-        condition: query => query.page == 'ingame' && query.component == 'defenses',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'defenses',
     },
     {
         action: () => trackAlliancePage(),
-        condition: query => query.page == 'ingame' && query.component == 'alliance',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'alliance',
     },
     {
         action: () => trackOverviewPage(),
-        condition: query => query.page == 'ingame' && query.component == 'overview',
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'overview',
     },
     {
         action: () => trackResourceSettingsPage(),
-        condition: query => query.page == 'resourceSettings',
+        condition: query => (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings') || query.page?.toLowerCase() == 'resourcesettings',
+    },
+    {
+        action: () => trackLifeformBuildingsPage(),
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'lfbuildings',
+    },
+    {
+        action: () => trackLifeformResearchPage(),
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'lfresearch',
+    },
+    {
+        action: () => trackLifeformSettingsPage(),
+        condition: query => query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'lfsettings',
     },
     {
         action: () => trackEmpirePage(),
-        condition: query => query.page == 'standalone' && query.component == 'empire',
+        condition: query => query.page?.toLowerCase() == 'standalone' && query.component?.toLowerCase() == 'empire',
     },
 ];
 export const observerCallbacks: ObserverCallback[] = [];
@@ -85,10 +95,10 @@ const observer = new MutationObserver(() => {
 
     for (let i = 0; i < observerCallbacks.length; i++) {
         const observerCallback = observerCallbacks[i];
-        if(siteFooter == null && !observerCallback.asap) {
+        if (siteFooter == null && !observerCallback.asap) {
             continue;
         }
-        
+
         const elem = document.querySelector(observerCallback.selector);
 
         if (elem != null) {

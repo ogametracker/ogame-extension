@@ -1,8 +1,11 @@
 import { $i18n } from "@/shared/i18n/extension/$i18n";
 import { LanguageKey } from "../../i18n/LanguageKey";
 import { CombatResultType } from "../combat-reports/CombatResultType";
+import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
+import { LifeformDiscoveryEventType } from "../lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformType } from "../ogame/lifeforms/LifeformType";
 import { ResourceType } from "../ogame/resources/ResourceType";
 import { ShipType } from "../ogame/ships/ShipType";
 import { Settings } from "./Settings";
@@ -52,11 +55,18 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             includeExpeditionFoundShipsResourceUnits: true,
             includeLostShipsResourceUnits: true,
         },
-        msuConversionRates: {
-            crystal: 2,
-            deuterium: 3,
+        conversionRates: {
+            mode: 'msu',
+            msu: {
+                crystal: 2,
+                deuterium: 3,
+            },
+            dsu: {
+                metal: 3,
+                crystal: 1.5,
+            },
         },
-        showMsuCells: true,
+        showCellsWithConvertedResourceUnits: true,
         expeditionFoundShipsResourceUnits: {
             factor: 1,
             deuteriumFactor: 1,
@@ -73,7 +83,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 [ResourceType.metal]: '#ff5e00',
                 [ResourceType.crystal]: '#1a9fff',
                 [ResourceType.deuterium]: '#1bee8f',
-                totalMsu: '#999999',
+                totalConverted: '#999999',
             },
             ships: {
                 [ShipType.lightFighter]: '#2472f3',
@@ -113,6 +123,25 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionEventSize.medium]: '#3e85fe',
                     [ExpeditionEventSize.large]: '#e01a76',
                 },
+                depletion: {
+                    [ExpeditionDepletionLevel.none]: '#00c23a',
+                    [ExpeditionDepletionLevel.low]: '#fbbc04',
+                    [ExpeditionDepletionLevel.medium]: '#ff5e00',
+                    [ExpeditionDepletionLevel.high]: '#c72525',
+                    unknown: '#404040',
+                },
+            },
+            lifeformDiscoveries: {
+                [LifeformDiscoveryEventType.nothing]: '#404040',
+                [LifeformDiscoveryEventType.lostShip]: '#d11515',
+                [LifeformDiscoveryEventType.knownLifeformFound]: '#33bcdb',
+                [LifeformDiscoveryEventType.newLifeformFound]: '#00c23a',
+            },
+            lifeforms: {
+                [LifeformType.humans]: '#7ec000',
+                [LifeformType.rocktal]: '#df6642',
+                [LifeformType.mechas]: '#4b91e7',
+                [LifeformType.kaelesh]: '#9863e9',
             },
         },
         universeHistory: {
@@ -127,6 +156,9 @@ export function getDefaultSettings(language: LanguageKey): Settings {
         },
         messageTracking: {
             showSimplifiedResults: true,
+        },
+        debrisFields: {
+            separateExpeditionDebrisFields: false,
         },
     };
 }

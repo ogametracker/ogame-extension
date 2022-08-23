@@ -53,17 +53,7 @@
 
         private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.sizes;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    expeditions: {
-                        ...SettingsDataModule.settings.colors.expeditions,
-                        sizes: defaultColors,
-                    },
-                },
-            });
+            this.updateColors(defaultColors);
         }
     }
 </script>

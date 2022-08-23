@@ -6,4 +6,5 @@ export const en: DebrisFieldsTranslations = {
         title: 'Add debris field manually',
         buttonText: 'Add',
     },
+    position: 'Position',
 };

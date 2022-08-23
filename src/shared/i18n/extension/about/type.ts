@@ -47,6 +47,7 @@ export interface AboutTranslations {
                 numberOfTrackedExpeditions: string;
                 numberOfTrackedCombatReports: string;
                 numberOfTrackedDebrisFieldReports: string;
+                numberOfTrackedLifeformDiscoveries: string;
                 lastUpdateServerSettings: string;
                 numberOfUniverseHistoryEntries: string;
             };

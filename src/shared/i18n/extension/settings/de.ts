@@ -8,6 +8,7 @@ export const de: SettingsTranslations = {
         importExport: 'Import/Export',
         expeditions: 'Expeditionen',
         combats: 'Kämpfe',
+        debrisFields: 'Trümmerfelder',
         resourceBalance: 'Rohstoffbilanz',
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',
@@ -49,12 +50,19 @@ export const de: SettingsTranslations = {
         combatResults: 'Kampfergebnis',
         expeditionEvents: 'Expeditionsereignisse',
         expeditionEventSizes: 'Ereignisgrößen',
+        expeditionDepletionLevels: 'Systemauslastung',
+        lifeformDiscoveries: 'Entdeckungsmissionen',
+        lifeforms: 'Lebensformen',
         resources: 'Rohstoffe',
         ships: 'Schiffe',
     },
     common: {
         extensionLanguage: 'UI-Sprache (im OGame Tracker)',
-        msuConversionRates: 'MSE-Umrechnungskurse',
+        conversionRates: {
+            title: 'Umrechnungskurse',
+            msuLong: 'Umrechnung nach Metall',
+            dsuLong: 'Umrechnung nach Deuterium',
+        },
     },
     expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
@@ -80,11 +88,11 @@ export const de: SettingsTranslations = {
             checkboxLabel: 'Rohstoffeinheiten in Kämpfen verlorener Schiffe in die Rohstoffbilanz einbeziehen',
         },
     },
-    showMsuInTables: {
-        title: 'MSE in Tabellen',
-        label: 'MSE-Werte in Tabellen anzeigen',
+    showConvertedUnitsInTables: {
+        title: 'MSE/DSE in Tabellen',
+        label: 'Umgerechnete MSE/DSE-Werte in Tabellen anzeigen',
 
-        infoAmortization: 'Amotisationszeit wird weiterhin anhand von Kosten und Produktion in MSE errechnet',
+        infoAmortization: 'Amotisationszeit wird weiterhin anhand von Kosten und Produktion in MSE/DSE errechnet',
     },
 
     reset: 'Einstellungen zurücksetzen',
@@ -158,6 +166,13 @@ export const de: SettingsTranslations = {
         showSimplifiedResults: {
             title: 'Vereinfachte Ansicht',
             label: 'Vereinfachte Ansicht, versteckt Originaltexte von Expeditionsergebnissen und TF-Abbauberichten, und zeigt Icons anstatt Texten in den Benachrichtigungen.',
+        },
+    },
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
+            title: 'TFs von Position 16 separat anzeigen',
+            label: 'TFs von Position 16 separat anzeigen',
         },
     },
 };

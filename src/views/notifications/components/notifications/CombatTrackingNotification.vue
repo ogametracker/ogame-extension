@@ -42,7 +42,7 @@
                         v-text="$i18n.$n(sum)"
                     />
                 </div>
-                <div v-else>
+                <div class="text-grid" v-else>
                     <span v-text="$i18n.$t.resources[ResourceType.metal]" />
                     <span
                         :class="{
@@ -156,7 +156,7 @@ import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     .text-grid {
         display: grid;
-        grid-template-columns: auto fr;
+        grid-template-columns: auto 1fr;
         row-gap: 4px;
         column-gap: 8px;
         align-items: center;

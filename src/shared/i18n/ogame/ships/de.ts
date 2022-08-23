@@ -14,9 +14,9 @@ export const de: ShipTranslations =  {
     [ShipType.pathfinder]: 'Pathfinder',
     [ShipType.smallCargo]: 'Kleiner Transporter',
     [ShipType.largeCargo]: 'Großer Transporter',
-    [ShipType.recycler]: 'Recycler',
     [ShipType.colonyShip]: 'Kolonieschiff',
+    [ShipType.recycler]: 'Recycler',
     [ShipType.espionageProbe]: 'Spionagesonde',
-    [ShipType.crawler]: 'Crawler',
     [ShipType.solarSatellite]: 'Solarsatellit',
+    [ShipType.crawler]: 'Crawler',
 };

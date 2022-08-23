@@ -1,18 +1,10 @@
 <template>
-    <span class="checkbox" @click="checked = !checked">
+    <span class="checkbox" @click="onClick($event)">
         <span class="checkmark">
-            <span
-                class="mdi"
-                :style="{ color: color }"
-                :class="
-                    checked
-                        ? 'mdi-checkbox-blank'
-                        : 'mdi-checkbox-blank-outline'
-                "
-            />
-            <span class="check-icon mdi mdi-check" v-if="checked" />
+            <span class="mdi" :style="{ color: color }" :class="checked ? 'mdi-checkbox-blank' : 'mdi-checkbox-blank-outline'" />
+            <span class="check-icon mdi mdi-check" v-if="checked" :style="{ color: checkColor }"/>
         </span>
-        
+
         <span v-if="label != null" v-text="label" />
     </span>
 </template>
@@ -30,7 +22,21 @@
         private color!: string | null;
 
         @Prop({ required: false, type: String, default: () => null })
+        private checkColor!: string | null;
+
+        @Prop({ required: false, type: String, default: () => null })
         private label!: string | null;
+
+        private onClick(event: MouseEvent) {
+            this.checked = !this.checked;
+
+            this.$emit('input-extended', {
+                value: this.checked,
+                shift: event.shiftKey,
+                ctrl: event.ctrlKey,
+                alt: event.altKey,
+            });
+        }
     }
 </script>
 <style lang="scss" scoped>

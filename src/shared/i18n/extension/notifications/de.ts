@@ -41,6 +41,16 @@ export const de: NotificationTranslations = {
             events: 'Expeditionsereignisse',
         },
     },
+    lifeformDiscoveryTracking: {
+        title: (value: string) =>
+            value == '1'
+                ? `${value} neue LF-Entdeckungsmission getrackt`
+                : `${value} neue LF-Entdeckungsmissionen getrackt`,
+        message: (value: string) =>
+            value == '1'
+                ? `${value} neue Lebensform-Entdeckungsmission wurde getrackt.`
+                : `${value} neue Lebensform-Entdeckungsmissionen wurden getrackt.`,
+    },
 
     messageTrackingError: {
         title: (value: string) =>

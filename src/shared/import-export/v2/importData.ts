@@ -48,7 +48,7 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         });
 
         const db = await getPlayerDatabase(account);
-        const tx = db.transaction(['combatReports', 'debrisFieldReports', 'expeditions', 'empire', 'universeSpecificSettings'], 'readwrite');
+        const tx = db.transaction(['combatReports', 'debrisFieldReports', 'expeditions', 'lifeformDiscoveries', 'empire', 'universeSpecificSettings'], 'readwrite');
 
         const combatReportStore = tx.objectStore('combatReports');
         for (const combatReport of account.combatReports) {
@@ -63,6 +63,11 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         const debrisFieldReportStore = tx.objectStore('debrisFieldReports');
         for (const debrisFieldReport of account.debrisFieldReports) {
             await debrisFieldReportStore.put(debrisFieldReport);
+        }
+        
+        const lifeformDiscoveryStore = tx.objectStore('lifeformDiscoveries');
+        for (const discovery of (account.lifeformDiscoveries ?? [])) {
+            await lifeformDiscoveryStore.put(discovery);
         }
 
         if (account.universeSpecificSettings != null) {

@@ -53,7 +53,9 @@
 </template>
 
 <script lang="ts">
+    import { ServerSettingsModule } from '@/service-worker/server-settings/ServerSettingsModule';
     import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
+    import { HighscoreTypeNames } from '@/shared/models/ogame/highscore';
     import { createRecord } from '@/shared/utils/createRecord';
     import { mergeDeep } from '@/shared/utils/mergeDeep';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
@@ -62,6 +64,7 @@
     import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
     import { Tab } from '@/views/stats/components/common/Tabs.vue';
     import { GlobalOgameMetaData } from '@/views/stats/data/global';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
     import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
     import { addDays } from 'date-fns';
@@ -121,9 +124,9 @@
         private scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
         private firstDay = 0;
 
-        private readonly keys: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+        private readonly keys = HighscoreTypeNames;
         private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
-            return [
+            const tabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
                 {
                     key: 'total',
                     label: this.$i18n.$t.universeHistory.highscoreTabs.total,
@@ -161,6 +164,29 @@
                     label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
                 },
             ];
+
+            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
+                tabs.push(
+                    {
+                        key: 'lifeform',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
+                    },
+                    {
+                        key: 'lifeformEconomy',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
+                    },
+                    {
+                        key: 'lifeformTechnology',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
+                    },
+                    {
+                        key: 'lifeformDiscoveries',
+                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
+                    }
+                );
+            }
+
+            return tabs;
         }
 
         private get tableColumns(): GridTableColumn<'player'>[] {
@@ -239,7 +265,7 @@
             let minDate = Number.MAX_SAFE_INTEGER;
 
             const scores = await UniverseHistoryDataModule.getPlayerScoreHistory(this.playerIds);
-            const types: DbUniverseHistoryScoreType[] = ['total', 'economy', 'research', 'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost', 'honor', 'numberOfShips'];
+            const types = HighscoreTypeNames;
             const lastScores = createRecord(this.playerIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
 
             scores.forEach((score, i) => {
@@ -248,7 +274,7 @@
                 if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
                     return;
                 }
-                if(!types.includes(score.type)) {
+                if (!types.includes(score.type)) {
                     return; // happens if beta data available
                 }
 

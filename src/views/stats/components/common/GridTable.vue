@@ -3,7 +3,9 @@
         class="grid-table"
         :class="{
             'grid-table--sticky-header': sticky != null,
+            'grid-table--sticky-footer': stickyFooter,
             'grid-table--inline': inline,
+            'grid-table--has-row-borders': rowBorders,
         }"
         :style="{
             'grid-template-columns': gridColumns,
@@ -25,56 +27,33 @@
                     },
                 ]"
             >
-                <slot
-                    v-if="$scopedSlots[`header-${column.key}`] != null"
-                    :name="`header-${column.key}`"
-                    :label="column.label"
-                />
+                <slot v-if="$scopedSlots[`header-${column.key}`] != null" :name="`header-${column.key}`" :label="column.label" />
                 <span v-else v-text="column.label" />
             </div>
         </div>
         <div class="grid-table-body">
-            <div
-                class="grid-table-row"
-                v-for="(item, i) in items"
-                :key="i"
-                v-show="!hideRow(item)"
-            >
+            <div class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
                 <div
                     v-for="column in columns"
                     :key="column.key"
                     class="grid-table-cell"
                     :class="[
-                        cellClassProvider(item[column.key]),
+                        cellClassProvider(item[column.key], item),
                         column.class,
                         {
                             first: footerItems.length == 0 && i == 0,
-                            last:
-                                footerItems.length == 0 &&
-                                i == columns.length - 1,
+                            last: footerItems.length == 0 && i == columns.length - 1,
                         },
                     ]"
                 >
-                    <slot
-                        v-if="$scopedSlots[`cell-${column.key}`] != null"
-                        :name="`cell-${column.key}`"
-                        :value="item[column.key]"
-                        :item="item"
-                    />
-                    <span
-                        v-else-if="column.formatter != null"
-                        v-text="column.formatter(item[column.key])"
-                    />
+                    <slot v-if="$scopedSlots[`cell-${column.key}`] != null" :name="`cell-${column.key}`" :value="item[column.key]" :item="item" :index="i" />
+                    <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
             </div>
         </div>
         <div class="grid-table-foot">
-            <div
-                class="grid-table-row"
-                v-for="(item, i) in footerItems"
-                :key="i"
-            >
+            <div class="grid-table-row" v-for="(item, i) in footerItems" :key="i">
                 <div
                     v-for="(column, c) in columns"
                     :key="column.key"
@@ -87,16 +66,8 @@
                         },
                     ]"
                 >
-                    <slot
-                        v-if="$scopedSlots[`footer-${column.key}`] != null"
-                        :name="`footer-${column.key}`"
-                        :value="item[column.key]"
-                        :item="item"
-                    />
-                    <span
-                        v-else-if="column.formatter != null"
-                        v-text="column.formatter(item[column.key])"
-                    />
+                    <slot v-if="$scopedSlots[`footer-${column.key}`] != null" :name="`footer-${column.key}`" :value="item[column.key]" :item="item" />
+                    <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
             </div>
@@ -147,14 +118,20 @@
         @Prop({ required: false, type: Array as PropType<Record<string, any>[]>, default: () => [] })
         private footerItems!: Record<string, any>[];
 
-        @Prop({ required: false, type: Function as PropType<(value: any) => string>, default: (value: any) => '' })
-        private cellClassProvider!: (value: any) => string;
+        @Prop({ required: false, type: Function as PropType<(value: any, item: any) => string>, default: () => '' })
+        private cellClassProvider!: (value: any, item: any) => string;
 
         @Prop({ required: false, type: String, default: null })
         private sticky!: string | null;
 
+        @Prop({ required: false, type: Boolean, default: false })
+        private stickyFooter!: boolean;
+
         @Prop({ required: false, type: Function as PropType<(item: any) => boolean>, default: () => false })
         private hideRow!: (item: any) => boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private rowBorders!: boolean;
 
 
         private get gridColumns(): string {
@@ -206,11 +183,7 @@
         &-head .grid-table-cell {
             z-index: 1;
             background-color: black;
-            background-image: linear-gradient(
-                0deg,
-                rgba(var(--color), 0.5),
-                rgba(var(--color), 0.7)
-            );
+            background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
         }
 
         &-body {
@@ -229,7 +202,7 @@
             }
 
             .grid-table-cell {
-                background: rgba(var(--color), 0.2) !important;
+                background: black linear-gradient(0deg, rgba(var(--color), 0.2), rgba(var(--color), 0.2)) !important;
             }
         }
 
@@ -248,6 +221,17 @@
         &--sticky-header {
             max-height: var(--grid-table--sticky-height);
             overflow: auto;
+        }
+
+        &--sticky-footer > &-foot &-cell {
+            position: sticky;
+            bottom: 0;
+        }
+
+        &--has-row-borders {
+            .grid-table-row + .grid-table-row > .grid-table-cell {
+                border-top: 1px solid rgba(var(--color), 0.3333);
+            }
         }
     }
     .grid-table-head {

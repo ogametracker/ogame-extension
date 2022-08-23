@@ -5,7 +5,7 @@
             'o-research--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/research/${research}.jpg)`,
+            'background-image': `url(/img/ogame/research/${image}.jpg)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,41 +16,46 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-
-    export enum OResearchType {
-        'espionage-technology' = 'espionage-technology',
-        'computer-technology' = 'computer-technology',
-        'weapons-technology' = 'weapons-technology',
-        'shielding-technology' = 'shielding-technology',
-        'armor-technology' = 'armor-technology',
-        'energy-technology' = 'energy-technology',
-        'hyperspace-technology' = 'hyperspace-technology',
-        'combustion-drive' = 'combustion-drive',
-        'impulse-drive' = 'impulse-drive',
-        'hyperspace-drive' = 'hyperspace-drive',
-        'laser-technology' = 'laser-technology',
-        'ion-technology' = 'ion-technology',
-        'plasma-technology' = 'plasma-technology',
-        'intergalactic-research-network' = 'intergalactic-research-network',
-        'astrophysics' = 'astrophysics',
-        'graviton-technology' = 'graviton-technology',
-    }
+    import { ResearchType, ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
 
     @Component({})
     export default class OResearch extends Vue {
 
         @Prop({
             required: true,
-            type: String as PropType<OResearchType>,
-            validator: (value: string) => (Object.values(OResearchType) as string[]).includes(value)
+            type: Number as PropType<ResearchType>,
+            validator: (value: number) => (ResearchTypes as number[]).includes(value)
         })
-        private research!: OResearchType;
+        private research!: ResearchType;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+
+        private get image() {
+            return this.imageMap[this.research];
+        }
+        private readonly imageMap: Record<ResearchType, string> = {
+            [ResearchType.espionageTechnology]: 'espionage-technology',
+            [ResearchType.computerTechnology]: 'computer-technology',
+            [ResearchType.weaponsTechnology]: 'weapons-technology',
+            [ResearchType.shieldingTechnology]: 'shielding-technology',
+            [ResearchType.armorTechnology]: 'armor-technology',
+            [ResearchType.energyTechnology]: 'energy-technology',
+            [ResearchType.hyperspaceTechnology]: 'hyperspace-technology',
+            [ResearchType.combustionDrive]: 'combustion-drive',
+            [ResearchType.impulseDrive]: 'impulse-drive',
+            [ResearchType.hyperspaceDrive]: 'hyperspace-drive',
+            [ResearchType.laserTechnology]: 'laser-technology',
+            [ResearchType.ionTechnology]: 'ion-technology',
+            [ResearchType.plasmaTechnology]: 'plasma-technology',
+            [ResearchType.intergalacticResearchNetwork]: 'intergalactic-research-network',
+            [ResearchType.astrophysics]: 'astrophysics',
+            [ResearchType.gravitonTechnology]: 'graviton-technology',
+        };
     }
 </script>
 <style lang="scss" scoped>

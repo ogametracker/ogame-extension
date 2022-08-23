@@ -5,7 +5,7 @@
             'o-resource--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/resources/${resource}.upscaled.png)`,
+            'background-image': `url(/img/ogame/resources/${image}.upscaled.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,31 +16,35 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 
-    export enum OResourceType {
-        metal = 'metal',
-        crystal = 'crystal',
-        deuterium = 'deuterium',
-        energy = 'energy',
-        darkMatter = 'dark-matter',
-        tritium = 'tritium',
-    }
+    export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
 
     @Component({})
     export default class OResource extends Vue {
-
         @Prop({
             required: true,
-            type: String as PropType<OResourceType>,
-            validator: (value: string) => (Object.values(OResourceType) as string[]).includes(value)
+            type: String as PropType<ExtendedResourceType>,
+            validator: (value: string) => ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value)
         })
-        private resource!: OResourceType;
+        private resource!: ExtendedResourceType;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+        private get image() {
+            return this.imageMap[this.resource];
+        }
+        private readonly imageMap: Record<ExtendedResourceType, string> = {
+            [ResourceType.metal]: 'metal',
+            [ResourceType.crystal]: 'crystal',
+            [ResourceType.deuterium]: 'deuterium',
+            energy: 'energy',
+            'dark-matter': 'dark-matter',
+        };
     }
 </script>
 <style lang="scss" scoped>

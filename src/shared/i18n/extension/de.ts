@@ -1,6 +1,9 @@
 import { de as ships } from '../ogame/ships/de';
 import { de as buildings } from '../ogame/buildings/de';
 import { de as research } from '../ogame/research/de';
+import { de as lifeforms } from '../ogame/lifeforms/de';
+import { de as lifeformBuildings } from '../ogame/lifeforms/buildings/de';
+import { de as lifeformTechnologies } from '../ogame/lifeforms/technologies/de';
 import { de as premium } from '../ogame/premium/de';
 
 import { ExtensionTranslations } from "./type";
@@ -17,11 +20,17 @@ import { de as switchAccounts } from './switchAccounts/de';
 import { de as about } from './about/de';
 import { de as universeHistory } from './universeHistory/de';
 import { de as notifications } from './notifications/de';
+import { de as tools } from './tools/de';
+
+import { de as excelExport } from './excelExport/de';
 
 export const de: ExtensionTranslations = {
     ships,
     buildings,
     research,
+    lifeforms,
+    lifeformBuildings,
+    lifeformTechnologies,
     premium,
 
     common,
@@ -37,4 +46,7 @@ export const de: ExtensionTranslations = {
     about,
     universeHistory,
     notifications,
+    tools,
+
+    excelExport,
 };

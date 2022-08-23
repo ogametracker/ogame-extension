@@ -22,10 +22,11 @@
                     </button>
                 </template>
 
-                <msu-conversion-rate-settings />
-                <show-msu-cells-settings />
-                <hr class="two-column" />
-                <date-range-settings />
+                <conversion-rate-settings />
+                <show-converted-resources-in-cells-settings />
+                <separate-expedition-and-normal-debris-field-settings />
+                <hr class="three-column" />
+                <date-range-settings class="three-column" />
             </floating-menu>
             <manually-add-debris-field-menu />
         </span>
@@ -36,51 +37,68 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
     import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '@stats/data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import MsuConversionRateSettings from '@stats/components/settings/MsuConversionRateSettings.vue';
+    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
-    import ShowMsuCellsSettings from '@stats/components/settings/ShowMsuCellsSettings.vue';
+    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
+    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
-            MsuConversionRateSettings,
+            ConversionRateSettings,
             ManuallyAddDebrisFieldMenu,
-            ShowMsuCellsSettings,
+            ShowConvertedResourcesInCellsSettings,
+            SeparateExpeditionAndNormalDebrisFieldSettings,
         },
     })
     export default class Table extends Vue {
         private showSettings = false;
-        
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
             maximumFractionDigits: 1,
         };
 
-        private get msuConversionRates() {
-            return SettingsDataModule.settings.msuConversionRates;
-        }
-
         private get resourceTypes(): Record<string, ResourceType> {
-            return {    
+            return {
                 [this.$i18n.$t.resources.metal]: ResourceType.metal,
                 [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
                 [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
+        private get separate() {
+            return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
+        }
+
         private get items(): RangedStatsTableItem<DailyDebrisFieldReportResult>[] {
             const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
 
+            if (this.separate) {
+                return resources.map(resource => ({
+                    label: this.$i18n.$t.resources[resource],
+                    items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
+                        label: {
+                            normal: `${this.$i18n.$t.debrisFields.position} 1-15`,
+                            expedition: `${this.$i18n.$t.debrisFields.position} 16`,
+                            total: this.$i18n.$t.common.sum,
+                        }[key],
+                        getValue: reports => reports.reduce((acc, report) => acc + report[key][resource], 0),
+                        class: key == 'total' ? 'sum-item' : '',
+                        labelClass: key == 'total' ? 'sum-item' : '',
+                    })),
+                }));
+            }
+
             return resources.map(resource => ({
                 label: this.$i18n.$t.resources[resource],
-                getValue: reports => reports
-                    .reduce((acc, report) => acc + report[resource], 0),
+                getValue: reports => reports.reduce((acc, report) => acc + report.total[resource], 0),
             }));
         }
 
@@ -92,14 +110,14 @@
             const result: RangedStatsTableItem<DailyDebrisFieldReportResult>[] = [
                 {
                     label: this.$i18n.$t.common.resourceUnits,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal, 0),
+                    getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal, 0),
                 },
             ];
 
-            if(SettingsDataModule.settings.showMsuCells) {
+            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: this.$i18n.$t.common.resourceUnitsMsu,
-                    getValue: reports => reports.reduce((acc, report) => acc + report.metal + report.crystal * this.msuConversionRates.crystal, 0),
+                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    getValue: reports => reports.reduce((acc, report) => acc + getMsuOrDsu(report.total), 0),
                 });
             }
 
@@ -114,6 +132,14 @@
         grid-template-columns: 1fr auto;
         align-items: start;
         height: 100%;
+
+        &::v-deep {
+            .sum-item {
+                font-weight: bold;
+                border-top: 1px solid rgba(var(--color), 0.5);
+                margin-top: 1px;
+            }
+        }
     }
 
     .multi-menu {
@@ -124,11 +150,11 @@
 
     .floating-settings::v-deep .floating-menu {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: repeat(3, auto);
         column-gap: 8px;
 
-        .two-column {
-            grid-column: 1 / span 2;
+        .three-column {
+            grid-column: 1 / span 3;
         }
 
         hr {

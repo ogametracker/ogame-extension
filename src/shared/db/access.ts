@@ -1,5 +1,6 @@
 import { IDBPDatabase, IDBPTransaction, openDB, StoreNames, unwrap } from "idb";
 import { MessageOgameMeta } from "../messages/Message";
+import { _throw } from "../utils/_throw";
 import { DbVersion, OgameTrackerGlobalDbSchema, OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema, OgameTrackerUniverseHistoryDbSchema } from "./schema";
 
 const databases: Partial<Record<string, Promise<IDBPDatabase<any>>>> = {};
@@ -26,6 +27,12 @@ async function getDatabase<TSchema>(
 }
 
 export function getPlayerDatabaseName(meta: MessageOgameMeta): string {
+    if(meta.serverId <= 0) {
+        _throw('Server ID is 0 or less');
+    }
+    if(meta.playerId <= 0) {
+        _throw('Player ID is 0 or less');
+    }
     return `s${meta.serverId}-${meta.language}-${meta.playerId}`;
 }
 export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerPlayerDbSchema>> {
@@ -40,11 +47,17 @@ export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
         if(oldVersion < 3) {
             db.createObjectStore('universeSpecificSettings');
         }
+        if(oldVersion < 7) {
+            db.createObjectStore('lifeformDiscoveries', { keyPath: 'id' });
+        }
     });
 }
 
 
 export function getServerDatabaseName(meta: MessageOgameMeta): string {
+    if(meta.serverId <= 0) {
+        _throw('Server ID is 0 or less');
+    }
     return `s${meta.serverId}-${meta.language}`;
 }
 export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerServerDbSchema>> {
@@ -57,6 +70,9 @@ export async function getServerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
 }
 
 export function getUniverseHistoryDatabaseName(meta: MessageOgameMeta): string {
+    if(meta.serverId <= 0) {
+        _throw('Server ID is 0 or less');
+    }
     return `s${meta.serverId}-${meta.language}.universeHistory`;
 }
 export async function getUniverseHistoryDatabase(meta: MessageOgameMeta): Promise<IDBPDatabase<OgameTrackerUniverseHistoryDbSchema>> {

@@ -41,6 +41,16 @@ export const en: NotificationTranslations = {
             events: 'Expedition events',
         },
     },
+    lifeformDiscoveryTracking: {
+        title: (value: string) =>
+            value == '1'
+                ? `${value} new lifeform discovery mission tracked`
+                : `${value} new lifeform discovery missions tracked`,
+        message: (value: string) => 
+        value == '1'
+            ? `${value} new lifeform discovery mission has been tracked.`
+            : `${value} new lifeform discovery missions have been tracked.`,
+    },
 
     messageTrackingError: {
         title: (value: string) =>

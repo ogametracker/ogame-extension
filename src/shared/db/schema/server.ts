@@ -17,9 +17,9 @@ export interface DbServerSettings {
     speedFleetHolding: number;
     galaxies: number;
     systems: number;
-    acs: number;
-    rapidFire: number;
-    defToTF: number;
+    acs: boolean;
+    rapidFire: boolean;
+    defToTF: boolean;
     debrisFactor: number;
     debrisFactorDef: number;
     repairFactor: number;
@@ -27,9 +27,9 @@ export interface DbServerSettings {
     newbieProtectionHigh: number;
     topScore: number;
     bonusFields: number;
-    donutGalaxy: number;
-    donutSystem: number;
-    wfEnabled: number;
+    donutGalaxy: boolean;
+    donutSystem: boolean;
+    wfEnabled: boolean;
     wfMinimumRessLost: number;
     wfMinimumLossPercentage: number;
     wfBasicPercentageRepairable: number;
@@ -39,7 +39,7 @@ export interface DbServerSettings {
     researchDurationDivisor: number;
     darkMatterNewAcount: number;
     cargoHyperspaceTechMultiplier: number;
-    marketplaceEnabled: number;
+    marketplaceEnabled: boolean;
     marketplaceBasicTradeRatioMetal: number;
     marketplaceBasicTradeRatioCrystal: number;
     marketplaceBasicTradeRatioDeuterium: number;
@@ -59,7 +59,7 @@ export interface DbServerSettings {
     minerBonusAdditionalCrawler: number;
     minerBonusMaxCrawler: number;
     minerBonusEnergy: number;
-    minerBonusOverloadCrawler: number;
+    minerBonusOverloadCrawler: boolean;
     resourceBuggyProductionBoost: number;
     resourceBuggyMaxProductionBoost: number;
     resourceBuggyEnergyConsumptionPerUnit: number;
@@ -70,15 +70,15 @@ export interface DbServerSettings {
     warriorBonusRecyclerCargoCapacity: number;
     warriorBonusAdditionalFleetSlots: number;
     warriorBonusAdditionalMoonFields: number;
-    warriorBonusFleetHalfSpeed: number;
-    warriorBonusAttackerWreckfield: number;
+    warriorBonusFleetHalfSpeed: boolean;
+    warriorBonusAttackerWreckfield: boolean;
     combatDebrisFieldLimit: number;
     explorerBonusIncreasedResearchSpeed: number;
     explorerBonusIncreasedExpeditionOutcome: number;
     explorerBonusLargerPlanets: number;
     explorerUnitItemsPerDay: number;
     explorerBonusPhalanxRange: number;
-    explorerBonusPlunderInactive: number;
+    explorerBonusPlunderInactive: boolean;
     explorerBonusExpeditionEnemyReduction: number;
     explorerBonusAdditionalExpeditionSlots: number;
     resourceProductionIncreaseCrystalDefault: number;
@@ -88,6 +88,8 @@ export interface DbServerSettings {
     exodusRatioMetal: number;
     exodusRatioCrystal: number;
     exodusRatioDeuterium: number;
+
+    lifeformsEnabled: boolean;
 };
 type DbServerSettingsItem<T extends keyof DbServerSettings = keyof DbServerSettings> = {
     key: T;

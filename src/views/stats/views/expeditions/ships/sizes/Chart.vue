@@ -1,23 +1,10 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :firstDay="firstDay"
-            :itemsPerDay="exposPerDay"
-            :datasets="datasets"
-            stacked
-            show-average
-        >
+        <stats-chart :firstDay="firstDay" :itemsPerDay="exposPerDay" :datasets="datasets" stacked show-average>
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
-                            "
-                        />
+                        <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
                         <div v-text="$i18n.$t.expeditions.finds" />
                     </div>
                     <hr />
@@ -78,7 +65,7 @@
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return ExpeditionEventSizes.map(size => ({
                 key: size,
-                label:  this.$i18n.$t.expeditions.expeditionEventSizes[size],
+                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
                 color: this.colors[size],
                 filled: true,
                 getValue: result => result.eventSizes.fleet[size],

@@ -1,4 +1,3 @@
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { TryActionResult } from "../../shared/TryActionResult";
@@ -17,6 +16,7 @@ import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { getLanguage } from "@/shared/i18n/getLanguage";
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -79,7 +79,26 @@ export class ExpeditionModule {
             _throw('Unknown expedition type');
         }
 
+        const depletion = this.tryParseDepletion(language, data);
+        if(depletion != null) {
+            result.depletion = depletion;
+        }
+
         return result;
+    }
+
+    private tryParseDepletion(language: LanguageKey, data: RawMessageData): ExpeditionDepletionLevel | undefined {
+        const logbookRegex = i18nExpeditions[language].logbookRegex;
+        const logbookEntry = data.text.match(logbookRegex)?.groups?.text;
+        if (logbookEntry == null) {
+            return undefined;
+        }
+
+        const i18nDepletionMessages = i18nExpeditions[language].depletionMessages;
+        const depletionLevel = ExpeditionDepletionLevels.find(level =>
+            i18nDepletionMessages[level].some(msg => logbookEntry.includes(msg))
+        );
+        return depletionLevel ?? _throw('failed to detect depletion level');
     }
 
     private tryParseNoEventExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventNothing | null {
@@ -223,11 +242,11 @@ export class ExpeditionModule {
 
             ExpeditionFindableShipTypes.forEach(ship => {
                 const shipName = i18nShips[language][ship];
-                const shipRegex = new RegExp(`${shipName}: (\\d+)`);
+                const shipRegex = new RegExp(`${shipName}: (?<amount>\\d+)`);
                 const shipMatch = textWithFoundFleet.match(shipRegex);
 
-                if (shipMatch != null) {
-                    foundShips[ship] = parseIntSafe(shipMatch[1], 10);
+                if (shipMatch?.groups != null) {
+                    foundShips[ship] = parseIntSafe(shipMatch.groups.amount, 10);
                 }
             });
         }
@@ -273,12 +292,12 @@ export class ExpeditionModule {
         const resourceNames = ResourceTypes;
         const regex = i18nMessages.regex(resourceNames.map(resource => i18nResources[language][resource]));
         const match = data.text.match(regex);
-        if (match == null) {
+        if (match?.groups == null) {
             return null;
         }
 
-        const resourceName = match[1];
-        const amount = parseIntSafe(match[2].replace(/[^\d]/g, ''), 10);
+        const resourceName = match.groups.name;
+        const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
         const size = ExpeditionEventSizes.find(
             size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
         );

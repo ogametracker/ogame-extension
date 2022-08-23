@@ -6,6 +6,7 @@ export interface SettingsTranslations {
         importExport: string;
         expeditions: string;
         combats: string;
+        debrisFields: string;
         resourceBalance: string;
         universeHistory: string;
         dangerZone: string;
@@ -46,12 +47,19 @@ export interface SettingsTranslations {
     colors: {
         expeditionEvents: string;
         expeditionEventSizes: string;
+        expeditionDepletionLevels: string;
+        lifeformDiscoveries: string;
+        lifeforms: string;
         combatResults: string;
         resources: string;
         ships: string;
     };
     common: {
-        msuConversionRates: string;
+        conversionRates: {
+            title: string;
+            msuLong: string;
+            dsuLong: string;
+        };
         extensionLanguage: string;
     };
     expeditions: {
@@ -78,7 +86,7 @@ export interface SettingsTranslations {
             checkboxLabel: string;
         };
     };
-    showMsuInTables: {
+    showConvertedUnitsInTables: {
         title: string;
         label: string;
 
@@ -153,6 +161,13 @@ export interface SettingsTranslations {
 
     accessibility: {
         showSimplifiedResults: {
+            title: string;
+            label: string;
+        };
+    };
+
+    debrisFields: {
+        separateExpeditionDebrisFields: {
             title: string;
             label: string;
         };

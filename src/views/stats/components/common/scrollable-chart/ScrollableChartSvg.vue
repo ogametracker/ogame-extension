@@ -87,6 +87,7 @@
                         <circle
                             v-if="
                                 dataset.normalizedValuesByNormalizedX[x] != null
+                                && dataset.valuesByNormalizedX[x] != 0
                             "
                             :key="`point-${dataset.key}-${x}`"
                             v-show="dataset.visible && !dataset.hidePoints"

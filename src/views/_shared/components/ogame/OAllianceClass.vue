@@ -5,7 +5,7 @@
             'o-alliance-class--disabled': disabled,
         }"
         :style="{
-            'background-image': `url(/img/ogame/alliance-classes/${allianceClass}.png)`,
+            'background-image': `url(/img/ogame/alliance-classes/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -16,29 +16,34 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-
-    export enum OAllianceClassType {
-        none = 'none',
-        researcher = 'researcher',
-        trader = 'trader',
-        warrior = 'warrior',
-    }
+    import { AllianceClass, AllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
 
     @Component({})
     export default class OAllianceClass extends Vue {
 
         @Prop({
             required: true,
-            type: String as PropType<OAllianceClassType>,
-            validator: (value: string) => (Object.values(OAllianceClassType) as string[]).includes(value)
+            type: String as PropType<AllianceClass>,
+            validator: (value: string) => (AllianceClasses as string[]).includes(value)
         })
-        private allianceClass!: OAllianceClassType;
+        private allianceClass!: AllianceClass;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+
+        private get image() {
+            return this.imageMap[this.allianceClass];
+        }
+        private readonly imageMap: Record<AllianceClass, string> = {
+            [AllianceClass.none]: 'none',
+            [AllianceClass.researcher]: 'researcher',
+            [AllianceClass.trader]: 'trader',
+            [AllianceClass.warrior]: 'warrior',
+        };
     }
 </script>
 <style lang="scss" scoped>

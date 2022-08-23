@@ -19,7 +19,10 @@ $image-size-small: 24px;
 
         &__content {
             display: flex !important;
+            flex-wrap: wrap;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             margin: -10px 0;
             padding: 0 5px 5px 12px;
         }
@@ -48,6 +51,23 @@ $image-size-small: 24px;
         align-items: center;
         column-gap: 8px;
         color: white;
+
+        &--depletion-level {
+            font-size: 24px;
+
+            &-none {
+                color: var(--ogame-tracker--depletion-level--none);
+            }
+            &-low {
+                color: var(--ogame-tracker--depletion-level--low);
+            }
+            &-medium {
+                color: var(--ogame-tracker--depletion-level--medium);
+            }
+            &-high {
+                color: var(--ogame-tracker--depletion-level--high);
+            }
+        }
 
         &--resources,
         &--darkMatter {
@@ -200,6 +220,69 @@ $image-size-small: 24px;
         }
     }
 
+    &-lifeform-discovery-result {
+        &--nothing {
+            color: var(--ogame-tracker--lifeform-discovery-event--nothing);
+
+            > .mdi {
+                font-size: 16px !important;
+            }
+        }
+
+        &--lostShip {
+            color: var(--ogame-tracker--lifeform-discovery-event--lostShip);
+
+            .mdi {
+                font-size: 20px !important;
+            }
+        }
+
+        &--knownLifeformFound,
+        &--newLifeformFound {
+            display: inline-flex;
+            column-gap: 4px;
+            align-items: center;
+
+            .ogame-tracker_lifeform-icon {
+                border-radius: 4px;
+                border: 1px solid;
+
+                &--humans {
+                    border-color: var(--ogame-tracker--lifeform--humans);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--humans);
+                    }
+                }
+                &--rocktal {
+                    border-color: var(--ogame-tracker--lifeform--rocktal);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--rocktal);
+                    }
+                }
+                &--mechas {
+                    border-color: var(--ogame-tracker--lifeform--mechas);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--mechas);
+                    }
+                }
+                &--kaelesh {
+                    border-color: var(--ogame-tracker--lifeform--kaelesh);
+                    + span {
+                        color: var(--ogame-tracker--lifeform--kaelesh);
+                    }
+                }
+            }
+        }
+
+        &--newLifeformFound {
+            color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
+        }
+
+        .mdi {
+            font-size: 32px;
+        }
+    }
+
     &-debris-field-report {
         display: inline-grid;
         grid-template-columns: repeat(2, 1fr);
@@ -250,6 +333,10 @@ $image-size-small: 24px;
             > .head {
                 grid-column: 1 / span 4;
                 justify-self: center;
+            }
+
+            .ogti-debris-field {
+                font-size: 24px;
             }
         }
 
@@ -331,12 +418,5 @@ $image-size-small: 24px;
         100% {
             transform: rotate(360deg);
         }
-    }
-
-    &-debris-field-icon {
-        width: $image-size-small;
-        height: $image-size-small;
-        background-size: cover;
-        background-image: url(#{$base-url}/img/ogame/misc/debris-field-icon.svg);
     }
 }

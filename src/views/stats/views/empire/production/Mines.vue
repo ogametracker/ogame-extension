@@ -1,33 +1,29 @@
 <template>
     <grid-table :columns="columns" :items="items" :footerItems="footerItems">
         <template #header-metalMine>
-            <o-building building="metal-mine" size="75px" />
+            <o-building :building="BuildingType.metalMine" size="75px" />
         </template>
         <template #header-crystalMine>
-            <o-building building="crystal-mine" size="75px" />
+            <o-building :building="BuildingType.crystalMine" size="75px" />
         </template>
         <template #header-deuteriumSynthesizer>
-            <o-building building="deuterium-synthesizer" size="75px" />
+            <o-building :building="BuildingType.deuteriumSynthesizer" size="75px" />
         </template>
         <template #header-solarPlant>
-            <o-building building="solar-plant" size="75px" />
+            <o-building :building="BuildingType.solarPlant" size="75px" />
         </template>
         <template #header-fusionReactor>
-            <o-building building="fusion-reactor" size="75px" />
+            <o-building :building="BuildingType.fusionReactor" size="75px" />
         </template>
 
         <template #header-crawlers>
-            <o-ship ship="crawler" size="75px" />
+            <o-ship :ship="ShipType.crawler" size="75px" />
         </template>
 
         <template #cell-planet="{ value: planet }">
             <div class="planet-info">
                 <span v-text="planet.name" />
-                <span>
-                    [{{ planet.coordinates.galaxy }}:{{
-                        planet.coordinates.system
-                    }}:{{ planet.coordinates.position }}]
-                </span>
+                <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
             </div>
         </template>
 
@@ -38,17 +34,13 @@
                         v-text="$i18n.$n(value.active)"
                         :class="{
                             'crawlers-good': value.active == value.maximum,
-                            'crawlers-ok':
-                                value.active > 0 &&
-                                value.active < value.maximum,
+                            'crawlers-ok': value.active > 0 && value.active < value.maximum,
                             'crawlers-bad': value.active == 0,
                         }"
                     />
                     <span>/{{ $i18n.$n(value.maximum) }}</span>
                 </span>
-                <span
-                    v-text="`(${$i18n.$n(value.available)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`"
-                />
+                <span v-text="`(${$i18n.$n(value.available)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`" />
             </div>
         </template>
 
@@ -80,19 +72,11 @@
                     v-text="$i18n.$n(value.active, avgNumberFormat)"
                     :class="{
                         'crawlers-good': value.active == value.maximum,
-                        'crawlers-ok':
-                            value.active > 0 && value.active < value.maximum,
+                        'crawlers-ok': value.active > 0 && value.active < value.maximum,
                         'crawlers-bad': value.active == 0,
                     }"
                 />
-                <span
-                    v-text="
-                        `(${$i18n.$n(
-                            value.available,
-                            avgNumberFormat
-                        )} ${$i18n.$t.empire.production.mines.crawlersAvailable})`
-                    "
-                />
+                <span v-text="`(${$i18n.$n(value.available, avgNumberFormat)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`" />
             </div>
         </template>
     </grid-table>
@@ -102,14 +86,16 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { Component, Vue } from 'vue-property-decorator';
-    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { getMaxActiveCrawlers } from '@/shared/models/ogame/buildings/getMaxActiveCrawlers';
     import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
     import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
-import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { getLifeformCollectorClassBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
+    import { getMaxActiveCrawlers } from '@/shared/models/ogame/resource-production/getMaxActiveCrawlers';
+    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
 
     interface ProductionMineItem {
         planet: {
@@ -132,6 +118,9 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
 
     @Component({})
     export default class Resources extends Vue {
+        private readonly BuildingType = BuildingType;
+        private readonly ShipType = ShipType;
+
         private readonly avgNumberFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -188,15 +177,18 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         }
 
         private get items(): ProductionMineItem[] {
+            const collectorClassFactor = 1 + getLifeformCollectorClassBonus(this.player);
+
             return this.planets
                 .map(planet => {
                     const maxActiveCrawlers = getMaxActiveCrawlers(
                         planet.buildings[BuildingType.metalMine],
                         planet.buildings[BuildingType.crystalMine],
                         planet.buildings[BuildingType.deuteriumSynthesizer],
-                        this.player.playerClass,
+                        this.player.playerClass == PlayerClass.collector,
                         this.player.officers.geologist,
-                        ServerSettingsDataModule.serverSettings,
+                        ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+                        collectorClassFactor,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 
@@ -224,7 +216,7 @@ import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataM
         private get planets(): PlanetData[] {
             return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[]; 
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[];
         }
     }
 </script>

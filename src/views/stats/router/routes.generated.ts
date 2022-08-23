@@ -35,6 +35,16 @@ import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
 import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
 import viewsempireIndex from '@stats/views/empire/Index.vue';
 import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
+import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
+import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
+import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
+import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
+import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
+import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
+import viewsempirelifeformsdiscoveriesexperienceTable from '@stats/views/empire/lifeforms/discoveries/experience/Table.vue';
+import viewsempirelifeformsdiscoveriesoverviewIndex from '@stats/views/empire/lifeforms/discoveries/overview/Index.vue';
+import viewsempirelifeformsdiscoveriesoverviewChart from '@stats/views/empire/lifeforms/discoveries/overview/Chart.vue';
+import viewsempirelifeformsdiscoveriesoverviewTable from '@stats/views/empire/lifeforms/discoveries/overview/Table.vue';
 import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
 import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
@@ -47,6 +57,9 @@ import viewsexpeditionsdarkmatteramountTable from '@stats/views/expeditions/dark
 import viewsexpeditionsdarkmattersizesIndex from '@stats/views/expeditions/dark-matter/sizes/Index.vue';
 import viewsexpeditionsdarkmattersizesChart from '@stats/views/expeditions/dark-matter/sizes/Chart.vue';
 import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-matter/sizes/Table.vue';
+import viewsexpeditionsdepletionIndex from '@stats/views/expeditions/depletion/Index.vue';
+import viewsexpeditionsdepletionChart from '@stats/views/expeditions/depletion/Chart.vue';
+import viewsexpeditionsdepletionTable from '@stats/views/expeditions/depletion/Table.vue';
 import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
 import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
@@ -55,6 +68,9 @@ import viewsexpeditionsresourcesIndex from '@stats/views/expeditions/resources/I
 import viewsexpeditionsresourcesamountIndex from '@stats/views/expeditions/resources/amount/Index.vue';
 import viewsexpeditionsresourcesamountChart from '@stats/views/expeditions/resources/amount/Chart.vue';
 import viewsexpeditionsresourcesamountTable from '@stats/views/expeditions/resources/amount/Table.vue';
+import viewsexpeditionsresourcescountIndex from '@stats/views/expeditions/resources/count/Index.vue';
+import viewsexpeditionsresourcescountChart from '@stats/views/expeditions/resources/count/Chart.vue';
+import viewsexpeditionsresourcescountTable from '@stats/views/expeditions/resources/count/Table.vue';
 import viewsexpeditionsresourcessizesIndex from '@stats/views/expeditions/resources/sizes/Index.vue';
 import viewsexpeditionsresourcessizesChart from '@stats/views/expeditions/resources/sizes/Chart.vue';
 import viewsexpeditionsresourcessizesTable from '@stats/views/expeditions/resources/sizes/Table.vue';
@@ -78,6 +94,7 @@ import viewssettingsCombats from '@stats/views/settings/Combats.vue';
 import viewssettingsCommon from '@stats/views/settings/Common.vue';
 import viewssettingsDangerZone from '@stats/views/settings/Danger-Zone.vue';
 import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
+import viewssettingsDebrisFields from '@stats/views/settings/Debris-Fields.vue';
 import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
 import viewssettingsResourceBalance from '@stats/views/settings/Resource-Balance.vue';
@@ -88,6 +105,7 @@ import viewstoolsCostCalculator from '@stats/views/tools/Cost-Calculator.vue';
 import viewstoolsExpeditionCalculator from '@stats/views/tools/Expedition-Calculator.vue';
 import viewstoolsProductionCalculator from '@stats/views/tools/Production-Calculator.vue';
 import viewstoolsResourceConversion from '@stats/views/tools/Resource-Conversion.vue';
+import viewstoolsSignatureGenerator from '@stats/views/tools/Signature-Generator.vue';
 import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
 import viewsuniversehistoryalliancesIndex from '@stats/views/universe-history/alliances/Index.vue';
 import viewsuniversehistoryalliancesHighscore from '@stats/views/universe-history/alliances/Highscore.vue';
@@ -379,6 +397,76 @@ const routes: RouteConfig[] = [
                     },
                     {
                         redirect: {
+                            name: "empire/lifeforms/overview"
+                        },
+                        path: "lifeforms",
+                        name: "empire/lifeforms",
+                        component: viewsempirelifeformsIndex,
+                        children: [
+                            {
+                                path: "overview",
+                                name: "empire/lifeforms/overview",
+                                component: viewsempirelifeformsOverview
+                            },
+                            {
+                                path: "progress",
+                                name: "empire/lifeforms/progress",
+                                component: viewsempirelifeformsProgress
+                            },
+                            {
+                                redirect: {
+                                    name: "empire/lifeforms/discoveries/overview"
+                                },
+                                path: "discoveries",
+                                name: "empire/lifeforms/discoveries",
+                                component: viewsempirelifeformsdiscoveriesIndex,
+                                children: [
+                                    {
+                                        redirect: {
+                                            name: "empire/lifeforms/discoveries/experience/chart"
+                                        },
+                                        path: "experience",
+                                        name: "empire/lifeforms/discoveries/experience",
+                                        component: viewsempirelifeformsdiscoveriesexperienceIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "empire/lifeforms/discoveries/experience/chart",
+                                                component: viewsempirelifeformsdiscoveriesexperienceChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "empire/lifeforms/discoveries/experience/table",
+                                                component: viewsempirelifeformsdiscoveriesexperienceTable
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        redirect: {
+                                            name: "empire/lifeforms/discoveries/overview/chart"
+                                        },
+                                        path: "overview",
+                                        name: "empire/lifeforms/discoveries/overview",
+                                        component: viewsempirelifeformsdiscoveriesoverviewIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "empire/lifeforms/discoveries/overview/chart",
+                                                component: viewsempirelifeformsdiscoveriesoverviewChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "empire/lifeforms/discoveries/overview/table",
+                                                component: viewsempirelifeformsdiscoveriesoverviewTable
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
                             name: "empire/production/resources"
                         },
                         path: "production",
@@ -469,6 +557,26 @@ const routes: RouteConfig[] = [
                         ]
                     },
                     {
+                        redirect: {
+                            name: "expeditions/depletion/chart"
+                        },
+                        path: "depletion",
+                        name: "expeditions/depletion",
+                        component: viewsexpeditionsdepletionIndex,
+                        children: [
+                            {
+                                path: "chart",
+                                name: "expeditions/depletion/chart",
+                                component: viewsexpeditionsdepletionChart
+                            },
+                            {
+                                path: "table",
+                                name: "expeditions/depletion/table",
+                                component: viewsexpeditionsdepletionTable
+                            }
+                        ]
+                    },
+                    {
                         path: "items",
                         name: "expeditions/items",
                         component: viewsexpeditionsitemsIndex
@@ -518,6 +626,26 @@ const routes: RouteConfig[] = [
                                         path: "table",
                                         name: "expeditions/resources/amount/table",
                                         component: viewsexpeditionsresourcesamountTable
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "expeditions/resources/count/chart"
+                                },
+                                path: "count",
+                                name: "expeditions/resources/count",
+                                component: viewsexpeditionsresourcescountIndex,
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "expeditions/resources/count/chart",
+                                        component: viewsexpeditionsresourcescountChart
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "expeditions/resources/count/table",
+                                        component: viewsexpeditionsresourcescountTable
                                     }
                                 ]
                             },
@@ -680,6 +808,11 @@ const routes: RouteConfig[] = [
                         component: viewssettingsDateRanges
                     },
                     {
+                        path: "debris-fields",
+                        name: "settings/debris-fields",
+                        component: viewssettingsDebrisFields
+                    },
+                    {
                         path: "expeditions",
                         name: "settings/expeditions",
                         component: viewssettingsExpeditions
@@ -703,7 +836,7 @@ const routes: RouteConfig[] = [
             },
             {
                 redirect: {
-                    name: "tools/expedition-calculator"
+                    name: "tools/signature-generator"
                 },
                 meta: {
                     color: "#008c85"
@@ -736,6 +869,11 @@ const routes: RouteConfig[] = [
                         path: "resource-conversion",
                         name: "tools/resource-conversion",
                         component: viewstoolsResourceConversion
+                    },
+                    {
+                        path: "signature-generator",
+                        name: "tools/signature-generator",
+                        component: viewstoolsSignatureGenerator
                     }
                 ]
             },

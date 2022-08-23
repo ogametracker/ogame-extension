@@ -9,17 +9,22 @@ import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
 import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
 import { PlayerOfficers } from '@/shared/models/empire/PlayerOfficers';
 import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
-import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
+import { ResearchType, ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetProductionSettings, DbShipAmounts } from '@/shared/db/schema/player';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
-import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
+import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
+import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+import { DefenseType, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 import { Lock } from 'semaphore-async-await';
 import { delay } from '@/shared/utils/delay';
+import { createRecord } from '@/shared/utils/createRecord';
+import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryDataModule } from './LifeformDiscoveryDataModule';
 
 @Component
 class EmpireDataModuleClass extends Vue {
@@ -32,6 +37,15 @@ class EmpireDataModuleClass extends Vue {
 
     public get ready(): Promise<void> {
         return this._ready;
+    }
+
+    public get lifeformExperience() {
+        const missionProgress = LifeformDiscoveryDataModule.lifeforms;
+        
+        return createRecord(
+            ValidLifeformTypes,
+            lf => Math.max(this.empire.lifeformExperience[lf], missionProgress[lf].gainedExperience),
+        );
     }
 
     private async created() {
@@ -47,7 +61,7 @@ class EmpireDataModuleClass extends Vue {
 
     private async loadData() {
         this.loading++;
-        if(this.loading > 1) {
+        if (this.loading > 1) {
             return;
         }
 
@@ -67,25 +81,10 @@ class EmpireDataModuleClass extends Vue {
             geologist: false,
             technocrat: false,
         };
-        const research = (await store.get('research')) as ResearchLevels | undefined ?? {
-            [ResearchType.espionageTechnology]: 0,
-            [ResearchType.computerTechnology]: 0,
-            [ResearchType.weaponsTechnology]: 0,
-            [ResearchType.shieldingTechnology]: 0,
-            [ResearchType.armorTechnology]: 0,
-            [ResearchType.energyTechnology]: 0,
-            [ResearchType.hyperspaceTechnology]: 0,
-            [ResearchType.combustionDrive]: 0,
-            [ResearchType.impulseDrive]: 0,
-            [ResearchType.hyperspaceDrive]: 0,
-            [ResearchType.laserTechnology]: 0,
-            [ResearchType.ionTechnology]: 0,
-            [ResearchType.plasmaTechnology]: 0,
-            [ResearchType.intergalacticResearchNetwork]: 0,
-            [ResearchType.astrophysics]: 0,
-            [ResearchType.gravitonTechnology]: 0,
-        };
+        const research = (await store.get('research')) as ResearchLevels | undefined ?? createRecord(ResearchTypes, 0);
         const planetOrder = (await store.get('planetOrder')) as number[] | undefined ?? [];
+        const lifeformExperience = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined
+            ?? createRecord(ValidLifeformTypes, 0);
 
         const planets: Record<number, PlanetData | MoonData> = {};
         const allKeys = await store.getAllKeys();
@@ -97,47 +96,12 @@ class EmpireDataModuleClass extends Vue {
 
             if (isMoon) {
                 const basicInfo = (await store.get(`moon.${id}`)) as DbBasicMoonData ?? _throw('no basic moon data found');
-                const buildings = (await store.get(`moon.${id}.buildings`)) as DbMoonBuildingLevels | undefined ?? {
-                    [BuildingType.metalStorage]: 0,
-                    [BuildingType.crystalStorage]: 0,
-                    [BuildingType.deuteriumTank]: 0,
-                    [BuildingType.roboticsFactory]: 0,
-                    [BuildingType.shipyard]: 0,
-                    [BuildingType.lunarBase]: 0,
-                    [BuildingType.sensorPhalanx]: 0,
-                    [BuildingType.jumpGate]: 0,
-                };
-                const ships = (await store.get(`moon.${id}.ships`)) as DbShipAmounts | undefined ?? {
-                    [ShipType.smallCargo]: 0,
-                    [ShipType.largeCargo]: 0,
-                    [ShipType.lightFighter]: 0,
-                    [ShipType.heavyFighter]: 0,
-                    [ShipType.cruiser]: 0,
-                    [ShipType.battleship]: 0,
-                    [ShipType.colonyShip]: 0,
-                    [ShipType.recycler]: 0,
-                    [ShipType.espionageProbe]: 0,
-                    [ShipType.bomber]: 0,
-                    [ShipType.solarSatellite]: 0,
-                    [ShipType.destroyer]: 0,
-                    [ShipType.deathStar]: 0,
-                    [ShipType.battlecruiser]: 0,
-                    [ShipType.crawler]: 0,
-                    [ShipType.reaper]: 0,
-                    [ShipType.pathfinder]: 0,
-                };
+                const buildings = (await store.get(`moon.${id}.buildings`)) as DbMoonBuildingLevels | undefined ?? createRecord(MoonBuildingTypes, 0);
+                const ships = (await store.get(`moon.${id}.ships`)) as DbShipAmounts | undefined ?? createRecord(ShipTypes, 0);
                 const defense: DbDefenseAmounts = (await store.get(`moon.${id}.defenses`)) as DbDefenseAmounts | undefined ?? {
-                    [DefenseType.rocketLauncher]: 0,
-                    [DefenseType.lightLaser]: 0,
-                    [DefenseType.heavyLaser]: 0,
-                    [DefenseType.gaussCannon]: 0,
-                    [DefenseType.ionCannon]: 0,
-                    [DefenseType.plasmaTurret]: 0,
+                    ...createRecord(DefenseTypes, 0),
                     [DefenseType.smallShieldDome]: false,
                     [DefenseType.largeShieldDome]: false,
-                
-                    [DefenseType.ballisticMissile]: 0,
-                    [DefenseType.interplanetaryMissile]: 0,
                 };
                 const activeItems = (await store.get(`moon.${id}.activeItems`) as DbActiveItems | undefined) ?? {};
 
@@ -153,56 +117,12 @@ class EmpireDataModuleClass extends Vue {
             }
             else {
                 const basicInfo = (await store.get(`planet.${id}`)) as DbBasicPlanetData ?? _throw('no basic planet data found');
-                const buildings = (await store.get(`planet.${id}.buildings`)) as DbPlanetBuildingLevels | undefined ?? {
-                    [BuildingType.metalMine]: 0,
-                    [BuildingType.crystalMine]: 0,
-                    [BuildingType.deuteriumSynthesizer]: 0,
-                    [BuildingType.metalStorage]: 0,
-                    [BuildingType.crystalStorage]: 0,
-                    [BuildingType.deuteriumTank]: 0,
-                    [BuildingType.solarPlant]: 0,
-                    [BuildingType.fusionReactor]: 0,
-                
-                    [BuildingType.roboticsFactory]: 0,
-                    [BuildingType.shipyard]: 0,
-                    [BuildingType.researchLab]: 0,
-                    [BuildingType.allianceDepot]: 0,
-                    [BuildingType.missileSilo]: 0,
-                    [BuildingType.naniteFactory]: 0,
-                    [BuildingType.terraformer]: 0,
-                    [BuildingType.spaceDock]: 0,
-                };
-                const ships = (await store.get(`planet.${id}.ships`)) as DbShipAmounts | undefined ?? {
-                    [ShipType.smallCargo]: 0,
-                    [ShipType.largeCargo]: 0,
-                    [ShipType.lightFighter]: 0,
-                    [ShipType.heavyFighter]: 0,
-                    [ShipType.cruiser]: 0,
-                    [ShipType.battleship]: 0,
-                    [ShipType.colonyShip]: 0,
-                    [ShipType.recycler]: 0,
-                    [ShipType.espionageProbe]: 0,
-                    [ShipType.bomber]: 0,
-                    [ShipType.solarSatellite]: 0,
-                    [ShipType.destroyer]: 0,
-                    [ShipType.deathStar]: 0,
-                    [ShipType.battlecruiser]: 0,
-                    [ShipType.crawler]: 0,
-                    [ShipType.reaper]: 0,
-                    [ShipType.pathfinder]: 0,
-                };
+                const buildings = (await store.get(`planet.${id}.buildings`)) as DbPlanetBuildingLevels | undefined ?? createRecord(PlanetBuildingTypes, 0);
+                const ships = (await store.get(`planet.${id}.ships`)) as DbShipAmounts | undefined ?? createRecord(ShipTypes, 0);
                 const defense: DbDefenseAmounts = (await store.get(`planet.${id}.defenses`)) as DbDefenseAmounts | undefined ?? {
-                    [DefenseType.rocketLauncher]: 0,
-                    [DefenseType.lightLaser]: 0,
-                    [DefenseType.heavyLaser]: 0,
-                    [DefenseType.gaussCannon]: 0,
-                    [DefenseType.ionCannon]: 0,
-                    [DefenseType.plasmaTurret]: 0,
+                    ...createRecord(DefenseTypes, 0),
                     [DefenseType.smallShieldDome]: false,
                     [DefenseType.largeShieldDome]: false,
-                
-                    [DefenseType.ballisticMissile]: 0,
-                    [DefenseType.interplanetaryMissile]: 0,
                 };
                 const activeItems = (await store.get(`planet.${id}.activeItems`) as DbActiveItems | undefined) ?? {};
                 const productionSettings = ((await store.get(`planet.${id}.productionSettings`)) as DbPlanetProductionSettings | undefined ?? {
@@ -215,6 +135,12 @@ class EmpireDataModuleClass extends Vue {
                     [ShipType.crawler]: playerClass == PlayerClass.collector ? 150 : 100,
                 }) as ProductionSettings;
 
+
+                const activeLifeform = (await store.get(`planet.${id}.lifeform`)) as LifeformType | undefined ?? LifeformType.none;
+                const lifeformBuildings = (await store.get(`planet.${id}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined ?? createRecord(LifeformBuildingTypes, 0);
+                const lifeformTechnologies = (await store.get(`planet.${id}.lifeformTechnologies`)) as DbPlanetLifeformTechnologyLevels | undefined ?? createRecord(LifeformTechnologyTypes, 0);
+                const activeLifeformTechnologies = (await store.get(`planet.${id}.activeLifeformTechnologies`)) as LifeformTechnologyType[] | undefined ?? [];
+
                 const planetData: PlanetData = {
                     isMoon: false,
                     ...basicInfo,
@@ -223,6 +149,11 @@ class EmpireDataModuleClass extends Vue {
                     defense,
                     activeItems,
                     productionSettings,
+
+                    activeLifeform,
+                    lifeformBuildings,
+                    lifeformTechnologies,
+                    activeLifeformTechnologies,
                 };
                 planets[id] = planetData;
             }
@@ -235,6 +166,7 @@ class EmpireDataModuleClass extends Vue {
             research,
             planetOrder,
             planets,
+            lifeformExperience,
         };
 
         this._resolveReady();

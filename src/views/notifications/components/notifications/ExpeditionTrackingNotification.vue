@@ -35,7 +35,7 @@
                     <div class="result-grid" v-if="foundShips">
                         <template v-for="ship in ships">
                             <template v-if="notification.ships[ship] > 0">
-                                <o-ship :ship="shipTypes[ship]" :key="`ship-icon-${ship}`" class="icon" />
+                                <o-ship :ship="ship" :key="`ship-icon-${ship}`" class="icon" />
                                 <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
                             </template>
                         </template>
@@ -93,7 +93,7 @@
                     <template v-if="notification.events[event] > 0">
                         <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close icon" :style="{ color: eventColors.nothing }" />
                         <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" class="icon" />
-                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" ship="battleship" size="24px" class="icon" />
+                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'delay'"
                             :key="`event-icon-${event}`"
@@ -135,22 +135,56 @@
                     </template>
                 </template>
             </div>
+
+            <template v-if="hasDepletion">
+                <hr />
+                <h4 v-text="$i18n.$t.expeditions.depletion" />
+                <div class="result-grid" v-if="showSimplified">
+                    <template v-for="level in DepletionLevels">
+                        <template v-if="notification.depletion[level] > 0">
+                            <span
+                                :key="`icon-${level}`"
+                                class="icon mdi"
+                                :class="
+                                    {
+                                        unknown: 'mdi-help',
+                                        none: 'mdi-signal-cellular-outline',
+                                        low: 'mdi-signal-cellular-1',
+                                        medium: 'mdi-signal-cellular-2',
+                                        high: 'mdi-signal-cellular-3',
+                                    }[level]
+                                "
+                                :style="{ color: depletionColors[level] }"
+                            />
+                            <span :key="`amount-${level}`" v-text="$i18n.$n(notification.depletion[level])" />
+                        </template>
+                    </template>
+                </div>
+                <div v-else class="text-grid events">
+                    <template v-for="level in DepletionLevels">
+                        <template v-if="notification.depletion[level] > 0">
+                            <span v-text="$i18n.$t.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
+                            <span v-text="$i18n.$n(notification.depletion[level])" :key="`depletion-count-${level}`" />
+                        </template>
+                    </template>
+                </div>
+            </template>
         </template>
     </notification>
 </template>
 
 <script lang="ts">
     import { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { OShipType } from '@/views/_shared/components/ogame/OShip.vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
     import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
 
     @Component({
         components: {
@@ -176,25 +210,13 @@
             ExpeditionEventType.trader,
             ExpeditionEventType.nothing,
         ];
+        private readonly ShipType = ShipType;
+        private readonly ResourceType = ResourceType;
+
+        private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
         private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
-        private readonly shipTypes: Record<ExpeditionFindableShipType, OShipType> = {
-            [ShipType.lightFighter]: OShipType['light-fighter'],
-            [ShipType.heavyFighter]: OShipType['heavy-fighter'],
-            [ShipType.cruiser]: OShipType.cruiser,
-            [ShipType.battleship]: OShipType.battleship,
-            [ShipType.bomber]: OShipType.bomber,
-            [ShipType.battlecruiser]: OShipType.battlecruiser,
-            [ShipType.destroyer]: OShipType.destroyer,
-            [ShipType.reaper]: OShipType.reaper,
-            [ShipType.pathfinder]: OShipType.pathfinder,
-            [ShipType.smallCargo]: OShipType['small-cargo'],
-            [ShipType.largeCargo]: OShipType['large-cargo'],
-            [ShipType.espionageProbe]: OShipType['espionage-probe'],
-        };
-
-        private readonly ResourceType = ResourceType;
 
         private get showSimplified() {
             return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
@@ -206,6 +228,10 @@
 
         private get title() {
             return this.$i18n.$t.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
+        }
+
+        private get hasDepletion() {
+            return Object.values(this.notification.depletion).some(c => c > 0);
         }
 
         private get foundResources() {
@@ -222,6 +248,10 @@
 
         private get eventColors() {
             return SettingsDataModule.settings.colors.expeditions.events;
+        }
+
+        private get depletionColors() {
+            return SettingsDataModule.settings.colors.expeditions.depletion;
         }
 
         private get resourceSum() {
@@ -265,6 +295,10 @@
         flex-direction: row;
         column-gap: 8px;
         row-gap: 4px;
+
+        + .result-grid {
+            margin-top: 8px;
+        }
     }
 
     .text-grid {

@@ -24,7 +24,7 @@ export enum MessageType {
     CombatReportUnknown = 'combat-reports/is-unknown',
 
     // message tracking
-    WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is no expedition, combat, or df report
+    WillNotBeTracked = 'message-tracking/no-tracking', // message will not be tracked because it is ignored for some reason (e.g. espionage combats)
     TrackingError = 'message-tracking/error',
 
     // empire tracking
@@ -57,4 +57,15 @@ export enum MessageType {
 
     // Universe-specific settings
     NotifyUniverseSpecificSettingsUpdate = 'universe-specific-settings/notify-update',
+
+    // lifeforms
+    UpdateLifeformExperience = 'lifeforms/update-lifeform-experience',
+    UpdateSelectedLifeform = 'lifeforms/update-selected-lifeform',
+    UpdatePlanetActiveLifeformBuildingLevels = 'lifeforms/update-active-building-levels',
+    UpdatePlanetLifeformBuildingLevels = 'lifeforms/update-all-building-levels',
+    UpdatePlanetActiveLifeformTechnologyLevels = 'lifeforms/update-active-technology-levels',
+    UpdatePlanetLifeformTechnologyLevels = 'lifeforms/update-all-technology-levels',
+    TrackLifeformDiscovery = 'lifeforms/track-discovery',
+    LifeformDiscovery = 'lifeforms/discovery',
+    NewLifeformDiscovery = 'lifeforms/new-discovery',
 }

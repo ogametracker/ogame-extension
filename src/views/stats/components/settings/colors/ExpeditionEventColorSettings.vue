@@ -61,17 +61,7 @@
 
         private resetColors() {
             const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.events;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    expeditions: {
-                        ...SettingsDataModule.settings.colors.expeditions,
-                        events: defaultColors,
-                    },
-                },
-            });
+            this.updateColors(defaultColors);
         }
     }
 </script>

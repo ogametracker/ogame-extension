@@ -6,6 +6,7 @@ import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { EmpireService } from "./empire/EmpireService";
 import { ExpeditionService } from "./expeditions/ExpeditionService";
+import { LifeformDiscoveryService } from "./lifeform-discoveries/LifeformDiscoveryService";
 import { InternalService } from "./InternalService";
 import { MessageService } from "./MessageService";
 import { ServerSettingsService } from "./server-settings/ServerSettingsService";
@@ -18,6 +19,7 @@ export const settingsService = new SettingsService();
 const services: MessageService[] = [
     settingsService,
     new ExpeditionService(),
+    new LifeformDiscoveryService(),
     new CombatReportService(),
     new DebrisFieldReportService(),
     new EmpireService(),
@@ -39,19 +41,24 @@ try {
 async function showMigrationWindow() {
     const hasData = (await chrome.storage.local.getBytesInUse()) > 0;
     const migrated = await chrome.storage.local.get('migration-v1-to-v2');
-    if(!hasData || migrated['migration-v1-to-v2'] == true) {
+    if (!hasData || migrated['migration-v1-to-v2'] == true) {
         return;
     }
 
     await chrome.tabs.create({
         active: true,
-        index: 0, 
+        index: 0,
         url: '/views/migrate.html',
     });
 }
 
 async function onMessage(message: Message<MessageType, any>) {
     _logDebug('got message', new Date(), message);
+    
+    if (message.ogameMeta.playerId <= 0 || message.ogameMeta.serverId <= 0) {
+        _logWarning('skipping message because playerid <= 0 or serverid <= 0', message);
+        return;
+    }
 
     for (const service of services) {
         await service.onMessage(message);

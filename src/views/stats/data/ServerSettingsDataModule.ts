@@ -52,11 +52,11 @@ class ServerSettingsDataModuleClass extends Vue {
             universe: {
                 galaxies: {
                     count: serverData?.galaxies ?? 5,
-                    isDonut: (serverData?.donutGalaxy ?? 1) == 1,
+                    isDonut: serverData?.donutGalaxy ?? true,
                 },
                 systems: {
                     count: serverData?.systems ?? 499,
-                    isDonut: (serverData?.donutSystem ?? 1) == 1,
+                    isDonut: serverData?.donutSystem ?? true,
                 },
             },
             darkMatterBonus: serverData?.darkMatterNewAcount ?? 0,
@@ -67,10 +67,10 @@ class ServerSettingsDataModuleClass extends Vue {
                     ships: serverData?.debrisFactor ?? 0,
                 },
                 defenseRepairFactor: serverData?.repairFactor ?? 0.7,
-                isAllianceCombatSystemEnabled: (serverData?.acs ?? 1) == 1,
-                isRapidfireEnabled: (serverData?.rapidFire ?? 1) == 1,
+                isAllianceCombatSystemEnabled: serverData?.acs ?? true,
+                isRapidfireEnabled: serverData?.rapidFire?? true,
                 wreckfields: {
-                    isEnabled: (serverData?.wfEnabled ?? 1) == 1,
+                    isEnabled: serverData?.wfEnabled?? true,
                     minLostPercentage: serverData?.wfMinimumLossPercentage ?? 5,
                     minLostResources: serverData?.wfMinimumRessLost ?? 150_000,
                     repairableBasePercentage: serverData?.wfBasicPercentageRepairable ?? 45,
@@ -79,10 +79,10 @@ class ServerSettingsDataModuleClass extends Vue {
             fleet: {
                 deuteriumConsumptionFactor: serverData?.globalDeuteriumSaveFactor ?? 1,
                 hyperspaceCargoPercentageFactor: serverData?.cargoHyperspaceTechMultiplier ?? 5,
-                isProbeCargoEnabled: (serverData?.probeCargo ?? 0) == 1,
+                espionageProbeCargo: serverData?.probeCargo ?? 0,
             },
             marketplace: {
-                isEnabled: (serverData?.marketplaceEnabled ?? 0) == 1,
+                isEnabled: serverData?.marketplaceEnabled ?? false,
                 offerTimeoutInDays: serverData?.marketplaceOfferTimeout ?? 3,
                 priceRanges: {
                     upper: serverData?.marketplacePriceRangeUpper ?? 0.2,
@@ -131,7 +131,7 @@ class ServerSettingsDataModuleClass extends Vue {
                     },
                     crawlers: {
                         geologistActiveCrawlerFactorBonus: serverData?.minerBonusMaxCrawler ?? 0.1,
-                        isOverloadEnabled: (serverData?.minerBonusOverloadCrawler ?? 1) == 1 ,
+                        isOverloadEnabled: serverData?.minerBonusOverloadCrawler ?? true,
                         productionFactorBonus: serverData?.minerBonusAdditionalCrawler ?? 0.5,
                     },
                 },
@@ -140,7 +140,7 @@ class ServerSettingsDataModuleClass extends Vue {
                     researchSpeedFactor: serverData?.explorerBonusIncreasedResearchSpeed ?? 0.25,
                     phalanxRangeFactorBonus: serverData?.explorerBonusPhalanxRange ?? 0.2,
                     planetSizeFactorBonus: serverData?.explorerBonusLargerPlanets ?? 0.1,
-                    hasBonusPlunderForInactivePlayers: (serverData?.explorerBonusPlunderInactive ?? 1) == 1,
+                    hasBonusPlunderForInactivePlayers: serverData?.explorerBonusPlunderInactive?? true,
                     expeditions: {
                         outcomeFactorBonus: serverData?.explorerBonusIncreasedExpeditionOutcome ?? 0.5,
                         enemyFactorReduction: serverData?.explorerBonusExpeditionEnemyReduction ?? 0.5,
@@ -150,8 +150,8 @@ class ServerSettingsDataModuleClass extends Vue {
                 general: {
                     bonusFleetSlots: serverData?.warriorBonusAdditionalFleetSlots ?? 2,
                     bonusMoonFields: serverData?.warriorBonusAdditionalMoonFields ?? 5,
-                    hasMorePreciseFleetSpeed: (serverData?.warriorBonusFleetHalfSpeed ?? 1) == 1,
-                    hasAttackerWreckfield: (serverData?.warriorBonusAttackerWreckfield ?? 1) == 1,
+                    hasMorePreciseFleetSpeed: serverData?.warriorBonusFleetHalfSpeed ?? true,
+                    hasAttackerWreckfield: serverData?.warriorBonusAttackerWreckfield ?? true,
                     combatShipSpeedFactorBonus: serverData?.warriorBonusFasterCombatShips ?? 1,
                     deuteriumConsumptionFactorReduction: serverData?.warriorBonusFuelConsumption ?? 0.25,
                     recyclers: {
@@ -160,6 +160,10 @@ class ServerSettingsDataModuleClass extends Vue {
                         speedFactorBonus: serverData?.warriorBonusFasterRecyclers ?? 1,
                     },
                 },
+            },
+
+            lifeforms: {
+                enabled: serverData?.lifeformsEnabled ?? false,
             },
         };
     }
