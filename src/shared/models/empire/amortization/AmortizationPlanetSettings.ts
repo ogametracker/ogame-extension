@@ -27,6 +27,7 @@ export interface AmortizationPlanetSettings {
     };
     lifeform: LifeformType;
     activeLifeformTechnologies: LifeformTechnologyType[];
+    ignoreEmptyLifeformTechnologySlots: boolean;
     lifeformBuildingLevels?: Record<LifeformBuildingType, number>;
     lifeformTechnologyLevels?: Record<LifeformTechnologyType, number>;
 }

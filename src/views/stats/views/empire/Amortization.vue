@@ -98,6 +98,7 @@
                                     :key="planetSetting.id"
                                     v-model="planetSettings[planetSetting.id]"
                                     toggleable
+                                    :planetData="empire.planets[planetSetting.id]"
                                 />
                             </div>
                         </div>
@@ -481,7 +482,7 @@
         }
 
         private getPlanetName(id: number): string {
-            return this.empire.planets[id]?.name 
+            return this.empire.planets[id]?.name
                 ?? `${this.$i18n.$t.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
         }
         private formatPlanetCoordinates(id: number): string {
@@ -528,6 +529,7 @@
                     count: 0,
                     max: false,
                 },
+                ignoreEmptyLifeformTechnologySlots: false,
                 lifeform: LifeformType.rocktal,
                 activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
             },
@@ -650,6 +652,7 @@
                         },
                         lifeform: planet.activeLifeform,
                         activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
+                        ignoreEmptyLifeformTechnologySlots: false,
                         lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
                         lifeformBuildingLevels: { ...planet.lifeformBuildings },
                     };
@@ -672,6 +675,7 @@
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
+                    ignoreEmptyLifeformTechnologySlots: false,
                     lifeform: LifeformType.rocktal,
                     activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
                 },
