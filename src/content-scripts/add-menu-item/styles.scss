@@ -24,7 +24,7 @@
             content: "OGame Tracker";
         }
 
-        &::after {
+        &.beta::after {
             content: "β";
             color: #ffd700;
             font-size: 0.75em;
