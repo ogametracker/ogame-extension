@@ -133,6 +133,7 @@ export interface EmpireTranslations {
         alwaysAvailable: string;
 
         discoveryMissions: string;
+        experiencePoints: string;
         lifeformFound: string;
         eventTypes: Record<LifeformDiscoveryEventType, string>;
     };

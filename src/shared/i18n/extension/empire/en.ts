@@ -139,6 +139,7 @@ export const en: EmpireTranslations = {
         lifeformFound: 'Lifeform found',
         alwaysAvailable: 'Always available',
 
+        experiencePoints: 'Experience Points',
         discoveredOn: 'Lifeform discovered on',
         numberOfLifeformDiscoveries: 'Number of discoveries',
     },
