@@ -89,6 +89,7 @@ export interface EmpireTranslations {
                 lifeformSettings: string;
                 relevantLifeformBuildings: string;
                 lifeformTechnologies: string;
+                ignoreEmptySlots: string;
             };
         };
 

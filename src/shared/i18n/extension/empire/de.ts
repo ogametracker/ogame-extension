@@ -90,6 +90,7 @@ export const de: EmpireTranslations = {
                 lifeformSettings: 'Lebensform-Einstellungen',
                 relevantLifeformBuildings: 'Relevante Lebensform-Gebäude',
                 lifeformTechnologies: 'Lebensform-Technologien',
+                ignoreEmptySlots: 'Inaktive Slots ignorieren',
             },
         },
 

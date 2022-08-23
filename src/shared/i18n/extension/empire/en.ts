@@ -90,6 +90,7 @@ export const en: EmpireTranslations = {
                 lifeformSettings: 'Lifeform settings',
                 relevantLifeformBuildings: 'Relevant Lifeform Buildings',
                 lifeformTechnologies: 'Lifeform Technologies',
+                ignoreEmptySlots: 'Ignore inactive slots',
             },
         },
 

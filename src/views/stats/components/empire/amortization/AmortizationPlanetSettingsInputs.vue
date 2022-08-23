@@ -99,6 +99,16 @@
                 />
             </span>
 
+            <template v-if="planetData != null">
+                <span />
+                <span>
+                    <checkbox
+                        v-model="settings.ignoreEmptyLifeformTechnologySlots"
+                        :label="$i18n.$t.empire.amortization.settings.planetSettings.ignoreEmptySlots"
+                    />
+                </span>
+            </template>
+
             <span />
             <span>
                 <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
@@ -162,6 +172,7 @@
     import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { PlanetData } from '@/shared/models/empire/PlanetData';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -196,6 +207,9 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
         private settings!: AmortizationPlanetSettings;
 
+        @Prop({ required: false, type: Object as PropType<PlanetData> })
+        private planetData!: PlanetData | null;
+
         @Watch('settings', { immediate: true, deep: true })
         private onSettingsChanged() {
             const lifeform = this.settings.lifeform;
@@ -203,18 +217,28 @@
                 return;
             }
 
-            const usedSlots = new Set<number>();
-            this.settings.activeLifeformTechnologies.forEach(tech => {
-                usedSlots.add(LifeformTechnologySlots[tech]);
-            });
+            if (this.settings.ignoreEmptyLifeformTechnologySlots && this.planetData != null) {
+                const someMissing = this.planetData.activeLifeformTechnologies.some(lfTech => !this.settings.activeLifeformTechnologies.includes(lfTech));
+                const differentLengths = this.settings.activeLifeformTechnologies.length != this.planetData.activeLifeformTechnologies.length;
 
-            this.slots.forEach(slot => {
-                if (usedSlots.has(slot)) {
-                    return;
+                if (differentLengths || someMissing) {
+                    this.settings.activeLifeformTechnologies = [...this.planetData.activeLifeformTechnologies];
                 }
+            }
+            else {
+                const usedSlots = new Set<number>();
+                this.settings.activeLifeformTechnologies.forEach(tech => {
+                    usedSlots.add(LifeformTechnologySlots[tech]);
+                });
 
-                this.settings.activeLifeformTechnologies.push(this.lifeformTechBySlot[slot][lifeform]);
-            });
+                this.slots.forEach(slot => {
+                    if (usedSlots.has(slot)) {
+                        return;
+                    }
+
+                    this.settings.activeLifeformTechnologies.push(this.lifeformTechBySlot[slot][lifeform]);
+                });
+            }
         }
 
         @Watch('settings.position')
