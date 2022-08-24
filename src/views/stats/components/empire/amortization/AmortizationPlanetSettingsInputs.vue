@@ -217,12 +217,16 @@
                 return;
             }
 
-            if (this.settings.ignoreEmptyLifeformTechnologySlots && this.planetData != null) {
-                const someMissing = this.planetData.activeLifeformTechnologies.some(lfTech => !this.settings.activeLifeformTechnologies.includes(lfTech));
-                const differentLengths = this.settings.activeLifeformTechnologies.length != this.planetData.activeLifeformTechnologies.length;
+            const planetData = this.planetData;
+            if (this.settings.ignoreEmptyLifeformTechnologySlots && planetData != null) {
+                const remove = this.settings.activeLifeformTechnologies.filter(tech => {
+                    const slot = LifeformTechnologySlots[tech];
 
-                if (differentLengths || someMissing) {
-                    this.settings.activeLifeformTechnologies = [...this.planetData.activeLifeformTechnologies];
+                    return !planetData.activeLifeformTechnologies.some(planetTech => slot == LifeformTechnologySlots[planetTech]);
+                });
+
+                if (remove.length > 0) {
+                    this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(tech => !remove.includes(tech));
                 }
             }
             else {
