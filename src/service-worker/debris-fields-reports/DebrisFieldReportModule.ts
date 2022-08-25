@@ -46,7 +46,10 @@ export class DebrisFieldReportModule {
 
         try {            
             const languageKey = getLanguage(language, true);
-            const parseResult = this.tryParseDebrisFieldReport(languageKey, messageData);
+            const parseResult = this.tryParseDebrisFieldReport(languageKey, {
+                ...messageData,
+                text: messageData.text.replace(/\s+/, ' ').trim(),
+            });
 
             report = parseResult.report;
 
