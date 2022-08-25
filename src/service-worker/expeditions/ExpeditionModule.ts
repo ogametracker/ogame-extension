@@ -45,7 +45,10 @@ export class ExpeditionModule {
         let expedition: ExpeditionEvent;
         try {
             const languageKey = getLanguage(language, true);
-            expedition = this.parseExpedition(languageKey, expeditionEventData);
+            expedition = this.parseExpedition(languageKey, {
+                ...expeditionEventData,
+                text: expeditionEventData.text.replace(/\s+/, ' ').trim(),
+            });
 
             await db.put('expeditions', expedition);
 

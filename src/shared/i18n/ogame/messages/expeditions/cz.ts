@@ -55,7 +55,7 @@ export const cz: ExpeditionMessages = {
             /*'Nalezli jsme */'obrovský hřbitov vesmírných lodí'/*. Některým technikům z expedice se podařilo opět pár lodí zprovoznit.'*/,
             /*'Nalezli jsme */'planetu se zbytky civilizace'/*. Zahlédli jsme obrovskou neporušenou vesmírnou stanici na nízké orbitě. Nekteří technici a piloti se vydali na povrch hledat lodě, které by se ještě daly použít.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [

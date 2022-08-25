@@ -55,7 +55,7 @@ export const si: ExpeditionMessages = {
             /*'Našli smo */'ogromno pokopališče ladij'/*. Našim tehnikom je uspelo nekatere popraviti.'*/,
             /*'Našli smo */'planet z ostanki civilizacije'/*. Opazili smo tudi ogromno vesoljsko postajo kako kroži v orbiti. Tehniki so se odpravili, da pogledajo katere ladje lahko uporabijo.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Naslednje ladje so zdaj del tvoje flote:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`Naslednje ladje so zdaj del tvoje flote:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [

@@ -56,7 +56,7 @@ export const it: ExpeditionMessages = {
             /*TODO: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*TODO: it 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [
