@@ -512,6 +512,35 @@ export const Items: Record<ItemHash, Item> = Object.freeze({
         grade: ItemGrade.platinum,
     },
 
+    "56c258e7c1f12a37773d9c95ad2e98dc3076aca6": {
+        hash: "56c258e7c1f12a37773d9c95ad2e98dc3076aca6" as ItemHash,
+        image: "4834adbcab85f74ad1a2030e3eccc89f35c9cfbb",
+        smallImage: '',
+        name: "KRAKEN Bronze (Lifeforms)",
+        grade: ItemGrade.bronze,
+    },
+    "309bc42ce9e5d4587c0061ef425e9940dce9f713": {
+        hash: "309bc42ce9e5d4587c0061ef425e9940dce9f713" as ItemHash,
+        image: "27f5d8ceafc520bcc0f7071981aff62aaefa796b",
+        smallImage: '',
+        name: "KRAKEN Silber (Lifeforms)",
+        grade: ItemGrade.silver,
+    },
+    "3b470998cf557da90f473c00c0f1a06c641079e4": {
+        hash: "3b470998cf557da90f473c00c0f1a06c641079e4" as ItemHash,
+        image: "d3ed9dfe986ecba129b4a4580d1709acbc732139",
+        smallImage: '',
+        name: "KRAKEN Gold (Lifeforms)",
+        grade: ItemGrade.gold,
+    },
+    "8223a42e752958f15d6392630d776af061c53e1f": {
+        hash: "8223a42e752958f15d6392630d776af061c53e1f" as ItemHash,
+        image: "27fc57078a3df32bc3db4db076e7040d20d1dcc3",
+        smallImage: '',
+        name: "KRAKEN Platin (Lifeforms)",
+        grade: ItemGrade.platinum,
+    },
+
     "d3d541ecc23e4daa0c698e44c32f04afd2037d84": {
         hash: "d3d541ecc23e4daa0c698e44c32f04afd2037d84" as ItemHash,
         image: "56724c3a1dcae8036bb172f0be833a6f9a28bc27",
@@ -567,6 +596,34 @@ export const Items: Record<ItemHash, Item> = Object.freeze({
         image: "c533ada7cad2164f322748638236b38c02aeaea0",
         smallImage: '141b0c6fcb652b2c2a4c598e37a620f9172c7d32',
         name: "NEWTRON Platin",
+        grade: ItemGrade.platinum,
+    },
+    "dfb5ffa09e06d48304d46aaff8686dd1beec1d24": {
+        hash: "dfb5ffa09e06d48304d46aaff8686dd1beec1d24" as ItemHash,
+        image: "be56c3b36189b16830e07a625f182fe4ab75b878",
+        smallImage: '',
+        name: "NEWTRON Bronze (Lifeforms)",
+        grade: ItemGrade.bronze,
+    },
+    "ff3e56f3f0c386c1698c56d912e47ab18b80bfa8": {
+        hash: "ff3e56f3f0c386c1698c56d912e47ab18b80bfa8" as ItemHash,
+        image: "d7ffe87869bafd8ec84c8d50774861d7c716985b",
+        smallImage: '',
+        name: "NEWTRON Silber (Lifeforms)",
+        grade: ItemGrade.silver,
+    },
+    "2a0d57915e6904a910012362abe8b1ca315a24b9": {
+        hash: "2a0d57915e6904a910012362abe8b1ca315a24b9" as ItemHash,
+        image: "3fbe027e0579e94fe88d873857a28d22d6b2411b",
+        smallImage: '',
+        name: "NEWTRON Gold (Lifeforms)",
+        grade: ItemGrade.gold,
+    },
+    "f1545f4fc66dafbc04ad02cafc87cfb5f34706fa": {
+        hash: "f1545f4fc66dafbc04ad02cafc87cfb5f34706fa" as ItemHash,
+        image: "c8b583a18c98a93041ccc82269af5886e972403e",
+        smallImage: '',
+        name: "NEWTRON Platin (Lifeforms)",
         grade: ItemGrade.platinum,
     },
 
@@ -705,4 +762,6 @@ export const Items: Record<ItemHash, Item> = Object.freeze({
         name: "Migrations-Item",
         grade: ItemGrade.none,
     },
+
+
 });
