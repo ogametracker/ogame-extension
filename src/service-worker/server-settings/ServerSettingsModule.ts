@@ -16,7 +16,7 @@ declare namespace OgameApi {
     }
 
     interface ServerData {
-        name: string;
+        name?: string;
         number: string;
         language: string;
         timezone: string;
@@ -114,14 +114,14 @@ type ServerSettingsMapping<
         toKey: TKeyTo;
     } & (
         | { type: StringConstructor | NumberConstructor | BooleanConstructor }
-        | { conversion: (value: OgameApi.ServerData[TKeyFrom]) => DbServerSettings[TKeyTo] }
+        | { conversion: (value: OgameApi.ServerData[TKeyFrom], serverData: OgameApi.ServerData) => DbServerSettings[TKeyTo] }
     );
 
 const $keyTypes: Record<keyof OgameApi.ServerData, ServerSettingsMapping> = {
     name: {
         fromKey: 'name',
         toKey: 'name',
-        type: String,
+        conversion: (name, serverData) => (name as string | undefined) ?? `${serverData.language.toUpperCase()} ${serverData.number}`,
     },
     number: {
         fromKey: 'number',
@@ -602,19 +602,19 @@ export class ServerSettingsModule {
             if ('type' in mapping) {
                 if (mapping.type == String) {
                     if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}'`);
+                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = serverDataValue.toString();
                 }
                 else if (mapping.type == Number) {
                     if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}'`);
+                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = parseFloatSafe(serverDataValue);
                 }
                 else if (mapping.type == Boolean) {
                     if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}'`);
+                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = serverDataValue == '1';
                 }
@@ -623,7 +623,7 @@ export class ServerSettingsModule {
                 }
             } 
             else {
-                value = mapping.conversion(serverDataValue);
+                value = mapping.conversion(serverDataValue, serverData);
             }
 
             await store.put(value, mapping.toKey);
