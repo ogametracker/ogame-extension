@@ -19,7 +19,7 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: dk 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Vores ekspeditionsflåde oprettede den første kontakt med en speciel race. Det så ud til at være et væsen lavet af energi, */'som kaldte sig selv Legorian'/* . Væsenet fløj gennem vores ekspeditionsskibe og besluttede sig for at hjælpe vores underudviklede race. En kasse med Mørk Materie blev materialiseret på broen af skibet.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`),
     },
