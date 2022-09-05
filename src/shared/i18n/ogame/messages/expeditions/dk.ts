@@ -55,7 +55,7 @@ export const dk: ExpeditionMessages = {
             /*'Vi fandt en */'enorm rumskibs gravplads'/*. Nogle af teknikerne fra ekspeditionen fik en del af skibene til at virke igen.'*/,
             /*'Vi har fundet en */'planet med rester fra en ukendt civilisation'/*. Vi kan se en gigantisk rumstation cirkulere omkring planeten. Nogen af vores piloter og teknikere er taget til overfladen for at lede efter skibe, som måske stadig kan bruges.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`De følgende skibe er nu del af flåden.(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`De følgende skibe er nu del af flåden.\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [

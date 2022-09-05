@@ -90,6 +90,7 @@ export const de: EmpireTranslations = {
                 lifeformSettings: 'Lebensform-Einstellungen',
                 relevantLifeformBuildings: 'Relevante Lebensform-Gebäude',
                 lifeformTechnologies: 'Lebensform-Technologien',
+                ignoreEmptySlots: 'Inaktive Slots ignorieren',
             },
         },
 
@@ -139,6 +140,7 @@ export const de: EmpireTranslations = {
         lifeformFound: 'Lebensform gefunden',
         alwaysAvailable: 'Immer verfügbar',
 
+        experiencePoints: 'Erfahrungspunkte',
         discoveredOn: 'Lebensform entdeckt am',
         numberOfLifeformDiscoveries: 'Anzahl Entdeckungen',
     },

@@ -55,7 +55,7 @@ export const en: ExpeditionMessages = {
             /*'We */'found an enormous spaceship graveyard'/*. Some of the technicians from the expedition fleet were able to get some of the ships to work again.'*/,
             /*'We found the */'planet of an extinct civilization'/*. We are able to see a giant intact space station, orbiting. Some of your technicians and pilots went to the surface looking for some ships which could still be used.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`The following ships are now part of the fleet:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`The following ships are now part of the fleet:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [

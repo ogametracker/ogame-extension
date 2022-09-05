@@ -91,6 +91,7 @@ function trackOwnedPlanets() {
 
 const planetIdRegex = /&cp=(?<id>\d+)($|[^\d])/;
 const maxTempRegex = / (?<temp>-?\d+)\s*°C<br\/?>/;
+const nameRegex = /^<b>(?<name>.+) \[\d+:\d+:\d+\]/;
 
 function getPlanetData(planetElem: Element): BasicPlanetDataPlanet {
     const planetLink = (planetElem.querySelector(':scope > a.planetlink') as HTMLAnchorElement | null)?.href ?? _throw('no planetlink found');
@@ -100,11 +101,11 @@ function getPlanetData(planetElem: Element): BasicPlanetDataPlanet {
     const coordsText = planetElem.querySelector(':scope > a.planetlink > .planet-koords')?.textContent ?? _throw('no planet coordinates found');
     const coordinates = parseCoordinates(coordsText);
 
-    const name = planetElem.querySelector(':scope > a.planetlink > .planet-name')?.textContent ?? _throw('no planet name found');
-
     const titleText = planetElem.querySelector(':scope > a.planetlink')?.getAttribute('title') ?? _throw('no planet title found');
     const maxTempText = titleText.match(maxTempRegex)?.groups?.temp ?? _throw('no max temp found');
     const maxTemperature = parseIntSafe(maxTempText, 10);
+
+    const name = titleText.match(nameRegex)?.groups?.name ?? _throw('no planet name found');
 
     return {
         isMoon: false,
@@ -124,7 +125,8 @@ function getMoonData(planetElem: Element, coordinates: Coordinates): BasicPlanet
     const idText = moonLinkElem.href.match(planetIdRegex)?.groups?.id ?? _throw('no moon id found in url');
     const id = parseIntSafe(idText, 10);
 
-    const name = (moonLinkElem.querySelector(':scope > img') as HTMLImageElement | null)?.alt ?? _throw('no moon name found');
+    const titleText = moonLinkElem.getAttribute('title') ?? _throw('no moon title found');
+    const name = titleText.match(nameRegex)?.groups?.name ?? _throw('no moon name found');
 
     return {
         isMoon: true,

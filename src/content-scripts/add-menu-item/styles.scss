@@ -23,15 +23,6 @@
         &::before {
             content: "OGame Tracker";
         }
-
-        &::after {
-            content: "β";
-            color: #ffd700;
-            font-size: 0.75em;
-            position: relative;
-            top: -5px;
-            margin-left: 2px;
-        }
     }
 
     .icon {

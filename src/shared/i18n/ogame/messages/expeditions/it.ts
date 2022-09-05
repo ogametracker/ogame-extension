@@ -35,7 +35,7 @@ export const it: ExpeditionMessages = {
             /*'Su una piccola luna con la sua atmosfera, la tua spedizione ha trovato alcuni */'grandi giacimenti di risorse grezze'/*. L`equipaggio sta cercando di estrarre e caricare quel tesoro naturale.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: it 'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Anelli */'di minerali in orbita attorno ad un pianeta'/* contenevano risorse incalcolabili. Le navi della spedizione stanno tornando e hanno le stive piene!'*/,
             /*TODO: it 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) è stato razziato`),
@@ -56,7 +56,7 @@ export const it: ExpeditionMessages = {
             /*TODO: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*TODO: it 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:(<br>|\\s*)(?<ships>((${ships.join('|')}):\\s*\\d+(<br>|\\s*)?)+)?`),
+        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -151,9 +151,9 @@ export const it: ExpeditionMessages = {
             /*'E` emozionante essere i */'primi ad attraversare un settore inesplorato',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO it: 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO it: 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*TODO it: 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Sembra che nessun */'umano sia stato in questa parte della galassia',
+            /*'Abbiamo */'trovato i detriti di un`antica nave spaziale'/*. Non siamo i primi ad essere stati qui.'*/,
+            /*'abbiamo quasi avuto */'una collisione con un`altra flotta in spedizione'/*. Non pensavo che ci sarebbe stato qualcun altro qui.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*TODO it: 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',

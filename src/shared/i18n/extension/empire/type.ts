@@ -89,6 +89,7 @@ export interface EmpireTranslations {
                 lifeformSettings: string;
                 relevantLifeformBuildings: string;
                 lifeformTechnologies: string;
+                ignoreEmptySlots: string;
             };
         };
 
@@ -133,6 +134,7 @@ export interface EmpireTranslations {
         alwaysAvailable: string;
 
         discoveryMissions: string;
+        experiencePoints: string;
         lifeformFound: string;
         eventTypes: Record<LifeformDiscoveryEventType, string>;
     };
