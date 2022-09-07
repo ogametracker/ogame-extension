@@ -53,7 +53,7 @@
     import { IDBPTransaction } from 'idb';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { _throw } from '@/shared/utils/_throw';
-    import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetProductionSettings, DbPlayerResearchLevels, DbShipAmounts } from '@/shared/db/schema/player';
+    import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbPlayerOfficers, DbPlayerResearchLevels, DbShipAmounts } from '@/shared/db/schema/player';
     import { createRecord } from '@/shared/utils/createRecord';
     import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
     import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
@@ -64,6 +64,9 @@
     import { DbServer } from '@/shared/db/schema/global';
     import { importData as importData_v1ToV2 } from '@/shared/import-export/v1-to-v2/importData';
     import { ImportCallbackInfo, importData as importData_v2 } from '@/shared/import-export/v2/importData';
+    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
 
     @Component({})
     export default class ImportExport extends Vue {
@@ -216,9 +219,20 @@
             const playerClass = await store.get('playerClass') as PlayerClass | undefined ?? PlayerClass.none;
             const research = await store.get('research') as DbPlayerResearchLevels ?? createRecord(ResearchTypes, 0);
 
+            const officers = (await store.get('officers')) as DbPlayerOfficers | undefined ?? {
+                admiral: false,
+                commander: false,
+                engineer: false,
+                geologist: false,
+                technocrat: false,
+            };
+            const lifeformExperience = (await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined
+                ?? createRecord(ValidLifeformTypes, 0);
+
             const keys = await store.getAllKeys();
 
-            const planetIds = keys.filter(key => key.startsWith('planet.') && key.split('.').length == 2).map(key => parseIntSafe(key.split('.')[1], 10));
+            const planetOrder = (await store.get('planetOrder')) as number[] | undefined ?? [];
+            const planetIds = planetOrder.filter(id => keys.includes(`planet.${id}`));
             const planets: V2ExportedEmpirePlanet[] = [];
             for (const planetId of planetIds) {
                 const data = await store.get(`planet.${planetId}`) as DbBasicPlanetData | undefined
@@ -245,6 +259,11 @@
                     [ShipType.crawler]: playerClass == PlayerClass.collector ? 150 : 100,
                 };
 
+                const activeLifeform = (await store.get(`planet.${planetId}.lifeform`)) as LifeformType | undefined ?? LifeformType.none;
+                const lifeformBuildings = (await store.get(`planet.${planetId}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined ?? createRecord(LifeformBuildingTypes, 0);
+                const lifeformTechnologies = (await store.get(`planet.${planetId}.lifeformTechnologies`)) as DbPlanetLifeformTechnologyLevels | undefined ?? createRecord(LifeformTechnologyTypes, 0);
+                const activeLifeformTechnologies = (await store.get(`planet.${planetId}.activeLifeformTechnologies`)) as LifeformTechnologyType[] | undefined ?? [];
+
                 planets.push({
                     id: data.id,
                     name: data.name,
@@ -255,6 +274,11 @@
                     defenses,
                     activeItems,
                     productionSettings,
+
+                    activeLifeform,
+                    lifeformBuildings,
+                    lifeformTechnologies,
+                    activeLifeformTechnologies,
                 });
             }
 
@@ -293,6 +317,9 @@
                 research,
                 planets,
                 moons,
+                officers,
+                planetOrder,
+                lifeformExperience,
             };
         }
 
@@ -336,7 +363,7 @@
         }
 
         private onImportProgress_v2(progress: ImportCallbackInfo): void {
-            switch(progress.type) {
+            switch (progress.type) {
                 case 'importing-settings': {
                     this.lastImportMessage = this.$i18n.$t.settings.importExport.importCallbacks.importingSettings;
                     break;
