@@ -107,7 +107,7 @@ export const dk: ExpeditionMessages = {
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
             /*'Nogle øjensynligt */'fortvivlede pirater'/*, har prøvet at kapre vores ekspeditions flåde.'*/,
-            /*'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Nogle */'primitive barbarer angriber os med deres rumskibe'/* ; hvis man da overhovet kan kalde dem rumskibe. Hvis vores skibe udsættes for fare, bliver vi nødt til at skyde tilbage.'*/,
             /*'Vi har sporet */'nogle berusede pirater'/*, der planlægger at overfalde os.'*/,
             /*'Under ekspeditionen blev vi nødt til at */'kæmpe mod nogle få piratskibe'/*.'*/,
             /*TODO: dk 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
@@ -142,11 +142,11 @@ export const dk: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /*TODO: dk *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    logbookRegex: /Logbog af Kommunikationsofficererne:(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*TODO: dk 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: dk 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Det er en vidunderlig følelse at være de første, */'der når frem til ukendte territorier',
         ],
         [ExpeditionDepletionLevel.low]: [
             /*TODO: dk 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
