@@ -142,7 +142,7 @@ export const dk: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /Logbog af Kommunikationsofficererne:(?<text>.+)/,
+    logbookRegex: /(Logbog af Kommunikationsofficererne|Logbog supplement Kommunikationsofficer):(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Dette område af universet er */'åbenbart ikke blevet besøgt indtil nu',
