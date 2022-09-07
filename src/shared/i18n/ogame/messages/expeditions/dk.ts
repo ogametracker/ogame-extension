@@ -145,7 +145,7 @@ export const dk: ExpeditionMessages = {
     logbookRegex: /Logbog af Kommunikationsofficererne:(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: dk 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*'Dette område af universet er */'åbenbart ikke blevet besøgt indtil nu',
             /*'Det er en vidunderlig følelse at være de første, */'der når frem til ukendte territorier',
         ],
         [ExpeditionDepletionLevel.low]: [
