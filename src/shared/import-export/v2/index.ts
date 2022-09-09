@@ -1,5 +1,8 @@
 import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { HighscoreTypeName } from "@/shared/models/ogame/highscore";
+import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { CombatReport } from "../../models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
@@ -29,14 +32,25 @@ export interface V2ExportedAccount {
 }
 
 export interface V2ExportedEmpire {
-    //dont export: planetOrder, officers
+    officers: V2ExportedPlayerOfficers;
 
     allianceClass: AllianceClass;
     playerClass: PlayerClass;
-
+    
     research: Record<ResearchType, number>;
+    planetOrder: number[];
     planets: V2ExportedEmpirePlanet[];
     moons: V2ExportedEmpireMoon[];
+    
+    lifeformExperience: Record<ValidLifeformType, number>;
+}
+
+export interface V2ExportedPlayerOfficers {
+    commander: boolean;
+    admiral: boolean;
+    geologist: boolean;
+    engineer: boolean;
+    technocrat: boolean;
 }
 
 export interface V2ExportedEmpirePlanet {
@@ -58,6 +72,11 @@ export interface V2ExportedEmpirePlanet {
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
     defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
+    
+    activeLifeform: LifeformType;
+    lifeformBuildings: Record<LifeformBuildingType, number>;
+    lifeformTechnologies: Record<LifeformTechnologyType, number>;
+    activeLifeformTechnologies: LifeformTechnologyType[];
 }
 
 export interface V2ExportedEmpireMoon {

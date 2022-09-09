@@ -19,7 +19,7 @@ export const dk: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: dk 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Vores ekspeditionsflåde oprettede den første kontakt med en speciel race. Det så ud til at være et væsen lavet af energi, */'som kaldte sig selv Legorian'/* . Væsenet fløj gennem vores ekspeditionsskibe og besluttede sig for at hjælpe vores underudviklede race. En kasse med Mørk Materie blev materialiseret på broen af skibet.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`),
     },
@@ -107,7 +107,7 @@ export const dk: ExpeditionMessages = {
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
             /*'Nogle øjensynligt */'fortvivlede pirater'/*, har prøvet at kapre vores ekspeditions flåde.'*/,
-            /*'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Nogle */'primitive barbarer angriber os med deres rumskibe'/* ; hvis man da overhovet kan kalde dem rumskibe. Hvis vores skibe udsættes for fare, bliver vi nødt til at skyde tilbage.'*/,
             /*'Vi har sporet */'nogle berusede pirater'/*, der planlægger at overfalde os.'*/,
             /*'Under ekspeditionen blev vi nødt til at */'kæmpe mod nogle få piratskibe'/*.'*/,
             /*TODO: dk 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
@@ -142,16 +142,16 @@ export const dk: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /*TODO: dk *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    logbookRegex: /(Logbog af Kommunikationsofficererne|Logbog supplement Kommunikationsofficer):(?<text>.+)/,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: dk 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: dk 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Dette område af universet er */'åbenbart ikke blevet besøgt indtil nu',
+            /*'Det er en vidunderlig følelse at være de første, */'der når frem til ukendte territorier',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: dk 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: dk 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*TODO: dk 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Det ser ikke */'ud til at andre har været i denne'/* del af galaksen før.'*/,
+            /*'Der blev */'opdaget gamle signaturer af rumskibe'/* . Det ser ikke ud til at vi var de første.'*/,
+            /*'Vi blev */'næsten ramt af en fremmed ekspeditionsflåde'/* . Havde ikke regnet med at der var så mange undervejs i dette område.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*TODO: dk 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',

@@ -75,8 +75,8 @@ export class DebrisFieldReportModule {
             _throw('found no debris field report match');
         }
 
-        const metalText = match.groups.metal.replace(/\./g, '') ?? _throw('metal not found');
-        const crystalText = match.groups.crystal.replace(/\./g, '') ?? _throw('crystal not found');
+        const metalText = match.groups.metal.replace(/[^\d]/g, '') ?? _throw('metal not found');
+        const crystalText = match.groups.crystal.replace(/[^\d]/g, '') ?? _throw('crystal not found');
 
         const metal = parseIntSafe(metalText, 10);
         const crystal = parseIntSafe(crystalText, 10);
