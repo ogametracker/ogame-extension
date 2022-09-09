@@ -149,9 +149,9 @@ export const dk: ExpeditionMessages = {
             /*'Det er en vidunderlig følelse at være de første, */'der når frem til ukendte territorier',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: dk 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: dk 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*TODO: dk 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Det ser ikke */'ud til at andre har været i denne'/* del af galaksen før.'*/,
+            /*'Der blev */'opdaget gamle signaturer af rumskibe'/* . Det ser ikke ud til at vi var de første.'*/,
+            /*'Vi blev */'næsten ramt af en fremmed ekspeditionsflåde'/* . Havde ikke regnet med at der var så mange undervejs i dette område.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*TODO: dk 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
