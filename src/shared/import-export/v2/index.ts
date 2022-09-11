@@ -32,17 +32,17 @@ export interface V2ExportedAccount {
 }
 
 export interface V2ExportedEmpire {
-    officers: V2ExportedPlayerOfficers;
+    officers?: V2ExportedPlayerOfficers;
 
     allianceClass: AllianceClass;
     playerClass: PlayerClass;
     
     research: Record<ResearchType, number>;
-    planetOrder: number[];
+    planetOrder?: number[];
     planets: V2ExportedEmpirePlanet[];
     moons: V2ExportedEmpireMoon[];
     
-    lifeformExperience: Record<ValidLifeformType, number>;
+    lifeformExperience?: Record<ValidLifeformType, number>;
 }
 
 export interface V2ExportedPlayerOfficers {
@@ -73,10 +73,10 @@ export interface V2ExportedEmpirePlanet {
     defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
     
-    activeLifeform: LifeformType;
-    lifeformBuildings: Record<LifeformBuildingType, number>;
-    lifeformTechnologies: Record<LifeformTechnologyType, number>;
-    activeLifeformTechnologies: LifeformTechnologyType[];
+    activeLifeform?: LifeformType;
+    lifeformBuildings?: Record<LifeformBuildingType, number>;
+    lifeformTechnologies?: Record<LifeformTechnologyType, number>;
+    activeLifeformTechnologies?: LifeformTechnologyType[];
 }
 
 export interface V2ExportedEmpireMoon {

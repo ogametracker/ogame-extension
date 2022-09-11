@@ -64,7 +64,7 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         for (const debrisFieldReport of account.debrisFieldReports) {
             await debrisFieldReportStore.put(debrisFieldReport);
         }
-        
+
         const lifeformDiscoveryStore = tx.objectStore('lifeformDiscoveries');
         for (const discovery of (account.lifeformDiscoveries ?? [])) {
             await lifeformDiscoveryStore.put(discovery);
@@ -78,9 +78,16 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         await empireStore.put(account.empire.allianceClass, 'allianceClass');
         await empireStore.put(account.empire.playerClass, 'playerClass');
         await empireStore.put(account.empire.research, 'research');
-        await empireStore.put(account.empire.lifeformExperience, 'lifeformExperience');
-        await empireStore.put(account.empire.planetOrder, 'planetOrder');
-        await empireStore.put(account.empire.officers, 'officers');
+
+        if (account.empire.lifeformExperience != null) {
+            await empireStore.put(account.empire.lifeformExperience, 'lifeformExperience');
+        }
+        if (account.empire.planetOrder != null) {
+            await empireStore.put(account.empire.planetOrder, 'planetOrder');
+        }
+        if (account.empire.officers != null) {
+            await empireStore.put(account.empire.officers, 'officers');
+        }
 
         for (const planet of account.empire.planets) {
             const basicData: DbBasicPlanetData = {
@@ -97,10 +104,19 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
             await empireStore.put(planet.defenses, `planet.${planet.id}.defenses`);
             await empireStore.put(planet.ships, `planet.${planet.id}.ships`);
 
-            await empireStore.put(planet.activeLifeform, `planet.${planet.id}.lifeform`);
-            await empireStore.put(planet.lifeformBuildings, `planet.${planet.id}.lifeformBuildings`);
-            await empireStore.put(planet.lifeformTechnologies, `planet.${planet.id}.lifeformTechnologies`);
-            await empireStore.put(planet.activeLifeformTechnologies, `planet.${planet.id}.activeLifeformTechnologies`);
+
+            if (planet.activeLifeform != null) {
+                await empireStore.put(planet.activeLifeform, `planet.${planet.id}.lifeform`);
+            }
+            if (planet.lifeformBuildings != null) {
+                await empireStore.put(planet.lifeformBuildings, `planet.${planet.id}.lifeformBuildings`);
+            }
+            if (planet.lifeformTechnologies != null) {
+                await empireStore.put(planet.lifeformTechnologies, `planet.${planet.id}.lifeformTechnologies`);
+            }
+            if (planet.activeLifeformTechnologies != null) {
+                await empireStore.put(planet.activeLifeformTechnologies, `planet.${planet.id}.activeLifeformTechnologies`);
+            }
         }
 
         for (const moon of account.empire.moons) {
