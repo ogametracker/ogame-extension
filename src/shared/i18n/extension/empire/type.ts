@@ -67,13 +67,12 @@ export interface EmpireTranslations {
             };
             plasmatechSettings: {
                 header: string;
-                showPlasmatech: string;
+                includePlasmatech: string;
             };
             planetSettings: {
                 header: string;
 
-                showInResult: string;
-                ignore: string;
+                includeInResult: string;
                 position: string;
                 maxTemperature: string;
                 activeItems: string;

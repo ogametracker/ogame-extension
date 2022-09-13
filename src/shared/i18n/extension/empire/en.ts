@@ -67,14 +67,13 @@ export const en: EmpireTranslations = {
                 newColony: 'new Colony',
             },
             plasmatechSettings: {
-                header: 'Plasmatechnology Settings',
-                showPlasmatech: 'Show plasmatechnology in result',
+                header: 'Plasma Technology Settings',
+                includePlasmatech: 'Include Plasma Technology in calculation',
             },
             planetSettings: {
                 header: 'Planet Settings',
 
-                showInResult: 'Show in result',
-                ignore: 'Ignore for calulation',
+                includeInResult: 'Include in calculation',
                 position: 'Position',
                 maxTemperature: 'Max. Temperature',
                 activeItems: 'Active Items',
