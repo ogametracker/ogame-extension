@@ -21,7 +21,7 @@ const observer = new MutationObserver(() => {
         ogameTrackerMenu.classList.add('leftmenu');
         ogameTrackerMenu.id = 'ogame-tracker-menu';
 
-        const tooltip = ingamei18n[language ?? LanguageKey.en];
+        const tooltip = ingamei18n[language ?? LanguageKey.en]?.tooltipNewTab;
 
         let html = `
             <li id="ogame-tracker-menu-item__v2">
