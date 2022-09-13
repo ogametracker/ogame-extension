@@ -31,7 +31,7 @@ import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@/share
 import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { messageHeaders } from "@/shared/i18n/ogame/messages/messageHeaders";
+import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
 
 let tabContent: Element | null = null;
 

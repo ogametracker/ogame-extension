@@ -18,7 +18,7 @@ import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { getLanguage } from "@/shared/i18n/getLanguage";
-import { messageHeaders } from "@/shared/i18n/ogame/messages/messageHeaders";
+import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
 
 let tabContent: Element | null = null;
 
