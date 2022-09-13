@@ -41,10 +41,11 @@
             }
 
 
-            items.push({
-                label: 'LOCA: Point Distribution',
-                to: { name: 'empire/point-distribution' },
-            });
+            //TODO: enable point distribution view when properly implemented
+            // items.push({
+            //     label: 'LOCA: Point Distribution',
+            //     to: { name: 'empire/point-distribution' },
+            // });
 
             return items;
         }
