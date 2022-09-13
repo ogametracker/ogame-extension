@@ -72,7 +72,7 @@ export class LifeformDiscoveryModule {
 
     #tryParseNothingLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventNothing | null {
         const i18nMessages = i18nDiscoveries[language].nothing;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -85,7 +85,7 @@ export class LifeformDiscoveryModule {
 
     #tryParseLostShipLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventLostShip | null {
         const i18nMessages = i18nDiscoveries[language].lostShip;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -136,5 +136,9 @@ export class LifeformDiscoveryModule {
             type: LifeformDiscoveryEventType.newLifeformFound,
             lifeform,
         };
+    }
+
+    #includesMessage(ogameText: string, message: string) {
+        return ogameText.toLowerCase().includes(message.toLowerCase());
     }
 }

@@ -45,9 +45,9 @@ export class ExpeditionModule {
         let expedition: ExpeditionEvent;
         try {
             const languageKey = getLanguage(language, true);
-            expedition = this.parseExpedition(languageKey, {
+            expedition = this.#parseExpedition(languageKey, {
                 ...expeditionEventData,
-                text: expeditionEventData.text.replace(/\s+/, ' ').trim(),
+                text: expeditionEventData.text.replace(/\s+/, ' ').trim(), // some expedition messages have multiple white space characters in a row
             });
 
             await db.put('expeditions', expedition);
@@ -65,24 +65,24 @@ export class ExpeditionModule {
         }
     }
 
-    private parseExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEvent {
-        const result = this.tryParseDarkMatterExpedition(language, data)
-            ?? this.tryParseResourceExpedition(language, data)
-            ?? this.tryParseFleetExpedition(language, data)
-            ?? this.tryParseItemExpedition(language, data)
-            ?? this.tryParseEarlyExpedition(language, data)
-            ?? this.tryParseDelayedExpedition(language, data)
-            ?? this.tryParseTraderExpedition(language, data)
-            ?? this.tryParseAliensExpedition(language, data)
-            ?? this.tryParsePiratesExpedition(language, data)
-            ?? this.tryParseLostFleetExpedition(language, data)
-            ?? this.tryParseNoEventExpedition(language, data);
+    #parseExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEvent {
+        const result = this.#tryParseDarkMatterExpedition(language, data)
+            ?? this.#tryParseResourceExpedition(language, data)
+            ?? this.#tryParseFleetExpedition(language, data)
+            ?? this.#tryParseItemExpedition(language, data)
+            ?? this.#tryParseEarlyExpedition(language, data)
+            ?? this.#tryParseDelayedExpedition(language, data)
+            ?? this.#tryParseTraderExpedition(language, data)
+            ?? this.#tryParseAliensExpedition(language, data)
+            ?? this.#tryParsePiratesExpedition(language, data)
+            ?? this.#tryParseLostFleetExpedition(language, data)
+            ?? this.#tryParseNoEventExpedition(language, data);
 
         if (result == null) {
             _throw('Unknown expedition type');
         }
 
-        const depletion = this.tryParseDepletion(language, data);
+        const depletion = this.#tryParseDepletion(language, data);
         if(depletion != null) {
             result.depletion = depletion;
         }
@@ -90,7 +90,7 @@ export class ExpeditionModule {
         return result;
     }
 
-    private tryParseDepletion(language: LanguageKey, data: RawMessageData): ExpeditionDepletionLevel | undefined {
+    #tryParseDepletion(language: LanguageKey, data: RawMessageData): ExpeditionDepletionLevel | undefined {
         const logbookRegex = i18nExpeditions[language].logbookRegex;
         const logbookEntry = data.text.match(logbookRegex)?.groups?.text;
         if (logbookEntry == null) {
@@ -104,9 +104,9 @@ export class ExpeditionModule {
         return depletionLevel ?? _throw('failed to detect depletion level');
     }
 
-    private tryParseNoEventExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventNothing | null {
+    #tryParseNoEventExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventNothing | null {
         const i18nMessages = i18nExpeditions[language][ExpeditionEventType.nothing];
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -117,9 +117,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseLostFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventLostFleet | null {
+    #tryParseLostFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventLostFleet | null {
         const i18nMessages = i18nExpeditions[language].lostFleet;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -130,10 +130,10 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParsePiratesExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventPirates | null {
+    #tryParsePiratesExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventPirates | null {
         const i18nMessages = i18nExpeditions[language].pirates;
         const size = ExpeditionEventSizes.find(
-            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+            size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
         if (size == null) {
             return null;
@@ -147,10 +147,10 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseAliensExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventAliens | null {
+    #tryParseAliensExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventAliens | null {
         const i18nMessages = i18nExpeditions[language].aliens;
         const size = ExpeditionEventSizes.find(
-            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+            size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
         if (size == null) {
             return null;
@@ -164,9 +164,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseTraderExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventTrader | null {
+    #tryParseTraderExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventTrader | null {
         const i18nMessages = i18nExpeditions[language].trader;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -177,9 +177,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseDelayedExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDelay | null {
+    #tryParseDelayedExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDelay | null {
         const i18nMessages = i18nExpeditions[language].delay;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -190,9 +190,9 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseEarlyExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventEarly | null {
+    #tryParseEarlyExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventEarly | null {
         const i18nMessages = i18nExpeditions[language].early;
-        if (!i18nMessages.some(message => data.text.includes(message))) {
+        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
             return null;
         }
 
@@ -203,7 +203,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseItemExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventItem | null {
+    #tryParseItemExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventItem | null {
         const i18nMessages = i18nExpeditions[language].item;
         const regex = i18nMessages.regex;
         const match = data.text.match(regex);
@@ -224,10 +224,10 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventFleet | null {
+    #tryParseFleetExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventFleet | null {
         const i18nMessages = i18nExpeditions[language].fleet;
         const size = ExpeditionEventSizes.find(
-            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+            size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
         if (size == null) {
             return null;
@@ -245,7 +245,7 @@ export class ExpeditionModule {
 
             ExpeditionFindableShipTypes.forEach(ship => {
                 const shipName = i18nShips[language][ship];
-                const shipRegex = new RegExp(`${shipName}: (?<amount>\\d+)`);
+                const shipRegex = new RegExp(`${shipName}: (?<amount>\\d+)`, 'i');
                 const shipMatch = textWithFoundFleet.match(shipRegex);
 
                 if (shipMatch?.groups != null) {
@@ -263,7 +263,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseDarkMatterExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDarkMatter | null {
+    #tryParseDarkMatterExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDarkMatter | null {
         const i18nMessages = i18nExpeditions[language].darkMatter;
         const regex = i18nMessages.regex(i18nPremium[language].darkMatter);
         const match = data.text.match(regex);
@@ -274,7 +274,7 @@ export class ExpeditionModule {
 
         const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
         const size = ExpeditionEventSizes.find(
-            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+            size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
 
         if (size == null) {
@@ -290,7 +290,7 @@ export class ExpeditionModule {
         };
     }
 
-    private tryParseResourceExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventResources | null {
+    #tryParseResourceExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventResources | null {
         const i18nMessages = i18nExpeditions[language].resources;
         const resourceNames = ResourceTypes;
         const regex = i18nMessages.regex(resourceNames.map(resource => i18nResources[language][resource]));
@@ -302,7 +302,7 @@ export class ExpeditionModule {
         const resourceName = match.groups.name;
         const amount = parseIntSafe(match.groups.amount.replace(/[^\d]/g, ''), 10);
         const size = ExpeditionEventSizes.find(
-            size => i18nMessages[size].some((msg: string) => data.text.includes(msg))
+            size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
 
         if (size == null) {
@@ -324,5 +324,9 @@ export class ExpeditionModule {
             },
             size: size,
         };
+    }
+
+    #includesMessage(ogameText: string, message: string) {
+        return ogameText.toLowerCase().includes(message.toLowerCase());
     }
 }
