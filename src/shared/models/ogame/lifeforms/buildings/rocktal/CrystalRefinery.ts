@@ -20,7 +20,7 @@ class CrystalRefineryClass extends LifeformBuilding implements ResourceProductio
             },
             energy: {
                 baseCost: 90,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }

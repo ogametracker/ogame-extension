@@ -20,7 +20,7 @@ class HighPerformanceSynthesiserClass extends LifeformBuilding implements Resour
             },
             energy: {
                 baseCost: 60,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }

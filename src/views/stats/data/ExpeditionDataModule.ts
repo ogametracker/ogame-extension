@@ -11,7 +11,7 @@ import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/Res
 import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
 import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-import { Ships } from '@/shared/models/ogame/ships/Ships';
+import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
 import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 import { createRecord } from '@/shared/utils/createRecord';
@@ -129,7 +129,7 @@ class ExpeditionDataModuleClass extends Vue {
                     const count = expedition.fleet[ship] ?? 0;
                     dailyResult.findings.fleet[ship] += count;
 
-                    const shipData = Ships[ship as number as ShipType];
+                    const shipData = ShipByTypes[ship];
                     const resourceUnits = multiplyCost(shipData.getCost(), count);
 
                     for (const resource of ResourceTypes) {

@@ -1,5 +1,7 @@
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 
+//TODO: split up into multiple files
+//TODO: include in i18n type(s)
 export const messageHeaders: Record<LanguageKey, Record<'expedition' | 'lifeformDiscovery' | 'debrisField', string>> = {
     [LanguageKey.cz]: {
         expedition: 'Výsledek expedice',

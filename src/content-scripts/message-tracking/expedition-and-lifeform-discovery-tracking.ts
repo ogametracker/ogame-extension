@@ -22,16 +22,16 @@ import { v4 } from "uuid";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, LifeformDiscoveryTrackingNotificationMessage, LifeformDiscoveryTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { addCost, Cost, multiplyCost } from "@/shared/models/ogame/common/Cost";
-import { Ships } from "@/shared/models/ogame/ships/Ships";
+import { ShipByTypes } from "@/shared/models/ogame/ships/ShipTypes";
 import { settingsWrapper } from "./main";
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { getLanguage } from "@/shared/i18n/getLanguage";
-import { messageHeaders } from "./i18n";
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { messageHeaders } from "@/shared/i18n/ogame/messages/messageHeaders";
 
 let tabContent: Element | null = null;
 
@@ -453,11 +453,11 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
                 .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
-            const units = ships.reduce((total, ship) => {
-                const shipCost = multiplyCost(Ships[ship as ShipType].getCost(), expedition.fleet[ship] ?? 0);
+            const units = ships.reduce<Cost>((total, ship) => {
+                const shipCost = multiplyCost(ShipByTypes[ship].getCost(), expedition.fleet[ship] ?? 0);
                 const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
                 return addCost(total, adjustedCost);
-            }, { metal: 0, crystal: 0, deuterium: 0 } as Cost)
+            }, { metal: 0, crystal: 0, deuterium: 0, energy: 0 })
 
             return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">

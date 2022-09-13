@@ -20,7 +20,7 @@ class DisruptionChamberClass extends LifeformBuilding implements ResourceProduct
             },
             energy: {
                 baseCost: 0,
-                increaseFactor: 0
+                increaseFactor: 0,
             },
         });
     }

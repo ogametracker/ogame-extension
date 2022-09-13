@@ -20,8 +20,8 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
                 increaseFactor: 1.8,
             },
             energy: {
-                baseCost: 10,
-                increaseFactor: 1.08,
+                baseCost: 120,
+                increaseFactor: 1.3,
             },
         });
     }

@@ -40,6 +40,12 @@
                 });
             }
 
+
+            items.push({
+                label: 'LOCA: Point Distribution',
+                to: { name: 'empire/point-distribution' },
+            });
+
             return items;
         }
     }

@@ -11,16 +11,3 @@ export enum DefenseType {
     ballisticMissile = 502,
     interplanetaryMissile = 503,
 }
-export const DefenseTypes = [
-    DefenseType.rocketLauncher,
-    DefenseType.lightLaser,
-    DefenseType.heavyLaser,
-    DefenseType.gaussCannon,
-    DefenseType.ionCannon,
-    DefenseType.plasmaTurret,
-    DefenseType.smallShieldDome,
-    DefenseType.largeShieldDome,
-
-    DefenseType.ballisticMissile,
-    DefenseType.interplanetaryMissile,
-];

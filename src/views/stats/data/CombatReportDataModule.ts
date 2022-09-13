@@ -7,11 +7,11 @@ import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
-import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
 import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 import { createRecord } from '@/shared/utils/createRecord';
-import { Ships } from '@/shared/models/ogame/ships/Ships';
+import { ShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 
 export interface DailyCombatReportResult {
@@ -98,7 +98,7 @@ class CombatReportDataModuleClass extends Vue {
         for (const ship of ShipTypes) {
             lostShips.ships[ship] += report.lostShips[ship];
 
-            const shipData = Ships[ship];
+            const shipData = ShipByTypes[ship];
             const resourceUnits = multiplyCost(shipData.getCost(), report.lostShips[ship]);
 
             ResourceTypes.forEach(resource => lostShips.resourceUnits[resource] += resourceUnits[resource]);

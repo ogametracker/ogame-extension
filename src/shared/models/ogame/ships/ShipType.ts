@@ -17,23 +17,30 @@ export enum ShipType {
     reaper = 218,
     pathfinder = 219,
 }
-export const ShipTypes = [
-    ShipType.smallCargo,
-    ShipType.largeCargo,
-    ShipType.lightFighter,
-    ShipType.heavyFighter,
-    ShipType.cruiser,
-    ShipType.battleship,
-    ShipType.colonyShip,
-    ShipType.recycler,
-    ShipType.espionageProbe,
-    ShipType.bomber,
-    ShipType.solarSatellite,
-    ShipType.destroyer,
-    ShipType.deathStar,
-    ShipType.battlecruiser,
-    ShipType.crawler,
-    ShipType.reaper,
-    ShipType.pathfinder,
-];
-export const NonStationaryShipTypes = ShipTypes.filter(ship => ![ShipType.crawler, ShipType.solarSatellite].includes(ship));
+export type StationaryShipType = ShipType.crawler | ShipType.solarSatellite;
+export type NonStationaryShipType = Exclude<ShipType, StationaryShipType>;
+
+export type PlanetShipType = ShipType;
+export type MoonShipType = Exclude<ShipType, ShipType.crawler>;
+
+export type MilitaryShipType = (
+    | ShipType.lightFighter
+    | ShipType.heavyFighter
+    | ShipType.cruiser
+    | ShipType.battleship
+    | ShipType.battlecruiser
+    | ShipType.bomber
+    | ShipType.destroyer
+    | ShipType.deathStar
+    | ShipType.reaper
+    | ShipType.pathfinder
+    | ShipType.crawler // yes, it's counted to the military ships
+);
+export type CivilShipType = (
+    | ShipType.smallCargo
+    | ShipType.largeCargo
+    | ShipType.colonyShip
+    | ShipType.recycler
+    | ShipType.espionageProbe
+    | ShipType.solarSatellite
+);

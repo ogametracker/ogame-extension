@@ -18,6 +18,38 @@ import { VortexChamber } from "./kaelesh/VortexChamber";
 import { LifeformType } from "../LifeformType";
 import { LifeformBuilding } from "./LifeformBuilding";
 import { LifeformBuildingType } from "../LifeformBuildingType";
+import { ResidentialSector } from "./humans/ResidentialSector";
+import { BiosphereFarm } from "./humans/BiosphereFarm";
+import { AcademyOfSciences } from "./humans/AcademyOfSciences";
+import { NeuroCalibrationCentre } from "./humans/NeuroCalibrationCentre";
+import { FoodSilo } from "./humans/FoodSilo";
+import { Skyscraper } from "./humans/Skyscraper";
+import { BiotechLab } from "./humans/BiotechLab";
+import { PlanetaryShield } from "./humans/PlanetaryShield";
+import { MeditationEnclave } from "./rocktal/MeditationEnclave";
+import { CrystalFarm } from "./rocktal/CrystalFarm";
+import { RuneForge } from "./rocktal/RuneForge";
+import { Oriktorium } from "./rocktal/Oriktorium";
+import { AdvancedRecyclingPlant } from "./rocktal/AdvancedRecyclingPlant";
+import { AssemblyLine } from "./mechas/AssemblyLineClass";
+import { FusionCellFactory } from "./mechas/FusionCellFactory";
+import { UpdateNetwork } from "./mechas/UpdateNetwork";
+import { QuantumComputerCentre } from "./mechas/QuantumComputerCentre";
+import { AutomatisedAssemblyCentre } from "./mechas/AutomatisedAssemblyCentre";
+import { MicrochipAssemblyLine } from "./mechas/MicrochipAssemblyLine";
+import { ProductionAssemblyHall } from "./mechas/ProductionAssemblyHall";
+import { NanoRepairBots } from "./mechas/NanoRepairBots";
+import { Sanctuary } from "./kaelesh/Sanctuary";
+import { AntimatterCondenser } from "./kaelesh/AntimatterCondenser";
+import { HallsOfRealisation } from "./kaelesh/HallsOfRealisation";
+import { ForumOfTranscendence } from "./kaelesh/ForumOfTranscendence";
+import { AntimatterConvector } from "./kaelesh/AntimatterConvector";
+import { CloningLaboratory } from "./kaelesh/CloningLaboratory";
+import { ChrysalisAccelerator } from "./kaelesh/ChrysalisAccelerator";
+import { BioModifier } from "./kaelesh/BioModifier";
+import { PsionicModulator } from "./kaelesh/PsionicModulator";
+import { ShipManufacturingHall } from "./kaelesh/ShipManufacturingHall";
+import { SupraRefractor } from "./kaelesh/SupraRefractor";
 
 export const ResourceProductionBonusLifeformBuildingsByLifeform: Record<LifeformType, ResourceProductionBonusLifeformBuilding[]> = {
     [LifeformType.none]: [],
@@ -100,55 +132,55 @@ export const LifeformTechnologyResearchBuildings = Object.values(LifeformTechnol
 
 
 export const LifeformBuildingsByType: Record<LifeformBuildingType, LifeformBuilding> = {
-    [LifeformBuildingType.residentialSector]: null!, //TODO:
-    [LifeformBuildingType.biosphereFarm]: null!, //TODO:
+    [LifeformBuildingType.residentialSector]: ResidentialSector,
+    [LifeformBuildingType.biosphereFarm]: BiosphereFarm,
     [LifeformBuildingType.researchCentre]: ResearchCentre,
-    [LifeformBuildingType.academyOfSciences]: null!, //TODO:
-    [LifeformBuildingType.neuroCalibrationCentre]: null!, //TODO:
+    [LifeformBuildingType.academyOfSciences]: AcademyOfSciences,
+    [LifeformBuildingType.neuroCalibrationCentre]: NeuroCalibrationCentre,
     [LifeformBuildingType.highEnergySmelting]: HighEnergySmelting,
-    [LifeformBuildingType.foodSilo]: null!, //TODO:
+    [LifeformBuildingType.foodSilo]: FoodSilo,
     [LifeformBuildingType.fusionPoweredProduction]: FusionPoweredProduction,
-    [LifeformBuildingType.skyscraper]: null!, //TODO:
-    [LifeformBuildingType.biotechLab]: null!, //TODO:
+    [LifeformBuildingType.skyscraper]: Skyscraper,
+    [LifeformBuildingType.biotechLab]: BiotechLab,
     [LifeformBuildingType.metropolis]: Metropolis,
-    [LifeformBuildingType.planetaryShield]: null!, //TODO:
+    [LifeformBuildingType.planetaryShield]: PlanetaryShield,
 
-    [LifeformBuildingType.meditationEnclave]: null!, //TODO:
-    [LifeformBuildingType.crystalFarm]: null!, //TODO:
+    [LifeformBuildingType.meditationEnclave]: MeditationEnclave,
+    [LifeformBuildingType.crystalFarm]: CrystalFarm,
     [LifeformBuildingType.runeTechnologium]: RuneTechnologium,
-    [LifeformBuildingType.runeForge]: null!, //TODO:
-    [LifeformBuildingType.oriktorium]: null!, //TODO:
+    [LifeformBuildingType.runeForge]: RuneForge,
+    [LifeformBuildingType.oriktorium]: Oriktorium,
     [LifeformBuildingType.magmaForge]: MagmaForge,
     [LifeformBuildingType.disruptionChamber]: DisruptionChamber,
     [LifeformBuildingType.megalith]: Megalith,
     [LifeformBuildingType.crystalRefinery]: CrystalRefinery,
     [LifeformBuildingType.deuteriumSynthesiser]: DeuteriumSynthesiser,
     [LifeformBuildingType.mineralResearchCentre]: MineralResearchCentre,
-    [LifeformBuildingType.advancedRecyclingPlant]: null!, //TODO:
+    [LifeformBuildingType.advancedRecyclingPlant]: AdvancedRecyclingPlant,
 
-    [LifeformBuildingType.assemblyLine]: null!, //TODO:
-    [LifeformBuildingType.fusionCellFactory]: null!, //TODO:
+    [LifeformBuildingType.assemblyLine]: AssemblyLine,
+    [LifeformBuildingType.fusionCellFactory]: FusionCellFactory,
     [LifeformBuildingType.roboticsResearchCentre]: RoboticsResearchCentre,
-    [LifeformBuildingType.updateNetwork]: null!, //TODO:
-    [LifeformBuildingType.quantumComputerCentre]: null!, //TODO:
-    [LifeformBuildingType.automatisedAssemblyCentre]: null!, //TODO:
+    [LifeformBuildingType.updateNetwork]: UpdateNetwork,
+    [LifeformBuildingType.quantumComputerCentre]: QuantumComputerCentre,
+    [LifeformBuildingType.automatisedAssemblyCentre]: AutomatisedAssemblyCentre,
     [LifeformBuildingType.highPerformanceTransformer]: HighPerformanceTransformer,
-    [LifeformBuildingType.microchipAssemblyLine]: null!, //TODO:
-    [LifeformBuildingType.productionAssemblyHall]: null!, //TODO:
+    [LifeformBuildingType.microchipAssemblyLine]: MicrochipAssemblyLine,
+    [LifeformBuildingType.productionAssemblyHall]: ProductionAssemblyHall,
     [LifeformBuildingType.highPerformanceSynthesiser]: HighPerformanceSynthesiser,
     [LifeformBuildingType.chipMassProduction]: ChipMassProduction,
-    [LifeformBuildingType.nanoRepairBots]: null!, //TODO:
+    [LifeformBuildingType.nanoRepairBots]: NanoRepairBots,
 
-    [LifeformBuildingType.sanctuary]: null!, //TODO:
-    [LifeformBuildingType.antimatterCondenser]: null!, //TODO:
+    [LifeformBuildingType.sanctuary]: Sanctuary,
+    [LifeformBuildingType.antimatterCondenser]: AntimatterCondenser,
     [LifeformBuildingType.vortexChamber]: VortexChamber,
-    [LifeformBuildingType.hallsOfRealisation]: null!, //TODO:
-    [LifeformBuildingType.forumOfTranscendence]: null!, //TODO:
-    [LifeformBuildingType.antimatterConvector]: null!, //TODO:
-    [LifeformBuildingType.cloningLaboratory]: null!, //TODO:
-    [LifeformBuildingType.chrysalisAccelerator]: null!, //TODO:
-    [LifeformBuildingType.bioModifier]: null!, //TODO:
-    [LifeformBuildingType.psionicModulator]: null!, //TODO:
-    [LifeformBuildingType.shipManufacturingHall]: null!, //TODO:
-    [LifeformBuildingType.supraRefractor]: null!, //TODO:
+    [LifeformBuildingType.hallsOfRealisation]: HallsOfRealisation,
+    [LifeformBuildingType.forumOfTranscendence]: ForumOfTranscendence,
+    [LifeformBuildingType.antimatterConvector]: AntimatterConvector,
+    [LifeformBuildingType.cloningLaboratory]: CloningLaboratory,
+    [LifeformBuildingType.chrysalisAccelerator]: ChrysalisAccelerator,
+    [LifeformBuildingType.bioModifier]: BioModifier,
+    [LifeformBuildingType.psionicModulator]: PsionicModulator,
+    [LifeformBuildingType.shipManufacturingHall]: ShipManufacturingHall,
+    [LifeformBuildingType.supraRefractor]: SupraRefractor,
 };

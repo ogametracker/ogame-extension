@@ -20,7 +20,7 @@ class FusionPoweredProductionClass extends LifeformBuilding implements ResourceP
             },
             energy: {
                 baseCost: 80,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }
