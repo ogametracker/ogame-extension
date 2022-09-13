@@ -35,7 +35,7 @@ class ResearchCentreClass extends LifeformBuilding implements LifeformTechnology
             return { cost: 0, time: 0};
         }
 
-        const costReduction = 0.005; // 0.5%
+        const costReduction = 0.0025; // 0.25%
         const timeReduction = 0.02; // 2%
         return {
             cost: costReduction * level,

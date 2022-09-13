@@ -31,7 +31,7 @@ import { CrystalFarm } from "./rocktal/CrystalFarm";
 import { RuneForge } from "./rocktal/RuneForge";
 import { Oriktorium } from "./rocktal/Oriktorium";
 import { AdvancedRecyclingPlant } from "./rocktal/AdvancedRecyclingPlant";
-import { AssemblyLine } from "./mechas/AssemblyLineClass";
+import { AssemblyLine } from "./mechas/AssemblyLine";
 import { FusionCellFactory } from "./mechas/FusionCellFactory";
 import { UpdateNetwork } from "./mechas/UpdateNetwork";
 import { QuantumComputerCentre } from "./mechas/QuantumComputerCentre";
