@@ -72,6 +72,16 @@ import viewsexpeditionsresourcesamountTable from '@stats/views/expeditions/resou
 import viewsexpeditionsresourcescountIndex from '@stats/views/expeditions/resources/count/Index.vue';
 import viewsexpeditionsresourcescountChart from '@stats/views/expeditions/resources/count/Chart.vue';
 import viewsexpeditionsresourcescountTable from '@stats/views/expeditions/resources/count/Table.vue';
+import viewsexpeditionsresourcessizebreakdownIndex from '@stats/views/expeditions/resources/size-breakdown/Index.vue';
+import viewsexpeditionsresourcessizebreakdowncrystalIndex from '@stats/views/expeditions/resources/size-breakdown/crystal/Index.vue';
+import viewsexpeditionsresourcessizebreakdowncrystalChart from '@stats/views/expeditions/resources/size-breakdown/crystal/Chart.vue';
+import viewsexpeditionsresourcessizebreakdowncrystalTable from '@stats/views/expeditions/resources/size-breakdown/crystal/Table.vue';
+import viewsexpeditionsresourcessizebreakdowndeuteriumIndex from '@stats/views/expeditions/resources/size-breakdown/deuterium/Index.vue';
+import viewsexpeditionsresourcessizebreakdowndeuteriumChart from '@stats/views/expeditions/resources/size-breakdown/deuterium/Chart.vue';
+import viewsexpeditionsresourcessizebreakdowndeuteriumTable from '@stats/views/expeditions/resources/size-breakdown/deuterium/Table.vue';
+import viewsexpeditionsresourcessizebreakdownmetalIndex from '@stats/views/expeditions/resources/size-breakdown/metal/Index.vue';
+import viewsexpeditionsresourcessizebreakdownmetalChart from '@stats/views/expeditions/resources/size-breakdown/metal/Chart.vue';
+import viewsexpeditionsresourcessizebreakdownmetalTable from '@stats/views/expeditions/resources/size-breakdown/metal/Table.vue';
 import viewsexpeditionsresourcessizesIndex from '@stats/views/expeditions/resources/sizes/Index.vue';
 import viewsexpeditionsresourcessizesChart from '@stats/views/expeditions/resources/sizes/Chart.vue';
 import viewsexpeditionsresourcessizesTable from '@stats/views/expeditions/resources/sizes/Table.vue';
@@ -652,6 +662,76 @@ const routes: RouteConfig[] = [
                                         path: "table",
                                         name: "expeditions/resources/count/table",
                                         component: viewsexpeditionsresourcescountTable
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "expeditions/resources/size-breakdown/metal"
+                                },
+                                path: "size-breakdown",
+                                name: "expeditions/resources/size-breakdown",
+                                component: viewsexpeditionsresourcessizebreakdownIndex,
+                                children: [
+                                    {
+                                        redirect: {
+                                            name: "expeditions/resources/size-breakdown/crystal/chart"
+                                        },
+                                        path: "crystal",
+                                        name: "expeditions/resources/size-breakdown/crystal",
+                                        component: viewsexpeditionsresourcessizebreakdowncrystalIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "expeditions/resources/size-breakdown/crystal/chart",
+                                                component: viewsexpeditionsresourcessizebreakdowncrystalChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "expeditions/resources/size-breakdown/crystal/table",
+                                                component: viewsexpeditionsresourcessizebreakdowncrystalTable
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        redirect: {
+                                            name: "expeditions/resources/size-breakdown/deuterium/chart"
+                                        },
+                                        path: "deuterium",
+                                        name: "expeditions/resources/size-breakdown/deuterium",
+                                        component: viewsexpeditionsresourcessizebreakdowndeuteriumIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "expeditions/resources/size-breakdown/deuterium/chart",
+                                                component: viewsexpeditionsresourcessizebreakdowndeuteriumChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "expeditions/resources/size-breakdown/deuterium/table",
+                                                component: viewsexpeditionsresourcessizebreakdowndeuteriumTable
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        redirect: {
+                                            name: "expeditions/resources/size-breakdown/metal/chart"
+                                        },
+                                        path: "metal",
+                                        name: "expeditions/resources/size-breakdown/metal",
+                                        component: viewsexpeditionsresourcessizebreakdownmetalIndex,
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "expeditions/resources/size-breakdown/metal/chart",
+                                                component: viewsexpeditionsresourcessizebreakdownmetalChart
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "expeditions/resources/size-breakdown/metal/table",
+                                                component: viewsexpeditionsresourcessizebreakdownmetalTable
+                                            }
+                                        ]
                                     }
                                 ]
                             },
