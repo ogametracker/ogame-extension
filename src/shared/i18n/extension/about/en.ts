@@ -23,7 +23,7 @@ export const en: AboutTranslations = {
             },
         },
         tips: {
-            header: 'Tipps',
+            header: 'Tips',
             rightClickDefaultRoute: 'You can right-click a main tab on the left side or any of its sub-menu items to set this menu as standard for the selected route.',
             numbersKeyboardNavigation: 'You can open the pages of the tabs with a digit by pressing the respective digit key on your keyboard.',
             amortizationTable: {
