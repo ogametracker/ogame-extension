@@ -18,7 +18,7 @@ export const cz: ExpeditionMessages = {
             /*'Naše */'expedice hlásí neobvyklý jev'/*: hromadění Temní hmoty v energetických skladech našich lodí. Technici se pokusí nahromadit této Temné hmoty co možná nejvíce.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: cz 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Samovolná */'deformace hyperprostoru umožnila'/* tvé expedici posbírat velké množství Temné hmoty!'*/,
             /*'Naše expedice zaznamenala první kontakt s novou rasou. Stvoření vzniklé z energie prolétlo našimi loďmi a */'rozhodlo se pomoci našemu nerozvinutému druhu'/*. Na můstku po něm zůstala bedna s Temnou hmotou!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) bylo ukořistěno`),
