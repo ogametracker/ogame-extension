@@ -21,7 +21,7 @@ export const en: ExpeditionMessages = {
             /*'A */'spontaneous hyper space deformation'/* allowed your expedition to harvest large amount of Dark Matter'*/,
             /*'Our expedition made first contact with a special race. It looks as though a creature made of pure energy, who */'named himself Legorian'/*, flew through the expedition ships and then decided to help our underdeveloped species. A case containing Dark Matter materialized at the bridge of the ship'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) have been captured`),
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) have been captured`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -37,7 +37,7 @@ export const en: ExpeditionMessages = {
             /*'Mineral */'belts around an unknown planet contained countless resources'/*. The expedition ships are coming back and their storages are full'*/,
             /*'Your expedition fleet reports the */'discovery of a giant alien ship wreck'/*. They were not able to learn from their technologies but they were able to divide the ship into its main components and made some useful resources out of it'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) have been captured`),
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) have been captured`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -101,7 +101,7 @@ export const en: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /(?<name>.+) has been added to the inventory/,
+        regex: /(?<name>.+) has been added to the inventory/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -142,7 +142,7 @@ export const en: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /(Entry from the communications officers logbook|Logbook addition of the communication officer):(?<text>.+)/,
+    logbookRegex: /(Entry from the communications officers logbook|Logbook addition of the communication officer):(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'It seems that */'this part of the universe has not been explored'/* yet'*/,

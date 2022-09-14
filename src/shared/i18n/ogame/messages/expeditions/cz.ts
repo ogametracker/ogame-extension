@@ -21,7 +21,7 @@ export const cz: ExpeditionMessages = {
             /*'Samovolná */'deformace hyperprostoru umožnila'/* tvé expedici posbírat velké množství Temné hmoty!'*/,
             /*'Naše expedice zaznamenala první kontakt s novou rasou. Stvoření vzniklé z energie prolétlo našimi loďmi a */'rozhodlo se pomoci našemu nerozvinutému druhu'/*. Na můstku po něm zůstala bedna s Temnou hmotou!'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) bylo ukořistěno`),
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) bylo ukořistěno`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -37,7 +37,7 @@ export const cz: ExpeditionMessages = {
             /*'Pásy */'minerálů okolo neznámé planety obsahovaly'/* nezměrné množství surovin. Lodě se z expedice vrací s plným nákladovým prostorem.'*/,
             /*'Expediční letky hlásí objev */'gigantického vraku mimozemské vesmírné lodě'/*. Nebyli schopni zjistit žádné další informace o jejich technologiích, ale byli schopni rozmontovat loď na hlavní části a získat takto slušné množství surovin.'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) bylo ukořistěno`),
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) bylo ukořistěno`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -55,7 +55,7 @@ export const cz: ExpeditionMessages = {
             /*'Nalezli jsme */'obrovský hřbitov vesmírných lodí'/*. Některým technikům z expedice se podařilo opět pár lodí zprovoznit.'*/,
             /*'Nalezli jsme */'planetu se zbytky civilizace'/*. Zahlédli jsme obrovskou neporušenou vesmírnou stanici na nízké orbitě. Nekteří technici a piloti se vydali na povrch hledat lodě, které by se ještě daly použít.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
+        regex: (ships: string[]) => new RegExp(`Následující lodě jsou nyní součástí letky:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -101,7 +101,7 @@ export const cz: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /Předmět „(?<name>.+)“ byl přidán do inventáře/,
+        regex: /Předmět „(?<name>.+)“ byl přidán do inventáře/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -142,7 +142,7 @@ export const cz: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Záznam z lodního deníku obsluhy komunikace:(?<text>.+)/,
+    logbookRegex: /Záznam z lodního deníku obsluhy komunikace:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Zdá se, že tato část vesmíru */'nebyla zatím prozkoumána.',

@@ -21,7 +21,7 @@ export const si: ExpeditionMessages = {
             /*'*/'Spontana deformacija hiper prostora'/* ti je omogočila, da pobereš večje količine Črne materije!'*/,
             /*'Naša ekspedicija je vzpostavila kontakt s posebno raso. Izgleda kot močno bitje, narejeno iz čiste energije, */'imenovano Legorian'/*, ki je preletelo skozi ekspedicijske ladje in se odločilo pomagati slabšim rasam. Kovček s Črno materijo te čaka na ladijskem mostu.'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) je bilo zajeto.`),
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) je bilo zajeto.`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -37,7 +37,7 @@ export const si: ExpeditionMessages = {
             /*'*/'Mineralni pas okoli nepoznanega planeta'/* vsebuje neprecenljive surovine. Ekspedicija se vrača nazaj brez njih, saj so skladišča prepolna.'*/,
             /*'Poročilo ekspedicije poroča o najdbi */'ruševin ogromne vesoljske ladje'/*. Naši tehniki niso mogli dobiti nobenih novih informacij, vendar so razstavili ladjo na dele in tako pridobili koristne surovine.'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) je bilo zajeto`),
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) je bilo zajeto`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -55,7 +55,7 @@ export const si: ExpeditionMessages = {
             /*'Našli smo */'ogromno pokopališče ladij'/*. Našim tehnikom je uspelo nekatere popraviti.'*/,
             /*'Našli smo */'planet z ostanki civilizacije'/*. Opazili smo tudi ogromno vesoljsko postajo kako kroži v orbiti. Tehniki so se odpravili, da pogledajo katere ladje lahko uporabijo.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Naslednje ladje so zdaj del tvoje flote:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
+        regex: (ships: string[]) => new RegExp(`Naslednje ladje so zdaj del tvoje flote:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -101,7 +101,7 @@ export const si: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /(?<name>.+) je bil dodan inventarju/,
+        regex: /(?<name>.+) je bil dodan inventarju/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -142,7 +142,7 @@ export const si: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /*TODO: si *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    logbookRegex: /*TODO: si *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*TODO: si 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',

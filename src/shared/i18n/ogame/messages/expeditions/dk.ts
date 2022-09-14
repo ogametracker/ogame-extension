@@ -21,7 +21,7 @@ export const dk: ExpeditionMessages = {
             /*TODO: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Vores ekspeditionsflåde oprettede den første kontakt med en speciel race. Det så ud til at være et væsen lavet af energi, */'som kaldte sig selv Legorian'/* . Væsenet fløj gennem vores ekspeditionsskibe og besluttede sig for at hjælpe vores underudviklede race. En kasse med Mørk Materie blev materialiseret på broen af skibet.'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`),
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -37,7 +37,7 @@ export const dk: ExpeditionMessages = {
             /**/'Planetringene omkring planeten'/* indeholder uendelige mængder råstoffer. Ekspeditionsskibene vender tilbage med fyldte kamre!'*/,
             /*'Din ekspeditionsflåde har fundet et */'gigantisk rumskib af ukendt oprindelse'/*. Vi kunne ikke lære noget fra teknologierne brugt i det, men det lykkedes os at opdele det i dets grundenheder og udvinde nogle brugbare ressourcer af det.'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) er blevet taget.`),
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) er blevet taget.`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -55,7 +55,7 @@ export const dk: ExpeditionMessages = {
             /*'Vi fandt en */'enorm rumskibs gravplads'/*. Nogle af teknikerne fra ekspeditionen fik en del af skibene til at virke igen.'*/,
             /*'Vi har fundet en */'planet med rester fra en ukendt civilisation'/*. Vi kan se en gigantisk rumstation cirkulere omkring planeten. Nogen af vores piloter og teknikere er taget til overfladen for at lede efter skibe, som måske stadig kan bruges.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`De følgende skibe er nu del af flåden.\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
+        regex: (ships: string[]) => new RegExp(`De følgende skibe er nu del af flåden.\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -101,7 +101,7 @@ export const dk: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /(?<name>.+) er blevet tilføjet til inventaret/,
+        regex: /(?<name>.+) er blevet tilføjet til inventaret/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -142,7 +142,7 @@ export const dk: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /(Logbog af Kommunikationsofficererne|Logbog supplement Kommunikationsofficer):(?<text>.+)/,
+    logbookRegex: /(Logbog af Kommunikationsofficererne|Logbog supplement Kommunikationsofficer):(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Dette område af universet er */'åbenbart ikke blevet besøgt indtil nu',
