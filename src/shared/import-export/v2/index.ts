@@ -36,12 +36,12 @@ export interface V2ExportedEmpire {
 
     allianceClass: AllianceClass;
     playerClass: PlayerClass;
-    
+
     research: Record<ResearchType, number>;
     planetOrder?: number[];
     planets: V2ExportedEmpirePlanet[];
     moons: V2ExportedEmpireMoon[];
-    
+
     lifeformExperience?: Record<ValidLifeformType, number>;
 }
 
@@ -72,7 +72,7 @@ export interface V2ExportedEmpirePlanet {
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
     defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
-    
+
     activeLifeform?: LifeformType;
     lifeformBuildings?: Record<LifeformBuildingType, number>;
     lifeformTechnologies?: Record<LifeformTechnologyType, number>;
@@ -96,6 +96,97 @@ export interface V2ExportedServer {
     name: string;
 
     universeHistory?: V2ExportedUniverseHistory;
+    serverSettings?: V2ExportedServerSettings;
+}
+
+export interface V2ExportedServerSettings {
+    name: string;
+    number: string;
+    language: string;
+    timezone: string;
+    timezoneOffset: string;
+    domain: string;
+    version: string;
+
+    speed: number;
+    speedFleetPeaceful: number;
+    speedFleetWar: number;
+    speedFleetHolding: number;
+    galaxies: number;
+    systems: number;
+    acs: boolean;
+    rapidFire: boolean;
+    defToTF: boolean;
+    debrisFactor: number;
+    debrisFactorDef: number;
+    repairFactor: number;
+    newbieProtectionLimit: number;
+    newbieProtectionHigh: number;
+    topScore: number;
+    bonusFields: number;
+    donutGalaxy: boolean;
+    donutSystem: boolean;
+    wfEnabled: boolean;
+    wfMinimumRessLost: number;
+    wfMinimumLossPercentage: number;
+    wfBasicPercentageRepairable: number;
+    globalDeuteriumSaveFactor: number;
+    bashlimit: number;
+    probeCargo: number;
+    researchDurationDivisor: number;
+    darkMatterNewAcount: number;
+    cargoHyperspaceTechMultiplier: number;
+    marketplaceEnabled: boolean;
+    marketplaceBasicTradeRatioMetal: number;
+    marketplaceBasicTradeRatioCrystal: number;
+    marketplaceBasicTradeRatioDeuterium: number;
+    marketplacePriceRangeLower: number;
+    marketplacePriceRangeUpper: number;
+    marketplaceTaxNormalUser: number;
+    marketplaceTaxAdmiral: number;
+    marketplaceTaxCancelOffer: number;
+    marketplaceTaxNotSold: number;
+    marketplaceOfferTimeout: number;
+    characterClassesEnabled: number;
+    minerBonusResourceProduction: number;
+    minerBonusFasterTradingShips: number;
+    minerBonusIncreasedCargoCapacityForTradingShips: number;
+    minerBonusAdditionalFleetSlots: number;
+    minerBonusAdditionalMarketSlots: number;
+    minerBonusAdditionalCrawler: number;
+    minerBonusMaxCrawler: number;
+    minerBonusEnergy: number;
+    minerBonusOverloadCrawler: boolean;
+    resourceBuggyProductionBoost: number;
+    resourceBuggyMaxProductionBoost: number;
+    resourceBuggyEnergyConsumptionPerUnit: number;
+    warriorBonusFasterCombatShips: number;
+    warriorBonusFasterRecyclers: number;
+    warriorBonusFuelConsumption: number;
+    warriorBonusRecyclerFuelConsumption: number;
+    warriorBonusRecyclerCargoCapacity: number;
+    warriorBonusAdditionalFleetSlots: number;
+    warriorBonusAdditionalMoonFields: number;
+    warriorBonusFleetHalfSpeed: boolean;
+    warriorBonusAttackerWreckfield: boolean;
+    combatDebrisFieldLimit: number;
+    explorerBonusIncreasedResearchSpeed: number;
+    explorerBonusIncreasedExpeditionOutcome: number;
+    explorerBonusLargerPlanets: number;
+    explorerUnitItemsPerDay: number;
+    explorerBonusPhalanxRange: number;
+    explorerBonusPlunderInactive: boolean;
+    explorerBonusExpeditionEnemyReduction: number;
+    explorerBonusAdditionalExpeditionSlots: number;
+    resourceProductionIncreaseCrystalDefault: number;
+    resourceProductionIncreaseCrystalPos1: number;
+    resourceProductionIncreaseCrystalPos2: number;
+    resourceProductionIncreaseCrystalPos3: number;
+    exodusRatioMetal: number;
+    exodusRatioCrystal: number;
+    exodusRatioDeuterium: number;
+
+    lifeformsEnabled: boolean;
 }
 
 export type V2ExportedUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
