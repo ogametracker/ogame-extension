@@ -9,14 +9,17 @@ import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
 import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
 import { PlayerOfficers } from '@/shared/models/empire/PlayerOfficers';
 import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
-import { ResearchType, ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
+import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
-import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
-import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-import { DefenseType, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
+import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
+import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
+import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
 import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
 import { Lock } from 'semaphore-async-await';
 import { delay } from '@/shared/utils/delay';
@@ -159,6 +162,7 @@ class EmpireDataModuleClass extends Vue {
             }
         }
 
+        const fleets = (await store.get('fleets') as DbFleets | undefined) ?? [];
         this.empire = {
             allianceClass,
             playerClass,
@@ -167,6 +171,7 @@ class EmpireDataModuleClass extends Vue {
             planetOrder,
             planets,
             lifeformExperience,
+            fleets,
         };
 
         this._resolveReady();

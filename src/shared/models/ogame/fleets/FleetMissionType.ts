@@ -1,0 +1,15 @@
+export enum FleetMissionType {
+    attack = 1,
+    acsAttack = 2,
+    transport = 3,
+    deployment = 4,
+    acsDefend = 5,
+    espionage = 6,
+    colonization = 7,
+    recycleDebrisField = 8,
+    destroyMoon = 9,
+    missileAttack = 10,
+    expedition = 15,
+    trade = 16,
+    searchForLifeforms = 18,
+}

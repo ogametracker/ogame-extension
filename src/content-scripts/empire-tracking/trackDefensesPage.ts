@@ -1,6 +1,7 @@
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { DefenseType, DefenseTypes } from '../../shared/models/ogame/defenses/DefenseType';
+import { DefenseType } from '../../shared/models/ogame/defenses/DefenseType';
+import { DefenseTypes } from '../../shared/models/ogame/defenses/DefenseTypes';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";

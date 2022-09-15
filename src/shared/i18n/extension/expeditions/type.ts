@@ -17,6 +17,7 @@ export interface ExpeditionsTranslations {
             sizes: string;
             resources: string;
             count: string;
+            sizesByResource: string;
         };
     };
 

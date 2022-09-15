@@ -16,13 +16,13 @@ export const it: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*TODO: it 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
             /*TODO: it 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*TODO: it 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'La nostra spedizione riporta un inusuale quanto spettacolare fenomeno. Questo ha portato della Materia Oscura ad */'accumularsi nelle riserve di energia per gli scudi'/* della nave. I nostri tecnici, finché il fenomeno è durato, hanno cercato di conservare tutta la Materia Oscura che potevano.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: it 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*TODO: it 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) è stato razziato`),
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) è stato razziato`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -36,9 +36,9 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Anelli */'di minerali in orbita attorno ad un pianeta'/* contenevano risorse incalcolabili. Le navi della spedizione stanno tornando e hanno le stive piene!'*/,
-            /*TODO: it 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'La tua spedizione si è */'imbattuta nel relitto di un`enorme nave aliena'/* . Non sono stati in grado di apprendere le loro tecnologie, ma sono riusciti a dividere la nave in varie parti e a trasformare i suoi componenti in utili risorse.'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) è stato razziato`),
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) è stato razziato`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -49,14 +49,14 @@ export const it: ExpeditionMessages = {
             /*'Abbiamo */'trovato una stazione pirata deserta'/*. Ci sono alcune vecchie navi che giacciono nell`hangar. I nostri tecnici stanno cercando di capire se sono ancora utilizzabili o meno.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*'La nostra spedizione si è imbattuta in un */'vecchio cantiere navale automatizzato'/*. Alcune navi sono ancora nella fase di produzione e i nostri tecnici stanno cercando di riattivare i generatori del cantiere.'*/,
+            /*'La nostra spedizione si è imbattuta in un */'vecchio Cantiere Spaziale automatizzato'/* . Alcune navi sono ancora nella fase di produzione e i nostri tecnici stanno cercando di riattivare i generatori del cantiere'*/,
             /*'Abbiamo */'trovato i resti di un`armata'/*. I tecnici si sono diretti verso le navi più intatte e le hanno rimesse in funzione.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*TODO: it 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
+        regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -102,7 +102,7 @@ export const it: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /seguente oggetto: (?<name>.+)/,
+        regex: /seguente oggetto: (?<name>.+)/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -144,7 +144,7 @@ export const it: ExpeditionMessages = {
     },
 
     
-    logbookRegex: /Rapporto dell`ufficiale alle comunicazioni:(?<text>.+)/,
+    logbookRegex: /Rapporto dell`ufficiale alle comunicazioni:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Sembra che questa parte di */'universo non sia ancora stata esplorata',

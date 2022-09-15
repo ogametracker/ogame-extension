@@ -8,20 +8,20 @@ class ImprovedStellaratorClass extends LifeformTechnology implements ResearchCos
     public constructor() {
         super({
             metal: {
-                baseCost: 70_000,
+                baseCost: 75_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 40_000,
+                baseCost: 55_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 20_000,
+                baseCost: 25_000,
                 increaseFactor: 1.5,
             },
             energy: {
                 baseCost: 0,
-                increaseFactor: 0,
+                increaseFactor: 1,
             },
         });
     }

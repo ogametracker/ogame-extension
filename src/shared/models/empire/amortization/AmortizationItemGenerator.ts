@@ -61,7 +61,7 @@ interface AmortizationGenerationSettings {
     player: AmortizationPlayerSettings;
     planets: Record<number, AmortizationPlanetSettings>;
     astrophysics: AmortizationAstrophysicsSettings;
-    showPlasmaTechnology: boolean;
+    includePlasmaTechnology: boolean;
 }
 interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
     setPlasmaTechnologyLevel(level: number): void;
@@ -563,19 +563,24 @@ export class AmortizationItemGenerator {
         let newPlanets = 0;
 
         while (true) {
+            let items: AmortizationItem[] = [];
+
             const mineItems = this.#getMineAmortizationItems();
-            const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
-            const astrophysicsItem = this.#getAstrophysicsAmortizationItem(-newPlanets - 1);
             const lifeformBuildingItems = this.#getLifeformBuildingAmortizationItems();
             const lifeformTechnologyItems = this.#getLifeformTechnologyItems();
+            items.push(...mineItems, ...lifeformBuildingItems, ...lifeformTechnologyItems);
 
-            const items: AmortizationItem[] = [
-                ...mineItems,
-                plasmaTechItem,
-                astrophysicsItem,
-                ...lifeformBuildingItems,
-                ...lifeformTechnologyItems,
-            ].filter(item => item.productionDeltaConverted > 0) //remove items with production delta = 0, because plasmatech and others can have no effect if there are no mines at all
+            if (this.#settings.includePlasmaTechnology) {
+                const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
+                items.push(plasmaTechItem);
+            }
+            if (this.#settings.astrophysics.planet.include) {
+                const astrophysicsItem = this.#getAstrophysicsAmortizationItem(-newPlanets - 1);
+                items.push(astrophysicsItem);
+            }
+
+
+            items = items.filter(item => item.productionDeltaConverted > 0) //remove items with production delta = 0, because plasmatech and others can have no effect if there are no mines at all
                 .sort((a, b) => {
                     // sort by amortization time, then by cost
                     const compareTime = a.timeInHours - b.timeInHours;
@@ -586,8 +591,11 @@ export class AmortizationItemGenerator {
                     return a.costConverted - b.costConverted;
                 });
 
+            if(items.length == 0) {
+                break;
+            }
+
             const bestItem = items[0];
-            let yieldItem: boolean = true;
             switch (bestItem.type) {
                 case 'mine': {
                     const planetData = this.#state.planets[bestItem.planetId].data;
@@ -599,8 +607,6 @@ export class AmortizationItemGenerator {
                     bestItem.additionalLifeformBuildings.forEach(b => {
                         planetData.lifeformBuildings[b.building] = b.levels.to;
                     });
-
-                    yieldItem = this.#settings.planets[planetData.id].show;
                     break;
                 }
 
@@ -617,8 +623,6 @@ export class AmortizationItemGenerator {
                             planetData.lifeformTechnologies[bt.technology] = bt.levels.to;
                         }
                     });
-
-                    yieldItem = this.#settings.showPlasmaTechnology;
                     break;
                 }
 
@@ -633,8 +637,6 @@ export class AmortizationItemGenerator {
                     bestItem.additionalLifeformBuildings.forEach(b => {
                         planetData.lifeformBuildings[b.building] = b.levels.to;
                     });
-
-                    yieldItem = this.#settings.planets[planetData.id].show;
                     break;
                 }
 
@@ -649,14 +651,11 @@ export class AmortizationItemGenerator {
                     bestItem.additionalLifeformBuildings.forEach(b => {
                         planetData.lifeformBuildings[b.building] = b.levels.to;
                     });
-
-                    yieldItem = this.#settings.planets[planetData.id].show;
                     break;
                 }
 
                 case 'astrophysics-and-colony': {
                     newPlanets++;
-
 
                     const newAstroLevel = Math.max(this.#state.research[ResearchType.astrophysics], ...bestItem.levels);
                     this.#state.research[ResearchType.astrophysics] = newAstroLevel;
@@ -668,9 +667,7 @@ export class AmortizationItemGenerator {
 
                     this.#settings.planets[bestItem.newPlanetId] = {
                         ...this.#settings.astrophysics.planet,
-                        show: this.#settings.astrophysics.show,
                     };
-                    yieldItem = this.#settings.astrophysics.show;
                     break;
                 }
 
@@ -679,9 +676,7 @@ export class AmortizationItemGenerator {
 
             this.#updateState();
 
-            if (yieldItem) {
-                yield bestItem;
-            }
+            yield bestItem;
         }
     }
 
@@ -877,7 +872,7 @@ export class AmortizationItemGenerator {
 
     //#region lifeform technology amortization item calculation
     #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
-        return this.#planets.flatMap(
+        return this.#includedPlanets.flatMap(
             planet => [
                 ...planet.lifeformResourceProductionBonusTechnologies,
                 ...planet.crawlerProductionBonusTechnologies,
@@ -1212,7 +1207,7 @@ export class AmortizationItemGenerator {
 
     //#region lifeform building amortization item calculation
     #getLifeformBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
-        return this.#planets.flatMap(
+        return this.#includedPlanets.flatMap(
             planet => ResourceProductionBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
                 lfBuilding => this.#getLifeformBuildingAmortizationItem(this.#state.productionBreakdowns, planet, lfBuilding)
             )
@@ -1530,7 +1525,7 @@ export class AmortizationItemGenerator {
             }, 0);
         };
 
-        const planetStates = this.#planets;
+        const planetStates = this.#includedPlanets;
         planetStates.forEach(planetState => {
             localPlanetStates[planetState.data.id] = {
                 id: planetState.data.id,
@@ -1883,7 +1878,7 @@ export class AmortizationItemGenerator {
 
     //#region mine amortization item calculation
     #getMineAmortizationItems(): MineAmortizationItem[] {
-        return this.#planets.flatMap(
+        return this.#includedPlanets.flatMap(
             planet => $mineBuildingTypes.map(
                 mineType => this.#getMineAmortizationItem(this.#state.productionBreakdowns, planet, mineType)
             )
@@ -2076,8 +2071,8 @@ export class AmortizationItemGenerator {
     }
     //#endregion
 
-    get #planets() {
+    get #includedPlanets() {
         return Object.values(this.#state.planets)
-            .filter(planet => planet.data.id < 0 || !this.#settings.planets[planet.data.id].ignore);
+            .filter(planet => this.#settings.planets[planet.data.id].include);
     }
 }

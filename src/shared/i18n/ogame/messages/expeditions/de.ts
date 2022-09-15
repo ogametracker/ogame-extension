@@ -21,7 +21,7 @@ export const de: ExpeditionMessages = {
             /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
-        regex: (darkMatter: string) => new RegExp(`Es wurde (?<name>${darkMatter}) (?<amount>[^\\s]+) erbeutet`),
+        regex: (darkMatter: string) => new RegExp(`Es wurde (?<name>${darkMatter}) (?<amount>[^\\s]+) erbeutet`, 'i'),
     },
 
     [ExpeditionEventType.resources]: {
@@ -37,7 +37,7 @@ export const de: ExpeditionMessages = {
             /*'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
             /*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
-        regex: (resources: string[]) => new RegExp(`Es wurde (?<name>${resources.join('|')}) (?<amount>.+) erbeutet`),
+        regex: (resources: string[]) => new RegExp(`Es wurde (?<name>${resources.join('|')}) (?<amount>.+) erbeutet`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
@@ -55,7 +55,7 @@ export const de: ExpeditionMessages = {
             /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
-        regex: (ships: string[]) => new RegExp(`Folgende Schiffe schlossen sich der Flotte an:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`),
+        regex: (ships: string[]) => new RegExp(`Folgende Schiffe schlossen sich der Flotte an:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
@@ -101,7 +101,7 @@ export const de: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /Ein (?<name>.+) wurde dem Inventar hinzugefügt/,
+        regex: /Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -142,7 +142,7 @@ export const de: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/,
+    logbookRegex: /Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',

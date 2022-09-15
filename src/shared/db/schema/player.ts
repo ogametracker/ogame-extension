@@ -7,12 +7,14 @@ import { AllianceClass } from "@/shared/models/ogame/classes/AllianceClass";
 import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
 import { DefenseType } from "@/shared/models/ogame/defenses/DefenseType";
+import { FleetMissionType } from "@/shared/models/ogame/fleets/FleetMissionType";
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
-import { ShipType } from "@/shared/models/ogame/ships/ShipType";
+import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
+import { NonStationaryShipType, ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { UniverseSpecificSettings } from "@/shared/models/universe-specific-settings/UniverseSpecificSettings";
 import { DBSchema } from "idb";
 
@@ -70,6 +72,18 @@ export type DbPlanetLifeformBuildingLevels = Record<LifeformBuildingType, number
 export type DbPlanetLifeformTechnologyLevels = Record<LifeformTechnologyType, number>;
 export type DbPlanetActiveLifeformTechnologies = LifeformTechnologyType[];
 
+interface DbFleet {
+    id: number;
+    mission: FleetMissionType;
+    isReturnFlight: boolean;
+    arrivalTime: number;
+    originCoordinates: Coordinates;
+    destinationCoordinates: Coordinates;
+    ships: Record<NonStationaryShipType, number>;
+    cargo: Record<ResourceType, number>;
+}
+export type DbFleets = DbFleet[];
+
 type DbEmpire = (
     | { key: 'allianceClass'; value: AllianceClass }
     | { key: 'officers'; value: DbPlayerOfficers }
@@ -94,6 +108,8 @@ type DbEmpire = (
     | { key: `moon.${number}.ships`; value: DbShipAmounts }
     | { key: `moon.${number}.defenses`; value: DbDefenseAmounts }
     | { key: `moon.${number}.activeItems`; value: DbActiveItems }
+
+    | { key: 'fleets'; value: DbFleets }
 );
 
 

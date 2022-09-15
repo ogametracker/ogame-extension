@@ -1,3 +1,3 @@
-import { ShipType } from '../ogame/ships/ShipType';
+import { PlanetShipType } from '../ogame/ships/ShipType';
 
-export type PlanetShipCount = Record<ShipType, number>;
+export type PlanetShipCount = Record<PlanetShipType, number>;

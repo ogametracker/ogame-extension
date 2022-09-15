@@ -42,9 +42,9 @@
 </template>
 
 <script lang="ts">
-    import { getGlobalDatabase, getPlayerDatabase, getUniverseHistoryDatabase } from '@/shared/db/access';
+    import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabase } from '@/shared/db/access';
     import { VersionedDataExport } from '@/shared/import-export';
-    import { V2Export, V2ExportedAccount, V2ExportedEmpire, V2ExportedEmpireMoon, V2ExportedEmpirePlanet, V2ExportedServer, V2ExportedUniverseHistory } from '@/shared/import-export/v2';
+    import { V2Export, V2ExportedAccount, V2ExportedEmpire, V2ExportedEmpireMoon, V2ExportedEmpirePlanet, V2ExportedServer, V2ExportedServerSettings, V2ExportedUniverseHistory } from '@/shared/import-export/v2';
     import { _log, _logDebug, _logError } from '@/shared/utils/_log';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import { downloadFile } from '@stats/utils/downloadFile';
@@ -55,18 +55,22 @@
     import { _throw } from '@/shared/utils/_throw';
     import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbPlayerOfficers, DbPlayerResearchLevels, DbShipAmounts } from '@/shared/db/schema/player';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { BuildingType, MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
-    import { ShipType, ShipTypes } from '@/shared/models/ogame/ships/ShipType';
-    import { DefenseType, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
+    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
-    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchType';
+    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
     import { DbServer } from '@/shared/db/schema/global';
     import { importData as importData_v1ToV2 } from '@/shared/import-export/v1-to-v2/importData';
     import { ImportCallbackInfo, importData as importData_v2 } from '@/shared/import-export/v2/importData';
     import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { DbServerSettings } from '@/shared/db/schema/server';
 
     @Component({})
     export default class ImportExport extends Vue {
@@ -147,11 +151,14 @@
                     universeHistory = await this.getExportUniverseHistory(server);
                 }
 
+                const serverSettings = await this.getExportServerSettings(server);
+
                 servers.push({
                     serverId: server.id,
                     language: server.language,
                     name: server.name,
                     universeHistory,
+                    serverSettings,
                 });
             }
 
@@ -161,6 +168,32 @@
                 accounts,
                 servers,
             };
+        }
+
+        private async getExportServerSettings(server: DbServer): Promise<V2ExportedServerSettings | undefined> {
+            const db = await getServerDatabase({
+                serverId: server.id,
+                language: server.language,
+                playerId: 0,
+            });
+            const tx = db.transaction('serverSettings', 'readonly');
+            const store = tx.objectStore('serverSettings');
+
+            const keys = await store.getAllKeys();
+            if (keys.length == 0) {
+                await tx.done;
+                return undefined;
+            }
+
+            const exportKeys: (keyof V2ExportedServerSettings)[] = (keys.filter(k => k != '_lastUpdate') as (Exclude<keyof DbServerSettings, '_lastUpdate'>)[]);
+            const settings = {} as V2ExportedServerSettings;
+            for (const key of exportKeys) {
+                const value = await store.get(key as keyof DbServerSettings);
+                (settings as any)[key] = value;
+            }
+
+            await tx.done;
+            return settings;
         }
 
         private async getExportUniverseHistory(server: DbServer): Promise<V2ExportedUniverseHistory | undefined> {

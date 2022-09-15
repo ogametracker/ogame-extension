@@ -20,6 +20,7 @@ export const de: ExpeditionsTranslations = {
             sizes: 'Fundgrößen',
             resources: 'Rohstoffeinheiten',
             count: 'Anzahl',
+            sizesByResource: 'Fundgrößen nach Rohstoff',
         },
     },
 

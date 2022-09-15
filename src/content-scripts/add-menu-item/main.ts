@@ -1,18 +1,19 @@
 import { _log, _logDebug } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { ogameTrackerCloseDialogEventName } from '../../shared/messages/communication';
-import { isSupportedLanguage } from '../../shared/i18n/isSupportedLanguage';
 import { getOgameMeta } from '../../shared/ogame-web/getOgameMeta';
-import { i18nTooltips } from "./tooltip-i18n";
+import ingamei18n from "@/shared/i18n/extension/ingame";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 
 import './styles.scss';
+import { LanguageKey } from "@/shared/i18n/LanguageKey";
 
 const observer = new MutationObserver(() => {
     const menu = document.querySelector('#menuTableTools');
 
     if (menu != null) {
         const ogameMeta = getOgameMeta();
-        const supportsLanguage = isSupportedLanguage(ogameMeta.language);
+        const language = getLanguage(ogameMeta.language);
 
         const parent = menu;
 
@@ -20,7 +21,7 @@ const observer = new MutationObserver(() => {
         ogameTrackerMenu.classList.add('leftmenu');
         ogameTrackerMenu.id = 'ogame-tracker-menu';
 
-        const tooltip = i18nTooltips[ogameMeta.language] ?? i18nTooltips.en;
+        const tooltip = ingamei18n[language ?? LanguageKey.en]?.tooltipNewTab;
 
         let html = `
             <li id="ogame-tracker-menu-item__v2">
@@ -30,7 +31,7 @@ const observer = new MutationObserver(() => {
                     </span>
                 </span>
                 <div class="menubutton beta"></div>
-                ${supportsLanguage
+                ${language != null
                 ? ''
                 : `<div class="warning-lang-not-supported tooltip" title="The OGame language '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
                         <span class="mdi mdi-alert"></span>

@@ -1,5 +1,6 @@
 import { observerCallbacks } from "./main";
-import { ResearchType, ResearchTypes } from '../../shared/models/ogame/research/ResearchType';
+import { ResearchType } from '../../shared/models/ogame/research/ResearchType';
+import { ResearchTypes } from '../../shared/models/ogame/research/ResearchTypes';
 import { _throw } from "../../shared/utils/_throw";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";

@@ -68,13 +68,12 @@ export const de: EmpireTranslations = {
             },
             plasmatechSettings: {
                 header: 'Einstellungen zu Plasmatechnik',
-                showPlasmatech: 'Plasmatechnik in Ergebnis anzeigen',
+                includePlasmatech: 'Plasmatechnik für Berechnung berücksichtigen',
             },
             planetSettings: {
                 header: 'Einstellungen der Planeten',
 
-                showInResult: 'in Ergebnis anzeigen',
-                ignore: 'Für Berechnung ignorieren',
+                includeInResult: 'für Berechnung berücksichtigen',
                 position: 'Position',
                 maxTemperature: 'Max. Temperatur',
                 activeItems: 'Aktive Items',

@@ -6,20 +6,20 @@ class RocktalCollectorEnhancementClass extends LifeformTechnology implements Col
     public constructor() {
         super({
             metal: {
-                baseCost: 200_000,
-                increaseFactor: 1.5,
+                baseCost: 300_000,
+                increaseFactor: 1.7,
             },
             crystal: {
-                baseCost: 100_000,
-                increaseFactor: 1.5,
+                baseCost: 180_000,
+                increaseFactor: 1.7,
             },
             deuterium: {
-                baseCost: 100_000,
-                increaseFactor: 1.5,
+                baseCost: 120_000,
+                increaseFactor: 1.7,
             },
             energy: {
                 baseCost: 0,
-                increaseFactor: 0,
+                increaseFactor: 1,
             },
         });
     }

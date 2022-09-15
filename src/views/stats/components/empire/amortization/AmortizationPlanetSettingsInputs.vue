@@ -9,11 +9,8 @@
 
         <div class="body">
             <template v-if="toggleable">
-                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.showInResult" />
-                <checkbox v-model="settings.show" />
-
-                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.ignore" />
-                <checkbox v-model="settings.ignore" />
+                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.includeInResult" />
+                <checkbox v-model="settings.include" />
             </template>
 
             <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.position" />

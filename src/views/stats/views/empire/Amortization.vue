@@ -74,19 +74,14 @@
                         <div>
                             <h3 v-text="$i18n.$t.empire.amortization.settings.astrophysicsSettings.header" />
                             <div class="astrophysics-settings">
-                                <checkbox
-                                    v-model="astrophysicsSettings.show"
-                                    :label="$i18n.$t.empire.amortization.settings.astrophysicsSettings.showAstrophysics"
-                                />
-
-                                <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" />
+                                <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" toggleable />
                             </div>
                         </div>
 
                         <div>
                             <h3 v-text="$i18n.$t.empire.amortization.settings.plasmatechSettings.header" />
                             <div class="plasma-tech-settings">
-                                <checkbox v-model="showPlasmaTechnology" :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.showPlasmatech" />
+                                <checkbox v-model="includePlasmaTechnology" :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.includePlasmatech" />
                             </div>
                         </div>
 
@@ -381,7 +376,8 @@
 
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { BuildingType, BuildingTypes } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
+    import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
     import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
@@ -515,10 +511,8 @@
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
-            show: true,
             planet: {
-                show: true,
-                ignore: false,
+                include: true,
                 id: -1,
                 name: '',
                 position: 0,
@@ -534,7 +528,7 @@
                 activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
             },
         };
-        private showPlasmaTechnology = true;
+        private includePlasmaTechnology = true;
 
         private showSettings = true;
 
@@ -581,7 +575,7 @@
                     player: this.clone(this.playerSettings),
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
-                    showPlasmaTechnology: this.clone(this.showPlasmaTechnology),
+                    includePlasmaTechnology: this.clone(this.includePlasmaTechnology),
                 },
                 lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
@@ -632,8 +626,7 @@
             this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
                 .reduce((acc, planet) => {
                     const settings: AmortizationPlanetSettings = {
-                        show: true,
-                        ignore: false,
+                        include: true,
                         id: planet.id,
                         name: planet.name,
                         maxTemperature: planet.maxTemperature,
@@ -661,10 +654,8 @@
                 }, {} as Record<number, AmortizationPlanetSettings>);
 
             this.astrophysicsSettings = {
-                show: true,
                 planet: {
-                    show: true,
-                    ignore: false,
+                    include: true,
                     id: -1,
                     name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
                     position: 8,

@@ -16,9 +16,9 @@ import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
-import { messageHeaders } from "./i18n";
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { getLanguage } from "@/shared/i18n/getLanguage";
+import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
 
 let tabContent: Element | null = null;
 

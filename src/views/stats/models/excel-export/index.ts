@@ -9,7 +9,7 @@ import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries
 import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
 import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-import { ShipTypes } from '@/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
 import * as xlsx from 'xlsx';
 import { CombatReportDataModule } from '../../data/CombatReportDataModule';
 import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';

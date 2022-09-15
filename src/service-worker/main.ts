@@ -34,6 +34,10 @@ try {
     chrome.runtime.onInstalled.addListener(async () => await showMigrationWindow());
 
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));
+
+    self.addEventListener('installed', async () => {
+        void (self as any).skipWaiting();
+    });
 } catch (error) {
     _logError(error);
 }

@@ -20,7 +20,7 @@ class DeuteriumSynthesiserClass extends LifeformBuilding implements ResourceProd
             },
             energy: {
                 baseCost: 90,
-                increaseFactor: 1.1
+                increaseFactor: 1.1,
             },
         });
     }

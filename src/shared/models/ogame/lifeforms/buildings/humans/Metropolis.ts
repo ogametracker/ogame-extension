@@ -19,7 +19,7 @@ class MetropolisClass extends LifeformBuilding implements LifeformTechnologyBonu
             },
             energy: {
                 baseCost: 90,
-                increaseFactor: 1.1
+                increaseFactor: 1.05,
             },
         });
     }

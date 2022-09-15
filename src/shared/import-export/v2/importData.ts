@@ -1,6 +1,7 @@
-import { getGlobalDatabase, getPlayerDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
+import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
 import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
 import { DbBasicMoonData, DbBasicPlanetData } from "@/shared/db/schema/player";
+import { DbServerSettings } from "@/shared/db/schema/server";
 import { StoreNames } from "idb";
 import { V2Export, V2ExportedUniverseHistory } from ".";
 
@@ -146,54 +147,69 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         });
 
         const history = server.universeHistory;
-        if (history == null) {
-            continue;
-        }
+        if (history != null) {
+            const db = await getUniverseHistoryDatabase({
+                language: server.language,
+                serverId: server.serverId,
+                playerId: 0,
+            });
+            const tx = db.transaction([
+                '_lastUpdate',
+                'players', 'playerNames', 'playerAlliances', 'playerStates', 'playerScores',
+                'alliances', 'allianceTags', 'allianceNames', 'allianceMembers', 'allianceStates', 'allianceScores',
+                'planets', 'planetNames', 'planetStates', 'planetCoordinates',
+                'moons', 'moonNames', 'moonStates'
+            ], 'readwrite');
 
-        const db = await getUniverseHistoryDatabase({
-            language: server.language,
-            serverId: server.serverId,
-            playerId: 0,
-        });
-        const tx = db.transaction([
-            '_lastUpdate',
-            'players', 'playerNames', 'playerAlliances', 'playerStates', 'playerScores',
-            'alliances', 'allianceTags', 'allianceNames', 'allianceMembers', 'allianceStates', 'allianceScores',
-            'planets', 'planetNames', 'planetStates', 'planetCoordinates',
-            'moons', 'moonNames', 'moonStates'
-        ], 'readwrite');
+            await tx.objectStore('_lastUpdate').put(history._lastUpdate, 0);
 
-        await tx.objectStore('_lastUpdate').put(history._lastUpdate, 0);
+            const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
+                'players',
+                'playerNames',
+                'playerAlliances',
+                'playerStates',
+                'playerScores',
+                'alliances',
+                'allianceTags',
+                'allianceNames',
+                'allianceMembers',
+                'allianceStates',
+                'allianceScores',
+                'planets',
+                'planetNames',
+                'planetStates',
+                'planetCoordinates',
+                'moons',
+                'moonNames',
+                'moonStates',
+            ];
+            for (const storeName of stores) {
+                const store = tx.objectStore(storeName);
+                const entries = history[storeName];
 
-        const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
-            'players',
-            'playerNames',
-            'playerAlliances',
-            'playerStates',
-            'playerScores',
-            'alliances',
-            'allianceTags',
-            'allianceNames',
-            'allianceMembers',
-            'allianceStates',
-            'allianceScores',
-            'planets',
-            'planetNames',
-            'planetStates',
-            'planetCoordinates',
-            'moons',
-            'moonNames',
-            'moonStates',
-        ];
-        for (const storeName of stores) {
-            const store = tx.objectStore(storeName);
-            const entries = history[storeName];
-
-            for (const entry of entries) {
-                await store.put(entry);
+                for (const entry of entries) {
+                    await store.put(entry);
+                }
             }
+
+            await tx.done;
         }
 
-        await tx.done;
+        if (server.serverSettings != null) {
+            const db = await getServerDatabase({
+                language: server.language,
+                serverId: server.serverId,
+                playerId: 0,
+            });
+            const tx = db.transaction('serverSettings', 'readwrite');
+
+            const store = tx.objectStore('serverSettings');
+            for (const entry of Object.entries(server.serverSettings)) {
+                const [key, value] = entry;
+                await store.put(value, key as (keyof DbServerSettings));
+            }
+
+            await tx.done;
+        }
     }
 }

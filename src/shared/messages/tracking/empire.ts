@@ -2,7 +2,7 @@ import { Coordinates } from '../../models/ogame/common/Coordinates';
 import { Message, NoDataMessage } from '../../messages/Message';
 import { MessageType } from '../MessageType';
 import { ItemHash } from '../../models/ogame/items/ItemHash';
-import { ShipType } from '../../models/ogame/ships/ShipType';
+import { NonStationaryShipType, ShipType } from '../../models/ogame/ships/ShipType';
 import { DefenseType } from '../../models/ogame/defenses/DefenseType';
 import { PlayerOfficers } from '../../models/empire/PlayerOfficers';
 import { PlayerClass } from '../../models/ogame/classes/PlayerClass';
@@ -14,6 +14,9 @@ import { PlanetActiveItems } from '@/shared/models/empire/PlanetActiveItems';
 import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType';
+import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+import { Fleets } from '@/shared/models/ogame/fleets/types';
 
 
 // basic planet/moon data
@@ -94,6 +97,9 @@ export type UpdatePlanetActiveLifeformTechnologyLevelsMessage = Message<MessageT
 type PlanetLifeformTechnologyLevels = Record<LifeformTechnologyType, number>;
 export type UpdatePlanetLifeformTechnologyLevelsMessage = Message<MessageType.UpdatePlanetLifeformTechnologyLevels, PlanetDataWrapper<PlanetLifeformTechnologyLevels>>;
 
+
+// fleets
+export type UpdateFleetsMessage = Message<MessageType.UpdateFleets, Fleets>;
 
 
 // notifications

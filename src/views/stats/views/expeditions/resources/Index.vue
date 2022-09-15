@@ -24,6 +24,10 @@
                     label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.count,
                     to: { name: 'expeditions/resources/count' },
                 },
+                {
+                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.sizesByResource,
+                    to: { name: 'expeditions/resources/size-breakdown' },
+                },
             ];
         }
     }

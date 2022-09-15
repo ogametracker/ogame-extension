@@ -1,19 +1,26 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
+import { getLanguage } from "@/shared/i18n/getLanguage";
 import { MessageType } from "@/shared/messages/MessageType";
-import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateActiveOfficersMessage, UpdateOwnedPlanetsMessage, UpdatePlayerClassMessage } from "@/shared/messages/tracking/empire";
+import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateActiveOfficersMessage, UpdateFleetsMessage, UpdateOwnedPlanetsMessage, UpdatePlayerClassMessage } from "@/shared/messages/tracking/empire";
 import { UpdateSelectedLifeformMessage } from "@/shared/messages/tracking/empire";
 import { PlayerOfficers } from "@/shared/models/empire/PlayerOfficers";
 import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
 import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
 import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { FleetMissionType } from "@/shared/models/ogame/fleets/FleetMissionType";
+import { Fleet } from "@/shared/models/ogame/fleets/types";
+import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
+import { NonStationaryShipTypes } from "@/shared/models/ogame/ships/ShipTypes";
 import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
+import { createRecord } from "@/shared/utils/createRecord";
 import { parseCoordinates } from "@/shared/utils/parseCoordinates";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { _throw } from "@/shared/utils/_throw";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { getActiveLifeform } from "./getActiveLifeform";
 import { observerCallbacks } from "./main";
+import i18nShips from '@/shared/i18n/ogame/ships';
+import i18nResources from '@/shared/i18n/ogame/resources';
 
 export function trackOnIngamePages() {
     trackPlayerClass();
@@ -21,8 +28,11 @@ export function trackOnIngamePages() {
     trackOfficers();
 
     trackSelectedLifeform();
+
+    trackFleets();
 }
 
+//#region player class
 function trackPlayerClass() {
     observerCallbacks.push({
         selector: '#characterclass',
@@ -48,9 +58,9 @@ function trackPlayerClass() {
         },
     });
 }
+//#endregion
 
-
-
+//#region owned planets/moons
 function trackOwnedPlanets() {
     observerCallbacks.push({
         selector: '#planetList',
@@ -128,8 +138,9 @@ function getMoonData(planetElem: Element, coordinates: Coordinates): BasicPlanet
         },
     };
 }
+//#endregion
 
-
+//#region officers
 function trackOfficers() {
     observerCallbacks.push({
         selector: '#officers',
@@ -158,9 +169,9 @@ function trackOfficers() {
         },
     });
 }
+//#endregion
 
-
-
+//#region active lifeform
 function trackSelectedLifeform() {
     observerCallbacks.push({
         selector: '#lifeform', // is only on page for planets
@@ -185,3 +196,122 @@ function trackSelectedLifeform() {
         },
     });
 }
+//#endregion
+
+//#region fleets
+function trackFleets() {
+    const observer = new MutationObserver(() => {
+        updateFleetTracking();
+    });
+    observer.observe(document.documentElement, { subtree: true, childList: true });
+}
+
+const $trackedFleets: Record<number, Fleet> = {};
+
+function updateFleetTracking() {
+    const eventTable = document.querySelector('#eventContent');
+    if (eventTable == null) {
+        return;
+    }
+
+    const meta = getOgameMeta();
+    const language = getLanguage(meta.language);
+    if(language == null) {
+        return;
+    }
+
+    const shipNames = i18nShips[language];
+    const resourceNames = i18nResources[language];
+
+    const fleetRows = eventTable.querySelectorAll('.eventFleet');
+    let trackedNewFleet = false;
+    fleetRows.forEach(row => {
+        const id = parseIntSafe(row.id.replace('eventRow-', ''));
+        if ($trackedFleets[id] != null) {
+            return;
+        }
+
+        const arrivalTime = parseIntSafe(row.getAttribute('data-arrival-time') ?? _throw('no arrival time found')) * 1_000;
+        const isReturnFlight = row.getAttribute('data-return-flight') == 'true';
+        const mission = parseIntSafe(row.getAttribute('data-mission-type') ?? _throw('no mission type found')) as FleetMissionType;
+
+        const originCoordinatesText = row.querySelector('.coordsOrigin')?.textContent ?? _throw('no origin coordinates found');
+        const originCoordinatesType = getCoordinateType(row.querySelector('.originFleet') ?? _throw('no origin icon found'));
+        const originCoordinates = parseCoordinates(originCoordinatesText.trim(), originCoordinatesType);
+
+        const destinationCoordinatesText = row.querySelector('.destCoords')?.textContent ?? _throw('no origin coordinates found');
+        const destinationCoordinatesType = getCoordinateType(row.querySelector('.destFleet') ?? _throw('no dest icon found'));;
+        const destinationCoordinates = parseCoordinates(destinationCoordinatesText.trim(), destinationCoordinatesType);
+
+        const tooltipHtml = row.querySelector('[class*="icon_movement"] .tooltip')?.getAttribute('title') ?? _throw('no tooltip found');
+        const tooltipTextElem = document.createElement('div');
+        tooltipTextElem.innerHTML = tooltipHtml;
+        const tooltipText = tooltipTextElem.textContent ?? '';
+
+        const ships = createRecord(NonStationaryShipTypes, shipType => {
+            const name = shipNames[shipType];
+            const regex = new RegExp(`${name}:\\s*(?<count>[^\\s]+)`);
+            const match = tooltipText.match(regex);
+
+            if(match?.groups == null) {
+                return 0;
+            }
+
+            const countText = match.groups.count.replace(/[^\d]/g, '');
+            return parseIntSafe(countText);
+        });
+        const cargo = createRecord(ResourceTypes, resourceType => {
+            const name = resourceNames[resourceType];
+            const regex = new RegExp(`${name}:\\s*(?<amount>[^\\s]+)`);
+            const match = tooltipText.match(regex);
+
+            if(match?.groups == null) {
+                return 0;
+            }
+
+            const amountText = match.groups.amount.replace(/[^\d]/g, '');
+            return parseIntSafe(amountText);
+        });
+
+        const fleet: Fleet = {
+            id,
+            arrivalTime,
+            isReturnFlight,
+            mission,
+
+            originCoordinates,
+            destinationCoordinates,
+
+            cargo,
+            ships,
+        };
+        $trackedFleets[id] = fleet;
+
+        trackedNewFleet = true;
+    });
+
+    if(trackedNewFleet) {
+        const msg: UpdateFleetsMessage = {
+            ogameMeta: getOgameMeta(),
+            type: MessageType.UpdateFleets,
+            data: Object.values($trackedFleets),
+            senderUuid: empireTrackingUuid,
+        };
+        sendMessage(msg);
+    }
+}
+
+function getCoordinateType(elem: Element): PlanetType {
+    if (elem.querySelector('figure.planet') != null) {
+        return PlanetType.planet;
+    }
+    if (elem.querySelector('figure.moon') != null) {
+        return PlanetType.moon;
+    }
+    if (elem.querySelector('figure.tf') != null) {
+        return PlanetType.debrisField;
+    }
+
+    _throw('invalid coordinate type');
+}
+//#endregion
