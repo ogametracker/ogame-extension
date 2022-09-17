@@ -46,7 +46,8 @@ fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 console.log(`Generating manifest`);
 execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''} --browser=${browser}`, { stdio: 'inherit' });
 
-const version = JSON.parse(fs.readFileSync('./dist/manifest.json')).version;
+const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json'));
+const version = manifest.version;
 const dateFormat = new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: '2-digit',
@@ -58,11 +59,22 @@ const dateFormat = new Intl.DateTimeFormat(undefined, {
 });
 console.log(`Build ready (version ${version}, ${dateFormat.format(new Date())})`);
 
-if(!isDev) {
+if (!isDev) {
     console.log('Creating zip-archive');
 
     const zipdir = require('zip-dir');
     zipdir('./dist', { saveTo: `./dist/ogame-tracker-${browser}--${version}.zip` });
+
+    const tagName = `${manifest.name.replace(/\s/g, '_')}/${version}`;
+    try {
+        console.log(`creating git tag '${tagName}'`);
+        execSync(`git tag ${tagName}`);
+        execSync(`git push origin ${tagName}`);
+        console.log('created tag successfully');
+    } catch(e) {
+        console.log('FAILED to add git tag');
+        console.log(e);
+    }
 }
 
 console.log('Done');
