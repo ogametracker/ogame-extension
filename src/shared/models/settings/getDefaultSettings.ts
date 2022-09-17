@@ -58,12 +58,12 @@ export function getDefaultSettings(language: LanguageKey): Settings {
         conversionRates: {
             mode: 'msu',
             msu: {
-                crystal: 2,
+                crystal: 1.5,
                 deuterium: 3,
             },
             dsu: {
                 metal: 3,
-                crystal: 1.5,
+                crystal: 2,
             },
         },
         showCellsWithConvertedResourceUnits: true,
