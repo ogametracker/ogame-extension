@@ -508,6 +508,9 @@
 
             this.saveStateDate = savedAmortization.date;
             this.amortizationItems = savedAmortization.items;
+
+            this.selectedItemIndizesSet.clear();
+            this.selectedItemIndizes = [];
         }
 
         private getPlanetName(id: number): string {
@@ -592,7 +595,7 @@
                 this.stopGenerating = false;
                 this.showSettings = false;
                 this.initItems();
-                
+
                 this.selectedItemIndizes = [];
                 this.selectedItemIndizesSet.clear();
 
