@@ -35,6 +35,9 @@
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private border!: boolean;
+
         private get image() {
             return this.imageMap[this.resource];
         }

@@ -2,6 +2,18 @@
     <div class="player-settings">
         <conversion-rate-settings class="conversion-rate-settings" />
 
+        <span v-text="'LOCA: Optimize for'" />
+        <span class="gap">
+            <o-resource
+                v-for="resource in resources"
+                :key="resource"
+                class="toggleable-resource"
+                :resource="resource"
+                :disabled="!settings.optimizeForResources.includes(resource)"
+                @click="toggleOptimizeForResource(resource)"
+            />
+        </span>
+
         <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
             <o-officer
@@ -62,6 +74,7 @@
     import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 
     @Component({
         components: {
@@ -73,6 +86,7 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
 
+        private readonly resources = ResourceTypes;
         private readonly ResearchType = ResearchType;
         private readonly playerClasses = SelectablePlayerClasses;
         private readonly allianceClasses = SelectableAllianceClasses;
@@ -94,6 +108,15 @@
             }
 
             this.settings.allianceClass = allianceClass;
+        }
+
+        private toggleOptimizeForResource(resource: ResourceType) {
+            if (this.settings.optimizeForResources.includes(resource)) {
+                this.settings.optimizeForResources = this.settings.optimizeForResources.filter(r => r != resource);
+            }
+            else {
+                this.settings.optimizeForResources.push(resource);
+            }
         }
     }
 </script>
@@ -118,7 +141,8 @@
 
         .o-officer,
         .o-player-class,
-        .o-alliance-class {
+        .o-alliance-class,
+        .toggleable-resource {
             cursor: pointer;
         }
 

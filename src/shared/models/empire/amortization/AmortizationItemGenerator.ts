@@ -147,6 +147,14 @@ export class AmortizationItemGenerator {
         return result.value;
     }
 
+    #excludeIgnoredResources(cost: Cost): Cost {
+        const copy: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+
+        this.#settings.player.optimizeForResources.forEach(resource => copy[resource] = cost[resource]);
+
+        return copy;
+    }
+
     #initGenerator(): Generator<AmortizationItem, void, unknown> {
         const generator = this.#generateNextItem();
 
@@ -567,7 +575,7 @@ export class AmortizationItemGenerator {
 
             const mineItems = this.#getMineAmortizationItems();
             const lifeformBuildingItems = this.#getLifeformBuildingAmortizationItems();
-            const lifeformTechnologyItems = this.#getLifeformTechnologyItems();
+            const lifeformTechnologyItems = this.#getLifeformTechnologyAmortizationItems();
             items.push(...mineItems, ...lifeformBuildingItems, ...lifeformTechnologyItems);
 
             if (this.#settings.includePlasmaTechnology) {
@@ -591,7 +599,7 @@ export class AmortizationItemGenerator {
                     return a.costConverted - b.costConverted;
                 });
 
-            if(items.length == 0) {
+            if (items.length == 0) {
                 break;
             }
 
@@ -776,7 +784,7 @@ export class AmortizationItemGenerator {
                 ...planetState.lifeformResourceProductionBonusTechnologies,
                 ...planetState.crawlerProductionBonusTechnologies,
                 ...planetState.collectorClassBonusTechnologies,
-            ].map(tech => this.#getLifeformTechnologyItem(newProductionBreakdowns, planetState, tech));
+            ].map(tech => this.#getLifeformTechnologyAmortizationItem(newProductionBreakdowns, planetState, tech));
 
             const items = [...mineItems, ...lfBuildingItems, ...lfTechnologyItems];
             const bestItem = items
@@ -835,7 +843,8 @@ export class AmortizationItemGenerator {
         } while (true);
 
         const totalCostConverted = this.#getMsuOrDsu(totalCost);
-        const productionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
+        let productionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {
@@ -855,7 +864,7 @@ export class AmortizationItemGenerator {
             costConverted: totalCostConverted,
             productionDelta,
             productionDeltaConverted: productionDeltaConverted,
-            timeInHours,
+            timeInHours: totalCostConverted / productionDeltaConverted,
         };
     }
     #clonePlanetState(planetState: AmortizationPlanetState): AmortizationPlanetState {
@@ -871,16 +880,16 @@ export class AmortizationItemGenerator {
 
 
     //#region lifeform technology amortization item calculation
-    #getLifeformTechnologyItems(): LifeformTechnologyAmortizationItem[] {
+    #getLifeformTechnologyAmortizationItems(): LifeformTechnologyAmortizationItem[] {
         return this.#includedPlanets.flatMap(
             planet => [
                 ...planet.lifeformResourceProductionBonusTechnologies,
                 ...planet.crawlerProductionBonusTechnologies,
                 ...planet.collectorClassBonusTechnologies,
-            ].map(tech => this.#getLifeformTechnologyItem(this.#state.productionBreakdowns, planet, tech))
+            ].map(tech => this.#getLifeformTechnologyAmortizationItem(this.#state.productionBreakdowns, planet, tech))
         );
     }
-    #getLifeformTechnologyItem(
+    #getLifeformTechnologyAmortizationItem(
         productionBreakdowns: EmpireProductionBreakdowns,
         planetState: AmortizationPlanetState,
         technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology,
@@ -943,7 +952,8 @@ export class AmortizationItemGenerator {
         const newProduction = newProductionBreakdowns.getTotal();
 
 
-        const productionDelta = subCost(newProduction, curProduction);
+        let productionDelta = subCost(newProduction, curProduction);
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {
@@ -1256,6 +1266,7 @@ export class AmortizationItemGenerator {
                 [resource]: productionDeltaValue,
             });
         });
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {
@@ -1404,7 +1415,8 @@ export class AmortizationItemGenerator {
         newProductionBreakdown.setPlasmaTechnologyLevel(newLevel);
         const newProduction = newProductionBreakdown.getTotal();
 
-        const productionDelta = subCost(newProduction, curProduction);
+        let productionDelta = subCost(newProduction, curProduction);
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         const additionalLifeformStuff: (LifeformTechnologyLevels | LifeformBuildingLevels)[] = [];
@@ -1858,7 +1870,7 @@ export class AmortizationItemGenerator {
                 level: c.level,
                 planetId: c.planetId,
             })).sort((a, b) => {
-                const idDiff = a.technology - b.technology;
+                const idDiff: number = a.technology - b.technology;
                 if (idDiff != 0) {
                     return idDiff;
                 }
@@ -1915,16 +1927,12 @@ export class AmortizationItemGenerator {
         });
 
         const resource = $resourceByMineType[mineType];
-        const productionBreakdown = productionBreakdowns[resource];
-        const newProductionBreakdown = productionBreakdown.clone();
-        newProductionBreakdown.planets[planetId].mineProduction = mine.getProduction(newLevel, planetState.productionBuildingDependencies);
-        newProductionBreakdown.planets[planetId].crawlers.totalMineLevel += 1;
+        const newProductionBreakdowns = productionBreakdowns.clone();
+        newProductionBreakdowns[resource].planets[planetId].mineProduction = mine.getProduction(newLevel, planetState.productionBuildingDependencies);
+        ResourceTypes.forEach(res => newProductionBreakdowns[res].planets[planetId].crawlers.totalMineLevel += 1);
 
-        const productionDeltaValue = newProductionBreakdown.getTotal() - productionBreakdown.getTotal();
-        const productionDelta: Cost = {
-            metal: 0, crystal: 0, deuterium: 0, energy: 0,
-            [resource]: productionDeltaValue,
-        };
+        const originalProductionDelta = subCost(newProductionBreakdowns.getTotal(), productionBreakdowns.getTotal());
+        const productionDelta = this.#excludeIgnoredResources(originalProductionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {

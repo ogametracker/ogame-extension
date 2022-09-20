@@ -52,7 +52,7 @@ export const en: EmpireTranslations = {
             applyAndClose: 'Apply settings and close',
 
             playerSettings: {
-                header: 'Player-wide Settings',
+                header: 'General Settings',
                 officers: 'Officers',
                 playerClass: 'Player Class',
                 allianceClass: 'Alliance Class',

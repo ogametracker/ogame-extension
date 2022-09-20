@@ -44,7 +44,7 @@ export const de: EmpireTranslations = {
             productionPlus: 'Produktionsplus',
             amortizationTime: 'Amortisationszeit',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Level' : 'Levels'} auf ${planets} Planeten`,
+            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Stufe' : 'Stufen'} auf ${planets} Planeten`,
         },
 
         settings: {
@@ -52,7 +52,7 @@ export const de: EmpireTranslations = {
             applyAndClose: 'Einstellungen anwenden und schließen',
 
             playerSettings: {
-                header: 'Spielerweite Einstellungen',
+                header: 'Allgemeine Einstellungen',
                 officers: 'Offiziere',
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',

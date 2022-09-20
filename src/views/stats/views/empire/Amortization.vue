@@ -81,7 +81,10 @@
                         <div>
                             <h3 v-text="$i18n.$t.empire.amortization.settings.plasmatechSettings.header" />
                             <div class="plasma-tech-settings">
-                                <checkbox v-model="includePlasmaTechnology" :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.includePlasmatech" />
+                                <checkbox
+                                    v-model="includePlasmaTechnology"
+                                    :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.includePlasmatech"
+                                />
                             </div>
                         </div>
 
@@ -329,11 +332,24 @@
                         </div>
                     </template>
                     <template #cell-costConverted="{ value }">
-                        <span v-text="$i18n.$n(value)" />
+                        <decimal-number :value="value" />
                     </template>
 
                     <template #cell-productionDelta="{ value }">
-                        <span v-text="$i18n.$n(value.metal + value.crystal + value.deuterium, numberFormat)" />
+                        <div class="production-delta-grid">
+                            <template v-if="value.metal > 0">
+                                <o-resource resource="metal" size="18px" />
+                                <decimal-number :value="value.metal" />
+                            </template>
+                            <template v-if="value.crystal > 0">
+                                <o-resource resource="crystal" size="18px" />
+                                <decimal-number :value="value.crystal" />
+                            </template>
+                            <template v-if="value.deuterium > 0">
+                                <o-resource resource="deuterium" size="18px" />
+                                <decimal-number :value="value.deuterium" />
+                            </template>
+                        </div>
                     </template>
                     <template #cell-productionDeltaConverted="{ value }">
                         <span v-text="$i18n.$n(value, numberFormat)" />
@@ -353,8 +369,25 @@
                     <template #footer-costConverted="{ value }">
                         <span v-text="$i18n.$n(value)" :class="{ zero: value == 0 }" />
                     </template>
-                    <template #footer-productionDelta />
-                    <template #footer-productionDeltaConverted />
+                    <template #footer-productionDelta="{ value }">
+                        <div class="production-delta-grid">
+                            <template v-if="value.metal > 0">
+                                <o-resource resource="metal" size="18px" />
+                                <decimal-number :value="value.metal" />
+                            </template>
+                            <template v-if="value.crystal > 0">
+                                <o-resource resource="crystal" size="18px" />
+                                <decimal-number :value="value.crystal" />
+                            </template>
+                            <template v-if="value.deuterium > 0">
+                                <o-resource resource="deuterium" size="18px" />
+                                <decimal-number :value="value.deuterium" />
+                            </template>
+                        </div>
+                    </template>
+                    <template #footer-productionDeltaConverted="{ value }">
+                        <decimal-number :value="value" />
+                    </template>
                     <template #footer-timeInHours />
                 </grid-table>
 
@@ -408,7 +441,7 @@
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
     import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
     import { UniverseSpecificSettings } from '@/shared/models/universe-specific-settings/UniverseSpecificSettings';
-    import { createRecord } from '@/shared/utils/createRecord';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -492,10 +525,9 @@
 
         private saveStateDate: number | null = null;
 
-        /**********************************/
-        /* START amortization calculation */
-        /**********************************/
+
         private playerSettings: AmortizationPlayerSettings = {
+            optimizeForResources: [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium],
             officers: {
                 admiral: false,
                 commander: false,
@@ -515,8 +547,8 @@
                 include: true,
                 id: -1,
                 name: '',
-                position: 0,
-                maxTemperature: 0,
+                position: 8,
+                maxTemperature: getAverageTemperature(8),
                 activeItems: [],
                 crawlers: {
                     overload: false,
@@ -535,6 +567,7 @@
         private readonly empire = EmpireDataModule.empire;
         private generator: AmortizationItemGenerator | null = null;
         private amortizationItems: AmortizationItem[] = [];
+        private readonly selectedItemIndizesSet = new Set<number>();
         private selectedItemIndizes: number[] = [];
 
         private generatingItemCount: { total: number; count: number } | null = null;
@@ -559,7 +592,9 @@
                 this.stopGenerating = false;
                 this.showSettings = false;
                 this.initItems();
+                
                 this.selectedItemIndizes = [];
+                this.selectedItemIndizesSet.clear();
 
                 void this.insertNextAmortizationItems(25);
             }
@@ -615,12 +650,13 @@
             const empire = this.empire;
 
             this.playerSettings = {
+                ...this.playerSettings,
+
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
                 levelAstrophysics: empire.research[ResearchType.astrophysics],
-                numberOfUnusedRaidColonySlots: 0,
             };
 
             this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
@@ -655,26 +691,17 @@
 
             this.astrophysicsSettings = {
                 planet: {
-                    include: true,
-                    id: -1,
+                    ...this.astrophysicsSettings.planet,
+
                     name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
-                    position: 8,
-                    maxTemperature: getAverageTemperature(8),
-                    activeItems: [],
                     crawlers: {
                         overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
-                    ignoreEmptyLifeformTechnologySlots: false,
-                    lifeform: LifeformType.rocktal,
-                    activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
                 },
             };
         }
-        /**********************************/
-        /*  END amortization calculation  */
-        /**********************************/
 
 
 
@@ -723,17 +750,22 @@
         }
 
         private get footerItems(): BaseAmortizationItem[] {
-            const zeroCost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            let productionDeltaConverted = 0;
 
-            const cost = this.selectedItemIndizes
-                .map(i => this.amortizationItems[i])
-                .reduce<Cost>((total, cur) => addCost(total, cur.cost), zeroCost);
+            this.selectedItemIndizes.forEach(i => {
+                const item = this.amortizationItems[i];
+                cost = addCost(cost, item.cost);
+                productionDelta = addCost(productionDelta, item.productionDelta);
+                productionDeltaConverted += item.productionDeltaConverted;
+            });
 
             return [{
                 cost,
                 costConverted: getMsuOrDsu(cost),
-                productionDelta: zeroCost,
-                productionDeltaConverted: 0,
+                productionDelta,
+                productionDeltaConverted,
                 timeInHours: 0,
             }];
         }
@@ -766,27 +798,30 @@
 
         private toggleItemSelection(index?: number, selectAllUntilIndex?: boolean) {
             if (index == null) {
-                if (this.selectedItemIndizes.length == this.items.length) {
+                if (this.selectedItemIndizesSet.size == this.items.length) {
                     this.selectedItemIndizes = [];
+                    this.selectedItemIndizesSet.clear();
                 }
                 else {
-                    this.selectedItemIndizes = this.items.map((_, i) => i);
+                    this.items.forEach((_, i) => this.selectedItemIndizesSet.add(i));
+                    this.selectedItemIndizes = [...this.selectedItemIndizesSet];
                 }
                 return;
             }
 
-            const select = !this.selectedItemIndizes.includes(index);
+            const select = !this.selectedItemIndizesSet.has(index);
             const min = selectAllUntilIndex ? 0 : index;
             const max = index;
             for (let index = min; index <= max; index++) {
-                const selected = this.selectedItemIndizes.includes(index);
+                const selected = this.selectedItemIndizesSet.has(index);
                 if (!select && selected) {
-                    this.selectedItemIndizes = this.selectedItemIndizes.filter(i => i != index);
+                    this.selectedItemIndizesSet.delete(index);
                 }
                 else if (select && !selected) {
-                    this.selectedItemIndizes.push(index);
+                    this.selectedItemIndizesSet.add(index);
                 }
             }
+            this.selectedItemIndizes = [...this.selectedItemIndizesSet];
         }
 
         private getAdditionalLifeformStuffGroups(additionalLifeformStuff: (LifeformBuildingLevels | LifeformTechnologyLevels)[]): AdditionalLifeformStuffGroup[] {
@@ -834,6 +869,14 @@
         width: 100%;
         grid-template-columns: repeat(3, 1fr);
         justify-items: end;
+    }
+
+    .production-delta-grid {
+        display: inline-grid;
+        align-items: center;
+        grid-template-columns: 16px 1fr;
+        justify-items: end;
+        gap: 4px;
     }
 
     .what-cell {
