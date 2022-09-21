@@ -2,7 +2,7 @@
     <div class="player-settings">
         <conversion-rate-settings class="conversion-rate-settings" />
 
-        <span v-text="'LOCA: Optimize for'" />
+        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.optimizeForResources" />
         <span class="gap">
             <o-resource
                 v-for="resource in resources"

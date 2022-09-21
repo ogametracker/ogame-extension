@@ -53,6 +53,7 @@ export const de: EmpireTranslations = {
 
             playerSettings: {
                 header: 'Allgemeine Einstellungen',
+                optimizeForResources: 'Für gewählte Rohstoffe optimieren',
                 officers: 'Offiziere',
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',

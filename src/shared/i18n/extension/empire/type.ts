@@ -52,6 +52,7 @@ export interface EmpireTranslations {
 
             playerSettings: {
                 header: string;
+                optimizeForResources: string;
                 officers: string;
                 playerClass: string;
                 allianceClass: string;
