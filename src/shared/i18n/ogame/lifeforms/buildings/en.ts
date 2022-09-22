@@ -1,5 +1,4 @@
 import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { LifeformBuildingsTranslations } from "./types";
 
 
