@@ -21,15 +21,13 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
-    type SupportedUILanguage = LanguageKey.de | LanguageKey.en;
-
     @Component({})
     export default class DetailedResourceBalanceSettings extends Vue {
-        private langs: SupportedUILanguage[] = [
+        private langs: LanguageKey[] = [
             LanguageKey.de,
             LanguageKey.en,
         ];
-        private languageNames: Record<SupportedUILanguage, string> = {
+        private languageNames: Partial<Record<LanguageKey, string>> = {
             [LanguageKey.de]: 'Deutsch',
             [LanguageKey.en]: 'English',
         };
