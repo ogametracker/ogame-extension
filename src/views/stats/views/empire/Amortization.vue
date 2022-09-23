@@ -482,7 +482,7 @@
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
 
         private get savedAmortization() {
-            return UniverseSpecificSettingsDataModule.settings.savedAmortization;;
+            return UniverseSpecificSettingsDataModule.settings.savedAmortization;
         }
 
         private async saveItems() {
