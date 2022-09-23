@@ -170,6 +170,7 @@
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { ResourceTranslations } from '@/shared/i18n/extension/resources/type';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -271,6 +272,50 @@
             ],
         };
 
+        private readonly boosterItemsMap: Partial<Record<ItemHash, ItemHash>> = {
+            //metal
+            [ItemHash.metalBooster_bronze_7days]: ItemHash.metalBooster_bronze_7days,
+            [ItemHash.metalBooster_silver_7days]: ItemHash.metalBooster_silver_7days,
+            [ItemHash.metalBooster_gold_7days]: ItemHash.metalBooster_gold_7days,
+            [ItemHash.metalBooster_platinum_7days]: ItemHash.metalBooster_platinum_7days,
+
+            [ItemHash.metalBooster_silver_30days]: ItemHash.metalBooster_silver_7days,
+            [ItemHash.metalBooster_gold_30days]: ItemHash.metalBooster_gold_7days,
+            [ItemHash.metalBooster_platinum_30days]: ItemHash.metalBooster_platinum_7days,
+
+            [ItemHash.metalBooster_silver_90days]: ItemHash.metalBooster_silver_7days,
+            [ItemHash.metalBooster_gold_90days]: ItemHash.metalBooster_gold_7days,
+            [ItemHash.metalBooster_platinum_90days]: ItemHash.metalBooster_platinum_7days,
+
+            //crystal
+            [ItemHash.crystalBooster_bronze_7days]: ItemHash.crystalBooster_bronze_7days,
+            [ItemHash.crystalBooster_silver_7days]: ItemHash.crystalBooster_silver_7days,
+            [ItemHash.crystalBooster_gold_7days]: ItemHash.crystalBooster_gold_7days,
+            [ItemHash.crystalBooster_platinum_7days]: ItemHash.crystalBooster_platinum_7days,
+
+            [ItemHash.crystalBooster_silver_30days]: ItemHash.crystalBooster_silver_7days,
+            [ItemHash.crystalBooster_gold_30days]: ItemHash.crystalBooster_gold_7days,
+            [ItemHash.crystalBooster_platinum_30days]: ItemHash.crystalBooster_platinum_7days,
+
+            [ItemHash.crystalBooster_silver_90days]: ItemHash.crystalBooster_silver_7days,
+            [ItemHash.crystalBooster_gold_90days]: ItemHash.crystalBooster_gold_7days,
+            [ItemHash.crystalBooster_platinum_90days]: ItemHash.crystalBooster_platinum_7days,
+
+            // deuterium
+            [ItemHash.deuteriumBooster_bronze_7days]: ItemHash.deuteriumBooster_bronze_7days,
+            [ItemHash.deuteriumBooster_silver_7days]: ItemHash.deuteriumBooster_silver_7days,
+            [ItemHash.deuteriumBooster_gold_7days]: ItemHash.deuteriumBooster_gold_7days,
+            [ItemHash.deuteriumBooster_platinum_7days]: ItemHash.deuteriumBooster_platinum_7days,
+
+            [ItemHash.deuteriumBooster_silver_30days]: ItemHash.deuteriumBooster_silver_7days,
+            [ItemHash.deuteriumBooster_gold_30days]: ItemHash.deuteriumBooster_gold_7days,
+            [ItemHash.deuteriumBooster_platinum_30days]: ItemHash.deuteriumBooster_platinum_7days,
+
+            [ItemHash.deuteriumBooster_silver_90days]: ItemHash.deuteriumBooster_silver_7days,
+            [ItemHash.deuteriumBooster_gold_90days]: ItemHash.deuteriumBooster_gold_7days,
+            [ItemHash.deuteriumBooster_platinum_90days]: ItemHash.deuteriumBooster_platinum_7days,
+        };
+
         private showLifeformSettings = false;
 
 
@@ -280,16 +325,18 @@
 
         private get activeBooster() {
             return {
-                metal: this.boosterItems.metal.find(item => this.settings.activeItems.includes(item)),
-                crystal: this.boosterItems.crystal.find(item => this.settings.activeItems.includes(item)),
-                deuterium: this.boosterItems.deuterium.find(item => this.settings.activeItems.includes(item)),
+                metal: this.boosterItems.metal.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
+                crystal: this.boosterItems.crystal.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
+                deuterium: this.boosterItems.deuterium.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
             };
         }
 
         private toggleBooster(item: ItemHash, exclude: ItemHash[]) {
-            const active = this.settings.activeItems.filter(i => i == item || !exclude.includes(i));
+            const active = this.settings.activeItems
+                .map(i => this.boosterItemsMap[i] as ItemHash)
+                .filter(i => i == item || !exclude.includes(i));
 
-            if (this.settings.activeItems.includes(item)) {
+            if (active.includes(item)) {
                 this.settings.activeItems = active.filter(i => i != item);
             } else {
                 this.settings.activeItems = [...active, item];
