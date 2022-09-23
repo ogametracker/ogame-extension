@@ -457,7 +457,10 @@ export class AmortizationItemGenerator {
             defense: {} as DefenseCount,
             lifeformBuildings: {
                 ...(planet.lifeformBuildingLevels ?? createRecord(LifeformBuildingTypes, 0)),
-                ...(createRecord(LifeformTechnologyResearchBuildings.map(b => b.type), 1)), // assume level 1 for lf research buildings
+                ...(createRecord(
+                    LifeformTechnologyResearchBuildings.map(b => b.type),
+                    b => Math.max(1, planet.lifeformBuildingLevels?.[b] ?? 0) // assume at least level 1 for lf research buildings
+                )),
             },
             lifeformTechnologies: { ...(planet.lifeformTechnologyLevels ?? createRecord(LifeformTechnologyTypes, 0)) },
             maxTemperature: planet.maxTemperature,
