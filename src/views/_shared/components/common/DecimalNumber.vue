@@ -2,7 +2,7 @@
     <span
         :class="{ 'fade-value': value == 0 }"
         v-text="$i18n.$n(Math.trunc(value), format)"
-        :fraction="$i18n.$n(value % 1, fractionNumberFormat).substring(1)"
+        :fraction="$i18n.$n(Math.abs(value) % 1, fractionNumberFormat).substring(1)"
     />
 </template>
 
