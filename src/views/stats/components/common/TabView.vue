@@ -27,7 +27,7 @@
 
                 <set-default-route-button
                     v-if="rootRouteName != null"
-                    :label="$i18n.$t.settings.setDefaultSubRoute"
+                    :label="$i18n.$t.extension.settings.setDefaultSubRoute"
                     :rootRouteName="rootRouteName"
                     :routeName="tab.to.name"
                     @click="$set(showMenu, i, false)"

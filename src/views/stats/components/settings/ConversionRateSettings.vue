@@ -1,12 +1,12 @@
 <template>
     <div class="conversion-rate-settings fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.common.conversionRates.title" />
+            <span v-text="$i18n.$t.extension.settings.common.conversionRates.title" />
         </div>
         <div class="fake-table-body">
             <select :value="conversionMode" @input="setConversionMode($event.target.value)">
-                <option value="msu" v-text="`${$i18n.$t.settings.common.conversionRates.msuLong} (${$i18n.$t.common.msu})`" />
-                <option value="dsu" v-text="`${$i18n.$t.settings.common.conversionRates.dsuLong} (${$i18n.$t.common.dsu})`" />
+                <option value="msu" v-text="`${$i18n.$t.extension.settings.common.conversionRates.msuLong} (${$i18n.$t.extension.common.msu})`" />
+                <option value="dsu" v-text="`${$i18n.$t.extension.settings.common.conversionRates.dsuLong} (${$i18n.$t.extension.common.dsu})`" />
             </select>
 
             <span class="inputs" v-if="conversionMode == 'msu'">

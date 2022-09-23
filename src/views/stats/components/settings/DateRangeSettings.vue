@@ -6,10 +6,10 @@
                     <tr>
                         <td />
                         <td />
-                        <td v-text="$i18n.$t.settings.dateRanges.headers.label" />
-                        <td v-text="$i18n.$t.settings.dateRanges.headers.type" />
-                        <td colspan="2" v-text="$i18n.$t.settings.dateRanges.headers.rangeStart" />
-                        <td colspan="2" v-text="$i18n.$t.settings.dateRanges.headers.rangeContains" />
+                        <td v-text="$i18n.$t.extension.settings.dateRanges.headers.label" />
+                        <td v-text="$i18n.$t.extension.settings.dateRanges.headers.type" />
+                        <td colspan="2" v-text="$i18n.$t.extension.settings.dateRanges.headers.rangeStart" />
+                        <td colspan="2" v-text="$i18n.$t.extension.settings.dateRanges.headers.rangeContains" />
                         <td>
                             <reset-button @reset="resetDateRanges()" />
                         </td>
@@ -41,7 +41,7 @@
                             />
                             <span 
                                 v-else
-                                v-text="$i18n.$t.settings.dateRanges.since($i18n.$t.settings.dateRanges.firstDayTemplate)" 
+                                v-text="$i18n.$t.extension.settings.dateRanges.since($i18n.$t.extension.settings.dateRanges.firstDayTemplate)" 
                             />
                         </td>
                         <td>
@@ -54,7 +54,7 @@
                                     v-for="rangeType in rangeTypes"
                                     :key="rangeType"
                                     :value="rangeType"
-                                    v-text="$i18n.$t.settings.dateRanges[rangeType]"
+                                    v-text="$i18n.$t.extension.settings.dateRanges[rangeType]"
                                 />
                             </select>
                         </td>
@@ -67,7 +67,7 @@
                             />
                         </td>
                         <td style="text-align: left; padding-left: 0">
-                            <span v-text="$i18n.$t.settings.dateRanges[`${range.type}sAgo`]" />
+                            <span v-text="$i18n.$t.extension.settings.dateRanges[`${range.type}sAgo`]" />
                         </td>
                         <td>
                             <input
@@ -78,7 +78,7 @@
                             />
                         </td>
                         <td style="text-align: left; padding-left: 0">
-                            <span v-text="$i18n.$t.settings.dateRanges[`${range.type}s`]" />
+                            <span v-text="$i18n.$t.extension.settings.dateRanges[`${range.type}s`]" />
                         </td>
                         <td v-text="getRangeText(range)" style="font-style: italic;" />
                     </tr>
@@ -156,7 +156,7 @@
                 type: 'day',
                 skip: 0,
                 take: 1,
-                label: this.$i18n.$t.settings.dateRanges.defaultNames.newRange,
+                label: this.$i18n.$t.extension.settings.dateRanges.defaultNames.newRange,
             });
             this.onItemsUpdated();
         }

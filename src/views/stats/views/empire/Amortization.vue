@@ -8,31 +8,31 @@
                         <span class="mdi mdi-menu-down" v-if="!showSettings" />
                         <span class="mdi mdi-menu-up" v-else />
 
-                        <span v-if="!showSettings" v-text="$i18n.$t.empire.amortization.settings.header" />
-                        <span v-else v-text="$i18n.$t.empire.amortization.settings.applyAndClose" />
+                        <span v-if="!showSettings" v-text="$i18n.$t.extension.empire.amortization.settings.header" />
+                        <span v-else v-text="$i18n.$t.extension.empire.amortization.settings.applyAndClose" />
                     </button>
 
                     <div class="generating-count">
                         <span
                             v-if="generatingItemCount != null"
-                            v-text="`${$i18n.$t.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
+                            v-text="`${$i18n.$t.extension.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
                         />
                         <template v-if="saveStateDate == null">
                             <button
                                 v-if="items.length > 0"
                                 :disabled="generatingItemCount != null || items.length == 0 || showSettings"
                                 class="mr-1"
-                                v-text="$i18n.$t.empire.amortization.saveLoad.saveButton"
+                                v-text="$i18n.$t.extension.empire.amortization.saveLoad.saveButton"
                                 @click="saveItems()"
                             />
                             <button
                                 v-if="savedAmortization != null"
                                 :disabled="generatingItemCount != null"
-                                v-text="$i18n.$t.empire.amortization.saveLoad.loadButton($i18n.$d(savedAmortization.date, 'datetime'))"
+                                v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadButton($i18n.$d(savedAmortization.date, 'datetime'))"
                                 @click="loadItems()"
                             />
                         </template>
-                        <span v-else v-text="$i18n.$t.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'))" />
+                        <span v-else v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'))" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -43,8 +43,8 @@
                         </template>
 
                         <div class="infos">
-                            <span v-text="$i18n.$t.empire.amortization.info.slowCalculation" />
-                            <span v-text="$i18n.$t.empire.amortization.info.ctrlClick" />
+                            <span v-text="$i18n.$t.extension.empire.amortization.info.slowCalculation" />
+                            <span v-text="$i18n.$t.extension.empire.amortization.info.ctrlClick" />
                         </div>
                     </floating-menu>
 
@@ -58,7 +58,7 @@
                         <show-converted-resources-in-cells-settings>
                             <div class="msu-settings-amortization-info">
                                 <span class="mdi mdi-alert" />
-                                <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.infoAmortization" />
+                                <span v-text="$i18n.$t.extension.settings.showConvertedUnitsInTables.infoAmortization" />
                             </div>
                         </show-converted-resources-in-cells-settings>
                     </floating-menu>
@@ -67,29 +67,29 @@
                 <div v-show="showSettings" class="amortization-settings-container">
                     <div class="flex-settings">
                         <div>
-                            <h3 v-text="$i18n.$t.empire.amortization.settings.playerSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.header" />
                             <amortization-player-settings-inputs v-model="playerSettings" />
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.empire.amortization.settings.astrophysicsSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.header" />
                             <div class="astrophysics-settings">
                                 <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" toggleable />
                             </div>
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.empire.amortization.settings.plasmatechSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.header" />
                             <div class="plasma-tech-settings">
                                 <checkbox
                                     v-model="includePlasmaTechnology"
-                                    :label="$i18n.$t.empire.amortization.settings.plasmatechSettings.includePlasmatech"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.includePlasmatech"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.empire.amortization.settings.planetSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.header" />
                             <div style="display: flex; gap: 8px; flex-wrap: wrap">
                                 <amortization-planet-settings-inputs
                                     v-for="planetSetting in planetSettingsSorted"
@@ -125,7 +125,7 @@
 
                     <template #header-cost>
                         <div class="cost-grid">
-                            <span v-text="$i18n.$t.empire.amortization.table.cost" style="grid-column: 2" />
+                            <span v-text="$i18n.$t.extension.empire.amortization.table.cost" style="grid-column: 2" />
                             <o-resource resource="metal" style="grid-column: 1" />
                             <o-resource resource="crystal" />
                             <o-resource resource="deuterium" />
@@ -146,7 +146,7 @@
                                 <span v-text="formatPlanetCoordinates(item.planetId)" />
                             </span>
                             <span v-else class="planet">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                                <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
@@ -211,7 +211,7 @@
                                         <i v-text="buildableTranslations[additionalLifeformStuffGroup.building || additionalLifeformStuffGroup.technology]" />
                                         <i
                                             v-text="
-                                                $i18n.$t.empire.amortization.table.levelsOnPlanets(
+                                                $i18n.$t.extension.empire.amortization.table.levelsOnPlanets(
                                                     additionalLifeformStuffGroup.totalLevels,
                                                     additionalLifeformStuffGroup.planetIds.size
                                                 )
@@ -237,7 +237,7 @@
                                             <span
                                                 v-text="
                                                     `${
-                                                        $i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony
+                                                        $i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony
                                                     } ${-additionalLifeformStuff.planetId}`
                                                 "
                                             />
@@ -283,7 +283,7 @@
                             </span>
 
                             <span class="planet" style="align-self: start; grid-row: 2">
-                                <span v-text="`${$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
+                                <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
                                 <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
                             </span>
 
@@ -399,7 +399,7 @@
                         :disabled="generatingItemCount != null"
                     >
                         <span class="mdi mdi-plus" />
-                        <span v-text="$i18n.$t.empire.amortization.generateItems($i18n.$n(count))" />
+                        <span v-text="$i18n.$t.extension.empire.amortization.generateItems($i18n.$n(count))" />
                     </button>
                 </div>
             </div>
@@ -515,7 +515,7 @@
 
         private getPlanetName(id: number): string {
             return this.empire.planets[id]?.name
-                ?? `${this.$i18n.$t.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
+                ?? `${this.$i18n.$t.extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
         }
         private formatPlanetCoordinates(id: number): string {
             const coordinates = this.empire.planets[id]?.coordinates as Coordinates | undefined;
@@ -696,7 +696,7 @@
                 planet: {
                     ...this.astrophysicsSettings.planet,
 
-                    name: this.$i18n.$t.empire.amortization.settings.astrophysicsSettings.newColony,
+                    name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
                     crawlers: {
                         overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
@@ -720,28 +720,28 @@
             if (showConversion) {
                 result.push({
                     key: 'costConverted',
-                    label: `${this.$i18n.$t.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     size: '1fr',
                 });
             }
 
             result.push({
                 key: 'productionDelta',
-                label: this.$i18n.$t.empire.amortization.table.productionPlus,
+                label: this.$i18n.$t.extension.empire.amortization.table.productionPlus,
                 size: '1fr',
             });
 
             if (showConversion) {
                 result.push({
                     key: 'productionDeltaConverted',
-                    label: `${this.$i18n.$t.empire.amortization.table.productionPlus} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.empire.amortization.table.productionPlus} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     size: '1fr',
                 });
             }
 
             result.push({
                 key: 'timeInHours',
-                label: this.$i18n.$t.empire.amortization.table.amortizationTime,
+                label: this.$i18n.$t.extension.empire.amortization.table.amortizationTime,
                 size: '1fr',
             });
 
@@ -779,13 +779,13 @@
 
         private get buildableTranslations() {
             const translations: Record<any, string> = {
-                'plasma-technology': this.$i18n.$t.research[ResearchType.plasmaTechnology],
-                'astrophysics-colony': this.$i18n.$t.research[ResearchType.astrophysics],
+                'plasma-technology': this.$i18n.$t.ogame.research[ResearchType.plasmaTechnology],
+                'astrophysics-colony': this.$i18n.$t.ogame.research[ResearchType.astrophysics],
             };
 
-            BuildingTypes.forEach(building => translations[building] = this.$i18n.$t.buildings[building]);
-            LifeformBuildingTypes.forEach(building => translations[building] = this.$i18n.$t.lifeformBuildings[building]);
-            LifeformTechnologyTypes.forEach(tech => translations[tech] = this.$i18n.$t.lifeformTechnologies[tech]);
+            BuildingTypes.forEach(building => translations[building] = this.$i18n.$t.ogame.buildings[building]);
+            LifeformBuildingTypes.forEach(building => translations[building] = this.$i18n.$t.ogame.lifeformBuildings[building]);
+            LifeformTechnologyTypes.forEach(tech => translations[tech] = this.$i18n.$t.ogame.lifeformTechnologies[tech]);
 
             return translations;
         }

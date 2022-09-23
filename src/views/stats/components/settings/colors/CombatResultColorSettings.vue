@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.combatResults"
+        :header="$i18n.$t.extension.settings.colors.combatResults"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -24,7 +24,7 @@
     })
     export default class CombatResultColorSettings extends Vue {
         private get labels(): Record<CombatResultType, string> {
-            return this.$i18n.$t.combats.combatResults;
+            return this.$i18n.$t.extension.combats.combatResults;
         }
 
         private readonly keys: CombatResultType[] = [

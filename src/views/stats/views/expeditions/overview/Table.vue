@@ -4,21 +4,21 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <span v-if="value == $i18n.$t.expeditions.expeditionEvents.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
-                <expedition-event-resources-icon v-else-if="value == $i18n.$t.expeditions.expeditionEvents.resources" size="24px" />
-                <o-ship v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet" :ship="ShipType.battleship" size="24px" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.delay" class="mdi mdi-clock-outline" :style="{ color: colors.delay }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.early" class="mdi mdi-clock-outline" :style="{ color: colors.early }" />
-                <o-resource v-else-if="value == $i18n.$t.expeditions.expeditionEvents.darkMatter" resource="dark-matter" size="24px" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.pirates" class="mdi mdi-pirate" :style="{ color: colors.pirates }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.aliens" class="mdi mdi-alien" :style="{ color: colors.aliens }" />
-                <o-item v-else-if="value == $i18n.$t.expeditions.expeditionEvents.item" :item="detroidItem" size="24px" />
+                <span v-if="value == $i18n.$t.extension.expeditions.expeditionEvents.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
+                <expedition-event-resources-icon v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.resources" size="24px" />
+                <o-ship v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.fleet" :ship="ShipType.battleship" size="24px" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.delay" class="mdi mdi-clock-outline" :style="{ color: colors.delay }" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.early" class="mdi mdi-clock-outline" :style="{ color: colors.early }" />
+                <o-resource v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.darkMatter" resource="dark-matter" size="24px" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.pirates" class="mdi mdi-pirate" :style="{ color: colors.pirates }" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.aliens" class="mdi mdi-alien" :style="{ color: colors.aliens }" />
+                <o-item v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.item" :item="detroidItem" size="24px" />
                 <span
-                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.trader"
+                    v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.trader"
                     class="mdi mdi-swap-horizontal-bold"
                     :style="{ color: colors.trader }"
                 />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.lostFleet" class="mdi mdi-cross" :style="{ color: colors.lostFleet }" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEvents.lostFleet" class="mdi mdi-cross" :style="{ color: colors.lostFleet }" />
             </template>
         </ranged-stats-table>
 
@@ -72,14 +72,14 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ExpeditionEventTypes.map(type => ({
-                label: this.$i18n.$t.expeditions.expeditionEvents[type],
+                label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.events[type], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: expos => ExpeditionEventTypes.reduce(
                     (acc, type) => acc + expos.reduce((acc, expo) => acc + expo.events[type], 0),
                     0

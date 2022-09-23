@@ -21,27 +21,27 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.overview,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.overview,
                     to: { name: 'expeditions/overview' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.foundResources,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.foundResources,
                     to: { name: 'expeditions/resources' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.foundShips,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.foundShips,
                     to: { name: 'expeditions/ships' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.foundDarkMatter,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.foundDarkMatter,
                     to: { name: 'expeditions/dark-matter' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.foundItems,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.foundItems,
                     to: { name: 'expeditions/items' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.depletion,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.depletion,
                     to: { name: 'expeditions/depletion' },
                 },
             ];

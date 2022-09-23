@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <div v-text="$i18n.$t.empire.production.messageProduction100" style="grid-column: 1 / span 2" />
+        <div v-text="$i18n.$t.extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" />
 
         <grid-table
             :columns="columns"
@@ -19,14 +19,14 @@
             <template #header-deuterium>
                 <o-resource resource="deuterium" size="75px" />
             </template>
-            <template #header-total> {{ $i18n.$t.common.resourceUnits }} </template>
+            <template #header-total> {{ $i18n.$t.extension.common.resourceUnits }} </template>
             <template #header-totalConverted>
-                {{ `${$i18n.$t.common.resourceUnits} (${conversionModeText})` }}
+                {{ `${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})` }}
             </template>
 
             <template #header-productionSettings>
                 <div class="production-settings-mini-table">
-                    <span class="header" v-text="$i18n.$t.empire.production.activeProductionSettings" />
+                    <span class="header" v-text="$i18n.$t.extension.empire.production.activeProductionSettings" />
                     <o-building :building="BuildingType.metalMine" />
                     <o-building :building="BuildingType.crystalMine" />
                     <o-building :building="BuildingType.deuteriumSynthesizer" />
@@ -34,7 +34,7 @@
                     <o-building :building="BuildingType.fusionReactor" />
                     <o-ship :ship="ShipType.solarSatellite" />
                     <o-ship :ship="ShipType.crawler" />
-                    <span style="grid-column: auto / span 4" v-text="$i18n.$t.empire.production.items" />
+                    <span style="grid-column: auto / span 4" v-text="$i18n.$t.extension.empire.production.items" />
                 </div>
             </template>
 
@@ -69,19 +69,19 @@
 
             <template #cell-breakdown="{ item }">
                 <div v-if="showBreakdown[item.planet.id]" class="breakdown-list">
-                    <div v-text="$i18n.$t.empire.production.breakdown.basicIncome" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.mineProduction" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.consumption" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.lifeformBuildings" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.crawlers" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.plasmaTechnology" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.items" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.geologist" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.commandStaff" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.playerClass" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.allianceClass" />
-                    <div v-text="$i18n.$t.empire.production.breakdown.lifeformTechnologies" />
-                    <div class="breakdown-sum" v-text="$i18n.$t.common.sum" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.basicIncome" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.mineProduction" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.consumption" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.lifeformBuildings" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.crawlers" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.plasmaTechnology" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.items" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.geologist" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.commandStaff" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.playerClass" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.allianceClass" />
+                    <div v-text="$i18n.$t.extension.empire.production.breakdown.lifeformTechnologies" />
+                    <div class="breakdown-sum" v-text="$i18n.$t.extension.common.sum" />
                 </div>
             </template>
             <template #cell-metal="{ value, item }">
@@ -283,15 +283,15 @@
 
         private get conversionModeText() {
             return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.common.msu
-                : this.$i18n.$t.common.dsu;
+                ? this.$i18n.$t.extension.common.msu
+                : this.$i18n.$t.extension.common.dsu;
         }
 
         private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
             const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
                 {
                     key: 'planet',
-                    label: this.$i18n.$t.empire.planet,
+                    label: this.$i18n.$t.extension.empire.planet,
                 },
                 { key: 'breakdown', size: '200px' },
                 { key: 'metal' },
@@ -420,7 +420,7 @@
                 {
                     planet: {
                         id: 0,
-                        name: this.$i18n.$t.empire.production.averagePerHour,
+                        name: this.$i18n.$t.extension.empire.production.averagePerHour,
                         coordinates: null!,
                     },
                     metal: { total: metalPerHour / this.planets.length } as PlanetProductionBreakdown,
@@ -436,7 +436,7 @@
                 {
                     planet: {
                         id: 0,
-                        name: this.$i18n.$t.empire.production.totalPerHour,
+                        name: this.$i18n.$t.extension.empire.production.totalPerHour,
                         coordinates: null!,
                     },
                     metal: { total: metalPerHour } as PlanetProductionBreakdown,
@@ -452,7 +452,7 @@
                 {
                     planet: {
                         id: 0,
-                        name: this.$i18n.$t.empire.production.totalPerDay,
+                        name: this.$i18n.$t.extension.empire.production.totalPerDay,
                         coordinates: null!,
                     },
                     metal: { total: metalPerHour * 24 } as PlanetProductionBreakdown,
@@ -468,7 +468,7 @@
                 {
                     planet: {
                         id: 0,
-                        name: this.$i18n.$t.empire.production.totalPerWeek,
+                        name: this.$i18n.$t.extension.empire.production.totalPerWeek,
                         coordinates: null!,
                     },
                     metal: { total: metalPerHour * 24 * 7 } as PlanetProductionBreakdown,

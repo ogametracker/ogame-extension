@@ -5,20 +5,20 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getResourcesAmount(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.common.resourceUnits" />
+                        <div v-text="$i18n.$t.extension.common.resourceUnits" />
 
                         <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
-                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
+                        <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getResourcesAmount(datasets))" />
-                    <div v-text="$i18n.$t.common.resourceUnits" />
+                    <div v-text="$i18n.$t.extension.common.resourceUnits" />
 
                     <div class="number" v-text="$i18n.$n(getConvertedResourcesAmount(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
+                    <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})`" />
                 </div>
             </template>
         </stats-chart>
@@ -113,8 +113,8 @@
 
         private get conversionModeText() {
             return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.common.msu
-                : this.$i18n.$t.common.dsu;
+                ? this.$i18n.$t.extension.common.msu
+                : this.$i18n.$t.extension.common.dsu;
         }
 
         private get firstDay() {
@@ -151,7 +151,7 @@
             return [
                 ...ResourceTypes.map(resource => ({
                     key: resource,
-                    label: this.$i18n.$t.resources[resource],
+                    label: this.$i18n.$t.extension.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (dayEvents: DayEvents) => this.getResource(dayEvents, resource),
@@ -159,7 +159,7 @@
                 })),
                 {
                     key: 'total',
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     color: this.colors.totalConverted,
                     filled: false,
                     getValue: dayEvents => getMsuOrDsu({

@@ -147,14 +147,14 @@
 
             columns.push(...this.dateRanges.map((range, i) => ({
                 key: i,
-                label: range.label ?? this.$i18n.$t.settings.dateRanges.since(this.$i18n.$d(this.firstDay, 'date')),
+                label: range.label ?? this.$i18n.$t.extension.settings.dateRanges.since(this.$i18n.$d(this.firstDay, 'date')),
                 formatter: (value: number) => this.$i18n.$n(value, this.numberFormatOptions),
             })));
 
             if (this.showAverage) {
                 columns.push({
                     key: 'average',
-                    label: this.$i18n.$t.common.averagePerDay,
+                    label: this.$i18n.$t.extension.common.averagePerDay,
                     formatter: (value: number) => this.$i18n.$n(value, this.averageNumberFormatOptions ?? this.numberFormatOptions)
                 });
             }

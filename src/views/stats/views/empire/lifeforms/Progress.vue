@@ -1,14 +1,14 @@
 <template>
     <grid-table :columns="columns" :items="items" sticky>
         <template #cell-lifeform="{ value }">
-            <span class="mr-2" v-text="$i18n.$t.lifeforms[value]" />
+            <span class="mr-2" v-text="$i18n.$t.ogame.lifeforms[value]" />
             <o-lifeform :lifeform="value" />
         </template>
         <template #cell-discoverDate="{ value, item }">
-            <i v-if="item.lifeform == 'humans'" v-text="$i18n.$t.empire.lifeforms.alwaysAvailable" />
+            <i v-if="item.lifeform == 'humans'" v-text="$i18n.$t.extension.empire.lifeforms.alwaysAvailable" />
             <span v-else-if="value != null" v-text="$i18n.$d(value, 'datetime')" />
-            <span v-else-if="item.totalExperience > 0" v-text="$i18n.$t.empire.lifeforms.discoveryDateUnknown" />
-            <i v-else v-text="$i18n.$t.empire.lifeforms.notDiscoveredYet" />
+            <span v-else-if="item.totalExperience > 0" v-text="$i18n.$t.extension.empire.lifeforms.discoveryDateUnknown" />
+            <i v-else v-text="$i18n.$t.extension.empire.lifeforms.notDiscoveredYet" />
         </template>
         <template #cell-level="{ item }">
             <span v-text="`${item.level} (${$i18n.$n(item.levelExperience)}/${$i18n.$n(item.neededLevelExperience)} XP)`" />
@@ -46,23 +46,23 @@
             return [
                 {
                     key: 'lifeform',
-                    label: this.$i18n.$t.empire.lifeforms.lifeform,
+                    label: this.$i18n.$t.extension.empire.lifeforms.lifeform,
                 },
                 {
                     key: 'discoverDate',
-                    label: this.$i18n.$t.empire.lifeforms.discoveredOn,
+                    label: this.$i18n.$t.extension.empire.lifeforms.discoveredOn,
                 },
                 {
                     key: 'level',
-                    label: this.$i18n.$t.empire.lifeforms.level,
+                    label: this.$i18n.$t.extension.empire.lifeforms.level,
                 },
                 {
                     key: 'totalExperience',
-                    label: this.$i18n.$t.empire.lifeforms.totalLifeformExperience,
+                    label: this.$i18n.$t.extension.empire.lifeforms.totalLifeformExperience,
                 },
                 {
                     key: 'findingCount',
-                    label: this.$i18n.$t.empire.lifeforms.numberOfLifeformDiscoveries,
+                    label: this.$i18n.$t.extension.empire.lifeforms.numberOfLifeformDiscoveries,
                 },
             ];
         }

@@ -1,10 +1,10 @@
 import { I18nMessageMap } from './$i18n';
 import { de } from './de';
 import { en } from './en';
-import { ExtensionTranslations } from './type';
+import { ExtensionTranslationsFull } from './type';
 
-const translations: I18nMessageMap<ExtensionTranslations> = {
-    de,
-    en,
+const translations: I18nMessageMap<ExtensionTranslationsFull> = {
+    de: de as ExtensionTranslationsFull,
+    en: en as ExtensionTranslationsFull,
 };
 export default translations;

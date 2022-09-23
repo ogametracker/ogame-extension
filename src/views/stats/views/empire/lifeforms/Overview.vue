@@ -7,7 +7,7 @@
         </template>
 
         <template #cell-lifeform="{ value }">
-            <span v-text="$i18n.$t.lifeforms[value]" class="mr-2" />
+            <span v-text="$i18n.$t.ogame.lifeforms[value]" class="mr-2" />
             <o-lifeform :lifeform="value" size="48px" />
         </template>
 
@@ -98,12 +98,12 @@
             return [
                 {
                     key: 'planet',
-                    label: this.$i18n.$t.empire.lifeforms.planet,
+                    label: this.$i18n.$t.extension.empire.lifeforms.planet,
                     size: '200px',
                 },
                 {
                     key: 'lifeform',
-                    label: this.$i18n.$t.empire.lifeforms.lifeform,
+                    label: this.$i18n.$t.extension.empire.lifeforms.lifeform,
                     size: '1fr',
                     style: {
                         'justify-items': 'start',
@@ -113,7 +113,7 @@
                 },
                 {
                     key: 'buildings',
-                    label: this.$i18n.$t.empire.lifeforms.buildings,
+                    label: this.$i18n.$t.extension.empire.lifeforms.buildings,
                     style: {
                         'justify-items': 'start',
                     },
@@ -121,7 +121,7 @@
                 },
                 {
                     key: 'lifeformTechsTier1',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 1)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 1)`,
                     style: {
                         'justify-items': 'start',
                     },
@@ -129,7 +129,7 @@
                 },
                 {
                     key: 'lifeformTechsTier2',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 2)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 2)`,
                     style: {
                         'justify-items': 'start',
                     },
@@ -137,7 +137,7 @@
                 },
                 {
                     key: 'lifeformTechsTier3',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 3)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 3)`,
                     style: {
                         'justify-items': 'start',
                     },

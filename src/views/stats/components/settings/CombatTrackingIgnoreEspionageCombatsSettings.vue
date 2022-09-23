@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.combats.ignoreEspionageCombats.title" />
+            <span v-text="$i18n.$t.extension.settings.combats.ignoreEspionageCombats.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="ignoreEspionageCombats"
                 @input="setIgnoreEspionageCombats($event)"
-                :label="$i18n.$t.settings.combats.ignoreEspionageCombats.label"
+                :label="$i18n.$t.extension.settings.combats.ignoreEspionageCombats.label"
             />
         </div>
     </div>

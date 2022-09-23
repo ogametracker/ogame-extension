@@ -13,7 +13,7 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.tools.signatureGenerator.header,
+                    label: this.$i18n.$t.extension.tools.signatureGenerator.header,
                     to: { name: 'tools/signature-generator' },
                 },
                 /*TODO: tools 

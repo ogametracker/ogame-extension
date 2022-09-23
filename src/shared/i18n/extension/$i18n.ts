@@ -2,7 +2,7 @@ import { _throw } from "@/shared/utils/_throw";
 import { format } from "date-fns";
 import { Component, Vue } from "vue-property-decorator";
 import { LanguageKey } from "../LanguageKey";
-import { ExtensionTranslations } from "./type";
+import { ExtensionTranslationsFull } from "./type";
 import extensionMessages from './';
 
 type I18nDateTimeFormatKey = 'date' | 'datetime' | 'time' | 'time_hm';
@@ -172,7 +172,7 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
     }
 }
 
-export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>().init({
+export const $i18n = new I18n<ExtensionTranslationsFull, Intl.DateTimeFormatOptions>().init({
     messages: extensionMessages,
     dateTimeFormats: {
         //always fallback to de because it will use the current locale anyways

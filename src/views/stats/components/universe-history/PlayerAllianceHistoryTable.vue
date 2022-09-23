@@ -3,7 +3,7 @@
     <grid-table v-else :columns="allianceHistoryColumns" :items="allianceHistoryItems" inline>
         <template #cell-alliance="{ value }">
             <span v-if="value != null" v-text="`[${value.tag}] ${value.name}`" />
-            <i v-else v-text="$i18n.$t.universeHistory.noAlliance" />
+            <i v-else v-text="$i18n.$t.extension.universeHistory.noAlliance" />
         </template>
 
         <template #cell-start="{ value }">
@@ -15,7 +15,7 @@
 
         <template #cell-end="{ value }">
             <span v-if="value != null" v-text="$i18n.$d(value, 'date')" />
-            <span v-else v-text="$i18n.$t.universeHistory.today" />
+            <span v-else v-text="$i18n.$t.extension.universeHistory.today" />
         </template>
     </grid-table>
 </template>
@@ -50,18 +50,18 @@
             return [
                 {
                     key: 'alliance',
-                    label: this.$i18n.$t.universeHistory.alliance,
+                    label: this.$i18n.$t.extension.universeHistory.alliance,
                 },
                 {
                     key: 'start',
-                    label: this.$i18n.$t.universeHistory.from,
+                    label: this.$i18n.$t.extension.universeHistory.from,
                 },
                 {
                     key: '-',
                 },
                 {
                     key: 'end',
-                    label: this.$i18n.$t.universeHistory.until,
+                    label: this.$i18n.$t.extension.universeHistory.until,
                 },
             ];
         }

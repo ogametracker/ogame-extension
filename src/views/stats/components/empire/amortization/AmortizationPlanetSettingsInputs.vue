@@ -9,21 +9,21 @@
 
         <div class="body">
             <template v-if="toggleable">
-                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.includeInResult" />
+                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.includeInResult" />
                 <checkbox v-model="settings.include" />
             </template>
 
-            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.position" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.position" />
             <span>
                 <input type="number" v-model.number="settings.position" min="1" max="15" step="1" />
             </span>
 
-            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.maxTemperature" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.maxTemperature" />
             <span>
                 <input type="number" v-model.number="settings.maxTemperature" min="-130" max="260" step="1" />
             </span>
 
-            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.activeItems" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.activeItems" />
             <span class="item-grid">
                 <o-item
                     v-for="item in boosterItems.metal"
@@ -48,12 +48,12 @@
                 />
             </span>
 
-            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.title" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
                     <o-ship :ship="ShipType.crawler" />
                     <checkbox-button v-model="settings.crawlers.overload" color="#00ff00" :disabled="!isCrawlerOverloadEnabled">
-                        {{ $i18n.$t.empire.amortization.settings.planetSettings.crawlers.overload }}
+                        {{ $i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.overload }}
                     </checkbox-button>
                 </div>
                 <div class="crawler-grid-row">
@@ -64,15 +64,15 @@
                             '--color': settings.crawlers.max ? '0, 255, 0' : null,
                         }"
                     >
-                        <span v-if="settings.crawlers.max" v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.maxCount" />
-                        <span v-else v-text="$i18n.$t.empire.amortization.settings.planetSettings.crawlers.fixCount" />
+                        <span v-if="settings.crawlers.max" v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
+                        <span v-else v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
                     </checkbox-button>
                     <input type="number" :value="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
             </span>
 
             <template v-if="settings.mines != null">
-                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.mines" />
+                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
                     <o-building :building="BuildingType.metalMine" />
                     <input type="number" v-model.number="settings.mines.metalMine" />
@@ -85,7 +85,7 @@
                 </span>
             </template>
 
-            <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeform" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeform" />
             <span class="lifeform-grid">
                 <o-lifeform
                     v-for="lifeform in lifeforms"
@@ -101,7 +101,7 @@
                 <span>
                     <checkbox
                         v-model="settings.ignoreEmptyLifeformTechnologySlots"
-                        :label="$i18n.$t.empire.amortization.settings.planetSettings.ignoreEmptySlots"
+                        :label="$i18n.$t.extension.empire.amortization.settings.planetSettings.ignoreEmptySlots"
                     />
                 </span>
             </template>
@@ -110,13 +110,13 @@
             <span>
                 <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
-                    <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeformSettings" />
+                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformSettings" />
                 </button>
             </span>
 
             <template v-if="showLifeformSettings">
                 <template v-if="settings.lifeformTechnologyLevels != null">
-                    <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
+                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
                         <template v-for="building in applicableLifeformBuildings">
                             <o-lifeform-building :key="`${building}-icon`" :building="building" />
@@ -125,7 +125,7 @@
                     </span>
                 </template>
 
-                <span v-text="$i18n.$t.empire.amortization.settings.planetSettings.lifeformTechnologies" />
+                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformTechnologies" />
                 <span>
                     <span class="lifeform-tech-grid">
                         <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">

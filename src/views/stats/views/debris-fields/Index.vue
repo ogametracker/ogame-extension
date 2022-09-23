@@ -20,11 +20,11 @@ import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataMod
         private get tabs(): Tab[] {
             return [
                 {
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                     to: { name: 'debris-fields/chart' },
                 },
                 {
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                     to: { name: 'debris-fields/table' },
                 },
             ];

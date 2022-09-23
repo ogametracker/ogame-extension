@@ -8,7 +8,7 @@
                         <input
                             type="text"
                             v-model="selectedAllianceName"
-                            :placeholder="$i18n.$t.universeHistory.allianceSelection.search"
+                            :placeholder="$i18n.$t.extension.universeHistory.allianceSelection.search"
                             list="alliance-list"
                             @change="onAllianceSelected($event.target.value)"
                             style="width: 100%"
@@ -126,39 +126,39 @@
             const tabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
                 {
                     key: 'total',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.total,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.total,
                 },
                 {
                     key: 'economy',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.economy,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.economy,
                 },
                 {
                     key: 'research',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.research,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.research,
                 },
                 {
                     key: 'military',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.military,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.military,
                 },
                 {
                     key: 'militaryBuilt',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryBuilt,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryBuilt,
                 },
                 {
                     key: 'militaryDestroyed',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryDestroyed,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryDestroyed,
                 },
                 {
                     key: 'militaryLost',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.militaryLost,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryLost,
                 },
                 {
                     key: 'honor',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.honor,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.honor,
                 },
                 {
                     key: 'numberOfShips',
-                    label: this.$i18n.$t.universeHistory.highscoreTabs.numberOfShips,
+                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.numberOfShips,
                 },
             ];
 
@@ -166,19 +166,19 @@
                 tabs.push(
                     {
                         key: 'lifeform',
-                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeform,
+                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeform,
                     },
                     {
                         key: 'lifeformEconomy',
-                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformEconomy,
+                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformEconomy,
                     },
                     {
                         key: 'lifeformTechnology',
-                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformTechnology,
+                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformTechnology,
                     },
                     {
                         key: 'lifeformDiscoveries',
-                        label: this.$i18n.$t.universeHistory.highscoreTabs.lifeformDiscoveries,
+                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformDiscoveries,
                     }
                 );
             }
@@ -189,7 +189,7 @@
         private get tableColumns(): GridTableColumn<'alliance'>[] {
             return [{
                 key: 'alliance',
-                label: this.$i18n.$t.universeHistory.allianceSelection.header,
+                label: this.$i18n.$t.extension.universeHistory.allianceSelection.header,
                 headerClass: 'alliance-selection-table-cell',
                 class: 'alliance-selection-table-cell',
             }];

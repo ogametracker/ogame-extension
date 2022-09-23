@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.expeditionDepletionLevels"
+        :header="$i18n.$t.extension.settings.colors.expeditionDepletionLevels"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -28,7 +28,7 @@
         private readonly depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
         private get labels(): Record<ExpeditionDepletionLevel | 'unknown', string> {
-            return createRecord(this.depletionLevels, level => this.$i18n.$t.expeditions.depletionLevels[level]);
+            return createRecord(this.depletionLevels, level => this.$i18n.$t.extension.expeditions.depletionLevels[level]);
         }
 
         private readonly keys = this.depletionLevels;

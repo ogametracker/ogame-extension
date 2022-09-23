@@ -1,7 +1,7 @@
 <template>
     <div v-if="!ready">
         <loading-spinner />
-        <div v-if="showLoadingMessage" v-text="$i18n.$t.universeHistory.loadingTakingLong" />
+        <div v-if="showLoadingMessage" v-text="$i18n.$t.extension.universeHistory.loadingTakingLong" />
     </div>
     <page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />
     <universe-history-tracking-settings v-else />
@@ -45,11 +45,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.universeHistory.tabs.players,
+                    label: this.$i18n.$t.extension.universeHistory.tabs.players,
                     to: { name: 'universe-history/players' },
                 },
                 {
-                    label: this.$i18n.$t.universeHistory.tabs.alliances,
+                    label: this.$i18n.$t.extension.universeHistory.tabs.alliances,
                     to: { name: 'universe-history/alliances' },
                 },
             ];

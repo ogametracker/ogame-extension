@@ -5,14 +5,14 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getTotal(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.empire.lifeforms.discoveryMissions" />
+                        <div v-text="$i18n.$t.extension.empire.lifeforms.discoveryMissions" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getTotal(datasets))" />
-                    <div v-text="`${$i18n.$t.empire.lifeforms.discoveryMissions} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.empire.lifeforms.discoveryMissions} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -69,8 +69,8 @@
             return typeGroups.map(group => ({
                 key: group[0],
                 label: group.length == 1
-                    ? this.$i18n.$t.empire.lifeforms.eventTypes[group[0]]
-                    : this.$i18n.$t.empire.lifeforms.lifeformFound,
+                    ? this.$i18n.$t.extension.empire.lifeforms.eventTypes[group[0]]
+                    : this.$i18n.$t.extension.empire.lifeforms.lifeformFound,
                 color: group.length == 1 ? this.colors[group[0]] : this.colors.knownLifeformFound,
                 filled: true,
                 getValue: (result: DailyLifeformDiscoveryResult) => group.reduce((acc, cur) => acc + result.events[cur], 0),

@@ -1,5 +1,5 @@
 <template>
-    <button class="reset-button" @click="$emit('reset')" :title="$i18n.$t.settings.reset">
+    <button class="reset-button" @click="$emit('reset')" :title="$i18n.$t.extension.settings.reset">
         <span class="mdi mdi-refresh" />
     </button>
 </template>

@@ -4,9 +4,9 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <span v-if="value == $i18n.$t.empire.lifeforms.eventTypes.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
+                <span v-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
                 <span
-                    v-else-if="value == $i18n.$t.empire.lifeforms.eventTypes.lostShip"
+                    v-else-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.lostShip"
                     class="mdi mdi-skull-crossbones-outline"
                     :style="{ color: colors.lostShip }"
                 />
@@ -62,15 +62,15 @@
 
         private get eventTypes(): Record<string, LifeformDiscoveryEventType> {
             return {
-                [this.$i18n.$t.empire.lifeforms.eventTypes.nothing]: LifeformDiscoveryEventType.nothing,
-                [this.$i18n.$t.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
-                [this.$i18n.$t.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
-                [this.$i18n.$t.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
+                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.nothing]: LifeformDiscoveryEventType.nothing,
+                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
+                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
+                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
             };
         }
 
         private get lifeformFoundLabel() {
-            return this.$i18n.$t.empire.lifeforms.lifeformFound;
+            return this.$i18n.$t.extension.empire.lifeforms.lifeformFound;
         }
 
         private get items(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
@@ -80,7 +80,7 @@
                 [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
             ]
             return typeGroups.map(group => ({
-                label: group.length == 1 ? this.$i18n.$t.empire.lifeforms.eventTypes[group[0]] : this.lifeformFoundLabel,
+                label: group.length == 1 ? this.$i18n.$t.extension.empire.lifeforms.eventTypes[group[0]] : this.lifeformFoundLabel,
                 getValue: discoveries => discoveries.reduce(
                     (acc, disc) => acc + group.reduce((acc, cur) => acc + disc.events[cur], 0),
                     0
@@ -90,7 +90,7 @@
 
         private get footerItems(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: discoveries => discoveries.reduce(
                     (acc, disc) => acc + Object.values(disc.events).reduce((acc, cur) => acc + cur, 0),
                     0

@@ -40,7 +40,7 @@
                     />
                     <span>/{{ $i18n.$n(value.maximum) }}</span>
                 </span>
-                <span v-text="`(${$i18n.$n(value.available)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`" />
+                <span v-text="`(${$i18n.$n(value.available)} ${$i18n.$t.extension.empire.production.mines.crawlersAvailable})`" />
             </div>
         </template>
 
@@ -76,7 +76,7 @@
                         'crawlers-bad': value.active == 0,
                     }"
                 />
-                <span v-text="`(${$i18n.$n(value.available, avgNumberFormat)} ${$i18n.$t.empire.production.mines.crawlersAvailable})`" />
+                <span v-text="`(${$i18n.$n(value.available, avgNumberFormat)} ${$i18n.$t.extension.empire.production.mines.crawlersAvailable})`" />
             </div>
         </template>
     </grid-table>
@@ -130,7 +130,7 @@
             return [
                 {
                     key: 'planet',
-                    label: this.$i18n.$t.empire.planet,
+                    label: this.$i18n.$t.extension.empire.planet,
                     size: '1fr',
                 },
                 { key: 'metalMine', size: '1fr' },
