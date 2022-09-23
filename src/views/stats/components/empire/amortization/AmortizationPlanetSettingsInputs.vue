@@ -1,5 +1,5 @@
 <template>
-    <div class="planet-settings">
+    <div class="planet-settings" :class="{ disabled: !settings.include }">
         <div class="header">
             <span v-text="settings.name" />
             <span v-if="settings.coordinates != null">
@@ -374,6 +374,11 @@
         flex-direction: column;
         border-radius: 4px;
         overflow: hidden;
+
+        &.disabled {
+            --color: 80, 80, 80;
+            backdrop-filter: grayscale(0.5);
+        }
     }
 
     .header {
