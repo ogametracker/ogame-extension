@@ -47,13 +47,13 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelPlasmatech" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.plasmaTechnology])" />
         <span>
             <o-research :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelAstrophysics" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
         <span>
             <o-research :research="ResearchType.astrophysics" />
             <input type="number" :value="settings.levelAstrophysics" disabled />

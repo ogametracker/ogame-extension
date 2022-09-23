@@ -74,7 +74,7 @@
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.consumption" />
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.lifeformBuildings" />
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.crawlers" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.plasmaTechnology" />
+                    <div v-text="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]" />
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.items" />
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.geologist" />
                     <div v-text="$i18n.$t.extension.empire.production.breakdown.commandStaff" />
@@ -232,6 +232,7 @@
     import { PlanetProductionBreakdown } from '@/shared/models/ogame/resource-production/types';
     import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
     import { getProductionBreakdowns } from '@stats/models/empire/production';
+import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
 
     interface ProductionItem {
         planet: {
@@ -272,6 +273,7 @@
         private readonly ItemHash = ItemHash;
         private readonly BuildingType = BuildingType;
         private readonly ShipType = ShipType;
+        private readonly ResearchType = ResearchType;
         private showSettings = false;
 
         private readonly resourcePackageAmounts = {

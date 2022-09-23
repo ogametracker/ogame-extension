@@ -27,7 +27,6 @@ export const de: EmpireTranslations = {
             consumption: 'Verbrauch',
             lifeformBuildings: 'Lebensform-Gebäude',
             crawlers: 'Crawler',
-            plasmaTechnology: 'Plasmatechnik',
             items: 'Items',
             geologist: 'Geologe',
             commandStaff: 'Kommandostab',
@@ -57,19 +56,17 @@ export const de: EmpireTranslations = {
                 officers: 'Offiziere',
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',
-                currentLevelPlasmatech: 'aktuelle Stufe der Plasmatechnik',
-                currentLevelAstrophysics: 'aktuelle Stufe der Astrophysik',
+                currentLevelOf: (name: string) => `aktuelle Stufe ${name}`,
 
                 unusedRaidColonySlots: 'Derzeit ungenutzt Raidkolo-Slots',
             },
             astrophysicsSettings: {
-                header: 'Einstellungen zu Astrophysik',
-                showAstrophysics: 'Astrophysik + neue Kolonien in Ergebnis anzeigen',
+                header: (name: string) => `Einstellungen zu ${name}`,
                 newColony: 'neue Kolonie',
             },
             plasmatechSettings: {
-                header: 'Einstellungen zu Plasmatechnik',
-                includePlasmatech: 'Plasmatechnik für Berechnung berücksichtigen',
+                header: (name: string) => `Einstellungen zu ${name}`,
+                includePlasmatech: (name: string) =>`${name} für Berechnung berücksichtigen`,
             },
             planetSettings: {
                 header: 'Einstellungen der Planeten',

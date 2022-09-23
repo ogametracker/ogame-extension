@@ -72,18 +72,18 @@
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.header($i18n.$t.ogame.research[ResearchType.astrophysics])" />
                             <div class="astrophysics-settings">
                                 <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" toggleable />
                             </div>
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.header" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.header($i18n.$t.ogame.research[ResearchType.plasmaTechnology])" />
                             <div class="plasma-tech-settings">
                                 <checkbox
                                     v-model="includePlasmaTechnology"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.includePlasmatech"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.plasmatechSettings.includePlasmatech($i18n.$t.ogame.research[ResearchType.plasmaTechnology])"
                                 />
                             </div>
                         </div>
