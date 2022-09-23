@@ -300,6 +300,7 @@
             if (this.settings.lifeform == lifeform) {
                 this.settings.lifeform = LifeformType.none;
                 this.settings.activeLifeformTechnologies = [];
+                this.showLifeformSettings = false;
                 return;
             }
 
