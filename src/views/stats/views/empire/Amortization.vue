@@ -483,7 +483,7 @@
     import { UniverseSpecificSettings } from '@/shared/models/universe-specific-settings/UniverseSpecificSettings';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { createRecord } from '@/shared/utils/createRecord';
-    import { GroupedAmortizationItem, GroupedAmortizationItemGroup } from '../../models/empire/amortization';
+    import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
 
     type SelectableAmortizationItem = AmortizationItem & { selected: boolean };
 
@@ -929,41 +929,33 @@
 
                         return Array.from({
                             length: levels.to - levels.from + 1,
-                        }).map((_, i) => levels.to + i);
+                        }).map((_, i) => levels.from + i);
                     };
 
                     switch (cur.type) {
                         case 'plasma-technology': {
-                            //TODO: handle plasma technology item    
-                            return groups; /*
                             const groupItem = (groups.plasmaTechnology ??= {
+                                type: 'plasma-technology',
                                 cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
                                 costConverted: 0,
-                                levels: { from: 0, to: 0 },
+                                levels: [],
                             });
-
-                            if (groupItem.levels.from == 0) {
-                                groupItem.levels.from = cur.level;
-                            }
-                            groupItem.levels.to = cur.level;
+                            groupItem.levels.push(cur.level);
 
                             groupItem.cost = addCost(groupItem.cost, cur.cost);
                             groupItem.costConverted += cur.costConverted;
 
                             cur.additionalLifeformStuff.forEach(lfStuff => {
-                                const planetItem = (groups[lfStuff.planetId] ??= {
-                                    planetId: lfStuff.planetId,
-                                    astrophysicsLevels: { from: 0, to: 0 },
-                                    cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-                                    costConverted: 0,
-                                    mines: createRecord(this.mineBuildingTypes, _ => ({ from: 0, to: 0 })),
-                                    lifeformBuildings: createRecord(LifeformBuildingTypes, _ => ({ from: 0, to: 0 })),
-                                    lifeformTechnologies: createRecord(LifeformTechnologyTypes, _ => ({ from: 0, to: 0 })),
-                                });
-
-                                planetItem.cost = addCost(planetItem.cost, )
+                                const planetItem = getPlanetItem(lfStuff.planetId);
+                                const levels = getLevelRangeArray(lfStuff.levels);
+                                if('building' in lfStuff) {
+                                    planetItem.lifeformBuildings[lfStuff.building].push(...levels);
+                                }
+                                 else {
+                                    planetItem.lifeformTechnologies[lfStuff.technology].push(...levels);
+                                }
                             });
-                            */
+                            return groups;
                         }
 
                         case 'mine': {
