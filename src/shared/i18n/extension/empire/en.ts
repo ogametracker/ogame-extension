@@ -40,8 +40,11 @@ export const en: EmpireTranslations = {
 
         table: {
             cost: 'Cost',
+            levels: 'Levels',
             productionPlus: 'Production Plus',
             amortizationTime: 'Amortization Time',
+            groupSelectedItems: 'Group selected items',
+            showOriginalItems: 'Show all items individually',
 
             levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
         },

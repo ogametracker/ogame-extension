@@ -39,8 +39,11 @@ export interface EmpireTranslations {
 
         table: {
             cost: string;
+            levels: string;
             productionPlus: string;
             amortizationTime: string;
+            groupSelectedItems: string;
+            showOriginalItems: string;
 
             levelsOnPlanets: (levels: number, planets: number) => string;
         };

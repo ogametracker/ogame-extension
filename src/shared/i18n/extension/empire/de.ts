@@ -40,8 +40,11 @@ export const de: EmpireTranslations = {
 
         table: {
             cost: 'Kosten',
+            levels: 'Stufen',
             productionPlus: 'Produktionsplus',
             amortizationTime: 'Amortisationszeit',
+            groupSelectedItems: 'Gewählte Elemente gruppieren',
+            showOriginalItems: 'All Elemente einzeln anzeigen',
 
             levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Stufe' : 'Stufen'} auf ${planets} Planeten`,
         },

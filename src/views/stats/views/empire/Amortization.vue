@@ -121,8 +121,13 @@
             </div>
 
             <div class="amortization-grouping">
-                <button v-if="!isGroupedItemsView" v-text="'LOCA: Group selected items'" :disabled="selectedCount == 0" @click="showGroupedItems()" />
-                <button v-else v-text="'LOCA: Show original table'" @click="showNormalItems" />
+                <button
+                    v-if="!isGroupedItemsView"
+                    v-text="$i18n.$t.extension.empire.amortization.table.groupSelectedItems"
+                    :disabled="selectedCount == 0"
+                    @click="showGroupedItems()"
+                />
+                <button v-else v-text="$i18n.$t.extension.empire.amortization.table.showOriginalItems" @click="showNormalItems" />
             </div>
 
             <div class="amortization-table" v-if="!showSettings">

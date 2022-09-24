@@ -122,6 +122,7 @@
     import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { GridTableColumn } from '../../common/GridTable.vue';
     import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
+    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
     interface TableItem {
         planet?: number;
@@ -147,22 +148,25 @@
             return [
                 {
                     key: 'planet',
-                    label: 'LOCA: Planet',
+                    label: this.$i18n.$t.extension.empire.planet,
                     size: 'auto',
                 },
                 {
                     key: 'item',
-                    label: 'LOCA: What',
+                    label: this.$i18n.$t.extension.empire.amortization.table.levels,
                     size: '1fr',
                 },
                 {
                     key: 'cost',
-                    label: 'LOCA: Cost',
+                    label: this.$i18n.$t.extension.empire.amortization.table.cost,
                     size: '3fr',
                 },
                 {
                     key: 'costConverted',
-                    label: 'LOCA: Cost converted',
+                    label: `${this.$i18n.$t.extension.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu'
+                        ? this.$i18n.$t.extension.common.msu
+                        : this.$i18n.$t.extension.common.dsu
+                        })`,
                     size: '1fr',
                 },
             ];
