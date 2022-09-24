@@ -120,14 +120,17 @@
                 </div>
             </div>
 
-            <div class="amortization-grouping">
+            <div class="amortization-grouping" v-if="false">
                 <button
                     v-if="!isGroupedItemsView"
                     v-text="$i18n.$t.extension.empire.amortization.table.groupSelectedItems"
                     :disabled="selectedCount == 0"
                     @click="showGroupedItems()"
                 />
-                <button v-else v-text="$i18n.$t.extension.empire.amortization.table.showOriginalItems" @click="showNormalItems" />
+                <template v-else>
+                    <button v-text="$i18n.$t.extension.empire.amortization.table.showOriginalItems" @click="showNormalItems" />
+                    <span v-text="'LOCA: gesamte Kosten gruppierter Elemente können geringer sein, da hier die optimale Reihenfolge berücksichtigt wird.'" />
+                </template>
             </div>
 
             <div class="amortization-table" v-if="!showSettings">
@@ -915,8 +918,6 @@
                             type: 'planet-item',
                             planetId: id,
                             astrophysicsLevels: [],
-                            cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-                            costConverted: 0,
                             mines: createRecord(this.mineBuildingTypes, _ => []),
                             lifeformBuildings: createRecord(LifeformBuildingTypes, _ => []),
                             lifeformTechnologies: createRecord(LifeformTechnologyTypes, _ => []),
@@ -936,22 +937,17 @@
                         case 'plasma-technology': {
                             const groupItem = (groups.plasmaTechnology ??= {
                                 type: 'plasma-technology',
-                                cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-                                costConverted: 0,
                                 levels: [],
                             });
                             groupItem.levels.push(cur.level);
 
-                            groupItem.cost = addCost(groupItem.cost, cur.cost);
-                            groupItem.costConverted += cur.costConverted;
-
                             cur.additionalLifeformStuff.forEach(lfStuff => {
                                 const planetItem = getPlanetItem(lfStuff.planetId);
                                 const levels = getLevelRangeArray(lfStuff.levels);
-                                if('building' in lfStuff) {
+                                if ('building' in lfStuff) {
                                     planetItem.lifeformBuildings[lfStuff.building].push(...levels);
                                 }
-                                 else {
+                                else {
                                     planetItem.lifeformTechnologies[lfStuff.technology].push(...levels);
                                 }
                             });
@@ -967,8 +963,6 @@
                                 item.lifeformBuildings[add.building].push(...levels);
                             });
 
-                            item.cost = addCost(item.cost, cur.cost);
-                            item.costConverted += cur.costConverted;
                             return groups;
                         }
 
@@ -988,8 +982,6 @@
                             });
                             item.astrophysicsLevels.push(...cur.levels);
 
-                            item.cost = addCost(item.cost, cur.cost);
-                            item.costConverted += cur.costConverted;
                             return groups;
                         }
 
@@ -1001,8 +993,6 @@
                                 item.lifeformBuildings[b.building].push(...levels);
                             });
 
-                            item.cost = addCost(item.cost, cur.cost);
-                            item.costConverted += cur.costConverted;
                             return groups;
                         }
 
@@ -1014,8 +1004,6 @@
                                 item.lifeformBuildings[b.building].push(...levels);
                             });
 
-                            item.cost = addCost(item.cost, cur.cost);
-                            item.costConverted += cur.costConverted;
                             return groups;
                         }
 

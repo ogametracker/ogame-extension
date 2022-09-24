@@ -175,6 +175,10 @@
         private get footerItems(): [TableItem] {
             return [{
                 item: null!,
+                
+                cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                costConverted: 0,
+                /* TODO: total best cost after reduction
                 cost: this.groupedItems.reduce<Cost>(
                     (total, cur) => addCost(total, cur.cost),
                     { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
@@ -183,6 +187,7 @@
                     (total, cur) => total + cur.costConverted,
                     0,
                 ),
+                */
             }];
         }
 
