@@ -92,7 +92,6 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
     #getTranslation(fullKey: string): string | Error {
         let result = this.#cache[this.#i18n.locale]?.[fullKey];
         if (result != null) {
-            console.debug(this.#i18n.locale, fullKey, result);
             return result;
         }
 
@@ -100,7 +99,6 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
         for (const fallbackLocale of this.#i18n.fallbackLocales) {
             result = this.#cache[fallbackLocale]?.[fullKey];
             if (result != null) {
-                console.debug(fallbackLocale, fullKey, result);
                 return result;
             }
 
