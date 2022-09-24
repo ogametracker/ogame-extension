@@ -6,22 +6,22 @@
             </template>
 
             <template #tab-content-tips>
-                <div class="tip" v-text="$i18n.$t.about.faqHelp.tips.rightClickDefaultRoute" />
-                <div class="tip" v-text="$i18n.$t.about.faqHelp.tips.numbersKeyboardNavigation" />
+                <div class="tip" v-text="$i18n.$t.extension.about.faqHelp.tips.rightClickDefaultRoute" />
+                <div class="tip" v-text="$i18n.$t.extension.about.faqHelp.tips.numbersKeyboardNavigation" />
                 <div class="tip">
-                    <span v-text="$i18n.$t.about.faqHelp.tips.amortizationTable.part1" />
-                    <router-link :to="{ name: 'empire/amortization' }" v-text="$i18n.$t.about.faqHelp.tips.amortizationTable.name" />
-                    <span v-text="$i18n.$t.about.faqHelp.tips.amortizationTable.part2" />
+                    <span v-text="$i18n.$t.extension.about.faqHelp.tips.amortizationTable.part1" />
+                    <router-link :to="{ name: 'empire/amortization' }" v-text="$i18n.$t.extension.about.faqHelp.tips.amortizationTable.name" />
+                    <span v-text="$i18n.$t.extension.about.faqHelp.tips.amortizationTable.part2" />
                 </div>
-                <div class="tip" v-text="$i18n.$t.about.faqHelp.tips.inlineSettings" />
-                <div class="tip" v-html="$i18n.$t.about.faqHelp.tips.switchAccountHtml" />
+                <div class="tip" v-text="$i18n.$t.extension.about.faqHelp.tips.inlineSettings" />
+                <div class="tip" v-html="$i18n.$t.extension.about.faqHelp.tips.switchAccountHtml" />
             </template>
         </tabs>
 
         <div class="discord-message">
-            <span v-text="$i18n.$t.about.faqHelp.messageDiscord.part1" />
-            <a :href="discordInviteLink" v-text="$i18n.$t.about.faqHelp.messageDiscord.discordServer" />
-            <span v-text="$i18n.$t.about.faqHelp.messageDiscord.part2" />
+            <span v-text="$i18n.$t.extension.about.faqHelp.messageDiscord.part1" />
+            <a :href="discordInviteLink" v-text="$i18n.$t.extension.about.faqHelp.messageDiscord.discordServer" />
+            <span v-text="$i18n.$t.extension.about.faqHelp.messageDiscord.part2" />
         </div>
     </div>
 </template>
@@ -52,20 +52,20 @@
         private get itemsFaq(): FaqItem[] {
             return [
                 {
-                    header: this.$i18n.$t.about.faqHelp.faq.fleetLostOnExpedition.header,
-                    text: this.$i18n.$t.about.faqHelp.faq.fleetLostOnExpedition.text,
+                    header: this.$i18n.$t.extension.about.faqHelp.faq.fleetLostOnExpedition.header,
+                    text: this.$i18n.$t.extension.about.faqHelp.faq.fleetLostOnExpedition.text,
                 },
                 {
-                    header: this.$i18n.$t.about.faqHelp.faq.syncBetweenDevices.header,
-                    text: this.$i18n.$t.about.faqHelp.faq.syncBetweenDevices.text,
+                    header: this.$i18n.$t.extension.about.faqHelp.faq.syncBetweenDevices.header,
+                    text: this.$i18n.$t.extension.about.faqHelp.faq.syncBetweenDevices.text,
                 },
                 {
-                    header: this.$i18n.$t.about.faqHelp.faq.productionInResourceBalance.header,
-                    text: this.$i18n.$t.about.faqHelp.faq.productionInResourceBalance.text,
+                    header: this.$i18n.$t.extension.about.faqHelp.faq.productionInResourceBalance.header,
+                    text: this.$i18n.$t.extension.about.faqHelp.faq.productionInResourceBalance.text,
                 },
                 {
-                    header: this.$i18n.$t.about.faqHelp.faq.whatAreAverages.header,
-                    text: this.$i18n.$t.about.faqHelp.faq.whatAreAverages.text,
+                    header: this.$i18n.$t.extension.about.faqHelp.faq.whatAreAverages.header,
+                    text: this.$i18n.$t.extension.about.faqHelp.faq.whatAreAverages.text,
                 },
             ];
         }
@@ -74,11 +74,11 @@
             return [
                 {
                     key: 'faq',
-                    label: this.$i18n.$t.about.faqHelp.faq.header,
+                    label: this.$i18n.$t.extension.about.faqHelp.faq.header,
                 },
                 {
                     key: 'tips',
-                    label: this.$i18n.$t.about.faqHelp.tips.header,
+                    label: this.$i18n.$t.extension.about.faqHelp.tips.header,
                 },
             ];
         }

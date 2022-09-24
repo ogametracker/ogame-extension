@@ -69,15 +69,15 @@
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
-                [this.$i18n.$t.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.resources[resource],
+                label: this.$i18n.$t.extension.resources[resource],
                 getValue: expos => expos.reduce(
                     (acc, expo) => acc + expo.findings.fleetResourceUnits[resource] * this.factors[resource],
                     0
@@ -88,7 +88,7 @@
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
                 {
-                    label: this.$i18n.$t.common.resourceUnits,
+                    label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc
                             + expo.findings.fleetResourceUnits.metal * this.factors.metal
@@ -101,7 +101,7 @@
 
             if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     getValue: expos => expos.reduce(
                         (acc, expo) => acc + getMsuOrDsu(expo.findings.fleetResourceUnits, this.factors),
                         0

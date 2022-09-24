@@ -16,14 +16,14 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.combats.combats" />
+                        <div v-text="$i18n.$t.extension.combats.combats" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.combats.shipsLost} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.combats.shipsLost} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -79,7 +79,7 @@
         private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
             return CombatResultTypes.map(result => ({
                 key: result,
-                label: this.$i18n.$t.combats.combatResults[result],
+                label: this.$i18n.$t.extension.combats.combatResults[result],
                 color: this.colors[result],
                 filled: true,
                 getValue: dailyResult => dailyResult.results.onExpeditions[result],

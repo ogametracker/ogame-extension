@@ -11,11 +11,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.empire.lifeforms.subHeaders.discoveryResults,
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.discoveryResults,
                     to: { name: 'empire/lifeforms/discoveries/overview' },
                 },
                 {
-                    label: this.$i18n.$t.empire.lifeforms.subHeaders.experience,
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.experience,
                     to: { name: 'empire/lifeforms/discoveries/experience' },
                 },
             ];

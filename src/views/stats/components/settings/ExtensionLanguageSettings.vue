@@ -1,7 +1,7 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.common.extensionLanguage" />
+            <span v-text="$i18n.$t.extension.settings.common.extensionLanguage" />
         </div>
         <div class="fake-table-body">
             <select :value="language" @change="setLanguage($event.target.value)">
@@ -21,15 +21,13 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
-    type SupportedUILanguage = LanguageKey.de | LanguageKey.en;
-
     @Component({})
     export default class DetailedResourceBalanceSettings extends Vue {
-        private langs: SupportedUILanguage[] = [
+        private langs: LanguageKey[] = [
             LanguageKey.de,
             LanguageKey.en,
         ];
-        private languageNames: Record<SupportedUILanguage, string> = {
+        private languageNames: Partial<Record<LanguageKey, string>> = {
             [LanguageKey.de]: 'Deutsch',
             [LanguageKey.en]: 'English',
         };

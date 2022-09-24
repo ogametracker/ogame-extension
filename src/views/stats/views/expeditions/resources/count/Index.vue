@@ -12,11 +12,11 @@
             return [
                 {
                     to: { name: 'expeditions/resources/count/chart' },
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                 },
                 {
                     to: { name: 'expeditions/resources/count/table' },
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                 },
             ];
         }

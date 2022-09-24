@@ -8,7 +8,7 @@
                         <input
                             type="text"
                             v-model="selectedAllianceName"
-                            :placeholder="$i18n.$t.universeHistory.allianceSelection.search"
+                            :placeholder="$i18n.$t.extension.universeHistory.allianceSelection.search"
                             list="alliance-list"
                             @change="onAllianceSelected($event.target.value)"
                             style="width: 100%"
@@ -77,7 +77,7 @@
         private get tableColumns(): GridTableColumn<'alliance'>[] {
             return [{
                 key: 'alliance',
-                label: this.$i18n.$t.universeHistory.allianceSelection.header,
+                label: this.$i18n.$t.extension.universeHistory.allianceSelection.header,
                 headerClass: 'alliance-selection-table-cell',
                 class: 'alliance-selection-table-cell',
             }];
@@ -94,15 +94,15 @@
             return [
                 {
                     key: 'tag',
-                    label: this.$i18n.$t.universeHistory.historyTabs.tags,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.tags,
                 },
                 {
                     key: 'name',
-                    label: this.$i18n.$t.universeHistory.historyTabs.names,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.names,
                 },
                 {
                     key: 'members',
-                    label: this.$i18n.$t.universeHistory.historyTabs.members,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.members,
                 },
             ];
         }

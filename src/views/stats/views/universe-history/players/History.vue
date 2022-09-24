@@ -8,7 +8,7 @@
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            :placeholder="$i18n.$t.universeHistory.playerSelection.search"
+                            :placeholder="$i18n.$t.extension.universeHistory.playerSelection.search"
                             list="player-list"
                             @change="onPlayerSelected($event.target.value)"
                             style="width: 100%"
@@ -82,7 +82,7 @@
         private get tableColumns(): GridTableColumn<'player'>[] {
             return [{
                 key: 'player',
-                label: this.$i18n.$t.universeHistory.playerSelection.header,
+                label: this.$i18n.$t.extension.universeHistory.playerSelection.header,
                 headerClass: 'player-selection-table-cell',
                 class: 'player-selection-table-cell',
             }];
@@ -99,19 +99,19 @@
             return [
                 {
                     key: 'status',
-                    label: this.$i18n.$t.universeHistory.historyTabs.status,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.status,
                 },
                 {
                     key: 'nickname',
-                    label: this.$i18n.$t.universeHistory.historyTabs.nicknames,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.nicknames,
                 },
                 {
                     key: 'alliance',
-                    label: this.$i18n.$t.universeHistory.historyTabs.alliances,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.alliances,
                 },
                 {
                     key: 'planet-moons',
-                    label: this.$i18n.$t.universeHistory.historyTabs.planetAndMoons,
+                    label: this.$i18n.$t.extension.universeHistory.historyTabs.planetAndMoons,
                 },
             ];
         }

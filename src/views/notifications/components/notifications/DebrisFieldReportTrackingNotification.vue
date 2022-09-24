@@ -16,13 +16,13 @@
                     <span v-text="$i18n.$n(sum)" />
                 </div>
                 <div v-else class="text-grid">
-                    <span v-text="$i18n.$t.resources[ResourceType.metal]" />
+                    <span v-text="$i18n.$t.extension.resources[ResourceType.metal]" />
                     <span :class="{ fade: notification.resources.metal == 0 }" v-text="$i18n.$n(notification.resources.metal)" />
 
-                    <span v-text="$i18n.$t.resources[ResourceType.crystal]" />
+                    <span v-text="$i18n.$t.extension.resources[ResourceType.crystal]" />
                     <span :class="{ fade: notification.resources.crystal == 0 }" v-text="$i18n.$n(notification.resources.crystal)" />
 
-                    <span v-text="$i18n.$t.common.sum" />
+                    <span v-text="$i18n.$t.extension.common.sum" />
                     <span :class="{ fade: sum == 0 }" v-text="$i18n.$n(sum)" />
                 </div>
             </template>
@@ -53,11 +53,11 @@
         }
 
         private get title() {
-            return this.$i18n.$t.notifications.debrisFieldReportTracking.title(this.$i18n.$n(this.notification.count));
+            return this.$i18n.$t.extension.notifications.debrisFieldReportTracking.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return this.$i18n.$t.notifications.debrisFieldReportTracking.message(this.$i18n.$n(this.notification.count));
+            return this.$i18n.$t.extension.notifications.debrisFieldReportTracking.message(this.$i18n.$n(this.notification.count));
         }
 
         private get sum() {

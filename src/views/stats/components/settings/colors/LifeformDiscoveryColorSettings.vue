@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.lifeformDiscoveries"
+        :header="$i18n.$t.extension.settings.colors.lifeformDiscoveries"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -26,9 +26,9 @@
 
         private get labels(): Record<Exclude<LifeformDiscoveryEventType, LifeformDiscoveryEventType.newLifeformFound>, string> {
             return {
-                [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.empire.lifeforms.eventTypes.nothing,
-                [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.empire.lifeforms.eventTypes.lostShip,
-                [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.extension.empire.lifeforms.lifeformFound,
             };
         }
 

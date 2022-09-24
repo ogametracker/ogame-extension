@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.ships"
+        :header="$i18n.$t.extension.settings.colors.ships"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -27,23 +27,23 @@
         private get labels(): Record<ShipType, string> {
 
             return {
-                [ShipType.lightFighter]: this.$i18n.$t.ships[ShipType.lightFighter],
-                [ShipType.heavyFighter]: this.$i18n.$t.ships[ShipType.heavyFighter],
-                [ShipType.cruiser]: this.$i18n.$t.ships[ShipType.cruiser],
-                [ShipType.battleship]: this.$i18n.$t.ships[ShipType.battleship],
-                [ShipType.bomber]: this.$i18n.$t.ships[ShipType.bomber],
-                [ShipType.battlecruiser]: this.$i18n.$t.ships[ShipType.battlecruiser],
-                [ShipType.destroyer]: this.$i18n.$t.ships[ShipType.destroyer],
-                [ShipType.reaper]: this.$i18n.$t.ships[ShipType.reaper],
-                [ShipType.pathfinder]: this.$i18n.$t.ships[ShipType.pathfinder],
-                [ShipType.smallCargo]: this.$i18n.$t.ships[ShipType.smallCargo],
-                [ShipType.largeCargo]: this.$i18n.$t.ships[ShipType.largeCargo],
-                [ShipType.espionageProbe]: this.$i18n.$t.ships[ShipType.espionageProbe],
-                [ShipType.deathStar]: this.$i18n.$t.ships[ShipType.deathStar],
-                [ShipType.recycler]: this.$i18n.$t.ships[ShipType.recycler],
-                [ShipType.colonyShip]: this.$i18n.$t.ships[ShipType.colonyShip],
-                [ShipType.crawler]: this.$i18n.$t.ships[ShipType.crawler],
-                [ShipType.solarSatellite]: this.$i18n.$t.ships[ShipType.solarSatellite],
+                [ShipType.lightFighter]: this.$i18n.$t.ogame.ships[ShipType.lightFighter],
+                [ShipType.heavyFighter]: this.$i18n.$t.ogame.ships[ShipType.heavyFighter],
+                [ShipType.cruiser]: this.$i18n.$t.ogame.ships[ShipType.cruiser],
+                [ShipType.battleship]: this.$i18n.$t.ogame.ships[ShipType.battleship],
+                [ShipType.bomber]: this.$i18n.$t.ogame.ships[ShipType.bomber],
+                [ShipType.battlecruiser]: this.$i18n.$t.ogame.ships[ShipType.battlecruiser],
+                [ShipType.destroyer]: this.$i18n.$t.ogame.ships[ShipType.destroyer],
+                [ShipType.reaper]: this.$i18n.$t.ogame.ships[ShipType.reaper],
+                [ShipType.pathfinder]: this.$i18n.$t.ogame.ships[ShipType.pathfinder],
+                [ShipType.smallCargo]: this.$i18n.$t.ogame.ships[ShipType.smallCargo],
+                [ShipType.largeCargo]: this.$i18n.$t.ogame.ships[ShipType.largeCargo],
+                [ShipType.espionageProbe]: this.$i18n.$t.ogame.ships[ShipType.espionageProbe],
+                [ShipType.deathStar]: this.$i18n.$t.ogame.ships[ShipType.deathStar],
+                [ShipType.recycler]: this.$i18n.$t.ogame.ships[ShipType.recycler],
+                [ShipType.colonyShip]: this.$i18n.$t.ogame.ships[ShipType.colonyShip],
+                [ShipType.crawler]: this.$i18n.$t.ogame.ships[ShipType.crawler],
+                [ShipType.solarSatellite]: this.$i18n.$t.ogame.ships[ShipType.solarSatellite],
             };
         }
 

@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.resources"
+        :header="$i18n.$t.extension.settings.colors.resources"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -26,10 +26,10 @@
 
         private get labels(): Record<ResourceType | 'totalConverted', string> {
             return {
-                [ResourceType.metal]: this.$i18n.$t.resources.metal,
-                [ResourceType.crystal]: this.$i18n.$t.resources.crystal,
-                [ResourceType.deuterium]: this.$i18n.$t.resources.deuterium,
-                totalConverted: `${this.$i18n.$t.common.resourceUnits} (${this.$i18n.$t.common.msu}/${this.$i18n.$t.common.dsu})`,
+                [ResourceType.metal]: this.$i18n.$t.extension.resources.metal,
+                [ResourceType.crystal]: this.$i18n.$t.extension.resources.crystal,
+                [ResourceType.deuterium]: this.$i18n.$t.extension.resources.deuterium,
+                totalConverted: `${this.$i18n.$t.extension.common.resourceUnits} (${this.$i18n.$t.extension.common.msu}/${this.$i18n.$t.extension.common.dsu})`,
             };
         }
 

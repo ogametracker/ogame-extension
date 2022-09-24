@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.resourceBalance.detailedResourceBalance.header" />
+            <span v-text="$i18n.$t.extension.settings.resourceBalance.detailedResourceBalance.header" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="showDetailedBreakdown"
                 @input="toggleDetailedBreakdown($event)"
-                :label="$i18n.$t.settings.resourceBalance.detailedResourceBalance.checkboxLabel"
+                :label="$i18n.$t.extension.settings.resourceBalance.detailedResourceBalance.checkboxLabel"
             />
         </div>
     </div>

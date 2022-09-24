@@ -12,11 +12,11 @@
             return [
                 {
                     to: { name: 'empire/lifeforms/discoveries/experience/chart' },
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                 },
                 {
                     to: { name: 'empire/lifeforms/discoveries/experience/table' },
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                 },
             ];
         }

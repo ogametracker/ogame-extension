@@ -27,7 +27,6 @@ export const en: EmpireTranslations = {
             consumption: 'Consumption',
             lifeformBuildings: 'Lifeform Buildings',
             crawlers: 'Crawlers',
-            plasmaTechnology: 'Plasma Technology',
             items: 'Items',
             geologist: 'Geologist',
             commandStaff: 'Command Staff',
@@ -57,19 +56,17 @@ export const en: EmpireTranslations = {
                 officers: 'Officers',
                 playerClass: 'Player Class',
                 allianceClass: 'Alliance Class',
-                currentLevelPlasmatech: 'Current Level of Plasmatechnology',
-                currentLevelAstrophysics: 'Current Level of Astrophysics',
+                currentLevelOf: (name: string) => `Current Level of ${name}`,
 
                 unusedRaidColonySlots: 'Currently unused raid colony slots',
             },
             astrophysicsSettings: {
-                header: 'Astrophysics Settings',
-                showAstrophysics: 'Show astrophysics + new colonies in result',
+                header: (name: string) => `${name} Settings`,
                 newColony: 'new Colony',
             },
             plasmatechSettings: {
-                header: 'Plasma Technology Settings',
-                includePlasmatech: 'Include Plasma Technology in calculation',
+                header: (name: string) => `${name} Settings`,
+                includePlasmatech: (name: string) => `Include ${name} in calculation`,
             },
             planetSettings: {
                 header: 'Planet Settings',

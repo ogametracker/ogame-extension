@@ -12,11 +12,11 @@
             return [
                 {
                     to: { name: 'expeditions/dark-matter/amount/chart' },
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                 },
                 {
                     to: { name: 'expeditions/dark-matter/amount/table' },
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                 },
             ];
         }

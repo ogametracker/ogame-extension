@@ -1,28 +1,28 @@
 <template>
     <div class="universe-history-tracking">
-        <div v-if="!settings.enabled" v-html="$i18n.$t.universeHistory.settings.messages.notEnabledHtml" />
+        <div v-if="!settings.enabled" v-html="$i18n.$t.extension.universeHistory.settings.messages.notEnabledHtml" />
 
         <checkbox-button
             :value="settings.enabled"
-            :label="$i18n.$t.universeHistory.settings.enableHighscoreTrackingOnly"
+            :label="$i18n.$t.extension.universeHistory.settings.enableHighscoreTrackingOnly"
             @input="setEnabled($event)"
             color="#00ff00"
         />
 
         <hr />
 
-        <div v-if="settings.enabled && !settings.trackHistory" v-html="$i18n.$t.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
+        <div v-if="settings.enabled && !settings.trackHistory" v-html="$i18n.$t.extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
         <checkbox-button
             v-if="settings.enabled"
             :value="settings.trackHistory"
-            :label="$i18n.$t.universeHistory.settings.enableHistoryTracking"
+            :label="$i18n.$t.extension.universeHistory.settings.enableHistoryTracking"
             @input="setTrackHistory($event)"
             color="#00ff00"
         />
 
         <hr />
 
-        <div v-html="$i18n.$t.universeHistory.settings.messages.trackingTimesHtml" />
+        <div v-html="$i18n.$t.extension.universeHistory.settings.messages.trackingTimesHtml" />
         <div class="time-grid">
             <checkbox-button
                 v-for="(enabled, time) in timeSelection"

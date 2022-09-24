@@ -5,20 +5,20 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.common.resourceUnits" />
+                        <div v-text="$i18n.$t.extension.common.resourceUnits" />
 
                         <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
-                        <div v-text="`${$i18n.$t.common.resourceUnits} (${conversionModeText})`" />
+                        <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${$i18n.$t.extension.common.total})`" />
 
                     <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(datasets))" />
-                    <div v-text="`${$i18n.$t.common.resourceUnits} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -85,8 +85,8 @@
 
         private get conversionModeText() {
             return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.common.msu
-                : this.$i18n.$t.common.dsu;
+                ? this.$i18n.$t.extension.common.msu
+                : this.$i18n.$t.extension.common.dsu;
         }
 
         private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
@@ -99,14 +99,14 @@
             return [
                 ...ResourceTypes.map(resource => ({
                     key: resource,
-                    label: this.$i18n.$t.resources[resource],
+                    label: this.$i18n.$t.extension.resources[resource],
                     color: this.colors[resource],
                     filled: true,
                     getValue: (result: DailyCombatReportResult) => result.lostShips.againstPlayers.resourceUnits[resource] * factors[resource],
                 })),
                 {
                     key: 'total',
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     color: this.colors.totalConverted,
                     filled: false,
                     getValue: (result: DailyCombatReportResult) => getMsuOrDsu(result.lostShips.againstPlayers.resourceUnits, factors),

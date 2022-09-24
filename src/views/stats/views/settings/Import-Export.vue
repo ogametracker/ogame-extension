@@ -2,19 +2,19 @@
     <div class="import-export">
         <div class="fake-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.settings.importExport.export.header" />
+                <span v-text="$i18n.$t.extension.settings.importExport.export.header" />
             </div>
             <div class="fake-table-body">
-                <div v-text="$i18n.$t.settings.importExport.export.description" />
+                <div v-text="$i18n.$t.extension.settings.importExport.export.description" />
                 <span>
-                    <checkbox v-model="exportUniverseHistory" :label="$i18n.$t.settings.importExport.export.includeUniverseHistory" />
+                    <checkbox v-model="exportUniverseHistory" :label="$i18n.$t.extension.settings.importExport.export.includeUniverseHistory" />
                 </span>
                 <button @click="exportData()" :disabled="isExporting">
                     <span class="mdi mdi-database-export" />
-                    <span v-text="$i18n.$t.settings.importExport.export.button" />
+                    <span v-text="$i18n.$t.extension.settings.importExport.export.button" />
                 </button>
                 <template v-if="isExporting">
-                    <span v-text="$i18n.$t.settings.importExport.export.wait" />
+                    <span v-text="$i18n.$t.extension.settings.importExport.export.wait" />
                     <loading-spinner />
                 </template>
             </div>
@@ -22,17 +22,17 @@
 
         <div class="fake-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.settings.importExport.import.header" />
+                <span v-text="$i18n.$t.extension.settings.importExport.import.header" />
             </div>
             <div class="fake-table-body">
-                <div v-text="$i18n.$t.settings.importExport.import.description" />
+                <div v-text="$i18n.$t.extension.settings.importExport.import.description" />
                 <input type="file" ref="fileInput" @input="onFileSelected()" accept=".json" :disabled="isImporting" />
                 <button @click="importData()" :disabled="isImporting || file == null">
                     <span class="mdi mdi-database-import" />
-                    <span v-text="$i18n.$t.settings.importExport.import.button" />
+                    <span v-text="$i18n.$t.extension.settings.importExport.import.button" />
                 </button>
                 <template v-if="isImporting">
-                    <span v-text="$i18n.$t.settings.importExport.import.wait" />
+                    <span v-text="$i18n.$t.extension.settings.importExport.import.wait" />
                     <loading-spinner />
                     <span v-text="lastImportMessage" />
                 </template>
@@ -98,7 +98,7 @@
             }
             catch (error) {
                 _logError(error);
-                alert(this.$i18n.$t.settings.importExport.export.errors.unexpectedError);
+                alert(this.$i18n.$t.extension.settings.importExport.export.errors.unexpectedError);
             }
             finally {
                 this.isExporting = false;
@@ -377,7 +377,7 @@
                         break;
 
                     default:
-                        alert(this.$i18n.$t.settings.importExport.import.errors.invalidFormat);
+                        alert(this.$i18n.$t.extension.settings.importExport.import.errors.invalidFormat);
                         break;
                 }
 
@@ -388,7 +388,7 @@
             }
             catch (error) {
                 _logDebug(error);
-                alert(this.$i18n.$t.settings.importExport.import.errors.unexpectedError);
+                alert(this.$i18n.$t.extension.settings.importExport.import.errors.unexpectedError);
             }
             finally {
                 this.isImporting = false;
@@ -398,22 +398,22 @@
         private onImportProgress_v2(progress: ImportCallbackInfo): void {
             switch (progress.type) {
                 case 'importing-settings': {
-                    this.lastImportMessage = this.$i18n.$t.settings.importExport.importCallbacks.importingSettings;
+                    this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingSettings;
                     break;
                 }
 
                 case 'importing-basic-accounts-and-servers': {
-                    this.lastImportMessage = this.$i18n.$t.settings.importExport.importCallbacks.importingBasicData;
+                    this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingBasicData;
                     break;
                 }
 
                 case 'importing-account': {
-                    this.lastImportMessage = `${this.$i18n.$t.settings.importExport.importCallbacks.importingAccounts} (${progress.currentIndex + 1}/${progress.total})`;
+                    this.lastImportMessage = `${this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts} (${progress.currentIndex + 1}/${progress.total})`;
                     break;
                 }
 
                 case 'importing-universe-history': {
-                    this.lastImportMessage = `${this.$i18n.$t.settings.importExport.importCallbacks.importingUniverseHistories} (${progress.currentIndex + 1}/${progress.total})`;
+                    this.lastImportMessage = `${this.$i18n.$t.extension.settings.importExport.importCallbacks.importingUniverseHistories} (${progress.currentIndex + 1}/${progress.total})`;
                     break;
                 }
             }
