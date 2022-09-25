@@ -13,7 +13,7 @@ import { addCost, Cost, multiplyCostInt, subCost } from "@/shared/models/ogame/c
 import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType, LifeformTechnologyBonusLifeformBuilding, LifeformTechnologyResearchBuilding, ResourceProductionBonusLifeformBuilding } from "@/shared/models/ogame/lifeforms/buildings/interfaces";
 import { AnyBuildingCostAndTimeReductionLifeformBuildings, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildings, LifeformTechnologyResearchBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
-import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
+import { getLifeformLevelTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, LifeformTypes, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
@@ -169,7 +169,7 @@ export class AmortizationItemGenerator {
             [ResearchType.astrophysics]: this.#settings.player.levelAstrophysics,
         } as Record<ResearchType, number>;
 
-        const lifeformExperienceBonus = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(this.#lifeformExperience[lf]));
+        const lifeformExperienceBonus = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformLevelTechnologyBonus(this.#lifeformExperience[lf]));
 
         const empireProductionPlanetStates = {
             metal: {} as Record<number, EmpireProductionPlanetState>,
@@ -407,7 +407,7 @@ export class AmortizationItemGenerator {
 
         const lifeformExperienceBoost = planet.lifeform == LifeformType.none
             ? 0
-            : getLifeformTechnologyBonus(this.#lifeformExperience[planet.lifeform]);
+            : getLifeformLevelTechnologyBonus(this.#lifeformExperience[planet.lifeform]);
 
         return {
             data: planetData,
@@ -725,7 +725,7 @@ export class AmortizationItemGenerator {
 
         const lifeformExperienceBonus = createRecord(
             LifeformTypes,
-            lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(this.#lifeformExperience[lf])
+            lf => lf == LifeformType.none ? 0 : getLifeformLevelTechnologyBonus(this.#lifeformExperience[lf])
         );
         const baseProductionConfig: Omit<EmpireProductionPlanetState, 'baseProduction' | 'mineProduction' | 'itemBonusProductionFactor'> = {
             crawlers: {

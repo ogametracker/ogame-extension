@@ -39,6 +39,8 @@ import viewsempirePointDistribution from '@stats/views/empire/Point-Distribution
 import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
 import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
 import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
+import viewsempirelifeformsbonusbreakdownIndex from '@stats/views/empire/lifeforms/bonus-breakdown/Index.vue';
+import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
 import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
 import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
@@ -428,6 +430,21 @@ const routes: RouteConfig[] = [
                                 path: "progress",
                                 name: "empire/lifeforms/progress",
                                 component: viewsempirelifeformsProgress
+                            },
+                            {
+                                redirect: {
+                                    name: "empire/lifeforms/bonus-breakdown/resource-production"
+                                },
+                                path: "bonus-breakdown",
+                                name: "empire/lifeforms/bonus-breakdown",
+                                component: viewsempirelifeformsbonusbreakdownIndex,
+                                children: [
+                                    {
+                                        path: "resource-production",
+                                        name: "empire/lifeforms/bonus-breakdown/resource-production",
+                                        component: viewsempirelifeformsbonusbreakdownResourceProduction
+                                    }
+                                ]
                             },
                             {
                                 redirect: {

@@ -68,7 +68,6 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
@@ -155,10 +154,8 @@
 
             const lifeformExperience: Partial<Record<LifeformType, number>> = player.lifeformExperience;
 
-            //TODO: don't show lifeform level+exp (shown in progress view), show total possible population (T1/T2/T3) instead (take food into account!)
             return planets.map<PlanetLifeformItem>(planet => {
                 const lfExp = lifeformExperience[planet.activeLifeform] ?? 0;
-                const lfLevel = getLifeformLevel(lfExp);
 
                 const result: PlanetLifeformItem = {
                     planet: {

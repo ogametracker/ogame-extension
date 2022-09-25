@@ -1,9 +1,18 @@
 <template>
     <span
-        :class="{ 'fade-value': value == 0 }"
-        v-text="$i18n.$n(Math.trunc(value), format)"
-        :fraction="$i18n.$n(Math.abs(value) % 1, fractionNumberFormat).substring(1)"
-    />
+        :class="{
+            'fade-value': value == 0,
+            'fade-decimals': fadeDecimals,
+            'small-fraction': smallFraction,
+        }"
+    >
+        <span v-if="prefix != ''" v-text="prefix" />
+        
+        <span v-text="$i18n.$n(Math.trunc(value), format)" />
+        <span v-if="digits > 0" class="fraction" v-text="$i18n.$n(Math.abs(value) % 1, fractionNumberFormat).substring(1)" />
+
+        <span v-if="suffix != ''" v-text="suffix" />
+    </span>
 </template>
 
 <script lang="ts">
@@ -16,6 +25,18 @@
 
         @Prop({ required: false, type: Number, default: 2, validator: (n: number) => n > 0 })
         private digits!: number;
+
+        @Prop({ required: false, type: Boolean, default: true })
+        private fadeDecimals!: boolean;
+
+        @Prop({ required: false, type: String, default: () => '' })
+        private prefix!: string;
+
+        @Prop({ required: false, type: String, default: () => '' })
+        private suffix!: string;
+
+        @Prop({ required: false, type: Boolean, default: true })
+        private smallFraction!: boolean;
 
 
         private readonly format: Intl.NumberFormatOptions = {
@@ -33,14 +54,16 @@
     .fade-value {
         color: rgba(white, 0.1);
 
-        &[fraction]::after {
+        .fraction {
             color: rgba(white, 0.1);
         }
     }
 
-    [fraction]::after {
-        content: attr(fraction);
-        color: rgba(white, 0.333);
+    .small-fraction .fraction {
         font-size: 0.65em;
+    }
+
+    .fade-decimals .fraction {
+        color: rgba(white, 0.333);
     }
 </style>

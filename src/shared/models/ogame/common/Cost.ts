@@ -5,13 +5,21 @@ export interface Cost {
     energy: number;
 }
 
-export function addCost(a: Cost, b: Cost): Cost {
-    return {
-        metal: a.metal + b.metal,
-        crystal: a.crystal + b.crystal,
-        deuterium: a.deuterium + b.deuterium,
-        energy: a.energy + b.energy,
+export function addCost(...costs: Cost[]): Cost {
+    const result: Cost = {
+        metal: 0,
+        crystal: 0,
+        deuterium: 0,
+        energy: 0,
     };
+    costs.forEach(cost => {
+        result.metal += cost.metal;
+        result.crystal += cost.crystal;
+        result.deuterium += cost.deuterium;
+        result.energy += cost.energy;
+    });
+
+    return result;
 }
 
 export function subCost(a: Cost, b: Cost): Cost {

@@ -15,6 +15,10 @@
                     label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.overview,
                 },
                 {
+                    to: { name: 'empire/lifeforms/bonus-breakdown' },
+                    label: 'LOCA: Bonus breakdowns',
+                },
+                {
                     to: { name: 'empire/lifeforms/progress' },
                     label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.progress,
                 },
