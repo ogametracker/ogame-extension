@@ -3,6 +3,7 @@
         class="o-alliance-class"
         :class="{
             'o-alliance-class--disabled': disabled,
+            'o-alliance-class--fade': fade,
         }"
         :style="{
             'background-image': `url(/img/ogame/alliance-classes/${image}.png)`,
@@ -34,6 +35,9 @@
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
+
 
         private get image() {
             return this.imageMap[this.allianceClass];
@@ -59,6 +63,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 </style>
