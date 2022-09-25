@@ -1,8 +1,7 @@
 <template>
     <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer>
         <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
-            <o-lifeform-building v-if="LifeformBuildings.includes(parseIntSafe(match.groups.id))" :building="parseIntSafe(match.groups.id)" size="48px" />
-            <o-lifeform-technology v-else :technology="parseIntSafe(match.groups.id)" size="48px" />
+            <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
 
         <template #cell-planet="{ value }">
@@ -11,17 +10,7 @@
         </template>
 
         <template v-slot:[`cell-${idSlotNameRegex}`]="{ item, match }">
-            <div class="production-breakdown" v-if="LifeformBuildings.includes(parseIntSafe(match.groups.id))">
-                <div class="row">
-                    <span />
-                    <span v-text="'\xa0'" />
-                </div>
-                <div v-for="resource in resourceKeys" class="row" :key="resource">
-                    <o-resource :resource="resource" size="24px" :fade="item.bonuses[match.groups.id][resource] == 0" />
-                    <decimal-number :value="item.bonuses[match.groups.id][resource] * 100" suffix="%" :fade-decimals="false" />
-                </div>
-            </div>
-            <div class="production-breakdown production-breakdown-techs" v-else>
+            <div class="production-breakdown production-breakdown-techs">
                 <div class="row">
                     <span />
                     <span v-text="'Base'" /><!-- LOCA: -->
@@ -80,10 +69,7 @@
     interface BonusOverviewItem {
         planet: PlanetData;
 
-        bonuses: (
-            Partial<Record<LifeformBuildingType, Cost>>
-            & Partial<Record<LifeformTechnologyType, TechnologyBonusBreakdown>>
-        );
+        bonuses: Partial<Record<LifeformTechnologyType, TechnologyBonusBreakdown>>;
         totalBonus: Cost;
     }
 
@@ -91,7 +77,6 @@
     export default class ResourceProduction extends Vue {
 
         private readonly resourceKeys: (keyof Cost)[] = ['metal', 'crystal', 'deuterium', 'energy'];
-        private readonly LifeformBuildings = ResourceProductionBonusLifeformBuildings.map(x => x.type);
         private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies.map(x => x.type);
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
@@ -103,9 +88,6 @@
                     key: 'planet',
                     label: 'LOCA: Planet',
                 },
-                ...this.LifeformBuildings.map<GridTableColumn<LifeformBuildingType>>(b => ({
-                    key: b,
-                })),
                 ...this.LifeformTechnologies.map<GridTableColumn<LifeformTechnologyType>>(t => ({
                     key: t,
                 })),
@@ -131,11 +113,6 @@
                 const buildingBoost = getPlanetLifeformTechnologyBoost(planet);
 
                 const bonuses: BonusOverviewItem['bonuses'] = {};
-                ResourceProductionBonusLifeformBuildings.forEach(building => {
-                    const level = planet.lifeformBuildings[building.type];
-                    const bonus = building.getProductionBonus(level);
-                    bonuses[building.type] = bonus;
-                });
                 ResourceProductionBonusLifeformTechnologies.forEach(technology => {
                     const level = planet.lifeformTechnologies[technology.type];
                     const baseBonus = technology.getProductionBonus(level);
@@ -155,12 +132,7 @@
                     bonuses,
                     get totalBonus() {
                         return Object.values(this.bonuses).reduce<Cost>(
-                            (total, cur) => {
-                                if ('total' in cur) {
-                                    return addCost(total, cur.total);
-                                }
-                                return addCost(total, cur)
-                            },
+                            (total, cur) => addCost(total, cur.total),
                             { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
                         );
                     }
