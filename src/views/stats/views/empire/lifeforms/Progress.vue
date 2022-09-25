@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" sticky>
+    <grid-table :columns="columns" :items="items" sticky="100%">
         <template #cell-lifeform="{ value }">
             <span class="mr-2" v-text="$i18n.$t.ogame.lifeforms[value]" />
             <o-lifeform :lifeform="value" />

@@ -5,7 +5,7 @@
         <grid-table
             :columns="columns"
             :items="items"
-            sticky
+            sticky="100%"
             :footerItems="footerItems"
             class="resources-production-table"
             :style="`--item-count: ${maxItemCount}`"

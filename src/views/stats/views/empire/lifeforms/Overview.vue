@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky>
+    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky="100%">
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
