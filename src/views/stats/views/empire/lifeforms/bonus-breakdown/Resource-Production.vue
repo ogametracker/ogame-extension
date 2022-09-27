@@ -4,6 +4,10 @@
             <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
 
+        <template #header-planet>
+            <button v-text="'+/-'" @click="isExpanded = !isExpanded" />
+        </template>
+
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             <span v-text="formatCoordinates(value.coordinates)" />
@@ -22,8 +26,20 @@
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
                     <o-resource :resource="resource" size="24px" :fade="item.bonuses[match.groups.id].total[resource] == 0" />
                     <decimal-number v-if="isExpanded" :value="item.bonuses[match.groups.id].base[resource] * 100" suffix="%" :fade-decimals="false" />
-                    <decimal-number v-if="isExpanded" :digits="3" :value="item.bonuses[match.groups.id].buildingBoost[resource] * 100" suffix="%" :fade-decimals="false" />
-                    <decimal-number v-if="isExpanded" :digits="3" :value="item.bonuses[match.groups.id].levelBoost[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number
+                        v-if="isExpanded"
+                        :digits="3"
+                        :value="item.bonuses[match.groups.id].buildingBoost[resource] * 100"
+                        suffix="%"
+                        :fade-decimals="false"
+                    />
+                    <decimal-number
+                        v-if="isExpanded"
+                        :digits="3"
+                        :value="item.bonuses[match.groups.id].levelBoost[resource] * 100"
+                        suffix="%"
+                        :fade-decimals="false"
+                    />
                     <decimal-number :digits="3" :value="item.bonuses[match.groups.id].total[resource] * 100" suffix="%" :fade-decimals="false" />
                 </div>
             </div>
@@ -78,7 +94,7 @@
     export default class ResourceProduction extends Vue {
 
         private readonly resourceKeys: (keyof Cost)[] = ['metal', 'crystal', 'deuterium', 'energy'];
-        private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies.map(x => x.type);
+        private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies.map(x => x.type).sort((a, b) => a - b);
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;
