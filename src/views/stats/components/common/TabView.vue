@@ -9,18 +9,10 @@
                 class="tab_floating-menu"
             >
                 <template #activator>
-                    <router-link
-                        :to="tab.to"
-                        class="tab"
-                        active-class="tab--active"
-                        ref="tabs"
-                    >
+                    <router-link :to="tab.to" class="tab" active-class="tab--active" ref="tabs">
                         <span class="tab-content">
                             <span v-if="tab.label != null" v-text="tab.label" />
-                            <span
-                                v-if="isDefaultRoute(tab.to)"
-                                class="tab-item-home-icon mdi mdi-home"
-                            />
+                            <span v-if="isDefaultRoute(tab.to)" class="tab-item-home-icon mdi mdi-home" />
                         </span>
                     </router-link>
                 </template>
@@ -35,7 +27,9 @@
             </floating-menu>
         </header>
         <main>
-            <router-view />
+            <keep-alive>
+                <router-view />
+            </keep-alive>
         </main>
     </div>
 </template>
@@ -134,11 +128,7 @@
                     }
 
                     &.tab--active {
-                        background: linear-gradient(
-                            135deg,
-                            rgba(var(--color), 0.4),
-                            rgba(var(--color), 0.7)
-                        );
+                        background: linear-gradient(135deg, rgba(var(--color), 0.4), rgba(var(--color), 0.7));
                     }
 
                     &::v-deep {
