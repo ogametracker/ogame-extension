@@ -149,12 +149,10 @@
                 return {
                     planet,
                     bonuses,
-                    get totalBonus() {
-                        return Object.values(this.bonuses).reduce<Cost>(
-                            (total, cur) => addCost(total, cur.total),
-                            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-                        );
-                    }
+                    totalBonus: Object.values(bonuses).reduce<Cost>(
+                        (total, cur) => addCost(total, cur.total),
+                        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                    ),
                 };
             });
         }

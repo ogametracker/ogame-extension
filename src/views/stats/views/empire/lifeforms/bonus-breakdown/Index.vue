@@ -14,6 +14,10 @@
                     to: { name: 'empire/lifeforms/bonus-breakdown/resource-production' },
                     label: 'LOCA: Resource Production Bonuses',
                 },
+                {
+                    to: { name: 'empire/lifeforms/bonus-breakdown/ship-stats' },
+                    label: 'LOCA: Ship Stats Bonuses',
+                },
             ];
         }
     }
