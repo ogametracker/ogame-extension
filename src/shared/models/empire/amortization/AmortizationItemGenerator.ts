@@ -34,6 +34,7 @@ import { createRecord } from "@/shared/utils/createRecord";
 import { __measure } from "@/shared/utils/performance/__measure";
 import { _throw } from "@/shared/utils/_throw";
 import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
+import { MissileType } from "../../ogame/missiles/MissileType";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
 import { AmortizationPlayerSettings } from "./AmortizationPlayerSettings";
@@ -455,6 +456,7 @@ export class AmortizationItemGenerator {
             } as PlanetBuildingLevels,
             coordinates: { position: planet.position } as Coordinates,
             defense: {} as DefenseCount,
+            missiles: {} as Record<MissileType, number>,
             lifeformBuildings: {
                 ...(planet.lifeformBuildingLevels ?? createRecord(LifeformBuildingTypes, 0)),
                 ...(createRecord(

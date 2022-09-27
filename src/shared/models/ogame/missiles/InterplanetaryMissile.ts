@@ -1,7 +1,7 @@
 import { Cost } from "../common/Cost";
-import { Defense } from "./Defense";
+import { Missile } from "./Missile";
 
-class InterplanetaryMissileClass extends Defense {
+class InterplanetaryMissileClass extends Missile {
 
     public get cost(): Cost {
         return {

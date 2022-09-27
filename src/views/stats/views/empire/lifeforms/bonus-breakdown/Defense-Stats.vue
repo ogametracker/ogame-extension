@@ -1,5 +1,5 @@
 <template>
-    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer class="ship-bonuses">
+    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer class="defense-bonuses">
         <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
             <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
@@ -20,25 +20,23 @@
                     <span v-text="'Armor'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
                     <span v-text="'Shield'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
                     <span v-text="'Damage'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Cargo'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Speed'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
 
                     <template v-if="isExpanded">
                         <span />
-                        <template v-for="statKey in shipStatsKeys">
+                        <template v-for="statKey in statsKeys">
                             <span v-for="key in breakdownKeys" v-text="key" :key="key + statKey" /><!-- LOCA: -->
                         </template>
                     </template>
                 </div>
 
-                <div v-for="ship in ShipTypes" class="row" :key="ship">
-                    <o-ship :ship="ship" size="24px" />
-                    <template v-for="statKey in shipStatsKeys">
+                <div v-for="defense in DefenseTypes" class="row" :key="defense">
+                    <o-defense :defense="defense" size="24px" />
+                    <template v-for="statKey in statsKeys">
                         <decimal-number
                             v-for="key in breakdownKeys"
                             :key="key + statKey"
                             :digits="3"
-                            :value="item.bonuses[match.groups.id][ship][statKey][key] * 100"
+                            :value="item.bonuses[match.groups.id][defense][statKey][key] * 100"
                             suffix="%"
                             :fade-decimals="false"
                         />
@@ -54,16 +52,14 @@
                     <span v-text="'Armor'" /><!-- LOCA: -->
                     <span v-text="'Shield'" /><!-- LOCA: -->
                     <span v-text="'Damage'" /><!-- LOCA: -->
-                    <span v-text="'Cargo'" /><!-- LOCA: -->
-                    <span v-text="'Speed'" /><!-- LOCA: -->
                 </div>
-                <div v-for="ship in ShipTypes" class="row" :key="ship">
-                    <o-ship :ship="ship" size="24px" />
+                <div v-for="defense in DefenseTypes" class="row" :key="defense">
+                    <o-defense :defense="defense" size="24px" />
                     <decimal-number
-                        v-for="statKey in shipStatsKeys"
+                        v-for="statKey in statsKeys"
                         :key="statKey"
                         :digits="3"
-                        :value="value[ship][statKey] * 100"
+                        :value="value[defense][statKey] * 100"
                         suffix="%"
                         :fade-decimals="false"
                     />
@@ -76,12 +72,12 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
+    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { StatsBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
     import { createRecord } from '@/shared/utils/createRecord';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
@@ -96,26 +92,24 @@
         total: number;
     }
 
-    interface ShipStatsBonusBreakdown<T> {
+    interface DefenseStatsBonusBreakdown<T> {
         armor: T;
         shield: T;
         damage: T;
-        cargo: T;
-        speed: T;
     }
 
     interface BonusOverviewItem {
         planet: PlanetData;
 
-        bonuses: Partial<Record<LifeformTechnologyType, Record<ShipType, ShipStatsBonusBreakdown<TechnologyBonusBreakdown>>>>;
-        totalBonus: Record<ShipType, ShipStatsBonusBreakdown<number>>;
+        bonuses: Partial<Record<LifeformTechnologyType, Record<DefenseType, DefenseStatsBonusBreakdown<TechnologyBonusBreakdown>>>>;
+        totalBonus: Record<DefenseType, DefenseStatsBonusBreakdown<number>>;
     }
 
     @Component({})
-    export default class ShipStats extends Vue {
-        private readonly ShipTypes = ShipTypes;
+    export default class DefenseStats extends Vue {
+        private readonly DefenseTypes = DefenseTypes;
         private readonly LifeformTechnologies = StatsBonusLifeformTechnologies
-            .filter(tech => ShipTypes.some(ship => tech.appliesTo(ship)))
+            .filter(tech => DefenseTypes.some(def => tech.appliesTo(def)))
             .map(x => x.type)
             .sort((a, b) => a - b);
 
@@ -124,7 +118,7 @@
 
         private isExpanded = false;
 
-        private readonly shipStatsKeys: (keyof ShipStatsBonusBreakdown<any>)[] = ['armor', 'shield', 'damage', 'cargo', 'speed'];
+        private readonly statsKeys: (keyof DefenseStatsBonusBreakdown<any>)[] = ['armor', 'shield', 'damage'];
 
         private get breakdownKeys(): (keyof TechnologyBonusBreakdown)[] {
             if (!this.isExpanded) {
@@ -169,12 +163,12 @@
                 StatsBonusLifeformTechnologies.forEach(technology => {
                     const level = planet.lifeformTechnologies[technology.type];
 
-                    bonuses[technology.type] = createRecord<ShipType, ShipStatsBonusBreakdown<TechnologyBonusBreakdown>>(ShipTypes, ship => {
-                        const base = technology.getStatsBonus(ship, level);
+                    bonuses[technology.type] = createRecord<DefenseType, DefenseStatsBonusBreakdown<TechnologyBonusBreakdown>>(DefenseTypes, defense => {
+                        const base = technology.getStatsBonus(defense, level);
                         const buildingBoost = { ...base };
                         const levelBoost = { ...base };
                         const total = { ...base };
-                        (Object.keys(base) as (keyof ShipStatsBonusBreakdown<any>)[]).forEach(key => {
+                        (Object.keys(base) as (keyof DefenseStatsBonusBreakdown<any>)[]).forEach(key => {
                             buildingBoost[key] *= buildingBoostFactor;
                             levelBoost[key] *= levelBoostFactor;
 
@@ -200,18 +194,6 @@
                                 levelBoost: levelBoost.damage,
                                 total: total.damage,
                             },
-                            cargo: {
-                                base: base.cargo,
-                                buildingBoost: buildingBoost.cargo,
-                                levelBoost: levelBoost.cargo,
-                                total: total.cargo,
-                            },
-                            speed: {
-                                base: base.speed,
-                                buildingBoost: buildingBoost.speed,
-                                levelBoost: levelBoost.speed,
-                                total: total.speed,
-                            },
                         };
                     });
                 });
@@ -219,16 +201,14 @@
                 const result: BonusOverviewItem = {
                     planet,
                     bonuses,
-                    totalBonus: createRecord<ShipType, ShipStatsBonusBreakdown<number>>(ShipTypes, ship => {
+                    totalBonus: createRecord<DefenseType, DefenseStatsBonusBreakdown<number>>(DefenseTypes, defense => {
                         const total = Object.values(bonuses).reduce(
                             (total, cur) => ({
-                                armor: total.armor + cur[ship].armor.total,
-                                shield: total.shield + cur[ship].shield.total,
-                                damage: total.damage + cur[ship].damage.total,
-                                cargo: total.cargo + cur[ship].cargo.total,
-                                speed: total.speed + cur[ship].speed.total,
+                                armor: total.armor + cur[defense].armor.total,
+                                shield: total.shield + cur[defense].shield.total,
+                                damage: total.damage + cur[defense].damage.total,
                             }),
-                            { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 },
+                            { armor: 0, shield: 0, damage: 0 },
                         );
                         return total;
                     }),
@@ -253,12 +233,12 @@
 <style lang="scss" scoped>
     .stats-breakdown {
         display: grid;
-        grid-template-columns: auto repeat(5, 1fr);
+        grid-template-columns: auto repeat(3, 1fr);
         gap: 4px;
         width: 100%;
 
         &.expanded {
-            grid-template-columns: auto repeat(20, 1fr);
+            grid-template-columns: auto repeat(12, 1fr);
 
             .expanded-header {
                 grid-column: auto / span 4;
@@ -271,7 +251,7 @@
         }
     }
 
-    .ship-bonuses::v-deep {
+    .defense-bonuses::v-deep {
         .grid-table-cell {
             border-left: 1px solid rgba(var(--color), 0.3);
 

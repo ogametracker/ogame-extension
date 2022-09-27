@@ -172,6 +172,7 @@ export const StatsBonusLifeformTechnologiesByLifeform: Record<LifeformType, Stat
     [LifeformType.rocktal]: [
         CargoHoldExpansion_CivilianShips,
         IonCrystalEnhancement_HeavyFighter,
+        ObsidianShieldReinforcement,
     ],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [],

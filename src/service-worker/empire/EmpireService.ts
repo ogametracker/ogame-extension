@@ -4,7 +4,7 @@ import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '../../shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateFleetsMessage, UpdateLifeformExperienceMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetActiveLifeformBuildingLevelsMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage, UpdateSelectedLifeformMessage, } from '../../shared/messages/tracking/empire';
+import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateFleetsMessage, UpdateLifeformExperienceMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetActiveLifeformBuildingLevelsMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetMissileCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage, UpdateSelectedLifeformMessage, } from '../../shared/messages/tracking/empire';
 import { serviceWorkerUuid } from '@/shared/uuid';
 
 export class EmpireService implements MessageService {
@@ -45,6 +45,12 @@ export class EmpireService implements MessageService {
             case MessageType.UpdatePlanetDefenseCounts: {
                 const msg = message as UpdatePlanetDefenseCountsMessage;
                 await this.empireModule.updatePlanetDefenses(msg.ogameMeta, msg.data);
+                break;
+            }
+
+            case MessageType.UpdatePlanetMissileCounts: {
+                const msg = message as UpdatePlanetMissileCountsMessage;
+                await this.empireModule.updatePlanetMissiles(msg.ogameMeta, msg.data);
                 break;
             }
 

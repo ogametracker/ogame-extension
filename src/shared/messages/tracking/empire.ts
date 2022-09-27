@@ -17,6 +17,7 @@ import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/Lifeform
 import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType';
 import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
 import { Fleets } from '@/shared/models/ogame/fleets/types';
+import { MissileType } from '@/shared/models/ogame/missiles/MissileType';
 
 
 // basic planet/moon data
@@ -64,6 +65,10 @@ export type PlanetDefenseCounts = Record<Exclude<DefenseType, DefenseType.smallS
     [DefenseType.largeShieldDome]: boolean;
 };
 export type UpdatePlanetDefenseCountsMessage = Message<MessageType.UpdatePlanetDefenseCounts, PlanetDataWrapper<PlanetDefenseCounts>>;
+
+// missile counts
+export type PlanetMissileCounts = Record<MissileType, number>;
+export type UpdatePlanetMissileCountsMessage = Message<MessageType.UpdatePlanetMissileCounts, PlanetDataWrapper<PlanetMissileCounts>>;
 
 // active officers, player class, alliance class
 export type UpdateActiveOfficersMessage = Message<MessageType.UpdateActiveOfficers, PlayerOfficers>;

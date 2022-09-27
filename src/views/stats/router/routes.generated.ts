@@ -40,6 +40,7 @@ import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
 import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
 import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
 import viewsempirelifeformsbonusbreakdownIndex from '@stats/views/empire/lifeforms/bonus-breakdown/Index.vue';
+import viewsempirelifeformsbonusbreakdownDefenseStats from '@stats/views/empire/lifeforms/bonus-breakdown/Defense-Stats.vue';
 import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
 import viewsempirelifeformsbonusbreakdownShipStats from '@stats/views/empire/lifeforms/bonus-breakdown/Ship-Stats.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
@@ -440,6 +441,11 @@ const routes: RouteConfig[] = [
                                 name: "empire/lifeforms/bonus-breakdown",
                                 component: viewsempirelifeformsbonusbreakdownIndex,
                                 children: [
+                                    {
+                                        path: "defense-stats",
+                                        name: "empire/lifeforms/bonus-breakdown/defense-stats",
+                                        component: viewsempirelifeformsbonusbreakdownDefenseStats
+                                    },
                                     {
                                         path: "resource-production",
                                         name: "empire/lifeforms/bonus-breakdown/resource-production",

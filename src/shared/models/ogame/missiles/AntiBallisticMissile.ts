@@ -1,7 +1,7 @@
 import { Cost } from "../common/Cost";
-import { Defense } from "./Defense";
+import { Missile } from "./Missile";
 
-class BallisticMissileClass extends Defense {
+class AntiBallisticMissileClass extends Missile {
 
     public get cost(): Cost {
         return {
@@ -25,4 +25,4 @@ class BallisticMissileClass extends Defense {
     }
 }
 
-export const BallisticMissile = new BallisticMissileClass();
+export const AntiBallisticMissile = new AntiBallisticMissileClass();

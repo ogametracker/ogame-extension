@@ -18,6 +18,10 @@
                     to: { name: 'empire/lifeforms/bonus-breakdown/ship-stats' },
                     label: 'LOCA: Ship Stats Bonuses',
                 },
+                {
+                    to: { name: 'empire/lifeforms/bonus-breakdown/defense-stats' },
+                    label: 'LOCA: Defense Stats Bonuses',
+                },
             ];
         }
     }
