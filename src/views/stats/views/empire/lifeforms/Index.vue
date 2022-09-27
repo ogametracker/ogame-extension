@@ -16,7 +16,7 @@
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown' },
-                    label: 'LOCA: Bonus breakdowns',
+                    label: 'LOCA: Technology Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/progress' },

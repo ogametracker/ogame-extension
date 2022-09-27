@@ -1,5 +1,5 @@
 <template>
-    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer>
+    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer class="resource-production-bonuses">
         <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
             <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
@@ -10,20 +10,21 @@
         </template>
 
         <template v-slot:[`cell-${idSlotNameRegex}`]="{ item, match }">
-            <div class="production-breakdown production-breakdown-techs">
+            <div class="production-breakdown production-breakdown-techs" :class="{ expanded: isExpanded }">
                 <div class="row">
                     <span />
-                    <span v-text="'Base'" /><!-- LOCA: -->
-                    <span v-text="'Buildings'" /><!-- LOCA: -->
-                    <span v-text="'Level'" /><!-- LOCA: -->
-                    <span v-text="'Total'" /><!-- LOCA: -->
+                    <span v-if="isExpanded" v-text="'Base'" /><!-- LOCA: -->
+                    <span v-if="isExpanded" v-text="'Buildings'" /><!-- LOCA: -->
+                    <span v-if="isExpanded" v-text="'Level'" /><!-- LOCA: -->
+                    <span v-if="isExpanded" v-text="'Total'" /><!-- LOCA: -->
+                    <span v-else />
                 </div>
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
                     <o-resource :resource="resource" size="24px" :fade="item.bonuses[match.groups.id].total[resource] == 0" />
-                    <decimal-number :value="item.bonuses[match.groups.id].base[resource] * 100" suffix="%" :fade-decimals="false" />
-                    <decimal-number :value="item.bonuses[match.groups.id].buildingBoost[resource] * 100" suffix="%" :fade-decimals="false" />
-                    <decimal-number :value="item.bonuses[match.groups.id].levelBoost[resource] * 100" suffix="%" :fade-decimals="false" />
-                    <decimal-number :value="item.bonuses[match.groups.id].total[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number v-if="isExpanded" :value="item.bonuses[match.groups.id].base[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number v-if="isExpanded" :digits="3" :value="item.bonuses[match.groups.id].buildingBoost[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number v-if="isExpanded" :digits="3" :value="item.bonuses[match.groups.id].levelBoost[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number :digits="3" :value="item.bonuses[match.groups.id].total[resource] * 100" suffix="%" :fade-decimals="false" />
                 </div>
             </div>
         </template>
@@ -32,11 +33,12 @@
             <div class="production-breakdown">
                 <div class="row">
                     <span />
-                    <span v-text="'\xa0'" />
+                    <span v-if="isExpanded" v-text="'\xa0'" />
+                    <span v-else />
                 </div>
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
                     <o-resource :resource="resource" size="24px" :fade="value[resource] == 0" />
-                    <decimal-number :value="value[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number :digits="3" :value="value[resource] * 100" suffix="%" :fade-decimals="false" />
                 </div>
             </div>
         </template>
@@ -47,7 +49,6 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
-    import { ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
@@ -81,6 +82,7 @@
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;
+        private isExpanded = false;
 
         private get columns(): GridTableColumn<keyof BonusOverviewItem | LifeformBuildingType | LifeformTechnologyType>[] {
             return [
@@ -94,6 +96,7 @@
                 {
                     key: 'totalBonus',
                     label: 'LOCA: total',
+                    class: 'total-cell',
                 },
             ];
         }
@@ -160,12 +163,18 @@
         gap: 4px;
         width: 100%;
 
-        &-techs {
+        &-techs.expanded {
             grid-template-columns: auto repeat(4, 1fr);
         }
 
         .row {
             display: contents;
+        }
+    }
+
+    .resource-production-bonuses::v-deep {
+        .total-cell {
+            border-left: 3px double rgba(var(--color), 0.7);
         }
     }
 </style>
