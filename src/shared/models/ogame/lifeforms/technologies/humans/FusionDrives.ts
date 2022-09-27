@@ -1,7 +1,9 @@
+import { ShipType } from "../../../ships/ShipType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { ShipStatsBonus, ShipStatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class FusionDrivesClass extends LifeformTechnology {
+class FusionDrivesClass extends LifeformTechnology implements ShipStatsBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +23,31 @@ class FusionDrivesClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+
+    public appliesTo(ship: ShipType): boolean {
+        return [
+            ShipType.smallCargo,
+            ShipType.largeCargo,
+            ShipType.colonyShip,
+            ShipType.recycler,
+            ShipType.espionageProbe,
+        ].includes(ship);
+    }
+
+    public getShipStatsBonus(ship: ShipType, level: number): ShipStatsBonus {
+        if (!this.appliesTo(ship)) {
+            return { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 };
+        }
+
+        const speedBonusPerLevel = 0.00_5; //0.5%
+        return {
+            armor: 0,
+            shield: 0,
+            damage: 0,
+            cargo: 0,
+            speed: speedBonusPerLevel * level,
+        };
     }
 
     public get type(): LifeformTechnologyType {

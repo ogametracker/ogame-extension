@@ -18,7 +18,7 @@ import { ResearchAI } from "./humans/ResearchAI";
 import { RobotAssistants } from "./humans/RobotAssistants";
 import { StealthFieldGenerator } from "./humans/StealthFieldGenerator";
 import { Supercomputer } from "./humans/Supercomputer";
-import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "./interfaces";
+import { BuildingCostAndTimeReductionLifeformTechnology, CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, ShipStatsBonusLifeformTechnology } from "./interfaces";
 import { EfficientSwarmIntelligence } from "./kaelesh/EfficientSwarmIntelligence";
 import { EnhancedSensorTechnology } from "./kaelesh/EnhancedSensorTechnology";
 import { GravitationSensors } from "./kaelesh/GravitationSensors";
@@ -129,11 +129,29 @@ export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesBy
 export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies = Object.values(CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
+export const BuildingCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, BuildingCostAndTimeReductionLifeformTechnology[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [
+        HighPerformanceTerraformer,
+        PlasmaTerraformer,
+    ],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [],
+};
+export const BuildingCostAndTimeReductionLifeformTechnologies = Object.values(BuildingCostAndTimeReductionLifeformTechnologiesByLifeform).flatMap(r => r);
+
+
 export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, ResearchCostAndTimeReductionLifeformTechnology[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [
         ImprovedStellarator,
+        StealthFieldGenerator,
+        ResearchAI,
+        ImprovedLabTechnology,
+        LowTemperatureDrives,
+        RobotAssistants,
     ],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [],
@@ -141,6 +159,21 @@ export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<
 export const ResearchCostAndTimeReductionLifeformTechnologies = Object.values(ResearchCostAndTimeReductionLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
+export const ShipStatsBonusLifeformTechnologiesByLifeform: Record<LifeformType, ShipStatsBonusLifeformTechnology[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [
+        FusionDrives,
+        LightFighterMkII,
+        CruiserMkII,
+        BomberMkII,
+        DestroyerMkII,
+        BattlecruiserMkII,
+    ],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [],
+};
+export const ShipStatsBonusLifeformTechnologies = Object.values(ShipStatsBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
 export const LifeformTechnologiesByType: Record<LifeformTechnologyType, LifeformTechnology> = {

@@ -1,7 +1,8 @@
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { DenCapacityBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class OrbitalDenClass extends LifeformTechnology {
+class OrbitalDenClass extends LifeformTechnology implements DenCapacityBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +22,11 @@ class OrbitalDenClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    public getDenCapacityBonus(level: number): number {
+        const bonusPerLevel = 0.04; //4%
+        return bonusPerLevel * level;
     }
 
     public get type(): LifeformTechnologyType {
