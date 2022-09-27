@@ -64,3 +64,5 @@ export interface FleetFuelReturnLifeformTechnology extends LifeformTechnology {
 //TODO: Expedition DM found bonus => 14215
 //TODO: Expedition speed booster => 14210
 //TODO: Phalanx range booster => 14208
+
+//TODO: max bonuses in interface or by interface type? => remove from actual implementations because they should be global
