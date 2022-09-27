@@ -1,5 +1,6 @@
 import { BuildingType } from "../../buildings/BuildingType";
 import { Cost } from "../../common/Cost";
+import { DefenseType } from "../../defenses/DefenseType";
 import { ResearchType } from "../../research/ResearchType";
 import { ShipType } from "../../ships/ShipType";
 import { CostAndTimeReduction } from "../common-interfaces";
@@ -29,16 +30,16 @@ export interface CollectorClassBonusLifeformTechnology extends LifeformTechnolog
     getCollectorClassBonus(level: number): number;
 }
 
-export interface ShipStatsBonus {
+export interface StatsBonus {
     armor: number;
     shield: number;
     damage: number;
     cargo: number;
     speed: number;
 }
-export interface ShipStatsBonusLifeformTechnology extends LifeformTechnology {
-    appliesTo(ship: ShipType): boolean;
-    getShipStatsBonus(ship: ShipType, level: number): ShipStatsBonus;
+export interface StatsBonusLifeformTechnology extends LifeformTechnology {
+    appliesTo(ship: ShipType | DefenseType): boolean;
+    getStatsBonus(ship: ShipType | DefenseType, level: number): StatsBonus;
 }
 
 export interface DenCapacityBonusLifeformTechnology extends LifeformTechnology {

@@ -1,9 +1,9 @@
 import { ShipType } from "../../../ships/ShipType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ShipStatsBonus, ShipStatsBonusLifeformTechnology } from "../interfaces";
+import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class BattlecruiserMkIIClass extends LifeformTechnology implements ShipStatsBonusLifeformTechnology {
+class BattlecruiserMkIIClass extends LifeformTechnology implements StatsBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -29,7 +29,7 @@ class BattlecruiserMkIIClass extends LifeformTechnology implements ShipStatsBonu
         return ship == ShipType.battlecruiser;
     }
 
-    public getShipStatsBonus(ship: ShipType, level: number): ShipStatsBonus {
+    public getStatsBonus(ship: ShipType, level: number): StatsBonus {
         if (!this.appliesTo(ship)) {
             return { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 };
         }
