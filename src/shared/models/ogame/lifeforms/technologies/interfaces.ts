@@ -56,3 +56,11 @@ export interface FuelConsumptionReductionLifeformTechnology extends LifeformTech
 export interface FleetFuelReturnLifeformTechnology extends LifeformTechnology {
     getFuelReturn(level: number): number;
 }
+
+//TODO: intergalactic envoys => 11201
+//TODO: Expedition fleet loss reduction => 14203
+//TODO: Expedition ships found bonus => 14204
+//TODO: Expedition resources found bonus => 14205
+//TODO: Expedition DM found bonus => 14215
+//TODO: Expedition speed booster => 14210
+//TODO: Phalanx range booster => 14208
