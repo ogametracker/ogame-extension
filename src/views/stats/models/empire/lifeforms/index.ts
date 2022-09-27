@@ -1,13 +1,13 @@
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { addCost, Cost } from "@/shared/models/ogame/common/Cost";
 import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
-import { CollectorClassBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
+import { ClassBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 
 export function getPlanetCollectorClassBonusFactor(planet: PlanetData): number {
-    return CollectorClassBonusLifeformTechnologies
+    return ClassBonusLifeformTechnologies
         .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
         .reduce(
-            (total, tech) => total + tech.getCollectorClassBonus(planet.lifeformTechnologies[tech.type]),
+            (total, tech) => total + tech.getClassBonus(planet.lifeformTechnologies[tech.type]),
             0
         );
 }

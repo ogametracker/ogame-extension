@@ -1,4 +1,5 @@
 import { BuildingType } from "../../buildings/BuildingType";
+import { PlayerClass } from "../../classes/PlayerClass";
 import { Cost } from "../../common/Cost";
 import { DefenseType } from "../../defenses/DefenseType";
 import { ResearchType } from "../../research/ResearchType";
@@ -26,8 +27,9 @@ export interface CrawlerProductionBonusAndConsumptionReductionLifeformTechnology
     getCrawlerConsumptionReduction(level: number): Cost;
 }
 
-export interface CollectorClassBonusLifeformTechnology extends LifeformTechnology {
-    getCollectorClassBonus(level: number): number;
+export interface ClassBonusLifeformTechnology extends LifeformTechnology {
+    appliesTo(playerClass: PlayerClass): boolean;
+    getClassBonus(playerClass: PlayerClass, level: number): number;
 }
 
 export interface StatsBonus {
@@ -44,4 +46,13 @@ export interface StatsBonusLifeformTechnology extends LifeformTechnology {
 
 export interface DenCapacityBonusLifeformTechnology extends LifeformTechnology {
     getDenCapacityBonus(level: number): number;
+}
+
+export interface FuelConsumptionReductionLifeformTechnology extends LifeformTechnology {
+    appliesTo(ship: ShipType): boolean;
+    getFuelConsumptionReduction(ship: ShipType, level: number): number;
+}
+
+export interface FleetFuelReturnLifeformTechnology extends LifeformTechnology {
+    getFuelReturn(level: number): number;
 }

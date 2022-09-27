@@ -17,8 +17,8 @@ import { getLifeformLevelTechnologyBonus } from "@/shared/models/ogame/lifeforms
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, LifeformTypes, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { CollectorClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
-import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
+import { ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from "@/shared/models/ogame/lifeforms/technologies/interfaces";
+import { ClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
 import { Astrophysics } from "@/shared/models/ogame/research/Astrophysics";
 import { PlasmaTechnology } from "@/shared/models/ogame/research/PlasmaTechnology";
@@ -34,6 +34,7 @@ import { createRecord } from "@/shared/utils/createRecord";
 import { __measure } from "@/shared/utils/performance/__measure";
 import { _throw } from "@/shared/utils/_throw";
 import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
+import { PlayerClass } from "../../ogame/classes/PlayerClass";
 import { MissileType } from "../../ogame/missiles/MissileType";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationPlanetSettings } from "./AmortizationPlanetSettings";
@@ -93,7 +94,7 @@ export interface AmortizationPlanetState {
     lifeformTechnologyBoost: number;
     lifeformTechnologyBoostBuildings: LifeformTechnologyBonusLifeformBuilding[];
 
-    collectorClassBonusTechnologies: CollectorClassBonusLifeformTechnology[];
+    collectorClassBonusTechnologies: ClassBonusLifeformTechnology[];
     lifeformResourceProductionBonusTechnologies: ResourceProductionBonusLifeformTechnology[];
     crawlerProductionBonusTechnologies: CrawlerProductionBonusAndConsumptionReductionLifeformTechnology[];
 }
@@ -334,8 +335,8 @@ export class AmortizationItemGenerator {
         const lifeformTechnologyResearchBuildings = LifeformTechnologyResearchBuildingsByLifeform[planet.lifeform];
 
         // collector class bonuses
-        const collectorClassBonusTechnologies = CollectorClassBonusLifeformTechnologies.filter(
-            tech => planet.activeLifeformTechnologies.includes(tech.type)
+        const collectorClassBonusTechnologies = ClassBonusLifeformTechnologies.filter(
+            tech => tech.appliesTo(PlayerClass.collector) && planet.activeLifeformTechnologies.includes(tech.type)
         );
 
         // crawler bonuses
@@ -479,7 +480,7 @@ export class AmortizationItemGenerator {
     }
     #init_getPlanetCollectorClassBonusFactor(planetState: AmortizationPlanetState) {
         return planetState.collectorClassBonusTechnologies.reduce(
-            (total, tech) => total + tech.getCollectorClassBonus(planetState.data.lifeformTechnologies[tech.type] ?? 0),
+            (total, tech) => total + tech.getClassBonus(PlayerClass.collector, planetState.data.lifeformTechnologies[tech.type] ?? 0),
             0
         );
     }
@@ -897,7 +898,7 @@ export class AmortizationItemGenerator {
     #getLifeformTechnologyAmortizationItem(
         productionBreakdowns: EmpireProductionBreakdowns,
         planetState: AmortizationPlanetState,
-        technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology,
+        technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | ClassBonusLifeformTechnology,
     ): LifeformTechnologyAmortizationItem {
         const planetData = planetState.data;
         const planetId = planetData.id;
@@ -940,7 +941,7 @@ export class AmortizationItemGenerator {
             additionalCrawlerBonus = bonus;
         }
         else {
-            const bonus = technology.getCollectorClassBonus(newLevel) - technology.getCollectorClassBonus(newLevel - 1);
+            const bonus = technology.getClassBonus(PlayerClass.collector, newLevel) - technology.getClassBonus(PlayerClass.collector, newLevel - 1);
             additionalCollectorClassBonus = bonus;
         }
 
@@ -976,7 +977,7 @@ export class AmortizationItemGenerator {
             timeInHours: reducedCostConverted / productionDeltaConverted,
         };
     }
-    #getLifeformTechnologyItem_costReduction(planetState: AmortizationPlanetState, technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | CollectorClassBonusLifeformTechnology) {
+    #getLifeformTechnologyItem_costReduction(planetState: AmortizationPlanetState, technology: ResourceProductionBonusLifeformTechnology | CrawlerProductionBonusAndConsumptionReductionLifeformTechnology | ClassBonusLifeformTechnology) {
         interface PotentialLifeformTechnologyCostReductionItemBase {
             planetId: number;
             level: number;

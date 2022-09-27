@@ -1,7 +1,7 @@
 import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { LifeformType } from "../LifeformType";
-import { CollectorClassBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
+import { ClassBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
 import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
 
 export function getLifeformCollectorClassBonus(player: LocalPlayerData): number {
@@ -18,12 +18,12 @@ export function getLifeformCollectorClassBonus(player: LocalPlayerData): number 
         }
 
         const techFactor = 1 + technologyBonusByPlanet[planet.id];
-        const collectorBonusTechnologies = CollectorClassBonusLifeformTechnologies.filter(
+        const collectorBonusTechnologies = ClassBonusLifeformTechnologies.filter(
             tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
         const baseCollectorBonus = collectorBonusTechnologies.reduce<number>((total, tech) => {
             const level = planet.lifeformTechnologies[tech.type];
-            const bonus = tech.getCollectorClassBonus(level);
+            const bonus = tech.getClassBonus(level);
             return total + bonus;
         }, 0);
         const collectorBonus = baseCollectorBonus * technologyBonusByPlanet[planet.id];
