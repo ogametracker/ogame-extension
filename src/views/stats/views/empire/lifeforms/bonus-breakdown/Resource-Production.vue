@@ -4,7 +4,6 @@
         :footerItems="footerItems"
         :columns="columns"
         sticky="100%"
-        sticky-footer
         class="resource-production-bonuses"
         :class="{ 'detailed-view': showDetailed }"
     >
@@ -28,7 +27,6 @@
                     <span class="show-detailed" v-text="'Base'" /><!-- LOCA: -->
                     <span class="show-detailed" v-text="'Buildings'" /><!-- LOCA: -->
                     <span class="show-detailed" v-text="'Level'" /><!-- LOCA: -->
-                    <span class="show-detailed" v-text="'Total'" /><!-- LOCA: -->
                     <span class="show-not-detailed" />
                 </div>
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
@@ -53,24 +51,16 @@
                         suffix="%"
                         :fade-decimals="false"
                     />
-                    <decimal-number :digits="3" :value="(item.bonuses[match.groups.id] || value).total[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number
+                        class="show-not-detailed"
+                        :digits="3"
+                        :value="(item.bonuses[match.groups.id] || value).total[resource] * 100"
+                        suffix="%"
+                        :fade-decimals="false"
+                    />
                 </div>
             </div>
         </template>
-
-        <!-- <template v-slot:[`(cell|footer)-totalBonus`]="{ value }">
-            <div class="production-breakdown">
-                <div class="row">
-                    <span />
-                    <span class="show-detailed" v-text="'\xa0'" />
-                    <span class="show-not-detailed" />
-                </div>
-                <div v-for="resource in resourceKeys" class="row" :key="resource">
-                    <o-resource :resource="resource" size="24px" :fade="value[resource] == 0" />
-                    <decimal-number :digits="3" :value="value[resource] * 100" suffix="%" :fade-decimals="false" />
-                </div>
-            </div>
-        </template> -->
     </grid-table>
 </template>
 
@@ -235,7 +225,7 @@
     .resource-production-bonuses {
         &.detailed-view::v-deep {
             .production-breakdown {
-                grid-template-columns: auto repeat(4, 1fr);
+                grid-template-columns: auto repeat(3, 1fr);
             }
 
             .show-not-detailed {

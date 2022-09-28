@@ -12,19 +12,19 @@
             return [
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/resource-production' },
-                    label: 'LOCA: Resource Production Bonuses',
+                    label: 'LOCA: Production Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/expeditions' },
-                    label: 'LOCA: Expeditions',
+                    label: 'LOCA: Expedition Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/ship-stats' },
-                    label: 'LOCA: Ship Stats Bonuses',
+                    label: 'LOCA: Ship Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/defense-stats' },
-                    label: 'LOCA: Defense Stats Bonuses',
+                    label: 'LOCA: Defense Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/fuel-consumption' },
@@ -44,7 +44,7 @@
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/crawlers' },
-                    label: 'LOCA: Crawler Production & Consumption',
+                    label: 'LOCA: Crawlers',
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/player-class' },

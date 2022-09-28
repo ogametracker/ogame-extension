@@ -1,11 +1,18 @@
 <template>
-    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer class="ship-bonuses">
+    <grid-table
+        :items="items"
+        :footerItems="footerItems"
+        :columns="columns"
+        sticky="100%"
+        class="ship-bonuses"
+        :class="{ 'detailed-view': showDetailed }"
+    >
         <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
             <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
 
         <template #header-planet>
-            <button v-text="'+/-'" @click="isExpanded = !isExpanded" />
+            <button v-text="'+/-'" @click="showDetailed = !showDetailed" />
         </template>
 
         <template #cell-planet="{ value }">
@@ -13,60 +20,44 @@
             <span v-text="formatCoordinates(value.coordinates)" />
         </template>
 
-        <template v-slot:[`cell-${idSlotNameRegex}`]="{ item, match }">
-            <div class="stats-breakdown stats-breakdown" :class="{ expanded: isExpanded }">
+        <template v-slot:[`(cell|footer)-(${idSlotNameRegex}|totalBonus)`]="{ value, item, match }">
+            <div class="stats-breakdown">
                 <div class="row">
                     <span />
-                    <span v-text="'Armor'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Shield'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Damage'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Cargo'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
-                    <span v-text="'Speed'" :class="{ 'expanded-header': isExpanded }" /><!-- LOCA: -->
+                    <span v-text="'Armor'" class="detailed-header" /><!-- LOCA: -->
+                    <span v-text="'Shield'" class="detailed-header" /><!-- LOCA: -->
+                    <span v-text="'Damage'" class="detailed-header" /><!-- LOCA: -->
+                    <span v-text="'Cargo'" class="detailed-header" /><!-- LOCA: -->
+                    <span v-text="'Speed'" class="detailed-header" /><!-- LOCA: -->
 
-                    <template v-if="isExpanded">
-                        <span />
-                        <template v-for="statKey in shipStatsKeys">
-                            <span v-for="key in breakdownKeys" v-text="key" :key="key + statKey" /><!-- LOCA: -->
-                        </template>
+                    <span class="show-detailed" />
+                    <template v-for="statKey in shipStatsKeys">
+                        <span
+                            v-for="key in breakdownKeysNoTotal"
+                            v-text="key"
+                            :key="key + statKey"
+                            class="show-detailed"
+                        /><!-- LOCA: -->
                     </template>
                 </div>
 
                 <div v-for="ship in ShipTypes" class="row" :key="ship">
-                    <o-ship :ship="ship" size="24px" />
+                    <o-ship
+                        :ship="ship"
+                        size="24px"
+                        :fade="shipStatsKeys.every((statKey) => (item.bonuses[match.groups.id] || value)[ship][statKey].total == 0)"
+                    />
                     <template v-for="statKey in shipStatsKeys">
                         <decimal-number
                             v-for="key in breakdownKeys"
                             :key="key + statKey"
+                            :class="key != 'total' ? 'show-detailed' : 'show-not-detailed'"
                             :digits="3"
-                            :value="item.bonuses[match.groups.id][ship][statKey][key] * 100"
+                            :value="(item.bonuses[match.groups.id] || value)[ship][statKey][key] * 100"
                             suffix="%"
                             :fade-decimals="false"
                         />
                     </template>
-                </div>
-            </div>
-        </template>
-
-        <template #cell-totalBonus="{ value }">
-            <div class="stats-breakdown">
-                <div class="row">
-                    <span />
-                    <span v-text="'Armor'" /><!-- LOCA: -->
-                    <span v-text="'Shield'" /><!-- LOCA: -->
-                    <span v-text="'Damage'" /><!-- LOCA: -->
-                    <span v-text="'Cargo'" /><!-- LOCA: -->
-                    <span v-text="'Speed'" /><!-- LOCA: -->
-                </div>
-                <div v-for="ship in ShipTypes" class="row" :key="ship">
-                    <o-ship :ship="ship" size="24px" />
-                    <decimal-number
-                        v-for="statKey in shipStatsKeys"
-                        :key="statKey"
-                        :digits="3"
-                        :value="value[ship][statKey] * 100"
-                        suffix="%"
-                        :fade-decimals="false"
-                    />
                 </div>
             </div>
         </template>
@@ -96,19 +87,19 @@
         total: number;
     }
 
-    interface ShipStatsBonusBreakdown<T> {
-        armor: T;
-        shield: T;
-        damage: T;
-        cargo: T;
-        speed: T;
+    interface ShipStatsBonusBreakdown {
+        armor: TechnologyBonusBreakdown;
+        shield: TechnologyBonusBreakdown;
+        damage: TechnologyBonusBreakdown;
+        cargo: TechnologyBonusBreakdown;
+        speed: TechnologyBonusBreakdown;
     }
 
     interface BonusOverviewItem {
         planet: PlanetData;
 
-        bonuses: Partial<Record<LifeformTechnologyType, Record<ShipType, ShipStatsBonusBreakdown<TechnologyBonusBreakdown>>>>;
-        totalBonus: Record<ShipType, ShipStatsBonusBreakdown<number>>;
+        bonuses: Partial<Record<LifeformTechnologyType, Record<ShipType, ShipStatsBonusBreakdown>>>;
+        totalBonus: Record<ShipType, ShipStatsBonusBreakdown>;
     }
 
     @Component({})
@@ -122,17 +113,11 @@
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;
 
-        private isExpanded = false;
+        private showDetailed = false;
 
-        private readonly shipStatsKeys: (keyof ShipStatsBonusBreakdown<any>)[] = ['armor', 'shield', 'damage', 'cargo', 'speed'];
-
-        private get breakdownKeys(): (keyof TechnologyBonusBreakdown)[] {
-            if (!this.isExpanded) {
-                return ['total'];
-            }
-
-            return ['base', 'buildingBoost', 'levelBoost', 'total'];
-        }
+        private readonly shipStatsKeys: (keyof ShipStatsBonusBreakdown)[] = ['armor', 'shield', 'damage', 'cargo', 'speed'];
+        private readonly breakdownKeys: (keyof TechnologyBonusBreakdown)[] = ['base', 'buildingBoost', 'levelBoost', 'total'];
+        private readonly breakdownKeysNoTotal: (keyof TechnologyBonusBreakdown)[] = ['base', 'buildingBoost', 'levelBoost'];
 
         private get columns(): GridTableColumn<keyof BonusOverviewItem | LifeformTechnologyType>[] {
             return [
@@ -147,6 +132,7 @@
                     key: 'totalBonus',
                     label: 'LOCA: total',
                     class: 'total-cell',
+                    footerClass: 'total-cell',
                 },
             ];
         }
@@ -171,12 +157,12 @@
                         ? planet.lifeformTechnologies[technology.type]
                         : 0;
 
-                    bonuses[technology.type] = createRecord<ShipType, ShipStatsBonusBreakdown<TechnologyBonusBreakdown>>(ShipTypes, ship => {
+                    bonuses[technology.type] = createRecord<ShipType, ShipStatsBonusBreakdown>(ShipTypes, ship => {
                         const base = technology.getStatsBonus(ship, level);
                         const buildingBoost = { ...base };
                         const levelBoost = { ...base };
                         const total = { ...base };
-                        (Object.keys(base) as (keyof ShipStatsBonusBreakdown<any>)[]).forEach(key => {
+                        (Object.keys(base) as (keyof ShipStatsBonusBreakdown)[]).forEach(key => {
                             buildingBoost[key] *= buildingBoostFactor;
                             levelBoost[key] *= levelBoostFactor;
 
@@ -221,29 +207,73 @@
                 const result: BonusOverviewItem = {
                     planet,
                     bonuses,
-                    totalBonus: createRecord<ShipType, ShipStatsBonusBreakdown<number>>(ShipTypes, ship => {
-                        const total = Object.values(bonuses).reduce(
-                            (total, cur) => ({
-                                armor: total.armor + cur[ship].armor.total,
-                                shield: total.shield + cur[ship].shield.total,
-                                damage: total.damage + cur[ship].damage.total,
-                                cargo: total.cargo + cur[ship].cargo.total,
-                                speed: total.speed + cur[ship].speed.total,
-                            }),
-                            { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 },
-                        );
-                        return total;
-                    }),
+                    totalBonus: createRecord<ShipType, ShipStatsBonusBreakdown>(
+                        ShipTypes,
+                        ship => createRecord(
+                            this.shipStatsKeys,
+                            statKey => Object.values(bonuses).reduce<TechnologyBonusBreakdown>(
+                                (total, cur) => ({
+                                    base: total.base + cur[ship][statKey].base,
+                                    buildingBoost: total.buildingBoost + cur[ship][statKey].buildingBoost,
+                                    levelBoost: total.levelBoost + cur[ship][statKey].levelBoost,
+                                    total: total.total + cur[ship][statKey].total,
+                                }),
+                                { base: 0, buildingBoost: 0, levelBoost: 0, total: 0 },
+                            )
+                        )
+                    ),
                 };
                 return result;
             });
         }
 
         private get footerItems(): [BonusOverviewItem] {
+            const items = this.items;
+
+            const bonuses: BonusOverviewItem['bonuses'] = {};
+            StatsBonusLifeformTechnologies.forEach(technology => {
+
+                bonuses[technology.type] = createRecord(
+                    ShipTypes,
+                    ship => createRecord(
+                        this.shipStatsKeys,
+                        statKey => items
+                            .map(item => item.bonuses[technology.type]![ship][statKey])
+                            .reduce<TechnologyBonusBreakdown>(
+                                (total, cur) => ({
+                                    base: total.base + cur.base,
+                                    buildingBoost: total.buildingBoost + cur.buildingBoost,
+                                    levelBoost: total.levelBoost + cur.levelBoost,
+                                    total: total.total + cur.total,
+                                }),
+                                { base: 0, buildingBoost: 0, levelBoost: 0, total: 0 },
+                            )
+                    ),
+                );
+            });
+
+            const totalBonus: Record<ShipType, ShipStatsBonusBreakdown> = createRecord(
+                ShipTypes,
+                ship => createRecord(
+                    this.shipStatsKeys,
+                    statKey => Object.values(bonuses)
+                        .map(b => b[ship][statKey])
+                        .reduce<TechnologyBonusBreakdown>(
+                            (total, cur) => ({
+                                base: total.base + cur.base,
+                                buildingBoost: total.buildingBoost + cur.buildingBoost,
+                                levelBoost: total.levelBoost + cur.levelBoost,
+                                total: total.total + cur.total,
+                            }),
+                            { base: 0, buildingBoost: 0, levelBoost: 0, total: 0 },
+                        ),
+                ),
+            );
+
             return [{
                 planet: null!,
-                bonuses: {},
-                totalBonus: null!,
+                bonuses,
+                totalBonus,
             }];
         }
 
@@ -259,28 +289,42 @@
         gap: 4px;
         width: 100%;
 
-        &.expanded {
-            grid-template-columns: auto repeat(20, 1fr);
-
-            .expanded-header {
-                grid-column: auto / span 4;
-                justify-self: center;
-            }
-        }
-
         .row {
             display: contents;
         }
     }
 
-    .ship-bonuses::v-deep {
-        .grid-table-body,
-        .grid-table-foot {
-            .grid-table-cell {
-                border-left: 1px solid rgba(var(--color), 0.3);
+    .ship-bonuses {
+        &.detailed-view::v-deep {
+            .stats-breakdown {
+                grid-template-columns: auto repeat(15, 1fr);
 
-                &.total-cell {
-                    border-left: 3px double rgba(var(--color), 0.7);
+                .detailed-header {
+                    grid-column: auto / span 3;
+                    justify-self: center;
+                }
+            }
+
+            .show-not-detailed {
+                display: none;
+            }
+        }
+
+        &:not(.detailed-view)::v-deep {
+            .show-detailed {
+                display: none;
+            }
+        }
+
+        &::v-deep {
+            .grid-table-body,
+            .grid-table-foot {
+                .grid-table-cell {
+                    border-left: 1px solid rgba(var(--color), 0.3);
+
+                    &.total-cell {
+                        border-left: 3px double rgba(var(--color), 0.7);
+                    }
                 }
             }
         }
