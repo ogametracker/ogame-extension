@@ -113,11 +113,11 @@
 
     @Component({})
     export default class ShipStats extends Vue {
-        private readonly ShipTypes = ShipTypes;
         private readonly LifeformTechnologies = StatsBonusLifeformTechnologies
             .filter(tech => ShipTypes.some(ship => tech.appliesTo(ship)))
             .map(x => x.type)
             .sort((a, b) => a - b);
+        private readonly ShipTypes = ShipTypes.filter(ship => StatsBonusLifeformTechnologies.some(tech => tech.appliesTo(ship)));
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;

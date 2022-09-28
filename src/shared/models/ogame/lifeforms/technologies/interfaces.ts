@@ -1,3 +1,4 @@
+import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 import { BuildingType } from "../../buildings/BuildingType";
 import { PlayerClass } from "../../classes/PlayerClass";
 import { Cost } from "../../common/Cost";
@@ -57,11 +58,12 @@ export interface FleetFuelReturnLifeformTechnology extends LifeformTechnology {
     getFuelReturn(level: number): number;
 }
 
+export interface ExpeditionBonusLifeformTechnology extends LifeformTechnology {
+    appliesTo(type: ExpeditionEventType): boolean;
+    getExpeditionBonus(type: ExpeditionEventType, level: number): number;
+}
+
 //TODO: intergalactic envoys => 11201
-//TODO: Expedition fleet loss reduction => 14203
-//TODO: Expedition ships found bonus => 14204
-//TODO: Expedition resources found bonus => 14205
-//TODO: Expedition DM found bonus => 14215
 //TODO: Expedition speed booster => 14210
 //TODO: Phalanx range booster => 14208
 

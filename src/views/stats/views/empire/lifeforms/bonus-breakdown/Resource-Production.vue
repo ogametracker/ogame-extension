@@ -187,8 +187,12 @@
     }
 
     .resource-production-bonuses::v-deep {
-        .total-cell {
-            border-left: 3px double rgba(var(--color), 0.7);
+        .grid-table-cell {
+            border-left: 1px solid rgba(var(--color), 0.3);
+
+            &.total-cell {
+                border-left: 3px double rgba(var(--color), 0.7);
+            }
         }
     }
 </style>
