@@ -161,7 +161,9 @@
 
                 const bonuses: BonusOverviewItem['bonuses'] = {};
                 StatsBonusLifeformTechnologies.forEach(technology => {
-                    const level = planet.lifeformTechnologies[technology.type];
+                    const level = planet.activeLifeformTechnologies.includes(technology.type)
+                        ? planet.lifeformTechnologies[technology.type]
+                        : 0;
 
                     bonuses[technology.type] = createRecord<DefenseType, DefenseStatsBonusBreakdown<TechnologyBonusBreakdown>>(DefenseTypes, defense => {
                         const base = technology.getStatsBonus(defense, level);
