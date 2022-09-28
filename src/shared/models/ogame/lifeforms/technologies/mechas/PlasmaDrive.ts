@@ -1,5 +1,5 @@
 import { ShipType } from "../../../ships/ShipType";
-import { ShipTypes } from "../../../ships/ShipTypes";
+import { NonStationaryShipTypes } from "../../../ships/ShipTypes";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -27,7 +27,9 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
     }
 
     public appliesTo(ship: ShipType): boolean {
-        return ShipTypes.filter(s => s != ShipType.deathStar).includes(ship);
+        return (NonStationaryShipTypes as ShipType[])
+            .filter(s => s != ShipType.deathStar)
+            .includes(ship);
     }
 
     public getStatsBonus(ship: ShipType, level: number): StatsBonus {

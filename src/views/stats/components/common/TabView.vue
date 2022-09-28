@@ -122,6 +122,10 @@
                     padding: 8px;
 
                     background-color: rgba(var(--color), 0.15);
+                    
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
 
                     &:not(.tab--active):hover {
                         background-color: rgba(var(--color), 0.25);

@@ -1,5 +1,5 @@
 import { ShipType } from "../../../ships/ShipType";
-import { ShipTypes } from "../../../ships/ShipTypes";
+import { NonStationaryShipTypes } from "../../../ships/ShipTypes";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { FuelConsumptionReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -27,7 +27,7 @@ class HeatRecoveryClass extends LifeformTechnology implements FuelConsumptionRed
     }
     
     public appliesTo(ship: ShipType): boolean {
-        return ShipTypes.includes(ship);
+        return (NonStationaryShipTypes as ShipType[]).includes(ship);
     }
 
     public getFuelConsumptionReduction(ship: ShipType, level: number): number {
