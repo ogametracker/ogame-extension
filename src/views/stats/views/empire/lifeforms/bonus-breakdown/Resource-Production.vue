@@ -80,7 +80,7 @@
     import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
@@ -107,7 +107,9 @@
     export default class ResourceProduction extends Vue {
 
         private readonly resourceKeys: (keyof Cost)[] = ['metal', 'crystal', 'deuterium', 'energy'];
-        private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies.map(x => x.type).sort((a, b) => a - b);
+        private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies
+            .map(x => x.type)
+            .sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;

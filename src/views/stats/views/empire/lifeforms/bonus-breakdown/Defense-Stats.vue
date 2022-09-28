@@ -75,7 +75,7 @@
     import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
     import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { StatsBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { createRecord } from '@/shared/utils/createRecord';
@@ -111,7 +111,7 @@
         private readonly LifeformTechnologies = StatsBonusLifeformTechnologies
             .filter(tech => DefenseTypes.some(def => tech.appliesTo(def)))
             .map(x => x.type)
-            .sort((a, b) => a - b);
+            .sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;

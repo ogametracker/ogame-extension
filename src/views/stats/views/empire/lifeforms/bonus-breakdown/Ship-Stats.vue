@@ -77,7 +77,7 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { StatsBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
@@ -116,7 +116,7 @@
         private readonly LifeformTechnologies = StatsBonusLifeformTechnologies
             .filter(tech => ShipTypes.some(ship => tech.appliesTo(ship)))
             .map(x => x.type)
-            .sort((a, b) => a - b);
+            .sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
         private readonly ShipTypes = ShipTypes.filter(ship => StatsBonusLifeformTechnologies.some(tech => tech.appliesTo(ship)));
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
