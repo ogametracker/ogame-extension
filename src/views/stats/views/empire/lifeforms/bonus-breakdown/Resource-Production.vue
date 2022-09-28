@@ -1,11 +1,19 @@
 <template>
-    <grid-table :items="items" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer class="resource-production-bonuses">
+    <grid-table
+        :items="items"
+        :footerItems="footerItems"
+        :columns="columns"
+        sticky="100%"
+        sticky-footer
+        class="resource-production-bonuses"
+        :class="{ 'detailed-view': showDetailed }"
+    >
         <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
             <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
         </template>
 
         <template #header-planet>
-            <button v-text="'+/-'" @click="isExpanded = !isExpanded" />
+            <button v-text="'+/-'" @click="showDetailed = !showDetailed" />
         </template>
 
         <template #cell-planet="{ value }">
@@ -13,51 +21,56 @@
             <span v-text="formatCoordinates(value.coordinates)" />
         </template>
 
-        <template v-slot:[`cell-${idSlotNameRegex}`]="{ item, match }">
-            <div class="production-breakdown production-breakdown-techs" :class="{ expanded: isExpanded }">
+        <template v-slot:[`(cell|footer)-(${idSlotNameRegex}|totalBonus)`]="{ value, item, match }">
+            <div class="production-breakdown">
                 <div class="row">
                     <span />
-                    <span v-if="isExpanded" v-text="'Base'" /><!-- LOCA: -->
-                    <span v-if="isExpanded" v-text="'Buildings'" /><!-- LOCA: -->
-                    <span v-if="isExpanded" v-text="'Level'" /><!-- LOCA: -->
-                    <span v-if="isExpanded" v-text="'Total'" /><!-- LOCA: -->
-                    <span v-else />
+                    <span class="show-detailed" v-text="'Base'" /><!-- LOCA: -->
+                    <span class="show-detailed" v-text="'Buildings'" /><!-- LOCA: -->
+                    <span class="show-detailed" v-text="'Level'" /><!-- LOCA: -->
+                    <span class="show-detailed" v-text="'Total'" /><!-- LOCA: -->
+                    <span class="show-not-detailed" />
                 </div>
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
-                    <o-resource :resource="resource" size="24px" :fade="item.bonuses[match.groups.id].total[resource] == 0" />
-                    <decimal-number v-if="isExpanded" :value="item.bonuses[match.groups.id].base[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <o-resource :resource="resource" size="24px" :fade="(item.bonuses[match.groups.id] || value).total[resource] == 0" />
                     <decimal-number
-                        v-if="isExpanded"
-                        :digits="3"
-                        :value="item.bonuses[match.groups.id].buildingBoost[resource] * 100"
+                        class="show-detailed"
+                        :value="(item.bonuses[match.groups.id] || value).base[resource] * 100"
                         suffix="%"
                         :fade-decimals="false"
                     />
                     <decimal-number
-                        v-if="isExpanded"
+                        class="show-detailed"
                         :digits="3"
-                        :value="item.bonuses[match.groups.id].levelBoost[resource] * 100"
+                        :value="(item.bonuses[match.groups.id] || value).buildingBoost[resource] * 100"
                         suffix="%"
                         :fade-decimals="false"
                     />
-                    <decimal-number :digits="3" :value="item.bonuses[match.groups.id].total[resource] * 100" suffix="%" :fade-decimals="false" />
+                    <decimal-number
+                        class="show-detailed"
+                        :digits="3"
+                        :value="(item.bonuses[match.groups.id] || value).levelBoost[resource] * 100"
+                        suffix="%"
+                        :fade-decimals="false"
+                    />
+                    <decimal-number :digits="3" :value="(item.bonuses[match.groups.id] || value).total[resource] * 100" suffix="%" :fade-decimals="false" />
                 </div>
             </div>
         </template>
 
-        <template #cell-totalBonus="{ value }">
+        <!-- <template v-slot:[`(cell|footer)-totalBonus`]="{ value }">
             <div class="production-breakdown">
                 <div class="row">
                     <span />
-                    <span v-if="isExpanded" v-text="'\xa0'" />
-                    <span v-else />
+                    <span class="show-detailed" v-text="'\xa0'" />
+                    <span class="show-not-detailed" />
                 </div>
                 <div v-for="resource in resourceKeys" class="row" :key="resource">
                     <o-resource :resource="resource" size="24px" :fade="value[resource] == 0" />
                     <decimal-number :digits="3" :value="value[resource] * 100" suffix="%" :fade-decimals="false" />
                 </div>
             </div>
-        </template>
+        </template> -->
     </grid-table>
 </template>
 
@@ -87,7 +100,7 @@
         planet: PlanetData;
 
         bonuses: Partial<Record<LifeformTechnologyType, TechnologyBonusBreakdown>>;
-        totalBonus: Cost;
+        totalBonus: TechnologyBonusBreakdown;
     }
 
     @Component({})
@@ -98,7 +111,7 @@
 
         private readonly idSlotNameRegex = '(?<id>\\d+)';
         private readonly parseIntSafe = parseIntSafe;
-        private isExpanded = false;
+        private showDetailed = false;
 
         private get columns(): GridTableColumn<keyof BonusOverviewItem | LifeformBuildingType | LifeformTechnologyType>[] {
             return [
@@ -113,6 +126,7 @@
                     key: 'totalBonus',
                     label: 'LOCA: total',
                     class: 'total-cell',
+                    footerClass: 'total-cell',
                 },
             ];
         }
@@ -125,43 +139,77 @@
 
         private get items(): BonusOverviewItem[] {
             return this.planets.map<BonusOverviewItem>(planet => {
-                const levelBoost = planet.activeLifeform == LifeformType.none
+                const levelBoostFactor = planet.activeLifeform == LifeformType.none
                     ? 0
                     : getLifeformLevelTechnologyBonus(EmpireDataModule.empire.lifeformExperience[planet.activeLifeform]);
 
-                const buildingBoost = getPlanetLifeformTechnologyBoost(planet);
+                const buildingBoostFactor = getPlanetLifeformTechnologyBoost(planet);
 
                 const bonuses: BonusOverviewItem['bonuses'] = {};
                 ResourceProductionBonusLifeformTechnologies.forEach(technology => {
-                    const level = planet.lifeformTechnologies[technology.type];
+                    const level = planet.activeLifeformTechnologies.includes(technology.type)
+                        ? planet.lifeformTechnologies[technology.type]
+                        : 0;
                     const baseBonus = technology.getProductionBonus(level);
+                    const buildingBoost = multiplyCost(baseBonus, buildingBoostFactor);
+                    const levelBoost = multiplyCost(baseBonus, levelBoostFactor);
 
                     bonuses[technology.type] = {
                         base: baseBonus,
-                        buildingBoost: multiplyCost(baseBonus, buildingBoost),
-                        levelBoost: multiplyCost(baseBonus, levelBoost),
-                        get total() {
-                            return addCost(this.base, this.buildingBoost, this.levelBoost);
-                        },
+                        buildingBoost,
+                        levelBoost,
+                        total: addCost(baseBonus, buildingBoost, levelBoost),
                     };
                 });
 
-                return {
+                const result: BonusOverviewItem = {
                     planet,
                     bonuses,
-                    totalBonus: Object.values(bonuses).reduce<Cost>(
-                        (total, cur) => addCost(total, cur.total),
-                        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-                    ),
+                    totalBonus: {
+                        base: addCost(...Object.values(bonuses).map(b => b.base)),
+                        buildingBoost: addCost(...Object.values(bonuses).map(b => b.buildingBoost)),
+                        levelBoost: addCost(...Object.values(bonuses).map(b => b.levelBoost)),
+                        total: addCost(...Object.values(bonuses).map(b => b.total)),
+                    },
                 };
+                return result;
             });
         }
 
         private get footerItems(): [BonusOverviewItem] {
+            const items = this.items;
+
+            const bonuses: BonusOverviewItem['bonuses'] = {};
+            ResourceProductionBonusLifeformTechnologies.forEach(technology => {
+                const baseBonus = addCost(
+                    ...items.map(item => item.bonuses[technology.type]!.base),
+                );
+                const buildingBoost = addCost(
+                    ...items.map(item => item.bonuses[technology.type]!.buildingBoost),
+                );
+                const levelBoost = addCost(
+                    ...items.map(item => item.bonuses[technology.type]!.levelBoost),
+                );
+
+                bonuses[technology.type] = {
+                    base: baseBonus,
+                    buildingBoost,
+                    levelBoost,
+                    total: addCost(baseBonus, buildingBoost, levelBoost),
+                };
+            });
+
+            const totalBonus = {
+                base: addCost(...Object.values(bonuses).map(b => b.base)),
+                buildingBoost: addCost(...Object.values(bonuses).map(b => b.buildingBoost)),
+                levelBoost: addCost(...Object.values(bonuses).map(b => b.levelBoost)),
+                total: addCost(...Object.values(bonuses).map(b => b.total)),
+            };
+
             return [{
                 planet: null!,
-                bonuses: {},
-                totalBonus: null!,
+                bonuses,
+                totalBonus,
             }];
         }
 
@@ -177,21 +225,38 @@
         gap: 4px;
         width: 100%;
 
-        &-techs.expanded {
-            grid-template-columns: auto repeat(4, 1fr);
-        }
-
         .row {
             display: contents;
         }
     }
 
-    .resource-production-bonuses::v-deep {
-        .grid-table-cell {
-            border-left: 1px solid rgba(var(--color), 0.3);
+    .resource-production-bonuses {
+        &.detailed-view::v-deep {
+            .production-breakdown {
+                grid-template-columns: auto repeat(4, 1fr);
+            }
 
-            &.total-cell {
-                border-left: 3px double rgba(var(--color), 0.7);
+            .show-not-detailed {
+                display: none;
+            }
+        }
+
+        &:not(.detailed-view)::v-deep {
+            .show-detailed {
+                display: none;
+            }
+        }
+
+        &::v-deep {
+            .grid-table-body,
+            .grid-table-foot {
+                .grid-table-cell {
+                    border-left: 1px solid rgba(var(--color), 0.3);
+
+                    &.total-cell {
+                        border-left: 3px double rgba(var(--color), 0.7);
+                    }
+                }
             }
         }
     }

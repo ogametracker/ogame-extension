@@ -252,11 +252,14 @@
     }
 
     .defense-bonuses::v-deep {
-        .grid-table-cell {
-            border-left: 1px solid rgba(var(--color), 0.3);
+        .grid-table-body,
+        .grid-table-foot {
+            .grid-table-cell {
+                border-left: 1px solid rgba(var(--color), 0.3);
 
-            &.total-cell {
-                border-left: 3px double rgba(var(--color), 0.7);
+                &.total-cell {
+                    border-left: 3px double rgba(var(--color), 0.7);
+                }
             }
         }
     }
