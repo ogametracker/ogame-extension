@@ -9,6 +9,7 @@ import { pt_pt } from './pt_pt';
 import { es_ar } from './es_ar';
 import { it } from './it';
 import { fr } from './fr';
+import { pl } from './pl';
 import { ResearchTranslations } from './types';
 
 const translations: Record<LanguageKey, ResearchTranslations> = {
@@ -20,6 +21,7 @@ const translations: Record<LanguageKey, ResearchTranslations> = {
     fr,
     hr,
     it,
+    pl,
     pt_pt,
     si,
 };

@@ -36,6 +36,6 @@ export const fr: LifeformDiscoveryMessages = {
         /*LOCA: fr 'Das Erkundungsschiff hatte vielversprechende Signale aufgefangen. Nachdem sie begeistert den energetischen Spuren folgten, */'brach plötzlich die Verbindung ab und konnte nicht wieder hergestellt'/* werden. Ausgeschickte Suchtrupps fanden keinerlei Hinweise auf den Verbleib des Schiffes. Es ist wohl in den Weiten des Alls verloren gegangen.'*/,
         /*LOCA: fr 'Bei der Verfolgung starker kosmischer Signale war der Navigator offenbar so abgelenkt, dass er das in der */'Nähe befindliche schwarze Loch vollkommen aus den Augen'/* verlor. Das Schiff geriet in das Gravitationsfeld und alle Anstrengungen der Crew konnten nicht verhindern, dass es hineingesogen wurde. Um einen weiteren Verlust dieser Art zu vermeiden, wurde vorgeschlagen, automatische Warnsignale vor schwarzen Löchern als Standard zu integrieren.'*/
     ],
-    [LifeformDiscoveryEventType.newLifeformFound]: /La forme de vie Kaeleshs a été trouvée aux coordonnées suivantes : .+/i,
+    [LifeformDiscoveryEventType.newLifeformFound]: /La forme de vie .+ a été trouvée aux coordonnées suivantes : .+/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /*LOCA: fr *//Dennoch konnten unsere Botschafter unser Wissen über sie um (?<xp>\d+) Erfahrung verbessern/i,
 };

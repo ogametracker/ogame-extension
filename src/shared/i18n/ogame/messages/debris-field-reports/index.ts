@@ -10,6 +10,7 @@ import { pt_pt } from './pt_pt';
 import { es_ar } from './es_ar';
 import { it } from './it';
 import { fr } from './fr';
+import { pl } from './pl';
 
 const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     cz,
@@ -20,6 +21,7 @@ const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     fr,
     hr,
     it,
+    pl,
     pt_pt,
     si,
 };
