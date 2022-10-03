@@ -8,6 +8,7 @@ import { si } from './si';
 import { pt_pt } from './pt_pt';
 import { es_ar } from './es_ar';
 import { it } from './it';
+import { fr } from './fr';
 import { ShipTranslations } from "./types";
 
 const translations: Record<LanguageKey, ShipTranslations> = {
@@ -16,6 +17,7 @@ const translations: Record<LanguageKey, ShipTranslations> = {
     dk,
     en,
     es_ar,
+    fr,
     hr,
     it,
     pt_pt,
