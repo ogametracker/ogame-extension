@@ -30,7 +30,7 @@ export const es_ar: ExpeditionMessages = {
             /*'En un planetoide abandonado encontramos */'algunas zonas de recursos fácilmente accesibles y recolectamos'/* algunos satisfactoriamente.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es-ar 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'Tu expedición encontró un antiguo, */'pero desierto convoy de carga'/* . Algunos de los recursos podrían ser rescatados.'*/,
             /*LOCA: es-ar 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -43,7 +43,7 @@ export const es_ar: ExpeditionMessages = {
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
             /*LOCA: es-ar 'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
-            /*LOCA: es-ar 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
+            /*'Tu expedición volvió a través de una vieja */'estrella fortaleza que está desierta desde hace años'/* . En el hangar de la fortaleza encontraron algunas naves. Los técnicos intentan poner algunas a flote de nuevo.'*/,
             /*LOCA: es-ar 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
             /*'Encontramos una */'estación pirata desierta'/* . Hay estacionadas algunas viejas naves en el hangar. Nuestros técnicos están mirando si algunas de ellas son aún útiles.'*/,
         ],
