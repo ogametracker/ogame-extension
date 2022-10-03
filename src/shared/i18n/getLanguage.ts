@@ -3,22 +3,16 @@ import { LanguageKey } from "./LanguageKey";
 
 /** map OGame server language to internal language key */
 const languageMap: Partial<Record<string, LanguageKey>> = {
+    ar: LanguageKey.es_ar,
+    cz: LanguageKey.cz,
     de: LanguageKey.de,
     dk: LanguageKey.dk,
-
     en: LanguageKey.en,
-    us: LanguageKey.en,
-
-    cz: LanguageKey.cz,
-
     hr: LanguageKey.hr,
-    ba: LanguageKey.hr,
-
     si: LanguageKey.si,
-
-    pt: LanguageKey.pt,
-
+    pt: LanguageKey.pt_pt,
     it: LanguageKey.it,
+    us: LanguageKey.en,
 };
 
 export function getLanguage(serverLanguage: string, throwIfUnsupported: boolean): LanguageKey;

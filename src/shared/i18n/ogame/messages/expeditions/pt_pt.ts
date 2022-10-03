@@ -3,7 +3,7 @@ import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEv
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 import { ExpeditionMessages } from "./types";
 
-export const pt: ExpeditionMessages = {
+export const pt_pt: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             //TODO: pt /*'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,

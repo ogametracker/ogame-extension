@@ -1,7 +1,7 @@
 import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { BuildingTranslations } from "./types";
 
-export const pt: BuildingTranslations = {
+export const pt_pt: BuildingTranslations = {
     [BuildingType.metalMine]: 'Mina de Metal',
     [BuildingType.crystalMine]: 'Mina de Cristal',
     [BuildingType.deuteriumSynthesizer]: 'Sintetizador de Deutério',

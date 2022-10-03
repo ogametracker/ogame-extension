@@ -1,7 +1,7 @@
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
 import { ResearchTranslations } from "./types";
 
-export const pt: ResearchTranslations = {
+export const pt_pt: ResearchTranslations = {
     [ResearchType.energyTechnology]: 'Tecnologia de Energia',
     [ResearchType.laserTechnology]: 'Tecnologia Laser',
     [ResearchType.ionTechnology]: 'Tecnologia de Iões',

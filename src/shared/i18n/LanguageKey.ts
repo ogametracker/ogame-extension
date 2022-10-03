@@ -3,8 +3,9 @@ export enum LanguageKey {
     de = 'de', // german
     dk = 'dk', // danish
     en = 'en', // english
+    es_ar = 'es_ar', // spanish (Argentina)
     hr = 'hr', // hungarian
     si = 'si', // slovenian
-    pt = 'pt', // portuguese
+    pt_pt = 'pt_pt', // portuguese (Portugal)
     it = 'it', // italian
 }
