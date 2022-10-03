@@ -74,10 +74,10 @@ export const pl: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: pl 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'Ostatnią zdobyczą ekspedycji było naprawdę dobre */'zdjęcie otwierającej się czarnej dziury.',
         /*LOCA: pl 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        /*LOCA: pl 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*LOCA: pl 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'Roztopienie rdzenia głównego statku powoduje reakcje łańcuchową, */'która powoduje wybuch niszczący całą flotę ekspedycji',
+        'Ekspedycja nie wykonała skoku powrotnego'/*. Nasi pracownicy naukowi w dalszym ciągu próbują wyjaśnić co się stało, lecz wydaje się, że flota jest bezpowrotnie stracona.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
@@ -86,17 +86,17 @@ export const pl: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: pl 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        /*'Niespodziewane sprzężenie */'zwrotne w zwojach energetycznych silników spowodowało'/* , że ekspedycja wróci szybciej, niż się spodziewano. Pierwsze raporty nie zawierają żadnych niepokojących informacji.'*/,
         /*'Twoja ekspedycja nie wykryła żadnych anomalii w badanym rejonie. Jednak flota */'wpadła w wiatr słoneczny podczas powrotu'/* . Z tego powodu podróż uległa znacznemu skróceniu. Twoja ekspedycja wróci do domu nieco wcześniej.'*/,
-        /*LOCA: pl 'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'Młody odważny dowódca pomyślnie */'przedostał się przez niestabilną dziurę w czasoprzestrzeni'/* , by skrócić lot powrotny. Ekspedycja nie przywiozła jednak niczego nowego.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
-        /*LOCA: pl 'Ein böser Patzer des Navigators führte zu einer */'Fehlkalkulation beim Sprung'/* der Expedition.'*/,
-        /*LOCA: pl 'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
-        /*LOCA: pl 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
+        /*'Główny nawigator miał zły dzień, */'co spowodowało obranie błędnego kursu'/* . Flota wylądowała w zupełnie innym miejscu, przez co wydłuży się czas jej powrotu.'*/,
+        /*'"Twoja */'ekspedycja osiągnęła sektor pełen burz cząsteczkowych'/* , które spowodowały przeciążenie systemów przechowywania energii i uszkodzenie głównych systemów statków. Mechanicy zdołali zlikwidować najpoważniejsze usterki, ale powrót ekspedycji nastąpi z dużym opóźnieniem.'*/,
+        /*'Z nieznanych */'powodów ekspedycja nieomal zderzyła się z gwiazdą'/* . Na szczęście pilotom udało się uniknąć kolizji i wylądować w znanym systemie. Wypadek ten spowoduje opóźnienie w powrocie floty.'*/,
         /*'Gwiezdny wiatr */'wiejący ze strony czerwonego giganta uniemożliwił skok'/* ekspedycji w nadprzestrzeń, przez co wydłuży się obliczenie skoku powrotnego. W tym sektorze nie było niczego poza pustką między gwiazdami. Flota wróci później, niż oczekiwano.'*/,
-        /*LOCA: pl 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
+        /*'Nowy */'system nawigacyjny nadal nie jest wolny od błędów'/* . Skok floty ekspedycyjnej nie tylko przeniósł ją w całkiem inne miejsce, ale także wszelkie zapasy deuteru zostały wykorzystane. Na szczęście skok przeniósł flotę w pobliże księżyca planety startowej. Lekko zawiedziona ekspedycja wraca pozbawiona swego napędu. Podróż powrotna zajmie ciut więcej czasu.'*/,
         /*'Główny */'statek ekspedycyjny zderzył się z nieznanym statkiem'/* , który nagle wpadł w lecącą flotę. Ów statek wybuchł poważnie uszkadzając statek ekspedycyjny. Jak tylko zostaną przeprowadzone potrzebne naprawy, flota zawróci na planetę startową, ponieważ dalszy lot w takich warunkach nie jest możliwy.'*/,
     ],
 
@@ -106,10 +106,10 @@ export const pl: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: pl 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Jacyś bardzo */'zdesperowani piraci próbowali przejąć flotę'/* ekspedycji.'*/,
             /*'Jacyś */'prymitywni barbarzyńcy atakują nas z użyciem pojazdów'/* , których nie można nazwać statkami kosmicznymi. Jeżeli ostrzał z ich strony będzie się nasilać, będziemy zmuszeni odpowiedzieć ogniem.'*/,
-            /*LOCA: pl 'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
-            /*LOCA: pl 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Odebraliśmy */'sygnał radiowy od jakichś pijanych piratów'/* . Wydaje się, że wkrótce nas zaatakują.'*/,
+            'Musieliśmy walczyć z piratami'/*. Na szczęście było ich tylko kilku.'*/,
             /*LOCA: pl 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -127,13 +127,13 @@ export const pl: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Kilka */'egzotycznie wyglądających statków zaatakowało twoją ekspedycję'/* bez żadnego ostrzeżenia'*/,
             /*'Twoja ekspedycja */'napotkała niezbyt przyjazną rasę obcych'/* ...'*/,
-            /*LOCA: pl 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Nasza ekspedycja została */'zaatakowana przez niewielką grupę niezidentyfikowanych'/* statków.'*/,
             /*LOCA: pl 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*LOCA: pl 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            /*LOCA: pl 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*LOCA: pl 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Wygląda na to, że */'Twoja ekspedycja naruszyła terytorium nieznanej'/* rasy wojowników.'*/,
+            /*'Kontakt z naszą ekspedycją został przerwany na krótki czas. Możemy jednak odszyfrować jej ostatnią wiadomość. Są pod ciężkim obstrzałem, */'agresorzy nie zostali rozpoznani',
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
