@@ -9,6 +9,7 @@ import { si } from './si';
 import { pt_pt } from './pt_pt';
 import { es_ar } from './es_ar';
 import { it } from './it';
+import { fr } from './fr';
 
 const translations: Record<LanguageKey, LifeformDiscoveryMessages> = {
     cz,
@@ -16,6 +17,7 @@ const translations: Record<LanguageKey, LifeformDiscoveryMessages> = {
     dk,
     en,
     es_ar,
+    fr,
     hr,
     it,
     pt_pt,
