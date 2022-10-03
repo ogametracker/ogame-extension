@@ -133,7 +133,7 @@ export const dk: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Et */'fremmedartet skib angriber din ekspeditionsflåde'/* uden varsel!'*/,
             /*'Din ekspeditionsflåde */'synes at have fløjet ind i et territorium'/*, som tilhører en ukendt og yderst aggressiv og krigerisk race.'*/,
-            /*TODO: dk 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Forbindelsen til */'ekspeditionsflåden var afbrudt i en kort periode'/* . Det som vi kunne dekryptere fra den sidste besked var, at de var under hård beskydning. Angriberen blev ikke identificeret.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
