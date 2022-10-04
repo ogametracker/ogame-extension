@@ -3,6 +3,7 @@ const fs = require('fs');
 const process = require('process');
 
 const isDev = process.argv.includes('--dev');
+const version = process.argv.includes('--version') ?  process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
 if (browser == null) {
     throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
@@ -48,7 +49,7 @@ const manifest = {
     description: '__MSG_appDesc__',
     manifest_version: 3,
     default_locale: 'de',
-    version: `${format(now, 'yyyy')
+    version: version ?? `${format(now, 'yyyy')
         }.${format(now, 'MM')
         }.${format(now, 'dd')
         }.${format(now, 'HH')}${format(now, 'mm')}${Math.trunc(now.getSeconds() / 10)}`,
