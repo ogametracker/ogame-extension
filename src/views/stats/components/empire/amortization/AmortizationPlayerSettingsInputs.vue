@@ -2,7 +2,19 @@
     <div class="player-settings">
         <conversion-rate-settings class="conversion-rate-settings" />
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.officers" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.optimizeForResources" />
+        <span class="gap">
+            <o-resource
+                v-for="resource in resources"
+                :key="resource"
+                class="toggleable-resource"
+                :resource="resource"
+                :disabled="!settings.optimizeForResources.includes(resource)"
+                @click="toggleOptimizeForResource(resource)"
+            />
+        </span>
+
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
             <o-officer
                 v-for="(active, officer) in settings.officers"
@@ -13,7 +25,7 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.playerClass" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
             <o-player-class
                 v-for="playerClass in playerClasses"
@@ -24,7 +36,7 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.allianceClass" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
             <o-alliance-class
                 v-for="allyClass in allianceClasses"
@@ -35,19 +47,19 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelPlasmatech" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.plasmaTechnology])" />
         <span>
             <o-research :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.currentLevelAstrophysics" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
         <span>
             <o-research :research="ResearchType.astrophysics" />
             <input type="number" :value="settings.levelAstrophysics" disabled />
         </span>
 
-        <span v-text="$i18n.$t.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
         <span>
             <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
         </span>
@@ -62,6 +74,7 @@
     import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 
     @Component({
         components: {
@@ -73,6 +86,7 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
 
+        private readonly resources = ResourceTypes;
         private readonly ResearchType = ResearchType;
         private readonly playerClasses = SelectablePlayerClasses;
         private readonly allianceClasses = SelectableAllianceClasses;
@@ -94,6 +108,15 @@
             }
 
             this.settings.allianceClass = allianceClass;
+        }
+
+        private toggleOptimizeForResource(resource: ResourceType) {
+            if (this.settings.optimizeForResources.includes(resource)) {
+                this.settings.optimizeForResources = this.settings.optimizeForResources.filter(r => r != resource);
+            }
+            else {
+                this.settings.optimizeForResources.push(resource);
+            }
         }
     }
 </script>
@@ -118,7 +141,8 @@
 
         .o-officer,
         .o-player-class,
-        .o-alliance-class {
+        .o-alliance-class,
+        .toggleable-resource {
             cursor: pointer;
         }
 

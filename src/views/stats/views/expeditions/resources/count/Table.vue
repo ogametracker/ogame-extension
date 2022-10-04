@@ -58,22 +58,22 @@
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
-                [this.$i18n.$t.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.resources[resource],
+                label: this.$i18n.$t.extension.resources[resource],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resourceCount[resource], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.resourceUnits,
+                label: this.$i18n.$t.extension.common.resourceUnits,
                 getValue: expos => expos.reduce(
                     (acc, expo) => acc
                         + expo.findings.resourceCount.metal

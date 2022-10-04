@@ -34,6 +34,7 @@ export enum MessageType {
     UpdateResearchLevels = 'empire/update-research-levels',
     UpdatePlanetShipCounts = 'empire/update-planet-ships',
     UpdatePlanetDefenseCounts = 'empire/update-planet-defenses',
+    UpdatePlanetMissileCounts = 'empire/update-planet-missiles',
     UpdateActiveOfficers = 'empire/update-active-officers',
     UpdatePlayerClass = 'empire/update-player-class',
     UpdateAllianceClass = 'empire/update-alliance-class',

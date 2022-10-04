@@ -2,9 +2,11 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 import { MessageOgameMeta } from "@/shared/messages/Message";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { MissileType } from "@/shared/models/ogame/missiles/MissileType";
+import { MissileTypes } from "@/shared/models/ogame/missiles/MissileTypes";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { MessageType } from "../../shared/messages/MessageType";
-import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
+import { UpdatePlanetActiveItemsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetMissileCountsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { BuildingType } from "../../shared/models/ogame/buildings/BuildingType";
 import { BuildingTypes } from "../../shared/models/ogame/buildings/BuildingTypes";
@@ -35,6 +37,7 @@ type OgameEmpirePlanetTechnologies = Record<
     | ResearchType
     | ShipType
     | DefenseType
+    | MissileType
     | LifeformBuildingType
     | LifeformTechnologyType
     ,
@@ -88,6 +91,7 @@ export function trackEmpirePage() {
 
                 trackPlanetBuildingLevels(planet, ogameMeta);
                 trackPlanetDefenses(planet, ogameMeta);
+                trackPlanetMissiles(planet, ogameMeta);
                 trackPlanetActiveItems(planet, ogameNow);
 
                 if (planet.type != OgameMoonType) {
@@ -187,6 +191,27 @@ function trackPlanetDefenses(planet: OgameEmpirePlanet, ogameMeta: MessageOgameM
         senderUuid: empireTrackingUuid,
     };
     sendMessage(defenseCountsMessage);
+}
+
+function trackPlanetMissiles(planet: OgameEmpirePlanet, ogameMeta: MessageOgameMeta) {
+    const isMoon = planet.type == OgameMoonType;
+    
+    const missileCounts = MissileTypes.reduce((acc, missile) => {
+        acc[missile] = parseIntSafe(planet[missile].toString(), 10);
+        return acc;
+    }, {} as Record<MissileType, number>);
+
+    const missileMessage: UpdatePlanetMissileCountsMessage = {
+        ogameMeta: getOgameMeta(),
+        type: MessageType.UpdatePlanetMissileCounts,
+        data: {
+            isMoon,
+            planetId: planet.id,
+            data: missileCounts,
+        },
+        senderUuid: empireTrackingUuid,
+    };
+    sendMessage(missileMessage);
 }
 
 function trackPlanetBuildingLevels(planet: OgameEmpirePlanet, ogameMeta: MessageOgameMeta) {

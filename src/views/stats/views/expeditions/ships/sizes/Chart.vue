@@ -5,14 +5,14 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.expeditions.finds" />
+                        <div v-text="$i18n.$t.extension.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.expeditions.finds} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.expeditions.finds} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -65,7 +65,7 @@
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return ExpeditionEventSizes.map(size => ({
                 key: size,
-                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
+                label: this.$i18n.$t.extension.expeditions.expeditionEventSizes[size],
                 color: this.colors[size],
                 filled: true,
                 getValue: result => result.eventSizes.fleet[size],

@@ -8,7 +8,7 @@
                 <div class="result-grid">
                     <template v-for="lifeform in notification.newLifeforms">
                         <o-lifeform :lifeform="lifeform" class="icon" :key="`icon-${lifeform}`" />
-                        <span v-text="$i18n.$t.lifeforms[lifeform]" :key="`name-${lifeform}`" />
+                        <span v-text="$i18n.$t.ogame.lifeforms[lifeform]" :key="`name-${lifeform}`" />
                     </template>
                 </div>
             </template>
@@ -20,7 +20,7 @@
                         <template v-if="notification.lifeformExperience[lifeform] > 0">
                             <o-lifeform :lifeform="lifeform" class="icon" :key="`icon-${lifeform}`" />
                             <div :key="`amount-${lifeform}`" class="xp-column">
-                                <span v-text="$i18n.$t.lifeforms[lifeform]" />
+                                <span v-text="$i18n.$t.ogame.lifeforms[lifeform]" />
                                 <span v-text="`+${$i18n.$n(notification.lifeformExperience[lifeform])} XP`" />
                             </div>
                         </template>
@@ -45,15 +45,15 @@
             </div>
             <div v-else class="text-grid">
                 <template v-if="notification.events.lostShip > 0">
-                    <span v-text="$i18n.$t.empire.lifeforms.eventTypes.lostShip" />
+                    <span v-text="$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip" />
                     <span v-text="$i18n.$n(notification.events.lostShip)" />
                 </template>
                 <template v-if="lifeformFindingCount > 0">
-                    <span v-text="$i18n.$t.empire.lifeforms.lifeformFound" />
+                    <span v-text="$i18n.$t.extension.empire.lifeforms.lifeformFound" />
                     <span v-text="$i18n.$n(lifeformFindingCount)" />
                 </template>
                 <template v-if="notification.events.nothing > 0">
-                    <span v-text="$i18n.$t.empire.lifeforms.eventTypes.nothing" />
+                    <span v-text="$i18n.$t.extension.empire.lifeforms.eventTypes.nothing" />
                     <span v-text="$i18n.$n(notification.events.nothing)" />
                 </template>
             </div>
@@ -101,11 +101,11 @@
         }
 
         private get title() {
-            return this.$i18n.$t.notifications.lifeformDiscoveryTracking.title(this.$i18n.$n(this.count));
+            return this.$i18n.$t.extension.notifications.lifeformDiscoveryTracking.title(this.$i18n.$n(this.count));
         }
 
         private get message() {
-            return this.$i18n.$t.notifications.lifeformDiscoveryTracking.message(this.$i18n.$n(this.count));
+            return this.$i18n.$t.extension.notifications.lifeformDiscoveryTracking.message(this.$i18n.$n(this.count));
         }
     }
 </script>

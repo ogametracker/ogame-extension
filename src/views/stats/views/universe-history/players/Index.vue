@@ -13,11 +13,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.universeHistory.tabs.subtabs.highscore,
+                    label: this.$i18n.$t.extension.universeHistory.tabs.subtabs.highscore,
                     to: { name: 'universe-history/players/highscore' },
                 },
                 {
-                    label: this.$i18n.$t.universeHistory.tabs.subtabs.history,
+                    label: this.$i18n.$t.extension.universeHistory.tabs.subtabs.history,
                     to: { name: 'universe-history/players/history' },
                 },
             ];

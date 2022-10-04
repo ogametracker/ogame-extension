@@ -24,18 +24,18 @@
         private get navItems(): ListNavItem[] {
             const items: ListNavItem[] = [
                 {
-                    label: this.$i18n.$t.empire.production.header,
+                    label: this.$i18n.$t.extension.empire.production.header,
                     to: { name: 'empire/production' },
                 },
                 {
-                    label: this.$i18n.$t.empire.amortization.header,
+                    label: this.$i18n.$t.extension.empire.amortization.header,
                     to: { name: 'empire/amortization' },
                 },
             ];
 
             if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
                 items.push({
-                    label: this.$i18n.$t.empire.lifeforms.header,
+                    label: this.$i18n.$t.extension.empire.lifeforms.header,
                     to: { name: 'empire/lifeforms' },
                 });
             }

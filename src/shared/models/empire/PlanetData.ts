@@ -1,5 +1,6 @@
 import { LifeformTechnologyType } from '../ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '../ogame/lifeforms/LifeformType';
+import { MissileType } from '../ogame/missiles/MissileType';
 import { PlanetBuildingLevels } from './PlanetBuildingLevels';
 import { PlanetDataBase } from './PlanetDataBase';
 import { PlanetLifeformBuildingLevels } from './PlanetLifeformBuildingLevels';
@@ -14,6 +15,7 @@ export interface PlanetData extends PlanetDataBase {
     ships: PlanetShipCount;
 
     productionSettings: ProductionSettings;
+    missiles: Record<MissileType, number>;
     
     activeLifeform: LifeformType;
     lifeformBuildings: PlanetLifeformBuildingLevels;

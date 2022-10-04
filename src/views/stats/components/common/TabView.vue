@@ -9,25 +9,17 @@
                 class="tab_floating-menu"
             >
                 <template #activator>
-                    <router-link
-                        :to="tab.to"
-                        class="tab"
-                        active-class="tab--active"
-                        ref="tabs"
-                    >
+                    <router-link :to="tab.to" class="tab" active-class="tab--active" ref="tabs">
                         <span class="tab-content">
                             <span v-if="tab.label != null" v-text="tab.label" />
-                            <span
-                                v-if="isDefaultRoute(tab.to)"
-                                class="tab-item-home-icon mdi mdi-home"
-                            />
+                            <span v-if="isDefaultRoute(tab.to)" class="tab-item-home-icon mdi mdi-home" />
                         </span>
                     </router-link>
                 </template>
 
                 <set-default-route-button
                     v-if="rootRouteName != null"
-                    :label="$i18n.$t.settings.setDefaultSubRoute"
+                    :label="$i18n.$t.extension.settings.setDefaultSubRoute"
                     :rootRouteName="rootRouteName"
                     :routeName="tab.to.name"
                     @click="$set(showMenu, i, false)"
@@ -35,7 +27,9 @@
             </floating-menu>
         </header>
         <main>
-            <router-view />
+            <keep-alive>
+                <router-view />
+            </keep-alive>
         </main>
     </div>
 </template>
@@ -129,16 +123,17 @@
 
                     background-color: rgba(var(--color), 0.15);
 
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
                     &:not(.tab--active):hover {
                         background-color: rgba(var(--color), 0.25);
                     }
 
                     &.tab--active {
-                        background: linear-gradient(
-                            135deg,
-                            rgba(var(--color), 0.4),
-                            rgba(var(--color), 0.7)
-                        );
+                        background: linear-gradient(135deg, rgba(var(--color), 0.4), rgba(var(--color), 0.7));
                     }
 
                     &::v-deep {

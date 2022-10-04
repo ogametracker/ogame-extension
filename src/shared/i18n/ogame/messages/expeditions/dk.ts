@@ -18,7 +18,7 @@ export const dk: ExpeditionMessages = {
             /*'Vores ekspedition */'rapporterer om et spektakulært fænomen'/*. En sammenhobning af Mørk Materie i energilageret i skibets skjolde. Vores teknikere prøver at holde på så meget Mørk Materie de kan, mens fænomenet er foranstående.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*LOCA: dk 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
             /*'Vores ekspeditionsflåde oprettede den første kontakt med en speciel race. Det så ud til at være et væsen lavet af energi, */'som kaldte sig selv Legorian'/* . Væsenet fløj gennem vores ekspeditionsskibe og besluttede sig for at hjælpe vores underudviklede race. En kasse med Mørk Materie blev materialiseret på broen af skibet.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) er blevet taget`, 'i'),
@@ -110,7 +110,7 @@ export const dk: ExpeditionMessages = {
             /*'Nogle */'primitive barbarer angriber os med deres rumskibe'/* ; hvis man da overhovet kan kalde dem rumskibe. Hvis vores skibe udsættes for fare, bliver vi nødt til at skyde tilbage.'*/,
             /*'Vi har sporet */'nogle berusede pirater'/*, der planlægger at overfalde os.'*/,
             /*'Under ekspeditionen blev vi nødt til at */'kæmpe mod nogle få piratskibe'/*.'*/,
-            /*TODO: dk 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*LOCA: dk 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'Din ekspeditionsflåde */'havde et ufint sammenstød med nogle rumpirater'/*.'*/,
@@ -125,20 +125,20 @@ export const dk: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*TODO: dk 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*LOCA: dk 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
             /*'Din ekspeditionsflåde havde ikke en */'venlig første kontakt'/* med en ukendt race.'*/,
             /*'Vores ekspedition blev angrebet af en */'mindre gruppe af ukendte skibe'/* !'*/,
-            /*TODO: dk 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*LOCA: dk 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'Et */'fremmedartet skib angriber din ekspeditionsflåde'/* uden varsel!'*/,
             /*'Din ekspeditionsflåde */'synes at have fløjet ind i et territorium'/*, som tilhører en ukendt og yderst aggressiv og krigerisk race.'*/,
-            /*TODO: dk 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Forbindelsen til */'ekspeditionsflåden var afbrudt i en kort periode'/* . Det som vi kunne dekryptere fra den sidste besked var, at de var under hård beskydning. Angriberen blev ikke identificeret.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*TODO: dk 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
-            /*TODO: dk 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*LOCA: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*LOCA: dk 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*LOCA: dk 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
     
@@ -154,12 +154,12 @@ export const dk: ExpeditionMessages = {
             /*'Vi blev */'næsten ramt af en fremmed ekspeditionsflåde'/* . Havde ikke regnet med at der var så mange undervejs i dette område.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO: dk 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*TODO: dk 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*TODO: dk 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*LOCA: dk 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*LOCA: dk 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*LOCA: dk 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*TODO: dk 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: dk 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };

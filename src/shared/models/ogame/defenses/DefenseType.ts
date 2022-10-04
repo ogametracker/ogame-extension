@@ -7,7 +7,4 @@ export enum DefenseType {
     plasmaTurret = 406,
     smallShieldDome = 407,
     largeShieldDome = 408,
-
-    ballisticMissile = 502,
-    interplanetaryMissile = 503,
 }

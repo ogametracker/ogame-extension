@@ -1,7 +1,9 @@
+import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { ExpeditionBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class GravitationSensorsClass extends LifeformTechnology {
+class GravitationSensorsClass extends LifeformTechnology implements ExpeditionBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +23,19 @@ class GravitationSensorsClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    public appliesTo(type: ExpeditionEventType): boolean {
+        return type == ExpeditionEventType.darkMatter;
+    }
+    
+    public getExpeditionBonus(type: ExpeditionEventType, level: number): number {
+        if(!this.appliesTo(type)) {
+            return 0;
+        }
+
+        const bonusPerLevel = 0.00_1; //0.1%
+        return bonusPerLevel * level;
     }
 
     public get type(): LifeformTechnologyType {

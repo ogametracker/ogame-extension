@@ -33,7 +33,7 @@ const observer = new MutationObserver(() => {
                 <div class="menubutton beta"></div>
                 ${language != null
                 ? ''
-                : `<div class="warning-lang-not-supported tooltip" title="The OGame language '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
+                : `<div class="warning-lang-not-supported tooltip" title="The OGame servers for locale '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
                         <span class="mdi mdi-alert"></span>
                     </div>`
                 }

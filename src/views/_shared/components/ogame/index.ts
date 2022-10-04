@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import OAllianceClass from './OAllianceClass.vue';
 import OBuilding from './OBuilding.vue';
+import ODefense from './ODefense.vue';
 import OItem from './OItem.vue';
 import OOfficer from './OOfficer.vue';
 import OPlayerClass from './OPlayerClass.vue';
@@ -13,6 +14,7 @@ import OLifeformTechnology from './OLifeformTechnology.vue';
 
 Vue.component('o-alliance-class', OAllianceClass);
 Vue.component('o-building', OBuilding);
+Vue.component('o-defense', ODefense);
 Vue.component('o-item', OItem);
 Vue.component('o-lifeform', OLifeform);
 Vue.component('o-lifeform-building', OLifeformBuilding);

@@ -10,6 +10,8 @@
         ]"
         :style="`--saturate: ${saturate}; --self-height: ${height}`"
         @click="animateRemove()"
+        @mouseenter="pauseTimer()"
+        @mouseleave="resumeTimer()"
     >
         <div class="title">
             <span v-if="title != null" v-text="title" />
@@ -20,10 +22,10 @@
             <slot v-else name="message" />
         </div>
         <div
-            v-if="timeout != null"
+            v-if="timeout != 0"
             class="timer"
-            :class="{ 'new-timer': isNew, 'hide-timer': remove }"
-            :style="`--time-ms: ${timeout}`"
+            :class="{ 'timer-running': timeoutId != null, 'timer-paused': timeoutId == null, 'hide-timer': remove }"
+            :style="`--time-ms: ${timeout}; --time-left-ms: ${timeLeft}`"
         />
     </div>
 </template>
@@ -53,15 +55,45 @@
         private remove = false;
         private height = 0;
 
+        private timeLeft: number | null = null;
+        private timeoutStart = 0;
+        private timeoutId: number | null = null;
+        private readonly timeoutRemoveBuffer = 100;
+
         private async mounted() {
             await delay(0);
             this.height = this.$el.clientHeight;
             this.isNew = false;
 
             if (this.timeout != null) {
-                await delay(this.timeout + 100); //100ms buffer
-                await this.animateRemove();
+                this.timeLeft = this.timeout;
+                await delay(1);
+                this.playRemove();
+
+                window.addEventListener('ogame-tracker.pause-notifications', () => this.pauseRemove());
+                window.addEventListener('ogame-tracker.resume-notifications', () => this.playRemove());
             }
+        }
+
+        private pauseRemove() {
+            if (this.timeLeft == null) {
+                return;
+            }
+
+            clearTimeout(this.timeoutId ?? undefined);
+            this.timeoutId = null;
+            this.timeLeft = Math.max(0, this.timeLeft - (Date.now() - this.timeoutStart));
+        }
+
+        private playRemove() {
+            if (this.timeLeft == null) {
+                return;
+            }
+
+            this.timeoutStart = Date.now();
+            this.timeoutId = setTimeout(async () => {
+                await this.animateRemove();
+            }, this.timeLeft + this.timeoutRemoveBuffer);
         }
 
         private async animateRemove() {
@@ -69,6 +101,14 @@
             await delay(200); // timeout must be greater than the transition time
 
             this.$emit('remove');
+        }
+
+        private pauseTimer() {
+            window.dispatchEvent(new Event('ogame-tracker.pause-notifications'));
+        }
+
+        private resumeTimer() {
+            window.dispatchEvent(new Event('ogame-tracker.resume-notifications'));
         }
     }
 </script>
@@ -87,8 +127,7 @@
         cursor: pointer;
 
         will-change: transform, margin-top, margin-bottom;
-        transition: transform 100ms cubic-bezier(0.62, 0.18, 0.67, 0.99),
-            margin-top 50ms cubic-bezier(0.62, 0.18, 0.67, 0.99) 100ms,
+        transition: transform 100ms cubic-bezier(0.62, 0.18, 0.67, 0.99), margin-top 50ms cubic-bezier(0.62, 0.18, 0.67, 0.99) 100ms,
             margin-bottom 50ms cubic-bezier(0.62, 0.18, 0.67, 0.99) 100ms;
 
         &.notification--right {
@@ -123,11 +162,7 @@
         .title {
             padding: 8px;
             background-color: rgba(var(--color), var(--saturate));
-            background-image: linear-gradient(
-                -90deg,
-                rgba(var(--color), 0.8),
-                rgba(var(--color), 0.7)
-            );
+            background-image: linear-gradient(-90deg, rgba(var(--color), 0.8), rgba(var(--color), 0.7));
             font-weight: bold;
             text-align: center;
         }
@@ -135,22 +170,23 @@
         .message {
             padding: 8px;
             background-color: rgba(var(--color), var(--saturate));
-            background-image: linear-gradient(
-                -90deg,
-                rgba(var(--color), 0.5),
-                rgba(var(--color), 0.3)
-            );
+            background-image: linear-gradient(-90deg, rgba(var(--color), 0.5), rgba(var(--color), 0.3));
         }
 
         .timer {
             margin-top: -2px;
             height: 2px;
             background: rgb(var(--color));
-            width: 0;
-            transition: width calc(var(--time-ms) * 1ms) linear;
+            width: 100%;
+            transition: width calc(var(--time-left-ms) * 1ms) linear;
 
-            &.new-timer {
-                width: 100%;
+            &.timer-running {
+                width: 0;
+            }
+
+            &.timer-paused {
+                width: calc(100% * var(--time-left-ms) / var(--time-ms));
+                transition: none;
             }
 
             &.hide-timer {

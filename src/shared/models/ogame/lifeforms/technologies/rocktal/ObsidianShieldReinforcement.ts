@@ -1,7 +1,10 @@
+import { DefenseType } from "../../../defenses/DefenseType";
+import { DefenseTypes } from "../../../defenses/DefenseTypes";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class ObsidianShieldReinforcementClass extends LifeformTechnology {
+class ObsidianShieldReinforcementClass extends LifeformTechnology implements StatsBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +24,29 @@ class ObsidianShieldReinforcementClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+
+    public appliesTo(defense: DefenseType): boolean {
+        return DefenseTypes.includes(defense);
+    }
+
+    public getStatsBonus(defense: DefenseType, level: number): StatsBonus {
+        if (!this.appliesTo(defense)) {
+            return { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 };
+        }
+
+        const armorBonusPerLevel = 0.00_5; //0.5%
+        const shieldBonusPerLevel = 0.00_5; //0.5%
+        const damageBonusPerLevel = 0.00_5; //0.5%
+        const cargoBonusPerLevel = 0.00_5; //0.5%
+        const speedBonusPerLevel = 0.00_5; //0.5%
+        return {
+            armor: armorBonusPerLevel * level,
+            shield: shieldBonusPerLevel * level,
+            damage: damageBonusPerLevel * level,
+            cargo: cargoBonusPerLevel * level,
+            speed: speedBonusPerLevel * level,
+        };
     }
 
     public get type(): LifeformTechnologyType {

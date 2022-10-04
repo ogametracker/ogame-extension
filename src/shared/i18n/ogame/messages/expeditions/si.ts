@@ -110,7 +110,7 @@ export const si: ExpeditionMessages = {
             /**/'Primitivni vesoljski barbari nas napadajo'/* z nečim kar zgleda kot vesoljsko plovilo. Če kmalu ne prenehajo, bomo primorani vrniti ogenj.'*/,
             /**/'Zasegli smo sporočilo od piratov'/*. Zgleda, da bomo kmalu napadeni.'*/,
             /**/'Boriti smo se morali proti piratom'/*, katerih na srečo ni bilo veliko'*/,
-            /*TODO: si 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*LOCA: si 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'Tvoja ekspedicija je */'imela neprijetno srečanje s piratskimi'/* ladjami.'*/,
@@ -118,8 +118,8 @@ export const si: ExpeditionMessages = {
             /*'Signal za pomoč kateremu je flota sledila, */'je bila v resnici zaseda piratov'/*. Bitki se ni bilo mogoče izogniti.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: si 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*TODO: si 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*LOCA: si 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*LOCA: si 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
     },
 
@@ -128,7 +128,7 @@ export const si: ExpeditionMessages = {
             /**/'Ladje eksotičnega izgleda'/*, so napadle našo ekspedicijsko floto brez opozorila.'*/,
             /*'Tvoja ekspedicijska flota je imela */'neprijateljsko srečanje z nepoznano raso'/*.'*/,
             /*'Naša ekspedicijska */'flota je bila napadena s strani ladij nepoznanega '/*izvora!'*/,
-            /*TODO: si 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*LOCA: si 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /**/'Nepoznana rasa napada našo ekspedicijsko floto'/* !*/,
@@ -136,30 +136,30 @@ export const si: ExpeditionMessages = {
             /*'Povezava z našo ekspedicijsko */'floto je bila za kratek čas prekinjena'/*. Lahko dešifriramo zadnje sporočilo. Zgleda, da so v težkem napadu z nepoznano raso.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: si 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*LOCA: si 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Imeli smo nekaj težav pri pravilni izgovorjavi narečja vesoljcev. naš */'diplomat je po nesreči zaklical'/* `Ogenj!` namesto `Mir!`.'*/,
-            /*TODO: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*LOCA: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
     
-    logbookRegex: /*TODO: si *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    logbookRegex: /*LOCA: si *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: si 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: si 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*LOCA: si 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*LOCA: si 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: si 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: si 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*TODO: si 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*LOCA: si 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*LOCA: si 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*LOCA: si 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO: si 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*TODO: si 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*TODO: si 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*LOCA: si 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*LOCA: si 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*LOCA: si 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*TODO: si 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: si 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };

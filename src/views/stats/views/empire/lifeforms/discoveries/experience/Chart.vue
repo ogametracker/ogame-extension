@@ -5,14 +5,14 @@
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
                         <div class="number" v-text="$i18n.$n(getTotal(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.empire.lifeforms.experiencePoints" />
+                        <div v-text="$i18n.$t.extension.empire.lifeforms.experiencePoints" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getTotal(datasets))" />
-                    <div v-text="`${$i18n.$t.empire.lifeforms.experiencePoints} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.empire.lifeforms.experiencePoints} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -63,7 +63,7 @@
         private get datasets(): StatsChartDataset<DailyLifeformDiscoveryResult>[] {
             return ValidLifeformTypes.map(lifeform => ({
                 key: lifeform,
-                label: this.$i18n.$t.lifeforms[lifeform],
+                label: this.$i18n.$t.ogame.lifeforms[lifeform],
                 color: this.colors[lifeform],
                 filled: true,
                 getValue: (result: DailyLifeformDiscoveryResult) => result.lifeformExperience[lifeform],

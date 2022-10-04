@@ -12,7 +12,7 @@ import { ResearchLevels } from '@/shared/models/empire/ResearchLevels';
 import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
 import { PlanetData } from '@/shared/models/empire/PlanetData';
 import { MoonData } from '@/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
+import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMissileAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@/shared/db/schema/player';
 import { _throw } from '@/shared/utils/_throw';
 import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
 import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
@@ -28,6 +28,7 @@ import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformB
 import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { LifeformDiscoveryDataModule } from './LifeformDiscoveryDataModule';
+import { MissileTypes } from '@/shared/models/ogame/missiles/MissileTypes';
 
 @Component
 class EmpireDataModuleClass extends Vue {
@@ -127,6 +128,7 @@ class EmpireDataModuleClass extends Vue {
                     [DefenseType.smallShieldDome]: false,
                     [DefenseType.largeShieldDome]: false,
                 };
+                const missiles = (await store.get(`planet.${id}.missiles`)) as DbMissileAmounts | undefined ?? createRecord(MissileTypes, 0);
                 const activeItems = (await store.get(`planet.${id}.activeItems`) as DbActiveItems | undefined) ?? {};
                 const productionSettings = ((await store.get(`planet.${id}.productionSettings`)) as DbPlanetProductionSettings | undefined ?? {
                     [BuildingType.metalMine]: 100,
@@ -150,6 +152,7 @@ class EmpireDataModuleClass extends Vue {
                     buildings,
                     ships,
                     defense,
+                    missiles,
                     activeItems,
                     productionSettings,
 

@@ -8,19 +8,19 @@ export const it: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'La spedizione è stata in */'grado di catturare e conservare della Materia Oscura',
             /*'Abbiamo */'trovato i resti di una nave aliena'/*. Nella stiva vi era un piccolo container con della Materia Oscura!'*/,
-            /*TODO: it 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*LOCA: it 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'La nostra spedizione si è imbattuta in una */'nave fantasma che trasportava un piccolo carico di Materia Oscura'/*. Non abbiamo scoperto cosa possa essere successo all`equipaggio della nave, ma i nostri tecnici sono stati in grado di recuperare la Materia Oscura.'*/,
             /*'La spedizione ha seguito alcuni */'deboli segnali e ha trovato un asteroide'/*. Nel cuore dell`asteroide era racchiusa una piccola quantità di Materia Oscura. L`asteroide è stato rimorchiato e successivamente la Materia Oscura è stata estratta.'*/,
             /*wtf? :D*/ /*'Durante la nostra spedizione */'odierna siamo passati vicini ad un pianeta intorno al quale carcasse'/* di navi distrutte, e uno sciame di meteore restavano a testimoniare una recente e catastrofica battaglia. Dalla superficie del pianeta proveniva un segnale che non siamo riusciti a decifrare molto bene, spero che non ci sia un guasto ai nostri sofisticati sistemi di comunicazione... Con il caro deuterio, il mutuo per acquistare la morte nera, l`ipoteca sulle navi da battaglia per pagare gli stipendi ai vostri ufficiali, non ci potremmo permettere di sostituire il walkie talkie attuale con uno nuovo... Comunque i nostri tecnici sono già al lavoro per verificare la cosa e credo che non sia il caso di tediarla oltre con i problemi economici del nostro impero, li conoscete senz`altro meglio di me. Ritornando al rapporto della nostra missione di esplorazione, questo è il messaggio che abbiamo intercettato: "@°[*+£ la mia flotta... @°[*+£ la mia luna (versi simili a urla di rabbia e pianti)". Poiché quei versi erano così strazianti abbiamo deciso di atterrare sul pianeta e portare aiuto agli abitanti del luogo. Qui abbiamo incontrato uno strano alieno, molto probabilmente l`imperatore di quello che un tempo era un piccolo ma prospero regno e che ora è un cumulo di macerie. Alla nostra richiesta di spiegarci cosa fosse accaduto, cosa avesse creato un disastro di proporzioni così immani, ci ha risposto che un marrano, che un codardo e vigliacco imperatore nemico aveva razziato i suoi pianeti e distrutto le sue flotte mentre lui si trovava altrove, a riposarsi su un noto pianeta di villeggiatura "Mondo Reale" assieme alla sua mezza dozzina di concubine. Mentre l`alieno ci raccontava queste cose, il nostro ufologo, grazie ai dati che gli inviavamo dalla superficie è riuscito a scoprire che l`alieno appartiene alla razza dei "Castori Minori" meglio nota come "Niubbus Rosikantes". Così provando una gran pena per la razza dell`alieno, prima di ripartire gli abbiamo donato un manualetto "OGame for Dummies" e gli abbiamo spiegato le leggi fisiche alla base del fleetsave; ci siamo rovinati e gli abbiamo lasciato anche un bignamino intitolato "Fleetsave: 1001 modi per non farsi piallare quando si va al bagno". L`alieno, visibilmente commosso dalla nostra generosità, per ringraziarci ci ha dato un cofanetto contenente un discreto quantitativo di Materia Oscura. Dalla nave ammiraglia "I love n00bs" passo e chiudo.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             'Oscura da una stella morente',
-            /*TODO: it 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*LOCA: it 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
             /*'La nostra spedizione riporta un inusuale quanto spettacolare fenomeno. Questo ha portato della Materia Oscura ad */'accumularsi nelle riserve di energia per gli scudi'/* della nave. I nostri tecnici, finché il fenomeno è durato, hanno cercato di conservare tutta la Materia Oscura che potevano.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: it 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: it 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*LOCA: it 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*LOCA: it 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) è stato razziato`, 'i'),
     },
@@ -53,7 +53,7 @@ export const it: ExpeditionMessages = {
             /*'Abbiamo */'trovato i resti di un`armata'/*. I tecnici si sono diretti verso le navi più intatte e le hanno rimesse in funzione.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*LOCA: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'Abbiamo trovato un pianeta che */'conserva i resti di una antica civiltà'/* . Siamo in grado di vedere una enorme stazione spaziale ancora intatta. Alcuni tecnici e piloti sono scesi sulla superficie per vedere se vi sono delle navi ancora utilizzabili.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -111,7 +111,7 @@ export const it: ExpeditionMessages = {
             /*'Alcuni */'barbari primitivi ci stanno attaccando con delle navi spaziali'/* che non sono degne di tale nome...'*/,
             /*'Abbiamo intercettato */'messaggi di alcuni pirati ubriachi'/*. Sembra che saremo presto sotto attacco.'*/,
             'Abbiamo dovuto combattere alcuni pirati'/*, fortunatamente erano pochi.'*/,
-            /*TODO: it 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*LOCA: it 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'La tua spedizione ha */'avuto uno spiacevole incontro con alcuni pirati dello spazio',
@@ -129,7 +129,7 @@ export const it: ExpeditionMessages = {
             /*'Alcune */'navi straniere hanno attaccato la spedizione'/* senza alcun avviso!'*/,
             /*'La tua flotta in esplorazione */'non ha avuto un amichevole primo contatto con una specie'/* sconosciuta.'*/,
             /*'La nostra spedizione è */'stata attaccata da un piccolo gruppo di navi',
-            /*TODO: it 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*LOCA: it 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'Una */'specie sconosciuta sta attaccando'/* la nostra spedizione!'*/,
@@ -137,7 +137,7 @@ export const it: ExpeditionMessages = {
             /*'Il collegamento con la nostra spedizione si è interrotto per un breve periodo. Da quello che abbiamo potuto decifrare dall`ultimo messaggio, stanno subendo un duro attacco - */'gli aggressori non sono stati identificati'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: it 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*LOCA: it 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Abbiamo */'avuto difficoltà a pronunciare correttamente il dialetto'/* della razza aliena. Il nostro diplomatico ha detto "fate fuoco" anziché "non fate fuoco"!'*/,
             /*'Una grande */'formazione di navi cristalline di origine sconosciuta'/* ha avuto una collisione diretta con la nostra flotta in spedizione. Dobbiamo prepararci al peggio.'*/,
         ],
@@ -156,12 +156,12 @@ export const it: ExpeditionMessages = {
             /*'abbiamo quasi avuto */'una collisione con un`altra flotta in spedizione'/*. Non pensavo che ci sarebbe stato qualcun altro qui.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO it: 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*TODO it: 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*TODO it: 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*LOCA it: 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*LOCA it: 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*LOCA it: 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*TODO it: 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA it: 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };

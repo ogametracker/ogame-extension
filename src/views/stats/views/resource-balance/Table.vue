@@ -112,9 +112,9 @@
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
-                [this.$i18n.$t.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
@@ -151,9 +151,9 @@
                 };
 
                 return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
-                    label: this.$i18n.$t.resources[resource],
+                    label: this.$i18n.$t.extension.resources[resource],
                     items: types[resource].map(eventType => ({
-                        label: eventType == null ? this.$i18n.$t.common.sum : this.$i18n.$t.resourceBalance[eventType],
+                        label: eventType == null ? this.$i18n.$t.extension.common.sum : this.$i18n.$t.extension.resourceBalance[eventType],
                         getValue: events => this.getResources(events, eventType, resource),
                         class: eventType == null ? 'sum-item' : '',
                         labelClass: eventType == null ? 'sum-item' : '',
@@ -162,7 +162,7 @@
             }
 
             return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.resources[resource],
+                label: this.$i18n.$t.extension.resources[resource],
                 getValue: events => this.getResources(events, null, resource),
             }));
         }
@@ -226,7 +226,7 @@
         private get footerItems(): RangedStatsTableItem<DailyEvents>[] {
             const result: RangedStatsTableItem<DailyEvents>[] = [
                 {
-                    label: this.$i18n.$t.common.resourceUnits,
+                    label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: events => ResourceTypes.reduce(
                         (total, resource) => total + EventTypes.reduce(
                             (total, eventType) => total + this.getResources(events, eventType, resource),
@@ -239,7 +239,7 @@
 
             if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     getValue: events => ResourceTypes.reduce(
                         (total, resource) => total + EventTypes.reduce(
                             (total, eventType) => total + getMsuOrDsu({

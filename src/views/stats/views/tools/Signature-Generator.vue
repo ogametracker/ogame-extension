@@ -186,7 +186,7 @@
                 const fixResourceHeaderOffset = 2;
 
                 drawTextWithShadow({
-                    text: this.$i18n.$t.tools.signatureGenerator.production,
+                    text: this.$i18n.$t.extension.tools.signatureGenerator.production,
                     x: padding,
                     y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
                     baseline: 'middle',
@@ -194,10 +194,10 @@
                     alignRight: true,
                 });
                 const cells1 = [
-                    this.$i18n.$t.tools.signatureGenerator.averagePerHour,
-                    this.$i18n.$t.tools.signatureGenerator.totalPerHour,
-                    this.$i18n.$t.tools.signatureGenerator.totalPerDay,
-                    this.$i18n.$t.tools.signatureGenerator.totalPerWeek,
+                    this.$i18n.$t.extension.tools.signatureGenerator.averagePerHour,
+                    this.$i18n.$t.extension.tools.signatureGenerator.totalPerHour,
+                    this.$i18n.$t.extension.tools.signatureGenerator.totalPerDay,
+                    this.$i18n.$t.extension.tools.signatureGenerator.totalPerWeek,
                 ];
                 cells1.forEach((text, i) => drawTextWithShadow({
                     text,
@@ -209,7 +209,7 @@
 
                 const xMetal = padding + colWidth;
                 drawTextWithShadow({
-                    text: this.$i18n.$t.resources.metal,
+                    text: this.$i18n.$t.extension.resources.metal,
                     x: xMetal,
                     y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
                     baseline: 'middle',
@@ -234,7 +234,7 @@
 
                 const xCrystal = padding + 2 * colWidth;
                 drawTextWithShadow({
-                    text: this.$i18n.$t.resources.crystal,
+                    text: this.$i18n.$t.extension.resources.crystal,
                     x: xCrystal,
                     y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
                     baseline: 'middle',
@@ -259,7 +259,7 @@
 
                 const xDeut = padding + 3 * colWidth;
                 drawTextWithShadow({
-                    text: this.$i18n.$t.resources.deuterium,
+                    text: this.$i18n.$t.extension.resources.deuterium,
                     x: xDeut,
                     y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
                     baseline: 'middle',
@@ -289,10 +289,10 @@
             const drawNumberOfTrackedEvents = () => {
                 const yStart = 190;
                 const events = [
-                    this.$i18n.$t.tools.signatureGenerator.expeditions,
-                    this.$i18n.$t.tools.signatureGenerator.lifeformDiscoveries,
-                    this.$i18n.$t.tools.signatureGenerator.combats,
-                    this.$i18n.$t.tools.signatureGenerator.debrisFieldReports,
+                    this.$i18n.$t.extension.tools.signatureGenerator.expeditions,
+                    this.$i18n.$t.extension.tools.signatureGenerator.lifeformDiscoveries,
+                    this.$i18n.$t.extension.tools.signatureGenerator.combats,
+                    this.$i18n.$t.extension.tools.signatureGenerator.debrisFieldReports,
                 ];
                 events.forEach((text, i) => drawTextWithShadow({
                     text,

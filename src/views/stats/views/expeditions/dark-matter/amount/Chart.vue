@@ -48,7 +48,7 @@
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return [{
                 key: 'dark-matter',
-                label: this.$i18n.$t.premium.darkMatter,
+                label: this.$i18n.$t.ogame.premium.darkMatter,
                 color: this.color,
                 filled: true,
                 getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,

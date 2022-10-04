@@ -27,7 +27,6 @@ export const en: EmpireTranslations = {
             consumption: 'Consumption',
             lifeformBuildings: 'Lifeform Buildings',
             crawlers: 'Crawlers',
-            plasmaTechnology: 'Plasma Technology',
             items: 'Items',
             geologist: 'Geologist',
             commandStaff: 'Command Staff',
@@ -41,8 +40,11 @@ export const en: EmpireTranslations = {
 
         table: {
             cost: 'Cost',
+            levels: 'Levels',
             productionPlus: 'Production Plus',
             amortizationTime: 'Amortization Time',
+            groupSelectedItems: 'Group selected items',
+            showOriginalItems: 'Show all items individually',
 
             levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
         },
@@ -52,23 +54,22 @@ export const en: EmpireTranslations = {
             applyAndClose: 'Apply settings and close',
 
             playerSettings: {
-                header: 'Player-wide Settings',
+                header: 'General Settings',
+                optimizeForResources: 'Optimize for selected resources',
                 officers: 'Officers',
                 playerClass: 'Player Class',
                 allianceClass: 'Alliance Class',
-                currentLevelPlasmatech: 'Current Level of Plasmatechnology',
-                currentLevelAstrophysics: 'Current Level of Astrophysics',
+                currentLevelOf: (name: string) => `Current Level of ${name}`,
 
                 unusedRaidColonySlots: 'Currently unused raid colony slots',
             },
             astrophysicsSettings: {
-                header: 'Astrophysics Settings',
-                showAstrophysics: 'Show astrophysics + new colonies in result',
+                header: (name: string) => `${name} Settings`,
                 newColony: 'new Colony',
             },
             plasmatechSettings: {
-                header: 'Plasma Technology Settings',
-                includePlasmatech: 'Include Plasma Technology in calculation',
+                header: (name: string) => `${name} Settings`,
+                includePlasmatech: (name: string) => `Include ${name} in calculation`,
             },
             planetSettings: {
                 header: 'Planet Settings',

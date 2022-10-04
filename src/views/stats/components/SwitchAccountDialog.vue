@@ -6,7 +6,7 @@
     >
         <loading-spinner v-if="!knownAccountsLoaded" />
         <div v-else>
-            <div v-text="$i18n.$t.switchAccounts.title" />
+            <div v-text="$i18n.$t.extension.switchAccounts.title" />
             <select @change="gotoAccount()" v-model="selectedAccountIndex">
                 <option
                     v-for="(account, i) in knownAccounts"

@@ -1,8 +1,9 @@
+import { PlayerClass } from "../../../classes/PlayerClass";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { CollectorClassBonusLifeformTechnology } from "../interfaces";
+import { ClassBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class RocktalCollectorEnhancementClass extends LifeformTechnology implements CollectorClassBonusLifeformTechnology {
+class RocktalCollectorEnhancementClass extends LifeformTechnology implements ClassBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -24,11 +25,19 @@ class RocktalCollectorEnhancementClass extends LifeformTechnology implements Col
         });
     }
     
+    public appliesTo(playerClass: PlayerClass): boolean {
+        return playerClass == PlayerClass.collector;
+    }
+    
     public get type(): LifeformTechnologyType {
         return LifeformTechnologyType.rocktalCollectorEnhancement;
     }
 
-    public getCollectorClassBonus(level: number): number {
+    public getClassBonus(playerClass: PlayerClass, level: number): number {
+        if(!this.appliesTo(playerClass)) {
+            return 0;
+        }
+
         const bonus = 0.00_2; // 0.2%
         return bonus * level;
     }

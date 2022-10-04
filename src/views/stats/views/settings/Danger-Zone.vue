@@ -5,7 +5,7 @@
                 <span class="ogti ogti-expedition" />
                 <span
                     v-text="
-                        $i18n.$t.settings.dangerZone.deleteExpeditions.button(
+                        $i18n.$t.extension.settings.dangerZone.deleteExpeditions.button(
                             accountAndServer
                         )
                     "
@@ -16,7 +16,7 @@
                 <span class="ogti ogti-attack" />
                 <span
                     v-text="
-                        $i18n.$t.settings.dangerZone.deleteCombats.button(
+                        $i18n.$t.extension.settings.dangerZone.deleteCombats.button(
                             accountAndServer
                         )
                     "
@@ -27,7 +27,7 @@
                 <span class="ogti ogti-debris-field" />
                 <span
                     v-text="
-                        $i18n.$t.settings.dangerZone.deleteDebrisFieldReports.button(
+                        $i18n.$t.extension.settings.dangerZone.deleteDebrisFieldReports.button(
                             accountAndServer
                         )
                     "
@@ -40,7 +40,7 @@
             <span class="mdi mdi-account" />
             <span
                 v-text="
-                    $i18n.$t.settings.dangerZone.deleteAccount.button(
+                    $i18n.$t.extension.settings.dangerZone.deleteAccount.button(
                         accountAndServer
                     )
                 "
@@ -52,7 +52,7 @@
             <span class="mdi mdi-update" />
             <span
                 v-text="
-                    $i18n.$t.settings.dangerZone.deleteUniverseHistory.button(
+                    $i18n.$t.extension.settings.dangerZone.deleteUniverseHistory.button(
                         server
                     )
                 "
@@ -63,7 +63,7 @@
         <button class="delete-button" @click="deleteEverything()">
             <span class="mdi mdi-delete" />
             <span
-                v-text="$i18n.$t.settings.dangerZone.deleteEverything.button"
+                v-text="$i18n.$t.extension.settings.dangerZone.deleteEverything.button"
             />
         </button>
 
@@ -106,9 +106,9 @@
 
         private async clearExpeditions() {
             const confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteExpeditions.confirmationText(this.accountAndServer, this.$i18n.$n(ExpeditionDataModule.count))
+                this.$i18n.$t.extension.settings.dangerZone.deleteExpeditions.confirmationText(this.accountAndServer, this.$i18n.$n(ExpeditionDataModule.count))
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
             if (confirmed) {
@@ -122,9 +122,9 @@
 
         private async clearCombats() {
             const confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteCombats.confirmationText(this.accountAndServer, this.$i18n.$n(CombatReportDataModule.count))
+                this.$i18n.$t.extension.settings.dangerZone.deleteCombats.confirmationText(this.accountAndServer, this.$i18n.$n(CombatReportDataModule.count))
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
             if (confirmed) {
@@ -138,9 +138,9 @@
 
         private async clearDebrisFieldReports() {
             const confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteDebrisFieldReports.confirmationText(this.accountAndServer, this.$i18n.$n(DebrisFieldReportDataModule.count))
+                this.$i18n.$t.extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(this.accountAndServer, this.$i18n.$n(DebrisFieldReportDataModule.count))
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
             if (confirmed) {
@@ -154,9 +154,9 @@
 
         private async deleteAccount() {
             const confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteAccount.confirmationText(this.accountAndServer)
+                this.$i18n.$t.extension.settings.dangerZone.deleteAccount.confirmationText(this.accountAndServer)
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
 
@@ -170,9 +170,9 @@
 
         private async deleteUniverseHistory() {
             const confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteUniverseHistory.confirmationText(this.accountAndServer)
+                this.$i18n.$t.extension.settings.dangerZone.deleteUniverseHistory.confirmationText(this.accountAndServer)
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
 
@@ -187,18 +187,18 @@
 
         private async deleteEverything() {
             let confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteEverything.confirmationText1
+                this.$i18n.$t.extension.settings.dangerZone.deleteEverything.confirmationText1
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
             if (!confirmed) {
                 return;
             }
 
             confirmed = window.confirm(
-                this.$i18n.$t.settings.dangerZone.deleteEverything.confirmationText2
+                this.$i18n.$t.extension.settings.dangerZone.deleteEverything.confirmationText2
                 + '\n\n'
-                + this.$i18n.$t.settings.dangerZone.doYouWantToContinue
+                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
             );
 
 

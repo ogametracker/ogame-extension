@@ -26,7 +26,6 @@ export interface EmpireTranslations {
             consumption: string;
             lifeformBuildings: string;
             crawlers: string;
-            plasmaTechnology: string;
             items: string;
             geologist: string;
             commandStaff: string;
@@ -40,8 +39,11 @@ export interface EmpireTranslations {
 
         table: {
             cost: string;
+            levels: string;
             productionPlus: string;
             amortizationTime: string;
+            groupSelectedItems: string;
+            showOriginalItems: string;
 
             levelsOnPlanets: (levels: number, planets: number) => string;
         };
@@ -52,22 +54,21 @@ export interface EmpireTranslations {
 
             playerSettings: {
                 header: string;
+                optimizeForResources: string;
                 officers: string;
                 playerClass: string;
                 allianceClass: string;
-                currentLevelPlasmatech: string;
-                currentLevelAstrophysics: string;
+                currentLevelOf: (name: string) => string;
 
                 unusedRaidColonySlots: string;
             };
             astrophysicsSettings: {
-                header: string;
-                showAstrophysics: string;
+                header: (name: string) => string;
                 newColony: string;
             };
             plasmatechSettings: {
-                header: string;
-                includePlasmatech: string;
+                header: (name: string) => string;
+                includePlasmatech: (name: string) => string;
             };
             planetSettings: {
                 header: string;

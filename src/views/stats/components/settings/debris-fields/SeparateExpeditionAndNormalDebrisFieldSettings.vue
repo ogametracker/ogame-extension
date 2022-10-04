@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.debrisFields.separateExpeditionDebrisFields.title" />
+            <span v-text="$i18n.$t.extension.settings.debrisFields.separateExpeditionDebrisFields.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="separateExpeditionDebrisFields"
                 @input="toggle($event)"
-                :label="$i18n.$t.settings.debrisFields.separateExpeditionDebrisFields.label"
+                :label="$i18n.$t.extension.settings.debrisFields.separateExpeditionDebrisFields.label"
             />
         </div>
     </div>

@@ -1,7 +1,10 @@
+import { ResearchType } from "../../../research/ResearchType";
+import { CostAndTimeReduction } from "../../common-interfaces";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class SupercomputerClass extends LifeformTechnology {
+class SupercomputerClass extends LifeformTechnology implements ResearchCostAndTimeReductionLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +24,24 @@ class SupercomputerClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    public appliesTo(research: LifeformTechnologyType | ResearchType): boolean {
+        return research == ResearchType.astrophysics;
+    }
+    
+    public getResearchCostAndTimeReduction(research: LifeformTechnologyType | ResearchType, level: number): CostAndTimeReduction {
+        if(!this.appliesTo(research)) {
+            return { cost: 0, time: 0 };
+        }
+        
+        const timeReductionPerLevel = 0.00_1; //0.1%
+        const maxTimeReduction = 0.99; //99%
+
+        return {
+            cost: 0,
+            time: Math.min(maxTimeReduction, timeReductionPerLevel * level),
+        };
     }
 
     public get type(): LifeformTechnologyType {

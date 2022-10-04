@@ -6,10 +6,9 @@ import { FusionReactor } from "@/shared/models/ogame/buildings/FusionReactor";
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
 import { addCost, Cost } from "@/shared/models/ogame/common/Cost";
-import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
-import { getLifeformTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
+import { getLifeformLevelTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
 import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { CollectorClassBonusLifeformTechnologies, CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
+import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
 import { getCrystalBaseProduction } from "@/shared/models/ogame/resource-production/getCrystalProduction";
@@ -21,50 +20,19 @@ import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { createRecord } from "@/shared/utils/createRecord";
 import { EmpireDataModule } from "@/views/stats/data/EmpireDataModule";
 import { ServerSettingsDataModule } from "@/views/stats/data/ServerSettingsDataModule";
+import { getPlanetCollectorClassBonusFactor, getPlanetLifeformBuildingBonusProductionFactor, getPlanetLifeformTechnologyBonusProductionFactor, getPlanetLifeformTechnologyBoost } from "../lifeforms";
 
 export interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
     getTotal(): Cost;
 }
 
-function get_planetCollectorClassBonusFactor(planet: PlanetData) {
-    return CollectorClassBonusLifeformTechnologies
-        .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
-        .reduce(
-            (total, tech) => total + tech.getCollectorClassBonus(planet.lifeformTechnologies[tech.type]),
-            0
-        );
-}
 
-function get_planetLifeformTechnologyBoost(planet: PlanetData) {
-    return LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.activeLifeform]
-        .reduce(
-            (total, building) => total + building.getLifeformTechnologyBonus(planet.lifeformBuildings[building.type]),
-            0
-        );
-}
-
-function get_planetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetData) {
+export function getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetData) {
     return CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies
         .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
         .reduce(
             (total, tech) => total + tech.getCrawlerProductionBonus(planet.lifeformTechnologies[tech.type]),
             0
-        );
-}
-
-function get_planetLifeformBuildingBonusProductionFactor(planet: PlanetData): Cost {
-    return ResourceProductionBonusLifeformBuildingsByLifeform[planet.activeLifeform].reduce<Cost>(
-        (total, building) => addCost(total, building.getProductionBonus(planet.lifeformBuildings[building.type])),
-        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-    );
-}
-
-function get_planetLifeformTechnologyBonusProductionFactor(planet: PlanetData): Cost {
-    return ResourceProductionBonusLifeformTechnologies
-        .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
-        .reduce<Cost>(
-            (total, tech) => addCost(total, tech.getProductionBonus(planet.lifeformTechnologies[tech.type])),
-            { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
         );
 }
 
@@ -90,7 +58,7 @@ export function getProductionBreakdowns(): EmpireProductionBreakdowns {
         crystal: {} as Record<number, EmpireProductionPlanetState>,
         deuterium: {} as Record<number, EmpireProductionPlanetState>,
     };
-    const lifeformXpBoost = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformTechnologyBonus(lifeformExperience[lf]));
+    const lifeformXpBoost = createRecord(LifeformTypes, lf => lf == LifeformType.none ? 0 : getLifeformLevelTechnologyBonus(lifeformExperience[lf]));
 
     planets.forEach(planet => {
         const levelMetalMine = planet.buildings[BuildingType.metalMine];
@@ -109,11 +77,11 @@ export function getProductionBreakdowns(): EmpireProductionBreakdowns {
         const baseProductionConfig = {
             crawlers: crawlerConfig,
             lifeformExperienceBoost: lifeformXpBoost[planet.activeLifeform],
-            collectorClassBonusFactor: get_planetCollectorClassBonusFactor(planet),
-            lifeformBuildingBonusProductionFactor: get_planetLifeformBuildingBonusProductionFactor(planet),
-            lifeformTechnologyBonusProductionFactor: get_planetLifeformTechnologyBonusProductionFactor(planet),
-            lifeformTechnologyCrawlerProductionBonusFactor: get_planetLifeformTechnologyCrawlerProductionBonusFactor(planet),
-            lifeformTechnologyBoost: get_planetLifeformTechnologyBoost(planet),
+            collectorClassBonusFactor: getPlanetCollectorClassBonusFactor(planet),
+            lifeformBuildingBonusProductionFactor: getPlanetLifeformBuildingBonusProductionFactor(planet),
+            lifeformTechnologyBonusProductionFactor: getPlanetLifeformTechnologyBonusProductionFactor(planet),
+            lifeformTechnologyCrawlerProductionBonusFactor: getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet),
+            lifeformTechnologyBoost: getPlanetLifeformTechnologyBoost(planet),
         };
 
         const productionBuildingDependencies: ProductionBuildingDependencies = {

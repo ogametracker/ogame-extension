@@ -11,52 +11,52 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.settings.tabs.common,
+                    label: this.$i18n.$t.extension.settings.tabs.common,
                     to: { name: 'settings/common' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.accessbility,
+                    label: this.$i18n.$t.extension.settings.tabs.accessbility,
                     to: { name: 'settings/accessibility' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.dateRanges,
+                    label: this.$i18n.$t.extension.settings.tabs.dateRanges,
                     to: { name: 'settings/date-ranges' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.colors,
+                    label: this.$i18n.$t.extension.settings.tabs.colors,
                     to: { name: 'settings/colors' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.expeditions,
+                    label: this.$i18n.$t.extension.settings.tabs.expeditions,
                     to: { name: 'settings/expeditions' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.combats,
+                    label: this.$i18n.$t.extension.settings.tabs.combats,
                     to: { name: 'settings/combats' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.debrisFields,
+                    label: this.$i18n.$t.extension.settings.tabs.debrisFields,
                     to: { name: 'settings/debris-fields' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.resourceBalance,
+                    label: this.$i18n.$t.extension.settings.tabs.resourceBalance,
                     to: { name: 'settings/resource-balance' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.universeHistory,
+                    label: this.$i18n.$t.extension.settings.tabs.universeHistory,
                     to: { name: 'settings/universe-history' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.importExport,
+                    label: this.$i18n.$t.extension.settings.tabs.importExport,
                     to: { name: 'settings/import-export' },
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.migrateOldData,
+                    label: this.$i18n.$t.extension.settings.tabs.migrateOldData,
                     href: '/views/migrate.html',
                     target: '_blank',
                 },
                 {
-                    label: this.$i18n.$t.settings.tabs.dangerZone,
+                    label: this.$i18n.$t.extension.settings.tabs.dangerZone,
                     to: { name: 'settings/danger-zone' },
                     class: 'danger-zone',
                 },

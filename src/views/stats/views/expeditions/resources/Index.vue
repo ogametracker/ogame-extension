@@ -13,19 +13,19 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.amount,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.amount,
                     to: { name: 'expeditions/resources/amount' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.sizes,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.sizes,
                     to: { name: 'expeditions/resources/sizes' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.count,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.count,
                     to: { name: 'expeditions/resources/count' },
                 },
                 {
-                    label: this.$i18n.$t.expeditions.tabHeaders.subHeaders.sizesByResource,
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.sizesByResource,
                     to: { name: 'expeditions/resources/size-breakdown' },
                 },
             ];

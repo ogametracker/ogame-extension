@@ -51,7 +51,7 @@
                     </component>
                 </template>
 
-                <set-default-route-button v-if="tab.canBeDefault" :label="$i18n.$t.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
+                <set-default-route-button v-if="tab.canBeDefault" :label="$i18n.$t.extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
             </floating-menu>
 
             <template v-if="isIframeMode">
@@ -66,9 +66,9 @@
         </main>
         <footer>
             <router-link :to="{ name: 'donate' }" class="made-with-love">
-                <span v-text="$i18n.$t.common.madeWithLove1" class="mr-1" />
+                <span v-text="$i18n.$t.extension.common.madeWithLove1" class="mr-1" />
                 <span class="mdi mdi-heart" style="color: #ff1f1f" />
-                <span v-text="$i18n.$t.common.madeWithLove2" class="ml-1" />
+                <span v-text="$i18n.$t.extension.common.madeWithLove2" class="ml-1" />
             </router-link>
 
             <span v-text="accountAndServer" />
@@ -156,7 +156,7 @@
                     key: 'expeditions',
                     to: { name: 'expeditions' },
                     icon: 'ogti ogti-expedition',
-                    label: this.$i18n.$t.expeditions.header,
+                    label: this.$i18n.$t.extension.expeditions.header,
                     keyboardKey: '1',
                     keyboardIcon: 'mdi mdi-numeric-1',
                     canBeDefault: true,
@@ -165,7 +165,7 @@
                     key: 'combats',
                     to: { name: 'combats' },
                     icon: 'ogti ogti-attack',
-                    label: this.$i18n.$t.combats.header,
+                    label: this.$i18n.$t.extension.combats.header,
                     keyboardKey: '2',
                     keyboardIcon: 'mdi mdi-numeric-2',
                     canBeDefault: true,
@@ -174,7 +174,7 @@
                     key: 'debris-fields',
                     to: { name: 'debris-fields' },
                     icon: 'ogti ogti-debris-field',
-                    label: this.$i18n.$t.debrisFields.header,
+                    label: this.$i18n.$t.extension.debrisFields.header,
                     keyboardKey: '3',
                     keyboardIcon: 'mdi mdi-numeric-3',
                     canBeDefault: true,
@@ -183,7 +183,7 @@
                     key: 'resource-balance',
                     to: { name: 'resource-balance' },
                     icon: 'ogti ogti-economy',
-                    label: this.$i18n.$t.resourceBalance.header,
+                    label: this.$i18n.$t.extension.resourceBalance.header,
                     keyboardKey: '4',
                     keyboardIcon: 'mdi mdi-numeric-4',
                     canBeDefault: true,
@@ -192,7 +192,7 @@
                     key: 'empire',
                     to: { name: 'empire' },
                     icon: 'ogti ogti-planet-moondna',
-                    label: this.$i18n.$t.empire.header,
+                    label: this.$i18n.$t.extension.empire.header,
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',
                     canBeDefault: true,
@@ -201,7 +201,7 @@
                     key: 'universe-history',
                     to: { name: 'universe-history' },
                     icon: 'mdi mdi-update',
-                    label: this.$i18n.$t.universeHistory.header,
+                    label: this.$i18n.$t.extension.universeHistory.header,
                     keyboardKey: '6',
                     keyboardIcon: 'mdi mdi-numeric-6',
                     canBeDefault: true,
@@ -241,7 +241,7 @@
                     key: 'donate',
                     to: { name: 'donate' },
                     icon: 'mdi mdi-coffee',
-                    label: this.$i18n.$t.donate.header,
+                    label: this.$i18n.$t.extension.donate.header,
                     class: 'donate',
                     appClass: 'donate-page',
                 },

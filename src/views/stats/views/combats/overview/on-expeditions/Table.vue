@@ -51,7 +51,7 @@
 
         private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return CombatResultTypes.map(result => ({
-                label: this.$i18n.$t.combats.combatResults[result],
+                label: this.$i18n.$t.extension.combats.combatResults[result],
                 getValue: combats => combats.reduce((acc, cur) => acc + cur.results.onExpeditions[result], 0),
             }));
         }
@@ -59,7 +59,7 @@
         private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return [
                 {
-                    label: this.$i18n.$t.common.resourceUnits,
+                    label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: combats => CombatResultTypes.reduce((acc, result) => acc + combats.reduce((acc, cur) => acc + cur.results.onExpeditions[result], 0), 0),
                 },
             ];

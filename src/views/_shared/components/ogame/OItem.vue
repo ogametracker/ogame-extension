@@ -4,6 +4,7 @@
         :class="{
             [`o-item--grade-${fullItem.grade}`]: !hideItemGrade,
             'o-item--disabled': disabled,
+            'o-item--fade': fade,
             'o-item--hide-grade': hideItemGrade,
         }"
         :style="{
@@ -42,6 +43,9 @@
         private disabled!: boolean;
 
         @Prop({ required: false, type: Boolean, default: false })
+        private fade!: boolean;
+
+        @Prop({ required: false, type: Boolean, default: false })
         private showTooltip!: boolean; //TODO: item tooltip
 
 
@@ -77,6 +81,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 

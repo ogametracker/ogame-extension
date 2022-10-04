@@ -3,6 +3,7 @@
         class="o-resource"
         :class="{
             'o-resource--disabled': disabled,
+            'o-resource--fade': fade,
         }"
         :style="{
             'background-image': `url(/img/ogame/resources/${image}.upscaled.png)`,
@@ -35,6 +36,9 @@
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
+
         private get image() {
             return this.imageMap[this.resource];
         }
@@ -60,6 +64,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 </style>

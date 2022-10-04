@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.expeditionEventSizes"
+        :header="$i18n.$t.extension.settings.colors.expeditionEventSizes"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -25,7 +25,7 @@
     export default class ExpeditionEventSizeColorSettings extends Vue {
 
         private get labels(): Record<ExpeditionEventSize, string> {
-            return this.$i18n.$t.expeditions.expeditionEventSizes;
+            return this.$i18n.$t.extension.expeditions.expeditionEventSizes;
         }
 
         private readonly keys: ExpeditionEventSize[] = [

@@ -3,6 +3,7 @@
         class="o-player-class"
         :class="{
             'o-player-class--disabled': disabled,
+            'o-player-class--fade': fade,
         }"
         :style="{
             'background-image': `url(/img/ogame/player-classes/${image}.png)`,
@@ -33,6 +34,9 @@
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
 
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
+
 
         private get image() {
             return this.imageMap[this.playerClass];
@@ -58,6 +62,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 </style>

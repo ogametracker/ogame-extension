@@ -52,7 +52,7 @@
 
         private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return ShipTypes.map(ship => ({
-                label: this.$i18n.$t.ships[ship],
+                label: this.$i18n.$t.ogame.ships[ship],
                 getValue: combats => combats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
             }));
         }
@@ -60,7 +60,7 @@
         private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return [
                 {
-                    label: this.$i18n.$t.common.sum,
+                    label: this.$i18n.$t.extension.common.sum,
                     getValue: combats => ShipTypes.reduce(
                         (total, ship) => total + combats.reduce(
                             (acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
@@ -72,23 +72,23 @@
 
         private get shipTable(): Record<string, ShipType> {
             return {
-                [this.$i18n.$t.ships[ShipType.lightFighter]]: ShipType.lightFighter,
-                [this.$i18n.$t.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
-                [this.$i18n.$t.ships[ShipType.cruiser]]: ShipType.cruiser,
-                [this.$i18n.$t.ships[ShipType.battleship]]: ShipType.battleship,
-                [this.$i18n.$t.ships[ShipType.bomber]]: ShipType.bomber,
-                [this.$i18n.$t.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
-                [this.$i18n.$t.ships[ShipType.destroyer]]: ShipType.destroyer,
-                [this.$i18n.$t.ships[ShipType.reaper]]: ShipType.reaper,
-                [this.$i18n.$t.ships[ShipType.pathfinder]]: ShipType.pathfinder,
-                [this.$i18n.$t.ships[ShipType.smallCargo]]: ShipType.smallCargo,
-                [this.$i18n.$t.ships[ShipType.largeCargo]]: ShipType.largeCargo,
-                [this.$i18n.$t.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
-                [this.$i18n.$t.ships[ShipType.recycler]]: ShipType.recycler,
-                [this.$i18n.$t.ships[ShipType.deathStar]]: ShipType.deathStar,
-                [this.$i18n.$t.ships[ShipType.crawler]]: ShipType.crawler,
-                [this.$i18n.$t.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
-                [this.$i18n.$t.ships[ShipType.colonyShip]]: ShipType.colonyShip,
+                [this.$i18n.$t.ogame.ships[ShipType.lightFighter]]: ShipType.lightFighter,
+                [this.$i18n.$t.ogame.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
+                [this.$i18n.$t.ogame.ships[ShipType.cruiser]]: ShipType.cruiser,
+                [this.$i18n.$t.ogame.ships[ShipType.battleship]]: ShipType.battleship,
+                [this.$i18n.$t.ogame.ships[ShipType.bomber]]: ShipType.bomber,
+                [this.$i18n.$t.ogame.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
+                [this.$i18n.$t.ogame.ships[ShipType.destroyer]]: ShipType.destroyer,
+                [this.$i18n.$t.ogame.ships[ShipType.reaper]]: ShipType.reaper,
+                [this.$i18n.$t.ogame.ships[ShipType.pathfinder]]: ShipType.pathfinder,
+                [this.$i18n.$t.ogame.ships[ShipType.smallCargo]]: ShipType.smallCargo,
+                [this.$i18n.$t.ogame.ships[ShipType.largeCargo]]: ShipType.largeCargo,
+                [this.$i18n.$t.ogame.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
+                [this.$i18n.$t.ogame.ships[ShipType.recycler]]: ShipType.recycler,
+                [this.$i18n.$t.ogame.ships[ShipType.deathStar]]: ShipType.deathStar,
+                [this.$i18n.$t.ogame.ships[ShipType.crawler]]: ShipType.crawler,
+                [this.$i18n.$t.ogame.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
+                [this.$i18n.$t.ogame.ships[ShipType.colonyShip]]: ShipType.colonyShip,
             };
         }
     }

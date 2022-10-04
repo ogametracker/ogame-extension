@@ -1,3 +1,4 @@
+import { RecursivePartial } from '@/shared/types/RecursivePartial';
 import { BuildingTranslations } from '../ogame/buildings/types';
 import { LifeformBuildingsTranslations } from '../ogame/lifeforms/buildings/types';
 import { LifeformTechnologiesTranslations } from '../ogame/lifeforms/technologies/types';
@@ -21,29 +22,38 @@ import { SwitchAccountsTranslations } from './switchAccounts/type';
 import { ToolsTranslations } from './tools/type';
 import { UniverseHistoryTranslations } from './universeHistory/type';
 
+export interface ExtensionTranslationsFull {
+    ogame: {
+        buildings: BuildingTranslations;
+        lifeforms: LifeformTranslations;
+        lifeformBuildings: LifeformBuildingsTranslations;
+        lifeformTechnologies: LifeformTechnologiesTranslations;
+        premium: PremiumTranslations;
+        research: ResearchTranslations;
+        ships: ShipTranslations;
+    };
+
+    extension: {
+        common: CommonTranslations;
+        settings: SettingsTranslations;
+        resources: ResourceTranslations;
+        expeditions: ExpeditionsTranslations;
+        combats: CombatsTranslations;
+        donate: DonateTranslations;
+        debrisFields: DebrisFieldsTranslations;
+        resourceBalance: ResourceBalanceTranslations;
+        empire: EmpireTranslations;
+        switchAccounts: SwitchAccountsTranslations;
+        about: AboutTranslations;
+        universeHistory: UniverseHistoryTranslations;
+        notifications: NotificationTranslations;
+        tools: ToolsTranslations;
+
+        excelExport: ExcelExportTranslations;
+    };
+}
+
 export interface ExtensionTranslations {
-    ships: ShipTranslations;
-    buildings: BuildingTranslations;
-    research: ResearchTranslations;
-    lifeforms: LifeformTranslations;
-    lifeformBuildings: LifeformBuildingsTranslations;
-    lifeformTechnologies: LifeformTechnologiesTranslations;
-    premium: PremiumTranslations;
-
-    common: CommonTranslations;
-    settings: SettingsTranslations;
-    resources: ResourceTranslations;
-    expeditions: ExpeditionsTranslations;
-    combats: CombatsTranslations;
-    donate: DonateTranslations;
-    debrisFields: DebrisFieldsTranslations;
-    resourceBalance: ResourceBalanceTranslations;
-    empire: EmpireTranslations;
-    switchAccounts: SwitchAccountsTranslations;
-    about: AboutTranslations;
-    universeHistory: UniverseHistoryTranslations;
-    notifications: NotificationTranslations;
-    tools: ToolsTranslations;
-
-    excelExport: ExcelExportTranslations;
+    ogame: ExtensionTranslationsFull['ogame'];
+    extension: RecursivePartial<ExtensionTranslationsFull['extension']>;
 }

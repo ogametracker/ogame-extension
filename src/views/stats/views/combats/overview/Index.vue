@@ -13,11 +13,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.combats.tabHeaders.subHeaders.againstPlayers,
+                    label: this.$i18n.$t.extension.combats.tabHeaders.subHeaders.againstPlayers,
                     to: { name: 'combats/overview/against-players' },
                 },
                 {
-                    label: this.$i18n.$t.combats.tabHeaders.subHeaders.onExpeditions,
+                    label: this.$i18n.$t.extension.combats.tabHeaders.subHeaders.onExpeditions,
                     to: { name: 'combats/overview/on-expeditions' },
                 },
             ];

@@ -12,15 +12,15 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.resources.metal,
+                    label: this.$i18n.$t.extension.resources.metal,
                     to: { name: 'expeditions/resources/size-breakdown/metal' },
                 },
                 {
-                    label: this.$i18n.$t.resources.crystal,
+                    label: this.$i18n.$t.extension.resources.crystal,
                     to: { name: 'expeditions/resources/size-breakdown/crystal' },
                 },
                 {
-                    label: this.$i18n.$t.resources.deuterium,
+                    label: this.$i18n.$t.extension.resources.deuterium,
                     to: { name: 'expeditions/resources/size-breakdown/deuterium' },
                 },
             ];

@@ -27,7 +27,14 @@
                     },
                 ]"
             >
-                <slot v-if="$scopedSlots[`header-${column.key}`] != null" :name="`header-${column.key}`" :label="column.label" />
+                <template v-if="getMatchingSlotNames(`header-${column.key}`).length > 0">
+                    <slot
+                        v-for="result in getMatchingSlotNames(`header-${column.key}`)"
+                        :name="result.name"
+                        :match="result.match"
+                        :label="column.label"
+                    />
+                </template>
                 <span v-else v-text="column.label" />
             </div>
         </div>
@@ -46,7 +53,16 @@
                         },
                     ]"
                 >
-                    <slot v-if="$scopedSlots[`cell-${column.key}`] != null" :name="`cell-${column.key}`" :value="item[column.key]" :item="item" :index="i" />
+                    <template v-if="getMatchingSlotNames(`cell-${column.key}`).length > 0">
+                        <slot
+                            v-for="result in getMatchingSlotNames(`cell-${column.key}`)"
+                            :name="result.name"
+                            :match="result.match"
+                            :value="item[column.key]"
+                            :item="item"
+                            :index="i"
+                        />
+                    </template>
                     <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
@@ -66,7 +82,16 @@
                         },
                     ]"
                 >
-                    <slot v-if="$scopedSlots[`footer-${column.key}`] != null" :name="`footer-${column.key}`" :value="item[column.key]" :item="item" />
+                    <template v-if="getMatchingSlotNames(`footer-${column.key}`).length > 0">
+                        <slot
+                            v-for="result in getMatchingSlotNames(`footer-${column.key}`)"
+                            :name="result.name"
+                            :match="result.match"
+                            :value="item[column.key]"
+                            :item="item"
+                            :index="i"
+                        />
+                    </template>
                     <span v-else-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                     <span v-else v-text="item[column.key]" />
                 </div>
@@ -156,6 +181,13 @@
                 },
             };
             this.$emit('scroll', scrollData);
+        }
+
+        private getMatchingSlotNames(columnKey: string): { name: string, match: RegExpMatchArray }[] {
+            return Object.keys(this.$scopedSlots).map(name => ({
+                name,
+                match: columnKey.match(`^${name}$`),
+            })).filter(r => r.match != null) as { name: string, match: RegExpMatchArray }[];
         }
     }
 </script>
