@@ -13,7 +13,7 @@ export const pl: ExpeditionMessages = {
             /*'Ekspedycja podążyła za */'dziwnym sygnałem pochodzącym z asteroidy'/* . W jej jądrze znaleziono małą ilość antymaterii. Asteroida została odholowana, a odkrywcy próbują wydobyć antymaterię.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pl 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Nasza */'ekspedycja przeprowadziła niezwykły eksperyment'/* . Naukowcom udało się wydobyć Antymaterię z umierającej gwiazdy.'*/,
             /*LOCA: pl 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
             /*LOCA: pl 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
@@ -48,7 +48,7 @@ export const pl: ExpeditionMessages = {
             /*'Znaleźliśmy */'opuszczoną stację piratów'/* , a w jej hangarach stare statki. Technicy dokonują oględzin i sprawdzają, czy niektóre z nich mogą zostać wykorzystane.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pl 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'Nasza ekspedycja */'natrafiła na starą automatyczną stocznię'/* . Kilka statków było nadal w fazie produkcyjnej i nasi technicy starają się aktualnie uruchomić generatory energii, aby dokończyć ich produkcję.'*/,
             /*LOCA: pl 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -67,9 +67,9 @@ export const pl: ExpeditionMessages = {
         /*'Podczas */'wyprawy zrobiono wspaniałe zdjęcia supernowej'/* . Niestety nic innego nie udało się przywieźć, lecz przynajmniej są spore szanse na wygranie tegorocznego konkursu "Fotografia Roku Wszechświata".'*/,
         /*'Ekspedycja */'śledziła dziwny sygnał od jakiegoś czasu'/* . W końcu okazało się, że sygnał nadawany był ze starej sondy wysłanej pokolenia temu celem przywitania się z innymi gatunkami. Sondę uratowano, a wiele muzeów na Twojej rodzinnej planecie wyraziło zainteresowanie nią.'*/,
         /*'Teraz wiemy, że czerwone */'anomalie klasy 5 nie tylko destabilizują'/* systemy nawigacyjne statków, ale także powodują halucynacje u wielu członków załogi. Ekspedycja nie przywiozła niczego z wyprawy.'*/,
-        /*LOCA: pl 'Deine Expeditionsflotte geriet gefährlich nahe an */'das Gravitationsfeld eines Neutronensterns'/* und musste einige Zeit kämpfen, um sich daraus zu befreien. Dadurch wurde sehr viel Deuterium verbraucht und die Expeditionsflotte kehrte schließlich unverrichteter Dinge zurück.'*/,
+        /*'Ekspedycja niemalże została złapana przez */'pole grawitacyjne gwiazdy neutronowej i potrzebowała'/* trochę czasu na całkowite uwolnienie się. Jako, że na ten cel wykorzystano dużo deuteru, ekspedycja okazała się bezowocna.'*/,
         /*'Dziwny */'wirus komputerowy zaatakował system nawigacji'/* krótko po tym, jak ekspedycja opuściła rodzimy układ słoneczny. Spowodowało to, że ekspedycja zaczęła zataczać okręgi. Rzecz jasna, ekspedycja nie należała do udanych.'*/,
-        /*LOCA: pl 'Vielleicht hätte man den */'Geburtstag des Captains'/* nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.'*/,
+        /*'Chyba nie */'powinniśmy byli urządzać przyjęcia urodzinowego dla kapitana'/* na tej samotnej planecie. Straszna, nieznana gorączka spowodowała, że większość załogi musiała pozostać w izolatkach przez resztę ekspedycji. Z powodu braków w załodze ekspedycja nie powiodła się.'*/,
         /*'Ktoś zainstalował w */'komputerach statku starą grę strategiczną'/* . Misja ekspedycji trwała długo, lecz nie była zbyt owocna.'*/,
     ],
 
@@ -142,16 +142,16 @@ export const pl: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /*LOCA: pl *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    logbookRegex: /Wpis z dziennika pokładowego oficerów komunikacyjnych|Wpis z dziennika pokładowego oficera komunikacyjnego:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*LOCA: pl 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*LOCA: pl 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Zdaje się, że ta */'część wszechświata jeszcze nie była badana',
+            /*'to cudowne uczucie być pierwszymi, */'którzy podróżują przez ten niezbadany sektor',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: pl 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*LOCA: pl 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*LOCA: pl 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Zdaje się, że żaden */'człowiek jeszcze nie był w tej części galaktyki',
+            /*'znaleźliśmy */'szczątki starożytnego statku kosmicznego'/* . Nie jesteśmy zatem pierwsi w tym miejscu'*/,
+            /*'niemalże */'doszło do kolizji z flotą innej ekspedycji'/* . Nie sądziłem, że inne ekspedycje mogą znajdować się w pobliżu.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*LOCA: pl 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
