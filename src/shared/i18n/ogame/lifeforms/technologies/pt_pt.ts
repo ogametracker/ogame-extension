@@ -1,7 +1,7 @@
 import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformTechnologiesTranslations } from "./types";
 
-export const pt: LifeformTechnologiesTranslations = {
+export const pt_pt: LifeformTechnologiesTranslations = {
     [LifeformTechnologyType.intergalacticEnvoys]: 'Emissários Intergalácticos',
     [LifeformTechnologyType.highPerformanceExtractors]: 'Extratores de Alto Desempenho',
     [LifeformTechnologyType.fusionDrives]: 'Motores de Fusão',

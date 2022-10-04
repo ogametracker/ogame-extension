@@ -1,7 +1,7 @@
 import { LifeformBuildingsTranslations } from "./types";
 import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 
-export const pt: LifeformBuildingsTranslations = {
+export const pt_pt: LifeformBuildingsTranslations = {
     [LifeformBuildingType.residentialSector]: 'Setor Residencial',
     [LifeformBuildingType.biosphereFarm]: 'Quinta de Biosfera',
     [LifeformBuildingType.researchCentre]: 'Centro de Pesquisa',
