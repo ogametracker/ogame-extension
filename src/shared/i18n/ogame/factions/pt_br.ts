@@ -1,6 +1,6 @@
 import { FactionTranslations } from "./types";
 
-export const es_ar: FactionTranslations = {
+export const pt_br: FactionTranslations = {
     pirates: 'Piratas',
     aliens: 'Aliens',
 };

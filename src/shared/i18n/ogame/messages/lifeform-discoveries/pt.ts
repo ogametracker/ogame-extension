@@ -1,7 +1,7 @@
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformDiscoveryMessages } from "./types";
 
-export const pt_pt: LifeformDiscoveryMessages = {
+export const pt: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.nothing]: [
         /*'No início da missão de exploração, foi */'possível decifrar algumas coordenadas promissoras'/*, obtidas através de uma mensagem misteriosa. No entanto, quando a Nave de Exploração chegou ao setor indicado pelas coordenadas, tudo o que a tripulação encontrou foi um gigantesco campo de destroços deixado para trás após uma batalha. Não foram encontrados sobreviventes.'*/,
         /*'O */'campo magnético de um asteroide interferiu'/* com os sistemas de deteção. Aquilo que aparentava ser um sinal promissor de vida inteligente extraterrestre era apenas uma interferência nos instrumentos de telemetria. Não foram encontradas novas formas de vida.'*/,
