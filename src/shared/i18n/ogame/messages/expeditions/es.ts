@@ -10,10 +10,10 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
             /*LOCA: es 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'Nuestra expedición se */'encontró con una nave fantasma que transportaba'/* una pequeña cantidad de Materia Oscura. No encontramos ningún indicio de que le pasó a la tripulación original de la nave pero nuestros técnicos fueron capaces de rescatar la Materia Oscura.'*/,
-            /*LOCA: es 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'La expedición siguió */'algunas señales fuera de lo común hasta un asteroide'/* . En el núcleo del asteroide se encontró una pequeña cantidad de Materia Oscura. El asteroide fue tomado y los exploradores intentan extraer la Materia Oscura.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Nuestra */'expedición logro un experimento único'/* . Fueron capaces de reciclar Materia Oscura de la desaparición de una estrella.'*/,
             /*LOCA: es 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
             /*LOCA: es 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
@@ -31,7 +31,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Tu expedición encontró un antiguo, */'pero desierto convoy de carga'/* . Algunos de los recursos podrían ser rescatados.'*/,
-            /*LOCA: es 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'En una pequeña luna con su propia atmósfera, tu expedición */'encontró una cantidad enorme de recursos sin explotar'/* . La tripulación en el terreno está tratando de levantar y cargar el tesoro natural.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
@@ -48,7 +48,7 @@ export const es: ExpeditionMessages = {
             /*'Encontramos una */'estación pirata desierta'/* . Hay estacionadas algunas viejas naves en el hangar. Nuestros técnicos están mirando si algunas de ellas son aún útiles.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'Nuestra expedición se */'encontró con un antiguo hangar automático'/* . Algunas de las naves se encuentran todavía en la fase de producción y nuestros técnicos están tratando de reactivar los generadores de energía.'*/,
             /*LOCA: es 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -96,7 +96,8 @@ export const es: ExpeditionMessages = {
         /*'Tu expedición entró en un */'sector lleno de tormentas de partículas'/* . Esto provocó que los almacenes de energía se sobrecargaran y la mayoría de los sistemas principales de las naves se averiaron. Tus mecánicos fueron capaces de evitar lo peor pero la flota va a volver con un gran retraso.'*/,
         /*'A causa de */'razones desconocidas el salto de la expedición fue totalmente'/* erróneo. Estuvo a punto de aterrizar en el corazón del sol. Afortunadamente esta aterrizó en un sistema conocido, el salto de vuelta va a llevar más tiempo del esperado.'*/,
         /*'El */'viento de una estrella gigante roja arruinó'/* los saltos de la expedición, esta necesitara algo de tiempo para calcular el salto de retorno. No había nada aparte del vacío entre las estrellas en ese sector. La flota volverá más tarde de lo previsto.'*/,
-        /*'El */'nuevo módulo de navegación está aún luchando'/* con algunos bugs. No sólo el salto de la expedición fue en una dirección totalmente errónea, sino también el deuterio ha sido gastado por completo. Afortunadamente el salto de la flota los dejó cerca de la luna del planeta de inicio. Algo decepcionada regresa la flota de expedición sin fuerza de impulso. A causa de ello, el retorno de la flota se retarda un poco.'*/,
+        /* es-es *//*'El */'nuevo módulo de navegación está aún luchando'/* con algunos bugs. No sólo el salto de la expedición fue en una dirección totalmente errónea, sino también el deuterio ha sido gastado por completo. Afortunadamente el salto de la flota los dejó cerca de la luna del planeta de inicio. Algo decepcionada regresa la flota de expedición sin fuerza de impulso. A causa de ello, el retorno de la flota se retarda un poco.'*/,
+        /* es-ar *//*'El */'nuevo módulo de navegación está aún lleno de errores'/* . El salto de la expedición fue en una dirección totalmente errónea pero el deuterio fue usado igualmente. Afortunadamente el salto de la flota los dejó cerca de la luna del planeta de inicio.'*/,
         /*'La nave */'principal de la expedición colisionó con una nave extranjera cuando'/* esta saltó sobre la flota sin ningún aviso. La nave extranjera explotó y los daños a la nave principal fueron sustanciales. Tan pronto como las reparaciones necesarias sean realizadas la flota empezará el viaje de vuelta ya que la expedición no puede continuar en estas condiciones.'*/,
     ],
 
