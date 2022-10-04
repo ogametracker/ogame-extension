@@ -3,6 +3,7 @@ const process = require('process');
 const fs = require('fs');
 
 const isDev = process.argv.includes('--dev');
+const manualVersion = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
 if (browser == null) {
     throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
@@ -44,7 +45,7 @@ fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 
 // generate manifest
 console.log(`Generating manifest`);
-execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''} --browser=${browser}`, { stdio: 'inherit' });
+execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''} --browser=${browser} ${manualVersion != null ? `--version ${manualVersion}` : ''}`, { stdio: 'inherit' });
 
 const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json'));
 const version = manifest.version;
@@ -71,7 +72,7 @@ if (!isDev) {
         execSync(`git tag ${tagName}`);
         execSync(`git push origin ${tagName}`);
         console.log('created tag successfully');
-    } catch(e) {
+    } catch (e) {
         console.log('FAILED to add git tag');
         console.log(e);
     }
