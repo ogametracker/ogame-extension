@@ -132,14 +132,14 @@
 
         private get statusHistoryLabels(): string[] {
             return [
-                this.$i18n.$t.universeHistory.status.active,
-                this.$i18n.$t.universeHistory.status.vacation,
-                this.$i18n.$t.universeHistory.status.inactive,
-                this.$i18n.$t.universeHistory.status.inactiveLong,
-                this.$i18n.$t.universeHistory.status.banned,
-                this.$i18n.$t.universeHistory.status.outlaw,
-                this.$i18n.$t.universeHistory.status.deleted,
-                this.$i18n.$t.universeHistory.status.admin,
+                this.$i18n.$t.extension.universeHistory.status.active,
+                this.$i18n.$t.extension.universeHistory.status.vacation,
+                this.$i18n.$t.extension.universeHistory.status.inactive,
+                this.$i18n.$t.extension.universeHistory.status.inactiveLong,
+                this.$i18n.$t.extension.universeHistory.status.banned,
+                this.$i18n.$t.extension.universeHistory.status.outlaw,
+                this.$i18n.$t.extension.universeHistory.status.deleted,
+                this.$i18n.$t.extension.universeHistory.status.admin,
             ];
         }
 

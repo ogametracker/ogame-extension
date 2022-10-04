@@ -1,7 +1,9 @@
+import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { ExpeditionBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class PsionicNetworkClass extends LifeformTechnology {
+class PsionicNetworkClass extends LifeformTechnology implements ExpeditionBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +23,22 @@ class PsionicNetworkClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    public appliesTo(type: ExpeditionEventType): boolean {
+        return type == ExpeditionEventType.lostFleet;
+    }
+    
+    public getExpeditionBonus(type: ExpeditionEventType, level: number): number {
+        if(!this.appliesTo(type)) {
+            return 0;
+        }
+
+        const reductionPerLevel = 0.00_05; //0.05%
+        const maxReduction = 0.5; //50%
+
+        // negative because reduction = -bonus
+        return -Math.min(maxReduction, reductionPerLevel * level);
     }
 
     public get type(): LifeformTechnologyType {

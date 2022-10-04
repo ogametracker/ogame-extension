@@ -12,6 +12,7 @@ import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { MissileType } from "@/shared/models/ogame/missiles/MissileType";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { NonStationaryShipType, ShipType } from "@/shared/models/ogame/ships/ShipType";
@@ -42,6 +43,8 @@ export type DbShipAmounts = Record<ShipType, number>;
 export type DbDefenseAmounts = 
     Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
     & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+
+export type DbMissileAmounts = Record<MissileType, number>
 
 export type DbPlanetProductionSettings = {
     [BuildingType.metalMine]: number;
@@ -96,6 +99,7 @@ type DbEmpire = (
     | { key: `planet.${number}.buildings`; value: DbPlanetBuildingLevels }
     | { key: `planet.${number}.ships`; value: DbShipAmounts }
     | { key: `planet.${number}.defenses`; value: DbDefenseAmounts }
+    | { key: `planet.${number}.missiles`; value: DbMissileAmounts }
     | { key: `planet.${number}.activeItems`; value: DbActiveItems }
     | { key: `planet.${number}.productionSettings`; value: DbPlanetProductionSettings }
     | { key: `planet.${number}.lifeform`; value: DbPlanetSelectedLifeform }

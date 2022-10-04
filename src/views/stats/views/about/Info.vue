@@ -3,7 +3,7 @@
         <div class="version">Version: {{ version }}</div>
         <hr />
 
-        <h3 v-text="$i18n.$t.about.info.table.currentAccount.header" />
+        <h3 v-text="$i18n.$t.extension.about.info.table.currentAccount.header" />
         <loading-spinner v-if="loading" />
         <grid-table
             v-else
@@ -15,7 +15,7 @@
         />
         <hr />
 
-        <h3 v-text="$i18n.$t.about.info.table.global.header" />
+        <h3 v-text="$i18n.$t.extension.about.info.table.global.header" />
         <loading-spinner v-if="loading" />
         <grid-table
             v-else
@@ -83,27 +83,27 @@ import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataMod
         private get itemsCurrentAccount(): InfoItem[] {
             return [
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedExpeditions,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.numberOfTrackedExpeditions,
                     value: this.$i18n.$n(this.currentAccountExpeditions),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedCombatReports,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.numberOfTrackedCombatReports,
                     value: this.$i18n.$n(this.currentAccountCombats),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedDebrisFieldReports,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.numberOfTrackedDebrisFieldReports,
                     value: this.$i18n.$n(this.currentAccountDfReports),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfTrackedLifeformDiscoveries,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.numberOfTrackedLifeformDiscoveries,
                     value: this.$i18n.$n(this.currentAccountLfDiscoveries),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.lastUpdateServerSettings,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.lastUpdateServerSettings,
                     value: this.lastServerSettingsUpdate == null ? '-' : this.$i18n.$d(this.lastServerSettingsUpdate, 'date'),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.currentAccount.numberOfUniverseHistoryEntries,
+                    label: this.$i18n.$t.extension.about.info.table.currentAccount.numberOfUniverseHistoryEntries,
                     value: this.$i18n.$n(this.universeHistoryEntries),
                 },
             ];
@@ -112,11 +112,11 @@ import { LifeformDiscoveryDataModule } from '../../data/LifeformDiscoveryDataMod
         private get itemsGlobal(): InfoItem[] {
             return [
                 {
-                    label: this.$i18n.$t.about.info.table.global.numberOfTrackedAccounts,
+                    label: this.$i18n.$t.extension.about.info.table.global.numberOfTrackedAccounts,
                     value: this.$i18n.$n(this.trackedAccounts),
                 },
                 {
-                    label: this.$i18n.$t.about.info.table.global.estimatedSize,
+                    label: this.$i18n.$t.extension.about.info.table.global.estimatedSize,
                     value: this.formatBytes(this.totalBytesInUse),
                 },
             ];

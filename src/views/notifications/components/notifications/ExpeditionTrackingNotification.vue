@@ -2,7 +2,7 @@
     <notification type="info" :title="title" :timeout="10000" @remove="$emit('remove')">
         <template #message>
             <template v-if="hasSummary">
-                <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.summary" />
+                <h4 v-text="$i18n.$t.extension.notifications.expeditionTracking.result.summary" />
 
                 <template v-if="showSimplified">
                     <div class="result-grid resources-grid" v-if="foundResources">
@@ -45,24 +45,24 @@
                 <template v-else>
                     <div class="text-grid" v-if="foundResources">
                         <template v-if="notification.resources.metal > 0">
-                            <span v-text="$i18n.$t.resources[ResourceType.metal]" />
+                            <span v-text="$i18n.$t.extension.resources[ResourceType.metal]" />
                             <span v-text="$i18n.$n(notification.resources.metal)" />
                         </template>
                         <template v-if="notification.resources.crystal > 0">
-                            <span v-text="$i18n.$t.resources[ResourceType.crystal]" />
+                            <span v-text="$i18n.$t.extension.resources[ResourceType.crystal]" />
                             <span v-text="$i18n.$n(notification.resources.crystal)" />
                         </template>
                         <template v-if="notification.resources.deuterium > 0">
-                            <span v-text="$i18n.$t.resources[ResourceType.deuterium]" />
+                            <span v-text="$i18n.$t.extension.resources[ResourceType.deuterium]" />
                             <span v-text="$i18n.$n(notification.resources.deuterium)" />
                         </template>
 
-                        <span v-text="$i18n.$t.common.sum" />
+                        <span v-text="$i18n.$t.extension.common.sum" />
                         <span v-text="$i18n.$n(resourceSum)" />
                     </div>
 
                     <div class="text-grid" v-if="notification.darkMatter > 0">
-                        <span v-text="$i18n.$t.premium.darkMatter" />
+                        <span v-text="$i18n.$t.ogame.premium.darkMatter" />
                         <span v-text="$i18n.$n(notification.darkMatter)" />
                     </div>
 
@@ -77,7 +77,7 @@
                     <div class="text-grid" v-if="foundShips">
                         <template v-for="ship in ships">
                             <template v-if="notification.ships[ship] > 0">
-                                <span v-text="$i18n.$t.ships[ship]" :key="`ship-name-${ship}`" />
+                                <span v-text="$i18n.$t.ogame.ships[ship]" :key="`ship-name-${ship}`" />
                                 <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
                             </template>
                         </template>
@@ -87,7 +87,7 @@
                 <hr />
             </template>
 
-            <h4 v-text="$i18n.$t.notifications.expeditionTracking.result.events" />
+            <h4 v-text="$i18n.$t.extension.notifications.expeditionTracking.result.events" />
             <div class="result-grid" v-if="showSimplified">
                 <template v-for="event in expeditionEvents">
                     <template v-if="notification.events[event] > 0">
@@ -130,7 +130,7 @@
             <div v-else class="text-grid events">
                 <template v-for="event in expeditionEvents">
                     <template v-if="notification.events[event] > 0">
-                        <span v-text="$i18n.$t.expeditions.expeditionEvents[event]" :key="`event-name-${event}`" />
+                        <span v-text="$i18n.$t.extension.expeditions.expeditionEvents[event]" :key="`event-name-${event}`" />
                         <span v-text="$i18n.$n(notification.events[event])" :key="`event-count-${event}`" />
                     </template>
                 </template>
@@ -138,7 +138,7 @@
 
             <template v-if="hasDepletion">
                 <hr />
-                <h4 v-text="$i18n.$t.expeditions.depletion" />
+                <h4 v-text="$i18n.$t.extension.expeditions.depletion" />
                 <div class="result-grid" v-if="showSimplified">
                     <template v-for="level in DepletionLevels">
                         <template v-if="notification.depletion[level] > 0">
@@ -163,7 +163,7 @@
                 <div v-else class="text-grid events">
                     <template v-for="level in DepletionLevels">
                         <template v-if="notification.depletion[level] > 0">
-                            <span v-text="$i18n.$t.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
+                            <span v-text="$i18n.$t.extension.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
                             <span v-text="$i18n.$n(notification.depletion[level])" :key="`depletion-count-${level}`" />
                         </template>
                     </template>
@@ -227,7 +227,7 @@
         }
 
         private get title() {
-            return this.$i18n.$t.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
+            return this.$i18n.$t.extension.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
         }
 
         private get hasDepletion() {

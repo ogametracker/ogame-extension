@@ -18,14 +18,14 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                    <div v-text="$i18n.$t.expeditions.shipsFound" />
+                    <div v-text="$i18n.$t.extension.expeditions.shipsFound" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.expeditions.shipsFound} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.expeditions.shipsFound} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -76,7 +76,7 @@
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return ExpeditionFindableShipTypes.map(ship => ({
                 key: `${ship}`,
-                label: this.$i18n.$t.ships[ship],
+                label: this.$i18n.$t.ogame.ships[ship],
                 color: this.colors[ship],
                 filled: true,
                 getValue: result => result.findings.fleet[ship],

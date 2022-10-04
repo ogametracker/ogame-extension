@@ -4,9 +4,9 @@
             <template #cell-label="{ value }">
                 <span v-text="value" />
 
-                <span v-if="value == $i18n.$t.expeditions.expeditionEventSizes.small" class="mdi mdi-hexagon-slice-1" :style="{ color: colors.small }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.medium" class="mdi mdi-hexagon-slice-3" :style="{ color: colors.medium }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEventSizes.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
+                <span v-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.small" class="mdi mdi-hexagon-slice-1" :style="{ color: colors.small }" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.medium" class="mdi mdi-hexagon-slice-3" :style="{ color: colors.medium }" />
+                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
             </template>
         </ranged-stats-table>
 
@@ -55,14 +55,14 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ExpeditionEventSizes.map(size => ({
-                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
+                label: this.$i18n.$t.extension.expeditions.expeditionEventSizes[size],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.eventSizes.resourceCount[this.resource][size], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resourceCount[this.resource], 0),
             }];
         }

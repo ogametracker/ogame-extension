@@ -67,9 +67,9 @@
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
-                [this.$i18n.$t.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
@@ -82,12 +82,12 @@
 
             if (this.separate) {
                 return resources.map(resource => ({
-                    label: this.$i18n.$t.resources[resource],
+                    label: this.$i18n.$t.extension.resources[resource],
                     items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
                         label: {
-                            normal: `${this.$i18n.$t.debrisFields.position} 1-15`,
-                            expedition: `${this.$i18n.$t.debrisFields.position} 16`,
-                            total: this.$i18n.$t.common.sum,
+                            normal: `${this.$i18n.$t.extension.debrisFields.position} 1-15`,
+                            expedition: `${this.$i18n.$t.extension.debrisFields.position} 16`,
+                            total: this.$i18n.$t.extension.common.sum,
                         }[key],
                         getValue: reports => reports.reduce((acc, report) => acc + report[key][resource], 0),
                         class: key == 'total' ? 'sum-item' : '',
@@ -97,7 +97,7 @@
             }
 
             return resources.map(resource => ({
-                label: this.$i18n.$t.resources[resource],
+                label: this.$i18n.$t.extension.resources[resource],
                 getValue: reports => reports.reduce((acc, report) => acc + report.total[resource], 0),
             }));
         }
@@ -109,14 +109,14 @@
         private get footerItems(): RangedStatsTableItem<DailyDebrisFieldReportResult>[] {
             const result: RangedStatsTableItem<DailyDebrisFieldReportResult>[] = [
                 {
-                    label: this.$i18n.$t.common.resourceUnits,
+                    label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal, 0),
                 },
             ];
 
             if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     getValue: reports => reports.reduce((acc, report) => acc + getMsuOrDsu(report.total), 0),
                 });
             }

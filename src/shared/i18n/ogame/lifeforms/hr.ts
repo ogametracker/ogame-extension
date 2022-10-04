@@ -1,6 +1,10 @@
 import { LifeformTranslations } from "./types";
-import { en } from './en';
+import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 
 export const hr: LifeformTranslations = {
-    ...en,
+    [LifeformType.none]: 'No Lifeform',
+    [LifeformType.humans]: 'Humans',
+    [LifeformType.rocktal]: 'Rock\'tal',
+    [LifeformType.mechas]: 'Mechas',
+    [LifeformType.kaelesh]: 'Kaelesh',
 };

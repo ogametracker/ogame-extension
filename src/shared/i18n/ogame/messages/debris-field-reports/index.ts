@@ -7,16 +7,25 @@ import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
 import { pt } from './pt';
+import { es } from './es';
 import { it } from './it';
+import { fr } from './fr';
+import { pl } from './pl';
 
 const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     cz,
     de,
     dk,
     en,
+    es_ar: es,
+    es_es: es,
+    es_mx: es,
+    fr,
     hr,
     it,
-    pt,
+    pl,
+    pt_br: pt,
+    pt_pt: pt,
     si,
 };
 export default translations;

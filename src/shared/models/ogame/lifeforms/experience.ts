@@ -1,6 +1,6 @@
 const bonusPerLevel = 0.01; //1%
 
-export function getLifeformTechnologyBonus(experience: number): number {
+export function getLifeformLevelTechnologyBonus(experience: number): number {
     const level = getLifeformLevel(experience);
     return level * bonusPerLevel;
 }

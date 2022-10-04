@@ -11,11 +11,11 @@
         private get tabs(): Tab[] {
             return [
                 {
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                     to: { name: 'combats/lost-ships/against-players/resources/chart' },
                 },
                 {
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                     to: { name: 'combats/lost-ships/against-players/resources/table' },
                 },
             ];

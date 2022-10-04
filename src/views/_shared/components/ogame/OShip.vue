@@ -3,6 +3,7 @@
         class="o-ship"
         :class="{
             'o-ship--disabled': disabled,
+            'o-ship--fade': fade,
         }"
         :style="{
             'background-image': `url(/img/ogame/ships/${image}.jpg)`,
@@ -34,6 +35,9 @@
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
 
 
         private get image() {
@@ -73,6 +77,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 </style>

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h2 v-text="$i18n.$t.donate.subHeader" />
+        <h2 v-text="$i18n.$t.extension.donate.subHeader" />
 
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.donate.kofi.header" />
+                <span v-text="$i18n.$t.extension.donate.kofi.header" />
             </div>
             <div class="fake-table-body" style="justify-items: center">
                 <a
@@ -14,15 +14,15 @@
                     class="donate-button"
                 >
                     <img src="/img/extern/kofi-logo.svg" />
-                    {{ $i18n.$t.donate.kofi.buttonText }}
+                    {{ $i18n.$t.extension.donate.kofi.buttonText }}
                 </a>
-                <small v-text="$i18n.$t.donate.kofi.message" />
+                <small v-text="$i18n.$t.extension.donate.kofi.message" />
             </div>
         </div>
 
         <div class="fake-table crypto-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.donate.crypto.header" />
+                <span v-text="$i18n.$t.extension.donate.crypto.header" />
             </div>
             <div class="fake-table-body">
                 <span class="mdi mdi-bitcoin" />

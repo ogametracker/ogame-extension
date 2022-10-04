@@ -3,12 +3,14 @@ import { observerCallbacks } from "./main";
 import { DefenseType } from '../../shared/models/ogame/defenses/DefenseType';
 import { DefenseTypes } from '../../shared/models/ogame/defenses/DefenseTypes';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { UpdatePlanetDefenseCountsMessage } from "../../shared/messages/tracking/empire";
+import { UpdatePlanetDefenseCountsMessage, UpdatePlanetMissileCountsMessage } from "../../shared/messages/tracking/empire";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { MessageType } from "../../shared/messages/MessageType";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { empireTrackingUuid } from "@/shared/uuid";
 import { createRecord } from "@/shared/utils/createRecord";
+import { MissileTypes } from "@/shared/models/ogame/missiles/MissileTypes";
+import { MissileType } from "@/shared/models/ogame/missiles/MissileType";
 
 export function trackDefensesPage() {
     observerCallbacks.push({
@@ -23,7 +25,6 @@ export function trackDefensesPage() {
             const isMoon = planetType == 'moon';
 
             const defenseCounts = createRecord(DefenseTypes, 0);
-
             DefenseTypes.forEach(defense => {
                 const amountText = element.querySelector(`[data-technology="${defense}"] .amount`)?.getAttribute('data-value')
                     ?? _throw(`did not find amount of defense '${DefenseType[defense]}'`);
@@ -32,7 +33,7 @@ export function trackDefensesPage() {
                 defenseCounts[defense] = amount;
             });
 
-            const message: UpdatePlanetDefenseCountsMessage = {
+            const defenseMessage: UpdatePlanetDefenseCountsMessage = {
                 ogameMeta: getOgameMeta(),
                 type: MessageType.UpdatePlanetDefenseCounts,
                 data: {
@@ -46,7 +47,29 @@ export function trackDefensesPage() {
                 },
                 senderUuid: empireTrackingUuid,
             };
-            sendMessage(message);
+            sendMessage(defenseMessage);
+
+
+            const missileCounts = createRecord(MissileTypes, 0);
+            MissileTypes.forEach(missile => {
+                const amountText = element.querySelector(`[data-technology="${missile}"] .amount`)?.getAttribute('data-value')
+                    ?? _throw(`did not find amount of missile '${MissileType[missile]}'`);
+
+                const amount = parseIntSafe(amountText, 10);
+                missileCounts[missile] = amount;
+            });
+
+            const missileMessage: UpdatePlanetMissileCountsMessage = {
+                ogameMeta: getOgameMeta(),
+                type: MessageType.UpdatePlanetMissileCounts,
+                data: {
+                    isMoon,
+                    planetId,
+                    data: missileCounts,
+                },
+                senderUuid: empireTrackingUuid,
+            };
+            sendMessage(missileMessage);
         },
     });
 }

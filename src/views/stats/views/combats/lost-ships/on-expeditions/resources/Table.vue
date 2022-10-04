@@ -75,9 +75,9 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
         private get resourceTypes(): Record<string, ResourceType> {
             return {
-                [this.$i18n.$t.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.resources.deuterium]: ResourceType.deuterium,
+                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
+                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
+                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
             };
         }
 
@@ -89,7 +89,7 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
             };
 
             return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.resources[resource],
+                label: this.$i18n.$t.extension.resources[resource],
                 getValue: reports => reports.reduce(
                     (acc, report) => acc + report.lostShips.onExpeditions.resourceUnits[resource] * factors[resource],
                     0
@@ -106,7 +106,7 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
             const result: RangedStatsTableItem<DailyCombatReportResult>[] = [
                 {
-                    label: this.$i18n.$t.common.resourceUnits,
+                    label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc
                             + report.lostShips.onExpeditions.resourceUnits.metal * factors.metal
@@ -119,7 +119,7 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
             if(SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
                 result.push({
-                    label: `${this.$i18n.$t.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.common.msu : this.$i18n.$t.common.dsu})`,
+                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     getValue: reports => reports.reduce(
                         (acc, report) => acc + getMsuOrDsu(report.lostShips.onExpeditions.resourceUnits, factors),
                         0

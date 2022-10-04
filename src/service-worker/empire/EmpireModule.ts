@@ -5,7 +5,7 @@ import { PlayerOfficers } from "../../shared/models/empire/PlayerOfficers";
 import { AllianceClass } from "../../shared/models/ogame/classes/AllianceClass";
 import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../../shared/models/ogame/buildings/BuildingType";
 import { MoonBuildingTypes, PlanetBuildingTypes } from "../../shared/models/ogame/buildings/BuildingTypes";
-import { BasicPlanetData, PlanetDataWrapper, PlanetDefenseCounts } from "../../shared/messages/tracking/empire";
+import { BasicPlanetData, PlanetDataWrapper, PlanetDefenseCounts, PlanetMissileCounts } from "../../shared/messages/tracking/empire";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
@@ -15,7 +15,7 @@ import { ResearchTypes } from "../../shared/models/ogame/research/ResearchTypes"
 import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
 import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
 import { getPlayerDatabase } from "../../shared/db/access";
-import { DbDefenseAmounts, DbFleets, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
+import { DbDefenseAmounts, DbFleets, DbMissileAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
 import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
@@ -116,6 +116,17 @@ export class EmpireModule {
         const db = await getPlayerDatabase(meta);
         const key: (`planet.${number}.defenses` | `moon.${number}.defenses`) = `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.defenses`;
         const amounts: DbDefenseAmounts = data.data;
+        await db.put('empire', amounts, key);
+    }
+
+    public async updatePlanetMissiles(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetMissileCounts>) {
+        if(data.isMoon) {
+            return;
+        }
+
+        const db = await getPlayerDatabase(meta);
+        const key: `planet.${number}.missiles`= `planet.${data.planetId}.missiles`;
+        const amounts: DbMissileAmounts = data.data;
         await db.put('empire', amounts, key);
     }
 

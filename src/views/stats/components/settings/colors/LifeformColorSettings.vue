@@ -1,6 +1,6 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.settings.colors.lifeforms"
+        :header="$i18n.$t.extension.settings.colors.lifeforms"
         :labels="labels"
         :keys="keys"
         :value="colors"
@@ -25,7 +25,7 @@
     export default class LifeformColorSettings extends Vue {
 
         private get labels(): Record<LifeformType, string> {
-            return this.$i18n.$t.lifeforms;
+            return this.$i18n.$t.ogame.lifeforms;
         }
 
         private readonly keys = ValidLifeformTypes;

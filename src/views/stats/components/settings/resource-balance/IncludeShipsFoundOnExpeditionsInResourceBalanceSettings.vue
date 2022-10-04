@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.resourceBalance.includeShipsFoundOnExpeditions.header" />
+            <span v-text="$i18n.$t.extension.settings.resourceBalance.includeShipsFoundOnExpeditions.header" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="include"
                 @input="toggleInclude($event)"
-                :label="$i18n.$t.settings.resourceBalance.includeShipsFoundOnExpeditions.checkboxLabel"
+                :label="$i18n.$t.extension.settings.resourceBalance.includeShipsFoundOnExpeditions.checkboxLabel"
             />
         </div>
     </div>

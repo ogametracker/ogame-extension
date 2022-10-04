@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky>
+    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky="100%">
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
@@ -7,7 +7,7 @@
         </template>
 
         <template #cell-lifeform="{ value }">
-            <span v-text="$i18n.$t.lifeforms[value]" class="mr-2" />
+            <span v-text="$i18n.$t.ogame.lifeforms[value]" class="mr-2" />
             <o-lifeform :lifeform="value" size="48px" />
         </template>
 
@@ -68,7 +68,6 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
@@ -98,12 +97,12 @@
             return [
                 {
                     key: 'planet',
-                    label: this.$i18n.$t.empire.lifeforms.planet,
+                    label: this.$i18n.$t.extension.empire.lifeforms.planet,
                     size: '200px',
                 },
                 {
                     key: 'lifeform',
-                    label: this.$i18n.$t.empire.lifeforms.lifeform,
+                    label: this.$i18n.$t.extension.empire.lifeforms.lifeform,
                     size: '1fr',
                     style: {
                         'justify-items': 'start',
@@ -113,7 +112,7 @@
                 },
                 {
                     key: 'buildings',
-                    label: this.$i18n.$t.empire.lifeforms.buildings,
+                    label: this.$i18n.$t.extension.empire.lifeforms.buildings,
                     style: {
                         'justify-items': 'start',
                     },
@@ -121,7 +120,7 @@
                 },
                 {
                     key: 'lifeformTechsTier1',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 1)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 1)`,
                     style: {
                         'justify-items': 'start',
                     },
@@ -129,7 +128,7 @@
                 },
                 {
                     key: 'lifeformTechsTier2',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 2)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 2)`,
                     style: {
                         'justify-items': 'start',
                     },
@@ -137,7 +136,7 @@
                 },
                 {
                     key: 'lifeformTechsTier3',
-                    label: `${this.$i18n.$t.empire.lifeforms.technologies} (${this.$i18n.$t.empire.lifeforms.tier} 3)`,
+                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 3)`,
                     style: {
                         'justify-items': 'start',
                     },
@@ -155,10 +154,8 @@
 
             const lifeformExperience: Partial<Record<LifeformType, number>> = player.lifeformExperience;
 
-            //TODO: don't show lifeform level+exp (shown in progress view), show total possible population (T1/T2/T3) instead (take food into account!)
             return planets.map<PlanetLifeformItem>(planet => {
                 const lfExp = lifeformExperience[planet.activeLifeform] ?? 0;
-                const lfLevel = getLifeformLevel(lfExp);
 
                 const result: PlanetLifeformItem = {
                     planet: {

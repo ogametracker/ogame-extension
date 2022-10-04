@@ -3,6 +3,7 @@
         class="o-officer"
         :class="{
             'o-officer--disabled': disabled,
+            'o-officer--fade': fade,
         }"
         :style="{
             'background-image': `url(/img/ogame/officers/${officer}.png)`,
@@ -40,6 +41,9 @@
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
     }
 </script>
 <style lang="scss" scoped>
@@ -55,6 +59,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
     }
 </style>

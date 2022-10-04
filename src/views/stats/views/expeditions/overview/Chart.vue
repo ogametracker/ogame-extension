@@ -16,14 +16,14 @@
                                 $i18n.$n(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.expeditions.expeditions" />
+                        <div v-text="$i18n.$t.extension.expeditions.expeditions" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
                     <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.expeditions.expeditions} (${$i18n.$t.common.total})`" />
+                    <div v-text="`${$i18n.$t.extension.expeditions.expeditions} (${$i18n.$t.extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -78,7 +78,7 @@
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
             return ExpeditionEventTypes.map(type => ({
                 key: type,
-                label: this.$i18n.$t.expeditions.expeditionEvents[type],
+                label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
                 color: this.colors[type],
                 filled: true,
                 getValue: result => result.events[type],

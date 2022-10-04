@@ -1,13 +1,13 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.accessibility.showSimplifiedResults.title" />
+            <span v-text="$i18n.$t.extension.settings.accessibility.showSimplifiedResults.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
                 :value="showSimplifiedResults"
                 @input="toggleShowSimplifiedResults($event)"
-                :label="$i18n.$t.settings.accessibility.showSimplifiedResults.label"
+                :label="$i18n.$t.extension.settings.accessibility.showSimplifiedResults.label"
             />
             <slot />
         </div>

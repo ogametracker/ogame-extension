@@ -12,15 +12,19 @@
             return [
                 {
                     to: { name: 'empire/lifeforms/overview' },
-                    label: this.$i18n.$t.empire.lifeforms.subHeaders.overview,
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.overview,
                 },
+                // {
+                //     to: { name: 'empire/lifeforms/bonus-breakdown' },
+                //     label: 'LOCA: Technology Bonuses',
+                // },
                 {
                     to: { name: 'empire/lifeforms/progress' },
-                    label: this.$i18n.$t.empire.lifeforms.subHeaders.progress,
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.progress,
                 },
                 {
                     to: { name: 'empire/lifeforms/discoveries' },
-                    label: this.$i18n.$t.empire.lifeforms.subHeaders.discoveryMissions,
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.discoveryMissions,
                 },
             ];
         }

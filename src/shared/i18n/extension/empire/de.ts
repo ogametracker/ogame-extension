@@ -27,7 +27,6 @@ export const de: EmpireTranslations = {
             consumption: 'Verbrauch',
             lifeformBuildings: 'Lebensform-Gebäude',
             crawlers: 'Crawler',
-            plasmaTechnology: 'Plasmatechnik',
             items: 'Items',
             geologist: 'Geologe',
             commandStaff: 'Kommandostab',
@@ -41,10 +40,13 @@ export const de: EmpireTranslations = {
 
         table: {
             cost: 'Kosten',
+            levels: 'Stufen',
             productionPlus: 'Produktionsplus',
             amortizationTime: 'Amortisationszeit',
+            groupSelectedItems: 'Gewählte Elemente gruppieren',
+            showOriginalItems: 'All Elemente einzeln anzeigen',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Level' : 'Levels'} auf ${planets} Planeten`,
+            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Stufe' : 'Stufen'} auf ${planets} Planeten`,
         },
 
         settings: {
@@ -52,23 +54,22 @@ export const de: EmpireTranslations = {
             applyAndClose: 'Einstellungen anwenden und schließen',
 
             playerSettings: {
-                header: 'Spielerweite Einstellungen',
+                header: 'Allgemeine Einstellungen',
+                optimizeForResources: 'Für gewählte Rohstoffe optimieren',
                 officers: 'Offiziere',
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',
-                currentLevelPlasmatech: 'aktuelle Stufe der Plasmatechnik',
-                currentLevelAstrophysics: 'aktuelle Stufe der Astrophysik',
+                currentLevelOf: (name: string) => `aktuelle Stufe ${name}`,
 
                 unusedRaidColonySlots: 'Derzeit ungenutzt Raidkolo-Slots',
             },
             astrophysicsSettings: {
-                header: 'Einstellungen zu Astrophysik',
-                showAstrophysics: 'Astrophysik + neue Kolonien in Ergebnis anzeigen',
+                header: (name: string) => `Einstellungen zu ${name}`,
                 newColony: 'neue Kolonie',
             },
             plasmatechSettings: {
-                header: 'Einstellungen zu Plasmatechnik',
-                includePlasmatech: 'Plasmatechnik für Berechnung berücksichtigen',
+                header: (name: string) => `Einstellungen zu ${name}`,
+                includePlasmatech: (name: string) =>`${name} für Berechnung berücksichtigen`,
             },
             planetSettings: {
                 header: 'Einstellungen der Planeten',

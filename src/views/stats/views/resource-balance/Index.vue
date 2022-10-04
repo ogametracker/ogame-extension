@@ -25,11 +25,11 @@
             return [
                 {
                     to: { name: 'resource-balance/chart' },
-                    label: this.$i18n.$t.common.chart,
+                    label: this.$i18n.$t.extension.common.chart,
                 },
                 {
                     to: { name: 'resource-balance/table' },
-                    label: this.$i18n.$t.common.table,
+                    label: this.$i18n.$t.extension.common.table,
                 },
             ];
         }

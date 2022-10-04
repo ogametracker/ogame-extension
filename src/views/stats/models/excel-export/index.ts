@@ -86,8 +86,8 @@ class ExcelExportClass {
         const dailyResults = LifeformDiscoveryDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ValidLifeformTypes.map(lf => $i18n.$t.lifeforms[lf]),
+            $i18n.$t.extension.common.date,
+            ...ValidLifeformTypes.map(lf => $i18n.$t.ogame.lifeforms[lf]),
         ];
         const data = dailyResults.map(result => [
             $i18n.$d(result.date, 'date'),
@@ -95,7 +95,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.excelExport.lifeformDiscoveries.sheets.dailyExperience}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.extension.excelExport.lifeformDiscoveries.sheets.dailyExperience}`);
     }
 
     async #writeLifeformDiscoveries_rawData(workbook: xlsx.WorkBook) {
@@ -103,25 +103,25 @@ class ExcelExportClass {
         const allDiscoveries = await db.getAll('lifeformDiscoveries');
 
         const headers = [
-            $i18n.$t.common.dateTime,
-            $i18n.$t.excelExport.lifeformDiscoveries.result,
-            $i18n.$t.excelExport.lifeformDiscoveries.lifeform,
-            $i18n.$t.excelExport.lifeformDiscoveries.experience,
+            $i18n.$t.extension.common.dateTime,
+            $i18n.$t.extension.excelExport.lifeformDiscoveries.result,
+            $i18n.$t.extension.excelExport.lifeformDiscoveries.lifeform,
+            $i18n.$t.extension.excelExport.lifeformDiscoveries.experience,
         ];
         const data = allDiscoveries.map(disc => [
             $i18n.$d(disc.date, 'datetime'),
             ({
-                [LifeformDiscoveryEventType.nothing]: $i18n.$t.empire.lifeforms.eventTypes.nothing,
-                [LifeformDiscoveryEventType.lostShip]: $i18n.$t.empire.lifeforms.eventTypes.lostShip,
-                [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
-                [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.nothing]: $i18n.$t.extension.empire.lifeforms.eventTypes.nothing,
+                [LifeformDiscoveryEventType.lostShip]: $i18n.$t.extension.empire.lifeforms.eventTypes.lostShip,
+                [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.extension.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.extension.empire.lifeforms.lifeformFound,
             }[disc.type]),
-            'lifeform' in disc ? $i18n.$t.lifeforms[disc.lifeform] : '',
+            'lifeform' in disc ? $i18n.$t.ogame.lifeforms[disc.lifeform] : '',
             'experience' in disc ? disc.experience : '',
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.lifeformDiscoveries.prefix} - ${$i18n.$t.extension.excelExport.debrisFields.sheets.rawData}`);
     }
 
     async #writeDebrisFields(workbook: xlsx.WorkBook, options: ExcelExportOptions_DebrisFields) {
@@ -137,10 +137,10 @@ class ExcelExportClass {
         const dailyResults = DebrisFieldReportDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            $i18n.$t.resources[ResourceType.metal],
-            $i18n.$t.resources[ResourceType.crystal],
-            $i18n.$t.debrisFields.position,
+            $i18n.$t.extension.common.date,
+            $i18n.$t.extension.resources[ResourceType.metal],
+            $i18n.$t.extension.resources[ResourceType.crystal],
+            $i18n.$t.extension.debrisFields.position,
         ];
         const data = dailyResults.flatMap(day => {
             const rows: [string, number, number, string][] = [];
@@ -166,7 +166,7 @@ class ExcelExportClass {
         });
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.debrisFields.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.dailyResources}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.debrisFields.prefix} - ${$i18n.$t.extension.excelExport.debrisFields.sheets.dailyResources}`);
     }
 
     async #writeDebrisFields_rawData(workbook: xlsx.WorkBook) {
@@ -174,10 +174,10 @@ class ExcelExportClass {
         const allDfReports = await db.getAll('debrisFieldReports');
 
         const headers = [
-            $i18n.$t.common.dateTime,
-            $i18n.$t.resources[ResourceType.metal],
-            $i18n.$t.resources[ResourceType.crystal],
-            $i18n.$t.debrisFields.position,
+            $i18n.$t.extension.common.dateTime,
+            $i18n.$t.extension.resources[ResourceType.metal],
+            $i18n.$t.extension.resources[ResourceType.crystal],
+            $i18n.$t.extension.debrisFields.position,
         ];
         const data = allDfReports.map(report => [
             $i18n.$d(report.date, 'datetime'),
@@ -190,7 +190,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.debrisFields.prefix} - ${$i18n.$t.excelExport.debrisFields.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.debrisFields.prefix} - ${$i18n.$t.extension.excelExport.debrisFields.sheets.rawData}`);
     }
 
     async #writeCombats(workbook: xlsx.WorkBook, options: ExcelExportOptions_Combats) {
@@ -214,8 +214,8 @@ class ExcelExportClass {
         const dailyResults = CombatReportDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ShipTypes.map(ship => $i18n.$t.ships[ship]),
+            $i18n.$t.extension.common.date,
+            ...ShipTypes.map(ship => $i18n.$t.ogame.ships[ship]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -223,14 +223,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.combats.prefix} - ${$i18n.$t.excelExport.combats.sheets.dailyLostShips}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.combats.prefix} - ${$i18n.$t.extension.excelExport.combats.sheets.dailyLostShips}`);
     }
     #writeCombats_dailyLoot(workbook: xlsx.WorkBook) {
         const dailyResults = CombatReportDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ResourceTypes.map(resource => $i18n.$t.resources[resource]),
+            $i18n.$t.extension.common.date,
+            ...ResourceTypes.map(resource => $i18n.$t.extension.resources[resource]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -238,15 +238,15 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.combats.prefix} - ${$i18n.$t.excelExport.combats.sheets.dailyLoot}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.combats.prefix} - ${$i18n.$t.extension.excelExport.combats.sheets.dailyLoot}`);
     }
     #writeCombats_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = CombatReportDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...CombatResultTypes.map(type => `${$i18n.$t.excelExport.combats.againstPlayers} (${$i18n.$t.combats.combatResults[type]})`),
-            ...CombatResultTypes.map(type => `${$i18n.$t.excelExport.combats.onExpeditions} (${$i18n.$t.combats.combatResults[type]})`),
+            $i18n.$t.extension.common.date,
+            ...CombatResultTypes.map(type => `${$i18n.$t.extension.excelExport.combats.againstPlayers} (${$i18n.$t.extension.combats.combatResults[type]})`),
+            ...CombatResultTypes.map(type => `${$i18n.$t.extension.excelExport.combats.onExpeditions} (${$i18n.$t.extension.combats.combatResults[type]})`),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -255,36 +255,36 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.combats.prefix} - ${$i18n.$t.excelExport.combats.sheets.dailyResults}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.combats.prefix} - ${$i18n.$t.extension.excelExport.combats.sheets.dailyResults}`);
     }
     async #writeCombats_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         const allCombatReports = await db.getAll('combatReports');
 
         const headers = [
-            $i18n.$t.common.dateTime,
-            $i18n.$t.excelExport.combats.result,
-            `${$i18n.$t.excelExport.combats.coordinates} (${$i18n.$t.excelExport.combats.galaxy})`,
-            `${$i18n.$t.excelExport.combats.coordinates} (${$i18n.$t.excelExport.combats.system})`,
-            `${$i18n.$t.excelExport.combats.coordinates} (${$i18n.$t.excelExport.combats.position})`,
-            `${$i18n.$t.excelExport.combats.coordinates} (${$i18n.$t.excelExport.combats.targetType})`,
-            $i18n.$t.excelExport.combats.combatType,
-            $i18n.$t.excelExport.combats.expeditionCombatOpponent,
-            ...ResourceTypes.map(resource => `${$i18n.$t.excelExport.combats.loot} (${$i18n.$t.resources[resource]})`),
-            ...ShipTypes.map(ship => `${$i18n.$t.excelExport.combats.lostShips} (${$i18n.$t.ships[ship]})`),
-            `${$i18n.$t.excelExport.combats.debrisField} (${$i18n.$t.resources[ResourceType.metal]})`,
-            `${$i18n.$t.excelExport.combats.debrisField} (${$i18n.$t.resources[ResourceType.crystal]})`,
+            $i18n.$t.extension.common.dateTime,
+            $i18n.$t.extension.excelExport.combats.result,
+            `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.galaxy})`,
+            `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.system})`,
+            `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.position})`,
+            `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.targetType})`,
+            $i18n.$t.extension.excelExport.combats.combatType,
+            $i18n.$t.extension.excelExport.combats.expeditionCombatOpponent,
+            ...ResourceTypes.map(resource => `${$i18n.$t.extension.excelExport.combats.loot} (${$i18n.$t.extension.resources[resource]})`),
+            ...ShipTypes.map(ship => `${$i18n.$t.extension.excelExport.combats.lostShips} (${$i18n.$t.ogame.ships[ship]})`),
+            `${$i18n.$t.extension.excelExport.combats.debrisField} (${$i18n.$t.extension.resources[ResourceType.metal]})`,
+            `${$i18n.$t.extension.excelExport.combats.debrisField} (${$i18n.$t.extension.resources[ResourceType.crystal]})`,
         ];
         const data = allCombatReports.map(combat => [
             $i18n.$d(combat.date, 'datetime'),
-            $i18n.$t.combats.combatResults[combat.result],
+            $i18n.$t.extension.combats.combatResults[combat.result],
             combat.coordinates.galaxy,
             combat.coordinates.system,
             combat.coordinates.position,
-            combat.coordinates.type == PlanetType.moon ? $i18n.$t.excelExport.combats.moon : $i18n.$t.excelExport.combats.planet,
-            combat.isExpedition ? $i18n.$t.excelExport.combats.expeditionCombat : $i18n.$t.excelExport.combats.playerCombat,
+            combat.coordinates.type == PlanetType.moon ? $i18n.$t.extension.excelExport.combats.moon : $i18n.$t.extension.excelExport.combats.planet,
+            combat.isExpedition ? $i18n.$t.extension.excelExport.combats.expeditionCombat : $i18n.$t.extension.excelExport.combats.playerCombat,
             combat.isExpedition
-                ? combat.expeditionAttackType == 'pirates' ? $i18n.$t.excelExport.combats.pirates : $i18n.$t.excelExport.combats.aliens
+                ? combat.expeditionAttackType == 'pirates' ? $i18n.$t.extension.excelExport.combats.pirates : $i18n.$t.extension.excelExport.combats.aliens
                 : '',
             ...ResourceTypes.map(resource => combat.loot[resource]),
             ...ShipTypes.map(ship => combat.lostShips[ship]),
@@ -293,7 +293,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.combats.prefix} - ${$i18n.$t.excelExport.combats.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.combats.prefix} - ${$i18n.$t.extension.excelExport.combats.sheets.rawData}`);
     }
 
     async #writeExpeditions(workbook: xlsx.WorkBook, options: ExcelExportOptions_Expeditions) {
@@ -336,8 +336,8 @@ class ExcelExportClass {
         const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
         const headers = [
-            $i18n.$t.common.date,
-            ...depletionLevels.map(level => $i18n.$t.expeditions.depletionLevels[level]),
+            $i18n.$t.extension.common.date,
+            ...depletionLevels.map(level => $i18n.$t.extension.expeditions.depletionLevels[level]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -345,14 +345,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDepletion}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyDepletion}`);
     }
     #writeExpeditions_dailyDarkMatter_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+            $i18n.$t.extension.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.extension.expeditions.expeditionEventSizes[size]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -360,14 +360,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatterSize}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyDarkMatterSize}`);
     }
     #writeExpeditions_dailyDarkMatter_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            $i18n.$t.premium.darkMatter,
+            $i18n.$t.extension.common.date,
+            $i18n.$t.ogame.premium.darkMatter,
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -375,14 +375,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyDarkMatter}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyDarkMatter}`);
     }
     #writeExpeditions_dailyShips_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+            $i18n.$t.extension.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.extension.expeditions.expeditionEventSizes[size]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -390,14 +390,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShipsSize}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyShipsSize}`);
     }
     #writeExpeditions_dailyShips_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ExpeditionFindableShipTypes.map(ship => $i18n.$t.ships[ship]),
+            $i18n.$t.extension.common.date,
+            ...ExpeditionFindableShipTypes.map(ship => $i18n.$t.ogame.ships[ship]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -405,14 +405,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyShips}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyShips}`);
     }
     #writeExpeditions_dailyResources_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ExpeditionEventSizes.map(size => $i18n.$t.expeditions.expeditionEventSizes[size]),
+            $i18n.$t.extension.common.date,
+            ...ExpeditionEventSizes.map(size => $i18n.$t.extension.expeditions.expeditionEventSizes[size]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -420,14 +420,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyResourcesSize}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyResourcesSize}`);
     }
     #writeExpeditions_dailyResources_amount(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ResourceTypes.map(resource => $i18n.$t.resources[resource]),
+            $i18n.$t.extension.common.date,
+            ...ResourceTypes.map(resource => $i18n.$t.extension.resources[resource]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -435,14 +435,14 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyResources}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyResources}`);
     }
     #writeExpeditions_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = ExpeditionDataModule.dailyResultsArray;
 
         const headers = [
-            $i18n.$t.common.date,
-            ...ExpeditionEventTypes.map(type => $i18n.$t.expeditions.expeditionEvents[type]),
+            $i18n.$t.extension.common.date,
+            ...ExpeditionEventTypes.map(type => $i18n.$t.extension.expeditions.expeditionEvents[type]),
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
@@ -450,27 +450,27 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.dailyResults}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.dailyResults}`);
     }
     async #writeExpeditions_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         const allExpeditions = await db.getAll('expeditions');
 
         const headers = [
-            $i18n.$t.common.dateTime,
-            $i18n.$t.excelExport.expeditions.eventType,
-            $i18n.$t.excelExport.expeditions.eventSize,
-            $i18n.$t.expeditions.depletion,
-            ...ResourceTypes.map(resource => $i18n.$t.resources[resource]),
-            ...ExpeditionFindableShipTypes.map(ship => $i18n.$t.ships[ship]),
-            $i18n.$t.premium.darkMatter,
-            $i18n.$t.excelExport.expeditions.item,
+            $i18n.$t.extension.common.dateTime,
+            $i18n.$t.extension.excelExport.expeditions.eventType,
+            $i18n.$t.extension.excelExport.expeditions.eventSize,
+            $i18n.$t.extension.expeditions.depletion,
+            ...ResourceTypes.map(resource => $i18n.$t.extension.resources[resource]),
+            ...ExpeditionFindableShipTypes.map(ship => $i18n.$t.ogame.ships[ship]),
+            $i18n.$t.ogame.premium.darkMatter,
+            $i18n.$t.extension.excelExport.expeditions.item,
         ];
         const data = allExpeditions.map(expo => [
             $i18n.$d(expo.date, 'datetime'),
-            $i18n.$t.expeditions.expeditionEvents[expo.type],
-            'size' in expo ? $i18n.$t.expeditions.expeditionEventSizes[expo.size] : '',
-            $i18n.$t.expeditions.depletionLevels[expo.depletion ?? 'unknown'],
+            $i18n.$t.extension.expeditions.expeditionEvents[expo.type],
+            'size' in expo ? $i18n.$t.extension.expeditions.expeditionEventSizes[expo.size] : '',
+            $i18n.$t.extension.expeditions.depletionLevels[expo.depletion ?? 'unknown'],
             ...ResourceTypes.map(resource => expo.type == ExpeditionEventType.resources ? expo.resources[resource] : ''),
             ...ExpeditionFindableShipTypes.map(ship => expo.type == ExpeditionEventType.fleet ? expo.fleet[ship] : ''),
             expo.type == ExpeditionEventType.darkMatter ? expo.darkMatter : '',
@@ -478,7 +478,7 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.excelExport.expeditions.prefix} - ${$i18n.$t.excelExport.expeditions.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(workbook, sheet, `${$i18n.$t.extension.excelExport.expeditions.prefix} - ${$i18n.$t.extension.excelExport.expeditions.sheets.rawData}`);
     }
 }
 

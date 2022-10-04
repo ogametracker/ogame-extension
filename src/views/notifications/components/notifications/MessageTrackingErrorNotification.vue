@@ -23,11 +23,11 @@
         private notification!: MessageTrackingErrorNotificationMessage['data'];
 
         private get title() {
-            return this.$i18n.$t.notifications.messageTrackingError.title(this.$i18n.$n(this.notification.count));
+            return this.$i18n.$t.extension.notifications.messageTrackingError.title(this.$i18n.$n(this.notification.count));
         }
 
         private get message() {
-            return this.$i18n.$t.notifications.messageTrackingError.message(this.$i18n.$n(this.notification.count));
+            return this.$i18n.$t.extension.notifications.messageTrackingError.message(this.$i18n.$n(this.notification.count));
         }
     }
 </script>

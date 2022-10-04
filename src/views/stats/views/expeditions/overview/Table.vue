@@ -4,21 +4,7 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <span v-if="value == $i18n.$t.expeditions.expeditionEvents.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
-                <expedition-event-resources-icon v-else-if="value == $i18n.$t.expeditions.expeditionEvents.resources" size="24px" />
-                <o-ship v-else-if="value == $i18n.$t.expeditions.expeditionEvents.fleet" :ship="ShipType.battleship" size="24px" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.delay" class="mdi mdi-clock-outline" :style="{ color: colors.delay }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.early" class="mdi mdi-clock-outline" :style="{ color: colors.early }" />
-                <o-resource v-else-if="value == $i18n.$t.expeditions.expeditionEvents.darkMatter" resource="dark-matter" size="24px" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.pirates" class="mdi mdi-pirate" :style="{ color: colors.pirates }" />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.aliens" class="mdi mdi-alien" :style="{ color: colors.aliens }" />
-                <o-item v-else-if="value == $i18n.$t.expeditions.expeditionEvents.item" :item="detroidItem" size="24px" />
-                <span
-                    v-else-if="value == $i18n.$t.expeditions.expeditionEvents.trader"
-                    class="mdi mdi-swap-horizontal-bold"
-                    :style="{ color: colors.trader }"
-                />
-                <span v-else-if="value == $i18n.$t.expeditions.expeditionEvents.lostFleet" class="mdi mdi-cross" :style="{ color: colors.lostFleet }" />
+                <expedition-event-type-icon :type="getExpeditionEventType(value)" />
             </template>
         </ranged-stats-table>
 
@@ -37,19 +23,21 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
     import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
+    import ExpeditionEventTypeIcon from '@stats/components/expeditions/ExpeditionEventTypeIcon.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { _throw } from '@/shared/utils/_throw';
 
     @Component({
         components: {
             RangedStatsTable,
             DateRangeSettings,
-            ExpeditionEventResourcesIcon,
+            ExpeditionEventTypeIcon,
         },
     })
     export default class Table extends Vue {
@@ -62,6 +50,13 @@
             maximumFractionDigits: 1,
         };
 
+        private getExpeditionEventType(text: string): ExpeditionEventType {
+            const reverseMap = createRecord(ExpeditionEventTypes, type => this.$i18n.$t.extension.expeditions.expeditionEvents[type]);
+            return (Object.entries(reverseMap) as [ExpeditionEventType, string][])
+                .find(e => e[1] == text)?.[0]
+                ?? _throw('failed to find fitting type');
+        }
+
         private get colors() {
             return SettingsDataModule.settings.colors.expeditions.events;
         }
@@ -72,14 +67,14 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ExpeditionEventTypes.map(type => ({
-                label: this.$i18n.$t.expeditions.expeditionEvents[type],
+                label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.events[type], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: expos => ExpeditionEventTypes.reduce(
                     (acc, type) => acc + expos.reduce((acc, expo) => acc + expo.events[type], 0),
                     0

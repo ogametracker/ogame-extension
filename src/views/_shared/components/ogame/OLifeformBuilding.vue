@@ -4,6 +4,7 @@
         :class="[
             {
                 'o-lifeform-building--disabled': disabled,
+                'o-lifeform-building--fade': fade,
             },
             `o-lifeform-building--${lifeform}`,
         ]"
@@ -36,6 +37,9 @@
 
         @Prop({ required: false, type: Boolean })
         private disabled!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private fade!: boolean;
 
         private get image() {
             return this.imageMap[this.building];
@@ -112,6 +116,9 @@
 
         &--disabled {
             filter: grayscale(1) brightness(0.7) contrast(1.2);
+        }
+        &--fade {
+            opacity: 0.3;
         }
 
         &--humans {

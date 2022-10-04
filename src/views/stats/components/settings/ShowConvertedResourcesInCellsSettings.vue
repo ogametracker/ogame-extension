@@ -1,10 +1,10 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.settings.showConvertedUnitsInTables.title" />
+            <span v-text="$i18n.$t.extension.settings.showConvertedUnitsInTables.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.settings.showConvertedUnitsInTables.label" />
+            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.extension.settings.showConvertedUnitsInTables.label" />
             <slot />
         </div>
     </div>

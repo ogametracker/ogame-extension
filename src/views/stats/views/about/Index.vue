@@ -11,11 +11,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: this.$i18n.$t.about.info.header,
+                    label: this.$i18n.$t.extension.about.info.header,
                     to: { name: 'about/info' },
                 },
                 {
-                    label: this.$i18n.$t.about.faqHelp.header,
+                    label: this.$i18n.$t.extension.about.faqHelp.header,
                     to: { name: 'about/help' },
                 },
             ];

@@ -68,14 +68,14 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return this.depletionLevels.map<RangedStatsTableItem<DailyExpeditionResult>>(level => ({
-                label: this.$i18n.$t.expeditions.depletionLevels[level],
+                label: this.$i18n.$t.extension.expeditions.depletionLevels[level],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.depletion[level], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: expos => this.depletionLevels.reduce(
                     (acc, type) => acc + expos.reduce((acc, expo) => acc + expo.depletion[type], 0),
                     0
@@ -85,8 +85,8 @@
 
         private get depletionLevelsByLabel(): Record<string, ExpeditionDepletionLevel | 'unknown'> {
             return createRecord(
-                this.depletionLevels.map(level => this.$i18n.$t.expeditions.depletionLevels[level]),
-                label => this.depletionLevels.find(level => label == this.$i18n.$t.expeditions.depletionLevels[level]) ?? _throw(`failed to find depletion level for label '${label}'`),
+                this.depletionLevels.map(level => this.$i18n.$t.extension.expeditions.depletionLevels[level]),
+                label => this.depletionLevels.find(level => label == this.$i18n.$t.extension.expeditions.depletionLevels[level]) ?? _throw(`failed to find depletion level for label '${label}'`),
             );
         }
     }

@@ -15,31 +15,31 @@ export function getDefaultSettings(language: LanguageKey): Settings {
     return {
         dateRanges: [
             {
-                label: $i18n.$t.settings.dateRanges.defaultNames.today,
+                label: $i18n.$t.extension.settings.dateRanges.defaultNames.today,
                 type: 'day',
                 skip: 0,
                 take: 1,
             },
             {
-                label: $i18n.$t.settings.dateRanges.defaultNames.yesterday,
+                label: $i18n.$t.extension.settings.dateRanges.defaultNames.yesterday,
                 type: 'day',
                 skip: 1,
                 take: 1,
             },
             {
-                label: $i18n.$t.settings.dateRanges.defaultNames.currentWeek,
+                label: $i18n.$t.extension.settings.dateRanges.defaultNames.currentWeek,
                 type: 'week',
                 skip: 0,
                 take: 1,
             },
             {
-                label: $i18n.$t.settings.dateRanges.defaultNames.lastWeek,
+                label: $i18n.$t.extension.settings.dateRanges.defaultNames.lastWeek,
                 type: 'week',
                 skip: 1,
                 take: 1,
             },
             {
-                label: $i18n.$t.settings.dateRanges.defaultNames.currentMonth,
+                label: $i18n.$t.extension.settings.dateRanges.defaultNames.currentMonth,
                 type: 'month',
                 skip: 0,
                 take: 1,

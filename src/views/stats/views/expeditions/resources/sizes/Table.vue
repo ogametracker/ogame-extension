@@ -11,7 +11,7 @@
 
                 <span
                     v-if="
-                        value == $i18n.$t.expeditions.expeditionEventSizes.small
+                        value == $i18n.$t.extension.expeditions.expeditionEventSizes.small
                     "
                     class="mdi mdi-hexagon-slice-1"
                     :style="{ color: colors.small }"
@@ -19,14 +19,14 @@
                 <span
                     v-else-if="
                         value ==
-                        $i18n.$t.expeditions.expeditionEventSizes.medium
+                        $i18n.$t.extension.expeditions.expeditionEventSizes.medium
                     "
                     class="mdi mdi-hexagon-slice-3"
                     :style="{ color: colors.medium }"
                 />
                 <span
                     v-else-if="
-                        value == $i18n.$t.expeditions.expeditionEventSizes.large
+                        value == $i18n.$t.extension.expeditions.expeditionEventSizes.large
                     "
                     class="mdi mdi-hexagon-slice-5"
                     :style="{ color: colors.large }"
@@ -73,14 +73,14 @@
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return ExpeditionEventSizes.map(size => ({
-                label: this.$i18n.$t.expeditions.expeditionEventSizes[size],
+                label: this.$i18n.$t.extension.expeditions.expeditionEventSizes[size],
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.eventSizes.resources[size], 0),
             }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: expos => expos.reduce((acc, expo) => acc + expo.events.resources, 0),
             }];
         }

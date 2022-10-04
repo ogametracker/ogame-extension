@@ -59,16 +59,16 @@
 
         private get lifeformTypes(): Record<string, LifeformType> {
             return {
-                [this.$i18n.$t.lifeforms.humans]: LifeformType.humans,
-                [this.$i18n.$t.lifeforms.rocktal]: LifeformType.rocktal,
-                [this.$i18n.$t.lifeforms.mechas]: LifeformType.mechas,
-                [this.$i18n.$t.lifeforms.kaelesh]: LifeformType.kaelesh,
+                [this.$i18n.$t.ogame.lifeforms.humans]: LifeformType.humans,
+                [this.$i18n.$t.ogame.lifeforms.rocktal]: LifeformType.rocktal,
+                [this.$i18n.$t.ogame.lifeforms.mechas]: LifeformType.mechas,
+                [this.$i18n.$t.ogame.lifeforms.kaelesh]: LifeformType.kaelesh,
             };
         }
 
         private get items(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
             return ValidLifeformTypes.map(lifeform => ({
-                label: this.$i18n.$t.lifeforms[lifeform],
+                label: this.$i18n.$t.ogame.lifeforms[lifeform],
                 getValue: discoveries => discoveries.reduce(
                     (acc, disc) => acc + disc.lifeformExperience[lifeform],
                     0
@@ -78,7 +78,7 @@
 
         private get footerItems(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
             return [{
-                label: this.$i18n.$t.common.sum,
+                label: this.$i18n.$t.extension.common.sum,
                 getValue: discoveries => discoveries.reduce(
                     (acc, disc) => acc + Object.values(disc.lifeformExperience).reduce((acc, cur) => acc + cur, 0),
                     0

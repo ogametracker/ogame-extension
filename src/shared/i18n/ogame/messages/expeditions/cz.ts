@@ -110,7 +110,7 @@ export const cz: ExpeditionMessages = {
             /*'Nějací */'primitivní barbaři na nás útočí z lodí'/*, které se snad ani loděmi nedají nazvat. Pokud bude situace vážnější, budeme nuceni opětovat palbu.'*/,
             /*'Zachytili jsme */'radiovou zprávu od nějakých opilých vesmírných pirátů'/*. Zřejmě na nás brzy zaútočí.'*/,
             /*'Museli */'jsme bojovat s vesmírnými piráty'/*, ale naštěstí jich bylo jen pár.'*/,
-            /*TODO: cz 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*LOCA: cz 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'Expedice měla */'nepříjemné setkání s vesmírnými piráty'/*.'*/,
@@ -128,7 +128,7 @@ export const cz: ExpeditionMessages = {
             /*'*/'Exoticky vypadající lodě neznámého původu'/* zaútočily na expedici bez jakéhokoliv varování!'*/,
             /*'Tvá expedice */'provedla ne-úplně-přátelské seznámení'/* s neznámou rasou mimozemšťanů.'*/,
             /*'Naše expedice */'byla přepadena malou skupinou neznámých lodí'/* !'*/,
-            /*TODO: cz 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*LOCA: cz 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'*/'Neznámí vetřelci zaútočili'/* na naši expedici!'*/,
@@ -138,7 +138,7 @@ export const cz: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/* !'*/,
             /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
-            /*TODO: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*LOCA: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
 
@@ -149,17 +149,17 @@ export const cz: ExpeditionMessages = {
             /*'Je to skvělý pocit */'poprvé prolétat neprozkoumaným sektorem',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*LOCA: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
             /*'Nalezli */'jsme trosky prastarých vesmírných'/* lodí. Nedostali jsme se sem první.'*/,
-            /*TODO: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*LOCA: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO: cz 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*TODO: cz 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*TODO: cz 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*LOCA: cz 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*LOCA: cz 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*LOCA: cz 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*TODO: cz 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: cz 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
         ],
     },
 };
