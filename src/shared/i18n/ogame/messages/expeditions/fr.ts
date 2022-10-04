@@ -6,15 +6,15 @@ import { ExpeditionMessages } from "./types";
 export const fr: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: fr 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'Votre expédition a */'réussi à collecter de l`antimatière'/* et à la conserver.'*/,
             /*'Nous avons */'trouvé l’épave d’un vaisseau extra-terrestre'/* avec à son bord un récipient contenant de l’antimatière !'*/,
-            /*LOCA: fr 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Nous avons */'rencontré un alien assez bizarre'/* qui voyageait à bord d`un petit vaisseau. En échange de quelques simples calculs mathématiques, il nous a cédé un récipient contenant de l`antimatière.'*/,
             /*'Notre expédition a rencontré un */'vaisseau fantôme qui transportait un peu d`antimatière'/* . Nous ne savons pas ce qui est arrivé à l`équipage de ce vaisseau, mais nous avons réussi à récupérer l`antimatière qui se trouvait à bord.'*/,
             /*'L`expédition a été attirée par des */'signaux bizarres et a découvert un astéroïde'/* , dont le noyau contenait de l`antimatière. L`astéroïde se trouve désormais à bord de notre vaisseau et nos chercheurs sont en train d`essayer d`en extraire l`antimatière.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: fr 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*LOCA: fr 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Notre */'expédition a réussi une expérience unique'/* . Les chercheurs ont réussi à gagner de l`antimatière à partir du matériel projeté par une supernova.'*/,
+            /*'Notre expédition a */'découvert une vielle station orbitale qui apparemment'/* navigue dans l`espace abandonnée depuis longtemps. La station est inutilisable, mais il y avait encore de l`antimatière stockée dans ses réacteurs. Nos techniciens essayent de récupérer autant d`antimatière qu`ils peuvent.'*/,
             /*LOCA: fr 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -49,7 +49,7 @@ export const fr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Notre expédition a */'découvert un chantier spatial automatisé'/* . Il y a encore quelques vaisseaux en production, nos techniciens essaient de rétablir l`alimentation en énergie du chantier.'*/,
-            /*LOCA: fr 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Nous avons */'retrouvé les restes d`une armada'/* . Les techniciens se sont immédiatement rendus sur les vaisseaux les mieux conservés et essaient de les remettre en état.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: fr 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
@@ -101,7 +101,7 @@ export const fr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /*LOCA: fr *//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /L`objet (?<name>.+) a été ajouté à l`inventaire/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -149,7 +149,7 @@ export const fr: ExpeditionMessages = {
             /*'C`est un sentiment assez */'unique de se savoir le premier à explorer'/* ce coin perdu de la galaxie. '*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: fr 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*'Il semblerait que personne */'ne soit jamais venu jusqu`à ce coin reculé'/* de la galaxie.'*/,
             /*'Nous avons */'découvert de très vieilles traces d`autres vaisseaux'/* , nous ne sommes donc pas les premiers à venir ici. '*/,
             /*'Nous avons failli entrer en */'collision avec une autre flotte d`expédition'/* . Je ne pensais pas qu`il y avait d`autres expéditions qui traînaient par ici.'*/,
         ],
