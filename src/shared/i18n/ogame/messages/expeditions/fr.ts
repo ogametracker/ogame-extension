@@ -34,7 +34,7 @@ export const fr: ExpeditionMessages = {
             /*'Votre expédition a */'découvert des ressources en quantité importantes'/* sur une lune possédant sa propre atmosphère. Vos équipes au sol sont en train de récupérer ces trésors de la nature.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: fr 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Une */'ceinture de minerai autour d`une planète'/* jusque là inconnue vous a procuré des tonnes de matières premiÈres. Vos soutes sont pleines à craquer !'*/,
             /*LOCA: fr 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`L\`attaquant obtient (?<name>${resources.join('|')}) (?<amount>.+)`, 'i'),
