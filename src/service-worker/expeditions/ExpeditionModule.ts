@@ -265,7 +265,8 @@ export class ExpeditionModule {
 
     #tryParseDarkMatterExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventDarkMatter | null {
         const i18nMessages = i18nExpeditions[language].darkMatter;
-        const regex = i18nMessages.regex(i18nPremium[language].darkMatter);
+        const dmName = i18nPremium[language].darkMatter.replace(/(\(|\))/g, (_, p1) => `\\${p1}`); // replace parens, as they are part of the name for some languages (e.g. french)
+        const regex = i18nMessages.regex(dmName);
         const match = data.text.match(regex);
 
         if (match?.groups == null) {
