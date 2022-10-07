@@ -7,9 +7,9 @@ export const pl: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             'Ekspedycja znalazła trochę Antymaterii',
-            /*LOCA: pl 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
-            /*LOCA: pl 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
-            /*LOCA: pl 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            'Znaleźliśmy wrak obcego statku'/* , a w nim mały pojemnik z Antymaterią.'*/,
+            /*'W małym */'statku znaleźliśmy osobliwego obcego'/* , który dał nam skrzynię z antymaterią w zamian za proste obliczenia matematyczne'*/,
+            /*'Nasza */'ekspedycja przechwyciła statek-widmo'/* , który transportował małą ilość Antymaterii. Nie znaleźliśmy żadnych wskazówek odnośnie losu załogi statku, ale nasi technicy zdołali odzyskać Antymaterię.'*/,
             /*'Ekspedycja podążyła za */'dziwnym sygnałem pochodzącym z asteroidy'/* . W jej jądrze znaleziono małą ilość antymaterii. Asteroida została odholowana, a odkrywcy próbują wydobyć antymaterię.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -49,7 +49,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nasza ekspedycja */'natrafiła na starą automatyczną stocznię'/* . Kilka statków było nadal w fazie produkcyjnej i nasi technicy starają się aktualnie uruchomić generatory energii, aby dokończyć ich produkcję.'*/,
-            /*LOCA: pl 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            'Znaleźliśmy szczątki armady'/* . Technicy od razu udali się do niemalże nietkniętych statków, starają się je ponownie uruchomić.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
