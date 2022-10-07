@@ -47,7 +47,7 @@ export class ExpeditionModule {
             const languageKey = getLanguage(language, true);
             expedition = this.#parseExpedition(languageKey, {
                 ...expeditionEventData,
-                text: expeditionEventData.text.replace(/\s+/, ' ').trim(), // some expedition messages have multiple white space characters in a row
+                text: expeditionEventData.text.replace(/\s+/g, ' ').trim(), // some expedition messages have multiple white space characters in a row
             });
 
             await db.put('expeditions', expedition);
