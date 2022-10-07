@@ -30,12 +30,12 @@ export function trackLifeformSettingsPage() {
                 }
 
                 const title = elem.getAttribute('title') ?? _throw('no experience title found');
-                const match = title.match(/Level\s+(?<level>\d+):\s+(?<exp>\d+)\//i);
+                const match = title.match(/\s+(?<level>[^\s]+):\s+(?<exp>[^\s]+)\/\d/i);
                 
-                const levelText = match?.groups?.level ?? _throw('no level match');
+                const levelText = match?.groups?.level.replace(/[^\d]/g, '') ?? _throw('no level match');
                 const level = parseIntSafe(levelText, 10);
 
-                const currentExpText = match?.groups?.exp ?? _throw('no exp match');
+                const currentExpText = match?.groups?.exp.replace(/[^\d]/g, '') ?? _throw('no exp match');
                 const currentExp = parseIntSafe(currentExpText, 10);
 
                 const exp = getLifeformExperienceNeededForLevel(level) + currentExp;
