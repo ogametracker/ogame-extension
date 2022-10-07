@@ -49,7 +49,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nasza ekspedycja */'natrafiła na starą automatyczną stocznię'/* . Kilka statków było nadal w fazie produkcyjnej i nasi technicy starają się aktualnie uruchomić generatory energii, aby dokończyć ich produkcję.'*/,
-            /*LOCA: pl 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            'Znaleźliśmy szczątki armady'/* . Technicy od razu udali się do niemalże nietkniętych statków, starają się je ponownie uruchomić.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
