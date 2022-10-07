@@ -39,7 +39,10 @@ export class LifeformDiscoveryModule {
         let lifeformDiscovery: LifeformDiscoveryEvent;
         try {
             const languageKey = getLanguage(language, true);
-            lifeformDiscovery = this.#parseLifeformDiscovery(languageKey, lifeformDiscoveryEventData);
+            lifeformDiscovery = this.#parseLifeformDiscovery(languageKey, {
+                ...lifeformDiscoveryEventData,
+                text: lifeformDiscoveryEventData.text.replace(/\s+/g, ' ').trim(),
+            });
 
             await db.put('lifeformDiscoveries', lifeformDiscovery);
 
