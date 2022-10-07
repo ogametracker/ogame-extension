@@ -159,7 +159,7 @@ export const en: ExpeditionMessages = {
             /*LOCA: en 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*LOCA: en 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*'If we felt in danger */'we could return with all the other expeditions flying around'/* here.'*/,
         ],
     },
 };
