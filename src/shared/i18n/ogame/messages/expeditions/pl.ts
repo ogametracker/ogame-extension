@@ -14,7 +14,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nasza */'ekspedycja przeprowadziła niezwykły eksperyment'/* . Naukowcom udało się wydobyć Antymaterię z umierającej gwiazdy.'*/,
-            /*LOCA: pl 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Nasza Ekspedycja namierzyła zardzewiałą stację kosmiczną, która */'wydaje się niekontrolowanie dryfować od dłuższego czasu w przestrzeni kosmicznej'/* . Sama stacja była całkowicie bezużyteczna, jednakże w jej reaktorze znajdowała się pewna ilość antymaterii. Nasi technicy starają się odzyskać tyle antymaterii, ile się uda.'*/,
             /*'Nasze ekspedycja doniosła o nietypowym, spektakularnym fenomenie: */'nagromadzeniu Antymaterii w magazynach energii tarcz statku'/* . Nasi technicy starają się zgromadzić jak najwięcej Antymaterii, dopóki zjawisko trwa.'*/,
         ],
         [ExpeditionEventSize.large]: [
