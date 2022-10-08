@@ -14,8 +14,8 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nasza */'ekspedycja przeprowadziła niezwykły eksperyment'/* . Naukowcom udało się wydobyć Antymaterię z umierającej gwiazdy.'*/,
-            /*LOCA: pl 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*LOCA: pl 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Nasza Ekspedycja namierzyła zardzewiałą stację kosmiczną, która */'wydaje się niekontrolowanie dryfować od dłuższego czasu w przestrzeni kosmicznej'/* . Sama stacja była całkowicie bezużyteczna, jednakże w jej reaktorze znajdowała się pewna ilość antymaterii. Nasi technicy starają się odzyskać tyle antymaterii, ile się uda.'*/,
+            /*'Nasze ekspedycja doniosła o nietypowym, spektakularnym fenomenie: */'nagromadzeniu Antymaterii w magazynach energii tarcz statku'/* . Nasi technicy starają się zgromadzić jak najwięcej Antymaterii, dopóki zjawisko trwa.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -31,11 +31,11 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Twoja ekspedycja przez przypadek natrafiła na w */'pełni załadowany, ale opuszczony konwój fregat'/* . Udało się odzyskać część surowców.'*/,
-            /*LOCA: pl 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Na małym księżycu z własną atmosferą Twoja */'ekspedycja znalazła ogromne złoża surowców'/* . Załoga na powierzchni stara się zebrać i załadować naturalny skarb.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'Pierścienie */'minerałów wokół nieznanej planety zawierają niezliczone'/* ilości surowców. Statki wracają z pełnymi ładowniami.'*/,
-            /*LOCA: pl 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Ekspedycja donosi o */'znalezieniu ogromnego wraku obcego statku kosmicznego'/* . Nie udało się poznać ich technologii ale zdołano podzielić statek na podstawowe elementy i odzyskać z nich surowce.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Zrabowano: (?<amount>.+) (?<name>${resources.join('|')})`, 'i'),
     },
@@ -81,7 +81,7 @@ export const pl: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.trader]: [
-        /*LOCA: pl 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Flota ekspedycyjna nawiązała */'kontakt z płochliwym gatunkiem obcych'/* . Ich przedstawiciel handlowy zostanie wysłany do Twojego imperium.'*/,
         /*LOCA: pl 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
     ],
 
@@ -114,7 +114,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*LOCA: pl 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            /*LOCA: pl 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'Wpadliśmy prosto w */'pułapkę zastawioną przez gwiezdnych piratów'/* . Nie udało się uniknąć walki.'*/,
             /*LOCA: pl 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
         ],
         [ExpeditionEventSize.large]: [

@@ -18,6 +18,7 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     pt: LanguageKey.pt_pt,
     si: LanguageKey.si,
     us: LanguageKey.en,
+    tw: LanguageKey.zh_tw,
 };
 
 export function getLanguage(serverLanguage: string, throwIfUnsupported: boolean): LanguageKey;

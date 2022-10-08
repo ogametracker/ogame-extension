@@ -3,6 +3,7 @@ const process = require('process');
 const fs = require('fs');
 
 const isDev = process.argv.includes('--dev');
+const noTag = process.argv.includes('--no-tag');
 const manualVersion = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
 if (browser == null) {
@@ -66,15 +67,17 @@ if (!isDev) {
     const zipdir = require('zip-dir');
     zipdir('./dist', { saveTo: `./dist/ogame-tracker-${browser}--${version}.zip` });
 
-    const tagName = `${manifest.name.replace(/\s/g, '_')}/${version}`;
-    try {
-        console.log(`creating git tag '${tagName}'`);
-        execSync(`git tag ${tagName}`);
-        execSync(`git push origin ${tagName}`);
-        console.log('created tag successfully');
-    } catch (e) {
-        console.log('FAILED to add git tag');
-        console.log(e);
+    if (!noTag) {
+        const tagName = `${manifest.name.replace(/\s/g, '_')}/${version}`;
+        try {
+            console.log(`creating git tag '${tagName}'`);
+            execSync(`git tag ${tagName}`);
+            execSync(`git push origin ${tagName}`);
+            console.log('created tag successfully');
+        } catch (e) {
+            console.log('FAILED to add git tag');
+            console.log(e);
+        }
     }
 }
 
