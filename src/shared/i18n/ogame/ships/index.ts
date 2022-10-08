@@ -1,4 +1,5 @@
 import { LanguageKey } from "../../LanguageKey";
+import { ShipTranslations } from "./types";
 import { de } from './de';
 import { en } from './en';
 import { dk } from './dk';
@@ -13,7 +14,7 @@ import { es_mx } from './es_mx';
 import { it } from './it';
 import { fr } from './fr';
 import { pl } from './pl';
-import { ShipTranslations } from "./types";
+import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, ShipTranslations> = {
     cz,
@@ -30,5 +31,6 @@ const translations: Record<LanguageKey, ShipTranslations> = {
     pt_br,
     pt_pt,
     si,
+    zh_tw,
 };
 export default translations;
