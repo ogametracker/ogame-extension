@@ -13,7 +13,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'遠征探險隊追隨著一*/'些奇怪的信號來到'/* 一顆小行星.在小行星核心,發現了少量的暗物質.我們占領了小行星,探險家正嘗試從中儘量提取暗物質.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: zh_tw *//*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'我們的遠征探險艦隊完成了*/'一項史無前例的實驗'/* .他們從一顆垂死的恒星上採集到了暗物質'*/,
             /*'我們的探險隊駐紮在一*/'個廢棄的空間站'/* ,這個地方看起來已經漂流在外太空一段時間.這個太空站已經沒有多大的用處,但是在核反應爐中,還有一些暗物質.我們的技術人員盡可能的嘗試保存它們.'*/,
             /*'我們的探險隊報告發現奇特的現象.在船艦護盾的能量槽中,*/'附著積存著一些暗物質'/* .我們的技術人員在正盡可能在這些怪象持續時儲存這些暗物質.'*/,
         ],
@@ -35,7 +35,7 @@ export const zh_tw: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: zh_tw *//*'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /*LOCA: zh_tw *//*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'您的遠征探險艦隊報告說他們發現了*/'一艘巨型的外星人艦船殘骸'/* .他們雖然無法從那裡學到任何科技,但他們發現可以分解那艘艦船的主要部件成為我們有用的資源.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`捕獲了 (?<name>${resources.join('|')}) (?<amount>.+)`, 'i'),
     },
@@ -49,11 +49,11 @@ export const zh_tw: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'我們的遠征探險艦隊闖進了一*/'間古老的全自動造船廠'/* ,一些艦船依然還在建造階段,我們的技術人員現在正嘗試重新恢復造船廠的能源供應'*/,
-            /*LOCA: zh_tw *//*'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'我們找到了一*/'支艦隊的殘骸群'/* .技術人員前往那些幾乎完好的艦船處嘗試令到它們重新啓動起來'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: zh_tw *//*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /*LOCA: zh_tw *//*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'我們找到了*/'一個文明滅絕的行星'/* .我們找到了還環繞在軌道上正常運行的龐大太空站.您的一些技術人員和駕駛員前往那裡找到了一些仍然可以使用的艦船.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`下列艦船隸屬於艦隊:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -86,7 +86,7 @@ export const zh_tw: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: zh_tw *//*'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        '在引擎的能源軸線上發生了'/*一個未能預期耦合逆轉狀況導致艦隊加速了返回時間,遠征探險艦隊因此比預期更早地返回了.首份報告稱他們沒找到什麼令人興奮的發現.'*/,
         /*'您的遠征探險艦隊報告稱在遠征探險的宇宙空域內並沒有找到什麼異象.正當他們返回之時,*/'艦隊偶遇了一股太陽風'/*.艦隊因此返航的路程加快了.您的遠征探險艦隊比預期更早地返回了.'*/,
         '年輕而膽識過人的指揮官'/*成功穿越了一個不穩定的蟲洞,減少了返回的飛行時間!而然,這支遠征探險艦隊並沒有帶回來什麼新東西.'*/,
     ],
@@ -108,7 +108,7 @@ export const zh_tw: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             '一些亡命的宇宙海盜'/*嘗試洗劫我們的遠征探險艦隊.'*/,
             /*'一*/'群原始野蠻人正利用太'/*空船向我們的遠征探險艦隊發起攻擊,我們甚至連他們叫什麼名都全然不知.如果他們再猛烈攻擊我們,我們將不得不予以還擊.'*/,
-            /*LOCA: zh_tw *//*'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
+            /*'我們從一*/'幫張狂的海盜處收到'/* 一些挑釁的無線電訊號.看來,我們即將遭受攻擊'*/,
             /*'我們不得不*/'與那裡的海盜進行戰鬥'/* ,慶幸的是對方艦船數不多.'*/,
             /*LOCA: zh_tw *//*'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
@@ -150,7 +150,7 @@ export const zh_tw: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.low]: [
             /*LOCA: zh_tw *//*'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*LOCA: zh_tw *//*'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*'我們發現一*/'艘遠古太空艦船的殘骸'/* .但我們並不是第一個踏足的人'*/,
             /*LOCA: zh_tw *//*'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
