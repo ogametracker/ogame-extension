@@ -7,6 +7,7 @@ export enum LanguageKey {
     es_ar = 'es_ar', // spanish (Argentina)
     es_mx = 'es_mx', // spanish (Mexico)
     fr = 'fr', // french
+    //TODO: gr = 'gr', // greek
     hr = 'hr', // croatian
     //TODO: hu = 'hu', // hungarian
     it = 'it', // italian
