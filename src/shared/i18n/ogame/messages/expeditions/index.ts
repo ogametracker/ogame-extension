@@ -11,6 +11,7 @@ import { es } from './es';
 import { it } from './it';
 import { fr } from './fr';
 import { pl } from './pl';
+import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, ExpeditionMessages> = {
     cz,
@@ -27,5 +28,6 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     pt_br: pt,
     pt_pt: pt,
     si,
+    zh_tw,
 };
 export default translations;
