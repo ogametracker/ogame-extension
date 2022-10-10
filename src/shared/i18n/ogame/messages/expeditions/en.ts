@@ -154,9 +154,9 @@ export const en: ExpeditionMessages = {
             /*'We */'nearly had a collision with another expedition fleet'/*. I did not believe that there would be others around here'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: en 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*LOCA: en 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: en 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'We */'celebrated the expeditions fulfillment with the crew members'/* of another expedition fleet which where on their way in the same sector. They have nothing new to report.'*/,
+            /*'We found */'proof indicating the presence of multiple expedition fleets'/* in the area. We are returning home.'*/,
+            /*'We */'established friendly radio contact with some other expeditions'/* in this sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*'If we felt in danger */'we could return with all the other expeditions flying around'/* here.'*/,
