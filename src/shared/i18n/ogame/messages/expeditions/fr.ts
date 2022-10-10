@@ -15,11 +15,11 @@ export const fr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Notre */'expédition a réussi une expérience unique'/* . Les chercheurs ont réussi à gagner de l`antimatière à partir du matériel projeté par une supernova.'*/,
             /*'Notre expédition a */'découvert une vielle station orbitale qui apparemment'/* navigue dans l`espace abandonnée depuis longtemps. La station est inutilisable, mais il y avait encore de l`antimatière stockée dans ses réacteurs. Nos techniciens essayent de récupérer autant d`antimatière qu`ils peuvent.'*/,
-            /*LOCA: fr 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Notre expédition nous signale un phénomène spectral assez surprenant. Il a */'provoqué la formation d`antimatière dans les réservoirs d`énergie'/* de la protection de nos vaisseaux. Nos techniciens essaient de conserver un maximum d`antimatière tant que le phénomène perdure.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: fr 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*LOCA: fr 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Notre expédition nous a signalé un contact quelque peu particulier. Apparemment des créatures énergétiques, qui se */'sont présentées sous le nom de légoriens'/* , ont traversé les vaisseaux de l`expédition et ont décidé d`aider l`espèce sous-développée que nous sommes - un récipient contenant de l`antimatière est apparu dans le poste de commande de nos vaisseaux.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`L\`attaquant obtient (?<name>${darkMatter}) (?<amount>[^\\s]+)`, 'i'),
     },
@@ -35,7 +35,7 @@ export const fr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Une */'ceinture de minerai autour d`une planète'/* jusque là inconnue vous a procuré des tonnes de matières premiÈres. Vos soutes sont pleines à craquer !'*/,
-            /*LOCA: fr 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Votre flotte d`expédition vous informe */'qu`elle a découvert l`épave d`un vaisseau alien'/* . Vos chercheurs n`ont pas su utiliser les technologies de ce vaisseau, par contre il a pû être démantelé, vous procurant un nombre important de ressources.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`L\`attaquant obtient (?<name>${resources.join('|')}) (?<amount>.+)`, 'i'),
     },
@@ -52,7 +52,7 @@ export const fr: ExpeditionMessages = {
             /*'Nous avons */'retrouvé les restes d`une armada'/* . Les techniciens se sont immédiatement rendus sur les vaisseaux les mieux conservés et essaient de les remettre en état.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: fr 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Nous avons */'découvert un immense cimetière de vaisseaux'/* . Nos techniciens ont réussi à remettre quelques vaisseaux en état.'*/,
             /*LOCA: fr 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Votre flotte s\`est agrandie, voici les nouveaux vaisseaux qui s\`y sont joints\\s*:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
