@@ -18,7 +18,7 @@ export const pl: ExpeditionMessages = {
             /*'Nasze ekspedycja doniosła o nietypowym, spektakularnym fenomenie: */'nagromadzeniu Antymaterii w magazynach energii tarcz statku'/* . Nasi technicy starają się zgromadzić jak najwięcej Antymaterii, dopóki zjawisko trwa.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pl 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Spontaniczna */'deformacja nadprzestrzeni pozwoliła Twojej ekspedycji'/* zebrać dużą ilość Antymaterii!'*/,
             /*LOCA: pl 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Zrabowano: (?<amount>[^\\s]+) (?<name>${darkMatter})`, 'i'),
