@@ -15,7 +15,7 @@ export const fr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Notre */'expédition a réussi une expérience unique'/* . Les chercheurs ont réussi à gagner de l`antimatière à partir du matériel projeté par une supernova.'*/,
             /*'Notre expédition a */'découvert une vielle station orbitale qui apparemment'/* navigue dans l`espace abandonnée depuis longtemps. La station est inutilisable, mais il y avait encore de l`antimatière stockée dans ses réacteurs. Nos techniciens essayent de récupérer autant d`antimatière qu`ils peuvent.'*/,
-            /*LOCA: fr 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Notre expédition nous signale un phénomène spectral assez surprenant. Il a */'provoqué la formation d`antimatière dans les réservoirs d`énergie'/* de la protection de nos vaisseaux. Nos techniciens essaient de conserver un maximum d`antimatière tant que le phénomène perdure.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: fr 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
