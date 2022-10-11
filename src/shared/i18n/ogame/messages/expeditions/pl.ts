@@ -82,7 +82,7 @@ export const pl: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /*'Flota ekspedycyjna nawiązała */'kontakt z płochliwym gatunkiem obcych'/* . Ich przedstawiciel handlowy zostanie wysłany do Twojego imperium.'*/,
-        /*LOCA: pl 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        'Ekspedycja odebrała sygnał alarmowy'/* . Ogromny statek transportowy dostał się w silne pole grawitacyjne planetoidy. Po udanej akcji ratunkowej ocalony kapitan ogłosił, że nasz imperator będzie jego ulubionym i uprzywilejowanym klientem.'*/,
     ],
 
     [ExpeditionEventType.early]: [
