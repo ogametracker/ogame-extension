@@ -53,7 +53,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /*LOCA: pl 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Odkryliśmy */'planetę z resztkami cywilizacji'/* . Na orbicie znajduje się olbrzymi port kosmiczny. Kilku techników i pilotów z ekspedycji udało się na powierzchnię w poszukiwaniu statków, które jeszcze można wykorzystać.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Następujące statki dołączyły do floty:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
