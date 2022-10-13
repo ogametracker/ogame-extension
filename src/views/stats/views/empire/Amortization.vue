@@ -704,6 +704,7 @@
 
         private initSettings() {
             const empire = this.empire;
+            const serverSettings = ServerSettingsDataModule.serverSettings;
 
             this.playerSettings = {
                 ...this.playerSettings,
@@ -731,7 +732,7 @@
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
-                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                            overload: empire.playerClass == PlayerClass.collector && serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -748,10 +749,11 @@
             this.astrophysicsSettings = {
                 planet: {
                     ...this.astrophysicsSettings.planet,
+                    lifeform: serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none,
 
                     name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
                     crawlers: {
-                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                        overload: empire.playerClass == PlayerClass.collector && serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
