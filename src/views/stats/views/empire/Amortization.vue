@@ -106,6 +106,17 @@
 
                         <div>
                             <h3 v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.header" />
+                            <div class="global-planet-settings">
+                                <button
+                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.deselectItems"
+                                    @click="deselectAllItems()"
+                                />
+                                <button
+                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.ignoreInactiveLifeformTechnologySlots"
+                                    @click="ignoreAllInactiveSlots()"
+                                />
+                            </div>
+
                             <div style="display: flex; gap: 8px; flex-wrap: wrap">
                                 <amortization-planet-settings-inputs
                                     v-for="planetSetting in planetSettingsSorted"
@@ -1039,6 +1050,14 @@
             this.isGroupedItemsView = false;
             this.groupedItems = {};
         }
+
+        private deselectAllItems() {
+            this.planetSettingsSorted.forEach(p => p.activeItems = []);
+        }
+
+        private ignoreAllInactiveSlots() {
+            this.planetSettingsSorted.forEach(p => p.ignoreEmptyLifeformTechnologySlots = true);
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -1224,5 +1243,12 @@
     .generating-count {
         display: flex;
         align-items: center;
+    }
+
+    .global-planet-settings {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+        gap: 8px;
     }
 </style>

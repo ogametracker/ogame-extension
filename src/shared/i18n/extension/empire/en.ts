@@ -74,6 +74,11 @@ export const en: EmpireTranslations = {
             planetSettings: {
                 header: 'Planet Settings',
 
+                global: {
+                    deselectItems: 'Deselect all items',
+                    ignoreInactiveLifeformTechnologySlots: 'Ignore inactive lifeform technology slots for all planets',
+                },
+
                 includeInResult: 'Include in calculation',
                 position: 'Position',
                 maxTemperature: 'Max. Temperature',

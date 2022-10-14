@@ -73,6 +73,11 @@ export interface EmpireTranslations {
             planetSettings: {
                 header: string;
 
+                global: {
+                    deselectItems: string;
+                    ignoreInactiveLifeformTechnologySlots: string;
+                };
+
                 includeInResult: string;
                 position: string;
                 maxTemperature: string;
