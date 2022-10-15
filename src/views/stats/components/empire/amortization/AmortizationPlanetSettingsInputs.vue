@@ -51,10 +51,8 @@
             <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
-                    <o-ship :ship="ShipType.crawler" />
-                    <checkbox-button v-model="settings.crawlers.overload" color="#00ff00" :disabled="!isCrawlerOverloadEnabled">
-                        {{ $i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.overload }}
-                    </checkbox-button>
+                    <input type="number" v-model.number="settings.crawlers.percentage" step="10" min="0" max="150" />
+                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
                 </div>
                 <div class="crawler-grid-row">
                     <checkbox-button
@@ -96,7 +94,7 @@
                 />
             </span>
 
-            <template v-if="planetData != null">
+            <template v-if="planetData != null && !productionMode">
                 <span />
                 <span>
                     <checkbox
@@ -170,7 +168,6 @@
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { ResourceTranslations } from '@/shared/i18n/extension/resources/type';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -207,6 +204,9 @@
 
         @Prop({ required: false, type: Object as PropType<PlanetData> })
         private planetData!: PlanetData | null;
+
+        @Prop({ required: false, type: Boolean })
+        private productionMode!: boolean;
 
         @Watch('settings', { immediate: true, deep: true })
         private onSettingsChanged() {
@@ -427,7 +427,7 @@
         &-row {
             display: flex;
             column-gap: 4px;
-            height: 32px;
+            align-items: center;
         }
     }
 

@@ -34,6 +34,12 @@ export const de: EmpireTranslations = {
             allianceClass: 'Allianzklasse',
             lifeformTechnologies: 'Lebensform-Technologien',
         },
+        
+        settings: {
+            reset: 'Zurücksetzen',
+            header: 'Produktionseinstellungen',
+            applyAndClose: 'Produktionseinstellungen anwenden und schließen',
+        },
     },
     amortization: {
         header: 'Amortisation',
@@ -60,6 +66,7 @@ export const de: EmpireTranslations = {
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',
                 currentLevelOf: (name: string) => `aktuelle Stufe ${name}`,
+                lifeformLevels: 'Lebenform-Levels',
 
                 unusedRaidColonySlots: 'Derzeit ungenutzt Raidkolo-Slots',
             },
@@ -74,13 +81,18 @@ export const de: EmpireTranslations = {
             planetSettings: {
                 header: 'Einstellungen der Planeten',
 
+                global: {
+                    deselectItems: 'Alle Items abwählen',
+                    ignoreInactiveLifeformTechnologySlots: 'Inaktive Lebensform-Technologie-Slots für alle Planeten ignorieren',
+                },
+
                 includeInResult: 'für Berechnung berücksichtigen',
                 position: 'Position',
                 maxTemperature: 'Max. Temperatur',
                 activeItems: 'Aktive Items',
                 crawlers: {
                     title: 'Crawler',
-                    overload: '150% Überladung',
+                    percentage: '% Produktion',
                     fixCount: 'Feste Anzahl',
                     maxCount: 'Max. Anzahl',
                 },

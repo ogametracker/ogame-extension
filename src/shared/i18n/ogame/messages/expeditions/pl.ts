@@ -136,7 +136,7 @@ export const pl: ExpeditionMessages = {
             /*'Kontakt z naszą ekspedycją został przerwany na krótki czas. Możemy jednak odszyfrować jej ostatnią wiadomość. Są pod ciężkim obstrzałem, */'agresorzy nie zostali rozpoznani',
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pl 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Twoja */'flota natrafiła na silną flotę obcych i jest w trakcie'/* zaciekłych walk!.'*/,
             /*LOCA: pl 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*LOCA: pl 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],

@@ -104,8 +104,21 @@
                             </div>
                         </div>
 
+                        <hr style="width: 100%" />
+
                         <div>
                             <h3 v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.header" />
+                            <div class="global-planet-settings">
+                                <button
+                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.deselectItems"
+                                    @click="deselectAllItems()"
+                                />
+                                <button
+                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.ignoreInactiveLifeformTechnologySlots"
+                                    @click="ignoreAllInactiveSlots()"
+                                />
+                            </div>
+
                             <div style="display: flex; gap: 8px; flex-wrap: wrap">
                                 <amortization-planet-settings-inputs
                                     v-for="planetSetting in planetSettingsSorted"
@@ -469,7 +482,7 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
@@ -487,6 +500,7 @@
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { createRecord } from '@/shared/utils/createRecord';
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
+import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
 
     type SelectableAmortizationItem = AmortizationItem & { selected: boolean };
 
@@ -595,6 +609,7 @@
             levelPlasmaTechnology: 0,
             levelAstrophysics: 0,
             numberOfUnusedRaidColonySlots: 0,
+            lifeformLevels: createRecord(ValidLifeformTypes, 0),
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
@@ -606,7 +621,7 @@
                 maxTemperature: getAverageTemperature(8),
                 activeItems: [],
                 crawlers: {
-                    overload: false,
+                    percentage: 100,
                     count: 0,
                     max: false,
                 },
@@ -704,10 +719,12 @@
 
         private initSettings() {
             const empire = this.empire;
+            const serverSettings = ServerSettingsDataModule.serverSettings;
 
             this.playerSettings = {
                 ...this.playerSettings,
 
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
@@ -731,7 +748,7 @@
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
-                            overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                            percentage: planet.productionSettings[ShipType.crawler],
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -748,10 +765,11 @@
             this.astrophysicsSettings = {
                 planet: {
                     ...this.astrophysicsSettings.planet,
+                    lifeform: serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none,
 
                     name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
                     crawlers: {
-                        overload: empire.playerClass == PlayerClass.collector && ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                        percentage: empire.playerClass == PlayerClass.collector ? 150 : 100,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },
@@ -1037,6 +1055,14 @@
             this.isGroupedItemsView = false;
             this.groupedItems = {};
         }
+
+        private deselectAllItems() {
+            this.planetSettingsSorted.forEach(p => p.activeItems = []);
+        }
+
+        private ignoreAllInactiveSlots() {
+            this.planetSettingsSorted.forEach(p => p.ignoreEmptyLifeformTechnologySlots = true);
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -1222,5 +1248,12 @@
     .generating-count {
         display: flex;
         align-items: center;
+    }
+
+    .global-planet-settings {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+        gap: 8px;
     }
 </style>

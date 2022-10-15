@@ -8,7 +8,7 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'La expedición fue */'capaz de capturar y almacenar algo'/* de Materia Oscura.'*/,
             /*LOCA: es 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
-            /*LOCA: es 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Nos */'encontramos un extraño alien en una estantería en una pequeña'/* nave, nos dio una maleta con Materia Oscura a cambio de unos simples cálculos matemáticos.'*/,
             /*'Nuestra expedición se */'encontró con una nave fantasma que transportaba'/* una pequeña cantidad de Materia Oscura. No encontramos ningún indicio de que le pasó a la tripulación original de la nave pero nuestros técnicos fueron capaces de rescatar la Materia Oscura.'*/,
             /*'La expedición siguió */'algunas señales fuera de lo común hasta un asteroide'/* . En el núcleo del asteroide se encontró una pequeña cantidad de Materia Oscura. El asteroide fue tomado y los exploradores intentan extraer la Materia Oscura.'*/,
         ],

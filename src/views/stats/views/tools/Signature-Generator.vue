@@ -70,7 +70,7 @@
             await EmpireDataModule.ready;
             await ServerSettingsDataModule.ready;
 
-            this.productionBreakdowns = getProductionBreakdowns();
+            this.productionBreakdowns = getProductionBreakdowns(EmpireDataModule.empire, EmpireDataModule.lifeformExperience);
 
             await this.initImages();
             this.draw();

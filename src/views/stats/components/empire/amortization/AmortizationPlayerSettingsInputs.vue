@@ -1,18 +1,20 @@
 <template>
     <div class="player-settings">
-        <conversion-rate-settings class="conversion-rate-settings" />
+        <template v-if="!productionMode">
+            <conversion-rate-settings class="conversion-rate-settings" />
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.optimizeForResources" />
-        <span class="gap">
-            <o-resource
-                v-for="resource in resources"
-                :key="resource"
-                class="toggleable-resource"
-                :resource="resource"
-                :disabled="!settings.optimizeForResources.includes(resource)"
-                @click="toggleOptimizeForResource(resource)"
-            />
-        </span>
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.optimizeForResources" />
+            <span class="gap">
+                <o-resource
+                    v-for="resource in resources"
+                    :key="resource"
+                    class="toggleable-resource"
+                    :resource="resource"
+                    :disabled="!settings.optimizeForResources.includes(resource)"
+                    @click="toggleOptimizeForResource(resource)"
+                />
+            </span>
+        </template>
 
         <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
@@ -53,15 +55,25 @@
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
-        <span>
-            <o-research :research="ResearchType.astrophysics" />
-            <input type="number" :value="settings.levelAstrophysics" disabled />
-        </span>
+        <template v-if="!productionMode">
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
+            <span>
+                <o-research :research="ResearchType.astrophysics" />
+                <input type="number" :value="settings.levelAstrophysics" disabled />
+            </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
-        <span>
-            <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
+            <span>
+                <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
+            </span>
+        </template>
+
+        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.lifeformLevels" />
+        <span class="lifeform-level-grid">
+            <span v-for="lifeform in LifeformTypes" :key="lifeform" style="display: contents">
+                <o-lifeform :lifeform="lifeform" />
+                <input type="number" v-model.number="settings.lifeformLevels[lifeform]" min="0" step="1" />
+            </span>
         </span>
     </div>
 </template>
@@ -75,6 +87,7 @@
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 
     @Component({
         components: {
@@ -86,10 +99,14 @@
         @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private settings!: AmortizationPlayerSettings;
 
+        @Prop({ required: false, type: Boolean, default: () => false })
+        private productionMode!: boolean;
+
         private readonly resources = ResourceTypes;
         private readonly ResearchType = ResearchType;
         private readonly playerClasses = SelectablePlayerClasses;
         private readonly allianceClasses = SelectableAllianceClasses;
+        private readonly LifeformTypes = ValidLifeformTypes;
 
 
         private togglePlayerClass(playerClass: PlayerClass): void {
@@ -123,7 +140,7 @@
 <style lang="scss" scoped>
     .player-settings {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: minmax(auto, 150px) 1fr;
         align-items: center;
         gap: 8px 16px;
 
@@ -132,6 +149,7 @@
 
             &:nth-of-type(2n + 1) {
                 justify-self: flex-end;
+                text-align: right;
             }
         }
 
@@ -168,5 +186,12 @@
                 padding-left: 0;
             }
         }
+    }
+
+    .lifeform-level-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        row-gap: 4px;
+        align-items: stretch;
     }
 </style>
