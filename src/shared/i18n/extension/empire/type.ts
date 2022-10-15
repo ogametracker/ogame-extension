@@ -33,6 +33,12 @@ export interface EmpireTranslations {
             allianceClass: string;
             lifeformTechnologies: string;
         };
+
+        settings: {
+            reset: string;
+            header: string;
+            applyAndClose: string;
+        };
     };
     amortization: {
         header: string;
@@ -59,6 +65,7 @@ export interface EmpireTranslations {
                 playerClass: string;
                 allianceClass: string;
                 currentLevelOf: (name: string) => string;
+                lifeformLevels: string;
 
                 unusedRaidColonySlots: string;
             };

@@ -96,7 +96,7 @@
                 />
             </span>
 
-            <template v-if="planetData != null">
+            <template v-if="planetData != null && !productionMode">
                 <span />
                 <span>
                     <checkbox
@@ -106,15 +106,15 @@
                 </span>
             </template>
 
-            <span />
-            <span>
+            <span v-if="!productionMode" />
+            <span v-if="!productionMode" >
                 <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
                     <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformSettings" />
                 </button>
             </span>
 
-            <template v-if="showLifeformSettings">
+            <template v-if="showLifeformSettings || productionMode">
                 <template v-if="settings.lifeformTechnologyLevels != null">
                     <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
@@ -170,7 +170,6 @@
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { ResourceTranslations } from '@/shared/i18n/extension/resources/type';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -207,6 +206,9 @@
 
         @Prop({ required: false, type: Object as PropType<PlanetData> })
         private planetData!: PlanetData | null;
+
+        @Prop({ required: false, type: Boolean })
+        private productionMode!: boolean;
 
         @Watch('settings', { immediate: true, deep: true })
         private onSettingsChanged() {

@@ -1,3 +1,4 @@
+import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
 import { CrystalMine } from "@/shared/models/ogame/buildings/CrystalMine";
@@ -5,9 +6,9 @@ import { DeuteriumSynthesizer } from "@/shared/models/ogame/buildings/DeuteriumS
 import { FusionReactor } from "@/shared/models/ogame/buildings/FusionReactor";
 import { MetalMine } from "@/shared/models/ogame/buildings/MetalMine";
 import { ProductionBuildingDependencies } from "@/shared/models/ogame/buildings/ProductionBuilding";
-import { addCost, Cost } from "@/shared/models/ogame/common/Cost";
+import { Cost } from "@/shared/models/ogame/common/Cost";
 import { getLifeformLevelTechnologyBonus } from "@/shared/models/ogame/lifeforms/experience";
-import { LifeformType, LifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, LifeformTypes, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@/shared/models/ogame/premium/hasCommandStaff";
 import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
@@ -18,7 +19,6 @@ import { EmpireProductionBreakdown, EmpireProductionPlanetState } from "@/shared
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { createRecord } from "@/shared/utils/createRecord";
-import { EmpireDataModule } from "@/views/stats/data/EmpireDataModule";
 import { ServerSettingsDataModule } from "@/views/stats/data/ServerSettingsDataModule";
 import { getPlanetCollectorClassBonusFactor, getPlanetLifeformBuildingBonusProductionFactor, getPlanetLifeformTechnologyBonusProductionFactor, getPlanetLifeformTechnologyBoost } from "../lifeforms";
 
@@ -36,12 +36,10 @@ export function getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet: 
         );
 }
 
-export function getProductionBreakdowns(): EmpireProductionBreakdowns {
-    const planets = Object.values(EmpireDataModule.empire.planets)
+export function getProductionBreakdowns(empire: LocalPlayerData, lifeformExperience: Record<ValidLifeformType, number>): EmpireProductionBreakdowns {
+    const planets = Object.values(empire.planets)
         .filter(planet => !planet.isMoon) as PlanetData[];
 
-    const empire = EmpireDataModule.empire;
-    const lifeformExperience = EmpireDataModule.lifeformExperience;
     const plasmaTechLevel = empire.research[ResearchType.plasmaTechnology];
 
     const serverSettings = ServerSettingsDataModule.serverSettings;

@@ -480,7 +480,7 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
@@ -498,6 +498,7 @@
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { createRecord } from '@/shared/utils/createRecord';
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
+import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
 
     type SelectableAmortizationItem = AmortizationItem & { selected: boolean };
 
@@ -606,6 +607,7 @@
             levelPlasmaTechnology: 0,
             levelAstrophysics: 0,
             numberOfUnusedRaidColonySlots: 0,
+            lifeformLevels: createRecord(ValidLifeformTypes, 0),
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
@@ -720,6 +722,7 @@
             this.playerSettings = {
                 ...this.playerSettings,
 
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,

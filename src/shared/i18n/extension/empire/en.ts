@@ -34,6 +34,12 @@ export const en: EmpireTranslations = {
             allianceClass: 'Alliance Class',
             lifeformTechnologies: 'Lifeform Technologies',
         },
+        
+        settings: {
+            reset: 'Reset',
+            header: 'Production settings',
+            applyAndClose: 'Apply and close production settings',
+        },
     },
     amortization: {
         header: 'Amortization',
@@ -60,6 +66,7 @@ export const en: EmpireTranslations = {
                 playerClass: 'Player Class',
                 allianceClass: 'Alliance Class',
                 currentLevelOf: (name: string) => `Current Level of ${name}`,
+                lifeformLevels: 'Lifeform Levels',
 
                 unusedRaidColonySlots: 'Currently unused raid colony slots',
             },

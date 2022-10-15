@@ -34,6 +34,12 @@ export const de: EmpireTranslations = {
             allianceClass: 'Allianzklasse',
             lifeformTechnologies: 'Lebensform-Technologien',
         },
+        
+        settings: {
+            reset: 'Zurücksetzen',
+            header: 'Produktionseinstellungen',
+            applyAndClose: 'Produktionseinstellungen anwenden und schließen',
+        },
     },
     amortization: {
         header: 'Amortisation',
@@ -60,6 +66,7 @@ export const de: EmpireTranslations = {
                 playerClass: 'Spielerklasse',
                 allianceClass: 'Allianzklasse',
                 currentLevelOf: (name: string) => `aktuelle Stufe ${name}`,
+                lifeformLevels: 'Lebenform-Levels',
 
                 unusedRaidColonySlots: 'Derzeit ungenutzt Raidkolo-Slots',
             },

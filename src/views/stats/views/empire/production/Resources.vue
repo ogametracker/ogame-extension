@@ -1,7 +1,42 @@
 <template>
     <div class="table-container">
-        <div v-text="$i18n.$t.extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" />
+        <div style="grid-column: 1 / span 2; display: grid; grid-template-rows: auto 1fr; max-height: 100%; overflow: hidden">
+            <div>
+                <button @click="showProductionSettings = !showProductionSettings">
+                    <span class="mdi mdi-cogs" />
+                    <span class="mdi mdi-menu-down" v-if="!showSettings" />
+                    <span class="mdi mdi-menu-up" v-else />
 
+                    <span v-if="!showProductionSettings" v-text="$i18n.$t.extension.empire.production.settings.header" />
+                    <span v-else v-text="$i18n.$t.extension.empire.production.settings.applyAndClose" />
+                </button>
+                <button @click="resetProductionSettings()" class="ml-2">
+                    <span class="mdi mdi-refresh" />
+                    <span v-text="$i18n.$t.extension.empire.production.settings.reset" />
+                </button>
+            </div>
+
+            <div v-show="showProductionSettings" class="mt-2" style="overflow: auto">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                    <amortization-player-settings-inputs
+                        v-model="playerSettings"
+                        :lifeform-levels="lifeformLevels"
+                        production-mode
+                        style="height: max-content; margin-top: 44px"
+                    />
+
+                    <amortization-planet-settings-inputs
+                        v-for="planetSetting in planetSettings"
+                        :key="planetSetting.id"
+                        :value="planetSetting"
+                        :planetData="empire.planets[planetSetting.id]"
+                        production-mode
+                    />
+                </div>
+            </div>
+        </div>
+
+        <div v-text="$i18n.$t.extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" v-show="!showProductionSettings" />
         <grid-table
             :columns="columns"
             :items="items"
@@ -9,6 +44,7 @@
             :footerItems="footerItems"
             class="resources-production-table"
             :style="`--item-count: ${maxItemCount}`"
+            v-show="!showProductionSettings"
         >
             <template #header-metal>
                 <o-resource resource="metal" size="75px" />
@@ -129,11 +165,7 @@
                     <template v-if="showBreakdown[item.planet.id]">
                         <decimal-number :value="value.baseProduction" />
                         <decimal-number :value="value.mineProduction" />
-                        <decimal-number
-                            :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }"
-                            :value="-item.fusionReactorConsumption"
-                           
-                        />
+                        <decimal-number :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }" :value="-item.fusionReactorConsumption" />
                         <decimal-number :value="value.lifeformBuildingsProduction" />
                         <decimal-number :value="value.crawlerProduction" />
                         <decimal-number :value="value.plasmaTechnologyProduction" />
@@ -202,7 +234,7 @@
             </template>
         </grid-table>
 
-        <floating-menu v-model="showSettings" left>
+        <floating-menu v-model="showSettings" left v-show="!showProductionSettings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
@@ -216,7 +248,6 @@
 
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { FusionReactor } from '@/shared/models/ogame/buildings/FusionReactor';
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
@@ -232,7 +263,18 @@
     import { PlanetProductionBreakdown } from '@/shared/models/ogame/resource-production/types';
     import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
     import { getProductionBreakdowns } from '@stats/models/empire/production';
-import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
+    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
+    import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
+    import { createRecord } from '@/shared/utils/createRecord';
+    import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
+    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import AmortizationPlanetSettingsInputs from '@stats/components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
+    import AmortizationPlayerSettingsInputs from '@stats/components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
+    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { _throw } from '@/shared/utils/_throw';
+    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
+    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
 
     interface ProductionItem {
         planet: {
@@ -267,6 +309,8 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     @Component({
         components: {
             ShowConvertedResourcesInCellsSettings,
+            AmortizationPlanetSettingsInputs,
+            AmortizationPlayerSettingsInputs,
         },
     })
     export default class Resources extends Vue {
@@ -274,7 +318,82 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
         private readonly BuildingType = BuildingType;
         private readonly ShipType = ShipType;
         private readonly ResearchType = ResearchType;
+
         private showSettings = false;
+
+        private showProductionSettings = false;
+        private playerSettings: AmortizationPlayerSettings = {
+            optimizeForResources: [],
+            officers: {
+                admiral: false,
+                commander: false,
+                engineer: false,
+                geologist: false,
+                technocrat: false,
+            },
+            playerClass: PlayerClass.none,
+            allianceClass: AllianceClass.none,
+            levelPlasmaTechnology: 0,
+            levelAstrophysics: 0,
+            numberOfUnusedRaidColonySlots: 0,
+            lifeformLevels: createRecord(ValidLifeformTypes, 0),
+        };
+        private planetSettings: AmortizationPlanetSettings[] = [];
+        private lifeformLevels = createRecord(ValidLifeformTypes, 0);
+
+        private mounted() {
+            this.resetProductionSettings();
+        }
+
+        private resetProductionSettings() {
+            const empire = EmpireDataModule.empire;
+
+            this.playerSettings = {
+                officers: empire.officers,
+                playerClass: empire.playerClass,
+                allianceClass: empire.allianceClass,
+                levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
+
+                // don't matter
+                optimizeForResources: [],
+                levelAstrophysics: 0,
+                numberOfUnusedRaidColonySlots: 0,
+            };
+            this.planetSettings = this.getPlanetSettings();
+        }
+
+        private get empire(): LocalPlayerData {
+            const empire = JSON.parse(JSON.stringify(EmpireDataModule.empire)) as LocalPlayerData;
+            empire.playerClass = this.playerSettings.playerClass;
+            empire.allianceClass = this.playerSettings.allianceClass;
+            empire.officers = this.playerSettings.officers;
+            empire.research[ResearchType.plasmaTechnology] = this.playerSettings.levelPlasmaTechnology;
+
+            this.planetSettings.forEach(ps => {
+                const planet = empire.planets[ps.id] as PlanetData;
+                planet.maxTemperature = ps.maxTemperature;
+                planet.coordinates.position = ps.position;
+                planet.activeItems = createRecord(ps.activeItems, 'permanent');
+                planet.buildings[BuildingType.metalMine] = ps.mines?.metalMine ?? _throw('no metal mine level');
+                planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
+                planet.buildings[BuildingType.deuteriumSynthesizer] = ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
+                planet.ships[ShipType.crawler] = ps.crawlers.max ? 10_000 : ps.crawlers.count;
+                planet.productionSettings[ShipType.crawler] = ps.crawlers.overload ? 150 : 100;
+                planet.activeLifeform = ps.lifeform;
+                planet.activeLifeformTechnologies = ps.activeLifeformTechnologies;
+                planet.lifeformTechnologies = {
+                    ...planet.lifeformTechnologies,
+                    ...ps.lifeformTechnologyLevels,
+                };
+                planet.lifeformBuildings = {
+                    ...planet.lifeformBuildings,
+                    ...ps.lifeformBuildingLevels,
+                };
+            });
+
+            return empire;
+        }
 
         private readonly resourcePackageAmounts = {
             all: 0,
@@ -287,6 +406,33 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
             return SettingsDataModule.settings.conversionRates.mode == 'msu'
                 ? this.$i18n.$t.extension.common.msu
                 : this.$i18n.$t.extension.common.dsu;
+        }
+
+        private getPlanetSettings(): AmortizationPlanetSettings[] {
+            return this.planets.map<AmortizationPlanetSettings>(planet => ({
+                include: true,
+                ignoreEmptyLifeformTechnologySlots: false,
+
+                id: planet.id,
+                name: planet.name,
+                position: planet.coordinates.position,
+                maxTemperature: planet.maxTemperature,
+                activeItems: Object.keys(planet.activeItems) as ItemHash[],
+                lifeform: planet.activeLifeform,
+                activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
+                lifeformBuildingLevels: { ...planet.lifeformBuildings },
+                lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
+                mines: {
+                    metalMine: planet.buildings[BuildingType.metalMine],
+                    crystalMine: planet.buildings[BuildingType.crystalMine],
+                    deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
+                },
+                crawlers: {
+                    overload: this.playerSettings.playerClass == PlayerClass.collector,
+                    count: planet.ships[ShipType.crawler],
+                    max: this.playerSettings.playerClass == PlayerClass.collector,
+                },
+            }));
         }
 
         private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
@@ -324,7 +470,12 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
         }
 
         private get productionBreakdowns() {
-            return getProductionBreakdowns();
+            const lifeformExperience = createRecord(
+                ValidLifeformTypes,
+                lf => getLifeformExperienceNeededForLevel(this.lifeformLevels[lf]),
+            );
+
+            return getProductionBreakdowns(this.empire, lifeformExperience);
         }
 
         private get fusionReactorConsumptions(): Record<number, number> {
@@ -393,7 +544,7 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
         }
 
         private correctCrawlerProductionSettings(production: CrawlerProductionPercentage): CrawlerProductionPercentage {
-            if (EmpireDataModule.empire?.playerClass == PlayerClass.collector) {
+            if (this.empire?.playerClass == PlayerClass.collector) {
                 return production;
             }
 
@@ -523,9 +674,9 @@ import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
         }
 
         private get planets(): PlanetData[] {
-            return Object.values(EmpireDataModule.empire.planets)
+            return Object.values(this.empire.planets)
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id)) as PlanetData[];
+                .sort((a, b) => this.empire.planetOrder.indexOf(a.id) - this.empire.planetOrder.indexOf(b.id)) as PlanetData[];
         }
 
         private readonly productionBoostItems_metal: ItemHash[] = [
