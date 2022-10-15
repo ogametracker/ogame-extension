@@ -349,7 +349,7 @@
             const empire = EmpireDataModule.empire;
 
             this.playerSettings = {
-                officers: empire.officers,
+                officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
@@ -379,7 +379,7 @@
                 planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
                 planet.buildings[BuildingType.deuteriumSynthesizer] = ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
                 planet.ships[ShipType.crawler] = ps.crawlers.max ? 10_000 : ps.crawlers.count;
-                planet.productionSettings[ShipType.crawler] = ps.crawlers.overload ? 150 : 100;
+                planet.productionSettings[ShipType.crawler] = ps.crawlers.percentage;
                 planet.activeLifeform = ps.lifeform;
                 planet.activeLifeformTechnologies = ps.activeLifeformTechnologies;
                 planet.lifeformTechnologies = {
@@ -428,7 +428,7 @@
                     deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
                 },
                 crawlers: {
-                    overload: this.playerSettings.playerClass == PlayerClass.collector,
+                    percentage: planet.productionSettings[ShipType.crawler],
                     count: planet.ships[ShipType.crawler],
                     max: this.playerSettings.playerClass == PlayerClass.collector,
                 },
@@ -509,12 +509,14 @@
             const productionBreakdowns = this.productionBreakdowns;
             const fusionReactorConsumptions = this.fusionReactorConsumptions;
 
-            return this.planets.map(planet => {
+            return this.planets.map<ProductionItem>(planet => {
                 const production = {
                     metal: productionBreakdowns.metal.getProductionBreakdown(planet.id),
                     crystal: productionBreakdowns.crystal.getProductionBreakdown(planet.id),
                     deuterium: productionBreakdowns.deuterium.getProductionBreakdown(planet.id),
                 };
+                
+                const settings = this.planetSettings.find(p => p.id == planet.id) ?? _throw('no planet settings found');
 
                 return {
                     planet,
@@ -528,27 +530,19 @@
                     }),
 
                     productionSettings: {
-                        metalMine: planet.productionSettings[BuildingType.metalMine],
+                        metalMine:  planet.productionSettings[BuildingType.metalMine],
                         crystalMine: planet.productionSettings[BuildingType.crystalMine],
                         deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
                         solarPlant: planet.productionSettings[BuildingType.solarPlant],
                         fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
 
                         solarSatellite: planet.productionSettings[ShipType.solarSatellite],
-                        crawler: this.correctCrawlerProductionSettings(planet.productionSettings[ShipType.crawler]),
+                        crawler: settings.crawlers.percentage,
                     },
 
-                    activeItems: ItemHashes.filter(item => planet.activeItems[item]! > Date.now() || planet.activeItems[item] == 'permanent'),
+                    activeItems: settings.activeItems,
                 };
             });
-        }
-
-        private correctCrawlerProductionSettings(production: CrawlerProductionPercentage): CrawlerProductionPercentage {
-            if (this.empire?.playerClass == PlayerClass.collector) {
-                return production;
-            }
-
-            return Math.min(100, production) as CrawlerProductionPercentage;
         }
 
         private get footerItems(): ProductionItem[] {
@@ -674,9 +668,9 @@
         }
 
         private get planets(): PlanetData[] {
-            return Object.values(this.empire.planets)
+            return Object.values(EmpireDataModule.empire.planets)
                 .filter(planet => !planet.isMoon)
-                .sort((a, b) => this.empire.planetOrder.indexOf(a.id) - this.empire.planetOrder.indexOf(b.id)) as PlanetData[];
+                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - this.empire.planetOrder.indexOf(b.id)) as PlanetData[];
         }
 
         private readonly productionBoostItems_metal: ItemHash[] = [

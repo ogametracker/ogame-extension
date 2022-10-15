@@ -92,7 +92,7 @@ export const en: EmpireTranslations = {
                 activeItems: 'Active Items',
                 crawlers: {
                     title: 'Crawlers',
-                    overload: '150% Overload',
+                    percentage: '% Production',
                     fixCount: 'Fixed Count',
                     maxCount: 'Max. Count',
                 },

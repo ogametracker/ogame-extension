@@ -91,7 +91,7 @@ export interface EmpireTranslations {
                 activeItems: string;
                 crawlers: {
                     title: string;
-                    overload: string;
+                    percentage: string;
                     fixCount: string;
                     maxCount: string;
                 };

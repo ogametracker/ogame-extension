@@ -3,6 +3,7 @@ import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
 import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { CrawlerProductionPercentage } from "../CrawlerProductionPercentage";
 
 export interface AmortizationPlanetSettings {
     include: boolean;
@@ -14,7 +15,7 @@ export interface AmortizationPlanetSettings {
 
     activeItems: ItemHash[];
     crawlers: {
-        overload: boolean;
+        percentage: CrawlerProductionPercentage;
         count: number;
         max: boolean;
     };

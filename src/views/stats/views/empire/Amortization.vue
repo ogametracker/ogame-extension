@@ -104,6 +104,8 @@
                             </div>
                         </div>
 
+                        <hr style="width: 100%" />
+
                         <div>
                             <h3 v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.header" />
                             <div class="global-planet-settings">
@@ -619,7 +621,7 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
                 maxTemperature: getAverageTemperature(8),
                 activeItems: [],
                 crawlers: {
-                    overload: false,
+                    percentage: 100,
                     count: 0,
                     max: false,
                 },
@@ -746,7 +748,7 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
                         },
                         activeItems: Object.keys(planet.activeItems) as ItemHash[],
                         crawlers: {
-                            overload: empire.playerClass == PlayerClass.collector && serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                            percentage: planet.productionSettings[ShipType.crawler],
                             count: planet.ships[ShipType.crawler],
                             max: empire.playerClass == PlayerClass.collector,
                         },
@@ -767,7 +769,7 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
 
                     name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
                     crawlers: {
-                        overload: empire.playerClass == PlayerClass.collector && serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+                        percentage: empire.playerClass == PlayerClass.collector ? 150 : 100,
                         count: 0,
                         max: empire.playerClass == PlayerClass.collector,
                     },

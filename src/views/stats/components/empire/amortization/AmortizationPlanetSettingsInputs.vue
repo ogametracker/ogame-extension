@@ -51,10 +51,8 @@
             <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
-                    <o-ship :ship="ShipType.crawler" />
-                    <checkbox-button v-model="settings.crawlers.overload" color="#00ff00" :disabled="!isCrawlerOverloadEnabled">
-                        {{ $i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.overload }}
-                    </checkbox-button>
+                    <input type="number" v-model.number="settings.crawlers.percentage" step="10" min="0" max="150" />
+                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
                 </div>
                 <div class="crawler-grid-row">
                     <checkbox-button
@@ -106,15 +104,15 @@
                 </span>
             </template>
 
-            <span v-if="!productionMode" />
-            <span v-if="!productionMode" >
+            <span />
+            <span>
                 <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
                     <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformSettings" />
                 </button>
             </span>
 
-            <template v-if="showLifeformSettings || productionMode">
+            <template v-if="showLifeformSettings">
                 <template v-if="settings.lifeformTechnologyLevels != null">
                     <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
@@ -429,7 +427,7 @@
         &-row {
             display: flex;
             column-gap: 4px;
-            height: 32px;
+            align-items: center;
         }
     }
 

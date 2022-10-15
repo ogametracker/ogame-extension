@@ -140,7 +140,7 @@
 <style lang="scss" scoped>
     .player-settings {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: minmax(auto, 150px) 1fr;
         align-items: center;
         gap: 8px 16px;
 
@@ -149,6 +149,7 @@
 
             &:nth-of-type(2n + 1) {
                 justify-self: flex-end;
+                text-align: right;
             }
         }
 
