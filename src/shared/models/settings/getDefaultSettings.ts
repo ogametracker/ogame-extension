@@ -11,8 +11,10 @@ import { ShipType } from "../ogame/ships/ShipType";
 import { Settings } from "./Settings";
 
 export function getDefaultSettings(language: LanguageKey): Settings {
+    const oldLang = $i18n.locale;
     $i18n.locale = language;
-    return {
+    
+    const defaultSettings: Settings = {
         dateRanges: [
             {
                 label: $i18n.$t.extension.settings.dateRanges.defaultNames.today,
@@ -161,4 +163,8 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             separateExpeditionDebrisFields: false,
         },
     };
+
+    $i18n.locale = oldLang;
+
+    return defaultSettings;
 }

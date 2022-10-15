@@ -471,7 +471,7 @@ export class AmortizationItemGenerator {
                 [BuildingType.metalMine]: 100,
                 [BuildingType.crystalMine]: 100,
                 [BuildingType.deuteriumSynthesizer]: 100,
-                [ShipType.crawler]: planet.crawlers.overload ? 150 : 100,
+                [ShipType.crawler]: planet.crawlers.percentage,
             } as ProductionSettings,
             ships: {
                 [ShipType.crawler]: planet.crawlers.max ? 10000 : planet.crawlers.count,
@@ -735,7 +735,7 @@ export class AmortizationItemGenerator {
                 available: planetSettings.crawlers.max
                     ? 10_000
                     : planetSettings.crawlers.count,
-                percentage: planetSettings.crawlers.overload ? 150 : 100,
+                percentage: planetSettings.crawlers.percentage,
                 totalMineLevel: 0,
             },
             lifeformExperienceBoost: lifeformExperienceBonus[planetSettings.lifeform],
