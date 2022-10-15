@@ -626,8 +626,8 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
                     max: false,
                 },
                 ignoreEmptyLifeformTechnologySlots: false,
-                lifeform: LifeformType.rocktal,
-                activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[LifeformType.rocktal]],
+                lifeform: LifeformType.none,
+                activeLifeformTechnologies: [],
             },
         };
         private includePlasmaTechnology = true;
@@ -762,10 +762,12 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
                     return acc;
                 }, {} as Record<number, AmortizationPlanetSettings>);
 
+            const astroLifeform = serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none;
             this.astrophysicsSettings = {
                 planet: {
                     ...this.astrophysicsSettings.planet,
-                    lifeform: serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none,
+                    lifeform: astroLifeform,
+                    activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[astroLifeform]],
 
                     name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
                     crawlers: {
@@ -776,8 +778,6 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
                 },
             };
         }
-
-
 
         private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] {
             const showConversion = SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
