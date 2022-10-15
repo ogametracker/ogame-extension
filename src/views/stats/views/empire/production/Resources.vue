@@ -339,7 +339,6 @@
             lifeformLevels: createRecord(ValidLifeformTypes, 0),
         };
         private planetSettings: AmortizationPlanetSettings[] = [];
-        private lifeformLevels = createRecord(ValidLifeformTypes, 0);
 
         private mounted() {
             this.resetProductionSettings();
@@ -430,7 +429,7 @@
                 crawlers: {
                     percentage: planet.productionSettings[ShipType.crawler],
                     count: planet.ships[ShipType.crawler],
-                    max: this.playerSettings.playerClass == PlayerClass.collector,
+                    max: false,
                 },
             }));
         }
@@ -472,7 +471,7 @@
         private get productionBreakdowns() {
             const lifeformExperience = createRecord(
                 ValidLifeformTypes,
-                lf => getLifeformExperienceNeededForLevel(this.lifeformLevels[lf]),
+                lf => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lf]),
             );
 
             return getProductionBreakdowns(this.empire, lifeformExperience);
