@@ -55,7 +55,7 @@
         private remove = false;
         private height = 0;
 
-        private timeLeft: number | null = null;
+        private timeLeft = 0;
         private timeoutStart = 0;
         private timeoutId: number | null = null;
         private readonly timeoutRemoveBuffer = 100;
@@ -76,7 +76,7 @@
         }
 
         private pauseRemove() {
-            if (this.timeLeft == null) {
+            if (this.timeLeft <= 0) {
                 return;
             }
 
@@ -86,7 +86,7 @@
         }
 
         private playRemove() {
-            if (this.timeLeft == null) {
+            if (this.timeLeft <= 0) {
                 return;
             }
 
