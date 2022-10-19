@@ -67,11 +67,12 @@
 
             if (this.timeout != null) {
                 this.timeLeft = this.timeout;
-                await delay(1);
-                this.playRemove();
+                await delay(100);
 
                 window.addEventListener('ogame-tracker.pause-notifications', () => this.pauseRemove());
                 window.addEventListener('ogame-tracker.resume-notifications', () => this.playRemove());
+
+                this.playRemove();
             }
         }
 
