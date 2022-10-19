@@ -50,6 +50,9 @@ export async function getPlayerDatabase(meta: MessageOgameMeta): Promise<IDBPDat
         if(oldVersion < 7) {
             db.createObjectStore('lifeformDiscoveries', { keyPath: 'id' });
         }
+        if(oldVersion < 8) {
+            db.createObjectStore('combatReports.ignored');
+        }
     });
 }
 

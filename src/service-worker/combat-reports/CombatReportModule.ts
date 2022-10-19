@@ -28,7 +28,20 @@ export class CombatReportModule {
         const combatReportData = message.data;
 
         const db = await getPlayerDatabase(message.ogameMeta);
-        // check if expedition already tracked => if true, return tracked data
+
+        // check if combat report ignored
+        const ignoredCombat = await db.get('combatReports.ignored', combatReportData.id);
+        if(ignoredCombat != null) {
+            return {
+                success: true,
+                result: {
+                    id: message.data.id,
+                    ignored: true,
+                },
+            };
+        }
+
+        // check if combat report already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', combatReportData.id);
         if (knownReport != null) {
             return {
@@ -44,6 +57,8 @@ export class CombatReportModule {
         const isEspionageCombat = this.isEspionageCombat(message.data.ogameCombatReport);
         if (isEspionageCombat && settingsService.settings.combatTracking.ignoreEspionageFights) {
             _logDebug(`ignoring espionage combat with id ${combatReportData.id}`);
+            
+            await db.put('combatReports.ignored', combatReportData.id);
 
             return {
                 success: true,
