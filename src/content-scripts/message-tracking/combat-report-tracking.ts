@@ -7,17 +7,17 @@ import { OgameCombatReport } from "../../shared/models/ogame/combats/OgameCombat
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { _logDebug } from "../../shared/utils/_log";
+import { _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
 import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
 import { v4 } from "uuid";
 import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
+import { TryActionResult } from "@/shared/TryActionResult";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
@@ -29,6 +29,7 @@ const notificationIds = {
     error: v4(),
 };
 const waitingForCombats: Record<number, true> = {};
+
 const failedToTrackCombats: Record<number, true> = {};
 const combatTrackingResult: CombatTrackingNotificationMessageData = {
     count: 0,
@@ -38,6 +39,10 @@ const combatTrackingResult: CombatTrackingNotificationMessageData = {
         deuterium: 0,
     },
 };
+const shouldTrackResolvers: Record<number, (value: boolean) => void> = {};
+
+const maxRetries = 5;
+const retryCombats: { id: number; date: number; attempt: number; msg: Element }[] = [];
 
 export function initCombatReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
@@ -49,6 +54,8 @@ export function initCombatReportTracking() {
         }
     });
     initObserver.observe(contentElem, { subtree: true, childList: true });
+
+    retryLoadCombats();
 }
 
 function setupObserver() {
@@ -219,71 +226,109 @@ async function trackCombatReports(elem: Element) {
     messages.forEach(msg => msg.classList.add(cssClasses.messages.base));
 
     const ogameMeta = getOgameMeta();
-
-    const promises = messages.map(async msg => {
-        const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
-
-        try {
-            // prepare message to service worker
-            if (isNaN(id)) {
-                _throw('Message id is NaN');
-            }
-
-            const shouldTrack = await shouldTrackCombatReport(id, ogameMeta);
-            if (!shouldTrack) {
-                return;
-            }
-
-            const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
-            const date = parse(dateText, dateTimeFormat, new Date()).getTime();
-            if (isNaN(date)) {
-                _throw('Message date is NaN');
-            }
-
-
-            // mark message as "waiting for result"
-            msg.classList.add(cssClasses.messages.waitingToBeProcessed);
-            addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
-
-            const messageUrl = `/game/index.php?page=messages&ajax=1&tabid=${tabIds.combats}&messageId=${id}`;
-            const ogameCombatReport = await loadOgameCombatReport(messageUrl);
-
-            // skip if is expedition fight and the language is not supported
-            if (ogameCombatReport.isExpedition && !isSupportedLanguage(ogameMeta.language)) {
-                addOrSetCustomMessageContent(msg, `<span class="mdi mdi-alert" style="font-size: 24px;"></span>`);
-                return;
-            }
-
-            // send message to service worker
-            const workerMessage: TrackCombatReportMessage = {
-                type: MessageType.TrackCombatReport,
-                ogameMeta,
-                data: {
-                    id,
-                    date,
-                    ogameCombatReport,
-                },
-                senderUuid: messageTrackingUuid,
-            };
-            sendMessage(workerMessage);
-
-            waitingForCombats[id] = true;
-        } catch (error) {
-            console.error(error);
-
-            msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
-            addOrSetCustomMessageContent(msg, false);
-
-            delete waitingForCombats[id];
-            failedToTrackCombats[id] = true;
-            sendNotificationMessages();
-        }
-    });
+    const promises = messages.map(async msg => await loadCombatReport(msg, ogameMeta));
 
     await Promise.all(promises);
 }
 
-const shouldTrackResolvers: Record<number, (value: boolean) => void> = {};
+async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attempt?: number): Promise<void> {
+    const id = parseInt(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id')); // no parseSafe because we want to error in the try-catch block
+
+    try {
+        // prepare message to service worker
+        if (isNaN(id)) {
+            _throw('Message id is NaN');
+        }
+
+        const shouldTrack = await shouldTrackCombatReport(id, ogameMeta);
+        if (!shouldTrack) {
+            return;
+        }
+
+        const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
+        const date = parse(dateText, dateTimeFormat, new Date()).getTime();
+        if (isNaN(date)) {
+            _throw('Message date is NaN');
+        }
+
+        // mark message as "waiting for result"
+        msg.classList.add(cssClasses.messages.waitingToBeProcessed);
+        addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
+
+        const messageUrl = `/game/index.php?page=messages&ajax=1&tabid=${tabIds.combats}&messageId=${id}`;
+        const loadingCombatResult = await loadOgameCombatReport(messageUrl);
+
+        // ogame error (e.g. 503) with valid response
+        if (!loadingCombatResult.success) {
+            const newAttempt = (attempt ?? 0) + 1;
+            if(newAttempt > maxRetries) {
+                _throw(`failed to load combat report ${id} after ${maxRetries} retries`);
+            }
+
+            _logWarning(`failed to load combat report ${id}, retrying (attempt ${newAttempt})`);
+            retryCombats.push({
+                id,
+                attempt: newAttempt,
+                date: getRetryTime(newAttempt),
+                msg,
+            });
+            return;
+        }
+
+        const ogameCombatReport = loadingCombatResult.result;
+
+        // skip if is expedition fight and the language is not supported
+        if (ogameCombatReport.isExpedition && !isSupportedLanguage(ogameMeta.language)) {
+            addOrSetCustomMessageContent(msg, `<span class="mdi mdi-alert" style="font-size: 24px;"></span>`);
+            return;
+        }
+
+        // send message to service worker
+        const workerMessage: TrackCombatReportMessage = {
+            type: MessageType.TrackCombatReport,
+            ogameMeta,
+            data: {
+                id,
+                date,
+                ogameCombatReport,
+            },
+            senderUuid: messageTrackingUuid,
+        };
+        sendMessage(workerMessage);
+
+        waitingForCombats[id] = true;
+    }
+    catch (error) {
+        console.error(error);
+
+        msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
+        addOrSetCustomMessageContent(msg, false);
+
+        delete waitingForCombats[id];
+        failedToTrackCombats[id] = true;
+        sendNotificationMessages();
+    }
+}
+
+function getRetryTime(attempt: number) {
+    return Date.now() + (2 ** (attempt - 1)) * 1_000;
+}
+
+async function retryLoadCombats() {
+    const now = Date.now();
+
+    const retries = retryCombats.filter(r => r.date <= now);
+    retries.forEach(r => retryCombats.splice(retryCombats.indexOf(r), 1));
+
+    const ogameMeta = getOgameMeta();
+    const promises = retries.map(async retry => {
+        await loadCombatReport(retry.msg, ogameMeta, retry.attempt);
+    });
+
+    await Promise.all(promises);
+
+    setTimeout(async () => await retryLoadCombats(), 500);
+}
 
 function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
     return new Promise<boolean>(resolve => {
@@ -299,8 +344,12 @@ function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
     });
 }
 
-async function loadOgameCombatReport(url: string): Promise<OgameCombatReport> {
+async function loadOgameCombatReport(url: string): Promise<TryActionResult<OgameCombatReport>> {
     const response = await fetch(url, { method: 'GET' });
+    if (!response.ok) {
+        return { success: false };
+    }
+
     const html = await response.text();
 
     const doc = domParser.parseFromString(html, 'text/html');
@@ -310,7 +359,10 @@ async function loadOgameCombatReport(url: string): Promise<OgameCombatReport> {
     const combatJsonMatch = combatScript.textContent?.match(combatJsonRegex) ?? _throw('no combat json match');
     const combatJson = combatJsonMatch.groups?.json ?? _throw('had combat json match but without content');
 
-    return JSON.parse(combatJson) as OgameCombatReport;
+    return {
+        success: true,
+        result: JSON.parse(combatJson) as OgameCombatReport,
+    };
 }
 
 
