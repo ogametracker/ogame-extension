@@ -122,6 +122,10 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
         key: number;
         value: CombatReport;
     };
+    'combatReports.ignored': {
+        key: number;
+        value: number;
+    };
 
     debrisFieldReports: {
         key: number;
