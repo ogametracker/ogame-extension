@@ -17,6 +17,8 @@ export class CombatReportService implements MessageService {
             case MessageType.RequestSingleCombatReport: {
                 const { data: id } = message as RequestSingleCombatReportMessage;
                 const tryResult = await this.combatReportModule.tryGetSingleReport(message as RequestSingleCombatReportMessage);
+
+                // unknown 
                 if(!tryResult.success) {
                     const unknownMessage: CombatReportUnknownMessage = {
                         ogameMeta: message.ogameMeta,
@@ -25,16 +27,32 @@ export class CombatReportService implements MessageService {
                         senderUuid: serviceWorkerUuid,
                     };
                     await broadcastMessage(unknownMessage);
+                    break;
                 }
-                else {
-                    const combatReportMessage: CombatReportMessage = {
+                
+                // known and ignored
+                if(tryResult.result.ignored) {
+                    const ignoreMessage: WillNotBeTrackedMessage = {
                         ogameMeta: message.ogameMeta,
-                        type: MessageType.CombatReport,
-                        data: tryResult.result,
+                        type: MessageType.WillNotBeTracked,
+                        data: {
+                            id: tryResult.result.id,
+                            type: 'combat-report',
+                        },
                         senderUuid: serviceWorkerUuid,
                     };
-                    await broadcastMessage(combatReportMessage);
+                    await broadcastMessage(ignoreMessage);
+                    break;
                 }
+                
+                // known combat
+                const combatReportMessage: CombatReportMessage = {
+                    ogameMeta: message.ogameMeta,
+                    type: MessageType.CombatReport,
+                    data: tryResult.result.report,
+                    senderUuid: serviceWorkerUuid,
+                };
+                await broadcastMessage(combatReportMessage);
                 break;
             }
 
