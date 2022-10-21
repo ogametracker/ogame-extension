@@ -7,7 +7,7 @@ export const es: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             /*'La expedición fue */'capaz de capturar y almacenar algo'/* de Materia Oscura.'*/,
-            /*LOCA: es 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
+            /*'Encontramos */'los restos de una nave alienígena'/* . En sus estanterías había un pequeño contenedor con algo de Materia Oscura.'*/,
             /*'Nos */'encontramos un extraño alien en una estantería en una pequeña'/* nave, nos dio una maleta con Materia Oscura a cambio de unos simples cálculos matemáticos.'*/,
             /*'Nuestra expedición se */'encontró con una nave fantasma que transportaba'/* una pequeña cantidad de Materia Oscura. No encontramos ningún indicio de que le pasó a la tripulación original de la nave pero nuestros técnicos fueron capaces de rescatar la Materia Oscura.'*/,
             /*'La expedición siguió */'algunas señales fuera de lo común hasta un asteroide'/* . En el núcleo del asteroide se encontró una pequeña cantidad de Materia Oscura. El asteroide fue tomado y los exploradores intentan extraer la Materia Oscura.'*/,
@@ -44,7 +44,7 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'¡Atravesamos los */'restos de una expedición previa'/* ! Nuestros técnicos intentarán conseguir que algunas de las naves funcionen de nuevo.'*/,
             /*'Tu expedición volvió a través de una vieja */'estrella fortaleza que está desierta desde hace años'/* . En el hangar de la fortaleza encontraron algunas naves. Los técnicos intentan poner algunas a flote de nuevo.'*/,
-            /*LOCA: es 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Nuestra expedición encontró un */'planeta que estuvo cerca de ser completamente destruido'/* en continuas guerras. Hay naves diversas flotando alrededor de la órbita. Los técnicos intentan reparar algunas de ellas. Quizá con ello también conseguiremos información de lo que pasó aquí.'*/,
             /*'Encontramos una */'estación pirata desierta'/* . Hay estacionadas algunas viejas naves en el hangar. Nuestros técnicos están mirando si algunas de ellas son aún útiles.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -77,7 +77,8 @@ export const es: ExpeditionMessages = {
         /*'La última transmisión que obtuvimos de la flota de expedición fueron las excelentes fotos que */'enseñaban un agujero negro que se estaba abriendo'/* .'*/,
         /*'Lo único que quedó de la */'expedición fue el siguiente mensaje de radio'/* : Zzzrrt Mierda! Krrrzzzzt Eso zrrrtrzt parece krgzzzz como Krzzzzzzzztzzzz...'*/,
         /*'Una fusión del núcleo de la nave insignia produce una reacción en cadena que destruye de una */'forma bastante espectacular la flota entera en'/* expedición.'*/,
-        /*'El */'contacto con la flota de expedición ha sido cortada de repente'/* . Nuestros académicos están aún intentando descubrir qué pasó, pero parece que la flota se perdió para siempre. '*/,
+        /*'El */'contacto con la flota de expedición ha sido cortada de repente'/* . Nuestros académicos están aún intentando descubrir qué pasó, pero parece que la flota se perdió para siempre.'*/,
+        /*'La */'flota en expedición no saltó de vuelta al vecindario'/* . Nuestros académicos están aún intentando encontrar que pasó, pero parece que la flota se perdió para siempre.'*/
     ],
 
     [ExpeditionEventType.trader]: [

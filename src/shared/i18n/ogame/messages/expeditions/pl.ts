@@ -75,7 +75,7 @@ export const pl: ExpeditionMessages = {
 
     [ExpeditionEventType.lostFleet]: [
         /*'Ostatnią zdobyczą ekspedycji było naprawdę dobre */'zdjęcie otwierającej się czarnej dziury.',
-        /*LOCA: pl 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
+        /*'Po naszej */'ekspedycji pozostała jedynie transmisja radiowa'/* : Zzzrrt grrt! Krrrzzzzt To zrrrtrzt wygląda krgzzzz jak Krzzzzzzzztzzzz...'*/,
         /*'Roztopienie rdzenia głównego statku powoduje reakcje łańcuchową, */'która powoduje wybuch niszczący całą flotę ekspedycji',
         'Ekspedycja nie wykonała skoku powrotnego'/*. Nasi pracownicy naukowi w dalszym ciągu próbują wyjaśnić co się stało, lecz wydaje się, że flota jest bezpowrotnie stracona.'*/,
     ],
@@ -113,7 +113,7 @@ export const pl: ExpeditionMessages = {
             /*LOCA: pl 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pl 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Ekspedycja */'miała niemiłe spotkanie ze statkami piratów',
             /*'Wpadliśmy prosto w */'pułapkę zastawioną przez gwiezdnych piratów'/* . Nie udało się uniknąć walki.'*/,
             /*LOCA: pl 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
         ],
