@@ -58,7 +58,7 @@ export class CombatReportModule {
         if (isEspionageCombat && settingsService.settings.combatTracking.ignoreEspionageFights) {
             _logDebug(`ignoring espionage combat with id ${combatReportData.id}`);
             
-            await db.put('combatReports.ignored', combatReportData.id);
+            await db.put('combatReports.ignored', combatReportData.id, combatReportData.id);
 
             return {
                 success: true,
@@ -100,14 +100,31 @@ export class CombatReportModule {
         );
     }
 
-    public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReport>> {
+    public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReportResult>> {
         const db = await getPlayerDatabase(message.ogameMeta);
+
+        // check if combat report ignored
+        const ignoredCombat = await db.get('combatReports.ignored', message.data);
+        if(ignoredCombat != null) {
+            return {
+                success: true,
+                result: {
+                    id: message.data,
+                    ignored: true,
+                },
+            };
+        }
+
         // check if expedition already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', message.data);
         if (knownReport != null) {
             return {
                 success: true,
-                result: knownReport,
+                result: {
+                    report: knownReport,
+                    isAlreadyTracked: true,
+                    ignored: false,
+                },
             };
         }
 
