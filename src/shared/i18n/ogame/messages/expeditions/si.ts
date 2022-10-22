@@ -142,16 +142,16 @@ export const si: ExpeditionMessages = {
         ],
     },
     
-    logbookRegex: /*LOCA: si *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    logbookRegex: /Poročilo iz dnevnika:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*LOCA: si 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*LOCA: si 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Zgleda, */'da ta del vesolja še ni bil raziskan',
+            /*'Ko */'potuješ po delu vesolja, ki še ni bil raziskan'/* , dobiš neverjeten občutek'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: si 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*LOCA: si 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*LOCA: si 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Zgleda, */'da razen nas še noben človek ni bil v tem delu'/* vesolja'*/,
+            /*'Našli */'smo ostanke starih ladij'/* . Nekdo je bil pred nami tukaj.'*/,
+            /*Skoraj */'smo se srečali z drugo ekspedicijo'/* . Nismo pričakovali še nekoga tukaj'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*LOCA: si 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
