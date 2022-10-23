@@ -177,7 +177,7 @@
         }
 
         private get items(): ProductionMineItem[] {
-            const collectorClassFactor = 1 + getLifeformCollectorClassBonus(this.player);
+            const collectorClassBonus = getLifeformCollectorClassBonus(this.player);
 
             return this.planets
                 .map(planet => {
@@ -188,7 +188,7 @@
                         this.player.playerClass == PlayerClass.collector,
                         this.player.officers.geologist,
                         ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
-                        collectorClassFactor,
+                        collectorClassBonus,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 
