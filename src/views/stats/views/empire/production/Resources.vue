@@ -340,6 +340,14 @@
         };
         private planetSettings: AmortizationPlanetSettings[] = [];
 
+
+        @Watch('playerSettings.playerClass')
+        private onPlayerClassSelectionChanged(newClass: PlayerClass) {
+            const percentage: CrawlerProductionPercentage = newClass == PlayerClass.collector ? 150 : 100;
+
+            this.planetSettings.forEach(p => p.crawlers.percentage = percentage);
+        }
+
         private mounted() {
             this.resetProductionSettings();
         }
