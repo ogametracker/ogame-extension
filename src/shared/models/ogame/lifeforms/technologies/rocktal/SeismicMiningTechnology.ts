@@ -7,7 +7,7 @@ class SeismicMiningTechnologyClass extends LifeformTechnology implements Resourc
     public constructor() {
         super({
             metal: {
-                baseCost: 120_00,
+                baseCost: 120_000,
                 increaseFactor: 1.5,
             },
             crystal: {

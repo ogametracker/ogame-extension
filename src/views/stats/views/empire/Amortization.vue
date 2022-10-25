@@ -472,7 +472,7 @@
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue, Watch } from 'vue-property-decorator';
     import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs from '../../components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
     import AmortizationGroupedItemTable from '../../components/empire/amortization/AmortizationGroupedItemTable.vue';
@@ -500,7 +500,8 @@
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { createRecord } from '@/shared/utils/createRecord';
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
-import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
+    import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
+import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
 
     type SelectableAmortizationItem = AmortizationItem & { selected: boolean };
 
@@ -547,6 +548,14 @@ import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
 
         private get savedAmortization() {
             return UniverseSpecificSettingsDataModule.settings.savedAmortization;
+        }
+
+        @Watch('playerSettings.playerClass')
+        private onPlayerClassSelectionChanged(newClass: PlayerClass) {
+            const percentage: CrawlerProductionPercentage = newClass == PlayerClass.collector ? 150 : 100;
+
+            this.planetSettingsSorted.forEach(p => p.crawlers.percentage = percentage);
+            this.astrophysicsSettings.planet.crawlers.percentage = percentage;
         }
 
         private async saveItems() {
