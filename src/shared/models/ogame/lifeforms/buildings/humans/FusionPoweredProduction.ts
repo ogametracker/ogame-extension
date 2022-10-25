@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -27,6 +28,10 @@ class FusionPoweredProductionClass extends LifeformBuilding implements ResourceP
     
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.fusionPoweredProduction;
+    }
+
+    public appliesTo(resource: ResourceType): boolean {
+        return [ResourceType.crystal, ResourceType.deuterium].includes(resource);
     }
 
     public getProductionBonus(level: number): Cost {

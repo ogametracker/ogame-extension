@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -27,6 +28,10 @@ class DisruptionChamberClass extends LifeformBuilding implements ResourceProduct
     
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.disruptionChamber;
+    }
+
+    public appliesTo(resource: ResourceType | 'energy'): boolean {
+        return resource == 'energy';
     }
 
     public getConsumptionReduction(level: number): Cost {
