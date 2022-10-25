@@ -20,7 +20,7 @@
                 <div style="display: flex; gap: 8px; flex-wrap: wrap">
                     <amortization-player-settings-inputs
                         v-model="playerSettings"
-                        :lifeform-levels="lifeformLevels"
+                        :lifeform-levels="playerSettings.lifeformLevels"
                         production-mode
                         style="height: max-content; margin-top: 44px"
                     />
@@ -340,6 +340,14 @@
         };
         private planetSettings: AmortizationPlanetSettings[] = [];
 
+
+        @Watch('playerSettings.playerClass')
+        private onPlayerClassSelectionChanged(newClass: PlayerClass) {
+            const percentage: CrawlerProductionPercentage = newClass == PlayerClass.collector ? 150 : 100;
+
+            this.planetSettings.forEach(p => p.crawlers.percentage = percentage);
+        }
+
         private mounted() {
             this.resetProductionSettings();
         }
@@ -505,6 +513,10 @@
         }
 
         private get items(): ProductionItem[] {
+            if(this.planetSettings.length == 0) {
+                return [];
+            }
+
             const productionBreakdowns = this.productionBreakdowns;
             const fusionReactorConsumptions = this.fusionReactorConsumptions;
 

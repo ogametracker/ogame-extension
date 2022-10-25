@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -27,6 +28,10 @@ class CrystalRefineryClass extends LifeformBuilding implements ResourceProductio
     
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.crystalRefinery;
+    }
+
+    public appliesTo(resource: ResourceType): boolean {
+        return [ResourceType.crystal].includes(resource);
     }
 
     public getProductionBonus(level: number): Cost {

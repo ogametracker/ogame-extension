@@ -155,7 +155,7 @@
 <script lang="ts">
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
@@ -168,6 +168,7 @@
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {
@@ -190,8 +191,10 @@
         }
 
         private readonly applicableBuildingTypes = [
-            ...ResourceProductionBonusLifeformBuildings,
+            ...ResourceProductionBonusLifeformBuildings.filter(b => ResourceTypes.some(resource => b.appliesTo(resource))),
             ...LifeformTechnologyBonusLifeformBuildings,
+            ...AnyBuildingCostAndTimeReductionLifeformBuildings,
+            ...LifeformTechnologyResearchBuildings,
         ].map(b => b.type);
 
         private get applicableLifeformBuildings(): LifeformBuildingType[] {

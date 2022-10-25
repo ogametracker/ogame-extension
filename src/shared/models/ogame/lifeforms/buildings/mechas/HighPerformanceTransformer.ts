@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -32,6 +33,10 @@ class HighPerformanceTransformerClass extends LifeformBuilding implements Resour
     public getLifeformTechnologyBonus(level: number): number {
         const techBonus = 0.003; // 0.3%
         return techBonus * level;
+    }
+
+    public appliesTo(resource: ResourceType | 'energy'): boolean {
+        return resource == 'energy';
     }
 
     public getProductionBonus(level: number): Cost {

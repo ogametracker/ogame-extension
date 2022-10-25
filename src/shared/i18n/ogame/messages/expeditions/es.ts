@@ -15,10 +15,10 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Nuestra */'expedición logro un experimento único'/* . Fueron capaces de reciclar Materia Oscura de la desaparición de una estrella.'*/,
             /*LOCA: es 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*LOCA: es 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Nuestra expedición informa de un espectacular y extraño fenómeno. La */'acumulación de Materia Oscura en los almacenes de energía'/* de los escudos de la nave. Nuestros técnicos intentan almacenar tanta Materia Oscura como pueden mientras dura el fenómeno.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'¡Una */'espontanea deformación en el hiperespacio'/* permitió a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
             /*LOCA: es 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Se robó (?<name>${darkMatter}) de (?<amount>[^\\s]+)`, 'i'),
