@@ -27,7 +27,7 @@ export function getLifeformCollectorClassBonus(player: LocalPlayerData): number 
             const bonus = tech.getClassBonus(PlayerClass.collector, level);
             return total + bonus;
         }, 0);
-        const collectorBonus = baseCollectorBonus * technologyBonusByPlanet[planet.id];
+        const collectorBonus = baseCollectorBonus * (1 + technologyBonusByPlanet[planet.id]);
 
         totalCollectorBonus += collectorBonus;
     }
