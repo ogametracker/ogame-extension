@@ -8,7 +8,7 @@ export function getMaxActiveCrawlers(
     collectorClassBonus: number
 ) {
     const maxCrawlerFactor = hasGeologist && isCollector
-        ? (1 + serverSettings_geologistActiveCrawlerFactorBonus) * (1 + collectorClassBonus)
+        ? (1 + serverSettings_geologistActiveCrawlerFactorBonus * (1 + collectorClassBonus))
         : 1;
 
     const crawlersPerLevel = 8;
