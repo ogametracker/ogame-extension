@@ -15,11 +15,11 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             'Oscura da una stella morente',
-            /*LOCA: it 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'La nostra spedizione ha */'localizzato una vecchia stazione spaziale che sembra vagare senza controllo nello'/* spazio profondo da molto tempo. La stazione di per sé era totalmente inutile, comunque c`era della Materia Oscura alloggiata nel reattore. I nostri tecnici ne hanno salvata più che potevano.'*/,
             /*'La nostra spedizione riporta un inusuale quanto spettacolare fenomeno. Questo ha portato della Materia Oscura ad */'accumularsi nelle riserve di energia per gli scudi'/* della nave. I nostri tecnici, finché il fenomeno è durato, hanno cercato di conservare tutta la Materia Oscura che potevano.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: it 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Una */'spontanea deformazione dell`iperspazio ha permesso'/* alla tua spedizione di raccogliere un grande quantitativo di Materia Oscura!'*/,
             /*LOCA: it 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) è stato razziato`, 'i'),
