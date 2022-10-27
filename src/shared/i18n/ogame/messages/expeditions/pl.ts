@@ -19,7 +19,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Spontaniczna */'deformacja nadprzestrzeni pozwoliła Twojej ekspedycji'/* zebrać dużą ilość Antymaterii!'*/,
-            /*LOCA: pl 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Wyglądała jak postać zrobiona */'wyłącznie z energii, nazywał sie Legor'/* . Przeleciał przez statki naszej ekspedycji i postanowił pomóc nam, prymitywnej rasie.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Zrabowano: (?<amount>[^\\s]+) (?<name>${darkMatter})`, 'i'),
     },
@@ -115,7 +115,7 @@ export const pl: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Ekspedycja */'miała niemiłe spotkanie ze statkami piratów',
             /*'Wpadliśmy prosto w */'pułapkę zastawioną przez gwiezdnych piratów'/* . Nie udało się uniknąć walki.'*/,
-            /*LOCA: pl 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Sygnał alarmowy wykryty przez ekspedycję okazał się być */'fałszywym sygnałem wysłanym przez gwiezdnych piratów'/* . Walki nie dało się uniknąć.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
