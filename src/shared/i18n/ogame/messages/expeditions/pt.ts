@@ -7,10 +7,10 @@ export const pt: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             //LOCA: pt /*'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
-            //LOCA: pt /*'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
+            /*'Encontramos os */'restos de uma nave alienígena'/* ' Lá dentro encontrámos um pequeno contentor com Matéria Negra.'*/,
             //LOCA: pt /*'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
-            //LOCA: pt /*'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
-            //LOCA: pt /*'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'A nossa frota em */'exploração encontrou uma nave-fantasma que transportava uma pequena quantidade'/* de Matéria Negra. Os engenheiros tentaram perceber o que tinha acontecido à tripulação mas não chegaram a qualquer explicação, no entanto recolheram a Matéria Negra.'*/,
+            /*'A expedição seguiu uns */'estranhos sinais vindos dum asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extracção da Matéria Negra.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             //LOCA: pt /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
@@ -35,14 +35,14 @@ export const pt: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             //LOCA: pt /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            //LOCA: pt /*'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'A tua frota de expedição */'relata que encontrou os destroços de uma nave alienígena gigante'/* . Embora não tenhamos aprendido novas tecnologias conseguimos resgatar alguns recursos da blindagem da nave.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Foram roubados (?<amount>.+) de (?<name>${resources.join('|')})`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            //LOCA: pt /*'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
+            /*'Encontrámos os */'destroços de uma antiga expedição espacial'/* ! Os nossos técnicos estão a tentar meter os sistemas das naves encontradas mais uma vez operacionais.'*/,
             //LOCA: pt /*'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
             //LOCA: pt /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
             /*'Descobrimos */'uma estação espacial pirata'/* ! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
