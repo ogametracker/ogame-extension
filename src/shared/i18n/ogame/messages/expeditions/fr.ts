@@ -142,7 +142,7 @@ export const fr: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Extrait du journal de bord d`un officier de communication\s*:(?<text>.+)/i,
+    logbookRegex: /Extrait du journal de bord d`un officier de communication|Message du carnet de bord d`un officier de communication|Extrait du carnet de bord d`un officier de communication\s*:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Cette */'partie de l`univers n`a apparemment encore'/* jamais été explorée.'*/,
@@ -157,6 +157,8 @@ export const fr: ExpeditionMessages = {
             /*LOCA: fr 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
             /*LOCA: fr 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
             /*LOCA: fr 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'Il serait peut être plus */'judicieux d`installer une stèle du souvenir'/* à cet endroit plutôt que de continuer d`y envoyer des expéditions.'*/,
+            /*'Si cela continue comme ca, vu le trafic qu`il y a ici, */'il va falloir songer à installer des feux de signalisation',
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: fr 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
