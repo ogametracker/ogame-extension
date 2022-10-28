@@ -142,7 +142,7 @@ export const fr: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Extrait du journal de bord d`un officier de communication|Message du carnet de bord d`un officier de communication|Extrait du carnet de bord d`un officier de communication\s*:(?<text>.+)/i,
+    logbookRegex: /(Extrait du journal de bord d`un officier de communication|Message du carnet de bord d`un officier de communication|Extrait du carnet de bord d`un officier de communication)\s*:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Cette */'partie de l`univers n`a apparemment encore'/* jamais été explorée.'*/,
