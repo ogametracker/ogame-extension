@@ -2,12 +2,12 @@ export enum LanguageKey {
     cz = 'cz', // czech
     de = 'de', // german
     dk = 'dk', // danish
+    //TODO: el = 'el', // greek
     en = 'en', // english
     'es-es' = 'es-es', // spanish (Spain)
     'es-ar' = 'es-ar', // spanish (Argentina)
     'es-mx' = 'es-mx', // spanish (Mexico)
     fr = 'fr', // french
-    //TODO: gr = 'gr', // greek
     hr = 'hr', // croatian
     //TODO: hu = 'hu', // hungarian
     it = 'it', // italian
