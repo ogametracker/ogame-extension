@@ -31,7 +31,7 @@ export const pt: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             //LOCA: pt /*'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
-            //LOCA: pt /*'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Numa pequena lua que tinha atmosfera, a tua expedição */'encontrou um grande armazém de recursos básicos'/* . A tripulação terrestre está a tentar transferi-los para a nave.'*/,
         ],
         [ExpeditionEventSize.large]: [
             //LOCA: pt /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
@@ -43,13 +43,13 @@ export const pt: ExpeditionMessages = {
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
             /*'Encontrámos os */'destroços de uma antiga expedição espacial'/* ! Os nossos técnicos estão a tentar meter os sistemas das naves encontradas mais uma vez operacionais.'*/,
-            //LOCA: pt /*'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
+            /*'A tua expedição */'encontrou uma fortaleza de uma antiga celebridade'/* que foi abandonada. No hangar da fortaleza encontrámos algumas naves. Os técnicos estão a tentar ver se algumas ainda estão operacionais.'*/,
             //LOCA: pt /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
             /*'Descobrimos */'uma estação espacial pirata'/* ! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*'A nossa expedição encontrou um */'velho hangar automatizado'/*. Algumas das naves ainda estavam em fase de produção e os nossos técnicos estão a tentar reactivar os geradores eléctricos para tentar acabá-las'*/,
-            //LOCA: pt /*'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Encontrámos */'o resto de uma armada'/* ! Os técnicos voaram para as naves que estavam mais intactas e tentaram metê-las a funcionar!'*/,
         ],
         [ExpeditionEventSize.large]: [
             //LOCA: pt /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
