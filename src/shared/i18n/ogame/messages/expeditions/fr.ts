@@ -154,14 +154,14 @@ export const fr: ExpeditionMessages = {
             /*'Nous avons failli entrer en */'collision avec une autre flotte d`expédition'/* . Je ne pensais pas qu`il y avait d`autres expéditions qui traînaient par ici.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: fr 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'Nous avons fêté la fin de notre expédition avec l`équipage d`une autre flotte d`expédition qui se trouvait dans le même secteur que nous. Eux */'non plus n`avaient rien découvert d`extraordinaire',
             /*LOCA: fr 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: fr 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
-            /*'Il serait peut être plus */'judicieux d`installer une stèle du souvenir'/* à cet endroit plutôt que de continuer d`y envoyer des expéditions.'*/,
-            /*'Si cela continue comme ca, vu le trafic qu`il y a ici, */'il va falloir songer à installer des feux de signalisation',
+            /*'Nous avons établi un */'contact radio amical avec d`autres flottes d`expédition'/* dans ce secteur.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: fr 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*'Si cela continue comme ca, vu le trafic qu`il y a ici, */'il va falloir songer à installer des feux de signalisation',
+            /*'Il serait peut être plus */'judicieux d`installer une stèle du souvenir'/* à cet endroit plutôt que de continuer d`y envoyer des expéditions.'*/,
         ],
     },
 };

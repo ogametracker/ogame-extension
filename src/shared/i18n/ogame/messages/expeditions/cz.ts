@@ -160,6 +160,8 @@ export const cz: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: cz 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: cz 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
+            /*LOCA: cz 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
         ],
     },
 };
