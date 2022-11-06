@@ -423,6 +423,7 @@
                 id: planet.id,
                 name: planet.name,
                 position: planet.coordinates.position,
+                coordinates: planet.coordinates,
                 maxTemperature: planet.maxTemperature,
                 activeItems: Object.keys(planet.activeItems) as ItemHash[],
                 lifeform: planet.activeLifeform,

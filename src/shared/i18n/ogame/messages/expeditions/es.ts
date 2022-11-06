@@ -53,7 +53,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /*LOCA: es 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Encontramos */'un planeta con restos de una civilización'/* . Somos capaces de ver una estación espacial gigante orbitando. Algunos de tus técnicos y pilotos fueron a la superficie en busca de algunas naves que se todavia se puedan usar.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Las siguientes naves son ahora parte de la flota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -74,7 +74,8 @@ export const es: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*'La última transmisión que obtuvimos de la flota de expedición fueron las excelentes fotos que */'enseñaban un agujero negro que se estaba abriendo'/* .'*/,
+        /*'La última transmisión que obtuvimos de la flota de expedición fueron las excelentes fotos que */'enseñaban un agujero negro que se estaba abriendo',
+        /*'La última cosa que obtuvimos de la expedición fueron algunas */'realmente buenas fotos tomadas de un agujero negro abriéndose',
         /*'Lo único que quedó de la */'expedición fue el siguiente mensaje de radio'/* : Zzzrrt Mierda! Krrrzzzzt Eso zrrrtrzt parece krgzzzz como Krzzzzzzzztzzzz...'*/,
         /*'Una fusión del núcleo de la nave insignia produce una reacción en cadena que destruye de una */'forma bastante espectacular la flota entera en'/* expedición.'*/,
         /*'El */'contacto con la flota de expedición ha sido cortada de repente'/* . Nuestros académicos están aún intentando descubrir qué pasó, pero parece que la flota se perdió para siempre.'*/,
@@ -162,6 +163,8 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: es 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: es 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
+            /*LOCA: es 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
         ],
     },
 };

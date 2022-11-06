@@ -18,8 +18,8 @@ export const zh_tw: ExpeditionMessages = {
             /*'我們的探險隊報告發現奇特的現象.在船艦護盾的能量槽中,*/'附著積存著一些暗物質'/* .我們的技術人員在正盡可能在這些怪象持續時儲存這些暗物質.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw *//*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*LOCA: zh_tw *//*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*LOCA: zh_tw 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*LOCA: zh_tw 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`捕獲了 (?<name>${darkMatter}) (?<amount>[^\\s]+)`, 'i'),
     },
@@ -34,7 +34,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'在一個擁*/'有自身大氣層的迷你月球上'/* ,您的遠征探險艦隊找到了一些資源礦藏,已先行登陸的隊員正在嘗試發掘並裝載那些自然礦藏.*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw *//*'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*LOCA: zh_tw 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
             /*'您的遠征探險艦隊報告說他們發現了*/'一艘巨型的外星人艦船殘骸'/* .他們雖然無法從那裡學到任何科技,但他們發現可以分解那艘艦船的主要部件成為我們有用的資源.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`捕獲了 (?<name>${resources.join('|')}) (?<amount>.+)`, 'i'),
@@ -52,7 +52,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'我們找到了一*/'支艦隊的殘骸群'/* .技術人員前往那些幾乎完好的艦船處嘗試令到它們重新啓動起來'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw *//*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*LOCA: zh_tw 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
             /*'我們找到了*/'一個文明滅絕的行星'/* .我們找到了還環繞在軌道上正常運行的龐大太空站.您的一些技術人員和駕駛員前往那裡找到了一些仍然可以使用的艦船.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`下列艦船隸屬於艦隊:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -74,10 +74,10 @@ export const zh_tw: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: zh_tw *//*'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*LOCA: zh_tw 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
         '遠征探險隊傳來的最後一條無線電訊息'/* :滋~~ 糟了！咖 那邊 滋~ 好像 嗶~~~有… 訊息中斷'*/,
-        /*LOCA: zh_tw *//*'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*LOCA: zh_tw *//*'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*LOCA: zh_tw 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*LOCA: zh_tw 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
@@ -110,35 +110,35 @@ export const zh_tw: ExpeditionMessages = {
             /*'一*/'群原始野蠻人正利用太'/*空船向我們的遠征探險艦隊發起攻擊,我們甚至連他們叫什麼名都全然不知.如果他們再猛烈攻擊我們,我們將不得不予以還擊.'*/,
             /*'我們從一*/'幫張狂的海盜處收到'/* 一些挑釁的無線電訊號.看來,我們即將遭受攻擊'*/,
             /*'我們不得不*/'與那裡的海盜進行戰鬥'/* ,慶幸的是對方艦船數不多.'*/,
-            /*LOCA: zh_tw *//*'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+            /*LOCA: zh_tw 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: zh_tw *//*'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            /*LOCA: zh_tw *//*'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*LOCA: zh_tw *//*'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*LOCA: zh_tw 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*LOCA: zh_tw 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*LOCA: zh_tw 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'該信號記錄絕不是來自外星文明的,*/'而是一個隱祕的海盜基地'/* !這些海盜對我們突然出現這裡絲毫不覺得有半分詫異.'*/,
-            /*LOCA: zh_tw *//*'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*LOCA: zh_tw 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
     },
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: zh_tw *//*'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
-            /*LOCA: zh_tw *//*'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*LOCA: zh_tw 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*LOCA: zh_tw 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
             /*'我們的遠征探險艦隊被*/'一小股不明來歷的艦'/*隊襲擊了!'*/,
-            /*LOCA: zh_tw *//*'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+            /*LOCA: zh_tw 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: zh_tw *//*'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*LOCA: zh_tw 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
             /*'您的遠征探險艦隊似乎踏足到一*/'個屬於未知種族的疆土宙域'/* ,不過可以確定的是它們絕對是凶殘和好戰的外星種族.'*/,
-            /*LOCA: zh_tw *//*'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*LOCA: zh_tw 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw *//*'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*LOCA: zh_tw *//*'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
-            /*LOCA: zh_tw *//*'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*LOCA: zh_tw 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*LOCA: zh_tw 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*LOCA: zh_tw 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
 
@@ -149,17 +149,19 @@ export const zh_tw: ExpeditionMessages = {
             /*'作為第一批到此未*/'被探索的宇宙空域的人'/* ,感覺太棒了'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: zh_tw *//*'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*LOCA: zh_tw 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
             /*'我們發現一*/'艘遠古太空艦船的殘骸'/* .但我們並不是第一個踏足的人'*/,
-            /*LOCA: zh_tw *//*'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*LOCA: zh_tw 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: zh_tw *//*'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*LOCA: zh_tw *//*'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: zh_tw *//*'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*LOCA: zh_tw 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*LOCA: zh_tw 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*LOCA: zh_tw 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*LOCA: zh_tw *//*'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: zh_tw 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*LOCA: zh_tw 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
+            /*LOCA: zh_tw 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
         ],
     },
 };
