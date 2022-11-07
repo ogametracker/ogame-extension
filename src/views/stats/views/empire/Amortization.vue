@@ -552,10 +552,16 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
 
         @Watch('playerSettings.playerClass')
         private onPlayerClassSelectionChanged(newClass: PlayerClass) {
-            const percentage: CrawlerProductionPercentage = newClass == PlayerClass.collector ? 150 : 100;
+            const isCollector = newClass == PlayerClass.collector;
+            const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
 
-            this.planetSettingsSorted.forEach(p => p.crawlers.percentage = percentage);
+            this.planetSettingsSorted.forEach(p => {
+                p.crawlers.percentage = percentage;
+                p.crawlers.max = isCollector;
+            });
+
             this.astrophysicsSettings.planet.crawlers.percentage = percentage;
+            this.astrophysicsSettings.planet.crawlers.max = isCollector;
         }
 
         private async saveItems() {

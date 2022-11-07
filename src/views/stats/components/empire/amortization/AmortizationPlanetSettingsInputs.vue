@@ -65,7 +65,7 @@
                         <span v-if="settings.crawlers.max" v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
                         <span v-else v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
                     </checkbox-button>
-                    <input type="number" :value="settings.crawlers.count" :disabled="settings.crawlers.max" />
+                    <input type="number" v-model.number="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
             </span>
 
