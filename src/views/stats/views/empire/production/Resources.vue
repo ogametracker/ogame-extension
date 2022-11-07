@@ -343,9 +343,13 @@
 
         @Watch('playerSettings.playerClass')
         private onPlayerClassSelectionChanged(newClass: PlayerClass) {
-            const percentage: CrawlerProductionPercentage = newClass == PlayerClass.collector ? 150 : 100;
+            const isCollector = newClass == PlayerClass.collector;
+            const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
 
-            this.planetSettings.forEach(p => p.crawlers.percentage = percentage);
+            this.planetSettings.forEach(p => {
+                p.crawlers.percentage = percentage;
+                p.crawlers.max = isCollector;
+            });
         }
 
         private mounted() {
@@ -514,7 +518,7 @@
         }
 
         private get items(): ProductionItem[] {
-            if(this.planetSettings.length == 0) {
+            if (this.planetSettings.length == 0) {
                 return [];
             }
 
@@ -527,7 +531,7 @@
                     crystal: productionBreakdowns.crystal.getProductionBreakdown(planet.id),
                     deuterium: productionBreakdowns.deuterium.getProductionBreakdown(planet.id),
                 };
-                
+
                 const settings = this.planetSettings.find(p => p.id == planet.id) ?? _throw('no planet settings found');
 
                 return {
@@ -542,7 +546,7 @@
                     }),
 
                     productionSettings: {
-                        metalMine:  planet.productionSettings[BuildingType.metalMine],
+                        metalMine: planet.productionSettings[BuildingType.metalMine],
                         crystalMine: planet.productionSettings[BuildingType.crystalMine],
                         deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
                         solarPlant: planet.productionSettings[BuildingType.solarPlant],
