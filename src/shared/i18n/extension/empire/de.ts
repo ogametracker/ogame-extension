@@ -68,7 +68,7 @@ export const de: EmpireTranslations = {
                 currentLevelOf: (name: string) => `aktuelle Stufe ${name}`,
                 lifeformLevels: 'Lebenform-Levels',
 
-                unusedRaidColonySlots: 'Derzeit ungenutzt Raidkolo-Slots',
+                unusedRaidColonySlots: 'Derzeit ungenutzte Raidkolo-Slots',
             },
             astrophysicsSettings: {
                 header: (name: string) => `Einstellungen zu ${name}`,
