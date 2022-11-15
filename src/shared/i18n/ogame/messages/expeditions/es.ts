@@ -14,7 +14,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nuestra */'expedición logro un experimento único'/* . Fueron capaces de reciclar Materia Oscura de la desaparición de una estrella.'*/,
-            /*LOCA: es 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Nuestra expedición encontró una estación espacial oxidada, */'la cual parece haber estado flotando sin control por el espacio exterior'/* durante mucho tiempo. La estación por si misma era totalmente inútil, sin embargo, había algo de Materia Oscura almacenada en su reactor. Nuestros técnicos están intentando juntar tanto como pueden.'*/,
             /*'Nuestra expedición informa de un espectacular y extraño fenómeno. La */'acumulación de Materia Oscura en los almacenes de energía'/* de los escudos de la nave. Nuestros técnicos intentan almacenar tanta Materia Oscura como pueden mientras dura el fenómeno.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -35,7 +35,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /*LOCA: es 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Tu expedición informa del */'descubrimiento de una nave alien gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y hacer algunos recursos útiles de ella.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Se robó (?<name>${resources.join('|')}) de (?<amount>.+)`, 'i'),
     },
