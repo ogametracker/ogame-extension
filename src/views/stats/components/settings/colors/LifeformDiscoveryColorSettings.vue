@@ -29,6 +29,7 @@
                 [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.nothing,
                 [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip,
                 [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.extension.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.artifacts]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.artifacts,
             };
         }
 
@@ -39,7 +40,7 @@
         ];
 
         private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
         }
 
         private updateColors(value: Record<LifeformDiscoveryEventType, string>) {
@@ -47,13 +48,16 @@
                 ...SettingsDataModule.settings,
                 colors: {
                     ...SettingsDataModule.settings.colors,
-                    lifeformDiscoveries: value,
+                    lifeformDiscoveries: {
+                        ...SettingsDataModule.settings.colors.lifeformDiscoveries,
+                        events: value,
+                    },
                 },
             });
         }
 
         private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.lifeformDiscoveries;
+            const defaultColors = getDefaultSettings(LanguageKey.de).colors.lifeformDiscoveries.events;
             this.updateColors(defaultColors);
         }
     }

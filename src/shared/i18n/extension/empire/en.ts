@@ -149,6 +149,7 @@ export const en: EmpireTranslations = {
             [LifeformDiscoveryEventType.lostShip]: 'Lost exploration ship',
             [LifeformDiscoveryEventType.newLifeformFound]: 'New lifeform',
             [LifeformDiscoveryEventType.knownLifeformFound]: 'Lifeform experience',
+            [LifeformDiscoveryEventType.artifacts]: 'Artifacts',
         },
         lifeformFound: 'Lifeform found',
         alwaysAvailable: 'Always available',

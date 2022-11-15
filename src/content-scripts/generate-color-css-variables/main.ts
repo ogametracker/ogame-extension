@@ -1,5 +1,6 @@
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { internalUuid } from "@/shared/uuid";
@@ -56,6 +57,7 @@ function generateCssVariables(colors: ColorSettings) {
     (Object.keys(colors.combatResults) as CombatResultType[])
         .forEach(combatResult => cssVariables[`--ogame-tracker--combat-result--${combatResult}`] = colors.combatResults[combatResult]);
 
+
     (Object.keys(colors.expeditions.events) as ExpeditionEventType[])
         .forEach(expoEvent => cssVariables[`--ogame-tracker--expedition-event--${expoEvent}`] = colors.expeditions.events[expoEvent]);
 
@@ -67,8 +69,13 @@ function generateCssVariables(colors: ColorSettings) {
     (Object.keys(colors.expeditions.depletion) as ExpeditionDepletionLevel[])
         .forEach(depletionLevel => cssVariables[`--ogame-tracker--depletion-level--${depletionLevel}`] = colors.expeditions.depletion[depletionLevel]);
 
-    (Object.keys(colors.lifeformDiscoveries) as LifeformDiscoveryEventType[])
-        .forEach(event => cssVariables[`--ogame-tracker--lifeform-discovery-event--${event}`] = colors.lifeformDiscoveries[event]);
+
+    (Object.keys(colors.lifeformDiscoveries.events) as LifeformDiscoveryEventType[])
+        .forEach(event => cssVariables[`--ogame-tracker--lifeform-discovery-event--${event}`] = colors.lifeformDiscoveries.events[event]);
+
+    (Object.keys(colors.lifeformDiscoveries.artifactFindingSizes) as LifeformDiscoveryEventArtifactFindingSize[])
+        .forEach(size => cssVariables[`--ogame-tracker--lifeform-discovery-result--artifacts--size--${size}`] = colors.lifeformDiscoveries.artifactFindingSizes[size]);
+
 
     (Object.keys(colors.lifeforms) as ValidLifeformType[])
         .forEach(lifeform => cssVariables[`--ogame-tracker--lifeform--${lifeform}`] = colors.lifeforms[lifeform]);

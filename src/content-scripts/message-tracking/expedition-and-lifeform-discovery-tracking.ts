@@ -32,6 +32,7 @@ import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/Lif
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 
 let tabContent: Element | null = null;
 
@@ -50,7 +51,9 @@ const totalLifeformDiscoveryResult: LifeformDiscoveryTrackingNotificationMessage
         [LifeformDiscoveryEventType.lostShip]: 0,
         [LifeformDiscoveryEventType.newLifeformFound]: 0,
         [LifeformDiscoveryEventType.knownLifeformFound]: 0,
+        [LifeformDiscoveryEventType.artifacts]: 0,
     },
+    artifacts: 0,
     newLifeforms: [],
     lifeformExperience: {
         [LifeformType.humans]: 0,
@@ -387,12 +390,36 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             `;
         }
 
+        case LifeformDiscoveryEventType.artifacts: {
+            return `
+                <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type, lifeformDiscovery.size)}">
+                    <div class="${getLifeformDiscoveryMissionArtifactSizeIconClass(lifeformDiscovery.size)}"></div>
+                    <span class="mdi mdi-atom-variant"></span>
+                    <span>${lifeformDiscovery.artifacts}</span>
+                </div>
+            `;
+        }
+
         default: _throw('unknown lifeform discovery type');
     }
 }
 
-function getLifeformDiscoveryResultClass(result: LifeformDiscoveryEventType) {
-    return `ogame-tracker-lifeform-discovery-result ogame-tracker-lifeform-discovery-result--${result}`;
+function getLifeformDiscoveryResultClass(result: LifeformDiscoveryEventType, size?: LifeformDiscoveryEventArtifactFindingSize) {
+    const cssClass = `ogame-tracker-lifeform-discovery-result ogame-tracker-lifeform-discovery-result--${result}`;
+    if (size == null) {
+        return cssClass;
+    }
+
+    return `${cssClass} ogame-tracker-lifeform-discovery-result--artifacts--size-${size}`
+}
+
+function getLifeformDiscoveryMissionArtifactSizeIconClass(size: LifeformDiscoveryEventArtifactFindingSize) {
+    return 'ogame-tracker-lifeform-discovery-result--size-icon mdi ' + ({
+        [LifeformDiscoveryEventArtifactFindingSize.small]: 'mdi-hexagon-slice-1',
+        [LifeformDiscoveryEventArtifactFindingSize.medium]: 'mdi-hexagon-slice-3',
+        [LifeformDiscoveryEventArtifactFindingSize.large]: 'mdi-hexagon-slice-5',
+        [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'mdi-hexagon-slice-6',
+    }[size]);
 }
 
 function getLifeformClass(lifeform: ValidLifeformType) {
@@ -441,7 +468,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
             return `
                 <div class="${getExpeditionResultClass(ExpeditionEventType.resources, expedition.size)}">
-                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource ${resource}"></div>
                     <div class="${resource}">${formatNumber(amount)}</div>
                 </div>
@@ -462,7 +489,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">
                     <div class="${getExpeditionResultClass(ExpeditionEventType.fleet, expedition.size)}">
-                        <div class="${getSizeIconClass(expedition.size)}"></div>
+                        <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                         ${ships.map(ship => `
                             <div class="ship-count-item">
                                 <div class="ogame-tracker-ship ship-${ship}"></div>
@@ -491,7 +518,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
         case ExpeditionEventType.darkMatter: {
             return `
                 <div class="${getExpeditionResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
-                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource dark-matter"></div>
                     <div class="dark-matter">${formatNumber(expedition.darkMatter)}</div>
                 </div>
@@ -517,7 +544,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
         case ExpeditionEventType.pirates: {
             return `
                 <div class="${getExpeditionResultClass(ExpeditionEventType.pirates, expedition.size)}">
-                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-pirate"></div>
                 </div>
             `;
@@ -526,7 +553,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
         case ExpeditionEventType.aliens: {
             return `
                 <div class="${getExpeditionResultClass(ExpeditionEventType.aliens, expedition.size)}">
-                    <div class="${getSizeIconClass(expedition.size)}"></div>
+                    <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-alien"></div>
                 </div>
             `;
@@ -578,7 +605,7 @@ function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
     }[level]);
 }
 
-function getSizeIconClass(size: ExpeditionEventSize) {
+function getExpeditionSizeIconClass(size: ExpeditionEventSize) {
     return 'ogame-tracker-expedition--size-icon mdi ' + ({
         [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
         [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',

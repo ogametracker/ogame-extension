@@ -7,10 +7,11 @@ import { RawMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { getLanguage } from "@/shared/i18n/getLanguage";
-import { LifeformDiscoveryEvent, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
+import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType, ValidLifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 
 interface LifeformDiscoveryEventResult {
     lifeformDiscovery: LifeformDiscoveryEvent;
@@ -64,7 +65,9 @@ export class LifeformDiscoveryModule {
             ?? this.#tryParseLostShipLifeformDiscovery(language, data)
             // parse known lifeform first because they share the same message with a new lifeform discovery except the XP part
             ?? this.#tryParseKnownLifeformFoundLifeformDiscovery(language, data)
-            ?? this.#tryParseNewLifeformFoundLifeformDiscovery(language, data);
+            ?? this.#tryParseNewLifeformFoundLifeformDiscovery(language, data)
+            ?? this.#tryParseArtifactsLifeformDiscovery(language, data)
+            ;
 
         if (result == null) {
             _throw('Unknown lifeform discovery type');
@@ -83,6 +86,34 @@ export class LifeformDiscoveryModule {
             id: data.id,
             date: data.date,
             type: LifeformDiscoveryEventType.nothing,
+        };
+    }
+
+    #tryParseArtifactsLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventArtifacts | null {
+        const i18nMessages = i18nDiscoveries[language].artifacts;
+        const size = (Object.keys(i18nMessages.size) as LifeformDiscoveryEventArtifactFindingSize[])
+            .find(s => this.#includesMessage(data.text, i18nMessages.size[s]));
+
+        if (size == null) {
+            return null;
+        }
+
+        let artifacts = 0;
+        if (size != LifeformDiscoveryEventArtifactFindingSize.storageFull) {
+            const artifactsAmount = data.text.match(i18nMessages.numberOfArtifacts)?.groups?.artifacts;
+            if (artifactsAmount == null) {
+                return null;
+            }
+
+            artifacts = parseIntSafe(artifactsAmount);
+        }
+
+        return {
+            id: data.id,
+            date: data.date,
+            type: LifeformDiscoveryEventType.artifacts,
+            artifacts,
+            size,
         };
     }
 
