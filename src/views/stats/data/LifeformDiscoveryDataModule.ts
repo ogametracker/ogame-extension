@@ -10,12 +10,15 @@ import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/share
 import { LifeformDiscoveryEvent } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
 import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { NewLifeformDiscoveryMessage } from '@/shared/messages/tracking/lifeform-discoveries';
+import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
 
 export interface DailyLifeformDiscoveryResult {
     date: number;
     events: Record<LifeformDiscoveryEventType, number>;
     foundLifeforms: ValidLifeformType[];
     lifeformExperience: Record<ValidLifeformType, number>;
+    artifacts: number;
+    artifactSizes: Record<LifeformDiscoveryEventArtifactFindingSize, number>;
 }
 
 export interface LifeformDiscoveryProgressInfo {
@@ -73,7 +76,7 @@ class LifeformDiscoveryDataModuleClass extends Vue {
     }
 
     private addLifeformDiscoveryToLifeformInfos(discovery: LifeformDiscoveryEvent) {
-        if(discovery.type == LifeformDiscoveryEventType.newLifeformFound) {
+        if (discovery.type == LifeformDiscoveryEventType.newLifeformFound) {
             this.lifeforms[discovery.lifeform].discoveredDate = discovery.date;
             this.lifeforms[discovery.lifeform].discoveriesCount++;
         }
@@ -105,6 +108,12 @@ class LifeformDiscoveryDataModuleClass extends Vue {
                 dailyResult.foundLifeforms.push(discovery.lifeform);
                 break;
             }
+
+            case LifeformDiscoveryEventType.artifacts: {
+                dailyResult.artifacts += discovery.artifacts;
+                dailyResult.artifactSizes[discovery.size]++;
+                break;
+            }
         }
     }
 
@@ -114,6 +123,8 @@ class LifeformDiscoveryDataModuleClass extends Vue {
             events: createRecord(LifeformDiscoveryEventTypes, 0),
             foundLifeforms: [],
             lifeformExperience: createRecord(ValidLifeformTypes, 0),
+            artifacts: 0,
+            artifactSizes: createRecord(LifeformDiscoveryEventArtifactFindingSizes, 0),
         };
     }
 

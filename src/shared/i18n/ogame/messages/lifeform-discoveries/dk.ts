@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformDiscoveryMessages } from "./types";
 
@@ -38,4 +39,13 @@ export const dk: LifeformDiscoveryMessages = {
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /og blev tilføjet til Livsformer menuen/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /forbedre vores viden omkring dem med (?<xp>\d+) XP/i,
+    [LifeformDiscoveryEventType.artifacts]: {
+        size: {
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: dk 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*LOCA: dk 'The Exploration Ship has */'found a small number of artefacts',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*LOCA: dk 'The Exploration Ship has */'found a large quantity of artefacts',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: dk 'The Exploration Ship has */'found a huge quantity of artefacts',
+        },
+        numberOfArtifacts: /*LOCA: dk *//Artefacts found: (?<artifacts>\d+)/i,
+    },
 };

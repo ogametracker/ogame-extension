@@ -7,6 +7,8 @@ export enum LifeformDiscoveryEventType {
     newLifeformFound = 'newLifeformFound',
     /** discovered a known lifeform and gathered some XP */
     knownLifeformFound = 'knownLifeformFound',
+    /** artifacts found */
+    artifacts = 'artifacts',
 }
 
 export const LifeformDiscoveryEventTypes: LifeformDiscoveryEventType[] = [
@@ -14,4 +16,5 @@ export const LifeformDiscoveryEventTypes: LifeformDiscoveryEventType[] = [
     LifeformDiscoveryEventType.lostShip,
     LifeformDiscoveryEventType.newLifeformFound,
     LifeformDiscoveryEventType.knownLifeformFound,
+    LifeformDiscoveryEventType.artifacts,
 ];

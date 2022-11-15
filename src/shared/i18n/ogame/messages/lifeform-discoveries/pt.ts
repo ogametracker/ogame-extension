@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformDiscoveryMessages } from "./types";
 
@@ -38,4 +39,13 @@ export const pt: LifeformDiscoveryMessages = {
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /nas coordenadas .+ e adicionada ao menu Formas de Vida/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /emissários conseguiram aumentar o nosso nível de conhecimento sobre esta forma de vida em (?<xp>\d+) EXP/i,
+    [LifeformDiscoveryEventType.artifacts]: {
+        size: {
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: pt 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*LOCA: pt 'The Exploration Ship has */'found a small number of artefacts',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*LOCA: pt 'The Exploration Ship has */'found a large quantity of artefacts',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: pt 'The Exploration Ship has */'found a huge quantity of artefacts',
+        },
+        numberOfArtifacts: /*LOCA: pt *//Artefacts found: (?<artifacts>\d+)/i,
+    },
 };

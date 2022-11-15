@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 
 export interface LifeformDiscoveryMessages {
@@ -5,4 +6,8 @@ export interface LifeformDiscoveryMessages {
     [LifeformDiscoveryEventType.lostShip]: string[];
     [LifeformDiscoveryEventType.newLifeformFound]: RegExp;
     [LifeformDiscoveryEventType.knownLifeformFound]: RegExp;
+    [LifeformDiscoveryEventType.artifacts]: {
+        size: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
+        numberOfArtifacts: RegExp;
+    };
 }
