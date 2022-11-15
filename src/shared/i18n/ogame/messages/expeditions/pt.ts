@@ -6,7 +6,7 @@ import { ExpeditionMessages } from "./types";
 export const pt: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            //LOCA: pt /*'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'A missão em */'exploração conseguiu capturar e conservar alguma Matéria Negra',
             /*'Encontramos os */'restos de uma nave alienígena'/* ' Lá dentro encontrámos um pequeno contentor com Matéria Negra.'*/,
             //LOCA: pt /*'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'A nossa frota em */'exploração encontrou uma nave-fantasma que transportava uma pequena quantidade'/* de Matéria Negra. Os engenheiros tentaram perceber o que tinha acontecido à tripulação mas não chegaram a qualquer explicação, no entanto recolheram a Matéria Negra.'*/,
@@ -30,7 +30,7 @@ export const pt: ExpeditionMessages = {
             /*'Num planetóide isolado */'encontrámos um campo de recursos'/*. Conseguimos recolhê-los e estamos a voltar para descarregá-los.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            //LOCA: pt /*'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'A tua expedição */'encontrou uma antiga escolta de cargueiros abandonados'/* . Ao abrir os conveses descobriram que ainda tinham alguns recursos! Estes foram descarregados nos porões das nossas naves.'*/,
             /*'Numa pequena lua que tinha atmosfera, a tua expedição */'encontrou um grande armazém de recursos básicos'/* . A tripulação terrestre está a tentar transferi-los para a nave.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -53,7 +53,7 @@ export const pt: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             //LOCA: pt /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            //LOCA: pt /*'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Encontrámos um */'planeta que alberga os restos de uma civilização'/* . Conseguimos encontrar uma estação espacial velha mas intacta. Alguns dos nosso técnicos e pilotos desceram à estação e conseguiram resgatar algumas das naves que lá se encontravam.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`As seguintes naves fazem agora parte da frota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
