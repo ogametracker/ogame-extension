@@ -637,6 +637,11 @@ function updateLifeformDiscoveryResults(msg: LifeformDiscoveryMessage) {
             break;
         }
 
+        case LifeformDiscoveryEventType.artifacts: {
+            totalLifeformDiscoveryResult.artifacts += msg.data.artifacts;
+            break;
+        }
+
         default: break;
     }
     sendNotificationMessages();
