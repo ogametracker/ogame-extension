@@ -394,7 +394,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type, lifeformDiscovery.size)}">
                     <div class="${getLifeformDiscoveryMissionArtifactSizeIconClass(lifeformDiscovery.size)}"></div>
-                    <span class="mdi mdi-atom-variant"></span>
+                    <span class="mdi mdi-flare"></span>
                     <span>${lifeformDiscovery.artifacts}</span>
                 </div>
             `;

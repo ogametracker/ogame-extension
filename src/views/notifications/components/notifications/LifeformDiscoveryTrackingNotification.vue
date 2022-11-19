@@ -31,7 +31,7 @@
             <template v-if="foundArtifacts">
                 <hr />
                 <div class="result-grid artifact-grid">
-                    <span class="mdi mdi-atom-variant" :style="{ color: colors.artifacts }" />
+                    <span class="mdi mdi-flare" :style="{ color: colors.artifacts }" />
                     <span v-text="$i18n.$n(notification.artifacts)" />
                 </div>
             </template>
@@ -47,7 +47,7 @@
                     <span v-text="$i18n.$n(lifeformFindingCount)" />
                 </template>
                 <template v-if="notification.events.artifacts > 0">
-                    <span class="mdi mdi-atom-variant" :style="{ color: colors.artifacts }" />
+                    <span class="mdi mdi-flare" :style="{ color: colors.artifacts }" />
                     <span v-text="$i18n.$n(notification.events.artifacts)" />
                 </template>
                 <template v-if="notification.events.nothing > 0">
