@@ -106,7 +106,7 @@ export class EmpireProductionBreakdown {
         this.#planetIds = Object.keys(planets).map(id => parseIntSafe(id));
     }
 
-    #getLifeformBonusFactors(): GlobalProductionBonuses {
+    getLifeformBonusFactors(): GlobalProductionBonuses {
         let collectorClassBonusFactor = 0;
         let lifeformTechnologyProductionBonusFactor = 0;
         let lifeformTechnologyCrawlerProductionBonusFactor = 0;
@@ -133,7 +133,7 @@ export class EmpireProductionBreakdown {
     }
 
     public getProductionBreakdown(planetId: number) {
-        return this.#getPlanetProductionBreakdown(planetId, this.#getLifeformBonusFactors());
+        return this.#getPlanetProductionBreakdown(planetId, this.getLifeformBonusFactors());
     }
 
     #getPlanetProductionBreakdown(planetId: number, globalBonuses: GlobalProductionBonuses) {
@@ -216,7 +216,7 @@ export class EmpireProductionBreakdown {
     }
 
     public getTotal(includeConsumption = false) {
-        const globalBonuses = this.#getLifeformBonusFactors();
+        const globalBonuses = this.getLifeformBonusFactors();
 
         return this.#planetIds.reduce((total, planetId) => {
             const consumption = includeConsumption ? this.planets[planetId].fusionReactorConsumption : 0;
