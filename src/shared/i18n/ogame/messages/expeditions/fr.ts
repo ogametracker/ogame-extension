@@ -53,7 +53,7 @@ export const fr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Nous avons */'découvert un immense cimetière de vaisseaux'/* . Nos techniciens ont réussi à remettre quelques vaisseaux en état.'*/,
-            /*LOCA: fr 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Nous avons */'découvert une planète avec les restes d`une civilisation'/* . Depuis l`orbite, nous avons pu découvrir une aire intacte de stationnement de vaisseaux. Nos techniciens et des pilotes se sont rendus à la surface de cette planète pour vérifier ce que valent les vaisseaux stationnés.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Votre flotte s\`est agrandie, voici les nouveaux vaisseaux qui s\`y sont joints\\s*:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
