@@ -27,7 +27,7 @@ export interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireP
 }
 
 
-export function getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetData) {
+function getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetData) {
     return CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies
         .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
         .reduce(

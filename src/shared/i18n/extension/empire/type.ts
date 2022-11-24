@@ -18,6 +18,7 @@ export interface EmpireTranslations {
 
         mines: {
             crawlersAvailable: string;
+            crawlersToReachLimit: (count: string) => string;
         };
         items: string;
         breakdown: {

@@ -19,6 +19,7 @@ export const en: EmpireTranslations = {
 
         mines: {
             crawlersAvailable: 'available',
+            crawlersToReachLimit: count => `${count} crawlers for maximum bonus`,
         },
         items: 'Active items',
         breakdown: {
