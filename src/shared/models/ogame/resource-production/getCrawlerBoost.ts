@@ -1,5 +1,6 @@
 import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
 import { PlayerClass } from "../classes/PlayerClass";
+import { getCrawlerProductionFactor } from "./getCrawlerProductionFactor";
 import { getMaxActiveCrawlers } from "./getMaxActiveCrawlers";
 
 export interface CrawlerBoostCalculationData {
@@ -33,9 +34,12 @@ export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
         data.lifeformTechnologies.collectorClassBonus,
     );
     const crawlerCount = Math.min(maxCrawlers, data.availableCrawlers);
-    const crawlerProductivity = data.playerClass == PlayerClass.collector
-        ? (1 + data.serverSettings.collectorCrawlerProductionFactorBonus) * (1 + data.lifeformTechnologies.collectorClassBonus)
-        : 1;
+    const crawlerProductivity = getCrawlerProductionFactor(
+        data.playerClass,
+        data.serverSettings.collectorCrawlerProductionFactorBonus,
+        data.lifeformTechnologies.collectorClassBonus,
+        data.lifeformTechnologies.crawlerProductionBonus,
+    );
 
     const potentialCrawlerBoost =
         data.serverSettings.crawlerProductionFactorPerUnit

@@ -1,4 +1,5 @@
 import { PlayerClass } from "../classes/PlayerClass";
+import { getCrawlerProductionFactor } from "./getCrawlerProductionFactor";
 
 export interface MaxCrawlerBoostCalculationData {
     playerClass: PlayerClass;
@@ -14,9 +15,12 @@ export interface MaxCrawlerBoostCalculationData {
     };
 }
 export function getCrawlerCountForMaximumBoost(data: MaxCrawlerBoostCalculationData): number {
-    const crawlerProductivity = data.playerClass == PlayerClass.collector
-        ? (1 + data.serverSettings.collectorCrawlerProductionFactorBonus) * (1 + data.lifeformTechnologies.collectorClassBonus) * 1.5 // overload
-        : 1;
+    const crawlerProductivity = getCrawlerProductionFactor(
+        data.playerClass,
+        data.serverSettings.collectorCrawlerProductionFactorBonus,
+        data.lifeformTechnologies.collectorClassBonus,
+        data.lifeformTechnologies.crawlerProductionBonus,
+    );
 
     return Math.ceil(
         data.serverSettings.crawlerMaxProductionFactor
