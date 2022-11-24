@@ -28,6 +28,7 @@ export function getCrawlerCountForMaximumBoost(data: MaxCrawlerBoostCalculationD
             data.serverSettings.crawlerProductionFactorPerUnit
             * crawlerProductivity
             * (1 + data.lifeformTechnologies.crawlerProductionBonus)
+            * (data.playerClass == PlayerClass.collector ? 1.5 : 1) //overload
         )
     );
 }
