@@ -77,6 +77,10 @@
                     }"
                 />
                 <span v-text="`(${$i18n.$n(value.available, avgNumberFormat)} ${$i18n.$t.extension.empire.production.mines.crawlersAvailable})`" />
+                <span
+                    style="grid-column: 1 / span 2"
+                    v-text="$i18n.$t.extension.empire.production.mines.crawlersToReachLimit($i18n.$n(effectiveCrawlerLimit))"
+                />
             </div>
         </template>
     </grid-table>
@@ -96,6 +100,8 @@
     import { getLifeformCollectorClassBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
     import { getMaxActiveCrawlers } from '@/shared/models/ogame/resource-production/getMaxActiveCrawlers';
     import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import { getCrawlerCountForMaximumBoost } from '@/shared/models/ogame/resource-production/getCrawlerCountForMaximumBoost';
+    import { getProductionBreakdowns } from '@/views/stats/models/empire/production';
 
     interface ProductionMineItem {
         planet: {
@@ -125,6 +131,30 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         };
+
+        private get serverSettings() {
+            return ServerSettingsDataModule.serverSettings;
+        }
+
+        private get effectiveCrawlerLimit() {
+            const bonus = getProductionBreakdowns(this.player, this.player.lifeformExperience).metal
+                .getLifeformBonusFactors()
+                .lifeformTechnologyCrawlerProductionBonusFactor;
+
+            return getCrawlerCountForMaximumBoost({
+                playerClass: this.player.playerClass,
+                lifeformTechnologies: {
+                    collectorClassBonus: this.collectorBonus,
+                    crawlerProductionBonus: bonus,
+                },
+                serverSettings: {
+                    geologistActiveCrawlerFactorBonus: this.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+                    collectorCrawlerProductionFactorBonus: this.serverSettings.playerClasses.collector.crawlers.productionFactorBonus,
+                    crawlerProductionFactorPerUnit: this.serverSettings.playerClasses.crawlers.productionBoostFactorPerUnit,
+                    crawlerMaxProductionFactor: this.serverSettings.playerClasses.crawlers.maxProductionFactor,
+                },
+            });
+        }
 
         private get columns(): GridTableColumn<keyof ProductionMineItem>[] {
             return [
@@ -176,9 +206,11 @@
             return [result];
         }
 
-        private get items(): ProductionMineItem[] {
-            const collectorClassBonus = getLifeformCollectorClassBonus(this.player);
+        private get collectorBonus() {
+            return getLifeformCollectorClassBonus(this.player);
+        }
 
+        private get items(): ProductionMineItem[] {
             return this.planets
                 .map(planet => {
                     const maxActiveCrawlers = getMaxActiveCrawlers(
@@ -188,7 +220,7 @@
                         this.player.playerClass == PlayerClass.collector,
                         this.player.officers.geologist,
                         ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
-                        collectorClassBonus,
+                        this.collectorBonus,
                     );
                     const availableCrawlers = planet.ships[ShipType.crawler];
 

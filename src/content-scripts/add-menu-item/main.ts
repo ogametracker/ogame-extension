@@ -30,7 +30,7 @@ const observer = new MutationObserver(() => {
                         <span class="mdi mdi-radar"></span>
                     </span>
                 </span>
-                <div class="menubutton"></div>
+                <div class="menubutton beta"></div>
                 ${language != null
                 ? ''
                 : `<div class="warning-lang-not-supported tooltip" title="The OGame servers for locale '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
