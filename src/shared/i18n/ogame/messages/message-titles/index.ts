@@ -7,7 +7,7 @@ import { cz } from './cz';
 import { hr } from './hr';
 import { si } from './si';
 import { pt } from './pt';
-import { es } from './es';
+import { es } from './es_ar';
 import { it } from './it';
 import { fr } from './fr';
 import { pl } from './pl';
