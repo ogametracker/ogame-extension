@@ -106,7 +106,7 @@ export const es: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: es 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Unos piratas */'realmente desesperados intentaron capturar nuestra flota'/* de expedición.'*/,
             /*'Unos */'bárbaros primitivos están atacándonos con naves espaciales'/* que ni siquiera merecen tal nombre. Si nos disparan en serio, nos veremos forzados a devolver el fuego.'*/,
             /*'Interceptamos */'comunicaciones de unos piratas borrachos'/* . Se suponía que tenían que atacarnos.'*/,
             /*LOCA: es 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
