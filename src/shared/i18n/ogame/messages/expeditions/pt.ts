@@ -44,7 +44,7 @@ export const pt: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*pt*//*'Encontrámos os */'destroços de uma antiga expedição espacial'/* ! Os nossos técnicos estão a tentar meter os sistemas das naves encontradas mais uma vez operacionais.'*/,
             /*pt*//*'A tua expedição */'encontrou uma fortaleza de uma antiga celebridade'/* que foi abandonada. No hangar da fortaleza encontrámos algumas naves. Os técnicos estão a tentar ver se algumas ainda estão operacionais.'*/,
-            /*LOCA: pt /*'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*pt*//*'A nossa expedição encontrou um */'planeta que quase foi totalmente destruído durante uma guerra'/* . Conseguimos encontrar várias naves a orbitar o planeta. Os técnicos estão a tentar reparar algumas delas, talvez também poderemos reunir algumas informações do que se passou por ali.'*/,
             /*pt*//*'Descobrimos */'uma estação espacial pirata'/* ! Conseguimos encontrar umas velhas naves no hangar. Os nossos técnicos estão a verificar se elas ainda estão em bom estado.'*/,
         ],
         [ExpeditionEventSize.medium]: [
