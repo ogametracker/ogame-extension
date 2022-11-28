@@ -6,7 +6,7 @@ import { ExpeditionMessages } from "./types";
 export const es: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: es 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'La expedición ha */'logrado capturar y almacenar algo de Materia Oscura',
             /*'Encontramos los */'restos de una nave alienígena'/* . A bordo había un pequeño contenedor con algo de Materia Oscura.'*/,
             /*'Encontramos un */'extraño alienígena a bordo de una pequeña nave que nos dio un pequeño'/* recipiente con Materia Oscura a cambio de unos simples cálculos matemáticos.'*/,
             /*'Nuestra expedición */'se encontró con una nave fantasma que transportaba una pequeña'/* cantidad de Materia Oscura. No encontramos ningún indicio de qué le ocurrió a la tripulación original, pero nuestros técnicos fueron capaces de rescatar la Materia Oscura.'*/,
@@ -49,7 +49,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Nuestra expedición se */'encontró con un antiguo Hangar automático'/* . Algunas de las naves se encuentran todavía en la fase de producción y nuestros técnicos están tratando de reactivar los generadores de energía.'*/,
-            /*LOCA: es 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Encontramos */'los restos de una armada'/* . Los técnicos fueron directamente a las naves casi intactas para intentar ponerlas en funcionamiento de nuevo.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
@@ -87,7 +87,7 @@ export const es: ExpeditionMessages = {
 
     [ExpeditionEventType.early]: [
         /*'Un inesperado acoplamiento */'de energía en los motores aceleró la vuelta'/* de la expedición, de manera que volvió antes de lo esperado. Aparte de eso, los informes preliminares no reportan nada interesante.'*/,
-        /*LOCA: es 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'Tu expedición no informa de ninguna anomalía en el sector explorado. Pero la flota */'entró en una oleada de viento solar mientras volvía'/* . Su retorno se aceleró enormemente. Tu expedición vuelve a casa un poco antes de lo esperado.'*/,
         /*'El nuevo comandante, que es bastante osado, */'ordenó utilizar un agujero de gusano inestable para acortar'/* el vuelo de regreso... ¡y tuvo éxito! Sin embargo, la expedición en sí no trajo nada nuevo.'*/,
     ],
 
@@ -109,7 +109,7 @@ export const es: ExpeditionMessages = {
             /*'Unos piratas */'realmente desesperados intentaron capturar nuestra flota'/* de expedición.'*/,
             /*'Unos */'bárbaros primitivos están atacándonos con naves espaciales'/* que ni siquiera merecen tal nombre. Si nos disparan en serio, nos veremos forzados a devolver el fuego.'*/,
             /*'Interceptamos */'comunicaciones de unos piratas borrachos'/* . Se suponía que tenían que atacarnos.'*/,
-            /*LOCA: es 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Tuvimos */'que luchar contra unos piratas que'/* , por suerte, no eran demasiado numerosos.'*/,
             /*LOCA: es 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
