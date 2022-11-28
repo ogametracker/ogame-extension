@@ -3,7 +3,7 @@ const fs = require('fs');
 const process = require('process');
 
 const isDev = process.argv.includes('--dev');
-const version = process.argv.includes('--version') ?  process.argv[process.argv.indexOf('--version') + 1] : null;
+const version = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
 if (browser == null) {
     throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
@@ -33,7 +33,7 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
 
         ['js', 'css'].forEach(type => {
             const files = options[type];
-            if(files == null) {
+            if (files == null) {
                 return;
             }
 
@@ -72,9 +72,13 @@ const manifest = {
     content_scripts: [
         ...contentScripts,
     ],
-    background: {
-        service_worker: 'service-worker.js',
-    },
+    background: {},
 };
+
+if (browser == 'chrome') {
+    manifest.background.service_worker = 'service-worker.js';
+} else if (browser == 'firefox') {
+    manifest.background.scripts = ['service-worker.js'];
+}
 
 fs.writeFileSync('./dist/manifest.json', JSON.stringify(manifest, null, 4), 'utf-8');
