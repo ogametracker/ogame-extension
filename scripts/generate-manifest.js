@@ -79,6 +79,11 @@ if (browser == 'chrome') {
     manifest.background.service_worker = 'service-worker.js';
 } else if (browser == 'firefox') {
     manifest.background.scripts = ['service-worker.js'];
+    manifest.browser_specific_settings = {
+        gecko: {
+            id: 'ogame-tracker@ogame-tracker.com',
+        },
+    };
 }
 
 fs.writeFileSync('./dist/manifest.json', JSON.stringify(manifest, null, 4), 'utf-8');
