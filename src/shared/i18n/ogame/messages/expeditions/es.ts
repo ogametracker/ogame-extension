@@ -35,7 +35,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Un */'cinturón de minerales alrededor de un planeta desconocido contiene incontables recursos'/* . ¡Las naves de la expedición están de vuelta y sus almacenes están llenos!'*/,
-            /*LOCA: es 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Tu expedición informa del */'descubrimiento de una nave alienígena gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y extraer recursos útiles de ella.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Se ha capturado (?<name>${resources.join('|')}) de (?<amount>.+)\\.`, 'i'),
     },
@@ -95,7 +95,7 @@ export const es: ExpeditionMessages = {
         /*'Un pequeño fallo del */'navegador provocó un error de cálculo en el salto'/* de la expedición. No solo la flota aterrizó en un lugar completamente diferente, sino que ahora el camino de vuelta necesitará mucho más tiempo.'*/,
         /*'Tu expedición entró en */'un sector asolado por tormentas de partículas'/* . Esto provocó que los depósitos de energía se sobrecargaran, y la mayoría de los sistemas principales de las naves fallaron. Tus mecánicos lograron evitar lo peor, pero la flota va a volver con un gran retraso.'*/,
         /*'Debido a motivos desconocidos, el */'salto de la expedición fue totalmente erróneo'/* . Estuvo a punto de aterrizar en el corazón de una estrella. Afortunadamente llegaron a un sistema conocido, aunque el salto de vuelta va a llevar más tiempo del esperado.'*/,
-        /*LOCA: es 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
+        /*'El */'viento estelar de una gigante roja ha arruinado'/* los saltos de la expedición de tal manera que necesitará un tiempo para calcular el salto de retorno. Aparte de eso, no había nada más que el vacío del espacio en el sector donde apareció la expedición.'*/,
         /*'El */'nuevo módulo de navegación aún está lidiando contra algunos bugs'/* . No solo el salto de la expedición fue en una dirección totalmente errónea, sino que se consumió todo el deuterio; afortunadamente, el salto de la flota los dejó cerca de la luna de su planeta de partida. La flota de expedición retorna algo decepcionada, y casi sin impulso. A causa de ello, el retorno de la flota se retrasa un poco.'*/,
         /*'La nave */'principal de la expedición colisionó con una nave desconocida'/* que saltó sobre la flota sin ningún aviso. La nave extraña explotó, causando sustanciales daños a la nave principal. Tan pronto como se lleven a cabo las reparaciones necesarias, la flota iniciará el viaje de vuelta, dado que la expedición no puede continuar en estas condiciones.'*/,
     ],
@@ -133,7 +133,7 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'¡Una *escuadrilla */'de naves sin identificar ha atacado a nuestra'/* expedición!'*/,
             /*LOCA: es 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*LOCA: es 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'La conexión con nuestra expedición se vio interrumpida repentinamente. Si hemos descifrado correctamente su último mensaje, la flota está sufriendo un duro ataque; */'no se ha logrado identificar a los agresores',
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
