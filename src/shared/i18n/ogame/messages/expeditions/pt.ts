@@ -8,7 +8,7 @@ export const pt: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*pt*//*'A missão em */'exploração conseguiu capturar e conservar alguma Matéria Negra',
             /*pt*//*'Encontramos os */'restos de uma nave alienígena'/* ' Lá dentro encontrámos um pequeno contentor com Matéria Negra.'*/,
-            /*LOCA: pt /*'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*pt*//*'Encontrámos um */'estranho alienígena numa pequena nave que nos deu um pequeno contentor'/* com Matéria Negra em troca de uns simples cálculos matemáticos.'*/,
             /*pt*//*'A nossa frota em */'exploração encontrou uma nave-fantasma que transportava uma pequena quantidade'/* de Matéria Negra. Os engenheiros tentaram perceber o que tinha acontecido à tripulação mas não chegaram a qualquer explicação, no entanto recolheram a Matéria Negra.'*/,
             /*pt*//*'A expedição seguiu uns */'estranhos sinais vindos dum asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extracção da Matéria Negra.'*/,
         ],
