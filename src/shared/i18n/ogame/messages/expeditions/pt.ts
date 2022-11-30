@@ -14,7 +14,7 @@ export const pt: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*LOCA: pt /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*LOCA: pt /*'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*pt*//*'A nossa */'missão localiza uma antiga estação espacial que'/* , ao que parece, está a flutuar sem rumo no espaço sideral. A estação em si não é recuperável mas foi descoberta alguma Matéria Negra armazenada nos seus reactores. Os nossos técnicos tentaram recuperar tanta Matéria Negra quanta puderam.'*/,
             /*pt*//*'A nossa frota em expedição envia-nos notícias de um fenómeno espectacular. A acumulação de Matéria Negra */'nas baterias de energia dos escudos da nave'/*. Os nossos engenheiros estão a tentar recolher o máximo de Matéria Negra que podem antes do fenómeno acabar.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -34,7 +34,7 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Numa pequena lua que tinha atmosfera, a tua expedição */'encontrou um grande armazém de recursos básicos'/* . A tripulação terrestre está a tentar transferi-los para a nave.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*pt*//*'Encontrámos uma */'cinta de minerais à volta de um planeta'/* desconhecido. As naves da expedição já estão a voltar completamente cheias!'*/,
             /*pt*//*'A tua frota de expedição */'relata que encontrou os destroços de uma nave alienígena gigante'/* . Embora não tenhamos aprendido novas tecnologias conseguimos resgatar alguns recursos da blindagem da nave.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Foram roubados (?<amount>.+) de (?<name>${resources.join('|')})`, 'i'),
@@ -86,7 +86,7 @@ export const pt: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: pt /*'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        /*pt*//*'Um problema inesperado no */'campo energético dos motores fez com que a expedição'/* voltasse mais rapidamente para casa. Os relatórios primários não revelam qualquer descoberta.'*/,
         /*pt*//*'A tua expedição não reportou qualquer anomalia no sector explorado. Mas a frota enquanto voltava, */'apanhou um pouco de vento solar'/*. Devido a esta ocorrência a viagem de volta foi mais rápida. A tua frota de expedição volta ao ponto de partida um pouco mais cedo.'*/,
         /*pt*//*'Um comandante novo e destemido */'conseguiu atravessar um wormhole instável'/* diminuindo assim a duração do voo! Contudo, a expedição não trouxe nada de novo.'*/,
     ],
