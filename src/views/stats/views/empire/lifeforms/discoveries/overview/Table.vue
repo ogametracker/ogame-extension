@@ -20,7 +20,7 @@
                 <span v-else-if="value == lifeformFoundLabel" class="mdi mdi-star-shooting" :style="{ color: colors.knownLifeformFound }" />
                 <span
                     v-else-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.artifacts"
-                    class="mdi mdi-flare"
+                    class="mdi mdi-pyramid"
                     :style="{ color: colors.artifacts }"
                 />
             </template>

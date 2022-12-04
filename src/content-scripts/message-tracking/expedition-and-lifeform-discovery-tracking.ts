@@ -394,7 +394,7 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             return `
                 <div class="${getLifeformDiscoveryResultClass(lifeformDiscovery.type, lifeformDiscovery.size)}">
                     <div class="${getLifeformDiscoveryMissionArtifactSizeIconClass(lifeformDiscovery.size)}"></div>
-                    <span class="mdi mdi-flare"></span>
+                    <span class="mdi mdi-pyramid${lifeformDiscovery.size == LifeformDiscoveryEventArtifactFindingSize.storageFull ? '-off' : ''}"></span>
                     <span>${lifeformDiscovery.artifacts}</span>
                 </div>
             `;
@@ -418,7 +418,7 @@ function getLifeformDiscoveryMissionArtifactSizeIconClass(size: LifeformDiscover
         [LifeformDiscoveryEventArtifactFindingSize.small]: 'mdi-hexagon-slice-1',
         [LifeformDiscoveryEventArtifactFindingSize.medium]: 'mdi-hexagon-slice-3',
         [LifeformDiscoveryEventArtifactFindingSize.large]: 'mdi-hexagon-slice-5',
-        [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'mdi-hexagon-slice-6',
+        [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'mdi-hexagon-outline',
     }[size]);
 }
 

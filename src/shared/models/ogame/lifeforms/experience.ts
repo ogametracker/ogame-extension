@@ -1,4 +1,4 @@
-const bonusPerLevel = 0.01; //1%
+const bonusPerLevel = 0.00_1; //0.11%
 
 export function getLifeformLevelTechnologyBonus(experience: number): number {
     const level = getLifeformLevel(experience);
@@ -14,6 +14,10 @@ export function getLifeformLevel(experience: number): number {
     }
 }
 
+export function getExperienceNeededForLevelUp(level: number): number {
+    return 900 * level;
+}
+
 export function getLifeformExperienceNeededForLevel(level: number): number {
-    return 5_500 * level * 2 ** (level * 2) + 1;
+    return 900 * level * (level + 1) / 2; // gaussian summation formula
 }

@@ -1,17 +1,17 @@
 import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
 import { PlanetData } from "@/shared/models/empire/PlanetData";
 import { createRecord } from "@/shared/utils/createRecord";
-import { getLifeformLevel } from "../experience";
+import { getLifeformLevelTechnologyBonus } from "../experience";
 import { LifeformType, ValidLifeformTypes } from "../LifeformType";
 import { LifeformTechnologyBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
 
 export function getLifeformTechnologyBonus(player: LocalPlayerData): Record<number, number> {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
     const technologyBonusByPlanet = createRecord(planets.map(p => p.id), 0);
-    const techBonusPerLevel = 0.01; // 1.0%
+    
     const levelTechnologyBonus = createRecord(
         ValidLifeformTypes,
-        lf => getLifeformLevel(player.lifeformExperience[lf]) * techBonusPerLevel
+        lf => getLifeformLevelTechnologyBonus(player.lifeformExperience[lf]),
     );
     for (const planet of planets) {
         if (planet.activeLifeform == LifeformType.none) {
