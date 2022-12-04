@@ -112,7 +112,7 @@ export const es_ar: ExpeditionMessages = {
             /*'Algunos */'piratas realmente desesperados intentaron capturar'/* nuestra flota de expedición.'*/,
             /*'Algunos */'bárbaros primitivos están atacándonos con naves'/* espaciales que no deberían ser llamadas así. Si nos disparan en serio nos veremos forzados a devolver el fuego. '*/,
             /*'Capturamos algunos */'mensajes de radio de algunos piratas borrachos'/* . Pareciera como si nos quisieran atacar.'*/,
-            /*'Tuvimos que */'luchar contra algunos piratas que por suerte'/* no eran muchos.'*/,
+            'Necesitamos luchar con algunos piratas que eran'/* , por suerte, solo unos pocos.'*/,
             /*LOCA: es-ar 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [

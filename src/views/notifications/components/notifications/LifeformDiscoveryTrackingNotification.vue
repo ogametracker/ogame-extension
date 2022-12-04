@@ -28,6 +28,14 @@
                 </div>
             </template>
 
+            <template v-if="foundArtifacts">
+                <hr />
+                <div class="result-grid artifact-grid">
+                    <span class="mdi mdi-flare" :style="{ color: colors.artifacts }" />
+                    <span v-text="$i18n.$n(notification.artifacts)" />
+                </div>
+            </template>
+
             <hr />
             <div class="result-grid" v-if="showSimplified">
                 <template v-if="notification.events.lostShip > 0">
@@ -37,6 +45,10 @@
                 <template v-if="lifeformFindingCount > 0">
                     <span class="mdi mdi-star-shooting" :style="{ color: colors.knownLifeformFound }" />
                     <span v-text="$i18n.$n(lifeformFindingCount)" />
+                </template>
+                <template v-if="notification.events.artifacts > 0">
+                    <span class="mdi mdi-flare" :style="{ color: colors.artifacts }" />
+                    <span v-text="$i18n.$n(notification.events.artifacts)" />
                 </template>
                 <template v-if="notification.events.nothing > 0">
                     <span class="mdi mdi-close" :style="{ color: colors.nothing }" />
@@ -82,7 +94,7 @@
         }
 
         private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
         }
 
         private readonly LifeformTypes = ValidLifeformTypes;
@@ -98,6 +110,10 @@
 
         private get foundExperience() {
             return Object.values(this.notification.lifeformExperience).some(xp => xp > 0);
+        }
+
+        private get foundArtifacts() {
+            return this.notification.artifacts > 0;
         }
 
         private get title() {

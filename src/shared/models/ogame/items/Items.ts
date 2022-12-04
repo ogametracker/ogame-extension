@@ -2,761 +2,762 @@ import { ItemHash } from "./ItemHash";
 import { ItemGrade } from "./ItemGrade";
 import { Item } from "./Item";
 
-export const Items: Record<ItemHash, Item> = Object.freeze({
-    "2dd05cc4c0e185fce2e712112dc44932027aee98": {
+export const Items: Record<ItemHash, Item> = {
+    [ItemHash.discoverer]: {
         name: "Entdecker",
         image: "3ecbd5114c3b663aa1a1252fc03091eecc790f10",
         smallImage: 'e9278159a8c40e2e9337ba3495f0b5af1e2c9d05',
-        hash: "2dd05cc4c0e185fce2e712112dc44932027aee98" as ItemHash,
+        hash: ItemHash.discoverer,
         grade: ItemGrade.none,
     },
-    "9374c79a24b84c4331f0d26526ef6c2d33319a6e": {
+    [ItemHash.collector]: {
         name: "Kollektor",
         image: "09726bf92556fc12b55ec5ee00516af0223b7713",
         smallImage: '90b2366b4c96638a1a8b419a1c9ad762147ef38a',
-        hash: "9374c79a24b84c4331f0d26526ef6c2d33319a6e" as ItemHash,
+        hash: ItemHash.collector,
         grade: ItemGrade.none,
     },
-    "77eff880829027daf23b755e14820a60c4c6fd93": {
+    [ItemHash.general]: {
         name: "General",
         image: "4b999ea0089c6358b5531635b37e280cfae62da2",
         smallImage: '3885fd784f5ccbda9f9a30040b1dffc98e204305',
-        hash: "77eff880829027daf23b755e14820a60c4c6fd93" as ItemHash,
+        hash: ItemHash.general,
         grade: ItemGrade.none,
     },
 
-    "1aa36213cb676fd5baad5edc2bee4fbe117a778b": {
+    [ItemHash.researcher]: {
         name: "Forscher",
         image: "55f7003a5cf07e52b38f11b81129ac5042dff4da",
         smallImage: '0fad76886bc161e860f8ffb04a1838ba21e377e6',
-        hash: "1aa36213cb676fd5baad5edc2bee4fbe117a778b" as ItemHash,
+        hash: ItemHash.researcher,
         grade: ItemGrade.none,
     },
-    "6c9fe5e35bdad0d4e3382eb6a5aeac6bc8263752": {
+    [ItemHash.trader]: {
         name: "Händler",
         image: "5df93e894bb92e987219fc9d669c9a276ceb5499",
         smallImage: 'b52a99657970f97a8881f2493be63e3a58c8d49f',
-        hash: "6c9fe5e35bdad0d4e3382eb6a5aeac6bc8263752" as ItemHash,
+        hash: ItemHash.trader,
         grade: ItemGrade.none,
     },
-    "9b48e257cbef6c5df0f03a47cead7f9abda3d437": {
+    [ItemHash.warrior]: {
         name: "Krieger",
         image: "48ca2adbb95b37db83777b659cfc4042c179fece",
         smallImage: 'a2d0a5aa06f932c7ecbd76906d44d4b46e338600',
-        hash: "9b48e257cbef6c5df0f03a47cead7f9abda3d437" as ItemHash,
+        hash: ItemHash.warrior,
         grade: ItemGrade.none,
     },
 
-    "b956c46faa8e4e5d8775701c69dbfbf53309b279": {
-        hash: "b956c46faa8e4e5d8775701c69dbfbf53309b279" as ItemHash,
+    [ItemHash.metalBooster_bronze_1day]: {
+        hash: ItemHash.metalBooster_bronze_1day,
         smallImage: '',
         image: "61b6be10761f20795844e467916f8cc2802dd680",
         name: "Metall-Booster Bronze (1 Tag)",
         grade: ItemGrade.bronze,
     },
-    "de922af379061263a56d7204d1c395cefcfb7d75": {
-        hash: "de922af379061263a56d7204d1c395cefcfb7d75" as ItemHash,
+    [ItemHash.metalBooster_bronze_7days]: {
+        hash: ItemHash.metalBooster_bronze_7days,
         smallImage: 'cea22d098a0b48c8960101e05c0bd2a7fadc72c5',
         image: "7f833a0709db862070ca9cdca8e91c28e52432af",
         name: "Metall-Booster Bronze (7 Tage)",
         grade: ItemGrade.bronze,
     },
-    "ba85cc2b8a5d986bbfba6954e2164ef71af95d4a": {
+    [ItemHash.metalBooster_silver_7days]: {
         name: "Metall-Booster Silber (7 Tage)",
         image: "db8f26a29991086cadd9db7deff044d89cd47de",
         smallImage: '1ab70d0954b4ebbb91e020c60afbaacb28707e5d',
-        hash: "ba85cc2b8a5d986bbfba6954e2164ef71af95d4a" as ItemHash,
+        hash: ItemHash.metalBooster_silver_7days,
         grade: ItemGrade.silver,
     },
-    "742743b3b0ae1f0b8a1e01921042810b58f12f39": {
+    [ItemHash.metalBooster_silver_30days]: {
         name: "Metall-Booster Silber (30 Tage)",
         image: "2bd0b5df51b77a3cb65d01568171cb991e047ac5",
         smallImage: '5e62926be58e94ebb28a231ecad87f8e852d0f6d',
-        hash: "742743b3b0ae1f0b8a1e01921042810b58f12f39" as ItemHash,
+        hash: ItemHash.metalBooster_silver_30days,
         grade: ItemGrade.silver,
     },
-    "6f44dcd2bd84875527abba69158b4e976c308bbc": {
+    [ItemHash.metalBooster_silver_90days]: {
         name: "Metall-Booster Silber (90 Tage)",
         image: "6b4ea2ced99211b1b9f0b84fb8a312f0f053a366",
         smallImage: '2e4d16cdaec1ea8ba2af28c914bb80f4d0939ce3',
-        hash: "6f44dcd2bd84875527abba69158b4e976c308bbc" as ItemHash,
+        hash: ItemHash.metalBooster_silver_90days,
         grade: ItemGrade.silver,
     },
-    "05294270032e5dc968672425ab5611998c409166": {
+    [ItemHash.metalBooster_gold_7days]: {
         name: "Metall-Booster Gold (7 Tage)",
         image: "3d0e872a750a6dae2f2a5a7011ec79794bb0e676",
         smallImage: '780aa9d6619ae572a318dacc29e7bb77ad980380',
-        hash: "05294270032e5dc968672425ab5611998c409166" as ItemHash,
+        hash: ItemHash.metalBooster_gold_7days,
         grade: ItemGrade.gold,
     },
-    "6fecb993169fe918d9c63cd37a2e541cc067664e": {
+    [ItemHash.metalBooster_gold_30days]: {
         name: "Metall-Booster Gold (30 Tage)",
         image: "eacc8d23eef74f5dd4b91b99a654e0d63450fa07",
         smallImage: '9132f52e224e6ba87677e5ccc5cd1391320cf7d2',
-        hash: "6fecb993169fe918d9c63cd37a2e541cc067664e" as ItemHash,
+        hash: ItemHash.metalBooster_gold_30days,
         grade: ItemGrade.gold,
     },
-    "21c1a65ca6aecf54ffafb94c01d0c60d821b325d": {
+    [ItemHash.metalBooster_gold_90days]: {
         name: "Metall-Booster Gold (90 Tage)",
         image: "b5ed0c10e3396c3cbab4dff2a778e2676f7b936a",
         smallImage: 'a0cba1aa5de23e877b10b196f40855bafc91256c',
-        hash: "21c1a65ca6aecf54ffafb94c01d0c60d821b325d" as ItemHash,
+        hash: ItemHash.metalBooster_gold_90days,
         grade: ItemGrade.gold,
     },
-    "a83cfdc15b8dba27c82962d57e50d8101d263cfb": {
+    [ItemHash.metalBooster_platinum_7days]: {
         name: "Metall-Booster Platin (7 Tage)",
         image: "34752e40512a574a74464006d326bd6aebecb1f1",
         smallImage: 'b29918a7d1f313fd91d788c9c444dfbe996640ee',
-        hash: "a83cfdc15b8dba27c82962d57e50d8101d263cfb" as ItemHash,
+        hash: ItemHash.metalBooster_platinum_7days,
         grade: ItemGrade.platinum,
     },
-    "c690f492cffe5f9f2952337e8eed307a8a62d6cf": {
+    [ItemHash.metalBooster_platinum_30days]: {
         name: "Metall-Booster Platin (30 Tage)",
         image: "ff1ad1a6d5879cb0ea720199c9eb6518584f0922",
         smallImage: 'ce3bb161706f1788c893b3196834d67102318866',
-        hash: "c690f492cffe5f9f2952337e8eed307a8a62d6cf" as ItemHash,
+        hash: ItemHash.metalBooster_platinum_30days,
         grade: ItemGrade.platinum,
     },
-    "ca7f903a65467b70411e513b0920d66c417aa3a2": {
+    [ItemHash.metalBooster_platinum_90days]: {
         name: "Metall-Booster Platin (90 Tage)",
         image: "ff96652e498d26f8d2621b0599808860f11ee31c",
         smallImage: 'e17ff7930eb79c7207502348180a2b4a437474d4',
-        hash: "ca7f903a65467b70411e513b0920d66c417aa3a2" as ItemHash,
+        hash: ItemHash.metalBooster_platinum_90days,
         grade: ItemGrade.platinum,
     },
 
-    "090a969b05d1b5dc458a6b1080da7ba08b84ec7f": {
-        hash: "090a969b05d1b5dc458a6b1080da7ba08b84ec7f" as ItemHash,
+    [ItemHash.crystalBooster_bronze_1day]: {
+        hash: ItemHash.crystalBooster_bronze_1day,
         image: "c6772214b0a510ee02d69fbd6c4bd6eae609a3f8",
         smallImage: '',
         name: "Kristall-Booster Bronze (1 Tag)",
         grade: ItemGrade.bronze,
     },
-    "3c9f85221807b8d593fa5276cdf7af9913c4a35d": {
-        hash: "3c9f85221807b8d593fa5276cdf7af9913c4a35d" as ItemHash,
+    [ItemHash.crystalBooster_bronze_7days]: {
+        hash: ItemHash.crystalBooster_bronze_7days,
         image: "ddedd2f4128678c7c857af7e5550e397f50f38c2",
         smallImage: '286f3eaf6072f55d8858514b159d1df5f16a5654',
         name: "Kristall-Booster Bronze (7 Tage)",
         grade: ItemGrade.bronze,
     },
-    "422db99aac4ec594d483d8ef7faadc5d40d6f7d3": {
+    [ItemHash.crystalBooster_silver_7days]: {
         name: "Kristall-Booster Silber (7 Tage)",
         image: "6e1d20e739c143784d10e58ddb4c50c52122a40a",
         smallImage: 'a703be5a40a8fe8128466721f5f925ae1e86d13a',
-        hash: "422db99aac4ec594d483d8ef7faadc5d40d6f7d3" as ItemHash,
+        hash: ItemHash.crystalBooster_silver_7days,
         grade: ItemGrade.silver,
     },
-    "5b69663e3ba09a1fe77cf72c5094e246cfe954d6": {
+    [ItemHash.crystalBooster_silver_30days]: {
         name: "Kristall-Booster Silber (30 Tage)",
         image: "4cb9628975e286b2cf4949ef4d216bccc1813a77",
         smallImage: '2746f4d2372da032f4daa294606ee88e5ca7a46a',
-        hash: "5b69663e3ba09a1fe77cf72c5094e246cfe954d6" as ItemHash,
+        hash: ItemHash.crystalBooster_silver_30days,
         grade: ItemGrade.silver,
     },
-    "04d8afd5936976e32ce894b765ea8bd168aa07ef": {
+    [ItemHash.crystalBooster_silver_90days]: {
         name: "Kristall-Booster Silber (90 Tage)",
         image: "23f7d50e917ed39c5b755b95786e8cf4c4141279",
         smallImage: '60a0fee6f82b2b4cec6928c1b052ac586f0b2a0d',
-        hash: "04d8afd5936976e32ce894b765ea8bd168aa07ef" as ItemHash,
+        hash: ItemHash.crystalBooster_silver_90days,
         grade: ItemGrade.silver,
     },
-    "118d34e685b5d1472267696d1010a393a59aed03": {
+    [ItemHash.crystalBooster_gold_7days]: {
         name: "Kristall-Booster Gold (7 Tage)",
         image: "bdb4508609de1df58bf4a6108fff73078c89f777",
         smallImage: '206bc65589c10c31b645c34991c12fc8556165b2',
-        hash: "118d34e685b5d1472267696d1010a393a59aed03" as ItemHash,
+        hash: ItemHash.crystalBooster_gold_7days,
         grade: ItemGrade.gold,
     },
-    "36fb611e71d42014f5ebd0aa5a52bc0c81a0c1cb": {
+    [ItemHash.crystalBooster_gold_30days]: {
         name: "Kristall-Booster Gold (30 Tage)",
         image: "5b84505319073e6b71900cfd059657750317ae23",
         smallImage: '627957046e2d5315bf13104e258ca0ea37ca7489',
-        hash: "36fb611e71d42014f5ebd0aa5a52bc0c81a0c1cb" as ItemHash,
+        hash: ItemHash.crystalBooster_gold_30days,
         grade: ItemGrade.gold,
     },
-    "d45f00e8b909f5293a83df4f369737ea7d69c684": {
+    [ItemHash.crystalBooster_gold_90days]: {
         name: "Kristall-Booster Gold (90 Tage)",
         image: "efdf5966695a147aaa26442f811346e8b749ec6d",
         smallImage: '11d508fc74f136dde21fe9506cad6db3d43149d5',
-        hash: "d45f00e8b909f5293a83df4f369737ea7d69c684" as ItemHash,
+        hash: ItemHash.crystalBooster_gold_90days,
         grade: ItemGrade.gold,
     },
-    "35d96e441c21ef112a84c618934d9d0f026998fd": {
+    [ItemHash.crystalBooster_platinum_7days]: {
         name: "Kristall-Booster Platin (7 Tage)",
         image: "9952055cf47d116eedeec429a469b61abdf6ce72",
         smallImage: '5650071c78c9fcf9681fc2c780694de96de29c1b',
-        hash: "35d96e441c21ef112a84c618934d9d0f026998fd" as ItemHash,
+        hash: ItemHash.crystalBooster_platinum_7days,
         grade: ItemGrade.platinum,
     },
-    "6bf45fcba8a6a68158273d04a924452eca75cf39": {
+    [ItemHash.crystalBooster_platinum_30days]: {
         name: "Kristall-Booster Platin (30 Tage)",
         image: "d4e203516d95ae28081a3d985818e2df5a2475d4",
         smallImage: 'd3f3321fcd999f657e9dc4ccf9cb34731524123f',
-        hash: "6bf45fcba8a6a68158273d04a924452eca75cf39" as ItemHash,
+        hash: ItemHash.crystalBooster_platinum_30days,
         grade: ItemGrade.platinum,
     },
-    "7c2edf40c5cd54ad11c6439398b83020c0a7a6be": {
+    [ItemHash.crystalBooster_platinum_90days]: {
         name: "Kristall-Booster Platin (90 Tage)",
         image: "5a16b583800c72b8eef5585fd5aa0bbd8e5c2c0f",
         smallImage: '5e33a2cfb73e9054540c5172f66b770b28765475',
-        hash: "7c2edf40c5cd54ad11c6439398b83020c0a7a6be" as ItemHash,
+        hash: ItemHash.crystalBooster_platinum_90days,
         grade: ItemGrade.platinum,
     },
 
-    "e254352ac599de4dd1f20f0719df0a070c623ca8": {
-        hash: "e254352ac599de4dd1f20f0719df0a070c623ca8" as ItemHash,
+    [ItemHash.deuteriumBooster_bronze_1day]: {
+        hash: ItemHash.deuteriumBooster_bronze_1day,
         image: "5f7a90f4d43866b781c61f7511bb8363252639a4",
         smallImage: '',
         name: "Deuterium-Booster Bronze (1 Tag)",
         grade: ItemGrade.bronze,
     },
-    "d9fa5f359e80ff4f4c97545d07c66dbadab1d1be": {
-        hash: "d9fa5f359e80ff4f4c97545d07c66dbadab1d1be" as ItemHash,
+    [ItemHash.deuteriumBooster_bronze_7days]: {
+        hash: ItemHash.deuteriumBooster_bronze_7days,
         smallImage: 'f0e514af79d0808e334e9b6b695bf864b861bdfa',
         image: "c7c2837a0b341d37383d6a9d8f8986f500db7bf9",
         name: "Deuterium-Booster Bronze (7 Tage)",
         grade: ItemGrade.bronze,
     },
-    "e4b78acddfa6fd0234bcb814b676271898b0dbb3": {
+    [ItemHash.deuteriumBooster_silver_7days]: {
         name: "Deuterium-Booster Silber (7 Tage)",
         image: "7d3064415ec1a60100db024471fb0c1fa8ab3726",
         smallImage: 'd5c2ed6852d80e61359aef62171ec7c932fc3bd7',
-        hash: "e4b78acddfa6fd0234bcb814b676271898b0dbb3" as ItemHash,
+        hash: ItemHash.deuteriumBooster_silver_7days,
         grade: ItemGrade.silver,
     },
-    "26416a3cdb94613844b1d3ca78b9057fd6ae9b15": {
+    [ItemHash.deuteriumBooster_silver_30days]: {
         name: "Deuterium-Booster Silber (30 Tage)",
         image: "7c48195115d4b4c97ac5b651b0cd766463631b7a",
         smallImage: '14a51990fe394912463be7a591b8c3fd41a47aad',
-        hash: "26416a3cdb94613844b1d3ca78b9057fd6ae9b15" as ItemHash,
+        hash: ItemHash.deuteriumBooster_silver_30days,
         grade: ItemGrade.silver,
     },
-    "6f0952a919fd2ab9c009e9ccd83c1745f98f758f": {
+    [ItemHash.deuteriumBooster_silver_90days]: {
         name: "Deuterium-Booster Silber (90 Tage)",
         image: "c7850b988587f08689f6d2d8e579bfde146525dd",
         smallImage: 'b4c6a0e05891b6bfd9509bd92b6653d61fdae8e5',
-        hash: "6f0952a919fd2ab9c009e9ccd83c1745f98f758f" as ItemHash,
+        hash: ItemHash.deuteriumBooster_silver_90days,
         grade: ItemGrade.silver,
     },
-    "5560a1580a0330e8aadf05cb5bfe6bc3200406e2": {
+    [ItemHash.deuteriumBooster_gold_7days]: {
         name: "Deuterium-Booster Gold (7 Tage)",
         image: "d52a66ed7b32cf220746cc3618a885876fce520e",
         smallImage: 'db408084e3b2b7b0e1fe13d9f234d2ebd76f11c5',
-        hash: "5560a1580a0330e8aadf05cb5bfe6bc3200406e2" as ItemHash,
+        hash: ItemHash.deuteriumBooster_gold_7days,
         grade: ItemGrade.gold,
     },
-    "300493ddc756869578cb2888a3a1bc0c3c66765f": {
+    [ItemHash.deuteriumBooster_gold_30days]: {
         name: "Deuterium-Booster Gold (30 Tage)",
         image: "b5d2db0f5428b76ce91a51daea5959426053e973",
         smallImage: '9f8eab23fd888c7d3c5a07e0d250a66f017ecec7',
-        hash: "300493ddc756869578cb2888a3a1bc0c3c66765f" as ItemHash,
+        hash: ItemHash.deuteriumBooster_gold_30days,
         grade: ItemGrade.gold,
     },
-    "dc5896bed3311434224d511fa7ced6fdbe41b4e8": {
+    [ItemHash.deuteriumBooster_gold_90days]: {
         name: "Deuterium-Booster Gold (90 Tage)",
         image: "b4abecddc518baa61d2f2004687cfbd89d34e7c7",
         smallImage: '4c7de7803df3ccb01d546ebce9e71379b1c49719',
-        hash: "dc5896bed3311434224d511fa7ced6fdbe41b4e8" as ItemHash,
+        hash: ItemHash.deuteriumBooster_gold_90days,
         grade: ItemGrade.gold,
     },
-    "4b51d903560edd102467b110586000bd64fdb954": {
+    [ItemHash.deuteriumBooster_platinum_7days]: {
         name: "Deuterium-Booster Platin (7 Tage)",
         image: "2d1d4247ba12a3185bfd423023b7b551cf841ac3",
         smallImage: '7a10926f00a92b563713ade10f89777a98efd96c',
-        hash: "4b51d903560edd102467b110586000bd64fdb954" as ItemHash,
+        hash: ItemHash.deuteriumBooster_platinum_7days,
         grade: ItemGrade.platinum,
     },
-    "620f779dbffa1011aded69b091239727910a3d03": {
+    [ItemHash.deuteriumBooster_platinum_30days]: {
         name: "Deuterium-Booster Platin (30 Tage)",
         image: "8245a9d21fb27088b25d48ae024e9382fcea1448",
         smallImage: 'd9b86d155a459c658cb7bfca594ce4b48e24546b',
-        hash: "620f779dbffa1011aded69b091239727910a3d03" as ItemHash,
+        hash: ItemHash.deuteriumBooster_platinum_30days,
         grade: ItemGrade.platinum,
     },
-    "831c3ea8d868eb3601536f4d5e768842988a1ba9": {
+    [ItemHash.deuteriumBooster_platinum_90days]: {
         name: "Deuterium-Booster Platin (90 Tage)",
         image: "55a877e91716da736ccec66817e611a61c9a1e4a",
         smallImage: '55966a0911221acfc9b7a88791a2846f659a1e29',
-        hash: "831c3ea8d868eb3601536f4d5e768842988a1ba9" as ItemHash,
+        hash: ItemHash.deuteriumBooster_platinum_90days,
         grade: ItemGrade.platinum,
     },
 
-    "3f6f381dc9b92822406731a942c028adf8dc978f": {
+    [ItemHash.energyBooster_bronze_7days]: {
         name: "Energie-Booster Bronze (7 Tage)",
         image: "daba686ad7f01a5d1e8b28bd13a1a9d1b8efe19c",
         smallImage: 'a020705ab782f54a75244eefaee69019d4f25abb',
-        hash: "3f6f381dc9b92822406731a942c028adf8dc978f" as ItemHash,
+        hash: ItemHash.energyBooster_bronze_7days,
         grade: ItemGrade.bronze,
     },
-    "c2bad58fcec374d709099d11d0549e59ea7e233e": {
+    [ItemHash.energyBooster_silver_7days]: {
         name: "Energie-Booster Silber (7 Tage)",
         image: "78277dabf424cfe6d902fcb67c10d7a81686a51f",
         smallImage: '162edd06c200f8eb655f31e5c6b98c89fabd7f82',
-        hash: "c2bad58fcec374d709099d11d0549e59ea7e233e" as ItemHash,
+        hash: ItemHash.energyBooster_silver_7days,
         grade: ItemGrade.silver,
     },
-    "bedd248aaf288c27e9351cfacfa6be03f1dbb898": {
+    [ItemHash.energyBooster_silver_30days]: {
         name: "Energie-Booster Silber (30 Tage)",
         image: "009ba047272acf73dfacca91dbef8e9c3b8d5a29",
         smallImage: '24e7e9df03218996c2bc8fd7629bce7bb735e083',
-        hash: "bedd248aaf288c27e9351cfacfa6be03f1dbb898" as ItemHash,
+        hash: ItemHash.energyBooster_silver_30days,
         grade: ItemGrade.silver,
     },
-    "e05aa5b9e3df5be3857b43da8403eafbf5ad3b96": {
+    [ItemHash.energyBooster_silver_90days]: {
         name: "Energie-Booster Silber (90 Tage)",
         image: "0b9e7bcf137a106982345e37a33127400e201ffa",
         smallImage: '3f1c1c7bec997542f706afab4e3e31e89473875a',
-        hash: "e05aa5b9e3df5be3857b43da8403eafbf5ad3b96" as ItemHash,
+        hash: ItemHash.energyBooster_silver_90days,
         grade: ItemGrade.silver,
     },
-    "55b52cbfb148ec80cd4e5b0580f7bed01149d643": {
+    [ItemHash.energyBooster_gold_7days]: {
         name: "Energie-Booster Gold (7 Tage)",
         image: "8c59dc4096d4cbddfc83a3a29ed6a64fa4696388",
         smallImage: 'a1fd30dc5e5a3d0c68bb0116a45e1303ae8d3d70',
-        hash: "55b52cbfb148ec80cd4e5b0580f7bed01149d643" as ItemHash,
+        hash: ItemHash.energyBooster_gold_7days,
         grade: ItemGrade.gold,
     },
-    "4fa9a2273ee446284d5177fd9d60a22de01e932b": {
+    [ItemHash.energyBooster_gold_30days]: {
         name: "Energie-Booster Gold (30 Tage)",
         image: "76bc563f528108c6d65b8f3a75789d929e2eae2b",
         smallImage: '067d550b6153abc635b3c1dc5455ce2b75957758',
-        hash: "4fa9a2273ee446284d5177fd9d60a22de01e932b" as ItemHash,
+        hash: ItemHash.energyBooster_gold_30days,
         grade: ItemGrade.gold,
     },
-    "5ad783dcfce3655ef97b36197425718a0dad6b66": {
+    [ItemHash.energyBooster_gold_90days]: {
         name: "Energie-Booster Gold (90 Tage)",
         image: "e7153f5de2c83321c908c2c3fcb76fb874547b5d",
         smallImage: 'ad67e4e7cc75c80a9d4e4424e2e44808312d1bbf',
-        hash: "5ad783dcfce3655ef97b36197425718a0dad6b66" as ItemHash,
+        hash: ItemHash.energyBooster_gold_90days,
         grade: ItemGrade.gold,
     },
-    "77c36199102e074dca46f5f26ef57ce824d044dd": {
+    [ItemHash.energyBooster_platinum_7days]: {
         name: "Energie-Booster Platin (7 Tage)",
         image: "a09b4c480b8b6971d73cc6d5102e4c2d217f51aa",
         smallImage: '253e0610c53379ce1c99410b23be2d49ee869d45',
-        hash: "77c36199102e074dca46f5f26ef57ce824d044dd" as ItemHash,
+        hash: ItemHash.energyBooster_platinum_7days,
         grade: ItemGrade.platinum,
     },
-    "dfe86378f8c3d7f3ee0790ea64603bc44e83ca47": {
+    [ItemHash.energyBooster_platinum_30days]: {
         name: "Energie-Booster Platin (30 Tage)",
         image: "9d13f9cd483fe22e01f33ada7511677fa8556e4e",
         smallImage: '9acaa2896f0e6750d121d4b2263dc772dd36ad60',
-        hash: "dfe86378f8c3d7f3ee0790ea64603bc44e83ca47" as ItemHash,
+        hash: ItemHash.energyBooster_platinum_30days,
         grade: ItemGrade.platinum,
     },
-    "c39aa972a971e94b1d9b4d7a8f734b3d8be12534": {
+    [ItemHash.energyBooster_platinum_90days]: {
         name: "Energie-Booster Platin (90 Tage)",
         image: "b1013d0e9eea34419d4b2acd05c4adcd15868417",
         smallImage: 'bcf756fab39cd83c5975c9aa7dfbc087ec0dbb3b',
-        hash: "c39aa972a971e94b1d9b4d7a8f734b3d8be12534" as ItemHash,
+        hash: ItemHash.energyBooster_platinum_90days,
         grade: ItemGrade.platinum,
     },
 
-    "be67e009a5894f19bbf3b0c9d9b072d49040a2cc": {
+    [ItemHash.moonFields_bronze]: {
         name: "Mondfelder Bronze",
         image: "fc59d4cb4bb28d6b9f43a8dd8bdd8ff9bb36674c",
         smallImage: '5676f99ae9818560720d97d0061fd480ca632837',
-        hash: "be67e009a5894f19bbf3b0c9d9b072d49040a2cc" as ItemHash,
+        hash: ItemHash.moonFields_bronze,
         grade: ItemGrade.bronze,
     },
-    "c21ff33ba8f0a7eadb6b7d1135763366f0c4b8bf": {
+    [ItemHash.moonFields_silver]: {
         name: "Mondfelder Silber",
         image: "f3c070b68fcc9a9fb5189056cfcbc657daafe34e",
         smallImage: '61534566b7942eb2669163cc26232bd449b3f8f0',
-        hash: "c21ff33ba8f0a7eadb6b7d1135763366f0c4b8bf" as ItemHash,
+        hash: ItemHash.moonFields_silver,
         grade: ItemGrade.silver,
     },
-    "05ee9654bd11a261f1ff0e5d0e49121b5e7e4401": {
+    [ItemHash.moonFields_gold]: {
         name: "Mondfelder Gold",
         image: "5dbf1cc479110bc65469477c127b81870e4af9a2",
         smallImage: '993278c3354e17af9e24a4b681770552518b27a6',
-        hash: "05ee9654bd11a261f1ff0e5d0e49121b5e7e4401" as ItemHash,
+        hash: ItemHash.moonFields_gold,
         grade: ItemGrade.gold,
     },
-    "8a426241572b2fea57844acd99bc326fe40e35cf": {
+    [ItemHash.moonFields_platinum]: {
         name: "Mondfelder Platin",
         image: "d25f5ba50e9b154aba44bd5616019450b9165b4a",
         smallImage: '69e30e56b80972e492b9becda4ef429724e9913f',
-        hash: "8a426241572b2fea57844acd99bc326fe40e35cf" as ItemHash,
+        hash: ItemHash.moonFields_platinum,
         grade: ItemGrade.platinum,
     },
 
-    "485a6d5624d9de836d3eb52b181b13423f795770": {
+    [ItemHash.moonShot_bronze]: {
         name: "M.O.O.N.S. Bronze",
         image: "261509b47bbb630462def327128eefbb8344ea86",
         smallImage: 'a0dd8b12aa51f3f59b4897bd5f56ad3c999a69db',
-        hash: "485a6d5624d9de836d3eb52b181b13423f795770" as ItemHash,
+        hash: ItemHash.moonShot_bronze,
         grade: ItemGrade.bronze,
     },
-    "fd895a5c9fd978b9c5c7b65158099773ba0eccef": {
+    [ItemHash.moonShot_silver]: {
         name: "M.O.O.N.S. Silber",
         image: "13ac941d1254701e2ea11a7f401ac8dd0a6a3760",
         smallImage: '5fcb68729c6ec78b05d7c20e6d09a9fe41dba537',
-        hash: "fd895a5c9fd978b9c5c7b65158099773ba0eccef" as ItemHash,
+        hash: ItemHash.moonShot_silver,
         grade: ItemGrade.silver,
     },
-    "45d6660308689c65d97f3c27327b0b31f880ae75": {
+    [ItemHash.moonShot_gold]: {
         name: "M.O.O.N.S. Gold",
         image: "ea9cc6187220bd33632353fca79bbabf3f9cb0be",
         smallImage: '35cba6d3db1f6e55e1d74f7ef7510e84c00d01b3',
-        hash: "45d6660308689c65d97f3c27327b0b31f880ae75" as ItemHash,
+        hash: ItemHash.moonShot_gold,
         grade: ItemGrade.gold,
     },
 
-    "16768164989dffd819a373613b5e1a52e226a5b0": {
+    [ItemHash.planetFields_bronze]: {
         name: "Planetenfelder Bronze",
         image: "34b21de1e58cdcfe271ac19798c6a877dfd7bc16",
         smallImage: 'ed1fc6b04d67c9e6058018c76f5ed3f325a0e1f1',
-        hash: "16768164989dffd819a373613b5e1a52e226a5b0" as ItemHash,
+        hash: ItemHash.planetFields_bronze,
         grade: ItemGrade.bronze,
     },
-    "0e41524dc46225dca21c9119f2fb735fd7ea5cb3": {
+    [ItemHash.planetFields_silver]: {
         name: "Planetenfelder Silber",
         image: "67c8a380625953698ae109c3af85075419c8fe36",
         smallImage: '6f2193f9f8714cdf9f15b6cdfed791fd8fc1de0a',
-        hash: "0e41524dc46225dca21c9119f2fb735fd7ea5cb3" as ItemHash,
+        hash: ItemHash.planetFields_silver,
         grade: ItemGrade.silver,
     },
-    "04e58444d6d0beb57b3e998edc34c60f8318825a": {
+    [ItemHash.planetFields_gold]: {
         name: "Planetenfelder Gold",
         image: "ddc59021e1e5cec24be946c7f2dcc55721a540fa",
         smallImage: 'ea8aa572c703894eba463a0961065fabafcac334',
-        hash: "04e58444d6d0beb57b3e998edc34c60f8318825a" as ItemHash,
+        hash: ItemHash.planetFields_gold,
         grade: ItemGrade.gold,
     },
-    "f3d9b82e10f2e969209c1a5ad7d22181c703bb36": {
+    [ItemHash.planetFields_platinum]: {
         name: "Planetenfelder Platin",
         image: "9771e15c04acfadc55cbd513efc8235ccfe5205d",
         smallImage: '180da4a7942369943d5a7ef8ce155276ff66b64f',
-        hash: "f3d9b82e10f2e969209c1a5ad7d22181c703bb36" as ItemHash,
+        hash: ItemHash.planetFields_platinum,
         grade: ItemGrade.platinum,
     },
 
-    "c1d0232604872f899ea15a9772baf76880f55c5f": {
+    [ItemHash.resourcePackage_all]: {
         name: "Komplettes Ressourcenpaket",
         image: "18145145a76b71f151ba97b7c17891a5389ceeb5",
         smallImage: 'baf833b54bdb312d955cbf323d810bc6b24578d0',
-        hash: "c1d0232604872f899ea15a9772baf76880f55c5f" as ItemHash,
+        hash: ItemHash.resourcePackage_all,
         grade: ItemGrade.none,
     },
-    "859d82d316b83848f7365d21949b3e1e63c7841f": {
+    [ItemHash.resourcePackage_metal]: {
         name: "Metallpaket",
         image: "0bd67f2ea31a389bfd33629b4e611e9261597c81",
         smallImage: '4077be1c061371b031604a0212611965c363a0b2',
         hash: "859d82d16b83848f7365d21949b3e1e63c7841f" as ItemHash,
         grade: ItemGrade.none,
     },
-    "bb2f6843226ef598f0b567b92c51b283de90aa48": {
+    [ItemHash.resourcePackage_crystal]: {
         name: "Kristallpaket",
         image: "c48c8ca23fb22d8860962109799a1f2e0285a64e",
         smallImage: '0b42850ea2014b8ace8db5b69bcee1475a881291',
-        hash: "bb2f6843226ef598f0b567b92c51b283de90aa48" as ItemHash,
+        hash: ItemHash.resourcePackage_crystal,
         grade: ItemGrade.none,
     },
-    "cb72ed207dd871832a850ee29f1c1f83aa3f4f36": {
+    [ItemHash.resourcePackage_deuterium]: {
         name: "Deuteriumpaket",
         image: "c7e79db86d95d22b033627c706cb47d9342f5ec1",
         smallImage: 'd4971620d3a2605afaac00736793fd942cd3ad35',
-        hash: "cb72ed207dd871832a850ee29f1c1f83aa3f4f36" as ItemHash,
+        hash: ItemHash.resourcePackage_deuterium,
         grade: ItemGrade.none,
     },
 
-    "cb4fd53e61feced0d52cfc4c1ce383bad9c05f67": {
+    [ItemHash.shortenTime_buildings]: {
         name: "Bauverkürzer Gebäude",
         image: "22bba1f3ceab83dc24eb944d4f2aa8207390ab7c",
         smallImage: '22bba1f3ceab83dc24eb944d4f2aa8207390ab7c',
-        hash: "cb4fd53e61feced0d52cfc4c1ce383bad9c05f67" as ItemHash,
+        hash: ItemHash.shortenTime_buildings,
         grade: ItemGrade.none,
     },
-    "14c17d49462963f5e5b67efa1257622ce1b866ac": {
+    [ItemHash.shortenTime_research]: {
         name: "Bauverkürzer Forschung",
         image: "959ce485c41b8713fb9c281fcd5d737331e0341c",
         smallImage: '959ce485c41b8713fb9c281fcd5d737331e0341c',
-        hash: "14c17d49462963f5e5b67efa1257622ce1b866ac" as ItemHash,
+        hash: ItemHash.shortenTime_research,
         grade: ItemGrade.none,
     },
-    "75accaa0d1bc22b78d83b89cd437bdccd6a58887": {
+    [ItemHash.shortenTime_shipyard]: {
         name: "Bauverkürzer Schiffe",
         image: "56d76263b87b56716214c91348602908b1f46fbd",
         smallImage: '56d76263b87b56716214c91348602908b1f46fbd',
-        hash: "75accaa0d1bc22b78d83b89cd437bdccd6a58887" as ItemHash,
+        hash: ItemHash.shortenTime_shipyard,
         grade: ItemGrade.none,
     },
 
-    "40f6c78e11be01ad3389b7dccd6ab8efa9347f3c": {
-        hash: "40f6c78e11be01ad3389b7dccd6ab8efa9347f3c" as ItemHash,
+    [ItemHash.kraken_bronze]: {
+        hash: ItemHash.kraken_bronze,
         image: "98629d11293c9f2703592ed0314d99f320f45845",
         smallImage: 'bc4e2315f7db4286ba72a424a32c920e78af8e27',
         name: "KRAKEN Bronze",
         grade: ItemGrade.bronze,
     },
-    "4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a": {
-        hash: "4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a" as ItemHash,
+    [ItemHash.kraken_silver]: {
+        hash: ItemHash.kraken_silver,
         image: "1ee55efe00bb03743ca031a9eaa1374bb936d863",
         smallImage: '7dcc0cb51f4514a339847e7f9129c99457066b50',
         name: "KRAKEN Silber",
         grade: ItemGrade.silver,
     },
-    "929d5e15709cc51a4500de4499e19763c879f7f7": {
-        hash: "929d5e15709cc51a4500de4499e19763c879f7f7" as ItemHash,
+    [ItemHash.kraken_gold]: {
+        hash: ItemHash.kraken_gold,
         image: "40a1644e104985a3e72da28b76069197128f9fb5",
         smallImage: '3e11d31fcf81e4c6eb48e74e2d434d5fa50e9c31',
         name: "KRAKEN Gold",
         grade: ItemGrade.gold,
     },
-    "f36042d76e6b8b33d931e1d4ae99f35265cd82d1": {
-        hash: "f36042d76e6b8b33d931e1d4ae99f35265cd82d1" as ItemHash,
+    [ItemHash.kraken_platinum]: {
+        hash: ItemHash.kraken_platinum,
         image: "59d0d098bdffad7faa5e5b3d17dd7799188500de",
         smallImage: '7886511210aaf1c2ea23b66b5d0dbf003ac25db8',
         name: "KRAKEN Platin",
         grade: ItemGrade.platinum,
     },
 
-    "56c258e7c1f12a37773d9c95ad2e98dc3076aca6": {
-        hash: "56c258e7c1f12a37773d9c95ad2e98dc3076aca6" as ItemHash,
-        image: "4834adbcab85f74ad1a2030e3eccc89f35c9cfbb",
-        smallImage: '',
-        name: "KRAKEN Bronze (Lifeforms)",
-        grade: ItemGrade.bronze,
-    },
-    "309bc42ce9e5d4587c0061ef425e9940dce9f713": {
-        hash: "309bc42ce9e5d4587c0061ef425e9940dce9f713" as ItemHash,
-        image: "27f5d8ceafc520bcc0f7071981aff62aaefa796b",
-        smallImage: '',
-        name: "KRAKEN Silber (Lifeforms)",
-        grade: ItemGrade.silver,
-    },
-    "3b470998cf557da90f473c00c0f1a06c641079e4": {
-        hash: "3b470998cf557da90f473c00c0f1a06c641079e4" as ItemHash,
-        image: "d3ed9dfe986ecba129b4a4580d1709acbc732139",
-        smallImage: '',
-        name: "KRAKEN Gold (Lifeforms)",
-        grade: ItemGrade.gold,
-    },
-    "8223a42e752958f15d6392630d776af061c53e1f": {
-        hash: "8223a42e752958f15d6392630d776af061c53e1f" as ItemHash,
-        image: "27fc57078a3df32bc3db4db076e7040d20d1dcc3",
-        smallImage: '',
-        name: "KRAKEN Platin (Lifeforms)",
-        grade: ItemGrade.platinum,
-    },
-
-    "d3d541ecc23e4daa0c698e44c32f04afd2037d84": {
-        hash: "d3d541ecc23e4daa0c698e44c32f04afd2037d84" as ItemHash,
+    [ItemHash.detroid_bronze]: {
+        hash: ItemHash.detroid_bronze,
         image: "56724c3a1dcae8036bb172f0be833a6f9a28bc27",
         smallImage: '610b867a8841d4a4c949d8a59719243580456452',
         name: "DETROID Bronze",
         grade: ItemGrade.bronze,
     },
-    "27cbcd52f16693023cb966e5026d8a1efbbfc0f9": {
-        hash: "27cbcd52f16693023cb966e5026d8a1efbbfc0f9" as ItemHash,
+    [ItemHash.detroid_silver]: {
+        hash: ItemHash.detroid_silver,
         image: "d0b8fb3d307b815b3182f3872e8eab654fe677df",
         smallImage: '8b60b23f428ed54bad7f81295b4c303fd1defbe4',
         name: "DETROID Silber",
         grade: ItemGrade.silver,
     },
-    "0968999df2fe956aa4a07aea74921f860af7d97f": {
-        hash: "0968999df2fe956aa4a07aea74921f860af7d97f" as ItemHash,
+    [ItemHash.detroid_gold]: {
+        hash: ItemHash.detroid_gold,
         image: "55d4b1750985e4843023d7d0acd2b9bafb15f0b7",
         smallImage: 'f46e7c8bdd1ea9bed4f0cb998199c478762a18a7',
         name: "DETROID Gold",
         grade: ItemGrade.gold,
     },
-    "3347bcd4ee59f1d3fa03c4d18a25bca2da81de82": {
-        hash: "3347bcd4ee59f1d3fa03c4d18a25bca2da81de82" as ItemHash,
+    [ItemHash.detroid_platinum]: {
+        hash: ItemHash.detroid_platinum,
         image: "5fe7fc5e764286b3f588ef488df593235671a661",
         smallImage: '9f6cdd9c0bfc9df332318e9e7602db5169726c54',
         name: "DETROID Platin",
         grade: ItemGrade.platinum,
     },
 
-    "da4a2a1bb9afd410be07bc9736d87f1c8059e66d": {
-        hash: "da4a2a1bb9afd410be07bc9736d87f1c8059e66d" as ItemHash,
+    [ItemHash.newtron_bronze]: {
+        hash: ItemHash.newtron_bronze,
         image: "4bc4327a3fd508b5da84267e2cfd58d47f9e4dcb",
         smallImage: '2a974711651e1b38cb8d840ccc15259c49726b75',
         name: "NEWTRON Bronze",
         grade: ItemGrade.bronze,
     },
-    "d26f4dab76fdc5296e3ebec11a1e1d2558c713ea": {
-        hash: "d26f4dab76fdc5296e3ebec11a1e1d2558c713ea" as ItemHash,
+    [ItemHash.newtron_silver]: {
+        hash: ItemHash.newtron_silver,
         image: "a92734028d1bf2e75c5c25ae134b4d298a5ca36e",
         smallImage: '2ca40705737c0bc51107bfca49643487c510ac4a',
         name: "NEWTRON Silber",
         grade: ItemGrade.silver,
     },
-    "8a4f9e8309e1078f7f5ced47d558d30ae15b4a1b": {
-        hash: "8a4f9e8309e1078f7f5ced47d558d30ae15b4a1b" as ItemHash,
+    [ItemHash.newtron_gold]: {
+        hash: ItemHash.newtron_gold,
         image: "d949732b01a7f7f6d92e814f2de99479a324e1e3",
         smallImage: '014827f6d1d5b78b1edd0d4476db05639e7d9367',
         name: "NEWTRON Gold",
         grade: ItemGrade.gold,
     },
-    "a1ba242ede5286b530cdf991796b3d1cae9e4f23": {
-        hash: "a1ba242ede5286b530cdf991796b3d1cae9e4f23" as ItemHash,
+    [ItemHash.newtron_platinum]: {
+        hash: ItemHash.newtron_platinum,
         image: "c533ada7cad2164f322748638236b38c02aeaea0",
         smallImage: '141b0c6fcb652b2c2a4c598e37a620f9172c7d32',
         name: "NEWTRON Platin",
         grade: ItemGrade.platinum,
     },
-    "dfb5ffa09e06d48304d46aaff8686dd1beec1d24": {
-        hash: "dfb5ffa09e06d48304d46aaff8686dd1beec1d24" as ItemHash,
-        image: "be56c3b36189b16830e07a625f182fe4ab75b878",
-        smallImage: '',
-        name: "NEWTRON Bronze (Lifeforms)",
+
+    [ItemHash.lifeformKraken_bronze]: {
+        hash: ItemHash.lifeformKraken_bronze,
+        image: "4834adbcab85f74ad1a2030e3eccc89f35c9cfbb",
+        smallImage: "fe38c0ce79edcf0fa53a8a6aebd58d5d27d0e1fd",
+        name: 'KRAKEN Bronze (Lifeform)',
         grade: ItemGrade.bronze,
     },
-    "ff3e56f3f0c386c1698c56d912e47ab18b80bfa8": {
-        hash: "ff3e56f3f0c386c1698c56d912e47ab18b80bfa8" as ItemHash,
-        image: "d7ffe87869bafd8ec84c8d50774861d7c716985b",
-        smallImage: '',
-        name: "NEWTRON Silber (Lifeforms)",
+    [ItemHash.lifeformKraken_silver]: {
+        hash: ItemHash.lifeformKraken_silver,
+        image: "27f5d8ceafc520bcc0f7071981aff62aaefa796b",
+        smallImage: "fb0017c2f817bc4c9b94336c2b0d845e08fbe06b",
+        name: 'KRAKEN Silber (Lifeform)',
         grade: ItemGrade.silver,
     },
-    "2a0d57915e6904a910012362abe8b1ca315a24b9": {
-        hash: "2a0d57915e6904a910012362abe8b1ca315a24b9" as ItemHash,
-        image: "3fbe027e0579e94fe88d873857a28d22d6b2411b",
-        smallImage: '',
-        name: "NEWTRON Gold (Lifeforms)",
+    [ItemHash.lifeformKraken_gold]: {
+        hash: ItemHash.lifeformKraken_gold,
+        image: "d3ed9dfe986ecba129b4a4580d1709acbc732139",
+        smallImage: "b754fae952ba44a4ee0aea13d2d4bc99cd73b069",
+        name: 'KRAKEN Gold (Lifeform)',
         grade: ItemGrade.gold,
     },
-    "f1545f4fc66dafbc04ad02cafc87cfb5f34706fa": {
-        hash: "f1545f4fc66dafbc04ad02cafc87cfb5f34706fa" as ItemHash,
-        image: "c8b583a18c98a93041ccc82269af5886e972403e",
-        smallImage: '',
-        name: "NEWTRON Platin (Lifeforms)",
+    [ItemHash.lifeformKraken_platinum]: {
+        hash: ItemHash.lifeformKraken_platinum,
+        image: "27fc57078a3df32bc3db4db076e7040d20d1dcc3",
+        smallImage: "94849b2f1461d41042096eb8ad536820731a4a5f",
+        name: 'KRAKEN Platin (Lifeform)',
         grade: ItemGrade.platinum,
     },
 
-    "e54ecc0416d6e96b4165f24238b03a1b32c1df47": {
-        hash: "e54ecc0416d6e96b4165f24238b03a1b32c1df47" as ItemHash,
+    [ItemHash.lifeformNewtron_bronze]: {
+        hash: ItemHash.lifeformNewtron_bronze,
+        image: "be56c3b36189b16830e07a625f182fe4ab75b878",
+        smallImage: "014b7b201f1fc889f6c5da1757a60e0b759c5ec1",
+        name: 'NEWTRON Bronze (Lifeform)',
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.lifeformNewtron_silver]: {
+        hash: ItemHash.lifeformNewtron_silver,
+        image: "d7ffe87869bafd8ec84c8d50774861d7c716985b",
+        smallImage: "30c32146a7926d10b1be12cff6f19771836d0e46",
+        name: 'NEWTRON Silber (Lifeform)',
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.lifeformNewtron_gold]: {
+        hash: ItemHash.lifeformNewtron_gold,
+        image: "3fbe027e0579e94fe88d873857a28d22d6b2411b",
+        smallImage: "5cd1c6979271dee76c1eb096a5ed940e2c1da705",
+        name: 'NEWTRON Gold (Lifeform)',
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.lifeformNewtron_platinum]: {
+        hash: ItemHash.lifeformNewtron_platinum,
+        image: "c8b583a18c98a93041ccc82269af5886e972403e",
+        smallImage: "8b6043a1c79f378b5cef68439e40c1be387ade42",
+        name: 'NEWTRON Platin (Lifeform)',
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.expeditionslots_bronze_7days]: {
+        hash: ItemHash.expeditionslots_bronze_7days,
         image: "40224d1fb7b7d7a244b2f40d3cf281dcf484cfd3",
         smallImage: '0b8fc29be235051208ea31248a0861b2f89e3f4f',
         name: "Expeditionslots Bronze (7 Tage)",
         grade: ItemGrade.bronze,
     },
-    "8c1f6c6849d1a5e4d9de6ae9bb1b861f6f7b5d4d": {
-        hash: "e54ecc0416d6e96b4165f24238b03a1b32c1df47" as ItemHash,
+    [ItemHash.expeditionslots_bronze_30days]: {
+        hash: ItemHash.expeditionslots_bronze_7days,
         image: "a59682857b7a632c4bef319f0ef79f0c3bdba5c9",
         smallImage: 'a229f220ebffccbb9325817261b32fcbe5d38e80',
         name: "Expeditionslots Bronze (30 Tage)",
         grade: ItemGrade.bronze,
     },
-    "a5784c685c0e1e6111d9c18aeaf80af2e0777ab4": {
-        hash: "a5784c685c0e1e6111d9c18aeaf80af2e0777ab4" as ItemHash,
+    [ItemHash.expeditionslots_bronze_90days]: {
+        hash: ItemHash.expeditionslots_bronze_90days,
         image: "dcd22251b799c72a98bf4c425166335165f95a9f",
         smallImage: '8d70a785cd10a9ecc7ba2523e434ad7e2f421dd4',
         name: "Expeditionslots Bronze (90 Tage)",
         grade: ItemGrade.bronze,
     },
-    "b2bc9789df7c1ef5e058f72d61380b696dde54e8": {
-        hash: "b2bc9789df7c1ef5e058f72d61380b696dde54e8" as ItemHash,
+    [ItemHash.expeditionslots_silver_7days]: {
+        hash: ItemHash.expeditionslots_silver_7days,
         image: "dbaa137369a212345f0ab33e18f8bb2335f9bedf",
         smallImage: '7ce87a5a3875a7dd5e2a98cf5047cdbb9b1d6a41',
         name: "Expeditionslots Silber (7 Tage)",
         grade: ItemGrade.silver,
     },
-    "31a504be1195149a3bef05b9cc6e3af185d24ef2": {
-        hash: "31a504be1195149a3bef05b9cc6e3af185d24ef2" as ItemHash,
+    [ItemHash.expeditionslots_silver_30days]: {
+        hash: ItemHash.expeditionslots_silver_30days,
         image: "2f3ee731849024bfef85eb8c7389bb65e8f6be61",
         smallImage: '6d8d8b7a1b99bb14868646abfe8fab38d13451f5',
         name: "Expeditionslots Silber (30 Tage)",
         grade: ItemGrade.silver,
     },
-    "4f6f941bbf2a8527b0424b3ad11014502d8f4fb8": {
-        hash: "4f6f941bbf2a8527b0424b3ad11014502d8f4fb8" as ItemHash,
+    [ItemHash.expeditionslots_silver_90days]: {
+        hash: ItemHash.expeditionslots_silver_90days,
         image: "4d5123202c051020a7341d2ea3599b4869945319",
         smallImage: '5adfefb8220ab03007a0ada97b493a89ba97faae',
         name: "Expeditionslots Silber (90 Tage)",
         grade: ItemGrade.silver,
     },
-    "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e": {
-        hash: "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e" as ItemHash,
+    [ItemHash.expeditionslots_gold_7days]: {
+        hash: ItemHash.expeditionslots_gold_7days,
         image: "ea4ec7669692e5b91dde58fc5fa606b7e1f22578",
         smallImage: '641f4b83c91f51f7bb3b884d883e70776953fcef',
         name: "Expeditionslots Gold (7 Tage)",
         grade: ItemGrade.gold,
     },
-    "fd7d35e73d0e09e83e30812b738ef966ea9ef790": {
-        hash: "fd7d35e73d0e09e83e30812b738ef966ea9ef790" as ItemHash,
+    [ItemHash.expeditionslots_gold_30days]: {
+        hash: ItemHash.expeditionslots_gold_30days,
         image: "1ba0e8436af518f0014af352af7d20c8d174fb53",
         smallImage: 'ce43c48b7ef200236ce251a8c89f9214262deebe',
         name: "Expeditionslots Gold (30 Tage)",
         grade: ItemGrade.gold,
     },
-    "540410439514ac09363c5c47cf47117a8b8ae79a": {
-        hash: "9336b9f29d36e3f69b0619c9523d8bec5e09ab8e" as ItemHash,
+    [ItemHash.expeditionslots_gold_90days]: {
+        hash: ItemHash.expeditionslots_gold_7days,
         image: "aede22854d3e8e46cb93dad726ad2b7edf9d235f",
         smallImage: 'db28835101052547db777287667853d0a465b207',
         name: "Expeditionslots Gold (90 Tage)",
         grade: ItemGrade.gold,
     },
 
-    "0684c6a5a42acbb3cd134913d421fc28dae6b90d": {
-        hash: "0684c6a5a42acbb3cd134913d421fc28dae6b90d" as ItemHash,
+    [ItemHash.fleetSlots_bronze_7days]: {
+        hash: ItemHash.fleetSlots_bronze_7days,
         image: "446d0d01503f8b845c3d3330c4dab673166570e1",
         smallImage: '0eb11ec1e956a5991eb4eba2bcdf3f4062362df2',
         name: "Flottenslots Bronze (7 Tage)",
         grade: ItemGrade.bronze,
     },
-    "94a28491b6fd85003f1cb151e88dde106f1d7596": {
-        hash: "94a28491b6fd85003f1cb151e88dde106f1d7596" as ItemHash,
+    [ItemHash.fleetSlots_bronze_30days]: {
+        hash: ItemHash.fleetSlots_bronze_30days,
         image: "8ab6d921069f01d8cb843f4bc37f51e5cf0c4318",
         smallImage: 'bec85c7b4868bdd5d634d50de17d8c17d56d40b5',
         name: "Flottenslots Bronze (30 Tage)",
         grade: ItemGrade.bronze,
     },
-    "bb47add58876240199a18ddacc2db07789be1934": {
-        hash: "bb47add58876240199a18ddacc2db07789be1934" as ItemHash,
+    [ItemHash.fleetSlots_bronze_90days]: {
+        hash: ItemHash.fleetSlots_bronze_90days,
         image: "a61bbfc57d4b70abff2365005bbcaf918796d784",
         smallImage: '6e6c6061005786c1c2ccc16bf72488127adddda8',
         name: "Flottenslots Bronze (90 Tage)",
         grade: ItemGrade.bronze,
     },
-    "f8fd610825fb4a442e27e4e9add74f050e040e27": {
-        hash: "f8fd610825fb4a442e27e4e9add74f050e040e27" as ItemHash,
+    [ItemHash.fleetSlots_silver_7days]: {
+        hash: ItemHash.fleetSlots_silver_7days,
         image: "d38f4e83f906ad747ec2601da836c0b11703e3b3",
         smallImage: '3e502c0a1f0462bd7e9589294934029f7f0af099',
         name: "Flottenslots Silber (7 Tage)",
         grade: ItemGrade.silver,
     },
-    "c4e598a85805a7eb3ca70f9265cbd366fc4d2b0e": {
-        hash: "c4e598a85805a7eb3ca70f9265cbd366fc4d2b0e" as ItemHash,
+    [ItemHash.fleetSlots_silver_30days]: {
+        hash: ItemHash.fleetSlots_silver_30days,
         image: "8a133b938e57285a3de891dd4b82b594d4e808a3",
         smallImage: 'bd55a2e08d6cc320646bbaf420d05cdf243db312',
         name: "Flottenslots Silber (30 Tage)",
         grade: ItemGrade.silver,
     },
-    "a693c5ce3f5676efaaf0781d94234bea4f599d2e": {
-        hash: "a693c5ce3f5676efaaf0781d94234bea4f599d2e" as ItemHash,
+    [ItemHash.fleetSlots_silver_90days]: {
+        hash: ItemHash.fleetSlots_silver_90days,
         image: "f7fc4e566869a8661ac5ef4a75ef9bd5fa5024e1",
         smallImage: '48e9a782b39199d3bb9f614ebd5d4a3804656079',
         name: "Flottenslots Silber (90 Tage)",
         grade: ItemGrade.silver,
     },
-    "5a8000c372cd079292a92d35d4ddba3c0f348d3b": {
-        hash: "5a8000c372cd079292a92d35d4ddba3c0f348d3b" as ItemHash,
+    [ItemHash.fleetSlots_gold_7days]: {
+        hash: ItemHash.fleetSlots_gold_7days,
         image: "4db5665750dfb83bb958280ffd500c7105574068",
         smallImage: '94619b2c741bdc50c440147eefffd79ac5089b0e',
         name: "Flottenslots Gold (7 Tage)",
         grade: ItemGrade.gold,
     },
-    "1808bf7639b81ac3ac87bcb7eb3bbba0a1874d0a": {
-        hash: "1808bf7639b81ac3ac87bcb7eb3bbba0a1874d0a" as ItemHash,
+    [ItemHash.fleetSlots_gold_30days]: {
+        hash: ItemHash.fleetSlots_gold_30days,
         image: "2fa215f7fe22370b9fd83796dc6baa17aed3f75a",
         smallImage: 'b11fd1374eb6ceac0a9c7788bb3d3d03afb35a12',
         name: "Flottenslots Gold (30 Tage)",
         grade: ItemGrade.gold,
     },
-    "1f7024c4f6493f0c589e1b00c76e6ced258c00e5": {
-        hash: "1f7024c4f6493f0c589e1b00c76e6ced258c00e5" as ItemHash,
+    [ItemHash.fleetSlots_gold_90days]: {
+        hash: ItemHash.fleetSlots_gold_90days,
         image: "fa17391a273844ee8e71d4625ce7381b458cf1ad",
         smallImage: '9e654ae49607c0ddcc87633bf7372b976fd7e183',
         name: "Flottenslots Gold (90 Tage)",
         grade: ItemGrade.gold,
     },
 
-    "7eacfcee74660f30bb92a5874e8cccf2bb286ebd": {
-        hash: "7eacfcee74660f30bb92a5874e8cccf2bb286ebd" as ItemHash,
+    [ItemHash.migrationItem]: {
+        hash: ItemHash.migrationItem,
         image: "16bf2c62de38daaf128fd1329efe976b9788c011",
         smallImage: '',
         name: "Migrations-Item",
@@ -764,4 +765,543 @@ export const Items: Record<ItemHash, Item> = Object.freeze({
     },
 
 
-});
+
+    [ItemHash.discoverer_pts]: {
+        name: "Entdecker",
+        image: "3ecbd5114c3b663aa1a1252fc03091eecc790f10",
+        smallImage: 'e9278159a8c40e2e9337ba3495f0b5af1e2c9d05',
+        hash: ItemHash.discoverer,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.collector_pts]: {
+        name: "Kollektor",
+        image: "09726bf92556fc12b55ec5ee00516af0223b7713",
+        smallImage: '90b2366b4c96638a1a8b419a1c9ad762147ef38a',
+        hash: ItemHash.collector,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.general_pts]: {
+        name: "General",
+        image: "4b999ea0089c6358b5531635b37e280cfae62da2",
+        smallImage: '3885fd784f5ccbda9f9a30040b1dffc98e204305',
+        hash: ItemHash.general,
+        grade: ItemGrade.none,
+    },
+
+    [ItemHash.researcher_pts]: {
+        name: "Forscher",
+        image: "55f7003a5cf07e52b38f11b81129ac5042dff4da",
+        smallImage: '0fad76886bc161e860f8ffb04a1838ba21e377e6',
+        hash: ItemHash.researcher,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.trader_pts]: {
+        name: "Händler",
+        image: "5df93e894bb92e987219fc9d669c9a276ceb5499",
+        smallImage: 'b52a99657970f97a8881f2493be63e3a58c8d49f',
+        hash: ItemHash.trader,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.warrior_pts]: {
+        name: "Krieger",
+        image: "48ca2adbb95b37db83777b659cfc4042c179fece",
+        smallImage: 'a2d0a5aa06f932c7ecbd76906d44d4b46e338600',
+        hash: ItemHash.warrior,
+        grade: ItemGrade.none,
+    },
+
+    [ItemHash.metalBooster_bronze_30days_pts]: {
+        name: 'Metall-Booster Bronze (30 Tage)',
+        image: '5d5f545b5c5969593c1bf4198da2664db75857b9',
+        smallImage: '',
+        hash: ItemHash.metalBooster_bronze_30days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.metalBooster_bronze_90days_pts]: {
+        name: 'Metall-Booster Bronze (90 Tage)',
+        image: '8bd9c40b9aae821cd7a19b24e414bf437f81191e',
+        smallImage: '',
+        hash: ItemHash.metalBooster_bronze_90days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.metalBooster_silver_30days_pts]: {
+        name: "Metall-Booster Silber (30 Tage)",
+        image: "2bd0b5df51b77a3cb65d01568171cb991e047ac5",
+        smallImage: '5e62926be58e94ebb28a231ecad87f8e852d0f6d',
+        hash: ItemHash.metalBooster_silver_30days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.metalBooster_silver_90days_pts]: {
+        name: "Metall-Booster Silber (90 Tage)",
+        image: "6b4ea2ced99211b1b9f0b84fb8a312f0f053a366",
+        smallImage: '2e4d16cdaec1ea8ba2af28c914bb80f4d0939ce3',
+        hash: ItemHash.metalBooster_silver_90days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.metalBooster_gold_30days_pts]: {
+        name: "Metall-Booster Gold (30 Tage)",
+        image: "eacc8d23eef74f5dd4b91b99a654e0d63450fa07",
+        smallImage: '9132f52e224e6ba87677e5ccc5cd1391320cf7d2',
+        hash: ItemHash.metalBooster_gold_30days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.metalBooster_gold_90days_pts]: {
+        name: "Metall-Booster Gold (90 Tage)",
+        image: "b5ed0c10e3396c3cbab4dff2a778e2676f7b936a",
+        smallImage: 'a0cba1aa5de23e877b10b196f40855bafc91256c',
+        hash: ItemHash.metalBooster_gold_90days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.metalBooster_platinum_7days_pts]: {
+        name: "Metall-Booster Platin (7 Tage)",
+        image: "34752e40512a574a74464006d326bd6aebecb1f1",
+        smallImage: 'b29918a7d1f313fd91d788c9c444dfbe996640ee',
+        hash: ItemHash.metalBooster_platinum_7days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.metalBooster_platinum_30days_pts]: {
+        name: "Metall-Booster Platin (30 Tage)",
+        image: "ff1ad1a6d5879cb0ea720199c9eb6518584f0922",
+        smallImage: 'ce3bb161706f1788c893b3196834d67102318866',
+        hash: ItemHash.metalBooster_platinum_30days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.metalBooster_platinum_90days_pts]: {
+        name: "Metall-Booster Platin (90 Tage)",
+        image: "ff96652e498d26f8d2621b0599808860f11ee31c",
+        smallImage: 'e17ff7930eb79c7207502348180a2b4a437474d4',
+        hash: ItemHash.metalBooster_platinum_90days,
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.crystalBooster_bronze_30days_pts]: {
+        name: 'Kristall-Booster Bronze (30 Tage)',
+        image: '7d4c8923bc936f09fef244db74d25413372e2217',
+        smallImage: '',
+        hash: ItemHash.crystalBooster_bronze_30days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.crystalBooster_bronze_90days_pts]: {
+        name: 'Kristall-Booster Bronze (90 Tage)',
+        image: '479a2800c485772418e620d3a356a96a3bd7fca4',
+        smallImage: '',
+        hash: ItemHash.crystalBooster_bronze_90days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.crystalBooster_silver_30days_pts]: {
+        name: "Kristall-Booster Silber (30 Tage)",
+        image: "4cb9628975e286b2cf4949ef4d216bccc1813a77",
+        smallImage: '2746f4d2372da032f4daa294606ee88e5ca7a46a',
+        hash: ItemHash.crystalBooster_silver_30days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.crystalBooster_silver_90days_pts]: {
+        name: "Kristall-Booster Silber (90 Tage)",
+        image: "23f7d50e917ed39c5b755b95786e8cf4c4141279",
+        smallImage: '60a0fee6f82b2b4cec6928c1b052ac586f0b2a0d',
+        hash: ItemHash.crystalBooster_silver_90days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.crystalBooster_gold_30days_pts]: {
+        name: "Kristall-Booster Gold (30 Tage)",
+        image: "5b84505319073e6b71900cfd059657750317ae23",
+        smallImage: '627957046e2d5315bf13104e258ca0ea37ca7489',
+        hash: ItemHash.crystalBooster_gold_30days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.crystalBooster_gold_90days_pts]: {
+        name: "Kristall-Booster Gold (90 Tage)",
+        image: "efdf5966695a147aaa26442f811346e8b749ec6d",
+        smallImage: '11d508fc74f136dde21fe9506cad6db3d43149d5',
+        hash: ItemHash.crystalBooster_gold_90days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.crystalBooster_platinum_7days_pts]: {
+        name: "Kristall-Booster Platin (7 Tage)",
+        image: "9952055cf47d116eedeec429a469b61abdf6ce72",
+        smallImage: '5650071c78c9fcf9681fc2c780694de96de29c1b',
+        hash: ItemHash.crystalBooster_platinum_7days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.crystalBooster_platinum_30days_pts]: {
+        name: "Kristall-Booster Platin (30 Tage)",
+        image: "d4e203516d95ae28081a3d985818e2df5a2475d4",
+        smallImage: 'd3f3321fcd999f657e9dc4ccf9cb34731524123f',
+        hash: ItemHash.crystalBooster_platinum_30days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.crystalBooster_platinum_90days_pts]: {
+        name: "Kristall-Booster Platin (90 Tage)",
+        image: "5a16b583800c72b8eef5585fd5aa0bbd8e5c2c0f",
+        smallImage: '5e33a2cfb73e9054540c5172f66b770b28765475',
+        hash: ItemHash.crystalBooster_platinum_90days,
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.deuteriumBooster_bronze_30days_pts]: {
+        name: 'Deuterium-Booster Bronze (30 Tage)',
+        image: '5416e185557bbd18f832feafde73fd46f3573239',
+        smallImage: '',
+        hash: ItemHash.deuteriumBooster_bronze_30days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.deuteriumBooster_bronze_90days_pts]: {
+        name: 'Deuterium-Booster Bronze (90 Tage)',
+        image: '2bd548012a7bea6bc1227f9c904754de1cfaf0bc',
+        smallImage: '',
+        hash: ItemHash.deuteriumBooster_bronze_90days_pts,
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.deuteriumBooster_silver_30days_pts]: {
+        name: "Deuterium-Booster Silber (30 Tage)",
+        image: "7c48195115d4b4c97ac5b651b0cd766463631b7a",
+        smallImage: '14a51990fe394912463be7a591b8c3fd41a47aad',
+        hash: ItemHash.deuteriumBooster_silver_30days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.deuteriumBooster_silver_90days_pts]: {
+        name: "Deuterium-Booster Silber (90 Tage)",
+        image: "c7850b988587f08689f6d2d8e579bfde146525dd",
+        smallImage: 'b4c6a0e05891b6bfd9509bd92b6653d61fdae8e5',
+        hash: ItemHash.deuteriumBooster_silver_90days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.deuteriumBooster_gold_30days_pts]: {
+        name: "Deuterium-Booster Gold (30 Tage)",
+        image: "b5d2db0f5428b76ce91a51daea5959426053e973",
+        smallImage: '9f8eab23fd888c7d3c5a07e0d250a66f017ecec7',
+        hash: ItemHash.deuteriumBooster_gold_30days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.deuteriumBooster_gold_90days_pts]: {
+        name: "Deuterium-Booster Gold (90 Tage)",
+        image: "b4abecddc518baa61d2f2004687cfbd89d34e7c7",
+        smallImage: '4c7de7803df3ccb01d546ebce9e71379b1c49719',
+        hash: ItemHash.deuteriumBooster_gold_90days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.deuteriumBooster_platinum_7days_pts]: {
+        name: "Deuterium-Booster Platin (7 Tage)",
+        image: "2d1d4247ba12a3185bfd423023b7b551cf841ac3",
+        smallImage: '7a10926f00a92b563713ade10f89777a98efd96c',
+        hash: ItemHash.deuteriumBooster_platinum_7days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.deuteriumBooster_platinum_30days_pts]: {
+        name: "Deuterium-Booster Platin (30 Tage)",
+        image: "8245a9d21fb27088b25d48ae024e9382fcea1448",
+        smallImage: 'd9b86d155a459c658cb7bfca594ce4b48e24546b',
+        hash: ItemHash.deuteriumBooster_platinum_30days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.deuteriumBooster_platinum_90days_pts]: {
+        name: "Deuterium-Booster Platin (90 Tage)",
+        image: "55a877e91716da736ccec66817e611a61c9a1e4a",
+        smallImage: '55966a0911221acfc9b7a88791a2846f659a1e29',
+        hash: ItemHash.deuteriumBooster_platinum_90days,
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.energyBooster_bronze_30days_pts]: {
+        hash: ItemHash.energyBooster_bronze_30days_pts,
+        image: '2be67177003ef1d6b19195e100fb22d3c2ff5891',
+        smallImage: '',
+        name: 'Energie-Booster Bronze (30 Tage)',
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.energyBooster_bronze_90days_pts]: {
+        hash: ItemHash.energyBooster_bronze_90days_pts,
+        image: 'abf12608d09c541979620e02a82bcd740451dd8f',
+        smallImage: '',
+        name: 'Energie-Booster Bronze (90 Tage)',
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.energyBooster_silver_7days_pts]: {
+        name: "Energie-Booster Silber (7 Tage)",
+        image: "78277dabf424cfe6d902fcb67c10d7a81686a51f",
+        smallImage: '162edd06c200f8eb655f31e5c6b98c89fabd7f82',
+        hash: ItemHash.energyBooster_silver_7days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.energyBooster_silver_30days_pts]: {
+        name: "Energie-Booster Silber (30 Tage)",
+        image: "009ba047272acf73dfacca91dbef8e9c3b8d5a29",
+        smallImage: '24e7e9df03218996c2bc8fd7629bce7bb735e083',
+        hash: ItemHash.energyBooster_silver_30days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.energyBooster_silver_90days_pts]: {
+        name: "Energie-Booster Silber (90 Tage)",
+        image: "0b9e7bcf137a106982345e37a33127400e201ffa",
+        smallImage: '3f1c1c7bec997542f706afab4e3e31e89473875a',
+        hash: ItemHash.energyBooster_silver_90days,
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.energyBooster_gold_7days_pts]: {
+        name: "Energie-Booster Gold (7 Tage)",
+        image: "8c59dc4096d4cbddfc83a3a29ed6a64fa4696388",
+        smallImage: 'a1fd30dc5e5a3d0c68bb0116a45e1303ae8d3d70',
+        hash: ItemHash.energyBooster_gold_7days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.energyBooster_gold_30days_pts]: {
+        name: "Energie-Booster Gold (30 Tage)",
+        image: "76bc563f528108c6d65b8f3a75789d929e2eae2b",
+        smallImage: '067d550b6153abc635b3c1dc5455ce2b75957758',
+        hash: ItemHash.energyBooster_gold_30days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.energyBooster_gold_90days_pts]: {
+        name: "Energie-Booster Gold (90 Tage)",
+        image: "e7153f5de2c83321c908c2c3fcb76fb874547b5d",
+        smallImage: 'ad67e4e7cc75c80a9d4e4424e2e44808312d1bbf',
+        hash: ItemHash.energyBooster_gold_90days,
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.energyBooster_platinum_7days_pts]: {
+        name: "Energie-Booster Platin (7 Tage)",
+        image: "a09b4c480b8b6971d73cc6d5102e4c2d217f51aa",
+        smallImage: '253e0610c53379ce1c99410b23be2d49ee869d45',
+        hash: ItemHash.energyBooster_platinum_7days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.energyBooster_platinum_30days_pts]: {
+        name: "Energie-Booster Platin (30 Tage)",
+        image: "9d13f9cd483fe22e01f33ada7511677fa8556e4e",
+        smallImage: '9acaa2896f0e6750d121d4b2263dc772dd36ad60',
+        hash: ItemHash.energyBooster_platinum_30days,
+        grade: ItemGrade.platinum,
+    },
+    [ItemHash.energyBooster_platinum_90days_pts]: {
+        name: "Energie-Booster Platin (90 Tage)",
+        image: "b1013d0e9eea34419d4b2acd05c4adcd15868417",
+        smallImage: 'bcf756fab39cd83c5975c9aa7dfbc087ec0dbb3b',
+        hash: ItemHash.energyBooster_platinum_90days,
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.resourcePackage_all_pts]: {
+        name: "Komplettes Ressourcenpaket",
+        image: "18145145a76b71f151ba97b7c17891a5389ceeb5",
+        smallImage: 'baf833b54bdb312d955cbf323d810bc6b24578d0',
+        hash: ItemHash.resourcePackage_all,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.resourcePackage_metal_pts]: {
+        name: "Metallpaket",
+        image: "0bd67f2ea31a389bfd33629b4e611e9261597c81",
+        smallImage: '4077be1c061371b031604a0212611965c363a0b2',
+        hash: "859d82d16b83848f7365d21949b3e1e63c7841f" as ItemHash,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.resourcePackage_crystal_pts]: {
+        name: "Kristallpaket",
+        image: "c48c8ca23fb22d8860962109799a1f2e0285a64e",
+        smallImage: '0b42850ea2014b8ace8db5b69bcee1475a881291',
+        hash: ItemHash.resourcePackage_crystal,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.resourcePackage_deuterium_pts]: {
+        name: "Deuteriumpaket",
+        image: "c7e79db86d95d22b033627c706cb47d9342f5ec1",
+        smallImage: 'd4971620d3a2605afaac00736793fd942cd3ad35',
+        hash: ItemHash.resourcePackage_deuterium,
+        grade: ItemGrade.none,
+    },
+
+    [ItemHash.detroid_platinum_pts]: {
+        hash: ItemHash.detroid_platinum,
+        image: "5fe7fc5e764286b3f588ef488df593235671a661",
+        smallImage: '9f6cdd9c0bfc9df332318e9e7602db5169726c54',
+        name: "DETROID Platin",
+        grade: ItemGrade.platinum,
+    },
+    
+    
+
+    [ItemHash.lifeformKraken_bronze_pts]: {
+        hash: ItemHash.lifeformKraken_bronze_pts,
+        image: "4834adbcab85f74ad1a2030e3eccc89f35c9cfbb",
+        smallImage: "fe38c0ce79edcf0fa53a8a6aebd58d5d27d0e1fd",
+        name: 'KRAKEN Bronze (Lifeform)',
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.lifeformKraken_silver_pts]: {
+        hash: ItemHash.lifeformKraken_silver_pts,
+        image: "27f5d8ceafc520bcc0f7071981aff62aaefa796b",
+        smallImage: "fb0017c2f817bc4c9b94336c2b0d845e08fbe06b",
+        name: 'KRAKEN Silber (Lifeform)',
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.lifeformKraken_gold_pts]: {
+        hash: ItemHash.lifeformKraken_gold_pts,
+        image: "d3ed9dfe986ecba129b4a4580d1709acbc732139",
+        smallImage: "b754fae952ba44a4ee0aea13d2d4bc99cd73b069",
+        name: 'KRAKEN Gold (Lifeform)',
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.lifeformKraken_platinum_pts]: {
+        hash: ItemHash.lifeformKraken_platinum_pts,
+        image: "27fc57078a3df32bc3db4db076e7040d20d1dcc3",
+        smallImage: "94849b2f1461d41042096eb8ad536820731a4a5f",
+        name: 'KRAKEN Platin (Lifeform)',
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.lifeformNewtron_bronze_pts]: {
+        hash: ItemHash.lifeformNewtron_bronze_pts,
+        image: "be56c3b36189b16830e07a625f182fe4ab75b878",
+        smallImage: "014b7b201f1fc889f6c5da1757a60e0b759c5ec1",
+        name: 'NEWTRON Bronze (Lifeform)',
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.lifeformNewtron_silver_pts]: {
+        hash: ItemHash.lifeformNewtron_silver_pts,
+        image: "d7ffe87869bafd8ec84c8d50774861d7c716985b",
+        smallImage: "30c32146a7926d10b1be12cff6f19771836d0e46",
+        name: 'NEWTRON Silber (Lifeform)',
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.lifeformNewtron_gold_pts]: {
+        hash: ItemHash.lifeformNewtron_gold_pts,
+        image: "3fbe027e0579e94fe88d873857a28d22d6b2411b",
+        smallImage: "5cd1c6979271dee76c1eb096a5ed940e2c1da705",
+        name: 'NEWTRON Gold (Lifeform)',
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.lifeformNewtron_platinum_pts]: {
+        hash: ItemHash.lifeformNewtron_platinum_pts,
+        image: "c8b583a18c98a93041ccc82269af5886e972403e",
+        smallImage: "8b6043a1c79f378b5cef68439e40c1be387ade42",
+        name: 'NEWTRON Platin (Lifeform)',
+        grade: ItemGrade.platinum,
+    },
+
+    [ItemHash.expeditionslots_bronze_7days_pts]: {
+        hash: ItemHash.expeditionslots_bronze_7days,
+        image: "40224d1fb7b7d7a244b2f40d3cf281dcf484cfd3",
+        smallImage: '0b8fc29be235051208ea31248a0861b2f89e3f4f',
+        name: "Expeditionslots Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.expeditionslots_bronze_30days_pts]: {
+        hash: ItemHash.expeditionslots_bronze_7days,
+        image: "a59682857b7a632c4bef319f0ef79f0c3bdba5c9",
+        smallImage: 'a229f220ebffccbb9325817261b32fcbe5d38e80',
+        name: "Expeditionslots Bronze (30 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.expeditionslots_bronze_90days_pts]: {
+        hash: ItemHash.expeditionslots_bronze_90days,
+        image: "dcd22251b799c72a98bf4c425166335165f95a9f",
+        smallImage: '8d70a785cd10a9ecc7ba2523e434ad7e2f421dd4',
+        name: "Expeditionslots Bronze (90 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.expeditionslots_silver_7days_pts]: {
+        hash: ItemHash.expeditionslots_silver_7days,
+        image: "dbaa137369a212345f0ab33e18f8bb2335f9bedf",
+        smallImage: '7ce87a5a3875a7dd5e2a98cf5047cdbb9b1d6a41',
+        name: "Expeditionslots Silber (7 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.expeditionslots_silver_30days_pts]: {
+        hash: ItemHash.expeditionslots_silver_30days,
+        image: "2f3ee731849024bfef85eb8c7389bb65e8f6be61",
+        smallImage: '6d8d8b7a1b99bb14868646abfe8fab38d13451f5',
+        name: "Expeditionslots Silber (30 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.expeditionslots_silver_90days_pts]: {
+        hash: ItemHash.expeditionslots_silver_90days,
+        image: "4d5123202c051020a7341d2ea3599b4869945319",
+        smallImage: '5adfefb8220ab03007a0ada97b493a89ba97faae',
+        name: "Expeditionslots Silber (90 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.expeditionslots_gold_7days_pts]: {
+        hash: ItemHash.expeditionslots_gold_7days,
+        image: "ea4ec7669692e5b91dde58fc5fa606b7e1f22578",
+        smallImage: '641f4b83c91f51f7bb3b884d883e70776953fcef',
+        name: "Expeditionslots Gold (7 Tage)",
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.expeditionslots_gold_30days_pts]: {
+        hash: ItemHash.expeditionslots_gold_30days,
+        image: "1ba0e8436af518f0014af352af7d20c8d174fb53",
+        smallImage: 'ce43c48b7ef200236ce251a8c89f9214262deebe',
+        name: "Expeditionslots Gold (30 Tage)",
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.expeditionslots_gold_90days_pts]: {
+        hash: ItemHash.expeditionslots_gold_7days,
+        image: "aede22854d3e8e46cb93dad726ad2b7edf9d235f",
+        smallImage: 'db28835101052547db777287667853d0a465b207',
+        name: "Expeditionslots Gold (90 Tage)",
+        grade: ItemGrade.gold,
+    },
+
+    [ItemHash.fleetSlots_bronze_7days_pts]: {
+        hash: ItemHash.fleetSlots_bronze_7days,
+        image: "446d0d01503f8b845c3d3330c4dab673166570e1",
+        smallImage: '0eb11ec1e956a5991eb4eba2bcdf3f4062362df2',
+        name: "Flottenslots Bronze (7 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.fleetSlots_bronze_30days_pts]: {
+        hash: ItemHash.fleetSlots_bronze_30days,
+        image: "8ab6d921069f01d8cb843f4bc37f51e5cf0c4318",
+        smallImage: 'bec85c7b4868bdd5d634d50de17d8c17d56d40b5',
+        name: "Flottenslots Bronze (30 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.fleetSlots_bronze_90days_pts]: {
+        hash: ItemHash.fleetSlots_bronze_90days,
+        image: "a61bbfc57d4b70abff2365005bbcaf918796d784",
+        smallImage: '6e6c6061005786c1c2ccc16bf72488127adddda8',
+        name: "Flottenslots Bronze (90 Tage)",
+        grade: ItemGrade.bronze,
+    },
+    [ItemHash.fleetSlots_silver_7days_pts]: {
+        hash: ItemHash.fleetSlots_silver_7days,
+        image: "d38f4e83f906ad747ec2601da836c0b11703e3b3",
+        smallImage: '3e502c0a1f0462bd7e9589294934029f7f0af099',
+        name: "Flottenslots Silber (7 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.fleetSlots_silver_30days_pts]: {
+        hash: ItemHash.fleetSlots_silver_30days,
+        image: "8a133b938e57285a3de891dd4b82b594d4e808a3",
+        smallImage: 'bd55a2e08d6cc320646bbaf420d05cdf243db312',
+        name: "Flottenslots Silber (30 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.fleetSlots_silver_90days_pts]: {
+        hash: ItemHash.fleetSlots_silver_90days,
+        image: "f7fc4e566869a8661ac5ef4a75ef9bd5fa5024e1",
+        smallImage: '48e9a782b39199d3bb9f614ebd5d4a3804656079',
+        name: "Flottenslots Silber (90 Tage)",
+        grade: ItemGrade.silver,
+    },
+    [ItemHash.fleetSlots_gold_7days_pts]: {
+        hash: ItemHash.fleetSlots_gold_7days,
+        image: "4db5665750dfb83bb958280ffd500c7105574068",
+        smallImage: '94619b2c741bdc50c440147eefffd79ac5089b0e',
+        name: "Flottenslots Gold (7 Tage)",
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.fleetSlots_gold_30days_pts]: {
+        hash: ItemHash.fleetSlots_gold_30days,
+        image: "2fa215f7fe22370b9fd83796dc6baa17aed3f75a",
+        smallImage: 'b11fd1374eb6ceac0a9c7788bb3d3d03afb35a12',
+        name: "Flottenslots Gold (30 Tage)",
+        grade: ItemGrade.gold,
+    },
+    [ItemHash.fleetSlots_gold_90days_pts]: {
+        hash: ItemHash.fleetSlots_gold_90days,
+        image: "fa17391a273844ee8e71d4625ce7381b458cf1ad",
+        smallImage: '9e654ae49607c0ddcc87633bf7372b976fd7e183',
+        name: "Flottenslots Gold (90 Tage)",
+        grade: ItemGrade.gold,
+    },
+};

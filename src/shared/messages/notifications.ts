@@ -40,6 +40,7 @@ export interface LifeformDiscoveryTrackingNotificationMessageData {
     events: Record<LifeformDiscoveryEventType, number>;
     newLifeforms: ValidLifeformType[];
     lifeformExperience: Record<ValidLifeformType, number>;
+    artifacts: number;
 }
 export type LifeformDiscoveryTrackingNotificationMessage = NotificationMessage<NotificationType.LifeformDiscoveryTracking, LifeformDiscoveryTrackingNotificationMessageData>;
 
