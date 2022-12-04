@@ -739,7 +739,7 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
             this.playerSettings = {
                 ...this.playerSettings,
 
-                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(EmpireDataModule.lifeformExperience[lf])),
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
