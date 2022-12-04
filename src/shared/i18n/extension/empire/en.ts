@@ -153,6 +153,7 @@ export const en: EmpireTranslations = {
         },
         lifeformFound: 'Lifeform found',
         alwaysAvailable: 'Always available',
+        artifacts: 'Artifacts',
 
         experiencePoints: 'Experience Points',
         discoveredOn: 'Lifeform discovered on',
