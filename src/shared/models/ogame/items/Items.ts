@@ -763,6 +763,13 @@ export const Items: Record<ItemHash, Item> = {
         name: "Migrations-Item",
         grade: ItemGrade.none,
     },
+    [ItemHash.migrationItem_pts]: {
+        hash: ItemHash.migrationItem_pts,
+        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
+        smallImage: '',
+        name: "Migrations-Item",
+        grade: ItemGrade.none,
+    },
 
 
 
