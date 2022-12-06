@@ -41,11 +41,11 @@ export const fr: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /connaissance de cette espèce de (?<xp>\d+) points d`expérience/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: fr 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
-            [LifeformDiscoveryEventArtifactFindingSize.small]: /*LOCA: fr 'The Exploration Ship has */'found a small number of artefacts',
-            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*LOCA: fr 'The Exploration Ship has */'found a large quantity of artefacts',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Le vaisseau d`exploration a trouvé quelques artéfacts, mais n`a */'pas pu les emmener puisque vos entrepôts sont complets',
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Le vaisseau d`exploration */'a trouvé quelques artéfacts',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Le vaisseau d`exploration */'a trouvé un grand nombre d`artéfacts',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: fr 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
         },
-        numberOfArtifacts: /*LOCA: fr *//Artefacts found: (?<artifacts>\d+)/i,
+        numberOfArtifacts: /Artéfacts trouvés : (?<artifacts>\d+)/i,
     },
 };

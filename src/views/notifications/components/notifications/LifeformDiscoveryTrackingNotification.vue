@@ -64,6 +64,10 @@
                     <span v-text="$i18n.$t.extension.empire.lifeforms.lifeformFound" />
                     <span v-text="$i18n.$n(lifeformFindingCount)" />
                 </template>
+                <template v-if="notification.events.artifacts > 0">
+                    <span v-text="$i18n.$t.extension.empire.lifeforms.artifacts" />
+                    <span v-text="$i18n.$n(notification.events.artifacts)" />
+                </template>
                 <template v-if="notification.events.nothing > 0">
                     <span v-text="$i18n.$t.extension.empire.lifeforms.eventTypes.nothing" />
                     <span v-text="$i18n.$n(notification.events.nothing)" />

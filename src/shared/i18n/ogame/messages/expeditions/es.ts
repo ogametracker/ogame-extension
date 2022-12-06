@@ -74,7 +74,7 @@ export const es: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: es 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'La última */'transmisión que recibimos de la flota fueron las excelentes fotos'/* de un agujero negro abriéndose.'*/,
         /*'Lo único que */'quedó de la expedición fue el siguiente mensaje'/* : zzzrrt ¡Madre mía! Krrrzzzzt Eso zrrrtrzt parece krgzzzz un krzzzzzzzztzzzz...'*/,
         /*'La */'fusión del núcleo de la nave insignia produjo una reacción'/* en cadena que destruyó espectacularmente la flota entera.'*/,
         /*'La flota de expedición */'no ha retornado al espacio normal tras su salto'/* . Nuestros científicos aún intentan descubrir qué pasó, pero parece que la flota se perdió para siempre.'*/,
@@ -113,7 +113,7 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Tu flota de expedición */'tuvo un desagradable encuentro con unos piratas'/* espaciales.'*/,
             /*'¡Nos metimos en la */'emboscada de unos bucaneros estelares'/* ! No se pudo evitar un combate.'*/,
             /*'La señal de emergencia que la expedición estaba siguiendo resultó ser */'una maliciosa trampa dispuesta por unos bucaneros estelares'/* . No se pudo evitar un combate.'*/,
         ],
@@ -137,7 +137,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*LOCA: es 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*'Tuvimos dificultades para */'pronunciar correctamente el dialecto de una raza alienígena'/* . Nuestro diplomático gritó "¡Fuego!" en lugar de "¡Paz!".'*/,
             /*LOCA: es 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
