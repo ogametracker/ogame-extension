@@ -21,7 +21,6 @@
 <script lang="ts">
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { _throw } from '@/shared/utils/_throw';
-    import { universeAccountTrackingUuid } from '@/shared/uuid';
     import { Component, Ref, Vue } from 'vue-property-decorator';
     import { CombatReportDataModule } from '../../data/CombatReportDataModule';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
@@ -47,6 +46,7 @@
             'heavy-fighter',
             'heavy-fighter2',
             'intergalactic-research-network',
+            'lf-artifacts',
             'light-fighter',
             'light-fighter2',
             'new-universe',
