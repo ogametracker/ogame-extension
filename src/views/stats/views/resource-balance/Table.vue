@@ -25,6 +25,7 @@
             <hr class="two-column" />
             <include-ships-found-on-expeditions-in-resource-balance-settings />
             <include-ships-lost-in-combats-in-resource-balance />
+            <IncludeLostLootResourcesInResourceBalance />
             <hr class="two-column" />
             <detailed-resource-balance-settings />
             <hr class="two-column" />
@@ -50,6 +51,7 @@
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
     import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
+    import IncludeLostLootResourcesInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeLostLootResourcesInResourceBalance.vue';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
@@ -74,6 +76,7 @@
             ShowConvertedResourcesInCellsSettings,
             IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
             IncludeShipsLostInCombatsInResourceBalance,
+            IncludeLostLootResourcesInResourceBalance,
         },
     })
     export default class Table extends Vue {
@@ -86,10 +89,12 @@
 
         private get includeFoundShipsFactor(): Record<ResourceType, number> {
             const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
+            const settingFactor = this.includeFoundShips ? 1 : 0;
+
             return {
-                [ResourceType.metal]: factor,
-                [ResourceType.crystal]: factor,
-                [ResourceType.deuterium]: deuteriumFactor,
+                [ResourceType.metal]: factor * settingFactor,
+                [ResourceType.crystal]: factor * settingFactor,
+                [ResourceType.deuterium]: deuteriumFactor * settingFactor,
             };
         }
 
@@ -103,11 +108,17 @@
 
         private get includeLostShipsFactor(): Record<ResourceType, number> {
             const { factor, deuteriumFactor } = SettingsDataModule.settings.lostShipsResourceUnits;
+            const settingFactor = this.includeLostShips ? 1 : 0;
+
             return {
-                [ResourceType.metal]: factor,
-                [ResourceType.crystal]: factor,
-                [ResourceType.deuterium]: deuteriumFactor,
+                [ResourceType.metal]: factor * settingFactor,
+                [ResourceType.crystal]: factor * settingFactor,
+                [ResourceType.deuterium]: deuteriumFactor * settingFactor,
             };
+        }
+
+        private get includeLostLoot() {
+            return SettingsDataModule.settings.resourceBalance.includeLostLootResources;
         }
 
         private get resourceTypes(): Record<string, ResourceType> {
@@ -189,7 +200,7 @@
                 return 0;
             }
 
-            const includeFoundShipsFactor = this.includeFoundShips ? this.includeFoundShipsFactor[resource] : 0;
+            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
             const total = expeditions.findings.resources[resource]
                 + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
 
@@ -199,14 +210,19 @@
         private getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefined, resource: ResourceType): number {
             if (dailyReports == null) {
                 return 0;
-
             }
-            const includeLostShipsFactor = this.includeLostShips ? this.includeLostShipsFactor[resource] : 0;
 
-            const total = dailyReports.loot[resource]
-                - (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
-                    + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
-                ) * includeLostShipsFactor;
+            const lostLootFactor = this.includeLostLoot ? 1 : 0;
+            const lootResources = dailyReports.loot.lost[resource] * lostLootFactor
+                + dailyReports.loot.gained[resource];
+
+            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
+            const lostShipResourceUnits = (
+                dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+                + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
+            ) * includeLostShipsFactor;
+
+            const total = lootResources - lostShipResourceUnits;
 
             return total;
         }

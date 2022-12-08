@@ -69,7 +69,7 @@
         private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
             return ResourceTypes.map(resource => ({
                 label: this.$i18n.$t.extension.resources[resource],
-                getValue: combats => combats.reduce((acc, combat) => acc + combat.loot[resource], 0),
+                getValue: combats => combats.reduce((acc, combat) => acc + combat.loot.total[resource], 0),
             }));
         }
 
@@ -78,7 +78,7 @@
                 {
                     label: this.$i18n.$t.extension.common.resourceUnits,
                     getValue: combats => combats.reduce(
-                        (acc, combat) => acc + combat.loot.metal + combat.loot.crystal + combat.loot.deuterium,
+                        (acc, combat) => acc + combat.loot.total.metal + combat.loot.total.crystal + combat.loot.total.deuterium,
                         0
                     ),
                 },
@@ -88,7 +88,7 @@
                 result.push({
                     label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     getValue: combats => combats.reduce(
-                        (acc, combat) => acc + getMsuOrDsu(combat.loot),
+                        (acc, combat) => acc + getMsuOrDsu(combat.loot.total),
                         0
                     ),
                 });

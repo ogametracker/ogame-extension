@@ -87,6 +87,10 @@ export const en: SettingsTranslations = {
             header: 'Ships lost in combats',
             checkboxLabel: 'Include resources of ships lost in combats in resource balance',
         },
+        includeLostLootResources: {
+            header: 'Resource lost in combats',
+            checkboxLabel: 'Include resources that were lost in combats in resource balance',
+        },
     },
     showConvertedUnitsInTables: {
         title: 'MSU/DSU in tables',
