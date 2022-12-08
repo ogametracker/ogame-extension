@@ -41,7 +41,7 @@ export const cz: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /schopni zlepšit naši znalost o nich o (?<xp>\d+) ZK/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: cz 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Průzkumná loď našla artefakty, */'ale nemůže je sebrat, protože máš plný sklad',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*LOCA: cz 'The Exploration Ship has */'found a small number of artefacts',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*LOCA: cz 'The Exploration Ship has */'found a large quantity of artefacts',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: cz 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
