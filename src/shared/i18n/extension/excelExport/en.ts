@@ -105,5 +105,7 @@ export const en: ExcelExportTranslations = {
         result: 'Finding',
         experience: 'Experience',
         lifeform: 'Lifeform',
+        artifacts: 'Artifacts',
+        artifactsSize: 'Size',
     },
 };

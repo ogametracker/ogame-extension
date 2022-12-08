@@ -49,7 +49,7 @@
         private showSettings = false;
 
         private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
         }
 
         private get firstDay() {
@@ -65,6 +65,7 @@
                 [LifeformDiscoveryEventType.nothing],
                 [LifeformDiscoveryEventType.lostShip],
                 [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
+                [LifeformDiscoveryEventType.artifacts],
             ]
             return typeGroups.map(group => ({
                 key: group[0],

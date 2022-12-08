@@ -13,7 +13,7 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'A expedição seguiu uns */'estranhos sinais vindos dum asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extracção da Matéria Negra.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pt /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*pt*//*'A nossa missão de */'exploração conseguiu completar um dos seus propósitos'/* ! Esta conseguiu retirar Matéria Negra duma estrela a extinguir-se.'*/,
             /*pt*//*'A nossa */'missão localiza uma antiga estação espacial que'/* , ao que parece, está a flutuar sem rumo no espaço sideral. A estação em si não é recuperável mas foi descoberta alguma Matéria Negra armazenada nos seus reactores. Os nossos técnicos tentaram recuperar tanta Matéria Negra quanta puderam.'*/,
             /*pt*//*'A nossa frota em expedição envia-nos notícias de um fenómeno espectacular. A acumulação de Matéria Negra */'nas baterias de energia dos escudos da nave'/*. Os nossos engenheiros estão a tentar recolher o máximo de Matéria Negra que podem antes do fenómeno acabar.'*/,
         ],
@@ -154,9 +154,9 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*pt*//*LOCA: pt 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*pt*//*LOCA: pt 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*pt*//*LOCA: pt 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*pt*//*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,
+            /*pt*//*'Descobrimos */'provas que indicam a presença de outras frotas'/* em expedição.'*/,
+            /*pt*//*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*pt*//*LOCA: pt 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,

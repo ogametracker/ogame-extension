@@ -133,7 +133,7 @@
             return this.planets.map<BonusOverviewItem>(planet => {
                 const levelBoostFactor = planet.activeLifeform == LifeformType.none
                     ? 0
-                    : getLifeformLevelTechnologyBonus(EmpireDataModule.empire.lifeformExperience[planet.activeLifeform]);
+                    : getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
 
                 const buildingBoostFactor = getPlanetLifeformTechnologyBoost(planet);
 

@@ -8,6 +8,7 @@ import { hr } from './hr';
 import { si } from './si';
 import { pt } from './pt';
 import { es_ar } from './es_ar';
+import { es_mx } from './es_mx';
 import { es } from './es';
 import { it } from './it';
 import { fr } from './fr';
@@ -21,7 +22,7 @@ const translations: Record<LanguageKey, LifeformDiscoveryMessages> = {
     en,
     'es-ar': es_ar,
     'es-es': es,
-    'es-mx': es,
+    'es-mx': es_mx,
     fr,
     hr,
     it,

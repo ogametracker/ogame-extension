@@ -4,6 +4,7 @@ import { CombatResultType } from "../combat-reports/CombatResultType";
 import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLevel";
 import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
+import { LifeformDiscoveryEventArtifactFindingSize } from "../lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "../lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType } from "../ogame/lifeforms/LifeformType";
 import { ResourceType } from "../ogame/resources/ResourceType";
@@ -13,7 +14,7 @@ import { Settings } from "./Settings";
 export function getDefaultSettings(language: LanguageKey): Settings {
     const oldLang = $i18n.locale;
     $i18n.locale = language;
-    
+
     const defaultSettings: Settings = {
         dateRanges: [
             {
@@ -134,10 +135,19 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                 },
             },
             lifeformDiscoveries: {
-                [LifeformDiscoveryEventType.nothing]: '#404040',
-                [LifeformDiscoveryEventType.lostShip]: '#d11515',
-                [LifeformDiscoveryEventType.knownLifeformFound]: '#33bcdb',
-                [LifeformDiscoveryEventType.newLifeformFound]: '#00c23a',
+                events: {
+                    [LifeformDiscoveryEventType.nothing]: '#404040',
+                    [LifeformDiscoveryEventType.lostShip]: '#d11515',
+                    [LifeformDiscoveryEventType.knownLifeformFound]: '#33bcdb',
+                    [LifeformDiscoveryEventType.newLifeformFound]: '#00c23a',
+                    [LifeformDiscoveryEventType.artifacts]: '#fbbc04',
+                },
+                artifactFindingSizes: {
+                    [LifeformDiscoveryEventArtifactFindingSize.small]: '#404040',
+                    [LifeformDiscoveryEventArtifactFindingSize.medium]: '#3e85fe',
+                    [LifeformDiscoveryEventArtifactFindingSize.large]: '#e01a76',
+                    [LifeformDiscoveryEventArtifactFindingSize.storageFull]: '#d11515',
+                },
             },
             lifeforms: {
                 [LifeformType.humans]: '#7ec000',

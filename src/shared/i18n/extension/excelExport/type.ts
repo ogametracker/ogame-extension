@@ -103,5 +103,7 @@ export interface ExcelExportTranslations {
         result: string;
         lifeform: string;
         experience: string;
+        artifacts: string;
+        artifactsSize: string;
     };
 }

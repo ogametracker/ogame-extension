@@ -8,6 +8,7 @@ import { CombatResultType } from '../combat-reports/CombatResultType';
 import { ExpeditionDepletionLevel } from '../expeditions/ExpeditionDepletionLevel';
 import { LifeformDiscoveryEventType } from '../lifeform-discoveries/LifeformDiscoveryEventType';
 import { ValidLifeformType } from '../ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryEventArtifactFindingSize } from '../lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
 
 export interface ColorSettings {
     expeditions: {
@@ -15,7 +16,10 @@ export interface ColorSettings {
         sizes: Record<ExpeditionEventSize, string>;
         depletion: Record<ExpeditionDepletionLevel | 'unknown', string>;
     };
-    lifeformDiscoveries: Record<LifeformDiscoveryEventType, string>;
+    lifeformDiscoveries: {
+        events: Record<LifeformDiscoveryEventType, string>;
+        artifactFindingSizes: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
+    };
     lifeforms: Record<ValidLifeformType, string>;
     resources: Record<ResourceType | 'totalConverted', string>;
     ships: Record<ShipType, string>;
