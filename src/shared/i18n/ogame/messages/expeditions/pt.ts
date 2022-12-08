@@ -154,9 +154,9 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*pt*//*LOCA: pt 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*pt*//*LOCA: pt 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*pt*//*LOCA: pt 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*pt*//*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,
+            /*pt*//*'Descobrimos */'provas que indicam a presença de outras frotas'/* em expedição.'*/,
+            /*pt*//*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*pt*//*LOCA: pt 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
