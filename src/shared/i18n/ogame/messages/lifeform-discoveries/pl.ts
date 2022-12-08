@@ -29,7 +29,7 @@ export const pl: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.lostShip]: [
         /*'Załodze statku */'ekspedycyjnego udało się nawiązać kontakt z nieznaną rasą obcych'/* , która na pierwszy rzut oka wydawała się być przyjazna. Wiadomości naszych ambasadorów i załogi dosyć szybko wydały nam się jednak aż nazbyt euforyczne i musieliśmy wyjść z założenia, że ulegli hipnozie. Ich ostatnich znakiem życia było bardzo radosne orzeczenie całej załogi, że zostaną już na stale u ich nowych najlepszych przyjaciół. Od tamtej pory zaginął po nich wszelki ślad.'*/,
         /*'W trakcie poszukiwania inteligentnych form życia statek wylądował na nieznanym do tej pory księżycu. Załoga statku dosyć szybko dowiedziała się, dlaczego jeszcze nikt nie udokumentował istnienia tego ciała niebieskiego. Udało im się wysłać jeszcze szybki sygnał SOS, ale niestety było już za późno. */'Ogromne czerwie magmowe pochłonęły cały statek'/* wraz za załogą w przeciągu kilku minut.'*/,
-        /*LOCA: pl 'Das Erkundungsschiff schaffte es zwar, eine intelligente Alienspezies aufzuspüren, */'diese erwies sich jedoch als feindselig'/*. Dem letzten Funkspruch der Crew ist zu entnehmen, dass sie von den Außerirdischen als Gefangene abtransportiert wurden. Jeglicher Versuch, den weiteren Verbleib des Schiffes und seiner Besatzung aufzuklären, blieb leider erfolglos.'*/,
+        /*'Statek ekspedycyjny natrafił na nieznany do tej pory gatunek istot żyjących, */'które okazały się jednak wrogo nastawione'/* . Z ostatniej wiadomości załogi wynika, że jej członkowie zostali pojmani i uprowadzeni przez obcych. Niestety nie udało się ustalić ani lokalizacji statku, ani dalszych losów jego załogi.'*/,
         /*'Statek ekspedycyjny wylądował na nieznanej planecie, by uzupełnić zapasy. Planeta ta była spowita tajemniczą mgłą, */'która okazała się być niezwykle silnym gazem usypiającym'/* . Jego moc była na tyle niezwykła, że nikt nie odważył się podjąć misji ratunkowej.'*/,
         /*'Załoga tego statku ekspedycyjnego już zawsze słynęła z brawurowych manewrów i miała w całej flocie reputację nieustraszonej, co czyniło ją idealnym wyborem do tej misji. Pewnie dlatego jej członkowie pomyśleli, że mogą */'spokojnie przelecieć przez sam środek pola asteroid'/* . Niestety tym razem ich odwaga nie była najlepszym doradcą, a ze statku pozostał tylko kosmiczny złom.'*/,
         /*'Wygląda na to, że */'statek ekspedycyjny przepadł w do tej pory nieznanej osobliwości'/* . Nie udało się namierzyć oznak życia załogi.'*/,
@@ -44,7 +44,7 @@ export const pl: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Statek ekspedycyjny znalazł */'kilka artefaktów, ale nie mógł ich zabrać, ponieważ twoje'/* magazyny są pełne.'*/,
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Statek */'ekspedycyjny znalazł kilka artefaktów',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Statek */'ekspedycyjny znalazł dużą ilość artefaktów',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: pl 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Statek */'ekspedycyjny znalazł olbrzymią kolekcję artefaktów',
         },
         numberOfArtifacts: /Znalezione artefakty: (?<artifacts>\d+)/i,
     },
