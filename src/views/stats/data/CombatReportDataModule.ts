@@ -30,7 +30,12 @@ export interface DailyCombatReportResult {
             resourceUnits: Record<ResourceType, number>;
         };
     };
-    loot: Record<ResourceType, number>;
+
+    loot: {
+        gained: Record<ResourceType, number>;
+        lost: Record<ResourceType, number>;
+        total: Record<ResourceType, number>;
+    }
 }
 
 @Component
@@ -105,14 +110,26 @@ class CombatReportDataModuleClass extends Vue {
         }
 
         for (const resource of ResourceTypes) {
-            dailyResult.loot[resource] += report.loot[resource];
+            const amount = report.loot[resource];
+            
+            dailyResult.loot.total[resource] += amount;
+            
+            if (amount < 0) {
+                dailyResult.loot.lost[resource] += amount;
+            } else {
+                dailyResult.loot.gained[resource] += amount;
+            }
         }
     }
 
     private getNewDailyResult(date: number): DailyCombatReportResult {
         return {
             date,
-            loot: createRecord(ResourceTypes, 0),
+            loot: {
+                lost: createRecord(ResourceTypes, 0),
+                gained: createRecord(ResourceTypes, 0),
+                total: createRecord(ResourceTypes, 0),
+            },
             lostShips: {
                 onExpeditions: {
                     ships: createRecord(ShipTypes, 0),

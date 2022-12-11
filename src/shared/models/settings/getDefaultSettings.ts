@@ -57,6 +57,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
             showDetailedBreakdown: false,
             includeExpeditionFoundShipsResourceUnits: true,
             includeLostShipsResourceUnits: true,
+            includeLostLootResources: true,
         },
         conversionRates: {
             mode: 'msu',

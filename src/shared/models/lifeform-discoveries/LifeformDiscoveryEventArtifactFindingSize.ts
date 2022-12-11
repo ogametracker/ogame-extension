@@ -6,8 +6,8 @@ export enum LifeformDiscoveryEventArtifactFindingSize {
 }
 
 export const LifeformDiscoveryEventArtifactFindingSizes: LifeformDiscoveryEventArtifactFindingSize[] = [
-    LifeformDiscoveryEventArtifactFindingSize.storageFull,
     LifeformDiscoveryEventArtifactFindingSize.small,
     LifeformDiscoveryEventArtifactFindingSize.medium,
     LifeformDiscoveryEventArtifactFindingSize.large,
+    LifeformDiscoveryEventArtifactFindingSize.storageFull,
 ];

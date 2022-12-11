@@ -239,7 +239,7 @@ class ExcelExportClass {
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
-            ...ResourceTypes.map(resource => day.loot[resource]),
+            ...ResourceTypes.map(resource => day.loot.total[resource]),
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 

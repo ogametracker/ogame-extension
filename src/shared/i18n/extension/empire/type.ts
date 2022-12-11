@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 
 export interface EmpireTranslations {
@@ -151,5 +152,6 @@ export interface EmpireTranslations {
         lifeformFound: string;
         artifacts: string;
         eventTypes: Record<LifeformDiscoveryEventType, string>;
+        artifactFindingSizes: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
     };
 }

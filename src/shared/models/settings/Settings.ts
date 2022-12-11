@@ -73,6 +73,7 @@ export interface Settings {
         showDetailedBreakdown: boolean;
         includeExpeditionFoundShipsResourceUnits: boolean;
         includeLostShipsResourceUnits: boolean;
+        includeLostLootResources: boolean;
     };
 
     debrisFields: {

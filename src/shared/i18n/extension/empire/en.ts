@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { EmpireTranslations } from "./type";
 
@@ -150,6 +151,12 @@ export const en: EmpireTranslations = {
             [LifeformDiscoveryEventType.newLifeformFound]: 'New lifeform',
             [LifeformDiscoveryEventType.knownLifeformFound]: 'Lifeform experience',
             [LifeformDiscoveryEventType.artifacts]: 'Artifacts found',
+        },
+        artifactFindingSizes: {
+            [LifeformDiscoveryEventArtifactFindingSize.small]: 'Common Find',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: 'Large Find',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: 'Huge Find',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'Storage Full',
         },
         lifeformFound: 'Lifeform found',
         alwaysAvailable: 'Always available',
