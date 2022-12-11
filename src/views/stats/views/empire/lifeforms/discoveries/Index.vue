@@ -18,6 +18,10 @@
                     label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.experience,
                     to: { name: 'empire/lifeforms/discoveries/experience' },
                 },
+                {
+                    label: this.$i18n.$t.extension.empire.lifeforms.artifacts,
+                    to: { name: 'empire/lifeforms/discoveries/artifacts' },
+                },
             ];
         }
     }
