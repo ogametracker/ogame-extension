@@ -88,7 +88,7 @@
                     label: this.$i18n.$t.extension.resources[resource],
                     color: this.colors[resource],
                     filled: true,
-                    getValue: (result: DailyCombatReportResult) => result.loot[resource],
+                    getValue: (result: DailyCombatReportResult) => result.loot.total[resource],
                     showAverage: true,
                 })),
                 {
@@ -96,7 +96,7 @@
                     label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
                     color: this.colors.totalConverted,
                     filled: false,
-                    getValue: result => getMsuOrDsu(result.loot),
+                    getValue: result => getMsuOrDsu(result.loot.total),
                     stack: false,
                     showAverage: true,
                 }

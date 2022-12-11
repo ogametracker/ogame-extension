@@ -87,6 +87,10 @@ export const de: SettingsTranslations = {
             header: 'In Kämpfen verlorene Schiffe',
             checkboxLabel: 'Rohstoffeinheiten in Kämpfen verlorener Schiffe in die Rohstoffbilanz einbeziehen',
         },
+        includeLostLootResources: {
+            header: 'In Kämpfen verlorene Rohstoffe',
+            checkboxLabel: 'in Kämpfen verlorene Rohstoffeinheiten in die Rohstoffbilanz einbeziehen',
+        },
     },
     showConvertedUnitsInTables: {
         title: 'MSE/DSE in Tabellen',

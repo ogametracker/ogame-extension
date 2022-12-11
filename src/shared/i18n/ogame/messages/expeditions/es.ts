@@ -19,7 +19,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'¡Una */'deformación espontánea en el hiperespacio permitió'/* a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
-            /*LOCA: es 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Nuestra expedición informa de un primer encuentro muy particular. Parece ser que una criatura de energía, */'que se llamaba a sí mismo Legoriano'/* , fluyó a través de las naves de la expedición y decidió ayudar a nuestra especie poco desarrollada. ¡Materializó un recipiente de Materia Oscura en el puente de la nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Se ha capturado (?<name>${darkMatter}) de (?<amount>.+)\\.`, 'i'),
     },
@@ -138,7 +138,7 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Tuvimos dificultades para */'pronunciar correctamente el dialecto de una raza alienígena'/* . Nuestro diplomático gritó "¡Fuego!" en lugar de "¡Paz!".'*/,
-            /*LOCA: es 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Una gran */'formación de naves cristalinas de origen desconocido'/* toma curso directo de colisión con nuestra expedición. Ahora tenemos que asumir lo peor.'*/,
         ],
     },
 
