@@ -119,7 +119,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*LOCA: es 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'La expedición informa de */'duras batallas contra naves piratas sin identificar',
         ],
     },
 
