@@ -18,8 +18,8 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'A nossa frota em expedição envia-nos notícias de um fenómeno espectacular. A acumulação de Matéria Negra */'nas baterias de energia dos escudos da nave'/*. Os nossos engenheiros estão a tentar recolher o máximo de Matéria Negra que podem antes do fenómeno acabar.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*LOCA: pt /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*pt*//*'Uma */'deformação espontânea no hiperespaço permite'/* à tua frota recolher uma grande quantidade de Matéria Negra!'*/,
+            /*pt*//*'A nossa frota em exploração contactou pela primeira vez com uma raça especial. Parece que é uma criatura feita de energia pura, */'que se auto-intitula Legoriana'/* . Esta flutua por entre as naves da expedição e decide ajudar a nossa espécie subdesenvolvida - uma caixa contendo Matéria Negra foi materializada no convés da nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Foram roubados (?<amount>[^\\s]+) de (?<name>${darkMatter})`, 'i'),
     },
