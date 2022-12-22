@@ -131,7 +131,7 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*'¡Una *escuadrilla */'de naves sin identificar ha atacado a nuestra'/* expedición!'*/,
+            /*'¡Una */'especie desconocida ataca nuestra expedición',
             /*'Tu flota de */'expedición parece haber entrado en un territorio perteneciente a una raza alienígena'/* desconocida pero muy belicosa.'*/,
             /*'La conexión con nuestra expedición se vio interrumpida repentinamente. Si hemos descifrado correctamente su último mensaje, la flota está sufriendo un duro ataque; */'no se ha logrado identificar a los agresores',
         ],
