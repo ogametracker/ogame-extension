@@ -118,7 +118,7 @@ export const es: ExpeditionMessages = {
             /*'La señal de emergencia que la expedición estaba siguiendo resultó ser */'una maliciosa trampa dispuesta por unos bucaneros estelares'/* . No se pudo evitar un combate.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'¡Las */'señales no provenían de una criatura extraña'/* , sino de una base pirata secreta! Los piratas no se mostraron especialmente entusiasmados con nuestra presencia en el sector.'*/,
             /*'La expedición informa de */'duras batallas contra naves piratas sin identificar',
         ],
     },
