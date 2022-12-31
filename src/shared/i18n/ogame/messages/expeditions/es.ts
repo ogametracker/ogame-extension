@@ -118,7 +118,7 @@ export const es: ExpeditionMessages = {
             /*'La señal de emergencia que la expedición estaba siguiendo resultó ser */'una maliciosa trampa dispuesta por unos bucaneros estelares'/* . No se pudo evitar un combate.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'¡Las */'señales no provenían de una criatura extraña'/* , sino de una base pirata secreta! Los piratas no se mostraron especialmente entusiasmados con nuestra presencia en el sector.'*/,
             /*'La expedición informa de */'duras batallas contra naves piratas sin identificar',
         ],
     },
@@ -131,7 +131,7 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*'¡Una *escuadrilla */'de naves sin identificar ha atacado a nuestra'/* expedición!'*/,
+            /*'¡Una */'especie desconocida ataca nuestra expedición',
             /*'Tu flota de */'expedición parece haber entrado en un territorio perteneciente a una raza alienígena'/* desconocida pero muy belicosa.'*/,
             /*'La conexión con nuestra expedición se vio interrumpida repentinamente. Si hemos descifrado correctamente su último mensaje, la flota está sufriendo un duro ataque; */'no se ha logrado identificar a los agresores',
         ],

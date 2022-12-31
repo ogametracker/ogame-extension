@@ -8,15 +8,15 @@ class IonCrystalModulesClass extends LifeformTechnology implements CrawlerProduc
         super({
             metal: {
                 baseCost: 200_000,
-                increaseFactor: 1.5,
+                increaseFactor: 1.2,
             },
             crystal: {
                 baseCost: 100_000,
-                increaseFactor: 1.5,
+                increaseFactor: 1.2,
             },
             deuterium: {
                 baseCost: 100_000,
-                increaseFactor: 1.5,
+                increaseFactor: 1.2,
             },
             energy: {
                 baseCost: 0,
