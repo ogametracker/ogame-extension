@@ -44,7 +44,7 @@ export const fr: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Le vaisseau d`exploration a trouvé quelques artéfacts, mais n`a */'pas pu les emmener puisque vos entrepôts sont complets',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Le vaisseau d`exploration */'a trouvé quelques artéfacts',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Le vaisseau d`exploration */'a trouvé un grand nombre d`artéfacts',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: fr 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Le vaisseau d`exploration */'a trouvé une énorme collection d`artéfacts',
         },
         numberOfArtifacts: /Artéfacts trouvés : (?<artifacts>\d+)/i,
     },
