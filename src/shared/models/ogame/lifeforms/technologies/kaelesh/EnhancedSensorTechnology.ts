@@ -7,15 +7,15 @@ class EnhancedSensorTechnologyClass extends LifeformTechnology implements Expedi
     public constructor() {
         super({
             metal: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 10000,
+                baseCost: 10_000,
                 increaseFactor: 1.5,
             },
             energy: {

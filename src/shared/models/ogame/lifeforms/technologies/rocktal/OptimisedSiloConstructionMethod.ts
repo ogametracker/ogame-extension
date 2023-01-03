@@ -8,15 +8,15 @@ class OptimisedSiloConstructionMethodClass extends LifeformTechnology implements
     public constructor() {
         super({
             metal: {
-                baseCost: 220000,
+                baseCost: 220_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 110000,
+                baseCost: 110_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 110000,
+                baseCost: 110_000,
                 increaseFactor: 1.3,
             },
             energy: {

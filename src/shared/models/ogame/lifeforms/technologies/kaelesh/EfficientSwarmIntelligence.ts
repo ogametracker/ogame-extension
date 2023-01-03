@@ -9,15 +9,15 @@ class EfficientSwarmIntelligenceClass extends LifeformTechnology implements Rese
     public constructor() {
         super({
             metal: {
-                baseCost: 200000,
+                baseCost: 200_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 100000,
+                baseCost: 100_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 100000,
+                baseCost: 100_000,
                 increaseFactor: 1.5,
             },
             energy: {

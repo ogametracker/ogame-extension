@@ -7,15 +7,15 @@ class NeuromodalCompressorClass extends LifeformTechnology implements StatsBonus
     public constructor() {
         super({
             metal: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.3,
             },
             energy: {

@@ -7,15 +7,15 @@ class KaeleshDiscovererEnhancementClass extends LifeformTechnology implements Cl
     public constructor() {
         super({
             metal: {
-                baseCost: 300000,
+                baseCost: 300_000,
                 increaseFactor: 1.7,
             },
             crystal: {
-                baseCost: 180000,
+                baseCost: 180_000,
                 increaseFactor: 1.7,
             },
             deuterium: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.7,
             },
             energy: {

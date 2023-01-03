@@ -9,15 +9,15 @@ class NeuroInterfaceClass extends LifeformTechnology implements ResearchCostAndT
     public constructor() {
         super({
             metal: {
-                baseCost: 70000,
+                baseCost: 70_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 40000,
+                baseCost: 40_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.5,
             },
             energy: {

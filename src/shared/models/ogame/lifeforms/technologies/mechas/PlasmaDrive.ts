@@ -8,15 +8,15 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
     public constructor() {
         super({
             metal: {
-                baseCost: 7500,
+                baseCost: 7_500,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 12500,
+                baseCost: 12_500,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.3,
             },
             energy: {

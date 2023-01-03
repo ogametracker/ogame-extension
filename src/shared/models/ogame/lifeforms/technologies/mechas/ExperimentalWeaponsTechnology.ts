@@ -8,15 +8,15 @@ class ExperimentalWeaponsTechnologyClass extends LifeformTechnology implements R
     public constructor() {
         super({
             metal: {
-                baseCost: 500000,
+                baseCost: 500_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 300000,
+                baseCost: 300_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 200000,
+                baseCost: 200_000,
                 increaseFactor: 1.5,
             },
             energy: {

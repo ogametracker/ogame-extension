@@ -7,15 +7,15 @@ class GeneralOverhaul_LightFighterClass extends LifeformTechnology implements St
     public constructor() {
         super({
             metal: {
-                baseCost: 160000,
+                baseCost: 160_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.5,
             },
             energy: {

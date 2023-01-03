@@ -7,15 +7,15 @@ class GravitationSensorsClass extends LifeformTechnology implements ExpeditionBo
     public constructor() {
         super({
             metal: {
-                baseCost: 240000,
+                baseCost: 240_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.5,
             },
             energy: {
