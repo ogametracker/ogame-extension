@@ -343,6 +343,10 @@
 
         @Watch('playerSettings.playerClass')
         private onPlayerClassSelectionChanged(newClass: PlayerClass) {
+            if (!this.showProductionSettings) {
+                return;
+            }
+
             const isCollector = newClass == PlayerClass.collector;
             const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
 
