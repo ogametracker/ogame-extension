@@ -8,6 +8,7 @@ import { serviceWorkerUuid } from '@/shared/uuid';
 import { Settings } from '@/shared/models/settings/Settings';
 import { LanguageKey } from '@/shared/i18n/LanguageKey';
 import { loadSettings } from '@/shared/models/settings/loadSettings';
+import { getLanguage } from '@/shared/i18n/getLanguage';
 
 export class SettingsService implements MessageService {
     private _settings: Settings = null!;
@@ -47,7 +48,8 @@ export class SettingsService implements MessageService {
     }
 
     private async broadcastSettings(meta: MessageOgameMeta, uuid?: string): Promise<void> {
-        const settings = this._settings
+        const lang = getLanguage(meta.language) ?? LanguageKey.en;
+        const settings = await loadSettings(lang);
 
         const settingsMessage: SettingsMessage = {
             ogameMeta: meta,
