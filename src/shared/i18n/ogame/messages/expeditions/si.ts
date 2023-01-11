@@ -118,7 +118,7 @@ export const si: ExpeditionMessages = {
             /*'Signal za pomoč kateremu je flota sledila, */'je bila v resnici zaseda piratov'/*. Bitki se ni bilo mogoče izogniti.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: si 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'Signal ni prišel od tujega stvora, */'ampak iz baze piratov'/* ! Niti niso bili presenečeni nad našo prisotnostjo.'*/,
             /*LOCA: si 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
     },

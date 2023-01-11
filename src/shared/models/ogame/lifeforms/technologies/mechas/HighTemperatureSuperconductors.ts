@@ -8,15 +8,15 @@ class HighTemperatureSuperconductorsClass extends LifeformTechnology implements 
     public constructor() {
         super({
             metal: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.3,
             },
             energy: {

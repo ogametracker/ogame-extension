@@ -8,15 +8,15 @@ class HeatRecoveryClass extends LifeformTechnology implements FuelConsumptionRed
     public constructor() {
         super({
             metal: {
-                baseCost: 10000,
+                baseCost: 10_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 6000,
+                baseCost: 6_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 1000,
+                baseCost: 1_000,
                 increaseFactor: 1.5,
             },
             energy: {

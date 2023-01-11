@@ -7,15 +7,15 @@ class TelekineticTractorBeamClass extends LifeformTechnology implements Expediti
     public constructor() {
         super({
             metal: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 15000,
+                baseCost: 15_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 7500,
+                baseCost: 7_500,
                 increaseFactor: 1.5,
             },
             energy: {

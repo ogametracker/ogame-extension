@@ -8,15 +8,15 @@ class ObsidianShieldReinforcementClass extends LifeformTechnology implements Sta
     public constructor() {
         super({
             metal: {
-                baseCost: 250000,
+                baseCost: 250_000,
                 increaseFactor: 1.4,
             },
             crystal: {
-                baseCost: 250000,
+                baseCost: 250_000,
                 increaseFactor: 1.4,
             },
             deuterium: {
-                baseCost: 250000,
+                baseCost: 250_000,
                 increaseFactor: 1.4,
             },
             energy: {

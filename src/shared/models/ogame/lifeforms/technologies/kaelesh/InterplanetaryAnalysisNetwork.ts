@@ -5,15 +5,15 @@ class InterplanetaryAnalysisNetworkClass extends LifeformTechnology {
     public constructor() {
         super({
             metal: {
-                baseCost: 80000,
+                baseCost: 80_000,
                 increaseFactor: 1.2,
             },
             crystal: {
-                baseCost: 50000,
+                baseCost: 50_000,
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.2,
             },
             energy: {

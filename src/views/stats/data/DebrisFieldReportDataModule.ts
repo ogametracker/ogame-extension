@@ -68,6 +68,20 @@ class DebrisFieldReportDataModuleClass extends Vue {
         this._resolveReady();
     }
 
+    private addTimeout: number | undefined = undefined;
+    private addReports: DebrisFieldReport[] = [];
+
+    private addDebrisFieldReportToDailyResult_delayed(report: DebrisFieldReport) {
+        this.addReports.push(report);
+
+        clearTimeout(this.addTimeout);
+        this.addTimeout = setTimeout(() => {
+            const addReports = this.addReports;
+            this.addReports = [];
+            addReports.forEach(report => this.addDebrisFieldReportToDailyResult(report));
+        }, 500);
+    }
+
     private addDebrisFieldReportToDailyResult(report: DebrisFieldReport) {
         this.internal_count++;
 
@@ -125,7 +139,7 @@ class DebrisFieldReportDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewDebrisFieldReport: {
                 const { data } = msg as NewDebrisFieldReportMessage;
-                this.addDebrisFieldReportToDailyResult(data);
+                this.addDebrisFieldReportToDailyResult_delayed(data);
                 break;
             }
         }

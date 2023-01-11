@@ -8,15 +8,15 @@ class ImprovedDroneAIClass extends LifeformTechnology implements ResearchCostAnd
     public constructor() {
         super({
             metal: {
-                baseCost: 70000,
+                baseCost: 70_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 40000,
+                baseCost: 40_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.3,
             },
             energy: {

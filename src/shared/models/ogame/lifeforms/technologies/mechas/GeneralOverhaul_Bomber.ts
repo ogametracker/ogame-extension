@@ -7,15 +7,15 @@ class GeneralOverhaul_BomberClass extends LifeformTechnology implements StatsBon
     public constructor() {
         super({
             metal: {
-                baseCost: 320000,
+                baseCost: 320_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 240000,
+                baseCost: 240_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 100000,
+                baseCost: 100_000,
                 increaseFactor: 1.5,
             },
             energy: {

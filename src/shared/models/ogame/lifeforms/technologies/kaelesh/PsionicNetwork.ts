@@ -7,15 +7,15 @@ class PsionicNetworkClass extends LifeformTechnology implements ExpeditionBonusL
     public constructor() {
         super({
             metal: {
-                baseCost: 15000,
+                baseCost: 15_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 10000,
+                baseCost: 10_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 5000,
+                baseCost: 5_000,
                 increaseFactor: 1.5,
             },
             energy: {

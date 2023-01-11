@@ -81,6 +81,20 @@ class CombatReportDataModuleClass extends Vue {
         this._resolveReady();
     }
 
+    private addTimeout: number | undefined = undefined;
+    private addCombatReports: CombatReport[] = [];
+
+    private addCombatReportToDailyResult_delayed(report: CombatReport) {
+        this.addCombatReports.push(report);
+
+        clearTimeout(this.addTimeout);
+        this.addTimeout = setTimeout(() => {
+            const addCombats = this.addCombatReports;
+            this.addCombatReports = [];
+            addCombats.forEach(report => this.addCombatReportToDailyResult(report));
+        }, 500);
+    }
+
     private addCombatReportToDailyResult(report: CombatReport) {
         this.internal_count++;
 
@@ -160,7 +174,7 @@ class CombatReportDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewCombatReport: {
                 const { data } = msg as NewCombatReportMessage;
-                this.addCombatReportToDailyResult(data);
+                this.addCombatReportToDailyResult_delayed(data);
                 break;
             }
         }

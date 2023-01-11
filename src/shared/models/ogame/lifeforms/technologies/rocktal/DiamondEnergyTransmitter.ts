@@ -8,15 +8,15 @@ class DiamondEnergyTransmitterClass extends LifeformTechnology implements Resear
     public constructor() {
         super({
             metal: {
-                baseCost: 240000,
+                baseCost: 240_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.3,
             },
             energy: {

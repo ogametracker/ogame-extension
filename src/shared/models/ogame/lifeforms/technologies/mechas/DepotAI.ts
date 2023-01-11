@@ -8,15 +8,15 @@ class DepotAIClass extends LifeformTechnology implements BuildingCostAndTimeRedu
     public constructor() {
         super({
             metal: {
-                baseCost: 20000,
+                baseCost: 20_000,
                 increaseFactor: 1.3,
             },
             crystal: {
-                baseCost: 15000,
+                baseCost: 15_000,
                 increaseFactor: 1.3,
             },
             deuterium: {
-                baseCost: 7500,
+                baseCost: 7_500,
                 increaseFactor: 1.3,
             },
             energy: {

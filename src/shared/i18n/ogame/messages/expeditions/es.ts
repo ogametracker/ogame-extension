@@ -127,7 +127,7 @@ export const es: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'¡Unas */'naves de exótico aspecto atacaron la expedición'/* sin previo aviso!'*/,
             /*'Tu flota de expedición no tuvo un */'primer contacto especialmente amigable con una especie'/* desconocida.'*/,
-            /*LOCA: es 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'¡Una escuadrilla de */'naves sin identificar ha atacado a nuestra expedición',
             /*LOCA: es 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [

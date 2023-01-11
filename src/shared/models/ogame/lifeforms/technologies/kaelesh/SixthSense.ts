@@ -7,15 +7,15 @@ class SixthSenseClass extends LifeformTechnology implements ExpeditionBonusLifef
     public constructor() {
         super({
             metal: {
-                baseCost: 120000,
+                baseCost: 120_000,
                 increaseFactor: 1.5,
             },
             crystal: {
-                baseCost: 30000,
+                baseCost: 30_000,
                 increaseFactor: 1.5,
             },
             deuterium: {
-                baseCost: 25000,
+                baseCost: 25_000,
                 increaseFactor: 1.5,
             },
             energy: {

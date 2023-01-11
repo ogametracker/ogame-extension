@@ -65,14 +65,32 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         let minDate: number | null = null;
         const lifeformDiscoveries = await db.getAll('lifeformDiscoveries');
         lifeformDiscoveries.forEach(discovery => {
-            this.addLifeformDiscoveryToDailyResult(discovery);
-            this.addLifeformDiscoveryToLifeformInfos(discovery);
+            this.addLifeformDiscovery(discovery);
 
             minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, discovery.date);
         });
         this.internal_firstDate = minDate;
 
         this._resolveReady();
+    }
+
+    private addLifeformDiscovery(discovery: LifeformDiscoveryEvent) {
+        this.addLifeformDiscoveryToDailyResult(discovery);
+        this.addLifeformDiscoveryToLifeformInfos(discovery);
+    }
+
+    private addTimeout: number | undefined = undefined;
+    private addDiscoveries: LifeformDiscoveryEvent[] = [];
+
+    private addLifeformDiscovery_delayed(discovery: LifeformDiscoveryEvent) {
+        this.addDiscoveries.push(discovery);
+
+        clearTimeout(this.addTimeout);
+        this.addTimeout = setTimeout(() => {
+            const addDiscoveries = this.addDiscoveries;
+            this.addDiscoveries = [];
+            addDiscoveries.forEach(discovery => this.addLifeformDiscovery(discovery));
+        }, 500);
     }
 
     private addLifeformDiscoveryToLifeformInfos(discovery: LifeformDiscoveryEvent) {
@@ -141,7 +159,7 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewLifeformDiscovery: {
                 const { data: discovery } = msg as NewLifeformDiscoveryMessage;
-                this.addLifeformDiscoveryToDailyResult(discovery);
+                this.addLifeformDiscovery_delayed(discovery);
                 break;
             }
         }

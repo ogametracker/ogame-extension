@@ -5,15 +5,15 @@ class TelekineticDriveClass extends LifeformTechnology {
     public constructor() {
         super({
             metal: {
-                baseCost: 85000,
+                baseCost: 85_000,
                 increaseFactor: 1.2,
             },
             crystal: {
-                baseCost: 40000,
+                baseCost: 40_000,
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 35000,
+                baseCost: 35_000,
                 increaseFactor: 1.2,
             },
             energy: {
