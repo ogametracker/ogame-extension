@@ -50,9 +50,9 @@ const manifest = {
     manifest_version: 3,
     default_locale: 'de',
     version: version ?? `${format(now, 'yyyy')
-        }.${format(now, 'MM')
-        }.${format(now, 'dd')
-        }.${format(now, 'HH')}${format(now, 'mm')}${Math.trunc(now.getSeconds() / 10)}`,
+        }.${format(now, 'M')
+        }.${format(now, 'd')
+        }.${format(now, 'k')}${format(now, 'mm')}${Math.trunc(now.getSeconds() / 10)}`,
     icons: {
         [128]: isDev ? 'icon128-dev.png' : 'icon128.png',
     },
@@ -77,7 +77,8 @@ const manifest = {
 
 if (browser == 'chrome') {
     manifest.background.service_worker = 'service-worker.js';
-} else if (browser == 'firefox') {
+} 
+else if (browser == 'firefox') {
     manifest.background.scripts = ['service-worker.js'];
     manifest.browser_specific_settings = {
         gecko: {
