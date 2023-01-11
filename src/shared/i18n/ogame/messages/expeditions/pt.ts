@@ -8,18 +8,18 @@ export const pt: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*pt*//*'A missão em */'exploração conseguiu capturar e conservar alguma Matéria Negra',
             /*pt*//*'Encontramos os */'restos de uma nave alienígena'/* ' Lá dentro encontrámos um pequeno contentor com Matéria Negra.'*/,
-            /*LOCA: pt /*'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*pt*//*'Encontrámos um */'estranho alienígena numa pequena nave que nos deu um pequeno contentor'/* com Matéria Negra em troca de uns simples cálculos matemáticos.'*/,
             /*pt*//*'A nossa frota em */'exploração encontrou uma nave-fantasma que transportava uma pequena quantidade'/* de Matéria Negra. Os engenheiros tentaram perceber o que tinha acontecido à tripulação mas não chegaram a qualquer explicação, no entanto recolheram a Matéria Negra.'*/,
             /*pt*//*'A expedição seguiu uns */'estranhos sinais vindos dum asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extracção da Matéria Negra.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pt /*'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*LOCA: pt /*'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*pt*//*'A nossa missão de */'exploração conseguiu completar um dos seus propósitos'/* ! Esta conseguiu retirar Matéria Negra duma estrela a extinguir-se.'*/,
+            /*pt*//*'A nossa */'missão localiza uma antiga estação espacial que'/* , ao que parece, está a flutuar sem rumo no espaço sideral. A estação em si não é recuperável mas foi descoberta alguma Matéria Negra armazenada nos seus reactores. Os nossos técnicos tentaram recuperar tanta Matéria Negra quanta puderam.'*/,
             /*pt*//*'A nossa frota em expedição envia-nos notícias de um fenómeno espectacular. A acumulação de Matéria Negra */'nas baterias de energia dos escudos da nave'/*. Os nossos engenheiros estão a tentar recolher o máximo de Matéria Negra que podem antes do fenómeno acabar.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt /*'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*LOCA: pt /*'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*pt*//*'Uma */'deformação espontânea no hiperespaço permite'/* à tua frota recolher uma grande quantidade de Matéria Negra!'*/,
+            /*pt*//*'A nossa frota em exploração contactou pela primeira vez com uma raça especial. Parece que é uma criatura feita de energia pura, */'que se auto-intitula Legoriana'/* . Esta flutua por entre as naves da expedição e decide ajudar a nossa espécie subdesenvolvida - uma caixa contendo Matéria Negra foi materializada no convés da nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Foram roubados (?<amount>[^\\s]+) de (?<name>${darkMatter})`, 'i'),
     },
@@ -34,7 +34,7 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Numa pequena lua que tinha atmosfera, a tua expedição */'encontrou um grande armazém de recursos básicos'/* . A tripulação terrestre está a tentar transferi-los para a nave.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt /*'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*pt*//*'Encontrámos uma */'cinta de minerais à volta de um planeta'/* desconhecido. As naves da expedição já estão a voltar completamente cheias!'*/,
             /*pt*//*'A tua frota de expedição */'relata que encontrou os destroços de uma nave alienígena gigante'/* . Embora não tenhamos aprendido novas tecnologias conseguimos resgatar alguns recursos da blindagem da nave.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Foram roubados (?<amount>.+) de (?<name>${resources.join('|')})`, 'i'),
@@ -52,7 +52,7 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Encontrámos */'o resto de uma armada'/* ! Os técnicos voaram para as naves que estavam mais intactas e tentaram metê-las a funcionar!'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt /*'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*pt*//*'Encontrámos */'um enorme cemitério de naves'/* ! Os Engenheiros de Máquinas conseguiram meter algumas a funcionar e estas estão a voltar connosco!'*/,
             /*pt*//*'Encontrámos um */'planeta que alberga os restos de uma civilização'/* . Conseguimos encontrar uma estação espacial velha mas intacta. Alguns dos nosso técnicos e pilotos desceram à estação e conseguiram resgatar algumas das naves que lá se encontravam.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`As seguintes naves fazem agora parte da frota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -86,7 +86,7 @@ export const pt: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: pt /*'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        /*pt*//*'Um problema inesperado no */'campo energético dos motores fez com que a expedição'/* voltasse mais rapidamente para casa. Os relatórios primários não revelam qualquer descoberta.'*/,
         /*pt*//*'A tua expedição não reportou qualquer anomalia no sector explorado. Mas a frota enquanto voltava, */'apanhou um pouco de vento solar'/*. Devido a esta ocorrência a viagem de volta foi mais rápida. A tua frota de expedição volta ao ponto de partida um pouco mais cedo.'*/,
         /*pt*//*'Um comandante novo e destemido */'conseguiu atravessar um wormhole instável'/* diminuindo assim a duração do voo! Contudo, a expedição não trouxe nada de novo.'*/,
     ],
@@ -154,9 +154,9 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*pt*//*LOCA: pt 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*pt*//*LOCA: pt 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*pt*//*LOCA: pt 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*pt*//*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,
+            /*pt*//*'Descobrimos */'provas que indicam a presença de outras frotas'/* em expedição.'*/,
+            /*pt*//*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*pt*//*LOCA: pt 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,

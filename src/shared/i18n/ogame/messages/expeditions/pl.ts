@@ -52,7 +52,7 @@ export const pl: ExpeditionMessages = {
             'Znaleźliśmy szczątki armady'/* . Technicy od razu udali się do niemalże nietkniętych statków, starają się je ponownie uruchomić.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pl 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Odkryliśmy */'niesamowity cmentarz statków kosmicznych'/* . Kilku technikom z ekspedycji udało się uruchomić niektóre statki i dołączyć do floty.'*/,
             /*'Odkryliśmy */'planetę z resztkami cywilizacji'/* . Na orbicie znajduje się olbrzymi port kosmiczny. Kilku techników i pilotów z ekspedycji udało się na powierzchnię w poszukiwaniu statków, które jeszcze można wykorzystać.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Następujące statki dołączyły do floty:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -160,7 +160,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: pl 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
-            /*LOCA: pl 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
+            /*'może lepiej by */'było otworzyć tu sklep z pamiątkami niż wysyłać kolejną'/* ekspedycję.'*/,
             /*LOCA: pl 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
         ],
     },

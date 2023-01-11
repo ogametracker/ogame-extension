@@ -136,7 +136,7 @@ export const si: ExpeditionMessages = {
             /*'Povezava z našo ekspedicijsko */'floto je bila za kratek čas prekinjena'/*. Lahko dešifriramo zadnje sporočilo. Zgleda, da so v težkem napadu z nepoznano raso.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: si 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Tvoja ekspedicija je */'naletela na sovražno floto in poroča o hudi'/* bitki!'*/,
             /*'Imeli smo nekaj težav pri pravilni izgovorjavi narečja vesoljcev. naš */'diplomat je po nesreči zaklical'/* `Ogenj!` namesto `Mir!`.'*/,
             /*LOCA: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],

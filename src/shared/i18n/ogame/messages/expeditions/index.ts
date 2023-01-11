@@ -1,17 +1,19 @@
 import { LanguageKey } from "../../../LanguageKey";
 import { ExpeditionMessages } from "./types";
-import { de } from './de';
-import { en } from './en';
-import { dk } from './dk';
 import { cz } from './cz';
-import { hr } from './hr';
-import { si } from './si';
-import { pt } from './pt';
-import { es_ar } from './es_ar';
+import { de } from './de';
+import { dk } from './dk';
+import { en } from './en';
 import { es } from './es';
-import { it } from './it';
+import { es_ar } from './es_ar';
+import { es_mx } from './es_mx';
 import { fr } from './fr';
+import { hr } from './hr';
+import { it } from './it';
 import { pl } from './pl';
+import { pt } from './pt';
+import { pt_br } from './pt_br';
+import { si } from './si';
 import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, ExpeditionMessages> = {
@@ -21,12 +23,12 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     en,
     'es-ar': es_ar,
     'es-es': es,
-    'es-mx': es,
+    'es-mx': es_mx,
     fr,
     hr,
     it,
     pl,
-    'pt-br': pt,
+    'pt-br': pt_br,
     'pt-pt': pt,
     si,
     'zh-tw': zh_tw,

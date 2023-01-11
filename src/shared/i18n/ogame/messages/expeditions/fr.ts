@@ -155,7 +155,7 @@ export const fr: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*'Nous avons fêté la fin de notre expédition avec l`équipage d`une autre flotte d`expédition qui se trouvait dans le même secteur que nous. Eux */'non plus n`avaient rien découvert d`extraordinaire',
-            /*LOCA: fr 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*'Nous avons */'découvert des signes indiquant la présence d`autres flottes'/* d`expédition dans ce secteur.'*/,
             /*'Nous avons établi un */'contact radio amical avec d`autres flottes d`expédition'/* dans ce secteur.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [

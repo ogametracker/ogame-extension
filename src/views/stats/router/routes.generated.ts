@@ -45,6 +45,13 @@ import viewsempirelifeformsbonusbreakdownExpeditions from '@stats/views/empire/l
 import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
 import viewsempirelifeformsbonusbreakdownShipStats from '@stats/views/empire/lifeforms/bonus-breakdown/Ship-Stats.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
+import viewsempirelifeformsdiscoveriesartifactsIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/Index.vue';
+import viewsempirelifeformsdiscoveriesartifactsamountIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Index.vue';
+import viewsempirelifeformsdiscoveriesartifactsamountChart from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Chart.vue';
+import viewsempirelifeformsdiscoveriesartifactsamountTable from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Table.vue';
+import viewsempirelifeformsdiscoveriesartifactssizesIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Index.vue';
+import viewsempirelifeformsdiscoveriesartifactssizesChart from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Chart.vue';
+import viewsempirelifeformsdiscoveriesartifactssizesTable from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Table.vue';
 import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
 import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
 import viewsempirelifeformsdiscoveriesexperienceTable from '@stats/views/empire/lifeforms/discoveries/experience/Table.vue';
@@ -472,6 +479,56 @@ const routes: RouteConfig[] = [
                                 name: "empire/lifeforms/discoveries",
                                 component: viewsempirelifeformsdiscoveriesIndex,
                                 children: [
+                                    {
+                                        redirect: {
+                                            name: "empire/lifeforms/discoveries/artifacts/amount"
+                                        },
+                                        path: "artifacts",
+                                        name: "empire/lifeforms/discoveries/artifacts",
+                                        component: viewsempirelifeformsdiscoveriesartifactsIndex,
+                                        children: [
+                                            {
+                                                redirect: {
+                                                    name: "empire/lifeforms/discoveries/artifacts/amount/chart"
+                                                },
+                                                path: "amount",
+                                                name: "empire/lifeforms/discoveries/artifacts/amount",
+                                                component: viewsempirelifeformsdiscoveriesartifactsamountIndex,
+                                                children: [
+                                                    {
+                                                        path: "chart",
+                                                        name: "empire/lifeforms/discoveries/artifacts/amount/chart",
+                                                        component: viewsempirelifeformsdiscoveriesartifactsamountChart
+                                                    },
+                                                    {
+                                                        path: "table",
+                                                        name: "empire/lifeforms/discoveries/artifacts/amount/table",
+                                                        component: viewsempirelifeformsdiscoveriesartifactsamountTable
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                redirect: {
+                                                    name: "empire/lifeforms/discoveries/artifacts/sizes/chart"
+                                                },
+                                                path: "sizes",
+                                                name: "empire/lifeforms/discoveries/artifacts/sizes",
+                                                component: viewsempirelifeformsdiscoveriesartifactssizesIndex,
+                                                children: [
+                                                    {
+                                                        path: "chart",
+                                                        name: "empire/lifeforms/discoveries/artifacts/sizes/chart",
+                                                        component: viewsempirelifeformsdiscoveriesartifactssizesChart
+                                                    },
+                                                    {
+                                                        path: "table",
+                                                        name: "empire/lifeforms/discoveries/artifacts/sizes/table",
+                                                        component: viewsempirelifeformsdiscoveriesartifactssizesTable
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
                                     {
                                         redirect: {
                                             name: "empire/lifeforms/discoveries/experience/chart"

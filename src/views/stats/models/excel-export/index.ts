@@ -107,6 +107,8 @@ class ExcelExportClass {
             $i18n.$t.extension.excelExport.lifeformDiscoveries.result,
             $i18n.$t.extension.excelExport.lifeformDiscoveries.lifeform,
             $i18n.$t.extension.excelExport.lifeformDiscoveries.experience,
+            $i18n.$t.extension.excelExport.lifeformDiscoveries.artifactsSize,
+            $i18n.$t.extension.excelExport.lifeformDiscoveries.artifacts,
         ];
         const data = allDiscoveries.map(disc => [
             $i18n.$d(disc.date, 'datetime'),
@@ -115,9 +117,12 @@ class ExcelExportClass {
                 [LifeformDiscoveryEventType.lostShip]: $i18n.$t.extension.empire.lifeforms.eventTypes.lostShip,
                 [LifeformDiscoveryEventType.knownLifeformFound]: $i18n.$t.extension.empire.lifeforms.lifeformFound,
                 [LifeformDiscoveryEventType.newLifeformFound]: $i18n.$t.extension.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.artifacts]: $i18n.$t.extension.empire.lifeforms.eventTypes.artifacts,
             }[disc.type]),
             'lifeform' in disc ? $i18n.$t.ogame.lifeforms[disc.lifeform] : '',
             'experience' in disc ? disc.experience : '',
+            'size' in disc ? disc.size : '',
+            'artifacts' in disc ? disc.artifacts : '',
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
@@ -234,7 +239,7 @@ class ExcelExportClass {
         ];
         const data = dailyResults.map(day => [
             $i18n.$d(day.date, 'date'),
-            ...ResourceTypes.map(resource => day.loot[resource]),
+            ...ResourceTypes.map(resource => day.loot.total[resource]),
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 

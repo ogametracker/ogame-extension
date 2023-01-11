@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformDiscoveryMessages } from "./types";
 
@@ -38,4 +39,13 @@ export const cz: LifeformDiscoveryMessages = {
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /byla objevena forma života .+ a byla přidána do nabídky forem života/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /schopni zlepšit naši znalost o nich o (?<xp>\d+) ZK/i,
+    [LifeformDiscoveryEventType.artifacts]: {
+        size: {
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Průzkumná loď našla artefakty, */'ale nemůže je sebrat, protože máš plný sklad',
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Průzkumná */'loď našla malý počet artefaktů',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Průzkumná */'loď našla velké množství artefaktů',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Průzkumná */'loď našla obrovské množství artefaktů',
+        },
+        numberOfArtifacts: /Nalezené artefakty: (?<artifacts>\d+)/i,
+    },
 };

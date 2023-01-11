@@ -364,7 +364,7 @@
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
                 levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
-                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(EmpireDataModule.lifeformExperience[lf])),
 
                 // don't matter
                 optimizeForResources: [],

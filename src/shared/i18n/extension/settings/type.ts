@@ -85,6 +85,10 @@ export interface SettingsTranslations {
             header: string;
             checkboxLabel: string;
         };
+        includeLostLootResources: {
+            header: string;
+            checkboxLabel: string;
+        };
     };
     showConvertedUnitsInTables: {
         title: string;

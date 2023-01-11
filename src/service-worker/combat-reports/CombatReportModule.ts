@@ -29,17 +29,6 @@ export class CombatReportModule {
 
         const db = await getPlayerDatabase(message.ogameMeta);
 
-        // check if combat report ignored
-        const ignoredCombat = await db.get('combatReports.ignored', combatReportData.id);
-        if(ignoredCombat != null) {
-            return {
-                success: true,
-                result: {
-                    id: message.data.id,
-                    ignored: true,
-                },
-            };
-        }
 
         // check if combat report already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', combatReportData.id);
@@ -54,8 +43,21 @@ export class CombatReportModule {
             };
         }
 
+        const shouldIgnoreEspionageCombats = settingsService.settings.combatTracking.ignoreEspionageFights;
+        // check if combat report ignored
+        const ignoredCombat = await db.get('combatReports.ignored', combatReportData.id);
+        if(ignoredCombat != null && shouldIgnoreEspionageCombats) {
+            return {
+                success: true,
+                result: {
+                    id: message.data.id,
+                    ignored: true,
+                },
+            };
+        }
+
         const isEspionageCombat = this.isEspionageCombat(message.data.ogameCombatReport);
-        if (isEspionageCombat && settingsService.settings.combatTracking.ignoreEspionageFights) {
+        if (isEspionageCombat && shouldIgnoreEspionageCombats) {
             _logDebug(`ignoring espionage combat with id ${combatReportData.id}`);
             
             await db.put('combatReports.ignored', combatReportData.id, combatReportData.id);
@@ -103,18 +105,6 @@ export class CombatReportModule {
     public async tryGetSingleReport(message: RequestSingleCombatReportMessage): Promise<TryActionResult<CombatReportResult>> {
         const db = await getPlayerDatabase(message.ogameMeta);
 
-        // check if combat report ignored
-        const ignoredCombat = await db.get('combatReports.ignored', message.data);
-        if(ignoredCombat != null) {
-            return {
-                success: true,
-                result: {
-                    id: message.data,
-                    ignored: true,
-                },
-            };
-        }
-
         // check if expedition already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', message.data);
         if (knownReport != null) {
@@ -124,6 +114,19 @@ export class CombatReportModule {
                     report: knownReport,
                     isAlreadyTracked: true,
                     ignored: false,
+                },
+            };
+        }
+
+        const shouldIgnoreEspionageCombats = settingsService.settings.combatTracking.ignoreEspionageFights;
+        // check if combat report ignored
+        const ignoredCombat = await db.get('combatReports.ignored', message.data);
+        if(ignoredCombat != null && shouldIgnoreEspionageCombats) {
+            return {
+                success: true,
+                result: {
+                    id: message.data,
+                    ignored: true,
                 },
             };
         }

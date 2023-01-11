@@ -13,13 +13,13 @@ export const es: ExpeditionMessages = {
             /*'En el */'núcleo del asteroide había una pequeña cantidad'/* de Materia Oscura. Transportamos el asteroide a bordo y los exploradores intentan extraer la Materia Oscura.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*LOCA: es 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*LOCA: es 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Nuestra expedición */'logró llevar a cabo un experimento único'/* : consiguieron extraer Materia Oscura de una estrella moribunda.'*/,
+            /*'Nuestra expedición */'encontró una vetusta estación espacial que parece haber flotado'/* durante mucho tiempo sin control por el espacio exterior. La estación por sí misma era totalmente inútil, pero había algo de Materia Oscura almacenada en su reactor. Nuestros técnicos están intentando guardar tanta como sea posible.'*/,
+            /*'Nuestra expedición informa de un espectacular y extraño fenómeno: la acumulación de Materia Oscura */'en los almacenes de energía de los escudos de la nave'/* . Nuestros técnicos están intentando almacenar tanta Materia Oscura como sea posible mientras dure el fenómeno.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*LOCA: es 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'¡Una */'deformación espontánea en el hiperespacio permitió'/* a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
+            /*'Nuestra expedición informa de un primer encuentro muy particular. Parece ser que una criatura de energía, */'que se llamaba a sí mismo Legoriano'/* , fluyó a través de las naves de la expedición y decidió ayudar a nuestra especie poco desarrollada. ¡Materializó un recipiente de Materia Oscura en el puente de la nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Se ha capturado (?<name>${darkMatter}) de (?<amount>.+)\\.`, 'i'),
     },
@@ -52,8 +52,8 @@ export const es: ExpeditionMessages = {
             /*'Encontramos */'los restos de una armada'/* . Los técnicos fueron directamente a las naves casi intactas para intentar ponerlas en funcionamiento de nuevo.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /*LOCA: es 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Encontramos */'un enorme cementerio de naves espaciales'/* . Unos técnicos de la expedición consiguieron volver a hacer funcionar algunas naves de nuevo.'*/,
+            /*'Encontramos */'un planeta con restos de una civilización'/* . Desde la órbita se puede ver una estación espacial gigante que está intacta. Algunos de tus técnicos y pilotos fueron a la superficie en busca de naves que se puedan usar aún.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Las siguientes naves ahora forman parte de la flota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -74,15 +74,15 @@ export const es: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: es 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'La última */'transmisión que recibimos de la flota fueron las excelentes fotos'/* de un agujero negro abriéndose.'*/,
         /*'Lo único que */'quedó de la expedición fue el siguiente mensaje'/* : zzzrrt ¡Madre mía! Krrrzzzzt Eso zrrrtrzt parece krgzzzz un krzzzzzzzztzzzz...'*/,
-        /*LOCA: es 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'La */'fusión del núcleo de la nave insignia produjo una reacción'/* en cadena que destruyó espectacularmente la flota entera.'*/,
         /*'La flota de expedición */'no ha retornado al espacio normal tras su salto'/* . Nuestros científicos aún intentan descubrir qué pasó, pero parece que la flota se perdió para siempre.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
         /*'Tu flota en expedición tuvo un */'corto contacto con una esquiva raza de alienígenas'/* . Estos anunciaron que van a enviar a un representante con bienes comerciales a tus mundos.'*/,
-        /*LOCA: es 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Tu */'expedición captó un grito de ayuda'/* . Era una gran nave de carga que fue capturada por un potente campo gravitacional de un planetoide. Después de que la nave de carga fuese liberada con éxito, el capitán anunció que va a incluir a su liberador en su libro negro como cliente exclusivo.'*/,
     ],
 
     [ExpeditionEventType.early]: [
@@ -113,13 +113,13 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: es 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Tu flota de expedición */'tuvo un desagradable encuentro con unos piratas'/* espaciales.'*/,
             /*'¡Nos metimos en la */'emboscada de unos bucaneros estelares'/* ! No se pudo evitar un combate.'*/,
-            /*LOCA: es 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'La señal de emergencia que la expedición estaba siguiendo resultó ser */'una maliciosa trampa dispuesta por unos bucaneros estelares'/* . No se pudo evitar un combate.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*LOCA: es 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'¡Las */'señales no provenían de una criatura extraña'/* , sino de una base pirata secreta! Los piratas no se mostraron especialmente entusiasmados con nuestra presencia en el sector.'*/,
+            /*'La expedición informa de */'duras batallas contra naves piratas sin identificar',
         ],
     },
 
@@ -131,14 +131,14 @@ export const es: ExpeditionMessages = {
             /*LOCA: es 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*'¡Una *escuadrilla */'de naves sin identificar ha atacado a nuestra'/* expedición!'*/,
-            /*LOCA: es 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'¡Una */'especie desconocida ataca nuestra expedición',
+            /*'Tu flota de */'expedición parece haber entrado en un territorio perteneciente a una raza alienígena'/* desconocida pero muy belicosa.'*/,
             /*'La conexión con nuestra expedición se vio interrumpida repentinamente. Si hemos descifrado correctamente su último mensaje, la flota está sufriendo un duro ataque; */'no se ha logrado identificar a los agresores',
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*LOCA: es 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
-            /*LOCA: es 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Tuvimos dificultades para */'pronunciar correctamente el dialecto de una raza alienígena'/* . Nuestro diplomático gritó "¡Fuego!" en lugar de "¡Paz!".'*/,
+            /*'Una gran */'formación de naves cristalinas de origen desconocido'/* toma curso directo de colisión con nuestra expedición. Ahora tenemos que asumir lo peor.'*/,
         ],
     },
 
@@ -154,9 +154,9 @@ export const es: ExpeditionMessages = {
             /*'casi tuvimos una */'colisión con otra flota de expedición'/* . No sabía que hubiera otra gente rondando por aquí.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: es 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'celebramos el fin de la expedición con los miembros de la tripulación de otra flota expedicionaria que estaba en el mismo sector. */'Ellos tampoco tienen nada emocionante sobre lo que informar',
             /*LOCA: es 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: es 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'establecimos */'contacto amistoso por radio con otras expediciones en el sector',
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: es 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,

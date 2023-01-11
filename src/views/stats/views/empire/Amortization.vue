@@ -501,9 +501,14 @@
     import { createRecord } from '@/shared/utils/createRecord';
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
     import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
-import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
+    import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
 
-    type SelectableAmortizationItem = AmortizationItem & { selected: boolean };
+    type AmortizationViewItem = AmortizationItem & {
+        selected: boolean;
+
+        /** is the item already done or not applicable anymore (e.g. planet was deleted)? */
+        done: boolean;
+    };
 
     interface AdditionalLifeformStuffGroup {
         items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
@@ -588,10 +593,53 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
             this.isGroupedItemsView = false;
 
             this.saveStateDate = savedAmortization.date;
-            this.amortizationItems = savedAmortization.items.map<SelectableAmortizationItem>(i => ({
-                ...i,
+            this.amortizationItems = savedAmortization.items.map<AmortizationViewItem>(item => ({
+                ...item,
                 selected: false,
+                done: this.getIsDone(item),
             }));
+        }
+
+        private getIsDone(item: AmortizationItem): boolean {
+            const itemType = item.type;
+            switch (item.type) {
+                case 'mine': {
+                    if(item.planetId < 0) {
+                        return false; //TODO: how to check if an item on a new planet was done?
+                    }
+
+                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
+                    return planet == null || planet.buildings[item.mine] >= item.level;
+                }
+
+                case 'plasma-technology': {
+                    return this.empire.research[ResearchType.plasmaTechnology] >= item.level;
+                }
+
+                case 'astrophysics-and-colony': {
+                    return false; //TODO: how to check if an astro+colony item was done?
+                }
+
+                case 'lifeform-building': {
+                    if(item.planetId < 0) {
+                        return false; //TODO: how to check if an item on a new planet was done?
+                    }
+
+                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
+                    return planet == null || planet.lifeformBuildings[item.building] >= item.level;
+                }
+
+                case 'lifeform-technology': {
+                    if(item.planetId < 0) {
+                        return false; //TODO: how to check if an item on a new planet was done?
+                    }
+
+                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
+                    return planet == null || planet.lifeformTechnologies[item.technology] >= item.level;
+                }
+
+                default: _throw(`Invalid amortization item type '${itemType}'`);
+            }
         }
 
         private getPlanetName(id: number): string {
@@ -651,7 +699,7 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
 
         private readonly empire = EmpireDataModule.empire;
         private generator: AmortizationItemGenerator | null = null;
-        private amortizationItems: SelectableAmortizationItem[] = [];
+        private amortizationItems: AmortizationViewItem[] = [];
         private selectedCount = 0;
 
         private generatingItemCount: { total: number; count: number } | null = null;
@@ -721,6 +769,7 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
                 this.amortizationItems.push({
                     ...next,
                     selected: false,
+                    done: false,
                 });
                 count--;
 
@@ -739,7 +788,7 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
             this.playerSettings = {
                 ...this.playerSettings,
 
-                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empire.lifeformExperience[lf])),
+                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(EmpireDataModule.lifeformExperience[lf])),
                 officers: { ...empire.officers },
                 playerClass: empire.playerClass,
                 allianceClass: empire.allianceClass,
@@ -868,16 +917,30 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
             return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
         }
 
-        private cellClassProvider(_: any, item: AmortizationItem): string {
-            switch (item.type) {
-                case 'astrophysics-and-colony': return 'astrophysics-cell';
-                case 'plasma-technology': return 'plasmatech-cell';
+        private cellClassProvider(_: any, item: AmortizationViewItem): string {
+            const classes: string[] = [];
 
-                default: return '';
+            switch (item.type) {
+                case 'astrophysics-and-colony': {
+                    classes.push('astrophysics-cell');
+                    break;
+                }
+                case 'plasma-technology': {
+                    classes.push('plasmatech-cell');
+                    break;
+                }
+
+                default: break;
             }
+
+            if (item.done) {
+                classes.push('done-cell');
+            }
+
+            return classes.join(' ');
         }
 
-        private toggleItemSelection(item?: SelectableAmortizationItem, index?: number, selectAllUntilIndex?: boolean) {
+        private toggleItemSelection(item?: AmortizationViewItem, index?: number, selectAllUntilIndex?: boolean) {
             if (item == null || index == null) {
                 const allSelected = this.selectedCount == this.amortizationItems.length;
                 this.selectedCount = allSelected ? 0 : this.amortizationItems.length;
@@ -1181,6 +1244,10 @@ import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProdu
                 .plasmatech-cell,
                 .plasmatech-cell ~ .grid-table-cell {
                     background-color: rgba(123, 255, 95, 0.1) !important;
+                }
+
+                .done-cell > * {
+                    opacity: 0.33;
                 }
             }
         }

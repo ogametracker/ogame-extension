@@ -105,5 +105,7 @@ export const de: ExcelExportTranslations = {
         result: 'Fund',
         experience: 'Erfahrung',
         lifeform: 'Lebensform',
+        artifacts: 'Artefakte',
+        artifactsSize: 'Größe',
     },
 };

@@ -1,6 +1,13 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table :dataItems="discoveries" :items="items" :footerItems="footerItems" show-average show-percentage :averageNumberFormatOptions="avgNumberFormat">
+        <ranged-stats-table
+            :dataItems="discoveries"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            show-percentage
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -10,10 +17,11 @@
                     class="mdi mdi-skull-crossbones-outline"
                     :style="{ color: colors.lostShip }"
                 />
+                <span v-else-if="value == lifeformFoundLabel" class="mdi mdi-star-shooting" :style="{ color: colors.knownLifeformFound }" />
                 <span
-                    v-else-if="value == lifeformFoundLabel"
-                    class="mdi mdi-star-shooting"
-                    :style="{ color: colors.knownLifeformFound }"
+                    v-else-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.artifacts"
+                    class="mdi mdi-pyramid"
+                    :style="{ color: colors.artifacts }"
                 />
             </template>
         </ranged-stats-table>
@@ -34,7 +42,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+    import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
     import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@/views/stats/data/LifeformDiscoveryDataModule';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
 
@@ -57,7 +65,7 @@
         }
 
         private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries;
+            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
         }
 
         private get eventTypes(): Record<string, LifeformDiscoveryEventType> {
@@ -66,6 +74,7 @@
                 [this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
                 [this.$i18n.$t.extension.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
                 [this.$i18n.$t.extension.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
+                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.artifacts]: LifeformDiscoveryEventType.artifacts,
             };
         }
 
@@ -78,6 +87,7 @@
                 [LifeformDiscoveryEventType.nothing],
                 [LifeformDiscoveryEventType.lostShip],
                 [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
+                [LifeformDiscoveryEventType.artifacts],
             ]
             return typeGroups.map(group => ({
                 label: group.length == 1 ? this.$i18n.$t.extension.empire.lifeforms.eventTypes[group[0]] : this.lifeformFoundLabel,

@@ -1,3 +1,4 @@
+import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformDiscoveryMessages } from "./types";
 
@@ -38,4 +39,13 @@ export const en: LifeformDiscoveryMessages = {
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /and added to the Lifeforms menu/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /our envoys were able to improve our knowledge about them by (?<xp>\d+) XP/i,
+    [LifeformDiscoveryEventType.artifacts]: {
+        size: {
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*'The */'Exploration Ship has found a small number of'/* artefacts'*/, //to match both "artefact" and "artifact"
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'The */'Exploration Ship has found a large quantity of'/* artefacts'*/, //to match both "artefact" and "artifact"
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*The */'Exploration Ship has found a huge trove of'/* artefacts'*/, //to match both "artefact" and "artifact"
+        },
+        numberOfArtifacts: /Art[ei]facts found: (?<artifacts>\d+)/i,
+    }
 };
