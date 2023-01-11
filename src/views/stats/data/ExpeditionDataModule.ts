@@ -80,6 +80,21 @@ class ExpeditionDataModuleClass extends Vue {
         this._resolveReady();
     }
 
+
+    private addTimeout: number | undefined = undefined;
+    private addExpos: ExpeditionEvent[] = [];
+
+    private addExpeditionToDailyResult_delayed(expo: ExpeditionEvent) {
+        this.addExpos.push(expo);
+
+        clearTimeout(this.addTimeout);
+        this.addTimeout = setTimeout(() => {
+            const addExpos = this.addExpos;
+            this.addExpos = [];
+            addExpos.forEach(expo => this.addExpeditionToDailyResult(expo));
+        }, 500);
+    }
+
     private addExpeditionToDailyResult(expedition: ExpeditionEvent) {
         this.internal_count++;
 
@@ -179,7 +194,7 @@ class ExpeditionDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewExpedition: {
                 const { data: expedition } = msg as NewExpeditionMessage;
-                this.addExpeditionToDailyResult(expedition);
+                this.addExpeditionToDailyResult_delayed(expedition);
                 break;
             }
         }
