@@ -13,6 +13,8 @@ import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 import { UniversesAndAccountsService } from "./universes-and-accounts/UniversesAndAccountsService";
+import { broadcastMessage } from "@/shared/communication/broadcastMessage";
+import { serviceWorkerUuid } from "@/shared/uuid";
 
 export const settingsService = new SettingsService();
 
@@ -28,16 +30,20 @@ const services: MessageService[] = [
     new UniversesAndAccountsService(),
 
     new InternalService(),
+
+    // re-broadcast service (fix for missing notifications and other messages in FF)
+    {
+        onMessage: async (message) => {
+            if (message.senderUuid != serviceWorkerUuid) {
+                broadcastMessage(message);
+            }
+        },
+    },
 ];
 
 try {
     chrome.runtime.onInstalled.addListener(async () => await showMigrationWindow());
-
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));
-
-    self.addEventListener('installed', async () => {
-        void (self as any).skipWaiting();
-    });
 } catch (error) {
     _logError(error);
 }
@@ -58,7 +64,7 @@ async function showMigrationWindow() {
 
 async function onMessage(message: Message<MessageType, any>) {
     _logDebug('got message', new Date(), message);
-    
+
     if (message.ogameMeta.playerId <= 0 || message.ogameMeta.serverId <= 0) {
         _logWarning('skipping message because playerid <= 0 or serverid <= 0', message);
         return;
