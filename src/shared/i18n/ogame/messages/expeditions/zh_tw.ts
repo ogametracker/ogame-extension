@@ -125,7 +125,7 @@ export const zh_tw: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: zh_tw 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*'批奇形怪狀*/'的外星艦船在事先毫無警'/*告之下襲擊了我們的遠征探險艦隊'*/,
             /*LOCA: zh_tw 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
             /*'我們的遠征探險艦隊被*/'一小股不明來歷的艦'/*隊襲擊了!'*/,
             /*LOCA: zh_tw 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
