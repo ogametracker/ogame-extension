@@ -72,7 +72,7 @@ if (!isDev) {
     zipdir('./dist', { saveTo: `./publish/ogame-tracker-${browser}--${version}.zip` });
 
     if (!noTag) {
-        const tagName = `${manifest.name.replace(/\s/g, '_')}/${version}`;
+        const tagName = `${manifest.name.replace(/\s/g, '_')}/${browser}/${version}`;
         try {
             console.log(`creating git tag '${tagName}'`);
             execSync(`git tag ${tagName}`);

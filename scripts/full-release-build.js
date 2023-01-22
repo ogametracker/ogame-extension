@@ -15,5 +15,5 @@ console.log(`creating Firefox build`);
 build('firefox', version);
 
 function build(browser, version) {
-    execSync(`node ./scripts/build.js --browser=${browser} --version ${version} --no-tag`);
+    execSync(`node ./scripts/build.js --browser=${browser} --version ${version}`);
 }
