@@ -7,7 +7,8 @@
     "dev:firefox": "node scripts/build.js --dev --browser=firefox",
     "dev:chrome": "node scripts/build.js --dev --browser=chrome",
     "build:firefox": "node scripts/build.js --browser=firefox",
-    "build:chrome": "node scripts/build.js --browser=chrome"
+    "build:chrome": "node scripts/build.js --browser=chrome",
+    "publish": "node scripts/full-release-build.js"
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
@@ -24,7 +25,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.176",
+    "@types/chrome": "^0.0.208",
     "@types/uuid": "^8.3.4",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
