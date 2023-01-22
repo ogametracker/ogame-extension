@@ -64,8 +64,12 @@ console.log(`Build ready (version ${version}, ${dateFormat.format(new Date())})`
 if (!isDev) {
     console.log('Creating zip-archive');
 
+    if (!fs.existsSync('./publish')) {
+        fs.mkdirSync('./publish');
+    }
+
     const zipdir = require('zip-dir');
-    zipdir('./dist', { saveTo: `./dist/ogame-tracker-${browser}--${version}.zip` });
+    zipdir('./dist', { saveTo: `./publish/ogame-tracker-${browser}--${version}.zip` });
 
     if (!noTag) {
         const tagName = `${manifest.name.replace(/\s/g, '_')}/${version}`;

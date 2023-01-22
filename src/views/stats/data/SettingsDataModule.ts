@@ -4,12 +4,10 @@ import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@/shared/communication/broadcastMessage';
 import { Settings } from '@/shared/models/settings/Settings';
-import { NotifySettingsUpdateMessage } from '@/shared/messages/settings';
+import { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@/shared/messages/settings';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getGlobalDatabase } from '@/shared/db/access';
-import { LanguageKey } from '@/shared/i18n/LanguageKey';
-import { loadSettings } from '@/shared/models/settings/loadSettings';
-import { getLanguage } from '@/shared/i18n/getLanguage';
+import { sendMessage } from '@/shared/communication/sendMessage';
 
 @Component
 class SettingsDataModuleClass extends Vue {
@@ -43,18 +41,20 @@ class SettingsDataModuleClass extends Vue {
         this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
 
         this.initCommunication();
-        await this.loadData();
+        this.requestData();
     }
 
     private initCommunication() {
         chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
     }
 
-    private async loadData() {
-        const languageKey = getLanguage(GlobalOgameMetaData.language) ?? LanguageKey.en;
-        this.settings = await loadSettings(languageKey);
-
-        this._resolveReady();
+    private requestData() {
+        const requestMessage: RequestSettingsMessage = {
+            type: MessageType.RequestSettings,
+            ogameMeta: GlobalOgameMetaData,
+            senderUuid: statsViewUuid,
+        };
+        sendMessage(requestMessage);
     }
 
     private async onMessage(msg: Message) {
@@ -69,7 +69,15 @@ class SettingsDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NotifySettingsUpdate: {
-                await this.loadData();
+                this.requestData();
+                break;
+            }
+
+            case MessageType.Settings: {
+                const message = msg as SettingsMessage;
+                this.settings = message.data;
+
+                this._resolveReady();
                 break;
             }
         }
