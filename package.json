@@ -7,7 +7,8 @@
     "dev:firefox": "node scripts/build.js --dev --browser=firefox",
     "dev:chrome": "node scripts/build.js --dev --browser=chrome",
     "build:firefox": "node scripts/build.js --browser=firefox",
-    "build:chrome": "node scripts/build.js --browser=chrome"
+    "build:chrome": "node scripts/build.js --browser=chrome",
+    "publish": "node scripts/full-release-build.js"
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",

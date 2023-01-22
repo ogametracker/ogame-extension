@@ -1,6 +1,6 @@
-const { format } = require('date-fns');
 const fs = require('fs');
 const process = require('process');
+const { generateVersion } = require('./_generateVersion');
 
 const isDev = process.argv.includes('--dev');
 const version = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
@@ -49,10 +49,7 @@ const manifest = {
     description: '__MSG_appDesc__',
     manifest_version: 3,
     default_locale: 'de',
-    version: version ?? `${format(now, 'yyyy')
-        }.${format(now, 'M')
-        }.${format(now, 'd')
-        }.${format(now, 'k')}${format(now, 'mm')}${Math.trunc(now.getSeconds() / 10)}`,
+    version: version ?? generateVersion(),
     icons: {
         [128]: isDev ? 'icon128-dev.png' : 'icon128.png',
     },
@@ -82,7 +79,8 @@ else if (browser == 'firefox') {
     manifest.background.scripts = ['service-worker.js'];
     manifest.browser_specific_settings = {
         gecko: {
-            id: 'ogame-tracker@ogame-tracker.com',
+            id: '{ce110eb6-2f01-4ee5-9dc3-6378e566c0fa}', // addon ID from addons.mozilla.org
+            strict_min_version: '109.0',
         },
     };
 }
