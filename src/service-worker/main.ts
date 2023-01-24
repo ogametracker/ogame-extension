@@ -13,8 +13,8 @@ import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 import { UniversesAndAccountsService } from "./universes-and-accounts/UniversesAndAccountsService";
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { serviceWorkerUuid } from "@/shared/uuid";
+import { ReBroadcastService } from "./re-broadcast/ReBroadcastService";
+import { UploadResultsService } from "./upload-results/UploadResultsService";
 
 export const settingsService = new SettingsService();
 
@@ -30,15 +30,9 @@ const services: MessageService[] = [
     new UniversesAndAccountsService(),
 
     new InternalService(),
+    new ReBroadcastService(),
 
-    // re-broadcast service (fix for missing notifications and other messages in FF)
-    {
-        onMessage: async (message) => {
-            if (message.senderUuid != serviceWorkerUuid) {
-                broadcastMessage(message);
-            }
-        },
-    },
+    new UploadResultsService(),
 ];
 
 try {
