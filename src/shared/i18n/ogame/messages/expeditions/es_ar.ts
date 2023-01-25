@@ -34,7 +34,7 @@ export const es_ar: ExpeditionMessages = {
             /*'En una pequeña luna con su propia atmósfera, tu expedición */'encontró una cantidad enorme de recursos sin explotar'/* . La tripulación en el terreno está tratando de levantar y cargar el tesoro natural.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es-ar 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Un */'cinturón de minerales alrededor de un planeta'/* desconocido contiene incontables recursos. ¡Las naves de la expedición están de vuelta y sus almacenes están llenos!'*/,
             /*'Tu expedición informa del */'descubrimiento de una nave alien gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y hacer algunos recursos útiles de ella.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Se robó (?<name>${resources.join('|')}) de (?<amount>.+)`, 'i'),
