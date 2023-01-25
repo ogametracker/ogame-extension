@@ -1,3 +1,5 @@
+import { ApiExpeditionResult, ApiExpeditionResultBase, ApiExpeditionResultDepletionLevel, ApiExpeditionResultFleet, ApiExpeditionResultResource, ApiExpeditionResultSize, ApiExpeditionResultType } from "@/shared/api/result-uploads/models";
+import { batchUploadExpeditions } from "@/shared/api/result-uploads/upload";
 import { getGlobalDatabase, getPlayerDatabase } from "@/shared/db/access";
 import { DbAccount } from "@/shared/db/schema/global";
 import { Message } from "@/shared/messages/Message";
@@ -38,24 +40,20 @@ export class UploadResultsService implements MessageService {
                 serverId: account.serverId,
             });
 
-            const expeditions = await accountDb.getAll('expeditions');
-            if(expeditions.length == 0) {
+            const allExpeditions = await accountDb.getAll('expeditions');
+            const uploadExpeditions = allExpeditions.filter(e => true); //TODO: filter not yet uploaded expeditions
+            if(uploadExpeditions.length == 0) {
                 continue;
             }
 
-            for (let sliceStart = 0; sliceStart < expeditions.length; sliceStart += sliceSize) {
-                const slice = expeditions.slice(sliceStart, sliceStart + sliceSize);
+            for (let sliceStart = 0; sliceStart < uploadExpeditions.length; sliceStart += sliceSize) {
+                const slice = uploadExpeditions.slice(sliceStart, sliceStart + sliceSize);
 
-                const result = slice.map<ApiExpeditionResult>(expo => this.#mapExpeditionResult(account, expo));
+                const apiExpeditions = slice.map<ApiExpeditionResult>(expo => this.#mapExpeditionResult(account, expo));
+                const result = await batchUploadExpeditions(apiExpeditions);
 
-                //TODO: handle exception
-                //TODO: handle 400/invalid ids
+                //TODO: invalid ids?
                 //TODO: save valid ids
-                await fetch('https://localhost:7136/api/result/expedition/batch', {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify(result),
-                });
             }
         }
 
@@ -222,67 +220,3 @@ export class UploadResultsService implements MessageService {
         }
     }
 }
-
-type ApiExpeditionResultBase = {
-    serverId: number;
-    language: string;
-    messageId: number;
-
-    date: string;
-    type: ApiExpeditionResultType;
-    depletionLevel?: ApiExpeditionResultDepletionLevel;
-};
-
-type ApiExpeditionResult = ApiExpeditionResultBase & {
-    size?: ApiExpeditionResultSize;
-    resource?: ApiExpeditionResultResource;
-    amount?: number;
-    fleet?: ApiExpeditionResultFleet;
-    itemHash?: string;
-};
-
-enum ApiExpeditionResultType {
-    nothing = 'nothing',
-    resources = 'resources',
-    fleet = 'fleet',
-    delay = 'delay',
-    early = 'early',
-    darkMatter = 'darkMatter',
-    pirates = 'pirates',
-    aliens = 'aliens',
-    item = 'item',
-    trader = 'trader',
-    lostFleet = 'lostFleet',
-}
-
-enum ApiExpeditionResultDepletionLevel {
-    none = 'none',
-    low = 'low',
-    medium = 'medium',
-    high = 'high',
-}
-enum ApiExpeditionResultSize {
-    small = 'small',
-    medium = 'medium',
-    large = 'large',
-}
-enum ApiExpeditionResultResource {
-    metal = 'metal',
-    crystal = 'crystal',
-    deuterium = 'deuterium',
-}
-
-type ApiExpeditionResultFleet = {
-    lightFighter: number;
-    heavyFighter: number;
-    cruiser: number;
-    battleship: number;
-    bomber: number;
-    battlecruiser: number;
-    destroyer: number;
-    reaper: number;
-    pathfinder: number;
-    smallCargo: number;
-    largeCargo: number;
-    espionageProbe: number;
-};
