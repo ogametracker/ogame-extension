@@ -90,7 +90,7 @@ function trackOwnedPlanets() {
 }
 
 const planetIdRegex = /&cp=(?<id>\d+)($|[^\d])/;
-const maxTempRegex = / (?<temp>-?\d+)\s*°C<br\/?>/;
+const maxTempRegex = /\d+\s*°C[^\d]*(?<temp>-?\d+)\s*°C/;
 const nameRegex = /^<b>(?<name>.+) \[\d+:\d+:\d+\]/;
 
 function getPlanetData(planetElem: Element): BasicPlanetDataPlanet {
