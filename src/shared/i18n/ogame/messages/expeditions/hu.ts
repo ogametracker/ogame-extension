@@ -9,7 +9,7 @@ export const hu: ExpeditionMessages = {
             /*'Az expedíciónak */'ehetősége van szerezni és tárolni némi'/* Sötét Anyagot.'*/,
             /*'Találtunk */'néhány megmaradt idegen hajót'/* . Ezeken a hajókon volt egy kis tartály, valamennyi Sötét Anyaggal.'*/,
             /*'Találkoztunk egy furcsa idegennel egy kis hajón, aki adott nekünk néhány Sötét Anyagot */'néhny egyszerű matematikai számításért'/* cserébe.'*/,
-            /*TODO: hu 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            /*'Expedíciónk */'átvette a hatalmat egy olyan szellemhajó fölött'/* , amely kis mennyiségű Sötét Anyagot szállított. Nem találtunk semmit arra vonatkozóan, hogy mi történt a hajó eredeti legénységével, de technikusaink sikeresen megmentették a Sötét Anyagot.'*/,
             /*TODO: hu 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -44,7 +44,7 @@ export const hu: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Kereszteztünk */'egy előző expedíció maradványait'/* A Technikusaink megpróbálják ismét működővé varázsolni a hajókat'*/,
             /*'Az expedíciód */'belefutott egy híres, rég elhagyatott erődbe'/* . Az erőd hangárjában találtak néhány hajót. A technikusok megpróbálják ismét működőképes állapotba hozni őket.'*/,
-            /*TODO: hu 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Expedíciónk felfedezett egy bolygót, */'mely majdnem megsemmisült a folyamatos háborúk'/* során. Különböző hajók keringenek ott bolygó körüli pályára állva. A technikusok megpróbálnak néhányat megjavítani. Talán arról is szerzünk infót, mi történt itt pontosan.'*/,
             /*'Találtunk */'egy elhagyatott kalóz állomást'/* . Néhány régi hajó van a hangárban. A Technikusok ellenőrzik, hogy használható-e valamelyik vagy sem.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -88,7 +88,7 @@ export const hu: ExpeditionMessages = {
     [ExpeditionEventType.early]: [
         /*TODO: hu 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
         /*TODO: hu 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
-        /*TODO: hu 'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'Az új és kicsit merész parancsnok */'sikeresen keresztülutazott egy instabil féreglyukon'/* hogy rövidítse a repülést, . Mindazonáltal maga az expedíció nem hozott semmi újat.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
@@ -108,8 +108,8 @@ export const hu: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Néhány */'űr-kalóz megpróbálta elfoglalni'/* az expedíciós flottát.'*/, //TODO: welche Nachricht ist das?
             /*TODO: hu 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
-            /*TODO: hu 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
-            /*TODO: hu 'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
+            /*'Néhány */'primitív barbár támadt ránk olyan hajókkal'/* , amiknek még neve sincs. Ha tüzet nyitnak ránk, kénytelenek leszünk visszalőni.'*/,
+            /*'Elfogtunk egy rádió üzenetet, */'ami ittas kalózoktól származik'/* . Úgytűnik hamarosan megtámadnak.'*/,
             /*TODO: hu 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
             /*TODO: hu 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
