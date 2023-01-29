@@ -61,7 +61,7 @@ export const hu: ExpeditionMessages = {
     [ExpeditionEventType.nothing]: [
         /*'Az eleinte ígéretes */'letapogatási eredmények ellenlére sajnos üres'/* kézzel tértünk vissza.'*/,
         /*TODO: hu 'Außer einiger kurioser kleiner Tierchen von einem */'unbekannten Sumpfplaneten'/* bringt diese Expedition nichts Aufregendes von ihrer Reise mit.'*/,
-        /*TODO: hu 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'Az */'expedíciód megtanulta mi a nagy üres tér'/* . Még egy kis aszterida vagy sugárzás se volt, ami izgalmassá tette volna a küldetést.'*/,
         /*'Egy élőlény, */'akit tiszta energiából csináltak'/* , arról győződött meg, hogy minden expedíciótag csak bámulta a hipnotizáló mintát a képernyőkön. Amikor a legtöbbjük megint kitisztult, az expedíciónak szüksége volt, hogy félbehagyják.'*/,
         /*'A vezető hajó */'reaktorának meghibásodása megsemmisítette a teljes'/* expedíciós flottát. Szerencsére a technikusok el tudják kerülni a legrosszabbat. Az újraépítés sok időt vesznek igénybe és az expedíció visszatér eredmény nélkül.'*/,
         /*'Az expedíciód egy */'fantasztikus képet készített egy Szupernováról'/* . Semmit nem sikerült szerezned, de jó esélyeid vannak, hogy megnyerd a "Legjobb kép az Univerzumban" díjat ebben az évben.'*/,
