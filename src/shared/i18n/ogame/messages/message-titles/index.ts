@@ -8,6 +8,7 @@ import { es_ar } from './es_ar';
 import { es } from './es';
 import { fr } from './fr';
 import { hr } from './hr';
+import { hu } from './hu';
 import { it } from './it';
 import { pl } from './pl';
 import { pt } from './pt';
@@ -25,6 +26,7 @@ const translations: Record<LanguageKey, MessageTitles> = {
     'es-mx': es,
     fr,
     hr,
+    hu,
     it,
     pl,
     'pt-br': pt_br,

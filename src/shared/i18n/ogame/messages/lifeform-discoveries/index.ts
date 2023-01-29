@@ -9,6 +9,7 @@ import { es_ar } from './es_ar';
 import { es_mx } from './es_mx';
 import { fr } from './fr';
 import { hr } from './hr';
+import { hu } from './hu';
 import { it } from './it';
 import { pl } from './pl';
 import { pt } from './pt';
@@ -26,6 +27,7 @@ const translations: Record<LanguageKey, LifeformDiscoveryMessages> = {
     'es-mx': es_mx,
     fr,
     hr,
+    hu,
     it,
     pl,
     'pt-br': pt_br,

@@ -4,15 +4,16 @@ import { cz } from './cz';
 import { de } from './de';
 import { dk } from './dk';
 import { en } from './en';
-import { es } from './es';
 import { es_ar } from './es_ar';
+import { es } from './es';
 import { es_mx } from './es_mx';
 import { fr } from './fr';
 import { hr } from './hr';
+import { hu } from './hu';
 import { it } from './it';
 import { pl } from './pl';
-import { pt } from './pt';
 import { pt_br } from './pt_br';
+import { pt } from './pt';
 import { si } from './si';
 import { zh_tw } from './zh_tw';
 
@@ -26,6 +27,7 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     'es-mx': es_mx,
     fr,
     hr,
+    hu,
     it,
     pl,
     'pt-br': pt_br,
