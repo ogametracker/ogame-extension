@@ -53,7 +53,7 @@ export const it: ExpeditionMessages = {
             /*'Abbiamo */'trovato i resti di un`armata'/*. I tecnici si sono diretti verso le navi più intatte e le hanno rimesse in funzione.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: it 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Abbiamo trovato un */'enorme cimitero di navi spaziali'/* . Alcuni tecnici della spedizione sono riusciti a farne funzionare alcune'*/,
             /*'Abbiamo trovato un pianeta che */'conserva i resti di una antica civiltà'/* . Siamo in grado di vedere una enorme stazione spaziale ancora intatta. Alcuni tecnici e piloti sono scesi sulla superficie per vedere se vi sono delle navi ancora utilizzabili.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Le seguenti navi sono ora parte della flotta:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),

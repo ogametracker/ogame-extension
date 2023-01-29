@@ -9,7 +9,7 @@ export enum LanguageKey {
     'es-mx' = 'es-mx', // spanish (Mexico)
     fr = 'fr', // french
     hr = 'hr', // croatian
-    //TODO: hu = 'hu', // hungarian
+    hu = 'hu', // hungarian
     it = 'it', // italian
     //TODO: jp = 'jp', // japanese
     //TODO: nl = 'nl', // dutch

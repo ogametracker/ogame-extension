@@ -18,7 +18,7 @@ export const fr: ExpeditionMessages = {
             /*'Notre expédition nous signale un phénomène spectral assez surprenant. Il a */'provoqué la formation d`antimatière dans les réservoirs d`énergie'/* de la protection de nos vaisseaux. Nos techniciens essaient de conserver un maximum d`antimatière tant que le phénomène perdure.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: fr 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Une */'irrégularité momentanée dans l`hyperespace'/* a permis à votre expédition de collecter une grande quantité d`antimatière !'*/,
             /*'Notre expédition nous a signalé un contact quelque peu particulier. Apparemment des créatures énergétiques, qui se */'sont présentées sous le nom de légoriens'/* , ont traversé les vaisseaux de l`expédition et ont décidé d`aider l`espèce sous-développée que nous sommes - un récipient contenant de l`antimatière est apparu dans le poste de commande de nos vaisseaux.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`L\`attaquant obtient (?<name>${darkMatter}) (?<amount>[^\\s]+)`, 'i'),

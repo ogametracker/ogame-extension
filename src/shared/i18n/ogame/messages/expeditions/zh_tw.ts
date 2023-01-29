@@ -101,7 +101,7 @@ export const zh_tw: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /*LOCA: zh_tw *//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /已將 (?<name>.+) 添加至 背囊 中/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -149,7 +149,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'作為第一批到此未*/'被探索的宇宙空域的人'/* ,感覺太棒了'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: zh_tw 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*'在該銀河系的這片空域內,*/'似乎並沒有人類踏'/* 足過'*/,
             /*'我們發現一*/'艘遠古太空艦船的殘骸'/* .但我們並不是第一個踏足的人'*/,
             /*LOCA: zh_tw 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
