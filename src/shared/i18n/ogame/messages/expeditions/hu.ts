@@ -60,7 +60,7 @@ export const hu: ExpeditionMessages = {
 
     [ExpeditionEventType.nothing]: [
         /*'Az eleinte ígéretes */'letapogatási eredmények ellenlére sajnos üres'/* kézzel tértünk vissza.'*/,
-        /*TODO: hu 'Außer einiger kurioser kleiner Tierchen von einem */'unbekannten Sumpfplaneten'/* bringt diese Expedition nichts Aufregendes von ihrer Reise mit.'*/,
+        /*'Néhány kicsi, furcsa háziállaton kívül (amik egy */'ismeretlen mocsárbolgyóról származnak'/* ) az expedíció nem hoz vissza semmi izgalmasat.'*/,
         /*'Az */'expedíciód megtanulta mi a nagy üres tér'/* . Még egy kis aszterida vagy sugárzás se volt, ami izgalmassá tette volna a küldetést.'*/,
         /*'Egy élőlény, */'akit tiszta energiából csináltak'/* , arról győződött meg, hogy minden expedíciótag csak bámulta a hipnotizáló mintát a képernyőkön. Amikor a legtöbbjük megint kitisztult, az expedíciónak szüksége volt, hogy félbehagyják.'*/,
         /*'A vezető hajó */'reaktorának meghibásodása megsemmisítette a teljes'/* expedíciós flottát. Szerencsére a technikusok el tudják kerülni a legrosszabbat. Az újraépítés sok időt vesznek igénybe és az expedíció visszatér eredmény nélkül.'*/,
@@ -152,7 +152,7 @@ export const hu: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /*'Úgy tűnik nem */'volt még ember a galaxis ezen részén'/* ezelőtt.'*/,
             /*'Találtunk egy űrhajótörmeléket. Nem */'mi vagyunk az elsők itt',
-            /*TODO: hu 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Majdnem */'nekimentünk egy másik expedíciós flottának'/* . Nem gondoltam, hogy mások is vannak körülöttünk.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*TODO: hu 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
