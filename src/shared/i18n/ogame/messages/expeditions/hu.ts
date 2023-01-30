@@ -106,8 +106,7 @@ export const hu: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /*'Néhány */'űr-kalóz megpróbálta elfoglalni'/* az expedíciós flottát.'*/, //TODO: welche Nachricht ist das?
-            /*TODO: hu 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Néhány */'űr-kalóz megpróbálta elfoglalni'/* az expedíciós flottát.'*/,
             /*'Néhány */'primitív barbár támadt ránk olyan hajókkal'/* , amiknek még neve sincs. Ha tüzet nyitnak ránk, kénytelenek leszünk visszalőni.'*/,
             /*'Elfogtunk egy rádió üzenetet, */'ami ittas kalózoktól származik'/* . Úgytűnik hamarosan megtámadnak.'*/,
             /*'Szükségünk van harcra néhány kalózzal, */'szerencsére csak néhánnyal',
@@ -115,8 +114,8 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Az expedíciódnak */'elégedetlen találkozása volt néhány űr kalózzal',
-            /*TODO: hu 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             'Belefutottunk egy csillag-kalóz támadásba'/* ! A harcot nem lehetett elkerülni.'*/,
+            /*'A segélykérő jelet, */'amit követett az expedíciónk egy csillag-kalóztól származott'/* . A harcot nem lehetett elkerülni.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
