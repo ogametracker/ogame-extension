@@ -10,11 +10,11 @@ export const hu: ExpeditionMessages = {
             /*'Találtunk */'néhány megmaradt idegen hajót'/* . Ezeken a hajókon volt egy kis tartály, valamennyi Sötét Anyaggal.'*/,
             /*'Találkoztunk egy furcsa idegennel egy kis hajón, aki adott nekünk néhány Sötét Anyagot */'néhny egyszerű matematikai számításért'/* cserébe.'*/,
             /*'Expedíciónk */'átvette a hatalmat egy olyan szellemhajó fölött'/* , amely kis mennyiségű Sötét Anyagot szállított. Nem találtunk semmit arra vonatkozóan, hogy mi történt a hajó eredeti legénységével, de technikusaink sikeresen megmentették a Sötét Anyagot.'*/,
-            /*TODO: hu 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'Az expedíciónk */'követett néhány furcsa jelet egy aszteroidába'/* . Az aszteroida magjában kis mennyiségű sötét anyagot találtak. Az aszteroidát megszerezték és a felfedezők megpróbálják kinyerni belőle a Sötét Anyagot.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: hu 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*TODO: hu 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Az expedíciónk */'lokalizált egy rozsgás Űrállomást'/* , ami láthatólag hosszú ideje kihalt. Az állomás teljesen használhatatlan, bár van némi sötét anyag, ami a reaktorban van tárolva. A technikusaink megpróbálnak megmenteni belőle annyit, amennyit csak tudnak.'*/,
             /*TODO: hu 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -34,7 +34,7 @@ export const hu: ExpeditionMessages = {
             /*'Egy */'saját légkörrel rendelkező apró holdon'/* expedíciód hatalmas nyersanyag-raktárat talált. A legénység a felszínen megpróbálja betakarítani a természeti kincset.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Ásvány */'gyűrűk egy ismeretlen bolgyó körül megszámlálhatatlan mennyiségű'/* nyersanyaggal. Az expedíciós hajóid jönnek vissza teli rakománnyal!'*/,
             /*TODO: hu 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<amount>.+) (?<name>${resources.join('|')}) elfogva`, 'i'),
@@ -48,7 +48,7 @@ export const hu: ExpeditionMessages = {
             /*'Találtunk */'egy elhagyatott kalóz állomást'/* . Néhány régi hajó van a hangárban. A Technikusok ellenőrzik, hogy használható-e valamelyik vagy sem.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: hu 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'Az expedíciónk egy */'régi autómatikus hajógyárba futott'/* . Néhány hajó jelenleg is készülőben van és a szerelőink azon dolgoznak, hogy újraindítsák a hajógyár energia generátorait.'*/,
             /*'Egy */'hajóhad maradványaira találtunk'/* . A szerelők elmentek a legjobb állapotban lévő hajókra, hogy ismét működésbe hozzák őket'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -69,39 +69,39 @@ export const hu: ExpeditionMessages = {
         /*'Nos, mostmár tudjuk, hogy azok a piros, */'5-ös osztályú rendellenességeknek nincsenek'/* kaotikus hatásai a hajók navigációs rendszerére, de masszív hallucinációt okoznak a legénységnek. Az expedícióról üres kézzel tértek vissza.'*/,
         /*'Az expedíciód túl közel került egy */'Neutron csillag gravitációs mezőjéhez és beletellett'/* némi időbe, mire kiszabadult. A sok elhasznált Deutérium miatt a flottának eredmény nélkül kellett hazatérnie.'*/,
         /*'Egy ismeretlen */'számítógép vírus támadta meg a navigációs rendszert'/* nemsokkal az otthoni naprendszer elhagyása után. Ennek következtében a flotta körbe - körbe repül. Azt kell mondjam, hogy az expedíció nem lett túl sikeres.'*/,
-        /*TODO: hu 'Vielleicht hätte man den */'Geburtstag des Captains'/* nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.'*/,
-        /*TODO: hu 'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
+        /*'Valószínűleg a */'kapitányok szülinapi ünnepségét nem kellett volna az elszigetelt'/* bolgyón tartani. Egy szörnyű ismeretlen láz miatt az expedíciós legénység jelentős része a gyengélkedőbe került. A legénységhiány miatt az expedíció megszakadt.'*/,
+        /*'valaki */'feltelepített egy régi stratégiai játékot a hajó'/* összes számítógépére. Az expedíciós flotta sokáig távol volt, de emiatt nem nagyon volt haszna.'*/,
     ],
 
     [ExpeditionEventType.lostFleet]: [
         /*TODO: hu 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
-        /*TODO: hu 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        /*TODO: hu 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'Az egyetlen dolog, ami a */'küldetésből megmaradt a következő rádió adás'/* : Zzzrrt Szellem! Krrrzzzzt Az zrrrtrzt úgy krgzzzz néz ki Krzzzzzzzztzzzz'*/,
+        /*'A vezető hajó magjának felmelegedése egy hatalmas robbanáshoz vezetett, */'ami megsemmisítette az egész Expedíxiós flottát',
         /*TODO: hu 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
         /*TODO: hu 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        /*TODO: hu 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Az */'expedíciód vészjelzést fogott'/* . Egy mega szállító volt egy kisbolygó gravitációs mezejének fogságában. Miután a szállítóhajó sikeresen ki lett mentve, a kapitány örömmel jelentette be hogy az aki megmentette őket, mostantól a kedvenc ügyfelük lesz.'*/,
     ],
 
     [ExpeditionEventType.early]: [
-        /*TODO: hu 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        /*TODO: hu 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'Váratlanul meghibásodtak a hajtóművek. A küldetés véget ért. A */'flotta hamarabb ér vissza a tervezettnél',
+        /*'Az expedícióid nem jelentett semmilyen rendellenességeket a felkutatott szektorban. De a */'flotta befutott egy kevés napszélbe amíg visszatért'/* . Ez az utazást gyorsította. Az expedíciós hajók kicsit korábban térnek haza.'*/,
         /*'Az új és kicsit merész parancsnok */'sikeresen keresztülutazott egy instabil féreglyukon'/* hogy rövidítse a repülést, . Mindazonáltal maga az expedíció nem hozott semmi újat.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
         /*'A */'navigációs vezetőnek rossz napja volt'/* és ez okozta az expedíciós ugrás elszámolását. Nem csak a flotta landolt valahol teljesen máshol de a visszaút is sokkal több időbe kerül.'*/,
         /*'Az expedíciód egy */'részecskeviharral teli szektorba jutott'/* . Ez túltöltötte az energiatárolókat és a hajók központi rendszerének nagyrésze megsemmisült. A szerelők képesek megmenteni a legrosszabbtól, de az expedícióról való visszatérés jelentős késéssel történik majd.'*/,
-        /*TODO: hu 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        /*TODO: hu 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
-        /*TODO: hu 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
+        /*'Ismeretlen okok */'miatt az expedíciós ugrás teljesen rossz irényba'/* ment. A Nap szíve közelében landolt. Szerencsére a landolás ismert rendszerben történt, a visszaugrás hosszabb időt vesz igénybe.'*/,
+        /*'Egy Vörös */'óriás csillagszele tönktretette az expedíciós ugrást'/* , ami meghosszabbítja a kiszámítását a visszaugrásnak. Nem történt semmi a csillagok közt a szektorban. A flotta később tér vissza, mint tervezte.'*/,
+        /*'A */'Navigációs modul még hibákkal kűzd'/* . Az expedíciós ugrás majdnem rossz irányba indult, de az összes Deutérium fel lett használva. Szerencsére az ugrás elég közelre ment az induló bolgyó holdjához. Az expedíció lassabban tér vissza.'*/,
         /*'Az */'expedició fő hajója ütközött egy idegen hajóval'/* , ami figyelmezetés nélkül ugrott a flottába. Az idegen hajó felrobbant és jelentős károkat okozott a fő hajónak. Azonnal el kell kezdeni a sérülések javítását, ilyen állapotban az expedíció nem folytatható.'*/,
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /*TODO: hu *//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /(?<name>.+) lett hozzáadva a raktárhoz/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -110,13 +110,13 @@ export const hu: ExpeditionMessages = {
             /*TODO: hu 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
             /*'Néhány */'primitív barbár támadt ránk olyan hajókkal'/* , amiknek még neve sincs. Ha tüzet nyitnak ránk, kénytelenek leszünk visszalőni.'*/,
             /*'Elfogtunk egy rádió üzenetet, */'ami ittas kalózoktól származik'/* . Úgytűnik hamarosan megtámadnak.'*/,
-            /*TODO: hu 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Szükségünk van harcra néhány kalózzal, */'szerencsére csak néhánnyal',
             /*TODO: hu 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: hu 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Az expedíciódnak */'elégedetlen találkozása volt néhány űr kalózzal',
             /*TODO: hu 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*TODO: hu 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            'Belefutottunk egy csillag-kalóz támadásba'/* ! A harcot nem lehetett elkerülni.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -127,14 +127,14 @@ export const hu: ExpeditionMessages = {
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
             /*TODO: hu 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
-            /*TODO: hu 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
-            /*TODO: hu 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'A felderítő expedíciód */'elsőre nem túl barátságos kapcsolatot létesített'/* az ismeretlen fajokkal.'*/,
+            /*'Az expedíciónkat */'egy kisebb csapat ismeretlen hajó támadta meg',
             /*TODO: hu 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: hu 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'Egy */'ismeretlen faj megtámadta az expedíciónkat',
             /*TODO: hu 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*TODO: hu 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'A */'kapcsolat az expedíciós flottával nemrég megszakadt'/* . Megfejtettük az utolsó kódolt üzenetüket. Erős támadás alatt vannak, a támadókat nem lehet azonosítani.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
