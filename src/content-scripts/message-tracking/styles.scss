@@ -281,7 +281,10 @@ $image-size-small: 24px;
         }
 
         &--newLifeformFound {
-            color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
+            > .mdi {
+                font-size: 28px;
+                color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
+            }
         }
 
         &--artifacts {
