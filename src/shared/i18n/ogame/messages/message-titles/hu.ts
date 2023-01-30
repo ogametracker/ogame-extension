@@ -2,6 +2,6 @@ import { MessageTitles } from "./types";
 
 export const hu: MessageTitles = {
     expedition: 'Expedíció eredmény',
-    /*LOCA: hu*/lifeformDiscovery: 'Lebensformbericht',
+    lifeformDiscovery: 'Életforma jelentés',
     debrisField: 'Betakarítás jelentés DF-ről',
 };
