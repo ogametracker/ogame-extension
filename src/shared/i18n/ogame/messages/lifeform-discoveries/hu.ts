@@ -41,7 +41,7 @@ export const hu: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /Követeink azonban (?<xp>\d+) XP-vel bővíthették a róluk gyűjtött ismereteinket/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Das Erkundungsschiff hat zwar ein paar Artefakte gefunden, */'konnte sie aber nicht mitnehmen, da deine Lager voll sind',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*TODO: hu 'Das Erkundungsschiff hat zwar ein paar Artefakte gefunden, */'konnte sie aber nicht mitnehmen, da deine Lager voll sind',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'A Kutatóhajó */'kis mennyiségű leletet talált',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'A Kutatóhajó */'nagy mennyiségű leletet talált',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*'A Kutatóhajó */'hatalmas leletegyüttest talált',
