@@ -36,7 +36,7 @@ execSync(`npx webpack --mode=${webpackBuildMode} --node-env=${webpackBuildMode} 
 console.log('building views');
 // create .env file with VUE_APP_BROWSER environment variable
 console.log('creating Vue build');
-fs.writeFileSync(`.env`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
+fs.writeFileSync(`.env.local`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
 const vueBuildMode = isDev ? 'development' : 'production';
 execSync(`vue-cli-service build --modern --mode ${vueBuildMode}`, { stdio: 'inherit' });
 

@@ -18,7 +18,7 @@ export const hu: ExpeditionMessages = {
             /*TODO: hu 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Egy */'spontán Hiperűr deformálódás lehetővé'/* tette az expedíciódnak, hogy nagy mennyiségű Sötét anyagot takarítson be!'*/,
             /*TODO: hu 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<amount>[^\\s]+) (?<name>${darkMatter}) elfogva`, 'i'),
@@ -81,7 +81,7 @@ export const hu: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.trader]: [
-        /*TODO: hu 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Az expedíciós flottád */'kapcsolatba lépett egy félős idegen fajjal'/* . Ők bejelentették, hogy küldenek reprezentatív árut, hogy kereskedjenek a világoddal.'*/,
         /*'Az */'expedíciód vészjelzést fogott'/* . Egy mega szállító volt egy kisbolygó gravitációs mezejének fogságában. Miután a szállítóhajó sikeresen ki lett mentve, a kapitány örömmel jelentette be hogy az aki megmentette őket, mostantól a kedvenc ügyfelük lesz.'*/,
     ],
 
@@ -106,8 +106,7 @@ export const hu: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /*'Néhány */'űr-kalóz megpróbálta elfoglalni'/* az expedíciós flottát.'*/, //TODO: welche Nachricht ist das?
-            /*TODO: hu 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Néhány */'űr-kalóz megpróbálta elfoglalni'/* az expedíciós flottát.'*/,
             /*'Néhány */'primitív barbár támadt ránk olyan hajókkal'/* , amiknek még neve sincs. Ha tüzet nyitnak ránk, kénytelenek leszünk visszalőni.'*/,
             /*'Elfogtunk egy rádió üzenetet, */'ami ittas kalózoktól származik'/* . Úgytűnik hamarosan megtámadnak.'*/,
             /*'Szükségünk van harcra néhány kalózzal, */'szerencsére csak néhánnyal',
@@ -115,8 +114,8 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Az expedíciódnak */'elégedetlen találkozása volt néhány űr kalózzal',
-            /*TODO: hu 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             'Belefutottunk egy csillag-kalóz támadásba'/* ! A harcot nem lehetett elkerülni.'*/,
+            /*'A segélykérő jelet, */'amit követett az expedíciónk egy csillag-kalóztól származott'/* . A harcot nem lehetett elkerülni.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -126,7 +125,7 @@ export const hu: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*TODO: hu 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*'Egzotikus */'megjelenésű hajók támadták meg figyelmeztetés nélkül'/* a felderítő flottádat!'*/,
             /*'A felderítő expedíciód */'elsőre nem túl barátságos kapcsolatot létesített'/* az ismeretlen fajokkal.'*/,
             /*'Az expedíciónkat */'egy kisebb csapat ismeretlen hajó támadta meg',
             /*TODO: hu 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
