@@ -3,6 +3,7 @@ import { DebrisFieldReportMessages } from "./types";
 import { cz } from './cz';
 import { de } from './de';
 import { dk } from './dk';
+import { el } from './el';
 import { en } from './en';
 import { es } from './es';
 import { fr } from './fr';
@@ -19,6 +20,7 @@ const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     cz,
     de,
     dk,
+    el,
     en,
     'es-ar': es,
     'es-es': es,

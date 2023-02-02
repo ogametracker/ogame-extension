@@ -4,6 +4,7 @@ import { cz } from './cz';
 import { de } from './de';
 import { dk } from './dk';
 import { en } from './en';
+import { el } from './el';
 import { es_ar } from './es_ar';
 import { es } from './es';
 import { es_mx } from './es_mx';
@@ -21,6 +22,7 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     cz,
     de,
     dk,
+    el,
     en,
     'es-ar': es_ar,
     'es-es': es,

@@ -2,8 +2,9 @@ import { LanguageKey } from '../../LanguageKey';
 import { FactionTranslations } from './types';
 import { cz } from './cz';
 import { de } from './de';
-import { dk } from './dk';
 import { en } from './en';
+import { el } from './el';
+import { dk } from './dk';
 import { es_ar } from './es_ar';
 import { es_es } from './es_es';
 import { es_mx } from './es_mx';
@@ -21,6 +22,7 @@ const translations: Record<LanguageKey, FactionTranslations> = {
     cz,
     de,
     dk,
+    el,
     en,
     'es-ar': es_ar,
     'es-es': es_es,
