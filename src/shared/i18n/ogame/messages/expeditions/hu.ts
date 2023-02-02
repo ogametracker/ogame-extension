@@ -77,7 +77,7 @@ export const hu: ExpeditionMessages = {
         /*'Az utolsó dolog, amit az expedícióról kaptunk */'néhány nagyon jó minőségű fénykép egy épp nyíló fekete'/* lyukról.'*/,
         /*'Az egyetlen dolog, ami a */'küldetésből megmaradt a következő rádió adás'/* : Zzzrrt Szellem! Krrrzzzzt Az zrrrtrzt úgy krgzzzz néz ki Krzzzzzzzztzzzz'*/,
         /*'A vezető hajó magjának felmelegedése egy hatalmas robbanáshoz vezetett, */'ami megsemmisítette az egész Expedíxiós flottát',
-        /*TODO: hu 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'Az expedíciós */'flotta nem ugrott vissza a környékre'/* . A tudósaink megpróbálják kideríteni mi történt, de úgy tűnik a flotta végleg elveszett.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
