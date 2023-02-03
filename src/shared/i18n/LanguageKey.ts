@@ -1,25 +1,42 @@
 export enum LanguageKey {
-    cz = 'cz', // czech
-    de = 'de', // german
-    dk = 'dk', // danish
-    //TODO: el = 'el', // greek
-    en = 'en', // english
-    'es-es' = 'es-es', // spanish (Spain)
-    'es-ar' = 'es-ar', // spanish (Argentina)
-    'es-mx' = 'es-mx', // spanish (Mexico)
-    fr = 'fr', // french
-    hr = 'hr', // croatian
-    hu = 'hu', // hungarian
-    it = 'it', // italian
+    /** Czech */
+    cz = 'cz',
+    /** German */
+    de = 'de',
+    /** Danish */
+    dk = 'dk',
+    /** Greek */
+    el = 'el',
+    /** English */
+    en = 'en', 
+    /** Spanish (Spain) */
+    'es-es' = 'es-es', 
+    /** Spanish (Argentina) */
+    'es-ar' = 'es-ar', 
+    /** Spanish (Mexico) */
+    'es-mx' = 'es-mx', 
+    /** French */
+    fr = 'fr',
+    /** Croatian */
+    hr = 'hr', 
+    /** Hungarian */
+    hu = 'hu', 
+    /** Italian */
+    it = 'it', 
     //TODO: jp = 'jp', // japanese
     //TODO: nl = 'nl', // dutch
-    pl = 'pl', // polish
-    'pt-br' = 'pt-br', // portuguese (Brasil)
-    'pt-pt' = 'pt-pt', // portuguese (Portugal)
+    /** Polish */
+    pl = 'pl',
+    /** Portuguese (Brasil) */ 
+    'pt-br' = 'pt-br', 
+    /** Portuguese (Portugal) */
+    'pt-pt' = 'pt-pt',
     //TODO: ro = 'ro', // romanian
     //TODO: ru = 'ru', // russian
-    si = 'si', // slovenian
+    /** Slovenian */
+    si = 'si', 
     //TODO: sk = 'sk', // slovakian
     //TODO: tr = 'tr', // turkish
-    'zh-tw' = 'zh-tw', // chinese (Taiwan)
+    /** Chinese (Taiwan) */
+    'zh-tw' = 'zh-tw', 
 }

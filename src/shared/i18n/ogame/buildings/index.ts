@@ -3,6 +3,7 @@ import { BuildingTranslations } from './types';
 import { cz } from './cz';
 import { de } from './de';
 import { en } from './en';
+import { el } from './el';
 import { dk } from './dk';
 import { es_ar } from './es_ar';
 import { es_es } from './es_es';
@@ -21,10 +22,11 @@ const translations: Record<LanguageKey, BuildingTranslations> = {
     cz,
     de,
     dk,
+    el,
+    en,
     'es-ar': es_ar,
     'es-es': es_es,
     'es-mx': es_mx,
-    en,
     fr,
     hr,
     hu,

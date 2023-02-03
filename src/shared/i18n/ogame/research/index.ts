@@ -3,6 +3,7 @@ import { ResearchTranslations } from './types';
 import { cz } from './cz';
 import { de } from './de';
 import { dk } from './dk';
+import { el } from './el';
 import { en } from './en';
 import { es_ar } from './es_ar';
 import { es_es } from './es_es';
@@ -21,6 +22,7 @@ const translations: Record<LanguageKey, ResearchTranslations> = {
     cz,
     de,
     dk,
+    el,
     en,
     'es-ar': es_ar,
     'es-es': es_es,

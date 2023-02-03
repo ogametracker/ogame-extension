@@ -13,9 +13,9 @@ export const hu: ExpeditionMessages = {
             /*'Az expedíciónk */'követett néhány furcsa jelet egy aszteroidába'/* . Az aszteroida magjában kis mennyiségű sötét anyagot találtak. Az aszteroidát megszerezték és a felfedezők megpróbálják kinyerni belőle a Sötét Anyagot.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: hu 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Az expedíciónk */'végrehajtott egy egyedülálló kísérletet'/* . Képesek voltunk Sötét anyagot nyerni egy elpusztuló csillagból.'*/,
             /*'Az expedíciónk */'lokalizált egy rozsgás Űrállomást'/* , ami láthatólag hosszú ideje kihalt. Az állomás teljesen használhatatlan, bár van némi sötét anyag, ami a reaktorban van tárolva. A technikusaink megpróbálnak megmenteni belőle annyit, amennyit csak tudnak.'*/,
-            /*TODO: hu 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Az expedíciónk jelentett egy furcsa, látványos jelenséget. Sötét anyag */'halmozódott fel a hajó pajzs energiamezőjében'/* . A technikusaink megpróbálnak olyan sok sötét anyagot tárolni, amennyit csak tudnak, amíg a jelenség tart.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'Egy */'spontán Hiperűr deformálódás lehetővé'/* tette az expedíciódnak, hogy nagy mennyiségű Sötét anyagot takarítson be!'*/,
@@ -35,7 +35,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Ásvány */'gyűrűk egy ismeretlen bolgyó körül megszámlálhatatlan mennyiségű'/* nyersanyaggal. Az expedíciós hajóid jönnek vissza teli rakománnyal!'*/,
-            /*TODO: hu 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Az expedíciós flottád egy */'hatalmas idegen hajóroncs felfedezését jelentették'/* . Nem tudtak tanulni semmit a technológiájukból de képesek voltak a hajót az elemeire bontani és készítettek belőle valamennyi hasznos nyersanyagot.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<amount>.+) (?<name>${resources.join('|')}) elfogva`, 'i'),
     },
@@ -52,7 +52,7 @@ export const hu: ExpeditionMessages = {
             /*'Egy */'hajóhad maradványaira találtunk'/* . A szerelők elmentek a legjobb állapotban lévő hajókra, hogy ismét működésbe hozzák őket'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Találtunk */'egy hatalmas hajótemetőt'/* . Néhány szerelő a flottából képes volt néhányat működőképessé tenni közülük.'*/,
             /*TODO: hu 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`A következő hajók csatlakoznak a flottához:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -74,10 +74,10 @@ export const hu: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*TODO: hu 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'Az utolsó dolog, amit az expedícióról kaptunk */'néhány nagyon jó minőségű fénykép egy épp nyíló fekete'/* lyukról.'*/,
         /*'Az egyetlen dolog, ami a */'küldetésből megmaradt a következő rádió adás'/* : Zzzrrt Szellem! Krrrzzzzt Az zrrrtrzt úgy krgzzzz néz ki Krzzzzzzzztzzzz'*/,
         /*'A vezető hajó magjának felmelegedése egy hatalmas robbanáshoz vezetett, */'ami megsemmisítette az egész Expedíxiós flottát',
-        /*TODO: hu 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'Az expedíciós */'flotta nem ugrott vissza a környékre'/* . A tudósaink megpróbálják kideríteni mi történt, de úgy tűnik a flotta végleg elveszett.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
@@ -154,7 +154,7 @@ export const hu: ExpeditionMessages = {
             /*'Majdnem */'nekimentünk egy másik expedíciós flottának'/* . Nem gondoltam, hogy mások is vannak körülöttünk.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO: hu 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'Ünnepeltük az expedíciót egy másik expedíciós flotta legénységével eggyütt. */'Nekik nem volt semmi érdekes dolguk',
             /*'másik */'expedíciós flottára utaló jeleket találtunk',
             /*'Baráti */'rádiókapcsolatot létesítettünk egy másik expedíciós'/* flottával ebben'*/,
         ],

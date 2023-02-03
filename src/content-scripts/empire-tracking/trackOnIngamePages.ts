@@ -257,6 +257,9 @@ function updateFleetTracking() {
                 return 0;
             }
 
+            if(match.groups.count == '?') {
+                return 0;
+            }
             const countText = match.groups.count.replace(/[^\d]/g, '');
             return parseIntSafe(countText);
         });
