@@ -1,9 +1,9 @@
 import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ExpeditionBonusLifeformTechnology } from "../interfaces";
+import { ExpeditionEventProbabilityBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
-class PsionicNetworkClass extends LifeformTechnology implements ExpeditionBonusLifeformTechnology {
+class PsionicNetworkClass extends LifeformTechnology implements ExpeditionEventProbabilityBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -29,7 +29,7 @@ class PsionicNetworkClass extends LifeformTechnology implements ExpeditionBonusL
         return type == ExpeditionEventType.lostFleet;
     }
     
-    public getExpeditionBonus(type: ExpeditionEventType, level: number): number {
+    public getExpeditionEventProbabilityBonus(type: ExpeditionEventType, level: number): number {
         if(!this.appliesTo(type)) {
             return 0;
         }

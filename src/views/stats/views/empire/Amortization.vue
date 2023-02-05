@@ -742,6 +742,17 @@
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
                     includePlasmaTechnology: this.clone(this.includePlasmaTechnology),
+                    //TODO: 
+                    expeditions: {
+                        wavesPerDay: 8,
+                        items: [],
+                        fleetUnitsFactors: {
+                            metal: SettingsDataModule.settings.expeditionFoundShipsResourceUnits.factor,
+                            crystal: SettingsDataModule.settings.expeditionFoundShipsResourceUnits.factor,
+                            deuterium: SettingsDataModule.settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
+                        },
+                        useSmallCargos: false,
+                    },
                 },
                 lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),

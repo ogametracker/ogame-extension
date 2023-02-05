@@ -5,6 +5,7 @@ import { PlanetData } from "../../empire/PlanetData";
 import { ServerSettings } from "../../server-settings/ServerSettings";
 import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";
+import { getTechnologyBonusFactor } from "../lifeforms/utils";
 import { ResourceType } from "../resources/ResourceType";
 import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
 import { getCrawlerBoost } from "./getCrawlerBoost";
@@ -113,7 +114,7 @@ export class EmpireProductionBreakdown {
 
         this.#planetIds.forEach(planetId => {
             const planet = this.planets[planetId];
-            const techBonusFactor = (1 + planet.lifeformTechnologyBoost) * (1 + planet.lifeformExperienceBoost);
+            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost, planet.lifeformExperienceBoost);
 
             collectorClassBonusFactor += planet.collectorClassBonusFactor * techBonusFactor;
             lifeformTechnologyProductionBonusFactor += planet.lifeformTechnologyBonusProductionFactor * techBonusFactor;
