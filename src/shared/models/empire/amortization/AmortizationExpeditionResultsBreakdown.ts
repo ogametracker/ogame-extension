@@ -58,7 +58,6 @@ const averageUnitsPerSize: Record<ExpeditionEventSize, number> = {
 export interface AmortizationExpeditionResultsBreakdownOptions {
     playerClass: PlayerClass;
     admiral: boolean;
-    useSmallCargos: boolean;
 
     astrophysicsLevel: number;
     itemBonusSlots: number;

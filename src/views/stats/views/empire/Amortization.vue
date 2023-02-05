@@ -742,7 +742,7 @@
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
                     includePlasmaTechnology: this.clone(this.includePlasmaTechnology),
-                    //TODO: 
+                    //TODO: expedition amortization settings
                     expeditions: {
                         wavesPerDay: 8,
                         items: [],
@@ -751,7 +751,6 @@
                             crystal: SettingsDataModule.settings.expeditionFoundShipsResourceUnits.factor,
                             deuterium: SettingsDataModule.settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
                         },
-                        useSmallCargos: false,
                     },
                 },
                 lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),

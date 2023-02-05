@@ -5,5 +5,4 @@ export interface AmortizationExpeditionSettings {
     wavesPerDay: number;
     items: ItemHash[];
     fleetUnitsFactors: Record<ResourceType, number>;
-    useSmallCargos: boolean;
 }

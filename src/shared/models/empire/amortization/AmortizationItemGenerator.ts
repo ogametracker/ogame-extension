@@ -106,7 +106,6 @@ export interface AmortizationPlanetState {
 
     discovererClassBonusTechnologies: ClassBonusLifeformTechnology[];
     lifeformExpeditionBonusTechnologies: ExpeditionBonusLifeformTechnology[];
-    lifeformExpeditionEventProbabilityBonusTechnologies: ExpeditionEventProbabilityBonusLifeformTechnology[];
 }
 
 interface AmortizationItemGeneratorState {
@@ -335,7 +334,6 @@ export class AmortizationItemGenerator {
                 economySpeed: this.#serverSettings.speed.economy,
                 topScore: this.#serverSettings.topScore ?? 0,
             },
-            useSmallCargos: this.#settings.expeditions.useSmallCargos,
             planets: createMappedRecord(
                 planets,
                 planet => planet.id,
@@ -438,10 +436,6 @@ export class AmortizationItemGenerator {
         const lifeformExpeditionBonusTechnologies = ExpeditionBonusLifeformTechnologies.filter(
             tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
-        // init expedition event probability bonus researches
-        const lifeformExpeditionEventProbabilityBonusTechnologies = ExpeditionEventProbabilityBonusLifeformTechnologies.filter(
-            tech => planet.activeLifeformTechnologies.includes(tech.type)
-        );
 
         const productionBuildingDependencies: ProductionBuildingDependencies = {
             planet: {
@@ -495,7 +489,6 @@ export class AmortizationItemGenerator {
 
             discovererClassBonusTechnologies,
             lifeformExpeditionBonusTechnologies,
-            lifeformExpeditionEventProbabilityBonusTechnologies,
         };
     }
     #init_getPlanetData(planet: AmortizationPlanetSettings): PlanetData {
@@ -765,6 +758,7 @@ export class AmortizationItemGenerator {
                     this.#state.research[ResearchType.astrophysics] = newAstroLevel;
 
                     this.#state.planets[bestItem.newPlanetId] = bestItem.planetState;
+                    this.#state.expeditions.options.planets[bestItem.newPlanetId] = bestItem.planetExpeditionState;
                     ResourceTypes.forEach(resource => {
                         this.#state.productionBreakdowns[resource].addPlanet(bestItem.newPlanetId, bestItem.newPlanetProductionStates[resource]);
                     });
@@ -808,7 +802,13 @@ export class AmortizationItemGenerator {
             ...this.#settings.astrophysics.planet,
             id: planetId,
         });
+
         let planetExpeditionState = this.#init_getPlanetExpeditionState(planetState);
+        const expeditionsPerHour = expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
+        const curExpeditionFindsPerHour = multiplyCost(
+            expeditionBreakdown.averageExpeditionFinds,
+            expeditionsPerHour,
+        );
 
         const planetSettings = this.#settings.astrophysics.planet;
         const position = planetSettings.position;
@@ -893,7 +893,6 @@ export class AmortizationItemGenerator {
 
                 ...planetState.discovererClassBonusTechnologies,
                 ...planetState.lifeformExpeditionBonusTechnologies,
-                ...planetState.lifeformExpeditionEventProbabilityBonusTechnologies,
             ].map(tech => this.#getLifeformTechnologyAmortizationItem(
                 newProductionBreakdowns,
                 newExpeditionBreakdown,
@@ -947,18 +946,13 @@ export class AmortizationItemGenerator {
             let newProductionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
             let newProductionDeltaConverted = this.#getMsuOrDsu(newProductionDelta);
 
-            {
-                const expeditionsPerHour = expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
-                const curExpeditionFindsPerHour = multiplyCost(
-                    expeditionBreakdown.averageExpeditionFinds,
-                    expeditionsPerHour,
-                );
-                
+            {                
                 const newExpeditionBreakdown = expeditionBreakdown.clone();
+                const newExpeditionsPerHour = newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
                 newExpeditionBreakdown.options.planets[planetExpeditionState.id] = planetExpeditionState;
                 const newExpeditionFindsPerHour = multiplyCost(
-                    expeditionBreakdown.averageExpeditionFinds,
-                    expeditionsPerHour,
+                    newExpeditionBreakdown.averageExpeditionFinds,
+                    newExpeditionsPerHour,
                 );
                 const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
                 const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
@@ -983,15 +977,14 @@ export class AmortizationItemGenerator {
         let productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         {
-            const expeditionsPerHour = expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
-            const curExpeditionFindsPerHour = multiplyCost(
-                expeditionBreakdown.averageExpeditionFinds,
-                expeditionsPerHour,
-            );
+            const newExpeditionBreakdown = expeditionBreakdown.clone();
+            const newExpeditionsPerHour = newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
+            newExpeditionBreakdown.options.planets[planetExpeditionState.id] = planetExpeditionState;
             const newExpeditionFindsPerHour = multiplyCost(
-                expeditionBreakdown.averageExpeditionFinds,
-                expeditionsPerHour,
+                newExpeditionBreakdown.averageExpeditionFinds,
+                newExpeditionsPerHour,
             );
+
             const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
             const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
 
@@ -1005,6 +998,7 @@ export class AmortizationItemGenerator {
             newPlanetId: planetId,
             levels: newAstrophysicsLevels,
             planetState,
+            planetExpeditionState,
             newPlanetProductionStates,
 
             builtLevels: {
@@ -1044,7 +1038,6 @@ export class AmortizationItemGenerator {
 
                 ...planet.discovererClassBonusTechnologies,
                 ...planet.lifeformExpeditionBonusTechnologies,
-                ...planet.lifeformExpeditionEventProbabilityBonusTechnologies,
             ].map(tech => this.#getLifeformTechnologyAmortizationItem(
                 this.#state.productionBreakdowns,
                 this.#state.expeditions,

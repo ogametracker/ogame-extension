@@ -4,6 +4,7 @@ import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBu
 import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { EmpireProductionPlanetState } from "@/shared/models/ogame/resource-production/types";
 import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
+import { AmortizationExpeditionResultsPlanetState } from "./AmortizationExpeditionResultsBreakdown";
 import { AmortizationPlanetState } from "./AmortizationItemGenerator";
 
 export type MineBuildingType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
@@ -56,6 +57,7 @@ export interface AstrophysicsAmortizationItem extends BaseAmortizationItem {
     builtLevels: AstrophysicsAmortizationLevels;
 
     planetState: AmortizationPlanetState;
+    planetExpeditionState: AmortizationExpeditionResultsPlanetState;
     newPlanetProductionStates: Record<ResourceType, EmpireProductionPlanetState>;
 }
 
