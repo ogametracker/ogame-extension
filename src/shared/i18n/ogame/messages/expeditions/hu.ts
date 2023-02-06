@@ -137,7 +137,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*TODO: hu 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*'Volt egy kis nehézségünk az */'idegen faj nyelvjárásának helyes értelmezésével'/* . Diplomatánk véletlenül a "Béke!" helyett azt mondta, "Tűz!".'*/,
             /*TODO: hu 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
     },
