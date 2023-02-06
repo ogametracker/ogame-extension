@@ -9,7 +9,7 @@ export const zh_tw: LifeformDiscoveryMessages = {
         /*LOCA: zh_tw 'Gerade als das Erkundungsschiff einen vielversprechenden Funkspruch auffangen konnte, */'kam es zu einem Totalausfall sämtlicher Kommunikationssysteme'/*. Unter diesen Umständen war nicht nur jede Kontaktaufnahme mit eventuellen intelligenten Lebensformen ausgeschlossen, ein Fortführen der Mission wäre auch gefährlich gewesen. Deshalb kehrte die Crew enttäuscht, aber unversehrt zurück.'*/,
         /*'在我們系統的一個大部分未探索過的角落裡，發現了一*/'個具有某種意識形式的星雲我'/* 們的星際使節欣喜若狂；當探測器被送入星雲中時，媒體甚至引起了嚴重的騷動。然而，試圖與星雲交流的嘗試很快揭示，它的智慧程度甚至還不如一隻蟑螂。人們激動的情緒消退了，並且決定悄悄地把整個事件掩蓋起來。'*/,
         /*LOCA: zh_tw 'Bei der Suche nach neuen Lebensformen folgte das Erkundungsschiff einigen mysteriösen Signalen, die */'von der Rückseite eines unbekannten Planeten zu stammen'/* schienen. Die intergalaktischen Botschafter an Bord hatten schon das Begrüßungspaket geholt und den Übersetzungscomputer aktiviert, doch es stellte sich heraus, dass das Signal von einem Schiffswrack stammt. Das Schiff ist eindeutig außerirdischer Herkunft, aber von den Piloten fehlt leider jede Spur. So konnte keine neue Lebensform entdeckt werden.'*/,
-        /*LOCA: zh_tw 'Das Erkundungsschiff war einige Zeit unterwegs, bis sich herausstellte, dass sich ein */'fataler Bug in die Scan-Software eingeschlichen'/* hatte. So konnte leider keine neue Lebensform aufgespürt werden.'*/,
+        /*'探索飛船已經飛行了一段時間，後來發現一*/'個致命的漏洞溜進了掃描軟體'/* 。不幸的是，這意味著，船員無法發現新的生命形式。'*/,
         /*'我們的星際使節拜訪了一*/'顆居住著非常乾淨的類蟲物種的行星'/* ；他們認為這些物種一定擁有智慧，但結果令人感到失望。在看到它們瘋搶飛船垃圾壓縮器裡的東西後，他們決定把它們送回它們的星球，儘管一些船員建議留一些在飛船上。'*/,
         /*'探索飛船上的研究人員欣喜若狂地發現，*/'小行星群中央有一個神經網路'/* 。然而，他們發現這不過是截獲新聞報導的裝置；對此，他們頗感失望；並且，內容是關於幾個世紀前的體育比賽結果；但是，這個裝置已經發展出了自身的生命，就像某種太空沙發專家一樣。船員們失望地返航；除了一些毫無意義的資訊外，他們並沒有得到任何更重要的消息。'*/,
         '對真菌孢子的測試結果表明'/* ，他們發現了智慧生命；探索飛船上的船員們欣喜若狂。但是，結果證明，這是某個小丑操縱了測試結果；其目的只是為了讓競爭對手難堪。實際上，這些孢子並不會比那些在廚房微波爐後面發現的孢子更聰明多少。在飛船返航之前，他們把這個搞事的傢伙扔在了最近的行星上。'*/,
@@ -22,7 +22,7 @@ export const zh_tw: LifeformDiscoveryMessages = {
         /*'在尋找外星生命的過程中，*/'探索飛船曾陷入宇宙漩渦'/* ，外層船體嚴重受損。船員和飛船在一次危險的飛行機動中獲救，但他們不得不放棄探險，空手而歸。'*/,
         /*'探索飛船發現了一個古老的廢棄空間站；*/'其上曾經有一些以前不為人知的物種居住'/* 。然而，更深入的研究發現，該空間站只是一種已滅絕的生命形式精心設計的騙局。船員們銷毀了這些可笑的資訊，但沒有發現其他值得注意的東西。'*/,
         /*'在一個孤獨和野蠻的星球上，船員們發現了一*/'個高科技人工智慧驅動的研究站'/* 。不幸的是，研究站的門有密碼保護，且該人工智慧拒絕配合。船員們花了幾天時間試圖破譯密碼；給養物資不斷減少；幸好一名比較不顯眼的船員偶然發現了密碼，然後破譯了密碼。但是，這個工作站最終令人大失所望：這個人工智慧只不過是一個精心設計的家庭管理系統。船員們決定返航。'*/,
-        /*LOCA: zh_tw 'Das Erkundungsschiff kam durch einen technischen Fehler im */'Navigationsmodul dem Ereignishorizont eines schwarzen Lochs bedrohlich nahe'/*. Die Crew konnte gerade noch abdrehen, verbrauchte dabei jedoch ihren Treibstoffvorrat und musste daher die Suche nach neuen Lebensformen erfolglos abbrechen.'*/,
+        /*'導航模組中的一個技術錯誤使探索飛船接近一*/'個黑洞的視界'/* ，陷入極度危險之中。船員及時返航，但最終耗盡了燃料供應，因此不得不停止尋找新的生命形式，無功而返。'*/,
         /*'探索飛船興奮地報告說，他們遇到了一*/'艘來自平行宇宙的'/* 一模一樣的飛船。這個維度的宇航員甚至有著相同的名字。但相似之處僅限於此：在歡迎派對上，客人們太粗魯了；所以船員們很快就把他們趕出了我們的宇宙。船員們深感失望，同時也鬆了一口氣，然後返航回家了。'*/,
     ],
     [LifeformDiscoveryEventType.lostShip]: [
