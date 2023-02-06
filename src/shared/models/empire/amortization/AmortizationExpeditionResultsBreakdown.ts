@@ -96,7 +96,10 @@ export class AmortizationExpeditionResultsBreakdown {
     get slots(): number {
         const astroSlots = Math.floor(Math.sqrt(this.options.astrophysicsLevel));
         const classBonusSlots = this.options.playerClass == PlayerClass.discoverer
-            ? this.options.serverSettings.discovererExpeditionSlotBonus
+            ? Math.trunc(
+                this.options.serverSettings.discovererExpeditionSlotBonus
+                * (1 + this.#lifeformDiscovererClassBonus)
+            )
             : 0;
         const admiralSlots = this.options.admiral ? 1 : 0;
 
@@ -136,7 +139,7 @@ export class AmortizationExpeditionResultsBreakdown {
         const scoreFactor = this.#resourceFindFactor;
 
         const classFactor = this.options.playerClass == PlayerClass.discoverer
-            ? 1.5 * (1 + this.#lifeformDiscovererClassBonus) * this.options.serverSettings.economySpeed
+            ? 1.5 * (1 + this.#lifeformDiscovererClassBonus) * this.options.serverSettings.economySpeed //TODO: fix after ingame formula has been fixed
             : 1;
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;

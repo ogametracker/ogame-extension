@@ -105,7 +105,7 @@
                         </div>
 
                         <div>
-                            <h3 v-text="'LOCA: Expedition Settings'" />
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
                             <div class="expeditionsettings">
                                 <amortization-expedition-settings-inputs v-model="expeditionSettings" :playerSettings="playerSettings" />
                             </div>
@@ -138,19 +138,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="amortization-grouping" v-if="false">
-                <button
-                    v-if="!isGroupedItemsView"
-                    v-text="$i18n.$t.extension.empire.amortization.table.groupSelectedItems"
-                    :disabled="selectedCount == 0"
-                    @click="showGroupedItems()"
-                />
-                <template v-else>
-                    <button v-text="$i18n.$t.extension.empire.amortization.table.showOriginalItems" @click="showNormalItems" />
-                    <span v-text="'LOCA: gesamte Kosten gruppierter Elemente können geringer sein, da hier die optimale Reihenfolge berücksichtigt wird.'" />
-                </template>
             </div>
 
             <div class="amortization-table" v-if="!showSettings">

@@ -1095,7 +1095,6 @@ export class AmortizationItemGenerator {
         let additionalCrawlerBonus = 0;
         let additionalCollectorClassBonus = 0;
         let additionalProductionBonus: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-        let isProductionBonus = false;
 
         if ('getProductionBonus' in technology) {
             const bonus = subCost(
@@ -1103,49 +1102,44 @@ export class AmortizationItemGenerator {
                 technology.getProductionBonus(newLevel - 1),
             );
             additionalProductionBonus = addCost(additionalProductionBonus, bonus);
-            isProductionBonus = true;
         }
         else if ('getCrawlerProductionBonus' in technology) {
             const bonus = technology.getCrawlerProductionBonus(newLevel)
                 - technology.getCrawlerProductionBonus(newLevel - 1);
             additionalCrawlerBonus = bonus;
-            isProductionBonus = true;
         }
         else if ('getClassBonus' in technology && technology.appliesTo(PlayerClass.collector)) {
             const bonus = technology.getClassBonus(PlayerClass.collector, newLevel)
                 - technology.getClassBonus(PlayerClass.collector, newLevel - 1);
 
             additionalCollectorClassBonus = bonus;
-            isProductionBonus = true;
         }
 
         let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
         let productionDeltaConverted = 0;
-        if (isProductionBonus) {
-            const curProduction = productionBreakdowns.getTotal();
 
-            const newProductionBreakdowns = productionBreakdowns.clone();
-            ResourceTypes.forEach(resource => {
-                const planetProductionState = newProductionBreakdowns[resource].planets[planetId];
+        const curProduction = productionBreakdowns.getTotal();
 
-                planetProductionState.lifeformTechnologyBonusProductionFactor += additionalProductionBonus[resource];
-                planetProductionState.collectorClassBonusFactor += additionalCollectorClassBonus;
-                planetProductionState.lifeformTechnologyCrawlerProductionBonusFactor += additionalCrawlerBonus;
-            });
-            const newProduction = newProductionBreakdowns.getTotal();
+        const newProductionBreakdowns = productionBreakdowns.clone();
+        ResourceTypes.forEach(resource => {
+            const planetProductionState = newProductionBreakdowns[resource].planets[planetId];
+
+            planetProductionState.lifeformTechnologyBonusProductionFactor += additionalProductionBonus[resource];
+            planetProductionState.collectorClassBonusFactor += additionalCollectorClassBonus;
+            planetProductionState.lifeformTechnologyCrawlerProductionBonusFactor += additionalCrawlerBonus;
+        });
+        const newProduction = newProductionBreakdowns.getTotal();
 
 
-            productionDelta = subCost(newProduction, curProduction);
-            productionDelta = this.#excludeIgnoredResources(productionDelta);
-            productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
-        }
+        productionDelta = subCost(newProduction, curProduction);
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
+        productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
 
         if (this.#settings.expeditions.include) {
             let additionalDiscovererClassBonus = 0;
             let additionalExpeditionBonuses: Record<ExpeditionEventType, number> = createRecord(ExpeditionEventTypes, 0);
             let additionalExpeditionEventProbabilityBonuses: Record<ExpeditionEventType, number> = createRecord(ExpeditionEventTypes, 0);
-            let isExpeditionBonus = false;
 
             if ('getExpeditionBonus' in technology) {
                 ExpeditionEventTypes.forEach(eventType => {
@@ -1153,7 +1147,6 @@ export class AmortizationItemGenerator {
                         - technology.getExpeditionBonus(eventType, newLevel - 1);
                     additionalExpeditionBonuses[eventType] += bonus;
                 });
-                isExpeditionBonus = true;
             }
             else if ('getExpeditionEventProbabilityBonus' in technology) {
                 ExpeditionEventTypes.forEach(eventType => {
@@ -1161,39 +1154,36 @@ export class AmortizationItemGenerator {
                         - technology.getExpeditionEventProbabilityBonus(eventType, newLevel - 1);
                     additionalExpeditionEventProbabilityBonuses[eventType] += bonus;
                 });
-                isExpeditionBonus = true;
             }
             else if ('getClassBonus' in technology && technology.appliesTo(PlayerClass.discoverer)) {
                 const bonus = technology.getClassBonus(PlayerClass.discoverer, newLevel)
                     - technology.getClassBonus(PlayerClass.discoverer, newLevel - 1);
 
                 additionalDiscovererClassBonus = bonus;
-                isExpeditionBonus = true;
             }
 
-            if (isExpeditionBonus) {
-                const expeditionsPerHour = expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
-                const curExpeditionFindsPerHour = multiplyCost(
-                    expeditionBreakdown.averageExpeditionFinds,
-                    expeditionsPerHour,
-                );
-                const newExpeditionBreakdown = expeditionBreakdown.clone();
+            const expeditionsPerHour = expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
+            const curExpeditionFindsPerHour = multiplyCost(
+                expeditionBreakdown.averageExpeditionFinds,
+                expeditionsPerHour,
+            );
+            const newExpeditionBreakdown = expeditionBreakdown.clone();
 
-                const newPlanetBreakdown = newExpeditionBreakdown.options.planets[planetId];
-                newPlanetBreakdown.discovererClassBonusFactor += additionalDiscovererClassBonus;
-                ExpeditionEventTypes.forEach(eventType => {
-                    newPlanetBreakdown.lifeformTechnologyExpeditionBonusFactor[eventType] += additionalExpeditionBonuses[eventType];
-                });
-                const newExpeditionFindsPerHour = multiplyCost(
-                    expeditionBreakdown.averageExpeditionFinds,
-                    expeditionsPerHour,
-                );
-                const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
-                const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
+            const newPlanetBreakdown = newExpeditionBreakdown.options.planets[planetId];
+            newPlanetBreakdown.discovererClassBonusFactor += additionalDiscovererClassBonus;
+            ExpeditionEventTypes.forEach(eventType => {
+                newPlanetBreakdown.lifeformTechnologyExpeditionBonusFactor[eventType] += additionalExpeditionBonuses[eventType];
+            });
+            const newExpeditionsPerHour = newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
+            const newExpeditionFindsPerHour = multiplyCost(
+                newExpeditionBreakdown.averageExpeditionFinds,
+                newExpeditionsPerHour,
+            );
+            const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
+            const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
 
-                productionDelta = addCost(productionDelta, expeditionDelta);
-                productionDeltaConverted += expeditionDeltaConverted;
-            }
+            productionDelta = addCost(productionDelta, expeditionDelta);
+            productionDeltaConverted += expeditionDeltaConverted;
         }
 
 

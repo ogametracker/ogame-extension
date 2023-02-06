@@ -105,6 +105,15 @@ export interface EmpireTranslations {
                 lifeformTechnologies: string;
                 ignoreEmptySlots: string;
             };
+            expeditionSettings: {
+                header: string;
+                includeInResult: string;
+                averageWavesPerDay: string;
+                items: string;
+                averageExpeditionsPerDay: string;
+                shipUnitFactors: string;
+                topPlayerScore: string;
+            };
         };
 
         info: {

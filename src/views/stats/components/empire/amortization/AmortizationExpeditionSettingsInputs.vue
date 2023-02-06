@@ -1,43 +1,39 @@
 <template>
     <div class="expedition-settings" :class="{ disabled: !settings.include }">
         <div class="header">
-            <span>&nbsp;</span>
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
         </div>
 
         <div class="body">
-            <span v-text="'LOCA: Include'" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.includeInResult" />
             <checkbox v-model="settings.include" />
 
-            <span v-text="'LOCA: Waves per day'" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay" />
             <span>
                 <input type="number" v-model.number.lazy="settings.wavesPerDay" min="0" max="20" step="0.1" />
             </span>
 
-            <span v-text="'LOCA: Items'" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.items" />
             <span class="item-grid">
                 <o-item v-for="item in slotItems" :key="item" :item="item" :disabled="!settings.items.includes(item)" @click="toggleItem(item)" />
             </span>
 
-            <span v-text="'LOCA: Expeditions total'" />
-            <span v-text="$i18n.$n(expeditionsPerDay)" />
+            <i v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay" />
+            <i v-text="$i18n.$n(expeditionsPerDay)" />
 
-            <span v-text="'LOCA: Ship unit factors'" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.shipUnitFactors" />
             <div class="resource-factors">
-                <span>
-                    <o-resource resource="metal" />
-                    <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.metal" min="0" max="1" step="0.01" />
-                </span>
-                <span>
-                    <o-resource resource="crystal" />
-                    <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.crystal" min="0" max="1" step="0.01" />
-                </span>
-                <span>
-                    <o-resource resource="deuterium" />
-                    <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.deuterium" min="0" max="1" step="0.01" />
-                </span>
+                <o-resource resource="metal" />
+                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.metal" min="0" max="1" step="0.01" />
+
+                <o-resource resource="crystal" />
+                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.crystal" min="0" max="1" step="0.01" />
+
+                <o-resource resource="deuterium" />
+                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.deuterium" min="0" max="1" step="0.01" />
             </div>
 
-            <span v-text="'LOCA: Top player score'" />
+            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.topPlayerScore" />
             <span>
                 <select v-model.number.lazy="settings.serverSettings.topScore">
                     <option v-for="(text, value) in topScores" :key="value" :value="value" v-text="text" />
@@ -224,8 +220,8 @@
     }
 
     .resource-factors {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: auto 1fr;
         width: max-content;
         gap: 4px;
     }

@@ -106,6 +106,15 @@ export const en: EmpireTranslations = {
                 lifeformTechnologies: 'Lifeform Technologies',
                 ignoreEmptySlots: 'Ignore inactive slots',
             },
+            expeditionSettings: {
+                header: 'Expedition Settings',
+                includeInResult: 'Include in calculation',
+                averageWavesPerDay: '⌀ Waves per day',
+                items: 'Slot items',
+                averageExpeditionsPerDay: '⌀ Expeditions per day',
+                shipUnitFactors: 'Ship resource unit factors',
+                topPlayerScore: 'Top player score',
+            },
         },
 
         info: {
