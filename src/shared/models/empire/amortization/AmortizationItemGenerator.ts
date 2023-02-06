@@ -38,6 +38,7 @@ import { formatWithOptions } from "date-fns/fp";
 import { ExpeditionEventType, ExpeditionEventTypes } from "../../expeditions/ExpeditionEventType";
 import { PlayerClass } from "../../ogame/classes/PlayerClass";
 import { getItemSlotBonus } from "../../ogame/expeditions/getItemSlotBonus";
+import { LifeformBuilding } from "../../ogame/lifeforms/buildings/LifeformBuilding";
 import { MissileType } from "../../ogame/missiles/MissileType";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationExpeditionResultsBreakdown, AmortizationExpeditionResultsPlanetState } from "./AmortizationExpeditionResultsBreakdown";
@@ -661,9 +662,15 @@ export class AmortizationItemGenerator {
             let items: AmortizationItem[] = [];
 
             const mineItems = this.#getMineAmortizationItems();
-            const lifeformBuildingItems = this.#getLifeformProductionBonusBuildingAmortizationItems();
+            const lifeformProductionBonusBuildingItems = this.#getLifeformProductionBonusBuildingAmortizationItems();
+            const lifeformTechnologyBoostBuildingItems = this.#getLifeformTechnologyBoostBuildingAmortizationItems();
             const lifeformTechnologyItems = this.#getLifeformTechnologyAmortizationItems();
-            items.push(...mineItems, ...lifeformBuildingItems, ...lifeformTechnologyItems);
+            items.push(
+                ...mineItems,
+                ...lifeformProductionBonusBuildingItems,
+                ...lifeformTechnologyBoostBuildingItems,
+                ...lifeformTechnologyItems,
+            );
 
             if (this.#settings.includePlasmaTechnology) {
                 const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
@@ -884,8 +891,14 @@ export class AmortizationItemGenerator {
         let timeInHours = Infinity;
         do {
             const mineItems = $mineBuildingTypes.map(mine => this.#getMineAmortizationItem(newProductionBreakdowns, planetState, mine));
-            const lfBuildingItems = ResourceProductionBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
+            const lfProductionBonusBuildingItems = ResourceProductionBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
                 .map(lfBuilding => this.#getLifeformProductionBonusBuildingAmortizationItem(newProductionBreakdowns, planetState, lfBuilding));
+            const lfTechnologyBoostBuildingItems = LifeformTechnologyBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
+                .map(lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(
+                    newProductionBreakdowns,
+                    newExpeditionBreakdown,
+                    planetState,
+                    lfBuilding));
             const lfTechnologyProductionItems = [
                 ...planetState.lifeformResourceProductionBonusTechnologies,
                 ...planetState.crawlerProductionBonusTechnologies,
@@ -907,7 +920,13 @@ export class AmortizationItemGenerator {
                     tech))
                 : [];
 
-            const items = [...mineItems, ...lfBuildingItems, ...lfTechnologyProductionItems, ...lfTechnologyExpeditionItems];
+            const items = [
+                ...mineItems,
+                ...lfProductionBonusBuildingItems,
+                ...lfTechnologyBoostBuildingItems,
+                ...lfTechnologyProductionItems,
+                ...lfTechnologyExpeditionItems,
+            ];
             const bestItem = items
                 .filter(item => item.productionDeltaConverted > 0)
                 .reduce<MineAmortizationItem | LifeformBuildingAmortizationItem | LifeformTechnologyAmortizationItem>(
@@ -981,8 +1000,6 @@ export class AmortizationItemGenerator {
 
         const totalCostConverted = this.#getMsuOrDsu(totalCost);
         let productionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
-        productionDelta = this.#excludeIgnoredResources(productionDelta);
-        let productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         if (this.#settings.expeditions) {
             const newExpeditionBreakdown = expeditionBreakdown.clone();
@@ -994,12 +1011,11 @@ export class AmortizationItemGenerator {
             );
 
             const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
-            const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
-
             productionDelta = addCost(productionDelta, expeditionDelta);
-            productionDeltaConverted += expeditionDeltaConverted;
         }
 
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
+        let productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {
             type: 'astrophysics-and-colony',
@@ -1132,8 +1148,6 @@ export class AmortizationItemGenerator {
 
 
         productionDelta = subCost(newProduction, curProduction);
-        productionDelta = this.#excludeIgnoredResources(productionDelta);
-        productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
 
         if (this.#settings.expeditions.include) {
@@ -1180,12 +1194,11 @@ export class AmortizationItemGenerator {
                 newExpeditionsPerHour,
             );
             const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
-            const expeditionDeltaConverted = this.#getMsuOrDsu(expeditionDelta);
-
             productionDelta = addCost(productionDelta, expeditionDelta);
-            productionDeltaConverted += expeditionDeltaConverted;
         }
 
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
+        productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
         return {
             type: 'lifeform-technology',
@@ -1204,7 +1217,6 @@ export class AmortizationItemGenerator {
         };
     }
 
-    //TODO: extract lifeform technology boost buildings to separate amortization item
     #getLifeformTechnologyItem_costReduction(
         planetState: AmortizationPlanetState,
         technology: ResourceProductionBonusLifeformTechnology
@@ -1267,31 +1279,21 @@ export class AmortizationItemGenerator {
 
         const potentialLifeformTechnologyCostReductionOrTechBonusBuildingReduceFunction = (
             best: PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null,
-            building: LifeformTechnologyResearchBuilding | LifeformTechnologyBonusLifeformBuilding,
+            building: LifeformTechnologyResearchBuilding,
         ): PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null => {
             const newLevel = localPlanetState.lifeformBuildingLevels[building.type] + 1;
             const cost = building.getCost(newLevel);
             const reducedCost = multiplyCostInt(cost, 1 - localPlanetState.lifeformBuildingCostReduction[building.type]);
 
-            let additionalCostReduction = 0;
-            let additionalTechBoost = 0;
-            if ('getLifeformTechnologyResearchCostAndTimeReduction' in building) {
-                additionalCostReduction = building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost
-                    - building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
-            } else {
-                additionalTechBoost = building.getLifeformTechnologyBonus(newLevel) - building.getLifeformTechnologyBonus(newLevel - 1);
-            }
+            let additionalCostReduction = building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost
+                - building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
             const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
                 if ('building' in cur) {
                     const curReducedCost = multiplyCostInt(cur.cost, 1 - localPlanetState.lifeformBuildingCostReduction[cur.building]);
                     return addCost(total, curReducedCost);
                 }
 
-                const technologyCostReduction = localPlanetState.lifeformTechnologyCostReduction + additionalCostReduction;
-                const technologyBoost = planetState.lifeformTechnologyBoost + additionalTechBoost;
-                const xpTechBoost = planetState.lifeformExperienceBoost;
-                const costReduction = technologyCostReduction * (1 + technologyBoost) * (1 + xpTechBoost);
-
+                const costReduction = localPlanetState.lifeformTechnologyCostReduction + additionalCostReduction;
                 const curReducedCost = multiplyCostInt(cur.cost, 1 - costReduction);
 
                 return addCost(total, curReducedCost);
@@ -1372,7 +1374,7 @@ export class AmortizationItemGenerator {
         const bestItems: PotentialLifeformTechnologyCostReductionItem[] = [];
         while (true) {
             const bestItem =
-                [...planetState.lifeformTechnologyResearchBuildings, ...planetState.lifeformTechnologyBoostBuildings].reduce(
+                [...planetState.lifeformTechnologyResearchBuildings].reduce(
                     (best, cur) => potentialLifeformTechnologyCostReductionOrTechBonusBuildingReduceFunction(best, cur),
                     null as PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding | null,
                 )
@@ -1456,7 +1458,104 @@ export class AmortizationItemGenerator {
     //#endregion
 
 
-    //#region lifeform building amortization item calculation
+    //#region lifeform technology boost building amortization item calculation
+    #getLifeformTechnologyBoostBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
+        return this.#includedPlanets.flatMap(
+            planet => LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
+                lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(this.#state.productionBreakdowns, this.#state.expeditions, planet, lfBuilding)
+            )
+        );
+    }
+
+    #getLifeformTechnologyBoostBuildingAmortizationItem(
+        productionBreakdowns: EmpireProductionBreakdowns,
+        expeditions: AmortizationExpeditionResultsBreakdown,
+        planetState: AmortizationPlanetState,
+        lfBuilding: LifeformTechnologyBonusLifeformBuilding,
+    ): LifeformBuildingAmortizationItem {
+        const planetData = planetState.data;
+        const planetId = planetData.id;
+        const newLevel = planetData.lifeformBuildings[lfBuilding.type] + 1;
+
+        const result = this.#getLifeformBuildingAmortizationItem_costReduction(planetState, lfBuilding);
+        const reducedCost = result.totalReducedCost;
+        const reducedCostConverted = result.totalReducedCostConverted;
+
+        const additionalLifeformBuildings: LifeformBuildingLevels[] = [];
+        const additionalLifeformBuildingsByBuilding: Partial<Record<LifeformBuildingType, LifeformBuildingLevels>> = {};
+        result.additionalLifeformBuildings.forEach(item => {
+            let levels = additionalLifeformBuildingsByBuilding[item.building];
+            if (levels == null) {
+                levels = {
+                    planetId: planetData.id,
+                    building: item.building,
+                    levels: {
+                        from: item.level,
+                        to: item.level,
+                    },
+                };
+                additionalLifeformBuildingsByBuilding[item.building] = levels;
+                additionalLifeformBuildings.push(levels);
+            }
+
+            levels.levels.to = item.level;
+        });
+
+        let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+
+        const additionalTechnologyBoost = lfBuilding.getLifeformTechnologyBonus(newLevel) - lfBuilding.getLifeformTechnologyBonus(newLevel - 1);
+        ResourceTypes.forEach(resource => {
+            const productionBreakdown = productionBreakdowns[resource];
+            const newProductionBreakdown = productionBreakdown.clone();
+
+            newProductionBreakdown.planets[planetId].lifeformTechnologyBoost += additionalTechnologyBoost;
+
+            const productionDeltaValue = newProductionBreakdown.getTotal() - productionBreakdown.getTotal();
+            productionDelta = addCost(productionDelta, {
+                metal: 0, crystal: 0, deuterium: 0, energy: 0,
+                [resource]: productionDeltaValue,
+            });
+        });
+
+
+        {
+            const expeditionsPerHour = expeditions.slots * this.#settings.expeditions.wavesPerDay / 24;
+            const curExpeditionFindsPerHour = multiplyCost(
+                expeditions.averageExpeditionFinds,
+                expeditionsPerHour,
+            );
+
+            const newExpeditionBreakdown = expeditions.clone();
+            newExpeditionBreakdown.options.planets[planetId].lifeformTechnologyBoost += additionalTechnologyBoost;
+            const newExpeditionFindsPerHour = multiplyCost(
+                newExpeditionBreakdown.averageExpeditionFinds,
+                expeditionsPerHour,
+            );
+            const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
+
+            productionDelta = addCost(productionDelta, expeditionDelta);
+        }
+
+        productionDelta = this.#excludeIgnoredResources(productionDelta);
+        const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
+
+        return {
+            type: 'lifeform-building',
+            planetId,
+            building: lfBuilding.type,
+            level: newLevel,
+            additionalLifeformBuildings,
+
+            cost: reducedCost,
+            costConverted: reducedCostConverted,
+            productionDelta,
+            productionDeltaConverted: productionDeltaConverted,
+            timeInHours: reducedCostConverted / productionDeltaConverted,
+        };
+    }
+    //#endregion
+
+    //#region lifeform production bonus building amortization item calculation
     #getLifeformProductionBonusBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
         return this.#includedPlanets.flatMap(
             planet => ResourceProductionBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
@@ -1511,6 +1610,7 @@ export class AmortizationItemGenerator {
                 [resource]: productionDeltaValue,
             });
         });
+
         productionDelta = this.#excludeIgnoredResources(productionDelta);
         const productionDeltaConverted = this.#getMsuOrDsu(productionDelta);
 
@@ -1528,7 +1628,7 @@ export class AmortizationItemGenerator {
             timeInHours: reducedCostConverted / productionDeltaConverted,
         };
     }
-    #getLifeformBuildingAmortizationItem_costReduction(planetState: AmortizationPlanetState, lfBuilding: ResourceProductionBonusLifeformBuilding) {
+    #getLifeformBuildingAmortizationItem_costReduction(planetState: AmortizationPlanetState, lfBuilding: LifeformBuilding) {
         interface PotentialLifeformBuildingCostReductionBuilding {
             building: AnyBuildingCostAndTimeReductionLifeformBuilding;
             level: number;
