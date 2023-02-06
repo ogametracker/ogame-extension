@@ -62,6 +62,10 @@ export interface ExpeditionBonusLifeformTechnology extends LifeformTechnology {
     appliesTo(type: ExpeditionEventType): boolean;
     getExpeditionBonus(type: ExpeditionEventType, level: number): number;
 }
+export interface ExpeditionEventProbabilityBonusLifeformTechnology extends LifeformTechnology {
+    appliesTo(type: ExpeditionEventType): boolean;
+    getExpeditionEventProbabilityBonus(type: ExpeditionEventType, level: number): number;
+}
 
 //TODO: intergalactic envoys => 11201
 //TODO: Expedition speed booster => 14210

@@ -18,7 +18,7 @@ import { ResearchAI } from "./humans/ResearchAI";
 import { RobotAssistants } from "./humans/RobotAssistants";
 import { StealthFieldGenerator } from "./humans/StealthFieldGenerator";
 import { Supercomputer } from "./humans/Supercomputer";
-import { BuildingCostAndTimeReductionLifeformTechnology, ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, DenCapacityBonusLifeformTechnology, ExpeditionBonusLifeformTechnology, FleetFuelReturnLifeformTechnology, FuelConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, StatsBonusLifeformTechnology } from "./interfaces";
+import { BuildingCostAndTimeReductionLifeformTechnology, ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, DenCapacityBonusLifeformTechnology, ExpeditionBonusLifeformTechnology, ExpeditionEventProbabilityBonusLifeformTechnology, FleetFuelReturnLifeformTechnology, FuelConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, StatsBonusLifeformTechnology } from "./interfaces";
 import { EfficientSwarmIntelligence } from "./kaelesh/EfficientSwarmIntelligence";
 import { EnhancedSensorTechnology } from "./kaelesh/EnhancedSensorTechnology";
 import { GravitationSensors } from "./kaelesh/GravitationSensors";
@@ -257,7 +257,6 @@ export const ExpeditionBonusLifeformTechnologiesByLifeform: Record<LifeformType,
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [
-        PsionicNetwork,
         TelekineticTractorBeam,
         EnhancedSensorTechnology,
         SixthSense,
@@ -265,6 +264,18 @@ export const ExpeditionBonusLifeformTechnologiesByLifeform: Record<LifeformType,
     ],
 };
 export const ExpeditionBonusLifeformTechnologies = Object.values(ExpeditionBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+
+
+export const ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionEventProbabilityBonusLifeformTechnology[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [    ],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [
+        PsionicNetwork,
+    ],
+};
+export const ExpeditionEventProbabilityBonusLifeformTechnologies = Object.values(ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
 export const LifeformTechnologiesByType: Record<LifeformTechnologyType, LifeformTechnology> = {

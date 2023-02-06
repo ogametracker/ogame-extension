@@ -104,6 +104,13 @@
                             </div>
                         </div>
 
+                        <div>
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
+                            <div class="expeditionsettings">
+                                <amortization-expedition-settings-inputs v-model="expeditionSettings" :playerSettings="playerSettings" />
+                            </div>
+                        </div>
+
                         <hr style="width: 100%" />
 
                         <div>
@@ -131,19 +138,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="amortization-grouping" v-if="false">
-                <button
-                    v-if="!isGroupedItemsView"
-                    v-text="$i18n.$t.extension.empire.amortization.table.groupSelectedItems"
-                    :disabled="selectedCount == 0"
-                    @click="showGroupedItems()"
-                />
-                <template v-else>
-                    <button v-text="$i18n.$t.extension.empire.amortization.table.showOriginalItems" @click="showNormalItems" />
-                    <span v-text="'LOCA: gesamte Kosten gruppierter Elemente können geringer sein, da hier die optimale Reihenfolge berücksichtigt wird.'" />
-                </template>
             </div>
 
             <div class="amortization-table" v-if="!showSettings">
@@ -476,6 +470,7 @@
     import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs from '../../components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
     import AmortizationGroupedItemTable from '../../components/empire/amortization/AmortizationGroupedItemTable.vue';
+    import AmortizationExpeditionSettingsInputs from '../../components/empire/amortization/AmortizationExpeditionSettingsInputs.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
     import { GridTableColumn } from '../../components/common/GridTable.vue';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
@@ -502,6 +497,11 @@
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
     import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
+    import { AmortizationExpeditionSettings } from '@/shared/models/empire/amortization/AmortizationExpeditionSettings';
+    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { startOfToday, subDays } from 'date-fns';
+    import { AmortizationExpeditionResultsBreakdown, AmortizationExpeditionResultsBreakdownOptions } from '@/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
+    import { getItemSlotBonus } from '@/shared/models/ogame/expeditions/getItemSlotBonus';
 
     type AmortizationViewItem = AmortizationItem & {
         selected: boolean;
@@ -523,6 +523,7 @@
             AmortizationPlanetSettingsInputs,
             AmortizationPlayerSettingsInputs,
             AmortizationGroupedItemTable,
+            AmortizationExpeditionSettingsInputs,
             ShowConvertedResourcesInCellsSettings,
         },
     })
@@ -604,7 +605,7 @@
             const itemType = item.type;
             switch (item.type) {
                 case 'mine': {
-                    if(item.planetId < 0) {
+                    if (item.planetId < 0) {
                         return false; //TODO: how to check if an item on a new planet was done?
                     }
 
@@ -621,7 +622,7 @@
                 }
 
                 case 'lifeform-building': {
-                    if(item.planetId < 0) {
+                    if (item.planetId < 0) {
                         return false; //TODO: how to check if an item on a new planet was done?
                     }
 
@@ -630,7 +631,7 @@
                 }
 
                 case 'lifeform-technology': {
-                    if(item.planetId < 0) {
+                    if (item.planetId < 0) {
                         return false; //TODO: how to check if an item on a new planet was done?
                     }
 
@@ -694,6 +695,22 @@
             },
         };
         private includePlasmaTechnology = true;
+        private expeditionSettings: AmortizationExpeditionSettings = {
+            include: true,
+            wavesPerDay: 8,
+            items: [],
+            fleetUnitsFactors: {
+                metal: 0.35,
+                crystal: 0.35,
+                deuterium: 0.35,
+            },
+            serverSettings: {
+                topScore: 100_000_001,
+                economySpeed: 1,
+                discovererExpeditionBonus: 0.5,
+                discovererExpeditionSlotBonus: 2,
+            },
+        };
 
         private showSettings = true;
 
@@ -742,6 +759,7 @@
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
                     includePlasmaTechnology: this.clone(this.includePlasmaTechnology),
+                    expeditions: this.clone(this.expeditionSettings),
                 },
                 lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
@@ -784,6 +802,7 @@
         private initSettings() {
             const empire = this.empire;
             const serverSettings = ServerSettingsDataModule.serverSettings;
+            const settings = SettingsDataModule.settings;
 
             this.playerSettings = {
                 ...this.playerSettings,
@@ -840,6 +859,51 @@
                         max: empire.playerClass == PlayerClass.collector,
                     },
                 },
+            };
+
+
+
+            const expoSlotItems = Object.keys(Object.values(empire.planets)[0].activeItems) as ItemHash[];
+            const bonusExpoSlots = getItemSlotBonus(createRecord(expoSlotItems, _ => 'permanent' as const));
+
+            const days = Array.from({ length: 7 }).map((_, i) => subDays(startOfToday(), i + 1).getTime());
+            const expoCounts = days.map(day => ExpeditionDataModule.dailyResults[day])
+                .map(res => res == null
+                    ? 0
+                    : Object.values(res.events).reduce((total, cur) => total + cur, 0))
+                .filter(res => res > 0);
+            const avgExpos = expoCounts.reduce((total, cur) => total + cur, 0) / Math.max(1, expoCounts.length);
+            const expoServerSettings: AmortizationExpeditionResultsBreakdownOptions['serverSettings'] = {
+                topScore: serverSettings.topScore ?? 100_000_001,
+                economySpeed: serverSettings.speed.economy,
+                discovererExpeditionBonus: serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
+                discovererExpeditionSlotBonus: serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
+            };
+            let avgWaves = avgExpos / new AmortizationExpeditionResultsBreakdown({
+                playerClass: this.playerSettings.playerClass,
+                admiral: this.playerSettings.officers.admiral,
+                astrophysicsLevel: this.playerSettings.levelAstrophysics,
+                itemBonusSlots: bonusExpoSlots,
+                fleetFindsResourceFactors: {
+                    metal: settings.expeditionFoundShipsResourceUnits.factor,
+                    crystal: settings.expeditionFoundShipsResourceUnits.factor,
+                    deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
+                },
+                serverSettings: expoServerSettings,
+                planets: {},
+            }).slots;
+            avgWaves = Math.round(10 * avgWaves) / 10;
+
+            this.expeditionSettings = {
+                include: this.expeditionSettings.include,
+                items: expoSlotItems,
+                wavesPerDay: avgWaves,
+                fleetUnitsFactors: {
+                    metal: settings.expeditionFoundShipsResourceUnits.factor,
+                    crystal: settings.expeditionFoundShipsResourceUnits.factor,
+                    deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
+                },
+                serverSettings: expoServerSettings,
             };
         }
 

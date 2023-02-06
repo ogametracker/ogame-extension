@@ -40,6 +40,7 @@ class ServerSettingsDataModuleClass extends Vue {
     private mapServerSettings(serverData?: DbServerSettings): ServerSettings {
         return {
             lastUpdate: serverData?._lastUpdate ?? 0,
+            topScore: serverData?.topScore ?? 0,
             speed: {
                 economy: serverData?.speed ?? 1,
                 research: serverData?.researchDurationDivisor ?? 1,

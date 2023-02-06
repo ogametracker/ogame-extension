@@ -136,6 +136,7 @@ interface ServerLifeformSettings {
 export interface ServerSettings {
     lastUpdate: number;
 
+    topScore?: number;
     speed: ServerSpeedSettings;
     universe: ServerUniverseSettings;
     combats: ServerCombatSettings;
