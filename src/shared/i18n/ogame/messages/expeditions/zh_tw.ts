@@ -18,7 +18,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'我們的探險隊報告發現奇特的現象.在船艦護盾的能量槽中,*/'附著積存著一些暗物質'/* .我們的技術人員在正盡可能在這些怪象持續時儲存這些暗物質.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'一次偶然*/'發生的超空間扭曲'/* ,使得您的遠征探險艦隊收穫了大量的暗物質!'*/,
             /*'我們的遠征探險艦隊與一個很特殊的種族發生了第一次接觸.這些生物乍看起來似乎是由高純度的能量所構成.*/'他們稱呼自己為樂高人'/*.他們在飛躍經過我們的遠征探險艦隊時,决定幫助他們眼中我們這些未開化的落後種族.一些含有暗物質的物質由他們傳送至艦橋內.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`捕獲了 (?<name>${darkMatter}) (?<amount>[^\\s]+)`, 'i'),
@@ -114,12 +114,12 @@ export const zh_tw: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'您的遠征探險艦隊與一*/'些宇宙海盜發生了不愉快的接觸',
-            /*LOCA: zh_tw 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'我們徑直落入一*/'些星際海盜的埋伏陷阱之中'/* !一場激戰看來無可避免了.'*/,
             /*'遠征探險艦隊所跟蹤到的緊急求援訊號原來實際上是一*/'幫星際海盜所設下的埋伏陷阱'/*.看來,一場激戰將無可避免.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'該信號記錄絕不是來自外星文明的,*/'而是一個隱祕的海盜基地'/* !這些海盜對我們突然出現這裡絲毫不覺得有半分詫異.'*/,
-            /*LOCA: zh_tw 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'遠征探險艦隊報告說與*/'不明來歷的海盜艦隊發生了戰鬥',
         ],
     },
 

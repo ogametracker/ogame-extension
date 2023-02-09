@@ -138,6 +138,8 @@ export class AmortizationExpeditionResultsBreakdown {
     get averageExpeditionFinds(): Cost {
         const scoreFactor = this.#resourceFindFactor;
 
+        const pathfinderFactor = 2;
+
         const classFactor = this.options.playerClass == PlayerClass.discoverer
             ? 1.5 * (1 + this.#lifeformDiscovererClassBonus) * this.options.serverSettings.economySpeed //TODO: fix after ingame formula has been fixed
             : 1;
@@ -160,6 +162,7 @@ export class AmortizationExpeditionResultsBreakdown {
             },
             scoreFactor
             * classFactor
+            * pathfinderFactor
             * eventTypeProbabilities.resources
             * (1 + eventBonuses.resources)
         );
@@ -179,6 +182,7 @@ export class AmortizationExpeditionResultsBreakdown {
             ),
             scoreFactor
             * classFactor
+            * pathfinderFactor
             * eventTypeProbabilities.fleet
             * (1 + eventBonuses.fleet)
         );

@@ -333,7 +333,7 @@ export class AmortizationItemGenerator {
                 discovererExpeditionSlotBonus: this.#serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
                 discovererExpeditionBonus: this.#serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
                 economySpeed: this.#serverSettings.speed.economy,
-                topScore: this.#serverSettings.topScore ?? 0,
+                topScore: this.#settings.expeditions.serverSettings.topScore ?? 0,
             },
             planets: createMappedRecord(
                 planets,
