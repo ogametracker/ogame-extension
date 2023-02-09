@@ -132,7 +132,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Egy */'ismeretlen faj megtámadta az expedíciónkat',
-            /*TODO: hu 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Úgy néz ki, */'hogy a felfedező flottád ellenséges területre ért'/* , ami egy ismeretlen, de nagyon agresszív és harcias idegen fajhoz tartozik.'*/,
             /*'A */'kapcsolat az expedíciós flottával nemrég megszakadt'/* . Megfejtettük az utolsó kódolt üzenetüket. Erős támadás alatt vannak, a támadókat nem lehet azonosítani.'*/,
         ],
         [ExpeditionEventSize.large]: [
