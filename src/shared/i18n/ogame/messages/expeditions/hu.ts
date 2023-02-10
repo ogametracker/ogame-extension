@@ -53,7 +53,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Találtunk */'egy hatalmas hajótemetőt'/* . Néhány szerelő a flottából képes volt néhányat működőképessé tenni közülük.'*/,
-            /*TODO: hu 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Találtunk egy */'bolygót némi maradék civilizációval'/* . Látunk egy hatalmas sértetlen űrállomást keringeni körülötte. Néhány szerelő és pilóta leszállt a bolygóra használható hajókat keresni.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`A következő hajók csatlakoznak a flottához:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
