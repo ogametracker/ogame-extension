@@ -34,7 +34,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'在一個擁*/'有自身大氣層的迷你月球上'/* ,您的遠征探險艦隊找到了一些資源礦藏,已先行登陸的隊員正在嘗試發掘並裝載那些自然礦藏.*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'不知名的行星有一*/'條由礦物組成的光環'/* ,裡面蘊藏著無窮無盡的資源.遠征探險艦隊從那裡滿載而歸.'*/,
             /*'您的遠征探險艦隊報告說他們發現了*/'一艘巨型的外星人艦船殘骸'/* .他們雖然無法從那裡學到任何科技,但他們發現可以分解那艘艦船的主要部件成為我們有用的資源.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`捕獲了 (?<name>${resources.join('|')}) (?<amount>.+)`, 'i'),
