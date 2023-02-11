@@ -38,7 +38,9 @@ import { formatWithOptions } from "date-fns/fp";
 import { ExpeditionEventType, ExpeditionEventTypes } from "../../expeditions/ExpeditionEventType";
 import { PlayerClass } from "../../ogame/classes/PlayerClass";
 import { getItemSlotBonus } from "../../ogame/expeditions/getItemSlotBonus";
+import { getLifeformTechnologyBonus } from "../../ogame/lifeforms/buildings/getLifeformTechnologyBonus";
 import { LifeformBuilding } from "../../ogame/lifeforms/buildings/LifeformBuilding";
+import { getTechnologyBonusFactor } from "../../ogame/lifeforms/utils";
 import { MissileType } from "../../ogame/missiles/MissileType";
 import { AmortizationAstrophysicsSettings } from "./AmortizationAstrophysicsSettings";
 import { AmortizationExpeditionResultsBreakdown, AmortizationExpeditionResultsPlanetState } from "./AmortizationExpeditionResultsBreakdown";
@@ -131,7 +133,7 @@ export class AmortizationItemGenerator {
     readonly #state: AmortizationItemGeneratorState = {
         get totalPlasmaTechnologyCostReduction() {
             return Object.values(this.planets).reduce(
-                (total, planet) => total + planet.plasmaTechnologyCostReduction * (1 + planet.lifeformTechnologyBoost) * (1 + planet.lifeformExperienceBoost),
+                (total, planet) => total + planet.plasmaTechnologyCostReduction * getTechnologyBonusFactor(planet.lifeformTechnologyBoost, planet.lifeformExperienceBoost),
                 0,
             );
         },
@@ -1878,7 +1880,7 @@ export class AmortizationItemGenerator {
                 const planetTechBonus = planet.lifeformTechnologyBoost;
                 const xpTechBonus = this.#state.planets[planet.id].lifeformExperienceBoost;
 
-                return total + planetPlasmaTechCostReduction * (1 + planetTechBonus) * (1 + xpTechBonus);
+                return total + planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus);
             }, 0);
         };
 
@@ -1927,7 +1929,7 @@ export class AmortizationItemGenerator {
                 const additionalCostReduction = technology.getResearchCostAndTimeReduction(cur.research, newLevel).cost
                     - technology.getResearchCostAndTimeReduction(cur.research, newLevel - 1).cost;
 
-                const newCostReduction = costReduction + additionalCostReduction * (1 + planetTechBonus) * (1 + xpTechBonus);
+                const newCostReduction = costReduction + additionalCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus);
                 const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
 
                 return addCost(total, curReducedCost);
@@ -1980,7 +1982,7 @@ export class AmortizationItemGenerator {
                             const planetTechBonus = planet.lifeformTechnologyBoost + (planet.id == planetId ? additionalTechBonus : 0);
                             const xpTechBonus = this.#state.planets[planetId].lifeformExperienceBoost;
 
-                            return total + planetPlasmaTechCostReduction * (1 + planetTechBonus) * (1 + xpTechBonus);
+                            return total + planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus);
                         },
                         0
                     );
@@ -2048,7 +2050,7 @@ export class AmortizationItemGenerator {
                             const planetTechBonus = planet.lifeformTechnologyBoost;
                             const xpTechBonus = this.#state.planets[planetId].lifeformExperienceBoost;
 
-                            return total + planetPlasmaTechCostReduction * (1 + planetTechBonus) * (1 + xpTechBonus);
+                            return total + planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus);
                         },
                         0
                     );
