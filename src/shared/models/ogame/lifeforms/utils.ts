@@ -1,3 +1,3 @@
 export function getTechnologyBonusFactor(buildingBoost: number, levelBoost: number): number {
-    return (1 + buildingBoost) * (1 + levelBoost); //TODO: check if this is still correct
+    return (1 + buildingBoost + levelBoost); // this is the correct formula (checked 2023-02-11)
 }
