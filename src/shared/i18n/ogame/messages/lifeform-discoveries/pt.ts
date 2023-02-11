@@ -46,6 +46,6 @@ export const pt: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'A Nave de Exploração */'encontrou uma grande quantidade de artefactos',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: pt 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
         },
-        numberOfArtifacts: /*LOCA: pt *//Artefacts found: (?<artifacts>\d+)/i,
+        numberOfArtifacts: /Artefactos encontrados: (?<artifacts>\d+)/i,
     },
 };

@@ -6,7 +6,7 @@ export const zh_tw: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.nothing]: [
         /*'在探索之初，*/'他們破譯了從神秘資訊'/* ，從中獲得了一些很有希望的座標。但當探索飛船到達座標提到的區域時，船員們發現，那只是一場戰鬥後留下的巨大殘骸。搜尋倖存者的行動最終也毫無結果。'*/,
         '小行星磁場干擾了掃描器'/* 。看似有希望的外星智慧生命信號，其實只是測量儀器的中斷信號；因此，船員們並沒有發現新的生命形式。'*/,
-        /*LOCA: zh_tw 'Gerade als das Erkundungsschiff einen vielversprechenden Funkspruch auffangen konnte, */'kam es zu einem Totalausfall sämtlicher Kommunikationssysteme'/*. Unter diesen Umständen war nicht nur jede Kontaktaufnahme mit eventuellen intelligenten Lebensformen ausgeschlossen, ein Fortführen der Mission wäre auch gefährlich gewesen. Deshalb kehrte die Crew enttäuscht, aber unversehrt zurück.'*/,
+        /*'在探索飛船截獲了一個很有希望的無線電信號之後，*/'他們所有的通信系統突然癱瘓了'/* 。在這種情況下，不僅不可能與潛在的智慧生命形式取得聯繫，而且，繼續這項任務也會很危險。所以船員們失望地返航，但大家都沒有受傷。'*/,
         /*'在我們系統的一個大部分未探索過的角落裡，發現了一*/'個具有某種意識形式的星雲我'/* 們的星際使節欣喜若狂；當探測器被送入星雲中時，媒體甚至引起了嚴重的騷動。然而，試圖與星雲交流的嘗試很快揭示，它的智慧程度甚至還不如一隻蟑螂。人們激動的情緒消退了，並且決定悄悄地把整個事件掩蓋起來。'*/,
         /*'為了尋找新的生命形式，探索飛船追蹤了一些神秘的信號；這些信號似乎來自一*/'個未知星球的遠端'/* 。飛船上的星際使節已經取回了問候包，並啟動了翻譯電腦，但結果發現信號來自一艘沉船。這艘船顯然來自域外星球，但不幸的是，已經沒有船員的跡象。這意味著沒有發現新的生命形式。'*/,
         /*'探索飛船已經飛行了一段時間，後來發現一*/'個致命的漏洞溜進了掃描軟體'/* 。不幸的是，這意味著，船員無法發現新的生命形式。'*/,

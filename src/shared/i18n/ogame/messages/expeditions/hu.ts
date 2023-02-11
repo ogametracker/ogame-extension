@@ -19,7 +19,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Egy */'spontán Hiperűr deformálódás lehetővé'/* tette az expedíciódnak, hogy nagy mennyiségű Sötét anyagot takarítson be!'*/,
-            /*TODO: hu 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Az expedíciónk első alkalommal létesít kapcsolatot egy speciális fajjal. Ez a faj láthatólag energiából készült, */'aki magát Legorian-nak hívja'/* , átment az expedíciós hajókon és utána eldöntötte, hogy segít az alulfejlett fajoknak. A láda tartalmaz sötét anyagot, ami a hajó hídján van elhelyezve.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<amount>[^\\s]+) (?<name>${darkMatter}) elfogva`, 'i'),
     },
@@ -53,7 +53,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Találtunk */'egy hatalmas hajótemetőt'/* . Néhány szerelő a flottából képes volt néhányat működőképessé tenni közülük.'*/,
-            /*TODO: hu 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Találtunk egy */'bolygót némi maradék civilizációval'/* . Látunk egy hatalmas sértetlen űrállomást keringeni körülötte. Néhány szerelő és pilóta leszállt a bolygóra használható hajókat keresni.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`A következő hajók csatlakoznak a flottához:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
