@@ -1,7 +1,7 @@
 import { MessageTitles } from "./types";
 
 export const hr: MessageTitles = {
-    /*LOCA: hr*/expedition: 'Expeditionsergebnis',
+    expedition: 'Rezultati ekspedicija',
     /*LOCA: hr*/lifeformDiscovery: 'Lebensformbericht',
-    /*LOCA: hr*/debrisField: 'Schürfbericht von TF',
+    debrisField: 'Izvještaj o Ruševinama na',
 };
