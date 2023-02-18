@@ -12,6 +12,7 @@ import { fr } from './fr';
 import { hr } from './hr';
 import { hu } from './hu';
 import { it } from './it';
+import { nl } from './nl';
 import { pl } from './pl';
 import { pt_br } from './pt_br';
 import { pt_pt } from './pt_pt';
@@ -31,6 +32,7 @@ const translations: Record<LanguageKey, LifeformTechnologiesTranslations> = {
     hr,
     hu,
     it,
+    nl,
     pl,
     'pt-br': pt_br,
     'pt-pt': pt_pt,

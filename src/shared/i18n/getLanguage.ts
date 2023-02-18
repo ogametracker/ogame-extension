@@ -16,6 +16,7 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     hu: LanguageKey.hu,
     it: LanguageKey.it,
     mx: LanguageKey['es-mx'],
+    nl: LanguageKey.nl,
     pl: LanguageKey.pl,
     pt: LanguageKey['pt-pt'],
     si: LanguageKey.si,

@@ -24,7 +24,7 @@ export enum LanguageKey {
     /** Italian */
     it = 'it', 
     //TODO: jp = 'jp', // japanese
-    //TODO: nl = 'nl', // dutch
+    nl = 'nl', // dutch
     /** Polish */
     pl = 'pl',
     /** Portuguese (Brasil) */ 
