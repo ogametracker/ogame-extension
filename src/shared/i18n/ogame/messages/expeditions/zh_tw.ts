@@ -52,7 +52,7 @@ export const zh_tw: ExpeditionMessages = {
             /*'我們找到了一*/'支艦隊的殘骸群'/* .技術人員前往那些幾乎完好的艦船處嘗試令到它們重新啓動起來'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: zh_tw 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'我們發現一*/'個巨大的船艦墓地'/* .遠征探險艦隊的技術人員從中找到一些可以再次航行的船艦.'*/,
             /*'我們找到了*/'一個文明滅絕的行星'/* .我們找到了還環繞在軌道上正常運行的龐大太空站.您的一些技術人員和駕駛員前往那裡找到了一些仍然可以使用的艦船.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`下列艦船隸屬於艦隊:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -74,7 +74,7 @@ export const zh_tw: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: zh_tw 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'我們從遠征探險艦隊收到了最後傳來的影像,那是一*/'個大得嚇人的黑洞',
         '遠征探險隊傳來的最後一條無線電訊息'/* :滋~~ 糟了！咖 那邊 滋~ 好像 嗶~~~有… 訊息中斷'*/,
         /*LOCA: zh_tw 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
         /*LOCA: zh_tw 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
@@ -131,7 +131,7 @@ export const zh_tw: ExpeditionMessages = {
             /*LOCA: zh_tw 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: zh_tw 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'一不明種族的艦隊正我們的遠征探險*/'艦隊發起猛烈攻擊',
             /*'您的遠征探險艦隊似乎踏足到一*/'個屬於未知種族的疆土宙域'/* ,不過可以確定的是它們絕對是凶殘和好戰的外星種族.'*/,
             /*LOCA: zh_tw 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],

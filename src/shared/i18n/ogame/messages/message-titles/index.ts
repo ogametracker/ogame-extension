@@ -11,6 +11,7 @@ import { fr } from './fr';
 import { hr } from './hr';
 import { hu } from './hu';
 import { it } from './it';
+import { nl } from './nl';
 import { pl } from './pl';
 import { pt } from './pt';
 import { pt_br } from './pt_br';
@@ -30,6 +31,7 @@ const translations: Record<LanguageKey, MessageTitles> = {
     hr,
     hu,
     it,
+    nl,
     pl,
     'pt-br': pt_br,
     'pt-pt': pt,
