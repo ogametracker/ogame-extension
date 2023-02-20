@@ -51,6 +51,10 @@
                     to: { name: 'settings/import-export' },
                 },
                 {
+                    label: this.$i18n.$t.extension.settings.tabs.linkAccounts,
+                    to: { name: 'settings/linked-accounts' },
+                },
+                {
                     label: this.$i18n.$t.extension.settings.tabs.migrateOldData,
                     href: '/views/migrate.html',
                     target: '_blank',

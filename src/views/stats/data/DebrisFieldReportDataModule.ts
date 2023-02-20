@@ -1,12 +1,13 @@
 import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
 import { MessageType } from '@/shared/messages/MessageType';
 import { NewDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
-import { Message } from '@/shared/messages/Message';
+import { Message, MessageOgameMeta } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
+import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DebrisFieldResources {
     metal: number;
@@ -54,16 +55,32 @@ class DebrisFieldReportDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await this.$nextTick();
+        await UniversesAndAccountsDataModule.ready;
+
+        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
+            playerId: acc.id,
+            language: acc.serverLanguage,
+            serverId: acc.serverId,
+        }));
+        const accounts: MessageOgameMeta[] = [
+            GlobalOgameMetaData,
+            ...linkedAccounts,
+        ];
 
         let minDate: number | null = null;
-        const reports = await db.getAll('debrisFieldReports');
-        reports.forEach(report => {
-            this.addDebrisFieldReportToDailyResult(report);
-
-            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
-        });
-        this.internal_firstDate = minDate;
+        for (const account of accounts) {
+            const db = await getPlayerDatabase(account);
+            
+            const reports = await db.getAll('debrisFieldReports');
+            reports.forEach(report => {
+                this.addDebrisFieldReportToDailyResult(report);
+                
+                minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
+            });
+            this.internal_firstDate = minDate;
+        }
 
         this._resolveReady();
     }

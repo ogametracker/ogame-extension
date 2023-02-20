@@ -13,6 +13,7 @@ export const de: SettingsTranslations = {
         universeHistory: 'Universumshistorie',
         dangerZone: 'Gefahrenzone',
         accessbility: 'Barrierefreiheit',
+        linkAccounts: 'Accounts verknüpfen',
 
         migrateOldData: 'Altdaten migrieren',
     },
@@ -178,5 +179,10 @@ export const de: SettingsTranslations = {
             title: 'TFs von Position 16 separat anzeigen',
             label: 'TFs von Position 16 separat anzeigen',
         },
+    },
+
+    linkAccounts: {
+        header: 'Mit dem aktuell angezeigten Account verknüpfte Accounts',
+        linkAccount: 'weiteren Account verknüpfen:'
     },
 };

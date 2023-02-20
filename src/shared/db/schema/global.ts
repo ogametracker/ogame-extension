@@ -1,11 +1,19 @@
 import { DBSchema } from "idb";
 import { Settings } from "../../models/settings/Settings";
 
+export interface DbLinkedAccount {
+    serverId: number;
+    serverLanguage: string;
+    id: number;
+}
+
 export interface DbAccount {
     serverId: number;
     serverLanguage: string;
     id: number;
     name: string;
+
+    linkedAccounts?: DbLinkedAccount[];
 };
 export interface DbServer {
     id: number;

@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@/shared/db/access';
-import { DbAccount, DbServer } from '@/shared/db/schema/global';
+import { DbAccount, DbLinkedAccount, DbServer } from '@/shared/db/schema/global';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { CombatReportDataModule } from './CombatReportDataModule';
 import { deleteDB, StoreNames } from 'idb';
@@ -67,6 +67,8 @@ class UniversesAndAccountsDataModuleClass extends Vue {
         this.accounts = await tx.objectStore('accounts').getAll();
         this.servers = await tx.objectStore('servers').getAll();
 
+        await tx.done;
+
         this._resolveReady();
     }
 
@@ -92,6 +94,46 @@ class UniversesAndAccountsDataModuleClass extends Vue {
         await globalDb.delete('servers', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language]);
     }
 
+    public async linkAccount(account: DbLinkedAccount) {
+        const currentAccount = this.currentAccount;
+        console.debug('linking account ', account, 'with', currentAccount);
+        if (currentAccount.linkedAccounts == null) {
+            Vue.set(currentAccount, <keyof DbAccount>'linkedAccounts', []);
+        }
+
+        const accountIsLinked = currentAccount.linkedAccounts!.some(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        if (accountIsLinked) {
+            return;
+        }
+        currentAccount.linkedAccounts!.push(account);
+
+        const db = await getGlobalDatabase();
+        const tx = db.transaction(['accounts'], 'readwrite');
+
+        await tx.objectStore('accounts').put(currentAccount);
+
+        await tx.done;
+
+        console.debug('successfully linked account ', account, 'with', currentAccount);
+    }
+
+    public async unlinkAccount(account: DbLinkedAccount) {
+        const currentAccount = this.currentAccount;
+        if (currentAccount.linkedAccounts == null) {
+            Vue.set(currentAccount, <keyof DbAccount>'linkedAccounts', []);
+        }
+        const index = currentAccount.linkedAccounts!.findIndex(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        if (index >= 0) {
+            currentAccount.linkedAccounts!.splice(index, 1);
+        }
+
+        const db = await getGlobalDatabase();
+        const tx = db.transaction(['accounts'], 'readwrite');
+
+        await tx.objectStore('accounts').put(currentAccount);
+        await tx.done;
+    }
+
     private sendDropConnectionsMessage() {
         const msg: DropDatabaseConnectionsMessage = {
             ogameMeta: GlobalOgameMetaData,
@@ -103,7 +145,7 @@ class UniversesAndAccountsDataModuleClass extends Vue {
 
     public async deleteEverything() {
         this.sendDropConnectionsMessage();
-        
+
         const allDatabases = await indexedDB.databases();
         for (const db of allDatabases) {
             if (db.name == null) {
