@@ -120,6 +120,7 @@ import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
 import viewssettingsDebrisFields from '@stats/views/settings/Debris-Fields.vue';
 import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
 import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
+import viewssettingsLinkedAccounts from '@stats/views/settings/Linked-Accounts.vue';
 import viewssettingsResourceBalance from '@stats/views/settings/Resource-Balance.vue';
 import viewssettingsUniverseHistory from '@stats/views/settings/Universe-History.vue';
 import viewstoolsIndex from '@stats/views/tools/Index.vue';
@@ -999,6 +1000,11 @@ const routes: RouteConfig[] = [
                         path: "import-export",
                         name: "settings/import-export",
                         component: viewssettingsImportExport
+                    },
+                    {
+                        path: "linked-accounts",
+                        name: "settings/linked-accounts",
+                        component: viewssettingsLinkedAccounts
                     },
                     {
                         path: "resource-balance",

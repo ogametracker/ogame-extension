@@ -1,29 +1,19 @@
 <template>
-    <custom-dialog
-        show-close
-        @close="$emit('close')"
-        :style="`--color: ${getColorVariable(color)};`"
-    >
+    <custom-dialog show-close @close="$emit('close')" :style="`--color: ${getColorVariable(color)};`">
         <loading-spinner v-if="!knownAccountsLoaded" />
         <div v-else>
             <div v-text="$i18n.$t.extension.switchAccounts.title" />
-            <select @change="gotoAccount()" v-model="selectedAccountIndex">
-                <option
-                    v-for="(account, i) in knownAccounts"
-                    :key="account.key"
-                    :value="i"
-                >
-                    {{ account.name }} ({{
-                        account.universeLanguage.toUpperCase()
-                    }}
-                    {{ account.universeName }})
-                </option>
+            <select @change="gotoAccount()" v-model="selectedAccountKey">
+                <optgroup v-for="accountGroup in knownAccountGroups" :key="accountGroup.serverName" :label="accountGroup.serverName">
+                    <option v-for="account in accountGroup.accounts" :key="account.key" :value="account.key" v-text="account.name" />
+                </optgroup>
             </select>
         </div>
     </custom-dialog>
 </template>
 
 <script lang="ts">
+    import { DbAccount } from '@/shared/db/schema/global';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { UniversesAndAccountsDataModule } from '../data/UniversesAndAccountsDataModule';
     import { getRGBString } from '../utils/getRGBString';
@@ -45,9 +35,9 @@
         @Prop({ required: true, type: String })
         private color!: string;
 
-        private knownAccounts: KnownAccount[] = [];
+        private knownAccountGroups: { serverName: string; accounts: KnownAccount[] }[] = [];
         private knownAccountsLoaded = false;
-        private selectedAccountIndex = -1;
+        private selectedAccountKey: string | null = null;
 
 
         private getColorVariable(hexColor: string | null): string | null {
@@ -59,17 +49,34 @@
             this.knownAccountsLoaded = true;
         }
 
+        private mapAccount(acc: DbAccount): KnownAccount {
+            const server = UniversesAndAccountsDataModule.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage);
+            let serverName = `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`;
+            if (server != null) {
+                let name = server.name;
+                let prefix = `${server.language.toUpperCase()} `;
+                if (name.startsWith(prefix)) {
+                    serverName = name;
+                }
+                else {
+                    serverName = prefix + name;
+                }
+            }
+
+            return {
+                key: `${acc.serverLanguage}-${acc.serverId}-${acc.id}`,
+                id: acc.id,
+                universeId: acc.serverId,
+                universeLanguage: acc.serverLanguage,
+                name: acc.name,
+                universeName: serverName,
+            };
+        }
+
         private async loadKnownAccounts(): Promise<void> {
-            this.knownAccounts = UniversesAndAccountsDataModule.accounts
-                .map<KnownAccount>(acc => ({
-                    key: `${acc.serverLanguage}-${acc.serverId}-${acc.id}`,
-                    id: acc.id,
-                    universeId: acc.serverId,
-                    universeLanguage: acc.serverLanguage,
-                    name: acc.name,
-                    universeName: UniversesAndAccountsDataModule.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage)?.name ?? `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`,
-                })
-                ).sort((a, b) => {
+            const accounts = UniversesAndAccountsDataModule.accounts
+                .map<KnownAccount>(acc => this.mapAccount(acc))
+                .sort((a, b) => {
                     const lang = a.universeLanguage.localeCompare(b.universeLanguage);
                     if (lang != 0) {
                         return lang;
@@ -96,17 +103,34 @@
 
                     return a.id - b.id;
                 });
+
+            const groups: Record<string, KnownAccount[]> = {};
+            accounts.forEach(acc => {
+                const serverKey = `${acc.universeLanguage}-${acc.universeId}`;
+                (groups[serverKey] ??= []).push(acc);
+            });
+
+            const result = Object.keys(groups).sort().map(key => ({
+                serverName: groups[key][0].universeName,
+                accounts: groups[key],
+            }));
+            this.knownAccountGroups = result;
         }
 
         private async gotoAccount() {
-            const account = this.knownAccounts[this.selectedAccountIndex];
+            const accs = this.knownAccountGroups.flatMap(gr => gr.accounts);
+            const account = accs.find(acc => acc.key == this.selectedAccountKey);
+            if (account == null) {
+                return;
+            }
+
             const url = `/views/stats.html?player=${account.id}&language=${account.universeLanguage}&server=${account.universeId}`;
             window.open(url, '_blank', 'noopener,noreferrer');
 
             this.$emit('close');
 
             await this.$nextTick();
-            this.selectedAccountIndex = -1;
+            this.selectedAccountKey = null;
         }
     }
 </script>

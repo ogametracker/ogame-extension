@@ -6,10 +6,10 @@ import { ExpeditionMessages } from "./types";
 export const hr: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: hr 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'Ekspedicija */'je uspjela pronaći i sačuvati Crnu Materiju',
             /*LOCA: hr 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
             /*LOCA: hr 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
-            /*LOCA: hr 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            /*'Naša*/' ekspedicija je zauzela napušteni brod s kojeg je transportirala'/* malu količinu Crne Materije. Ne pronalazimo nikakve tragove šta se dogodilo posadi ovog broda, ali tehničari su uspjeli spasiti Crnu Materiju.'*/,
             /*'Ekspedicija je pratila neke */'čudne signale prema jednom asteroidu'/*. U jezgri samog asteroida je pronađena mala količina Crne Materije. Istraživači su uzeli asteroid radi daljnjeg istraivanja i izvlačenja Crne Materije.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -31,7 +31,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Vaša ekspedicija je pronašla prastari, */'pun resursa napušteni konvoj'/*. Nešto novih resursa je moglo biti spašeno.'*/,
-            /*LOCA: hr 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Tvoja ekspedicija je na */'malom mjesecu nšla ogromna spremišta resursa'/* . Posada na mjesecu pokušava utovariti sve resurse u brodove.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: hr 'Ein */'Mineraliengürtel'/* um einen unbekannten Planeten enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
@@ -42,7 +42,7 @@ export const hr: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: hr 'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
+            /*'Našli */'smo ostatke prijašnje ekspedicije'/* ! Naši tehničari će pokušati popraviti neke brodove.'*/,
             /*LOCA: hr 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
             /*LOCA: hr 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
             /*'Našli smo */'staru piratsku stanicu'/* u kojoj su neki brodovi. Naši tehničari pokušavaju utvrditi jesu li još neki brodovi korisni ili ne.'*/,
@@ -61,14 +61,14 @@ export const hr: ExpeditionMessages = {
     [ExpeditionEventType.nothing]: [
         /*'Iako su prva skeniranja sektora bila dobra flota se nažalost */'vratila praznih ruku'/*.'*/,
         /*'Ekspedicija nije vratila ništa drugo osim nekih čudnih i malih stvorenja sa */'nepoznatog močvarnog planeta'/*.'*/,
-        /*LOCA: hr 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'Vaša ekspedicija je */'prikupila nova saznanja o praznini univerzuma'/* . Nije bilo čak niti jednog malo asteroida koji bi mogao učiniti ovu ekspediciju uzbudljivom.'*/,
         /*LOCA: hr 'Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf */'die hypnotischen Muster'/* auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.'*/,
-        /*LOCA: hr 'Ein */'Reaktorfehler des Führungsschiffes'/* hätte beinahe die gesamte Expedition vernichtet. Zum Glück waren die Techniker mehr als fähig und konnten das Schlimmste verhindern. Die Reparatur nahm jedoch so viel Zeit in Anspruch, dass die Expedition unverrichteter Dinge wieder zurückkehren musste.'*/,
+        /*'Zbog otkazivanja */'brodskog reaktora jednog od brodova skoro je došlo'/* do uništenja cijele flote. Na svu sreću tehničari su uspjeli spriječiti najgore. Dosta vremena je potrošeno na popravak i zbog toga se ekspedicija vratila bez rezultata.'*/,
         /*'Vasa ekspedicija je snimila */'prelijepe slike super nove'/*. Ništa novo nije moglo biti prikupljeno na ekspediciji osim dobre šanse da se pobijedi na takmičenju za "Najbolju sliku univerzuma".'*/,
         /*LOCA: hr 'Deine Expeditionsflotte folgte einige Zeit seltsamen Signalen. Schließlich musste sie feststellen, dass die */'Signale zu einer uralten Sonde'/* gehören, die wohl vor einigen Generationen losgeschickt wurde, um fremde Spezies zu begrüßen. Die Sonde wurde geborgen und mehrere Museen deines Hauptplaneten haben schon Interesse daran verlauten lassen.'*/,
         /*'Sada znamo da te crvene */'anomalije klase 5'/* nemaju samo kaotične efekte za brodsku navigaciju nego i hipnotiziraju cijelu posadu. Ekspedicija nije vratila ništa natrag.'*/,
         /*'Vaša ekspedicija je naletjela u */'gravitacijsko polje neutronske'/* zvijezde i bilo joj je potrebno vremena da se oslobodi. Zbog toga je flota potrošila sav Deuterij i morala se vratiti bez rezultata.'*/,
-        /*LOCA: hr 'Ein */'seltsames Computervirus'/* legte kurz nach Verlassen des Sonnensystems die Navigation lahm. Dies führte dazu, dass die gesamte Expeditionsflotte die ganze Zeit im Kreis flog. Überflüssig zu sagen, dass die Expedition nicht besonders erfolgreich war.'*/,
+        /*'Čudni računalni */'virus je zarazio brodsku navigaciju'/* ubrzo nakon počekta ekspedicije. To je uzrokovalo da se ekspedicijska flota vrti u krug. Suvišno je spominjati kako misija nije bila uspješna.'*/,
         /*'Naš ekspedicijski tim je naišao na čudnu koloniju koja je već jako dugo napuštena. Nakon slijetanja našu ekipu je pogodila */'velika temperatura od stranog virusa'/*. Kasnije su saznali da je taj virus pobio cijelu kolonizaciju koja je živjela na koloniji. Naš tim se sada vraća doma, i nažalos ne nosi ništa nazad.'*/,
         /*'Netko je */'instalirao staru stratešku'/* igru u brodsko računalo. Ekspedicijska flota je bila dugo odsutna ali zbog igre nije vratila ništa produktivno.'*/,
     ],
@@ -95,8 +95,8 @@ export const hr: ExpeditionMessages = {
         'Navigator glavnog broda je imao loš dan i krivo izračunao'/* koordinate na koje treba ići. Ne samo da je flota krivo sletila negdje drugdje, nego joj i treba više vremena za povratak natrag.'*/,
         /*'Ekspedicija je završila u */'sektoru sa olujama'/*. To je potaklo spremnike energije na preopterećenje i većina sistema u brodu se srušilo. Mehaničari su uspjeli izbjeći najgore ali povratak ekspedicije će se znatno odužiti.'*/,
         /*LOCA: hr 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        /*LOCA: hr 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
-        /*LOCA: hr 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
+        /*'Gravitacija */'crvenog diva uništila je skok ekspedicijske'/* flote i trebati će malo vremena da se flota vrati nazad, stoga će joj trebati više vremena nego očekivano.'*/,
+        /*'Novi */'navigacijski modul još uvijek ima nekih problema'/* . Ne samo da je ekspedicijski skok završio na krivom mjestu nego je i potrošio sav Deuterij. Bitno razočarana ekspedicijska flota se vraća bez impulsa. Povratak će trajati duže nego očekivano.'*/,
         /*'Ekspedicijska flota se susrela sa neprijateljskim brodom koji je pojavio bez ikakvog upozorenja. */'Neprijateljski brod je eksplodirao'/* i eksplozijom uzrokovao štetu na vašim brodovima. Dok god se ne poprave svi brodovi ekspedicijska flota ne može ići natrag pa će zbog toga povratak potrajati duže.'*/,
     ],
 

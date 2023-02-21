@@ -1,7 +1,7 @@
 import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
 import { MessageType } from '@/shared/messages/MessageType';
 import { NewExpeditionMessage } from '@/shared/messages/tracking/expeditions';
-import { Message } from '@/shared/messages/Message';
+import { Message, MessageOgameMeta } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
@@ -16,6 +16,7 @@ import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 import { createRecord } from '@/shared/utils/createRecord';
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
+import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DailyExpeditionResult {
     date: number;
@@ -59,23 +60,39 @@ class ExpeditionDataModuleClass extends Vue {
     }
 
     private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+        this._ready = new Promise<void>(async resolve => this._resolveReady = resolve);
 
         this.initCommunication();
         await this.loadData();
     }
 
     private async loadData() {
-        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await this.$nextTick();
+        await UniversesAndAccountsDataModule.ready;
+
+        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
+            playerId: acc.id,
+            language: acc.serverLanguage,
+            serverId: acc.serverId,
+        }));
+        const accounts: MessageOgameMeta[] = [
+            GlobalOgameMetaData,
+            ...linkedAccounts,
+        ];
 
         let minDate: number | null = null;
-        const expeditions = await db.getAll('expeditions');
-        expeditions.forEach(expedition => {
-            this.addExpeditionToDailyResult(expedition);
+        for(const account of accounts) {
+            const db = await getPlayerDatabase(account);
 
-            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
-        });
-        this.internal_firstDate = minDate;
+            const expeditions = await db.getAll('expeditions');
+            expeditions.forEach(expedition => {
+                this.addExpeditionToDailyResult(expedition);
+
+                minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
+            });
+            this.internal_firstDate = minDate;
+        }
 
         this._resolveReady();
     }
@@ -119,7 +136,7 @@ class ExpeditionDataModuleClass extends Vue {
                     dailyResult.findings.resources[resource] += expedition.resources[resource];
                 }
 
-                if(resource != null) {
+                if (resource != null) {
                     dailyResult.eventSizes.resourceCount[resource][expedition.size]++;
                     dailyResult.findings.resourceCount[resource]++;
                 }

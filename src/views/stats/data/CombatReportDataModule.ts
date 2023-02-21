@@ -1,7 +1,7 @@
 import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
 import { MessageType } from '@/shared/messages/MessageType';
 import { NewCombatReportMessage } from '@/shared/messages/tracking/combat-reports';
-import { Message } from '@/shared/messages/Message';
+import { Message, MessageOgameMeta } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
@@ -13,6 +13,7 @@ import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/Res
 import { createRecord } from '@/shared/utils/createRecord';
 import { ShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
+import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DailyCombatReportResult {
     date: number;
@@ -67,16 +68,32 @@ class CombatReportDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await this.$nextTick();
+        await UniversesAndAccountsDataModule.ready;
+
+        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
+            playerId: acc.id,
+            language: acc.serverLanguage,
+            serverId: acc.serverId,
+        }));
+        const accounts: MessageOgameMeta[] = [
+            GlobalOgameMetaData,
+            ...linkedAccounts,
+        ];
 
         let minDate: number | null = null;
-        const reports = await db.getAll('combatReports');
-        reports.forEach(report => {
-            this.addCombatReportToDailyResult(report);
+        for (const account of accounts) {
+            const db = await getPlayerDatabase(account);
 
-            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
-        });
-        this.internal_firstDate = minDate;
+            const reports = await db.getAll('combatReports');
+            reports.forEach(report => {
+                this.addCombatReportToDailyResult(report);
+
+                minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
+            });
+            this.internal_firstDate = minDate;
+        }
 
         this._resolveReady();
     }
@@ -125,9 +142,9 @@ class CombatReportDataModuleClass extends Vue {
 
         for (const resource of ResourceTypes) {
             const amount = report.loot[resource];
-            
+
             dailyResult.loot.total[resource] += amount;
-            
+
             if (amount < 0) {
                 dailyResult.loot.lost[resource] += amount;
             } else {

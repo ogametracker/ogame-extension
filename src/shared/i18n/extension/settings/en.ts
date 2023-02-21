@@ -13,6 +13,7 @@ export const en: SettingsTranslations = {
         universeHistory: 'Universe History',
         dangerZone: 'Danger Zone',
         accessbility: 'Accessibility',
+        linkAccounts: 'Link Accounts',
 
         migrateOldData: 'Migrate old data',
     },
@@ -178,5 +179,10 @@ export const en: SettingsTranslations = {
             title: 'Separate position 16',
             label: 'Separate debris fields harvested at position 16 from position 1-15',
         },
+    },
+
+    linkAccounts: {
+        header: 'Accounts linked with the currently shown account',
+        linkAccount: 'link another account:'
     },
 };

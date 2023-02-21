@@ -1,5 +1,5 @@
 import { MessageType } from '@/shared/messages/MessageType';
-import { Message } from '@/shared/messages/Message';
+import { Message, MessageOgameMeta } from '@/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
@@ -11,6 +11,7 @@ import { LifeformDiscoveryEvent } from '@/shared/models/lifeform-discoveries/Lif
 import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 import { NewLifeformDiscoveryMessage } from '@/shared/messages/tracking/lifeform-discoveries';
 import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DailyLifeformDiscoveryResult {
     date: number;
@@ -60,16 +61,32 @@ class LifeformDiscoveryDataModuleClass extends Vue {
     }
 
     private async loadData() {
-        const db = await getPlayerDatabase(GlobalOgameMetaData);
+        await this.$nextTick();
+        await UniversesAndAccountsDataModule.ready;
+
+        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
+            playerId: acc.id,
+            language: acc.serverLanguage,
+            serverId: acc.serverId,
+        }));
+        const accounts: MessageOgameMeta[] = [
+            GlobalOgameMetaData,
+            ...linkedAccounts,
+        ];
 
         let minDate: number | null = null;
-        const lifeformDiscoveries = await db.getAll('lifeformDiscoveries');
-        lifeformDiscoveries.forEach(discovery => {
-            this.addLifeformDiscovery(discovery);
+        for (const account of accounts) {
+            const db = await getPlayerDatabase(account);
 
-            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, discovery.date);
-        });
-        this.internal_firstDate = minDate;
+            const lifeformDiscoveries = await db.getAll('lifeformDiscoveries');
+            lifeformDiscoveries.forEach(discovery => {
+                this.addLifeformDiscovery(discovery);
+
+                minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, discovery.date);
+            });
+            this.internal_firstDate = minDate;
+        }
 
         this._resolveReady();
     }

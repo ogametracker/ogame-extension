@@ -11,6 +11,7 @@ export interface SettingsTranslations {
         universeHistory: string;
         dangerZone: string;
         accessbility: string;
+        linkAccounts: string;
 
         migrateOldData: string;
     };
@@ -175,5 +176,10 @@ export interface SettingsTranslations {
             title: string;
             label: string;
         };
+    };
+
+    linkAccounts: {
+        header: string;
+        linkAccount: string;
     };
 }

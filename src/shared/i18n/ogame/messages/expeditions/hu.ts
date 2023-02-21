@@ -136,7 +136,7 @@ export const hu: ExpeditionMessages = {
             /*'A */'kapcsolat az expedíciós flottával nemrég megszakadt'/* . Megfejtettük az utolsó kódolt üzenetüket. Erős támadás alatt vannak, a támadókat nem lehet azonosítani.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Az expedíciód egy Idegen */'invázióba flottába futott és kemény harcot'/* jelent!'*/,
             /*'Volt egy kis nehézségünk az */'idegen faj nyelvjárásának helyes értelmezésével'/* . Diplomatánk véletlenül a "Béke!" helyett azt mondta, "Tűz!".'*/,
             /*TODO: hu 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
