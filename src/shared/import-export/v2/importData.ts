@@ -23,11 +23,30 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
 
     progressCallback?.({ type: 'importing-basic-accounts-and-servers' });
     for (const account of data.accounts) {
+        const existingAcc = await globalTx.objectStore('accounts').get([account.serverId, account.language, account.playerId]);
+        const linkedAccounts = existingAcc?.linkedAccounts ?? [];
+        for (const linkedAcc of account.linkedAccounts ?? []) {
+            if (linkedAccounts.some(acc =>
+                acc.id == linkedAcc.playerId
+                && acc.serverId == linkedAcc.serverId
+                && acc.serverLanguage == linkedAcc.language
+            )) {
+                continue;
+            }
+
+            linkedAccounts.push({
+                id: linkedAcc.playerId,
+                serverId: linkedAcc.serverId,
+                serverLanguage: linkedAcc.language,
+            });
+        }
+
         await globalTx.objectStore('accounts').put({
             serverId: account.serverId,
             serverLanguage: account.language,
             id: account.playerId,
             name: account.playerName,
+            linkedAccounts,
         });
     }
     for (const server of data.servers) {

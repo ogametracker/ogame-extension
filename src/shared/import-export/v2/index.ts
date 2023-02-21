@@ -22,6 +22,7 @@ export interface V2ExportedAccount {
     serverId: number;
     playerId: number;
     playerName: string;
+    linkedAccounts?: V2ExportedLinkedAccount[];
 
     combatReports: CombatReport[];
     expeditions: ExpeditionEvent[];
@@ -29,6 +30,12 @@ export interface V2ExportedAccount {
     lifeformDiscoveries?: LifeformDiscoveryEvent[];
     empire: V2ExportedEmpire;
     universeSpecificSettings?: UniverseSpecificSettings;
+}
+
+export interface V2ExportedLinkedAccount {
+    language: string;
+    serverId: number;
+    playerId: number;
 }
 
 export interface V2ExportedEmpire {

@@ -132,6 +132,11 @@
                     serverId: account.serverId,
                     playerId: account.id,
                     playerName: account.name,
+                    linkedAccounts: account.linkedAccounts?.map(acc => ({
+                        language: acc.serverLanguage,
+                        serverId: acc.serverId,
+                        playerId: acc.id,
+                    })),
 
                     combatReports,
                     expeditions,
