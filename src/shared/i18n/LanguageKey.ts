@@ -32,7 +32,7 @@ export enum LanguageKey {
     /** Portuguese (Portugal) */
     'pt-pt' = 'pt-pt',
     //TODO: ro = 'ro', // romanian
-    //TODO: ru = 'ru', // russian
+    ru = 'ru', // russian
     /** Slovenian */
     si = 'si', 
     //TODO: sk = 'sk', // slovakian

@@ -25,7 +25,7 @@ const observer = new MutationObserver(() => {
 
         let html = `
             <li id="ogame-tracker-menu-item__v2">
-                <span class="menu_icon tooltipRight" title="${tooltip}">
+                <span class="menu_icon tooltipRight" title="${tooltip ?? ingamei18n.en?.tooltipNewTab}">
                     <span class="menuImage icon">
                         <span class="mdi mdi-radar"></span>
                     </span>
