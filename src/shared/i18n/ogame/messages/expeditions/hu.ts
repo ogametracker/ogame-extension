@@ -119,7 +119,7 @@ export const hu: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*TODO: hu 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Az expedíció jelenti, */'hogy azonosítatlan kalózhajók ellen harcolnak',
         ],
     },
 
