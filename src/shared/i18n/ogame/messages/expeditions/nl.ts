@@ -6,11 +6,11 @@ import { ExpeditionMessages } from "./types";
 export const nl: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /* TODO: nl 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'De expeditie */'heeft succesvol donkere materie verkregen',
             /*'Uit */'overblijfselen van een onbekend schip halen we een kleine container'/* met donkere materie.'*/,
             /*'Een vreemd */'buitenaards wezen in een heel klein ruimteschip gaf ons een klein kistje'/* donkere materie in ruil voor wat eenvoudige wiskundige berekeningen.'*/,
             /*'Onze expeditie */'stuitte onverwachts op een spookschip'/* . Wat er met het schip gebeurd is, en waar de bemanning is, blijft onduidelijk, maar onze technici hebben wel achtergebleven donkere materie weten te verzamelen.'*/,
-            /* TODO: nl 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'De expeditie */'volgde zeldzame signalen en ontdekte zo een asteroïde'/* . In de kern van de asteroïde zit een kleine hoeveelheid donkere materie verborgen. De asteroïde is binnenboord gehaald en de onderzoekers proberen nu de donkere materie vrij te krijgen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO: nl 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
@@ -64,7 +64,7 @@ export const nl: ExpeditionMessages = {
         /*'De expeditie heeft */'uitgebreid onderzoek gedaan naar oneindige leegte'/* in de ruimte. Er was niet eens een kleine asteroïde, straling of deeltje dat deze expeditie de moeite waard had kunnen maken.'*/,
         /*'Een */'levensvorm van pure energie hypnotiseerde de hele bemanning'/* . Nadat de vloot uren heeft rondgedobberd raakte hij buiten bereik. De expeditie moest worden afgebroken omdat het deuterium op was.'*/,
         /*'Een */'storing in de reactor van het moederschip vernietigde'/* bijna de totale expeditievloot. Gelukkig zijn de technici ervaren en hebben ze het ergste kunnen voorkomen. De reparatiewerkzaamheden namen nogal wat tijd in beslag en dwongen de expeditie huiswaarts te keren voor ze iets bereikt hadden.'*/,
-        /* TODO: nl 'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
+        /*'Je expeditie heeft */'adembenemende foto`s gemaakt van een supernova'/* . Het zou best mogelijk zijn dat een van deze foto`s de een prijs wint in "beste foto van het universum"-competitie van dit jaar. Verder heeft de expeditie niets opgeleverd.'*/,
         /*'Je expeditievloot heeft korte tijd vreemde signalen gevolgd. Uiteindelijk ontdekten ze dat deze signalen */'uitgezonden werden door een oude sonde die generaties geleden verzonden'/* werd om buitenlandse soorten te groeten. De sonde is geborgen en verschillende musea op je thuisplaneet hebben al laten weten interesse in de sonde te hebben.'*/,
         /*'Hoe dan ook, we weten nu in ieder */'geval dat deze klasse 5 rariteit niet alleen'/* de sensoren in de war brengt, maar ook de bemanning tot hallucineren brengt. Verder brengt de expeditie echter niets terug.'*/,
         /*'Je expeditie kwam bijna in een */'zwaartekrachtveld van een neutronenster'/* terecht en had geruime tijd nodig om zich daaruit te bevrijden. Deze actie heeft veel deuterium gekost waardoor je expeditie terug moet keren zonder resultaat.'*/,
@@ -87,13 +87,13 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.early]: [
         /*'Een */'onverwachte terugkoppeling in de energiespoelen'/* van de motoren maakt het doorzetten van de expeditie onmogelijk, de vloot komt eerder terug dan verwacht. Zo te zien hebben ze verder weinig spannends meegemaakt.'*/,
-        /* TODO: nl 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
-        /* TODO: nl 'Der etwas wagemutige neue */'Kommandant nutzte ein instabiles Wurmloch'/*, um den Rückflug zu verkürzen - mit Erfolg! Jedoch hat die Expedition selbst keine neuen Erkenntnisse gebracht.'*/,
+        /*'Je expeditie */'heeft geen rariteiten gevonden in de te verkennen sector'/* . Op de terugweg kon er wel gebruik gemaakt worden van een sterke zonnewind, waardoor de vloot wat sneller thuis is dan gepland.'*/,
+        /*'Je nieuwe en */'ongeremde vlootcommandant heeft de vloot door een onstabiel wormgat'/* gestuurd, verbazingwekkend genoeg blijft de vloot onbeschadigd, en komt in zijn geheel wat eerder terug.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
         /*'De */'navigatieleider had een slechte dag waardoor de vlucht'/* van de expeditie verkeerd berekend was. Niet alleen landde de vloot op een volkomen verkeerde plaats, de terugweg van de vloot heeft nu ook nog veel meer tijd nodig dan de bedoeling was.'*/,
-        /* TODO: nl 'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
+        /*'Je expeditie komt */'terecht in een sector waar een heftige deeltjesstorm woedt'/* . Deze storm overbelast je energieopslag waardoor de hoofdsystemen van je schepen defect zijn geraakt. Je technici waren in staat om ergere schade te voorkomen, maar de expeditie heeft wel een vertraging opgelopen. De thuiskomst zal later zijn dan de planning was.'*/,
         /*'Door */'onbekende oorzaak is de expeditiesprong volkomen mislukt'/* . De expeditie landde bijna in de kern van een zon. Gelukkig landde de expeditie wel in een bekend stelsel, maar de sprong huiswaarts zal meer tijd in beslag nemen dan gedacht werd.'*/,
         /* TODO: nl 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
         /* TODO: nl 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
@@ -101,15 +101,15 @@ export const nl: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /*TODO: nl*//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /Een (?<name>.+) is aan je Inventaris toegevoegd/i,
     },
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
             /* TODO: nl 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
-            /* TODO: nl 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Enkele */'primitieve barbaren vallen ons aan met ruimteschepen'/* die die naam nauwelijks verdienen. Als het gevecht zwaarder wordt, zullen we genoodzaakt zijn terug te vuren.'*/,
             /*'We vingen een */'radiobericht op van enkele dronken piraten'/* . Het lijkt erop dat we een aanval kunnen verwachten.'*/,
-            /* TODO: nl 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'We */'moesten ons verdedigen tegen enkele piraten'/* die, gelukkig, niet al te talrijk waren.'*/,
             /* TODO: nl 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -127,7 +127,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /* TODO: nl 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
             /*'Je expeditievloot heeft een */'onvriendelijk eerste contact gemaakt'/* met een onbekende levensvorm.'*/,
-            /* TODO: nl 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Onze expeditie is */'aangevallen door een kleine vloot onbekende schepen',
             /* TODO: nl 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
