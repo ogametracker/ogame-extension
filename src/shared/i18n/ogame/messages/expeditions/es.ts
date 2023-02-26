@@ -136,7 +136,7 @@ export const es: ExpeditionMessages = {
             /*'La conexión con nuestra expedición se vio interrumpida repentinamente. Si hemos descifrado correctamente su último mensaje, la flota está sufriendo un duro ataque; */'no se ha logrado identificar a los agresores',
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Tu expedición */'encontró una flota alienígena de invasión'/* e informa de duras batallas.'*/,
             /*'Tuvimos dificultades para */'pronunciar correctamente el dialecto de una raza alienígena'/* . Nuestro diplomático gritó "¡Fuego!" en lugar de "¡Paz!".'*/,
             /*'Una gran */'formación de naves cristalinas de origen desconocido'/* toma curso directo de colisión con nuestra expedición. Ahora tenemos que asumir lo peor.'*/,
         ],
