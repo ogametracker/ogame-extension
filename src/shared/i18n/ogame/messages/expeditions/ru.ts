@@ -145,7 +145,7 @@ export const ru: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /*TODO: ru*//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    logbookRegex: /Бортовой журнал, дополнение связиста:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Эта часть */'вселенной наверное ещё не исследована',
