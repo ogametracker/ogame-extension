@@ -1,7 +1,7 @@
 import { MessageTitles } from "./types";
 
 export const ru: MessageTitles = {
-    expedition: /*TODO: ru*/'Expedition Result',
-    lifeformDiscovery: /*TODO: ru*/'Lifeform Report',
-    debrisField: /*TODO: ru*/'Harvesting report from DF',
+    expedition: 'Результат экспедици',
+    lifeformDiscovery: 'Отчет о формах жизни',
+    debrisField: 'Доклад переработчиков с',
 };

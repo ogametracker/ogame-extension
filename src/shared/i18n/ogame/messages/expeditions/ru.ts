@@ -7,15 +7,15 @@ export const ru: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             /*TODO: ru 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
-            /*TODO: ru 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
-            /*TODO: ru 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Мы нашли */'останки инопланетного корабля'/*. На борту находился небольшой контейнер с Тёмной материей!'*/,
+            /*'Мы нашли странного инопланетянина на борту маленького корабля, который обменял нам небольшой контейнер Тёмной материи */'на несколько элементарных математических расчётов',
             /*TODO: ru 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
-            /*TODO: ru 'Die Expedition folgte einigen */'seltsamen Signalen und entdeckte einen Asteroiden'/*, in dessen Kern ein wenig Dunkle Materie eingeschlossen war. Der Asteroid wurde an Bord geholt und die Forscher versuchen nun, die Dunkle Materie zu extrahieren.'*/,
+            /*'Экспедиция */'следовала странным сигналам и обнаружила астероид'/* , в середине которого находилось небольшое количество Тёмной материи. Астероид был доставлен на борт и сейчас учёные пытаются экстрагировать Тёмную материю.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: ru 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /*TODO: ru 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*TODO: ru 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Наша экспедиция */'натолкнулась на древнюю космическую станцию, долгое время дрейфовавшую по вселенной'/* . Сама станция находится в абсолютно непригодном для использования состоянии, но в одном из реакторов хранилось небольшое количество Тёмной материи. Наши техники прилагают все усилия, чтобы доставить на борт как можно больше.'*/,
+            /*'Наша экспедиция сообщает о странном спектральном феномене. В результате этого в */'энергетических хранилищах корабельных щитов образовалась Тёмная материя'/* . Сейчас наши техники пытаются законсервировать как можно больше Тёмной материи.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: ru 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -25,35 +25,38 @@ export const ru: ExpeditionMessages = {
     },
 
     [ExpeditionEventType.resources]: {
+        //TODO: Ваша экспедиция натолкнулась на обломки корабля из какой-то древней битвы. Отдельные компоненты ещё можно собрать и переработать.
+        //TODO: Экспедиция наткнулась на радиоактивно облучённого планетоида с крайне ядовитой атмосферой. Однако сканы показали, что этот планетоид очень богат полезными ископаемыми. При помощи роботов учёные пытаются получить самый максимум.
+        //TODO: Мы встретили маленький конвой гражданских кораблей, которому срочно требуется пища и медикаменты. Взамен мы получили целую кучу полезных ресурсов.
         [ExpeditionEventSize.small]: [
-            /*TODO: ru 'Deine Expedition hat einen */'kleinen Asteroidenschwarm'/* entdeckt, aus dem einige Ressourcen gewonnen werden können.'*/,
-            /*TODO: ru 'Auf einem abgelegenen Planetoiden wurden */'einige leicht zugängliche Ressourcenfelder'/* gefunden und erfolgreich Rohstoffe gewonnen'*/,
+            /*'Ваша экспедиция */'нашла маленькое скопление астероидов'/* , из которого можно добыть некоторые ресурсы.'*/,
+            /*'На уда̣ленном */'планетоиде были найдены легкодоступные залежи ресурсов'/* , которые были успешно доставлены на борт.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: ru 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
-            /*TODO: ru 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
+            /*'Ваша */'экспедиция нашла древний заполненный грузом конвой'/* . Некоторые ресурсы удалось доставить на борт.'*/,
+            /*'На */'маленькой луне с собственной атмосферой ваша экспедиция'/* нашла крупные залежи ресурсов.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: ru 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /*TODO: ru 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Пояс из минералов вокруг неизвестной планеты содержал невероятные количества ресурсов. */'Экспедиционный флот сообщает о полных хранилищах',
+            /*'Ваш экспедиционный флот */'сообщает о нахождении обломков огромного инопланетного корабля'/* . Его технология им абсолютно неизвестна, но отдельные его части можно пустить на ресурсы.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Было найдено (?<amount>.+) (?<name>${resources.join('|')})`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*TODO: ru 'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
-            /*TODO: ru 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
+            /*'Мы */'натолкнулись на остатки предыдущей экспедиции'/* ! Наши техники пытаются найти среди обломков что-то летающее.'*/,
+            /*'Ваша экспедиция */'наткнулась на старинную звёздную крепость'/* , уже целую вечность покинутую. В ангаре крепости стоит ещё несколько кораблей. Техники исследуют их на предмет исправности.'*/,
             /*TODO: ru 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
-            /*TODO: ru 'Wir haben eine */'verlassene Piratenbasis'/* gefunden. Im Hangar liegen noch einige alte Schiffe. Unsere Techniker schauen nach, ob einige davon noch zu gebrauchen sind.'*/,
+            /*'Мы */'нашли покинутую пиратскую базу'/*. В ангаре ещё стоит несколько старых кораблей. Наши техники смотрят, могут ли они ещё летать.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: ru 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
-            /*TODO: ru 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Наша экспедиция */'натолкнулась на древнюю автоматическую верфь'/* . Несколько кораблей находятся ещё в фазе производства и наши техники пытаются восстановить энергообеспечение верфи.'*/,
+            /*'Мы */'нашли остатки армады'/* . Техники экспедиционного флота сразу же принялись за неповреждённые корабли и пытаются починить их.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: ru 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /*TODO: ru 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Мы нашли */'огромное кладбище космических кораблей'/* . Некоторым техникам из экспедиции удалось восстановить несколько штук.'*/,
+            /*'Мы */'обнаружили планету со следами цивилизации'/* . С орбиты можно распознать огромный порт, единственный оставшийся целым. Группа техников и пилотов отправилась на поверхность планеты, чтобы поискать ещё пригодные к использованию корабли.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`К флоту присоединились:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -145,23 +148,23 @@ export const ru: ExpeditionMessages = {
     logbookRegex: /*TODO: ru*//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: ru 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: ru 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Эта часть */'вселенной наверное ещё не исследована',
+            /*'Это такое возвышающее чувство - */'быть первопроходцем в неисследованном секторе'/* вселенной.'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: ru 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: ru 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*TODO: ru 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Похоже, что в этом */'районе галактики ещё не ступала нога человека',
+            /*'Мы */'обнаружили очень древние корабельные сигнатуры'/* . Похоже, что мы тут не первые.'*/,
+            /*'Мы почти */'столкнулись с другим экспедиционным флотом'/* . Никогда бы не подумал, что сюда ещё кто-то полетит.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*TODO: ru 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*TODO: ru 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*TODO: ru 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'Мы отпраздновали окончание экспедиции с членами команды повстречавшейся нам второй экспедиции, которая тоже исследовала этот сектор. */'Они тоже не нашли ничего особенного',
+            /*'Обнаружены */'следы присутствия других экспедиционных'/* флотов.'*/,
+            /*'Налажен */'дружеский радио-контакт с другими экспедициями'/* из этого сектора.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*TODO: ru 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
-            /*TODO: ru 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
-            /*TODO: ru 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
+            /*'Если мы не слишком уверены в себе, то мы */'можем совместить усилия с остальными экспедициями из этого'/* сектора.'*/,
+            /*'Может было бы */'разумнее соорудить здесь сувенирную станцию'/*, вместо того, чтобы отправлять целую экспедицию?'*/,
+            /*'Если так пойдёт и дальше, то при */'таком движении надо будет ставить навигационные'/* буйки.'*/,
         ],
     },
 };

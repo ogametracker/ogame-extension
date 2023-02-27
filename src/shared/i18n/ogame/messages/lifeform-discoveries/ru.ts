@@ -42,9 +42,9 @@ export const ru: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*TODO: ru 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
-            [LifeformDiscoveryEventArtifactFindingSize.small]: /*TODO: ru 'The */'Exploration Ship has found a small number of'/* artefacts'*/, //to match both "artefact" and "artifact"
-            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*TODO: ru 'The */'Exploration Ship has found a large quantity of'/* artefacts'*/, //to match both "artefact" and "artifact"
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*TODO: ru 'The */'Exploration Ship has found a huge trove of'/* artefacts'*/, //to match both "artefact" and "artifact"
+            [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Исследовательский корабль */'нашел небольшое количество артефактов', 
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Исследовательский корабль */'нашел большое количество артефактов',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*TODO: ru 'The */'Exploration Ship has found a huge trove of'/* artefacts'*/, 
         },
         numberOfArtifacts: /Найдено артефактов: (?<artifacts>\d+)/i,
     }
