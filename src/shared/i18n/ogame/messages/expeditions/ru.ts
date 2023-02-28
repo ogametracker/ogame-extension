@@ -6,10 +6,10 @@ import { ExpeditionMessages } from "./types";
 export const ru: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /*TODO: ru 'Der Expedition ist es gelungen, */'ein wenig Dunkle Materie einzufangen'/* und zu konservieren.'*/,
+            /*'Экспедиции удалось */'поймать и законсервировать немного Тёмной материи',
             /*'Мы нашли */'останки инопланетного корабля'/*. На борту находился небольшой контейнер с Тёмной материей!'*/,
             /*'Мы нашли странного инопланетянина на борту маленького корабля, который обменял нам небольшой контейнер Тёмной материи */'на несколько элементарных математических расчётов',
-            /*TODO: ru 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            /*'Наша экспедиция */'наткнулась на корабль-призрак с грузом Тёмной материи'/* . Пока мы не можем выяснить, что случилось с его экипажем, но нашим техникам удалось достать немного Тёмной материи.'*/,
             /*'Экспедиция */'следовала странным сигналам и обнаружила астероид'/* , в середине которого находилось небольшое количество Тёмной материи. Астероид был доставлен на борт и сейчас учёные пытаются экстрагировать Тёмную материю.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -19,7 +19,7 @@ export const ru: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: ru 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /*TODO: ru 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Наша экспедиция передаёт особую новость! По всей видимости какая-то энергетическая раса, */'называвшая себя легорианцами'/* , облетела корабли экспедиции и решила немного помочь слаборазвитой расе. На мостике материализовался контейнер с тёмной материей!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Было найдено (?<amount>[^\\s]+) (?<name>${darkMatter})`, 'i'),
     },

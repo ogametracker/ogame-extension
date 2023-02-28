@@ -27,7 +27,7 @@ export const ru: LifeformDiscoveryMessages = {
     ],
     [LifeformDiscoveryEventType.lostShip]: [
         /*'Команда экспедиционного корабля конфликтовала изначально, */'и со временем начался бунт'/* . Брошенные члены команды были найдены и спасены, но сообщили, что бунтовщики захватили корабль и присоединились к команде космических пиратов. Результатом этой ситуации стали обязательные семинары для команд, укрепляющие командный дух, проводящиеся каждый квартал.'*/,
-        /*TODO: ru 'The crew of the exploration ship successfully made contact with a previously unknown alien species. */'First impressions suggested they were benevolent'/*. However the reports from our emissary and the crew became increasingly euphoric, which is why we must assume that they were subject to some kind of hypnosis. The final report we received was a joyous proclamation on behalf of the entire crew that they would prefer to remain with these friendly aliens. The ship and its crew have disappeared without trace.'*/,
+        /*'Команда экспедиционного корабля успешно связалась с ранее неизвестной расой инопланетян. Судя по первым сообщениям, */'они были благожелательны'/* . Однако, вскоре отчеты посла и команды стали все более и более эйфорическими, поэтому мы полагаем, что они подверглись какому-то гипнозу. Последний отчет был радостным провозглашением того, что вся команда хочет остаться с дружелюбными инопланетянами. Корабль и команда исчезли без следа.'*/,
         /*'В поисках разумной жизни корабль сделал остановку на прежде неизведанной луне. По крайней мере, об этой луне никогда не было отчетов. Вскоре стало понятно, почему. Корабль смог отправить сигнал о бедствии, но было слишком поздно. Прибытие корабля */'разбудило гигантских магмовых червей'/* , которые за пару минут поглотили корабль и его команду.'*/,
         /*'Экспедиционный корабль смог найти разумную расу инопланетной жизни, но они оказались враждебными. Судя по последнему сигналу, отправленному командой, */'инопланетяне, похоже, пленили их'/* . Все последующие попытки найти корабль и команду провалились.'*/,
         /*TODO: ru 'The exploration ship stopped at an unknown planet on its journey to stock up on supplies. The planet was shrouded in a strange fog, which */'the crew were quickly able to identify as sleeping gas'/*. But upon further inspection, it soon became apparent that the gas was so strong that both the ship and her crew were unsalvageable.'*/,
@@ -44,7 +44,7 @@ export const ru: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*TODO: ru 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Исследовательский корабль */'нашел небольшое количество артефактов', 
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Исследовательский корабль */'нашел большое количество артефактов',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*TODO: ru 'The */'Exploration Ship has found a huge trove of'/* artefacts'*/, 
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Исследовательский корабль */'нашел огромный клад, полный артефактов', 
         },
         numberOfArtifacts: /Найдено артефактов: (?<artifacts>\d+)/i,
     }
