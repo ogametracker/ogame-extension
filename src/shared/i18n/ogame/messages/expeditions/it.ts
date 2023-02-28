@@ -20,7 +20,7 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Una */'spontanea deformazione dell`iperspazio ha permesso'/* alla tua spedizione di raccogliere un grande quantitativo di Materia Oscura!'*/,
-            /*LOCA: it 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'La nostra spedizione riporta un primo contatto di tipo speciale. Pare che una creatura di energia, */'che ha detto di chiamarsi Legorian'/*, sia passata attraverso le navi della spedizione e abbia deciso di aiutare la nostra primitiva specie - un contenitore ricolmo di Materia Oscura si è materializzato sul ponte della nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) è stato razziato`, 'i'),
     },

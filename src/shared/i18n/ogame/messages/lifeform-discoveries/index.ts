@@ -16,6 +16,7 @@ import { nl } from './nl';
 import { pl } from './pl';
 import { pt } from './pt';
 import { pt_br } from './pt_br';
+import { ru } from './ru';
 import { si } from './si';
 import { zh_tw } from './zh_tw';
 
@@ -36,6 +37,7 @@ const translations: Record<LanguageKey, LifeformDiscoveryMessages> = {
     pl,
     'pt-br': pt_br,
     'pt-pt': pt,
+    ru,
     si,
     'zh-tw': zh_tw,
 };
