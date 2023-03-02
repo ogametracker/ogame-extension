@@ -18,7 +18,7 @@ export const nl: ExpeditionMessages = {
             /* TODO: nl 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /* TODO: nl 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Uit */'spontane hyperruimtevervorming'/* ontstaat een grote hoeveelheid donkere materie!'*/,
             /* TODO: nl 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Er is (?<name>${darkMatter}) (?<amount>[^\\s]+) buitgemaakt`, 'i'),
@@ -82,7 +82,7 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /* TODO: nl 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        /* TODO: nl 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Een noodoproep bereikte je expeditie. Een enorm transportschip raakte gevangen door een krachtig gravitonveld van een grote planeet. Nadat we het schip hebben */'losgetrokken biedt de kapitein een exclusief handelscontract'/* aan.'*/,
     ],
 
     [ExpeditionEventType.early]: [
