@@ -47,7 +47,7 @@ export const ru: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Мы */'натолкнулись на остатки предыдущей экспедиции'/* ! Наши техники пытаются найти среди обломков что-то летающее.'*/,
             /*'Ваша экспедиция */'наткнулась на старинную звёздную крепость'/* , уже целую вечность покинутую. В ангаре крепости стоит ещё несколько кораблей. Техники исследуют их на предмет исправности.'*/,
-            /*TODO: ru 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Наша экспедиция нашла планету, */'почти полностью разрушенную постоянными войнами'/* . На орбите дрейфуют различные обломки. Техники пытаются отремонтировать некоторые из них, в надежде получить информацию, что там произошло. '*/,
             /*'Мы */'нашли покинутую пиратскую базу'/*. В ангаре ещё стоит несколько старых кораблей. Наши техники смотрят, могут ли они ещё летать.'*/,
         ],
         [ExpeditionEventSize.medium]: [
