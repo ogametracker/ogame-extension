@@ -14,11 +14,11 @@ export const nl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO: nl 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /* TODO: nl 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Onze expeditie */'heeft een eeuwenoud ruimtestation waargenomen'/* , het lijkt ongecontroleerd in de ruimte rond te zweven... Het station zelf mag dan verouderd zijn, in de reactor lag een voorraad donkere materie. Onze technici proberen zoveel mogelijk te bergen.'*/,
             /* TODO: nl 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /* TODO: nl 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
+            /*'Uit */'spontane hyperruimtevervorming'/* ontstaat een grote hoeveelheid donkere materie!'*/,
             /* TODO: nl 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Er is (?<name>${darkMatter}) (?<amount>[^\\s]+) buitgemaakt`, 'i'),
@@ -30,7 +30,7 @@ export const nl: ExpeditionMessages = {
             /*'Op een */'verdwaalde planetoïde lagen de grondstoffen'/* voor het oprapen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO: nl 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'Je vloot stuitte op een eeuwenoud, */'volledig geladen en verlaten konvooi'/* . Natuurlijk ideaal om even wat in te laden.'*/,
             /*'Op een */'kleine maan met atmosfeer kon je expeditie landen'/* , op de grond kwam de bemanning volop grondstoffen tegen. De bemanning probeert zoveel mogelijk grondstof te verzamelen.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -48,11 +48,11 @@ export const nl: ExpeditionMessages = {
             /*'Op een */'verlaten piratenstation liggen nog diverse schepen'/* in de ruimtehangar. Onze technici proberen deze vreemde schepen te herkennen, wie weet kunnen we ze in gebruik nemen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO: nl 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
-            /* TODO: nl 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Onze expeditie kwam een oude */'volautomatische scheepswerf'/* tegen, enkele schepen lijken midden in de productie te zitten. Door de generatoren op te starten kunnen we ze misschien afbouwen.'*/,
+            /*'We */'liepen de resten van een oude oorlogsarmada'/* tegen het lijf. Technici vliegen direct op dit scheepskerkhof, wie weet zitten er nog bruikbare schepen tussen.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /* TODO: nl 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Op een */'enorm ruimtekerkhof vinden we duizenden schepen'/* . Enkele technici gaan op onderzoek uit, zo`n groot kerkhof heeft vast wel een paar bruikbare schepen.'*/,
             /* TODO: nl 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`De volgende schepen zijn nu een deel van de vloot:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -82,7 +82,7 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /* TODO: nl 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        /* TODO: nl 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Een noodoproep bereikte je expeditie. Een enorm transportschip raakte gevangen door een krachtig gravitonveld van een grote planeet. Nadat we het schip hebben */'losgetrokken biedt de kapitein een exclusief handelscontract'/* aan.'*/,
     ],
 
     [ExpeditionEventType.early]: [
@@ -95,7 +95,7 @@ export const nl: ExpeditionMessages = {
         /*'De */'navigatieleider had een slechte dag waardoor de vlucht'/* van de expeditie verkeerd berekend was. Niet alleen landde de vloot op een volkomen verkeerde plaats, de terugweg van de vloot heeft nu ook nog veel meer tijd nodig dan de bedoeling was.'*/,
         /*'Je expeditie komt */'terecht in een sector waar een heftige deeltjesstorm woedt'/* . Deze storm overbelast je energieopslag waardoor de hoofdsystemen van je schepen defect zijn geraakt. Je technici waren in staat om ergere schade te voorkomen, maar de expeditie heeft wel een vertraging opgelopen. De thuiskomst zal later zijn dan de planning was.'*/,
         /*'Door */'onbekende oorzaak is de expeditiesprong volkomen mislukt'/* . De expeditie landde bijna in de kern van een zon. Gelukkig landde de expeditie wel in een bekend stelsel, maar de sprong huiswaarts zal meer tijd in beslag nemen dan gedacht werd.'*/,
-        /* TODO: nl 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
+        /*'De */'zonnewind van een rode reus verstoorde de sprong'/* van de expeditie en het zal geruime tijd duren voor de route voor de terugkeer berekend is. Er was niets dan leegte tussen de sterren in de sector. De vloot zal later dan verwacht terugkeren.'*/,
         /* TODO: nl 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
         /*'Het moederschip van de expeditie is in */'botsing gekomen met een buitenlands schip op het moment dat het zonder'/* waarschuwing in de vloot sprong. Het buitenlandse schip is geëxplodeerd en de schade aan het moederschip is enorm. Zodra de noodzakelijke reparaties zijn uitgevoerd zal de vloot huiswaarts keren, omdat de expeditie helaas geen doorgang kan vinden als gevolg van de opgelopen schade.'*/,
     ],
@@ -115,7 +115,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /* TODO: nl 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /* TODO: nl 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /* TODO: nl 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Het noodsignaal dat de expeditie volgde */'bleek in scene gezet te zijn door ruimtepiraten'/* . Een gevecht kon niet meer voorkomen worden.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /* TODO: nl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -125,7 +125,7 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /* TODO: nl 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*'Onbekende */'exotisch ogende schepen vallen de expeditie'/* zonder waarschuwing aan.'*/,
             /*'Je expeditievloot heeft een */'onvriendelijk eerste contact gemaakt'/* met een onbekende levensvorm.'*/,
             /*'Onze expeditie is */'aangevallen door een kleine vloot onbekende schepen',
             /* TODO: nl 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
@@ -151,7 +151,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /*'Het lijkt er op dat */'geen mens ooit in deze uithoek van de melkweg'/* is geweest.'*/,
             /*'Onverwacht */'komen we puin van oude schepen tegen'/* , iemand is hier eerder geweest.'*/,
-            /* TODO: nl 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Op een haar na hadden we een */'botsing met een andere expeditie'/* . Ik had niet verwacht hier andere schepen tegen te zullen komen.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /* TODO: nl 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
