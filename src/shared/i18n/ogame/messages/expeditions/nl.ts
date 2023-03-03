@@ -95,7 +95,7 @@ export const nl: ExpeditionMessages = {
         /*'De */'navigatieleider had een slechte dag waardoor de vlucht'/* van de expeditie verkeerd berekend was. Niet alleen landde de vloot op een volkomen verkeerde plaats, de terugweg van de vloot heeft nu ook nog veel meer tijd nodig dan de bedoeling was.'*/,
         /*'Je expeditie komt */'terecht in een sector waar een heftige deeltjesstorm woedt'/* . Deze storm overbelast je energieopslag waardoor de hoofdsystemen van je schepen defect zijn geraakt. Je technici waren in staat om ergere schade te voorkomen, maar de expeditie heeft wel een vertraging opgelopen. De thuiskomst zal later zijn dan de planning was.'*/,
         /*'Door */'onbekende oorzaak is de expeditiesprong volkomen mislukt'/* . De expeditie landde bijna in de kern van een zon. Gelukkig landde de expeditie wel in een bekend stelsel, maar de sprong huiswaarts zal meer tijd in beslag nemen dan gedacht werd.'*/,
-        /* TODO: nl 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
+        /*'De */'zonnewind van een rode reus verstoorde de sprong'/* van de expeditie en het zal geruime tijd duren voor de route voor de terugkeer berekend is. Er was niets dan leegte tussen de sterren in de sector. De vloot zal later dan verwacht terugkeren.'*/,
         /* TODO: nl 'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
         /*'Het moederschip van de expeditie is in */'botsing gekomen met een buitenlands schip op het moment dat het zonder'/* waarschuwing in de vloot sprong. Het buitenlandse schip is geëxplodeerd en de schade aan het moederschip is enorm. Zodra de noodzakelijke reparaties zijn uitgevoerd zal de vloot huiswaarts keren, omdat de expeditie helaas geen doorgang kan vinden als gevolg van de opgelopen schade.'*/,
     ],
@@ -115,7 +115,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /* TODO: nl 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /* TODO: nl 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /* TODO: nl 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Het noodsignaal dat de expeditie volgde */'bleek in scene gezet te zijn door ruimtepiraten'/* . Een gevecht kon niet meer voorkomen worden.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /* TODO: nl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -151,7 +151,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /*'Het lijkt er op dat */'geen mens ooit in deze uithoek van de melkweg'/* is geweest.'*/,
             /*'Onverwacht */'komen we puin van oude schepen tegen'/* , iemand is hier eerder geweest.'*/,
-            /* TODO: nl 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Op een haar na hadden we een */'botsing met een andere expeditie'/* . Ik had niet verwacht hier andere schepen tegen te zullen komen.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /* TODO: nl 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
