@@ -30,7 +30,7 @@ export class LifeformDiscoveryModule {
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(knownLifeformDiscovery),
+                    lifeformDiscovery: knownLifeformDiscovery,
                     isAlreadyTracked: true,
                 },
             };
@@ -50,7 +50,7 @@ export class LifeformDiscoveryModule {
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(lifeformDiscovery),
+                    lifeformDiscovery,
                     isAlreadyTracked: false,
                 },
             };
@@ -176,31 +176,3 @@ export class LifeformDiscoveryModule {
         return ogameText.toLowerCase().includes(message.toLowerCase());
     }
 }
-
-
-//#region april fools
-function transformResult(result: LifeformDiscoveryEvent): LifeformDiscoveryEvent {
-    if(!isAprilFools()) {
-        return result;
-    }
-
-    switch(result.type) {
-        case LifeformDiscoveryEventType.artifacts: return {
-            ...result,
-            artifacts: result.id % 4,
-        };
-
-        case LifeformDiscoveryEventType.knownLifeformFound: return {
-            ...result,
-            experience: result.id % 379,
-        };
-
-        default: return result;
-    }
-}
-
-function isAprilFools() {
-    const now = new Date();
-    return now.getDate() == 1 && now.getMonth() == 4 - 1;
-}
-//#endregion
