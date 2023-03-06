@@ -477,12 +477,3 @@ $image-size-small: 24px;
         }
     }
 }
-
-.dm-patched {
-    height: 75px;
-    width: 113px;
-    margin-bottom: 16px;
-    background-image: url(#{$base-url}/img/ogame/misc/dm-patched.png);
-    background-size: cover;
-    background-position: center;
-}

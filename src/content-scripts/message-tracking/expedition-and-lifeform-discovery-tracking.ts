@@ -143,10 +143,6 @@ function onMessage(message: Message<MessageType, any>) {
             const msg = message as ExpeditionMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
-            if (isAprilFools() && aprilFools_expeditionIds.has(msg.data.id)) {
-                return;
-            }
-
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
             if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
@@ -165,10 +161,6 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewLifeformDiscovery: {
             const msg = message as LifeformDiscoveryMessage;
             const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
-
-            if (isAprilFools() && aprilFools_lifeformDiscoveryIds.has(msg.data.id)) {
-                return;
-            }
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
@@ -280,39 +272,6 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Elem
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
             waitingForMessageResult[id] = true;
-
-
-            // april fools
-            if (isAprilFools() && messageType == MessageType.TrackExpedition && lang == LanguageKey.de) {
-                const rand = (min: number, max: number) => Math.floor(min + Math.random() * (max - min));
-                const replacements: Partial<Record<number, string>> = {
-                    1: `Unsere Expeditionsflotte ist auf eine Gruppe feindlicher Schiffe gestoßen. Damit wir unversehrt nach Hause fliegen konnten, mussten wir eine Gebühr zahlen.<br/><br/>Du musstest Dunkle Materie ${new Intl.NumberFormat('de').format(rand(12612, 19346))} abgeben.`,
-                    7:  `Unsere Expeditionsflotte ist auf eine Gruppe feindlicher Schiffe gestoßen. Damit wir unversehrt nach Hause fliegen konnten, mussten wir eine Gebühr zahlen.<br/><br/>Du musstest Metall ${new Intl.NumberFormat('de').format(1_000_000 * 3 * rand(4, 15))} abgeben.`,
-                    11: `Unsere Expeditionsflotte ist auf eine Gruppe feindlicher Schiffe gestoßen. Damit wir unversehrt nach Hause fliegen konnten, mussten wir eine Gebühr zahlen.<br/><br/>Du musstest Kristall ${new Intl.NumberFormat('de').format(1_000_000 * 2 * rand(4, 15))} abgeben.`,
-                    15: `Unsere Expeditionsflotte ist auf eine Gruppe feindlicher Schiffe gestoßen. Damit wir unversehrt nach Hause fliegen konnten, mussten wir eine Gebühr zahlen.<br/><br/>Du musstest Deuterium ${new Intl.NumberFormat('de').format(1_000_000 * 1 * rand(4, 15))} abgeben.`,
-                    27: 'Unsere Expedition hat einen Händler auf dem Weg zu einem Kunden getroffen. Er handelt jedoch ausschließlich mit Gewürzen, weshalb er uns leider keine Rohstoffe zum Handel anbieten kann. Enttäuscht und ohne weitere Ereignisse unsere deine Expedition nach Hause.',
-                    36: 'In den Tiefen des Alls sind unsere Schiffe auf einen einsamen Mond getroffen, der anscheinend von der Umlaufbahn seines Planeten abgekommen war. Bei der Untersuchung des Mondes wurden ein zerstörtes Sprungtor sowie mehrere hundert Millionen verlassene Schiffe entdeckt, welche sich jedoch alle als funktionsuntüchtig herausstellten. Der Kapitän fand außerdem an einigen Schiffen die Inschrift "scudi", allerdings konnte niemand etwas damit anfangen.',
-                    42: 'Deine Expedition fand einige verlassene Todessterne in der Nähe eines bewaldeten Mondes. Als die Techniker die Stationen betraten, aktivierten sich die Todessterne und zerstörten die gesamte Expeditionsflotte.',
-                    53: 'Inmitten eines belebten Sonnensystems stieß deine Expeditionsflotte auf einen Planeten, auf dem sich tausende Kisten mit Metall befanden. Da der Planet nur relativ schwach beschützt war, landete deine Crew landete auf dem Planeten, um die Kisten nach Hause zu transportieren. Als sie sich den Kisten näherten, verschwanden sie jedoch, und an dessen Stelle befand sich nun eine vollständig ausgebaute Metallmine sowie mehere Millionen Schlachtkreuzer. Seitdem fehlt von unserer Expeditionsflotte jede Spur.',
-                    69: 'Deine Expedition stieß auf einen kleinen Planeten, der vollkommen mit einem Dschungel überwachsen war. In den Tiefen des Dschungels fanden sie eine kleine Hütte, in der sich ein kleines und hässliches Wesen auffand, das einer Puppe ähnelte, sowie sein frosch-ähnliches Haustier, welches wild durch die Gegend hüpfte. Die Crew versuchte, mit dem Wesen zu kommunizieren, jedoch murmelte das Wesen nur unverständliche Worte vor sich hin, die sich wie "Wo Voice?" anhörten. Da sich auf dem Planeten sonst nichts befand, kehrt deine Expedition ohne Ergebnisse zurück.',
-                };
-                const replacement = replacements[id % 99];
-                if (replacement != null) {
-                    aprilFools_expeditionIds.add(id);
-
-                    msg.querySelector('.msg_content')!.innerHTML = replacement;
-
-                    setTimeout(() => onMessage(<MessageTrackingErrorMessage>{
-                        type: MessageType.TrackingError,
-                        data: {
-                            id,
-                            type: 'expedition',
-                        },
-                        ogameMeta: getOgameMeta(),
-                        senderUuid: 'april-fools',
-                    }), 50 + Math.random() * 150);
-                }
-            }
         } catch (error) {
             console.error(error);
             unprocessedMessages.push(msg);
@@ -558,11 +517,6 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.darkMatter: {
             return `
-                ${
-                    isAprilFools()
-                    ? '<div class="dm-patched"></div>'
-                    : ''
-                }
                 <div class="${getExpeditionResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
                     <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource dark-matter"></div>
@@ -711,10 +665,7 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
             const fleet = msg.data.fleet;
             Object.keys(fleet)
                 .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
-                .forEach(ship => {
-                    totalExpeditionResult.ships[ship] ??= 0;
-                    totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0);
-                });
+                .forEach(ship => totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0));
             break;
         }
 
@@ -732,14 +683,3 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
     }
     sendNotificationMessages();
 }
-
-
-//#region april fools
-const aprilFools_expeditionIds = new Set<number>();
-const aprilFools_lifeformDiscoveryIds = new Set<number>();
-
-function isAprilFools() {
-    const now = new Date();
-    return now.getDate() == 1 && now.getMonth() == 4 - 1;
-}
-//#endregion
