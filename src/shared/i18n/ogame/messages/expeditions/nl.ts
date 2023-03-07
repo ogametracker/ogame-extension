@@ -76,12 +76,12 @@ export const nl: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /* TODO: nl 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
         /* TODO: nl 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
-        /* TODO: nl 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'Een */'ontploffing van de hyperruimtemotor veroorzaakt een kettingreactie'/* van explosies die heel de vloot vernietigt.'*/,
         /* TODO: nl 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
-        /* TODO: nl 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Onze expeditievloot */'heeft contact gemaakt met verlegen buitenaardse wezens'/* . Ze komen met een diplomaat aan boord om handel te drijven tussen onze werelden.'*/,
         /*'Een noodoproep bereikte je expeditie. Een enorm transportschip raakte gevangen door een krachtig gravitonveld van een grote planeet. Nadat we het schip hebben */'losgetrokken biedt de kapitein een exclusief handelscontract'/* aan.'*/,
     ],
 
@@ -106,7 +106,7 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /* TODO: nl 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Een paar */'wanhopige piraten hebben geprobeerd onze expeditievloot'/* te enteren.'*/,
             /*'Enkele */'primitieve barbaren vallen ons aan met ruimteschepen'/* die die naam nauwelijks verdienen. Als het gevecht zwaarder wordt, zullen we genoodzaakt zijn terug te vuren.'*/,
             /*'We vingen een */'radiobericht op van enkele dronken piraten'/* . Het lijkt erop dat we een aanval kunnen verwachten.'*/,
             /*'We */'moesten ons verdedigen tegen enkele piraten'/* die, gelukkig, niet al te talrijk waren.'*/,
