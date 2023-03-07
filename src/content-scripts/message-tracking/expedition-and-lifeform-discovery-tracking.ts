@@ -579,9 +579,11 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             const item = Items[expedition.itemHash];
             const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.item)}">
-                    <img src="${imageUrl}" class="item-grade--${item.grade}" />
-                </div>
+                <a href="/game/index.php?page=shop#item=${expedition.itemHash}&page=inventory">
+                    <div class="${getExpeditionResultClass(ExpeditionEventType.item)}">
+                        <img src="${imageUrl}" class="item-grade--${item.grade}" />
+                    </div>
+                </a>
             `;
         }
 
