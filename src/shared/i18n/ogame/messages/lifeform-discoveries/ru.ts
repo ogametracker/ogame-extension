@@ -35,7 +35,7 @@ export const ru: LifeformDiscoveryMessages = {
         /*'Экспедиционный корабль, похоже, */'попал в ранее неизвестную черную дыру'/* . От команды не осталось ни следа.'*/,
         /*'Экспедиционный флот */'попал в ловушку враждебной расы инопланетян'/* . Они уничтожили экспедиционный корабль до того, как удалось установить контакт.'*/,
         /*'Экспедиционный корабль обнаружил многообещающие сигналы. Однако после поисков источника сигнала, */'передача сигнала внезапно прервалась'/* . Поисковые команды отправились на поиски, но не обнаружили ни следа корабля. Он навеки пропал в пустоте.'*/,
-        /*TODO: ru 'The ship’s navigator must have been so deeply concentrated on following the strange signal that he lost sight of the fact that they were operating near a black hole. The ship edged too close to its gravitational well, and despite the crew’s best efforts, */'there was nothing to stop them being dragged inside'/*. To avoid any more such unnecessary losses, the report suggests that automatic black hole alarms be integrated as standard in future.'*/,
+        /*'Штурман корабля был так сконцентрирован на странном сигнале, что не заметил, что они находятся рядом с черной дырой. Они подошли слишком близко к гравитационной яме, и, */'несмотря на все усилия экипажа, их все-таки затянуло внутрь'/* . Во избежание таких ненужных потерь, отчет советует введение автоматических сирен, уведомляющих о черных дырах в будущем.'*/,
     ],
     [LifeformDiscoveryEventType.newLifeformFound]: /Форма жизни .+ была обнаружена под координатами .+ и добавлена в меню Формы жизни/i,
     [LifeformDiscoveryEventType.knownLifeformFound]: /нашим послам удалось углубить наши знания о них на (?<xp>\d+) XP/i,
