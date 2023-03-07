@@ -185,6 +185,7 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
+import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
 
     @Component({
         components: {
@@ -215,7 +216,7 @@
 
         private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
-        private readonly ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
+        private readonly ships = [...ShipTypes].sort((a, b) => a - b);
 
 
         private get showSimplified() {
