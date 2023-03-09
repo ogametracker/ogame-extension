@@ -159,9 +159,9 @@ export const pt: ExpeditionMessages = {
             /*pt*//*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*pt*//*LOCA: pt 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
-            /*pt*//*LOCA: pt 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
-            /*pt*//*LOCA: pt 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
+            /*pt*//*'Se estivéssemos em */'perigo podíamos voltar com uma das várias expedições'/* que estavam por aquele quadrante.'*/,
+            /*pt*//*'Talvez seja mais */'produtivo abrir uma loja de presentes aqui do que enviar'/* outra expedição.'*/,
+            /*pt*//*'Se isto continuar assim */'teremos de colocar boias de navegação para controlar'/* o tráfego.'*/,
         ],
     },
 };
