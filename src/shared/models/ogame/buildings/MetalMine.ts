@@ -45,8 +45,8 @@ class MetalMineClass extends ProductionBuilding {
 
     public getCost(level: number): Cost {
         return {
-            metal: Math.round(40 * 1.5 ** level),
-            crystal: Math.round(10 * 1.5 ** level),
+            metal: Math.floor(40 * 1.5 ** level),
+            crystal: Math.floor(10 * 1.5 ** level),
             deuterium: 0,
             energy: 0,
         };

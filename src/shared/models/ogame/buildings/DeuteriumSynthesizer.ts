@@ -31,8 +31,8 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
 
     public getCost(level: number): Cost {
         return {
-            metal: Math.round(150 * 1.5 ** level),
-            crystal: Math.round(50 * 1.5 ** level),
+            metal: Math.floor(150 * 1.5 ** level),
+            crystal: Math.floor(50 * 1.5 ** level),
             deuterium: 0,
             energy: 0,
         };
