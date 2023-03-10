@@ -15,7 +15,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /* TODO: nl 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
             /*'Onze expeditie */'heeft een eeuwenoud ruimtestation waargenomen'/* , het lijkt ongecontroleerd in de ruimte rond te zweven... Het station zelf mag dan verouderd zijn, in de reactor lag een voorraad donkere materie. Onze technici proberen zoveel mogelijk te bergen.'*/,
-            /* TODO: nl 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'De expeditie rapporteert een bijzonder fenomeen. Hieruit verkrijgen we donkere materie */'in de energiebuffers van de schilden van ons schip'/* . Onze technici proberen dit te stabiliseren, zodat we de kostbare donkere materie kunnen bewaren.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'Uit */'spontane hyperruimtevervorming'/* ontstaat een grote hoeveelheid donkere materie!'*/,
