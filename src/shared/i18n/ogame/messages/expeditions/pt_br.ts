@@ -9,7 +9,7 @@ export const pt_br: ExpeditionMessages = {
             /*'A expedição */'conseguiu capturar e conservar alguma Matéria Negra',
             /*'Nós encontramos os restos de uma nave alienígena. Lá */'dentro havia um pequeno recepiente com Matéria Negra',
             /*'Encontramos um */'estrangeiro alienígena em uma pequena nave que nos deu'/* um pequeno frasco com Matéria Negra em troca de simples cálculos matemáticos.'*/,
-            /*LOCA: pt-br 'Unsere Expedition ist auf ein */'Geisterschiff gestoßen'/*, das eine kleine Menge Dunkler Materie transportierte. Wir haben zwar keinerlei Hinweise finden können, was der ursprünglichen Crew zugestoßen ist. Dennoch gelang es unseren Technikern, die Dunkle Materie zu bergen.'*/,
+            /*'A nossa expedição */'encontrou uma nave-fantasma que transportava uma pequena quantidade'/* de Matéria Negra. Nós não conseguimos descobrir o que aconteceu com a tripulação, mas nossos engenheiros conseguiram transferir a Matéria Negra para a nossa nave.'*/,
             /*'A expedição */'seguiu uns estranhos sinais vindos de um asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extração da Matéria Negra.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -87,12 +87,12 @@ export const pt_br: ExpeditionMessages = {
 
     [ExpeditionEventType.early]: [
         /*LOCA: pt-br 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        /*LOCA: pt-br 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'A sua expedição não reportou nenhuma anomalia no setor explorado. Mas quando a frota retornava, */'apanhou um pouco de vento solar'/* . Por causa disso a viagem de volta foi mais rápida. A sua frota de expedição retorna um pouco mais cedo.'*/,
         /*'O novo e destemido */'comandante conseguiu atravessar um wormhole instável diminuindo'/* assim a duração do vôo! Contudo, a expedição não trouxe qualque novidade.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
-        /*LOCA: pt-br 'Ein böser Patzer des Navigators führte zu einer */'Fehlkalkulation beim Sprung'/* der Expedition.'*/,
+        /*'Um */'erro no sistema de navegação'/* fez com que o salto de hiperespaço fosse mal calculado. Por causa disso a frota aterrou no local errado e irá demorar mais tempo para voltar.'*/,
         /*'A missão */'entrou num setor com tempestades de plasma'/* . Por causa disso, as baterias de energia da frota sofreram um curto-circuito e tiveram de aterrar num planeta próximo. Os mecânicos conseguiram resolver o problema mas a missão irá voltar com um grande atraso.'*/,
         /*LOCA: pt-br 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
         /*LOCA: pt-br 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
@@ -108,8 +108,8 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Alguns */'piratas espaciais desesperados tentaram capturar'/* a nossa frota de expedição.'*/,
             /*'Alguns */'bárbaros primitivos estão nos atacando com naves espaciais'/* , que não podem nem mesmo serem chamadas assim. Se começaram a fazer algum dano considerável seremos obrigados a atirar de volta.'*/,
-            /*LOCA: pt-br 'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
-            /*LOCA: pt-br 'Wir */'mussten uns gegen einige Piraten wehren'/*, die zum Glück nicht allzu zahlreich waren.'*/,
+            /*'Apanhamos algumas */'mensagens de rádio de alguns piratas bêbados'/* . Parece que logo seremos atacados.'*/,
+            /*'Nós */'tivemos de combater com alguns piratas'/* que por sorte não eram muito fortes.'*/,
             /*LOCA: pt-br 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -126,7 +126,7 @@ export const pt_br: ExpeditionMessages = {
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
             /*'Algumas */'naves exóticas atacaram a frota de expedição'/* sem qualquer aviso!'*/,
-            /*LOCA: pt-br 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*'A sua frota de expedição */'teve um primeiro contato realmente não muito agradável'/* com espécies desconhecidas.'*/,
             /*LOCA: pt-br 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
             /*LOCA: pt-br 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],

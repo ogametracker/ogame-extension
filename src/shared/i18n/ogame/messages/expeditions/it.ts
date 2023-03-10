@@ -157,7 +157,7 @@ export const it: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*LOCA: it 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*LOCA: it 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*'Abbiamo */'trovato prove che indicano la presenza di molte altre flotte di esplorazione'/* in questo settore.'*/,
             /*LOCA: it 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
