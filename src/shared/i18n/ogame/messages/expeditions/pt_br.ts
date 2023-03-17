@@ -13,7 +13,7 @@ export const pt_br: ExpeditionMessages = {
             /*'A expedição */'seguiu uns estranhos sinais vindos de um asteróide'/* . No núcleo do asteróide estava uma pequena quantidade de Matéria Negra enclausurada. O asteróide foi resgatado para proceder à extração da Matéria Negra.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pt-br 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Sua expedição */'conseguiu completar uma experiênca única'/* ! Retiraram Matéria Negra de uma estrela que estava se extinguindo.'*/,
             /*'Nossa missão */'localizou uma antiga estação espacial'/* , que parece estar flutuando sem rumo no espaço sideral já faz muito tempo. A estação em si não é recuperável mas foi descoberto alguma Matéria Negra armazenada em seu reator. Os nossos técnicos tentaram recuperar o máximo de Matéria Negra que puderam.'*/,
             /*'Nossa expedição relata um fenômemo impar e espetacular: A */'acumulação de Matéria Negra nas baterias de energia dos escudos'/* da nave. Nossos engenheiros tentam retirar o máxima de Matéria Negra enquanto o fenômeno durar.'*/,
         ],
@@ -35,7 +35,7 @@ export const pt_br: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pt-br 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /*LOCA: pt-br 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'A sua frota de expedição relata a */'descoberta de destroços de uma nave alienígena gigante'/* . Nós não podemos aprender as suas tecnologias, mas foi possível dividir as naves com seus componentes principais e resgatar recursos preciosos do resto.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Foram roubados (?<amount>.+) de (?<name>${resources.join('|')})`, 'i'),
     },
@@ -81,12 +81,12 @@ export const pt_br: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.trader]: [
-        /*LOCA: pt-br 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'A sua frota de expedição */'fez contato com uma raça alienígena tímida'/* . Eles anunciaram o envio de um representante com mercadorias para trocar nos nossos mundos.'*/,
         /*'A sua */'expedição recebeu um sinal de emergência'/* . Um enorme cargueiro foi apanhado dentro dum poderoso campo gravitacional gerado por um planetóide. Depois de ajudar o cargueiro a libertar-se o capitão da nave anunciou que a pessoa que o libertou seria seu favorito e exclusivo cliente.'*/,
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: pt-br 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        /*'Um problema */'inesperado no campo energético dos motores'/* fez com que a expedição voltasse mais rapidamente para casa. Os primeiros relatórios não revelam qualquer descoberta.'*/,
         /*'A sua expedição não reportou nenhuma anomalia no setor explorado. Mas quando a frota retornava, */'apanhou um pouco de vento solar'/* . Por causa disso a viagem de volta foi mais rápida. A sua frota de expedição retorna um pouco mais cedo.'*/,
         /*'O novo e destemido */'comandante conseguiu atravessar um wormhole instável diminuindo'/* assim a duração do vôo! Contudo, a expedição não trouxe qualque novidade.'*/,
     ],
@@ -95,7 +95,7 @@ export const pt_br: ExpeditionMessages = {
         /*'Um */'erro no sistema de navegação'/* fez com que o salto de hiperespaço fosse mal calculado. Por causa disso a frota aterrou no local errado e irá demorar mais tempo para voltar.'*/,
         /*'A missão */'entrou num setor com tempestades de plasma'/* . Por causa disso, as baterias de energia da frota sofreram um curto-circuito e tiveram de aterrar num planeta próximo. Os mecânicos conseguiram resolver o problema mas a missão irá voltar com um grande atraso.'*/,
         /*LOCA: pt-br 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        /*LOCA: pt-br 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
+        /*'O */'vento de uma estrela vermelha gigante'/* , fez com que o computador se enganasse nas coordenadas do salto de hiperespaço. Vai levar algum tempo para calcular o salto de retorno. Não encontramos nada alem disso na área que saltamos. A frota irá retornar depois do esperado.'*/,
         /*'O */'novo módulo de navegação ainda tem alguns problemas'/* . Alem das expedições saltam para um lugar totalmente diferente, o deutério foi quase todo gasto. Por sorte, as frotas saltam próximas da lua do planeta de saída. Obrigados a utilizar os motores secundários, a equipe demorará mais do que o esperado para retornar ao planeta.'*/,
         /*'A nave principal da expedição */'colidiu com uma nave estranha que tinha acabado de sair do salto'/* de hiperespaço sem qualquer aviso. A nave estranha explodiu causando danos substanciais no casco da nave principal. Assim que os reparos necessários forem concluídos, as frotas começaram a retornar, visto que a expedição nao pode continuar nessas condições'*/,
     ],
@@ -127,7 +127,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Algumas */'naves exóticas atacaram a frota de expedição'/* sem qualquer aviso!'*/,
             /*'A sua frota de expedição */'teve um primeiro contato realmente não muito agradável'/* com espécies desconhecidas.'*/,
-            /*LOCA: pt-br 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'A nossa missão */'foi atacada por um pequeno grupo de naves'/* desconhecidas!'*/,
             /*LOCA: pt-br 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -149,19 +149,19 @@ export const pt_br: ExpeditionMessages = {
             /*'É estranho saber que somos os */'primeiros a viajar através de um setor desconhecido',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: pt-br 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*LOCA: pt-br 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
-            /*LOCA: pt-br 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Ao que parece, somos os */'primeiros humanos a entrar nesta parte'/* da galáxia'*/,
+            /*'Encontramos os destroços de algumas naves antigas. Não */'somos os primeiros neste quadrante',
+            /*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: pt-br 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*LOCA: pt-br 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: pt-br 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,
+            /*'Descobrimos */'provas que indicam a presença de outras frotas'/* em expedição.'*/,
+            /*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
-            /*LOCA: pt-br 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
-            /*LOCA: pt-br 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
-            /*LOCA: pt-br 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
+            /*'Se estivéssemos em */'perigo podíamos voltar com uma das várias expedições'/* que estavam por aquele quadrante.'*/,
+            /*'Talvez seja mais */'produtivo abrir uma loja de presentes aqui do que enviar'/* outra expedição.'*/,
+            /*'Se isto continuar assim */'teremos de colocar boias de navegação para controlar'/* o tráfego.'*/,
         ],
     },
 };
