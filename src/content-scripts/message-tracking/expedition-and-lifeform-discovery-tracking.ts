@@ -245,7 +245,7 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Elem
 
             const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
             const messageType = (Object.keys(messageTypeHeaders) as (keyof typeof messageTypeHeaders)[])
-                .find(msgType => messageTitle.includes(messageTypeHeaders[msgType]) == true);
+                .find(msgType => messageTitle.toLowerCase().includes(messageTypeHeaders[msgType].toLowerCase()) == true);
             if (messageType == null) {
                 _throw(`unknown message type '${messageTitle}'`);
             }
