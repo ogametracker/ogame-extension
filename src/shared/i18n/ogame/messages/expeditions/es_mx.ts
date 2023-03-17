@@ -6,7 +6,7 @@ import { ExpeditionMessages } from "./types";
 export const es_mx: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
-            /*'La expedición ha */'logrado capturar y almacenar algo de Materia Oscura',
+            /*'La expedición fue */'capaz de capturar y almacenar algo de Materia Oscura.',
             /*'Encontramos los */'restos de una nave alienígena'/* . En sus estanterías había un pequeño contenedor con algo de Materia Oscura.'*/,
             /*'Nos encontramos */'un extraño alien en una estantería en una pequeña nave'/* , nos dio una maleta con Materia Oscura a cambio de unos simples cálculos matemáticos.'*/,
             /*'Nuestra expedición */'se encontró con una nave fantasma que transportaba una pequeña'/* cantidad de Materia Oscura. No encontramos ningún indicio de que le pasó a la tripulación original de la nave pero nuestros técnicos fueron capaces de rescatar la Materia Oscura.'*/,
