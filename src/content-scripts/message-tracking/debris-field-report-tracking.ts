@@ -138,7 +138,7 @@ function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
             const html = messageTextElem.innerHTML;
 
             const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
-            if (!messageTitle.includes(headers.debrisField)) {
+            if (!messageTitle.toLowerCase().includes(headers.debrisField.toLowerCase())) {
                 //ignore anything that's not a DF harvest report
                 return;
             }
