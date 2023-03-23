@@ -1,5 +1,5 @@
 import { DebrisFieldReportMessages } from "./types";
 
 export const it: DebrisFieldReportMessages = {
-    regex: /Hai raccolto (?<metal>.+) unità di metallo e (?<crystal>.+) unità di cristallo/i,
+    regex: /Hai raccolto (?<metal>.+) unità di metallo e (?<crystal>.+) unità di cristallo|Hai raccolto (?<metal>.+) unità di metallo, (?<crystal>.+) unità di cristallo e (?<deuterium>.+) unità di deuterio/i,
 };

@@ -342,7 +342,7 @@ $image-size-small: 24px;
 
     &-debris-field-report {
         display: inline-grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(var(--columns), 1fr);
         font-weight: bold;
         align-items: center;
         justify-items: center;
