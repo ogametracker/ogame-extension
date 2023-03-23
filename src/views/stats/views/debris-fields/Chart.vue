@@ -23,7 +23,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
@@ -32,7 +32,7 @@
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
     import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
     import { getRGB, getRGBString } from '../../utils/getRGBString';
-import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     @Component({
         components: {
@@ -63,17 +63,16 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
             return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
         }
 
-        private readonly alternativeColors = {
+        private readonly alternativeColors: Record<ResourceType, string> = {
             metal: '#fbbc04',
             crystal: '#4b17da',
+            deuterium: '#ff0000', //TODO: 
         }
 
         private get datasets(): StatsChartDataset<DailyDebrisFieldReportResult>[] {
-            const resources: (ResourceType.metal | ResourceType.crystal)[] = [ResourceType.metal, ResourceType.crystal];
-
             if (!this.separateResults) {
                 return [
-                    ...resources.map(resource => ({
+                    ...ResourceTypes.map(resource => ({
                         key: resource,
                         label: this.$i18n.$t.extension.resources[resource],
                         color: this.colors[resource],
@@ -94,7 +93,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
             }
 
             return [
-                ...resources.map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: `${resource}-normal`,
                     label: `${this.$i18n.$t.extension.resources[resource]} (${this.$i18n.$t.extension.debrisFields.position} 1-15)`,
                     color: this.colors[resource],
@@ -102,7 +101,7 @@ import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
                     getValue: (result: DailyDebrisFieldReportResult) => result.normal[resource],
                     showAverage: true,
                 })),
-                ...resources.map(resource => ({
+                ...ResourceTypes.map(resource => ({
                     key: `${resource}-pos16`,
                     label: `${this.$i18n.$t.extension.resources[resource]} (${this.$i18n.$t.extension.debrisFields.position} 16)`,
                     color: this.alternativeColors[resource],

@@ -232,10 +232,6 @@
                 return 0;
             }
 
-            if (resource == ResourceType.deuterium) {
-                return 0;
-            }
-
             return reports.total[resource];
         }
 
