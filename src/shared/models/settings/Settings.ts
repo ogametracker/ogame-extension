@@ -9,11 +9,12 @@ import { ExpeditionDepletionLevel } from '../expeditions/ExpeditionDepletionLeve
 import { LifeformDiscoveryEventType } from '../lifeform-discoveries/LifeformDiscoveryEventType';
 import { ValidLifeformType } from '../ogame/lifeforms/LifeformType';
 import { LifeformDiscoveryEventArtifactFindingSize } from '../lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { ExpeditionEventCombatSize } from '../expeditions/ExpeditionEvents';
 
 export interface ColorSettings {
     expeditions: {
         events: Record<ExpeditionEventType, string>;
-        sizes: Record<ExpeditionEventSize, string>;
+        sizes: Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>;
         depletion: Record<ExpeditionDepletionLevel | 'unknown', string>;
     };
     lifeformDiscoveries: {

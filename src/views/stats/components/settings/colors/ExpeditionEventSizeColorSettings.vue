@@ -11,6 +11,7 @@
 
 <script lang="ts">
     import { LanguageKey } from '@/shared/i18n/LanguageKey';
+    import { ExpeditionEventCombatSize } from '@/shared/models/expeditions/ExpeditionEvents';
     import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
     import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
@@ -28,17 +29,18 @@
             return this.$i18n.$t.extension.expeditions.expeditionEventSizes;
         }
 
-        private readonly keys: ExpeditionEventSize[] = [
+        private readonly keys: (ExpeditionEventSize | ExpeditionEventCombatSize)[] = [
             ExpeditionEventSize.small,
             ExpeditionEventSize.medium,
             ExpeditionEventSize.large,
+            'fled-death-star',
         ];
 
         private get colors() {
             return SettingsDataModule.settings.colors.expeditions.sizes;
         }
 
-        private updateColors(value: Record<ExpeditionEventSize, string>) {
+        private updateColors(value: Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 colors: {
