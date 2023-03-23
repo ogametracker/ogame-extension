@@ -69,8 +69,8 @@ export class DebrisFieldReportModule {
     }
 
     private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): { success: true, report: DebrisFieldReport } {
-        const regex = i18nDebrisFieldReports[language].regex;
-        const match = regex.exec(data.text);
+        const regexes = i18nDebrisFieldReports[language].regex;
+        const match = regexes.map(regex => regex.exec(data.text)).find(match => match?.groups != null);
         if (match?.groups == null) {
             _throw('found no debris field report match');
         }
