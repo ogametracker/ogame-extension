@@ -213,6 +213,15 @@ $image-size-small: 24px;
                     font-size: 32px !important;
                 }
             }
+
+            &-fled-death-star {
+                border: 1px solid var(--ogame-tracker--expedition-size--fled-death-star);
+
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--fled-death-star);
+                    font-size: 24px !important;
+                }
+            }
         }
 
         .mdi {

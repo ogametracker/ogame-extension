@@ -121,6 +121,9 @@ export const cz: ExpeditionMessages = {
             /*'Zaznamenané signály nepřišly od neznámé osoby, */'ale z tajné pirátské základny'/* ! Nebyli příliš překvapeni naší prezencí v jejich sektoru.'*/,
             /*'Expedice hlásí tuhé boje s */'neidentifikovatelnými pirátskými loděmi'/* !'*/,
         ],
+        'fled-death-star': [
+            /*LOCA: cz 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const cz: ExpeditionMessages = {
             /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/* !'*/,
             /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
             /*LOCA: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: cz 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

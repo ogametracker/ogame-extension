@@ -41,6 +41,7 @@ export const en: ExpeditionsTranslations = {
         [ExpeditionEventSize.small]: 'Common Find',
         [ExpeditionEventSize.medium]: 'Large Find',
         [ExpeditionEventSize.large]: 'Huge Find',
+        'fled-death-star': 'Enemies fled',
     },
     depletionLevels: {
         [ExpeditionDepletionLevel.none]: 'Very Low',

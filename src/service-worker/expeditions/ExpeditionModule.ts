@@ -7,7 +7,7 @@ import i18nExpeditions from '../../shared/i18n/ogame/messages/expeditions';
 import i18nPremium from '../../shared/i18n/ogame/premium';
 import i18nResources from '../../shared/i18n/ogame/resources';
 import i18nShips from '../../shared/i18n/ogame/ships';
-import { ExpeditionEventSizes } from "../../shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventCombatSizes, ExpeditionEventSizes } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
 import { ResourceType, ResourceTypes } from "../../shared/models/ogame/resources/ResourceType";
 import { ItemHash } from "../../shared/models/ogame/items/ItemHash";
@@ -132,7 +132,7 @@ export class ExpeditionModule {
 
     #tryParsePiratesExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventPirates | null {
         const i18nMessages = i18nExpeditions[language].pirates;
-        const size = ExpeditionEventSizes.find(
+        const size = ExpeditionEventCombatSizes.find(
             size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
         if (size == null) {
@@ -149,7 +149,7 @@ export class ExpeditionModule {
 
     #tryParseAliensExpedition(language: LanguageKey, data: RawMessageData): ExpeditionEventAliens | null {
         const i18nMessages = i18nExpeditions[language].aliens;
-        const size = ExpeditionEventSizes.find(
+        const size = ExpeditionEventCombatSizes.find(
             size => i18nMessages[size].some(message => this.#includesMessage(data.text, message))
         );
         if (size == null) {

@@ -8,7 +8,7 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionEventCombatSize, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
@@ -607,15 +607,16 @@ function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
     }[level]);
 }
 
-function getExpeditionSizeIconClass(size: ExpeditionEventSize) {
-    return 'ogame-tracker-expedition--size-icon mdi ' + ({
+function getExpeditionSizeIconClass(size: ExpeditionEventSize | ExpeditionEventCombatSize) {
+    return 'ogame-tracker-expedition--size-icon mdi ' + (<Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>>{
         [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
         [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',
         [ExpeditionEventSize.large]: 'mdi-hexagon-slice-5',
-    }[size]);
+        'fled-death-star': 'mdi-run-fast',
+    })[size];
 }
 
-function getExpeditionResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize) {
+function getExpeditionResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize | ExpeditionEventCombatSize) {
     const cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${result}`;
     if (size == null) {
         return cssClass;

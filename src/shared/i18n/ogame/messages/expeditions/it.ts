@@ -122,6 +122,9 @@ export const it: ExpeditionMessages = {
             /*'I segnali registrati non provenivano da un */'alieno ma da una base spaziale pirata'/* ! Non erano nemmeno sorpresi dalla nostra presenza nel loro settore...'*/,
             /*'La spedizione riporta */'feroci scontri contro delle navi pirata non identificate',
         ],
+        'fled-death-star': [
+            /*LOCA: it 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -140,6 +143,9 @@ export const it: ExpeditionMessages = {
             /*LOCA: it 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Abbiamo */'avuto difficoltà a pronunciare correttamente il dialetto'/* della razza aliena. Il nostro diplomatico ha detto "fate fuoco" anziché "non fate fuoco"!'*/,
             /*'Una grande */'formazione di navi cristalline di origine sconosciuta'/* ha avuto una collisione diretta con la nostra flotta in spedizione. Dobbiamo prepararci al peggio.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: it 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

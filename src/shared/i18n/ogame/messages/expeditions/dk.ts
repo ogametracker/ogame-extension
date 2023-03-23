@@ -121,6 +121,9 @@ export const dk: ExpeditionMessages = {
             /*'Der er modtaget signaler som ikke stammer fra fremmede */'væsener men derimod kommer fra en skjult piratbase'/* ! Piraterne var ikke glade for vores besøg i deres sektor.'*/,
             /*'Ekspeditionsflåden melder om kampe */'med ikke-identificerede piratskibe'/* !'*/,
         ],
+        'fled-death-star': [
+            /*LOCA: dk 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const dk: ExpeditionMessages = {
             /*LOCA: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Vi havde en del */'problemer med at udtale dialekten af alienracen rigtigt'/* . Vores diplomat sagde ved et uheld `Ild!` i stedet for `Fred!`.'*/,
             /*LOCA: dk 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: dk 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
     
