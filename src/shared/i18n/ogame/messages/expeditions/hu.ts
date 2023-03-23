@@ -118,7 +118,7 @@ export const hu: ExpeditionMessages = {
             /*'A segélykérő jelet, */'amit követett az expedíciónk egy csillag-kalóztól származott'/* . A harcot nem lehetett elkerülni.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'A felvett jelek nem idegentől származnak, */'hanem egy titkos Kalóz bázisról'/* . Ők nem igazán vannak meglepve a jelenlétünktől.'*/,
             /*'Az expedíció jelenti, */'hogy azonosítatlan kalózhajók ellen harcolnak',
         ],
     },
