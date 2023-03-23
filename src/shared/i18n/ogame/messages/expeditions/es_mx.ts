@@ -18,7 +18,7 @@ export const es_mx: ExpeditionMessages = {
             /*'Nuestra expedición informa de un espectacular y extraño fenómeno: la acumulación de Materia Oscura */'en los almacenes de energía de los escudos de la nave'/* . Nuestros técnicos están intentando almacenar tanta Materia Oscura como sea posible mientras dure el fenómeno.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*'¡Una */'deformación espontánea en el hiperespacio permitió'/* a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
+            /*'¡Una */'espontanea deformación en el hiperespacio permitió'/* a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
             /*LOCA: es 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Se han tomado (?<name>${darkMatter}) de (?<amount>.+)\\.`, 'i'),
@@ -82,12 +82,12 @@ export const es_mx: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /*'Tu flota en expedición tuvo un */'corto contacto con una esquiva raza de alienígenas'/* . Estos anunciaron que van a enviar a un representante con bienes comerciales a tus mundos.'*/,
-        /*'Tu */'expedición captó un grito de ayuda'/* . Era una gran nave de carga que fue capturada por un potente campo gravitacional de un planetoide. Después de que la nave de carga fuese liberada con éxito, el capitán anunció que va a incluir a su liberador en su libro negro como cliente exclusivo.'*/,
+        /*'Tu */'expedición captura un grito de ayuda'/* . Era una gran nave de carga que fue capturada por un potente campo gravitacional de un planetoide. Después de que la nave de carga fuese liberada con éxito, el capitán de celebración anunció que va a poner a su liberador en su libro negro como cliente exclusivo preferido.'*/
     ],
 
     [ExpeditionEventType.early]: [
         /*'Un inesperado acoplamiento */'de energía en los motores aceleró la vuelta'/* de la expedición, vuelve a casa antes de lo esperado. Los primeros informes dicen que no tienen nada emocionante a tener en cuenta.'*/,
-        /*'Tu expedición no informa de ninguna anomalía en el sector explorado. Pero la flota */'entró en una oleada de viento solar mientras volvía'/* . Su retorno se aceleró enormemente. Tu expedición vuelve a casa un poco antes de lo esperado.'*/,
+        /*'Tu expedición no informa de ninguna anomalía en el sector explorado. Pero la flota */'entro en algún viento solar mientras volvía'/* . A causa de esto la vuelta de la flota se aceleró mucho. Tu expedición vuelve a casa un poco antes.'*/,
         /*'¡El nuevo, y un poco atrevido, */'comandante viajó con éxito a través de un inestable agujero de gusano'/* para acortar el vuelo de regreso! Sin embargo, la expedición en sí no trajo nada nuevo.'*/,
     ],
 
@@ -125,9 +125,9 @@ export const es_mx: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*'¡Unas */'naves de exótico aspecto atacaron la expedición'/* sin previo aviso!'*/,
+            /*'¡Algunas */'naves de apariencia exótica atacaron la expedición'/* sin previo aviso!'*/,
             /*'Tu expedición */'no hizo un primer contacto amigable con una especie desconocida',
-            /*LOCA: es 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'¡Nuestra */'expedición fue atacada por un pequeño grupo de naves'/* sin identificar!'*/,
             /*LOCA: es 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
