@@ -126,6 +126,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionEventSize.small]: '#404040',
                     [ExpeditionEventSize.medium]: '#3e85fe',
                     [ExpeditionEventSize.large]: '#e01a76',
+                    'fled-death-star': '#dddddd',
                 },
                 depletion: {
                     [ExpeditionDepletionLevel.none]: '#00c23a',

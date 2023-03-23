@@ -121,6 +121,9 @@ export const zh_tw: ExpeditionMessages = {
             /*'該信號記錄絕不是來自外星文明的,*/'而是一個隱祕的海盜基地'/* !這些海盜對我們突然出現這裡絲毫不覺得有半分詫異.'*/,
             /*'遠征探險艦隊報告說與*/'不明來歷的海盜艦隊發生了戰鬥',
         ],
+        'fled-death-star': [
+            /*LOCA: zh-tw 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const zh_tw: ExpeditionMessages = {
             /*LOCA: zh_tw 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*LOCA: zh_tw 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*LOCA: zh_tw 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: zh-tw 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

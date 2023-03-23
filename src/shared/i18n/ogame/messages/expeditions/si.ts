@@ -121,6 +121,9 @@ export const si: ExpeditionMessages = {
             /*'Signal ni prišel od tujega stvora, */'ampak iz baze piratov'/* ! Niti niso bili presenečeni nad našo prisotnostjo.'*/,
             /*LOCA: si 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
+        'fled-death-star': [
+            /*LOCA: si 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const si: ExpeditionMessages = {
             /*'Tvoja ekspedicija je */'naletela na sovražno floto in poroča o hudi'/* bitki!'*/,
             /*'Imeli smo nekaj težav pri pravilni izgovorjavi narečja vesoljcev. naš */'diplomat je po nesreči zaklical'/* `Ogenj!` namesto `Mir!`.'*/,
             /*LOCA: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: si 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
     

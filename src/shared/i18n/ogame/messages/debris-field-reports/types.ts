@@ -1,3 +1,3 @@
 export interface DebrisFieldReportMessages {
-    regex: RegExp;
+    regex: RegExp[];
 }

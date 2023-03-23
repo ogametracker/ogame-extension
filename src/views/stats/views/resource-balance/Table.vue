@@ -158,7 +158,7 @@
                 const types: Record<ResourceType, (EventType | null)[]> = {
                     [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report', null],
                     [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report', null],
-                    [ResourceType.deuterium]: ['expedition', 'combat-report', null],
+                    [ResourceType.deuterium]: ['expedition', 'combat-report', 'debris-field-report', null],
                 };
 
                 return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
@@ -229,10 +229,6 @@
 
         private getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
             if (reports == null) {
-                return 0;
-            }
-
-            if (resource == ResourceType.deuterium) {
                 return 0;
             }
 

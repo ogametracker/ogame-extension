@@ -94,7 +94,7 @@ export const pt_br: ExpeditionMessages = {
     [ExpeditionEventType.delay]: [
         /*'Um */'erro no sistema de navegação'/* fez com que o salto de hiperespaço fosse mal calculado. Por causa disso a frota aterrou no local errado e irá demorar mais tempo para voltar.'*/,
         /*'A missão */'entrou num setor com tempestades de plasma'/* . Por causa disso, as baterias de energia da frota sofreram um curto-circuito e tiveram de aterrar num planeta próximo. Os mecânicos conseguiram resolver o problema mas a missão irá voltar com um grande atraso.'*/,
-        /*LOCA: pt-br 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
+        /*'Devido a razões ainda desconhecidas, */'o salto da frota de expedição correu mal'/* . Quase aterrou no coração de um sol. Por sorte aterraram em um sistema conhecido, mas a viagem retorno demorará um pouco mais que o tempo previsto.'*/,
         /*'O */'vento de uma estrela vermelha gigante'/* , fez com que o computador se enganasse nas coordenadas do salto de hiperespaço. Vai levar algum tempo para calcular o salto de retorno. Não encontramos nada alem disso na área que saltamos. A frota irá retornar depois do esperado.'*/,
         /*'O */'novo módulo de navegação ainda tem alguns problemas'/* . Alem das expedições saltam para um lugar totalmente diferente, o deutério foi quase todo gasto. Por sorte, as frotas saltam próximas da lua do planeta de saída. Obrigados a utilizar os motores secundários, a equipe demorará mais do que o esperado para retornar ao planeta.'*/,
         /*'A nave principal da expedição */'colidiu com uma nave estranha que tinha acabado de sair do salto'/* de hiperespaço sem qualquer aviso. A nave estranha explodiu causando danos substanciais no casco da nave principal. Assim que os reparos necessários forem concluídos, as frotas começaram a retornar, visto que a expedição nao pode continuar nessas condições'*/,
@@ -121,6 +121,9 @@ export const pt_br: ExpeditionMessages = {
             /*LOCA: pt-br 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
             /*LOCA: pt-br 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
+        'fled-death-star': [
+            /*LOCA: pt-br 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const pt_br: ExpeditionMessages = {
             /*LOCA: pt-br 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*LOCA: pt-br 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*LOCA: pt-br 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: pt-br 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

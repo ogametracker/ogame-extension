@@ -82,11 +82,16 @@ function onMessage(message: Message<MessageType, any>) {
                 li.classList.add(cssClasses.messages.hideContent);
             }
             addOrSetCustomMessageContent(li, `
-                <div class="ogame-tracker-debris-field-report">
+                <div 
+                    class="ogame-tracker-debris-field-report" 
+                    style="--columns: ${msg.data.deuterium != null ? 3 : 2}"
+                >
                     <div class="ogame-tracker-resource metal"></div>
                     <div class="ogame-tracker-resource crystal"></div>
+                    ${msg.data.deuterium != null ? '<div class="ogame-tracker-resource crystal"></div>' : ''}
                     <div class="">${formatNumber(msg.data.metal)}</div>
                     <div class="">${formatNumber(msg.data.crystal)}</div>
+                    ${msg.data.deuterium != null ? `<div class="ogame-tracker-resource deuterium">${formatNumber(msg.data.deuterium)}</div>` : ''}
                 </div>
             `);
 

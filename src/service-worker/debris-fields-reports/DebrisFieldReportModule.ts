@@ -69,17 +69,19 @@ export class DebrisFieldReportModule {
     }
 
     private tryParseDebrisFieldReport(language: LanguageKey, data: RawMessageData): { success: true, report: DebrisFieldReport } {
-        const regex = i18nDebrisFieldReports[language].regex;
-        const match = regex.exec(data.text);
+        const regexes = i18nDebrisFieldReports[language].regex;
+        const match = regexes.map(regex => regex.exec(data.text)).find(match => match?.groups != null);
         if (match?.groups == null) {
             _throw('found no debris field report match');
         }
 
         const metalText = match.groups.metal.replace(/[^\d]/g, '') ?? _throw('metal not found');
         const crystalText = match.groups.crystal.replace(/[^\d]/g, '') ?? _throw('crystal not found');
+        const deuteriumText = match.groups.deuterium?.replace(/[^\d]/g, '');
 
         const metal = parseIntSafe(metalText, 10);
         const crystal = parseIntSafe(crystalText, 10);
+        const deuterium = deuteriumText != null ? parseIntSafe(deuteriumText, 10) : undefined;
 
         const isExpeditionDebrisField = /\[\d+:\d+:16\]/.test(data.text);
 
@@ -90,6 +92,7 @@ export class DebrisFieldReportModule {
                 date: data.date,
                 metal,
                 crystal,
+                deuterium,
                 isExpeditionDebrisField,
             },
         };

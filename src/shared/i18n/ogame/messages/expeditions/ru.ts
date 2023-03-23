@@ -124,6 +124,9 @@ export const ru: ExpeditionMessages = {
             /*'Пойманные сигналы исходили не от инопланетной расы, */'а от секретной пиратской базы'/* ! Они были не в особом восторге от нашего появления.'*/,
             /*'Экспедиционный флот */'сообщает о жестоких боях с неизвестными кораблями',
         ],
+        'fled-death-star': [
+            /*LOCA: ru 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -142,6 +145,9 @@ export const ru: ExpeditionMessages = {
             /*'На вашу */'экспедицию напал вражеский флот пришельцев'/* , имеются тяжёлые потери!'*/,
             /*TODO: ru 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*'Огромная */'Армада хрустальных кораблей неизвестного происхождения'/* взяли курс на прямое столкновения с нашим экспедиционным флотом. Мы должны приготовиться к худшему.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: ru 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

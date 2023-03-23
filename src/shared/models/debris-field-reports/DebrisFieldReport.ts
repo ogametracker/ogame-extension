@@ -5,6 +5,7 @@ export interface DebrisFieldReport {
     id: number;
     [ResourceType.metal]: number;
     [ResourceType.crystal]: number;
+    [ResourceType.deuterium]?: number;
     
     isExpeditionDebrisField?: boolean;
 }

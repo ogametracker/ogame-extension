@@ -41,6 +41,7 @@ export const de: ExpeditionsTranslations = {
         [ExpeditionEventSize.small]: 'normaler Fund',
         [ExpeditionEventSize.medium]: 'großer Fund',
         [ExpeditionEventSize.large]: 'riesiger Fund',
+        'fled-death-star': 'Gegner sind geflohen',
     },
     depletionLevels: {
         [ExpeditionDepletionLevel.none]: 'Sehr Gering',

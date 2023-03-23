@@ -1,4 +1,5 @@
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionEventCombatSize } from "@/shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 
@@ -26,17 +27,8 @@ export interface ExpeditionMessages {
         regex: RegexBuilder<string[]>;
     };
 
-    [ExpeditionEventType.pirates]: {
-        [ExpeditionEventSize.small]: string[];
-        [ExpeditionEventSize.medium]: string[];
-        [ExpeditionEventSize.large]: string[];
-    };
-
-    [ExpeditionEventType.aliens]: {
-        [ExpeditionEventSize.small]: string[];
-        [ExpeditionEventSize.medium]: string[];
-        [ExpeditionEventSize.large]: string[];
-    };
+    [ExpeditionEventType.pirates]: Record<ExpeditionEventCombatSize, string[]>;
+    [ExpeditionEventType.aliens]: Record<ExpeditionEventCombatSize, string[]>;
 
     [ExpeditionEventType.nothing]: string[];
     [ExpeditionEventType.lostFleet]: string[];

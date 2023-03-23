@@ -91,11 +91,15 @@ export type ExpeditionEventNothing = ExpeditionEventBase & {
     type: ExpeditionEventType.nothing;
 };
 
-export type ExpeditionEventAliens = ExpeditionEventBase & ExpeditionEventWithSize & {
+export type ExpeditionEventCombatSize = ExpeditionEventSize | 'fled-death-star';
+
+export type ExpeditionEventAliens = ExpeditionEventBase & {
+    size: ExpeditionEventCombatSize;
     type: ExpeditionEventType.aliens;
 };
 
-export type ExpeditionEventPirates = ExpeditionEventBase & ExpeditionEventWithSize & {
+export type ExpeditionEventPirates = ExpeditionEventBase & {
+    size: ExpeditionEventCombatSize;
     type: ExpeditionEventType.pirates;
 };
 

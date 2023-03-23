@@ -118,8 +118,11 @@ export const hu: ExpeditionMessages = {
             /*'A segélykérő jelet, */'amit követett az expedíciónk egy csillag-kalóztól származott'/* . A harcot nem lehetett elkerülni.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: hu 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'A felvett jelek nem idegentől származnak, */'hanem egy titkos Kalóz bázisról'/* . Ők nem igazán vannak meglepve a jelenlétünktől.'*/,
             /*'Az expedíció jelenti, */'hogy azonosítatlan kalózhajók ellen harcolnak',
+        ],
+        'fled-death-star': [
+            /*LOCA: hu 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 
@@ -139,6 +142,9 @@ export const hu: ExpeditionMessages = {
             /*'Az expedíciód egy Idegen */'invázióba flottába futott és kemény harcot'/* jelent!'*/,
             /*'Volt egy kis nehézségünk az */'idegen faj nyelvjárásának helyes értelmezésével'/* . Diplomatánk véletlenül a "Béke!" helyett azt mondta, "Tűz!".'*/,
             /*TODO: hu 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*LOCA: hu 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
         ],
     },
 

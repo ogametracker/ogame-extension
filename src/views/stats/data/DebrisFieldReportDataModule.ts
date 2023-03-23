@@ -8,11 +8,9 @@ import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@/shared/db/access';
 import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
+import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
 
-export interface DebrisFieldResources {
-    metal: number;
-    crystal: number;
-}
+export type DebrisFieldResources = Record<ResourceType, number>;
 
 export interface DailyDebrisFieldReportResult {
     date: number;
@@ -116,10 +114,12 @@ class DebrisFieldReportDataModuleClass extends Vue {
         if (report.isExpeditionDebrisField) {
             dailyResult.expedition.metal += report.metal;
             dailyResult.expedition.crystal += report.crystal;
+            dailyResult.expedition.deuterium += report.deuterium ?? 0;
         } 
         else {
             dailyResult.normal.metal += report.metal;
             dailyResult.normal.crystal += report.crystal;
+            dailyResult.normal.deuterium += report.deuterium ?? 0;
         }
 
         this.internal_minId = Math.min(this.internal_minId, report.id);
@@ -131,14 +131,17 @@ class DebrisFieldReportDataModuleClass extends Vue {
             total: {
                 metal: 0,
                 crystal: 0,
+                deuterium: 0,
             },
             normal: {
                 metal: 0,
                 crystal: 0,
+                deuterium: 0,
             },
             expedition: {
                 metal: 0,
                 crystal: 0,
+                deuterium: 0,
             },
         };
     }

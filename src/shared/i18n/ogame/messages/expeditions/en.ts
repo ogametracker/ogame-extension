@@ -121,6 +121,9 @@ export const en: ExpeditionMessages = {
             /*'The recorded signals didn`t come from a */'foreign being but from a secret pirate base'/* ! They were not really surprised by our presence in their sector.'*/,
             /*'The expedition */'reports tough battles against unidentified pirate'/* ships.'*/,
         ],
+        'fled-death-star': [
+            /*'Your expedition */'stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar'/*, they fled.' */,
+        ],
     },
 
     [ExpeditionEventType.aliens]: {
@@ -139,6 +142,9 @@ export const en: ExpeditionMessages = {
             /*'Your expedition */'ran into an alien invasion fleet'/* and reports heavy fighting!'*/,
             /*'We had a bit of difficulty */'pronouncing the dialect of the alien race'/* correctly. Our diplomat accidentally called `Fire!` instead of `Peace!`'*/,
             /*'A large Armada of */'crystalline ships of unknown origin'/* take a direct collision course with our expedition-fleet. We should assume the worst.'*/,
+        ],
+        'fled-death-star': [
+            /*'Your expedition */'stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar'/*, they fled.' */,
         ],
     },
 

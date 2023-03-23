@@ -1,4 +1,5 @@
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionEventCombatSize } from "@/shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 
@@ -22,7 +23,7 @@ export interface ExpeditionsTranslations {
     };
 
     expeditionEvents: Record<ExpeditionEventType, string>;
-    expeditionEventSizes: Record<ExpeditionEventSize, string>;
+    expeditionEventSizes: Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>;
     depletionLevels: Record<ExpeditionDepletionLevel | 'unknown', string>;
 
     expeditions: string;
