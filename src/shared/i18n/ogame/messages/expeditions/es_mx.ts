@@ -115,7 +115,7 @@ export const es_mx: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*LOCA: es 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /*'¡Nos metimos en una */'emboscada organizada por algunos bucaneros estelares'/* ! La batalla no se pudo evitar.'*/,
-            /*'La señal de emergencia que la expedición estaba siguiendo resultó ser */'una maliciosa trampa dispuesta por unos bucaneros estelares'/* . No se pudo evitar un combate.'*/,
+            /*'La */'señal de emergencia que la expedición siguió resultó ser un montaje'/* de algunos bucaneros estelares. La batalla no se pudo evitar.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
