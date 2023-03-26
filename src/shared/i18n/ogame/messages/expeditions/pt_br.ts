@@ -115,7 +115,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*LOCA: pt-br 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /*LOCA: pt-br 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*LOCA: pt-br 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'O */'sinal de emergência que a expedição recebeu era um engodo colocado'/* por uns piratas estelares. Não houve como evitar um confronto.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pt-br 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
