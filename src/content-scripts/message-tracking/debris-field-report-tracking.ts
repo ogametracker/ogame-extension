@@ -14,7 +14,7 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
-import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
+import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
 import { LanguageKey } from "@/shared/i18n/LanguageKey";
 import { getLanguage } from "@/shared/i18n/getLanguage";
@@ -33,6 +33,7 @@ const totalDebrisFieldResult: DebrisFieldReportTrackingNotificationMessageData =
     resources: {
         metal: 0,
         crystal: 0,
+        deuterium: 0,
     },
 };
 
@@ -78,7 +79,7 @@ function onMessage(message: Message<MessageType, any>) {
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.processed);
-            if(settingsWrapper.settings.messageTracking.showSimplifiedResults) {
+            if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
                 li.classList.add(cssClasses.messages.hideContent);
             }
             addOrSetCustomMessageContent(li, `
@@ -88,10 +89,18 @@ function onMessage(message: Message<MessageType, any>) {
                 >
                     <div class="ogame-tracker-resource metal"></div>
                     <div class="ogame-tracker-resource crystal"></div>
-                    ${msg.data.deuterium != null ? '<div class="ogame-tracker-resource crystal"></div>' : ''}
-                    <div class="">${formatNumber(msg.data.metal)}</div>
-                    <div class="">${formatNumber(msg.data.crystal)}</div>
-                    ${msg.data.deuterium != null ? `<div class="ogame-tracker-resource deuterium">${formatNumber(msg.data.deuterium)}</div>` : ''}
+                    ${msg.data.deuterium != null ? '<div class="ogame-tracker-resource deuterium"></div>' : ''}
+                    <div class="${msg.data.metal == 0 ? 'no-resources' : ''}">
+                        ${formatNumber(msg.data.metal)}
+                    </div>
+                    <div class="${msg.data.crystal == 0 ? 'no-resources' : ''}">
+                        ${formatNumber(msg.data.crystal)}
+                    </div>
+                    ${msg.data.deuterium != null
+                    ? ` <div class="${msg.data.deuterium == 0 ? 'no-resources' : ''}">
+                            ${formatNumber(msg.data.deuterium)}
+                        </div>`
+                    : ''}
                 </div>
             `);
 
@@ -189,10 +198,10 @@ function sendNotificationMessages() {
         sendErrorNotificationMessage(failed);
     }
 
-    if(totalDebrisFieldResult.count == 0) {
+    if (totalDebrisFieldResult.count == 0) {
         return;
     }
-    
+
     const msg: DebrisFieldReportTrackingNotificationMessage = {
         type: MessageType.Notification,
         ogameMeta: getOgameMeta(),
@@ -224,8 +233,7 @@ function updateReportResults(msg: DebrisFieldReportMessage) {
     delete waitingForReports[msg.data.id];
     totalDebrisFieldResult.count++;
 
-    ([ResourceType.metal, ResourceType.crystal] as [ResourceType.metal, ResourceType.crystal])
-        .forEach(resource => totalDebrisFieldResult.resources[resource] += msg.data[resource]);
+    ResourceTypes.forEach(resource => totalDebrisFieldResult.resources[resource] += msg.data[resource] ?? 0);
 
     sendNotificationMessages();
 }
