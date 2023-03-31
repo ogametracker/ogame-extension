@@ -52,7 +52,7 @@ export type CombatTrackingNotificationMessage = NotificationMessage<Notification
 
 export interface DebrisFieldReportTrackingNotificationMessageData {
     count: number;
-    resources: Record<Exclude<ResourceType, ResourceType.deuterium>, number>;
+    resources: Record<ResourceType, number>;
 }
 export type DebrisFieldReportTrackingNotificationMessage = NotificationMessage<NotificationType.DebrisFieldReportTracking, DebrisFieldReportTrackingNotificationMessageData>;
 

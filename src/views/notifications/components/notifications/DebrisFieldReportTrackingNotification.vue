@@ -3,27 +3,29 @@
         <template #message>
             <div v-text="message" />
 
-            <template v-if="notification.resources.metal > 0 || notification.resources.crystal > 0">
+            <template v-if="hasResources">
                 <hr />
                 <div class="resources-grid" v-if="showSimplified">
-                    <o-resource resource="metal" />
-                    <span v-text="$i18n.$n(notification.resources.metal)" :class="{ fade: notification.resources.metal == 0 }" />
-
-                    <o-resource resource="crystal" />
-                    <span v-text="$i18n.$n(notification.resources.crystal)" :class="{ fade: notification.resources.crystal == 0 }" />
+                    <template v-for="resource in ResourceTypes">
+                        <template v-if="notification.resources[resource] > 0">
+                            <o-resource :resource="resource" />
+                            <span v-text="$i18n.$n(notification.resources[resource])"/>
+                        </template>
+                    </template>
 
                     <span class="mdi mdi-sigma" />
                     <span v-text="$i18n.$n(sum)" />
                 </div>
                 <div v-else class="text-grid">
-                    <span v-text="$i18n.$t.extension.resources[ResourceType.metal]" />
-                    <span :class="{ fade: notification.resources.metal == 0 }" v-text="$i18n.$n(notification.resources.metal)" />
-
-                    <span v-text="$i18n.$t.extension.resources[ResourceType.crystal]" />
-                    <span :class="{ fade: notification.resources.crystal == 0 }" v-text="$i18n.$n(notification.resources.crystal)" />
+                    <template v-for="resource in ResourceTypes">
+                        <template v-if="notification.resources[resource] > 0">
+                            <span v-text="$i18n.$t.extension.resources[resource]" />
+                            <span v-text="$i18n.$n(notification.resources[resource])" />
+                        </template>
+                    </template>
 
                     <span v-text="$i18n.$t.extension.common.sum" />
-                    <span :class="{ fade: sum == 0 }" v-text="$i18n.$n(sum)" />
+                    <span v-text="$i18n.$n(sum)" />
                 </div>
             </template>
         </template>
@@ -32,7 +34,7 @@
 
 <script lang="ts">
     import { DebrisFieldReportTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
     import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
@@ -47,6 +49,7 @@
         private notification!: DebrisFieldReportTrackingNotificationMessageData;
 
         private readonly ResourceType = ResourceType;
+        private readonly ResourceTypes = ResourceTypes;
 
         private get showSimplified() {
             return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
@@ -63,13 +66,15 @@
         private get sum() {
             return this.notification.resources.metal + this.notification.resources.crystal;
         }
+
+        private get hasResources() {
+            return this.notification.resources.metal > 0 
+                || this.notification.resources.crystal > 0
+                || this.notification.resources.deuterium > 0;
+        }
     }
 </script>
 <style lang="scss" scoped>
-    .fade {
-        color: rgba(white, 0.1);
-    }
-
     .resources-grid {
         display: grid;
         grid-template-columns: repeat(2, 32px 1fr);

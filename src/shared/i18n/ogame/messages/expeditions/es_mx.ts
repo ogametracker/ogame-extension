@@ -81,7 +81,7 @@ export const es_mx: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.trader]: [
-        /*'Tu flota en expedición tuvo un */'corto contacto con una esquiva raza de alienígenas'/* . Estos anunciaron que van a enviar a un representante con bienes comerciales a tus mundos.'*/,
+        /*'Tu flota en expedición tuvo un */'corto contacto con una raza de aliens un poco vergonzosa'/* . Estos anunciaron que van a enviar a un representante con bienes de comercio a tus mundos.'*/,
         /*'Tu */'expedición captura un grito de ayuda'/* . Era una gran nave de carga que fue capturada por un potente campo gravitacional de un planetoide. Después de que la nave de carga fuese liberada con éxito, el capitán de celebración anunció que va a poner a su liberador en su libro negro como cliente exclusivo preferido.'*/
     ],
 
