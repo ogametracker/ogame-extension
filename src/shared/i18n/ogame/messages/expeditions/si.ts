@@ -141,7 +141,7 @@ export const si: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*'Tvoja ekspedicija je */'naletela na sovražno floto in poroča o hudi'/* bitki!'*/,
             /*'Imeli smo nekaj težav pri pravilni izgovorjavi narečja vesoljcev. naš */'diplomat je po nesreči zaklical'/* `Ogenj!` namesto `Mir!`.'*/,
-            /*LOCA: si 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Velika */'armada kistalnih ladij nepoznanega izvora se je srečala z našo ekspedicijsko'/* floto. Lahko predvidevamo najhujše.'*/,
         ],
         'fled-death-star': [
             /*LOCA: si 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
