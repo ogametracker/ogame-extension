@@ -421,13 +421,8 @@ function transformFleet(id: number, fleet: Partial<Record<ExpeditionFindableShip
     if (useSats) {
         replace(ShipType.solarSatellite, shipTypes[satsIndex]);
     }
-    const useCrawlers = id % 18 < 6;
-    const crawlersIndex = (id + 3) % length;
-    if (useCrawlers) {
-        replace(ShipType.crawler, shipTypes[crawlersIndex]);
-    }
     const useRips = id % 23 < 2;
-    const ripsIndex = (id + 4) % length;
+    const ripsIndex = (id + 3) % length;
     if (useRips) {
         replace(ShipType.deathStar, shipTypes[ripsIndex]);
     }
