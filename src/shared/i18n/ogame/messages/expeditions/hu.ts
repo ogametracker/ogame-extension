@@ -141,7 +141,7 @@ export const hu: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*'Az expedíciód egy Idegen */'invázióba flottába futott és kemény harcot'/* jelent!'*/,
             /*'Volt egy kis nehézségünk az */'idegen faj nyelvjárásának helyes értelmezésével'/* . Diplomatánk véletlenül a "Béke!" helyett azt mondta, "Tűz!".'*/,
-            /*TODO: hu 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Ismeretlen */'eredetű Kristályos hajók nagy formációja megegyező'/* pályán halad az Expedíciós flottáéval. Szükségünk van feltételezni a legrosszabbat.'*/,
         ],
         'fled-death-star': [
             /*LOCA: hu 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */

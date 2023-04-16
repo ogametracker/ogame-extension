@@ -41,7 +41,7 @@ export const ru: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /нашим послам удалось углубить наши знания о них на (?<xp>\d+) XP/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*TODO: ru 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Исследовательский корабль нашел некоторое количество артефактов, */'но не может собрать их, так как хранилище заполнено',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Исследовательский корабль */'нашел небольшое количество артефактов', 
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Исследовательский корабль */'нашел большое количество артефактов',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Исследовательский корабль */'нашел огромный клад, полный артефактов', 

@@ -34,7 +34,7 @@ export const pt_br: ExpeditionMessages = {
             /*'Em uma */'pequena lua com atmosfera'/* , a sua expedição encontrou um grande armazém de recursos básicos. A tripulação terrestre está tentando transferir e carregar esse tesouro natural.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pt-br 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Uma */'cinta de minerais em volta de um planeta desconhecido'/* possui incontáveis recursos. A frota expedição está voltando e seus armazéns estão completamente cheios.'*/,
             /*'A sua frota de expedição relata a */'descoberta de destroços de uma nave alienígena gigante'/* . Nós não podemos aprender as suas tecnologias, mas foi possível dividir as naves com seus componentes principais e resgatar recursos preciosos do resto.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Foram roubados (?<amount>.+) de (?<name>${resources.join('|')})`, 'i'),
@@ -74,10 +74,10 @@ export const pt_br: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: pt-br 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'As últimas imagens que tivemos da frota em expedição foram */'umas imagens muito próximas de um buraco negro a nascer',
         /*'A única coisa deixada pela */'expedição era a seguinte transmição de rádio'/* : Zzzrrt Deus! Krrrzzzzt Aquilo zrrrtrzt olha krgzzzz como Krzzzzzzzztzzzz...'*/,
         /*LOCA: pt-br 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*LOCA: pt-br 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'A frota em */'expedição não conseguiu voltar do salto de hiperespaço'/* . Os nossos cientistas ainda estão tentando compreender o que aconteceu, mas pelo que parece a frota foi perdida para sempre.'*/,
     ],
 
     [ExpeditionEventType.trader]: [

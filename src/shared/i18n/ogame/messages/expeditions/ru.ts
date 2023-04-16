@@ -143,7 +143,7 @@ export const ru: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'На вашу */'экспедицию напал вражеский флот пришельцев'/* , имеются тяжёлые потери!'*/,
-            /*TODO: ru 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*'Язык этой расы труден в произношении. Совершенно случайно наш дипломат */'воскликнул "Огонь!" вместо "Мир!"',
             /*'Огромная */'Армада хрустальных кораблей неизвестного происхождения'/* взяли курс на прямое столкновения с нашим экспедиционным флотом. Мы должны приготовиться к худшему.'*/,
         ],
         'fled-death-star': [
