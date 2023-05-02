@@ -155,7 +155,7 @@ export const cz: ExpeditionMessages = {
             /*'Je to skvělý pocit */'poprvé prolétat neprozkoumaným sektorem',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*LOCA: cz 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*'Zdá se, že v */'části této galaxie ještě nikdo jiný před'/* námi nebyl.'*/,
             /*'Nalezli */'jsme trosky prastarých vesmírných'/* lodí. Nedostali jsme se sem první.'*/,
             /*LOCA: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],

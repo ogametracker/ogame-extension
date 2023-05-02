@@ -7,7 +7,7 @@ export const hr: ExpeditionMessages = {
     [ExpeditionEventType.darkMatter]: {
         [ExpeditionEventSize.small]: [
             /*'Ekspedicija */'je uspjela pronaći i sačuvati Crnu Materiju',
-            /*LOCA: hr 'Wir haben die */'Überreste eines Alien-Schiffes'/* gefunden. An Bord war ein kleiner Behälter mit Dunkler Materie!'*/,
+            /*'Pronašli smo */'ostatke vanzemaljskog broda'/* . Na njemu je bilo malo spremište Crne Materije.'*/,
             /*LOCA: hr 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
             /*'Naša*/' ekspedicija je zauzela napušteni brod s kojeg je transportirala'/* malu količinu Crne Materije. Ne pronalazimo nikakve tragove šta se dogodilo posadi ovog broda, ali tehničari su uspjeli spasiti Crnu Materiju.'*/,
             /*'Ekspedicija je pratila neke */'čudne signale prema jednom asteroidu'/*. U jezgri samog asteroida je pronađena mala količina Crne Materije. Istraživači su uzeli asteroid radi daljnjeg istraivanja i izvlačenja Crne Materije.'*/,
@@ -43,8 +43,8 @@ export const hr: ExpeditionMessages = {
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
             /*'Našli */'smo ostatke prijašnje ekspedicije'/* ! Naši tehničari će pokušati popraviti neke brodove.'*/,
-            /*LOCA: hr 'Deine Expedition ist auf eine */'alte Sternenfestung'/* gestoßen, die wohl seit Ewigkeiten verlassen ist. Im Hangar der Festung wurden ein paar Schiffe gefunden. Die Techniker versuchen, einige davon wieder flott zu machen.'*/,
-            /*LOCA: hr 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Vaša ekspedicija je */'pronašla staru tvrđavu koja je napuštena prije par godina'/* . U hangaru su pronađeni neki brodovi. Tehničari pokušavaju osposobiti te brodove za let.'*/,
+            /*'Naša ekspedicija je */'pronašla planet koji je skoro uništen u prijašnjim ratovima'/* . U njegovoj orbiti plutaju neki brodovi koje naši tehničari pokušavaju popraviti.'*/,
             /*'Našli smo */'staru piratsku stanicu'/* u kojoj su neki brodovi. Naši tehničari pokušavaju utvrditi jesu li još neki brodovi korisni ili ne.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -62,10 +62,10 @@ export const hr: ExpeditionMessages = {
         /*'Iako su prva skeniranja sektora bila dobra flota se nažalost */'vratila praznih ruku'/*.'*/,
         /*'Ekspedicija nije vratila ništa drugo osim nekih čudnih i malih stvorenja sa */'nepoznatog močvarnog planeta'/*.'*/,
         /*'Vaša ekspedicija je */'prikupila nova saznanja o praznini univerzuma'/* . Nije bilo čak niti jednog malo asteroida koji bi mogao učiniti ovu ekspediciju uzbudljivom.'*/,
-        /*LOCA: hr 'Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf */'die hypnotischen Muster'/* auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.'*/,
+        /*'Živo */'biće napravljeno od čiste energije se potrudilo'/* da svi članovi ekspedicije budu hipnotizirani tokom putovanja. Kada se većina njih osvijestila shvatili su da su potrošili previše deuterija i da se moraju vratiti nazad.'*/,
         /*'Zbog otkazivanja */'brodskog reaktora jednog od brodova skoro je došlo'/* do uništenja cijele flote. Na svu sreću tehničari su uspjeli spriječiti najgore. Dosta vremena je potrošeno na popravak i zbog toga se ekspedicija vratila bez rezultata.'*/,
         /*'Vasa ekspedicija je snimila */'prelijepe slike super nove'/*. Ništa novo nije moglo biti prikupljeno na ekspediciji osim dobre šanse da se pobijedi na takmičenju za "Najbolju sliku univerzuma".'*/,
-        /*LOCA: hr 'Deine Expeditionsflotte folgte einige Zeit seltsamen Signalen. Schließlich musste sie feststellen, dass die */'Signale zu einer uralten Sonde'/* gehören, die wohl vor einigen Generationen losgeschickt wurde, um fremde Spezies zu begrüßen. Die Sonde wurde geborgen und mehrere Museen deines Hauptplaneten haben schon Interesse daran verlauten lassen.'*/,
+        /*'Ekspedicijska */'flota je pratila čudan signal neko vrijeme'/* . Na kraju su oktrili da taj signal dolazi od stare sonde koju su poslale prijašnje generacije da dočekuje strane brodove. Sonda je sačuvana i neki muzeji na vašem matičnom planetu su pokazali interes za nju.'*/,
         /*'Sada znamo da te crvene */'anomalije klase 5'/* nemaju samo kaotične efekte za brodsku navigaciju nego i hipnotiziraju cijelu posadu. Ekspedicija nije vratila ništa natrag.'*/,
         /*'Vaša ekspedicija je naletjela u */'gravitacijsko polje neutronske'/* zvijezde i bilo joj je potrebno vremena da se oslobodi. Zbog toga je flota potrošila sav Deuterij i morala se vratiti bez rezultata.'*/,
         /*'Čudni računalni */'virus je zarazio brodsku navigaciju'/* ubrzo nakon počekta ekspedicije. To je uzrokovalo da se ekspedicijska flota vrti u krug. Suvišno je spominjati kako misija nije bila uspješna.'*/,
@@ -82,7 +82,7 @@ export const hr: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /*LOCA: hr 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
-        /*LOCA: hr 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Vaša ekspedicija je primila signal za hitne slučajeve. Ogroman transporter je upao u gravitacijsko polje jednog planetoida. Nakon to je transporter spašen njihov kapetan je izjavio da će */'osoba koja ih je spasila odsada biti njihov poseban klijent',
     ],
 
     [ExpeditionEventType.early]: [

@@ -13,7 +13,7 @@ export const el: ExpeditionMessages = {
             /*'Η εξερευνητική αποστολή ακολούθησε κάποιες */'παράξενες ενδείξεις που προέρχοταν από ένα αστεροϊδή'/* . Στο πυρήνα του, εντοπίστηκε αντιύλη. Η ερευνητές πήραν τον αστεροϊδή για να προσπαθήσουν να εξορύξουν την αντιύλη.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: el 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Η αποστολή εξερεύνησης, */'πραγματοποίησε επιτυχώς ένα πρωτότυπο πείραμα'/* ! Κατόρθωσε να εξορύξει αντιύλη από ένα αστέρι που έσβηνε.'*/,
             /*'Η αποστολή εξερεύνησης, */'εντόπισε ένα εγκαταλειμένο διαστημικό σταθμό'/* , ο οποίος περιφερόταν ανεξέλεγκτα στο διάστημα για αρκετό καιρό. Ο ίδιος ο σταθμός δεν είναι χρήσιμος, ωστώσο εντοπίστηκε ποσότητα αντιύλης στους αντιδραστίρες. Οι τεχνικοί προσπαθούν να περισυλλέξουν όσο το δυνατόν περισσότερη ποσότητα.'*/,
             /*TODO: el 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
@@ -34,7 +34,7 @@ export const el: ExpeditionMessages = {
             /*'Σε ένα */'μικρό φεγγάρι με δική του ατμόσφαιρα'/* , η αποστολή εντόπισε τεράστιες ποσότητες ακατέργαστων πόρων. Το πλήρωμα βρίσκεται στο έδαφος και προσπαθεί να φορτώσει αυτό το φυσικό θυσαυρό.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: el 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
+            /*'Ζώνες */'ορυχείων σε όλο το πλανήτη περιέχουν αναρίθμητους πόρους'/* . Τα σκάφη της αποστολής επιστρέφουν με τα αμπάρια τους γεμάτα!'*/,
             /*TODO: el 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) αποκτήθηκαν`, 'i'),
@@ -48,7 +48,7 @@ export const el: ExpeditionMessages = {
             /*'Εντοπίσαμε */'μια εγκαταλελειμένη βάση πειρατών'/* . Μερικά σκάφη βρίσκονται στα υπόστεγα. Οι τεχνικοί μας κάνουν τους απαραίτητους ελέγχους για να δουν αν μερικά από αυτά μπορούν να μας φανούν χρήσιμα ή όχι.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: el 'Unsere Expedition stieß auf eine */'alte automatische Schiffswerft'/*. Einige Schiffe sind noch in der Produktionsphase und unsere Techniker versuchen, die Energieversorgung der Werft wiederherzustellen.'*/,
+            /*'Η αποστολή εξερεύνησης, εντόπισε ένα */'παλαιό αυτοματοποιημένο ναυπηγείο'/* . Μερικά σκάφη βρίσκονται ακόμα στη γραμμή παραγωγής. Οι τεχνικοί προσπαθούν να θέσουν σε λειτουργία τις γεννήτριες του ναυπηγείου.'*/,
             /*'Εντοπίσαμε */'τα απομεινάρια μιας αρμάδας'/* . οι τεχνικοί πήγαν κατευθείαν στα πιο ανέπαφα σκάφη προσπαθώντας να τα θέσουν ξανά σε λειτουργία.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -156,8 +156,8 @@ export const el: ExpeditionMessages = {
             /*'Είναι ωραίο το συναίσθημα, να */'είμαστε οι πρώτοι που ταξιδευουμε'/* σε αυτό τον ανεξερεύνητο τομέα.'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: el 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: el 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*'Φαίνεται πως κανένας */'άνθρωπος δεν έχει έρθει σε αυτό το τμήμα του γαλαξία'/* ξανά.'*/,
+            /*'Εντοπίσαμε */'συντρίμμια από κάποια απαρχαιωμένα σκάφη'/* . Δεν είμαστε οι πρώτοι που φτάνουμε εδώ.'*/,
             /*TODO: el 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
