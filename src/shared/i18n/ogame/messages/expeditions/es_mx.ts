@@ -140,7 +140,7 @@ export const es_mx: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: es 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
-            /*LOCA: es 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*'Tuvimos dificultades para */'pronunciar correctamente el dialecto de una raza alienígena'/* . Nuestro diplomático gritó "¡Fuego!" en lugar de "¡Paz!".'*/,
             /*LOCA: es 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
