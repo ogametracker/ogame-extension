@@ -13,7 +13,7 @@ export const el: ExpeditionMessages = {
             /*'Η εξερευνητική αποστολή ακολούθησε κάποιες */'παράξενες ενδείξεις που προέρχοταν από ένα αστεροϊδή'/* . Στο πυρήνα του, εντοπίστηκε αντιύλη. Η ερευνητές πήραν τον αστεροϊδή για να προσπαθήσουν να εξορύξουν την αντιύλη.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: el 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Η αποστολή εξερεύνησης, */'πραγματοποίησε επιτυχώς ένα πρωτότυπο πείραμα'/* ! Κατόρθωσε να εξορύξει αντιύλη από ένα αστέρι που έσβηνε.'*/,
             /*'Η αποστολή εξερεύνησης, */'εντόπισε ένα εγκαταλειμένο διαστημικό σταθμό'/* , ο οποίος περιφερόταν ανεξέλεγκτα στο διάστημα για αρκετό καιρό. Ο ίδιος ο σταθμός δεν είναι χρήσιμος, ωστώσο εντοπίστηκε ποσότητα αντιύλης στους αντιδραστίρες. Οι τεχνικοί προσπαθούν να περισυλλέξουν όσο το δυνατόν περισσότερη ποσότητα.'*/,
             /*TODO: el 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
         ],
