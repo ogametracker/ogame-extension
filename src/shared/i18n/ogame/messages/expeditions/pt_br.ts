@@ -113,7 +113,7 @@ export const pt_br: ExpeditionMessages = {
             /*LOCA: pt-br 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pt-br 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'A sua expedição teve um */'encontro não muito agradável com alguns piratas'/* do espaço.'*/,
             /*LOCA: pt-br 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             /*'O */'sinal de emergência que a expedição recebeu era um engodo colocado'/* por uns piratas estelares. Não houve como evitar um confronto.'*/,
         ],
