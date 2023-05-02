@@ -13,7 +13,7 @@ export const nl: ExpeditionMessages = {
             /*'De expeditie */'volgde zeldzame signalen en ontdekte zo een asteroïde'/* . In de kern van de asteroïde zit een kleine hoeveelheid donkere materie verborgen. De asteroïde is binnenboord gehaald en de onderzoekers proberen nu de donkere materie vrij te krijgen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO: nl 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Onze expeditie */'volbrengt een uniek experiment'/*. We hebben donkere materie weten te verkrijgen uit een exploderende ster.'*/,
             /*'Onze expeditie */'heeft een eeuwenoud ruimtestation waargenomen'/* , het lijkt ongecontroleerd in de ruimte rond te zweven... Het station zelf mag dan verouderd zijn, in de reactor lag een voorraad donkere materie. Onze technici proberen zoveel mogelijk te bergen.'*/,
             /*'De expeditie rapporteert een bijzonder fenomeen. Hieruit verkrijgen we donkere materie */'in de energiebuffers van de schilden van ons schip'/* . Onze technici proberen dit te stabiliseren, zodat we de kostbare donkere materie kunnen bewaren.'*/,
         ],
@@ -74,7 +74,7 @@ export const nl: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /* TODO: nl 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'Het laatste bericht dat we ontvingen, was */'een bijzonder fraaie closeup van een zwart gat',
         /* TODO: nl 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
         /*'Een */'ontploffing van de hyperruimtemotor veroorzaakt een kettingreactie'/* van explosies die heel de vloot vernietigt.'*/,
         /* TODO: nl 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
@@ -113,7 +113,7 @@ export const nl: ExpeditionMessages = {
             /* TODO: nl 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO: nl 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Je expeditie had een */'onaangename ontmoeting met enkele ruimtepiraten',
             /* TODO: nl 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             /*'Het noodsignaal dat de expeditie volgde */'bleek in scene gezet te zijn door ruimtepiraten'/* . Een gevecht kon niet meer voorkomen worden.'*/,
         ],
@@ -134,7 +134,7 @@ export const nl: ExpeditionMessages = {
             /* TODO: nl 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO: nl 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'Een */'onbekende levensvorm valt onze expeditie'/* aan!'*/,
             /* TODO: nl 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
             /* TODO: nl 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
