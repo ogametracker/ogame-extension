@@ -110,6 +110,7 @@ class DebrisFieldReportDataModuleClass extends Vue {
 
         dailyResult.total.metal += report.metal;
         dailyResult.total.crystal += report.crystal;
+        dailyResult.total.deuterium += report.deuterium ?? 0;
 
         if (report.isExpeditionDebrisField) {
             dailyResult.expedition.metal += report.metal;
