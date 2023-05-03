@@ -45,7 +45,6 @@ export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
         data.serverSettings.crawlerProductionFactorPerUnit
         * crawlerCount
         * crawlerProductivity
-        * (1 + data.lifeformTechnologies.crawlerProductionBonus)
         * data.crawlerProductionSetting / 100;
 
     return Math.min(potentialCrawlerBoost, data.serverSettings.crawlerMaxProductionFactor);
