@@ -114,7 +114,7 @@ export const nl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Je expeditie had een */'onaangename ontmoeting met enkele ruimtepiraten',
-            /* TODO: nl 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'We liepen in een */'hinderlaag van een stel ruimterebellen'/* . Een gevecht was niet meer te voorkomen.'*/,
             /*'Het noodsignaal dat de expeditie volgde */'bleek in scene gezet te zijn door ruimtepiraten'/* . Een gevecht kon niet meer voorkomen worden.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -135,7 +135,7 @@ export const nl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Een */'onbekende levensvorm valt onze expeditie'/* aan!'*/,
-            /* TODO: nl 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Je expeditie */'is het territorium van onbekende, zeer agressieve en oorlogszuchtige'/* ruimtewezens binnen gedrongen.'*/,
             /* TODO: nl 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
