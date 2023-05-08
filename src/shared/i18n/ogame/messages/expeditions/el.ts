@@ -35,7 +35,7 @@ export const el: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Ζώνες */'ορυχείων σε όλο το πλανήτη περιέχουν αναρίθμητους πόρους'/* . Τα σκάφη της αποστολής επιστρέφουν με τα αμπάρια τους γεμάτα!'*/,
-            /*TODO: el 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Η αποστολή εξερεύνησης αναφέρει τον */'εντοπισμό ενός γιγαντιαίου διαστημικού ναυαγίου εξωγήινης προέλευσης'/* . Δεν μπορέσαμε να ανακαλύψουμε κάτι για τη τεχνιλογία τους, αλλά διαμελίζοντας το σκάφος στα κύρια διαμερίσματα του μπορέσαμε να πάρουμε κάποιους πόρους.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) αποκτήθηκαν`, 'i'),
     },
