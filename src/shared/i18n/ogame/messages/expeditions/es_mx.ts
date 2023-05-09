@@ -35,7 +35,7 @@ export const es_mx: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Un*/' cinturón de minerales alrededor de un planeta desconocido contiene incontables recursos'/* . ¡Las naves de la expedición están de vuelta y sus almacenes están llenos!'*/,
-            /*'Tu expedición informa del */'descubrimiento de una nave alienígena gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y extraer recursos útiles de ella.'*/,
+            /*'Tu expedición informa del */'descubrimiento de una nave alien gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y hacer algunos recursos útiles de ella.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Se han tomado (?<name>${resources.join('|')}) de (?<amount>.+)\\.`, 'i'),
     },
