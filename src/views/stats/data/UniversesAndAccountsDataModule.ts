@@ -13,6 +13,7 @@ import { ExpeditionDataModule } from './ExpeditionDataModule';
 import { DebrisFieldReportDataModule } from './DebrisFieldReportDataModule';
 import { EmpireDataModule } from './EmpireDataModule';
 import { ServerSettingsDataModule } from './ServerSettingsDataModule';
+import { MessageOgameMeta } from '@/shared/messages/Message';
 
 @Component
 class UniversesAndAccountsDataModuleClass extends Vue {
@@ -33,18 +34,28 @@ class UniversesAndAccountsDataModuleClass extends Vue {
     }
 
     public get currentAccount(): DbAccount {
-        const account = this.accounts.find(
-            a => a.serverId == GlobalOgameMetaData.serverId
-                && a.serverLanguage == GlobalOgameMetaData.language
-                && a.id == GlobalOgameMetaData.playerId
-        );
+        const accEqual = (a: {
+            serverId: number;
+            serverLanguage: string;
+            id: number;
+        }, b: MessageOgameMeta) =>
+            a.serverId == b.serverId
+            && a.serverLanguage == b.language
+            && a.id == b.playerId;
 
-        return account ?? {
-            serverId: GlobalOgameMetaData.serverId,
-            serverLanguage: GlobalOgameMetaData.language,
-            id: GlobalOgameMetaData.playerId,
-            name: GlobalOgameMetaData.playerId.toString(),
-        };
+        const account = this.accounts.find(a => accEqual(a, GlobalOgameMetaData));
+
+        if (account == null) {
+            return {
+                serverId: GlobalOgameMetaData.serverId,
+                serverLanguage: GlobalOgameMetaData.language,
+                id: GlobalOgameMetaData.playerId,
+                name: GlobalOgameMetaData.playerId.toString(),
+            };
+        }
+
+        account.linkedAccounts = (account.linkedAccounts ?? []).filter(acc => !accEqual(acc, GlobalOgameMetaData));
+        return account;
     }
 
     public get currentServer(): DbServer {
