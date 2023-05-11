@@ -182,7 +182,21 @@ export const en: SettingsTranslations = {
     },
 
     linkAccounts: {
-        header: 'Accounts linked with the currently shown account',
-        linkAccount: 'link another account:'
+        header: (account: string) => `Link accounts with the current account (${account})`,
+        descriptionHtml: (account: string) =>
+            `You should only link accounts if you want the OGame Tracker to consider data of the linked accounts as data of the current account (${account}).<br/>`
+            + `This is often the case when an account has been merged to another server and is handled as a separate account in the OGame Tracker.<br/><br/>`
+            + `Example: <br/>`
+            + `<ol>
+                    <li>the player "OGame Professional" is playing on the server "EN Milkyway"</li>
+                    <li>the server "EN Milkyway" becomes exodus universe during a merge</li>
+                    <li>the player "OGame Professional" merges their account to "EN Cartwheel"</li>   
+                    <li>after the merge, the OGame Tracker shows no expeditions from the original server "EN Milkyway" for the merged account</li>
+                    <li>in the OGame Tracker the old account "OGame Professional" on server "EN Milkyway" is linked to the new account "OGame Professional" on server "EN Cartwheel"</li>
+                    <li>expeditions that were sent on the old server "EN Milkyway" will now show up again for the merged account on "EN Cartwheel"</li>
+                </ol>
+            `,
+        linkAccount: 'link another account:',
+        linkedAccounts: 'Linked accounts:',
     },
 };

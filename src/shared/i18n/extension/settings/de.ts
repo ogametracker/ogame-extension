@@ -182,7 +182,22 @@ export const de: SettingsTranslations = {
     },
 
     linkAccounts: {
-        header: 'Mit dem aktuell angezeigten Account verknüpfte Accounts',
-        linkAccount: 'weiteren Account verknüpfen:'
+        header: (account: string) => `Accounts mit dem aktuellen Account (${account}) verknüpfen`,
+        descriptionHtml: (account: string) =>
+            `Hier sollten nur Accounts miteinander verknüpft werden, wenn die Daten der gewählten Accounts als Daten des aktuellen Accounts (${account}) behandelt werden sollen.<br/>`
+            + `Dies ist zum Beispiel gewünscht, wenn ein Account aufgrund einer Fusion von einem Server auf einen anderen verschoben wurde und somit im Tracker als separater Account behandelt wird, `
+            + `aber bspw. die Expeditionen des ursprügnlichen Accounts weiterhin angezeigt werden sollen.<br/><br/>`
+            + `Beispiel: <br/>`
+            + `<ol>
+                    <li>der Spieler "OGame Profi" spielt auf dem Server "DE Milchstraße"</li>
+                    <li>der Server "DE Milchstraße" wird nun Exodusuni bei einer Fusion</li>
+                    <li>der Spieler "OGame Profi" fusioniert also seinen Account nach "DE Wagenrad"</li>   
+                    <li>der OGame Tracker zeigt für den Account nach der Fusion keine Expeditionen mehr vom Ursprungsserver "DE Milchstraße"</li>
+                    <li>im OGame Tracker wird der Account "OGame Profi" vom Server "DE Milchstraße" mit dem Account vom Server "DE Wagenrad" verknüpft</li>
+                    <li>Expeditionen, die auf dem Ursprungsserver "DE Milchstraße" gesendet wurden, werden nun auch für den fusionierten Account auf dem Server "DE Wagenrad" angezeigt</li>
+                </ol>
+            `,
+        linkAccount: 'weiteren Account verknüpfen:',
+        linkedAccounts: 'Verknüpfte Accounts:',
     },
 };

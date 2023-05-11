@@ -35,7 +35,7 @@ export const el: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Ζώνες */'ορυχείων σε όλο το πλανήτη περιέχουν αναρίθμητους πόρους'/* . Τα σκάφη της αποστολής επιστρέφουν με τα αμπάρια τους γεμάτα!'*/,
-            /*TODO: el 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Η αποστολή εξερεύνησης αναφέρει τον */'εντοπισμό ενός γιγαντιαίου διαστημικού ναυαγίου εξωγήινης προέλευσης'/* . Δεν μπορέσαμε να ανακαλύψουμε κάτι για τη τεχνιλογία τους, αλλά διαμελίζοντας το σκάφος στα κύρια διαμερίσματα του μπορέσαμε να πάρουμε κάποιους πόρους.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) αποκτήθηκαν`, 'i'),
     },
@@ -114,7 +114,7 @@ export const el: ExpeditionMessages = {
             /*TODO: el 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: el 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Η αποστολή εξερεύνησης, */'είχε μια δυσάρεστη συνάντηση με διαστημικούς πειρατές',
             /*TODO: el 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             /*'Το σήμα κινδύνου που ακολουθήσαμε, ήταν δόλωμα για την */'ενέδρα που είχαν στήσει οι αστροπειρατές'/* . Η μάχη ήταν αναπόφευκτη.'*/,
         ],

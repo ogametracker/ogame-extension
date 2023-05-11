@@ -19,7 +19,7 @@ export const es_mx: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'¡Una */'espontanea deformación en el hiperespacio permitió'/* a tu expedición recolectar grandes cantidades de Materia Oscura!'*/,
-            /*LOCA: es 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Nuestra expedición hizo un primer contacto con una raza especial. Parecían como unas criaturas de energía, */'se llamaban a si mismos Legorianos'/* , fluyeron a través de las naves de la expedición y decidieron ayudar a nuestra especie poco desarrollada. ¡Un recipiente que contenía Materia Oscura fue materializada en el puente de la nave!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Se han tomado (?<name>${darkMatter}) de (?<amount>.+)\\.`, 'i'),
     },
@@ -35,7 +35,7 @@ export const es_mx: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Un*/' cinturón de minerales alrededor de un planeta desconocido contiene incontables recursos'/* . ¡Las naves de la expedición están de vuelta y sus almacenes están llenos!'*/,
-            /*'Tu expedición informa del */'descubrimiento de una nave alienígena gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y extraer recursos útiles de ella.'*/,
+            /*'Tu expedición informa del */'descubrimiento de una nave alien gigante averiada y abandonada'/* . No fueron capaces de aprender de sus tecnologías, pero fueron capaces de dividir la nave en sus componentes básicos y hacer algunos recursos útiles de ella.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`Se han tomado (?<name>${resources.join('|')}) de (?<amount>.+)\\.`, 'i'),
     },
@@ -76,7 +76,7 @@ export const es_mx: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*LOCA: es 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
         /*'Lo único que */'quedó de la expedición fue el siguiente mensaje'/* : zzzrrt ¡Madre mía! Krrrzzzzt Eso zrrrtrzt parece krgzzzz un krzzzzzzzztzzzz...'*/,
-        /*'La */'fusión del núcleo de la nave insignia produjo una reacción'/* en cadena que destruyó espectacularmente la flota entera.'*/,
+        /*'Una */'fusión del núcleo de la nave insignia produce una reacción'/* en cadena que destruye de una forma bastante espectacular la flota entera en expedición.'*/,
         /*'La flota en expedición */'no saltó de vuelta al vecindario'/* . Nuestros académicos están aún intentando encontrar que pasó, pero parece que la flota se perdió para siempre.'*/,
     ],
 

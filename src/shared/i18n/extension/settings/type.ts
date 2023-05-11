@@ -1,3 +1,5 @@
+import { DbAccount, DbServer } from "@/shared/db/schema/global";
+
 export interface SettingsTranslations {
     tabs: {
         dateRanges: string;
@@ -179,7 +181,9 @@ export interface SettingsTranslations {
     };
 
     linkAccounts: {
-        header: string;
+        header: (account: string) => string;
+        descriptionHtml: (account: string) => string;
+        linkedAccounts: string;
         linkAccount: string;
     };
 }
