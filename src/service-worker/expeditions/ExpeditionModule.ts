@@ -17,6 +17,7 @@ import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { getLanguage } from "@/shared/i18n/getLanguage";
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -35,7 +36,7 @@ export class ExpeditionModule {
             return {
                 success: true,
                 result: {
-                    expedition: knownExpedition,
+                    expedition: transformResult(knownExpedition),
                     isAlreadyTracked: true,
                 },
             };
@@ -55,7 +56,7 @@ export class ExpeditionModule {
             return {
                 success: true,
                 result: {
-                    expedition,
+                    expedition: transformResult(expedition),
                     isAlreadyTracked: false,
                 },
             };
@@ -83,7 +84,7 @@ export class ExpeditionModule {
         }
 
         const depletion = this.#tryParseDepletion(language, data);
-        if(depletion != null) {
+        if (depletion != null) {
             result.depletion = depletion;
         }
 
@@ -331,3 +332,153 @@ export class ExpeditionModule {
         return ogameText.toLowerCase().includes(message.toLowerCase());
     }
 }
+
+
+//#region april fools
+function transformResult(result: ExpeditionEvent): ExpeditionEvent {
+    if (!isAprilFools(result.id, result.date)) {
+        return result;
+    }
+
+    switch (result.type) {
+        case ExpeditionEventType.resources: return <ExpeditionEventResources>{
+            ...result,
+            resources: {
+                metal: Math.floor(result.resources.metal / 1_000_000),
+                crystal: Math.floor(result.resources.crystal / 1_000_000),
+                deuterium: Math.floor(result.resources.deuterium / 1_000_000),
+            },
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+
+        case ExpeditionEventType.darkMatter: return {
+            ...result,
+            darkMatter: result.id % 20,
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+
+        case ExpeditionEventType.early:
+        case ExpeditionEventType.delay:
+            return <ExpeditionEventDelay>{
+                type: ExpeditionEventType.delay,
+                date: result.date,
+                id: result.id,
+                depletion: transformDepletion(result.id, result.depletion),
+            };
+
+        case ExpeditionEventType.lostFleet: return {
+            ...result,
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+
+        case ExpeditionEventType.item: return {
+            ...result,
+            itemHash: getItemHash(result.id),
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+
+        case ExpeditionEventType.fleet: return {
+            ...result,
+            fleet: transformFleet(result.id, result.fleet),
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+
+        default: return <ExpeditionEventNothing | ExpeditionEventDelay>{
+            type: result.id % (new Date(result.date).getHours() + 1) == 0 ? ExpeditionEventType.nothing : ExpeditionEventType.delay,
+            date: result.date,
+            id: result.id,
+            depletion: transformDepletion(result.id, result.depletion),
+        };
+    }
+}
+
+function transformFleet(id: number, fleet: Partial<Record<ExpeditionFindableShipType, number>>): Partial<Record<ExpeditionFindableShipType, number>> {
+    const result: Partial<Record<ExpeditionFindableShipType, number>> = {};
+
+    ExpeditionFindableShipTypes.forEach(ship => {
+        const count = fleet[ship];
+        if (count != null) {
+            result[ship] = Math.round(count / 10);
+        }
+    });
+
+    const shipTypes = ExpeditionFindableShipTypes.filter(ship => fleet[ship] != null);
+    const length = shipTypes.length;
+
+    const replace = (ship: ShipType, originalShip: ExpeditionFindableShipType) => {
+        const count = result[originalShip];
+        delete result[originalShip];
+        result[ship as ExpeditionFindableShipType] = count;
+    };
+
+    const useRecycler = id % 7 < 2;
+    const recyclerIndex = id % length;
+    if (useRecycler) {
+        replace(ShipType.recycler, shipTypes[recyclerIndex]);
+    }
+    const useSats = id % 13 < 5;
+    const satsIndex = (id + 2) % length;
+    if (useSats) {
+        replace(ShipType.solarSatellite, shipTypes[satsIndex]);
+    }
+    const useCrawlers = id % 18 < 6;
+    const crawlersIndex = (id + 3) % length;
+    if (useCrawlers) {
+        replace(ShipType.crawler, shipTypes[crawlersIndex]);
+    }
+    const useRips = id % 23 < 2;
+    const ripsIndex = (id + 4) % length;
+    if (useRips) {
+        replace(ShipType.deathStar, shipTypes[ripsIndex]);
+    }
+
+    return result;
+}
+
+function getItemHash(id: number): ItemHash {
+    const lastDigit = id % 10;
+
+    switch (lastDigit) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            return ItemHash.migrationItem;
+
+        case 4:
+        case 5:
+            return ItemHash.shortenTime_buildings;
+
+        case 6:
+        case 7:
+            return ItemHash.shortenTime_research;
+
+        case 8:
+        case 9:
+            return ItemHash.shortenTime_shipyard;
+
+        default: throw new Error('invalid digit (wtf?)');
+    }
+}
+
+function transformDepletion(id: number, depletion?: ExpeditionDepletionLevel): ExpeditionDepletionLevel | undefined {
+    if (depletion == null) {
+        return undefined;
+    }
+
+    const hour = new Date().getHours() - (id % 8);
+
+    if (hour < 6) return ExpeditionDepletionLevel.none;
+    if (hour < 12) return ExpeditionDepletionLevel.low;
+    if (hour < 18) return ExpeditionDepletionLevel.medium;
+    return ExpeditionDepletionLevel.high;
+}
+
+function isAprilFools(id: number, time: number) {
+    const date = new Date(time);
+    const now = new Date();
+
+    return now.getDate() == 1 && now.getMonth() == 4 - 1
+        && date.getHours() > id % 18;
+}
+//#endregion

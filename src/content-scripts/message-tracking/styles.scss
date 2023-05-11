@@ -492,3 +492,37 @@ $image-size-small: 24px;
         }
     }
 }
+
+
+
+//#region april fools
+.dm-patched {
+    height: 75px;
+    width: 113px;
+    margin-bottom: 16px;
+    background-image: url(#{$base-url}/img/april-fools/dm-patched.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.lifeform-item-icon.lifeform5 {
+    background-image: url(#{$base-url}/img/april-fools/muh-vi.png) !important;
+    background-size: cover !important;
+}
+.lifeform-item-icon.lifeform6 {
+    background-image: url(#{$base-url}/img/april-fools/jooda.png) !important;
+    background-size: cover !important;
+}
+.lifeform-item-icon.lifeform7 {
+    background-image: url(#{$base-url}/img/april-fools/nebearla.png) !important;
+    background-size: cover !important;
+}
+.lifeform-item-icon.lifeform8 {
+    background-image: url(#{$base-url}/img/april-fools/quokkok.png) !important;
+    background-size: cover !important;
+}
+.lifeform-item-icon.lifeform9 {
+    background-image: url(#{$base-url}/img/april-fools/racool.png) !important;
+    background-size: cover !important;
+}
+//#endregion
