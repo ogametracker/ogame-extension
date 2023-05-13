@@ -122,7 +122,7 @@ export const hu: ExpeditionMessages = {
             /*'Az expedíció jelenti, */'hogy azonosítatlan kalózhajók ellen harcolnak',
         ],
         'fled-death-star': [
-            /*LOCA: hu 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Expedíciód során néhány kalózba botlottál, de */'Halálcsillagod elsöprő erejének köszönhetően a támadók elmenekültek',
         ],
     },
 
