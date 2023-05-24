@@ -1,255 +1,194 @@
 <template>
-    <grid-table
-        :items="items"
-        :footerItems="footerItems"
-        :columns="columns"
-        sticky="100%"
-        class="resource-production-bonuses"
-        :class="{ 'detailed-view': showDetailed }"
-    >
-        <template v-slot:[`header-${idSlotNameRegex}`]="{ match }">
-            <o-lifeform-technology :technology="parseIntSafe(match.groups.id)" size="48px" />
-        </template>
-
-        <template #header-planet>
-            <button v-text="'+/-'" @click="showDetailed = !showDetailed" />
-        </template>
-
-        <template #cell-planet="{ value }">
-            <span v-text="value.name" />
-            <span v-text="formatCoordinates(value.coordinates)" />
-        </template>
-
-        <template v-slot:[`(cell|footer)-(${idSlotNameRegex}|totalBonus)`]="{ value, item, match }">
-            <div class="production-breakdown">
-                <div class="row">
-                    <span />
-                    <span class="show-detailed" v-text="'Base'" /><!-- LOCA: -->
-                    <span class="show-detailed" v-text="'Buildings'" /><!-- LOCA: -->
-                    <span class="show-detailed" v-text="'Level'" /><!-- LOCA: -->
-                    <span class="show-not-detailed" />
-                </div>
-                <div v-for="resource in resourceKeys" class="row" :key="resource">
-                    <o-resource :resource="resource" size="24px" :fade="(item.bonuses[match.groups.id] || value).total[resource] == 0" />
-                    <decimal-number
-                        class="show-detailed"
-                        :value="(item.bonuses[match.groups.id] || value).base[resource] * 100"
-                        suffix="%"
-                        :fade-decimals="false"
-                    />
-                    <decimal-number
-                        class="show-detailed"
-                        :digits="3"
-                        :value="(item.bonuses[match.groups.id] || value).buildingBoost[resource] * 100"
-                        suffix="%"
-                        :fade-decimals="false"
-                    />
-                    <decimal-number
-                        class="show-detailed"
-                        :digits="3"
-                        :value="(item.bonuses[match.groups.id] || value).levelBoost[resource] * 100"
-                        suffix="%"
-                        :fade-decimals="false"
-                    />
-                    <decimal-number
-                        class="show-not-detailed"
-                        :digits="3"
-                        :value="(item.bonuses[match.groups.id] || value).total[resource] * 100"
-                        suffix="%"
-                        :fade-decimals="false"
-                    />
-                </div>
-            </div>
-        </template>
-    </grid-table>
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
     import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
+    import { ResourceProductionBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { LifeformTechnologiesByType, ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
+    import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
 
-    interface TechnologyBonusBreakdown {
+    type ResourceProductionBonusBreakdown = {
         base: Cost;
-        buildingBoost: Cost;
-        levelBoost: Cost;
+        level: Cost;
+        buildings: Cost;
+        buildingsBoost: number;
         total: Cost;
-    }
+    };
 
-    interface BonusOverviewItem {
-        planet: PlanetData;
-
-        bonuses: Partial<Record<LifeformTechnologyType, TechnologyBonusBreakdown>>;
-        totalBonus: TechnologyBonusBreakdown;
-    }
-
-    @Component({})
+    @Component({
+        components: {
+            LifeformBonusesBreakdown,
+        }
+    })
     export default class ResourceProduction extends Vue {
 
-        private readonly resourceKeys: (keyof Cost)[] = ['metal', 'crystal', 'deuterium', 'energy'];
-        private readonly LifeformTechnologies = ResourceProductionBonusLifeformTechnologies
-            .map(x => x.type)
-            .sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
+        private readonly bonusTypes: LifeformBonusesBreakdownType<keyof Cost>[] = [
+            {
+                key: 'metal',
+                label: 'LOCA: Metal',
+            },
+            {
+                key: 'crystal',
+                label: 'LOCA: Crystal',
+            },
+            {
+                key: 'deuterium',
+                label: 'LOCA: Deuterium',
+            },
+            {
+                key: 'energy',
+                label: 'LOCA: Energy',
+            },
+        ];
 
-        private readonly idSlotNameRegex = '(?<id>\\d+)';
-        private readonly parseIntSafe = parseIntSafe;
-        private showDetailed = false;
+        private readonly techs: LifeformTechnologyType[] = ResourceProductionBonusLifeformTechnologies.map(t => t.type);
 
-        private get columns(): GridTableColumn<keyof BonusOverviewItem | LifeformBuildingType | LifeformTechnologyType>[] {
-            return [
-                {
-                    key: 'planet',
-                    label: 'LOCA: Planet',
-                },
-                ...this.LifeformTechnologies.map<GridTableColumn<LifeformTechnologyType>>(t => ({
-                    key: t,
-                })),
-                {
-                    key: 'totalBonus',
-                    label: 'LOCA: total',
-                    class: 'total-cell',
-                    footerClass: 'total-cell',
-                },
-            ];
-        }
+        private get planets(): Record<number, LifeformBonusesPlanetBreakdown<keyof Cost>[]> {
+            return createMappedRecord(
+                EmpireDataModule.empire.planetOrder
+                    .map(id => EmpireDataModule.empire.planets[id])
+                    .filter(planet => !planet.isMoon) as PlanetData[],
+                planet => planet.id,
+                planet => this.techs.map<LifeformBonusesPlanetBreakdown<keyof Cost>>(techType => {
+                    const tech = LifeformTechnologiesByType[techType] as ResourceProductionBonusLifeformTechnology;
+                    const planetBonuses = this.getPlanetBonus(tech, planet);
 
-        private get planets(): PlanetData[] {
-            return EmpireDataModule.empire.planetOrder
-                .map(id => EmpireDataModule.empire.planets[id])
-                .filter(p => !p.isMoon) as PlanetData[];
-        }
-
-        private get items(): BonusOverviewItem[] {
-            return this.planets.map<BonusOverviewItem>(planet => {
-                const levelBoostFactor = planet.activeLifeform == LifeformType.none
-                    ? 0
-                    : getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-
-                const buildingBoostFactor = getPlanetLifeformTechnologyBoost(planet);
-
-                const bonuses: BonusOverviewItem['bonuses'] = {};
-                ResourceProductionBonusLifeformTechnologies.forEach(technology => {
-                    const level = planet.activeLifeformTechnologies.includes(technology.type)
-                        ? planet.lifeformTechnologies[technology.type]
-                        : 0;
-                    const baseBonus = technology.getProductionBonus(level);
-                    const buildingBoost = multiplyCost(baseBonus, buildingBoostFactor);
-                    const levelBoost = multiplyCost(baseBonus, levelBoostFactor);
-
-                    bonuses[technology.type] = {
-                        base: baseBonus,
-                        buildingBoost,
-                        levelBoost,
-                        total: addCost(baseBonus, buildingBoost, levelBoost),
+                    return {
+                        planet,
+                        technologyType: techType,
+                        bonuses: createRecord<keyof Cost, LifeformBonusesPlanetBreakdown['bonuses'][string]>(
+                            ['metal', 'crystal', 'deuterium', 'energy'],
+                            key => ({
+                                base: planetBonuses.base[key],
+                                buildings: planetBonuses.buildings[key],
+                                level: planetBonuses.level[key],
+                                total: planetBonuses.total[key],
+                            })),
                     };
-                });
-
-                const result: BonusOverviewItem = {
-                    planet,
-                    bonuses,
-                    totalBonus: {
-                        base: addCost(...Object.values(bonuses).map(b => b.base)),
-                        buildingBoost: addCost(...Object.values(bonuses).map(b => b.buildingBoost)),
-                        levelBoost: addCost(...Object.values(bonuses).map(b => b.levelBoost)),
-                        total: addCost(...Object.values(bonuses).map(b => b.total)),
-                    },
-                };
-                return result;
-            });
+                })
+            );
         }
 
-        private get footerItems(): [BonusOverviewItem] {
-            const items = this.items;
+        private get experience() {
+            return EmpireDataModule.empire.lifeformExperience;
+        }
 
-            const bonuses: BonusOverviewItem['bonuses'] = {};
-            ResourceProductionBonusLifeformTechnologies.forEach(technology => {
-                const baseBonus = addCost(
-                    ...items.map(item => item.bonuses[technology.type]!.base),
-                );
-                const buildingBoost = addCost(
-                    ...items.map(item => item.bonuses[technology.type]!.buildingBoost),
-                );
-                const levelBoost = addCost(
-                    ...items.map(item => item.bonuses[technology.type]!.levelBoost),
-                );
-
-                bonuses[technology.type] = {
-                    base: baseBonus,
-                    buildingBoost,
-                    levelBoost,
-                    total: addCost(baseBonus, buildingBoost, levelBoost),
+        private getPlanetBonus(tech: ResourceProductionBonusLifeformTechnology, planet: PlanetData): ResourceProductionBonusBreakdown {
+            if (planet.activeLifeform == LifeformType.none) {
+                return {
+                    base: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                    level: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                    buildings: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                    buildingsBoost: 0,
+                    total: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
                 };
-            });
+            }
 
-            const totalBonus = {
-                base: addCost(...Object.values(bonuses).map(b => b.base)),
-                buildingBoost: addCost(...Object.values(bonuses).map(b => b.buildingBoost)),
-                levelBoost: addCost(...Object.values(bonuses).map(b => b.levelBoost)),
-                total: addCost(...Object.values(bonuses).map(b => b.total)),
+            const baseBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type]);
+            const lifeformLevelBonus = multiplyCost(baseBonus, getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform]));
+            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const lifeformBuildingBonus = multiplyCost(baseBonus, buildingsBoost);
+
+            return {
+                base: baseBonus,
+                level: lifeformLevelBonus,
+                buildings: lifeformBuildingBonus,
+                buildingsBoost,
+                total: addCost(baseBonus, lifeformLevelBonus, lifeformBuildingBonus),
             };
-
-            return [{
-                planet: null!,
-                bonuses,
-                totalBonus,
-            }];
         }
 
-        private formatCoordinates(coords: Coordinates) {
-            return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
-        }
+        /*
+
+                private readonly percentageFormat: Intl.NumberFormatOptions = {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3,
+                };
+                private readonly smallPercentageFormat: Intl.NumberFormatOptions = {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                };
+
+                private readonly getLifeformLevelTechnologyBonus = getLifeformLevelTechnologyBonus;
+                private readonly resources: (keyof Cost)[] = ['metal', 'crystal', 'deuterium', 'energy'];
+
+                private readonly expandedPlanets: Partial<Record<number, boolean>> = {};
+
+                private togglePlanet(id: number) {
+                    Vue.set(this.expandedPlanets, id, !(this.expandedPlanets[id] ?? false));
+                }
+
+                private get planets() {
+                    return Object.values(EmpireDataModule.empire.planets)
+                        .filter(planet => !planet.isMoon) as PlanetData[];
+                }
+
+                private formatCoordinates(coords: Coordinates) {
+                    return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
+                }
+
+                private readonly LifeformTechnologySlots = LifeformTechnologySlots;
+
+
+                private get levels(): Record<ValidLifeformType, number> {
+                    return createRecord(ValidLifeformTypes, type => getLifeformLevel(this.experience[type]));
+                }
+
+                private get totalBonus(): ResourceProductionBonusBreakdown {
+                    return this.planets.reduce<ResourceProductionBonusBreakdown>((total, cur) => {
+                        const planet = this.getTotalPlanetBonus(cur);
+                        return {
+                            base: addCost(total.base, planet.base),
+                            level: addCost(total.level, planet.level),
+                            buildings: addCost(total.buildings, planet.buildings),
+                            total: addCost(total.total, planet.total),
+                            buildingsBoost: 0,
+                        };
+                    }, {
+                        base: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        level: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        buildings: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        buildingsBoost: 0,
+                        total: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                    });
+                }
+
+                private getProductionResearches(planet: PlanetData): ResourceProductionBonusLifeformTechnology[] {
+                    return ResourceProductionBonusLifeformTechnologies
+                        .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
+                        .sort((a, b) => LifeformTechnologySlots[a.type] - LifeformTechnologySlots[b.type]);
+                }
+
+                private getTotalPlanetBonus(planet: PlanetData): ResourceProductionBonusBreakdown {
+                    const breakdowns = this.getProductionResearches(planet)
+                        .map(tech => this.getPlanetBonus(tech, planet));
+
+                    return breakdowns.reduce<ResourceProductionBonusBreakdown>((total, cur) => {
+                        return {
+                            base: addCost(total.base, cur.base),
+                            level: addCost(total.level, cur.level),
+                            buildings: addCost(total.buildings, cur.buildings),
+                            total: addCost(total.total, cur.total),
+                            buildingsBoost: total.buildingsBoost,
+                        };
+                    }, {
+                        base: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        level: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        buildings: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        total: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+                        buildingsBoost: getPlanetLifeformTechnologyBoost(planet),
+                    });
+                }
+
+                */
     }
 </script>
-<style lang="scss" scoped>
-    .production-breakdown {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 4px;
-        width: 100%;
-
-        .row {
-            display: contents;
-        }
-    }
-
-    .resource-production-bonuses {
-        &.detailed-view::v-deep {
-            .production-breakdown {
-                grid-template-columns: auto repeat(3, 1fr);
-            }
-
-            .show-not-detailed {
-                display: none;
-            }
-        }
-
-        &:not(.detailed-view)::v-deep {
-            .show-detailed {
-                display: none;
-            }
-        }
-
-        &::v-deep {
-            .grid-table-body,
-            .grid-table-foot {
-                .grid-table-cell {
-                    border-left: 1px solid rgba(var(--color), 0.3);
-
-                    &.total-cell {
-                        border-left: 3px double rgba(var(--color), 0.7);
-                    }
-                }
-            }
-        }
-    }
-</style>

@@ -40,10 +40,7 @@ import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
 import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
 import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
 import viewsempirelifeformsbonusbreakdownIndex from '@stats/views/empire/lifeforms/bonus-breakdown/Index.vue';
-import viewsempirelifeformsbonusbreakdownDefenseStats from '@stats/views/empire/lifeforms/bonus-breakdown/Defense-Stats.vue';
-import viewsempirelifeformsbonusbreakdownExpeditions from '@stats/views/empire/lifeforms/bonus-breakdown/Expeditions.vue';
 import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
-import viewsempirelifeformsbonusbreakdownShipStats from '@stats/views/empire/lifeforms/bonus-breakdown/Ship-Stats.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
 import viewsempirelifeformsdiscoveriesartifactsIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/Index.vue';
 import viewsempirelifeformsdiscoveriesartifactsamountIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Index.vue';
@@ -451,24 +448,9 @@ const routes: RouteConfig[] = [
                                 component: viewsempirelifeformsbonusbreakdownIndex,
                                 children: [
                                     {
-                                        path: "defense-stats",
-                                        name: "empire/lifeforms/bonus-breakdown/defense-stats",
-                                        component: viewsempirelifeformsbonusbreakdownDefenseStats
-                                    },
-                                    {
-                                        path: "expeditions",
-                                        name: "empire/lifeforms/bonus-breakdown/expeditions",
-                                        component: viewsempirelifeformsbonusbreakdownExpeditions
-                                    },
-                                    {
                                         path: "resource-production",
                                         name: "empire/lifeforms/bonus-breakdown/resource-production",
                                         component: viewsempirelifeformsbonusbreakdownResourceProduction
-                                    },
-                                    {
-                                        path: "ship-stats",
-                                        name: "empire/lifeforms/bonus-breakdown/ship-stats",
-                                        component: viewsempirelifeformsbonusbreakdownShipStats
                                     }
                                 ]
                             },
