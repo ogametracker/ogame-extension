@@ -43,7 +43,7 @@
                         <div v-for="type in types" :key="type.key" class="bonus" v-text="'LOCA: Bonus'" />
                     </div>
 
-                    <div v-for="tech in technologies" :key="tech" class="tech-row">
+                    <div v-for="tech in technologiesSorted" :key="tech" class="tech-row">
                         <template v-if="planet.activeLifeformTechnologies.includes(tech) && planet.lifeformTechnologies[tech] > 0">
                             <div class="slot" v-text="LifeformTechnologySlots[tech]" />
                             <div class="tech">
@@ -142,6 +142,10 @@
 
         @Prop({ required: true, type: Array as PropType<LifeformTechnologyType[]> })
         private technologies!: LifeformTechnologyType[];
+
+        private get technologiesSorted(): LifeformTechnologyType[] {
+            return [...this.technologies].sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
+        }
 
         private readonly smallPercentageFormat: Intl.NumberFormatOptions = {
             minimumFractionDigits: 1,
