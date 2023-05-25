@@ -15,15 +15,19 @@
                     label: 'LOCA: Production Bonuses',
                 },
                 {
-                    to: { name: 'empire/lifeforms/bonus-breakdown/expeditions' },
-                    label: 'LOCA: Expedition Bonuses',
+                    to: { name: 'empire/lifeforms/bonus-breakdown/expedition-finds' },
+                    label: 'LOCA: Expedition Find Bonuses',
                 },
                 {
-                    to: { name: 'empire/lifeforms/bonus-breakdown/ship-stats' },
+                    to: { name: 'empire/lifeforms/bonus-breakdown/expedition-fleet-speed' },
+                    label: 'LOCA: Expedition Arrival Speed Bonuses',
+                },
+                {
+                    to: { name: 'empire/lifeforms/bonus-breakdown/ships' },
                     label: 'LOCA: Ship Bonuses',
                 },
                 {
-                    to: { name: 'empire/lifeforms/bonus-breakdown/defense-stats' },
+                    to: { name: 'empire/lifeforms/bonus-breakdown/defenses' },
                     label: 'LOCA: Defense Bonuses',
                 },
                 {
@@ -47,10 +51,6 @@
                     label: 'LOCA: Crawlers',
                 },
                 {
-                    to: { name: 'empire/lifeforms/bonus-breakdown/player-class' },
-                    label: 'LOCA: Player Classes',
-                },
-                {
                     to: { name: 'empire/lifeforms/bonus-breakdown/den-capacity' },
                     label: 'LOCA: Den Capacity',
                 },
@@ -61,6 +61,10 @@
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/discovery-missions' },
                     label: 'LOCA: Discovery Missions',
+                },
+                {
+                    to: { name: 'empire/lifeforms/bonus-breakdown/player-class' },
+                    label: 'LOCA: Player Classes',
                 },
             ];
         }

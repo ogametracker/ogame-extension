@@ -1,7 +1,10 @@
 <template>
     <div class="lifeform-bonus-breakdown" :style="`--bonus-types: ${types.length}`">
         <div class="header-row">
-            <div class="title" v-text="'LOCA: Resource Production bonuses'" />
+            <div class="title">
+                <slot v-if="$scopedSlots.header != null" name="header" />
+                <span v-else v-text="header" />
+            </div>
 
             <div v-for="type in types" :key="type.key" class="partial-bonus">
                 <div class="title" v-text="type.label" />
@@ -133,6 +136,9 @@
 
     @Component({})
     export default class LifeformBonusesBreakdown extends Vue {
+
+        @Prop({ required: false, type: String, default: () => '' })
+        private header!: string;
 
         @Prop({ required: true, type: Array as PropType<LifeformBonusesBreakdownType[]> })
         private types!: LifeformBonusesBreakdownType[];
@@ -330,22 +336,26 @@
             flex-direction: column;
             align-items: end;
 
-            > * {
+            * {
                 padding: 0;
             }
         }
 
         .title {
             grid-column: 1 / span 2;
+
+            * {
+                padding: 0;
+            }
         }
     }
 
     .planet-row {
         display: contents;
-        --opacity: 0.4;
+        --opacity: 0.3;
 
         &:nth-of-type(odd) {
-            --opacity: 0.35;
+            --opacity: 0.25;
         }
 
         .planet-header-row {
@@ -371,10 +381,6 @@
 
     .tech-header-row {
         display: contents;
-
-        > * {
-            background: rgba(var(--color), 0.25);
-        }
     }
 
     .tech {
@@ -397,5 +403,6 @@
 
     .decimal-number {
         align-items: end !important;
+        padding: 0;
     }
 </style>

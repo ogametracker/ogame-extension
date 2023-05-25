@@ -18,7 +18,7 @@ import { ResearchAI } from "./humans/ResearchAI";
 import { RobotAssistants } from "./humans/RobotAssistants";
 import { StealthFieldGenerator } from "./humans/StealthFieldGenerator";
 import { Supercomputer } from "./humans/Supercomputer";
-import { BuildingCostAndTimeReductionLifeformTechnology, ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, DenCapacityBonusLifeformTechnology, ExpeditionBonusLifeformTechnology, ExpeditionEventProbabilityBonusLifeformTechnology, FleetFuelReturnLifeformTechnology, FuelConsumptionReductionLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, StatsBonusLifeformTechnology } from "./interfaces";
+import { BuildingCostAndTimeReductionLifeformTechnology, ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, DenCapacityBonusLifeformTechnology, ExpeditionBonusLifeformTechnology, ExpeditionEventProbabilityBonusLifeformTechnology, FleetFuelReturnLifeformTechnology, FleetSpeedBonusLifeformTechnology, FuelConsumptionReductionLifeformTechnology, PhalanxRangeBonusLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, StatsBonusLifeformTechnology } from "./interfaces";
 import { EfficientSwarmIntelligence } from "./kaelesh/EfficientSwarmIntelligence";
 import { EnhancedSensorTechnology } from "./kaelesh/EnhancedSensorTechnology";
 import { GravitationSensors } from "./kaelesh/GravitationSensors";
@@ -253,7 +253,7 @@ export const DenCapacityBonusLifeformTechnologies = Object.values(DenCapacityBon
 
 export const ExpeditionBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [    ],
+    [LifeformType.humans]: [],
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [
@@ -268,7 +268,7 @@ export const ExpeditionBonusLifeformTechnologies = Object.values(ExpeditionBonus
 
 export const ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionEventProbabilityBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [    ],
+    [LifeformType.humans]: [],
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [
@@ -276,6 +276,32 @@ export const ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform: Reco
     ],
 };
 export const ExpeditionEventProbabilityBonusLifeformTechnologies = Object.values(ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+
+
+export const PhalanxRangeBonusLifeformTechnologiesByLifeform: Record<LifeformType, PhalanxRangeBonusLifeformTechnology[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [
+        InterplanetaryAnalysisNetwork,
+    ],
+};
+export const PhalanxRangeBonusLifeformTechnologies = Object.values(PhalanxRangeBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+
+
+export const FleetSpeedBonusLifeformTechnologiesByLifeform: Record<LifeformType, FleetSpeedBonusLifeformTechnology[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [
+        IntergalacticEnvoys,
+    ],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [],
+    [LifeformType.kaelesh]: [
+        TelekineticDrive,
+    ],
+};
+export const FleetSpeedBonusLifeformTechnologies = Object.values(FleetSpeedBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
 
 export const LifeformTechnologiesByType: Record<LifeformTechnologyType, LifeformTechnology> = {

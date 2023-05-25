@@ -1,7 +1,8 @@
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnology } from "../LifeformTechnology";
+import { PhalanxRangeBonusLifeformTechnology } from "../interfaces";
 
-class InterplanetaryAnalysisNetworkClass extends LifeformTechnology {
+class InterplanetaryAnalysisNetworkClass extends LifeformTechnology implements PhalanxRangeBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +22,11 @@ class InterplanetaryAnalysisNetworkClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+
+    getPhalanxRangeBonus(level: number): number {
+        const bonusPerLevel = 0.00_6; //0.6%
+        return bonusPerLevel * level;
     }
 
     public get type(): LifeformTechnologyType {

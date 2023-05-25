@@ -16,7 +16,7 @@
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown' },
-                    label: 'LOCA: Technology Bonuses',
+                    label: 'LOCA: Research Bonuses',
                 },
                 {
                     to: { name: 'empire/lifeforms/progress' },

@@ -8,6 +8,7 @@ import { ShipType } from "../../ships/ShipType";
 import { CostAndTimeReduction } from "../common-interfaces";
 import { LifeformTechnologyType } from "../LifeformTechnologyType";
 import { LifeformTechnology } from "./LifeformTechnology";
+import { FleetMissionType } from "../../fleets/FleetMissionType";
 
 export interface ResourceProductionBonusLifeformTechnology extends LifeformTechnology {
     getProductionBonus(level: number): Cost;
@@ -67,8 +68,16 @@ export interface ExpeditionEventProbabilityBonusLifeformTechnology extends Lifef
     getExpeditionEventProbabilityBonus(type: ExpeditionEventType, level: number): number;
 }
 
+
+export interface PhalanxRangeBonusLifeformTechnology extends LifeformTechnology {
+    getPhalanxRangeBonus(level: number): number;
+}
+export interface FleetSpeedBonusLifeformTechnology extends LifeformTechnology {
+    appliesTo(type: FleetMissionType): boolean;
+    getFleetSpeedBonus(mission: FleetMissionType, level: number): number;
+}
+
 //TODO: intergalactic envoys => 11201
 //TODO: Expedition speed booster => 14210
-//TODO: Phalanx range booster => 14208
 
 //TODO: max bonuses in interface or by interface type? => remove from actual implementations because they should be global

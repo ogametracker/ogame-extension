@@ -1,7 +1,9 @@
+import { FleetMissionType } from "../../../fleets/FleetMissionType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnology } from "../LifeformTechnology";
+import { FleetSpeedBonusLifeformTechnology } from "../interfaces";
 
-class IntergalacticEnvoysClass extends LifeformTechnology {
+class IntergalacticEnvoysClass extends LifeformTechnology implements FleetSpeedBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +23,23 @@ class IntergalacticEnvoysClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    appliesTo(type: FleetMissionType): boolean {
+        return type == FleetMissionType.searchForLifeforms;
+    }
+
+    getFleetSpeedBonus(mission: FleetMissionType, level: number): number {
+        if(!this.appliesTo(mission)) {
+            return 0;
+        }
+
+        if(level == 1) {
+            return 0;
+        }
+
+        const bonusPerLevel = 0.01; //1%
+        return bonusPerLevel * level;
     }
 
     public get type(): LifeformTechnologyType {

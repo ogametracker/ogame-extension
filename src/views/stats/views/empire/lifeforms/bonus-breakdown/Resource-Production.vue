@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :header="'LOCA: Resource Production bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
