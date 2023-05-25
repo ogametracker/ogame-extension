@@ -16,7 +16,7 @@
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown' },
-                    label: 'LOCA: Research Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.researchBonuses,
                 },
                 {
                     to: { name: 'empire/lifeforms/progress' },

@@ -12,59 +12,59 @@
             return [
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/resource-production' },
-                    label: 'LOCA: Production Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.production.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/expedition-finds' },
-                    label: 'LOCA: Expedition Find Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionFinds.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/expedition-fleet-speed' },
-                    label: 'LOCA: Expedition Arrival Speed Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionSpeed.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/ships' },
-                    label: 'LOCA: Ship Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/defenses' },
-                    label: 'LOCA: Defense Bonuses',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.defenses.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/fuel-consumption' },
-                    label: 'LOCA: Fuel Consumption',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.fuelConsumption.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/fleet-fuel-return' },
-                    label: 'LOCA: Fleet Fuel Return',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.fuelReturn.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/building-cost-time' },
-                    label: 'LOCA: Building Cost & Time',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.buildingCostTime.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/research-cost-time' },
-                    label: 'LOCA: Research Cost & Time',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/crawlers' },
-                    label: 'LOCA: Crawlers',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.crawlers.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/den-capacity' },
-                    label: 'LOCA: Den Capacity',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.denCapacity.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/phalanx-range' },
-                    label: 'LOCA: Phalanx Range',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.phalanxRange.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/discovery-missions' },
-                    label: 'LOCA: Discovery Missions',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.discoveryMissions.header,
                 },
                 {
                     to: { name: 'empire/lifeforms/bonus-breakdown/player-class' },
-                    label: 'LOCA: Player Classes',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.header,
                 },
             ];
         }

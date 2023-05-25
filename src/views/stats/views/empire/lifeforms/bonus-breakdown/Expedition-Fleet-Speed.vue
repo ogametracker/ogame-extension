@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Expedition arrival speed bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -7,8 +7,8 @@
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType, ValidLifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { FleetSpeedBonusLifeformTechnology, PhalanxRangeBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
-    import { FleetSpeedBonusLifeformTechnologies, PhalanxRangeBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { FleetSpeedBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { FleetSpeedBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
@@ -35,7 +35,7 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<'speed'>[] = [
             {
                 key: 'speed',
-                label: 'LOCA: Speed Bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionSpeed.bonus,
             },
         ];
 

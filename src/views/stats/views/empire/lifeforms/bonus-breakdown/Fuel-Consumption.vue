@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Fuel consumption'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -34,7 +34,7 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<'fuelConsumption'>[] = [
             {
                 key: 'fuelConsumption',
-                label: 'LOCA: Fuel Consumption',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.fuelConsumption.header,
             },
         ];
 

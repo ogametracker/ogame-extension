@@ -23,6 +23,7 @@ import { de as notifications } from './notifications/de';
 import { de as tools } from './tools/de';
 
 import { de as excelExport } from './excelExport/de';
+import { de as playerClasses } from './playerClasses/de';
 
 export const de: ExtensionTranslations = {
     ogame: {
@@ -53,5 +54,6 @@ export const de: ExtensionTranslations = {
         tools,
 
         excelExport,
+        playerClasses,
     },
 };

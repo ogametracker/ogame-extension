@@ -5,4 +5,5 @@ export const fr: ResourceTranslations = {
     [ResourceType.metal]: 'Métal',
     [ResourceType.crystal]: 'Cristal',
     [ResourceType.deuterium]: 'Deutérium',
+    energy: 'Énergie',
 };

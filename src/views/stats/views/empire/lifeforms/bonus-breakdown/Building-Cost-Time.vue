@@ -7,7 +7,6 @@
         <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
-                    <span v-text="'LOCA: Building cost and time reduction'" />
                     <span>
                         <o-building :building="building" class="mr-2" />
                         <span v-text="$i18n.$t.ogame.buildings[building]" />
@@ -57,11 +56,11 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof Bonuses>[] = [
             {
                 key: 'cost',
-                label: 'LOCA: Cost',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.buildingCostTime.cost,
             },
             {
                 key: 'time',
-                label: 'LOCA: Time',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.buildingCostTime.time,
             },
         ];
 

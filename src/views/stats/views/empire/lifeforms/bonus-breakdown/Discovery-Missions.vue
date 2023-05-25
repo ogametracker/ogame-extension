@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Lifeform discovery speed bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -35,7 +35,7 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<'speed'>[] = [
             {
                 key: 'speed',
-                label: 'LOCA: Speed Bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.discoveryMissions.header,
             },
         ];
 

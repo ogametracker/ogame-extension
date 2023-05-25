@@ -7,7 +7,6 @@
         <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
-                    <span v-text="'LOCA: Ship stats bonuses'" />
                     <span>
                         <o-ship :ship="ship" class="mr-2" />
                         <span v-text="$i18n.$t.ogame.ships[ship]" />
@@ -59,23 +58,23 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof StatsBonuses>[] = [
             {
                 key: 'armor',
-                label: 'LOCA: Armor',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.armor,
             },
             {
                 key: 'shield',
-                label: 'LOCA: Shield',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.shield,
             },
             {
                 key: 'damage',
-                label: 'LOCA: Damage',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.damage,
             },
             {
                 key: 'cargo',
-                label: 'LOCA: Cargo',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.cargo,
             },
             {
                 key: 'speed',
-                label: 'LOCA: Speed',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.speed,
             },
         ];
 

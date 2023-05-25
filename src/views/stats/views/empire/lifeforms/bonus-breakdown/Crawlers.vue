@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Crawler bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -38,11 +38,11 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof Bonuses>[] = [
             {
                 key: 'production',
-                label: 'LOCA: Production Bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.crawlers.productionBonus,
             },
             {
                 key: 'energyConsumption',
-                label: 'LOCA: Energy Consumption',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.crawlers.energyConsumption,
             },
         ];
 

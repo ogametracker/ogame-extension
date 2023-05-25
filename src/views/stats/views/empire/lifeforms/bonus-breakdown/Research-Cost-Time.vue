@@ -1,19 +1,18 @@
 <template>
     <div>
         <select v-model="research" style="display: block; margin-bottom: 4px">
-            <optgroup :label="'LOCA: Researches'">
+            <optgroup :label="$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.researches">
                 <option v-for="research in Researches" :key="research" :value="research" v-text="$i18n.$t.ogame.research[research]" />
             </optgroup>
-            <option value="lifeform-researches" v-text="'LOCA: Lifeform Researches'" />
+            <option value="lifeform-researches" v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
         </select>
 
         <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start" v-if="research == 'lifeform-researches'">
-                    <span v-text="'LOCA: Lifeform research cost and time reduction'" />
+                    <span v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: start" v-else>
-                    <span v-text="'LOCA: Research cost and time reduction'" />
                     <span>
                         <o-research :research="research" class="mr-2" />
                         <span v-text="$i18n.$t.ogame.research[research]" />
@@ -63,11 +62,11 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof Bonuses>[] = [
             {
                 key: 'cost',
-                label: 'LOCA: Cost',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.buildingCostTime.cost,
             },
             {
                 key: 'time',
-                label: 'LOCA: Time',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.buildingCostTime.time,
             },
         ];
 

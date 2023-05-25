@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Expedition find bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -41,19 +41,19 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof ExpeditionBonuses>[] = [
             {
                 key: 'resources',
-                label: 'LOCA: Resources',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionFinds.resources,
             },
             {
                 key: 'ships',
-                label: 'LOCA: Ships',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionFinds.ships,
             },
             {
                 key: 'darkMatter',
-                label: 'LOCA: Dark Matter',
+                label: this.$i18n.$t.ogame.premium.darkMatter,
             },
             {
                 key: 'fleetLoss',
-                label: 'LOCA: Fleet Loss',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.expeditionFinds.fleetLoss,
             },
         ];
 

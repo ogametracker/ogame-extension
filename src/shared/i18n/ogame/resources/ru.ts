@@ -5,4 +5,5 @@ export const ru: ResourceTranslations = {
     [ResourceType.metal]: 'Металл',
     [ResourceType.crystal]: 'Кристалл',
     [ResourceType.deuterium]: 'Дейтерий',
+    energy: 'Энергия',
 };

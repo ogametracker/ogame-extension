@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Resource Production bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -34,19 +34,19 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof Cost>[] = [
             {
                 key: 'metal',
-                label: 'LOCA: Metal',
+                label: this.$i18n.$t.ogame.resources.metal,
             },
             {
                 key: 'crystal',
-                label: 'LOCA: Crystal',
+                label: this.$i18n.$t.ogame.resources.crystal,
             },
             {
                 key: 'deuterium',
-                label: 'LOCA: Deuterium',
+                label: this.$i18n.$t.ogame.resources.deuterium,
             },
             {
                 key: 'energy',
-                label: 'LOCA: Energy',
+                label: this.$i18n.$t.ogame.resources.energy,
             },
         ];
 

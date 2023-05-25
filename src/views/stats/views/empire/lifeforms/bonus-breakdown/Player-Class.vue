@@ -1,7 +1,7 @@
 <template>
     <div>
         <select v-model.number="playerClass" style="display: block; margin-bottom: 4px">
-            <option v-for="playerClass in PlayerClasses" :key="playerClass" :value="playerClass" v-text="`LOCA: ${playerClass}`" />
+            <option v-for="playerClass in PlayerClasses" :key="playerClass" :value="playerClass" v-text="$i18n.$t.extension.playerClasses[playerClass]" />
         </select>
 
         <grid-table inline :columns="classBonusesColumns" :items="classBonusesRows">
@@ -17,7 +17,7 @@
 
         <hr />
 
-        <lifeform-bonuses-breakdown :header="'LOCA: Class bonus'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
     </div>
 </template>
 
@@ -89,37 +89,37 @@
             const factor = 1 + classBonus;
             return [
                 {
-                    label: 'LOCA: Production bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.productionBonus,
                     base: this.serverSettings.playerClasses.collector.productionFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.productionFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: energy-production-bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.energyProductionBonus,
                     base: this.serverSettings.playerClasses.collector.energyProductionFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.energyProductionFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: transporter-speed-bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.transporterSpeedBonus,
                     base: this.serverSettings.playerClasses.collector.tradingShips.speedFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.tradingShips.speedFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: transporter-cargo capacity bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.transporterCargoBonus,
                     base: this.serverSettings.playerClasses.collector.tradingShips.cargoCapacityFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.tradingShips.cargoCapacityFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: crawler-production-bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.crawlerProductionBonus,
                     base: this.serverSettings.playerClasses.collector.crawlers.productionFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.crawlers.productionFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: geologist-crawler-amount-bonus',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.collector.geologistCrawlerAmountBonus,
                     base: this.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
                     actual: this.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus * factor,
                     isPercentage: true,
@@ -131,37 +131,37 @@
             const factor = 1 + classBonus;
             return [
                 {
-                    label: 'LOCA: Research Duration',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.researchDuration,
                     base: -this.serverSettings.playerClasses.discoverer.researchSpeedFactor,
                     actual: -this.serverSettings.playerClasses.discoverer.researchSpeedFactor * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Increased Expedition Finds',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.increasedExpeditionFinds,
                     base: this.serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
                     actual: this.serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus * factor * 3, //TODO: fix formula when discoverer bonus formula fixed
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Larger Planets on Colonization',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.largerPlanets,
                     base: this.serverSettings.playerClasses.discoverer.planetSizeFactorBonus,
                     actual: this.serverSettings.playerClasses.discoverer.planetSizeFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Additional Expedition Slots',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.additionalExpeditionSlots,
                     base: this.serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
                     actual: Math.trunc(this.serverSettings.playerClasses.discoverer.bonusExpeditionSlots * factor),
                     isPercentage: false,
                 },
                 {
-                    label: 'LOCA: Reduced Chance of Combats on Expeditions',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.reducedExpeditionCombatChance,
                     base: -0.5, //TODO: value not in server settings
                     actual: -0.5 * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Increased Phalanx Range',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.phalanxRange,
                     base: this.serverSettings.playerClasses.discoverer.phalanxRangeFactorBonus,
                     actual: this.serverSettings.playerClasses.discoverer.phalanxRangeFactorBonus * factor,
                     isPercentage: true,
@@ -173,43 +173,43 @@
             const factor = 1 + classBonus;
             return [
                 {
-                    label: 'LOCA: Increased Speed for Combat Ships',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.combatShipSpeed,
                     base: this.serverSettings.playerClasses.general.combatShipSpeedFactorBonus,
                     actual: this.serverSettings.playerClasses.general.combatShipSpeedFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Increased Speed for Recyclers',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.recyclerSpeed,
                     base: this.serverSettings.playerClasses.general.recyclers.speedFactorBonus,
                     actual: this.serverSettings.playerClasses.general.recyclers.speedFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Deuterium Consumption for all ships',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.fuelConsumption,
                     base: -this.serverSettings.playerClasses.general.deuteriumConsumptionFactorReduction,
                     actual: -this.serverSettings.playerClasses.general.deuteriumConsumptionFactorReduction * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Increased Cargo for Recyclers and Pathfinders',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.increasedCargoRecyclersPathfinders,
                     base: this.serverSettings.playerClasses.general.recyclers.cargoCapacityFactorBonus,
                     actual: this.serverSettings.playerClasses.general.recyclers.cargoCapacityFactorBonus * factor,
                     isPercentage: true,
                 },
                 {
-                    label: 'LOCA: Additional Combat Research Levels',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalCombatResearchLevels,
                     base: 2, //TODO: not in server settings
                     actual: Math.trunc(2 * factor),
                     isPercentage: false,
                 },
                 {
-                    label: 'LOCA: Additional Fleet Slots',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalFleetSlots,
                     base: this.serverSettings.playerClasses.general.bonusFleetSlots,
                     actual: Math.trunc(this.serverSettings.playerClasses.general.bonusFleetSlots * factor),
                     isPercentage: false,
                 },
                 {
-                    label: 'LOCA: Additional Moon Fields',
+                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalMoonFields,
                     base: this.serverSettings.playerClasses.general.bonusMoonFields,
                     actual: Math.trunc(this.serverSettings.playerClasses.general.bonusMoonFields * factor),
                     isPercentage: false,
@@ -220,15 +220,15 @@
         private readonly classBonusesColumns: GridTableColumn<keyof ClassBonusValues>[] = [
             {
                 key: 'label',
-                label: 'LOCA: Bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.bonus,
             },
             {
                 key: 'base',
-                label: 'LOCA: Base value',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.baseValue,
             },
             {
                 key: 'actual',
-                label: 'LOCA: With bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.valueWithBonuses,
             },
         ];
 
@@ -244,7 +244,7 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<'classBonus'>[] = [
             {
                 key: 'classBonus',
-                label: 'LOCA: Class Bonus',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.classBonus,
             },
         ];
 

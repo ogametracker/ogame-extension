@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Den capacity bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -34,7 +34,7 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<'range'>[] = [
             {
                 key: 'range',
-                label: 'LOCA: Phalanx Range',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.phalanxRange.header,
             },
         ];
 

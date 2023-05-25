@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :header="'LOCA: Defense stats bonuses'" :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
 </template>
 
 <script lang="ts">
@@ -40,15 +40,15 @@
         private readonly bonusTypes: LifeformBonusesBreakdownType<keyof StatsBonuses>[] = [
             {
                 key: 'armor',
-                label: 'LOCA: Armor',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.armor,
             },
             {
                 key: 'shield',
-                label: 'LOCA: Shield',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.shield,
             },
             {
                 key: 'damage',
-                label: 'LOCA: Damage',
+                label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.ships.damage,
             },
         ];
 

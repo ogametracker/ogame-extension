@@ -36,7 +36,7 @@ export const de: EmpireTranslations = {
             allianceClass: 'Allianzklasse',
             lifeformTechnologies: 'Lebensform-Technologien',
         },
-        
+
         settings: {
             reset: 'Zurücksetzen',
             header: 'Produktionseinstellungen',
@@ -78,7 +78,7 @@ export const de: EmpireTranslations = {
             },
             plasmatechSettings: {
                 header: (name: string) => `Einstellungen zu ${name}`,
-                includePlasmatech: (name: string) =>`${name} für Berechnung berücksichtigen`,
+                includePlasmatech: (name: string) => `${name} für Berechnung berücksichtigen`,
             },
             planetSettings: {
                 header: 'Einstellungen der Planeten',
@@ -142,6 +142,7 @@ export const de: EmpireTranslations = {
 
             discoveryResults: 'Ergebnisse',
             experience: 'Erfahrung',
+            researchBonuses: 'Forschungsboni',
         },
 
         planet: 'Planet',
@@ -174,5 +175,97 @@ export const de: EmpireTranslations = {
         experiencePoints: 'Erfahrungspunkte',
         discoveredOn: 'Lebensform entdeckt am',
         numberOfLifeformDiscoveries: 'Anzahl Entdeckungen',
+
+        researchBonuses: {
+            production: {
+                header: 'Rohstoffproduktion',
+            },
+            expeditionFinds: {
+                header: 'Expeditionsfunde',
+                resources: 'Rohstoffe',
+                ships: 'Schiffe',
+                fleetLoss: 'Flottenverluste',
+            },
+            expeditionSpeed: {
+                header: 'Geschwindigkeit zum Expeditionsort',
+                bonus: 'Geschwindigkeitsbonus',
+            },
+            ships: {
+                header: 'Schiffe',
+                armor: 'Panzerung',
+                shield: 'Schild',
+                damage: 'Schaden',
+                cargo: 'Laderaum',
+                speed: 'Geschwindigkeit',
+            },
+            defenses: {
+                header: 'Verteidigungsanlagen',
+            },
+            fuelConsumption: {
+                header: 'Treibstoffverbrauch',
+            },
+            fuelReturn: {
+                header: 'Treibstoffrückgewinn bei Rückruf',
+                bonus: 'Treibstoffrückgewinn',
+            },
+            buildingCostTime: {
+                header: 'Gebäude Kosten&Zeit',
+                cost: 'Kosten',
+                time: 'Zeit',
+            },
+            researchCostTime: {
+                header: 'Forschungen Kosten&Zeit',
+                researches: 'Forschungen',
+                lifeformResearches: 'Lebensform-Forschungen',
+            },
+            crawlers: {
+                header: 'Crawler',
+                productionBonus: 'Rohstoffproduktion',
+                energyConsumption: 'Energieverbrauch',
+            },
+            denCapacity: {
+                header: 'Versteckkapazität',
+            },
+            phalanxRange: {
+                header: 'Phalanx-Reichweite',
+            },
+            discoveryMissions: {
+                header: 'Gesachwindigkeit Entdeckungsmissionen',
+            },
+            playerClasses: {
+                header: 'Spielerklassen',
+
+                collector: {
+                    productionBonus: 'Erhöhte Minenproduktion',
+                    energyProductionBonus: 'Erhöhte Ernergieproduktion',
+                    transporterSpeedBonus: 'Transporter-Geschwindigkeitsbonus',
+                    transporterCargoBonus: 'Transporter-Laderaumbonus',
+                    crawlerProductionBonus: 'Crawler-Produktionsbonus',
+                    geologistCrawlerAmountBonus: 'Mehr verwendbare Crawler mit Geologe',
+                },
+                discoverer: {
+                    researchDuration: 'Forschungszeit',
+                    increasedExpeditionFinds: 'Erhöhter Ertrag bei Expeditionen',
+                    largerPlanets: 'Größere Planeten bei Kolonisierung',
+                    additionalExpeditionSlots: 'Zusätzliche Expeditionsslots',
+                    reducedExpeditionCombatChance: 'Change auf Expeditionsgegner',
+                    phalanxRange: 'Erhöhte Phalanx-Reichweite',
+                },
+                general: {
+                    combatShipSpeed: 'Kampfschiff-Geschwindigkeitsbonus',
+                    recyclerSpeed: 'Recycler-Geschwindigkeitsbonus',
+                    fuelConsumption: 'Treibstoffverbrauch für alle Schiffe',
+                    increasedCargoRecyclersPathfinders: 'Erhöhter Laderaum für Recycler/Pathfinder',
+                    additionalCombatResearchLevels: 'Zusätzliche Kampfforschungsstufen',
+                    additionalFleetSlots: 'Zusätzliche Flottenslots',
+                    additionalMoonFields: 'Zusätzliche Mondfelder',
+                },
+
+                classBonus: 'Klassenbonus',
+                bonus: 'Bonus',
+                baseValue: 'Basiswert',
+                valueWithBonuses: 'Wert inkl. Boni',
+            },
+        },
     },
 };
