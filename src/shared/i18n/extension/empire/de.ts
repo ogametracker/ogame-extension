@@ -230,14 +230,14 @@ export const de: EmpireTranslations = {
                 header: 'Phalanx-Reichweite',
             },
             discoveryMissions: {
-                header: 'Gesachwindigkeit Entdeckungsmissionen',
+                header: 'Geschwindigkeit Entdeckungsmissionen',
             },
             playerClasses: {
                 header: 'Spielerklassen',
 
                 collector: {
                     productionBonus: 'Erhöhte Minenproduktion',
-                    energyProductionBonus: 'Erhöhte Ernergieproduktion',
+                    energyProductionBonus: 'Erhöhte Energieproduktion',
                     transporterSpeedBonus: 'Transporter-Geschwindigkeitsbonus',
                     transporterCargoBonus: 'Transporter-Laderaumbonus',
                     crawlerProductionBonus: 'Crawler-Produktionsbonus',

@@ -7,8 +7,8 @@
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType, ValidLifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { FleetSpeedBonusLifeformTechnology, PhalanxRangeBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
-    import { FleetSpeedBonusLifeformTechnologies, PhalanxRangeBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { FleetSpeedBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { FleetSpeedBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
