@@ -34,6 +34,25 @@
         </div>
 
         <div>
+            <span>LOCA: Dark matter finds</span>
+            <span>
+                <expedition-size-icon :size="ExpeditionEventSize.small" />
+                <o-resource resource="dark-matter" />
+                <span v-text="`${$i18n.$n(-300)} - ${$i18n.$n(-400)}`" />
+            </span>
+            <span>
+                <expedition-size-icon :size="ExpeditionEventSize.medium" />
+                <o-resource resource="dark-matter" />
+                <span v-text="`${$i18n.$n(-500)} - ${$i18n.$n(-700)}`" />
+            </span>
+            <span>
+                <expedition-size-icon :size="ExpeditionEventSize.large" />
+                <o-resource resource="dark-matter" />
+                <span v-text="`${$i18n.$n(-1300)} - ${$i18n.$n(-1800)}`" />
+            </span>
+        </div>
+
+        <div>
             <span>LOCA: Maximum ship find (units)</span>
             <span>
                 <o-ship :ship="ShipType.battleship" />
@@ -43,8 +62,8 @@
 
         <h3>LOCA: List of possible finds</h3>
         <div class="find-col" v-for="size in sizes" :key="size">
-            <h3>
-                <expedition-size-icon :size="ExpeditionEventSize[size]" />
+            <h3 class="table-title">
+                <expedition-size-icon :size="size" />
                 <span v-text="`LOCA: ${size}`" />
             </h3>
             <grid-table inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
@@ -67,11 +86,9 @@
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { getRGBString } from '../../utils/getRGBString';
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { PlanetDataWrapper } from '@/shared/messages/tracking/empire';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getTechnologyBonusFactor } from '@/shared/models/ogame/lifeforms/utils';
     import { getPlanetLifeformTechnologyBoost } from '../../models/empire/lifeforms';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
@@ -344,5 +361,16 @@
     .find-col {
         display: inline-flex;
         flex-direction: column;
+        margin-right: 16px;
+    }
+
+    .table-title {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .mdi {
+            font-size: 24px;
+        }
     }
 </style>
