@@ -71,4 +71,21 @@ export const de: ExpeditionsTranslations = {
         amount: 'Menge',
         date: 'Datum',
     },
+    possibleFinds: {
+        info: {
+            playerClass: 'Spieler-Klasse',
+            economySpeed: 'Ökonomie-Geschwindigkeit',
+            resourceFindBonus: 'Bonus Rohstofffunde',
+            shipFindBonus: 'Bonus Schiffsfunde',
+            darkMatterFindBonus: 'Bonus DM-Funde',
+            discovererBonus: 'Bonus Entdeckerklasse',
+        },
+
+        maximumFinds: 'Maximalfunde',
+        findsDarkMatter: 'Bereiche der DM-Funde',
+
+        listOfPossibleFinds: 'Liste derzeit möglicher Funde (Rohstoffe, Schiffseinheiten)',
+        findSizes: (size: string) => `Fundmengen (${size})`,
+        shipUnits: 'Schiffseinheiten',
+    },
 };

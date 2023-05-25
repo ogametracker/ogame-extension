@@ -43,11 +43,11 @@
 
         <hr />
 
-        <h3>LOCA: List of possible finds</h3>
+        <h3 v-text="$i18n.$t.extension.expeditions.possibleFinds.listOfPossibleFinds" />
         <div class="find-col" v-for="size in sizes" :key="size">
             <h3 class="table-title">
                 <expedition-size-icon :size="size" />
-                <span v-text="`LOCA: ${size}`" />
+                <span v-text="$i18n.$t.extension.expeditions.possibleFinds.findSizes($i18n.$t.extension.expeditions.expeditionEventSizes[size])" />
             </h3>
             <grid-table inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
                 <template v-slot:[`cell-.+`]="{ value }">
@@ -75,6 +75,7 @@
     import { getPlanetLifeformTechnologyBoost } from '../../../models/empire/lifeforms';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
+    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
 
     type FindableUnits = {
         metal: number;
@@ -219,19 +220,19 @@
             return [
                 {
                     key: 'metal',
-                    label: 'LOCA: Metal',
+                    label: this.$i18n.$t.ogame.resources.metal,
                 },
                 {
                     key: 'crystal',
-                    label: 'LOCA: Crystal',
+                    label: this.$i18n.$t.ogame.resources.crystal,
                 },
                 {
                     key: 'deuterium',
-                    label: 'LOCA: deuterium',
+                    label: this.$i18n.$t.ogame.resources.deuterium,
                 },
                 {
                     key: 'shipUnits',
-                    label: 'LOCA: shipUnits',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.shipUnits,
                 },
             ];
         }
@@ -248,27 +249,32 @@
             return [
                 {
                     type: 'playerClass',
-                    label: 'LOCA: Player class',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.playerClass,
                     value: info.playerClass,
                 },
                 {
                     type: 'number',
-                    label: 'LOCA: Economy speed',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.economySpeed,
                     value: info.ecoSpeed,
                 },
                 {
                     type: 'percentage',
-                    label: 'LOCA: Resource find bonus',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.resourceFindBonus,
                     value: info.resourceFindBonus,
                 },
                 {
                     type: 'percentage',
-                    label: 'LOCA: Ship find bonus',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.shipFindBonus,
                     value: info.shipFindBonus,
                 },
                 {
                     type: 'percentage',
-                    label: 'LOCA: Discoverer class bonus',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.darkMatterFindBonus,
+                    value: info.darkMatterBonus,
+                },
+                {
+                    type: 'percentage',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.discovererBonus,
                     value: info.discovererBonus,
                 },
             ];
@@ -278,7 +284,7 @@
             return [
                 {
                     key: 'key',
-                    label: 'LOCA: Maximum finds',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.maximumFinds,
                     style: {
                         'justify-content': 'space-between',
                         'gap': '4px',
@@ -300,7 +306,7 @@
                 { key: 'size' },
                 {
                     key: 'amount',
-                    label: 'LOCA: Amount',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.findsDarkMatter,
                     style: {
                         'justify-content': 'start',
                         'gap': '6px',
@@ -309,20 +315,20 @@
             ];
         }
         private get darkMatterItems(): { size: ExpeditionEventSize, amount: [min: number, max: number] }[] {
-            //TODO: apply dark matter lifeforms bonus
+            const factor = 1 + this.info.darkMatterBonus;
 
             return [
                 {
                     size: ExpeditionEventSize.small,
-                    amount: [300, 400],
+                    amount: [300, 400].map(x => Math.trunc(x * factor)) as [number, number],
                 },
                 {
                     size: ExpeditionEventSize.medium,
-                    amount: [500, 700],
+                    amount: [500, 700].map(x => Math.trunc(x * factor)) as [number, number],
                 },
                 {
                     size: ExpeditionEventSize.large,
-                    amount: [1000, 1800],
+                    amount: [1000, 1800].map(x => Math.trunc(x * factor)) as [number, number],
                 },
             ];
         }
@@ -377,6 +383,26 @@
                 return total + techBonus;
             }, 0);
 
+            const darkMatterBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
+                let techBonus = 0;
+                planets.forEach(planet => {
+                    const level = planet.activeLifeformTechnologies.includes(tech.type)
+                        ? planet.lifeformTechnologies[tech.type]
+                        : 0;
+
+                    const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.darkMatter, level);
+                    const levelBonus = planet.activeLifeform == LifeformType.none
+                        ? 0
+                        : baseBonus * getLifeformLevelTechnologyBonus(empire.lifeformExperience[planet.activeLifeform]);
+                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
+
+                    const total = baseBonus + levelBonus + buildingBonus;
+                    techBonus += total;
+                });
+
+                return total + techBonus;
+            }, 0);
+
             const discovererBonus = ClassBonusLifeformTechnologies.reduce((total, tech) => {
                 let techBonus = 0;
                 planets.forEach(planet => {
@@ -399,10 +425,11 @@
 
             return {
                 playerClass: empire.playerClass,
-                ecoSpeed: 10,
-                resourceFindBonus: resourceFindBonus,
-                shipFindBonus: shipFindBonus,
-                discovererBonus: discovererBonus,
+                ecoSpeed: ServerSettingsDataModule.serverSettings.speed.economy,
+                resourceFindBonus,
+                shipFindBonus,
+                discovererBonus,
+                darkMatterBonus,
             };
         }
 

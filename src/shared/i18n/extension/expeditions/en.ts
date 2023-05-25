@@ -71,4 +71,21 @@ export const en: ExpeditionsTranslations = {
         amount: 'Amount',
         date: 'Date',
     },
+    possibleFinds: {
+        info: {
+            playerClass: 'Player class',
+            economySpeed: 'Economy speed',
+            resourceFindBonus: 'Bonus resource finds',
+            shipFindBonus: 'Bonus ship finds',
+            darkMatterFindBonus: 'Bonus Dark Matter finds',
+            discovererBonus: 'Discoverer class bonus',
+        },
+
+        maximumFinds: 'Maximum Finds',
+        findsDarkMatter: 'Ranges of DM finds',
+
+        listOfPossibleFinds: 'List of possible finds (resources, ship units)',
+        findSizes: (size: string) => `Possible find amounts (${size})`,
+        shipUnits: 'Ship units',
+    },
 };

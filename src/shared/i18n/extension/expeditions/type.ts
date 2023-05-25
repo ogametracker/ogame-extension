@@ -46,4 +46,21 @@ export interface ExpeditionsTranslations {
         amount: string;
         date: string;
     };
+    possibleFinds: {
+        info: {
+            playerClass: string;
+            economySpeed: string;
+            resourceFindBonus: string;
+            shipFindBonus: string;
+            darkMatterFindBonus: string;
+            discovererBonus: string;
+        };
+
+        maximumFinds: string;
+        findsDarkMatter: string;
+
+        listOfPossibleFinds: string;
+        findSizes: (size: string) => string;
+        shipUnits: string;
+    };
 }
