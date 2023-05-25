@@ -387,6 +387,7 @@
 
     .tech-header-row {
         display: contents;
+        font-style: italic;
     }
 
     .tech {
