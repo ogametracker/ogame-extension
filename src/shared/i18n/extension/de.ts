@@ -31,6 +31,7 @@ export const de: ExtensionTranslations = {
         lifeformBuildings,
         lifeformTechnologies,
         premium,
+        resources,
         research,
         ships,
     },

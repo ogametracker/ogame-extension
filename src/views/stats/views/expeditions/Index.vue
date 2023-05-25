@@ -47,7 +47,7 @@
                     to: { name: 'expeditions/depletion' },
                 },
                 {
-                    label: 'LOCA: Info',
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.info.header,
                     to: { name: 'expeditions/info' },
                 },
             ];

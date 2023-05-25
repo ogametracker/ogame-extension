@@ -1,64 +1,47 @@
 <template>
     <div>
-        <div>
-            <span v-text="'LOCA: Player class'" />
-            <o-player-class :player-class="info.playerClass" />
+        <div class="small-tables">
+            <grid-table inline :columns="infoColumns" :items="infoItems" no-header>
+                <template #cell-value="{ value, item }">
+                    <o-player-class v-if="item.type == 'playerClass'" :player-class="value" />
+                    <span v-else-if="item.type == 'number'" v-text="value" />
+                    <span v-else v-text="$i18n.$n(value * 100, percentageFormat) + '%'" />
+                </template>
+            </grid-table>
 
-            <span v-text="'LOCA: Economy speed'" />
-            <span v-text="info.ecoSpeed" />
+            <grid-table inline :columns="maxFindsColumns" :items="maxFindsItems">
+                <template #cell-key="{ value }">
+                    <template v-if="value == 'metal'">
+                        <o-resource resource="metal" size="24px" />
+                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].metal)" />
+                    </template>
+                    <template v-else-if="value == 'crystal'">
+                        <o-resource resource="crystal" size="24px" />
+                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].crystal)" />
+                    </template>
+                    <template v-else-if="value == 'deuterium'">
+                        <o-resource resource="deuterium" size="24px" />
+                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].deuterium)" />
+                    </template>
+                    <template v-else-if="value == 'shipUnits'">
+                        <o-ship :ship="ShipType.battleship" size="24px" />
+                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].shipUnits)" />
+                    </template>
+                </template>
+            </grid-table>
 
-            <span v-text="'LOCA: Resource find bonus'" />
-            <span v-text="$i18n.$n(info.resourceFindBonus * 100, percentageFormat) + '%'" />
-
-            <span v-text="'LOCA: Ship find bonus'" />
-            <span v-text="$i18n.$n(info.shipFindBonus * 100, percentageFormat) + '%'" />
-
-            <span v-text="'LOCA: Discoverer class bonus'" />
-            <span v-text="$i18n.$n(info.discovererBonus * 100, percentageFormat) + '%'" />
+            <grid-table inline :columns="darkMatterColumns" :items="darkMatterItems">
+                <template #cell-size="{ value }">
+                    <expedition-size-icon :size="value" class="scaled-icon" />
+                </template>
+                <template #cell-amount="{ item }">
+                    <o-resource resource="dark-matter" size="24px" />
+                    <span v-text="`${$i18n.$n(item.amount[0])} - ${$i18n.$n(item.amount[1])}`" />
+                </template>
+            </grid-table>
         </div>
 
-        <div>
-            <span>LOCA: Maximum resource finds</span>
-            <span>
-                <o-resource resource="metal" />
-                <span v-text="$i18n.$n(finds.large[finds.large.length - 1].metal)" />
-            </span>
-            <span>
-                <o-resource resource="crystal" />
-                <span v-text="$i18n.$n(finds.large[finds.large.length - 1].crystal)" />
-            </span>
-            <span>
-                <o-resource resource="deuterium" />
-                <span v-text="$i18n.$n(finds.large[finds.large.length - 1].deuterium)" />
-            </span>
-        </div>
-
-        <div>
-            <span>LOCA: Dark matter finds</span>
-            <span>
-                <expedition-size-icon :size="ExpeditionEventSize.small" />
-                <o-resource resource="dark-matter" />
-                <span v-text="`${$i18n.$n(-300)} - ${$i18n.$n(-400)}`" />
-            </span>
-            <span>
-                <expedition-size-icon :size="ExpeditionEventSize.medium" />
-                <o-resource resource="dark-matter" />
-                <span v-text="`${$i18n.$n(-500)} - ${$i18n.$n(-700)}`" />
-            </span>
-            <span>
-                <expedition-size-icon :size="ExpeditionEventSize.large" />
-                <o-resource resource="dark-matter" />
-                <span v-text="`${$i18n.$n(-1300)} - ${$i18n.$n(-1800)}`" />
-            </span>
-        </div>
-
-        <div>
-            <span>LOCA: Maximum ship find (units)</span>
-            <span>
-                <o-ship :ship="ShipType.battleship" />
-                <span v-text="$i18n.$n(finds.large[finds.large.length - 1].shipUnits)" />
-            </span>
-        </div>
+        <hr />
 
         <h3>LOCA: List of possible finds</h3>
         <div class="find-col" v-for="size in sizes" :key="size">
@@ -253,6 +236,97 @@
             ];
         }
 
+        private get infoColumns(): GridTableColumn<'label' | 'value'>[] {
+            return [
+                { key: 'label' },
+                { key: 'value' },
+            ];
+        }
+        private get infoItems(): { type: 'playerClass' | 'percentage' | 'number'; label: string; value: number | PlayerClass }[] {
+            const info = this.info;
+
+            return [
+                {
+                    type: 'playerClass',
+                    label: 'LOCA: Player class',
+                    value: info.playerClass,
+                },
+                {
+                    type: 'number',
+                    label: 'LOCA: Economy speed',
+                    value: info.ecoSpeed,
+                },
+                {
+                    type: 'percentage',
+                    label: 'LOCA: Resource find bonus',
+                    value: info.resourceFindBonus,
+                },
+                {
+                    type: 'percentage',
+                    label: 'LOCA: Ship find bonus',
+                    value: info.shipFindBonus,
+                },
+                {
+                    type: 'percentage',
+                    label: 'LOCA: Discoverer class bonus',
+                    value: info.discovererBonus,
+                },
+            ];
+        }
+
+        private get maxFindsColumns(): GridTableColumn<'key'>[] {
+            return [
+                {
+                    key: 'key',
+                    label: 'LOCA: Maximum finds',
+                    style: {
+                        'justify-content': 'space-between',
+                        'gap': '4px',
+                    },
+                },
+            ];
+        }
+        private get maxFindsItems(): { key: keyof FindableUnits }[] {
+            return [
+                { key: 'metal' },
+                { key: 'crystal' },
+                { key: 'deuterium' },
+                { key: 'shipUnits' },
+            ];
+        }
+
+        private get darkMatterColumns(): GridTableColumn<'size' | 'amount'>[] {
+            return [
+                { key: 'size' },
+                {
+                    key: 'amount',
+                    label: 'LOCA: Amount',
+                    style: {
+                        'justify-content': 'start',
+                        'gap': '6px',
+                    },
+                },
+            ];
+        }
+        private get darkMatterItems(): { size: ExpeditionEventSize, amount: [min: number, max: number] }[] {
+            //TODO: apply dark matter lifeforms bonus
+
+            return [
+                {
+                    size: ExpeditionEventSize.small,
+                    amount: [300, 400],
+                },
+                {
+                    size: ExpeditionEventSize.medium,
+                    amount: [500, 700],
+                },
+                {
+                    size: ExpeditionEventSize.large,
+                    amount: [1000, 1800],
+                },
+            ];
+        }
+
         private get info() {
             const empire = EmpireDataModule.empire;
 
@@ -372,5 +446,14 @@
         .mdi {
             font-size: 24px;
         }
+    }
+
+    .small-tables {
+        display: flex;
+        gap: 16px;
+        align-items: start;
+    }
+    .scaled-icon {
+        transform: scale(1.6);
     }
 </style>

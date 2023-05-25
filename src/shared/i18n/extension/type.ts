@@ -29,6 +29,7 @@ export interface ExtensionTranslationsFull {
         lifeformBuildings: LifeformBuildingsTranslations;
         lifeformTechnologies: LifeformTechnologiesTranslations;
         premium: PremiumTranslations;
+        resources: ResourceTranslations;
         research: ResearchTranslations;
         ships: ShipTranslations;
     };

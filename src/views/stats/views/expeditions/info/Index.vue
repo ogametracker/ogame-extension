@@ -12,11 +12,11 @@
         private get navItems(): ListNavItem[] {
             return [
                 {
-                    label: 'LOCA: Largest Finds',
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.info.topFinds,
                     to: { name: 'expeditions/info/largest-finds' },
                 },
                 {
-                    label: 'LOCA: Possible Finds',
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.info.possibleFinds,
                     to: { name: 'expeditions/info/possible-finds' },
                 },
             ];

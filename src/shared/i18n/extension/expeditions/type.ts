@@ -12,6 +12,12 @@ export interface ExpeditionsTranslations {
         foundDarkMatter: string;
         foundItems: string;
         depletion: string;
+        info: {
+            header: string;
+
+            topFinds: string;
+            possibleFinds: string;
+        };
 
         subHeaders: {
             amount: string;
@@ -30,4 +36,14 @@ export interface ExpeditionsTranslations {
     finds: string;
     shipsFound: string;
     depletion: string;
+
+    topFinds: {
+        title: (type: string) => string;
+        shipUnits: string;
+        shipUnitsIncludingDeuterium: string;
+
+        size: string;
+        amount: string;
+        date: string;
+    };
 }

@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <loading-spinner v-if="loading" />
+    <div v-else>
         <div v-for="key in keys" :key="key" class="find-column">
-            <h3 v-text="`TODO: ${key} finds`" />
+            <h3 v-text="$i18n.$t.extension.expeditions.topFinds.title(keyTranslations[key])" />
 
             <grid-table inline :columns="columns" :items="largestFinds[key]" :style="`--color: ${colors[key]}`">
                 <template #cell-size="{ value }">
@@ -25,10 +26,11 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
     import { GridTableColumn } from '../../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
+    import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
 
     type Find = {
         size: ExpeditionEventSize;
@@ -41,6 +43,7 @@
         crystal: Find[];
         deuterium: Find[];
         shipUnits: Find[];
+        shipUnitsIncludingDeuterium: Find[];
         darkMatter: Find[];
     }
 
@@ -53,15 +56,29 @@
 
         private readonly maxCount = 25;
 
+        private loading = true;
+
         private largestFinds: Finds = {
             metal: [],
             crystal: [],
             deuterium: [],
             shipUnits: [],
+            shipUnitsIncludingDeuterium: [],
             darkMatter: [],
         };
 
-        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'darkMatter'];
+        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsIncludingDeuterium', 'darkMatter'];
+
+        private get keyTranslations(): Record<keyof Finds, string> {
+            return {
+                metal: this.$i18n.$t.ogame.resources.metal,
+                crystal: this.$i18n.$t.ogame.resources.crystal,
+                deuterium: this.$i18n.$t.ogame.resources.deuterium,
+                shipUnits: this.$i18n.$t.extension.expeditions.topFinds.shipUnits,
+                shipUnitsIncludingDeuterium: this.$i18n.$t.extension.expeditions.topFinds.shipUnitsIncludingDeuterium,
+                darkMatter: this.$i18n.$t.ogame.premium.darkMatter,
+            };
+        }
 
         private get colors(): Record<keyof Finds, string> {
             const colors = SettingsDataModule.settings.colors;
@@ -72,6 +89,7 @@
                 deuterium: getRGBString(colors.resources.deuterium)!,
                 darkMatter: getRGBString(colors.expeditions.events.darkMatter)!,
                 shipUnits: getRGBString(colors.expeditions.events.fleet)!,
+                shipUnitsIncludingDeuterium: getRGBString(colors.expeditions.events.fleet)!,
             };
         }
 
@@ -79,15 +97,15 @@
             return [
                 {
                     key: 'size',
-                    label: 'LOCA: Size',
+                    label: this.$i18n.$t.extension.expeditions.topFinds.size,
                 },
                 {
                     key: 'amount',
-                    label: 'LOCA: Amount',
+                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
                 },
                 {
                     key: 'date',
-                    label: 'LOCA: Date',
+                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
                 },
             ];
         }
@@ -106,6 +124,8 @@
                     this.addDarkMatterExpo(expo);
                 }
             });
+
+            this.loading = false;
         }
 
         private addDarkMatterExpo(expo: ExpeditionEventDarkMatter) {
@@ -130,7 +150,64 @@
         }
 
         private addFleetExpo(expo: ExpeditionEventFleet) {
-            //TODO: add to ship units
+            // ship units (metal + crystal)
+            {
+                const units = ExpeditionFindableShipTypes.map(shipType => {
+                    const count = expo.fleet[shipType] ?? 0;
+                    const ship = ShipByTypes[shipType];
+
+                    const cost = ship.getCost();
+                    return (cost.metal + cost.crystal) * count;
+                }).reduce((total, cur) => total + cur, 0);
+
+                const finds = this.largestFinds.shipUnits;
+                const smallestFind: Find = finds[finds.length - 1] ?? {
+                    size: ExpeditionEventSize.small,
+                    amount: 0,
+                    date: 0,
+                };
+                if (smallestFind.amount >= units) {
+                    return;
+                }
+
+                const index = finds.findIndex(find => find.amount < units);
+                finds.splice(index, 0, {
+                    size: expo.size,
+                    amount: units,
+                    date: expo.date,
+                });
+
+                this.largestFinds.shipUnits = finds.slice(0, this.maxCount);
+            }
+            // ship units (metal + crystal + deuterium)
+            {
+                const units = ExpeditionFindableShipTypes.map(shipType => {
+                    const count = expo.fleet[shipType] ?? 0;
+                    const ship = ShipByTypes[shipType];
+
+                    const cost = ship.getCost();
+                    return (cost.metal + cost.crystal + cost.deuterium) * count;
+                }).reduce((total, cur) => total + cur, 0);
+
+                const finds = this.largestFinds.shipUnitsIncludingDeuterium;
+                const smallestFind: Find = finds[finds.length - 1] ?? {
+                    size: ExpeditionEventSize.small,
+                    amount: 0,
+                    date: 0,
+                };
+                if (smallestFind.amount >= units) {
+                    return;
+                }
+
+                const index = finds.findIndex(find => find.amount < units);
+                finds.splice(index, 0, {
+                    size: expo.size,
+                    amount: units,
+                    date: expo.date,
+                });
+
+                this.largestFinds.shipUnitsIncludingDeuterium = finds.slice(0, this.maxCount);
+            }
         }
 
         private addResourceExpo(expo: ExpeditionEventResources) {
