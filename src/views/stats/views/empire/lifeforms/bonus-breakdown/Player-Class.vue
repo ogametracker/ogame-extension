@@ -139,7 +139,7 @@
                 {
                     label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.increasedExpeditionFinds,
                     base: this.serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
-                    actual: this.serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus * factor * 3, //TODO: fix formula when discoverer bonus formula fixed
+                    actual: this.serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus * (1 + classBonus * 3), //TODO: fix formula when discoverer bonus formula fixed
                     isPercentage: true,
                 },
                 {
