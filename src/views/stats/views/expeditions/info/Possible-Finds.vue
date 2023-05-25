@@ -445,7 +445,7 @@
                 ExpeditionEventSizes,
                 size => findBases[size].map<FindableUnits>(base => {
                     const metal = base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
-                    const shipUnits = base * pathfinderFactor * classFactor * (1 + info.shipFindBonus);
+                    const shipUnits = base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
 
                     return {
                         metal: Math.trunc(metal),
