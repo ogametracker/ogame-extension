@@ -40,10 +40,20 @@ import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
 import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
 import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
 import viewsempirelifeformsbonusbreakdownIndex from '@stats/views/empire/lifeforms/bonus-breakdown/Index.vue';
-import viewsempirelifeformsbonusbreakdownDefenseStats from '@stats/views/empire/lifeforms/bonus-breakdown/Defense-Stats.vue';
-import viewsempirelifeformsbonusbreakdownExpeditions from '@stats/views/empire/lifeforms/bonus-breakdown/Expeditions.vue';
+import viewsempirelifeformsbonusbreakdownBuildingCostTime from '@stats/views/empire/lifeforms/bonus-breakdown/Building-Cost-Time.vue';
+import viewsempirelifeformsbonusbreakdownCrawlers from '@stats/views/empire/lifeforms/bonus-breakdown/Crawlers.vue';
+import viewsempirelifeformsbonusbreakdownDefenses from '@stats/views/empire/lifeforms/bonus-breakdown/Defenses.vue';
+import viewsempirelifeformsbonusbreakdownDenCapacity from '@stats/views/empire/lifeforms/bonus-breakdown/Den-Capacity.vue';
+import viewsempirelifeformsbonusbreakdownDiscoveryMissions from '@stats/views/empire/lifeforms/bonus-breakdown/Discovery-Missions.vue';
+import viewsempirelifeformsbonusbreakdownExpeditionFinds from '@stats/views/empire/lifeforms/bonus-breakdown/Expedition-Finds.vue';
+import viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed from '@stats/views/empire/lifeforms/bonus-breakdown/Expedition-Fleet-Speed.vue';
+import viewsempirelifeformsbonusbreakdownFleetFuelReturn from '@stats/views/empire/lifeforms/bonus-breakdown/Fleet-Fuel-Return.vue';
+import viewsempirelifeformsbonusbreakdownFuelConsumption from '@stats/views/empire/lifeforms/bonus-breakdown/Fuel-Consumption.vue';
+import viewsempirelifeformsbonusbreakdownPhalanxRange from '@stats/views/empire/lifeforms/bonus-breakdown/Phalanx-Range.vue';
+import viewsempirelifeformsbonusbreakdownPlayerClass from '@stats/views/empire/lifeforms/bonus-breakdown/Player-Class.vue';
+import viewsempirelifeformsbonusbreakdownResearchCostTime from '@stats/views/empire/lifeforms/bonus-breakdown/Research-Cost-Time.vue';
 import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
-import viewsempirelifeformsbonusbreakdownShipStats from '@stats/views/empire/lifeforms/bonus-breakdown/Ship-Stats.vue';
+import viewsempirelifeformsbonusbreakdownShips from '@stats/views/empire/lifeforms/bonus-breakdown/Ships.vue';
 import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
 import viewsempirelifeformsdiscoveriesartifactsIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/Index.vue';
 import viewsempirelifeformsdiscoveriesartifactsamountIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Index.vue';
@@ -73,6 +83,9 @@ import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-
 import viewsexpeditionsdepletionIndex from '@stats/views/expeditions/depletion/Index.vue';
 import viewsexpeditionsdepletionChart from '@stats/views/expeditions/depletion/Chart.vue';
 import viewsexpeditionsdepletionTable from '@stats/views/expeditions/depletion/Table.vue';
+import viewsexpeditionsinfoIndex from '@stats/views/expeditions/info/Index.vue';
+import viewsexpeditionsinfoLargestFinds from '@stats/views/expeditions/info/Largest-Finds.vue';
+import viewsexpeditionsinfoPossibleFinds from '@stats/views/expeditions/info/Possible-Finds.vue';
 import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
 import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
@@ -451,14 +464,64 @@ const routes: RouteConfig[] = [
                                 component: viewsempirelifeformsbonusbreakdownIndex,
                                 children: [
                                     {
-                                        path: "defense-stats",
-                                        name: "empire/lifeforms/bonus-breakdown/defense-stats",
-                                        component: viewsempirelifeformsbonusbreakdownDefenseStats
+                                        path: "building-cost-time",
+                                        name: "empire/lifeforms/bonus-breakdown/building-cost-time",
+                                        component: viewsempirelifeformsbonusbreakdownBuildingCostTime
                                     },
                                     {
-                                        path: "expeditions",
-                                        name: "empire/lifeforms/bonus-breakdown/expeditions",
-                                        component: viewsempirelifeformsbonusbreakdownExpeditions
+                                        path: "crawlers",
+                                        name: "empire/lifeforms/bonus-breakdown/crawlers",
+                                        component: viewsempirelifeformsbonusbreakdownCrawlers
+                                    },
+                                    {
+                                        path: "defenses",
+                                        name: "empire/lifeforms/bonus-breakdown/defenses",
+                                        component: viewsempirelifeformsbonusbreakdownDefenses
+                                    },
+                                    {
+                                        path: "den-capacity",
+                                        name: "empire/lifeforms/bonus-breakdown/den-capacity",
+                                        component: viewsempirelifeformsbonusbreakdownDenCapacity
+                                    },
+                                    {
+                                        path: "discovery-missions",
+                                        name: "empire/lifeforms/bonus-breakdown/discovery-missions",
+                                        component: viewsempirelifeformsbonusbreakdownDiscoveryMissions
+                                    },
+                                    {
+                                        path: "expedition-finds",
+                                        name: "empire/lifeforms/bonus-breakdown/expedition-finds",
+                                        component: viewsempirelifeformsbonusbreakdownExpeditionFinds
+                                    },
+                                    {
+                                        path: "expedition-fleet-speed",
+                                        name: "empire/lifeforms/bonus-breakdown/expedition-fleet-speed",
+                                        component: viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed
+                                    },
+                                    {
+                                        path: "fleet-fuel-return",
+                                        name: "empire/lifeforms/bonus-breakdown/fleet-fuel-return",
+                                        component: viewsempirelifeformsbonusbreakdownFleetFuelReturn
+                                    },
+                                    {
+                                        path: "fuel-consumption",
+                                        name: "empire/lifeforms/bonus-breakdown/fuel-consumption",
+                                        component: viewsempirelifeformsbonusbreakdownFuelConsumption
+                                    },
+                                    {
+                                        path: "phalanx-range",
+                                        name: "empire/lifeforms/bonus-breakdown/phalanx-range",
+                                        component: viewsempirelifeformsbonusbreakdownPhalanxRange
+                                    },
+                                    {
+                                        path: "player-class",
+                                        name: "empire/lifeforms/bonus-breakdown/player-class",
+                                        component: viewsempirelifeformsbonusbreakdownPlayerClass
+                                    },
+                                    {
+                                        path: "research-cost-time",
+                                        name: "empire/lifeforms/bonus-breakdown/research-cost-time",
+                                        component: viewsempirelifeformsbonusbreakdownResearchCostTime
                                     },
                                     {
                                         path: "resource-production",
@@ -466,9 +529,9 @@ const routes: RouteConfig[] = [
                                         component: viewsempirelifeformsbonusbreakdownResourceProduction
                                     },
                                     {
-                                        path: "ship-stats",
-                                        name: "empire/lifeforms/bonus-breakdown/ship-stats",
-                                        component: viewsempirelifeformsbonusbreakdownShipStats
+                                        path: "ships",
+                                        name: "empire/lifeforms/bonus-breakdown/ships",
+                                        component: viewsempirelifeformsbonusbreakdownShips
                                     }
                                 ]
                             },
@@ -682,6 +745,26 @@ const routes: RouteConfig[] = [
                                 path: "table",
                                 name: "expeditions/depletion/table",
                                 component: viewsexpeditionsdepletionTable
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "expeditions/info/largest-finds"
+                        },
+                        path: "info",
+                        name: "expeditions/info",
+                        component: viewsexpeditionsinfoIndex,
+                        children: [
+                            {
+                                path: "largest-finds",
+                                name: "expeditions/info/largest-finds",
+                                component: viewsexpeditionsinfoLargestFinds
+                            },
+                            {
+                                path: "possible-finds",
+                                name: "expeditions/info/possible-finds",
+                                component: viewsexpeditionsinfoPossibleFinds
                             }
                         ]
                     },

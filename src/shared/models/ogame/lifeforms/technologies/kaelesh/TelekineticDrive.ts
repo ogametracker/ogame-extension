@@ -1,7 +1,9 @@
+import { FleetMissionType } from "../../../fleets/FleetMissionType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnology } from "../LifeformTechnology";
+import { FleetSpeedBonusLifeformTechnology } from "../interfaces";
 
-class TelekineticDriveClass extends LifeformTechnology {
+class TelekineticDriveClass extends LifeformTechnology implements FleetSpeedBonusLifeformTechnology {
     public constructor() {
         super({
             metal: {
@@ -21,6 +23,23 @@ class TelekineticDriveClass extends LifeformTechnology {
                 increaseFactor: 1,
             },
         });
+    }
+    
+    appliesTo(type: FleetMissionType): boolean {
+        return type == FleetMissionType.expedition;
+    }
+
+    getFleetSpeedBonus(mission: FleetMissionType, level: number): number {
+        if(!this.appliesTo(mission)) {
+            return 0;
+        }
+
+        if(level == 1) {
+            return 0;
+        }
+
+        const bonusPerLevel = 0.01; //1%
+        return bonusPerLevel * level;
     }
 
     public get type(): LifeformTechnologyType {

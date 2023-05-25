@@ -4,4 +4,5 @@ export interface ResourceTranslations {
     [ResourceType.metal]: string;
     [ResourceType.crystal]: string;
     [ResourceType.deuterium]: string;
+    energy: string;
 }

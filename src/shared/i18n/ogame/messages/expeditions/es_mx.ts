@@ -74,7 +74,7 @@ export const es_mx: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*LOCA: es 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'La */'última cosa que obtuvimos de la expedición fueron algunas realmente'/* buenas fotos tomadas de un agujero negro abriéndose.'*/,
         /*'Lo único que */'quedó de la expedición fue el siguiente mensaje'/* : zzzrrt ¡Madre mía! Krrrzzzzt Eso zrrrtrzt parece krgzzzz un krzzzzzzzztzzzz...'*/,
         /*'Una */'fusión del núcleo de la nave insignia produce una reacción'/* en cadena que destruye de una forma bastante espectacular la flota entera en expedición.'*/,
         /*'La flota en expedición */'no saltó de vuelta al vecindario'/* . Nuestros académicos están aún intentando encontrar que pasó, pero parece que la flota se perdió para siempre.'*/,

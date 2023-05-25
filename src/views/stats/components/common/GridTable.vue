@@ -26,6 +26,7 @@
                         last: i == columns.length - 1,
                     },
                 ]"
+                :style="column.style"
             >
                 <template v-if="getMatchingSlotNames(`header-${column.key}`).length > 0">
                     <slot
@@ -52,6 +53,7 @@
                             last: footerItems.length == 0 && i == columns.length - 1,
                         },
                     ]"
+                    :style="column.style"
                 >
                     <template v-if="getMatchingSlotNames(`cell-${column.key}`).length > 0">
                         <slot
@@ -81,6 +83,7 @@
                             last: c == columns.length - 1,
                         },
                     ]"
+                    :style="column.style"
                 >
                     <template v-if="getMatchingSlotNames(`footer-${column.key}`).length > 0">
                         <slot

@@ -14,6 +14,12 @@ export const en: ExpeditionsTranslations = {
         foundDarkMatter: ogamePremium.darkMatter,
         foundItems: 'Items',
         depletion: 'Depletion',
+        info: {
+            header: 'Info',
+
+            topFinds: 'Top Finds',
+            possibleFinds: 'List of Possible Finds',
+        },
 
         subHeaders: {
             amount: 'Amount',
@@ -55,4 +61,31 @@ export const en: ExpeditionsTranslations = {
     finds: 'Finds',
     shipsFound: 'Ships found',
     depletion: 'System depletion',
+
+    topFinds: {
+        title: (type: string) => `Top finds (${type})`,
+        shipUnits: 'Ship units',
+        shipUnitsIncludingDeuterium: 'Ship units incl. Deuterium',
+
+        size: 'Size',
+        amount: 'Amount',
+        date: 'Date',
+    },
+    possibleFinds: {
+        info: {
+            playerClass: 'Player class',
+            economySpeed: 'Economy speed',
+            resourceFindBonus: 'Bonus resource finds',
+            shipFindBonus: 'Bonus ship finds',
+            darkMatterFindBonus: 'Bonus Dark Matter finds',
+            discovererBonus: 'Discoverer class bonus',
+        },
+
+        maximumFinds: 'Maximum Finds',
+        findsDarkMatter: 'Ranges of DM finds',
+
+        listOfPossibleFinds: 'List of possible finds (resources, ship units)',
+        findSizes: (size: string) => `Possible find amounts (${size})`,
+        shipUnits: 'Ship units',
+    },
 };

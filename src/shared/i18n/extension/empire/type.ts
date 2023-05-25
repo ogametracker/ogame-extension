@@ -141,6 +141,8 @@ export interface EmpireTranslations {
 
             discoveryResults: string;
             experience: string;
+
+            researchBonuses: string;
         };
 
         planet: string;
@@ -162,5 +164,97 @@ export interface EmpireTranslations {
         artifacts: string;
         eventTypes: Record<LifeformDiscoveryEventType, string>;
         artifactFindingSizes: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
+
+        researchBonuses: {
+            production: {
+                header: string;
+            };
+            expeditionFinds: {
+                header: string;
+                resources: string;
+                ships: string;
+                fleetLoss: string;
+            };
+            expeditionSpeed: {
+                header: string;
+                bonus: string;
+            };
+            ships: {
+                header: string;
+                armor: string;
+                shield: string;
+                damage: string;
+                cargo: string;
+                speed: string;
+            };
+            defenses: {
+                header: string;
+            };
+            fuelConsumption: {
+                header: string;
+            };
+            fuelReturn: {
+                header: string;
+                bonus: string;
+            };
+            buildingCostTime: {
+                header: string;
+                cost: string;
+                time: string;
+            };
+            researchCostTime: {
+                header: string;
+                researches: string;
+                lifeformResearches: string;
+            };
+            crawlers: {
+                header: string;
+                productionBonus: string;
+                energyConsumption: string;
+            };
+            denCapacity: {
+                header: string;
+            };
+            phalanxRange: {
+                header: string;
+            };
+            discoveryMissions: {
+                header: string;
+            };
+            playerClasses: {
+                header: string;
+
+                collector: {
+                    productionBonus: string;
+                    energyProductionBonus: string;
+                    transporterSpeedBonus: string;
+                    transporterCargoBonus: string;
+                    crawlerProductionBonus: string;
+                    geologistCrawlerAmountBonus: string;
+                };
+                discoverer: {
+                    researchDuration: string;
+                    increasedExpeditionFinds: string;
+                    largerPlanets: string;
+                    additionalExpeditionSlots: string;
+                    reducedExpeditionCombatChance: string;
+                    phalanxRange: string;
+                };
+                general: {
+                    combatShipSpeed: string;
+                    recyclerSpeed: string;
+                    fuelConsumption: string;
+                    increasedCargoRecyclersPathfinders: string;
+                    additionalCombatResearchLevels: string;
+                    additionalFleetSlots: string;
+                    additionalMoonFields: string;
+                };
+
+                classBonus: string;
+                bonus: string;
+                baseValue: string;
+                valueWithBonuses: string;
+            };
+        };
     };
 }

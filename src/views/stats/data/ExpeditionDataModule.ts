@@ -12,7 +12,6 @@ import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/exped
 import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
 import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
 import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-import { ShipType } from '@/shared/models/ogame/ships/ShipType';
 import { multiplyCost } from '@/shared/models/ogame/common/Cost';
 import { createRecord } from '@/shared/utils/createRecord';
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
@@ -68,6 +67,21 @@ class ExpeditionDataModuleClass extends Vue {
 
     private async loadData() {
         await this.$nextTick();
+
+        const expeditions = await this.getRawData();
+
+        let minDate: number | null = null;
+        expeditions.forEach(expedition => {
+            this.addExpeditionToDailyResult(expedition);
+
+            minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
+        });
+        this.internal_firstDate = minDate;
+        
+        this._resolveReady();
+    }
+
+    public async getRawData(): Promise<ExpeditionEvent[]> {
         await UniversesAndAccountsDataModule.ready;
 
         const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
@@ -81,20 +95,14 @@ class ExpeditionDataModuleClass extends Vue {
             ...linkedAccounts,
         ];
 
-        let minDate: number | null = null;
-        for(const account of accounts) {
+        const rawExpeditions: ExpeditionEvent[] = [];
+        for (const account of accounts) {
             const db = await getPlayerDatabase(account);
 
             const expeditions = await db.getAll('expeditions');
-            expeditions.forEach(expedition => {
-                this.addExpeditionToDailyResult(expedition);
-
-                minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
-            });
-            this.internal_firstDate = minDate;
+            rawExpeditions.push(...expeditions);
         }
-
-        this._resolveReady();
+        return rawExpeditions;
     }
 
 

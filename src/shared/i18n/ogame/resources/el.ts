@@ -5,4 +5,5 @@ export const el: ResourceTranslations = {
     [ResourceType.metal]: 'Μέταλλο',
     [ResourceType.crystal]: 'Κρύσταλλο',
     [ResourceType.deuterium]: 'Δευτέριο',
+    energy: 'Ενέργεια',
 };

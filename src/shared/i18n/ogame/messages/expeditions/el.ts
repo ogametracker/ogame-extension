@@ -15,7 +15,7 @@ export const el: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Η αποστολή εξερεύνησης, */'πραγματοποίησε επιτυχώς ένα πρωτότυπο πείραμα'/* ! Κατόρθωσε να εξορύξει αντιύλη από ένα αστέρι που έσβηνε.'*/,
             /*'Η αποστολή εξερεύνησης, */'εντόπισε ένα εγκαταλειμένο διαστημικό σταθμό'/* , ο οποίος περιφερόταν ανεξέλεγκτα στο διάστημα για αρκετό καιρό. Ο ίδιος ο σταθμός δεν είναι χρήσιμος, ωστώσο εντοπίστηκε ποσότητα αντιύλης στους αντιδραστίρες. Οι τεχνικοί προσπαθούν να περισυλλέξουν όσο το δυνατόν περισσότερη ποσότητα.'*/,
-            /*TODO: el 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Η αποστολή εξερεύνησης */'αναφέρει ένα παράξενο, θεαματικό φαινόμενο'/* ! Τη έλξη αντιύλης στους συσωρευτές ενέργειας των ασπίδων των σκαφών. Οι τεχνικοί προσπαθούν να συγκεντρώσουν όσο το δυνατόν περισσότερη ποσότητα αντιύλης είναι δυνατόν, όσο διαρκεί το φαινόμενο.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: el 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -52,7 +52,7 @@ export const el: ExpeditionMessages = {
             /*'Εντοπίσαμε */'τα απομεινάρια μιας αρμάδας'/* . οι τεχνικοί πήγαν κατευθείαν στα πιο ανέπαφα σκάφη προσπαθώντας να τα θέσουν ξανά σε λειτουργία.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: el 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Εντοπίσαμε */'ένα τεράστιο διαστημικό νεκροταφείο'/* . Ορισμένοι από τους τεχνικούς της αποστολής, κατάφεραν και έθεσαν σε λειτουργία μερικά από τα σκάφη που υπήρχαν εκεί.'*/,
             /*TODO: el 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Τα ακόλουθα σκάφη, αποτελούν πλέον μέρος του στόλου:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
@@ -135,9 +135,9 @@ export const el: ExpeditionMessages = {
             /*TODO: el 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: el 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'Ένα */'άγνωστο είδος επιτέθηκε στην αποστολή μας',
             /*'Ο στόλος της αποστολής, */'εισχώρησε σε μια περιοχή που ανήκει σε μια μη καταγεγραμένη'/* , αλλά πολύ επιθετική και πολεμοχαρή εξωγήινη φυλή.'*/,
-            /*TODO: el 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Η σύνδεση */'με το στόλο της αποστολής διακόπηκε για λίγο χρόνο'/* . Το τελευταίο τους μύνημα που μπορέσαμε και αποκωδικοποιήσαμε, ανάφερε οτι δέχονταν ισχυρά πυρά.Οι επιτιθέμενοι δεν μπόρεσαν να αναγνωριστούν.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: el 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,

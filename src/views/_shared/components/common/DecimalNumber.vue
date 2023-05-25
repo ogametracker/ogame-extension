@@ -1,5 +1,6 @@
 <template>
     <span
+        class="decimal-number"
         :class="{
             'fade-value': value == 0,
             'fade-decimals': fadeDecimals,
@@ -7,7 +8,7 @@
         }"
     >
         <span v-if="prefix != ''" v-text="prefix" />
-        
+
         <span v-text="$i18n.$n(Math.trunc(value), format)" />
         <span v-if="digits > 0" class="fraction" v-text="$i18n.$n(Math.abs(value) % 1, fractionNumberFormat).substring(1)" />
 
@@ -51,19 +52,23 @@
     }
 </script>
 <style lang="scss" scoped>
-    .fade-value {
-        color: rgba(white, 0.1);
+    .decimal-number {
+        --small-fraction-size: 0.65em;
 
-        .fraction {
+        &.fade-value {
             color: rgba(white, 0.1);
+
+            .fraction {
+                color: rgba(white, 0.1);
+            }
         }
-    }
 
-    .small-fraction .fraction {
-        font-size: 0.65em;
-    }
+        &.small-fraction .fraction {
+            font-size: var(--small-fraction-size);
+        }
 
-    .fade-decimals .fraction {
-        color: rgba(white, 0.333);
+        &.fade-decimals .fraction {
+            color: rgba(white, 0.333);
+        }
     }
 </style>

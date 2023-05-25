@@ -7,6 +7,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ListNavItem } from '@stats/components/common/ListNav.vue';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { EmpireDataModule } from '../../data/EmpireDataModule';
 
     @Component({})
     export default class Expeditions extends Vue {
@@ -15,6 +16,7 @@
 
         async mounted() {
             await ExpeditionDataModule.ready;
+            await EmpireDataModule.ready;
             this.loading = false;
         }
 
@@ -43,6 +45,10 @@
                 {
                     label: this.$i18n.$t.extension.expeditions.tabHeaders.depletion,
                     to: { name: 'expeditions/depletion' },
+                },
+                {
+                    label: this.$i18n.$t.extension.expeditions.tabHeaders.info.header,
+                    to: { name: 'expeditions/info' },
                 },
             ];
         }

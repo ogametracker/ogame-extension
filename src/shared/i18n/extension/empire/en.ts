@@ -36,7 +36,7 @@ export const en: EmpireTranslations = {
             allianceClass: 'Alliance Class',
             lifeformTechnologies: 'Lifeform Technologies',
         },
-        
+
         settings: {
             reset: 'Reset',
             header: 'Production settings',
@@ -54,7 +54,7 @@ export const en: EmpireTranslations = {
             groupSelectedItems: 'Group selected items',
             showOriginalItems: 'Show all items individually',
 
-            levelsOnPlanets:(levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
+            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
         },
 
         settings: {
@@ -142,6 +142,7 @@ export const en: EmpireTranslations = {
 
             discoveryResults: 'Results',
             experience: 'Experience',
+            researchBonuses: 'Research Bonuses',
         },
 
         planet: 'Planet',
@@ -174,5 +175,97 @@ export const en: EmpireTranslations = {
         experiencePoints: 'Experience Points',
         discoveredOn: 'Lifeform discovered on',
         numberOfLifeformDiscoveries: 'Number of discoveries',
+
+        researchBonuses: {
+            production: {
+                header: 'Resource Production',
+            },
+            expeditionFinds: {
+                header: 'Expedition Finds',
+                resources: 'Resources',
+                ships: 'Ships',
+                fleetLoss: 'Fleet losses',
+            },
+            expeditionSpeed: {
+                header: 'Expedition Arrival Speed',
+                bonus: 'Speed Bonus',
+            },
+            ships: {
+                header: 'Ships',
+                armor: 'Armor',
+                shield: 'Shield',
+                damage: 'Damage',
+                cargo: 'Cargo',
+                speed: 'Speed',
+            },
+            defenses: {
+                header: 'Defenses',
+            },
+            fuelConsumption: {
+                header: 'Fuel Consumption',
+            },
+            fuelReturn: {
+                header: 'Fuel Return on Recall',
+                bonus: 'Fuel Return',
+            },
+            buildingCostTime: {
+                header: 'Building Cost&Time',
+                cost: 'Cost',
+                time: 'Time',
+            },
+            researchCostTime: {
+                header: 'Research Cost&Time',
+                researches: 'Researches',
+                lifeformResearches: 'Lifeform Researches',
+            },
+            crawlers: {
+                header: 'Crawlers',
+                productionBonus: 'Resource Production',
+                energyConsumption: 'Energy Consumption',
+            },
+            denCapacity: {
+                header: 'Den Capacity',
+            },
+            phalanxRange: {
+                header: 'Phalanx Range',
+            },
+            discoveryMissions: {
+                header: 'Discovery Mission Speed',
+            },
+            playerClasses: {
+                header: 'Player Classes',
+
+                collector: {
+                    productionBonus: 'Increased mine production',
+                    energyProductionBonus: 'Increased energy production',
+                    transporterSpeedBonus: 'Transporter speed bonus',
+                    transporterCargoBonus: 'Transporter cargo bonus',
+                    crawlerProductionBonus: 'Crawler production bonus',
+                    geologistCrawlerAmountBonus: 'More usable crawlers with Geologist',
+                },
+                discoverer: {
+                    researchDuration: 'Research time',
+                    increasedExpeditionFinds: 'Increased gain on expeditions',
+                    largerPlanets: 'Larger planets on colonization',
+                    additionalExpeditionSlots: 'Additional expedition slots',
+                    reducedExpeditionCombatChance: 'Chance of expedition combats',
+                    phalanxRange: 'Increased phalanx range',
+                },
+                general: {
+                    combatShipSpeed: 'Combat ship speed bonus',
+                    recyclerSpeed: 'recycler speed bonus',
+                    fuelConsumption: 'Fuel consumption for all ships',
+                    increasedCargoRecyclersPathfinders: 'Increased cargo for Recyclers/Pathfinders',
+                    additionalCombatResearchLevels: 'Additional combat research levels',
+                    additionalFleetSlots: 'Additional fleet slots',
+                    additionalMoonFields: 'Additional moon fields',
+                },
+
+                classBonus: 'Class Bonus',
+                bonus: 'Bonus',
+                baseValue: 'Base Value',
+                valueWithBonuses: 'Value with Bonuses',
+            },
+        },
     },
 };

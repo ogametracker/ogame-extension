@@ -21,6 +21,7 @@ import { SettingsTranslations } from './settings/type';
 import { SwitchAccountsTranslations } from './switchAccounts/type';
 import { ToolsTranslations } from './tools/type';
 import { UniverseHistoryTranslations } from './universeHistory/type';
+import { PlayerClassTranslations } from './playerClasses/type';
 
 export interface ExtensionTranslationsFull {
     ogame: {
@@ -29,6 +30,7 @@ export interface ExtensionTranslationsFull {
         lifeformBuildings: LifeformBuildingsTranslations;
         lifeformTechnologies: LifeformTechnologiesTranslations;
         premium: PremiumTranslations;
+        resources: ResourceTranslations;
         research: ResearchTranslations;
         ships: ShipTranslations;
     };
@@ -50,6 +52,7 @@ export interface ExtensionTranslationsFull {
         tools: ToolsTranslations;
 
         excelExport: ExcelExportTranslations;
+        playerClasses: PlayerClassTranslations;
     };
 }
 
