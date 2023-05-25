@@ -1,165 +1,14 @@
-import viewsIndex from '@stats/views/Index.vue';
-import viewsDonate from '@stats/views/Donate.vue';
-import viewsExcelExport from '@stats/views/Excel-Export.vue';
-import viewsaboutIndex from '@stats/views/about/Index.vue';
-import viewsaboutHelp from '@stats/views/about/Help.vue';
-import viewsaboutInfo from '@stats/views/about/Info.vue';
-import viewscombatsIndex from '@stats/views/combats/Index.vue';
-import viewscombatslostshipsIndex from '@stats/views/combats/lost-ships/Index.vue';
-import viewscombatslostshipsagainstplayersIndex from '@stats/views/combats/lost-ships/against-players/Index.vue';
-import viewscombatslostshipsagainstplayersamountIndex from '@stats/views/combats/lost-ships/against-players/amount/Index.vue';
-import viewscombatslostshipsagainstplayersamountChart from '@stats/views/combats/lost-ships/against-players/amount/Chart.vue';
-import viewscombatslostshipsagainstplayersamountTable from '@stats/views/combats/lost-ships/against-players/amount/Table.vue';
-import viewscombatslostshipsagainstplayersresourcesIndex from '@stats/views/combats/lost-ships/against-players/resources/Index.vue';
-import viewscombatslostshipsagainstplayersresourcesChart from '@stats/views/combats/lost-ships/against-players/resources/Chart.vue';
-import viewscombatslostshipsagainstplayersresourcesTable from '@stats/views/combats/lost-ships/against-players/resources/Table.vue';
-import viewscombatslostshipsonexpeditionsIndex from '@stats/views/combats/lost-ships/on-expeditions/Index.vue';
-import viewscombatslostshipsonexpeditionsamountIndex from '@stats/views/combats/lost-ships/on-expeditions/amount/Index.vue';
-import viewscombatslostshipsonexpeditionsamountChart from '@stats/views/combats/lost-ships/on-expeditions/amount/Chart.vue';
-import viewscombatslostshipsonexpeditionsamountTable from '@stats/views/combats/lost-ships/on-expeditions/amount/Table.vue';
-import viewscombatslostshipsonexpeditionsresourcesIndex from '@stats/views/combats/lost-ships/on-expeditions/resources/Index.vue';
-import viewscombatslostshipsonexpeditionsresourcesChart from '@stats/views/combats/lost-ships/on-expeditions/resources/Chart.vue';
-import viewscombatslostshipsonexpeditionsresourcesTable from '@stats/views/combats/lost-ships/on-expeditions/resources/Table.vue';
-import viewscombatsoverviewIndex from '@stats/views/combats/overview/Index.vue';
-import viewscombatsoverviewagainstplayersIndex from '@stats/views/combats/overview/against-players/Index.vue';
-import viewscombatsoverviewagainstplayersChart from '@stats/views/combats/overview/against-players/Chart.vue';
-import viewscombatsoverviewagainstplayersTable from '@stats/views/combats/overview/against-players/Table.vue';
-import viewscombatsoverviewonexpeditionsIndex from '@stats/views/combats/overview/on-expeditions/Index.vue';
-import viewscombatsoverviewonexpeditionsChart from '@stats/views/combats/overview/on-expeditions/Chart.vue';
-import viewscombatsoverviewonexpeditionsTable from '@stats/views/combats/overview/on-expeditions/Table.vue';
-import viewscombatsresourcesIndex from '@stats/views/combats/resources/Index.vue';
-import viewscombatsresourcesChart from '@stats/views/combats/resources/Chart.vue';
-import viewscombatsresourcesTable from '@stats/views/combats/resources/Table.vue';
-import viewsdebrisfieldsIndex from '@stats/views/debris-fields/Index.vue';
-import viewsdebrisfieldsChart from '@stats/views/debris-fields/Chart.vue';
-import viewsdebrisfieldsTable from '@stats/views/debris-fields/Table.vue';
-import viewsempireIndex from '@stats/views/empire/Index.vue';
-import viewsempireAmortization from '@stats/views/empire/Amortization.vue';
-import viewsempirePointDistribution from '@stats/views/empire/Point-Distribution.vue';
-import viewsempirelifeformsIndex from '@stats/views/empire/lifeforms/Index.vue';
-import viewsempirelifeformsOverview from '@stats/views/empire/lifeforms/Overview.vue';
-import viewsempirelifeformsProgress from '@stats/views/empire/lifeforms/Progress.vue';
-import viewsempirelifeformsbonusbreakdownIndex from '@stats/views/empire/lifeforms/bonus-breakdown/Index.vue';
-import viewsempirelifeformsbonusbreakdownBuildingCostTime from '@stats/views/empire/lifeforms/bonus-breakdown/Building-Cost-Time.vue';
-import viewsempirelifeformsbonusbreakdownCrawlers from '@stats/views/empire/lifeforms/bonus-breakdown/Crawlers.vue';
-import viewsempirelifeformsbonusbreakdownDefenses from '@stats/views/empire/lifeforms/bonus-breakdown/Defenses.vue';
-import viewsempirelifeformsbonusbreakdownDenCapacity from '@stats/views/empire/lifeforms/bonus-breakdown/Den-Capacity.vue';
-import viewsempirelifeformsbonusbreakdownDiscoveryMissions from '@stats/views/empire/lifeforms/bonus-breakdown/Discovery-Missions.vue';
-import viewsempirelifeformsbonusbreakdownExpeditionFinds from '@stats/views/empire/lifeforms/bonus-breakdown/Expedition-Finds.vue';
-import viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed from '@stats/views/empire/lifeforms/bonus-breakdown/Expedition-Fleet-Speed.vue';
-import viewsempirelifeformsbonusbreakdownFleetFuelReturn from '@stats/views/empire/lifeforms/bonus-breakdown/Fleet-Fuel-Return.vue';
-import viewsempirelifeformsbonusbreakdownFuelConsumption from '@stats/views/empire/lifeforms/bonus-breakdown/Fuel-Consumption.vue';
-import viewsempirelifeformsbonusbreakdownPhalanxRange from '@stats/views/empire/lifeforms/bonus-breakdown/Phalanx-Range.vue';
-import viewsempirelifeformsbonusbreakdownPlayerClass from '@stats/views/empire/lifeforms/bonus-breakdown/Player-Class.vue';
-import viewsempirelifeformsbonusbreakdownResearchCostTime from '@stats/views/empire/lifeforms/bonus-breakdown/Research-Cost-Time.vue';
-import viewsempirelifeformsbonusbreakdownResourceProduction from '@stats/views/empire/lifeforms/bonus-breakdown/Resource-Production.vue';
-import viewsempirelifeformsbonusbreakdownShips from '@stats/views/empire/lifeforms/bonus-breakdown/Ships.vue';
-import viewsempirelifeformsdiscoveriesIndex from '@stats/views/empire/lifeforms/discoveries/Index.vue';
-import viewsempirelifeformsdiscoveriesartifactsIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/Index.vue';
-import viewsempirelifeformsdiscoveriesartifactsamountIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Index.vue';
-import viewsempirelifeformsdiscoveriesartifactsamountChart from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Chart.vue';
-import viewsempirelifeformsdiscoveriesartifactsamountTable from '@stats/views/empire/lifeforms/discoveries/artifacts/amount/Table.vue';
-import viewsempirelifeformsdiscoveriesartifactssizesIndex from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Index.vue';
-import viewsempirelifeformsdiscoveriesartifactssizesChart from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Chart.vue';
-import viewsempirelifeformsdiscoveriesartifactssizesTable from '@stats/views/empire/lifeforms/discoveries/artifacts/sizes/Table.vue';
-import viewsempirelifeformsdiscoveriesexperienceIndex from '@stats/views/empire/lifeforms/discoveries/experience/Index.vue';
-import viewsempirelifeformsdiscoveriesexperienceChart from '@stats/views/empire/lifeforms/discoveries/experience/Chart.vue';
-import viewsempirelifeformsdiscoveriesexperienceTable from '@stats/views/empire/lifeforms/discoveries/experience/Table.vue';
-import viewsempirelifeformsdiscoveriesoverviewIndex from '@stats/views/empire/lifeforms/discoveries/overview/Index.vue';
-import viewsempirelifeformsdiscoveriesoverviewChart from '@stats/views/empire/lifeforms/discoveries/overview/Chart.vue';
-import viewsempirelifeformsdiscoveriesoverviewTable from '@stats/views/empire/lifeforms/discoveries/overview/Table.vue';
-import viewsempireproductionIndex from '@stats/views/empire/production/Index.vue';
-import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue';
-import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
-import viewsespionageIndex from '@stats/views/espionage/Index.vue';
-import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
-import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
-import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
-import viewsexpeditionsdarkmatteramountChart from '@stats/views/expeditions/dark-matter/amount/Chart.vue';
-import viewsexpeditionsdarkmatteramountTable from '@stats/views/expeditions/dark-matter/amount/Table.vue';
-import viewsexpeditionsdarkmattersizesIndex from '@stats/views/expeditions/dark-matter/sizes/Index.vue';
-import viewsexpeditionsdarkmattersizesChart from '@stats/views/expeditions/dark-matter/sizes/Chart.vue';
-import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-matter/sizes/Table.vue';
-import viewsexpeditionsdepletionIndex from '@stats/views/expeditions/depletion/Index.vue';
-import viewsexpeditionsdepletionChart from '@stats/views/expeditions/depletion/Chart.vue';
-import viewsexpeditionsdepletionTable from '@stats/views/expeditions/depletion/Table.vue';
-import viewsexpeditionsinfoIndex from '@stats/views/expeditions/info/Index.vue';
-import viewsexpeditionsinfoLargestFinds from '@stats/views/expeditions/info/Largest-Finds.vue';
-import viewsexpeditionsinfoPossibleFinds from '@stats/views/expeditions/info/Possible-Finds.vue';
-import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
-import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
-import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
-import viewsexpeditionsoverviewTable from '@stats/views/expeditions/overview/Table.vue';
-import viewsexpeditionsresourcesIndex from '@stats/views/expeditions/resources/Index.vue';
-import viewsexpeditionsresourcesamountIndex from '@stats/views/expeditions/resources/amount/Index.vue';
-import viewsexpeditionsresourcesamountChart from '@stats/views/expeditions/resources/amount/Chart.vue';
-import viewsexpeditionsresourcesamountTable from '@stats/views/expeditions/resources/amount/Table.vue';
-import viewsexpeditionsresourcescountIndex from '@stats/views/expeditions/resources/count/Index.vue';
-import viewsexpeditionsresourcescountChart from '@stats/views/expeditions/resources/count/Chart.vue';
-import viewsexpeditionsresourcescountTable from '@stats/views/expeditions/resources/count/Table.vue';
-import viewsexpeditionsresourcessizebreakdownIndex from '@stats/views/expeditions/resources/size-breakdown/Index.vue';
-import viewsexpeditionsresourcessizebreakdowncrystalIndex from '@stats/views/expeditions/resources/size-breakdown/crystal/Index.vue';
-import viewsexpeditionsresourcessizebreakdowncrystalChart from '@stats/views/expeditions/resources/size-breakdown/crystal/Chart.vue';
-import viewsexpeditionsresourcessizebreakdowncrystalTable from '@stats/views/expeditions/resources/size-breakdown/crystal/Table.vue';
-import viewsexpeditionsresourcessizebreakdowndeuteriumIndex from '@stats/views/expeditions/resources/size-breakdown/deuterium/Index.vue';
-import viewsexpeditionsresourcessizebreakdowndeuteriumChart from '@stats/views/expeditions/resources/size-breakdown/deuterium/Chart.vue';
-import viewsexpeditionsresourcessizebreakdowndeuteriumTable from '@stats/views/expeditions/resources/size-breakdown/deuterium/Table.vue';
-import viewsexpeditionsresourcessizebreakdownmetalIndex from '@stats/views/expeditions/resources/size-breakdown/metal/Index.vue';
-import viewsexpeditionsresourcessizebreakdownmetalChart from '@stats/views/expeditions/resources/size-breakdown/metal/Chart.vue';
-import viewsexpeditionsresourcessizebreakdownmetalTable from '@stats/views/expeditions/resources/size-breakdown/metal/Table.vue';
-import viewsexpeditionsresourcessizesIndex from '@stats/views/expeditions/resources/sizes/Index.vue';
-import viewsexpeditionsresourcessizesChart from '@stats/views/expeditions/resources/sizes/Chart.vue';
-import viewsexpeditionsresourcessizesTable from '@stats/views/expeditions/resources/sizes/Table.vue';
-import viewsexpeditionsshipsIndex from '@stats/views/expeditions/ships/Index.vue';
-import viewsexpeditionsshipsamountIndex from '@stats/views/expeditions/ships/amount/Index.vue';
-import viewsexpeditionsshipsamountChart from '@stats/views/expeditions/ships/amount/Chart.vue';
-import viewsexpeditionsshipsamountTable from '@stats/views/expeditions/ships/amount/Table.vue';
-import viewsexpeditionsshipsresourcesIndex from '@stats/views/expeditions/ships/resources/Index.vue';
-import viewsexpeditionsshipsresourcesChart from '@stats/views/expeditions/ships/resources/Chart.vue';
-import viewsexpeditionsshipsresourcesTable from '@stats/views/expeditions/ships/resources/Table.vue';
-import viewsexpeditionsshipssizesIndex from '@stats/views/expeditions/ships/sizes/Index.vue';
-import viewsexpeditionsshipssizesChart from '@stats/views/expeditions/ships/sizes/Chart.vue';
-import viewsexpeditionsshipssizesTable from '@stats/views/expeditions/ships/sizes/Table.vue';
-import viewsresourcebalanceIndex from '@stats/views/resource-balance/Index.vue';
-import viewsresourcebalanceChart from '@stats/views/resource-balance/Chart.vue';
-import viewsresourcebalanceTable from '@stats/views/resource-balance/Table.vue';
-import viewssettingsIndex from '@stats/views/settings/Index.vue';
-import viewssettingsAccessibility from '@stats/views/settings/Accessibility.vue';
-import viewssettingsColors from '@stats/views/settings/Colors.vue';
-import viewssettingsCombats from '@stats/views/settings/Combats.vue';
-import viewssettingsCommon from '@stats/views/settings/Common.vue';
-import viewssettingsDangerZone from '@stats/views/settings/Danger-Zone.vue';
-import viewssettingsDateRanges from '@stats/views/settings/Date-Ranges.vue';
-import viewssettingsDebrisFields from '@stats/views/settings/Debris-Fields.vue';
-import viewssettingsExpeditions from '@stats/views/settings/Expeditions.vue';
-import viewssettingsImportExport from '@stats/views/settings/Import-Export.vue';
-import viewssettingsLinkedAccounts from '@stats/views/settings/Linked-Accounts.vue';
-import viewssettingsResourceBalance from '@stats/views/settings/Resource-Balance.vue';
-import viewssettingsUniverseHistory from '@stats/views/settings/Universe-History.vue';
-import viewstoolsIndex from '@stats/views/tools/Index.vue';
-import viewstoolsConstructionQueue from '@stats/views/tools/Construction-Queue.vue';
-import viewstoolsCostCalculator from '@stats/views/tools/Cost-Calculator.vue';
-import viewstoolsExpeditionCalculator from '@stats/views/tools/Expedition-Calculator.vue';
-import viewstoolsProductionCalculator from '@stats/views/tools/Production-Calculator.vue';
-import viewstoolsResourceConversion from '@stats/views/tools/Resource-Conversion.vue';
-import viewstoolsSignatureGenerator from '@stats/views/tools/Signature-Generator.vue';
-import viewsuniversehistoryIndex from '@stats/views/universe-history/Index.vue';
-import viewsuniversehistoryalliancesIndex from '@stats/views/universe-history/alliances/Index.vue';
-import viewsuniversehistoryalliancesHighscore from '@stats/views/universe-history/alliances/Highscore.vue';
-import viewsuniversehistoryalliancesHistory from '@stats/views/universe-history/alliances/History.vue';
-import viewsuniversehistoryplayersIndex from '@stats/views/universe-history/players/Index.vue';
-import viewsuniversehistoryplayersHighscore from '@stats/views/universe-history/players/Highscore.vue';
-import viewsuniversehistoryplayersHistory from '@stats/views/universe-history/players/History.vue';
-import { RouteConfig } from 'vue-router';
 
-const routes: RouteConfig[] = [
+        import { RouteConfig } from 'vue-router';
+
+        const routes: RouteConfig[] = [
     {
         redirect: {
             name: "expeditions"
         },
         path: "/",
         name: "",
-        component: viewsIndex,
+        component: () => import(/* webpackChunkName: \"stats-view-viewsIndex\" */ '../views/Index.vue'),
         children: [
             {
                 meta: {
@@ -167,7 +16,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "donate",
                 name: "donate",
-                component: viewsDonate
+                component: () => import(/* webpackChunkName: \"stats-view-viewsDonate\" */ '../views/Donate.vue')
             },
             {
                 meta: {
@@ -175,7 +24,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "excel-export",
                 name: "excel-export",
-                component: viewsExcelExport
+                component: () => import(/* webpackChunkName: \"stats-view-viewsExcelExport\" */ '../views/Excel-Export.vue')
             },
             {
                 redirect: {
@@ -186,17 +35,17 @@ const routes: RouteConfig[] = [
                 },
                 path: "about",
                 name: "about",
-                component: viewsaboutIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsaboutIndex\" */ '../views/about/Index.vue'),
                 children: [
                     {
                         path: "help",
                         name: "about/help",
-                        component: viewsaboutHelp
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsaboutHelp\" */ '../views/about/Help.vue')
                     },
                     {
                         path: "info",
                         name: "about/info",
-                        component: viewsaboutInfo
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsaboutInfo\" */ '../views/about/Info.vue')
                     }
                 ]
             },
@@ -209,7 +58,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "combats",
                 name: "combats",
-                component: viewscombatsIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewscombatsIndex\" */ '../views/combats/Index.vue'),
                 children: [
                     {
                         redirect: {
@@ -217,7 +66,7 @@ const routes: RouteConfig[] = [
                         },
                         path: "lost-ships",
                         name: "combats/lost-ships",
-                        component: viewscombatslostshipsIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsIndex\" */ '../views/combats/lost-ships/Index.vue'),
                         children: [
                             {
                                 redirect: {
@@ -225,7 +74,7 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "against-players",
                                 name: "combats/lost-ships/against-players",
-                                component: viewscombatslostshipsagainstplayersIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersIndex\" */ '../views/combats/lost-ships/against-players/Index.vue'),
                                 children: [
                                     {
                                         redirect: {
@@ -233,17 +82,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "amount",
                                         name: "combats/lost-ships/against-players/amount",
-                                        component: viewscombatslostshipsagainstplayersamountIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersamountIndex\" */ '../views/combats/lost-ships/against-players/amount/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "combats/lost-ships/against-players/amount/chart",
-                                                component: viewscombatslostshipsagainstplayersamountChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersamountChart\" */ '../views/combats/lost-ships/against-players/amount/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "combats/lost-ships/against-players/amount/table",
-                                                component: viewscombatslostshipsagainstplayersamountTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersamountTable\" */ '../views/combats/lost-ships/against-players/amount/Table.vue')
                                             }
                                         ]
                                     },
@@ -253,17 +102,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "resources",
                                         name: "combats/lost-ships/against-players/resources",
-                                        component: viewscombatslostshipsagainstplayersresourcesIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersresourcesIndex\" */ '../views/combats/lost-ships/against-players/resources/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "combats/lost-ships/against-players/resources/chart",
-                                                component: viewscombatslostshipsagainstplayersresourcesChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersresourcesChart\" */ '../views/combats/lost-ships/against-players/resources/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "combats/lost-ships/against-players/resources/table",
-                                                component: viewscombatslostshipsagainstplayersresourcesTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsagainstplayersresourcesTable\" */ '../views/combats/lost-ships/against-players/resources/Table.vue')
                                             }
                                         ]
                                     }
@@ -275,7 +124,7 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "on-expeditions",
                                 name: "combats/lost-ships/on-expeditions",
-                                component: viewscombatslostshipsonexpeditionsIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsIndex\" */ '../views/combats/lost-ships/on-expeditions/Index.vue'),
                                 children: [
                                     {
                                         redirect: {
@@ -283,17 +132,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "amount",
                                         name: "combats/lost-ships/on-expeditions/amount",
-                                        component: viewscombatslostshipsonexpeditionsamountIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsamountIndex\" */ '../views/combats/lost-ships/on-expeditions/amount/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "combats/lost-ships/on-expeditions/amount/chart",
-                                                component: viewscombatslostshipsonexpeditionsamountChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsamountChart\" */ '../views/combats/lost-ships/on-expeditions/amount/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "combats/lost-ships/on-expeditions/amount/table",
-                                                component: viewscombatslostshipsonexpeditionsamountTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsamountTable\" */ '../views/combats/lost-ships/on-expeditions/amount/Table.vue')
                                             }
                                         ]
                                     },
@@ -303,17 +152,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "resources",
                                         name: "combats/lost-ships/on-expeditions/resources",
-                                        component: viewscombatslostshipsonexpeditionsresourcesIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsresourcesIndex\" */ '../views/combats/lost-ships/on-expeditions/resources/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "combats/lost-ships/on-expeditions/resources/chart",
-                                                component: viewscombatslostshipsonexpeditionsresourcesChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsresourcesChart\" */ '../views/combats/lost-ships/on-expeditions/resources/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "combats/lost-ships/on-expeditions/resources/table",
-                                                component: viewscombatslostshipsonexpeditionsresourcesTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatslostshipsonexpeditionsresourcesTable\" */ '../views/combats/lost-ships/on-expeditions/resources/Table.vue')
                                             }
                                         ]
                                     }
@@ -327,7 +176,7 @@ const routes: RouteConfig[] = [
                         },
                         path: "overview",
                         name: "combats/overview",
-                        component: viewscombatsoverviewIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewIndex\" */ '../views/combats/overview/Index.vue'),
                         children: [
                             {
                                 redirect: {
@@ -335,17 +184,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "against-players",
                                 name: "combats/overview/against-players",
-                                component: viewscombatsoverviewagainstplayersIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewagainstplayersIndex\" */ '../views/combats/overview/against-players/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "combats/overview/against-players/chart",
-                                        component: viewscombatsoverviewagainstplayersChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewagainstplayersChart\" */ '../views/combats/overview/against-players/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "combats/overview/against-players/table",
-                                        component: viewscombatsoverviewagainstplayersTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewagainstplayersTable\" */ '../views/combats/overview/against-players/Table.vue')
                                     }
                                 ]
                             },
@@ -355,17 +204,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "on-expeditions",
                                 name: "combats/overview/on-expeditions",
-                                component: viewscombatsoverviewonexpeditionsIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewonexpeditionsIndex\" */ '../views/combats/overview/on-expeditions/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "combats/overview/on-expeditions/chart",
-                                        component: viewscombatsoverviewonexpeditionsChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewonexpeditionsChart\" */ '../views/combats/overview/on-expeditions/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "combats/overview/on-expeditions/table",
-                                        component: viewscombatsoverviewonexpeditionsTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsoverviewonexpeditionsTable\" */ '../views/combats/overview/on-expeditions/Table.vue')
                                     }
                                 ]
                             }
@@ -377,17 +226,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "resources",
                         name: "combats/resources",
-                        component: viewscombatsresourcesIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewscombatsresourcesIndex\" */ '../views/combats/resources/Index.vue'),
                         children: [
                             {
                                 path: "chart",
                                 name: "combats/resources/chart",
-                                component: viewscombatsresourcesChart
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatsresourcesChart\" */ '../views/combats/resources/Chart.vue')
                             },
                             {
                                 path: "table",
                                 name: "combats/resources/table",
-                                component: viewscombatsresourcesTable
+                                component: () => import(/* webpackChunkName: \"stats-view-viewscombatsresourcesTable\" */ '../views/combats/resources/Table.vue')
                             }
                         ]
                     }
@@ -402,17 +251,17 @@ const routes: RouteConfig[] = [
                 },
                 path: "debris-fields",
                 name: "debris-fields",
-                component: viewsdebrisfieldsIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsdebrisfieldsIndex\" */ '../views/debris-fields/Index.vue'),
                 children: [
                     {
                         path: "chart",
                         name: "debris-fields/chart",
-                        component: viewsdebrisfieldsChart
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsdebrisfieldsChart\" */ '../views/debris-fields/Chart.vue')
                     },
                     {
                         path: "table",
                         name: "debris-fields/table",
-                        component: viewsdebrisfieldsTable
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsdebrisfieldsTable\" */ '../views/debris-fields/Table.vue')
                     }
                 ]
             },
@@ -425,17 +274,17 @@ const routes: RouteConfig[] = [
                 },
                 path: "empire",
                 name: "empire",
-                component: viewsempireIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsempireIndex\" */ '../views/empire/Index.vue'),
                 children: [
                     {
                         path: "amortization",
                         name: "empire/amortization",
-                        component: viewsempireAmortization
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsempireAmortization\" */ '../views/empire/Amortization.vue')
                     },
                     {
                         path: "point-distribution",
                         name: "empire/point-distribution",
-                        component: viewsempirePointDistribution
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirePointDistribution\" */ '../views/empire/Point-Distribution.vue')
                     },
                     {
                         redirect: {
@@ -443,17 +292,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "lifeforms",
                         name: "empire/lifeforms",
-                        component: viewsempirelifeformsIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsIndex\" */ '../views/empire/lifeforms/Index.vue'),
                         children: [
                             {
                                 path: "overview",
                                 name: "empire/lifeforms/overview",
-                                component: viewsempirelifeformsOverview
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsOverview\" */ '../views/empire/lifeforms/Overview.vue')
                             },
                             {
                                 path: "progress",
                                 name: "empire/lifeforms/progress",
-                                component: viewsempirelifeformsProgress
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsProgress\" */ '../views/empire/lifeforms/Progress.vue')
                             },
                             {
                                 redirect: {
@@ -461,77 +310,77 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "bonus-breakdown",
                                 name: "empire/lifeforms/bonus-breakdown",
-                                component: viewsempirelifeformsbonusbreakdownIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownIndex\" */ '../views/empire/lifeforms/bonus-breakdown/Index.vue'),
                                 children: [
                                     {
                                         path: "building-cost-time",
                                         name: "empire/lifeforms/bonus-breakdown/building-cost-time",
-                                        component: viewsempirelifeformsbonusbreakdownBuildingCostTime
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownBuildingCostTime\" */ '../views/empire/lifeforms/bonus-breakdown/Building-Cost-Time.vue')
                                     },
                                     {
                                         path: "crawlers",
                                         name: "empire/lifeforms/bonus-breakdown/crawlers",
-                                        component: viewsempirelifeformsbonusbreakdownCrawlers
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownCrawlers\" */ '../views/empire/lifeforms/bonus-breakdown/Crawlers.vue')
                                     },
                                     {
                                         path: "defenses",
                                         name: "empire/lifeforms/bonus-breakdown/defenses",
-                                        component: viewsempirelifeformsbonusbreakdownDefenses
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDefenses\" */ '../views/empire/lifeforms/bonus-breakdown/Defenses.vue')
                                     },
                                     {
                                         path: "den-capacity",
                                         name: "empire/lifeforms/bonus-breakdown/den-capacity",
-                                        component: viewsempirelifeformsbonusbreakdownDenCapacity
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDenCapacity\" */ '../views/empire/lifeforms/bonus-breakdown/Den-Capacity.vue')
                                     },
                                     {
                                         path: "discovery-missions",
                                         name: "empire/lifeforms/bonus-breakdown/discovery-missions",
-                                        component: viewsempirelifeformsbonusbreakdownDiscoveryMissions
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDiscoveryMissions\" */ '../views/empire/lifeforms/bonus-breakdown/Discovery-Missions.vue')
                                     },
                                     {
                                         path: "expedition-finds",
                                         name: "empire/lifeforms/bonus-breakdown/expedition-finds",
-                                        component: viewsempirelifeformsbonusbreakdownExpeditionFinds
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownExpeditionFinds\" */ '../views/empire/lifeforms/bonus-breakdown/Expedition-Finds.vue')
                                     },
                                     {
                                         path: "expedition-fleet-speed",
                                         name: "empire/lifeforms/bonus-breakdown/expedition-fleet-speed",
-                                        component: viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed\" */ '../views/empire/lifeforms/bonus-breakdown/Expedition-Fleet-Speed.vue')
                                     },
                                     {
                                         path: "fleet-fuel-return",
                                         name: "empire/lifeforms/bonus-breakdown/fleet-fuel-return",
-                                        component: viewsempirelifeformsbonusbreakdownFleetFuelReturn
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownFleetFuelReturn\" */ '../views/empire/lifeforms/bonus-breakdown/Fleet-Fuel-Return.vue')
                                     },
                                     {
                                         path: "fuel-consumption",
                                         name: "empire/lifeforms/bonus-breakdown/fuel-consumption",
-                                        component: viewsempirelifeformsbonusbreakdownFuelConsumption
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownFuelConsumption\" */ '../views/empire/lifeforms/bonus-breakdown/Fuel-Consumption.vue')
                                     },
                                     {
                                         path: "phalanx-range",
                                         name: "empire/lifeforms/bonus-breakdown/phalanx-range",
-                                        component: viewsempirelifeformsbonusbreakdownPhalanxRange
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownPhalanxRange\" */ '../views/empire/lifeforms/bonus-breakdown/Phalanx-Range.vue')
                                     },
                                     {
                                         path: "player-class",
                                         name: "empire/lifeforms/bonus-breakdown/player-class",
-                                        component: viewsempirelifeformsbonusbreakdownPlayerClass
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownPlayerClass\" */ '../views/empire/lifeforms/bonus-breakdown/Player-Class.vue')
                                     },
                                     {
                                         path: "research-cost-time",
                                         name: "empire/lifeforms/bonus-breakdown/research-cost-time",
-                                        component: viewsempirelifeformsbonusbreakdownResearchCostTime
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownResearchCostTime\" */ '../views/empire/lifeforms/bonus-breakdown/Research-Cost-Time.vue')
                                     },
                                     {
                                         path: "resource-production",
                                         name: "empire/lifeforms/bonus-breakdown/resource-production",
-                                        component: viewsempirelifeformsbonusbreakdownResourceProduction
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownResourceProduction\" */ '../views/empire/lifeforms/bonus-breakdown/Resource-Production.vue')
                                     },
                                     {
                                         path: "ships",
                                         name: "empire/lifeforms/bonus-breakdown/ships",
-                                        component: viewsempirelifeformsbonusbreakdownShips
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownShips\" */ '../views/empire/lifeforms/bonus-breakdown/Ships.vue')
                                     }
                                 ]
                             },
@@ -541,7 +390,7 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "discoveries",
                                 name: "empire/lifeforms/discoveries",
-                                component: viewsempirelifeformsdiscoveriesIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesIndex\" */ '../views/empire/lifeforms/discoveries/Index.vue'),
                                 children: [
                                     {
                                         redirect: {
@@ -549,7 +398,7 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "artifacts",
                                         name: "empire/lifeforms/discoveries/artifacts",
-                                        component: viewsempirelifeformsdiscoveriesartifactsIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/Index.vue'),
                                         children: [
                                             {
                                                 redirect: {
@@ -557,17 +406,17 @@ const routes: RouteConfig[] = [
                                                 },
                                                 path: "amount",
                                                 name: "empire/lifeforms/discoveries/artifacts/amount",
-                                                component: viewsempirelifeformsdiscoveriesartifactsamountIndex,
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Index.vue'),
                                                 children: [
                                                     {
                                                         path: "chart",
                                                         name: "empire/lifeforms/discoveries/artifacts/amount/chart",
-                                                        component: viewsempirelifeformsdiscoveriesartifactsamountChart
+                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountChart\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Chart.vue')
                                                     },
                                                     {
                                                         path: "table",
                                                         name: "empire/lifeforms/discoveries/artifacts/amount/table",
-                                                        component: viewsempirelifeformsdiscoveriesartifactsamountTable
+                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountTable\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Table.vue')
                                                     }
                                                 ]
                                             },
@@ -577,17 +426,17 @@ const routes: RouteConfig[] = [
                                                 },
                                                 path: "sizes",
                                                 name: "empire/lifeforms/discoveries/artifacts/sizes",
-                                                component: viewsempirelifeformsdiscoveriesartifactssizesIndex,
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Index.vue'),
                                                 children: [
                                                     {
                                                         path: "chart",
                                                         name: "empire/lifeforms/discoveries/artifacts/sizes/chart",
-                                                        component: viewsempirelifeformsdiscoveriesartifactssizesChart
+                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesChart\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Chart.vue')
                                                     },
                                                     {
                                                         path: "table",
                                                         name: "empire/lifeforms/discoveries/artifacts/sizes/table",
-                                                        component: viewsempirelifeformsdiscoveriesartifactssizesTable
+                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesTable\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Table.vue')
                                                     }
                                                 ]
                                             }
@@ -599,17 +448,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "experience",
                                         name: "empire/lifeforms/discoveries/experience",
-                                        component: viewsempirelifeformsdiscoveriesexperienceIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceIndex\" */ '../views/empire/lifeforms/discoveries/experience/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "empire/lifeforms/discoveries/experience/chart",
-                                                component: viewsempirelifeformsdiscoveriesexperienceChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceChart\" */ '../views/empire/lifeforms/discoveries/experience/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "empire/lifeforms/discoveries/experience/table",
-                                                component: viewsempirelifeformsdiscoveriesexperienceTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceTable\" */ '../views/empire/lifeforms/discoveries/experience/Table.vue')
                                             }
                                         ]
                                     },
@@ -619,17 +468,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "overview",
                                         name: "empire/lifeforms/discoveries/overview",
-                                        component: viewsempirelifeformsdiscoveriesoverviewIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewIndex\" */ '../views/empire/lifeforms/discoveries/overview/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "empire/lifeforms/discoveries/overview/chart",
-                                                component: viewsempirelifeformsdiscoveriesoverviewChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewChart\" */ '../views/empire/lifeforms/discoveries/overview/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "empire/lifeforms/discoveries/overview/table",
-                                                component: viewsempirelifeformsdiscoveriesoverviewTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewTable\" */ '../views/empire/lifeforms/discoveries/overview/Table.vue')
                                             }
                                         ]
                                     }
@@ -643,17 +492,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "production",
                         name: "empire/production",
-                        component: viewsempireproductionIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsempireproductionIndex\" */ '../views/empire/production/Index.vue'),
                         children: [
                             {
                                 path: "mines",
                                 name: "empire/production/mines",
-                                component: viewsempireproductionMines
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempireproductionMines\" */ '../views/empire/production/Mines.vue')
                             },
                             {
                                 path: "resources",
                                 name: "empire/production/resources",
-                                component: viewsempireproductionResources
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsempireproductionResources\" */ '../views/empire/production/Resources.vue')
                             }
                         ]
                     }
@@ -665,7 +514,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "espionage",
                 name: "espionage",
-                component: viewsespionageIndex
+                component: () => import(/* webpackChunkName: \"stats-view-viewsespionageIndex\" */ '../views/espionage/Index.vue')
             },
             {
                 meta: {
@@ -676,7 +525,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "expeditions",
                 name: "expeditions",
-                component: viewsexpeditionsIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsIndex\" */ '../views/expeditions/Index.vue'),
                 children: [
                     {
                         redirect: {
@@ -684,7 +533,7 @@ const routes: RouteConfig[] = [
                         },
                         path: "dark-matter",
                         name: "expeditions/dark-matter",
-                        component: viewsexpeditionsdarkmatterIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmatterIndex\" */ '../views/expeditions/dark-matter/Index.vue'),
                         children: [
                             {
                                 redirect: {
@@ -692,17 +541,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "amount",
                                 name: "expeditions/dark-matter/amount",
-                                component: viewsexpeditionsdarkmatteramountIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmatteramountIndex\" */ '../views/expeditions/dark-matter/amount/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/dark-matter/amount/chart",
-                                        component: viewsexpeditionsdarkmatteramountChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmatteramountChart\" */ '../views/expeditions/dark-matter/amount/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/dark-matter/amount/table",
-                                        component: viewsexpeditionsdarkmatteramountTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmatteramountTable\" */ '../views/expeditions/dark-matter/amount/Table.vue')
                                     }
                                 ]
                             },
@@ -712,17 +561,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "sizes",
                                 name: "expeditions/dark-matter/sizes",
-                                component: viewsexpeditionsdarkmattersizesIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmattersizesIndex\" */ '../views/expeditions/dark-matter/sizes/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/dark-matter/sizes/chart",
-                                        component: viewsexpeditionsdarkmattersizesChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmattersizesChart\" */ '../views/expeditions/dark-matter/sizes/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/dark-matter/sizes/table",
-                                        component: viewsexpeditionsdarkmattersizesTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdarkmattersizesTable\" */ '../views/expeditions/dark-matter/sizes/Table.vue')
                                     }
                                 ]
                             }
@@ -734,17 +583,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "depletion",
                         name: "expeditions/depletion",
-                        component: viewsexpeditionsdepletionIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdepletionIndex\" */ '../views/expeditions/depletion/Index.vue'),
                         children: [
                             {
                                 path: "chart",
                                 name: "expeditions/depletion/chart",
-                                component: viewsexpeditionsdepletionChart
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdepletionChart\" */ '../views/expeditions/depletion/Chart.vue')
                             },
                             {
                                 path: "table",
                                 name: "expeditions/depletion/table",
-                                component: viewsexpeditionsdepletionTable
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsdepletionTable\" */ '../views/expeditions/depletion/Table.vue')
                             }
                         ]
                     },
@@ -754,24 +603,24 @@ const routes: RouteConfig[] = [
                         },
                         path: "info",
                         name: "expeditions/info",
-                        component: viewsexpeditionsinfoIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsinfoIndex\" */ '../views/expeditions/info/Index.vue'),
                         children: [
                             {
                                 path: "largest-finds",
                                 name: "expeditions/info/largest-finds",
-                                component: viewsexpeditionsinfoLargestFinds
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsinfoLargestFinds\" */ '../views/expeditions/info/Largest-Finds.vue')
                             },
                             {
                                 path: "possible-finds",
                                 name: "expeditions/info/possible-finds",
-                                component: viewsexpeditionsinfoPossibleFinds
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsinfoPossibleFinds\" */ '../views/expeditions/info/Possible-Finds.vue')
                             }
                         ]
                     },
                     {
                         path: "items",
                         name: "expeditions/items",
-                        component: viewsexpeditionsitemsIndex
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsitemsIndex\" */ '../views/expeditions/items/Index.vue')
                     },
                     {
                         redirect: {
@@ -779,17 +628,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "overview",
                         name: "expeditions/overview",
-                        component: viewsexpeditionsoverviewIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsoverviewIndex\" */ '../views/expeditions/overview/Index.vue'),
                         children: [
                             {
                                 path: "chart",
                                 name: "expeditions/overview/chart",
-                                component: viewsexpeditionsoverviewChart
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsoverviewChart\" */ '../views/expeditions/overview/Chart.vue')
                             },
                             {
                                 path: "table",
                                 name: "expeditions/overview/table",
-                                component: viewsexpeditionsoverviewTable
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsoverviewTable\" */ '../views/expeditions/overview/Table.vue')
                             }
                         ]
                     },
@@ -799,7 +648,7 @@ const routes: RouteConfig[] = [
                         },
                         path: "resources",
                         name: "expeditions/resources",
-                        component: viewsexpeditionsresourcesIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcesIndex\" */ '../views/expeditions/resources/Index.vue'),
                         children: [
                             {
                                 redirect: {
@@ -807,17 +656,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "amount",
                                 name: "expeditions/resources/amount",
-                                component: viewsexpeditionsresourcesamountIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcesamountIndex\" */ '../views/expeditions/resources/amount/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/resources/amount/chart",
-                                        component: viewsexpeditionsresourcesamountChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcesamountChart\" */ '../views/expeditions/resources/amount/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/resources/amount/table",
-                                        component: viewsexpeditionsresourcesamountTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcesamountTable\" */ '../views/expeditions/resources/amount/Table.vue')
                                     }
                                 ]
                             },
@@ -827,17 +676,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "count",
                                 name: "expeditions/resources/count",
-                                component: viewsexpeditionsresourcescountIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcescountIndex\" */ '../views/expeditions/resources/count/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/resources/count/chart",
-                                        component: viewsexpeditionsresourcescountChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcescountChart\" */ '../views/expeditions/resources/count/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/resources/count/table",
-                                        component: viewsexpeditionsresourcescountTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcescountTable\" */ '../views/expeditions/resources/count/Table.vue')
                                     }
                                 ]
                             },
@@ -847,7 +696,7 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "size-breakdown",
                                 name: "expeditions/resources/size-breakdown",
-                                component: viewsexpeditionsresourcessizebreakdownIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdownIndex\" */ '../views/expeditions/resources/size-breakdown/Index.vue'),
                                 children: [
                                     {
                                         redirect: {
@@ -855,17 +704,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "crystal",
                                         name: "expeditions/resources/size-breakdown/crystal",
-                                        component: viewsexpeditionsresourcessizebreakdowncrystalIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowncrystalIndex\" */ '../views/expeditions/resources/size-breakdown/crystal/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "expeditions/resources/size-breakdown/crystal/chart",
-                                                component: viewsexpeditionsresourcessizebreakdowncrystalChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowncrystalChart\" */ '../views/expeditions/resources/size-breakdown/crystal/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "expeditions/resources/size-breakdown/crystal/table",
-                                                component: viewsexpeditionsresourcessizebreakdowncrystalTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowncrystalTable\" */ '../views/expeditions/resources/size-breakdown/crystal/Table.vue')
                                             }
                                         ]
                                     },
@@ -875,17 +724,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "deuterium",
                                         name: "expeditions/resources/size-breakdown/deuterium",
-                                        component: viewsexpeditionsresourcessizebreakdowndeuteriumIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowndeuteriumIndex\" */ '../views/expeditions/resources/size-breakdown/deuterium/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "expeditions/resources/size-breakdown/deuterium/chart",
-                                                component: viewsexpeditionsresourcessizebreakdowndeuteriumChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowndeuteriumChart\" */ '../views/expeditions/resources/size-breakdown/deuterium/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "expeditions/resources/size-breakdown/deuterium/table",
-                                                component: viewsexpeditionsresourcessizebreakdowndeuteriumTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdowndeuteriumTable\" */ '../views/expeditions/resources/size-breakdown/deuterium/Table.vue')
                                             }
                                         ]
                                     },
@@ -895,17 +744,17 @@ const routes: RouteConfig[] = [
                                         },
                                         path: "metal",
                                         name: "expeditions/resources/size-breakdown/metal",
-                                        component: viewsexpeditionsresourcessizebreakdownmetalIndex,
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdownmetalIndex\" */ '../views/expeditions/resources/size-breakdown/metal/Index.vue'),
                                         children: [
                                             {
                                                 path: "chart",
                                                 name: "expeditions/resources/size-breakdown/metal/chart",
-                                                component: viewsexpeditionsresourcessizebreakdownmetalChart
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdownmetalChart\" */ '../views/expeditions/resources/size-breakdown/metal/Chart.vue')
                                             },
                                             {
                                                 path: "table",
                                                 name: "expeditions/resources/size-breakdown/metal/table",
-                                                component: viewsexpeditionsresourcessizebreakdownmetalTable
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizebreakdownmetalTable\" */ '../views/expeditions/resources/size-breakdown/metal/Table.vue')
                                             }
                                         ]
                                     }
@@ -917,17 +766,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "sizes",
                                 name: "expeditions/resources/sizes",
-                                component: viewsexpeditionsresourcessizesIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizesIndex\" */ '../views/expeditions/resources/sizes/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/resources/sizes/chart",
-                                        component: viewsexpeditionsresourcessizesChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizesChart\" */ '../views/expeditions/resources/sizes/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/resources/sizes/table",
-                                        component: viewsexpeditionsresourcessizesTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsresourcessizesTable\" */ '../views/expeditions/resources/sizes/Table.vue')
                                     }
                                 ]
                             }
@@ -939,7 +788,7 @@ const routes: RouteConfig[] = [
                         },
                         path: "ships",
                         name: "expeditions/ships",
-                        component: viewsexpeditionsshipsIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsIndex\" */ '../views/expeditions/ships/Index.vue'),
                         children: [
                             {
                                 redirect: {
@@ -947,17 +796,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "amount",
                                 name: "expeditions/ships/amount",
-                                component: viewsexpeditionsshipsamountIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsamountIndex\" */ '../views/expeditions/ships/amount/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/ships/amount/chart",
-                                        component: viewsexpeditionsshipsamountChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsamountChart\" */ '../views/expeditions/ships/amount/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/ships/amount/table",
-                                        component: viewsexpeditionsshipsamountTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsamountTable\" */ '../views/expeditions/ships/amount/Table.vue')
                                     }
                                 ]
                             },
@@ -967,17 +816,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "resources",
                                 name: "expeditions/ships/resources",
-                                component: viewsexpeditionsshipsresourcesIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsresourcesIndex\" */ '../views/expeditions/ships/resources/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/ships/resources/chart",
-                                        component: viewsexpeditionsshipsresourcesChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsresourcesChart\" */ '../views/expeditions/ships/resources/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/ships/resources/table",
-                                        component: viewsexpeditionsshipsresourcesTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipsresourcesTable\" */ '../views/expeditions/ships/resources/Table.vue')
                                     }
                                 ]
                             },
@@ -987,17 +836,17 @@ const routes: RouteConfig[] = [
                                 },
                                 path: "sizes",
                                 name: "expeditions/ships/sizes",
-                                component: viewsexpeditionsshipssizesIndex,
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipssizesIndex\" */ '../views/expeditions/ships/sizes/Index.vue'),
                                 children: [
                                     {
                                         path: "chart",
                                         name: "expeditions/ships/sizes/chart",
-                                        component: viewsexpeditionsshipssizesChart
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipssizesChart\" */ '../views/expeditions/ships/sizes/Chart.vue')
                                     },
                                     {
                                         path: "table",
                                         name: "expeditions/ships/sizes/table",
-                                        component: viewsexpeditionsshipssizesTable
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipssizesTable\" */ '../views/expeditions/ships/sizes/Table.vue')
                                     }
                                 ]
                             }
@@ -1014,17 +863,17 @@ const routes: RouteConfig[] = [
                 },
                 path: "resource-balance",
                 name: "resource-balance",
-                component: viewsresourcebalanceIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsresourcebalanceIndex\" */ '../views/resource-balance/Index.vue'),
                 children: [
                     {
                         path: "chart",
                         name: "resource-balance/chart",
-                        component: viewsresourcebalanceChart
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsresourcebalanceChart\" */ '../views/resource-balance/Chart.vue')
                     },
                     {
                         path: "table",
                         name: "resource-balance/table",
-                        component: viewsresourcebalanceTable
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsresourcebalanceTable\" */ '../views/resource-balance/Table.vue')
                     }
                 ]
             },
@@ -1037,67 +886,67 @@ const routes: RouteConfig[] = [
                 },
                 path: "settings",
                 name: "settings",
-                component: viewssettingsIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewssettingsIndex\" */ '../views/settings/Index.vue'),
                 children: [
                     {
                         path: "accessibility",
                         name: "settings/accessibility",
-                        component: viewssettingsAccessibility
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsAccessibility\" */ '../views/settings/Accessibility.vue')
                     },
                     {
                         path: "colors",
                         name: "settings/colors",
-                        component: viewssettingsColors
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsColors\" */ '../views/settings/Colors.vue')
                     },
                     {
                         path: "combats",
                         name: "settings/combats",
-                        component: viewssettingsCombats
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsCombats\" */ '../views/settings/Combats.vue')
                     },
                     {
                         path: "common",
                         name: "settings/common",
-                        component: viewssettingsCommon
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsCommon\" */ '../views/settings/Common.vue')
                     },
                     {
                         path: "danger-zone",
                         name: "settings/danger-zone",
-                        component: viewssettingsDangerZone
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsDangerZone\" */ '../views/settings/Danger-Zone.vue')
                     },
                     {
                         path: "date-ranges",
                         name: "settings/date-ranges",
-                        component: viewssettingsDateRanges
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsDateRanges\" */ '../views/settings/Date-Ranges.vue')
                     },
                     {
                         path: "debris-fields",
                         name: "settings/debris-fields",
-                        component: viewssettingsDebrisFields
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsDebrisFields\" */ '../views/settings/Debris-Fields.vue')
                     },
                     {
                         path: "expeditions",
                         name: "settings/expeditions",
-                        component: viewssettingsExpeditions
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsExpeditions\" */ '../views/settings/Expeditions.vue')
                     },
                     {
                         path: "import-export",
                         name: "settings/import-export",
-                        component: viewssettingsImportExport
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsImportExport\" */ '../views/settings/Import-Export.vue')
                     },
                     {
                         path: "linked-accounts",
                         name: "settings/linked-accounts",
-                        component: viewssettingsLinkedAccounts
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsLinkedAccounts\" */ '../views/settings/Linked-Accounts.vue')
                     },
                     {
                         path: "resource-balance",
                         name: "settings/resource-balance",
-                        component: viewssettingsResourceBalance
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsResourceBalance\" */ '../views/settings/Resource-Balance.vue')
                     },
                     {
                         path: "universe-history",
                         name: "settings/universe-history",
-                        component: viewssettingsUniverseHistory
+                        component: () => import(/* webpackChunkName: \"stats-view-viewssettingsUniverseHistory\" */ '../views/settings/Universe-History.vue')
                     }
                 ]
             },
@@ -1110,37 +959,37 @@ const routes: RouteConfig[] = [
                 },
                 path: "tools",
                 name: "tools",
-                component: viewstoolsIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewstoolsIndex\" */ '../views/tools/Index.vue'),
                 children: [
                     {
                         path: "construction-queue",
                         name: "tools/construction-queue",
-                        component: viewstoolsConstructionQueue
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsConstructionQueue\" */ '../views/tools/Construction-Queue.vue')
                     },
                     {
                         path: "cost-calculator",
                         name: "tools/cost-calculator",
-                        component: viewstoolsCostCalculator
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsCostCalculator\" */ '../views/tools/Cost-Calculator.vue')
                     },
                     {
                         path: "expedition-calculator",
                         name: "tools/expedition-calculator",
-                        component: viewstoolsExpeditionCalculator
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsExpeditionCalculator\" */ '../views/tools/Expedition-Calculator.vue')
                     },
                     {
                         path: "production-calculator",
                         name: "tools/production-calculator",
-                        component: viewstoolsProductionCalculator
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsProductionCalculator\" */ '../views/tools/Production-Calculator.vue')
                     },
                     {
                         path: "resource-conversion",
                         name: "tools/resource-conversion",
-                        component: viewstoolsResourceConversion
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsResourceConversion\" */ '../views/tools/Resource-Conversion.vue')
                     },
                     {
                         path: "signature-generator",
                         name: "tools/signature-generator",
-                        component: viewstoolsSignatureGenerator
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsSignatureGenerator\" */ '../views/tools/Signature-Generator.vue')
                     }
                 ]
             },
@@ -1153,7 +1002,7 @@ const routes: RouteConfig[] = [
                 },
                 path: "universe-history",
                 name: "universe-history",
-                component: viewsuniversehistoryIndex,
+                component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryIndex\" */ '../views/universe-history/Index.vue'),
                 children: [
                     {
                         redirect: {
@@ -1161,17 +1010,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "alliances",
                         name: "universe-history/alliances",
-                        component: viewsuniversehistoryalliancesIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryalliancesIndex\" */ '../views/universe-history/alliances/Index.vue'),
                         children: [
                             {
                                 path: "highscore",
                                 name: "universe-history/alliances/highscore",
-                                component: viewsuniversehistoryalliancesHighscore
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryalliancesHighscore\" */ '../views/universe-history/alliances/Highscore.vue')
                             },
                             {
                                 path: "history",
                                 name: "universe-history/alliances/history",
-                                component: viewsuniversehistoryalliancesHistory
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryalliancesHistory\" */ '../views/universe-history/alliances/History.vue')
                             }
                         ]
                     },
@@ -1181,17 +1030,17 @@ const routes: RouteConfig[] = [
                         },
                         path: "players",
                         name: "universe-history/players",
-                        component: viewsuniversehistoryplayersIndex,
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryplayersIndex\" */ '../views/universe-history/players/Index.vue'),
                         children: [
                             {
                                 path: "highscore",
                                 name: "universe-history/players/highscore",
-                                component: viewsuniversehistoryplayersHighscore
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryplayersHighscore\" */ '../views/universe-history/players/Highscore.vue')
                             },
                             {
                                 path: "history",
                                 name: "universe-history/players/history",
-                                component: viewsuniversehistoryplayersHistory
+                                component: () => import(/* webpackChunkName: \"stats-view-viewsuniversehistoryplayersHistory\" */ '../views/universe-history/players/History.vue')
                             }
                         ]
                     }
@@ -1200,4 +1049,6 @@ const routes: RouteConfig[] = [
         ]
     }
 ];
-export default routes;
+
+        export default routes;
+        

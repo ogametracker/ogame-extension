@@ -177,6 +177,13 @@ export const en: EmpireTranslations = {
         numberOfLifeformDiscoveries: 'Number of discoveries',
 
         researchBonuses: {
+            breakdown: {
+                slot: 'Slot',
+                research: 'Research',
+                bonus: 'Bonus',
+                lifeformBuildingsBoost: (boost: string) => `Lifeform Building Boost (${boost})`,
+                lifeformLevelBoost: (lifeform: string, boost: string) => `Lifeform Level Boost (${lifeform}: ${boost})`,
+            },
             production: {
                 header: 'Resource Production',
             },
