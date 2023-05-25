@@ -73,6 +73,8 @@ import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
 import viewsespionageIndex from '@stats/views/espionage/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
+import viewsexpeditionsLargestFinds from '@stats/views/expeditions/Largest-Finds.vue';
+import viewsexpeditionsPossibleFinds from '@stats/views/expeditions/Possible-Finds.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
 import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
 import viewsexpeditionsdarkmatteramountChart from '@stats/views/expeditions/dark-matter/amount/Chart.vue';
@@ -675,6 +677,16 @@ const routes: RouteConfig[] = [
                 name: "expeditions",
                 component: viewsexpeditionsIndex,
                 children: [
+                    {
+                        path: "largest-finds",
+                        name: "expeditions/largest-finds",
+                        component: viewsexpeditionsLargestFinds
+                    },
+                    {
+                        path: "possible-finds",
+                        name: "expeditions/possible-finds",
+                        component: viewsexpeditionsPossibleFinds
+                    },
                     {
                         redirect: {
                             name: "expeditions/dark-matter/amount"
