@@ -110,7 +110,7 @@ const getVueRoutes = (tree) => {
             const componentName = localImportPath.replace(/\/|(\.vue)|\-/g, '');
             imports[componentName] = importPath;
 
-            vueRoute.component = componentName;
+            vueRoute.component = `() => import(/* webpackChunkName: "stats-view-${componentName}" */ '../${localImportPath}')`;
         }
 
         const children = getVueRoutes(route.children);
@@ -126,18 +126,15 @@ const getVueRoutes = (tree) => {
 /** @type import('vue-router').RouteConfig[] */
 const vueRoutes = getVueRoutes(routeTree);
 
-imports['{ RouteConfig }'] = 'vue-router';
-// console.log(imports);
+const code = `
+        import { RouteConfig } from 'vue-router';
 
-const code = Object.keys(imports)
-    .map(name => `import ${name} from '${imports[name]}';`)
-    .concat('')
-    .concat(
-        `const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4)
-            .replace(/"component": "(\w+)"/g, 'component: $1')
-            .replace(/"([^"]+)":/g, '$1:')
-        };`,
-        'export default routes;',
-    ).join('\n');
+        const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4)
+            /* */.replace(/"component": "(.+)"(,|\n)/g, 'component: $1$2')
+            /* */.replace(/"([^"]+)":/g, '$1:')
+    /**/};
+
+        export default routes;
+        `;
 
 fs.writeFileSync(`${__dirname}/router/routes.generated.ts`, code);
