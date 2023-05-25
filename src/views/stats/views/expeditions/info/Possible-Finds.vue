@@ -81,15 +81,15 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { Component, Vue } from 'vue-property-decorator';
-    import { GridTableColumn } from '../../components/common/GridTable.vue';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { getRGBString } from '../../utils/getRGBString';
+    import { GridTableColumn } from '../../../components/common/GridTable.vue';
+    import { EmpireDataModule } from '../../../data/EmpireDataModule';
+    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+    import { getRGBString } from '../../../utils/getRGBString';
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getPlanetLifeformTechnologyBoost } from '../../models/empire/lifeforms';
+    import { getPlanetLifeformTechnologyBoost } from '../../../models/empire/lifeforms';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
 

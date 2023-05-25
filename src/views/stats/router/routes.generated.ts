@@ -73,8 +73,6 @@ import viewsempireproductionMines from '@stats/views/empire/production/Mines.vue
 import viewsempireproductionResources from '@stats/views/empire/production/Resources.vue';
 import viewsespionageIndex from '@stats/views/espionage/Index.vue';
 import viewsexpeditionsIndex from '@stats/views/expeditions/Index.vue';
-import viewsexpeditionsLargestFinds from '@stats/views/expeditions/Largest-Finds.vue';
-import viewsexpeditionsPossibleFinds from '@stats/views/expeditions/Possible-Finds.vue';
 import viewsexpeditionsdarkmatterIndex from '@stats/views/expeditions/dark-matter/Index.vue';
 import viewsexpeditionsdarkmatteramountIndex from '@stats/views/expeditions/dark-matter/amount/Index.vue';
 import viewsexpeditionsdarkmatteramountChart from '@stats/views/expeditions/dark-matter/amount/Chart.vue';
@@ -85,6 +83,9 @@ import viewsexpeditionsdarkmattersizesTable from '@stats/views/expeditions/dark-
 import viewsexpeditionsdepletionIndex from '@stats/views/expeditions/depletion/Index.vue';
 import viewsexpeditionsdepletionChart from '@stats/views/expeditions/depletion/Chart.vue';
 import viewsexpeditionsdepletionTable from '@stats/views/expeditions/depletion/Table.vue';
+import viewsexpeditionsinfoIndex from '@stats/views/expeditions/info/Index.vue';
+import viewsexpeditionsinfoLargestFinds from '@stats/views/expeditions/info/Largest-Finds.vue';
+import viewsexpeditionsinfoPossibleFinds from '@stats/views/expeditions/info/Possible-Finds.vue';
 import viewsexpeditionsitemsIndex from '@stats/views/expeditions/items/Index.vue';
 import viewsexpeditionsoverviewIndex from '@stats/views/expeditions/overview/Index.vue';
 import viewsexpeditionsoverviewChart from '@stats/views/expeditions/overview/Chart.vue';
@@ -678,16 +679,6 @@ const routes: RouteConfig[] = [
                 component: viewsexpeditionsIndex,
                 children: [
                     {
-                        path: "largest-finds",
-                        name: "expeditions/largest-finds",
-                        component: viewsexpeditionsLargestFinds
-                    },
-                    {
-                        path: "possible-finds",
-                        name: "expeditions/possible-finds",
-                        component: viewsexpeditionsPossibleFinds
-                    },
-                    {
                         redirect: {
                             name: "expeditions/dark-matter/amount"
                         },
@@ -754,6 +745,26 @@ const routes: RouteConfig[] = [
                                 path: "table",
                                 name: "expeditions/depletion/table",
                                 component: viewsexpeditionsdepletionTable
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "expeditions/info/largest-finds"
+                        },
+                        path: "info",
+                        name: "expeditions/info",
+                        component: viewsexpeditionsinfoIndex,
+                        children: [
+                            {
+                                path: "largest-finds",
+                                name: "expeditions/info/largest-finds",
+                                component: viewsexpeditionsinfoLargestFinds
+                            },
+                            {
+                                path: "possible-finds",
+                                name: "expeditions/info/possible-finds",
+                                component: viewsexpeditionsinfoPossibleFinds
                             }
                         ]
                     },

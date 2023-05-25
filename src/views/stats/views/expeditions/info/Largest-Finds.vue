@@ -23,12 +23,12 @@
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
+    import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
     import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { GridTableColumn } from '../../components/common/GridTable.vue';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { getRGBString } from '../../utils/getRGBString';
+    import { GridTableColumn } from '../../../components/common/GridTable.vue';
+    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+    import { getRGBString } from '../../../utils/getRGBString';
 
     type Find = {
         size: ExpeditionEventSize;

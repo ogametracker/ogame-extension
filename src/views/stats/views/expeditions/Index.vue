@@ -47,12 +47,8 @@
                     to: { name: 'expeditions/depletion' },
                 },
                 {
-                    label: 'LOCA: Largest Finds',
-                    to: { name: 'expeditions/largest-finds' },
-                },
-                {
-                    label: 'LOCA: Possible Finds',
-                    to: { name: 'expeditions/possible-finds' },
+                    label: 'LOCA: Info',
+                    to: { name: 'expeditions/info' },
                 },
             ];
         }
