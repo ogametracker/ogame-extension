@@ -41,9 +41,9 @@
 
                 <template v-if="expandedPlanets[planet.id] == true">
                     <div class="tech-header-row">
-                        <div class="slot" v-text="'LOCA: Slot'" />
-                        <div class="tech" v-text="'LOCA: Research'" />
-                        <div v-for="type in types" :key="type.key" class="bonus" v-text="'LOCA: Bonus'" />
+                        <div class="slot" v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.slot" />
+                        <div class="tech" v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.research" />
+                        <div v-for="type in types" :key="type.key" class="bonus" v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.bonus" />
                     </div>
 
                     <div v-for="tech in technologiesSorted" :key="tech" class="tech-row">
@@ -67,7 +67,13 @@
 
                     <div class="tech-row boosts">
                         <div />
-                        <div v-text="`LOCA: Lifeform Buildings Boost (${$i18n.$n(getPlanetLifeformTechnologyBoost(planet) * 100, smallPercentageFormat)}%)`" />
+                        <div
+                            v-text="
+                                $i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.lifeformBuildingsBoost(
+                                    $i18n.$n(getPlanetLifeformTechnologyBoost(planet) * 100, smallPercentageFormat) + '%'
+                                )
+                            "
+                        />
                         <span v-for="type in types" :key="type.key" class="bonus">
                             <decimal-number
                                 :value="buildingsPlanetBonusesByType[planet.id][type.key] * 100"
@@ -83,10 +89,10 @@
                         <div />
                         <div
                             v-text="
-                                `LOCA: Lifeform Level Boost (${$i18n.$t.ogame.lifeforms[planet.activeLifeform]}: ${$i18n.$n(
-                                    getLifeformLevelTechnologyBonus(experience[planet.activeLifeform]) * 100,
-                                    smallPercentageFormat
-                                )}%)`
+                                $i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.lifeformLevelBoost(
+                                    $i18n.$t.ogame.lifeforms[planet.activeLifeform],
+                                    $i18n.$n(getLifeformLevelTechnologyBonus(experience[planet.activeLifeform]) * 100, smallPercentageFormat) + '%'
+                                )
                             "
                         />
                         <span v-for="type in types" :key="type.key" class="bonus">

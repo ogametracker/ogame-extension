@@ -166,6 +166,14 @@ export interface EmpireTranslations {
         artifactFindingSizes: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
 
         researchBonuses: {
+            breakdown: {
+                slot: string;
+                research: string;
+                bonus: string;
+                lifeformBuildingsBoost: (boost: string) => string;
+                lifeformLevelBoost: (lifeform: string, boost: string) => string;
+            };
+
             production: {
                 header: string;
             };
