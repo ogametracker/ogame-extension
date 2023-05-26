@@ -8,6 +8,7 @@
     import { ListNavItem } from '../../components/common/ListNav.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
+    import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
 
     @Component({})
     export default class Index extends Vue {
@@ -17,6 +18,7 @@
         async mounted() {
             await EmpireDataModule.ready;
             await ServerSettingsDataModule.ready;
+            await UniverseSpecificSettingsDataModule.ready;
 
             this.loading = false;
         }
