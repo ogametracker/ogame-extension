@@ -37,16 +37,12 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
             return { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 };
         }
 
-        const armorBonusPerLevel = 0.00_2; //0.2%
-        const shieldBonusPerLevel = 0.00_2; //0.2%
-        const damageBonusPerLevel = 0.00_2; //0.2%
-        const cargoBonusPerLevel = 0.00_2; //0.2%
         const speedBonusPerLevel = 0.00_2; //0.2%
         return {
-            armor: armorBonusPerLevel * level,
-            shield: shieldBonusPerLevel * level,
-            damage: damageBonusPerLevel * level,
-            cargo: cargoBonusPerLevel * level,
+            armor: 0,
+            shield: 0,
+            damage: 0,
+            cargo: 0,
             speed: speedBonusPerLevel * level,
         };
     }
