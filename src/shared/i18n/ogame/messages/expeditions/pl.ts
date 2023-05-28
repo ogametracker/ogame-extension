@@ -148,7 +148,7 @@ export const pl: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Wpis z dziennika pokładowego oficerów komunikacyjnych|Wpis z dziennika pokładowego oficera komunikacyjnego:(?<text>.+)/i,
+    logbookRegex: /(Wpis z dziennika pokładowego oficerów komunikacyjnych|Wpis z dziennika pokładowego oficera komunikacyjnego):(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Zdaje się, że ta */'część wszechświata jeszcze nie była badana',
