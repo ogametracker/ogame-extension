@@ -75,9 +75,9 @@ export const nl: ExpeditionMessages = {
 
     [ExpeditionEventType.lostFleet]: [
         /*'Het laatste bericht dat we ontvingen, was */'een bijzonder fraaie closeup van een zwart gat',
-        /* TODO: nl 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
+        /*'Het enige dat is */'overgebleven van de expeditie is het volgende radiogram'/* : Zzzrrt Aaargh! Krrrzzzzt Dat zrrrtrzt lijkt krgzzzz wel Krzzzzzzzztzzzz...'*/,
         /*'Een */'ontploffing van de hyperruimtemotor veroorzaakt een kettingreactie'/* van explosies die heel de vloot vernietigt.'*/,
-        /* TODO: nl 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'De */'expeditievloot kon niet terugvliegen'/* . Onze onderzoekers zijn nog steeds aan het speuren, maar ze hebben geen idee wat er gebeurd is, het lijkt er op dat we de vloot beter als verloren kunnen beschouwen.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
