@@ -119,7 +119,7 @@ export const pl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
-            /*LOCA: pl 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Ekspedycja donosi o */'ciężkich walkach z niezidentyfikowanymi statkami piratów',
         ],
         'fled-death-star': [
             /*LOCA: pl 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
