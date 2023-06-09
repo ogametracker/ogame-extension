@@ -136,7 +136,7 @@ export const nl: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*'Een */'onbekende levensvorm valt onze expeditie'/* aan!'*/,
             /*'Je expeditie */'is het territorium van onbekende, zeer agressieve en oorlogszuchtige'/* ruimtewezens binnen gedrongen.'*/,
-            /* TODO: nl 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'De */'verbinding met onze expeditievloot werd korte tijd verbroken'/* . Uit de data die we nog konden ontcijferen lag de vloot onder zwaar vuur, al was er geen duidelijke agressor aanwezig.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /* TODO: nl 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
