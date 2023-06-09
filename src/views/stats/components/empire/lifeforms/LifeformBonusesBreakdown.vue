@@ -105,6 +105,22 @@
                             />
                         </span>
                     </div>
+
+                    <div class="tech-row boosts" v-if="Object.values(planetBugBonusesByType[planet.id]).some(val => val > 0)">
+                        <div />
+                        <div
+                            v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.bugBoost"
+                        />
+                        <span v-for="type in types" :key="type.key" class="bonus">
+                            <decimal-number
+                                :value="planetBugBonusesByType[planet.id][type.key] * 100"
+                                suffix="%"
+                                :digits="3"
+                                :fade-decimals="false"
+                                style="--small-fraction-size: 0.75em"
+                            />
+                        </span>
+                    </div>
                 </template>
             </template>
         </div>
@@ -137,6 +153,8 @@
             buildings: number;
             level: number;
             total: number;
+
+            bugBonus?: number;
         }>;
     }
 
@@ -206,11 +224,13 @@
                                 buildings: 0,
                                 level: 0,
                                 total: 0,
+                                bugBonus: 0,
                             };
                             techBreakdown[key].base += bonuses.base;
                             techBreakdown[key].buildings += bonuses.buildings;
                             techBreakdown[key].level += bonuses.level;
                             techBreakdown[key].total += bonuses.total;
+                            techBreakdown[key].bugBonus! += bonuses.bugBonus ?? 0;
                         });
                     })
                 });
@@ -253,6 +273,27 @@
 
                             result[planetId][key] ??= 0;
                             result[planetId][key] += bonuses.level;
+                        });
+                    })
+                });
+
+            return result;
+        }
+
+        private get planetBugBonusesByType(): Record<number, Record<string, number>> {
+            const result: Record<number, Record<string, number>> = {};
+
+            Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+                .forEach(pair => {
+                    const [planetId, breakdownds] = pair;
+                    result[planetId] = {};
+
+                    breakdownds.forEach(breakdown => {
+                        Object.entries(breakdown.bonuses).forEach(pair => {
+                            const [key, bonuses] = pair;
+
+                            result[planetId][key] ??= 0;
+                            result[planetId][key] += bonuses.bugBonus ?? 0;
                         });
                     })
                 });

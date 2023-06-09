@@ -50,6 +50,8 @@
         buildings: Bonuses;
         buildingsBoost: number;
         total: Bonuses;
+
+        bugBonus: Bonuses;
     };
 
     @Component({
@@ -103,6 +105,7 @@
                                     buildings: planetBonuses.buildings[key],
                                     level: planetBonuses.level[key],
                                     total: planetBonuses.total[key],
+                                    bugBonus: planetBonuses.bugBonus[key],
                                 })),
                         };
                     })
@@ -120,6 +123,7 @@
                 buildings: { cost: 0, time: 0 },
                 buildingsBoost: 0,
                 total: { cost: 0, time: 0 },
+                bugBonus: { cost: 0, time: 0 },
             };
             const research = this.research == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : this.research;
 
@@ -144,14 +148,25 @@
                 const [bonusType, statsType] = pair;
 
                 const baseBonus = bonuses[statsType];
-                const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform as ValidLifeformType]);
-                const lifeformBuildingBonus = baseBonus * buildingsBoost;
-
-                const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;
-
                 result.base[bonusType] += baseBonus;
+
+                const levelBoost = getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform as ValidLifeformType]);
+                const lifeformLevelBonus = baseBonus * levelBoost;
                 result.level[bonusType] += lifeformLevelBonus;
+
+                const lifeformBuildingBonus = baseBonus * buildingsBoost;
                 result.buildings[bonusType] += lifeformBuildingBonus;
+                
+                let bugBonus = 0;
+                if(bonusType == 'time') {
+                    const bonusFactor = 1 + buildingsBoost + levelBoost;
+                    const bugBonusFactor = bonusFactor ** 2 - bonusFactor;
+                    bugBonus = bugBonusFactor * baseBonus;
+                }
+                result.bugBonus[bonusType] = bugBonus;
+
+                
+                const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus + bugBonus;
                 result.total[bonusType] += total;
             });
 

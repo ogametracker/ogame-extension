@@ -183,6 +183,7 @@ export const de: EmpireTranslations = {
                 bonus: 'Bonus',
                 lifeformBuildingsBoost: (boost: string) => `Lebensformgebäude-Boost (${boost})`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Lebensform-Level-Boost (${lifeform}: ${boost})`,
+                bugBoost: 'durch Bugs verursachter Boost',
             },
             production: {
                 header: 'Rohstoffproduktion',

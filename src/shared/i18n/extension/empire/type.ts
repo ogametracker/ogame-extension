@@ -172,6 +172,8 @@ export interface EmpireTranslations {
                 bonus: string;
                 lifeformBuildingsBoost: (boost: string) => string;
                 lifeformLevelBoost: (lifeform: string, boost: string) => string;
+
+                bugBoost: string;
             };
 
             production: {
