@@ -127,7 +127,7 @@ export const en: EmpireTranslations = {
         saveLoad: {
             saveButton: 'Save calculated amortization results',
             loadButton: (date: string) => `Load save (${date})`,
-            loadedSave: (date: string) => `Viewing saved results (${date})`,
+            loadedSave: (date: string, hiddenItems: string) => `Viewing saved results (${date}) - ${hiddenItems} hidden rows`,
             abandonedPlanet: 'Abandoned Planet',
         },
 
@@ -183,6 +183,7 @@ export const en: EmpireTranslations = {
                 bonus: 'Bonus',
                 lifeformBuildingsBoost: (boost: string) => `Lifeform Building Boost (${boost})`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Lifeform Level Boost (${lifeform}: ${boost})`,
+                bugBoost: 'Boost caused by bugs',
             },
             production: {
                 header: 'Resource Production',

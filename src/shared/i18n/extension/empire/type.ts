@@ -126,7 +126,7 @@ export interface EmpireTranslations {
         saveLoad: {
             saveButton: string;
             loadButton: (date: string) => string;
-            loadedSave: (date: string) => string;
+            loadedSave: (date: string, hiddenItems: string) => string;
             abandonedPlanet: string;
         };
 
@@ -172,6 +172,8 @@ export interface EmpireTranslations {
                 bonus: string;
                 lifeformBuildingsBoost: (boost: string) => string;
                 lifeformLevelBoost: (lifeform: string, boost: string) => string;
+
+                bugBoost: string;
             };
 
             production: {

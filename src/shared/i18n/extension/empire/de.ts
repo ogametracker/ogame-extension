@@ -127,7 +127,7 @@ export const de: EmpireTranslations = {
         saveLoad: {
             saveButton: 'Amortisationsergebnisse speichern',
             loadButton: (date: string) => `Speicherstand laden (${date})`,
-            loadedSave: (date: string) => `Speicherstand wird angezeigt (${date})`,
+            loadedSave: (date: string, hiddenItems: string) => `Speicherstand wird angezeigt (${date}) - ${hiddenItems} ausgeblendete Zeilen`,
             abandonedPlanet: 'Aufgegebener Planet',
         },
 
@@ -183,6 +183,7 @@ export const de: EmpireTranslations = {
                 bonus: 'Bonus',
                 lifeformBuildingsBoost: (boost: string) => `Lebensformgebäude-Boost (${boost})`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Lebensform-Level-Boost (${lifeform}: ${boost})`,
+                bugBoost: 'durch Bugs verursachter Boost',
             },
             production: {
                 header: 'Rohstoffproduktion',
