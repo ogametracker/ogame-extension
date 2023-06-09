@@ -126,7 +126,7 @@ export interface EmpireTranslations {
         saveLoad: {
             saveButton: string;
             loadButton: (date: string) => string;
-            loadedSave: (date: string) => string;
+            loadedSave: (date: string, hiddenItems: string) => string;
             abandonedPlanet: string;
         };
 

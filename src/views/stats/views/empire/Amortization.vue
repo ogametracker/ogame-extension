@@ -32,7 +32,7 @@
                                 @click="loadItems()"
                             />
                         </template>
-                        <span v-else v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'))" />
+                        <span v-else v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'), $i18n.$n(saveStateHiddenItems))" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -505,9 +505,6 @@
 
     type AmortizationViewItem = AmortizationItem & {
         selected: boolean;
-
-        /** is the item already done or not applicable anymore (e.g. planet was deleted)? */
-        done: boolean;
     };
 
     interface AdditionalLifeformStuffGroup {
@@ -594,11 +591,13 @@
             this.isGroupedItemsView = false;
 
             this.saveStateDate = savedAmortization.date;
-            this.amortizationItems = savedAmortization.items.map<AmortizationViewItem>(item => ({
-                ...item,
-                selected: false,
-                done: this.getIsDone(item),
-            }));
+            this.amortizationItems = savedAmortization.items
+                .filter(item => !this.getIsDone(item))
+                .map<AmortizationViewItem>(item => ({
+                    ...item,
+                    selected: false,
+                }));
+            this.saveStateHiddenItems = savedAmortization.items.length - this.amortizationItems.length;
         }
 
         private getIsDone(item: AmortizationItem): boolean {
@@ -657,6 +656,7 @@
         }
 
         private saveStateDate: number | null = null;
+        private saveStateHiddenItems = 0;
 
 
         private playerSettings: AmortizationPlayerSettings = {
@@ -787,7 +787,6 @@
                 this.amortizationItems.push({
                     ...next,
                     selected: false,
-                    done: false,
                 });
                 count--;
 
@@ -995,10 +994,6 @@
                 }
 
                 default: break;
-            }
-
-            if (item.done) {
-                classes.push('done-cell');
             }
 
             return classes.join(' ');
@@ -1308,10 +1303,6 @@
                 .plasmatech-cell,
                 .plasmatech-cell ~ .grid-table-cell {
                     background-color: rgba(123, 255, 95, 0.1) !important;
-                }
-
-                .done-cell > * {
-                    opacity: 0.33;
                 }
             }
         }

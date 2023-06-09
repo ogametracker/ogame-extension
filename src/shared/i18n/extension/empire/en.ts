@@ -127,7 +127,7 @@ export const en: EmpireTranslations = {
         saveLoad: {
             saveButton: 'Save calculated amortization results',
             loadButton: (date: string) => `Load save (${date})`,
-            loadedSave: (date: string) => `Viewing saved results (${date})`,
+            loadedSave: (date: string, hiddenItems: string) => `Viewing saved results (${date}) - ${hiddenItems} hidden rows`,
             abandonedPlanet: 'Abandoned Planet',
         },
 
