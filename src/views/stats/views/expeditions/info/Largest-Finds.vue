@@ -135,16 +135,22 @@
                 amount: 0,
                 date: 0,
             };
-            if (smallestFind.amount >= expo.darkMatter) {
+            if (smallestFind.amount >= expo.darkMatter && finds.length >= this.maxCount) {
                 return;
             }
 
             const index = finds.findIndex(find => find.amount < expo.darkMatter);
-            finds.splice(index, 0, {
+            const newFind = {
                 size: expo.size,
                 amount: expo.darkMatter,
                 date: expo.date,
-            });
+            };
+            if(index == -1) {
+                finds.push(newFind);
+            } 
+            else {
+                finds.splice(index, 0, newFind);
+            }
 
             this.largestFinds.darkMatter = finds.slice(0, this.maxCount);
         }
@@ -166,16 +172,22 @@
                     amount: 0,
                     date: 0,
                 };
-                if (smallestFind.amount >= units) {
+                if (smallestFind.amount >= units && finds.length >= this.maxCount) {
                     return;
                 }
 
                 const index = finds.findIndex(find => find.amount < units);
-                finds.splice(index, 0, {
+                const newFind = {
                     size: expo.size,
                     amount: units,
                     date: expo.date,
-                });
+                };
+                if(index == -1) {
+                    finds.push(newFind);
+                } 
+                else {
+                    finds.splice(index, 0, newFind);
+                }
 
                 this.largestFinds.shipUnits = finds.slice(0, this.maxCount);
             }
@@ -195,16 +207,22 @@
                     amount: 0,
                     date: 0,
                 };
-                if (smallestFind.amount >= units) {
+                if (smallestFind.amount >= units && finds.length >= this.maxCount) {
                     return;
                 }
 
                 const index = finds.findIndex(find => find.amount < units);
-                finds.splice(index, 0, {
+                const newFind = {
                     size: expo.size,
                     amount: units,
                     date: expo.date,
-                });
+                };
+                if(index == -1) {
+                    finds.push(newFind);
+                } 
+                else {
+                    finds.splice(index, 0, newFind);
+                }
 
                 this.largestFinds.shipUnitsIncludingDeuterium = finds.slice(0, this.maxCount);
             }
@@ -216,6 +234,10 @@
                 : expo.resources.crystal > 0
                     ? ResourceType.crystal
                     : ResourceType.deuterium;
+                    
+            if(expo.resources[resource] == 0) {
+                return;
+            }
 
             const ressFinds = this.largestFinds[resource];
             const smallestFind: Find = ressFinds[ressFinds.length - 1] ?? {
@@ -223,16 +245,22 @@
                 amount: 0,
                 date: 0,
             };
-            if (smallestFind.amount >= expo.resources[resource]) {
+            if (smallestFind.amount >= expo.resources[resource] && ressFinds.length >= this.maxCount) {
                 return;
             }
 
-            const index = ressFinds.findIndex(find => find.amount < expo.resources[resource]);
-            ressFinds.splice(index, 0, {
+            const index = ressFinds.findIndex(find => find.amount <= expo.resources[resource]);
+            const newFind = {
                 size: expo.size,
                 amount: expo.resources[resource],
                 date: expo.date,
-            });
+            };
+            if(index == -1) { 
+                ressFinds.push(newFind)
+            }
+            else{
+                ressFinds.splice(index, 0, newFind);
+            }
 
             this.largestFinds[resource] = ressFinds.slice(0, this.maxCount);
         }
