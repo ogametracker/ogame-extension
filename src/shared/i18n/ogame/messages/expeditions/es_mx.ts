@@ -135,7 +135,7 @@ export const es_mx: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'¡Una */'especie desconocida ataca nuestra expedición',
-            /*LOCA: es 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Tu expedición parece */'haber entrado en un territorio que pertenece a una raza alien desconocida'/* pero realmente agresiva y marcial.'*/,
             /*'La conexión con nuestra expedición fue interrumpida por un corto tiempo. Podemos descifrar su último mensaje. Están bajo un duro ataque, */'el agresor no ha podido ser identificado.',
         ],
         [ExpeditionEventSize.large]: [
