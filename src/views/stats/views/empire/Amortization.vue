@@ -479,7 +479,7 @@
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { _throw } from '@/shared/utils/_throw';
     import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
     import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
@@ -547,7 +547,7 @@
             const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.planet.lifeform];
             return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
         }
-        private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes;
+        private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes.sort((a,b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]); // sorted by slot
 
         private get savedAmortization() {
             return UniverseSpecificSettingsDataModule.settings.savedAmortization;
