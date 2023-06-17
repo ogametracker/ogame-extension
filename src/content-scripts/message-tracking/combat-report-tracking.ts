@@ -20,7 +20,7 @@ import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageDat
 import { TryActionResult } from "@/shared/TryActionResult";
 
 const domParser = new DOMParser();
-const combatJsonRegex = /var combatData = jQuery.parseJSON\('(?<json>[^']+)'\);/;
+const combatJsonRegex = /var combatData = jQuery\.parseJSON\('(?<json>[^\n]+)'\);/;
 
 let tabContent: Element | null = null;
 
