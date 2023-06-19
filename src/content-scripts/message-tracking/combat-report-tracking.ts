@@ -175,13 +175,13 @@ function onMessage(message: Message<MessageType, any>) {
                 html += `
                     <div class="ogame-tracker-combat-report--debris-field-table">
                         <span class="ogti-debris-field"></span>
-                        ${([ResourceType.metal, ResourceType.crystal] as (keyof CombatReport['debrisField'])[]).map(resource => `
+                        ${([ResourceType.metal, ResourceType.crystal, ResourceType.deuterium] as (keyof CombatReport['debrisField'])[]).map(resource => `
                             <div class="ogame-tracker-resource ${resource}"></div>
-                            <div class="${combatReport.debrisField[resource] == 0
+                            <div class="${(combatReport.debrisField[resource] ?? 0) == 0
 /*                              */ ? 'ogame-tracker-combat-report--no-loot'
 /*                              */ : ''
 /*                          */}">
-                                ${formatNumber(combatReport.debrisField[resource])}
+                                ${formatNumber(combatReport.debrisField[resource] ?? 0)}
                             </div>
                         `).join('')}
                     </div>

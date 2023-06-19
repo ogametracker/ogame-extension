@@ -183,7 +183,7 @@ export const fr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /L['`]objet (?<name>.+) a été ajouté à l['`]inventaire/i,
+        regex: /L\\?['`]objet (?<name>.+) a été ajouté à l\\?['`]inventaire/i,
     },
 
     [ExpeditionEventType.pirates]: {

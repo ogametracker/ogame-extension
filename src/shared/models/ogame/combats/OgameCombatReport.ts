@@ -82,6 +82,9 @@ export interface OgameCombatReport {
         crystalTotal: number;
         crystalRecycledAfterCombat: number;
         crystal: number;
+        deuteriumTotal: number;
+        deuteriumRecycledAfterCombat: number;
+        deuterium: number;
         darkMatter: number;
     };
     loot: {

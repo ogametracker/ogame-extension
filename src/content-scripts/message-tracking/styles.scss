@@ -394,7 +394,7 @@ $image-size-small: 24px;
 
         &--debris-field-table {
             display: inline-grid;
-            grid-template-columns: auto repeat(2, auto 1fr);
+            grid-template-columns: auto repeat(3, auto 1fr);
             align-items: center;
             gap: 4px;
 
