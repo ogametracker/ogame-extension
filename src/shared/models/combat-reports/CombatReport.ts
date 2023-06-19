@@ -14,6 +14,7 @@ export interface CombatReport {
     debrisField: {
         [ResourceType.metal]: number;
         [ResourceType.crystal]: number;
+        [ResourceType.deuterium]?: number;
     };
 
     loot: {

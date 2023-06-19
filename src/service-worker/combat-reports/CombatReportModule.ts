@@ -177,6 +177,7 @@ export class CombatReportModule {
         const debrisField = {
             [ResourceType.metal]: ogameCombatReport.debris.metal,
             [ResourceType.crystal]: ogameCombatReport.debris.crystal,
+            [ResourceType.deuterium]: ogameCombatReport.debris.deuterium,
         };
 
         const lostShips: Record<ShipType, number> = {
