@@ -64,6 +64,12 @@ export interface SettingsTranslations {
             dsuLong: string;
         };
         extensionLanguage: string;
+
+        serverSettings: {
+            title: string;
+            lastUpdate: string;
+            forceUpdate: string;
+        };
     };
     expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: string;

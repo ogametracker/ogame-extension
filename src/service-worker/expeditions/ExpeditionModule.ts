@@ -246,7 +246,9 @@ export class ExpeditionModule {
 
             ExpeditionFindableShipTypes.forEach(ship => {
                 const shipName = i18nShips[language][ship];
-                const shipRegex = new RegExp(`(\\b|\\d|^)${shipName}: (?<amount>\\d+)`, 'i');
+                const shipRegex = new RegExp(`(\\b|\\d|^)${
+                    shipName.replace('`', '[\'`]') // replace `with ' so it works for both french v9 and v10 servers
+                }: (?<amount>\\d+)`, 'i');
                 const shipMatch = textWithFoundFleet.match(shipRegex);
 
                 if (shipMatch?.groups != null) {

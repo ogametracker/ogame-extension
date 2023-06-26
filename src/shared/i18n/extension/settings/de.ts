@@ -64,6 +64,12 @@ export const de: SettingsTranslations = {
             msuLong: 'Umrechnung nach Metall',
             dsuLong: 'Umrechnung nach Deuterium',
         },
+
+        serverSettings: {
+            title: 'Serverdaten',
+            lastUpdate: 'Letzte Aktualisierung',
+            forceUpdate: 'Serverdaten aktualisieren',
+        },
     },
     expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
