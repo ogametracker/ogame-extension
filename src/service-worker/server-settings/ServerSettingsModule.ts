@@ -574,15 +574,18 @@ export class ServerSettingsModule {
             const timeLeft = Math.max(0, this.interval - (Date.now() - lastUpdate));
 
             setTimeout(async () => {
-                await this.updateServerSettings();
-                await this.init();
+                await this.update();
             }, timeLeft);
         } catch (error) {
             setTimeout(async () => {
-                await this.updateServerSettings();
-                await this.init();
+                await this.update();
             }, 1000 * 60 * 5); // try again after 5min
         }
+    }
+
+    public async update() {
+        await this.updateServerSettings();
+        await this.init();
     }
 
     private async updateServerSettings(): Promise<void> {

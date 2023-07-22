@@ -64,6 +64,12 @@ export const en: SettingsTranslations = {
             dsuLong: 'Convert to Deuterium',
         },
         extensionLanguage: 'UI language (within OGame Tracker)',
+
+        serverSettings: {
+            title: 'Server data',
+            lastUpdate: 'Last update',
+            forceUpdate: 'Update server data',
+        },
     },
     expeditions: {
         resourceUnitFactorsOfShipFoundOnExpeditions: 'Factors of resource units of ships found on expeditions',

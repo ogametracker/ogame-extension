@@ -52,6 +52,7 @@ export enum MessageType {
 
     // server settings
     NotifyServerSettingsUpdate = 'server-settings/notify-update',
+    ForceUpdateServerSettings = 'server-settings/force-update',
 
     // accounts & universes
     UpdatePlayerName = 'accounts/update-player-name',
