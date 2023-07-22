@@ -5,6 +5,7 @@ import { PlayerClass } from "../../ogame/classes/PlayerClass";
 import { addCost, Cost, multiplyCost, multiplyCostComponentWise } from "../../ogame/common/Cost";
 import { getTechnologyBonusFactor } from "../../ogame/lifeforms/utils";
 import { ResourceType, ResourceTypes } from "../../ogame/resources/ResourceType";
+import { getExpeditionFindFactor } from "../../expeditions/getExpeditionFindFactor";
 
 export interface AmortizationExpeditionResultsPlanetState {
     id: number;
@@ -81,16 +82,7 @@ export class AmortizationExpeditionResultsBreakdown {
 
     get #resourceFindFactor(): number {
         const score = this.options.serverSettings.topScore;
-
-        if (score < 100_000) return 0.10;
-        if (score < 1_000_000) return 0.24;
-        if (score < 5_000_000) return 0.36;
-        if (score < 25_000_000) return 0.48;
-        if (score < 50_000_000) return 0.60;
-        if (score < 75_000_000) return 0.72;
-        if (score < 100_000_000) return 0.84;
-
-        return 1.00;
+        return getExpeditionFindFactor(score);
     }
 
     get slots(): number {
