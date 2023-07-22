@@ -141,7 +141,7 @@ export const cz: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*'Tvá expedice narazila na mimozemskou */'invazní flotilu a hlásí tuhé boje'/* !'*/,
             /*'Máme menší problémy se správnou výslovností dialektu této mimozemské rasy. */'Náš diplomat omylem zvolal'/* `Palba!` místo `Mír!`.'*/,
-            /*LOCA: cz 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'Velká */'formace krystalinových lodí neznámého původu'/* nabrala kolizní kurz s naší expediční letkou. Musíme se připravit na nejhorší.'*/,
         ],
         'fled-death-star': [
             /*LOCA: cz 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
