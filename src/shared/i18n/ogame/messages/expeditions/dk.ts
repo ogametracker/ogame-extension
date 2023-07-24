@@ -134,7 +134,8 @@ export const dk: ExpeditionMessages = {
             /*LOCA: dk 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*'Et */'fremmedartet skib angriber din ekspeditionsflåde'/* uden varsel!'*/,
+            /*'Et */'fremmedartet skib angriber din ekspeditionsflåde'/* uden varsel!'*/, //v9?
+            /*'En */'ukendt race angriber din ekspedition', //v10?
             /*'Din ekspeditionsflåde */'synes at have fløjet ind i et territorium'/*, som tilhører en ukendt og yderst aggressiv og krigerisk race.'*/,
             /*'Forbindelsen til */'ekspeditionsflåden var afbrudt i en kort periode'/* . Det som vi kunne dekryptere fra den sidste besked var, at de var under hård beskydning. Angriberen blev ikke identificeret.'*/,
         ],

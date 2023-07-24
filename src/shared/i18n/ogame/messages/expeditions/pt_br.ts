@@ -28,7 +28,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'A sua expedição */'encontrou um pequeno asteróide e conseguiu resgatar'/* alguns recursos.'*/,
             /*'Em um */'planetóide isolado encontramos um campo de recursos'/* com fácil acesso e recolhemos alguns recursos com sucesso.'*/,
-        ],
+        ],  
         [ExpeditionEventSize.medium]: [
             /*'A sua expedição */'encontrou uma antiga escolta de cargueiros abandonados'/* , interamente carregados. Alguns recursos foram resgatados.'*/,
             /*'Em uma */'pequena lua com atmosfera'/* , a sua expedição encontrou um grande armazém de recursos básicos. A tripulação terrestre está tentando transferir e carregar esse tesouro natural.'*/,
@@ -53,7 +53,7 @@ export const pt_br: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Nós encontramos um */'enorme cemitério de naves espaciais'/* ! Os Engenheiros de Máquinas conseguiram colocar algumas naves a funcionar novamente.'*/,
-            /*LOCA: pt-br 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Nós encontramos */'um planeta que guarda os restos de uma civilização'/* . Conseguimos encontrar uma estação espacial gigante intacta. Alguns dos nosso técnicos e pilotos foram até a superfície à procura de algumas naves que ainda poderiam ser usadas.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`As seguintes naves agora fazem parte da frota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -155,9 +155,11 @@ export const pt_br: ExpeditionMessages = {
             /*'É estranho saber que somos os */'primeiros a viajar através de um setor desconhecido',
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*'Ao que parece, somos os */'primeiros humanos a entrar nesta parte'/* da galáxia'*/,
+            /*'Ao que parece, somos os */'primeiros humanos a entrar nesta parte'/* da galáxia'*/, //v9?
+            /*'Parece que nenhum ser */'humano esteve anteriormente nessa parte da galáxia', //v10?
             /*'Encontramos os destroços de algumas naves antigas. Não */'somos os primeiros neste quadrante',
-            /*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/,
+            /*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/, //v9?
+            /*'Nós quase */'tivemos uma colisão com uma outra frota de expedição'/* . Eu pensei que não encontraríamos mais ninguém por aqui.'*///v10?
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,

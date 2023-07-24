@@ -76,6 +76,7 @@
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
 
     type FindableUnits = {
         metal: number;
@@ -440,12 +441,14 @@
             const classFactor = info.playerClass == PlayerClass.discoverer
                 ? info.ecoSpeed * (1.5 * (1 + info.discovererBonus))
                 : 1;
+            
+            const topPointsFactors = getExpeditionFindFactor(ServerSettingsDataModule.serverSettings.topScore ?? 0);
 
             return createRecord(
                 ExpeditionEventSizes,
                 size => findBases[size].map<FindableUnits>(base => {
-                    const metal = base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
-                    const shipUnits = base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
+                    const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
+                    const shipUnits = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
 
                     return {
                         metal: Math.trunc(metal),
