@@ -7,7 +7,7 @@
             <option value="lifeform-researches" v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
+        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start" v-if="research == 'lifeform-researches'">
                     <span v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
@@ -38,6 +38,8 @@
     import { CostAndTimeReduction } from '@/shared/models/ogame/lifeforms/common-interfaces';
     import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
     import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type Bonuses = {
         cost: number;
@@ -80,6 +82,20 @@
             return this.technologies
                 .filter(tech => tech.appliesTo(research))
                 .map(t => t.type);
+        }
+
+        private get limits(): Record<keyof Bonuses, (value: number) => number> {
+            const research = this.research == 'lifeform-researches'
+                ? LifeformTechnologyType.intergalacticEnvoys
+                : this.research;
+
+            const costLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechCostReduction, tech: research });
+            const timeLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechTimeReduction, tech: research });
+
+            return {
+                cost: value => costLimit != null ? Math.max(value, -costLimit) : value,
+                time: value => timeLimit != null ? Math.max(value, -timeLimit) : value,
+            };
         }
 
         private research: ResearchType | 'lifeform-researches' = ResearchType.energyTechnology;
@@ -135,7 +151,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const bonuses = tech.getResearchCostAndTimeReduction(research, planet.lifeformTechnologies[tech.type]);
@@ -147,7 +166,7 @@
             (Object.entries(mapping) as [keyof Bonuses, keyof CostAndTimeReduction][]).forEach(pair => {
                 const [bonusType, statsType] = pair;
 
-                const baseBonus = bonuses[statsType];
+                const baseBonus = -1 * bonuses[statsType];
                 result.base[bonusType] += baseBonus;
 
                 const levelBoost = getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform as ValidLifeformType]);

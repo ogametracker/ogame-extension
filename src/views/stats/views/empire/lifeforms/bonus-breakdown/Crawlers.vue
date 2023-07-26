@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script lang="ts">
@@ -14,6 +14,8 @@
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type Bonuses = {
         production: number;
@@ -50,6 +52,16 @@
 
         private get techs(): LifeformTechnologyType[] {
             return this.technologies.map(t => t.type);
+        }
+
+        private get limits(): Record<keyof Bonuses, (value: number) => number> {
+            const energyConsumptionLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.CrawlerEnergyConsumptionReduction });
+            const productionLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.CrawlerBonus });
+
+            return {
+                energyConsumption: value => energyConsumptionLimit != null ? Math.max(value, -energyConsumptionLimit) : value,
+                production: value => productionLimit != null ? Math.min(value, productionLimit) : value,
+            };
         }
 
         private get planets(): Record<number, LifeformBonusesPlanetBreakdown<keyof Bonuses>[]> {
@@ -98,7 +110,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const bonuses = {

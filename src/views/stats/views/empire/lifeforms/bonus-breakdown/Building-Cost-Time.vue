@@ -4,7 +4,7 @@
             <option v-for="building in Buildings" :key="building" :value="building" v-text="$i18n.$t.ogame.buildings[building]" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
+        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
                     <span>
@@ -32,6 +32,8 @@
     import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { CostAndTimeReduction } from '@/shared/models/ogame/lifeforms/common-interfaces';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type Bonuses = {
         cost: number;
@@ -70,6 +72,16 @@
             return this.technologies
                 .filter(tech => tech.appliesTo(this.building))
                 .map(t => t.type);
+        }
+
+        private get limits(): Record<keyof Bonuses, (value: number) => number> {
+            const costLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechCostReduction, tech: this.building });
+            const timeLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechTimeReduction, tech: this.building });
+
+            return {
+                cost: value => costLimit != null ? Math.max(value, -costLimit) : value,
+                time: value => timeLimit != null ? Math.max(value, -timeLimit) : value,
+            };
         }
 
         private building = BuildingType.allianceDepot;
@@ -122,7 +134,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const bonuses = tech.getBuildingCostAndTimeReduction(this.building, planet.lifeformTechnologies[tech.type]);
@@ -134,7 +149,7 @@
             (Object.entries(mapping) as [keyof Bonuses, keyof CostAndTimeReduction][]).forEach(pair => {
                 const [bonusType, statsType] = pair;
 
-                const baseBonus = bonuses[statsType];
+                const baseBonus = -1 * bonuses[statsType];
                 const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform as ValidLifeformType]);
                 const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
