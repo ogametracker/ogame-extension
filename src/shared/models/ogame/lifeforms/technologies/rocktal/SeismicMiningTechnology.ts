@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { ResourceProductionBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -23,6 +24,10 @@ class SeismicMiningTechnologyClass extends LifeformTechnology implements Resourc
                 increaseFactor: 0,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.ResourceProductionBonus }];
     }
     
     public get type(): LifeformTechnologyType {

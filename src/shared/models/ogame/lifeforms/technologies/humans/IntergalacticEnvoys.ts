@@ -1,4 +1,5 @@
-import { FleetMissionType } from "../../../fleets/FleetMissionType";
+import { FleetMissionType, FleetMissionTypes } from "../../../fleets/FleetMissionType";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnology } from "../LifeformTechnology";
 import { FleetSpeedBonusLifeformTechnology } from "../interfaces";
@@ -24,17 +25,25 @@ class IntergalacticEnvoysClass extends LifeformTechnology implements FleetSpeedB
             },
         });
     }
-    
+
+    public get bonuses(): LifeformBonusType[] {
+        return FleetMissionTypes.filter(m => this.appliesTo(m))
+            .map<LifeformBonusType>(missionType => ({
+                type: LifeformBonusTypeId.FleetSpeedBonus,
+                missionType,
+            }));
+    }
+
     appliesTo(type: FleetMissionType): boolean {
         return type == FleetMissionType.searchForLifeforms;
     }
 
     getFleetSpeedBonus(mission: FleetMissionType, level: number): number {
-        if(!this.appliesTo(mission)) {
+        if (!this.appliesTo(mission)) {
             return 0;
         }
 
-        if(level == 1) {
+        if (level == 1) {
             return 0;
         }
 

@@ -1,3 +1,4 @@
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { FleetFuelReturnLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -23,7 +24,11 @@ class SlingshotAutopilotClass extends LifeformTechnology implements FleetFuelRet
             },
         });
     }
-    
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.FuelReturn }];
+    }
+
     public getFuelReturn(level: number): number {
         const returnPerLevel = 0.00_15; //0.15%
         const maxReturn = 0.9; //90%

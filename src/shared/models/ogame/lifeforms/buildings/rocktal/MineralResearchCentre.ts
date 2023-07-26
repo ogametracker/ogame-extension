@@ -1,5 +1,6 @@
 import { BuildingType } from "../../../buildings/BuildingType";
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -24,6 +25,19 @@ class MineralResearchCentreClass extends LifeformBuilding implements AnyBuilding
                 increaseFactor: 1.3,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return this.affectedBuildings.flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
     }
 
     public readonly affectedBuildings: AnyBuildingType[] = [

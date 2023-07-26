@@ -1,4 +1,5 @@
 import { Cost } from "../../../common/Cost";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -24,16 +25,23 @@ class IonCrystalModulesClass extends LifeformTechnology implements CrawlerProduc
             },
         });
     }
-    
+
+    public get bonuses(): LifeformBonusType[] {
+        return [
+            { type: LifeformBonusTypeId.CrawlerBonus },
+            { type: LifeformBonusTypeId.CrawlerEnergyConsumptionReduction },
+        ];
+    }
+
     public get type(): LifeformTechnologyType {
         return LifeformTechnologyType.ionCrystalModules;
     }
-    
+
     public getCrawlerProductionBonus(level: number): number {
         const bonus = 0.00_1; //0.1%
         return level * bonus;
     }
-    
+
     public getCrawlerConsumptionReduction(level: number): Cost {
         const energyReduction = 0.00_1; //0.1%
         return {

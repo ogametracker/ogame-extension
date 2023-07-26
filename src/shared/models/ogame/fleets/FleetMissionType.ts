@@ -13,3 +13,18 @@ export enum FleetMissionType {
     trade = 16,
     searchForLifeforms = 18,
 }
+export const FleetMissionTypes: FleetMissionType[] = [
+    FleetMissionType.attack,
+    FleetMissionType.acsAttack,
+    FleetMissionType.transport,
+    FleetMissionType.deployment,
+    FleetMissionType.acsDefend,
+    FleetMissionType.espionage,
+    FleetMissionType.colonization,
+    FleetMissionType.recycleDebrisField,
+    FleetMissionType.destroyMoon,
+    FleetMissionType.missileAttack,
+    FleetMissionType.expedition,
+    FleetMissionType.trade,
+    FleetMissionType.searchForLifeforms,
+];

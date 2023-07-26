@@ -1,5 +1,6 @@
 import { Cost } from "../../common/Cost";
 import { CostAndIncreaseFactor } from "../common-interfaces";
+import { LifeformBonusType } from "../LifeformBonusType";
 import { LifeformBuildingType } from "../LifeformBuildingType";
 
 
@@ -24,6 +25,7 @@ export abstract class LifeformBuilding {
         this.#energy = data.energy;
     }
 
+    public abstract get bonuses(): LifeformBonusType[];
     public abstract get type(): LifeformBuildingType;
 
     public getCost(level: number): Cost {

@@ -1,5 +1,7 @@
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -23,6 +25,19 @@ class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnolo
                 increaseFactor: 1.1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return LifeformTechnologyTypes.flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
     }
     
     public get type(): LifeformBuildingType {

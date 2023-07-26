@@ -1,5 +1,6 @@
 import { ShipType } from "../../../ships/ShipType";
-import { NonStationaryShipTypes } from "../../../ships/ShipTypes";
+import { NonStationaryShipTypes, ShipTypes } from "../../../ships/ShipTypes";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -24,6 +25,14 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return ShipTypes.filter(ship => this.appliesTo(ship))
+            .map<LifeformBonusType>(ship => ({
+                type: LifeformBonusTypeId.StatsBonus,
+                tech: ship,
+            }));
     }
 
     public appliesTo(ship: ShipType): boolean {
