@@ -1,3 +1,4 @@
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class AdvancedRecyclingPlantClass extends LifeformBuilding {
                 increaseFactor: 1.1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.AutoRecycleDebrisField }];
     }
 
     public get type(): LifeformBuildingType {

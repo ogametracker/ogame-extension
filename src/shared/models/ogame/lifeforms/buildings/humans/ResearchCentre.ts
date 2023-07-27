@@ -1,5 +1,7 @@
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { LifeformTechnologyResearchBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -24,15 +26,28 @@ class ResearchCentreClass extends LifeformBuilding implements LifeformTechnology
             },
         });
     }
-    
+
+    public get bonuses(): LifeformBonusType[] {
+        return LifeformTechnologyTypes.flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
+    }
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.researchCentre;
     }
-    
+
     public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {
         // yep
-        if(level == 1) {
-            return { cost: 0, time: 0};
+        if (level == 1) {
+            return { cost: 0, time: 0 };
         }
 
         const costReduction = 0.0025; // 0.25%

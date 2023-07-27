@@ -10,6 +10,13 @@
                 <div class="title" v-text="type.label" />
                 <span class="total-value">
                     <decimal-number :value="totalBonus[type.key] * 100" suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
+                    <span 
+                        v-if="
+                            limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key]
+                            || limits[type.key](Number.MIN_SAFE_INTEGER) == totalBonus[type.key]
+                        "
+                        class="mdi mdi-alert-outline"
+                    />
                 </span>
             </div>
         </div>
@@ -173,6 +180,9 @@
         @Prop({ required: true, type: Array as PropType<LifeformTechnologyType[]> })
         private technologies!: LifeformTechnologyType[];
 
+        @Prop({ required: true, type: Object as PropType<Record<string, (value: number) => number>> })
+        private limits!: Record<string, (value: number) => number>;
+
         private get technologiesSorted(): LifeformTechnologyType[] {
             return [...this.technologies].sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
         }
@@ -328,7 +338,7 @@
                     cur.forEach(bonusBreakdown => {
                         Object.keys(bonusBreakdown.bonuses).forEach(key => {
                             total[key] ??= 0;
-                            total[key] += bonusBreakdown.bonuses[key].total;
+                            total[key] = this.limits[key](total[key] + bonusBreakdown.bonuses[key].total);
                         });
                     });
                     return total;
@@ -452,5 +462,11 @@
     .decimal-number {
         align-items: end !important;
         padding: 0;
+    }
+
+    .total-value {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
     }
 </style>

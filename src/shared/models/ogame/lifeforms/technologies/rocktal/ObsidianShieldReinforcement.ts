@@ -1,5 +1,6 @@
 import { DefenseType } from "../../../defenses/DefenseType";
 import { DefenseTypes } from "../../../defenses/DefenseTypes";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -24,6 +25,14 @@ class ObsidianShieldReinforcementClass extends LifeformTechnology implements Sta
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return DefenseTypes.filter(def => this.appliesTo(def))
+            .map<LifeformBonusType>(def => ({
+                type: LifeformBonusTypeId.StatsBonus,
+                tech: def,
+            }));
     }
 
     public appliesTo(defense: DefenseType): boolean {

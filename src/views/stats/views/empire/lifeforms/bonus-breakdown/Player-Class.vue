@@ -17,7 +17,7 @@
 
         <hr />
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
     </div>
 </template>
 
@@ -36,6 +36,8 @@
     import { PlayerClass, SelectablePlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
     import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type ClassBonusBreakdown = {
         base: number;
@@ -83,6 +85,14 @@
             }
 
             throw new Error('invalid player class');
+        }
+
+        private get limits(): Record<'classBonus', (value: number) => number> {
+            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.PlayerClassBonus, playerClass: this.playerClass });
+
+            return {
+                classBonus: value => limit != null ? Math.min(value, limit) : value,
+            };
         }
 
         private getCollectorClassBonusesRows(classBonus: number): ClassBonusValues[] {
@@ -297,9 +307,13 @@
                 };
             }
 
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
+            
             const baseBonus = tech.getClassBonus(this.playerClass, planet.lifeformTechnologies[tech.type]);
             const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform]);
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
             const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
             return {

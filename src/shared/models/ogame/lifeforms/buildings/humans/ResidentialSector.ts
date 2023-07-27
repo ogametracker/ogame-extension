@@ -1,3 +1,4 @@
+import { LifeformBonusType } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -21,6 +22,10 @@ class ResidentialSectorClass extends LifeformBuilding {
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [];
     }
     
     public get type(): LifeformBuildingType {

@@ -1,5 +1,6 @@
 import { ShipType } from "../../../ships/ShipType";
 import { NonStationaryShipTypes } from "../../../ships/ShipTypes";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { FuelConsumptionReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -24,6 +25,10 @@ class HeatRecoveryClass extends LifeformTechnology implements FuelConsumptionRed
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.FuelConsumptionReduction }];
     }
     
     public appliesTo(ship: ShipType): boolean {

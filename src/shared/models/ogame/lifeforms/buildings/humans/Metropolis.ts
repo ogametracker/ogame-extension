@@ -1,3 +1,4 @@
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
@@ -22,6 +23,10 @@ class MetropolisClass extends LifeformBuilding implements LifeformTechnologyBonu
                 increaseFactor: 1.05,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.LifeformResearchBonusBoost }];
     }
     
     public get type(): LifeformBuildingType {

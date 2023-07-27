@@ -1,4 +1,5 @@
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from "../../LifeformBuildingType";
 import { LifeformType } from "../../LifeformType";
 import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
@@ -24,6 +25,19 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
                 increaseFactor: 1.3,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return this.affectedBuildings.flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
     }
 
     public get type(): LifeformBuildingType {

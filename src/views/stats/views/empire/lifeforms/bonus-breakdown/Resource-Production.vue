@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script lang="ts">
@@ -15,6 +15,8 @@
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type ResourceProductionBonusBreakdown = {
         base: Cost;
@@ -51,6 +53,17 @@
         ];
 
         private readonly techs: LifeformTechnologyType[] = ResourceProductionBonusLifeformTechnologies.map(t => t.type);
+
+
+        private get limits(): Record<'metal' | 'crystal' | 'deuterium' | 'energy', (value: number) => number> {
+            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ResourceProductionBonus });
+            return {
+                metal: value => limit != null ? Math.min(value, limit) : value,
+                crystal: value => limit != null ? Math.min(value, limit) : value,
+                deuterium: value => limit != null ? Math.min(value, limit) : value,
+                energy: value => limit != null ? Math.min(value, limit) : value,
+            };
+        }
 
         private get planets(): Record<number, LifeformBonusesPlanetBreakdown<keyof Cost>[]> {
             return createMappedRecord(
@@ -93,9 +106,13 @@
                 };
             }
 
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
+            
             const baseBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type]);
             const lifeformLevelBonus = multiplyCost(baseBonus, getLifeformLevelTechnologyBonus(this.experience[planet.activeLifeform]));
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
             const lifeformBuildingBonus = multiplyCost(baseBonus, buildingsBoost);
 
             return {

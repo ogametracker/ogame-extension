@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script lang="ts">
@@ -14,6 +14,8 @@
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/empire/lifeforms';
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
 
     type BonusBreakdown = {
@@ -70,6 +72,14 @@
             );
         }
 
+        private get limits(): Record<'capacity', (value: number) => number> {
+            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.DenCapacityBonus });
+
+            return {
+                capacity: value => limit != null ? Math.min(value, limit) : value,
+            };
+        }
+
         private get experience() {
             return EmpireDataModule.empire.lifeformExperience;
         }
@@ -90,7 +100,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const baseBonus = tech.getDenCapacityBonus(planet.lifeformTechnologies[tech.type]);

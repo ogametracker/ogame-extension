@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script lang="ts">
@@ -15,6 +15,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type DefenseBonusBreakdown = {
         base: number;
@@ -42,6 +44,14 @@
 
         private get techs(): LifeformTechnologyType[] {
             return this.technologies.map(t => t.type);
+        }
+
+        private get limits(): Record<'fuelConsumption', (value: number) => number> {
+            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.FuelConsumptionReduction });
+
+            return {
+                fuelConsumption: value => limit != null ? Math.max(value, -limit) : value,
+            };
         }
 
         private get planets(): Record<number, LifeformBonusesPlanetBreakdown<'fuelConsumption'>[]> {
@@ -90,7 +100,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const baseBonus = -1 * tech.getFuelConsumptionReduction(ShipType.lightFighter, planet.lifeformTechnologies[tech.type]);

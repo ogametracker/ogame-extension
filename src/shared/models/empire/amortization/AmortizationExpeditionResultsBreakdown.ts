@@ -133,7 +133,7 @@ export class AmortizationExpeditionResultsBreakdown {
         const pathfinderFactor = 2;
 
         const classFactor = this.options.playerClass == PlayerClass.discoverer
-            ? 1.5 * (1 + this.#lifeformDiscovererClassBonus) * this.options.serverSettings.economySpeed //TODO: fix after ingame formula has been fixed
+            ? 1.5 * (1 + this.#lifeformDiscovererClassBonus) * this.options.serverSettings.economySpeed 
             : 1;
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;

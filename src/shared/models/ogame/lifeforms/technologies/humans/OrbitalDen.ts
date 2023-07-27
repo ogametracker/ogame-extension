@@ -1,3 +1,4 @@
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { DenCapacityBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -22,6 +23,10 @@ class OrbitalDenClass extends LifeformTechnology implements DenCapacityBonusLife
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.DenCapacityBonus }];
     }
     
     public getDenCapacityBonus(level: number): number {

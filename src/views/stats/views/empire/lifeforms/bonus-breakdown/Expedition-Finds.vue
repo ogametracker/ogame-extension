@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" />
+    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script lang="ts">
@@ -15,6 +15,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type ExpeditionBonuses = {
         resources: number;
@@ -60,6 +62,21 @@
         private readonly technologies = [...ExpeditionEventProbabilityBonusLifeformTechnologies, ...ExpeditionBonusLifeformTechnologies];
         private readonly techs: LifeformTechnologyType[] = this.technologies.map(t => t.type);
 
+
+        private get limits(): Record<keyof ExpeditionBonuses, (value: number) => number> {
+            const resourcesLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.resources });
+            const shipsLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.fleet });
+            const darkMatterLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.darkMatter });
+            const fleetLossLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionEventProbabilityBonus, event: ExpeditionEventType.lostFleet });
+
+            return {
+                resources: value => resourcesLimit != null ? Math.min(value, resourcesLimit) : value,
+                ships: value => shipsLimit != null ? Math.min(value, shipsLimit) : value,
+                darkMatter: value => darkMatterLimit != null ? Math.min(value, darkMatterLimit) : value,
+                fleetLoss: value => fleetLossLimit != null ? Math.max(value, -fleetLossLimit) : value,
+            };
+        }
+
         private get planets(): Record<number, LifeformBonusesPlanetBreakdown<keyof ExpeditionBonuses>[]> {
             return createMappedRecord(
                 EmpireDataModule.empire.planetOrder
@@ -103,7 +120,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const mapping: Record<keyof ExpeditionBonuses, ExpeditionEventType> = {

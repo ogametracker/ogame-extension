@@ -1,3 +1,4 @@
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnology } from "../LifeformTechnology";
 import { PhalanxRangeBonusLifeformTechnology } from "../interfaces";
@@ -22,6 +23,10 @@ class InterplanetaryAnalysisNetworkClass extends LifeformTechnology implements P
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [{ type: LifeformBonusTypeId.PhalanxRangeBonus }];
     }
 
     getPhalanxRangeBonus(level: number): number {

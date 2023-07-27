@@ -1,6 +1,8 @@
 import { ResearchType } from "../../../research/ResearchType";
+import { ResearchTypes } from "../../../research/ResearchTypes";
 import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
 
@@ -26,11 +28,25 @@ class RuneShieldsClass extends LifeformTechnology implements ResearchCostAndTime
         });
     }
 
-    public appliesTo(research: LifeformTechnologyType | ResearchType): boolean {
+    public get bonuses(): LifeformBonusType[] {
+        return ResearchTypes.filter(t => this.appliesTo(t))
+            .flatMap<LifeformBonusType>(tech => [
+                {
+                    type: LifeformBonusTypeId.TechCostReduction,
+                    tech,
+                },
+                {
+                    type: LifeformBonusTypeId.TechTimeReduction,
+                    tech,
+                }
+            ]);
+    }
+
+    public appliesTo(research: ResearchType): boolean {
         return research == ResearchType.armorTechnology;
     }
 
-    public getResearchCostAndTimeReduction(research: LifeformTechnologyType | ResearchType, level: number): CostAndTimeReduction {
+    public getResearchCostAndTimeReduction(research: ResearchType, level: number): CostAndTimeReduction {
         if (!this.appliesTo(research)) {
             return { cost: 0, time: 0 };
         }

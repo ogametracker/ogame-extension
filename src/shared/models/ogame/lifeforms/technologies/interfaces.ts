@@ -76,8 +76,3 @@ export interface FleetSpeedBonusLifeformTechnology extends LifeformTechnology {
     appliesTo(type: FleetMissionType): boolean;
     getFleetSpeedBonus(mission: FleetMissionType, level: number): number;
 }
-
-//TODO: intergalactic envoys => 11201
-//TODO: Expedition speed booster => 14210
-
-//TODO: max bonuses in interface or by interface type? => remove from actual implementations because they should be global

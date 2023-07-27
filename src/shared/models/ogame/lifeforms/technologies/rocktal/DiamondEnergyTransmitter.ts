@@ -1,5 +1,7 @@
 import { ResearchType } from "../../../research/ResearchType";
+import { ResearchTypes } from "../../../research/ResearchTypes";
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -25,19 +27,33 @@ class DiamondEnergyTransmitterClass extends LifeformTechnology implements Resear
             },
         });
     }
-    
+
+    public get bonuses(): LifeformBonusType[] {
+        return ResearchTypes.filter(t => this.appliesTo(t))
+            .flatMap<LifeformBonusType>(tech => [
+                {
+                    type: LifeformBonusTypeId.TechCostReduction,
+                    tech,
+                },
+                {
+                    type: LifeformBonusTypeId.TechTimeReduction,
+                    tech,
+                }
+            ]);
+    }
+
     public appliesTo(research: ResearchType): boolean {
         return research == ResearchType.energyTechnology;
     }
-    
+
     public getResearchCostAndTimeReduction(research: ResearchType, level: number): CostAndTimeReduction {
-        if(!this.appliesTo(research)) {
+        if (!this.appliesTo(research)) {
             return { cost: 0, time: 0 };
         }
 
         const costReductionPerLevel = 0.00_1; //0.1%
         const maxCostReduction = 0.5; //50%;
-        
+
         const timeReductionPerLevel = 0.00_2; //0.2%
         const maxTimeReduction = 0.99; //99%
 

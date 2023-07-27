@@ -1,6 +1,7 @@
 import { ResearchType } from "../../../research/ResearchType";
 import { ResearchTypes } from "../../../research/ResearchTypes";
 import { CostAndTimeReduction } from "../../common-interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -25,6 +26,14 @@ class ImprovedLabTechnologyClass extends LifeformTechnology implements ResearchC
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return [...ResearchTypes, ...LifeformTechnologyTypes].filter(t => this.appliesTo(t))
+            .map<LifeformBonusType>(tech => ({
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            }));
     }
 
     public appliesTo(research: LifeformTechnologyType | ResearchType): boolean {

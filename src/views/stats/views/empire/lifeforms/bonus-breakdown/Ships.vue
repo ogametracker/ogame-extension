@@ -4,7 +4,7 @@
             <option v-for="ship in Ships" :key="ship" :value="ship" v-text="$i18n.$t.ogame.ships[ship]" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets">
+        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
                     <span>
@@ -31,6 +31,8 @@
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type StatsBonuses = {
         armor: number;
@@ -85,6 +87,17 @@
                 .map(t => t.type);
         }
 
+        private get limits(): Record<keyof StatsBonuses, (value: number) => number> {
+            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.StatsBonus, tech: this.ship });
+            return {
+                armor: value => limit != null ? Math.min(value, limit) : value,
+                shield: value => limit != null ? Math.min(value, limit) : value,
+                damage: value => limit != null ? Math.min(value, limit) : value,
+                cargo: value => limit != null ? Math.min(value, limit) : value,
+                speed: value => limit != null ? Math.min(value, limit) : value,
+            };
+        }
+
         private ship = ShipType.largeCargo;
         private readonly Ships = ShipTypes;
 
@@ -135,7 +148,10 @@
             }
 
 
-            const buildingsBoost = getPlanetLifeformTechnologyBoost(planet);
+            const buildingsBoost = Math.min(
+                getPlanetLifeformTechnologyBoost(planet),
+                getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+            );
             result.buildingsBoost += buildingsBoost;
 
             const bonuses = tech.getStatsBonus(this.ship, planet.lifeformTechnologies[tech.type]);

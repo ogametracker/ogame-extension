@@ -1,4 +1,5 @@
-import { PlayerClass } from "../../../classes/PlayerClass";
+import { PlayerClass, PlayerClasses } from "../../../classes/PlayerClass";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { ClassBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
@@ -23,6 +24,14 @@ class MechanGeneralEnhancementClass extends LifeformTechnology implements ClassB
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return PlayerClasses.filter(p => this.appliesTo(p))
+            .map<LifeformBonusType>(playerClass => ({
+                type: LifeformBonusTypeId.PlayerClassBonus,
+                playerClass,
+            }));
     }
 
     public appliesTo(playerClass: PlayerClass): boolean {

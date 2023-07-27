@@ -1,7 +1,8 @@
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventType, ExpeditionEventTypes } from "@/shared/models/expeditions/ExpeditionEventType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { ExpeditionBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 
 class EnhancedSensorTechnologyClass extends LifeformTechnology implements ExpeditionBonusLifeformTechnology {
     public constructor() {
@@ -23,6 +24,14 @@ class EnhancedSensorTechnologyClass extends LifeformTechnology implements Expedi
                 increaseFactor: 1,
             },
         });
+    }
+
+    public get bonuses(): LifeformBonusType[] {
+        return ExpeditionEventTypes.filter(t => this.appliesTo(t))
+            .map<LifeformBonusType>(event => ({
+                type: LifeformBonusTypeId.ExpeditionBonus,
+                event,
+            }));
     }
     
     public appliesTo(type: ExpeditionEventType): boolean {
