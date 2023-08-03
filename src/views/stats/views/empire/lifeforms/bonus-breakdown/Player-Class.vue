@@ -293,7 +293,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
         }
 
         private get experience() {
-            return EmpireDataModule.empire.lifeformExperience;
+            return EmpireDataModule.lifeformExperience;
         }
 
         private getPlanetBonus(tech: ClassBonusLifeformTechnology, planet: PlanetData): ClassBonusBreakdown {

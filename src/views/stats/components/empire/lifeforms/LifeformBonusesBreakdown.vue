@@ -208,7 +208,7 @@
         private readonly LifeformTechnologySlots = LifeformTechnologySlots;
 
         private get experience() {
-            return EmpireDataModule.empire.lifeformExperience;
+            return EmpireDataModule.lifeformExperience;
         }
 
         private get levels(): Record<ValidLifeformType, number> {
