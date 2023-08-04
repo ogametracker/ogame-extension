@@ -113,7 +113,7 @@
                         </span>
                     </div>
 
-                    <div class="tech-row boosts" v-if="Object.values(planetBugBonusesByType[planet.id]).some(val => val > 0)">
+                    <div class="tech-row boosts" v-if="Object.values(planetBugBonusesByType[planet.id]).some(val => val != 0)">
                         <div />
                         <div
                             v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.bugBoost"
