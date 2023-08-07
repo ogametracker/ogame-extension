@@ -24,7 +24,7 @@
         @Prop({ required: true, type: Number, validator: (n: number) => !isNaN(n) })
         private value!: number;
 
-        @Prop({ required: false, type: Number, default: 2, validator: (n: number) => n > 0 })
+        @Prop({ required: false, type: Number, default: 2, validator: (n: number) => n >= 0 })
         private digits!: number;
 
         @Prop({ required: false, type: Boolean, default: true })

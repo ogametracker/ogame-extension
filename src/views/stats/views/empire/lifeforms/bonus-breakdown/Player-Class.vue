@@ -7,11 +7,11 @@
         <grid-table inline :columns="classBonusesColumns" :items="classBonusesRows">
             <template #cell-base="{ value, item }">
                 <decimal-number v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
-                <span v-else v-text="$i18n.$n(value)" />
+                <decimal-number v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" />
             </template>
             <template #cell-actual="{ value, item }">
                 <decimal-number v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
-                <span v-else v-text="$i18n.$n(value)" />
+                <decimal-number v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" :fade-decimals="false" />
             </template>
         </grid-table>
 
@@ -161,7 +161,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
                 {
                     label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.discoverer.additionalExpeditionSlots,
                     base: this.serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
-                    actual: Math.trunc(this.serverSettings.playerClasses.discoverer.bonusExpeditionSlots * factor),
+                    actual: this.serverSettings.playerClasses.discoverer.bonusExpeditionSlots * factor,
                     isPercentage: false,
                 },
                 {
