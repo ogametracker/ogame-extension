@@ -40,6 +40,8 @@
     import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
 import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
+import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+import { parseIntSafe } from '@/shared/utils/parseNumbers';
 
     type Bonuses = {
         cost: number;
@@ -132,6 +134,11 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
             return EmpireDataModule.lifeformExperience;
         }
 
+        private get hasResearchBonusBug() {
+            const [major, minor] = ServerSettingsDataModule.serverSettings.version.split(/[\.\-]/g).map(s => parseInt(s));
+            return major < 10 || (major == 10 && minor < 2);
+        }
+
         private getPlanetBonus(tech: ResearchCostAndTimeReductionLifeformTechnology, planet: PlanetData): BonusBreakdown {
             const result: BonusBreakdown = {
                 base: { cost: 0, time: 0 },
@@ -163,6 +170,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
                 cost: 'cost',
                 time: 'time',
             };
+            const hasBugBonus = this.hasResearchBonusBug;
             (Object.entries(mapping) as [keyof Bonuses, keyof CostAndTimeReduction][]).forEach(pair => {
                 const [bonusType, statsType] = pair;
 
@@ -177,7 +185,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
                 result.buildings[bonusType] += lifeformBuildingBonus;
                 
                 let bugBonus = 0;
-                if(bonusType == 'time') {
+                if(bonusType == 'time' && hasBugBonus) {
                     const bonusFactor = 1 + buildingsBoost + levelBoost;
                     const bugBonusFactor = bonusFactor ** 2 - bonusFactor;
                     bugBonus = bugBonusFactor * baseBonus;
