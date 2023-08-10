@@ -74,7 +74,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
         }
 
         private get experience() {
-            return EmpireDataModule.empire.lifeformExperience;
+            return EmpireDataModule.lifeformExperience;
         }
 
         private get limits(): Record<'speed', (value: number) => number> {

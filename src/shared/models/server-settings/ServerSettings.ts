@@ -135,6 +135,7 @@ interface ServerLifeformSettings {
 
 export interface ServerSettings {
     lastUpdate: number;
+    version: string;
 
     topScore?: number;
     speed: ServerSpeedSettings;
