@@ -100,7 +100,7 @@ declare namespace OgameApi {
         exodusRatioMetal: string;
         exodusRatioCrystal: string;
         exodusRatioDeuterium: string;
-        
+
         //remove ? when lifeform on all servers
         lifeformSettings?: Record<string, any>;
     }
@@ -109,10 +109,10 @@ declare namespace OgameApi {
 type ServerSettingsMapping<
     TKeyFrom extends keyof OgameApi.ServerData = keyof OgameApi.ServerData,
     TKeyTo extends keyof DbServerSettings = keyof DbServerSettings
-    > = {
-        fromKey: TKeyFrom;
-        toKey: TKeyTo;
-    } & (
+> = {
+    fromKey: TKeyFrom;
+    toKey: TKeyTo;
+} & (
         | { type: StringConstructor | NumberConstructor | BooleanConstructor }
         | { conversion: (value: OgameApi.ServerData[TKeyFrom], serverData: OgameApi.ServerData) => DbServerSettings[TKeyTo] }
     );
@@ -604,19 +604,19 @@ export class ServerSettingsModule {
             let value: DbServerSettings[keyof DbServerSettings];
             if ('type' in mapping) {
                 if (mapping.type == String) {
-                    if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
+                    if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
                         _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = serverDataValue.toString();
                 }
                 else if (mapping.type == Number) {
-                    if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
+                    if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
                         _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = parseFloatSafe(serverDataValue);
                 }
                 else if (mapping.type == Boolean) {
-                    if(typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
+                    if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
                         _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
                     }
                     value = serverDataValue == '1';
@@ -624,7 +624,7 @@ export class ServerSettingsModule {
                 else {
                     _throw('invalid type', mapping.type);
                 }
-            } 
+            }
             else {
                 value = mapping.conversion(serverDataValue, serverData);
             }
@@ -649,7 +649,7 @@ export class ServerSettingsModule {
 
     private async getXml<T = any>(apiFile: string): Promise<T> {
         const url = `${this.apiUrlBase}/${apiFile}`;
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-cache' });
         const xml = await response.text();
 
         return this.parser.parse(xml);
