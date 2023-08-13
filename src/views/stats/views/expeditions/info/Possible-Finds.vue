@@ -76,7 +76,7 @@
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
+    import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
 
     type FindableUnits = {
         metal: number;
@@ -354,7 +354,7 @@ import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpediti
                     const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.resources, level);
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(empire.lifeformExperience[planet.activeLifeform]);
+                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
                     const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
 
                     const total = baseBonus + levelBonus + buildingBonus;
@@ -374,7 +374,7 @@ import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpediti
                     const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.fleet, level);
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(empire.lifeformExperience[planet.activeLifeform]);
+                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
                     const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
 
                     const total = baseBonus + levelBonus + buildingBonus;
@@ -394,7 +394,7 @@ import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpediti
                     const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.darkMatter, level);
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(empire.lifeformExperience[planet.activeLifeform]);
+                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
                     const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
 
                     const total = baseBonus + levelBonus + buildingBonus;
@@ -414,7 +414,7 @@ import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpediti
                     const baseBonus = tech.getClassBonus(PlayerClass.discoverer, level);
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(empire.lifeformExperience[planet.activeLifeform]);
+                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
                     const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
 
                     const total = baseBonus + levelBonus + buildingBonus;

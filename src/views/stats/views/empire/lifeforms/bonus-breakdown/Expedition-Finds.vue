@@ -15,8 +15,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/empire/lifeforms/LifeformBonusesBreakdown.vue';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
+    import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+    import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type ExpeditionBonuses = {
         resources: number;
@@ -104,7 +104,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
         }
 
         private get experience() {
-            return EmpireDataModule.empire.lifeformExperience;
+            return EmpireDataModule.lifeformExperience;
         }
 
         private getPlanetBonus(tech: ExpeditionBonusLifeformTechnology | ExpeditionEventProbabilityBonusLifeformTechnology, planet: PlanetData): ExpeditionBonusBreakdown {

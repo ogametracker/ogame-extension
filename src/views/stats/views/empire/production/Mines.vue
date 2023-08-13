@@ -137,7 +137,7 @@
         }
 
         private get effectiveCrawlerLimit() {
-            const bonus = getProductionBreakdowns(this.player, this.player.lifeformExperience).metal
+            const bonus = getProductionBreakdowns(this.player, EmpireDataModule.lifeformExperience).metal
                 .getLifeformBonusFactors()
                 .lifeformTechnologyCrawlerProductionBonusFactor;
 
