@@ -1,0 +1,173 @@
+import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
+import { ExpeditionMessages } from "./types";
+
+export const ro: ExpeditionMessages = {
+    [ExpeditionEventType.darkMatter]: {
+        [ExpeditionEventSize.small]: [
+            /*'Expeditia a fost */'capabila sa captureze si stocheze niste'/* Materie Intunecata.'*/,
+            /*'Am gasit */'ramasitele unei nave extraterestre'/* . Pe bordul sau era un recipient mic cu catava Materie Intunecata!'*/,
+            /*TODO: ro 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Expediția a */'găsit o navă abandonată ce transporta o cantitate'/* mică de Materie Întunecată. Nu am găsit indicii legate de soarta acestei nave, dar tehnicienii noștrii au reușit să extragă Materia Întunecată.'*/,
+            /*'Expeditia a urmarit niste */'semnale ciudate catre un asteroid'/* . In miezul asteroidului a fost gasita o cantitate mica de Materie Intunecata. Asteroidul a fost luat si exploratorii incearca sa extraga Materia Intunecata.,'*/
+        ],
+        [ExpeditionEventSize.medium]: [
+            /*TODO: ro 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Expeditia noastra a */'localizat o statie spatiala ruginita'/* , care parea sa pluteasca necontrolata prin afara spatiului pentru un timp indelungat. Statia era total nevolositoare, insa, era niste Materie Intunecata stocata in reactorul lor. Tehnicienii nostrii incearca sa salveze cat pot de mult.'*/,
+            /*'Expeditia nostra raporteaza un fenomen ciudat si spectaculos. Acumularea Materiei Intunecata in */'depozitele de energie ale scuturilor navelor'/* . Tehnicienii nostrii incearca sa stocheze cat mai multa Materie Intunecata atat timp cat mai tine fenomenul.'*/,
+        ],
+        [ExpeditionEventSize.large]: [
+            /*'O deformarea */'hiperspatiala spontana a permis expeditiei'/* tale sa adune o cantitate mare de Materie Intunecata!'*/,
+            /*TODO: ro 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+        ],
+        regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) au fost capturate`, 'i'),
+    },
+
+    [ExpeditionEventType.resources]: {
+        [ExpeditionEventSize.small]: [
+            /*'Expeditia ta a */'descoperit un asteroid mic din care'/* au putut fi stranse niste resurse.'*/,
+            /*'Pe un planetoid izolat am gasit niste */'campuri de resurse usor accesibile'/* si am strans cateva cu succes.'*/,
+        ],
+        [ExpeditionEventSize.medium]: [
+            /*'Expeditia ta a */'gasit un convoi antic, plin dar parasit'/* . Cateva din resurse au putut fi salvate.'*/,
+            /*'Pe o luna mica cu propria atmosfera expeditia ta a gasit */'niste depozite uriase de resurse in stare bruta'/* . Echipajul de la sol incearca sa ridice incarcatura de comoara nationala.'*/,
+        ],
+        [ExpeditionEventSize.large]: [
+            /*'Curele */'minerale in jurul unei planete necunoscute'/* contin resurse nenumarate. Navele de expeditie se intorc inapoi cu depozitele pline!'*/,
+            /*TODO: ro 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+        ],
+        regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) au fost capturate`, 'i'),
+    },
+
+    [ExpeditionEventType.fleet]: {
+        [ExpeditionEventSize.small]: [
+            /*'Am dat peste */'ramasitele unei expeditii precedente'/* ! Tehnicienii nostrii vor incerca sa repare unele din nave.'*/,
+            /*'Expediția ta a dat */'peste un cimitir de nave foarte vechi'/* . În hangar au fost găsite câteva nave ce au putut fi salvate. Tehnicienii noștri încearcă să le repare.'*/,
+            /*TODO: ro 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Am gasit o */'statie de pirati abandonata'/* . Exista niste nave vechi in hangar. Tehnicienii nostrii incearca sa-si dea seama daca unele dintre ele mai sunt folositoare sau nu.'*/,
+        ],
+        [ExpeditionEventSize.medium]: [
+            /*'Expeditia noastra a dat */'de un santier naval automat si vechi'/* . Unele nave sunt inca in faza de productie si tehnicienii nostrii in acest moment incearca sa reactiveze generatoarele de energie ale santierului.'*/,
+            /*'Am gasit */'resturile dintr-o armada'/* . Tehnicienii s-au dus direct catre majoritatea navelor aproape intacte si incearca sa le repare.'*/,
+        ],
+        [ExpeditionEventSize.large]: [
+            /*'Am gasit */'un cimitir imens de nave'/* . Cativa din tehnicienii de pe flota expeditiei au fost capabili sa repare unele din nave.'*/,
+            /*TODO: ro 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+        ],
+        regex: (ships: string[]) => new RegExp(`Urmatoarele nave fac acum parte din flota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
+    },
+
+    [ExpeditionEventType.nothing]: [
+        /*TODO: ro 'Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider */'mit leeren Händen'/* zurück.'*/,
+        /*'Cu exceptia unor */'animale mici de pe o planeta mlastinoasa'/* , expeditia nu aduce nimic interesant din calatorie.'*/,
+        /*TODO: ro 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'O fiinta */'formata din energie pura s-a asigurat ca toti membrii'/* expeditiei au privit doar la tiparul hipnotizant a ecranelor. Cand majoritatea dintre ei s-au trezit din nou expeditia a trebuit sa fie abandonata deoarece aveau prea putin Deuteriu.'*/,
+        /*'Un esec la */'reactorul navei lider aproape ca a distrus'/* intreaga flota de expeditie. Din fericire tehnicienii reusit sa limiteze daunele. Reparatia a durat ceva timp si a fortat expeditia sa se intoarca fara sa rezolve nimic.'*/,
+        /*TODO: ro 'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
+        /*'Flota ta de expeditie a urmarit niste semnale ciudate pentru ceva vreme. La final au observat ca acele */'semnale erau trimise de la o sonda'/* veche care a fost trimisa acum multe generatii pentru a intampina specile straine. Sonda a fost salvata si ceva muzee de pe planeta ta mama deja si-au exprimat interesul.'*/,
+        /*'Ei bine, acum stim ca */'acele anomalii rosii, clasa 5'/* nu doar ca au efect rau asupra navigatiei sistemelor navelor dar de asemenea genereaza o halucinare masiva asupra echipajului. Expeditia nu a adus nimic inapoi.'*/,
+        /*'Expeditia ta aproape că a nimerit in câmpul de */'gravitație a unei stele neutronice'/* . Din aceasta cauza s-a consumat mult Deuteriu si flota de expeditie a trebuit sa se intoarca fara nici un rezultat.'*/,
+        /*'Un */'virus de calculator a atacat sistemele de navigare'/* cu putin dupa plecarea de pe sistemul nostru solar. Acest lucru a cauzat flota de expeditie sa zboare in cercuri. Nu mai e nevoie sa spunem ca expeditia nu a fost de prea mare succes.'*/,
+        /*'Echipa noastră de expediție a */'ajuns la o colonie abandonată de milenii'/* . După ce au aterizat, echipajul a fost infectat cu un virus necunoscut. Acum știm ce a omorât această colonie. Expediția se întoarce acasă pentru a-și trata membrii bolnavi. Din păcate, a trebuit să abandonăm misiunea și ne întoarcem cu mâna goală.'*/,
+        /*TODO: ro 'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
+    ],
+
+    [ExpeditionEventType.lostFleet]: [
+        /*TODO: ro 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*TODO: ro 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
+        /*TODO: ro 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*TODO: ro 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+    ],
+
+    [ExpeditionEventType.trader]: [
+        /*TODO: ro 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*TODO: ro 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+    ],
+
+    [ExpeditionEventType.early]: [
+        /*TODO: ro 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
+        /*TODO: ro 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'Noul si putin indraznetul */'comandant a traversat cu succes printr-o carie instabila'/* pentru a scurta zborul inapoi! Dar, expeditia nu a adus nimic nou.'*/,
+    ],
+
+    [ExpeditionEventType.delay]: [
+        /*'Liderul navigatiei a avut o zi proasta si asta a */'cauzat expeditiei sa ajunga la calculari gresite'/* . Nu numai ca flota a aterizat intr-un loc complet diferit dar calea inapoi necesita mult mai mult timp.'*/,
+        /*TODO: ro 'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
+        /*'Datorita motivelor */'necunoscute saltul expeditiei a mers total gresit'/* . Aproape ca a aterizat in inima Soarelui. Din fericire a aterizat intr-un sistem cunoscut, saltul inapoi va dura mai mult totusi.'*/,
+        /*'Vantul unei */'stele ale unui gigant rosu a ruinat'/* saltul expeditiei si va dura ceva timp sa calculeze introarcerea saltului. Nu exista nimic pe langa pustietatea dintre stele si reactor. Flota se va intoarce mai tarziu decat este asteptata.,'*/,
+        /*'Noul modul de */'navigare inca se lupta cu unele probleme'/* . Saltul expeditiei nu numai ca a condus navele in directia total gresita dar a folosit si tot Deuteriul. Din fericire saltul flotei i-a dus destul de aproape de luna planetei stea. Putin dezamagit expeditia se intoarce acum fara impuls. Calea de intoarcere va dura ceva mai mult.'*/,
+        /*TODO: ro 'Das Führungsschiff deiner */'Expeditionsflotte kollidierte mit einem fremden Schiff'/*, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.'*/,
+    ],
+
+    [ExpeditionEventType.item]: {
+        regex: /(?<name>.+) a fost adăugat la inventar/i,
+    },
+
+    [ExpeditionEventType.pirates]: {
+        [ExpeditionEventSize.small]: [
+            /*'Cativa pirati ai */'spatiului foarte disperati au incercat'/* sa-ti captureze flota de expeditie.'*/,
+            /*TODO: ro 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Am prins un */'mesaj radio de la niste pirati beti'/* . Se pare ca vom fi atacati in curand.'*/,
+            /*'Am fost */'nevoiti sa ne luptam cu niste pirati care'/* , din fericire, erau putini.'*/,
+            /*TODO: ro 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
+        ],
+        [ExpeditionEventSize.medium]: [
+            /*TODO: ro 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*TODO: ro 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*TODO: ro 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+        ],
+        [ExpeditionEventSize.large]: [
+            /*TODO: ro 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*TODO: ro 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+        ],
+        'fled-death-star': [
+            /*TODO: ro 'Deine Expedition */'ist auf Aliens getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+        ],
+    },
+
+    [ExpeditionEventType.aliens]: {
+        [ExpeditionEventSize.small]: [
+            /*'Niste nave */'aparent exotice au atacat flota de expeditie'/* fara nici un avertisment!'*/,
+            /*TODO: ro 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*TODO: ro 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*TODO: ro 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
+        ],
+        [ExpeditionEventSize.medium]: [
+            /*TODO: ro 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*TODO: ro 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*TODO: ro 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+        ],
+        [ExpeditionEventSize.large]: [
+            /*TODO: ro 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*TODO: ro 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
+            /*TODO: ro 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+        ],
+        'fled-death-star': [
+            /*TODO: ro 'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+        ],
+    },
+
+    logbookRegex: /*TODO: ro *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    depletionMessages: {
+        [ExpeditionDepletionLevel.none]: [
+            /*TODO: ro 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
+            /*TODO: ro 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+        ],
+        [ExpeditionDepletionLevel.low]: [
+            /*TODO: ro 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*TODO: ro 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*TODO: ro 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+        ],
+        [ExpeditionDepletionLevel.medium]: [
+            /*TODO: ro 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*TODO: ro 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*TODO: ro 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+        ],
+        [ExpeditionDepletionLevel.high]: [
+            /*TODO: ro 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
+            /*TODO: ro 'Vielleicht wäre es sinnvoller, hier */'eine Souvenir-Station zu errichten'/* , anstatt noch eine Expedition loszuschicken.'*/,
+            /*TODO: ro 'Wenn das so weitergeht, sollte man */'bei all dem Verkehr hier Navigationsbojen'/* aussetzen.'*/,
+        ],
+    },
+};

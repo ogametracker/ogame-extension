@@ -15,12 +15,16 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     hr: LanguageKey.hr,
     hu: LanguageKey.hu,
     it: LanguageKey.it,
+    //TODO: jp japanese
     mx: LanguageKey['es-mx'],
     nl: LanguageKey.nl,
     pl: LanguageKey.pl,
     pt: LanguageKey['pt-pt'],
+    ro: LanguageKey.ro,
     ru: LanguageKey.ru,
     si: LanguageKey.si,
+    //TODO: sk slovakian
+    //TODO: tr turkish
     us: LanguageKey.en,
     tw: LanguageKey['zh-tw'],
 };
