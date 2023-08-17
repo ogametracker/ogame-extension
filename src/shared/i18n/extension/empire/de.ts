@@ -107,7 +107,7 @@ export const de: EmpireTranslations = {
                 ignoreEmptySlots: 'Inaktive Slots ignorieren',
             },
             expeditionSettings: {
-                header: 'Expeditionseinstellunge',
+                header: 'Expeditionseinstellungen',
                 includeInResult: 'für Berechnung berücksichtigen',
                 averageWavesPerDay: '⌀ Wellen pro Tag',
                 items: 'Slot-Items',
