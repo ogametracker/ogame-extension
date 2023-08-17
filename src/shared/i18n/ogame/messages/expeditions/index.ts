@@ -16,6 +16,7 @@ import { nl } from './nl';
 import { pl } from './pl';
 import { pt_br } from './pt_br';
 import { pt } from './pt';
+import { ro } from './ro';
 import { ru } from './ru';
 import { si } from './si';
 import { zh_tw } from './zh_tw';
@@ -37,6 +38,7 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     pl,
     'pt-br': pt_br,
     'pt-pt': pt,
+    ro,
     ru,
     si,
     'zh-tw': zh_tw,
