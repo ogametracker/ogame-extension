@@ -53,7 +53,7 @@ export const ro: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Am gasit */'un cimitir imens de nave'/* . Cativa din tehnicienii de pe flota expeditiei au fost capabili sa repare unele din nave.'*/,
-            /*TODO: ro 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Am gasit o */'planeta care are resturi ale unei civilizatii'/* . Suntem capabili sa vedem o statie spatiala giganta intacta, orbitand. Unii din tehnicienii tai si piloti merg la suprafata cautand unele nave care inca s-ar putea folosi.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Urmatoarele nave fac acum parte din flota:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
