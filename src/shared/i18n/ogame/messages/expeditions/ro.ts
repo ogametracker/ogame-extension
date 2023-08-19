@@ -35,7 +35,7 @@ export const ro: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Curele */'minerale in jurul unei planete necunoscute'/* contin resurse nenumarate. Navele de expeditie se intorc inapoi cu depozitele pline!'*/,
-            /*TODO: ro 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Flota ta de expeditie */'raporteaza descoperirea unei epave a unei nave extraterestre uriase'/* . Nu au fost capabili sa invete de la tehnologiile lor dar au fost capabili sa divida nava in componentele sale principale si au facut niste resurse folositoare din acestea.'*/
         ],
         regex: (resources: string[]) => new RegExp(`(?<name>${resources.join('|')}) (?<amount>.+) au fost capturate`, 'i'),
     },
@@ -44,7 +44,7 @@ export const ro: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Am dat peste */'ramasitele unei expeditii precedente'/* ! Tehnicienii nostrii vor incerca sa repare unele din nave.'*/,
             /*'Expediția ta a dat */'peste un cimitir de nave foarte vechi'/* . În hangar au fost găsite câteva nave ce au putut fi salvate. Tehnicienii noștri încearcă să le repare.'*/,
-            /*TODO: ro 'Unsere Expedition fand einen Planeten, der wohl durch */'anhaltende Kriege'/* fast komplett zerstört wurde. In der Umlaufbahn treiben diverse Schiffswracks. Die Techniker versuchen, einige davon zu reparieren. Vielleicht erhalten wir so auch Information darüber, was hier geschehen ist.'*/,
+            /*'Expeditia noastra a gasit o */'planeta care a fost aproape distrusa in timpul unui anumit lant de razboaie'/* . Exista nave diferite care plutesc in jurul orbitei. Tehnicienii incearca sa repare cateva dintre ele. Poate ca de asemenea vom primi informatii despre ce s-a intamplat acolo.'*/,
             /*'Am gasit o */'statie de pirati abandonata'/* . Exista niste nave vechi in hangar. Tehnicienii nostrii incearca sa-si dea seama daca unele dintre ele mai sunt folositoare sau nu.'*/,
         ],
         [ExpeditionEventSize.medium]: [
@@ -59,18 +59,18 @@ export const ro: ExpeditionMessages = {
     },
 
     [ExpeditionEventType.nothing]: [
-        /*TODO: ro 'Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider */'mit leeren Händen'/* zurück.'*/,
+        /*'In ciuda primelor, foarte promitatoare scanari ale sectorului, din */'nefericire ne-am intors cu mainile goale',
         /*'Cu exceptia unor */'animale mici de pe o planeta mlastinoasa'/* , expeditia nu aduce nimic interesant din calatorie.'*/,
-        /*TODO: ro 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'Expeditia ta a */'invatat despre pustietatea imensa a spatiului'/* . Nu a existat nici macar un asteroid mic sau radiatie sau particula care sa fi facut aceasta expeditie incitanta.'*/,
         /*'O fiinta */'formata din energie pura s-a asigurat ca toti membrii'/* expeditiei au privit doar la tiparul hipnotizant a ecranelor. Cand majoritatea dintre ei s-au trezit din nou expeditia a trebuit sa fie abandonata deoarece aveau prea putin Deuteriu.'*/,
         /*'Un esec la */'reactorul navei lider aproape ca a distrus'/* intreaga flota de expeditie. Din fericire tehnicienii reusit sa limiteze daunele. Reparatia a durat ceva timp si a fortat expeditia sa se intoarca fara sa rezolve nimic.'*/,
-        /*TODO: ro 'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
+        /*'Expeditia ta a */'facut poze superbe la o super nova'/* . Nimic nou nu a putut fi obtinut din expeditie dar macar sunt sanse bune sa castigi competitia de "Cea mai Buna Poza din Univers" de anu viitor.'*/,
         /*'Flota ta de expeditie a urmarit niste semnale ciudate pentru ceva vreme. La final au observat ca acele */'semnale erau trimise de la o sonda'/* veche care a fost trimisa acum multe generatii pentru a intampina specile straine. Sonda a fost salvata si ceva muzee de pe planeta ta mama deja si-au exprimat interesul.'*/,
         /*'Ei bine, acum stim ca */'acele anomalii rosii, clasa 5'/* nu doar ca au efect rau asupra navigatiei sistemelor navelor dar de asemenea genereaza o halucinare masiva asupra echipajului. Expeditia nu a adus nimic inapoi.'*/,
         /*'Expeditia ta aproape că a nimerit in câmpul de */'gravitație a unei stele neutronice'/* . Din aceasta cauza s-a consumat mult Deuteriu si flota de expeditie a trebuit sa se intoarca fara nici un rezultat.'*/,
         /*'Un */'virus de calculator a atacat sistemele de navigare'/* cu putin dupa plecarea de pe sistemul nostru solar. Acest lucru a cauzat flota de expeditie sa zboare in cercuri. Nu mai e nevoie sa spunem ca expeditia nu a fost de prea mare succes.'*/,
         /*'Echipa noastră de expediție a */'ajuns la o colonie abandonată de milenii'/* . După ce au aterizat, echipajul a fost infectat cu un virus necunoscut. Acum știm ce a omorât această colonie. Expediția se întoarce acasă pentru a-și trata membrii bolnavi. Din păcate, a trebuit să abandonăm misiunea și ne întoarcem cu mâna goală.'*/,
-        /*TODO: ro 'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
+        /*'Cineva a instalat cu joc */'strategic vechi in toate calculatoarele'/* de pe nave. Flota de expeditie a fost plecata pentru un timp indelungat dar nu a fost prea productiva din aceasta cauza.'*/,
     ],
 
     [ExpeditionEventType.lostFleet]: [
@@ -86,18 +86,18 @@ export const ro: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*TODO: ro 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        /*TODO: ro 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'O */'neasteptata explozie la motoarele din spate'/* a grabit intoarcerea expeditiei, flota se intoarce acasa mai repede decat trebuia. Primele rapoarte arata ca nu au nimic interesant sa raporteze.'*/,
+        /*'Expeditia ta nu raporteaza nici o anormalitate in sectorul explorat. Dar flota a ajuns in */'ceva vant al Soarelui in timp ce se intorcea'/* . Din aceasta cauza calea de intoarcere a fost grabita cu mult. Expeditia ta se intoarce acasa putin mai devreme.'*/,
         /*'Noul si putin indraznetul */'comandant a traversat cu succes printr-o carie instabila'/* pentru a scurta zborul inapoi! Dar, expeditia nu a adus nimic nou.'*/,
     ],
 
     [ExpeditionEventType.delay]: [
         /*'Liderul navigatiei a avut o zi proasta si asta a */'cauzat expeditiei sa ajunga la calculari gresite'/* . Nu numai ca flota a aterizat intr-un loc complet diferit dar calea inapoi necesita mult mai mult timp.'*/,
-        /*TODO: ro 'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
+        /*'Expediția a */'ajuns în mijlocul unei furtuni de particule'/* . Aceste energii se supra încarcă și distrug sistemele electronice ale navelor. Mecanicii tăi au reușit să salveze flota de expediție, dar drumul înapoi va fi puțin mai lung.'*/,
         /*'Datorita motivelor */'necunoscute saltul expeditiei a mers total gresit'/* . Aproape ca a aterizat in inima Soarelui. Din fericire a aterizat intr-un sistem cunoscut, saltul inapoi va dura mai mult totusi.'*/,
         /*'Vantul unei */'stele ale unui gigant rosu a ruinat'/* saltul expeditiei si va dura ceva timp sa calculeze introarcerea saltului. Nu exista nimic pe langa pustietatea dintre stele si reactor. Flota se va intoarce mai tarziu decat este asteptata.,'*/,
         /*'Noul modul de */'navigare inca se lupta cu unele probleme'/* . Saltul expeditiei nu numai ca a condus navele in directia total gresita dar a folosit si tot Deuteriul. Din fericire saltul flotei i-a dus destul de aproape de luna planetei stea. Putin dezamagit expeditia se intoarce acum fara impuls. Calea de intoarcere va dura ceva mai mult.'*/,
-        /*TODO: ro 'Das Führungsschiff deiner */'Expeditionsflotte kollidierte mit einem fremden Schiff'/*, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.'*/,
+        /*'Nava mama a */'expeditiei a facut o coliziune cu o nava straina cand s-a teleportat'/* direct in aceasta fara nici un avertisment. Nava straina a explodat si stricaciunile cauzate navei principale au fost substantiale. Cand reparatile necesare sunt facute flotele o sa-si inceapa calea de intoarcere deoarece expeditia nu mai poate continua in acele conditii.'*/,
     ],
 
     [ExpeditionEventType.item]: {
@@ -107,7 +107,7 @@ export const ro: ExpeditionMessages = {
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
             /*'Cativa pirati ai */'spatiului foarte disperati au incercat'/* sa-ti captureze flota de expeditie.'*/,
-            /*TODO: ro 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Niste pirati */'ne ataca cu nave inferior tehnologice'/* .Daca focul devine serios vom fi nevoiti sa ripostam.'*/,
             /*'Am prins un */'mesaj radio de la niste pirati beti'/* . Se pare ca vom fi atacati in curand.'*/,
             /*'Am fost */'nevoiti sa ne luptam cu niste pirati care'/* , din fericire, erau putini.'*/,
             /*TODO: ro 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
