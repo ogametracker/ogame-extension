@@ -8,7 +8,7 @@ export const ro: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Expeditia a fost */'capabila sa captureze si stocheze niste'/* Materie Intunecata.'*/,
             /*'Am gasit */'ramasitele unei nave extraterestre'/* . Pe bordul sau era un recipient mic cu catava Materie Intunecata!'*/,
-            /*TODO: ro 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Am gasit un */'extraterestru ciudat la bordul unei nave mici care ne-a dat'/* o valiza cu Materie Intunecata in schimbul unor calcule matematice simple.'*/,
             /*'Expediția a */'găsit o navă abandonată ce transporta o cantitate'/* mică de Materie Întunecată. Nu am găsit indicii legate de soarta acestei nave, dar tehnicienii noștrii au reușit să extragă Materia Întunecată.'*/,
             /*'Expeditia a urmarit niste */'semnale ciudate catre un asteroid'/* . In miezul asteroidului a fost gasita o cantitate mica de Materie Intunecata. Asteroidul a fost luat si exploratorii incearca sa extraga Materia Intunecata.,'*/
         ],
@@ -129,8 +129,8 @@ export const ro: ExpeditionMessages = {
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
             /*'Niste nave */'aparent exotice au atacat flota de expeditie'/* fara nici un avertisment!'*/,
-            /*TODO: ro 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
-            /*TODO: ro 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Flota ta de expeditie a avut un */'prim contact mai putin prietenos cu o specie necunoscuta',
+            /*'Expeditia */'noastra a fost atacata de un grup de nave necunoscute',
             /*TODO: ro 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
