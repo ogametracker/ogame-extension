@@ -114,7 +114,7 @@ export const pt_br: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'A sua expedição teve um */'encontro não muito agradável com alguns piratas'/* do espaço.'*/,
-            /*LOCA: pt-br 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'Nós fomos direto */'para uma emboscada efetuada por alguns piratas'/* estelares. Um combate foi inevitável.'*/,
             /*'O */'sinal de emergência que a expedição recebeu era um engodo colocado'/* por uns piratas estelares. Não houve como evitar um confronto.'*/,
         ],
         [ExpeditionEventSize.large]: [

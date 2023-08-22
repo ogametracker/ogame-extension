@@ -148,7 +148,7 @@ export const ro: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /Inregistrare din primul jurnal de bord al comunicantilor: (?<text>.+)/i,
+    logbookRegex: /Inregistrare din primul jurnal de bord al comunicantilor:(?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
             /*'Se pare ca aceasta */'parte a universului nu a fost explorata inca',
