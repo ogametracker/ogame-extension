@@ -9,8 +9,8 @@
     >
         <span v-if="prefix != ''" v-text="prefix" />
 
-        <span v-text="$i18n.$n(Math.trunc(value), format)" />
-        <span v-if="digits > 0" class="fraction" v-text="$i18n.$n(Math.abs(value) % 1, fractionNumberFormat).substring(1)" />
+        <span v-text="$i18n.$n(integerValue, format)" />
+        <span v-if="digits > 0" class="fraction" v-text="$i18n.$n(decimalValue, fractionNumberFormat).substring(1)" />
 
         <span v-if="suffix != ''" v-text="suffix" />
     </span>
@@ -48,6 +48,19 @@
                 minimumFractionDigits: this.digits,
                 maximumFractionDigits: this.digits,
             };
+        }
+
+        private get decimalValue() {
+            return Math.abs(this.value) % 1;
+        }
+        private get integerValue() {
+            const dec = this.decimalValue;
+            const value = Math.trunc(this.value);
+
+            if(dec > 0.9995 && dec < 1) {
+                return value + 1;
+            }
+            return value;
         }
     }
 </script>
