@@ -57,7 +57,7 @@
             const dec = this.decimalValue;
             const value = Math.trunc(this.value);
 
-            if(dec > 0.999 && dec < 1) {
+            if(dec > 0.9995 && dec < 1) {
                 return value + 1;
             }
             return value;
