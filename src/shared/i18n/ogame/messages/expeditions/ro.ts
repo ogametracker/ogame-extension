@@ -148,11 +148,11 @@ export const ro: ExpeditionMessages = {
         ],
     },
 
-    logbookRegex: /*TODO: ro *//Logbuchnachtrag des Kommunikationsoffiziers:(?<text>.+)/i,
+    logbookRegex: /Inregistrare din primul jurnal de bord al comunicantilor: (?<text>.+)/i,
     depletionMessages: {
         [ExpeditionDepletionLevel.none]: [
-            /*TODO: ro 'Dieser Bereich des Universums ist */'wohl noch nicht erkundet worden',
-            /*TODO: ro 'Es ist ein erhebendes Gefühl, der */'Erste in einem unerforschten Sektor'/* zu sein'*/,
+            /*'Se pare ca aceasta */'parte a universului nu a fost explorata inca',
+            /*'Ne simtim grozav sa fim */'primii care calatoresc printr-un sector'/* neexplorat.'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
             /*TODO: ro 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
