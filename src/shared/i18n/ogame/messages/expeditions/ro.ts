@@ -74,14 +74,14 @@ export const ro: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /*TODO: ro 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
-        /*TODO: ro 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
+        /*'Ultimul lucru pe care il avem de la expeditie a fost o */'fotografie foarte bine facuta cu deschiderea unei gauri negre',
+        /*'Singurul lucru ramas de la */'expeditie a fost urmatoarea transmisie radio'/* : Zzzrrt Doamne! Krrrzzzzt Acea zrrrtrzt arata krgzzzz ca Krzzzzzzzztzzzz...'*/,
         /*TODO: ro 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
         /*TODO: ro 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
-        /*TODO: ro 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Flota ta de expeditia a facut */'contactul cu o rasa de extraterestrii timizi'/* . Acestia anunta ca wiykd-ul lor a trimis un reprezentant cu bunuri sa faca schimb pentru lumile voastre.'*/,
         /*TODO: ro 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
     ],
 
@@ -114,7 +114,7 @@ export const ro: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: ro 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
-            /*TODO: ro 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
+            /*'Am intrat direct intr-o */'ambuscada pusa de ceva buccaneri ai stelelor'/* ! Lupta nu a putut fi evitata!'*/,
             /*TODO: ro 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -155,8 +155,8 @@ export const ro: ExpeditionMessages = {
             /*'Ne simtim grozav sa fim */'primii care calatoresc printr-un sector'/* neexplorat.'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /*TODO: ro 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
-            /*TODO: ro 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*'Se pare ca nici un om nu a */'fost prin aceasta parte a galaxiei inainte',
+            /*'Am gasit */'campuri de ramasite ale navelor spatiale antice'/* . Nu suntem primii aici.'*/,
             /*TODO: ro 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
