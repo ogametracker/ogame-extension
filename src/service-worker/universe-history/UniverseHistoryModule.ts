@@ -992,7 +992,9 @@ export class UniverseHistoryModule {
 
     private async getXml<T = any>(apiFile: string): Promise<T> {
         const url = `${this.apiUrlBase}/${apiFile}`;
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            cache: 'no-cache',
+        });
         const xml = await response.text();
 
         return this.parser.parse(xml);
