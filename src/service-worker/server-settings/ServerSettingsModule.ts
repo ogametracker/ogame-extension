@@ -591,6 +591,19 @@ export class ServerSettingsModule {
     private async updateServerSettings(): Promise<void> {
         // load and parse server settings
         const { serverData } = await this.getXml<OgameApi.ServerSettingsXml & { 'xmlns:xsi': string, 'xsi:noNamespaceSchemaLocation': string, timestamp: string, serverId: string }>('serverData.xml');
+        const playerScores = await this.getXml<{ 
+            highscore: {
+                player: {
+                    id: string; 
+                    position: string;
+                    score: string;
+                }[];
+            };
+        }>('highscore.xml?category=1&type=0');
+        const topScore = Math.max(
+            parseFloat(playerScores.highscore.player[0].score),
+            parseFloat(serverData.topScore),
+        );
 
         // update settings in db
         const db = await getServerDatabase(this.meta);
@@ -632,6 +645,8 @@ export class ServerSettingsModule {
             await store.put(value, mapping.toKey);
         }
         await store.put(Date.now(), '_lastUpdate');
+        // put top score manually as highscore-API may be more up-to-date
+        await store.put(topScore, 'topScore');
         await tx.done;
 
         // notify settings update

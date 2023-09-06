@@ -8,7 +8,7 @@ export const hr: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Ekspedicija */'je uspjela pronaći i sačuvati Crnu Materiju',
             /*'Pronašli smo */'ostatke vanzemaljskog broda'/* . Na njemu je bilo malo spremište Crne Materije.'*/,
-            /*LOCA: hr 'Wir trafen auf ein */'seltsames Alien an Bord eines kleinen Schiffes'/*, das uns im Austausch für ein paar simple, mathematische Berechnungen einen kleinen Behälter mit Dunkler Materie überließ.'*/,
+            /*'Sreli smo */'čudnog vanzemaljca koji nam je dao kutiju'/* Crne Materije u zamijenu za neke jednostavne matematičke formule.'*/,
             /*'Naša*/' ekspedicija je zauzela napušteni brod s kojeg je transportirala'/* malu količinu Crne Materije. Ne pronalazimo nikakve tragove šta se dogodilo posadi ovog broda, ali tehničari su uspjeli spasiti Crnu Materiju.'*/,
             /*'Ekspedicija je pratila neke */'čudne signale prema jednom asteroidu'/*. U jezgri samog asteroida je pronađena mala količina Crne Materije. Istraživači su uzeli asteroid radi daljnjeg istraivanja i izvlačenja Crne Materije.'*/,
         ],
@@ -86,8 +86,8 @@ export const hr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.early]: [
-        /*LOCA: hr 'Eine unvorhergesehene */'Rückkopplung in den Energiespulen'/* der Antriebsaggregate beschleunigte den Rücksprung der Expedition, so dass sie nun früher als erwartet zurückkehrt. Ersten Meldungen zufolge hat sie jedoch nichts Spannendes zu berichten.'*/,
-        /*LOCA: hr 'Deine Expedition meldet keine Besonderheiten in dem erforschten Sektor. Jedoch geriet die Flotte */'beim Rücksprung in einen Sonnenwind'/*. Dadurch wurde der Sprung beschleunigt. Deine Expedition kehrt nun etwas früher nach Hause.'*/,
+        /*'Neke */'anomalije u motorima ekspedicijskih brodova uzrokovale'/* su povećanje brzine stoga se flota vraća prije nego očekivano. Prvi izvještaji pokazuju da nisu skupili ništa vrijedno spomena.'*/,
+        /*'Izvještaji ekspedicije ne */'javljaju nikakve anomalije u istraženom sektoru'/* . Ali flota je naletjela na sunčane vjetrove i zbog toga se flota vraća prije nego očekivano.'*/,
         /*'*/'Novi i odvažni komander'/* je uspješno putovao kroz crvotočinu da skrati put povratka flote. Međutim, ekspedicija nije donjela ništa novo.'*/,
     ],
 
@@ -115,7 +115,7 @@ export const hr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*LOCA: hr 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /*LOCA: hr 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
-            /*LOCA: hr 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Signal koji je vaša flota */'pratila je na bio lažan signal koji su slali pirati'/* . Borba je bila neizbježna.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: hr 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -128,7 +128,7 @@ export const hr: ExpeditionMessages = {
 
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: hr 'Einige */'fremdartig anmutende Schiffe'/* haben ohne Vorwarnung die Expeditionsflotte angegriffen.'*/,
+            /*'Neki */'brodovi egzotičnog izgleda su napali tvoju ekspedicijsku'/* flotu bez ikakvog upozorenja!'*/,
             /*LOCA: hr 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
             /*LOCA: hr 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
             /*LOCA: hr 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
@@ -156,7 +156,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.low]: [
             /*'Izgleda da */'nijedan čovjek nije bio u ovom dijelu galaksije'/* prije nas'*/,
-            /*'Nali smo ostatke prastarih svemirskih brodova. */'Netko je bio ovdje prije nas',
+            /*'Našli smo ostatke prastarih svemirskih brodova. */'Netko je bio ovdje prije nas',
             /*'Skoro smo se susreli sa drugom ekspedicijskom flotom. */'Nisam očekivao da bi nekoga'/* moglo biti ovdje'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [

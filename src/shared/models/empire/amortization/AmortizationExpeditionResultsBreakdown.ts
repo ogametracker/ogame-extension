@@ -40,9 +40,9 @@ const eventSizeProbabilities: Record<ApplicableExpeditionEventType, Record<Exped
         [ExpeditionEventSize.large]: 0.01,
     },
     [ExpeditionEventType.fleet]: {
-        [ExpeditionEventSize.small]: 0.92_1,
-        [ExpeditionEventSize.medium]: 0.07_1,
-        [ExpeditionEventSize.large]: 0.00_8,
+        [ExpeditionEventSize.small]: 0.89,
+        [ExpeditionEventSize.medium]: 0.10,
+        [ExpeditionEventSize.large]: 0.01,
     },
 };
 const fleetResourceFactors: Record<ResourceType, number> = {
@@ -50,10 +50,114 @@ const fleetResourceFactors: Record<ResourceType, number> = {
     [ResourceType.crystal]: 0.49, // on avg. about 49% 
     [ResourceType.deuterium]: 0.065, // on avg. about 6.5% are deuterium (total > 100% because only metal+crystal are counted towards the units)
 };
+const unitsPerSize: Record<ExpeditionEventSize, number[]> = {
+    [ExpeditionEventSize.small]: [
+          250_000,
+          300_000,
+          350_000,
+          400_000,
+          450_000,
+          500_000,
+          550_000,
+          600_000,
+          650_000,
+          700_000,
+          750_000,
+          800_000,
+          850_000,
+          900_000,
+          950_000,
+        1_000_000,
+        1_050_000,
+        1_100_000,
+        1_150_000,
+        1_200_000,
+        1_250_000,
+    ],
+    [ExpeditionEventSize.medium]: [
+        1_300_000,
+        1_350_000,
+        1_400_000,
+        1_450_000,
+        1_500_000,
+        1_550_000,
+        1_600_000,
+        1_650_000,
+        1_700_000,
+        1_750_000,
+        1_800_000,
+        1_850_000,
+        1_900_000,
+        1_950_000,
+        2_000_000,
+        2_050_000,
+        2_100_000,
+        2_150_000,
+        2_200_000,
+        2_250_000,
+        2_300_000,
+        2_350_000,
+        2_400_000,
+        2_450_000,
+        2_500_000,
+    ],
+    [ExpeditionEventSize.large]: [
+        2_550_000,
+        2_600_000,
+        2_650_000,
+        2_700_000,
+        2_750_000,
+        2_800_000,
+        2_850_000,
+        2_900_000,
+        2_950_000,
+        3_000_000,
+        3_050_000,
+        3_100_000,
+        3_150_000,
+        3_200_000,
+        3_250_000,
+        3_300_000,
+        3_350_000,
+        3_400_000,
+        3_450_000,
+        3_500_000,
+        3_550_000,
+        3_600_000,
+        3_650_000,
+        3_700_000,
+        3_750_000,
+        3_800_000,
+        3_850_000,
+        3_900_000,
+        3_950_000,
+        4_000_000,
+        4_050_000,
+        4_100_000,
+        4_150_000,
+        4_200_000,
+        4_250_000,
+        4_300_000,
+        4_350_000,
+        4_400_000,
+        4_450_000,
+        4_500_000,
+        4_550_000,
+        4_600_000,
+        4_650_000,
+        4_700_000,
+        4_750_000,
+        4_800_000,
+        4_850_000,
+        4_900_000,
+        4_950_000,
+        5_000_000,
+    ],
+};
 const averageUnitsPerSize: Record<ExpeditionEventSize, number> = {
     [ExpeditionEventSize.small]: 750_000,
-    [ExpeditionEventSize.medium]: 1_875_000,
-    [ExpeditionEventSize.large]: 3_750_000,
+    [ExpeditionEventSize.medium]: 1_900_000,
+    [ExpeditionEventSize.large]: 3_775_000,
 };
 
 export interface AmortizationExpeditionResultsBreakdownOptions {
@@ -138,9 +242,38 @@ export class AmortizationExpeditionResultsBreakdown {
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;
 
+        const foundResourcesUnscaledSum_small = unitsPerSize.small.reduce((total, baseAmount) => {
+            const foundAmount = multiplyCost(
+                {
+                    energy: 0,
+                    ...createRecord(
+                        ResourceTypes,
+                        resource => baseAmount
+                            * resourceProbabilities[resource]
+                            * resourceFactors[resource]
+                    ),
+                },
+                scoreFactor
+                * classFactor
+                * pathfinderFactor
+                * eventTypeProbabilities.resources
+                * (1 + eventBonuses.resources)
+            );
+
+            return addCost(total, foundAmount);
+        }, 
+        { 
+            metal: 0,
+            crystal: 0,
+            deuterium: 0,
+            energy: 0,
+        }); 
+        const foundResourcesUnscaled_small = multiplyCost(foundResourcesUnscaledSum_small, 1 / unitsPerSize.small.length);
+        
         const foundResourcesUnscaled = eventSizeProbabilities.resources.small * averageUnitsPerSize.small
-            + eventSizeProbabilities.resources.medium * averageUnitsPerSize.medium
-            + eventSizeProbabilities.resources.large * averageUnitsPerSize.large;
+            // + eventSizeProbabilities.resources.medium * averageUnitsPerSize.medium
+            // + eventSizeProbabilities.resources.large * averageUnitsPerSize.large
+            ;
 
         const foundResources = multiplyCost(
             {
@@ -158,6 +291,7 @@ export class AmortizationExpeditionResultsBreakdown {
             * eventTypeProbabilities.resources
             * (1 + eventBonuses.resources)
         );
+        debugger;
 
         const foundFleetResources = multiplyCost(
             multiplyCostComponentWise(
