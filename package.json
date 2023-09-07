@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "lint:ts": "npx eslint src/ --ext .ts",
     "dev:firefox": "node scripts/build.js --dev --browser=firefox",
     "dev:chrome": "node scripts/build.js --dev --browser=chrome",
     "build:firefox": "node scripts/build.js --browser=firefox",
