@@ -17,3 +17,5 @@ How to build:
 
 3. output is in `dist` directory
     - created zip-archive will be there as well
+
+Alternatively run `npm run publish` which will create zipped production builds for both Chrome and Firefox ready to upload.
