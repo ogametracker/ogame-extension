@@ -15,7 +15,7 @@ export const hr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*LOCA: hr 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
             /*LOCA: hr 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /*LOCA: hr 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Naša ekspedicija izvještava o spektakularnom fenomenu. Akumulacija Crne Materije u energetstkim spremištima brodskih štitova. Naši tehničari */'pokušavaju spremiti to više Materije dok fenomen'/* još traje.'*/,
         ],
         [ExpeditionEventSize.large]: [
             'Spontana deformacija svemira'/* omogućila je tvojoj ekspediciji da pronađe velike količine Crne Materije.'*/,
@@ -49,7 +49,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*'Naša ekspedicija je našla */'staro automatsko brodogradilište'/*. Neki od brodova su još uvijek u produkciji pa naši tehničari pokušavaju popraviti brodogradilite da se ti brodovi dovrše.'*/,
-            /*LOCA: hr 'Wir haben die */'Reste einer Armada'/* gefunden. Die Techniker der Expeditionsflotte haben sich sofort auf die halbwegs intakten Schiffe begeben und versuchen, diese wieder instand zu setzen.'*/,
+            /*'Našli */'smo ostatke armade'/* . Tehničari su otišli direktno do netaknutih brodova da ih pokušaju pokrenuti opet.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: hr 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
@@ -94,26 +94,26 @@ export const hr: ExpeditionMessages = {
     [ExpeditionEventType.delay]: [
         'Navigator glavnog broda je imao loš dan i krivo izračunao'/* koordinate na koje treba ići. Ne samo da je flota krivo sletila negdje drugdje, nego joj i treba više vremena za povratak natrag.'*/,
         /*'Ekspedicija je završila u */'sektoru sa olujama'/*. To je potaklo spremnike energije na preopterećenje i većina sistema u brodu se srušilo. Mehaničari su uspjeli izbjeći najgore ali povratak ekspedicije će se znatno odužiti.'*/,
-        /*LOCA: hr 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
+        /*'Zbog */'nepoznatih razloga ekspedicijski skok je završio na krivom'/* mjestu. Zamalo u sam centar sunca. Na svu sreću flota je završila u poznatom sistemu ali skok nazad će potrajati malo duže.'*/,
         /*'Gravitacija */'crvenog diva uništila je skok ekspedicijske'/* flote i trebati će malo vremena da se flota vrati nazad, stoga će joj trebati više vremena nego očekivano.'*/,
         /*'Novi */'navigacijski modul još uvijek ima nekih problema'/* . Ne samo da je ekspedicijski skok završio na krivom mjestu nego je i potrošio sav Deuterij. Bitno razočarana ekspedicijska flota se vraća bez impulsa. Povratak će trajati duže nego očekivano.'*/,
         /*'Ekspedicijska flota se susrela sa neprijateljskim brodom koji je pojavio bez ikakvog upozorenja. */'Neprijateljski brod je eksplodirao'/* i eksplozijom uzrokovao štetu na vašim brodovima. Dok god se ne poprave svi brodovi ekspedicijska flota ne može ići natrag pa će zbog toga povratak potrajati duže.'*/,
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /*LOCA: hr */ /Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /\[predmet\](?<hash>.+) je dodan u spremnik/i,
     },
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /*LOCA: hr 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
-            /*LOCA: hr 'Einige */'primitive Barbaren greifen uns mit Raumschiffen'/* an, die nicht einmal ansatzweise die Bezeichnung Raumschiff verdient haben. Sollte der Beschuss ernstzunehmende Ausmaße annehmen, sehen wir uns gezwungen, das Feuer zu erwidern.'*/,
+            /*'Neki */'opaki pirati su pokušali zarobiti'/* vašu ekspedicijsku flotu.'*/,
+            /*'Neki */'primitivni svemirski barbari nas napadaju'/* nečime što izgleda kao brod. Ako ne prestanu uskoro morati ćemo otvoriti vatru na njih.'*/,
             /*LOCA: hr 'Wir haben ein paar */'Funksprüche sehr betrunkener Piraten'/* aufgefangen.'*/,
             /*'Flota se morala */'boriti protiv nekoliko pirata'/* kojih je na sreću bilo jako malo.'*/,
             /*LOCA: hr 'Unsere Expeditionsflotte meldet, dass ein gewisser */'Moa Tikarr und seine wilde Meute'/* die bedingungslose Kapitulation unserer Flotte verlangen. Sollten sie Ernst machen, werden sie feststellen müssen, dass sich unsere Schiffe durchaus zu wehren wissen.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: hr 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
+            /*'Vaša ekspedicija */'je imala neugodan susret sa piratima',
             /*LOCA: hr 'Wir sind in den */'Hinterhalt einiger Sternen-Freibeuter'/* geraten!'*/,
             /*'Signal koji je vaša flota */'pratila je na bio lažan signal koji su slali pirati'/* . Borba je bila neizbježna.'*/,
         ],
@@ -130,7 +130,7 @@ export const hr: ExpeditionMessages = {
         [ExpeditionEventSize.small]: [
             /*'Neki */'brodovi egzotičnog izgleda su napali tvoju ekspedicijsku'/* flotu bez ikakvog upozorenja!'*/,
             /*LOCA: hr 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
-            /*LOCA: hr 'Unsere Expedition wurde von einer */'kleinen Gruppe unbekannter Schiffe'/* angegriffen.'*/,
+            /*'Našu ekspediciju je */'napala mala skupina nepoznatih brodova',
             /*LOCA: hr 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [

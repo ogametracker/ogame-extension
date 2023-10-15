@@ -211,17 +211,17 @@ export class ExpeditionModule {
         if (match?.groups == null)
             return null;
 
-        const hashMatch = data.html.match(/href=["'][^"']*item=(?<itemHash>[a-f0-9]+)[^"']*["']/);
-        if (hashMatch == null) {
+        const itemHash = match.groups.hash // use hash if already part of regex (e.g. HR because of broken message formatting)
+            ?? data.html.match(/href=["'][^"']*item=(?<itemHash>[a-f0-9]+)[^"']*["']/)?.groups?.itemHash;
+        if (itemHash == null) {
             _throw('Found item expedition event, but cannot detect found item');
         }
 
-        const itemHash = hashMatch.groups!.itemHash as ItemHash;
         return {
             type: ExpeditionEventType.item,
             id: data.id,
             date: data.date,
-            itemHash,
+            itemHash: itemHash as ItemHash,
         };
     }
 
