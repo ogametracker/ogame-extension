@@ -119,7 +119,7 @@ export const si: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Signal ni prišel od tujega stvora, */'ampak iz baze piratov'/* ! Niti niso bili presenečeni nad našo prisotnostjo.'*/,
-            /*LOCA: si 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Ekspedicija */'poroča o bitki z neznanimi piratskimi'/* ladjami!'*/,
         ],
         'fled-death-star': [
             /*LOCA: si 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
