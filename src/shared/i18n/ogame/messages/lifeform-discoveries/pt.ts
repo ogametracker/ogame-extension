@@ -41,7 +41,7 @@ export const pt: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /emissários conseguiram aumentar o nosso nível de conhecimento sobre esta forma de vida em (?<xp>\d+) EXP/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: pt 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'A Nave de Exploração encontrou */'alguns artefactos mas não pode recolhê-los porque'/* o teu armazenamento está cheio.'*/,
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'A Nave de Exploração */'encontrou uma pequena quantidade de artefactos',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'A Nave de Exploração */'encontrou uma grande quantidade de artefactos',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*'A Nave de Exploração */'encontrou uma enorme quantidade de artefactos',
