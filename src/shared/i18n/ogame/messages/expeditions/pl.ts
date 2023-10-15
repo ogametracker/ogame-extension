@@ -118,7 +118,7 @@ export const pl: ExpeditionMessages = {
             /*'Sygnał alarmowy wykryty przez ekspedycję okazał się być */'fałszywym sygnałem wysłanym przez gwiezdnych piratów'/* . Walki nie dało się uniknąć.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: pl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'Zarejestrowane sygnały nie pochodziły od nieznanej istoty, */'a z tajnej bazy piratów'/* . Nie byli wcale zdziwieni naszą obecnością w tym sektorze.'*/,
             /*'Ekspedycja donosi o */'ciężkich walkach z niezidentyfikowanymi statkami piratów',
         ],
         'fled-death-star': [

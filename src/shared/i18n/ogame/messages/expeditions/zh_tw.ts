@@ -77,7 +77,7 @@ export const zh_tw: ExpeditionMessages = {
         /*'我們從遠征探險艦隊收到了最後傳來的影像,那是一*/'個大得嚇人的黑洞',
         '遠征探險隊傳來的最後一條無線電訊息'/* :滋~~ 糟了！咖 那邊 滋~ 好像 嗶~~~有… 訊息中斷'*/,
         /*LOCA: zh_tw 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*LOCA: zh_tw 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'與遠征探險艦*/'隊的聯繫突然間中斷了'/* .我們的科學家們還在努力嘗試重新建立聯繫,不過似乎艦隊已經永遠消失了.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
@@ -160,9 +160,9 @@ export const zh_tw: ExpeditionMessages = {
             /*LOCA: zh_tw 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: zh_tw 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'我們與另一支遠征探險艦隊的船員們一同慶祝這次遠征探險完滿結束.他們那支艦隊也是與我們一*/'樣在這片宇宙空域內進行遠征探索,不過他們什麼沒有找到',
             /*LOCA: zh_tw 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: zh_tw 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'我們與在這片區域的一*/'些遠征探險艦隊建立了友好'/* 的無線電聯絡.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: zh_tw 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
