@@ -45,7 +45,7 @@ export const pt_br: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: pt-br 'Das Erkundungsschiff hat zwar ein paar Artefakte gefunden, */'konnte sie aber nicht mitnehmen, da deine Lager voll sind',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'A Nave de Exploração encontrou */'uma pequena quantidade de artefatos',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'A Nave de Exploração encontrou */'uma grande quantidade de artefatos',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: pt-br 'Das Erkundungsschiff hat */'eine riesige Sammlung von Artefakten gefunden',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*A Nave de Exploração encontrou */'uma enorme quantidade de artefactos',
         },
         numberOfArtifacts: /Artefatos encontrados:\s*(?<artifacts>\d+)/i,
     },

@@ -44,7 +44,7 @@ export const pt: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: pt 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'A Nave de Exploração */'encontrou uma pequena quantidade de artefactos',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'A Nave de Exploração */'encontrou uma grande quantidade de artefactos',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: pt 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'A Nave de Exploração */'encontrou uma enorme quantidade de artefactos',
         },
         numberOfArtifacts: /Artefactos encontrados: (?<artifacts>\d+)/i,
     },
