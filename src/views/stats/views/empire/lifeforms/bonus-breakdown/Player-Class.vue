@@ -209,19 +209,19 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
                 {
                     label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalCombatResearchLevels,
                     base: 2, //TODO: not in server settings
-                    actual: Math.trunc(2 * factor),
+                    actual: 2 * factor,
                     isPercentage: false,
                 },
                 {
                     label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalFleetSlots,
                     base: this.serverSettings.playerClasses.general.bonusFleetSlots,
-                    actual: Math.trunc(this.serverSettings.playerClasses.general.bonusFleetSlots * factor),
+                    actual: this.serverSettings.playerClasses.general.bonusFleetSlots * factor,
                     isPercentage: false,
                 },
                 {
                     label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.playerClasses.general.additionalMoonFields,
                     base: this.serverSettings.playerClasses.general.bonusMoonFields,
-                    actual: Math.trunc(this.serverSettings.playerClasses.general.bonusMoonFields * factor),
+                    actual: this.serverSettings.playerClasses.general.bonusMoonFields * factor,
                     isPercentage: false,
                 },
             ];
