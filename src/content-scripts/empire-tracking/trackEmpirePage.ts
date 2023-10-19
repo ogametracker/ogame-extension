@@ -139,7 +139,11 @@ function trackPlanetActiveItems(planet: OgameEmpirePlanet, ogameNow: number) {
         // get small image url from style
         const styleAttr = divWithImageStyle.getAttribute('style') ?? _throw('no style attribute found?!');
         const backgroundUrlRegex = /background: url\([^)]+\/(?<smallImageHash>[^)]+)-small.png\)/;
-        const backgroundUrlMatch = styleAttr.match(backgroundUrlRegex) ?? _throw('no background image url found');
+        const backgroundUrlMatch = styleAttr.match(backgroundUrlRegex);
+        if(backgroundUrlMatch == null) {
+            console.warn('found item with no image hash match, likely lifeform or alliance debuff', backgroundUrlRegex);
+            return;
+        }
         const smallImageHash = backgroundUrlMatch.groups?.smallImageHash ?? _throw('matched but no background image url found');
 
         const item = Object.values(Items).find(item => item.smallImage == smallImageHash) ?? _throw(`did not find item with small image hash '${smallImageHash}'`);
