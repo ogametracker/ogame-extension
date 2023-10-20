@@ -1311,4 +1311,12 @@ export const Items: Record<ItemHash, Item> = {
         name: "Flottenslots Gold (90 Tage)",
         grade: ItemGrade.gold,
     },
+
+
+    //item ids of the officers (7 days)
+    //78badde414b2cba7c0c37e3e11a5a42e8414c8ac
+    //10662141326cc46ee30bc4dd05f581424050a768
+    //bbc7ee322189528ad5bc3a19e048c4ff582538b5
+    //ddb65e18ec97b32d7dc50249a0d9c256f57664df
+    //e8e01fb84ed1a33ed3ab34af6fc84e86e3505142
 };
