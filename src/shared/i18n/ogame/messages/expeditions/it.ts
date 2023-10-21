@@ -140,7 +140,7 @@ export const it: ExpeditionMessages = {
             /*'Il collegamento con la nostra spedizione si è interrotto per un breve periodo. Da quello che abbiamo potuto decifrare dall`ultimo messaggio, stanno subendo un duro attacco - */'gli aggressori non sono stati identificati'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: it 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'La tua spedizione ha */'incrociato una flotta di invasione aliena e riferisce'/* di un duro combattimento!'*/,
             /*'Abbiamo */'avuto difficoltà a pronunciare correttamente il dialetto'/* della razza aliena. Il nostro diplomatico ha detto "fate fuoco" anziché "non fate fuoco"!'*/,
             /*'Una grande */'formazione di navi cristalline di origine sconosciuta'/* ha avuto una collisione diretta con la nostra flotta in spedizione. Dobbiamo prepararci al peggio.'*/,
         ],
