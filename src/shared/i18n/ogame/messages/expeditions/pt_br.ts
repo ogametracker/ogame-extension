@@ -157,7 +157,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /*'Ao que parece, somos os */'primeiros humanos a entrar nesta parte'/* da galáxia'*/, //v9?
             /*'Parece que nenhum ser */'humano esteve anteriormente nessa parte da galáxia', //v10?
-            /*'Encontramos os destroços de algumas naves antigas. Não */'somos os primeiros neste quadrante',
+            /*'Encontramos os destroços de antigas naves espaciais. Não */'somos os primeiros aqui',
             /*'Quase que */'chocamos contra uma outra frota em expedição'/*. Pensei que não iríamos encontrar mais ninguém por aqui'*/, //v9?
             /*'Nós quase */'tivemos uma colisão com uma outra frota de expedição'/* . Eu pensei que não encontraríamos mais ninguém por aqui.'*///v10?
         ],

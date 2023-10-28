@@ -77,118 +77,14 @@
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
+    import { findBaseAmounts } from '@/shared/models/expeditions/findBaseAmounts';
+
 
     type FindableUnits = {
         metal: number;
         crystal: number;
         deuterium: number;
         shipUnits: number;
-    };
-
-
-    const findBases: Record<ExpeditionEventSize, number[]> = {
-        [ExpeditionEventSize.small]: [
-            250_000,
-            300_000,
-            350_000,
-            400_000,
-            450_000,
-            500_000,
-            550_000,
-            600_000,
-            650_000,
-            700_000,
-            750_000,
-            800_000,
-            850_000,
-            900_000,
-            950_000,
-            1_000_000,
-            1_050_000,
-            1_100_000,
-            1_150_000,
-            1_200_000,
-            1_250_000,
-        ],
-        [ExpeditionEventSize.medium]: [
-            1_300_000,
-            1_350_000,
-            1_400_000,
-            1_450_000,
-            1_500_000,
-            1_550_000,
-            1_600_000,
-            1_650_000,
-            1_700_000,
-            1_750_000,
-            1_800_000,
-            1_850_000,
-            1_900_000,
-            1_950_000,
-            2_000_000,
-            2_050_000,
-            2_100_000,
-            2_150_000,
-            2_200_000,
-            2_250_000,
-            2_300_000,
-            2_350_000,
-            2_400_000,
-            2_450_000,
-            2_500_000,
-        ],
-        [ExpeditionEventSize.large]: [
-            2_550_000,
-            2_600_000,
-            2_650_000,
-            2_700_000,
-            2_750_000,
-            2_800_000,
-            2_850_000,
-            2_900_000,
-            2_950_000,
-            3_000_000,
-            3_050_000,
-            3_100_000,
-            3_150_000,
-            3_200_000,
-            3_250_000,
-            3_300_000,
-            3_350_000,
-            3_400_000,
-            3_450_000,
-            3_500_000,
-            3_550_000,
-            3_600_000,
-            3_650_000,
-            3_700_000,
-            3_750_000,
-            3_800_000,
-            3_850_000,
-            3_900_000,
-            3_950_000,
-            4_000_000,
-            4_050_000,
-            4_100_000,
-            4_150_000,
-            4_200_000,
-            4_250_000,
-            4_300_000,
-            4_350_000,
-            4_400_000,
-            4_450_000,
-            4_500_000,
-            4_550_000,
-            4_600_000,
-            4_650_000,
-            4_700_000,
-            4_750_000,
-            4_800_000,
-            4_850_000,
-            4_900_000,
-            4_950_000,
-            5_000_000,
-        ],
     };
 
     @Component({
@@ -446,7 +342,7 @@
 
             return createRecord(
                 ExpeditionEventSizes,
-                size => findBases[size].map<FindableUnits>(base => {
+                size => findBaseAmounts[size].map<FindableUnits>(base => {
                     const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
                     const shipUnits = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
 

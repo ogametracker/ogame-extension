@@ -161,7 +161,7 @@ export const nl: ExpeditionMessages = {
             /*'Op een haar na hadden we een */'botsing met een andere expeditie'/* . Ik had niet verwacht hier andere schepen tegen te zullen komen.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /* TODO: nl 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
+            /*'We vierden vanavond feest met de bemanning van een andere expeditie. Hoewel we weinig te bespreken hadden, is het */'tegenkomen van een vriendelijke expeditie altijd reden'/* tot een feestje.'*/,
             /* TODO: nl 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
             /* TODO: nl 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
         ],

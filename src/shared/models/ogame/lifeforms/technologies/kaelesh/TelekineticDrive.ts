@@ -47,7 +47,7 @@ class TelekineticDriveClass extends LifeformTechnology implements FleetSpeedBonu
             return 0;
         }
 
-        const bonusPerLevel = 0.01; //1%
+        const bonusPerLevel = 0.00_1; //0.1%
         return bonusPerLevel * level;
     }
 

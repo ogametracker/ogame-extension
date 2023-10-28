@@ -155,7 +155,7 @@ function getAllianceClass(element: Element): AllianceClass {
 }
 
 function getProductionPercentage(element: Element, techId: number): number {
-    const select = element.querySelector(`select[name="last${techId}"]`) as HTMLSelectElement | null
+    const select = element.querySelector(`select[name="productionFactor[${techId}]"]`) as HTMLSelectElement | null
         ?? _throw(`select not found for techid ${techId}`);
 
     const levelOrAmount = getLevelOrAmount(element, techId);

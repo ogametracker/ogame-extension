@@ -2036,7 +2036,7 @@ export class AmortizationItemGenerator {
         ): PotentialPlasmaTechnologyCostReductionBuildingCostReductionBuilding | null => {
             const localPlanetState = localPlanetStates[planetId];
 
-            const newLevel = localPlanetState.lifeformBuildingCostReduction[building.type] + 1;
+            const newLevel = localPlanetState.lifeformBuildingLevels[building.type] + 1;
             const cost = building.getCost(newLevel);
             const reducedCost = multiplyCostInt(cost, 1 - localPlanetState.lifeformBuildingCostReduction[building.type]);
 
