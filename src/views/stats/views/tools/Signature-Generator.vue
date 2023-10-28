@@ -119,21 +119,52 @@
 
         private ctx = null as CanvasRenderingContext2D | null;
 
-        private readonly shadowColor = 'rgba(0, 0, 0, 0.7)';
-        private readonly shadowColorWide = 'black';
         private readonly textColor = 'white';
         private readonly font = '"Segoe UI",Tahoma,Verdana,Arial,sans-serif';
-        private readonly shadowBlur = 2;
-        private readonly shadowBlurWide = 10;
-        private readonly shadowLineWidth = 2;
-        private readonly shadowLineWidthWide = 2;
+        private readonly shadows = [
+            {
+                opacity: 0.8,
+                width: 2,
+                blur: 4,
+            },
+            {
+                opacity: 0.7,
+                width: 2,
+                blur: 8,
+            },
+            {
+                opacity: 0.7,
+                width: 1,
+                blur: 16,
+            },
+            {
+                opacity: 0.7,
+                width: 1,
+                blur: 24,
+            },
+            {
+                opacity: 0.8,
+                width: 1,
+                blur: 48,
+            },
+        ];
 
         private draw() {
+            const shadowCanvas = document.createElement('canvas');
+            shadowCanvas.height = this.canvas.height;
+            shadowCanvas.width = this.canvas.width;
+            const shadowCtx = shadowCanvas.getContext('2d') ?? _throw('no 2d context found');
+
+            const textCanvas = document.createElement('canvas');
+            textCanvas.height = this.canvas.height;
+            textCanvas.width = this.canvas.width;
+            const textCtx = textCanvas.getContext('2d') ?? _throw('no 2d context found');
+
             const ctx = (this.ctx ??= this.canvas.getContext('2d')) ?? _throw('no 2d context found');
 
             const numberFormat: Intl.NumberFormatOptions = { maximumFractionDigits: 0 };
             const yStep = 25;
-            const padding = 16;
+            const padding = 12;
             const resourceImgSize = 30;
             const colWidth = (this.width - 2 * padding) / 4;
 
@@ -150,30 +181,27 @@
                 maxWidth?: number;
                 alignRight?: boolean;
                 baseline?: CanvasTextBaseline;
+                fontSize?: number;
             }) => {
-                let { x, y, text, maxWidth, alignRight, baseline } = options;
+                let { x, y, text, maxWidth, alignRight, baseline, fontSize } = options;
+
+                textCtx.font = shadowCtx.font = `${fontSize ?? 16}px ${this.font}`;
+                textCtx.textBaseline = shadowCtx.textBaseline = baseline ?? 'bottom';
 
                 if (alignRight && maxWidth != null) {
-                    const measurement = ctx.measureText(text);
+                    const measurement = textCtx.measureText(text);
                     x = Math.max(x, x + maxWidth - measurement.width);
                 };
 
-                ctx.font = `16px ${this.font}`;
-                ctx.textBaseline = baseline ?? 'bottom';
+                for(const shadow of this.shadows) {
+                    shadowCtx.shadowColor = `rgba(0, 0, 0, ${shadow.opacity})`;
+                    shadowCtx.shadowBlur = shadow.blur;
+                    shadowCtx.lineWidth = shadow.width;
+                    shadowCtx.strokeText(text, x, y, maxWidth);
+                }
 
-                ctx.shadowColor = this.shadowColor;
-                ctx.shadowBlur = this.shadowBlur;
-                ctx.lineWidth = this.shadowLineWidth;
-                ctx.strokeText(text, x, y, maxWidth);
-
-                ctx.shadowColor = this.shadowColorWide;
-                ctx.shadowBlur = this.shadowBlurWide;
-                ctx.lineWidth = this.shadowLineWidthWide;
-                ctx.strokeText(text, x, y, maxWidth);
-
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = this.textColor;
-                ctx.fillText(text, x, y, maxWidth);
+                textCtx.fillStyle = this.textColor;
+                textCtx.fillText(text, x, y, maxWidth);
             };
             const drawAddonName = () => {
                 drawTextWithShadow({
@@ -182,13 +210,13 @@
                     y: this.height - padding,
                 });
             };
-            const drawProduction = () => {
+            const drawProduction = (yOffset: number) => {
                 const fixResourceHeaderOffset = 2;
 
                 drawTextWithShadow({
                     text: this.$i18n.$t.extension.tools.signatureGenerator.production,
                     x: padding,
-                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
+                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset + yOffset,
                     baseline: 'middle',
                     maxWidth: colWidth,
                     alignRight: true,
@@ -202,7 +230,7 @@
                 cells1.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: padding,
-                    y: padding + resourceImgSize + (i + 1) * yStep,
+                    y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
                     maxWidth: colWidth,
                     alignRight: true,
                 }));
@@ -211,12 +239,12 @@
                 drawTextWithShadow({
                     text: this.$i18n.$t.extension.resources.metal,
                     x: xMetal,
-                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
+                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset + yOffset,
                     baseline: 'middle',
                     maxWidth: colWidth - resourceImgSize - 5,
                     alignRight: true,
                 });
-                ctx.drawImage(this.resourceImages.metal, xMetal + colWidth - resourceImgSize, padding, resourceImgSize, resourceImgSize);
+                ctx.drawImage(this.resourceImages.metal, xMetal + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
                 const totalMetal = this.productionBreakdowns.metal.getTotal();
                 const cellsMetal = [
                     this.$i18n.$n(this.productionBreakdowns.metal.getAverage(), numberFormat),
@@ -227,7 +255,7 @@
                 cellsMetal.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: xMetal,
-                    y: padding + resourceImgSize + (i + 1) * yStep,
+                    y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
                     maxWidth: colWidth,
                     alignRight: true
                 }));
@@ -236,12 +264,12 @@
                 drawTextWithShadow({
                     text: this.$i18n.$t.extension.resources.crystal,
                     x: xCrystal,
-                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
+                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset + yOffset,
                     baseline: 'middle',
                     maxWidth: colWidth - resourceImgSize - 5,
                     alignRight: true,
                 });
-                ctx.drawImage(this.resourceImages.crystal, xCrystal + colWidth - resourceImgSize, padding, resourceImgSize, resourceImgSize);
+                ctx.drawImage(this.resourceImages.crystal, xCrystal + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
                 const totalCrystal = this.productionBreakdowns.crystal.getTotal();
                 const cellsCrystal = [
                     this.$i18n.$n(this.productionBreakdowns.crystal.getAverage(), numberFormat),
@@ -252,7 +280,7 @@
                 cellsCrystal.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: xCrystal,
-                    y: padding + resourceImgSize + (i + 1) * yStep,
+                    y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
                     maxWidth: colWidth,
                     alignRight: true
                 }));
@@ -261,12 +289,12 @@
                 drawTextWithShadow({
                     text: this.$i18n.$t.extension.resources.deuterium,
                     x: xDeut,
-                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset,
+                    y: padding + resourceImgSize / 2 + fixResourceHeaderOffset + yOffset,
                     baseline: 'middle',
                     maxWidth: colWidth - resourceImgSize - 5,
                     alignRight: true,
                 });
-                ctx.drawImage(this.resourceImages.deuterium, xDeut + colWidth - resourceImgSize, padding, resourceImgSize, resourceImgSize);
+                ctx.drawImage(this.resourceImages.deuterium, xDeut + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
                 const totalDeut = this.productionBreakdowns.deuterium.getTotal(true);
                 const cellsDeut = [
                     this.$i18n.$n(this.productionBreakdowns.deuterium.getAverage(true), numberFormat),
@@ -277,16 +305,16 @@
                 cellsDeut.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: xDeut,
-                    y: padding + resourceImgSize + (i + 1) * yStep,
+                    y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
                     maxWidth: colWidth,
                     alignRight: true,
                 }));
             };
-            const drawDivider = () => {
+            const drawDivider = (yOffset: number) => {
                 ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.fillRect(padding, 160, this.width - 2 * padding, 1);
+                ctx.fillRect(padding, 160 + yOffset, this.width - 2 * padding, 1);
             };
-            const drawNumberOfTrackedEvents = () => {
+            const drawNumberOfTrackedEvents = (yOffset: number) => {
                 const yStart = 190;
                 const events = [
                     this.$i18n.$t.extension.tools.signatureGenerator.expeditions,
@@ -297,7 +325,7 @@
                 events.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: padding + i * colWidth,
-                    y: yStart,
+                    y: yStart + yOffset,
                     maxWidth: colWidth,
                     alignRight: true,
                 }));
@@ -311,7 +339,7 @@
                 numbers.forEach((text, i) => drawTextWithShadow({
                     text,
                     x: padding + i * colWidth,
-                    y: yStart + yStep,
+                    y: yStart + yStep + yOffset,
                     maxWidth: colWidth,
                     alignRight: true,
                 }));
@@ -323,19 +351,40 @@
 
                 drawTextWithShadow({
                     text: nameAndServer,
-                    x: this.width / 2,
-                    y: this.height - padding,
+                    x: padding,
+                    y: padding,
                     maxWidth: this.width / 2 - padding,
+                    baseline: 'top',
+                });
+            };
+            const drawDate = () => {
+                const dateTimeFormat = new Intl.DateTimeFormat(this.$i18n.locale, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                });
+                drawTextWithShadow({
+                    text: dateTimeFormat.format(Date.now()),
+                    x: this.width / 2 ,
+                    maxWidth: this.width / 2 - padding,
+                    y: padding,
                     alignRight: true,
+                    baseline: 'top',
                 });
             };
 
             drawBackground();
+
             drawAddonName();
             drawPlayerName();
-            drawProduction();
-            drawDivider();
-            drawNumberOfTrackedEvents();
+            drawDate();
+
+            drawProduction(32);
+            drawDivider(32);
+            drawNumberOfTrackedEvents(32);
+
+            ctx.drawImage(shadowCanvas, 0, 0);
+            ctx.drawImage(textCanvas, 0, 0);
         }
     }
 </script>
