@@ -1,7 +1,12 @@
 import { Cost } from "../common/Cost";
 import { Defense } from "./Defense";
+import { DefenseType } from "./DefenseType";
 
 class SmallShieldDomeClass extends Defense {
+
+    public get type() { 
+        return DefenseType.smallShieldDome;
+    }
 
     public get cost(): Cost {
         return {

@@ -1,9 +1,14 @@
 import { Cost } from "../common/Cost";
 import { Ship } from "./Ship";
+import { ShipType } from "./ShipType";
 
 class ReaperClass extends Ship {
 
-    public getCost(): Cost {
+    public get type() { 
+        return ShipType.reaper;
+    }
+
+    public get cost(): Cost {
         return {
             metal: 85_000,
             crystal: 55_000,

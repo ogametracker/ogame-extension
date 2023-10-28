@@ -162,7 +162,7 @@
                     const count = expo.fleet[shipType] ?? 0;
                     const ship = ShipByTypes[shipType];
 
-                    const cost = ship.getCost();
+                    const cost = ship.cost;
                     return (cost.metal + cost.crystal) * count;
                 }).reduce((total, cur) => total + cur, 0);
 
@@ -197,7 +197,7 @@
                     const count = expo.fleet[shipType] ?? 0;
                     const ship = ShipByTypes[shipType];
 
-                    const cost = ship.getCost();
+                    const cost = ship.cost;
                     return (cost.metal + cost.crystal + cost.deuterium) * count;
                 }).reduce((total, cur) => total + cur, 0);
 

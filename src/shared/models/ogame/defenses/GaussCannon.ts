@@ -1,7 +1,12 @@
 import { Cost } from "../common/Cost";
 import { Defense } from "./Defense";
+import { DefenseType } from "./DefenseType";
 
 class GaussCannonClass extends Defense {
+
+    public get type() { 
+        return DefenseType.gaussCannon;
+    }
 
     public get cost(): Cost {
         return {

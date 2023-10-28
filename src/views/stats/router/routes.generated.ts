@@ -987,6 +987,11 @@
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsResourceConversion\" */ '../views/tools/Resource-Conversion.vue')
                     },
                     {
+                        path: "scrapyard-merchant",
+                        name: "tools/scrapyard-merchant",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsScrapyardMerchant\" */ '../views/tools/Scrapyard-Merchant.vue')
+                    },
+                    {
                         path: "signature-generator",
                         name: "tools/signature-generator",
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsSignatureGenerator\" */ '../views/tools/Signature-Generator.vue')
