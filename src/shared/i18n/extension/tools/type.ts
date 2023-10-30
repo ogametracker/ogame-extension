@@ -13,4 +13,9 @@ export interface ToolsTranslations {
         combats: string;
         debrisFieldReports: string;
     };
+    scrapyardMerchant: {
+        header: string;
+        percentage: string;
+        count: string;
+    };
 }

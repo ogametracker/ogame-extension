@@ -1,4 +1,5 @@
 import { de as ships } from '../ogame/ships/de';
+import { de as defenses } from '../ogame/defenses/de';
 import { de as buildings } from '../ogame/buildings/de';
 import { de as research } from '../ogame/research/de';
 import { de as lifeforms } from '../ogame/lifeforms/de';
@@ -35,6 +36,7 @@ export const de: ExtensionTranslations = {
         resources,
         research,
         ships,
+        defenses,
     },
 
     extension: {

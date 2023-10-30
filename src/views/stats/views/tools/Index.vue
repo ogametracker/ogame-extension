@@ -17,7 +17,7 @@
                     to: { name: 'tools/signature-generator' },
                 },
                 {
-                    label: 'LOCA: Scrapyard Merchant',
+                    label: this.$i18n.$t.extension.tools.scrapyardMerchant.header,
                     to: { name: 'tools/scrapyard-merchant' },
                 },
                 /*TODO: tools 

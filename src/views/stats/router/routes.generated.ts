@@ -977,11 +977,6 @@
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsExpeditionCalculator\" */ '../views/tools/Expedition-Calculator.vue')
                     },
                     {
-                        path: "production-calculator",
-                        name: "tools/production-calculator",
-                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsProductionCalculator\" */ '../views/tools/Production-Calculator.vue')
-                    },
-                    {
                         path: "resource-conversion",
                         name: "tools/resource-conversion",
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsResourceConversion\" */ '../views/tools/Resource-Conversion.vue')

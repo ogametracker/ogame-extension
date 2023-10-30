@@ -1,12 +1,16 @@
 <template>
     <div class="scrapyard-merchant">
-        <input
-            type="number"
-            min="35"
-            max="75"
-            step="1"
-            v-model.number="percentage"
-        />
+        <div>
+            <input
+                type="number"
+                min="35"
+                max="75"
+                step="1"
+                :value="percentage"
+                @input="setPercentage($event)"
+            />
+            <span v-text="$i18n.$t.extension.tools.scrapyardMerchant.percentage" />
+        </div>
 
         <grid-table
             class="scrap-table"
@@ -18,12 +22,12 @@
         >
             <template #cell-type="{ item }">
                 <template v-if="item.type in ships">
-                    <span v-text="$i18n.$t.ogame.ships[item.type]" />
+                    <span v-text="$i18n.$t.ogame.ships[item.type]" class="mr-2" />
                     <o-ship :ship="item.type" size="24px" />
                 </template>
 
                 <template v-else-if="item.type in defenses">
-                    <!-- <span v-text="$i18n.$t.ogame.defenses[item.type]" /> -->
+                    <span v-text="$i18n.$t.ogame.defenses[item.type]" class="mr-2" />
                     <o-defense :defense="item.type" size="24px" />
                 </template>
             </template>
@@ -67,6 +71,7 @@ import { createRecord } from '@/shared/utils/createRecord';
 import { GridTableColumn } from '../../components/common/GridTable.vue';
 import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
 import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+import { SettingsDataModule } from '../../data/SettingsDataModule';
 
 
 @Component({})
@@ -91,25 +96,31 @@ export default class ScrapyardMerchant extends Vue {
             },
             {
                 key: 'count',
-                label: 'LOCA: Count',
+                label: this.$i18n.$t.extension.tools.scrapyardMerchant.count,
             },
             {
                 key: 'metal',
-                label: 'LOCA: Metal',
+                label: this.$i18n.$t.ogame.resources.metal,
             },
             {
                 key: 'crystal',
-                label: 'LOCA: Crystal',
+                label: this.$i18n.$t.ogame.resources.crystal,
             },
             {
                 key: 'deuterium',
-                label: 'LOCA: Deuterium',
+                label: this.$i18n.$t.ogame.resources.deuterium,
             },
             {
                 key: 'msu-dsu',
-                label: 'LOCA: MSU/DSU',
+                label: `${this.$i18n.$t.extension.common.resourceUnits} (${this.conversionModeText})`,
             },
         ];
+    }
+
+    private get conversionModeText() {
+        return SettingsDataModule.settings.conversionRates.mode == 'msu'
+            ? this.$i18n.$t.extension.common.msu
+            : this.$i18n.$t.extension.common.dsu;
     }
 
     private getTotalCost(item: Ship | Defense | {}): Cost {
@@ -137,6 +148,19 @@ export default class ScrapyardMerchant extends Vue {
             ...ShipTypes.map(type => ShipByTypes[type]),
             ...DefenseTypes.map(type => DefenseByTypes[type]),
         ];
+    }
+
+    private async setPercentage(event: InputEvent) {
+        const input = event.target as HTMLInputElement;
+        const value = parseInt(input.value);
+
+        const percentage = isNaN(value)
+            ? 0
+            : Math.max(35, Math.min(75, Math.trunc(value)));
+
+        this.percentage = value;
+        await this.$nextTick();
+        this.percentage = percentage;
     }
 }
 </script>
