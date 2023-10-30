@@ -1,9 +1,14 @@
 import { Cost } from "../common/Cost";
 import { Ship } from "./Ship";
+import { ShipType } from "./ShipType";
 
 class RecyclerClass extends Ship {
 
-    public getCost(): Cost {
+    public get type() { 
+        return ShipType.recycler;
+    }
+
+    public get cost(): Cost {
         return {
             metal: 10_000,
             crystal: 6_000,

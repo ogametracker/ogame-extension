@@ -1,7 +1,12 @@
 import { Cost } from "../common/Cost";
 import { Defense } from "./Defense";
+import { DefenseType } from "./DefenseType";
 
 class HeavyLaserClass extends Defense {
+
+    public get type() { 
+        return DefenseType.heavyLaser;
+    }
 
     public get cost(): Cost {
         return {

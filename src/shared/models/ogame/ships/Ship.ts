@@ -1,8 +1,10 @@
 import { Cost } from '../common/Cost';
+import { ShipType } from './ShipType';
 
 //REFACTOR: methods to getters
 export abstract class Ship {
-    public abstract getCost(): Cost;
+    public abstract get type(): ShipType;
+    public abstract get cost(): Cost;
     public abstract baseHull(): number;
     public abstract baseShield(): number;
     public abstract baseDamage(): number;

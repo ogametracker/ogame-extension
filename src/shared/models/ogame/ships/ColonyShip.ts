@@ -1,9 +1,14 @@
 import { Cost } from "../common/Cost";
 import { Ship } from "./Ship";
+import { ShipType } from "./ShipType";
 
 class ColonyShipClass extends Ship {
 
-    public getCost(): Cost {
+    public get type() { 
+        return ShipType.colonyShip;
+    }
+
+    public get cost(): Cost {
         return {
             metal: 10_000,
             crystal: 20_000,

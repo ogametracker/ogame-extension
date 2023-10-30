@@ -1,5 +1,5 @@
 <template>
-    <div class="planet-settings" :class="{ disabled: !settings.include }">
+    <div class="planet-settings" :class="{ disabled: settings.include == false }">
         <div class="header">
             <span v-text="settings.name" />
             <span v-if="settings.coordinates != null">

@@ -22,6 +22,7 @@ import { SwitchAccountsTranslations } from './switchAccounts/type';
 import { ToolsTranslations } from './tools/type';
 import { UniverseHistoryTranslations } from './universeHistory/type';
 import { PlayerClassTranslations } from './playerClasses/type';
+import { DefenseTranslations } from '../ogame/defenses/types';
 
 export interface ExtensionTranslationsFull {
     ogame: {
@@ -33,6 +34,7 @@ export interface ExtensionTranslationsFull {
         resources: ResourceTranslations;
         research: ResearchTranslations;
         ships: ShipTranslations;
+        defenses: DefenseTranslations;
     };
 
     extension: {

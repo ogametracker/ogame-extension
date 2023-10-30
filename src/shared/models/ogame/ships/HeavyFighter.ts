@@ -1,9 +1,14 @@
 import { Cost } from "../common/Cost";
 import { Ship } from "./Ship";
+import { ShipType } from "./ShipType";
 
 class HeavyFighterClass extends Ship {
 
-    public getCost(): Cost {
+    public get type() { 
+        return ShipType.heavyFighter;
+    }
+
+    public get cost(): Cost {
         return {
             metal: 6_000,
             crystal: 4_000,

@@ -493,7 +493,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
             const units = ships.reduce<Cost>((total, ship) => {
-                const shipCost = multiplyCost(ShipByTypes[ship].getCost(), expedition.fleet[ship] ?? 0);
+                const shipCost = multiplyCost(ShipByTypes[ship].cost, expedition.fleet[ship] ?? 0);
                 const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
                 return addCost(total, adjustedCost);
             }, { metal: 0, crystal: 0, deuterium: 0, energy: 0 })

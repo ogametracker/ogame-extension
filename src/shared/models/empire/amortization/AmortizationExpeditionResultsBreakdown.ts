@@ -51,11 +51,11 @@ const eventSizeProbabilities: Record<ApplicableExpeditionEventType, Record<Exped
 };
 
 const largestShip = Reaper;
-const largestShipUnits = largestShip.getCost().metal + largestShip.getCost().crystal;
+const largestShipUnits = largestShip.cost.metal + largestShip.cost.crystal;
 const scaledCosts = ExpeditionFindableShipTypes.map(shipType => {
     const ship = ShipByTypes[shipType];
-    const units = ship.getCost().metal + ship.getCost().crystal;
-    const costScaled = multiplyCost(ship.getCost(), largestShipUnits / units);
+    const units = ship.cost.metal + ship.cost.crystal;
+    const costScaled = multiplyCost(ship.cost, largestShipUnits / units);
     return costScaled;
 });
 const scaledCostSum = addCost(...scaledCosts);

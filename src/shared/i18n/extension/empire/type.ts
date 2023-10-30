@@ -60,6 +60,17 @@ export interface EmpireTranslations {
             header: string;
             applyAndClose: string;
 
+            includeSettings: {
+                header: string;
+
+                mines: string;
+                expeditions: string;
+                expeditionsRequirement: string;
+                lifeformBuildings: string;
+                lifeformTechnologies: string;
+                astrophysicsAndColony: string;
+                astrophysicsPerformanceNote: string;
+            };
             playerSettings: {
                 header: string;
                 optimizeForResources: string;
@@ -74,10 +85,6 @@ export interface EmpireTranslations {
             astrophysicsSettings: {
                 header: (name: string) => string;
                 newColony: string;
-            };
-            plasmatechSettings: {
-                header: (name: string) => string;
-                includePlasmatech: (name: string) => string;
             };
             planetSettings: {
                 header: string;
@@ -107,7 +114,6 @@ export interface EmpireTranslations {
             };
             expeditionSettings: {
                 header: string;
-                includeInResult: string;
                 averageWavesPerDay: string;
                 items: string;
                 averageExpeditionsPerDay: string;

@@ -15,4 +15,9 @@ export const de: ToolsTranslations = {
         combats: 'Kämpfe',
         debrisFieldReports: 'Abgebaute TFs',
     },
+    scrapyardMerchant: {
+        header: 'Schrotthändler',
+        percentage: '% beim Schrotthändler',
+        count: 'Anzahl',
+    },
 };

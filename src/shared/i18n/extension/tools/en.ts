@@ -15,4 +15,9 @@ export const en: ToolsTranslations = {
         combats: 'Combats',
         debrisFieldReports: 'Harvested DFs',
     },
+    scrapyardMerchant: {
+        header: 'Scrapyard Merchant',
+        percentage: '% at the scrapyard merchant',
+        count: 'Count',
+    },
 };

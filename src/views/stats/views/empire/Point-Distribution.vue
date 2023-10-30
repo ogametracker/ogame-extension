@@ -302,7 +302,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -312,7 +312,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -324,7 +324,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = fleet.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const cost = multiplyCost(ship.getCost(), count);
+                    const cost = multiplyCost(ship.cost, count);
                     return total + this.getPoints(cost);
                 }, 0);
 
@@ -381,7 +381,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -391,7 +391,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -403,7 +403,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = fleet.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const cost = multiplyCost(ship.getCost(), count);
+                    const cost = multiplyCost(ship.cost, count);
                     return total + this.getPoints(cost);
                 }, 0);
 
@@ -419,7 +419,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -429,7 +429,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                         .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
                         .reduce((total, shipType) => {
                             const ship = ShipByTypes[shipType];
-                            const cost = multiplyCost(ship.getCost(), planet.ships[shipType]);
+                            const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
                             return total + this.getPoints(cost);
                         }, 0);
@@ -441,7 +441,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = fleet.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const cost = multiplyCost(ship.getCost(), count);
+                    const cost = multiplyCost(ship.cost, count);
                     return total + this.getPoints(cost);
                 }, 0);
 
@@ -543,7 +543,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = fleet.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const totalCost = multiplyCost(ship.getCost(), count);
+                    const totalCost = multiplyCost(ship.cost, count);
                     cost = addCost(cost, totalCost);
                 });
             });
@@ -559,7 +559,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = planet.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const totalCost = multiplyCost(ship.getCost(), count);
+                    const totalCost = multiplyCost(ship.cost, count);
                     cost = addCost(cost, totalCost);
                 });
 
@@ -574,7 +574,7 @@ import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType'
                     const count = moon.ships[shipType];
                     const ship = ShipByTypes[shipType];
 
-                    const totalCost = multiplyCost(ship.getCost(), count);
+                    const totalCost = multiplyCost(ship.cost, count);
                     cost = addCost(cost, totalCost);
                 });
 

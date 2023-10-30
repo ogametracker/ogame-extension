@@ -72,6 +72,47 @@
                         </div>
 
                         <div>
+                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.header" />
+                            <div class="include-settings">
+                                <checkbox
+                                    v-model="includeSettings.mines"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.mines"
+                                />
+                                <checkbox
+                                    v-model="includeSettings.expeditions"
+                                    :disabled="!includeSettings.lifeformTechnologies && !includeSettings.astrophysics"
+                                >   
+                                    <template #label>
+                                        <span v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditions" />
+                                        <br/>
+                                        <i v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditionsRequirement" />
+                                    </template>
+                                </checkbox>
+                                <checkbox
+                                    v-model="includeSettings.lifeformBuildings"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformBuildings"
+                                />
+                                <checkbox
+                                    v-model="includeSettings.lifeformTechnologies"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformTechnologies"
+                                />
+                                <checkbox
+                                    v-model="includeSettings.plasmaTechnology"
+                                    :label="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]"
+                                />
+                                <checkbox
+                                    v-model="includeSettings.astrophysics"
+                                >   
+                                    <template #label>
+                                        <span v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.astrophysicsAndColony" />
+                                        <br/>
+                                        <i v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.astrophysicsPerformanceNote" />
+                                    </template>
+                                </checkbox>
+                            </div>
+                        </div>
+
+                        <div>
                             <h3
                                 v-text="
                                     $i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.header(
@@ -80,27 +121,7 @@
                                 "
                             />
                             <div class="astrophysics-settings">
-                                <amortization-planet-settings-inputs v-model="astrophysicsSettings.planet" toggleable />
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3
-                                v-text="
-                                    $i18n.$t.extension.empire.amortization.settings.plasmatechSettings.header(
-                                        $i18n.$t.ogame.research[ResearchType.plasmaTechnology]
-                                    )
-                                "
-                            />
-                            <div class="plasma-tech-settings">
-                                <checkbox
-                                    v-model="includePlasmaTechnology"
-                                    :label="
-                                        $i18n.$t.extension.empire.amortization.settings.plasmatechSettings.includePlasmatech(
-                                            $i18n.$t.ogame.research[ResearchType.plasmaTechnology]
-                                        )
-                                    "
-                                />
+                                <amortization-planet-settings-inputs v-model="astrophysicsSettings" />
                             </div>
                         </div>
 
@@ -180,7 +201,7 @@
                                 </span>
                                 <span v-else class="planet">
                                     <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
-                                    <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                                    <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                 </span>
 
                                 <div class="levels">
@@ -279,11 +300,11 @@
                                                         } ${-additionalLifeformStuff.planetId}`
                                                     "
                                                 />
-                                                <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                                                <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                             </span>
 
                                             <o-lifeform-building
-                                                v-if="additionalLifeformStuff.building != null"
+                                                v-if="'building' in additionalLifeformStuff"
                                                 :building="additionalLifeformStuff.building"
                                                 size="36px"
                                             />
@@ -327,7 +348,7 @@
 
                                 <span class="planet" style="align-self: start; grid-row: 2">
                                     <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
-                                    <span v-text="`[-:-:${astrophysicsSettings.planet.position}]`" />
+                                    <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                 </span>
 
                                 <span class="colony-mines" style="display: contents">
@@ -450,7 +471,7 @@
                 <amortization-grouped-item-table
                     v-if="isGroupedItemsView"
                     :groupedItems="groupedItemsSorted"
-                    :newColonyPosition="astrophysicsSettings.planet.position"
+                    :newColonyPosition="astrophysicsSettings.position"
                 />
             </div>
         </div>
@@ -486,7 +507,7 @@
     import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
     import { AmortizationAstrophysicsSettings } from '@/shared/models/empire/amortization/AmortizationAstrophysicsSettings';
     import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@/shared/models/empire/amortization/models';
-    import { AmortizationItemGenerator } from '@/shared/models/empire/amortization/AmortizationItemGenerator';
+    import { AmortizationGenerationSettings, AmortizationItemGenerator } from '@/shared/models/empire/amortization/AmortizationItemGenerator';
     import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { delay } from '@/shared/utils/delay';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
@@ -544,7 +565,7 @@
         ].map(b => b.type);
 
         private get applicableLifeformBuildingTypes(): LifeformBuildingType[] {
-            const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.planet.lifeform];
+            const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.lifeform];
             return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
         }
         private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes.sort((a,b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]); // sorted by slot
@@ -563,8 +584,8 @@
                 p.crawlers.max = isCollector;
             });
 
-            this.astrophysicsSettings.planet.crawlers.percentage = percentage;
-            this.astrophysicsSettings.planet.crawlers.max = isCollector;
+            this.astrophysicsSettings.crawlers.percentage = percentage;
+            this.astrophysicsSettings.crawlers.max = isCollector;
         }
 
         private async saveItems() {
@@ -677,26 +698,29 @@
         };
         private planetSettings: Record<number, AmortizationPlanetSettings> = {};
         private astrophysicsSettings: AmortizationAstrophysicsSettings = {
-            planet: {
-                include: true,
-                id: -1,
-                name: '',
-                position: 8,
-                maxTemperature: getAverageTemperature(8),
-                activeItems: [],
-                crawlers: {
-                    percentage: 100,
-                    count: 0,
-                    max: false,
-                },
-                ignoreEmptyLifeformTechnologySlots: false,
-                lifeform: LifeformType.none,
-                activeLifeformTechnologies: [],
+            id: -1,
+            name: '',
+            position: 8,
+            maxTemperature: getAverageTemperature(8),
+            activeItems: [],
+            crawlers: {
+                percentage: 100,
+                count: 0,
+                max: false,
             },
+            ignoreEmptyLifeformTechnologySlots: false,
+            lifeform: LifeformType.none,
+            activeLifeformTechnologies: [],
         };
-        private includePlasmaTechnology = true;
+        private includeSettings: AmortizationGenerationSettings['include'] = {
+            astrophysics: false,
+            plasmaTechnology: true,
+            expeditions: true,
+            mines: true,
+            lifeformBuildings: true,
+            lifeformTechnologies: true,
+        };
         private expeditionSettings: AmortizationExpeditionSettings = {
-            include: true,
             wavesPerDay: 8,
             items: [],
             fleetUnitsFactors: {
@@ -758,8 +782,8 @@
                     player: this.clone(this.playerSettings),
                     planets: this.clone(this.planetSettings),
                     astrophysics: this.clone(this.astrophysicsSettings),
-                    includePlasmaTechnology: this.clone(this.includePlasmaTechnology),
                     expeditions: this.clone(this.expeditionSettings),
+                    include: this.clone(this.includeSettings),
                 },
                 lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
@@ -846,17 +870,15 @@
 
             const astroLifeform = serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none;
             this.astrophysicsSettings = {
-                planet: {
-                    ...this.astrophysicsSettings.planet,
-                    lifeform: astroLifeform,
-                    activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[astroLifeform]],
+                ...this.astrophysicsSettings,
+                lifeform: astroLifeform,
+                activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[astroLifeform]],
 
-                    name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
-                    crawlers: {
-                        percentage: empire.playerClass == PlayerClass.collector ? 150 : 100,
-                        count: 0,
-                        max: empire.playerClass == PlayerClass.collector,
-                    },
+                name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
+                crawlers: {
+                    percentage: empire.playerClass == PlayerClass.collector ? 150 : 100,
+                    count: 0,
+                    max: empire.playerClass == PlayerClass.collector,
                 },
             };
 
@@ -894,7 +916,6 @@
             avgWaves = Math.round(10 * avgWaves) / 10;
 
             this.expeditionSettings = {
-                include: this.expeditionSettings.include,
                 items: expoSlotItems,
                 wavesPerDay: avgWaves,
                 fleetUnitsFactors: {
@@ -1322,6 +1343,11 @@
         &-grouping {
             margin-bottom: 4px;
         }
+    }
+
+    .include-settings {
+        display: flex;
+        flex-direction: column;
     }
 
     .flex-settings {

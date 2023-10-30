@@ -16,6 +16,10 @@
                     label: this.$i18n.$t.extension.tools.signatureGenerator.header,
                     to: { name: 'tools/signature-generator' },
                 },
+                {
+                    label: this.$i18n.$t.extension.tools.scrapyardMerchant.header,
+                    to: { name: 'tools/scrapyard-merchant' },
+                },
                 /*TODO: tools 
                 {
                     label: 'LOCA: Expedition Calculator',

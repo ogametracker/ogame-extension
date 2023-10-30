@@ -170,7 +170,7 @@ class ExpeditionDataModuleClass extends Vue {
                     dailyResult.findings.fleet[ship] += count;
 
                     const shipData = ShipByTypes[ship];
-                    const resourceUnits = multiplyCost(shipData.getCost(), count);
+                    const resourceUnits = multiplyCost(shipData.cost, count);
 
                     for (const resource of ResourceTypes) {
                         dailyResult.findings.fleetResourceUnits[resource] += resourceUnits[resource]

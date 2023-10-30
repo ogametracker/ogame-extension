@@ -135,7 +135,7 @@ class CombatReportDataModuleClass extends Vue {
             lostShips.ships[ship] += report.lostShips[ship];
 
             const shipData = ShipByTypes[ship];
-            const resourceUnits = multiplyCost(shipData.getCost(), report.lostShips[ship]);
+            const resourceUnits = multiplyCost(shipData.cost, report.lostShips[ship]);
 
             ResourceTypes.forEach(resource => lostShips.resourceUnits[resource] += resourceUnits[resource]);
         }

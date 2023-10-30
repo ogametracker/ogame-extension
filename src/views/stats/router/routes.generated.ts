@@ -977,14 +977,14 @@
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsExpeditionCalculator\" */ '../views/tools/Expedition-Calculator.vue')
                     },
                     {
-                        path: "production-calculator",
-                        name: "tools/production-calculator",
-                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsProductionCalculator\" */ '../views/tools/Production-Calculator.vue')
-                    },
-                    {
                         path: "resource-conversion",
                         name: "tools/resource-conversion",
                         component: () => import(/* webpackChunkName: \"stats-view-viewstoolsResourceConversion\" */ '../views/tools/Resource-Conversion.vue')
+                    },
+                    {
+                        path: "scrapyard-merchant",
+                        name: "tools/scrapyard-merchant",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewstoolsScrapyardMerchant\" */ '../views/tools/Scrapyard-Merchant.vue')
                     },
                     {
                         path: "signature-generator",
