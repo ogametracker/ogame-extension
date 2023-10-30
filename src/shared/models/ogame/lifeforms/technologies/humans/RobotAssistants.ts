@@ -49,10 +49,9 @@ class RobotAssistantsClass extends LifeformTechnology implements ResearchCostAnd
         }
 
         const timeReductionPerLevel = 0.00_2; //0.2%
-        const maxTimeReduction = 0.99; //99%
 
         return {
-            time: Math.min(maxTimeReduction, timeReductionPerLevel * level),
+            time: timeReductionPerLevel * level,
             cost: 0,
         };
     }

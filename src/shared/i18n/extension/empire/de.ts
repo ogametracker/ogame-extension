@@ -61,6 +61,17 @@ export const de: EmpireTranslations = {
             header: 'Einstellungen',
             applyAndClose: 'Einstellungen anwenden und schließen',
 
+            includeSettings: {
+                header: 'Für Berechnung berücksichtigen',
+
+                mines: 'Minen',
+                expeditions: 'Expeditionen',
+                expeditionsRequirement: 'Hinweis: Benötigt Wahl von Lebensformforschungen und/oder Astrophysik',
+                lifeformBuildings: 'Lebensformgebäude',
+                lifeformTechnologies: 'Lebensformforschungen',
+                astrophysicsAndColony: 'Astrophysik und neue Kolonien',
+                astrophysicsPerformanceNote: 'Hinweis: Rechenintensiv, hat starken Einfluss auf Berechnungsgeschwindigkeit',
+            },
             playerSettings: {
                 header: 'Allgemeine Einstellungen',
                 optimizeForResources: 'Für gewählte Rohstoffe optimieren',
@@ -75,10 +86,6 @@ export const de: EmpireTranslations = {
             astrophysicsSettings: {
                 header: (name: string) => `Einstellungen zu ${name}`,
                 newColony: 'neue Kolonie',
-            },
-            plasmatechSettings: {
-                header: (name: string) => `Einstellungen zu ${name}`,
-                includePlasmatech: (name: string) => `${name} für Berechnung berücksichtigen`,
             },
             planetSettings: {
                 header: 'Einstellungen der Planeten',
@@ -108,7 +115,6 @@ export const de: EmpireTranslations = {
             },
             expeditionSettings: {
                 header: 'Expeditionseinstellungen',
-                includeInResult: 'für Berechnung berücksichtigen',
                 averageWavesPerDay: '⌀ Wellen pro Tag',
                 items: 'Slot-Items',
                 averageExpeditionsPerDay: '⌀ Expeditionen pro Tag',

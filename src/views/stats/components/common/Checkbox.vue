@@ -1,11 +1,14 @@
 <template>
-    <span class="checkbox" @click="onClick($event)">
+    <span class="checkbox" @click="onClick($event)" :class="{disabled: disabled}">
         <span class="checkmark">
             <span class="mdi" :style="{ color: color }" :class="checked ? 'mdi-checkbox-blank' : 'mdi-checkbox-blank-outline'" />
             <span class="check-icon mdi mdi-check" v-if="checked" :style="{ color: checkColor }"/>
         </span>
 
-        <span v-if="label != null" v-text="label" />
+        <span v-if="$slots.label != null">
+            <slot name="label" />
+        </span>
+        <span v-else-if="label != null" v-text="label" />
     </span>
 </template>
 
@@ -17,6 +20,9 @@
 
         @VModel({ required: true, type: Boolean })
         private checked!: boolean;
+
+        @Prop({ required: false, type: Boolean })
+        private disabled!: boolean;
 
         @Prop({ required: false, type: String, default: () => null })
         private color!: string | null;
@@ -59,6 +65,13 @@
                 left: 0;
                 top: 0;
             }
+        }
+
+        &.disabled {
+            pointer-events: none;
+            cursor: default;
+            --color: 80, 80, 80;
+            color: #888888;
         }
     }
 </style>

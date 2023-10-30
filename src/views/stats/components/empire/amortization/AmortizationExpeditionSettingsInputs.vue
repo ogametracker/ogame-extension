@@ -1,13 +1,10 @@
 <template>
-    <div class="expedition-settings" :class="{ disabled: !settings.include }">
+    <div class="expedition-settings">
         <div class="header">
             <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
         </div>
 
         <div class="body">
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.includeInResult" />
-            <checkbox v-model="settings.include" />
-
             <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay" />
             <span>
                 <input type="number" v-model.number.lazy="settings.wavesPerDay" min="0" max="20" step="0.1" />

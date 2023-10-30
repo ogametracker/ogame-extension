@@ -67,12 +67,19 @@ const $resourceByMineType: Record<MineBuildingType, ResourceType> = {
     [BuildingType.deuteriumSynthesizer]: ResourceType.deuterium,
 };
 
-interface AmortizationGenerationSettings {
+export interface AmortizationGenerationSettings {
     player: AmortizationPlayerSettings;
     planets: Record<number, AmortizationPlanetSettings>;
     astrophysics: AmortizationAstrophysicsSettings;
-    includePlasmaTechnology: boolean;
     expeditions: AmortizationExpeditionSettings;
+    include: {
+        astrophysics: boolean;
+        plasmaTechnology: boolean;
+        expeditions: boolean;
+        mines: boolean;
+        lifeformBuildings: boolean;
+        lifeformTechnologies: boolean;
+    };
 }
 interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
     setPlasmaTechnologyLevel(level: number): void;
@@ -365,16 +372,16 @@ export class AmortizationItemGenerator {
 
         // lf building cost reduction
         const lifeformBuildingCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform]
-            .filter(b => LifeformBuildingTypes.some(lfBuildingType => b.appliesTo(lfBuildingType)));
+            .filter(b => LifeformBuildingTypes.some(lfBuildingType => b.getCostAndTimeReduction(lfBuildingType, 20).cost > 0));
 
         // mine cost reduction
         const mineCostReductionBuildings = AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform[planet.lifeform]
-            .filter(b => $mineBuildingTypes.some(mineType => b.appliesTo(mineType)));
+            .filter(b => $mineBuildingTypes.some(mineType => b.getCostAndTimeReduction(mineType, 20).cost > 0));
 
         // plasma tech cost reduction
         const plasmaTechnologyCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(
             tech => planet.activeLifeformTechnologies.includes(tech.type)
-                && tech.appliesTo(ResearchType.plasmaTechnology)
+                && tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, 20).cost > 0
         );
 
         // lf research buildings
@@ -663,23 +670,27 @@ export class AmortizationItemGenerator {
         while (true) {
             let items: AmortizationItem[] = [];
 
-            const mineItems = this.#getMineAmortizationItems();
-            const lifeformProductionBonusBuildingItems = this.#getLifeformProductionBonusBuildingAmortizationItems();
-            const lifeformTechnologyBoostBuildingItems = this.#getLifeformTechnologyBoostBuildingAmortizationItems();
-            const lifeformTechnologyItems = this.#getLifeformTechnologyAmortizationItems();
-            items.push(
-                ...mineItems,
-                ...lifeformProductionBonusBuildingItems,
-                ...lifeformTechnologyBoostBuildingItems,
-                ...lifeformTechnologyItems,
-            );
-
-            if (this.#settings.includePlasmaTechnology) {
+            if (this.#settings.include.mines) {
+                items.push(...this.#getMineAmortizationItems());
+            }
+            if (this.#settings.include.lifeformBuildings) {
+                const lifeformProductionBonusBuildingItems = this.#getLifeformProductionBonusBuildingAmortizationItems();
+                const lifeformTechnologyBoostBuildingItems = this.#getLifeformTechnologyBoostBuildingAmortizationItems();
+                
+                items.push(
+                    ...lifeformProductionBonusBuildingItems,
+                    ...lifeformTechnologyBoostBuildingItems,
+                );
+            }
+            if (this.#settings.include.lifeformTechnologies) {
+                items.push(...this.#getLifeformTechnologyAmortizationItems(this.#settings.include.expeditions));
+            }
+            if (this.#settings.include.plasmaTechnology) {
                 const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
                 items.push(plasmaTechItem);
             }
-            if (this.#settings.astrophysics.planet.include) {
-                const astrophysicsItem = this.#getAstrophysicsAmortizationItem(-newPlanets - 1, this.#state.expeditions);
+            if (this.#settings.include.astrophysics) {
+                const astrophysicsItem = this.#getAstrophysicsAmortizationItem(-newPlanets - 1, this.#state.expeditions, this.#settings.include.expeditions);
                 items.push(astrophysicsItem);
             }
 
@@ -773,7 +784,8 @@ export class AmortizationItemGenerator {
                     });
 
                     this.#settings.planets[bestItem.newPlanetId] = {
-                        ...this.#settings.astrophysics.planet,
+                        ...this.#settings.astrophysics,
+                        include: true,
                     };
                     break;
                 }
@@ -788,7 +800,7 @@ export class AmortizationItemGenerator {
     }
 
     //#region astrophysics amortization item calculation
-    #getAstrophysicsAmortizationItem(planetId: number, expeditionBreakdown: AmortizationExpeditionResultsBreakdown): AstrophysicsAmortizationItem {
+    #getAstrophysicsAmortizationItem(planetId: number, expeditionBreakdown: AmortizationExpeditionResultsBreakdown, includeExpeditions: boolean): AstrophysicsAmortizationItem {
         const currentPlanetCount = Object.keys(this.#state.planets).length + this.#settings.player.numberOfUnusedRaidColonySlots;
         const minAstroLevel = (currentPlanetCount - 1) * 2 - 1;
         const levelAstrophysics = Math.max(minAstroLevel, this.#state.research[ResearchType.astrophysics]);
@@ -808,7 +820,8 @@ export class AmortizationItemGenerator {
         }
 
         let planetState = this.#init_getPlanetState({
-            ...this.#settings.astrophysics.planet,
+            ...this.#settings.astrophysics,
+            include: true,
             id: planetId,
         });
 
@@ -819,7 +832,7 @@ export class AmortizationItemGenerator {
             expeditionsPerHour,
         );
 
-        const planetSettings = this.#settings.astrophysics.planet;
+        const planetSettings = this.#settings.astrophysics;
         const position = planetSettings.position;
         const items = planetSettings.activeItems.reduce<Partial<Record<ItemHash, "permanent">>>((acc, cur) => {
             acc[cur] = 'permanent';
@@ -909,9 +922,10 @@ export class AmortizationItemGenerator {
                 newProductionBreakdowns,
                 newExpeditionBreakdown,
                 planetState,
-                tech));
+                tech,
+                includeExpeditions));
 
-            const lfTechnologyExpeditionItems = this.#settings.expeditions.include
+            const lfTechnologyExpeditionItems = includeExpeditions
                 ? [
                     ...planetState.discovererClassBonusTechnologies,
                     ...planetState.lifeformExpeditionBonusTechnologies,
@@ -919,7 +933,8 @@ export class AmortizationItemGenerator {
                     newProductionBreakdowns,
                     newExpeditionBreakdown,
                     planetState,
-                    tech))
+                    tech,
+                    includeExpeditions))
                 : [];
 
             const items = [
@@ -975,8 +990,7 @@ export class AmortizationItemGenerator {
             let newProductionDelta = subCost(newProductionBreakdowns.getTotal(), currentProduction);
             let newProductionDeltaConverted = this.#getMsuOrDsu(newProductionDelta);
 
-            if (this.#settings.expeditions.include) {
-                // const newExpeditionBreakdown = expeditionBreakdown.clone(); TODO remove
+            if (includeExpeditions) {
                 const newExpeditionsPerHour = newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay / 24;
                 newExpeditionBreakdown.options.planets[planetExpeditionState.id] = planetExpeditionState;
                 const newExpeditionFindsPerHour = multiplyCost(
@@ -1055,20 +1069,25 @@ export class AmortizationItemGenerator {
 
 
     //#region lifeform technology amortization item calculation
-    #getLifeformTechnologyAmortizationItems(): LifeformTechnologyAmortizationItem[] {
+    #getLifeformTechnologyAmortizationItems(includeExpeditions: boolean): LifeformTechnologyAmortizationItem[] {
         return this.#includedPlanets.flatMap(
             planet => [
                 ...planet.lifeformResourceProductionBonusTechnologies,
                 ...planet.crawlerProductionBonusTechnologies,
                 ...planet.collectorClassBonusTechnologies,
 
-                ...planet.discovererClassBonusTechnologies,
-                ...planet.lifeformExpeditionBonusTechnologies,
+                ...(includeExpeditions 
+                    ? [
+                        ...planet.discovererClassBonusTechnologies,
+                        ...planet.lifeformExpeditionBonusTechnologies,
+                    ]: []
+                ),
             ].map(tech => this.#getLifeformTechnologyAmortizationItem(
                 this.#state.productionBreakdowns,
                 this.#state.expeditions,
                 planet,
                 tech,
+                includeExpeditions,
             ))
         );
     }
@@ -1081,6 +1100,7 @@ export class AmortizationItemGenerator {
             | ClassBonusLifeformTechnology
             | ExpeditionBonusLifeformTechnology
             | ExpeditionEventProbabilityBonusLifeformTechnology,
+        includeExpeditions: boolean,
     ): LifeformTechnologyAmortizationItem {
         const planetData = planetState.data;
         const planetId = planetData.id;
@@ -1152,7 +1172,7 @@ export class AmortizationItemGenerator {
         productionDelta = subCost(newProduction, curProduction);
 
 
-        if (this.#settings.expeditions.include) {
+        if (includeExpeditions) {
             let additionalDiscovererClassBonus = 0;
             let additionalExpeditionBonuses: Record<ExpeditionEventType, number> = createRecord(ExpeditionEventTypes, 0);
             let additionalExpeditionEventProbabilityBonuses: Record<ExpeditionEventType, number> = createRecord(ExpeditionEventTypes, 0);
@@ -1303,7 +1323,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 const resultBase: PotentialLifeformTechnologyCostReductionItemBase = {
                     planetId: planetData.id,
                     level: newLevel,
@@ -1358,7 +1378,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 return {
                     planetId: planetData.id,
                     building,
@@ -1679,7 +1699,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 return {
                     building: building,
                     level: newLevel,
@@ -1937,7 +1957,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 return {
                     planetId,
                     technology,
@@ -2002,7 +2022,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 const resultBase: PotentialPlasmaTechnologyCostReductionItemBase = {
                     planetId,
                     level: newLevel,
@@ -2076,7 +2096,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostMConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostMConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostMConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostMConverted < totalReducedCostConverted && (best == null || newTotalReducedCostMConverted < best.newTotalReducedCostConverted)) {
                 return {
                     planetId,
                     building,
@@ -2116,7 +2136,7 @@ export class AmortizationItemGenerator {
                 return best;
             }
 
-            if (bestPlanetItem.newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || bestPlanetItem.newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (bestPlanetItem.newTotalReducedCostConverted < totalReducedCostConverted && (best == null || bestPlanetItem.newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 return bestPlanetItem;
             }
 
@@ -2351,7 +2371,7 @@ export class AmortizationItemGenerator {
 
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
-            if (newTotalReducedCostConverted <= totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
+            if (newTotalReducedCostConverted < totalReducedCostConverted && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)) {
                 return {
                     building,
                     level: newLevel,
