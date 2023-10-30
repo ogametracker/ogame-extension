@@ -19,7 +19,7 @@ import { ShipType } from "../../shared/models/ogame/ships/ShipType";
 import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { _logError } from "../../shared/utils/_log";
+import { _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { observerCallbacks } from "./main";
 
@@ -141,12 +141,16 @@ function trackPlanetActiveItems(planet: OgameEmpirePlanet, ogameNow: number) {
         const backgroundUrlRegex = /background: url\([^)]+\/(?<smallImageHash>[^)]+)-small.png\)/;
         const backgroundUrlMatch = styleAttr.match(backgroundUrlRegex);
         if(backgroundUrlMatch == null) {
-            console.warn('found item with no image hash match, likely lifeform or alliance debuff', backgroundUrlRegex);
+            _logWarning('found item with no image hash match, likely lifeform or alliance debuff', backgroundUrlRegex);
             return;
         }
         const smallImageHash = backgroundUrlMatch.groups?.smallImageHash ?? _throw('matched but no background image url found');
 
-        const item = Object.values(Items).find(item => item.smallImage == smallImageHash) ?? _throw(`did not find item with small image hash '${smallImageHash}'`);
+        const item = Object.values(Items).find(item => item.smallImage == smallImageHash);
+        if(item == null) {
+            _logWarning(`did not find item with small image hash '${smallImageHash}'`);
+            return;
+        }
 
         const durationLeftElem = itemDiv.querySelector('span[data-total-duration]') ?? _throw('no item duration found');
         const durationLeftText = durationLeftElem.textContent ?? _throw('no duration found');
