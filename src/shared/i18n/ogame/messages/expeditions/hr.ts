@@ -35,7 +35,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             'Mineralni pojas oko nepoznate planete'/* sadrži neprocenjive resurse. Ekspedicijski brodovi se vraćaju nazad i njihovi spremnici su prepuni'*/,
-            /*LOCA: hr 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Izvještaj ekspedicijske flote govori o */'otkrivanju ruševina ogromnog vanzemaljskog broda'/* . Nisu bili u mogućnosti da nauče išta iz njihove tehnologije ali su podijelili brod u dijelove i izvukli dosta korisnih resursa.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<amount>.+) (?<name>${resources.join('|')}) je ukradeno`, 'i'),
     },
@@ -53,7 +53,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Našli */'smo ogromno groblje brodova'/* . Neki naši tehničari iz ekspedicijske flote su uspjeli opet pokrenuti neke brodove.'*/,
-            /*LOCA: hr 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Našli smo */'planetu sa ostacima civilizacije'/* . Vidjeli smo veliku netaknutu svemirsku stanicu kako orbitira oko planete. Neki naši tehničari i piloti su otišli na površinu u potragu za brodovima koje bi mogli iskoristiti.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Sljedeći brodovi su sada dio vaše flote:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -76,7 +76,7 @@ export const hr: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*'Jedina stvar koja je ostala od cijele ekspedicije je vrlo dobra slika */'crne rupe koja se stvara'/*.'*/,
         /*'Jedino što je */'ostalo od ekspedicije je radio poruka'/* : *zzzzzzzzzz* To *krzzzzzzzz* izgleda *krrzzzzzz* kao *zzzzzzzzzzzzzzzzzzzz...'*/,
-        /*LOCA: hr 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'Eksplozija jezgre jednog od tvojih brodova vodi do lančane reakcije u kojoj */'spektakularnom eksplozijom nestaje cijela ekspedicijska'/* flota.'*/,
         /*'Ekspedicijska flota */'se nije vratila na planetu'/* . Naši istraživači jos pokušavaju otkriti šta se dogodilo ali izgleda da je flota zauvijek izgubljena.'*/,
     ],
 
@@ -119,7 +119,7 @@ export const hr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Zabilježeni signal je */'došao sa skrivene piratske baze'/* ! Nisu bili iznenađeni vašom prisutnoću u njihovom sektoru.'*/,
-            /*LOCA: hr 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
+            /*'Ekspedicija izvještava o */'teškoj borbi protiv neidentificiranih piratskih brodova',
         ],
         'fled-death-star': [
             /*LOCA: hr 'Your expedition stumbled across some pirates, but overwhelmed by the magnitude of your Deathstar, they fled.' */
@@ -136,10 +136,10 @@ export const hr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             'Nepoznate vrste napale su tvoju ekspediciju',
             /*'Tvoja ekspedicijska flota */'je ušla u teritorij koji pripada nepoznatoj ali vrlo agresivnoj'/* rasi izvanzemaljaca'*/,
-            /*LOCA: hr 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Veza sa tvojom ekspedicijskom flotom je prekinuta. Uspjeli smo dešifrirati njihovu zadnju poruku. Pod teškim napadom su, */'neprijatelj se ne može identificirati',
         ],
         [ExpeditionEventSize.large]: [
-            /*LOCA: hr 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Tvoja ekspedicija je naletjela na invaziju */'izvanzemaljske flote i došlo je do velike bitke',
             /*LOCA: hr 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*LOCA: hr 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
