@@ -467,7 +467,7 @@ class AmortizationExpeditionResultsBreakdown {
 
 const breakdown = new AmortizationExpeditionResultsBreakdown({
     admiral: true,
-    astrophysicsLevel: 27,
+    astrophysicsLevel: 29,
     fleetFindsResourceFactors: {
         metal: 1,
         crystal: 1,
@@ -481,11 +481,11 @@ const breakdown = new AmortizationExpeditionResultsBreakdown({
         discovererExpeditionSlotBonus: 2,
         economySpeed: 10,
     },
-    planets: createRecord([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], id => ({
+    planets: createRecord([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], id => ({
         id,
-        discovererClassBonusFactor: 0.00_2 * 0,
-        lifeformExperienceBoost: 0.00_1 * 59,
-        lifeformTechnologyBoost: 0.00_5 * 11,
+        discovererClassBonusFactor: 0.00_2 * 14,
+        lifeformExperienceBoost: 0.00_1 * 60,
+        lifeformTechnologyBoost: 0.00_3 * (14+12),
         lifeformTechnologyExpeditionBonusFactor: createRecord(ExpeditionEventTypes, type => {
             switch (type) {
                 case ExpeditionEventType.resources: return 0.00_2 * (18 + 16);
@@ -496,7 +496,7 @@ const breakdown = new AmortizationExpeditionResultsBreakdown({
     })),
 });
 const oldAvgFinds = breakdown.averageExpeditionFinds;
-
+debugger;
 let newBreakdown = breakdown.clone();
 let newAvgFinds = oldAvgFinds;
 const test = Array.from({ length: 15 }).map((_, i) => {
