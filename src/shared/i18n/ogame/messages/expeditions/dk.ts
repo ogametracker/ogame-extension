@@ -142,7 +142,7 @@ export const dk: ExpeditionMessages = {
         [ExpeditionEventSize.large]: [
             /*LOCA: dk 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
             /*'Vi havde en del */'problemer med at udtale dialekten af alienracen rigtigt'/* . Vores diplomat sagde ved et uheld `Ild!` i stedet for `Fred!`.'*/,
-            /*LOCA: dk 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
+            /*'En stor */'formation af krystallignende skibe, fra en ukendt'/* oprindelse, indtager direkte kollision mod din ekspeditionsflåde. Vi kan nu forvente det værste.'*/,
         ],
         'fled-death-star': [
             /*LOCA: dk 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
