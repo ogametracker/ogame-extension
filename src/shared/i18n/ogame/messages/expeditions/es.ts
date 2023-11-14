@@ -161,7 +161,7 @@ export const es: ExpeditionMessages = {
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*'celebramos el fin de la expedición con los miembros de la tripulación de otra flota expedicionaria que estaba en el mismo sector. */'Ellos tampoco tienen nada emocionante sobre lo que informar',
-            /*LOCA: es 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
+            /*'encontramos */'indicios sobre la presencia de otras flotas'/* de expedición'*/,
             /*'establecimos */'contacto amistoso por radio con otras expediciones en el sector',
         ],
         [ExpeditionDepletionLevel.high]: [
