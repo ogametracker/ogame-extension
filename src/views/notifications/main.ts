@@ -19,6 +19,11 @@ function watchLanguage() {
         lang => $i18n.locale = lang,
         { immediate: true }
     );
+    new Vue().$watch(
+        () => SettingsDataModule.settings.extensionLanguageRegion,
+        region => $i18n.localeRegion = region ?? null,
+        { immediate: true }
+    );
 }
 
 async function main() {

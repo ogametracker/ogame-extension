@@ -12,13 +12,26 @@
                     v-text="languageNames[lang]"
                 />
             </select>
+            <select 
+                v-if="Object.keys(getRegions(language)).length > 0" 
+                :value="languageRegion" 
+                @change="setLanguageRegion($event.target.value)"
+            >
+                <option
+                    v-for="(name, region) in getRegions(language)"
+                    :key="region"
+                    :value="region"
+                    v-text="name"
+                />
+            </select>
+            <span v-text="'LOCA: Fallback to EN if translations not available'" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 
     @Component({})
@@ -31,15 +44,35 @@
             [LanguageKey.de]: 'Deutsch',
             [LanguageKey.en]: 'English',
         };
+        private regions: Partial<Record<LanguageKey, Record<string, string>>> = {
+            [LanguageKey.en]: {
+                'gb': 'United Kingdom',
+                'us': 'United States',
+            },
+        };
+
+        private getRegions(locale: LanguageKey): Record<string, string> {
+            return this.regions[locale] ?? {};
+        }
 
         private get language() {
             return SettingsDataModule.settings.extensionLanguage;
+        }
+        private get languageRegion() {
+            return SettingsDataModule.settings.extensionLanguageRegion;
         }
 
         private setLanguage(extensionLanguage: LanguageKey) {
             SettingsDataModule.updateSettings({
                 ...SettingsDataModule.settings,
                 extensionLanguage,
+            });
+        }
+
+        private setLanguageRegion(region?: string) {
+            SettingsDataModule.updateSettings({
+                ...SettingsDataModule.settings,
+                extensionLanguageRegion: region,
             });
         }
     }
@@ -66,8 +99,14 @@
         &-body {
             height: 100%;
             padding: 8px;
-            display: flex;
+            display: flex;;
             align-items: center;
+        }
+
+        &-body {
+            flex-direction: column;
+            align-items: start;
+            gap: 4px;
         }
     }
 </style>

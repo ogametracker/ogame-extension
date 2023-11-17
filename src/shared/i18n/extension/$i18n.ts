@@ -2,7 +2,7 @@ import { _throw } from "@/shared/utils/_throw";
 import { format } from "date-fns";
 import { Component, Vue } from "vue-property-decorator";
 import { LanguageKey } from "../LanguageKey";
-import { ExtensionTranslationsFull } from "./type";
+import { ExtensionTranslations } from "./type";
 import extensionMessages from './';
 import { _logWarning } from "@/shared/utils/_log";
 import { RecursivePartial } from "@/shared/types/RecursivePartial";
@@ -15,14 +15,15 @@ export type I18nDateTimeFormat = string | Intl.DateTimeFormatOptions;
 
 export interface I18nOptions<TMessages, TDateTimeFormats> {
     locale: LanguageKey;
+    localeRegion?: string;
     fallbackLocales: LanguageKey[];
-    messages: Partial<Record<LanguageKey, Partial<TMessages>>>;
+    messages: RecursivePartial<Record<LanguageKey, Partial<TMessages>>>;
     dateTimeFormats: I18nDateTimeFormatMap<TDateTimeFormats>;
 }
 
 type PartialLanguageKey = Exclude<LanguageKey, 'de'>;
 export type I18nDateTimeFormatMap<T> = { [LanguageKey.de]: I18nDateTimeFormats<T> } & Partial<Record<PartialLanguageKey, I18nDateTimeFormats<T>>>;
-export type I18nMessageMap<T> = { [LanguageKey.de]: T } & Partial<Record<PartialLanguageKey, T>>;
+export type I18nMessageMap<T> = { [LanguageKey.de]: T } & RecursivePartial<Record<PartialLanguageKey, T>>;
 export type I18nFullMessageMap<T> = Record<LanguageKey, T>;
 
 class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
@@ -113,6 +114,7 @@ class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
 export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extends Vue {
     public enabled = true;
     public locale = LanguageKey.de;
+    public localeRegion: string | null = null;
     private _proxy: I18nMessageProxy<TMessages, TDateTimeFormats> = null!;
     public fallbackLocales: LanguageKey[] = [LanguageKey.en];
 
@@ -140,6 +142,7 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
         this.dateTimeFormats = new I18nMessageProxy<any, TDateTimeFormats>(this, options.dateTimeFormats as any) as any;
 
         this.locale = options.locale;
+        this.localeRegion = options.localeRegion ?? null;
         this.fallbackLocales = options.fallbackLocales;
 
         return this;
@@ -151,6 +154,14 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
         }
     }
 
+    public get fullLocaleIdentifier(): string {
+        if(this.localeRegion == null) {
+            return this.locale;
+        }
+
+        return `${this.locale}-${this.localeRegion}`;
+    }
+
     public $d(date: number | Date, formatName: I18nDateTimeFormatKey): string {
         this.throwOnDisabled();
 
@@ -160,13 +171,13 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
             return format(date, dateFormat);
         }
 
-        return new Intl.DateTimeFormat(this.locale, dateFormat as Intl.DateTimeFormatOptions).format(date);
+        return new Intl.DateTimeFormat(this.fullLocaleIdentifier, dateFormat as Intl.DateTimeFormatOptions).format(date);
     }
 
     public $n(number: number, options?: Intl.NumberFormatOptions): string {
         this.throwOnDisabled();
 
-        const formatter = new Intl.NumberFormat(this.locale, options);
+        const formatter = new Intl.NumberFormat(this.fullLocaleIdentifier, options);
         return formatter.format(number);
     }
 
@@ -201,7 +212,7 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
     }
 }
 
-export const $i18n = new I18n<ExtensionTranslationsFull, Intl.DateTimeFormatOptions>().init({
+export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>().init({
     messages: extensionMessages,
     dateTimeFormats: {
         //always fallback to de because it will use the current locale anyways
@@ -234,6 +245,16 @@ export const $i18n = new I18n<ExtensionTranslationsFull, Intl.DateTimeFormatOpti
             },
         },
         en: {
+            datetime: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
             time: {
                 hour12: true,
                 hour: '2-digit',
