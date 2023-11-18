@@ -64,6 +64,7 @@ export const en: SettingsTranslations = {
             dsuLong: 'Convert to Deuterium',
         },
         extensionLanguage: 'UI language (within OGame Tracker)',
+        extensionLanguageFallbackHint: 'English texts will be shown if texts are not available in the selected language.',
 
         serverSettings: {
             title: 'Server data',

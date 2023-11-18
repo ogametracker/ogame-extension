@@ -24,7 +24,7 @@
                     v-text="name"
                 />
             </select>
-            <span v-text="'LOCA: Fallback to EN if translations not available'" />
+            <span v-text="$i18n.$t.extension.settings.common.extensionLanguageFallbackHint" />
         </div>
     </div>
 </template>
