@@ -19,6 +19,7 @@ import { pt } from './pt';
 import { ro } from './ro';
 import { ru } from './ru';
 import { si } from './si';
+import { tr } from './tr';
 import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, ExpeditionMessages> = {
@@ -41,6 +42,7 @@ const translations: Record<LanguageKey, ExpeditionMessages> = {
     ro,
     ru,
     si,
+    tr,
     'zh-tw': zh_tw,
 };
 export default translations;

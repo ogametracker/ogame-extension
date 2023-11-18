@@ -483,9 +483,9 @@ const breakdown = new AmortizationExpeditionResultsBreakdown({
     },
     planets: createRecord([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], id => ({
         id,
-        discovererClassBonusFactor: 0.00_2 * 14,
-        lifeformExperienceBoost: 0.00_1 * 60,
-        lifeformTechnologyBoost: 0.00_3 * (14+12),
+        discovererClassBonusFactor: 0.00_2 * (id < 15 ? 13 : 12),
+        lifeformExperienceBoost: 0.00_1 * 65,
+        lifeformTechnologyBoost: id == 1 ? 0.00_3 * (14+12) : 0.00_5 * 12,
         lifeformTechnologyExpeditionBonusFactor: createRecord(ExpeditionEventTypes, type => {
             switch (type) {
                 case ExpeditionEventType.resources: return 0.00_2 * (18 + 16);

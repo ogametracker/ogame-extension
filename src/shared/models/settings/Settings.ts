@@ -44,6 +44,7 @@ export interface ShipResourceUnitsFactors {
 
 export interface Settings {
     extensionLanguage: LanguageKey;
+    extensionLanguageRegion?: string;
 
     dateRanges: DateRange[];
     colors: ColorSettings;

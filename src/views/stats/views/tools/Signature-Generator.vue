@@ -358,7 +358,7 @@
                 });
             };
             const drawDate = () => {
-                const dateTimeFormat = new Intl.DateTimeFormat(this.$i18n.locale, {
+                const dateTimeFormat = new Intl.DateTimeFormat(this.$i18n.fullLocaleIdentifier, {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',

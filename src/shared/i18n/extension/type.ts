@@ -24,7 +24,7 @@ import { UniverseHistoryTranslations } from './universeHistory/type';
 import { PlayerClassTranslations } from './playerClasses/type';
 import { DefenseTranslations } from '../ogame/defenses/types';
 
-export interface ExtensionTranslationsFull {
+export interface ExtensionTranslations {
     ogame: {
         buildings: BuildingTranslations;
         lifeforms: LifeformTranslations;
@@ -56,9 +56,4 @@ export interface ExtensionTranslationsFull {
         excelExport: ExcelExportTranslations;
         playerClasses: PlayerClassTranslations;
     };
-}
-
-export interface ExtensionTranslations {
-    ogame: ExtensionTranslationsFull['ogame'];
-    extension: RecursivePartial<ExtensionTranslationsFull['extension']>;
 }

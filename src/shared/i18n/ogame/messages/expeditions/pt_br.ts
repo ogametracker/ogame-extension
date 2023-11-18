@@ -164,7 +164,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionDepletionLevel.medium]: [
             /*'Nós celebramos o final da */'expedição com os membros de outra expedição que estavam'/* no mesmo sector. Eles não tinham nada de especial a reportar.'*/,
             /*'Descobrimos */'provas que indicam a presença de outras frotas'/* em expedição.'*/,
-            /*'Nós conseguimos */'contactar com outras frotas de expedição amigáveis neste'/* sector.'*/,
+            /*'Nós conseguimos */'estabelecer um contato com outras frotas de expedição amigáveis neste'/* setor.'*/
         ],
         [ExpeditionDepletionLevel.high]: [
             /*'Se estivéssemos em */'perigo podíamos voltar com uma das várias expedições'/* que estavam por aquele quadrante.'*/,
