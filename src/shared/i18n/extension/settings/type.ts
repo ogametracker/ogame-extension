@@ -64,6 +64,7 @@ export interface SettingsTranslations {
             dsuLong: string;
         };
         extensionLanguage: string;
+        extensionLanguageFallbackHint: string;
 
         serverSettings: {
             title: string;

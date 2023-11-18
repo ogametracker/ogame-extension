@@ -59,6 +59,7 @@ export const de: SettingsTranslations = {
     },
     common: {
         extensionLanguage: 'UI-Sprache (im OGame Tracker)',
+        extensionLanguageFallbackHint: 'Sollten Texte nicht in der gewählten Sprache verfügbar sein, werden englische Texte angezeigt.',
         conversionRates: {
             title: 'Umrechnungskurse',
             msuLong: 'Umrechnung nach Metall',
