@@ -36,7 +36,7 @@ export enum LanguageKey {
     /** Slovenian */
     si = 'si', 
     //TODO: sk = 'sk', // slovakian
-    //TODO: tr = 'tr', // turkish
+    tr = 'tr', // turkish
     /** Chinese (Taiwan) */
     'zh-tw' = 'zh-tw', 
 }

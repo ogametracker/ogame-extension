@@ -2,6 +2,7 @@ import { LanguageKey } from "../../LanguageKey";
 import { DefenseTranslations } from "./types";
 import { de } from './de';
 import { en } from './en';
+import { tr } from './tr';
 
 const translations: Record<LanguageKey, DefenseTranslations> = {
     de,
@@ -24,6 +25,7 @@ const translations: Record<LanguageKey, DefenseTranslations> = {
     ro: en,
     ru: en,
     si: en,
+    tr,
     'zh-tw': en,
 };
 export default translations;

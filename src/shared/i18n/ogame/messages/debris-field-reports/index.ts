@@ -17,6 +17,7 @@ import { pt_pt } from './pt_pt';
 import { ro } from './ro';
 import { ru } from './ru';
 import { si } from './si';
+import { tr } from './tr';
 import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
@@ -39,6 +40,7 @@ const translations: Record<LanguageKey, DebrisFieldReportMessages> = {
     ro,
     ru,
     si,
+    tr,
     'zh-tw': zh_tw,
 };
 export default translations;
