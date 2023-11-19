@@ -30,7 +30,7 @@ export const tr: ExpeditionMessages = {
             /*'Kenarda, gözlerden irak kalan kücük */'bir gezegen üzerinde bir kac maden bulundu ve bu madenlerden'/* basariyla yararli olabilecek hammadde cikarildi.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /* TODO tr 'Deine Expedition fand einen uralten, voll beladenen, aber */'menschenleeren Frachterkonvoi'/*. Einige Ressourcen konnten geborgen werden.'*/,
+            /*'Kesif ekibin, tamamen yüklü ve */'terkedilmis bir antik yük gemisi konvoyu buldu'/* . Bazi hammaddeler kurtarilabildi.'*/,
             /* TODO tr 'Auf einem kleinen Mond mit eigener Atmosphäre fand deine Expedition */'große Rohstoffvorkommen'/*. Die Bodencrews sind dabei, diese natürlichen Schätze zu heben.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -42,7 +42,7 @@ export const tr: ExpeditionMessages = {
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /* TODO tr 'Wir sind auf die */'Überreste einer Vorgängerexpedition'/* gestoßen! Unsere Techniker versuchen, einige der Wracks wieder flugfähig zu machen.'*/,
+            /*'Kesif */'sirasinda bir filonun kalintilarini bulduk'/* . Hemen bu kalintilari inceleyip, isimize yarayacak gemi varsa tamir edip kendi filomuza katacagiz.'*/,
             /*'Kesif */'ekibin terkedilmis yildiz kalesi buldu'/* . Kalede kimse yasamiyor ama icinde hala birkac gemi var. Geriye bu gemilerin calisir durumda olup olmadigini anlamak kaliyor.'*/,
             /*'Kesif sirasinda eski */'savaslar sonucunda neredeyse tamamen yokolmus bir gezegen'/* bulduk. Gezegenin yörüngesinde öylece hareket etmekte olan onlarca gemi vardi, bakalim belki bu gemilerden bazilarini tamir etmeyi basarabiliriz. Böylelikle buralarda ne oldugunu da anlayabiliriz.'*/,
             /*'Terkedilmis bir korsan üssü bulduk. */'Üssün deposundaysa bir cok eski gemi var, ve teknik uzmanlarimiz bu gemilerin'/* kullanilip kullanilmayacagina karar vermeye calisiyor.'*/,
@@ -53,7 +53,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
-            /* TODO tr 'Wir haben einen Planeten mit */'Resten einer Zivilisation'/* entdeckt.'*/,
+            /*'Icinde zamaninda */'gelismis bir uygarlik barindirmis olan bir gezegen bulduk'/* . Koca gezegende geriye sadece uzaydan da görebilen devasa bir uzay gemisi istasyonu kalmis. Pilot ve uzmanlarimiz gezegene gidip bu uzay gemisi istasyonunda isimize yarayabilecek gemi olup olmadigini kontrol edecekler.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Filona katilan gemiler:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
@@ -61,16 +61,16 @@ export const tr: ExpeditionMessages = {
     [ExpeditionEventType.nothing]: [
         /* TODO tr 'Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider */'mit leeren Händen'/* zurück.'*/,
         /*'Bu kesif sonucunda kücük, */'garip bir yaratik disinda kayda deger bir sey bulunamadi',
-        /* TODO tr 'Deine Expedition hat wortwörtlich mit der */'Leere des Alls'/* Bekanntschaft gemacht. Es gab nicht einmal einen kleinen Asteroiden oder Strahlung oder Partikel oder irgendetwas, das diese Expedition aufregend gestaltet hätte.'*/,
+        /*'Bu kesif seni */'kelimenin tam anlamiyla evrenin bosluklariyla tanistirdi'/* . Bosluk disinda hic bir seye rastlamadin, ne kücük bir gezegen ne bir göktasi ne bir tanecik...hicbir sey!'*/,
         /* TODO tr 'Eine Lebensform aus reiner Energie hat dafür gesorgt, dass sämtliche Expeditionsmitglieder tagelang auf */'die hypnotischen Muster'/* auf den Bildschirmen starrten. Als endlich die Meisten wieder klar im Kopf waren, musste die Expedition aufgrund von akutem Deuterium-Mangel abgebrochen werden.'*/,
         /*'Filo merkez */'gemisinin reaktöründeki hata neredeyse tüm kesif filosunu'/* yokediyordu. Sans eseri en iyi uzmanlarin da kesfe katilmislardi ve sorunlari uzun ugraslar sonucunda hallettiler. Bu sorun o kadar cok güc ve vakit harcattiki, kesif yarida birakilmak zorunda kalindi.'*/,
         /* TODO tr 'Deine Expedition hat */'wunderschöne Bilder einer Supernova'/* gemacht. Wirklich neue Erkenntnisse hat diese Expedition jedoch nicht gebracht. Aber man hat gute Chancen auf den Sieg im diesjährigen Bestes-Bild-des-Universums-Wettbewerb!'*/,
-        /* TODO tr 'Deine Expeditionsflotte folgte einige Zeit seltsamen Signalen. Schließlich musste sie feststellen, dass die */'Signale zu einer uralten Sonde'/* gehören, die wohl vor einigen Generationen losgeschickt wurde, um fremde Spezies zu begrüßen. Die Sonde wurde geborgen und mehrere Museen deines Hauptplaneten haben schon Interesse daran verlauten lassen.'*/,
+        /*'Bir ara kesif filona garip sinyaller eslik ediyordu. Bir kac arastirmadan sonra bu sinyallerin, */'cok eskiden yabanci yaratiklari incelemesi icin göderilmis olan bir casus sondasindan'/* geldigi anlasildi. Sonda bulundugu yerden cikarilip, ana gezegenine geri götürüldü. Bu kadar cok müzenin bu sondayi sergilemek icin yarisacagini kimse bilemezdi!'*/,
         /* TODO tr 'Nun, zumindest weiß man jetzt, dass */'rote Anomalien der Klasse 5'/* nicht nur chaotische Auswirkungen auf die Schiffssysteme haben, sondern auch massive Halluzinationen bei der Crew auslösen können. Viel mehr hat diese Expedition aber nicht gebracht.'*/,
         /*'Keşif filon bir */'şekilde nötron yıldızlarından birinin merkez çekim kuvvetinin'/* yakınlarına girdi. Bu çekim kuvvetinden çıkması kolay olmadı, kendini ancak ağır bir mücadelenin sonucunda kurtarabildi. Tabii bu mücadele sırasında ekstra deuterium tüketimi zorunluydu ve dolayısıyla filon verilen görevi yerine getiremeden, yakıt yetersizliği sebebiyle erkenden eve dönmek zorunda kaldı.'*/,
         /*'Evrenin tüm yönbulma */'sistemleri garip bir bilgisayar virüsü yüzünden agir sorunlar'/* yasadilar. Bunun sonucunda gönderilen kesif filosu tüm süre boyunca kendi etrafinda turlamis ve dönüp dolasip ayni yere gelmis. Herhalde bu kesif yolculugunun olumlu bir katkisi olmadigini bir daha söylemem gerekmiyor.'*/,
-        /* TODO tr 'Vielleicht hätte man den */'Geburtstag des Captains'/* nicht auf diesem abgelegenen Planeten feiern sollen. Ein fieses Dschungelfieber hat große Teile der Crew gezwungen, die Reise in der Krankenstation zu verbringen. Der unerwartete Personalausfall führte dazu, dass die Expedition scheiterte.'*/,
-        /* TODO tr 'Irgendjemand hat auf allen Schiffscomputern ein */'uraltes Strategiespiel'/* installiert. Die Expeditionsflotte war lange unterwegs, aber dadurch nicht besonders produktiv.'*/,
+        /*'Galiba */'kaptanin dogumgününün bu bilinmedik gezegende kutlanmasi'/* hic iyi bir fikir degildi. Garip bir hastalik ve beraberinde getirdigi agir ates yüzünden mürettabatin yarisi yorgan dösek hastahanede yatiyor. Bu sorun yüzünden kesif de basarisizlikla yarida kesilmek zorunda kaldi.'*/,
+        /*'Ilginc bir sekilde gemi */'mürettabindan bir kisi geminin tüm bilgisayarlarina milattan kalma bir strateji'/* oyunu yüklemis. Kesif filosu uzun süre yolda olmasina ragmen, bu teknik aksakliktan ötürü cok da verimli olamadi.'*/,
     ],
 
     [ExpeditionEventType.lostFleet]: [
@@ -95,8 +95,8 @@ export const tr: ExpeditionMessages = {
         /*'Kesif filon */'navigasyon sistemindeki önemli bir hatadan dolayi yola yanlis'/* hesaplarla cikiyor. Filo cok yanlis bir yere inmekle kalmiyor, ayni zamanda eve geri dönüsü de önemli boyutta yavasliyor.'*/,
         /* TODO tr 'Deine Expedition geriet in einen */'Sektor mit verstärkten Partikelstürmen'/*. Dadurch überluden sich die Energiespeicher der Flotte und bei sämtlichen Schiffen fielen die Hauptsysteme aus. Deine Mechaniker konnten das Schlimmste verhindern, jedoch wird die Expedition nun mit einiger Verspätung zurückkehren.'*/,
         /* TODO tr 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
-        /* TODO tr 'Der */'Sternwind eines roten Riesen'/* verfälschte den Sprung der Expedition dermaßen, dass es einige Zeit dauerte, den Rücksprung zu berechnen. Davon abgesehen gab es in dem Sektor, in dem die Expedition ankam, nichts außer der Leere zwischen den Sternen.'*/,
-        /*'Das neue */'Navigationsmodul hat wohl doch noch mit einigen Bugs'/* zu kämpfen. Nicht nur ging der Sprung der Expeditionsflotte in die völlig falsche Richtung, auch wurde das gesamte Deuterium verbraucht, wobei der Sprung der Flotte nur knapp hinter dem Mond des Startplaneten endete. Etwas enttäuscht kehrt die Expedition nun auf Impuls zurück. Dadurch wird die Rückkehr wohl ein wenig verzögert.'*/,
+        /*'Kırmızı devin */'yildiz rüzgari yüzünden kesif filonun sicramasi o derece etkileniyor'/* ki, geri dönüsün sadece hesaplanmasi bile inanilmaz zaman aliyor. Ayrica kesfin yapildigi yerde yildizlar arasindaki bosluktan baska bir sey yoktu.'*/,
+        /*'Yeni */'yönbulma ünitesi hala sorunlarla savaşıyor'/* . Keşif uçuşu sadece yanlış yöne gitmekle kalmadı, aynı zamanda bütün deuteriumunu da kullandı. Şans eseri filolar, uçuşa başladıkları gezegenin ayına yakın bir yere kadar ulaşabildiler. Biraz hayal kırıklığı yaratıcı ama keşif filosu impulsa geri dönüyor. Bu nedenle dönüş yolculuğu biraz daha uzun sürecek.'*/,
         /* TODO tr 'Das Führungsschiff deiner */'Expeditionsflotte kollidierte mit einem fremden Schiff'/*, das ohne Vorwarnung direkt in die Flotte sprang. Das fremde Schiff explodierte und die Schäden am Führungsschiff waren beachtlich. Sobald die gröbsten Reparaturen abgeschlossen sind, werden sich deine Schiffe auf den Rückweg machen, da in diesem Zustand die Expedition nicht fortgeführt werden kann.'*/,
     ],
 
