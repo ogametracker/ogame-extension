@@ -1,5 +1,6 @@
 <template>
     <div
+        role="grid"
         class="grid-table"
         :class="{
             'grid-table--sticky-header': sticky != null,
@@ -14,10 +15,11 @@
         @scroll="onScroll($event)"
         ref="element"
     >
-        <div class="grid-table-head" v-if="!noHeader">
+        <div v-if="!noHeader" role="row" class="grid-table-head">
             <div
                 v-for="(column, i) in columns"
                 :key="column.key"
+                role="columnheader"
                 class="grid-table-cell"
                 :class="[
                     column.headerClass,
@@ -39,11 +41,12 @@
                 <span v-else v-text="column.label" />
             </div>
         </div>
-        <div class="grid-table-body">
-            <div class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
+        <div role="rowgroup" class="grid-table-body">
+            <div role="row" class="grid-table-row" v-for="(item, i) in items" :key="i" v-show="!hideRow(item)">
                 <div
                     v-for="column in columns"
-                    :key="column.key"
+                    :key="column.key" 
+                    role="gridcell"
                     class="grid-table-cell"
                     :class="[
                         cellClassProvider(item[column.key], item),
@@ -70,11 +73,12 @@
                 </div>
             </div>
         </div>
-        <div class="grid-table-foot">
-            <div class="grid-table-row" v-for="(item, i) in footerItems" :key="i">
+        <div role="rowgroup" class="grid-table-foot">
+            <div role="row" class="grid-table-row" v-for="(item, i) in footerItems" :key="i">
                 <div
                     v-for="(column, c) in columns"
                     :key="column.key"
+                    role="gridcell"
                     class="grid-table-cell"
                     :class="[
                         column.footerClass,
