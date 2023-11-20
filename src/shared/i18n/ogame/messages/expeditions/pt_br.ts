@@ -136,7 +136,7 @@ export const pt_br: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*LOCA: pt-br 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
             /*LOCA: pt-br 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /*LOCA: pt-br 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'A ligação com nossa frota de expedição foi interrompida por um curto espaço de tempo. Nós conseguimos entender a última mensagem enviada. Ela está sob um ataque, os */'agressores não foram até o momento identificados.',
         ],
         [ExpeditionEventSize.large]: [
             /*LOCA: pt-br 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
