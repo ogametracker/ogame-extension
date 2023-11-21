@@ -160,9 +160,9 @@ export const cz: ExpeditionMessages = {
             /*LOCA: cz 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
-            /*LOCA: cz 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
-            /*LOCA: cz 'Es wurden */'Anzeichen für die Präsenz anderer Expeditionsflotten'/* gefunden.'*/,
-            /*LOCA: cz 'Es wurde */'friedlicher Funkkontakt zu einigen anderen Expeditionen'/* in diesem Sektor hergestellt.'*/,
+            /*'Oslavovali jsme */'splnění očekávání z expedice s posádkou letky jiné expedice'/* , která byla na cestě do stejného sektoru. Nenalezli nic zajímavého.'*/,
+            /*'Nalezli jsme */'důkazy přítomnosti několika dalších expedičních'/* letek.'*/,
+            /*'Podařilo se nám */'navázat přátelskou komunikaci s ostatními expedicemi'/* v tomto sektoru.'*/,
         ],
         [ExpeditionDepletionLevel.high]: [
             /*LOCA: cz 'Wenn wir uns zu unsicher fühlen, können wir uns ja */'mit all den anderen Expeditionen'/*, die hier herum fliegen, zusammen tun.'*/,
