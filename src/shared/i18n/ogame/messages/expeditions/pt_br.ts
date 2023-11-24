@@ -76,7 +76,7 @@ export const pt_br: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*'As últimas imagens que tivemos da frota em expedição foram */'umas imagens muito próximas de um buraco negro a nascer',
         /*'A única coisa deixada pela */'expedição era a seguinte transmição de rádio'/* : Zzzrrt Deus! Krrrzzzzt Aquilo zrrrtrzt olha krgzzzz como Krzzzzzzzztzzzz...'*/,
-        /*LOCA: pt-br 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'Uma falha no núcleo do motor da */'nave-mãe leva a uma reação em cadeia que destrói'/* , de uma forma espectacular, toda a frota de expedição.'*/,
         /*'A frota em */'expedição não conseguiu voltar do salto de hiperespaço'/* . Os nossos cientistas ainda estão tentando compreender o que aconteceu, mas pelo que parece a frota foi perdida para sempre.'*/,
     ],
 
