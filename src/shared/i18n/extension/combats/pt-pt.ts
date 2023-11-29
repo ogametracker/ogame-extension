@@ -4,7 +4,7 @@ import { CombatsTranslations } from "./type";
 export const pt-pt: CombatsTranslations = {
     header: 'Combates',
     tabHeaders: {
-        overview: 'Vista Geral',
+        overview: 'Resumo',
         loot: 'Pilhagem',
         lostShips: 'Naves Perdidas',
         subHeaders: {
