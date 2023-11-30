@@ -191,10 +191,19 @@
                 {
                     key: 'empire',
                     to: { name: 'empire' },
-                    icon: 'ogti ogti-planet-moondna',
+                    icon: 'ogti ogti-planet-moon',
                     label: this.$i18n.$t.extension.empire.header,
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',
+                    canBeDefault: true,
+                },
+                {
+                    key: 'lifeforms',
+                    to: { name: 'lifeforms' },
+                    icon: 'ogti ogti-dna',
+                    label: this.$i18n.$t.extension.empire.lifeforms.header,
+                    keyboardKey: '6',
+                    keyboardIcon: 'mdi mdi-numeric-6',
                     canBeDefault: true,
                 },
                 {

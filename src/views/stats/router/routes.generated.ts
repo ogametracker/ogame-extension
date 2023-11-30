@@ -288,206 +288,6 @@
                     },
                     {
                         redirect: {
-                            name: "empire/lifeforms/overview"
-                        },
-                        path: "lifeforms",
-                        name: "empire/lifeforms",
-                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsIndex\" */ '../views/empire/lifeforms/Index.vue'),
-                        children: [
-                            {
-                                path: "overview",
-                                name: "empire/lifeforms/overview",
-                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsOverview\" */ '../views/empire/lifeforms/Overview.vue')
-                            },
-                            {
-                                path: "progress",
-                                name: "empire/lifeforms/progress",
-                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsProgress\" */ '../views/empire/lifeforms/Progress.vue')
-                            },
-                            {
-                                redirect: {
-                                    name: "empire/lifeforms/bonus-breakdown/resource-production"
-                                },
-                                path: "bonus-breakdown",
-                                name: "empire/lifeforms/bonus-breakdown",
-                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownIndex\" */ '../views/empire/lifeforms/bonus-breakdown/Index.vue'),
-                                children: [
-                                    {
-                                        path: "building-cost-time",
-                                        name: "empire/lifeforms/bonus-breakdown/building-cost-time",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownBuildingCostTime\" */ '../views/empire/lifeforms/bonus-breakdown/Building-Cost-Time.vue')
-                                    },
-                                    {
-                                        path: "crawlers",
-                                        name: "empire/lifeforms/bonus-breakdown/crawlers",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownCrawlers\" */ '../views/empire/lifeforms/bonus-breakdown/Crawlers.vue')
-                                    },
-                                    {
-                                        path: "defenses",
-                                        name: "empire/lifeforms/bonus-breakdown/defenses",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDefenses\" */ '../views/empire/lifeforms/bonus-breakdown/Defenses.vue')
-                                    },
-                                    {
-                                        path: "den-capacity",
-                                        name: "empire/lifeforms/bonus-breakdown/den-capacity",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDenCapacity\" */ '../views/empire/lifeforms/bonus-breakdown/Den-Capacity.vue')
-                                    },
-                                    {
-                                        path: "discovery-missions",
-                                        name: "empire/lifeforms/bonus-breakdown/discovery-missions",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownDiscoveryMissions\" */ '../views/empire/lifeforms/bonus-breakdown/Discovery-Missions.vue')
-                                    },
-                                    {
-                                        path: "expedition-finds",
-                                        name: "empire/lifeforms/bonus-breakdown/expedition-finds",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownExpeditionFinds\" */ '../views/empire/lifeforms/bonus-breakdown/Expedition-Finds.vue')
-                                    },
-                                    {
-                                        path: "expedition-fleet-speed",
-                                        name: "empire/lifeforms/bonus-breakdown/expedition-fleet-speed",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownExpeditionFleetSpeed\" */ '../views/empire/lifeforms/bonus-breakdown/Expedition-Fleet-Speed.vue')
-                                    },
-                                    {
-                                        path: "fleet-fuel-return",
-                                        name: "empire/lifeforms/bonus-breakdown/fleet-fuel-return",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownFleetFuelReturn\" */ '../views/empire/lifeforms/bonus-breakdown/Fleet-Fuel-Return.vue')
-                                    },
-                                    {
-                                        path: "fuel-consumption",
-                                        name: "empire/lifeforms/bonus-breakdown/fuel-consumption",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownFuelConsumption\" */ '../views/empire/lifeforms/bonus-breakdown/Fuel-Consumption.vue')
-                                    },
-                                    {
-                                        path: "phalanx-range",
-                                        name: "empire/lifeforms/bonus-breakdown/phalanx-range",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownPhalanxRange\" */ '../views/empire/lifeforms/bonus-breakdown/Phalanx-Range.vue')
-                                    },
-                                    {
-                                        path: "player-class",
-                                        name: "empire/lifeforms/bonus-breakdown/player-class",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownPlayerClass\" */ '../views/empire/lifeforms/bonus-breakdown/Player-Class.vue')
-                                    },
-                                    {
-                                        path: "research-cost-time",
-                                        name: "empire/lifeforms/bonus-breakdown/research-cost-time",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownResearchCostTime\" */ '../views/empire/lifeforms/bonus-breakdown/Research-Cost-Time.vue')
-                                    },
-                                    {
-                                        path: "resource-production",
-                                        name: "empire/lifeforms/bonus-breakdown/resource-production",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownResourceProduction\" */ '../views/empire/lifeforms/bonus-breakdown/Resource-Production.vue')
-                                    },
-                                    {
-                                        path: "ships",
-                                        name: "empire/lifeforms/bonus-breakdown/ships",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsbonusbreakdownShips\" */ '../views/empire/lifeforms/bonus-breakdown/Ships.vue')
-                                    }
-                                ]
-                            },
-                            {
-                                redirect: {
-                                    name: "empire/lifeforms/discoveries/overview"
-                                },
-                                path: "discoveries",
-                                name: "empire/lifeforms/discoveries",
-                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesIndex\" */ '../views/empire/lifeforms/discoveries/Index.vue'),
-                                children: [
-                                    {
-                                        redirect: {
-                                            name: "empire/lifeforms/discoveries/artifacts/amount"
-                                        },
-                                        path: "artifacts",
-                                        name: "empire/lifeforms/discoveries/artifacts",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/Index.vue'),
-                                        children: [
-                                            {
-                                                redirect: {
-                                                    name: "empire/lifeforms/discoveries/artifacts/amount/chart"
-                                                },
-                                                path: "amount",
-                                                name: "empire/lifeforms/discoveries/artifacts/amount",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Index.vue'),
-                                                children: [
-                                                    {
-                                                        path: "chart",
-                                                        name: "empire/lifeforms/discoveries/artifacts/amount/chart",
-                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountChart\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Chart.vue')
-                                                    },
-                                                    {
-                                                        path: "table",
-                                                        name: "empire/lifeforms/discoveries/artifacts/amount/table",
-                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactsamountTable\" */ '../views/empire/lifeforms/discoveries/artifacts/amount/Table.vue')
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                redirect: {
-                                                    name: "empire/lifeforms/discoveries/artifacts/sizes/chart"
-                                                },
-                                                path: "sizes",
-                                                name: "empire/lifeforms/discoveries/artifacts/sizes",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesIndex\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Index.vue'),
-                                                children: [
-                                                    {
-                                                        path: "chart",
-                                                        name: "empire/lifeforms/discoveries/artifacts/sizes/chart",
-                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesChart\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Chart.vue')
-                                                    },
-                                                    {
-                                                        path: "table",
-                                                        name: "empire/lifeforms/discoveries/artifacts/sizes/table",
-                                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesartifactssizesTable\" */ '../views/empire/lifeforms/discoveries/artifacts/sizes/Table.vue')
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        redirect: {
-                                            name: "empire/lifeforms/discoveries/experience/chart"
-                                        },
-                                        path: "experience",
-                                        name: "empire/lifeforms/discoveries/experience",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceIndex\" */ '../views/empire/lifeforms/discoveries/experience/Index.vue'),
-                                        children: [
-                                            {
-                                                path: "chart",
-                                                name: "empire/lifeforms/discoveries/experience/chart",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceChart\" */ '../views/empire/lifeforms/discoveries/experience/Chart.vue')
-                                            },
-                                            {
-                                                path: "table",
-                                                name: "empire/lifeforms/discoveries/experience/table",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesexperienceTable\" */ '../views/empire/lifeforms/discoveries/experience/Table.vue')
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        redirect: {
-                                            name: "empire/lifeforms/discoveries/overview/chart"
-                                        },
-                                        path: "overview",
-                                        name: "empire/lifeforms/discoveries/overview",
-                                        component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewIndex\" */ '../views/empire/lifeforms/discoveries/overview/Index.vue'),
-                                        children: [
-                                            {
-                                                path: "chart",
-                                                name: "empire/lifeforms/discoveries/overview/chart",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewChart\" */ '../views/empire/lifeforms/discoveries/overview/Chart.vue')
-                                            },
-                                            {
-                                                path: "table",
-                                                name: "empire/lifeforms/discoveries/overview/table",
-                                                component: () => import(/* webpackChunkName: \"stats-view-viewsempirelifeformsdiscoveriesoverviewTable\" */ '../views/empire/lifeforms/discoveries/overview/Table.vue')
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        redirect: {
                             name: "empire/production/resources"
                         },
                         path: "production",
@@ -847,6 +647,209 @@
                                         path: "table",
                                         name: "expeditions/ships/sizes/table",
                                         component: () => import(/* webpackChunkName: \"stats-view-viewsexpeditionsshipssizesTable\" */ '../views/expeditions/ships/sizes/Table.vue')
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                redirect: {
+                    name: "lifeforms/overview"
+                },
+                meta: {
+                    color: "#701ebb"
+                },
+                path: "lifeforms",
+                name: "lifeforms",
+                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsIndex\" */ '../views/lifeforms/Index.vue'),
+                children: [
+                    {
+                        path: "overview",
+                        name: "lifeforms/overview",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsOverview\" */ '../views/lifeforms/Overview.vue')
+                    },
+                    {
+                        path: "progress",
+                        name: "lifeforms/progress",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsProgress\" */ '../views/lifeforms/Progress.vue')
+                    },
+                    {
+                        redirect: {
+                            name: "lifeforms/bonus-breakdown/resource-production"
+                        },
+                        path: "bonus-breakdown",
+                        name: "lifeforms/bonus-breakdown",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownIndex\" */ '../views/lifeforms/bonus-breakdown/Index.vue'),
+                        children: [
+                            {
+                                path: "building-cost-time",
+                                name: "lifeforms/bonus-breakdown/building-cost-time",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownBuildingCostTime\" */ '../views/lifeforms/bonus-breakdown/Building-Cost-Time.vue')
+                            },
+                            {
+                                path: "crawlers",
+                                name: "lifeforms/bonus-breakdown/crawlers",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownCrawlers\" */ '../views/lifeforms/bonus-breakdown/Crawlers.vue')
+                            },
+                            {
+                                path: "defenses",
+                                name: "lifeforms/bonus-breakdown/defenses",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownDefenses\" */ '../views/lifeforms/bonus-breakdown/Defenses.vue')
+                            },
+                            {
+                                path: "den-capacity",
+                                name: "lifeforms/bonus-breakdown/den-capacity",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownDenCapacity\" */ '../views/lifeforms/bonus-breakdown/Den-Capacity.vue')
+                            },
+                            {
+                                path: "discovery-missions",
+                                name: "lifeforms/bonus-breakdown/discovery-missions",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownDiscoveryMissions\" */ '../views/lifeforms/bonus-breakdown/Discovery-Missions.vue')
+                            },
+                            {
+                                path: "expedition-finds",
+                                name: "lifeforms/bonus-breakdown/expedition-finds",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownExpeditionFinds\" */ '../views/lifeforms/bonus-breakdown/Expedition-Finds.vue')
+                            },
+                            {
+                                path: "expedition-fleet-speed",
+                                name: "lifeforms/bonus-breakdown/expedition-fleet-speed",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownExpeditionFleetSpeed\" */ '../views/lifeforms/bonus-breakdown/Expedition-Fleet-Speed.vue')
+                            },
+                            {
+                                path: "fleet-fuel-return",
+                                name: "lifeforms/bonus-breakdown/fleet-fuel-return",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownFleetFuelReturn\" */ '../views/lifeforms/bonus-breakdown/Fleet-Fuel-Return.vue')
+                            },
+                            {
+                                path: "fuel-consumption",
+                                name: "lifeforms/bonus-breakdown/fuel-consumption",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownFuelConsumption\" */ '../views/lifeforms/bonus-breakdown/Fuel-Consumption.vue')
+                            },
+                            {
+                                path: "phalanx-range",
+                                name: "lifeforms/bonus-breakdown/phalanx-range",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownPhalanxRange\" */ '../views/lifeforms/bonus-breakdown/Phalanx-Range.vue')
+                            },
+                            {
+                                path: "player-class",
+                                name: "lifeforms/bonus-breakdown/player-class",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownPlayerClass\" */ '../views/lifeforms/bonus-breakdown/Player-Class.vue')
+                            },
+                            {
+                                path: "research-cost-time",
+                                name: "lifeforms/bonus-breakdown/research-cost-time",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownResearchCostTime\" */ '../views/lifeforms/bonus-breakdown/Research-Cost-Time.vue')
+                            },
+                            {
+                                path: "resource-production",
+                                name: "lifeforms/bonus-breakdown/resource-production",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownResourceProduction\" */ '../views/lifeforms/bonus-breakdown/Resource-Production.vue')
+                            },
+                            {
+                                path: "ships",
+                                name: "lifeforms/bonus-breakdown/ships",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsbonusbreakdownShips\" */ '../views/lifeforms/bonus-breakdown/Ships.vue')
+                            }
+                        ]
+                    },
+                    {
+                        redirect: {
+                            name: "lifeforms/discoveries/overview"
+                        },
+                        path: "discoveries",
+                        name: "lifeforms/discoveries",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesIndex\" */ '../views/lifeforms/discoveries/Index.vue'),
+                        children: [
+                            {
+                                redirect: {
+                                    name: "lifeforms/discoveries/artifacts/amount"
+                                },
+                                path: "artifacts",
+                                name: "lifeforms/discoveries/artifacts",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactsIndex\" */ '../views/lifeforms/discoveries/artifacts/Index.vue'),
+                                children: [
+                                    {
+                                        redirect: {
+                                            name: "lifeforms/discoveries/artifacts/amount/chart"
+                                        },
+                                        path: "amount",
+                                        name: "lifeforms/discoveries/artifacts/amount",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactsamountIndex\" */ '../views/lifeforms/discoveries/artifacts/amount/Index.vue'),
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "lifeforms/discoveries/artifacts/amount/chart",
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactsamountChart\" */ '../views/lifeforms/discoveries/artifacts/amount/Chart.vue')
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "lifeforms/discoveries/artifacts/amount/table",
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactsamountTable\" */ '../views/lifeforms/discoveries/artifacts/amount/Table.vue')
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        redirect: {
+                                            name: "lifeforms/discoveries/artifacts/sizes/chart"
+                                        },
+                                        path: "sizes",
+                                        name: "lifeforms/discoveries/artifacts/sizes",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactssizesIndex\" */ '../views/lifeforms/discoveries/artifacts/sizes/Index.vue'),
+                                        children: [
+                                            {
+                                                path: "chart",
+                                                name: "lifeforms/discoveries/artifacts/sizes/chart",
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactssizesChart\" */ '../views/lifeforms/discoveries/artifacts/sizes/Chart.vue')
+                                            },
+                                            {
+                                                path: "table",
+                                                name: "lifeforms/discoveries/artifacts/sizes/table",
+                                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesartifactssizesTable\" */ '../views/lifeforms/discoveries/artifacts/sizes/Table.vue')
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "lifeforms/discoveries/experience/chart"
+                                },
+                                path: "experience",
+                                name: "lifeforms/discoveries/experience",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesexperienceIndex\" */ '../views/lifeforms/discoveries/experience/Index.vue'),
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "lifeforms/discoveries/experience/chart",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesexperienceChart\" */ '../views/lifeforms/discoveries/experience/Chart.vue')
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "lifeforms/discoveries/experience/table",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesexperienceTable\" */ '../views/lifeforms/discoveries/experience/Table.vue')
+                                    }
+                                ]
+                            },
+                            {
+                                redirect: {
+                                    name: "lifeforms/discoveries/overview/chart"
+                                },
+                                path: "overview",
+                                name: "lifeforms/discoveries/overview",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesoverviewIndex\" */ '../views/lifeforms/discoveries/overview/Index.vue'),
+                                children: [
+                                    {
+                                        path: "chart",
+                                        name: "lifeforms/discoveries/overview/chart",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesoverviewChart\" */ '../views/lifeforms/discoveries/overview/Chart.vue')
+                                    },
+                                    {
+                                        path: "table",
+                                        name: "lifeforms/discoveries/overview/table",
+                                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesoverviewTable\" */ '../views/lifeforms/discoveries/overview/Table.vue')
                                     }
                                 ]
                             }

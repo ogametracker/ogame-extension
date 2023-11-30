@@ -72,7 +72,7 @@
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getPlanetLifeformTechnologyBoost } from '../../../models/empire/lifeforms';
+    import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';

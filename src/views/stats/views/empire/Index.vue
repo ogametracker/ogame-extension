@@ -35,13 +35,6 @@
                 },
             ];
 
-            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
-                items.push({
-                    label: this.$i18n.$t.extension.empire.lifeforms.header,
-                    to: { name: 'empire/lifeforms' },
-                });
-            }
-
 
             //TODO: enable point distribution view when properly implemented
             // items.push({

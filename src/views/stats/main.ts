@@ -44,11 +44,19 @@ async function applyRouteSettings() {
 
     Object.keys(routeSettings).forEach(routeName => {
         const route = allRoutes.find(route => route.name == routeName);
-        if (route == null) {
+        const targetRouteName = routeSettings[routeName];
+        const targetRoute = allRoutes.find(route => route.name == targetRouteName);
+        if (route == null || targetRoute == null) {
+            console.warn(`Route redirect could not resolved as at least one of the routes does not exist ('${routeName}' -> '${targetRouteName}')`);
+            delete routeSettings[routeName];
             return;
         }
 
-        route.redirect = { name: routeSettings[routeName] };
+        route.redirect = { name: targetRouteName };
+    });
+    SettingsDataModule.updateSettings({
+        ...SettingsDataModule.settings,
+        defaultRoutes: routeSettings,
     });
 }
 

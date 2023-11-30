@@ -1,8 +1,5 @@
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
-import { LocalPlayerData } from "../../empire/LocalPlayerData";
-import { PlanetData } from "../../empire/PlanetData";
-import { ServerSettings } from "../../server-settings/ServerSettings";
 import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";
 import { getTechnologyBonusFactor } from "../lifeforms/utils";
