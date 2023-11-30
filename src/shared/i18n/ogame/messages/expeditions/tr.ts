@@ -15,7 +15,7 @@ export const tr: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /* TODO tr 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
             /* TODO tr 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
-            /* TODO tr 'Unsere Expedition meldet ein seltsames spektrales Phänomen. Dies führte unter anderem dazu, dass sich in den */'Energiespeichern der Schiffsschilde Dunkle Materie'/* bildete. Unsere Techniker versuchen nun, solange das Phänomen noch anhält, möglichst viel dieser Dunklen Materie zu konservieren.'*/,
+            /*'Keşif esnasında nadir görülen çok ilginç bir olaya rastladık. Bu olayla birlikte geminin */'koruyucu kalkanlarının enerji depolarının içinde karanlık madde oluşumuna'/* rastlandı. Olayın sebebi çözülemediği için, öncelikle sebebi bir kenara bırakılıp; mevcut uzman kadro ile oluşan karanlık maddenin toplanması ve depolanmasına çalışılıyor.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
@@ -75,13 +75,13 @@ export const tr: ExpeditionMessages = {
 
     [ExpeditionEventType.lostFleet]: [
         /* TODO tr 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
-        /* TODO tr 'Von der Expedition ist */'nur noch folgender Funkspruch übrig'/* geblieben: Zzzrrt Oh Gott! Krrrzzzzt dass zrrrtrzt sieht krgzzzz ja aus wie Krzzzzzzzztzzzz ...'*/,
+        /*'Kesif */'filosundan geriye sadece bu radyo kaydi kaldi'/* : Zzzz Aman tanrim! Krrrzzzztttt Bu zzrrrttzzrt bir krgzzzzzz benziyor Krrzzzzzzztzzzzzttzzzzzz.........'*/,
         /* TODO tr 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
         /* TODO tr 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
-        /* TODO tr 'Deine Expeditionsflotte hatte kurzen */'Kontakt zu einer scheuen Alien-Rasse'/*.'*/,
+        /*'Kesif filon */'biraz utangac bir alien irkina rastliyor'/* . Acikcasi bu kadar cekingen alien ile de ilk kez karsilasiyorsun ve seninkiler de olaylari yavastan aliyorlar. Bir süre iletisim kurduktan sonra, aralarindan bir temsilciyi degis tokus edilebilecek mallarla dünyana göndermeyi öneriyorlar.'*/,
         /* TODO tr 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
     ],
 
@@ -157,6 +157,7 @@ export const tr: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /* TODO tr 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
             /* TODO tr 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
+            /*TODO is this the message above? 'Uzay */'gemilerinin birakabilecegi cinsten isaretlere rastladik'/* . Varliklari konusunda bir bilgimiz yok; ancak buralara gelen ilk filonun bizimki olmadigi kesin.'*/,
             /* TODO tr 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
