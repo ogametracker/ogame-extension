@@ -148,7 +148,8 @@ export const de: EmpireTranslations = {
 
             discoveryResults: 'Ergebnisse',
             experience: 'Erfahrung',
-            researchBonuses: 'Forschungsboni',
+            researchBonuses: 'Globale Forschungsboni',
+            planetBonuses: 'Effektive Boni pro Planet',
         },
 
         planet: 'Planet',
@@ -181,6 +182,8 @@ export const de: EmpireTranslations = {
         experiencePoints: 'Erfahrungspunkte',
         discoveredOn: 'Lebensform entdeckt am',
         numberOfLifeformDiscoveries: 'Anzahl Entdeckungen',
+
+        globalResearchBonus: 'Globaler Forschungsbonus',
 
         researchBonuses: {
             breakdown: {

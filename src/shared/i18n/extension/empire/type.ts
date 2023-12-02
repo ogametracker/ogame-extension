@@ -149,6 +149,7 @@ export interface EmpireTranslations {
             experience: string;
 
             researchBonuses: string;
+            planetBonuses: string;
         };
 
         planet: string;
@@ -170,6 +171,8 @@ export interface EmpireTranslations {
         artifacts: string;
         eventTypes: Record<LifeformDiscoveryEventType, string>;
         artifactFindingSizes: Record<LifeformDiscoveryEventArtifactFindingSize, string>;
+
+        globalResearchBonus: string;
 
         researchBonuses: {
             breakdown: {

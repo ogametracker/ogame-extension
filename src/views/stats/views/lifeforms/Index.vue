@@ -31,6 +31,10 @@
                     label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.researchBonuses,
                 },
                 {
+                    to: { name: 'lifeforms/planet-bonuses' },
+                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.planetBonuses,
+                },
+                {
                     to: { name: 'lifeforms/progress' },
                     label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.progress,
                 },

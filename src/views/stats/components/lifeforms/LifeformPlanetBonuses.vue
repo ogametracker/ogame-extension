@@ -69,8 +69,8 @@
                     <div class="tech-row">
                         <div />
                         <div>
-                            <router-link :to="{ name: researchBonusBreakdownRouteName }">
-                                <span v-text="'LOCA: global research bonus'" />
+                            <router-link :to="{ name: researchBonusBreakdownRouteName }" style="text-decoration: none">
+                                <span v-text="$i18n.$t.extension.empire.lifeforms.globalResearchBonus" />
                                 <span class="mdi mdi-open-in-new" />
                             </router-link>
                         </div>
