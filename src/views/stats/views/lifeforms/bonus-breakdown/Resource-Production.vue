@@ -15,8 +15,8 @@
     import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/lifeforms';
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
+    import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+    import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type ResourceProductionBonusBreakdown = {
         base: Cost;

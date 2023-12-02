@@ -854,6 +854,46 @@
                                 ]
                             }
                         ]
+                    },
+                    {
+                        redirect: {
+                            name: "lifeforms/planet-bonuses/resource-production"
+                        },
+                        path: "planet-bonuses",
+                        name: "lifeforms/planet-bonuses",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesIndex\" */ '../views/lifeforms/planet-bonuses/Index.vue'),
+                        children: [
+                            {
+                                path: "building-cost-time",
+                                name: "lifeforms/planet-bonuses/building-cost-time",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesBuildingCostTime\" */ '../views/lifeforms/planet-bonuses/Building-Cost-Time.vue')
+                            },
+                            {
+                                path: "energy-consumption",
+                                name: "lifeforms/planet-bonuses/energy-consumption",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesEnergyConsumption\" */ '../views/lifeforms/planet-bonuses/Energy-Consumption.vue')
+                            },
+                            {
+                                path: "research-cost-time",
+                                name: "lifeforms/planet-bonuses/research-cost-time",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesResearchCostTime\" */ '../views/lifeforms/planet-bonuses/Research-Cost-Time.vue')
+                            },
+                            {
+                                path: "resource-production",
+                                name: "lifeforms/planet-bonuses/resource-production",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesResourceProduction\" */ '../views/lifeforms/planet-bonuses/Resource-Production.vue')
+                            },
+                            {
+                                path: "technology-bonus",
+                                name: "lifeforms/planet-bonuses/technology-bonus",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesTechnologyBonus\" */ '../views/lifeforms/planet-bonuses/Technology-Bonus.vue')
+                            },
+                            {
+                                path: "wreckfield",
+                                name: "lifeforms/planet-bonuses/wreckfield",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsplanetbonusesWreckfield\" */ '../views/lifeforms/planet-bonuses/Wreckfield.vue')
+                            }
+                        ]
                     }
                 ]
             },
