@@ -16,6 +16,11 @@ class SpaceDockClass extends Building {
             energy: 10 * 5 ** level,
         };
     }
+
+    public getWreckfield(level: number, debrisFieldSetting: number): number {
+        const wreckfieldPercentage = 1 - debrisFieldSetting;
+        return wreckfieldPercentage * (Math.round(45 * level ** 0.08) * 0.01);
+    }
 }
 
 export const SpaceDock = new SpaceDockClass();

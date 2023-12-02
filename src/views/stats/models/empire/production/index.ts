@@ -20,7 +20,7 @@ import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { createRecord } from "@/shared/utils/createRecord";
 import { ServerSettingsDataModule } from "@/views/stats/data/ServerSettingsDataModule";
-import { getPlanetCollectorClassBonusFactor, getPlanetLifeformBuildingBonusProductionFactor, getPlanetLifeformTechnologyBonusProductionFactor, getPlanetLifeformTechnologyBoost } from "../lifeforms";
+import { getPlanetCollectorClassBonusFactor, getPlanetLifeformBuildingBonusProductionFactor, getPlanetLifeformTechnologyBonusProductionFactor, getPlanetLifeformTechnologyBoost } from "../../lifeforms";
 
 export interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
     getTotal(): Cost;

@@ -29,3 +29,7 @@ export interface ResourceConsumptionReductionLifeformBuilding extends LifeformBu
 export interface LifeformTechnologyResearchBuilding extends LifeformBuilding {
     getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction;
 }
+
+export interface SpaceDockBonusLifeformBuilding extends LifeformBuilding {
+    getSpaceDockBonus(level: number): number;
+}

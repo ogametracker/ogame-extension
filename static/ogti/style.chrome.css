@@ -1,19 +1,17 @@
 @font-face {
-  font-family: 'ogame-tracker-icons';
-  src:  url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo');
-
-  src:  url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.eot?txngo#iefix') format('embedded-opentype'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.ttf?txngo') format('truetype'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.woff?txngo') format('woff'),
-        url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.svg?txngo#icomoon') format('svg');
+  font-family: 'ogti';
+  src:
+    url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.ttf?g64lcw') format('truetype'),
+    url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.woff?g64lcw') format('woff'),
+    url('chrome-extension://__MSG_@@extension_id__/ogti/ogame-tracker-icons.svg?g64lcw#ogti') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="ogti-"], [class*=" ogti-"] {
+.ogti {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'ogame-tracker-icons' !important;
+  font-family: 'ogti' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -25,34 +23,42 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-[class^="ogti-"]::before, [class*=" ogti-"]::before {
-    display: inline-block;
-}
 
+.ogti-dna:before {
+  content: "\e900";
+}
 .ogti-planet-moondna:before {
   content: "\e908";
 }
 .ogti-attack:before {
-  content: "\e900";
+  content: "\e901";
+  color: #fff;
 }
 .ogti-debris-field:before {
-  content: "\e901";
+  content: "\e902";
+  color: #fefefe;
 }
 .ogti-discord:before {
-  content: "\e902";
+  content: "\e903";
+  color: #fff;
 }
 .ogti-economy:before {
-  content: "\e903";
+  content: "\e904";
+  color: #fff;
 }
 .ogti-expedition:before {
-  content: "\e904";
+  content: "\e905";
+  color: #fff;
 }
 .ogti-moon:before {
-  content: "\e905";
+  content: "\e906";
+  color: #fff;
 }
 .ogti-planet:before {
-  content: "\e906";
+  content: "\e907";
+  color: #fff;
 }
 .ogti-planet-moon:before {
-  content: "\e907";
+  content: "\e909";
+  color: #fff;
 }

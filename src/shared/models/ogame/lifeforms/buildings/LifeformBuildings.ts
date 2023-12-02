@@ -1,4 +1,4 @@
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, LifeformTechnologyBonusLifeformBuilding, LifeformTechnologyResearchBuilding, ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "./interfaces";
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, LifeformTechnologyBonusLifeformBuilding, LifeformTechnologyResearchBuilding, ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding, SpaceDockBonusLifeformBuilding } from "./interfaces";
 import { FusionPoweredProduction } from './humans/FusionPoweredProduction';
 import { HighEnergySmelting } from "./humans/HighEnergySmelting";
 import { HighPerformanceSynthesiser } from "./mechas/HighPerformanceSynthesiser";
@@ -128,6 +128,19 @@ export const LifeformTechnologyResearchBuildingsByLifeform: Record<LifeformType,
     ],
 };
 export const LifeformTechnologyResearchBuildings = Object.values(LifeformTechnologyResearchBuildingsByLifeform).flatMap(r => r);
+
+
+
+export const SpaceDockBonusLifeformBuildingsByLifeform: Record<LifeformType, SpaceDockBonusLifeformBuilding[]> = {
+    [LifeformType.none]: [],
+    [LifeformType.humans]: [],
+    [LifeformType.rocktal]: [],
+    [LifeformType.mechas]: [
+        NanoRepairBots,
+    ],
+    [LifeformType.kaelesh]: [],
+};
+export const SpaceDockBonusLifeformBuildings = Object.values(SpaceDockBonusLifeformBuildingsByLifeform).flatMap(r => r);
 
 
 

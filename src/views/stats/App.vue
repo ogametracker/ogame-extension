@@ -18,9 +18,12 @@
                 <template #activator>
                     <component
                         :is="tab.to != null ? 'router-link' : tab.href != null ? 'a' : 'div'"
-                        :href="tab.href"
                         :target="tab.href != null ? '_blank' : null"
-                        :to="tab.to"
+                        v-bind="
+                            tab.href != null
+                            ? { href: tab.href }
+                            : { to: tab.to }
+                        "
                         :active-class="tab.to != null ? 'nav-item-active' : null"
                         :class="[
                             {
@@ -191,10 +194,19 @@
                 {
                     key: 'empire',
                     to: { name: 'empire' },
-                    icon: 'ogti ogti-planet-moondna',
+                    icon: 'ogti ogti-planet-moon',
                     label: this.$i18n.$t.extension.empire.header,
                     keyboardKey: '5',
                     keyboardIcon: 'mdi mdi-numeric-5',
+                    canBeDefault: true,
+                },
+                {
+                    key: 'lifeforms',
+                    to: { name: 'lifeforms' },
+                    icon: 'ogti ogti-dna',
+                    label: this.$i18n.$t.extension.empire.lifeforms.header,
+                    keyboardKey: '6',
+                    keyboardIcon: 'mdi mdi-numeric-6',
                     canBeDefault: true,
                 },
                 {
@@ -202,8 +214,8 @@
                     to: { name: 'universe-history' },
                     icon: 'mdi mdi-update',
                     label: this.$i18n.$t.extension.universeHistory.header,
-                    keyboardKey: '6',
-                    keyboardIcon: 'mdi mdi-numeric-6',
+                    keyboardKey: '7',
+                    keyboardIcon: 'mdi mdi-numeric-7',
                     canBeDefault: true,
                 },
                 // {
