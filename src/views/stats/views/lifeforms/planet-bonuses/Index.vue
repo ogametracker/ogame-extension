@@ -12,7 +12,15 @@
             return [
                 {
                     to: { name: 'lifeforms/planet-bonuses/resource-production' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.researchBonuses.production.header,
+                    label: this.$i18n.$t.extension.empire.lifeforms.planetBonuses.resourceProduction.header,
+                },
+                {
+                    to: { name: 'lifeforms/planet-bonuses/lifeform-research-cost-time' },
+                    label: this.$i18n.$t.extension.empire.lifeforms.planetBonuses.lifeformResearchCostTime.header,
+                },
+                {
+                    to: { name: 'lifeforms/planet-bonuses/wreckfield' },
+                    label: this.$i18n.$t.extension.empire.lifeforms.planetBonuses.wreckfield.header,
                 },
             ];
         }

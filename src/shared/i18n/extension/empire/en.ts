@@ -226,12 +226,12 @@ export const en: EmpireTranslations = {
                 bonus: 'Fuel Return',
             },
             buildingCostTime: {
-                header: 'Building Cost&Time',
+                header: 'Building Cost & Time',
                 cost: 'Cost',
                 time: 'Time',
             },
             researchCostTime: {
-                header: 'Research Cost&Time',
+                header: 'Research Cost & Time',
                 researches: 'Researches',
                 lifeformResearches: 'Lifeform Researches',
             },
@@ -282,6 +282,18 @@ export const en: EmpireTranslations = {
                 bonus: 'Bonus',
                 baseValue: 'Base Value',
                 valueWithBonuses: 'Value with Bonuses',
+            },
+        },
+
+        planetBonuses: {
+            resourceProduction: {
+                header: 'Resource Production',
+            },
+            lifeformResearchCostTime: {
+                header: 'Lifeform Research Cost & Time',
+            },
+            wreckfield: {
+                header: 'Wreckfield',
             },
         },
     },

@@ -1,8 +1,9 @@
-import { LifeformBonusType } from "../../LifeformBonusType";
+import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
 import { LifeformBuilding } from "../LifeformBuilding";
+import { SpaceDockBonusLifeformBuilding } from "../interfaces";
 
-class NanoRepairBotsClass extends LifeformBuilding {
+class NanoRepairBotsClass extends LifeformBuilding implements SpaceDockBonusLifeformBuilding {
     public constructor() {
         super({
             metal: {
@@ -23,9 +24,14 @@ class NanoRepairBotsClass extends LifeformBuilding {
             },
         });
     }
+    
+    public getSpaceDockBonus(level: number): number {
+        const bonus = 0.01_3; // 1.3%
+        return bonus * level;
+    }
 
     public get bonuses(): LifeformBonusType[] {
-        return [];
+        return [{ type: LifeformBonusTypeId.SpaceDockBonus }];
     }
 
     public get type(): LifeformBuildingType {

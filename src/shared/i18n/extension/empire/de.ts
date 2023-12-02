@@ -226,12 +226,12 @@ export const de: EmpireTranslations = {
                 bonus: 'Treibstoffrückgewinn',
             },
             buildingCostTime: {
-                header: 'Gebäude Kosten&Zeit',
+                header: 'Gebäude Kosten & Zeit',
                 cost: 'Kosten',
                 time: 'Zeit',
             },
             researchCostTime: {
-                header: 'Forschungen Kosten&Zeit',
+                header: 'Forschungen Kosten & Zeit',
                 researches: 'Forschungen',
                 lifeformResearches: 'Lebensform-Forschungen',
             },
@@ -282,6 +282,18 @@ export const de: EmpireTranslations = {
                 bonus: 'Bonus',
                 baseValue: 'Basiswert',
                 valueWithBonuses: 'Wert inkl. Boni',
+            },
+        },
+
+        planetBonuses: {
+            resourceProduction: {
+                header: 'Rohstoffproduktion',
+            },
+            lifeformResearchCostTime: {
+                header: 'Lebensformforschungen Kosten & Zeit',
+            },
+            wreckfield: {
+                header: 'Wrackfeld',
             },
         },
     },

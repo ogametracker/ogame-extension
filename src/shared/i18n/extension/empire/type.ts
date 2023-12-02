@@ -275,5 +275,17 @@ export interface EmpireTranslations {
                 valueWithBonuses: string;
             };
         };
+
+        planetBonuses: {
+            resourceProduction: {
+                header: string;
+            };
+            lifeformResearchCostTime: {
+                header: string;
+            };
+            wreckfield: {
+                header: string;
+            };
+        };
     };
 }

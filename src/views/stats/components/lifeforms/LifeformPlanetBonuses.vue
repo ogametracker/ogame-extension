@@ -48,9 +48,16 @@
 
                 <template v-if="expandedPlanets[planet.id] == true">
                     <div v-for="building in buildingsSorted" :key="building" class="tech-row">
-                        <template v-if="LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building) && planet.lifeformBuildings[building] > 0">
+                        <template v-if="
+                            (LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building) && planet.lifeformBuildings[building] > 0)
+                            || forceIncludeBuildings.includes(building)
+                        ">
                             <div />
-                            <div class="tech">
+                            <div v-if="BuildingTypes.includes(building)" class="tech">
+                                <o-building :building="building" size="24px" />
+                                <span v-text="$i18n.$t.ogame.buildings[building] + ` (${planet.buildings[building]})`" />
+                            </div>
+                            <div v-else class="tech">
                                 <o-lifeform-building :building="building" size="24px" />
                                 <span v-text="$i18n.$t.ogame.lifeformBuildings[building] + ` (${planet.lifeformBuildings[building]})`" />
                             </div>
@@ -66,7 +73,7 @@
                         </template>
                     </div>
 
-                    <div class="tech-row">
+                    <div v-if="!noTechnologyBonuses" class="tech-row">
                         <div />
                         <div>
                             <router-link :to="{ name: researchBonusBreakdownRouteName }" style="text-decoration: none">
@@ -97,6 +104,7 @@
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
 
     export type LifeformPlanetBonusesType<TKey extends string = string> = {
         key: TKey;
@@ -120,11 +128,17 @@
         @Prop({ required: true, type: Object as PropType<Record<string, number>> })
         private technologyBonuses!: Record<string, number>;
 
+        @Prop({ required: false, type: Boolean })
+        private noTechnologyBonuses!: boolean;
+
         @Prop({ required: true, type: Object as PropType<Record<number, LifeformPlanetBonuses>> })
         private planets!: Record<number, LifeformPlanetBonuses>;
 
         @Prop({ required: true, type: Array as PropType<LifeformBuildingType[]> })
         private buildings!: LifeformBuildingType[];
+
+        @Prop({ required: false, type: Array as PropType<LifeformBuildingType[]>, default: () => [] })
+        private forceIncludeBuildings!: LifeformBuildingType[];
 
         @Prop({ required: true, type: Object as PropType<Record<string, (value: number) => number>> })
         private limits!: Record<string, (value: number) => number>;
@@ -135,6 +149,8 @@
         private get buildingsSorted(): LifeformBuildingType[] {
             return [...this.buildings].sort((a, b) => a - b);
         }
+
+        private readonly BuildingTypes = BuildingTypes;
 
         private readonly LifeformBuildingTypesByLifeform = LifeformBuildingTypesByLifeform;
 
@@ -149,8 +165,10 @@
         }
 
         private getTotalPlanetBonus(planet: LifeformPlanetBonuses, type: string): number {
-            return Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + cur, 0)
-                + this.technologyBonuses[type];
+            const bonus = Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + cur, 0)
+                + (this.noTechnologyBonuses ? 0 : this.technologyBonuses[type]);
+
+            return this.limits[type](bonus);
         }
 
         private get averageBonus(): Record<string, number> {

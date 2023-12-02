@@ -55,7 +55,7 @@
 
         private readonly buildings: LifeformBuildingType[] = ResourceProductionBonusLifeformBuildings.map(b => b.type);
 
-        private get limits(): Record<'metal' | 'crystal' | 'deuterium' | 'energy', (value: number) => number> {
+        private get limits(): Record<keyof Cost, (value: number) => number> {
             const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ResourceProductionBonus });
             return {
                 metal: value => limit != null ? Math.min(value, limit) : value,
