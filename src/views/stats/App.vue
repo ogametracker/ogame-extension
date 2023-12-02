@@ -18,9 +18,12 @@
                 <template #activator>
                     <component
                         :is="tab.to != null ? 'router-link' : tab.href != null ? 'a' : 'div'"
-                        :href="tab.href"
                         :target="tab.href != null ? '_blank' : null"
-                        :to="tab.to"
+                        v-bind="
+                            tab.href != null
+                            ? { href: tab.href }
+                            : { to: tab.to }
+                        "
                         :active-class="tab.to != null ? 'nav-item-active' : null"
                         :class="[
                             {
@@ -211,8 +214,8 @@
                     to: { name: 'universe-history' },
                     icon: 'mdi mdi-update',
                     label: this.$i18n.$t.extension.universeHistory.header,
-                    keyboardKey: '6',
-                    keyboardIcon: 'mdi mdi-numeric-6',
+                    keyboardKey: '7',
+                    keyboardIcon: 'mdi mdi-numeric-7',
                     canBeDefault: true,
                 },
                 // {

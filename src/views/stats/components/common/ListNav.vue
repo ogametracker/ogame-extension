@@ -12,8 +12,11 @@
                     :is="item.to != null ? 'router-link' : 'a'"
                     class="nav-list-item"
                     :class="item.class"
-                    :to="item.to"
-                    :href="item.href"
+                    v-bind="
+                        item.href != null
+                        ? { href: item.href }
+                        : { to: item.to }
+                    "
                     :target="item.target"
                     active-class="nav-list-item-active"
                     ref="links"
