@@ -60,10 +60,7 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         await this.loadData();
     }
 
-    private async loadData() {
-        await this.$nextTick();
-        await UniversesAndAccountsDataModule.ready;
-
+    private getAccounts() {
         const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
         const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
             playerId: acc.id,
@@ -74,6 +71,15 @@ class LifeformDiscoveryDataModuleClass extends Vue {
             GlobalOgameMetaData,
             ...linkedAccounts,
         ];
+
+        return accounts;
+    }
+
+    private async loadData() {
+        await this.$nextTick();
+        await UniversesAndAccountsDataModule.ready;
+
+        const accounts = this.getAccounts();
 
         let minDate: number | null = null;
         for (const account of accounts) {
@@ -89,6 +95,19 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         }
 
         this._resolveReady();
+    }
+
+    public async getRawData() {
+        const lifeformDiscoveries: LifeformDiscoveryEvent[] = [];
+        const accounts = this.getAccounts();
+        
+        for (const account of accounts) {
+            const db = await getPlayerDatabase(account);
+            const accLfMissions = await db.getAll('lifeformDiscoveries');
+            lifeformDiscoveries.push(...accLfMissions);
+        }
+
+        return lifeformDiscoveries;
     }
 
     private addLifeformDiscovery(discovery: LifeformDiscoveryEvent) {

@@ -764,6 +764,11 @@
                         component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesIndex\" */ '../views/lifeforms/discoveries/Index.vue'),
                         children: [
                             {
+                                path: "largest-finds",
+                                name: "lifeforms/discoveries/largest-finds",
+                                component: () => import(/* webpackChunkName: \"stats-view-viewslifeformsdiscoveriesLargestFinds\" */ '../views/lifeforms/discoveries/Largest-Finds.vue')
+                            },
+                            {
                                 redirect: {
                                     name: "lifeforms/discoveries/artifacts/amount"
                                 },
