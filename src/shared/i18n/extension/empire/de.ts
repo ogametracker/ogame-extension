@@ -93,6 +93,7 @@ export const de: EmpireTranslations = {
                 global: {
                     deselectItems: 'Alle Items abwählen',
                     ignoreInactiveLifeformTechnologySlots: 'Inaktive Lebensform-Technologie-Slots für alle Planeten ignorieren',
+                    deselectAllPlanets: 'Alle Planeten abwählen',
                 },
 
                 includeInResult: 'für Berechnung berücksichtigen',

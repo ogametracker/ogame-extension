@@ -93,6 +93,7 @@ export const en: EmpireTranslations = {
                 global: {
                     deselectItems: 'Deselect all items',
                     ignoreInactiveLifeformTechnologySlots: 'Ignore inactive lifeform technology slots for all planets',
+                    deselectAllPlanets: 'Deselect all planets',
                 },
 
                 includeInResult: 'Include in calculation',

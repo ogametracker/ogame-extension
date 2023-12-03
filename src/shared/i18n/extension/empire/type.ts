@@ -92,6 +92,7 @@ export interface EmpireTranslations {
                 global: {
                     deselectItems: string;
                     ignoreInactiveLifeformTechnologySlots: string;
+                    deselectAllPlanets: string;
                 };
 
                 includeInResult: string;
