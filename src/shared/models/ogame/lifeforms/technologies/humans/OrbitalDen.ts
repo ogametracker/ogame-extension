@@ -8,15 +8,15 @@ class OrbitalDenClass extends LifeformTechnology implements DenCapacityBonusLife
         super({
             metal: {
                 baseCost: 25_000,
-                increaseFactor: 1.4,
+                increaseFactor: 1.3,
             },
             crystal: {
                 baseCost: 20_000,
-                increaseFactor: 1.4,
+                increaseFactor: 1.3,
             },
             deuterium: {
                 baseCost: 10_000,
-                increaseFactor: 1.4,
+                increaseFactor: 1.3,
             },
             energy: {
                 baseCost: 0,

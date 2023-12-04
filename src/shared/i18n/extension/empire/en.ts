@@ -93,6 +93,7 @@ export const en: EmpireTranslations = {
                 global: {
                     deselectItems: 'Deselect all items',
                     ignoreInactiveLifeformTechnologySlots: 'Ignore inactive lifeform technology slots for all planets',
+                    deselectAllPlanets: 'Deselect all planets',
                 },
 
                 includeInResult: 'Include in calculation',
@@ -295,6 +296,17 @@ export const en: EmpireTranslations = {
             wreckfield: {
                 header: 'Wreckfield',
             },
+        },
+
+        topFinds: {
+            topFinds: 'Best Finds',
+            worstFinds: 'Worst Finds',
+
+            size: 'Size',
+            amount: 'Amount',
+            date: 'Date',
+            artifacts: 'Artifacts',
+            experience: 'XP',
         },
     },
 };

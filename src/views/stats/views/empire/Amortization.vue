@@ -145,6 +145,10 @@
                                     v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.ignoreInactiveLifeformTechnologySlots"
                                     @click="ignoreAllInactiveSlots()"
                                 />
+                                <button
+                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.deselectAllPlanets"
+                                    @click="deselectAllPlanets()"
+                                />
                             </div>
 
                             <div style="display: flex; gap: 8px; flex-wrap: wrap">
@@ -1043,6 +1047,10 @@
                     this.selectedCount++;
                 }
             }
+        }
+
+        private deselectAllPlanets() {
+            Object.values(this.planetSettings).forEach(planet => planet.include = false);
         }
 
         private getAdditionalLifeformStuffGroups(additionalLifeformStuff: (LifeformBuildingLevels | LifeformTechnologyLevels)[]): AdditionalLifeformStuffGroup[] {

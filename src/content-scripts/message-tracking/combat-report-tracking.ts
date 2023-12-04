@@ -174,7 +174,7 @@ function onMessage(message: Message<MessageType, any>) {
             if (combatReport.debrisField.metal > 0 || combatReport.debrisField.crystal > 0) {
                 html += `
                     <div class="ogame-tracker-combat-report--debris-field-table">
-                        <span class="ogti-debris-field"></span>
+                        <span class="ogti ogti-debris-field"></span>
                         ${([ResourceType.metal, ResourceType.crystal, ResourceType.deuterium] as (keyof CombatReport['debrisField'])[]).map(resource => `
                             <div class="ogame-tracker-resource ${resource}"></div>
                             <div class="${(combatReport.debrisField[resource] ?? 0) == 0

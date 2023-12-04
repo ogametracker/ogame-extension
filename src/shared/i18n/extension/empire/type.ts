@@ -92,6 +92,7 @@ export interface EmpireTranslations {
                 global: {
                     deselectItems: string;
                     ignoreInactiveLifeformTechnologySlots: string;
+                    deselectAllPlanets: string;
                 };
 
                 includeInResult: string;
@@ -286,6 +287,17 @@ export interface EmpireTranslations {
             wreckfield: {
                 header: string;
             };
+        };
+
+        topFinds: {
+            topFinds: string;
+            worstFinds: string;
+
+            size: string;
+            amount: string;
+            date: string;
+            artifacts: string;
+            experience: string;
         };
     };
 }

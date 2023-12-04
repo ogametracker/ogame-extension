@@ -34,7 +34,7 @@ class ChipMassProductionClass extends LifeformBuilding implements LifeformTechno
     }
 
     public getLifeformTechnologyBonus(level: number): number {
-        const techBonus = 0.003; // 0.3%
+        const techBonus = 0.00_4; // 0.4%
         return techBonus * level;
     }
 }

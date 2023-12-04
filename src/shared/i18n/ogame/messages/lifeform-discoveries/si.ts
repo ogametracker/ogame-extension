@@ -41,7 +41,7 @@ export const si: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /Naši odposlanci so lahko vseeno izboljšali znanje o njih za (?<xp>\d+) XP/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: si 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Raziskovalna ladja je našla nekaj artefaktov, */'a jih ne more pobrati zaradi polnega skladišča.',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Raziskovalna ladja */'je našla majhno število artefaktov',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Raziskovalna ladja */'je našla veliko količino artefaktov',
             [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: si 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
