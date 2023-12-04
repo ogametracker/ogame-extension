@@ -2,7 +2,7 @@
     <loading-spinner v-if="loading" />
     <div v-else>
         <div class="find-column">
-            <h3 v-text="'LOCA: Top finds (Artifacts)'" />
+            <h3 v-text="`${$i18n.$t.extension.empire.lifeforms.topFinds.topFinds} (${$i18n.$t.extension.empire.lifeforms.topFinds.artifacts})`" />
 
             <grid-table inline :columns="artifactColumns" :items="largestFinds.artifacts" :style="`--color: ${colors.artifacts}`">
                 <template #cell-size="{ value }">
@@ -18,7 +18,12 @@
         </div>
 
         <div v-for="key in experienceKeys" :key="key" class="find-column">
-            <h3 v-text="`LOCA: Top finds (Experience, ${key})`" />
+            <h3>
+                <span v-text="$i18n.$t.extension.empire.lifeforms.topFinds.topFinds" />
+                <span v-text="` (${$i18n.$t.extension.empire.lifeforms.topFinds.experience}`" />
+                <span v-if="key != 'all'" v-text="`, ${$i18n.$t.ogame.lifeforms[key]}`" />
+                <span v-text="')'" />
+            </h3>
 
             <grid-table 
                 inline 
@@ -39,7 +44,12 @@
         </div>
 
         <div v-for="key in experienceKeys" :key="key" class="find-column">
-            <h3 v-text="`LOCA: Worst finds (Experience, ${key})`" />
+            <h3>
+                <span v-text="$i18n.$t.extension.empire.lifeforms.topFinds.worstFinds" />
+                <span v-text="` (${$i18n.$t.extension.empire.lifeforms.topFinds.experience}`" />
+                <span v-if="key != 'all'" v-text="`, ${$i18n.$t.ogame.lifeforms[key]}`" />
+                <span v-text="')'" />
+            </h3>
 
             <grid-table 
                 inline 
@@ -120,8 +130,8 @@
 
         private get keyTranslations(): Record<keyof typeof this.largestFinds, string> {
             return {
-                artifacts: 'LOCA: Artifacts',
-                experience: 'LOCA: Experience',
+                artifacts: this.$i18n.$t.extension.empire.lifeforms.topFinds.artifacts,
+                experience: this.$i18n.$t.extension.empire.lifeforms.topFinds.experience,
             };
         }
 
@@ -139,15 +149,15 @@
             return [
                 {
                     key: 'size',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.size,
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.size,
                 },
                 {
                     key: 'amount',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.amount,
                 },
                 {
                     key: 'date',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.date,
                 },
             ];
         }
@@ -156,15 +166,15 @@
             return [
                 {
                     key: 'lifeform',
-                    label: 'LOCA: Lifeform',
+                    label: this.$i18n.$t.extension.empire.lifeforms.lifeform,
                 },
                 {
                     key: 'amount',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.amount,
                 },
                 {
                     key: 'date',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.date,
                 },
             ];
         }

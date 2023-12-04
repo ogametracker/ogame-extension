@@ -297,5 +297,16 @@ export const en: EmpireTranslations = {
                 header: 'Wreckfield',
             },
         },
+
+        topFinds: {
+            topFinds: 'Best Finds',
+            worstFinds: 'Worst Finds',
+
+            size: 'Size',
+            amount: 'Amount',
+            date: 'Date',
+            artifacts: 'Artifacts',
+            experience: 'XP',
+        },
     },
 };

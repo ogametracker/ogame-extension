@@ -22,6 +22,10 @@
                     label: this.$i18n.$t.extension.empire.lifeforms.artifacts,
                     to: { name: 'lifeforms/discoveries/artifacts' },
                 },
+                {
+                    label: this.$i18n.$t.extension.empire.lifeforms.topFinds.topFinds,
+                    to: { name: 'lifeforms/discoveries/largest-finds' },
+                },
             ];
         }
     }

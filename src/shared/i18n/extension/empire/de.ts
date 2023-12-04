@@ -297,5 +297,16 @@ export const de: EmpireTranslations = {
                 header: 'Wrackfeld',
             },
         },
+
+        topFinds: {
+            topFinds: 'Beste Funde',
+            worstFinds: 'Schlechteste Funde',
+
+            size: 'Größe',
+            amount: 'Menge',
+            date: 'Datum',
+            artifacts: 'Artefakte',
+            experience: 'XP',
+        },
     },
 };
