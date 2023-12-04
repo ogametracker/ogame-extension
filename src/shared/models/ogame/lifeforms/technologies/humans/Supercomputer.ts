@@ -11,15 +11,15 @@ class SupercomputerClass extends LifeformTechnology implements ResearchCostAndTi
         super({
             metal: {
                 baseCost: 500_000,
-                increaseFactor: 1.3,
+                increaseFactor: 1.2,
             },
             crystal: {
                 baseCost: 300_000,
-                increaseFactor: 1.3,
+                increaseFactor: 1.2,
             },
             deuterium: {
                 baseCost: 200_000,
-                increaseFactor: 1.3,
+                increaseFactor: 1.2,
             },
             energy: {
                 baseCost: 0,
@@ -51,12 +51,11 @@ class SupercomputerClass extends LifeformTechnology implements ResearchCostAndTi
             return { cost: 0, time: 0 };
         }
 
-        const timeReductionPerLevel = 0.00_1; //0.1%
-        const maxTimeReduction = 0.99; //99%
+        const timeReductionPerLevel = 0.00_3; //0.1%
 
         return {
             cost: 0,
-            time: Math.min(maxTimeReduction, timeReductionPerLevel * level),
+            time: timeReductionPerLevel * level,
         };
     }
 

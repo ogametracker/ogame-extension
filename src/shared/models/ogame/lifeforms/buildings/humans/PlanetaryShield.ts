@@ -7,15 +7,15 @@ class PlanetaryShieldClass extends LifeformBuilding {
         super({
             metal: {
                 baseCost: 250_000,
-                increaseFactor: 1.2,
+                increaseFactor: 1.15,
             },
             crystal: {
                 baseCost: 125_000,
-                increaseFactor: 1.2,
+                increaseFactor: 1.15,
             },
             deuterium: {
                 baseCost: 125_000,
-                increaseFactor: 1.2,
+                increaseFactor: 1.15,
             },
             energy: {
                 baseCost: 100,
