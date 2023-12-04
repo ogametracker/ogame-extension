@@ -5,7 +5,7 @@
         :buildings="buildings" 
         :planets="planets" 
         :limits="limits" 
-        research-bonus-breakdown-route-name="lifeforms/bonus-breakdown/resource-production" 
+        research-bonus-breakdown-route-name="lifeforms/bonus-breakdown/research-cost-time" 
     />
 </template>
 
@@ -16,13 +16,13 @@
     import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
     import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformBuildingsByType, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { LifeformBuildingsByType, LifeformTechnologyResearchBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
     import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { LifeformTechnologyResearchBuilding, ResourceProductionBonusLifeformBuilding } from '@/shared/models/ogame/lifeforms/buildings/interfaces';
-    import { ResearchCostAndTimeReductionLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { LifeformTechnologyResearchBuilding } from '@/shared/models/ogame/lifeforms/buildings/interfaces';
+    import { ResearchCostAndTimeReductionLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { getLifeformTechnologyBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformTechnologyBonus';
-    import { ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { ResearchCostAndTimeReductionLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
     import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
     type Bonuses = {
