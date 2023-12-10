@@ -8,23 +8,23 @@ import { en as lifeformTechnologies } from '../ogame/lifeforms/technologies/en';
 import { en as premium } from '../ogame/premium/en';
 
 import { ExtensionTranslations } from "./type";
-import { pt-pt as settings } from './settings/pt-pt';
-import { pt-pt as resources } from './resources/pt-pt';
-import { pt-pt as common } from './common/pt-pt';
-import { pt-pt as expeditions } from './expeditions/pt-pt';
-import { pt-pt as combats } from './combats/pt-pt';
-import { pt-pt as donate } from './donate/pt-pt';
-import { pt-pt as debrisFields } from './debrisFields/pt-pt';
-import { pt-pt as resourceBalance } from './resourceBalance/pt-pt';
-import { pt-pt as empire } from './empire/pt-pt';
-import { pt-pt as switchAccounts } from './switchAccounts/pt-pt';
-import { pt-pt as about } from './about/pt-pt';
-import { pt-pt as universeHistory } from './universeHistory/pt-pt';
-import { pt-pt as notifications } from './notifications/pt-pt';
-import { pt-pt as tools } from './tools/pt-pt';
+import { pt_pt as settings } from './settings/pt_pt';
+import { pt_pt as resources } from './resources/pt_pt';
+import { pt_pt as common } from './common/pt_pt';
+import { pt_pt as expeditions } from './expeditions/pt_pt';
+import { pt_pt as combats } from './combats/pt_pt';
+import { pt_pt as donate } from './donate/pt_pt';
+import { pt_pt as debrisFields } from './debrisFields/pt_pt';
+import { pt_pt as resourceBalance } from './resourceBalance/pt_pt';
+import { pt_pt as empire } from './empire/pt_pt';
+import { pt_pt as switchAccounts } from './switchAccounts/pt_pt';
+import { pt_pt as about } from './about/pt_pt';
+import { pt_pt as universeHistory } from './universeHistory/pt_pt';
+import { pt_pt as notifications } from './notifications/pt_pt';
+import { pt_pt as tools } from './tools/pt_pt';
 
-import { pt-pt as excelExport } from './excelExport/pt-pt';
-import { pt-pt as playerClasses } from './playerClasses/pt-pt';
+import { pt_pt as excelExport } from './excelExport/pt_pt';
+import { pt_pt as playerClasses } from './playerClasses/pt_pt';
 
 export const en: ExtensionTranslations = {
     ogame: {

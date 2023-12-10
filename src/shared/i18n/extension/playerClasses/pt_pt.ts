@@ -1,6 +1,6 @@
 import { PlayerClassTranslations } from "./type";
 
-export const pt-pt: PlayerClassTranslations = {
+export const pt_pt: PlayerClassTranslations = {
     collector: 'Colecionador',
     discoverer: 'Descobridor',
     general: 'General',

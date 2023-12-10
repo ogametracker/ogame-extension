@@ -1,6 +1,6 @@
 import { NotificationTranslations } from "./type";
 
-export const pt-pt: NotificationTranslations = {
+export const pt_pt: NotificationTranslations = {
     combatTracking: {
         title: (value: string) =>
             value == '1'

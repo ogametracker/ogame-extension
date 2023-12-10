@@ -1,6 +1,6 @@
 import { UniverseHistoryTranslations } from "./type";
 
-export const pt-pt: UniverseHistoryTranslations = {
+export const pt_pt: UniverseHistoryTranslations = {
     header: 'Histórico do Universo',
     settings: {  
         messages: {

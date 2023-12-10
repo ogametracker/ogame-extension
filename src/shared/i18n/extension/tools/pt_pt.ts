@@ -1,6 +1,6 @@
 import { ToolsTranslations } from "./type";
 
-export const pt-pt: ToolsTranslations = {
+export const pt_pt: ToolsTranslations = {
     signatureGenerator: {
         header: 'Gerador de Assinatura',
         

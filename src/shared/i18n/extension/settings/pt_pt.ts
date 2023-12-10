@@ -1,6 +1,6 @@
 import { SettingsTranslations } from "./type";
 
-export const pt-pt: SettingsTranslations = {
+export const pt_pt: SettingsTranslations = {
     tabs: {
         dateRanges: 'Intervalo de datas',
         colors: 'Cores',

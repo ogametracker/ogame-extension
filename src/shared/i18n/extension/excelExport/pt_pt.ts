@@ -1,6 +1,6 @@
 import { ExcelExportTranslations } from "./type";
 
-export const pt-pt: ExcelExportTranslations = {
+export const pt_pt: ExcelExportTranslations = {
     header: 'Exportar para Excel',
     chooseBelowMessage: 'Escolhe que dados queres incluir na exportação:',
     groups: {

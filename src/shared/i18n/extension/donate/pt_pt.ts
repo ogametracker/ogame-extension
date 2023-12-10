@@ -1,6 +1,6 @@
 import { DonateTranslations } from "./type";
 
-export const pt-pt: DonateTranslations = {
+export const pt_pt: DonateTranslations = {
     header: 'Doação',
     subHeader: 'Doar para ajudar o desenvolvimento do OGame Tracker',
     

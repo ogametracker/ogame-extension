@@ -5,7 +5,7 @@ import { en as ogamePremium } from '../../ogame/premium/en';
 import { en as ogameFactions } from '../../ogame/factions/en';
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 
-export const pt-pt: ExpeditionsTranslations = {
+export const pt_pt: ExpeditionsTranslations = {
     header: 'Expedições',
     tabHeaders: {
         overview: 'Resumo',

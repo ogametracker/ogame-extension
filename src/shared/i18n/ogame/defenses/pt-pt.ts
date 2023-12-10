@@ -1,7 +1,7 @@
 import { DefenseType } from "@/shared/models/ogame/defenses/DefenseType";
 import { DefenseTranslations } from "./types";
 
-export const pt-pt: DefenseTranslations =  {
+export const pt_pt: DefenseTranslations =  {
     [DefenseType.rocketLauncher]: 'Lançador de Misséis',
     [DefenseType.lightLaser]: 'Laser Ligeiro',
     [DefenseType.heavyLaser]: 'Laser Pesado',

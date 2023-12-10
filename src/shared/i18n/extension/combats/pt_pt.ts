@@ -1,7 +1,7 @@
 import { CombatResultType } from "@/shared/models/combat-reports/CombatResultType";
 import { CombatsTranslations } from "./type";
 
-export const pt-pt: CombatsTranslations = {
+export const pt_pt: CombatsTranslations = {
     header: 'Combates',
     tabHeaders: {
         overview: 'Resumo',

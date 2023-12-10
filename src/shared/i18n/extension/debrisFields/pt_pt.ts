@@ -1,6 +1,6 @@
 import { DebrisFieldsTranslations } from "./type";
 
-export const pt-pt: DebrisFieldsTranslations = {
+export const pt_pt: DebrisFieldsTranslations = {
     header: 'Campo de Destroços',
     addDebrisFieldManually: {
         title: 'Adicionar campo de destroços manualmente',

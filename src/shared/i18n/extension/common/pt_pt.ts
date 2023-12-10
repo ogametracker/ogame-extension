@@ -1,6 +1,6 @@
 import { CommonTranslations } from "./type";
 
-export const pt-pt: CommonTranslations = {
+export const pt_pt: CommonTranslations = {
     averagePerDay: '⌀ por dia',
     chart: 'Gráfico',
     table: 'Tabela',

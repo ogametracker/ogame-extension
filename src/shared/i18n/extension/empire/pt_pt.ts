@@ -2,7 +2,7 @@ import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifef
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { EmpireTranslations } from "./type";
 
-export const pt-pt: EmpireTranslations = {
+export const pt_pt: EmpireTranslations = {
     header: 'Império',
     planet: 'Planeta',
     production: {
