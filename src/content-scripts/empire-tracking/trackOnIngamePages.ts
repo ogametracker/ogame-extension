@@ -215,7 +215,7 @@ function updateFleetTracking() {
     }
 
     const meta = getOgameMeta();
-    const language = getLanguage(meta.language);
+    const language = getLanguage(meta.userLanguage);
     if(language == null) {
         return;
     }

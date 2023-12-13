@@ -52,6 +52,7 @@
 
         private ogameMeta: MessageOgameMeta = {
             language: '',
+            community: '',
             serverId: 0,
             playerId: 0,
         };

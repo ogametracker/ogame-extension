@@ -21,7 +21,7 @@ interface LifeformDiscoveryEventResult {
 export class LifeformDiscoveryModule {
     public async tryTrackExpedition(message: TrackLifeformDiscoveryMessage): Promise<TryActionResult<LifeformDiscoveryEventResult>> {
         const lifeformDiscoveryEventData = message.data;
-        const { language } = message.ogameMeta;
+        const { userLanguage } = message.ogameMeta;
         const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if discovery already tracked => if true, return tracked data
@@ -39,7 +39,7 @@ export class LifeformDiscoveryModule {
         // otherwise parse and save result
         let lifeformDiscovery: LifeformDiscoveryEvent;
         try {
-            const languageKey = getLanguage(language, true);
+            const languageKey = getLanguage(userLanguage, true);
             lifeformDiscovery = this.#parseLifeformDiscovery(languageKey, {
                 ...lifeformDiscoveryEventData,
                 text: lifeformDiscoveryEventData.text.replace(/\s+/g, ' ').trim(),

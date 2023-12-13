@@ -125,7 +125,7 @@ function setupExpeditionMessageObserver() {
     const tabContentElement = tabContent ?? _throw('Cannot find content element of expedition messages');
 
     const meta = getOgameMeta();
-    if (isSupportedLanguage(meta.language)) {
+    if (isSupportedLanguage(meta.userLanguage)) {
         const observer = new MutationObserver(() => trackMessages(tabContentElement));
         observer.observe(tabContentElement, { childList: true, subtree: true });
     }
@@ -206,7 +206,7 @@ function onMessage(message: Message<MessageType, any>) {
 
 function trackMessages(elem: Element) {
     const ogameMeta = getOgameMeta();
-    const lang = getLanguage(ogameMeta.language);
+    const lang = getLanguage(ogameMeta.userLanguage);
 
     let messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
         .filter(elem => !elem.classList.contains(cssClasses.messages.base));
@@ -529,7 +529,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.darkMatter: {
             return `
-                ${getOgameMeta().language == 'de' && isAprilFools(expedition.id, expedition.date)
+                ${getOgameMeta().userLanguage == 'de' && isAprilFools(expedition.id, expedition.date)
                     ? '<div class="dm-patched"></div>'
                     : ''
                 }

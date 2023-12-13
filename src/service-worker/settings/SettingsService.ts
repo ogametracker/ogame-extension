@@ -48,7 +48,7 @@ export class SettingsService implements MessageService {
     }
 
     private async broadcastSettings(meta: MessageOgameMeta, uuid?: string): Promise<void> {
-        const lang = getLanguage(meta.language) ?? LanguageKey.en;
+        const lang = getLanguage(meta.userLanguage) ?? LanguageKey.en;
         const settings = await loadSettings(lang);
 
         const settingsMessage: SettingsMessage = {

@@ -2,13 +2,29 @@ import { MessageOgameMeta } from "../messages/Message";
 import { parseIntSafe } from "../utils/parseNumbers";
 import { _throw } from "../utils/_throw";
 
+function getCookies(): Record<string, string> {
+    const cookies: Record<string, string> = {};
+
+    document.cookie.split(';')
+        .forEach(cookie => {
+            const [key, value] = cookie.split('=').map(x => decodeURIComponent(x.trim()));
+            cookies[key] = value;
+        });
+
+    return cookies;
+}
+
+function getLanguageMeta(): string {
+    return (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content ?? _throw('Cannot find language meta tag');
+}
+
 export function getOgameMeta(): MessageOgameMeta {
-    const language = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content ?? _throw('Cannot find language meta tag');
+    const userLanguage = getCookies()['oglocale'] ?? getLanguageMeta();
 
     const serverText = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)?.content ?? _throw('Cannot find universe meta tag');
-    const serverIdText = serverText.split('-')[0].replace(/^s/, '');
+    const [serverIdText, language] = serverText.split('.')[0].split('-').map(x => x.replace(/^s/, ''));
     if (!/^\d+$/.test(serverIdText)) {
-        _throw('Found ogaame universe tag but failed to extract server id from it');
+        _throw('Found ogame universe tag but failed to extract server id from it');
     }
     const serverId = parseIntSafe(serverIdText, 10);
 
@@ -17,6 +33,7 @@ export function getOgameMeta(): MessageOgameMeta {
 
     return {
         language,
+        userLanguage,
         serverId,
         playerId,
     };

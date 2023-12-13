@@ -26,7 +26,7 @@ export class DebrisFieldReportModule {
 
     public async tryTrackDebrisFieldReport(message: TrackDebrisFieldReportMessage): Promise<TryActionResult<DebrisFieldReportResult>> {
         const messageData = message.data;
-        const { language } = message.ogameMeta;
+        const { userLanguage } = message.ogameMeta;
         const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if expedition already tracked => if true, return tracked data
@@ -45,7 +45,7 @@ export class DebrisFieldReportModule {
         let report: DebrisFieldReport;
 
         try {            
-            const languageKey = getLanguage(language, true);
+            const languageKey = getLanguage(userLanguage, true);
             const parseResult = this.tryParseDebrisFieldReport(languageKey, {
                 ...messageData,
                 text: messageData.text.replace(/\s+/g, ' ').trim(),
