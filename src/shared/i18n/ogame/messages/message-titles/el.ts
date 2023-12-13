@@ -2,6 +2,6 @@ import { MessageTitles } from "./types";
 
 export const el: MessageTitles = {
     expedition: 'Αποτελέσματα εξερεύνησης',
-    lifeformDiscovery: /*TODO: el*/'Lifeform Report',
+    lifeformDiscovery: 'Αναφορά Μορφής ζωής',
     debrisField: 'Αναφορά συγκομιδής από ΠΣ στο',
 };
