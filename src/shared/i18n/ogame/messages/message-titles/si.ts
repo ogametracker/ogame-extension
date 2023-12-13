@@ -2,6 +2,6 @@ import { MessageTitles } from "./types";
 
 export const si: MessageTitles = {
     expedition: 'Rezultat ekspedicije',
-    /*LOCA: si*/lifeformDiscovery: 'Lebensformbericht',
+    lifeformDiscovery: 'Poročilo življenjske vrste',
     debrisField: 'Poročilo reciklaže',
 };
