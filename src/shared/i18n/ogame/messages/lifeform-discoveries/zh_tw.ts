@@ -44,7 +44,7 @@ export const zh_tw: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: zh_tw 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
             [LifeformDiscoveryEventArtifactFindingSize.small]: '探索飛船找到了少量的寶物',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: '探索飛船已找到大量寶物',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: zh_tw 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: '探索飛船已找到一個巨大的寶物庫',
         },
         numberOfArtifacts: /已找到寶物：(?<artifacts>\d+)/i,
     },
