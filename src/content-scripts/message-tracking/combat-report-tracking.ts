@@ -278,7 +278,7 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
         const ogameCombatReport = loadingCombatResult.result;
 
         // skip if is expedition fight and the language is not supported
-        if (ogameCombatReport.isExpedition && !isSupportedLanguage(ogameMeta.language)) {
+        if (ogameCombatReport.isExpedition && !isSupportedLanguage(ogameMeta.userLanguage)) {
             addOrSetCustomMessageContent(msg, `<span class="mdi mdi-alert" style="font-size: 24px;"></span>`);
             return;
         }

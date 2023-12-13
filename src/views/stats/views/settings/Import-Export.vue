@@ -116,6 +116,7 @@
                     serverId: account.serverId,
                     language: account.serverLanguage,
                     playerId: account.id,
+                    userLanguage: 'doesnt-really-matter',
                 });
                 const tx = db.transaction(['combatReports', 'expeditions', 'debrisFieldReports', 'lifeformDiscoveries', 'universeSpecificSettings', 'empire'], 'readonly');
 
@@ -180,6 +181,7 @@
                 serverId: server.id,
                 language: server.language,
                 playerId: 0,
+                userLanguage: 'doesnt-really-matter',
             });
             const tx = db.transaction('serverSettings', 'readonly');
             const store = tx.objectStore('serverSettings');
@@ -206,6 +208,7 @@
                 serverId: server.id,
                 language: server.language,
                 playerId: 0,
+                userLanguage: 'doesnt-really-matter',
             });
             const tx = db.transaction([
                 '_lastUpdate',

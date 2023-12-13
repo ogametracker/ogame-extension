@@ -75,7 +75,7 @@ export class CombatReportModule {
         let report: CombatReport;
         try {
             report = this.parseCombatReport(
-                message.ogameMeta.language,
+                message.ogameMeta.userLanguage,
                 message.ogameMeta.playerId,
                 combatReportData
             );

@@ -76,6 +76,7 @@ class CombatReportDataModuleClass extends Vue {
             playerId: acc.id,
             language: acc.serverLanguage,
             serverId: acc.serverId,
+            userLanguage: 'doesnt-matter',
         }));
         const accounts: MessageOgameMeta[] = [
             GlobalOgameMetaData,

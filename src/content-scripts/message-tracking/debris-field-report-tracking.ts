@@ -56,7 +56,7 @@ function setupObserver() {
     const tabContentElem = tabContent ?? _throw('Cannot find content element of misc messages');
 
     const meta = getOgameMeta();
-    const lang = getLanguage(meta.language);
+    const lang = getLanguage(meta.userLanguage);
     if (lang != null) {
         const observer = new MutationObserver(() => trackDebrisFieldReports(lang, tabContentElem));
         observer.observe(tabContentElem, { childList: true, subtree: true });

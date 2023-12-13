@@ -27,7 +27,7 @@ interface ExpeditionEventResult {
 export class ExpeditionModule {
     public async tryTrackExpedition(message: TrackExpeditionMessage): Promise<TryActionResult<ExpeditionEventResult>> {
         const expeditionEventData = message.data;
-        const { language } = message.ogameMeta;
+        const { userLanguage } = message.ogameMeta;
         const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if expedition already tracked => if true, return tracked data
@@ -45,7 +45,7 @@ export class ExpeditionModule {
         // otherwise parse and save result
         let expedition: ExpeditionEvent;
         try {
-            const languageKey = getLanguage(language, true);
+            const languageKey = getLanguage(userLanguage, true);
             expedition = this.#parseExpedition(languageKey, {
                 ...expeditionEventData,
                 text: expeditionEventData.text.replace(/\s+/g, ' ').trim(), // some expedition messages have multiple white space characters in a row

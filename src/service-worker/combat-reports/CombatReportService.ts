@@ -1,4 +1,4 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
+import { Message } from '../../shared/messages/Message';
 import { MessageType } from '../../shared/messages/MessageType';
 import { _throw } from '../../shared/utils/_throw';
 import { MessageService } from '../MessageService';

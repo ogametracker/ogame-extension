@@ -10,6 +10,7 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 import { Message } from "@/shared/messages/Message";
 
 import './styles.scss';
+import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
 
 const queryParams = getQueryParameters(location.search);
 export const settingsWrapper = {
@@ -43,7 +44,7 @@ function getSettings(): Promise<Settings> {
 
         const requestMessage: RequestSettingsMessage = {
             type: MessageType.RequestSettings,
-            ogameMeta: { language: 'de', playerId: 0, serverId: 0 },
+            ogameMeta: getOgameMeta(),
             senderUuid: messageTrackingUuid,
         };
         sendMessage(requestMessage);

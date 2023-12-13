@@ -93,7 +93,7 @@ import { LanguageKey } from '@/shared/i18n/LanguageKey';
             }
 
             if (updateTimes.length == 0) {
-                const languageKey = getLanguage(GlobalOgameMetaData.language) ?? LanguageKey.en;
+                const languageKey = getLanguage(GlobalOgameMetaData.userLanguage) ?? LanguageKey.en;
                 updateTimes = getDefaultSettings(languageKey).universeHistory.updateTimes;
             }
 

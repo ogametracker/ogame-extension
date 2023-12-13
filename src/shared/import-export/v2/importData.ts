@@ -67,7 +67,10 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
             total: data.accounts.length,
         });
 
-        const db = await getPlayerDatabase(account);
+        const db = await getPlayerDatabase({
+            ...account,
+            userLanguage: 'doesnt-really-matter',
+        });
         const tx = db.transaction(['combatReports', 'debrisFieldReports', 'expeditions', 'lifeformDiscoveries', 'empire', 'universeSpecificSettings'], 'readwrite');
 
         const combatReportStore = tx.objectStore('combatReports');
@@ -171,6 +174,7 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
                 language: server.language,
                 serverId: server.serverId,
                 playerId: 0,
+                userLanguage: 'doesnt-really-matter',
             });
             const tx = db.transaction([
                 '_lastUpdate',
@@ -219,6 +223,7 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
                 language: server.language,
                 serverId: server.serverId,
                 playerId: 0,
+                userLanguage: 'doesnt-really-matter',
             });
             const tx = db.transaction('serverSettings', 'readwrite');
 

@@ -13,7 +13,7 @@ const observer = new MutationObserver(() => {
 
     if (menu != null) {
         const ogameMeta = getOgameMeta();
-        const language = getLanguage(ogameMeta.language);
+        const language = getLanguage(ogameMeta.userLanguage);
 
         const parent = menu;
 
@@ -33,7 +33,7 @@ const observer = new MutationObserver(() => {
                 <div class="menubutton"></div>
                 ${language != null
                 ? ''
-                : `<div class="warning-lang-not-supported tooltip" title="The OGame servers for locale '${ogameMeta.language}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
+                : `<div class="warning-lang-not-supported tooltip" title="The OGame locale '${ogameMeta.userLanguage}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
                         <span class="mdi mdi-alert"></span>
                     </div>`
                 }
@@ -60,18 +60,12 @@ observer.observe(document.documentElement, {
 
 function getStatsPageUrl(iframe: boolean) {
     const url = chrome.runtime.getURL('/views/stats.html');
-    const player = (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content
-        ?? _throw('cannot find meta tag with player id');
-    const language = (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content
-        ?? _throw('cannot find meta tag with universe language');
-    const server = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)
-        ?.content?.split('-')?.[0]?.substring(1)
-        ?? _throw('cannot find meta tag with universe language');
+    const meta = getOgameMeta();
 
     const queryData: Record<string, string> = {
-        player,
-        language,
-        server,
+        player: meta.playerId.toString(),
+        language: meta.language,
+        server: meta.serverId.toString(),
     };
 
     if (iframe) {

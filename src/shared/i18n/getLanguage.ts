@@ -11,6 +11,7 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     en: LanguageKey.en,
     es: LanguageKey['es-es'],
     fr: LanguageKey.fr,
+    //TODO: fi finnish
     gr: LanguageKey.el,
     hr: LanguageKey.hr,
     hu: LanguageKey.hu,
@@ -22,11 +23,13 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     pt: LanguageKey['pt-pt'],
     ro: LanguageKey.ro,
     ru: LanguageKey.ru,
+    //TODO: se swedish
     si: LanguageKey.si,
     //TODO: sk slovakian
     tr: LanguageKey.tr,
     us: LanguageKey.en,
     tw: LanguageKey['zh-tw'],
+    //TODO yu bosnian (wtf why is it `yu` for yugoslavian?)
 };
 
 export function getLanguage(serverLanguage: string, throwIfUnsupported: boolean): LanguageKey;
