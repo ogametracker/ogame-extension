@@ -44,7 +44,7 @@ export const hr: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: hr 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Istraživački Brod je */'pronašao manju količinu artefakata',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Istraživački Brod je */'pronašao veću količinu artefakata',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: hr 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*Istraživački Brod je */'pronašao ogromnu riznicu artefakata',
         },
         numberOfArtifacts: /Artefakata pronađeno: (?<artifacts>\d+)/i,
     },
