@@ -21,7 +21,7 @@ function getLanguageMeta(): string {
 function getUserLanguage(): string {
     const userLanguage = getCookies()['oglocale'];
     
-    if(userLanguage == null || userLanguage == 'undefined') { // yes, it's actually a string with 'undefined' for whatever reason
+    if(userLanguage == null || userLanguage == 'undefined') { // yes, it's actually a string with 'undefined' if you save your settings while in vmode
         return getLanguageMeta();
     }
 
@@ -29,7 +29,7 @@ function getUserLanguage(): string {
 }
 
 export function getOgameMeta(): MessageOgameMeta {
-    const userLanguage = getUserLanguage;
+    const userLanguage = getUserLanguage();
 
     const serverText = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)?.content ?? _throw('Cannot find universe meta tag');
     const [serverIdText, language] = serverText.split('.')[0].split('-').map(x => x.replace(/^s/, ''));
