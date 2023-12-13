@@ -44,7 +44,7 @@ export const si: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Raziskovalna ladja je našla nekaj artefaktov, */'a jih ne more pobrati zaradi polnega skladišča.',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Raziskovalna ladja */'je našla majhno število artefaktov',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Raziskovalna ladja */'je našla veliko količino artefaktov',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: si 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Raziskovalna ladja */'je našla zakladnico artefaktov',
         },
         numberOfArtifacts: /Najdeni artefakti: (?<artifacts>\d+)/i,
     },
