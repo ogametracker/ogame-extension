@@ -44,7 +44,7 @@ export const dk: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: dk 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Udforsknings Skibet har */'fundet et lille antal artefakter',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Udforsknings Skibet har */'fundet en stor mængde artefakter',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: dk 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Udforsknings Skibet har */'fundet en kæmpe bjerg af artefakter',
         },
         numberOfArtifacts: /Artefakter fundet: (?<artifacts>\d+)/i,
     },
