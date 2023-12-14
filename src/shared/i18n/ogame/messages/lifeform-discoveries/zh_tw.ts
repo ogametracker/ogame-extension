@@ -26,7 +26,7 @@ export const zh_tw: LifeformDiscoveryMessages = {
         /*'探索飛船興奮地報告說，他們遇到了一*/'艘來自平行宇宙的'/* 一模一樣的飛船。這個維度的宇航員甚至有著相同的名字。但相似之處僅限於此：在歡迎派對上，客人們太粗魯了；所以船員們很快就把他們趕出了我們的宇宙。船員們深感失望，同時也鬆了一口氣，然後返航回家了。'*/,
     ],
     [LifeformDiscoveryEventType.lostShip]: [
-        /*LOCA: zh_tw 'Die Crew des Erkundungsschiffes war erheblichen inneren Konflikten ausgesetzt, */'die schließlich zu einer Meuterei führten'/*. Die ausgesetzten Crewmitglieder konnten gefunden und geborgen werden, sie berichteten jedoch, dass die Gegenseite das Schiff übernommen und sich einer Bande von Raumpiraten angeschlossen hat. Als Konsequenz dieses Vorfalls wurden nun für alle Schiffsbesatzungen vierteljährliche Teambuilding-Seminare verordnet.'*/,
+        '叛變者已經控制了飛船'/*，並加入了一個太空海盜團夥。由於這一事件，所有船員現在都必須每季度參加強制性的團隊建設研討會。'*/,
         /*'探索飛船上的船員成功與一*/'個以前不為人知的外星物種取得了聯繫'/* 。第一印象表示，它們是仁慈的物種。但是我們的使節和船員提交的報告變得越來越興奮，所以。我們必須假設他們受到了某種催眠。我們收到的最後報告是代表全體船員發出的歡慶公告，表示他們更願意和這些友好的外星人待在一起。然後，整艘飛船及船員消失得無影無蹤。'*/,
         /*'在尋找智慧生命形式的過程中，飛船在一顆之前未探索過的衛星上停了下來。至少，該衛星從未報告過。但是，其中原因很快就水落石出了。船員們設法發出了求救信號，但為時已晚。*/'巨大的岩漿蠕蟲被飛船的到來喚醒'/* ，並在幾分鐘內吞噬了飛船和船員。'*/,
         /*'探索非常設法追蹤到一個智慧外星物種，*/'但結果發現它們持敵對態度'/* 。從船員發出的最後一個信號來看，外星人好像把船員當成囚犯帶走了。每次嘗試進一步定位這艘飛船和船員都以失敗告終。'*/,
@@ -41,10 +41,10 @@ export const zh_tw: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /我們的使節能夠透過(?<xp>\d+) 經驗值加深對它們的了解/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: zh_tw 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'探索飛船已找到寶物，*/'但無法取回寶物，因為您的儲存空間已滿',
             [LifeformDiscoveryEventArtifactFindingSize.small]: '探索飛船找到了少量的寶物',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: '探索飛船已找到大量寶物',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: '探索飛船已找到一個巨大的寶物庫',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: '個巨大的寶物庫',
         },
         numberOfArtifacts: /已找到寶物：(?<artifacts>\d+)/i,
     },
