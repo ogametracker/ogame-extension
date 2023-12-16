@@ -35,7 +35,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /* TODO tr 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Kesif filomuz , */'devasa bir alien gemisi enkazini rapor etti'/*. Enkazdan , alienlarin teknolojilerine ait hic bir bilgi alamayan ekibimiz, gemiyi hammaddelerine kadar ayristirarak , yüksek miktarda işe yarar maden elde etti.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<amount>.+) (?<name>${resources.join('|')}) ele geçirildi`, 'i'),
     },
