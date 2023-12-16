@@ -32,7 +32,10 @@ export function getOgameMeta(): MessageOgameMeta {
     const userLanguage = getUserLanguage();
 
     const serverText = (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)?.content ?? _throw('Cannot find universe meta tag');
-    const [serverIdText, language] = serverText.split('.')[0].split('-').map(x => x.replace(/^s/, ''));
+    const serverTextSplit = serverText.split('.')[0].split('-');
+    const serverIdText = serverTextSplit[0].replace(/^s/, '');
+    const language = serverTextSplit[1];
+    
     if (!/^\d+$/.test(serverIdText)) {
         _throw('Found ogame universe tag but failed to extract server id from it');
     }
