@@ -14,7 +14,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO tr 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
-            /* TODO tr 'Unsere Expedition hat eine */'uralte Raumstation gefunden'/*, die wohl schon seit langer Zeit unkontrolliert durch das All schwebt. Die Station selbst war komplett unbrauchbar, jedoch lagerte in einem ihrer Reaktoren noch ein wenig Dunkler Materie. Unsere Techniker versuchen, so viel wie möglich davon zu bergen.'*/,
+            /*'Kesif ekibimiz , uzun süredir */'kontrolsüz bir bicimde dis uzayda sürüklenmekte olan'/* , pasli bir uzay istasyonuna yerlesiyor. Istasyonun kendisi tamamen kullanilamaz durumda; lakin reaktöründe hala biraz Karanlik Madde var. Teknisyenlerimiz kurtarabildikleri kadarini kurtarmaya calisiyor.'*/,
             /*'Keşif esnasında nadir görülen çok ilginç bir olaya rastladık. Bu olayla birlikte geminin */'koruyucu kalkanlarının enerji depolarının içinde karanlık madde oluşumuna'/* rastlandı. Olayın sebebi çözülemediği için, öncelikle sebebi bir kenara bırakılıp; mevcut uzman kadro ile oluşan karanlık maddenin toplanması ve depolanmasına çalışılıyor.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -35,14 +35,14 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Ein */'Mineraliengürtel um einen unbekannten Planeten'/* enthielt Unmengen an Rohstoffen. Die Expeditionsflotte meldet volle Lager!'*/,
-            /* TODO tr 'Deine Expeditionsflotte meldet den */'Fund eines riesigen Alien-Schiffswracks'/*. Mit der Technologie konnten sie zwar nichts anfangen, aber das Schiff ließ sich in seine Einzelteile zerlegen, wodurch man wertvolle Rohstoffe gewinnen konnte.'*/,
+            /*'Kesif filomuz , */'devasa bir alien gemisi enkazini rapor etti'/*. Enkazdan , alienlarin teknolojilerine ait hic bir bilgi alamayan ekibimiz, gemiyi hammaddelerine kadar ayristirarak , yüksek miktarda işe yarar maden elde etti.'*/,
         ],
         regex: (resources: string[]) => new RegExp(`(?<amount>.+) (?<name>${resources.join('|')}) ele geçirildi`, 'i'),
     },
 
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: [
-            /*'Bir önceki kesif filosunun kalintisina ulastik! Bu kalintilar icinde isimize yarayacak gemi olup olmadigina karar vermeye calisiyoruz.'*/
+            /*'Bir önceki */'kesif filosunun kalintisina ulastik'/* ! Bu kalintilar icinde isimize yarayacak gemi olup olmadigina karar vermeye calisiyoruz.'*/,
             /*'Kesif */'ekibin terkedilmis yildiz kalesi buldu'/* . Kalede kimse yasamiyor ama icinde hala birkac gemi var. Geriye bu gemilerin calisir durumda olup olmadigini anlamak kaliyor.'*/,
             /*'Kesif sirasinda eski */'savaslar sonucunda neredeyse tamamen yokolmus bir gezegen'/* bulduk. Gezegenin yörüngesinde öylece hareket etmekte olan onlarca gemi vardi, bakalim belki bu gemilerden bazilarini tamir etmeyi basarabiliriz. Böylelikle buralarda ne oldugunu da anlayabiliriz.'*/,
             /*'Terkedilmis bir korsan üssü bulduk. */'Üssün deposundaysa bir cok eski gemi var, ve teknik uzmanlarimiz bu gemilerin'/* kullanilip kullanilmayacagina karar vermeye calisiyor.'*/,
@@ -52,14 +52,14 @@ export const tr: ExpeditionMessages = {
             /*'Kesif */'sirasinda bir filonun kalintilarini bulduk'/* . Hemen bu kalintilari inceleyip, isimize yarayacak gemi varsa tamir edip kendi filomuza katacagiz.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /* TODO tr 'Wir haben einen */'riesigen Raumschiffsfriedhof'/* gefunden. Einigen Technikern der Expeditionsflotte ist es gelungen, das ein oder andere Schiff wieder in Betrieb zu nehmen.'*/,
+            /*'Cok büyük */'boyutlarda uzay gemisi mezarligi bulduk'/* ! Kesif filosundaki teknik uzmanlarimiz bulunan bu gemilerden bazilarini tamir edip, filomuza katmayi becerdiler.'*/,
             /*'Icinde zamaninda */'gelismis bir uygarlik barindirmis olan bir gezegen bulduk'/* . Koca gezegende geriye sadece uzaydan da görebilen devasa bir uzay gemisi istasyonu kalmis. Pilot ve uzmanlarimiz gezegene gidip bu uzay gemisi istasyonunda isimize yarayabilecek gemi olup olmadigini kontrol edecekler.'*/,
         ],
         regex: (ships: string[]) => new RegExp(`Filona katilan gemiler:\\s*(?<ships>((${ships.join('|')}):\\s*\\d+\\s*)+)?`, 'i'),
     },
 
     [ExpeditionEventType.nothing]: [
-        /* TODO tr 'Trotz der ersten vielversprechenden Scans dieses Sektors kommen wir leider */'mit leeren Händen'/* zurück.'*/,
+        /*'Bu bölgeden gelen ilk raporlar cok ilgi cekiciydi, ancak sonuc olarak elimiz bos dönüyoruz...*/'bir sey bulamadik',
         /*'Bu kesif sonucunda kücük, */'garip bir yaratik disinda kayda deger bir sey bulunamadi',
         /*'Bu kesif seni */'kelimenin tam anlamiyla evrenin bosluklariyla tanistirdi'/* . Bosluk disinda hic bir seye rastlamadin, ne kücük bir gezegen ne bir göktasi ne bir tanecik...hicbir sey!'*/,
         /*'Tüm mürettebatın saf enerjiden oluşan */'bir canlı tarafından hipnotize ediliyor'/* . Bu süreç içersinde günlerce yaptıkları tek şey önlerindeki ekrana bakmak oluyor. Ancak bu enerjinin etkisinden çıktıklarında, yakıt sorunu yüzünden olabildiğince çabuk bir şekilde eve dönmeleri gerektiğini anlıyor ve bu keşif gezisini yarıda kesiyorlar.'*/,
@@ -74,7 +74,7 @@ export const tr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.lostFleet]: [
-        /* TODO tr 'Das Letzte, was von dieser Expedition noch gesendet wurde, waren einige unglaublich gut gelungene */'Nahaufnahmen eines sich öffnenden schwarzen Lochs'/*.'*/,
+        /*'Kesif filosundan alabildigimiz son bilgi, yeni acilmakta olan bir kara deligin */'acikca belirgin oldugu cok net bir fotograf olabildi',
         /*'Kesif */'filosundan geriye sadece bu radyo kaydi kaldi'/* : Zzzz Aman tanrim! Krrrzzzztttt Bu zzrrrttzzrt bir krgzzzzzz benziyor Krrzzzzzzztzzzzzttzzzzzz.........'*/,
         /* TODO tr 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
         /* TODO tr 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
@@ -94,7 +94,7 @@ export const tr: ExpeditionMessages = {
     [ExpeditionEventType.delay]: [
         /*'Kesif filon */'navigasyon sistemindeki önemli bir hatadan dolayi yola yanlis'/* hesaplarla cikiyor. Filo cok yanlis bir yere inmekle kalmiyor, ayni zamanda eve geri dönüsü de önemli boyutta yavasliyor.'*/,
         /*'Kesif filon */'tanecik fırtınası yaşanan bir bölgeye girdi ve sonucunda bazı gemilerin enerji'/* depolarındaki aşırı zorlanma sebebiyle bu gemilerin merkez sistemleri de çöktü. Uzmanlar en önemli sorunları çözdüler, ancak filonun geri dönüşü bu olaylar yüzünden gecikecektir.'*/,
-        /* TODO tr 'Aus bisher unbekannten Gründen ging der */'Sprung der Expeditionsflotte völlig daneben'/*. Beinahe wären die Schiffe im Herzen einer Sonne angekommen. Zum Glück ist man in einem bekannten System gelandet, jedoch wird der Rücksprung länger dauern als ursprünglich gedacht.'*/,
+        /*'Sebebi bilinmeyen bir arizadan dolayi, */'göndermis oldugun kesif filosu cok yanlis yerlere iniyor'/* ; hatta neredeyse günesin merkezine iniyor da, kendini son andaki manevrasiyla kurtariyor. Neyse ki simdi bilinen bir günes sisteminde, ve arizalari giderip eve dönmeyi planliyor. Ancak tüm bu sorunlar filonun geri dönüsünü cok yavaslatacaktir.'*/,
         /*'Kırmızı devin */'yildiz rüzgari yüzünden kesif filonun sicramasi o derece etkileniyor'/* ki, geri dönüsün sadece hesaplanmasi bile inanilmaz zaman aliyor. Ayrica kesfin yapildigi yerde yildizlar arasindaki bosluktan baska bir sey yoktu.'*/,
         /*'Yeni */'yönbulma ünitesi hala sorunlarla savaşıyor'/* . Keşif uçuşu sadece yanlış yöne gitmekle kalmadı, aynı zamanda bütün deuteriumunu da kullandı. Şans eseri filolar, uçuşa başladıkları gezegenin ayına yakın bir yere kadar ulaşabildiler. Biraz hayal kırıklığı yaratıcı ama keşif filosu impulsa geri dönüyor. Bu nedenle dönüş yolculuğu biraz daha uzun sürecek.'*/,
         /*'Kesif merkez */'gemin hicbir uyarida bulunmadan direk filonun ortasina dalan'/* yabanci bir gemi ile carpisti. Carpismanin sonucunda yabanci gemi havaya ucurken, senin geminde cok agir yaralar acildi. Bu sartlar altinda, tüm kesif filosu bir an önce gereken tamiratlari yapip eve dönecektir, kesif ucusuna bu asamadan sonra devam edilemez.'*/,
@@ -106,7 +106,7 @@ export const tr: ExpeditionMessages = {
 
     [ExpeditionEventType.pirates]: {
         [ExpeditionEventSize.small]: [
-            /* TODO tr 'Ein paar anscheinend */'sehr verzweifelte Weltraumpiraten'/* haben versucht,'*/,
+            /*'Bazı umutsuz uzay korsanları */'keşif filomuzu ele geçirmek için beyhude bir çaba'/* içindeler.'*/,
             /*'Bazi ilkel */'barbarlar bize uzaygemisi olarak adlandirilmayacak birseyle saldiriyorlar'/* . Eger ates ciddilesirse, karsilik vermek zorunda kalabiliriz.'*/,
             /*'Sarhos uzay */'korsanlarindan bazi telsiz mesajlari yakaladik'/* . Yakinda saldiri altinda olacagiz galiba.'*/,
             /*'Karsimiza cikan */'uzay korsanlari neyseki öyle ahim sahim tipler degildiler'/* , kendimizi savunmamiz cok zor olmadi.'*/,
@@ -129,14 +129,14 @@ export const tr: ExpeditionMessages = {
     [ExpeditionEventType.aliens]: {
         [ExpeditionEventSize.small]: [
             /*'Egzotik görünüslü */'tarafimizca bilinmeyen gemiler kesif filomuza hic bir uyarida bulunmadan'/* saldirdilar!'*/,
-            /* TODO tr 'Deine Expeditionsflotte hatte einen */'nicht besonders freundlichen Erstkontakt'/* mit einer unbekannten Spezies.'*/,
+            /*'Kesif ekibimiz, */'bilinmeyen bir tür ile hic de dost canlisi olamayan'/* bir temasa giriyor.'*/,
             /*'Kücük bir grup */'bilinmeyen gemi tarafindan kesif ekibimize'/* saldirildi!'*/,
             /* TODO tr 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO tr 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
             /* TODO tr 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
-            /* TODO tr 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
+            /*'Kesif filomuz ile baglantimiz bir süreligine kesildi. Son mesajlarini cözmeye calisiyoruz. Büyük bir taarruz altindalar , */'saldirganlar tanimlanamadi',
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,

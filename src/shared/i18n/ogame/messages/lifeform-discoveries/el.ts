@@ -44,7 +44,7 @@ export const el: LifeformDiscoveryMessages = {
             [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*TODO: el 'Das Erkundungsschiff hat zwar ein paar Artefakte gefunden, */'konnte sie aber nicht mitnehmen, da deine Lager voll sind',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Το σκάφος εξερεύνησης */'βρήκε μερικά κειμήλια',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Το σκάφος εξερεύνησης */'βρήκε έναν μεγάλο αριθμό κειμηλίων',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*TODO: el 'Das Erkundungsschiff hat */'eine riesige Sammlung von Artefakten gefunden',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Το σκάφος εξερεύνησης */'μια τεράστια συλλογή κειμηλίων',
         },
         numberOfArtifacts: /Κειμήλια που βρήκες: (?<artifacts>\d+)/i,
     },

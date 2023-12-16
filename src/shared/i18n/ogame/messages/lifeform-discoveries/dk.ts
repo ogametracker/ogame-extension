@@ -31,8 +31,8 @@ export const dk: LifeformDiscoveryMessages = {
         /*'På dens søgning efter intelligente livsformer, stoppede skibet over på en tidligere uudforsket måne. I det mindre, er der ikke nogen der har rapporteret om månen før. Det blev snart klart hvorfor. Besætningen formået at slippe af med et nødsignal, men på det tidspunkt var det for sent. Vækket af skibets ankomst, */'fortærede gigantiske magma orme skibet og dens'/* besætning indeni, indenfor et par. minutter.'*/,
         /*'Udforsknings skibet har formået at finde en intelligent fremmed art, */'men de viste sig at være fjendtlige'/*. At dømme efter det sidste signal der blev sendt af besætningen, ville det se ud som om at rumvæsnerne tog dem væk som fanger. Hver yderligere forsøg på at lokalisere skibet og dens besætning er mislykkedes.'*/,
         /*'Udforsknings skibet stoppede på en ukendt planet på sin rejse for at fylde op med forsyninger. Planeten var indhyllet i en mærkelig tåge, som besætningen hurtigt */'var i stand til at identificere som en sovegas'/*. Men ved nærmere eftersyn, viste det sig hurtigt, at gassen var så stærk, at både skibet og dens besætning ikke var til at redde.'*/,
-        /*LOCA: dk 'Die Crew dieses Erkundungsschiffes war schon immer für waghalsige Manöver bekannt und galt in der gesamten Flotte als vollkommen unerschrocken, weshalb sie für diese Mission wie die perfekte Besatzung erschien. Vermutlich waren sie deshalb der Meinung, */'dass sie das Asteroidenfeld direkt durchfliegen können'/*. Leider stellte sich dies als etwas zu tollkühn heraus und von ihrem Schiff blieben nur noch Trümmer übrig.'*/,
-        /*LOCA: dk 'Es scheint, als wäre das */'Erkundungsschiff in einer bis dahin unbekannten Singularität'/* verloren gegangen. Es konnten keine Lebenszeichen der Crew mehr empfangen werden.'*/,
+        /*'Denne udforsknings skibs besætning har allerede fået sig et ry for at have en maverick outfit, modige i en grad af at være dumdristige, hvilket er derfor de så ud som at være det perfekte match til denne mission. Måske troede de at de bare */'kunne flyve lige igennem asteroide feltet'/* ? Desværre, vil det være svært at sammensætte svar fra vraget af deres skib.'*/,
+        /*'Det ser ud til at udforsknings */'skibet er blevet tabt i et hidtil ukendt singularitet'/*. Der har ikke været noget tegn på liv fra besætningen siden da.'*/,
         /*'Udforsknings flåden fløj ind i et */'bagholdsangreb fra en krigerisk fremmed art'/* . De pulveriserede udforsknings skibet før den første kontakt overhovedet kunne etableres.'*/,
         /*'Udforsknings skibet har detekteret nogen lovende signaler. Men efter at have fundet kilden til signalet, */'holdte den lige pludselig op med at sende'/*. Søgnings teamet blev sendt afsted, men de kunne ikke finde nogen spor af skibets lokation. Den må være tabt i tomrummet.'*/,
         /*'Skibets navigatør må have været så dybt koncentreret om at følge den mærkelige signal, at */'han glemte at de opererede tæt på et sort hul'/* . Skibet kantede for tæt på sin gravitationsbrønd, og på trods af besætningens bedste indsats, var der ikke noget der stoppede dem i at blive trækket ind. For at undgå flere af sådan nogen unødvendige tab, forslår rapporten at automatiske sort huls alarmer skal blive integreret som en standard i fremtiden.'*/
@@ -41,10 +41,10 @@ export const dk: LifeformDiscoveryMessages = {
     [LifeformDiscoveryEventType.knownLifeformFound]: /forbedre vores viden omkring dem med (?<xp>\d+) XP/i,
     [LifeformDiscoveryEventType.artifacts]: {
         size: {
-            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*LOCA: dk 'The Exploration Ship has found some artefacts */'but cannot recover them as your storage is full',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: /*'Udforsknings Skibet har fundet nogen artefakter, */'men den kan ikke tage dem med sig, da dit lager er fyldt',
             [LifeformDiscoveryEventArtifactFindingSize.small]: /*'Udforsknings Skibet har */'fundet et lille antal artefakter',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: /*'Udforsknings Skibet har */'fundet en stor mængde artefakter',
-            [LifeformDiscoveryEventArtifactFindingSize.large]: /*LOCA: dk 'The Exploration Ship has'found a huge quantity of artefacts'*/'------------------------------------------------------------------------------------------------------------------------------',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: /*'Udforsknings Skibet har */'fundet en kæmpe bjerg af artefakter',
         },
         numberOfArtifacts: /Artefakter fundet: (?<artifacts>\d+)/i,
     },
