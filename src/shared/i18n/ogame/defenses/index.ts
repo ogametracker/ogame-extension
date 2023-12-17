@@ -7,9 +7,8 @@ import { tr } from './tr';
 const translations: Record<LanguageKey, DefenseTranslations> = {
     de,
     en,
-
-    cz: en,
-    dk: en,
+    cs: en,
+    da: en,
     el: en,
     'es-ar': en,
     'es-es': en,
@@ -24,7 +23,7 @@ const translations: Record<LanguageKey, DefenseTranslations> = {
     'pt-pt': en,
     ro: en,
     ru: en,
-    si: en,
+    sl: en,
     tr,
     'zh-tw': en,
 };

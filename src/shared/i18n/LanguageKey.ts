@@ -1,10 +1,11 @@
 export enum LanguageKey {
+    //TODO: bs = 'bs', // bosnian
     /** Czech */
-    cz = 'cz',
+    cs = 'cs',
     /** German */
     de = 'de',
     /** Danish */
-    dk = 'dk',
+    da = 'da',
     /** Greek */
     el = 'el',
     /** English */
@@ -15,6 +16,7 @@ export enum LanguageKey {
     'es-ar' = 'es-ar', 
     /** Spanish (Mexico) */
     'es-mx' = 'es-mx', 
+    //TODO: fi = 'fi' // finnish
     /** French */
     fr = 'fr',
     /** Croatian */
@@ -23,7 +25,7 @@ export enum LanguageKey {
     hu = 'hu', 
     /** Italian */
     it = 'it', 
-    //TODO: jp = 'jp', // japanese
+    //TODO: ja = 'ja', // japanese
     nl = 'nl', // dutch
     /** Polish */
     pl = 'pl',
@@ -34,8 +36,9 @@ export enum LanguageKey {
     ro = 'ro', // romanian
     ru = 'ru', // russian
     /** Slovenian */
-    si = 'si', 
+    sl = 'sl', 
     //TODO: sk = 'sk', // slovakian
+    //TODO: sv = 'sv', // swedish
     tr = 'tr', // turkish
     /** Chinese (Taiwan) */
     'zh-tw' = 'zh-tw', 

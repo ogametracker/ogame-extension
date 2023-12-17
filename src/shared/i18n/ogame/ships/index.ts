@@ -1,8 +1,8 @@
 import { LanguageKey } from "../../LanguageKey";
 import { ShipTranslations } from "./types";
-import { cz } from './cz';
+import { cs } from './cs';
 import { de } from './de';
-import { dk } from './dk';
+import { da } from './da';
 import { el } from './el';
 import { en } from './en';
 import { es_ar } from './es_ar';
@@ -18,14 +18,14 @@ import { pt_br } from './pt_br';
 import { pt_pt } from './pt_pt';
 import { ro } from './ro';
 import { ru } from './ru';
-import { si } from './si';
+import { sl } from './sl';
 import { tr } from './tr';
 import { zh_tw } from './zh_tw';
 
 const translations: Record<LanguageKey, ShipTranslations> = {
-    cz,
+    cs,
     de,
-    dk,
+    da,
     el,
     en,
     'es-ar': es_ar,
@@ -41,7 +41,7 @@ const translations: Record<LanguageKey, ShipTranslations> = {
     'pt-pt': pt_pt,
     ro,
     ru,
-    si,
+    sl,
     tr,
     'zh-tw': zh_tw,
 };
