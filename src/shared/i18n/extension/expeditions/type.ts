@@ -40,7 +40,7 @@ export interface ExpeditionsTranslations {
     topFinds: {
         title: (type: string) => string;
         shipUnits: string;
-        shipUnitsIncludingDeuterium: string;
+        shipUnitsMsuDsu: (type: string) => string;
 
         size: string;
         amount: string;

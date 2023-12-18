@@ -4,7 +4,7 @@
         <div class="find-column">
             <h3 v-text="`${$i18n.$t.extension.empire.lifeforms.topFinds.topFinds} (${$i18n.$t.extension.empire.lifeforms.topFinds.artifacts})`" />
 
-            <grid-table inline :columns="artifactColumns" :items="largestFinds.artifacts" :style="`--color: ${colors.artifacts}`">
+            <grid-table inline :columns="artifactColumns" :items="largestFinds.artifacts.values" :style="`--color: ${colors.artifacts}`">
                 <template #cell-size="{ value }">
                     <expedition-size-icon :size="value" class="scaled-icon" />
                 </template>
@@ -17,7 +17,7 @@
             </grid-table>
         </div>
 
-        <div v-for="key in experienceKeys" :key="key" class="find-column">
+        <div v-for="key in experienceKeys" :key="`largest-${key}`" class="find-column">
             <h3>
                 <span v-text="$i18n.$t.extension.empire.lifeforms.topFinds.topFinds" />
                 <span v-text="` (${$i18n.$t.extension.empire.lifeforms.topFinds.experience}`" />
@@ -28,7 +28,7 @@
             <grid-table 
                 inline 
                 :columns="experienceColumns" 
-                :items="largestFinds.experience[key]" 
+                :items="largestFinds.experience[key].values" 
                 :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
             ">
                 <template #cell-lifeform="{ value }">
@@ -43,7 +43,7 @@
             </grid-table>
         </div>
 
-        <div v-for="key in experienceKeys" :key="key" class="find-column">
+        <div v-for="key in experienceKeys" :key="`smallest-${key}`" class="find-column">
             <h3>
                 <span v-text="$i18n.$t.extension.empire.lifeforms.topFinds.worstFinds" />
                 <span v-text="` (${$i18n.$t.extension.empire.lifeforms.topFinds.experience}`" />
@@ -54,7 +54,7 @@
             <grid-table 
                 inline 
                 :columns="experienceColumns" 
-                :items="smallestFinds.experience[key]" 
+                :items="smallestFinds.experience[key].values" 
                 :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
             ">
                 <template #cell-lifeform="{ value }">
@@ -83,6 +83,7 @@
     import { LifeformDiscoveryDataModule } from '@/views/stats/data/LifeformDiscoveryDataModule';
     import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
     import { LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+    import { TopList } from '@/views/stats/models/TopList';
 
     type ArtifactsFind = {
         size: LifeformDiscoveryEventArtifactFindingSize;
@@ -96,8 +97,8 @@
     };
 
     type Finds = {
-        artifacts: ArtifactsFind[];
-        experience: Record<ValidLifeformType | 'all', ExperienceFind[]>;
+        artifacts: TopList<ArtifactsFind>;
+        experience: Record<ValidLifeformType | 'all', TopList<ExperienceFind>>;
     };
 
     @Component({
@@ -107,22 +108,38 @@
     })
     export default class LargestFinds extends Vue {
 
-        private readonly maxCount = 25;
-
         private loading = true;
 
         private largestFinds: Finds = {
-            artifacts: [],
+            artifacts: new TopList<ArtifactsFind>({ 
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
             experience: {
-                ...createRecord(ValidLifeformTypes, () => []),
-                all: [],
+                ...createRecord(ValidLifeformTypes, () => new TopList<ExperienceFind>({ 
+                    comparator: (a, b) => b.amount - a.amount,
+                    maxSize: 25,
+                })),
+                all: new TopList<ExperienceFind>({ 
+                    comparator: (a, b) => b.amount - a.amount,
+                    maxSize: 25,
+                }),
             },
         };
         private smallestFinds: Finds = {
-            artifacts: [],
+            artifacts: new TopList<ArtifactsFind>({ 
+                comparator: (a, b) => a.amount - b.amount,
+                maxSize: 25,
+            }),
             experience: {
-                ...createRecord(ValidLifeformTypes, () => []),
-                all: [],
+                ...createRecord(ValidLifeformTypes, () => new TopList<ExperienceFind>({ 
+                    comparator: (a, b) => a.amount - b.amount,
+                    maxSize: 25,
+                })),
+                all: new TopList<ExperienceFind>({ 
+                    comparator: (a, b) => a.amount - b.amount,
+                    maxSize: 25,
+                }),
             },
         };
 
@@ -196,73 +213,24 @@
         }
 
         private addExperienceFind(discovery: LifeformDiscoveryEventKnownLifeformFound, lifeform: ValidLifeformType | 'all' = discovery.lifeform) {
-            this._addExperienceFind(
-                discovery, 
-                this.largestFinds.experience[lifeform], 
-                (worst, discovery) => worst.amount > discovery.experience,
-                { amount: 0, date: 0, lifeform: LifeformType.humans },
-            );
-
-            this._addExperienceFind(
-                discovery, 
-                this.smallestFinds.experience[lifeform], 
-                (worst, discovery) => worst.amount < discovery.experience,
-                { amount: Number.MAX_SAFE_INTEGER, date: 0, lifeform: LifeformType.humans },
-            );
-        }
-
-        private _addExperienceFind(
-            discovery: LifeformDiscoveryEventKnownLifeformFound, 
-            finds: ExperienceFind[], 
-            isBetter: (worstBest: ExperienceFind, find: LifeformDiscoveryEventKnownLifeformFound) => boolean,
-            defaultFind: ExperienceFind,
-        ) {
-            const smallestFind: ExperienceFind = finds[finds.length - 1] ?? defaultFind;
-            if (!isBetter(smallestFind, discovery) && finds.length >= this.maxCount) {
-                return;
-            }
-
-            const index = finds.findIndex(find => !isBetter(find, discovery));
-            const newFind: ExperienceFind = {
+            this.largestFinds.experience[lifeform].add({
+                lifeform: discovery.lifeform,
                 amount: discovery.experience,
                 date: discovery.date,
+            });
+            this.smallestFinds.experience[lifeform].add({
                 lifeform: discovery.lifeform,
-            };
-            if(index == -1) {
-                finds.push(newFind);
-            } 
-            else {
-                finds.splice(index, 0, newFind);
-            }
-
-            finds.splice(this.maxCount);
+                amount: discovery.experience,
+                date: discovery.date,
+            });
         }
 
         private addArtifactFind(discovery: LifeformDiscoveryEventArtifacts) {
-            const finds = this.largestFinds.artifacts;
-            const smallestFind: ArtifactsFind = finds[finds.length - 1] ?? {
-                size: LifeformDiscoveryEventArtifactFindingSize.small,
-                amount: 0,
-                date: 0,
-            };
-            if (smallestFind.amount >= discovery.artifacts && finds.length >= this.maxCount) {
-                return;
-            }
-
-            const index = finds.findIndex(find => find.amount < discovery.artifacts);
-            const newFind = {
+            this.largestFinds.artifacts.add({
                 size: discovery.size,
                 amount: discovery.artifacts,
                 date: discovery.date,
-            };
-            if(index == -1) {
-                finds.push(newFind);
-            } 
-            else {
-                finds.splice(index, 0, newFind);
-            }
-
-            this.largestFinds.artifacts = finds.slice(0, this.maxCount);
+            });
         }
     }
 </script>
