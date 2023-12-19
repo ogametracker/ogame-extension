@@ -128,7 +128,11 @@
                         <div>
                             <h3 v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
                             <div class="expeditionsettings">
-                                <amortization-expedition-settings-inputs v-model="expeditionSettings" :playerSettings="playerSettings" />
+                                <amortization-expedition-settings-inputs 
+                                    v-model="expeditionSettings" 
+                                    :playerSettings="playerSettings" 
+                                    :breakdown="expoBreakdown" 
+                                />
                             </div>
                         </div>
 
@@ -517,16 +521,17 @@
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
     import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
     import { UniverseSpecificSettings } from '@/shared/models/universe-specific-settings/UniverseSpecificSettings';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { createRecord } from '@/shared/utils/createRecord';
+    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
     import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
-    import { getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
+    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
     import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
     import { AmortizationExpeditionSettings } from '@/shared/models/empire/amortization/AmortizationExpeditionSettings';
     import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { startOfToday, subDays } from 'date-fns';
     import { AmortizationExpeditionResultsBreakdown, AmortizationExpeditionResultsBreakdownOptions } from '@/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
     import { getItemSlotBonus } from '@/shared/models/ogame/expeditions/getItemSlotBonus';
+import { getPlanetExpeditionState, getPlanetState } from '@/shared/models/empire/amortization/utils';
 
     type AmortizationViewItem = AmortizationItem & {
         selected: boolean;
@@ -562,6 +567,21 @@
         private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
         private readonly LifeformBuildingTypes = LifeformBuildingTypes;
         private readonly LifeformTechnologyTypes = LifeformTechnologyTypes;
+
+        private expoBreakdown = new AmortizationExpeditionResultsBreakdown({
+            playerClass: PlayerClass.none,
+            admiral: false,
+            astrophysicsLevel: 0,
+            itemBonusSlots: 0,
+            fleetFindsResourceFactors: createRecord(ResourceTypes, () => 0),
+            planets: {},
+            serverSettings: {
+                topScore: 0,
+                economySpeed: 0,
+                discovererExpeditionBonus: 0,
+                discovererExpeditionSlotBonus: 0,
+            },
+        });
 
         private readonly applicableBuildingTypes = [
             ...ResourceProductionBonusLifeformBuildings,
@@ -789,7 +809,10 @@
                     expeditions: this.clone(this.expeditionSettings),
                     include: this.clone(this.includeSettings),
                 },
-                lifeformExperience: this.clone(EmpireDataModule.lifeformExperience),
+                lifeformExperience: createRecord(
+                    ValidLifeformTypes, 
+                    lifeform => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lifeform]),
+                ),
                 serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
                 getMsuOrDsu,
             });
@@ -904,7 +927,12 @@
                 discovererExpeditionBonus: serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
                 discovererExpeditionSlotBonus: serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
             };
-            let avgWaves = avgExpos / new AmortizationExpeditionResultsBreakdown({
+            
+            const lifeformExperience = createRecord(
+                ValidLifeformTypes, 
+                lifeform => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lifeform]),
+            );
+            this.expoBreakdown = new AmortizationExpeditionResultsBreakdown({
                 playerClass: this.playerSettings.playerClass,
                 admiral: this.playerSettings.officers.admiral,
                 astrophysicsLevel: this.playerSettings.levelAstrophysics,
@@ -915,9 +943,13 @@
                     deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
                 },
                 serverSettings: expoServerSettings,
-                planets: {},
-            }).slots;
-            avgWaves = Math.round(10 * avgWaves) / 10;
+                planets: createMappedRecord(
+                    Object.values(this.planetSettings),
+                    planet => planet.id,
+                    planet => getPlanetExpeditionState(getPlanetState(planet, serverSettings, lifeformExperience)),
+                ),
+            });
+            const avgWaves = Math.round(10 * avgExpos / this.expoBreakdown.slots) / 10;
 
             this.expeditionSettings = {
                 items: expoSlotItems,

@@ -461,28 +461,6 @@ export const Items: Record<ItemHash, Item> = {
         grade: ItemGrade.none,
     },
 
-    [ItemHash.shortenTime_buildings]: {
-        name: "Bauverkürzer Gebäude",
-        image: "22bba1f3ceab83dc24eb944d4f2aa8207390ab7c",
-        smallImage: '22bba1f3ceab83dc24eb944d4f2aa8207390ab7c',
-        hash: ItemHash.shortenTime_buildings,
-        grade: ItemGrade.none,
-    },
-    [ItemHash.shortenTime_research]: {
-        name: "Bauverkürzer Forschung",
-        image: "959ce485c41b8713fb9c281fcd5d737331e0341c",
-        smallImage: '959ce485c41b8713fb9c281fcd5d737331e0341c',
-        hash: ItemHash.shortenTime_research,
-        grade: ItemGrade.none,
-    },
-    [ItemHash.shortenTime_shipyard]: {
-        name: "Bauverkürzer Schiffe",
-        image: "56d76263b87b56716214c91348602908b1f46fbd",
-        smallImage: '56d76263b87b56716214c91348602908b1f46fbd',
-        hash: ItemHash.shortenTime_shipyard,
-        grade: ItemGrade.none,
-    },
-
     [ItemHash.kraken_bronze]: {
         hash: ItemHash.kraken_bronze,
         image: "98629d11293c9f2703592ed0314d99f320f45845",
@@ -755,22 +733,6 @@ export const Items: Record<ItemHash, Item> = {
         name: "Flottenslots Gold (90 Tage)",
         grade: ItemGrade.gold,
     },
-
-    [ItemHash.migrationItem]: {
-        hash: ItemHash.migrationItem,
-        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
-        smallImage: '',
-        name: "Migrations-Item",
-        grade: ItemGrade.none,
-    },
-    [ItemHash.migrationItem_pts]: {
-        hash: ItemHash.migrationItem_pts,
-        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
-        smallImage: '',
-        name: "Migrations-Item",
-        grade: ItemGrade.none,
-    },
-
 
 
     [ItemHash.discoverer_pts]: {
@@ -1312,11 +1274,78 @@ export const Items: Record<ItemHash, Item> = {
         grade: ItemGrade.gold,
     },
 
+    /****************************/
 
-    //item ids of the officers (7 days)
-    //78badde414b2cba7c0c37e3e11a5a42e8414c8ac
-    //10662141326cc46ee30bc4dd05f581424050a768
-    //bbc7ee322189528ad5bc3a19e048c4ff582538b5
-    //ddb65e18ec97b32d7dc50249a0d9c256f57664df
-    //e8e01fb84ed1a33ed3ab34af6fc84e86e3505142
+    [ItemHash.migrationItem]: {
+        hash: ItemHash.migrationItem,
+        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
+        smallImage: '',
+        name: "Migrations-Item",
+        grade: ItemGrade.none,
+    },
+    [ItemHash.migrationItem_pts]: {
+        hash: ItemHash.migrationItem_pts,
+        image: "16bf2c62de38daaf128fd1329efe976b9788c011",
+        smallImage: '',
+        name: "Migrations-Item",
+        grade: ItemGrade.none,
+    },
+
+    [ItemHash.shortenTime_buildings]: {
+        name: "Bauverkürzer Gebäude",
+        image: "22bba1f3ceab83dc24eb944d4f2aa8207390ab7c",
+        smallImage: '22bba1f3ceab83dc24eb944d4f2aa8207390ab7c',
+        hash: ItemHash.shortenTime_buildings,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.shortenTime_research]: {
+        name: "Bauverkürzer Forschung",
+        image: "959ce485c41b8713fb9c281fcd5d737331e0341c",
+        smallImage: '959ce485c41b8713fb9c281fcd5d737331e0341c',
+        hash: ItemHash.shortenTime_research,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.shortenTime_shipyard]: {
+        name: "Bauverkürzer Schiffe",
+        image: "56d76263b87b56716214c91348602908b1f46fbd",
+        smallImage: '56d76263b87b56716214c91348602908b1f46fbd',
+        hash: ItemHash.shortenTime_shipyard,
+        grade: ItemGrade.none,
+    },
+    
+    [ItemHash.officer_commander]: {
+        name: ItemHash.officer_commander,
+        hash: ItemHash.officer_commander,
+        grade: ItemGrade.none,
+        image: '',
+        smallImage: '',
+    },
+    [ItemHash.officer_admiral]: {
+        name: ItemHash.officer_admiral,
+        hash: ItemHash.officer_admiral,
+        grade: ItemGrade.none,
+        image: '',
+        smallImage: '',
+    },
+    [ItemHash.officer_engineer]: {
+        name: ItemHash.officer_engineer,
+        hash: ItemHash.officer_engineer,
+        grade: ItemGrade.none,
+        image: '',
+        smallImage: '',
+    },
+    [ItemHash.officer_geologist]: {
+        name: ItemHash.officer_geologist,
+        hash: ItemHash.officer_geologist,
+        grade: ItemGrade.none,
+        image: '',
+        smallImage: '',
+    },
+    [ItemHash.officer_technocrat]: {
+        name: ItemHash.officer_technocrat,
+        hash: ItemHash.officer_technocrat,
+        grade: ItemGrade.none,
+        image: '',
+        smallImage: '',
+    },
 };

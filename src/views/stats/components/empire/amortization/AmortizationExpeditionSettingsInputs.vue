@@ -42,7 +42,7 @@
 
 <script lang="ts">
     import { AmortizationExpeditionSettings } from '@/shared/models/empire/amortization/AmortizationExpeditionSettings';
-    import { Component, Prop, Vue, VModel, Watch } from 'vue-property-decorator';
+    import { Component, Prop, PropSync, Vue, VModel, Watch } from 'vue-property-decorator';
     import { PropType } from 'vue';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { _throw } from '@/shared/utils/_throw';
@@ -60,6 +60,9 @@
 
         @Prop({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
         private playerSettings!: AmortizationPlayerSettings;
+
+        @Prop({ required: true, type: Object as PropType<AmortizationExpeditionResultsBreakdown> })
+        private breakdown!: AmortizationExpeditionResultsBreakdown;
 
         private get topScores(): Record<number, string> {
             return {
@@ -102,25 +105,6 @@
             [ItemHash.expeditionslots_gold_90days]: ItemHash.expeditionslots_gold_7days,
             [ItemHash.expeditionslots_gold_90days_pts]: ItemHash.expeditionslots_gold_7days,
         };
-
-        private breakdown = new AmortizationExpeditionResultsBreakdown({
-            playerClass: PlayerClass.none,
-            admiral: false,
-            astrophysicsLevel: 0,
-            itemBonusSlots: 0,
-            fleetFindsResourceFactors: {
-                metal: 0,
-                crystal: 0,
-                deuterium: 0,
-            },
-            serverSettings: {
-                topScore: 0,
-                economySpeed: 1,
-                discovererExpeditionBonus: 0.5,
-                discovererExpeditionSlotBonus: 2,
-            },
-            planets: {},
-        });
 
         @Watch('settings', { immediate: true, deep: true })
         @Watch('playerSettings', { immediate: true, deep: true })

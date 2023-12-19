@@ -84,7 +84,7 @@ export enum ItemHash {
     energyBooster_silver_30days = 'bedd248aaf288c27e9351cfacfa6be03f1dbb898',
     energyBooster_silver_30days_pts = '64ed3011f97a865988b3a38808b4c574f0605a62',
     energyBooster_silver_90days = 'e05aa5b9e3df5be3857b43da8403eafbf5ad3b96',
-    energyBooster_silver_90days_pts = '64ed3011f97a865988b3a38808b4c574f0605a62',
+    energyBooster_silver_90days_pts = '64ed3011f97a865988b3a38808b4c574f0605a62_',
     energyBooster_gold_7days = '55b52cbfb148ec80cd4e5b0580f7bed01149d643',
     energyBooster_gold_7days_pts = '0daf077d568dbb349143e9d3ab65c17164601848',
     energyBooster_gold_30days = '4fa9a2273ee446284d5177fd9d60a22de01e932b',
@@ -120,10 +120,6 @@ export enum ItemHash {
     resourcePackage_crystal_pts = '945e09627b23165fc3f611c634b0041883c24783',
     resourcePackage_deuterium = 'cb72ed207dd871832a850ee29f1c1f83aa3f4f36',
     resourcePackage_deuterium_pts = '4b62dc535efeef755bcc038714f470d3ed7beb01',
-
-    shortenTime_buildings = 'cb4fd53e61feced0d52cfc4c1ce383bad9c05f67',
-    shortenTime_research = '14c17d49462963f5e5b67efa1257622ce1b866ac',
-    shortenTime_shipyard = '75accaa0d1bc22b78d83b89cd437bdccd6a58887',
 
     kraken_bronze = '40f6c78e11be01ad3389b7dccd6ab8efa9347f3c',
     kraken_silver = '4a58d4978bbe24e3efb3b0248e21b3b4b1bfbd8a',
@@ -199,6 +195,16 @@ export enum ItemHash {
 
     migrationItem = '7eacfcee74660f30bb92a5874e8cccf2bb286ebd',
     migrationItem_pts = '4e58cbb8ad63a3df85f6d1ea16161f1e672d3ee3',
+
+    shortenTime_buildings = 'cb4fd53e61feced0d52cfc4c1ce383bad9c05f67',
+    shortenTime_research = '14c17d49462963f5e5b67efa1257622ce1b866ac',
+    shortenTime_shipyard = '75accaa0d1bc22b78d83b89cd437bdccd6a58887',
+
+    officer_geologist = '78badde414b2cba7c0c37e3e11a5a42e8414c8ac',
+    officer_commander = '10662141326cc46ee30bc4dd05f581424050a768',
+    officer_admiral = 'bbc7ee322189528ad5bc3a19e048c4ff582538b5',
+    officer_technocrat = 'ddb65e18ec97b32d7dc50249a0d9c256f57664df',
+    officer_engineer = 'e8e01fb84ed1a33ed3ab34af6fc84e86e3505142',
 }
 
 const _ItemHashes: Record<ItemHash, 0> = {
@@ -324,10 +330,6 @@ const _ItemHashes: Record<ItemHash, 0> = {
     [ItemHash.resourcePackage_deuterium]: 0,
     [ItemHash.resourcePackage_deuterium_pts]: 0,
 
-    [ItemHash.shortenTime_buildings]: 0,
-    [ItemHash.shortenTime_research]: 0,
-    [ItemHash.shortenTime_shipyard]: 0,
-
     [ItemHash.kraken_bronze]: 0,
     [ItemHash.kraken_silver]: 0,
     [ItemHash.kraken_gold]: 0,
@@ -402,5 +404,15 @@ const _ItemHashes: Record<ItemHash, 0> = {
 
     [ItemHash.migrationItem]: 0,
     [ItemHash.migrationItem_pts]: 0,
+
+    [ItemHash.shortenTime_buildings]: 0,
+    [ItemHash.shortenTime_research]: 0,
+    [ItemHash.shortenTime_shipyard]: 0,
+
+    [ItemHash.officer_commander]: 0,
+    [ItemHash.officer_admiral]: 0,
+    [ItemHash.officer_engineer]: 0,
+    [ItemHash.officer_geologist]: 0,
+    [ItemHash.officer_technocrat]: 0,
 }
 export const ItemHashes = Object.keys(_ItemHashes) as ItemHash[];
