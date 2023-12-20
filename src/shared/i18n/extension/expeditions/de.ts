@@ -65,7 +65,6 @@ export const de: ExpeditionsTranslations = {
     topFinds: {
         title: (type: string) => `Top-Funde (${type})`,
         shipUnits: 'Schiffseinheiten',
-        shipUnitsMsuDsu: (type: string) => `Schiffseinheiten (${type})`,
 
         size: 'Größe',
         amount: 'Menge',
