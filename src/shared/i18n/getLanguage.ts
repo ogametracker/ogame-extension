@@ -5,9 +5,9 @@ import { LanguageKey } from "./LanguageKey";
 const languageMap: Partial<Record<string, LanguageKey>> = {
     ar: LanguageKey['es-ar'],
     br: LanguageKey['pt-br'],
-    cz: LanguageKey.cz,
+    cz: LanguageKey.cs,
     de: LanguageKey.de,
-    dk: LanguageKey.dk,
+    dk: LanguageKey.da,
     en: LanguageKey.en,
     es: LanguageKey['es-es'],
     fr: LanguageKey.fr,
@@ -24,7 +24,7 @@ const languageMap: Partial<Record<string, LanguageKey>> = {
     ro: LanguageKey.ro,
     ru: LanguageKey.ru,
     //TODO: se swedish
-    si: LanguageKey.si,
+    si: LanguageKey.sl,
     //TODO: sk slovakian
     tr: LanguageKey.tr,
     us: LanguageKey.en,

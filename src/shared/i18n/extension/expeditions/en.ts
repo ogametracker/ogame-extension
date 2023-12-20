@@ -65,7 +65,7 @@ export const en: ExpeditionsTranslations = {
     topFinds: {
         title: (type: string) => `Top finds (${type})`,
         shipUnits: 'Ship units',
-        shipUnitsIncludingDeuterium: 'Ship units incl. Deuterium',
+        shipUnitsMsuDsu: (type: string) => `Ship units (${type})`,
 
         size: 'Size',
         amount: 'Amount',

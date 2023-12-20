@@ -76,7 +76,7 @@ export const tr: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*'Kesif filosundan alabildigimiz son bilgi, yeni acilmakta olan bir kara deligin */'acikca belirgin oldugu cok net bir fotograf olabildi',
         /*'Kesif */'filosundan geriye sadece bu radyo kaydi kaldi'/* : Zzzz Aman tanrim! Krrrzzzztttt Bu zzrrrttzzrt bir krgzzzzzz benziyor Krrzzzzzzztzzzzzttzzzzzz.........'*/,
-        /* TODO tr 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
+        /*'Lider Geminin ana reaktöründeki bir kaynak erimesi, diger bütün gemilerin */'yokolmasina yol acan bir patlamalar zincirine sebebiyet verdi',
         /* TODO tr 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
     ],
 

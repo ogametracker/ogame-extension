@@ -4,7 +4,7 @@
         <div v-for="key in keys" :key="key" class="find-column">
             <h3 v-text="$i18n.$t.extension.expeditions.topFinds.title(keyTranslations[key])" />
 
-            <grid-table inline :columns="columns" :items="largestFinds[key]" :style="`--color: ${colors[key]}`">
+            <grid-table inline :columns="columns" :items="largestFinds[key].values" :style="`--color: ${colors[key]}`">
                 <template #cell-size="{ value }">
                     <expedition-size-icon :size="value" class="scaled-icon" />
                 </template>
@@ -31,6 +31,8 @@
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
     import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { TopList } from '@/views/stats/models/TopList';
+import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
 
     type Find = {
         size: ExpeditionEventSize;
@@ -39,12 +41,12 @@
     }
 
     type Finds = {
-        metal: Find[];
-        crystal: Find[];
-        deuterium: Find[];
-        shipUnits: Find[];
-        shipUnitsIncludingDeuterium: Find[];
-        darkMatter: Find[];
+        metal: TopList<Find>;
+        crystal: TopList<Find>;
+        deuterium: TopList<Find>;
+        shipUnits: TopList<Find>;
+        shipUnitsConverted: TopList<Find>;
+        darkMatter: TopList<Find>;
     }
 
     @Component({
@@ -59,15 +61,33 @@
         private loading = true;
 
         private largestFinds: Finds = {
-            metal: [],
-            crystal: [],
-            deuterium: [],
-            shipUnits: [],
-            shipUnitsIncludingDeuterium: [],
-            darkMatter: [],
+            metal: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+            crystal: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+            deuterium: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+            shipUnits: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+            shipUnitsConverted: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+            darkMatter: new TopList<Find>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
         };
 
-        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsIncludingDeuterium', 'darkMatter'];
+        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
 
         private get keyTranslations(): Record<keyof Finds, string> {
             return {
@@ -75,7 +95,11 @@
                 crystal: this.$i18n.$t.ogame.resources.crystal,
                 deuterium: this.$i18n.$t.ogame.resources.deuterium,
                 shipUnits: this.$i18n.$t.extension.expeditions.topFinds.shipUnits,
-                shipUnitsIncludingDeuterium: this.$i18n.$t.extension.expeditions.topFinds.shipUnitsIncludingDeuterium,
+                shipUnitsConverted: this.$i18n.$t.extension.expeditions.topFinds.shipUnitsMsuDsu(
+                    SettingsDataModule.settings.conversionRates.mode == 'msu'
+                        ? this.$i18n.$t.extension.common.msu
+                        : this.$i18n.$t.extension.common.dsu
+                ),
                 darkMatter: this.$i18n.$t.ogame.premium.darkMatter,
             };
         }
@@ -89,7 +113,7 @@
                 deuterium: getRGBString(colors.resources.deuterium)!,
                 darkMatter: getRGBString(colors.expeditions.events.darkMatter)!,
                 shipUnits: getRGBString(colors.expeditions.events.fleet)!,
-                shipUnitsIncludingDeuterium: getRGBString(colors.expeditions.events.fleet)!,
+                shipUnitsConverted: getRGBString(colors.expeditions.events.fleet)!,
             };
         }
 
@@ -129,30 +153,11 @@
         }
 
         private addDarkMatterExpo(expo: ExpeditionEventDarkMatter) {
-            const finds = this.largestFinds.darkMatter;
-            const smallestFind: Find = finds[finds.length - 1] ?? {
-                size: ExpeditionEventSize.small,
-                amount: 0,
-                date: 0,
-            };
-            if (smallestFind.amount >= expo.darkMatter && finds.length >= this.maxCount) {
-                return;
-            }
-
-            const index = finds.findIndex(find => find.amount < expo.darkMatter);
-            const newFind = {
+            this.largestFinds.darkMatter.add({
                 size: expo.size,
                 amount: expo.darkMatter,
                 date: expo.date,
-            };
-            if(index == -1) {
-                finds.push(newFind);
-            } 
-            else {
-                finds.splice(index, 0, newFind);
-            }
-
-            this.largestFinds.darkMatter = finds.slice(0, this.maxCount);
+            });
         }
 
         private addFleetExpo(expo: ExpeditionEventFleet) {
@@ -166,65 +171,27 @@
                     return (cost.metal + cost.crystal) * count;
                 }).reduce((total, cur) => total + cur, 0);
 
-                const finds = this.largestFinds.shipUnits;
-                const smallestFind: Find = finds[finds.length - 1] ?? {
-                    size: ExpeditionEventSize.small,
-                    amount: 0,
-                    date: 0,
-                };
-                if (smallestFind.amount >= units && finds.length >= this.maxCount) {
-                    return;
-                }
-
-                const index = finds.findIndex(find => find.amount < units);
-                const newFind = {
+                this.largestFinds.shipUnits.add({
                     size: expo.size,
                     amount: units,
                     date: expo.date,
-                };
-                if(index == -1) {
-                    finds.push(newFind);
-                } 
-                else {
-                    finds.splice(index, 0, newFind);
-                }
-
-                this.largestFinds.shipUnits = finds.slice(0, this.maxCount);
+                });
             }
-            // ship units (metal + crystal + deuterium)
+            // ship units (MSU)
             {
-                const units = ExpeditionFindableShipTypes.map(shipType => {
+                const unitsMsu = ExpeditionFindableShipTypes.map(shipType => {
                     const count = expo.fleet[shipType] ?? 0;
                     const ship = ShipByTypes[shipType];
 
                     const cost = ship.cost;
-                    return (cost.metal + cost.crystal + cost.deuterium) * count;
+                    return getMsuOrDsu(cost) * count;
                 }).reduce((total, cur) => total + cur, 0);
 
-                const finds = this.largestFinds.shipUnitsIncludingDeuterium;
-                const smallestFind: Find = finds[finds.length - 1] ?? {
-                    size: ExpeditionEventSize.small,
-                    amount: 0,
-                    date: 0,
-                };
-                if (smallestFind.amount >= units && finds.length >= this.maxCount) {
-                    return;
-                }
-
-                const index = finds.findIndex(find => find.amount < units);
-                const newFind = {
+                this.largestFinds.shipUnitsConverted.add({
                     size: expo.size,
-                    amount: units,
+                    amount: unitsMsu,
                     date: expo.date,
-                };
-                if(index == -1) {
-                    finds.push(newFind);
-                } 
-                else {
-                    finds.splice(index, 0, newFind);
-                }
-
-                this.largestFinds.shipUnitsIncludingDeuterium = finds.slice(0, this.maxCount);
+                });
             }
         }
 
@@ -239,30 +206,11 @@
                 return;
             }
 
-            const ressFinds = this.largestFinds[resource];
-            const smallestFind: Find = ressFinds[ressFinds.length - 1] ?? {
-                size: ExpeditionEventSize.small,
-                amount: 0,
-                date: 0,
-            };
-            if (smallestFind.amount >= expo.resources[resource] && ressFinds.length >= this.maxCount) {
-                return;
-            }
-
-            const index = ressFinds.findIndex(find => find.amount <= expo.resources[resource]);
-            const newFind = {
+            this.largestFinds[resource].add({
                 size: expo.size,
                 amount: expo.resources[resource],
                 date: expo.date,
-            };
-            if(index == -1) { 
-                ressFinds.push(newFind)
-            }
-            else{
-                ressFinds.splice(index, 0, newFind);
-            }
-
-            this.largestFinds[resource] = ressFinds.slice(0, this.maxCount);
+            });
         }
     }
 </script>
