@@ -1,8 +1,8 @@
 import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionsTranslations } from "./type";
-import { en as ogamePremium } from '../../ogame/premium/en';
-import { en as ogameFactions } from '../../ogame/factions/en';
+import { pt_pt as ogamePremium } from '../../ogame/premium/pt_pt';
+import { pt_pt as ogameFactions } from '../../ogame/factions/pt_pt';
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
 import { RecursivePartial } from "@/shared/types/RecursivePartial";
 
