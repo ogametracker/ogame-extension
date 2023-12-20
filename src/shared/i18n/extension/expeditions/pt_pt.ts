@@ -66,7 +66,6 @@ export const pt_pt: RecursivePartial<ExpeditionsTranslations> = {
     topFinds: {
         title: (type: string) => `Melhores descobertas (${type})`,
         shipUnits: 'Unidades de naves',
-        shipUnitsIncludingDeuterium: 'Unidades de naves c/ Deutério',
 
         size: 'Tamanho',
         amount: 'Quantidade',
