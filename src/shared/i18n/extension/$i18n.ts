@@ -16,14 +16,15 @@ export type I18nDateTimeFormat = string | Intl.DateTimeFormatOptions;
 export interface I18nOptions<TMessages, TDateTimeFormats> {
     locale: LanguageKey;
     localeRegion?: string;
-    fallbackLocales: LanguageKey[];
-    messages: RecursivePartial<Record<LanguageKey, Partial<TMessages>>>;
+    fallbackLocales: RequiredLanguageKey[];
+    messages: Record<RequiredLanguageKey, TMessages> & RecursivePartial<Record<PartialLanguageKey, TMessages>>;
     dateTimeFormats: I18nDateTimeFormatMap<TDateTimeFormats>;
 }
 
-type PartialLanguageKey = Exclude<LanguageKey, 'de'>;
-export type I18nDateTimeFormatMap<T> = { [LanguageKey.de]: I18nDateTimeFormats<T> } & Partial<Record<PartialLanguageKey, I18nDateTimeFormats<T>>>;
-export type I18nMessageMap<T> = { [LanguageKey.de]: T } & RecursivePartial<Record<PartialLanguageKey, T>>;
+type RequiredLanguageKey = LanguageKey.de | LanguageKey.en;
+type PartialLanguageKey = Exclude<LanguageKey, RequiredLanguageKey>;
+export type I18nDateTimeFormatMap<T> = Record<RequiredLanguageKey, I18nDateTimeFormats<T>> & Partial<Record<PartialLanguageKey, I18nDateTimeFormats<T>>>;
+export type I18nMessageMap<T> = Record<RequiredLanguageKey, T> & RecursivePartial<Record<PartialLanguageKey, T>>;
 export type I18nFullMessageMap<T> = Record<LanguageKey, T>;
 
 class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
@@ -245,6 +246,11 @@ export const $i18n = new I18n<ExtensionTranslations, Intl.DateTimeFormatOptions>
             },
         },
         en: {
+            date: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            },
             datetime: {
                 year: 'numeric',
                 month: '2-digit',

@@ -1,5 +1,6 @@
 import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
 import { ItemHash } from "../items/ItemHash";
+import { isItemActive } from "../resource-production/getItemBonus";
 
 export function getItemSlotBonus(activeItems: PlanetActiveItems): number {
     const now = Date.now();
@@ -13,7 +14,7 @@ export function getItemSlotBonus(activeItems: PlanetActiveItems): number {
         ItemHash.expeditionslots_bronze_90days, 
         ItemHash.expeditionslots_bronze_90days_pts, 
     ];
-    if (items1.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items1.some(hash => isItemActive(now, activeItems[hash]))) {
         bonusSlots += 1;
     }
 
@@ -25,7 +26,7 @@ export function getItemSlotBonus(activeItems: PlanetActiveItems): number {
         ItemHash.expeditionslots_silver_90days, 
         ItemHash.expeditionslots_silver_90days_pts, 
     ];
-    if (items2.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items2.some(hash => isItemActive(now, activeItems[hash]))) {
         bonusSlots += 2;
     }
 
@@ -37,7 +38,7 @@ export function getItemSlotBonus(activeItems: PlanetActiveItems): number {
         ItemHash.expeditionslots_gold_90days, 
         ItemHash.expeditionslots_gold_90days_pts, 
     ];
-    if (items3.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items3.some(hash => isItemActive(now, activeItems[hash]))) {
         bonusSlots += 3;
     }
 

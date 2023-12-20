@@ -95,11 +95,11 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
                 crystal: this.$i18n.$t.ogame.resources.crystal,
                 deuterium: this.$i18n.$t.ogame.resources.deuterium,
                 shipUnits: this.$i18n.$t.extension.expeditions.topFinds.shipUnits,
-                shipUnitsConverted: this.$i18n.$t.extension.expeditions.topFinds.shipUnitsMsuDsu(
+                shipUnitsConverted: this.$i18n.$t.extension.expeditions.topFinds.shipUnits + ` (${
                     SettingsDataModule.settings.conversionRates.mode == 'msu'
                         ? this.$i18n.$t.extension.common.msu
                         : this.$i18n.$t.extension.common.dsu
-                ),
+                })`,
                 darkMatter: this.$i18n.$t.ogame.premium.darkMatter,
             };
         }
