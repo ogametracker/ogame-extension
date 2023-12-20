@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { CommonTranslations } from "./type";
 
-export const pt_pt: CommonTranslations = {
+export const pt_pt: RecursivePartial<CommonTranslations> = {
     averagePerDay: '⌀ por dia',
     chart: 'Gráfico',
     table: 'Tabela',

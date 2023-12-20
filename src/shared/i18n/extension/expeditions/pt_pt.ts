@@ -4,8 +4,9 @@ import { ExpeditionsTranslations } from "./type";
 import { en as ogamePremium } from '../../ogame/premium/en';
 import { en as ogameFactions } from '../../ogame/factions/en';
 import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 
-export const pt_pt: ExpeditionsTranslations = {
+export const pt_pt: RecursivePartial<ExpeditionsTranslations> = {
     header: 'Expedições',
     tabHeaders: {
         overview: 'Resumo',

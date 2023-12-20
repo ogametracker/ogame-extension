@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { ExcelExportTranslations } from "./type";
 
-export const pt_pt: ExcelExportTranslations = {
+export const pt_pt: RecursivePartial<ExcelExportTranslations> = {
     header: 'Exportar para Excel',
     chooseBelowMessage: 'Escolhe que dados queres incluir na exportação:',
     groups: {

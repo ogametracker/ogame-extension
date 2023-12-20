@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { UniverseHistoryTranslations } from "./type";
 
-export const pt_pt: UniverseHistoryTranslations = {
+export const pt_pt: RecursivePartial<UniverseHistoryTranslations> = {
     header: 'Histórico do Universo',
     settings: {  
         messages: {

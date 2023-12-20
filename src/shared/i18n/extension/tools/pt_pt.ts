@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { ToolsTranslations } from "./type";
 
-export const pt_pt: ToolsTranslations = {
+export const pt_pt: RecursivePartial<ToolsTranslations> = {
     signatureGenerator: {
         header: 'Gerador de Assinatura',
         

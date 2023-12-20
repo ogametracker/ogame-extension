@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { NotificationTranslations } from "./type";
 
-export const pt_pt: NotificationTranslations = {
+export const pt_pt: RecursivePartial<NotificationTranslations> = {
     combatTracking: {
         title: (value: string) =>
             value == '1'

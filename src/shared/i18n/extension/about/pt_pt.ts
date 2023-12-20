@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { AboutTranslations } from "./type";
 
-export const pt_pt: AboutTranslations = {
+export const pt_pt: RecursivePartial<AboutTranslations> = {
     faqHelp: {
         header: 'Ajuda',
         faq: {

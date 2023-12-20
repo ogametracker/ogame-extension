@@ -1,8 +1,9 @@
 import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { EmpireTranslations } from "./type";
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 
-export const pt_pt: EmpireTranslations = {
+export const pt_pt: RecursivePartial<EmpireTranslations> = {
     header: 'Império',
     planet: 'Planeta',
     production: {

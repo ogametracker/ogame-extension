@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { DonateTranslations } from "./type";
 
-export const pt_pt: DonateTranslations = {
+export const pt_pt: RecursivePartial<DonateTranslations> = {
     header: 'Doação',
     subHeader: 'Doar para ajudar o desenvolvimento do OGame Tracker',
     

@@ -1,6 +1,7 @@
+import { RecursivePartial } from "@/shared/types/RecursivePartial";
 import { SettingsTranslations } from "./type";
 
-export const pt_pt: SettingsTranslations = {
+export const pt_pt: RecursivePartial<SettingsTranslations> = {
     tabs: {
         dateRanges: 'Intervalo de datas',
         colors: 'Cores',

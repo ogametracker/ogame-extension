@@ -1,11 +1,11 @@
-import { en as ships } from '../ogame/ships/en';
-import { en as defenses } from '../ogame/defenses/en';
-import { en as buildings } from '../ogame/buildings/en';
-import { en as research } from '../ogame/research/en';
-import { en as lifeforms } from '../ogame/lifeforms/en';
-import { en as lifeformBuildings } from '../ogame/lifeforms/buildings/en';
-import { en as lifeformTechnologies } from '../ogame/lifeforms/technologies/en';
-import { en as premium } from '../ogame/premium/en';
+import { pt_pt as ships } from '../ogame/ships/pt_pt';
+import { pt_pt as defenses } from '../ogame/defenses/pt_pt';
+import { pt_pt as buildings } from '../ogame/buildings/pt_pt';
+import { pt_pt as research } from '../ogame/research/pt_pt';
+import { pt_pt as lifeforms } from '../ogame/lifeforms/pt_pt';
+import { pt_pt as lifeformBuildings } from '../ogame/lifeforms/buildings/pt_pt';
+import { pt_pt as lifeformTechnologies } from '../ogame/lifeforms/technologies/pt_pt';
+import { pt_pt as premium } from '../ogame/premium/pt_pt';
 
 import { ExtensionTranslations } from "./type";
 import { pt_pt as settings } from './settings/pt_pt';
@@ -25,8 +25,9 @@ import { pt_pt as tools } from './tools/pt_pt';
 
 import { pt_pt as excelExport } from './excelExport/pt_pt';
 import { pt_pt as playerClasses } from './playerClasses/pt_pt';
+import { RecursivePartial } from '@/shared/types/RecursivePartial';
 
-export const en: ExtensionTranslations = {
+export const pt_pt: RecursivePartial<ExtensionTranslations> = {
     ogame: {
         buildings,
         lifeforms,
