@@ -26,18 +26,29 @@ export function getItemBonus(resource: ResourceType, activeItems: PlanetActiveIt
         [ResourceType.deuterium]: [ItemHash.deuteriumBooster_platinum_7days, ItemHash.deuteriumBooster_platinum_30days, ItemHash.deuteriumBooster_platinum_90days],
     }[resource];
 
-    if (items10.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items10.some(hash => isItemActive(now, activeItems[hash]))) {
         return 0.1;
     }
-    if (items20.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items20.some(hash => isItemActive(now, activeItems[hash]))) {
         return 0.2;
     }
-    if (items30.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items30.some(hash => isItemActive(now, activeItems[hash]))) {
         return 0.3;
     }
-    if (items40.some(hash => activeItems[hash] == 'permanent' || (activeItems[hash] ?? -1) > now)) {
+    if (items40.some(hash => isItemActive(now, activeItems[hash]))) {
         return 0.4;
     }
 
     return 0;
+}
+
+export function isItemActive(now: number, itemExpiration?: number | 'permanent') {
+    if(itemExpiration == null) {
+        return false;
+    }
+    if(itemExpiration == 'permanent') {
+        return true;
+    }
+
+    return itemExpiration > now;
 }
