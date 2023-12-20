@@ -67,6 +67,8 @@
                 ...SettingsDataModule.settings,
                 extensionLanguage,
             });
+
+            this.setLanguageRegion(undefined);
         }
 
         private setLanguageRegion(region?: string) {
