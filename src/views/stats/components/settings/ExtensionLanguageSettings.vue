@@ -39,10 +39,12 @@
         private langs: LanguageKey[] = [
             LanguageKey.de,
             LanguageKey.en,
+            LanguageKey['pt-pt'],
         ];
         private languageNames: Partial<Record<LanguageKey, string>> = {
             [LanguageKey.de]: 'Deutsch',
             [LanguageKey.en]: 'English',
+            [LanguageKey['pt-pt']]: 'Português',
         };
         private regions: Partial<Record<LanguageKey, Record<string, string>>> = {
             [LanguageKey.en]: {
