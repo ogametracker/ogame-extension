@@ -19,9 +19,19 @@
             Please start the migration by clicking the button below.<br />
             When the migration is done this window should close by itself.
         </div>
+        <hr />
+        <h3>(PT) Migração de dados</h3>
+        <div>
+          Bem vindo à nova versão do OGame Tracker!<br />
+          Muitas coisas mudaram no background e essa é a razão para teres que fazer a migração dos dados já monitorizados.<br />
+          No entanto, tu apenas terás que fazer isto uma única vez e os dados existentes não serão apagados no caso de algum erro ocorrer.<br />
+          <br />
+          Para começar a migração dos dados basta clicares no botão abaixo.<br />
+          Quando a migração terminar esta janela/tab irá fechar-se automaticamente.
+        </div>
         <br />
 
-        <button v-text="'Daten migrieren/Migrate data'" :disabled="isImporting" @click="migrateData()" />
+        <button v-text="'Daten migrieren/Migrate data/Migrar dados'" :disabled="isImporting" @click="migrateData()" />
 
         <template v-if="isImporting">
             <br />
