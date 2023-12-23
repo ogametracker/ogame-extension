@@ -389,7 +389,9 @@ class UniverseHistoryDataModuleClass extends Vue {
         for(const player of playerIds) {
             const cursor = await index.openCursor(player.id, 'prev');
             if(cursor == null) {
-                throw new Error(`failed to open cursor for player ${player.id}`);
+                players[player.id] = player.id.toString();
+                console.warn(`failed to open cursor for player ${player.id}`);
+                continue;
             }
             const { playerId, name } = cursor.value;
             players[playerId] = name;
