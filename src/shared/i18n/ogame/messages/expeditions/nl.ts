@@ -19,7 +19,7 @@ export const nl: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /*'Uit */'spontane hyperruimtevervorming'/* ontstaat een grote hoeveelheid donkere materie!'*/,
-            /* TODO: nl 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Onze expeditie meldt een heel bijzonder eerste contact. Het lijkt een soort van energie-wezen te zijn, */'het noemt zichzelf Legorian'/* , dat door het schip heen vloog en besloot ons onderontwikkelde wezens te helpen. Een kist met donkere materie is uit het niets op de brug verschenen.'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`Er is (?<name>${darkMatter}) (?<amount>[^\\s]+) buitgemaakt`, 'i'),
     },

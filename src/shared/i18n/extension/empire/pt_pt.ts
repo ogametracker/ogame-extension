@@ -150,6 +150,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
             discoveryResults: 'Resultados',
             experience: 'Experiência',
             researchBonuses: 'Bonus de Pesquisas',
+            planetBonuses: 'Bónus efectivo nos planetas',
         },
 
         planet: 'Planeta',
@@ -281,6 +282,27 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
                 baseValue: 'Valor Base',
                 valueWithBonuses: 'Valor com Bónus',
             },
+        },
+        planetBonuses: {
+            resourceProduction: {
+                header: 'Produção de recursos',
+            },
+            lifeformResearchCostTime: {
+                header: 'Tempo e Custo de Pesquisas de Forma de Vida',
+            },
+            wreckfield: {
+                header: 'Campo de Destroços',
+            },
+        },
+        topFinds: {
+            topFinds: 'Melhores Descobertas',
+            worstFinds: 'Piores Descobertas',
+
+            size: 'Tamanho',
+            amount: 'Quantidade',
+            date: 'Data',
+            artifacts: 'Artifactos',
+            experience: 'XP',
         },
     },
 };

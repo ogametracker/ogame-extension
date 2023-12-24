@@ -8,7 +8,7 @@ import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionEventCombatSize, ExpeditionFindableShipType } from "../../shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEvent, ExpeditionEventCombatSize, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
@@ -479,7 +479,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             }
 
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.resources, expedition.size)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource ${resource}"></div>
                     <div class="${resource}">${formatNumber(amount)}</div>
@@ -500,7 +500,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
             return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">
-                    <div class="${getExpeditionResultClass(ExpeditionEventType.fleet, expedition.size)}">
+                    <div class="${getExpeditionResultClass(expedition)}">
                         <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                         ${ships.map(ship => `
                             <div class="ship-count-item">
@@ -533,7 +533,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
                     ? '<div class="dm-patched"></div>'
                     : ''
                 }
-                <div class="${getExpeditionResultClass(ExpeditionEventType.darkMatter, expedition.size)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="ogame-tracker-resource dark-matter"></div>
                     <div class="dark-matter">${formatNumber(expedition.darkMatter)}</div>
@@ -543,7 +543,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.delay: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.delay)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
             `;
@@ -551,7 +551,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.early: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.early)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
             `;
@@ -559,7 +559,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.pirates: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.pirates, expedition.size)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-pirate"></div>
                 </div>
@@ -568,7 +568,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.aliens: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.aliens, expedition.size)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
                     <div class="mdi mdi-alien"></div>
                 </div>
@@ -577,7 +577,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.lostFleet: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.lostFleet)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="mdi mdi-cross"></div>
                 </div>
             `;
@@ -585,7 +585,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.nothing: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.nothing)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="mdi mdi-close"></div>
                 </div>
             `;
@@ -596,7 +596,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
             return `
                 <a href="/game/index.php?page=shop#item=${expedition.itemHash}&page=inventory">
-                    <div class="${getExpeditionResultClass(ExpeditionEventType.item)}">
+                    <div class="${getExpeditionResultClass(expedition)}">
                         <img src="${imageUrl}" class="item-grade--${item.grade}" />
                     </div>
                 </a>
@@ -605,7 +605,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.trader: {
             return `
-                <div class="${getExpeditionResultClass(ExpeditionEventType.trader)}">
+                <div class="${getExpeditionResultClass(expedition)}">
                     <div class="mdi mdi-swap-horizontal-bold"></div>
                 </div>
             `;
@@ -632,13 +632,20 @@ function getExpeditionSizeIconClass(size: ExpeditionEventSize | ExpeditionEventC
     })[size];
 }
 
-function getExpeditionResultClass(result: ExpeditionEventType, size?: ExpeditionEventSize | ExpeditionEventCombatSize) {
-    const cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${result}`;
-    if (size == null) {
-        return cssClass;
+function getExpeditionResultClass(expedition: ExpeditionEvent) {
+    let cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${expedition.type}`;
+
+    if (expedition.type == ExpeditionEventType.fleet
+        && ExpeditionFindableShipTypes.every(ship => (expedition.fleet[ship] ?? 0) > 0)
+    ) {
+        cssClass += ' ogame-tracker-expedition-result--fleet--rainbow';
     }
 
-    return `${cssClass} ogame-tracker-expedition-result--size-${size}`;
+    if ('size' in expedition) {
+        cssClass += ` ogame-tracker-expedition-result--size-${expedition.size}`;
+    }
+
+    return cssClass;
 }
 
 function updateLifeformDiscoveryResults(msg: LifeformDiscoveryMessage) {

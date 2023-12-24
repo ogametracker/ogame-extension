@@ -155,10 +155,10 @@ export const tr: ExpeditionMessages = {
             /*'Daha önce hic girilmemis bir */'bölgeye ilk giren insan olmak inanilmaz güzel bir duygu'/* , kelimelerle ifade edemem.'*/,
         ],
         [ExpeditionDepletionLevel.low]: [
-            /* TODO tr 'Es scheint nicht so, als ob */'jemals ein Mensch in diesem Bereich der Galaxis'/* gewesen wäre.'*/,
+            /*'Ilk izlenimlere */'göre galaksinin bu köselerine ilk gelen biziz'/* . Baska bir filonun izine henüz rastlamadik.'*/,
             /* TODO tr 'Es wurden */'sehr alte Signaturen von Raumschiffen'/* entdeckt. Wir sind also nicht die Ersten hier.'*/,
             /*TODO is this the message above? 'Uzay */'gemilerinin birakabilecegi cinsten isaretlere rastladik'/* . Varliklari konusunda bir bilgimiz yok; ancak buralara gelen ilk filonun bizimki olmadigi kesin.'*/,
-            /* TODO tr 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Neredeyse yabanci */'bir kesif filosuyla carpisiyorduk'/* . Acikcasi buralarda baska kesif filolarinin olabilecegi aklimin ucundan bile gecmezdi.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /* TODO tr 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
