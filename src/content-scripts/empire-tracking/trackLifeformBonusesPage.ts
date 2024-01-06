@@ -11,7 +11,7 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 
 export function trackLifeformBonusesPage() {
     observerCallbacks.push({
-        selector: '#technologies',
+        selector: '#lfbonusescomponent',
         callback: element => {
 
             const lifeformExperience: Partial<Record<LifeformType, number>> = {};
