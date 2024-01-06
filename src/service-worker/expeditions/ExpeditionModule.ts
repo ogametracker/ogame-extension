@@ -234,27 +234,39 @@ export class ExpeditionModule {
             return null;
         }
 
-        const shipNames = ExpeditionFindableShipTypes.map(ship => i18nShips[language][ship]);
-        const regex = i18nMessages.regex(shipNames);
-        const match = data.text.match(regex);
-
         const foundShips: Partial<Record<ExpeditionFindableShipType, number>> = {};
 
-        // there can be no match if no ships were found because the expedition fleet was too small
-        if (match != null) {
-            const textWithFoundFleet = match.groups!.ships;
+        // OGame v11.6 introduced player-customizable language selection
+        // this feature brought a bug with it where ship names in expedition messages use the wrong language
+        // we try to track these anyways by trying the user language first and then all other ones for the ship names
+        const tryOGameBugLanguages = [language, ...Object.keys(i18nShips).filter(lang => lang != language) as LanguageKey[]];
+        for(const lang of tryOGameBugLanguages) {
+            const shipNames = ExpeditionFindableShipTypes.map(ship => i18nShips[lang][ship]);
+            const regex = i18nMessages.regex(shipNames);
+            const match = data.text.match(regex);
 
-            ExpeditionFindableShipTypes.forEach(ship => {
-                const shipName = i18nShips[language][ship];
-                const shipRegex = new RegExp(`(\\d\\s*|^)${
-                    shipName.replace('`', '[\'`]') // replace `with ' so it works for both french v9 and v10 servers
-                }:\\s*(?<amount>\\d+)`, 'i');
-                const shipMatch = textWithFoundFleet.match(shipRegex);
 
-                if (shipMatch?.groups != null) {
-                    foundShips[ship] = parseIntSafe(shipMatch.groups.amount, 10);
+            // there can be no match if no ships were found because the expedition fleet was too small
+            if (match != null) {
+                const textWithFoundFleet = match.groups!.ships;
+                
+                // if the mentioned bug appeared then `textWithFoundFleet` is `undefined`
+                if(textWithFoundFleet == null) {
+                    continue;
                 }
-            });
+
+                ExpeditionFindableShipTypes.forEach(ship => {
+                    const shipName = i18nShips[lang][ship];
+                    const shipRegex = new RegExp(`(\\d\\s*|^)${
+                        shipName.replace('`', '[\'`]') // replace `with ' so it works for both french v9 and v10 servers
+                    }:\\s*(?<amount>\\d+)`, 'i');
+                    const shipMatch = textWithFoundFleet.match(shipRegex);
+
+                    if (shipMatch?.groups != null) {
+                        foundShips[ship] = parseIntSafe(shipMatch.groups.amount, 10);
+                    }
+                });
+            }
         }
 
         return {
