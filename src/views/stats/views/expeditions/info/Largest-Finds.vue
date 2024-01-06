@@ -16,6 +16,22 @@
                 </template>
             </grid-table>
         </div>
+
+        <div class="find-column">
+            <h3 v-text="`LOCA: Top-Funde (Anzahl ${selectedShip})`" />
+
+            <grid-table inline :columns="columns" :items="largestFinds.shipAmounts[selectedShip].values" :style="`--color: 255,0,0`">
+                <template #cell-size="{ value }">
+                    <expedition-size-icon :size="value" class="scaled-icon" />
+                </template>
+                <template #cell-amount="{ value }">
+                    <span v-text="$i18n.$n(value)" />
+                </template>
+                <template #cell-date="{ value }">
+                    <span v-text="$i18n.$d(value, 'date')" />
+                </template>
+            </grid-table>
+        </div>
     </div>
 </template>
 
@@ -26,16 +42,22 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
     import { GridTableColumn } from '../../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
     import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { TopList } from '@/views/stats/models/TopList';
-import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
+    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
+    import { createRecord } from "@/shared/utils/createRecord";
 
     type Find = {
         size: ExpeditionEventSize;
+        amount: number;
+        date: number;
+    }
+    type ShipAmountFind = {
         amount: number;
         date: number;
     }
@@ -47,6 +69,7 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
         shipUnits: TopList<Find>;
         shipUnitsConverted: TopList<Find>;
         darkMatter: TopList<Find>;
+        shipAmounts: Record<ExpeditionFindableShipType, TopList<ShipAmountFind>>;
     }
 
     @Component({
@@ -55,8 +78,6 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
         }
     })
     export default class LargestFinds extends Vue {
-
-        private readonly maxCount = 25;
 
         private loading = true;
 
@@ -85,9 +106,15 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
                 comparator: (a, b) => b.amount - a.amount,
                 maxSize: 25,
             }),
+            shipAmounts: createRecord(ExpeditionFindableShipTypes, ship => new TopList<ShipAmountFind>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            })),
         };
 
         private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
+
+        private selectedShip: ExpeditionFindableShipType = ShipType.espionageProbe;
 
         private get keyTranslations(): Record<keyof Finds, string> {
             return {
@@ -193,6 +220,19 @@ import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
                     date: expo.date,
                 });
             }
+
+            // per ship type
+            ExpeditionFindableShipTypes.forEach(ship => {
+                const amount = expo.fleet[ship] ?? 0;
+                if(amount == 0) {
+                    return;
+                }
+
+                this.largestFinds.shipAmounts[ship].add({
+                    date: expo.date,
+                    amount,
+                });
+            });
         }
 
         private addResourceExpo(expo: ExpeditionEventResources) {
