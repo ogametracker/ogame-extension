@@ -137,7 +137,11 @@
                 },
                 {
                     key: 'maxShipUnitsConverted',
-                    label: 'LOCA: Max. Ship Units (MSU)',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.shipMaxUnitsConverted + ` (${
+                        SettingsDataModule.settings.conversionRates.mode == 'msu'
+                            ? this.$i18n.$t.extension.common.msu
+                            : this.$i18n.$t.extension.common.dsu
+                    })`,
                 },
             ];
         }

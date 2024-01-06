@@ -17,13 +17,13 @@
             </grid-table>
         </div>
 
-        <div class="find-column">
-            <h3 v-text="`LOCA: Top-Funde (Anzahl ${selectedShip})`" />
+        <div class="find-column" :style="`--color: ${colors.shipUnitsConverted}`">
+            <h3 v-text="$i18n.$t.extension.expeditions.topFinds.title($i18n.$t.extension.expeditions.topFinds.shipAmount)" />
+            <select v-model.number="selectedShip" style="display: block; margin-bottom: 4px">
+                <option v-for="ship in ShipTypes" :key="ship" :value="ship" v-text="$i18n.$t.ogame.ships[ship]" />
+            </select>
 
-            <grid-table inline :columns="columns" :items="largestFinds.shipAmounts[selectedShip].values" :style="`--color: 255,0,0`">
-                <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
-                </template>
+            <grid-table inline :columns="shipColumns" :items="largestFinds.shipAmounts[selectedShip].values">
                 <template #cell-amount="{ value }">
                     <span v-text="$i18n.$n(value)" />
                 </template>
@@ -80,6 +80,7 @@
     export default class LargestFinds extends Vue {
 
         private loading = true;
+        private readonly ShipTypes = ExpeditionFindableShipTypes;
 
         private largestFinds: Finds = {
             metal: new TopList<Find>({
@@ -150,6 +151,19 @@
                     key: 'size',
                     label: this.$i18n.$t.extension.expeditions.topFinds.size,
                 },
+                {
+                    key: 'amount',
+                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
+                },
+                {
+                    key: 'date',
+                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
+                },
+            ];
+        }
+
+        private get shipColumns(): GridTableColumn<keyof ShipAmountFind>[] {
+            return [
                 {
                     key: 'amount',
                     label: this.$i18n.$t.extension.expeditions.topFinds.amount,
