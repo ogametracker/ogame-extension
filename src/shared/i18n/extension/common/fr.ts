@@ -15,4 +15,4 @@ export const fr: RecursivePartial<CommonTranslations> = {
 
     madeWithLove1: 'Créé avec',
     madeWithLove2: 'par Wonkydonky',
-
+};
