@@ -230,20 +230,6 @@
                     this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(tech => !remove.includes(tech));
                 }
             }
-            // else {
-            //     const usedSlots = new Set<number>();
-            //     this.settings.activeLifeformTechnologies.forEach(tech => {
-            //         usedSlots.add(LifeformTechnologySlots[tech]);
-            //     });
-
-            //     this.slots.forEach(slot => {
-            //         if (usedSlots.has(slot)) {
-            //             return;
-            //         }
-
-            //         this.settings.activeLifeformTechnologies.push(this.lifeformTechBySlot[slot][lifeform]);
-            //     });
-            // }
         }
 
         @Watch('settings.position')
