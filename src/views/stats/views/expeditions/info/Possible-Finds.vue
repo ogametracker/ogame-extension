@@ -78,6 +78,9 @@
     import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
     import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
     import { findBaseAmounts } from '@/shared/models/expeditions/findBaseAmounts';
+    import { ExpeditionFindableShipTypes } from "@/shared/models/expeditions/ExpeditionEvents";
+    import { ShipByTypes } from "@/shared/models/ogame/ships/ShipTypes";
+    import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
 
 
     type FindableUnits = {
@@ -85,6 +88,7 @@
         crystal: number;
         deuterium: number;
         shipUnits: number;
+        maxShipUnitsConverted: number;
     };
 
     @Component({
@@ -130,6 +134,14 @@
                 {
                     key: 'shipUnits',
                     label: this.$i18n.$t.extension.expeditions.possibleFinds.shipUnits,
+                },
+                {
+                    key: 'maxShipUnitsConverted',
+                    label: this.$i18n.$t.extension.expeditions.possibleFinds.shipMaxUnitsConverted + ` (${
+                        SettingsDataModule.settings.conversionRates.mode == 'msu'
+                            ? this.$i18n.$t.extension.common.msu
+                            : this.$i18n.$t.extension.common.dsu
+                    })`,
                 },
             ];
         }
@@ -195,6 +207,7 @@
                 { key: 'crystal' },
                 { key: 'deuterium' },
                 { key: 'shipUnits' },
+                { key: 'maxShipUnitsConverted' },
             ];
         }
 
@@ -340,17 +353,33 @@
             
             const topPointsFactors = getExpeditionFindFactor(ServerSettingsDataModule.serverSettings.topScore ?? 0);
 
+            const maxConvertedShipCost = ExpeditionFindableShipTypes.map(shipType => {
+                    const ship = ShipByTypes[shipType];
+                    const cost = ship.cost;
+
+                    const converted = getMsuOrDsu(cost);
+                    const units = cost.metal + cost.crystal;
+
+                    return {
+                        converted,
+                        units,
+                        score: converted / units,
+                    };
+                }).sort((a,b) => b.score - a.score)[0];
+
             return createRecord(
                 ExpeditionEventSizes,
                 size => findBaseAmounts[size].map<FindableUnits>(base => {
                     const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
                     const shipUnits = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
+                    const maxShipUnitsConverted = Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
 
                     return {
                         metal: Math.trunc(metal),
                         crystal: Math.trunc(metal / 2),
                         deuterium: Math.trunc(metal / 3),
                         shipUnits: Math.trunc(shipUnits),
+                        maxShipUnitsConverted,
                     };
                 }),
             );

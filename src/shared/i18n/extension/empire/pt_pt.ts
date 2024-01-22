@@ -67,10 +67,6 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
 
                 mines: 'Minas',
                 expeditions: 'Expedições',
-                expeditionsRequirement: 'Nota: Requer tecnologias de forma de vida e/ou Astrofísica',
-                lifeformBuildings: 'Edifícios de Forma de Vida',
-                lifeformTechnologies: 'Tecnologias de Forma de Vida',
-                astrophysicsAndColony: 'Astrofísica e novas colónias',
                 astrophysicsPerformanceNote: 'Nota: Requer bastante processamento, irá afectar muito o desempenho',
             },
             playerSettings: {

@@ -65,6 +65,7 @@ export const de: ExpeditionsTranslations = {
     topFinds: {
         title: (type: string) => `Top-Funde (${type})`,
         shipUnits: 'Schiffseinheiten',
+        shipAmount: 'Schiffsanzahl',
 
         size: 'Größe',
         amount: 'Menge',
@@ -86,5 +87,6 @@ export const de: ExpeditionsTranslations = {
         listOfPossibleFinds: 'Liste derzeit möglicher Funde (Rohstoffe, Schiffseinheiten)',
         findSizes: (size: string) => `Fundmengen (${size})`,
         shipUnits: 'Schiffseinheiten',
+        shipMaxUnitsConverted: 'Max. Schiffseinheiten',
     },
 };

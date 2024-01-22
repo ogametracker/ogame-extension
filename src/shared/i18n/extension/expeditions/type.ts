@@ -40,6 +40,7 @@ export interface ExpeditionsTranslations {
     topFinds: {
         title: (type: string) => string;
         shipUnits: string;
+        shipAmount: string;
 
         size: string;
         amount: string;
@@ -61,5 +62,6 @@ export interface ExpeditionsTranslations {
         listOfPossibleFinds: string;
         findSizes: (size: string) => string;
         shipUnits: string;
+        shipMaxUnitsConverted: string;
     };
 }
