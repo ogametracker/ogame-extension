@@ -135,7 +135,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO tr 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            /* TODO tr 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Kesif filon, kimligi bilinmeyen ama */'gercekten saldirgan ve dövüs canlisi yabanci bir irkin'/* bölgesine girmis görünüyor.'*/,
             /*'Kesif filomuz ile baglantimiz bir süreligine kesildi. Son mesajlarini cözmeye calisiyoruz. Büyük bir taarruz altindalar , */'saldirganlar tanimlanamadi',
         ],
         [ExpeditionEventSize.large]: [
