@@ -135,7 +135,7 @@ export const ro: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: ro 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            /*TODO: ro 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Flota ta de */'expeditie pare sa fi zburat deasupra unui teritoriu care apartine'/* unei rase necunoscuta si razboinica.'*/,
             /*TODO: ro 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
