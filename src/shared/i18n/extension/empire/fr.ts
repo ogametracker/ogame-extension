@@ -308,4 +308,5 @@ lifeforms: {
             experience: 'Expérience',
         },
     },
+    },
 };
