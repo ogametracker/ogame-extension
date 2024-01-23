@@ -65,13 +65,13 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
     },
     historyTabs: {
         status: 'Statut',
-        surnoms: 'Alias',
+        nicknames: 'Alias',
         alliances: 'Alliances',
-        planètesEtLunes: 'Planètes et Lunes',
+        planetAndMoons: 'Planètes et Lunes',
 
-        balises: 'Balises',
-        noms: 'Noms',
-        membres: 'Membres',
+        tags: 'Balises',
+        names: 'Noms',
+        members: 'Membres',
     },
 
     noAlliance: 'pas d\'alliance',
