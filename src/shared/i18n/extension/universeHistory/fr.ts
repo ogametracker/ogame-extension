@@ -84,13 +84,13 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
     until: 'Jusqu\'à',
 
     status: {
-        actif: 'Actif',
-        modeVacances: 'Mode vacances',
-        inactif: 'Inactif (>= 7 jours)',
-        inactifLong: 'Inactif (>= 28 jours)',
-        banni: 'Banni',
-        horsLaLoi: 'Hors-la-loi',
-        supprimé: 'Supprimé',
+        active: 'Actif',
+        vacation: 'Mode vacances',
+        inactive: 'Inactif (>= 7 jours)',
+        inactiveLong: 'Inactif (>= 28 jours)',
+        banned: 'Banni',
+        outlaw: 'Hors-la-loi',
+        deleted: 'Supprimé',
         admin: 'Admin',
     },
 
