@@ -144,7 +144,7 @@ export const zh_tw: ExpeditionMessages = {
             /*LOCA: zh_tw 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: zh-tw 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            '您的探險隊偶然發現了一批外星人'/* ，但對方敵不過您的死亡之星威力，落荒而逃。' */
         ],
     },
 

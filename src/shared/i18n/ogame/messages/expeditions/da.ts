@@ -145,7 +145,7 @@ export const da: ExpeditionMessages = {
             /*'En stor */'formation af krystallignende skibe, fra en ukendt'/* oprindelse, indtager direkte kollision mod din ekspeditionsflåde. Vi kan nu forvente det værste.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: dk 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Din */'ekspedition stødte på nogen rumvæsner'/* , men de flygtede efter at blive overvældet af størrelsen på din Dødsstjerne.' */
         ],
     },
     

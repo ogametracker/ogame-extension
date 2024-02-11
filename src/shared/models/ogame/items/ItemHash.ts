@@ -199,6 +199,8 @@ export enum ItemHash {
     shortenTime_buildings = 'cb4fd53e61feced0d52cfc4c1ce383bad9c05f67',
     shortenTime_research = '14c17d49462963f5e5b67efa1257622ce1b866ac',
     shortenTime_shipyard = '75accaa0d1bc22b78d83b89cd437bdccd6a58887',
+    shortenTime_lifeformResearch = 'bb8e4fa790c899b3a050b07729f3e536ce8a4de4',
+    shortenTime_lifeformBuildings = 'ebcb7dd6a0a3ec38928109cb6e6866b11d60a0df',
 
     officer_geologist = '78badde414b2cba7c0c37e3e11a5a42e8414c8ac',
     officer_commander = '10662141326cc46ee30bc4dd05f581424050a768',
@@ -408,6 +410,8 @@ const _ItemHashes: Record<ItemHash, 0> = {
     [ItemHash.shortenTime_buildings]: 0,
     [ItemHash.shortenTime_research]: 0,
     [ItemHash.shortenTime_shipyard]: 0,
+    [ItemHash.shortenTime_lifeformBuildings]: 0,
+    [ItemHash.shortenTime_lifeformResearch]: 0,
 
     [ItemHash.officer_commander]: 0,
     [ItemHash.officer_admiral]: 0,

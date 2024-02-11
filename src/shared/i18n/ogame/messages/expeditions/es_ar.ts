@@ -147,7 +147,7 @@ export const es_ar: ExpeditionMessages = {
             /*'Una */'gran formación de naves cristalinas de origen desconocido'/* va directa a colisionar con nuestra expedición. Tenemos que asumir lo peor.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: es-ar 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'La */'expedición se ha topado con alienígenas'/* , pero han huido aterrorizados por la potencia de tu Estrella de la muerte.' */
         ],
     },
 

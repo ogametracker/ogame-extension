@@ -144,7 +144,7 @@ export const cs: ExpeditionMessages = {
             /*'Velká */'formace krystalinových lodí neznámého původu'/* nabrala kolizní kurz s naší expediční letkou. Musíme se připravit na nejhorší.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: cz 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Tvá */'expedice narazila na nějaké vetřelce'/* , ale ti byli ohromeni velikostí tvé hvězdy smrti a uprchli.' */
         ],
     },
 

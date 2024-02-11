@@ -1312,6 +1312,20 @@ export const Items: Record<ItemHash, Item> = {
         hash: ItemHash.shortenTime_shipyard,
         grade: ItemGrade.none,
     },
+    [ItemHash.shortenTime_lifeformBuildings]: {
+        name: "Bauverkürzer Lebensformgebäude",
+        image: "",
+        smallImage: '',
+        hash: ItemHash.shortenTime_lifeformBuildings,
+        grade: ItemGrade.none,
+    },
+    [ItemHash.shortenTime_lifeformResearch]: {
+        name: "Bauverkürzer Lebensformforschung",
+        image: "",
+        smallImage: '',
+        hash: ItemHash.shortenTime_lifeformResearch,
+        grade: ItemGrade.none,
+    },
     
     [ItemHash.officer_commander]: {
         name: ItemHash.officer_commander,

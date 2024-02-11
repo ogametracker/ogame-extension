@@ -4,6 +4,11 @@ import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries
 export interface EmpireTranslations {
     header: string;
     planet: string;
+    overview: {
+        header: string;
+        supplyBuildings: string;
+        facilityBuildings: string;
+    };
     production: {
         header: string;
         subHeaders: {
