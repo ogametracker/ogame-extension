@@ -40,11 +40,13 @@
             LanguageKey.de,
             LanguageKey.en,
             LanguageKey['pt-pt'],
+            LanguageKey.fr,
         ];
         private languageNames: Partial<Record<LanguageKey, string>> = {
             [LanguageKey.de]: 'Deutsch',
             [LanguageKey.en]: 'English',
             [LanguageKey['pt-pt']]: 'Português',
+            [LanguageKey.fr]: 'Français',
         };
         private regions: Partial<Record<LanguageKey, Record<string, string>>> = {
             [LanguageKey.en]: {

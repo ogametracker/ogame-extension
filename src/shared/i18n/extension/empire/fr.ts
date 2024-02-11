@@ -68,8 +68,6 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 mines: 'Mines',
                 expeditions: 'Expéditions',
                 expeditionsRequirement: 'Remarque : Nécessite "Recherche des formes de vie" et/ou "Astrophysique" activée',
-                lifeformBuildings: ' Bâtiments des formes de vie ',
-                lifeformTechnologies: 'Recherche des formes de vie',
                 astrophysicsAndColony: 'Astrophysique et nouvelles colonies',
                 astrophysicsPerformanceNote: 'Remarque : Intensif en calcul, affectera considérablement les performances',
             },
@@ -230,7 +228,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             buildingCostTime: {
                 header: 'Coût et temps de construction',
                 cost: 'Coût',
-                cost: 'Temps',
+                time: 'Temps',
             },
             researchCostTime: {
                 header: 'Coût et temps de recherche',
@@ -285,28 +283,28 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 baseValue: 'Valeur de base',
                 valueWithBonuses: 'Valeur avec bonus',
             },
-            planetBonuses: {
-                resourceProduction: {
-                    header: 'Production de ressources',
-                },
-                lifeformResearchCostTime: {
-                    header: 'Coût et temps de recherche des formes de vie',
-                },
-                wreckfield: {
-                    header: 'Champ de débris',
-                },
+        },
+        planetBonuses: {
+            resourceProduction: {
+                header: 'Production de ressources',
             },
-
-            topFinds: {
-                topFinds: 'Meilleures découvertes',
-                worstFinds: 'Pires découvertes',
-
-                size: 'Taille',
-                amount: 'Quantité',
-                date: 'Date',
-                artifacts: 'Artéfacts',
-                experience: 'Expérience',
+            lifeformResearchCostTime: {
+                header: 'Coût et temps de recherche des formes de vie',
             },
+            wreckfield: {
+                header: 'Champ de débris',
+            },
+        },
+
+        topFinds: {
+            topFinds: 'Meilleures découvertes',
+            worstFinds: 'Pires découvertes',
+
+            size: 'Taille',
+            amount: 'Quantité',
+            date: 'Date',
+            artifacts: 'Artéfacts',
+            experience: 'Expérience',
         },
     },
 };
