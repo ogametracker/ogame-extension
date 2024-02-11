@@ -5,6 +5,11 @@ import { EmpireTranslations } from "./type";
 export const de: EmpireTranslations = {
     header: 'Imperium',
     planet: 'Planet',
+    overview: {
+        header: 'Übersicht',
+        supplyBuildings: 'Versorgungsgebäude',
+        facilityBuildings: 'Anlagen',
+    },
     production: {
         header: 'Produktion',
         subHeaders: {
@@ -66,9 +71,11 @@ export const de: EmpireTranslations = {
 
                 mines: 'Minen',
                 expeditions: 'Expeditionen',
-                expeditionsRequirement: 'Hinweis: Benötigt Wahl von Lebensformforschungen und/oder Astrophysik',
-                lifeformBuildings: 'Lebensformgebäude',
-                lifeformTechnologies: 'Lebensformforschungen',
+                expeditionsRequirement: 'Hinweis: Benötigt Wahl von Lebensform-Expeditionsbonusforschungen, Lebensform-Forschungsbonusgebäuden, und/oder Astrophysik',
+                lifeformProductionBonusBuildings: 'Lebensform-Produktionsbonusgebäude',
+                lifeformTechnologyBoostBuildings: 'Lebensform-Forschungsbonusgebäude',
+                lifeformProductionBonusTechnologies: 'Lebensform-Produktionsbonusforschungen',
+                lifeformExpeditionBonusTechnologies: 'Lebensform-Expeditionsbonusforschungen',
                 astrophysicsAndColony: 'Astrophysik und neue Kolonien',
                 astrophysicsPerformanceNote: 'Hinweis: Rechenintensiv, hat starken Einfluss auf Berechnungsgeschwindigkeit',
             },

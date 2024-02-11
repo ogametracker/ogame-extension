@@ -101,7 +101,7 @@ export const tr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /* TODO tr *//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /Bir (?<name>.+), envantere eklendi/i,
     },
 
     [ExpeditionEventType.pirates]: {
@@ -122,7 +122,7 @@ export const tr: ExpeditionMessages = {
             /* TODO tr 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
         'fled-death-star': [
-            /* TODO tr 'Deine Expedition */'ist auf Aliens getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            /*'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
         ],
     },
 
@@ -135,7 +135,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /* TODO tr 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            /* TODO tr 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Kesif filon, kimligi bilinmeyen ama */'gercekten saldirgan ve dövüs canlisi yabanci bir irkin'/* bölgesine girmis görünüyor.'*/,
             /*'Kesif filomuz ile baglantimiz bir süreligine kesildi. Son mesajlarini cözmeye calisiyoruz. Büyük bir taarruz altindalar , */'saldirganlar tanimlanamadi',
         ],
         [ExpeditionEventSize.large]: [
@@ -144,7 +144,7 @@ export const tr: ExpeditionMessages = {
             /* TODO tr 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /* TODO tr 'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            'Keşfin, uzaylılarla buluştu'/* . Ancak ölüm yıldızının gücünden etkilenerek kaçtılar.'*/
         ],
     },
 

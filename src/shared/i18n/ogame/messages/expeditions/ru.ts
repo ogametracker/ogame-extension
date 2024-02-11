@@ -144,7 +144,7 @@ export const ru: ExpeditionMessages = {
             /*'Огромная */'Армада хрустальных кораблей неизвестного происхождения'/* взяли курс на прямое столкновения с нашим экспедиционным флотом. Мы должны приготовиться к худшему.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: ru 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Вашей */'экспедиции повстречалась группа инопланетян'/* , но, впав в ужас от размера вашей Звезды Смерти, они сбежали.' */
         ],
     },
 

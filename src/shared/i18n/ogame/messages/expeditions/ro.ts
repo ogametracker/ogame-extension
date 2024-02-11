@@ -135,7 +135,7 @@ export const ro: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.medium]: [
             /*TODO: ro 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
-            /*TODO: ro 'Deine */'Expeditionsflotte hat anscheinend das Hoheitsgebiet'/* einer bisher unbekannten, aber äußerst aggressiven und kriegerischen Alienrasse verletzt.'*/,
+            /*'Flota ta de */'expeditie pare sa fi zburat deasupra unui teritoriu care apartine'/* unei rase necunoscuta si razboinica.'*/,
             /*TODO: ro 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
@@ -144,7 +144,7 @@ export const ro: ExpeditionMessages = {
             /*TODO: ro 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /*TODO: ro 'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            /*'Expediția */'ta a dat peste niște extratereștri dar aceștia'/* , intimidați de mărimea RIP-ului tău, au fugit.'*/
         ],
     },
 

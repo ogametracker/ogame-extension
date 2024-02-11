@@ -4,6 +4,11 @@ import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries
 export interface EmpireTranslations {
     header: string;
     planet: string;
+    overview: {
+        header: string;
+        supplyBuildings: string;
+        facilityBuildings: string;
+    };
     production: {
         header: string;
         subHeaders: {
@@ -66,8 +71,10 @@ export interface EmpireTranslations {
                 mines: string;
                 expeditions: string;
                 expeditionsRequirement: string;
-                lifeformBuildings: string;
-                lifeformTechnologies: string;
+                lifeformProductionBonusBuildings: string;
+                lifeformTechnologyBoostBuildings: string;
+                lifeformProductionBonusTechnologies: string;
+                lifeformExpeditionBonusTechnologies: string;
                 astrophysicsAndColony: string;
                 astrophysicsPerformanceNote: string;
             };

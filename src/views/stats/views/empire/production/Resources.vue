@@ -424,6 +424,8 @@
         }
 
         private getPlanetSettings(): AmortizationPlanetSettings[] {
+            const isCollector = this.playerSettings.playerClass == PlayerClass.collector;
+
             return this.planets.map<AmortizationPlanetSettings>(planet => ({
                 include: true,
                 ignoreEmptyLifeformTechnologySlots: false,
@@ -444,7 +446,9 @@
                     deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
                 },
                 crawlers: {
-                    percentage: planet.productionSettings[ShipType.crawler],
+                    percentage: !isCollector && planet.productionSettings[ShipType.crawler] > 100
+                        ? 100
+                        : planet.productionSettings[ShipType.crawler],
                     count: planet.ships[ShipType.crawler],
                     max: false,
                 },

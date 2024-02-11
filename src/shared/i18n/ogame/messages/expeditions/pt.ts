@@ -144,7 +144,7 @@ export const pt: ExpeditionMessages = {
             /*'Uma grande Frota de */'naves cristalinas de origem desconhecida'/* está em rota de ataque contra a tua frota de exploração. Por agora temos de assumir o pior.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: pt 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'A tua */'expedição deparou-se com alguns extraterrestres'/* , mas a enorme magnitude da tua Estrela da Morte afugentou-os.' */
         ],
     },
     

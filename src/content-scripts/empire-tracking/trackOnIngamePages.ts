@@ -234,6 +234,10 @@ function updateFleetTracking() {
         const arrivalTime = parseIntSafe(row.getAttribute('data-arrival-time') ?? _throw('no arrival time found')) * 1_000;
         const isReturnFlight = row.getAttribute('data-return-flight') == 'true';
         const mission = parseIntSafe(row.getAttribute('data-mission-type') ?? _throw('no mission type found')) as FleetMissionType;
+        
+        if(mission == FleetMissionType.missileAttack) {
+            return;
+        }
 
         const originCoordinatesText = row.querySelector('.coordsOrigin')?.textContent ?? _throw('no origin coordinates found');
         const originCoordinatesType = getCoordinateType(row.querySelector('.originFleet') ?? _throw('no origin icon found'));

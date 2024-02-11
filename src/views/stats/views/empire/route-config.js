@@ -1,5 +1,5 @@
 module.exports = {
-    redirect: { name: 'empire/production' },
+    redirect: { name: 'empire/overview' },
     meta: {
         color: '#5000d0',
     },

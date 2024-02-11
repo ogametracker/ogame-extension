@@ -80,7 +80,6 @@
                                 />
                                 <checkbox
                                     v-model="includeSettings.expeditions"
-                                    :disabled="!includeSettings.lifeformTechnologies && !includeSettings.astrophysics"
                                 >   
                                     <template #label>
                                         <span v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditions" />
@@ -88,14 +87,24 @@
                                         <i v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditionsRequirement" />
                                     </template>
                                 </checkbox>
+
                                 <checkbox
-                                    v-model="includeSettings.lifeformBuildings"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformBuildings"
+                                    v-model="includeSettings.lifeformProductionBonusBuildings"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformProductionBonusBuildings"
                                 />
                                 <checkbox
-                                    v-model="includeSettings.lifeformTechnologies"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformTechnologies"
+                                    v-model="includeSettings.lifeformTechnologyBoostBuildings"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformTechnologyBoostBuildings"
                                 />
+                                <checkbox
+                                    v-model="includeSettings.lifeformProductionBonusTechnologies"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformProductionBonusTechnologies"
+                                />
+                                <checkbox
+                                    v-model="includeSettings.lifeformExpeditionBonusTechnologies"
+                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformExpeditionBonusTechnologies"
+                                />
+
                                 <checkbox
                                     v-model="includeSettings.plasmaTechnology"
                                     :label="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]"
@@ -741,8 +750,11 @@ import { getPlanetExpeditionState, getPlanetState } from '@/shared/models/empire
             plasmaTechnology: true,
             expeditions: true,
             mines: true,
-            lifeformBuildings: true,
-            lifeformTechnologies: true,
+            
+            lifeformProductionBonusBuildings: true,
+            lifeformTechnologyBoostBuildings: true,
+            lifeformProductionBonusTechnologies: true,
+            lifeformExpeditionBonusTechnologies: true,
         };
         private expeditionSettings: AmortizationExpeditionSettings = {
             wavesPerDay: 8,

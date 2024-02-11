@@ -144,7 +144,7 @@ export const pl: ExpeditionMessages = {
             /*LOCA: pl 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: pl 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Twoja */'ekspedycja trafiła na obcych'/* . Gdy ujrzeli jednak twoją Gwiazdę Śmierci, uciekli w popłochu.'*/
         ],
     },
 

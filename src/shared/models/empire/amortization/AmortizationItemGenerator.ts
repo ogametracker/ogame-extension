@@ -77,8 +77,10 @@ export interface AmortizationGenerationSettings {
         plasmaTechnology: boolean;
         expeditions: boolean;
         mines: boolean;
-        lifeformBuildings: boolean;
-        lifeformTechnologies: boolean;
+        lifeformProductionBonusBuildings: boolean;
+        lifeformTechnologyBoostBuildings: boolean;
+        lifeformProductionBonusTechnologies: boolean;
+        lifeformExpeditionBonusTechnologies: boolean;
     };
 }
 interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
@@ -438,18 +440,23 @@ export class AmortizationItemGenerator {
             if (this.#settings.include.mines) {
                 items.push(...this.#getMineAmortizationItems());
             }
-            if (this.#settings.include.lifeformBuildings) {
+            
+            if (this.#settings.include.lifeformProductionBonusBuildings) {
                 const lifeformProductionBonusBuildingItems = this.#getLifeformProductionBonusBuildingAmortizationItems();
-                const lifeformTechnologyBoostBuildingItems = this.#getLifeformTechnologyBoostBuildingAmortizationItems();
-                
-                items.push(
-                    ...lifeformProductionBonusBuildingItems,
-                    ...lifeformTechnologyBoostBuildingItems,
-                );
+                items.push(...lifeformProductionBonusBuildingItems);
             }
-            if (this.#settings.include.lifeformTechnologies) {
-                items.push(...this.#getLifeformTechnologyAmortizationItems(this.#settings.include.expeditions));
+            if (this.#settings.include.lifeformTechnologyBoostBuildings) {
+                const lifeformTechnologyBoostBuildingItems = this.#getLifeformTechnologyBoostBuildingAmortizationItems(this.#settings.include.expeditions);
+                items.push(...lifeformTechnologyBoostBuildingItems);
             }
+
+            if (this.#settings.include.lifeformProductionBonusTechnologies) {
+                items.push(...this.#getLifeformTechnologyAmortizationItems(false));
+            }
+            if(this.#settings.include.expeditions && this.#settings.include.lifeformExpeditionBonusTechnologies) {
+                items.push(...this.#getLifeformTechnologyAmortizationItems(true));
+            }
+
             if (this.#settings.include.plasmaTechnology) {
                 const plasmaTechItem = this.#getPlasmaTechnologyAmortizationItem();
                 items.push(plasmaTechItem);
@@ -670,45 +677,60 @@ export class AmortizationItemGenerator {
 
         let timeInHours = Infinity;
         do {
-            const mineItems = $mineBuildingTypes.map(mine => this.#getMineAmortizationItem(newProductionBreakdowns, planetState, mine));
-            const lfProductionBonusBuildingItems = ResourceProductionBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
-                .map(lfBuilding => this.#getLifeformProductionBonusBuildingAmortizationItem(newProductionBreakdowns, planetState, lfBuilding));
-            const lfTechnologyBoostBuildingItems = LifeformTechnologyBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
-                .map(lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(
-                    newProductionBreakdowns,
-                    newExpeditionBreakdown,
-                    planetState,
-                    lfBuilding));
-            const lfTechnologyProductionItems = [
-                ...planetState.lifeformResourceProductionBonusTechnologies,
-                ...planetState.crawlerProductionBonusTechnologies,
-                ...planetState.collectorClassBonusTechnologies,
-            ].map(tech => this.#getLifeformTechnologyAmortizationItem(
-                newProductionBreakdowns,
-                newExpeditionBreakdown,
-                planetState,
-                tech,
-                includeExpeditions));
+            const items: (MineAmortizationItem | LifeformBuildingAmortizationItem | LifeformTechnologyAmortizationItem)[] = [];
 
-            const lfTechnologyExpeditionItems = includeExpeditions
-                ? [
-                    ...planetState.discovererClassBonusTechnologies,
-                    ...planetState.lifeformExpeditionBonusTechnologies,
+            if (this.#settings.include.mines) {
+                const mineItems = $mineBuildingTypes.map(mine => this.#getMineAmortizationItem(newProductionBreakdowns, planetState, mine));
+                items.push(...mineItems);
+            }
+            
+            if (this.#settings.include.lifeformProductionBonusBuildings) {
+                const lfProductionBonusBuildingItems = ResourceProductionBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
+                    .map(lfBuilding => this.#getLifeformProductionBonusBuildingAmortizationItem(newProductionBreakdowns, planetState, lfBuilding));
+
+                items.push(...lfProductionBonusBuildingItems);
+            }
+
+            if (this.#settings.include.lifeformTechnologyBoostBuildings) {
+                const lfTechnologyBoostBuildingItems = LifeformTechnologyBonusLifeformBuildingsByLifeform[planetState.data.activeLifeform]
+                    .map(lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(
+                        newProductionBreakdowns,
+                        newExpeditionBreakdown,
+                        planetState,
+                        lfBuilding,
+                        includeExpeditions));
+
+                items.push(...lfTechnologyBoostBuildingItems);
+            }
+
+            if (this.#settings.include.lifeformProductionBonusTechnologies) {
+                const lfTechnologyProductionItems = [
+                    ...planetState.lifeformResourceProductionBonusTechnologies,
+                    ...planetState.crawlerProductionBonusTechnologies,
+                    ...planetState.collectorClassBonusTechnologies,
                 ].map(tech => this.#getLifeformTechnologyAmortizationItem(
                     newProductionBreakdowns,
                     newExpeditionBreakdown,
                     planetState,
                     tech,
-                    includeExpeditions))
-                : [];
+                    includeExpeditions));
 
-            const items = [
-                ...mineItems,
-                ...lfProductionBonusBuildingItems,
-                ...lfTechnologyBoostBuildingItems,
-                ...lfTechnologyProductionItems,
-                ...lfTechnologyExpeditionItems,
-            ];
+                items.push(...lfTechnologyProductionItems);
+            }
+            if(this.#settings.include.expeditions && this.#settings.include.lifeformExpeditionBonusTechnologies) {
+                const lfTechnologyExpeditionItems = [
+                        ...planetState.discovererClassBonusTechnologies,
+                        ...planetState.lifeformExpeditionBonusTechnologies,
+                    ].map(tech => this.#getLifeformTechnologyAmortizationItem(
+                        newProductionBreakdowns,
+                        newExpeditionBreakdown,
+                        planetState,
+                        tech,
+                        includeExpeditions));
+
+                items.push(...lfTechnologyExpeditionItems);
+            }
+
             const bestItem = items
                 .filter(item => item.productionDeltaConverted > 0)
                 .reduce<MineAmortizationItem | LifeformBuildingAmortizationItem | LifeformTechnologyAmortizationItem>(
@@ -834,26 +856,28 @@ export class AmortizationItemGenerator {
 
 
     //#region lifeform technology amortization item calculation
-    #getLifeformTechnologyAmortizationItems(includeExpeditions: boolean): LifeformTechnologyAmortizationItem[] {
+    #getLifeformTechnologyAmortizationItems(expeditions: boolean): LifeformTechnologyAmortizationItem[] {
         return this.#includedPlanets.flatMap(
-            planet => [
-                ...planet.lifeformResourceProductionBonusTechnologies,
-                ...planet.crawlerProductionBonusTechnologies,
-                ...planet.collectorClassBonusTechnologies,
+            planet => { 
+                const techs = expeditions ? 
+                [
+                    ...planet.discovererClassBonusTechnologies,
+                    ...planet.lifeformExpeditionBonusTechnologies,
+                ]
+                :[
+                    ...planet.lifeformResourceProductionBonusTechnologies,
+                    ...planet.crawlerProductionBonusTechnologies,
+                    ...planet.collectorClassBonusTechnologies,
+                ];
 
-                ...(includeExpeditions 
-                    ? [
-                        ...planet.discovererClassBonusTechnologies,
-                        ...planet.lifeformExpeditionBonusTechnologies,
-                    ]: []
-                ),
-            ].map(tech => this.#getLifeformTechnologyAmortizationItem(
-                this.#state.productionBreakdowns,
-                this.#state.expeditions,
-                planet,
-                tech,
-                includeExpeditions,
-            ))
+                return techs.map(tech => this.#getLifeformTechnologyAmortizationItem(
+                    this.#state.productionBreakdowns,
+                    this.#state.expeditions,
+                    planet,
+                    tech,
+                    expeditions,
+                ));
+            }
         );
     }
     #getLifeformTechnologyAmortizationItem(
@@ -1246,10 +1270,10 @@ export class AmortizationItemGenerator {
 
 
     //#region lifeform technology boost building amortization item calculation
-    #getLifeformTechnologyBoostBuildingAmortizationItems(): LifeformBuildingAmortizationItem[] {
+    #getLifeformTechnologyBoostBuildingAmortizationItems(includeExpeditions: boolean): LifeformBuildingAmortizationItem[] {
         return this.#includedPlanets.flatMap(
             planet => LifeformTechnologyBonusLifeformBuildingsByLifeform[planet.data.activeLifeform].map(
-                lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(this.#state.productionBreakdowns, this.#state.expeditions, planet, lfBuilding)
+                lfBuilding => this.#getLifeformTechnologyBoostBuildingAmortizationItem(this.#state.productionBreakdowns, this.#state.expeditions, planet, lfBuilding, includeExpeditions)
             )
         );
     }
@@ -1259,6 +1283,7 @@ export class AmortizationItemGenerator {
         expeditions: AmortizationExpeditionResultsBreakdown,
         planetState: AmortizationPlanetState,
         lfBuilding: LifeformTechnologyBonusLifeformBuilding,
+        includeExpeditions: boolean,
     ): LifeformBuildingAmortizationItem {
         const planetData = planetState.data;
         const planetId = planetData.id;
@@ -1304,7 +1329,7 @@ export class AmortizationItemGenerator {
             });
         });
 
-
+        if(includeExpeditions)
         {
             const expeditionsPerHour = expeditions.slots * this.#settings.expeditions.wavesPerDay / 24;
             const curExpeditionFindsPerHour = multiplyCost(
