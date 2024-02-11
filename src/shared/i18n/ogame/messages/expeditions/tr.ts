@@ -101,7 +101,7 @@ export const tr: ExpeditionMessages = {
     ],
 
     [ExpeditionEventType.item]: {
-        regex: /* TODO tr *//Ein (?<name>.+) wurde dem Inventar hinzugefügt/i,
+        regex: /Bir (?<name>.+), envantere eklendi/i,
     },
 
     [ExpeditionEventType.pirates]: {
