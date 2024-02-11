@@ -267,7 +267,7 @@
             },
             {
                 redirect: {
-                    name: "empire/production"
+                    name: "empire/overview"
                 },
                 meta: {
                     color: "#5000d0"
@@ -280,6 +280,11 @@
                         path: "amortization",
                         name: "empire/amortization",
                         component: () => import(/* webpackChunkName: \"stats-view-viewsempireAmortization\" */ '../views/empire/Amortization.vue')
+                    },
+                    {
+                        path: "overview",
+                        name: "empire/overview",
+                        component: () => import(/* webpackChunkName: \"stats-view-viewsempireOverview\" */ '../views/empire/Overview.vue')
                     },
                     {
                         path: "point-distribution",

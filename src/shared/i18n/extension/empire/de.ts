@@ -5,6 +5,11 @@ import { EmpireTranslations } from "./type";
 export const de: EmpireTranslations = {
     header: 'Imperium',
     planet: 'Planet',
+    overview: {
+        header: 'Übersicht',
+        supplyBuildings: 'Versorgungsgebäude',
+        facilityBuildings: 'Anlagen',
+    },
     production: {
         header: 'Produktion',
         subHeaders: {

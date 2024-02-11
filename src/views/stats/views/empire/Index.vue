@@ -26,6 +26,10 @@
         private get navItems(): ListNavItem[] {
             const items: ListNavItem[] = [
                 {
+                    label: this.$i18n.$t.extension.empire.overview.header,
+                    to: { name: 'empire/overview' },
+                },
+                {
                     label: this.$i18n.$t.extension.empire.production.header,
                     to: { name: 'empire/production' },
                 },
