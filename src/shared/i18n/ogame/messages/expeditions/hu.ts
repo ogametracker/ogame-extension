@@ -122,7 +122,7 @@ export const hu: ExpeditionMessages = {
             /*'Az expedíció jelenti, */'hogy azonosítatlan kalózhajók ellen harcolnak',
         ],
         'fled-death-star': [
-            /*'Expedíciód során néhány kalózba botlottál, de */'Halálcsillagod elsöprő erejének köszönhetően a támadók elmenekültek',
+            'Expedíciód során néhány kalózba botlottál'/*, de Halálcsillagod elsöprő erejének köszönhetően a támadók elmenekültek'*/,
         ],
     },
 
@@ -144,7 +144,7 @@ export const hu: ExpeditionMessages = {
             /*'Ismeretlen */'eredetű Kristályos hajók nagy formációja megegyező'/* pályán halad az Expedíciós flottáéval. Szükségünk van feltételezni a legrosszabbat.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: hu 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'La tua */'Spedizione è stata intercettata dagli Alieni'/* . Fortunatamente, sopraffatti dalla potenza della tua Morte Nera, si sono dati alla fuga.' */
         ],
     },
 

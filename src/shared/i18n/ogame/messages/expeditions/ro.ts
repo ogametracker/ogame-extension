@@ -144,7 +144,7 @@ export const ro: ExpeditionMessages = {
             /*TODO: ro 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /*TODO: ro 'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            /*'Expediția */'ta a dat peste niște extratereștri dar aceștia'/* , intimidați de mărimea RIP-ului tău, au fugit.'*/
         ],
     },
 

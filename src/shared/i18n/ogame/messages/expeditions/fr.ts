@@ -147,7 +147,7 @@ export const fr: ExpeditionMessages = {
             /*'Une flotte de */'vaisseaux cristallins va entrer en collision'/* avec notre flotte d`expédition d`ici peu. Nous devons nous préparer au pire.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: fr 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Votre */'expédition est tombée sur des aliens'/* . Prenant conscience de la puissance de votre étoile de la mort, ils ont pris la fuite.' */
         ],
     },
 

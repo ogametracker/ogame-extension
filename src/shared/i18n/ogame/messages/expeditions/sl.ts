@@ -144,7 +144,7 @@ export const sl: ExpeditionMessages = {
             /*'Velika */'armada kistalnih ladij nepoznanega izvora se je srečala z našo ekspedicijsko'/* floto. Lahko predvidevamo najhujše.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: si 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Tvoja */'ekspedicija je naletela na vesoljce'/* , a so zaradi šoka nad magnitudo tvoje Zvezde smrti pobegnili.' */
         ],
     },
     

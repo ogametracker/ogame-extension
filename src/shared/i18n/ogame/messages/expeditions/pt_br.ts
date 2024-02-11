@@ -134,7 +134,7 @@ export const pt_br: ExpeditionMessages = {
             /*LOCA: pt-br 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*LOCA: pt-br 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'Uma */'espécie desconhecida atacou a nossa'/* expedição!'*/,
             /*'Sua frota de expedição */'parece ter entrado em território de uma espécie de raça alienígena'/* extremamente agressiva.'*/,
             /*'A ligação com nossa frota de expedição foi interrompida por um curto espaço de tempo. Nós conseguimos entender a última mensagem enviada. Ela está sob um ataque, os */'agressores não foram até o momento identificados.',
         ],
@@ -144,7 +144,7 @@ export const pt_br: ExpeditionMessages = {
             /*LOCA: pt-br 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /*LOCA: pt-br 'Your expedition stumbled across some aliens, but overwhelmed by the magnitude of your Deathstar, they fled.' */
+            /*'Sua */'expedição encontrou alguns alienígenas'/* , com medo pela magnitude de sua Estrela da Morte, eles fugiram.' */
         ],
     },
 

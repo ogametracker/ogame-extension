@@ -122,7 +122,7 @@ export const tr: ExpeditionMessages = {
             /* TODO tr 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
         'fled-death-star': [
-            /* TODO tr 'Deine Expedition */'ist auf Aliens getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            /*'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
         ],
     },
 
@@ -144,7 +144,7 @@ export const tr: ExpeditionMessages = {
             /* TODO tr 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
         'fled-death-star': [
-            /* TODO tr 'Deine Expedition */'ist auf Piraten getroffen. Überwältigt von der Stärke deines Todessterns'/* , sind sie jedoch geflohen.'*/
+            'Keşfin, uzaylılarla buluştu'/* . Ancak ölüm yıldızının gücünden etkilenerek kaçtılar.'*/
         ],
     },
 
