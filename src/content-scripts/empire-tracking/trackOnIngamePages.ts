@@ -64,6 +64,7 @@ function trackPlayerClass() {
 function trackOwnedPlanets() {
     observerCallbacks.push({
         selector: '#planetList',
+        runWhenExistsSelector: '#bannerSkyscrapercomponent, #bottom',
         callback: element => {
             const planetElems = element.querySelectorAll('.smallplanet');
             const ownedPlanets: BasicPlanetData[] = [];
