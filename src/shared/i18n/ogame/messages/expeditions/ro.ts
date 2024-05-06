@@ -13,13 +13,13 @@ export const ro: ExpeditionMessages = {
             /*'Expeditia a urmarit niste */'semnale ciudate catre un asteroid'/* . In miezul asteroidului a fost gasita o cantitate mica de Materie Intunecata. Asteroidul a fost luat si exploratorii incearca sa extraga Materia Intunecata.,'*/
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: ro 'Unserer Expedition ist */'ein einmaliges Experiment gelungen'/*:'*/,
+            /*'Expeditia noastra */'indeplineste un experiment unic'/* . Au fost capabil sa stranga Materie Intunecata de la o stea pe cale de disparitie.'*/,
             /*'Expeditia noastra a */'localizat o statie spatiala ruginita'/* , care parea sa pluteasca necontrolata prin afara spatiului pentru un timp indelungat. Statia era total nevolositoare, insa, era niste Materie Intunecata stocata in reactorul lor. Tehnicienii nostrii incearca sa salveze cat pot de mult.'*/,
             /*'Expeditia nostra raporteaza un fenomen ciudat si spectaculos. Acumularea Materiei Intunecata in */'depozitele de energie ale scuturilor navelor'/* . Tehnicienii nostrii incearca sa stocheze cat mai multa Materie Intunecata atat timp cat mai tine fenomenul.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*'O deformarea */'hiperspatiala spontana a permis expeditiei'/* tale sa adune o cantitate mare de Materie Intunecata!'*/,
-            /*TODO: ro 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Expeditia noastra a facut primul contact cu o rasa speciala. Semana cu o creatura */'formata din energie, care se numea Legorian'/* , zburase prin navele de expeditie si a decis sa ajute specia noastra subdezvoltata. O valiza care contine Materie Intunecata a fost materializata pe podul navei!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<name>${darkMatter}) (?<amount>[^\\s]+) au fost capturate`, 'i'),
     },
@@ -76,13 +76,13 @@ export const ro: ExpeditionMessages = {
     [ExpeditionEventType.lostFleet]: [
         /*'Ultimul lucru pe care il avem de la expeditie a fost o */'fotografie foarte bine facuta cu deschiderea unei gauri negre',
         /*'Singurul lucru ramas de la */'expeditie a fost urmatoarea transmisie radio'/* : Zzzrrt Doamne! Krrrzzzzt Acea zrrrtrzt arata krgzzzz ca Krzzzzzzzztzzzz...'*/,
-        /*TODO: ro 'Ein Kernbruch des Führungsschiffes führte zu einer Kettenreaktion, die in einer durchaus */'spektakulären Explosion die gesamte Expedition'/* vernichtete.'*/,
-        /*TODO: ro 'Die Expeditionsflotte ist */'nicht mehr aus dem Sprung in den Normalraum'/* zurückgekehrt. Unsere Wissenschaftler rätseln noch immer, was geschehen sein könnte, jedoch scheint die Flotte endgültig verloren zu sein.'*/,
+        /*'O supra alimentare a miezului navei mama duce la o reactie in lant care */'distruge intr-o explozie destul de spectaculoasa'/* intreaga flota de expeditie.'*/,
+        /*'Flota de */'expeditie nu a sarit inapoi in cartier'/* . Academicienii nostrii inca incearca sa afle ce s-a intamplat dar se pare ca flota este pierduta pentru totdeauna.'*/,
     ],
 
     [ExpeditionEventType.trader]: [
         /*'Flota ta de expeditia a facut */'contactul cu o rasa de extraterestrii timizi'/* . Acestia anunta ca wiykd-ul lor a trimis un reprezentant cu bunuri sa faca schimb pentru lumile voastre.'*/,
-        /*TODO: ro 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Expeditia */'ta a primit un semnal de urgenta'/* . Un mega cargo a fost capturat pe un camp de gravitatie puternic generat de un planetoid. Dupa ce cargoul a fost eliberat cu succes capitanul a anuntat fericit ca persoana care i-a salvat va fi clientul lor preferat si exclusiv.'*/,
     ],
 
     [ExpeditionEventType.early]: [
@@ -115,7 +115,7 @@ export const ro: ExpeditionMessages = {
         [ExpeditionEventSize.medium]: [
             /*TODO: ro 'Deine Expeditionsflotte hatte ein */'unschönes Zusammentreffen mit einigen Weltraumpiraten'/*.'*/,
             /*'Am intrat direct intr-o */'ambuscada pusa de ceva buccaneri ai stelelor'/* ! Lupta nu a putut fi evitata!'*/,
-            /*TODO: ro 'Der Hilferuf, dem die Expedition folgte, stellte sich als */'böse Falle einiger arglistiger Sternen-Freibeuter'/* heraus. Ein Gefecht war unvermeidlich.'*/,
+            /*'Semnalul de urgenta pe care l-a urmat */'expeditia a fost pus de ceva buccaneri ai stelelor'/* . O lupta nu a putut fi evitata.'*/,
         ],
         [ExpeditionEventSize.large]: [
             /*TODO: ro 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
@@ -134,12 +134,12 @@ export const ro: ExpeditionMessages = {
             /*TODO: ro 'Die Expeditionsflotte meldet */'Kontakt mit unbekannten Schiffen'/*. Die Funksprüche sind nicht entschlüsselbar, jedoch scheinen die fremden Schiffe ihre Waffen zu aktivieren.'*/,
         ],
         [ExpeditionEventSize.medium]: [
-            /*TODO: ro 'Eine */'unbekannte Spezies greift unsere Expedition'/* an!'*/,
+            /*'O */'specie necunoscuta iti ataca expeditia',
             /*'Flota ta de */'expeditie pare sa fi zburat deasupra unui teritoriu care apartine'/* unei rase necunoscuta si razboinica.'*/,
             /*TODO: ro 'Die Verbindung zu unserer Expeditionsflotte wurde kurzfristig gestört. Sofern wir die letzte Botschaft richtig entschlüsselt haben, steht die Flotte unter schwerem Feuer; die */'Aggressoren konnten nicht identifiziert werden'/*.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /*TODO: ro 'Deine Expedition ist in eine Alien-Invasions-Flotte geraten und */'meldet schwere Gefechte'/*.'*/,
+            /*'Expeditia ta a dat peste o */'flota de invazie extraterestra si raporteaza'/* lupte crancene!'*/,
             /*TODO: ro 'Wir hatten Mühe den korrekten */'Dialekt einer Alienrasse'/* auszusprechen. Unser Diplomat rief daher "Feuer!" statt "Friede!".'*/,
             /*TODO: ro 'Ein großer */'Verband kristalliner Schiffe unbekannter Herkunft'/* hält direkten Kollisionskurs mit unserer Expeditionsflotte. Wir müssen nun wohl vom Schlimmsten ausgehen.'*/,
         ],
@@ -157,7 +157,7 @@ export const ro: ExpeditionMessages = {
         [ExpeditionDepletionLevel.low]: [
             /*'Se pare ca nici un om nu a */'fost prin aceasta parte a galaxiei inainte',
             /*'Am gasit */'campuri de ramasite ale navelor spatiale antice'/* . Nu suntem primii aici.'*/,
-            /*TODO: ro 'Wir hatten beinahe eine */'Kollision mit einer anderen Expeditionsflotte'/*. Hätte nicht gedacht, dass sich hier noch andere herumtreiben.'*/,
+            /*'Aproape ca am avut o */'coliziune cu o alta flota de expeditie'/* . Nu credeam ca vor mai fi si altii aici.'*/,
         ],
         [ExpeditionDepletionLevel.medium]: [
             /*TODO: ro 'Wir haben den Abschluss der Expedition mit den Crewmitgliedern einer zweiten Expeditionsflotte, die im selben Sektor unterwegs war, gefeiert. */'Die haben auch nichts Spannendes zu berichten',
