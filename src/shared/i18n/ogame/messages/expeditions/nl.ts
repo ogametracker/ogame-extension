@@ -119,7 +119,7 @@ export const nl: ExpeditionMessages = {
             /*'Het noodsignaal dat de expeditie volgde */'bleek in scene gezet te zijn door ruimtepiraten'/* . Een gevecht kon niet meer voorkomen worden.'*/,
         ],
         [ExpeditionEventSize.large]: [
-            /* TODO: nl 'Die aufgefangenen Signale stammten nicht von Fremdwesen, sondern */'von einer geheimen Piratenbasis'/* ! Die Piraten waren von unserer Anwesenheit in ihrem Sektor nicht besonders begeistert.'*/,
+            /*'De ontvangen signalen kwamen niet van een ruimtewezen, */'maar van een geheime piratenbasis'/* ! Ze waren niet eens verrast door onze aanwezigheid in hun sector.'*/,
             /* TODO: nl 'Die Expeditionsflotte meldet */'schwere Kämpfe mit nicht-identifizierten Piratenschiffen'/*.'*/,
         ],
         'fled-death-star': [
