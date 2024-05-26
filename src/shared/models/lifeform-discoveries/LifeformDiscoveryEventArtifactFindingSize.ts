@@ -1,7 +1,7 @@
 export enum LifeformDiscoveryEventArtifactFindingSize {
-    storageFull = 'storageFull',
-    small = 'small',
-    medium = 'medium',
+    storageFull = 'full',
+    small = 'normal',
+    medium = 'big',
     large = 'large',
 }
 

@@ -166,6 +166,7 @@ function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
                     date,
                     text,
                     html,
+                    attributes: {}
                 },
                 senderUuid: messageTrackingUuid,
             };
