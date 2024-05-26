@@ -28,8 +28,7 @@ export function trackLifeformBonusesPage() {
                 if(elem == null) {
                     return;
                 }
-
-                const title = elem.getAttribute('title') ?? _throw('no experience title found');
+                const title = elem.getAttribute('data-tooltip-title') ?? _throw('no experience title found');
                 const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s\/]*)\/?\d?/i);
                 
                 const levelText = match?.groups?.level.replace(/[^\d]/g, '') 
