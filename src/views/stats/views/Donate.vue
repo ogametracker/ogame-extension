@@ -1,37 +1,22 @@
 <template>
     <div>
-        <h2 v-text="$i18n.$t.extension.donate.subHeader" />
+        <h2>{{ $i18n.$t.extension.donate.subHeader }}</h2>
 
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
                 <span v-text="$i18n.$t.extension.donate.kofi.header" />
             </div>
             <div class="fake-table-body" style="justify-items: center">
-                <a
+                 <a
                     :href="kofiLink"
                     target="_blank"
                     rel="noreferrer noopener"
                     class="donate-button"
                 >
                     <img src="/img/extern/kofi-logo.svg" />
-                    {{ $i18n.$t.extension.donate.kofi.buttonText }}
+                    {{ $i18n.$t.extension.donate.kofi.buttonText }} 
                 </a>
                 <small v-text="$i18n.$t.extension.donate.kofi.message" />
-            </div>
-        </div>
-
-        <div class="fake-table crypto-table">
-            <div class="fake-table-header">
-                <span v-text="$i18n.$t.extension.donate.crypto.header" />
-            </div>
-            <div class="fake-table-body">
-                <span class="mdi mdi-bitcoin" />
-                <span class="crypto-name" v-text="'Bitcoin'" />
-                <span v-text="btcAddress" />
-
-                <span class="mdi mdi-ethereum" />
-                <span class="crypto-name" v-text="'Ethereum'" />
-                <span v-text="ethAddress" />
             </div>
         </div>
     </div>
@@ -43,8 +28,6 @@
 
     @Component({})
     export default class Donate extends Vue {
-        private readonly btcAddress = _constants.bitcoinAddress;
-        private readonly ethAddress = _constants.ethereumAddress;
         private readonly kofiLink = _constants.kofiLink;
     }
 </script>
