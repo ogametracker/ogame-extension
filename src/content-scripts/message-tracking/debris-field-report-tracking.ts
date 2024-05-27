@@ -138,24 +138,32 @@ function trackDebrisFieldReports(elem: Element) {
 
         try {
             // prepare message to service worker
-            const attributes = getMessageAttributes(msg, 'rawMessageData');
-            _logDebug(attributes);
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
+            const attributes = getMessageAttributes(element); 
 
             const timestamp = attributes["timestamp"] ?? _throw('Cannot find message timestamp');
+            const coords = attributes["coords"] ?? _throw('Cannot find message coordinates');
+            const recycledResourcesString = attributes['recycledresources'] ?? _throw('Cannot find message recycledresources');
+            const recycledResources = JSON.parse(recycledResourcesString)
+
             const date = parseInt(timestamp, 10) * 1000;
             if (isNaN(date)) {
                 _throw('Message timestamp is NaN');
             }
             
             // send message to service worker
-            // @WONKY are you more willing to keep attributes all togheter or to update the message data to separate every required attribute
             const workerMessage: TrackDebrisFieldReportMessage = {
                 type: MessageType.TrackDebrisFieldReport,
                 ogameMeta: getOgameMeta(),
                 data: {
                     id,
                     date,
-                    attributes
+                    coords,
+                    resources: {
+                        metal: recycledResources.metal ?? 0,
+                        crystal: recycledResources.crystal ?? 0,
+                        deuterium: recycledResources.deuterium ?? null
+                    }
                 },
                 senderUuid: messageTrackingUuid,
             };

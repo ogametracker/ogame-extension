@@ -1,11 +1,6 @@
 import { _throw } from "../../shared/utils/_throw";
 
-export function getMessageAttributes(msg: Element, className: string): { [key: string]: string } {
-    const element = msg.querySelector(`.${className}`);
-    if (!element) {
-        _throw(`Cannot find .${className} element`);
-    }
-
+export function getMessageAttributes(element: Element): { [key: string]: string } {
     const attributes = element.attributes;
     const extractedAttributes: { [key: string]: string } = {};
     for (const attribute of attributes) {

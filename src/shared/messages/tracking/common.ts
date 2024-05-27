@@ -5,8 +5,13 @@ export interface RawMessageData {
     html: string;
 }
 
-export interface RawMessageDataV11 {
+export interface RawDebrisFieldMessageData {
     id: number;
     date: number;
-    attributes: { [key: string]: string };
+    coords: string;
+    resources: {
+        metal: number;
+        crystal: number;
+        deuterium: number;
+    };
 }

@@ -3,7 +3,7 @@ import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
-import { RawMessageDataV11 } from "../../shared/messages/tracking/common";
+import { RawDebrisFieldMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 
@@ -58,23 +58,18 @@ export class DebrisFieldReportModule {
         }
     }
 
-    private tryParseDebrisFieldReport(data: RawMessageDataV11): { success: true, report: DebrisFieldReport } {
-        const debrisResources = JSON.parse(data.attributes['recycledresources'] as string);
-    
-        const metal = parseIntSafe(debrisResources.metal, 10);
-        const crystal = parseIntSafe(debrisResources.crystal, 10);
-        const deuterium = debrisResources.deuterium != null ? parseIntSafe(debrisResources.deuterium, 10) : undefined;
-    
-        const isExpeditionDebrisField = data.attributes['coords'].endsWith(':16');
+    private tryParseDebrisFieldReport(data: RawDebrisFieldMessageData): { success: true, report: DebrisFieldReport } {    
+        const deuterium = data.resources.deuterium != null ? data.resources.deuterium : undefined;
+        const isExpeditionDebrisField = data.coords.endsWith(':16');
     
         return {
             success: true,
             report: {
                 id: data.id,
                 date: data.date,
-                metal,
-                crystal,
-                deuterium,
+                metal: data.resources.metal,
+                crystal: data.resources.crystal,
+                deuterium: deuterium,
                 isExpeditionDebrisField,
             },
         };
