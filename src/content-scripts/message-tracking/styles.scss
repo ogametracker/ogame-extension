@@ -400,13 +400,13 @@ $image-size-small: 24px;
                 }
             }
 
-            &-large {
+            &-huge {
                 padding: 4px;
                 border-radius: 4px;
-                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--large);
+                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
 
                 .ogame-tracker-lifeform-discovery-result--size-icon {
-                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--large);
+                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
                     font-size: 32px !important;
                 }
             }
