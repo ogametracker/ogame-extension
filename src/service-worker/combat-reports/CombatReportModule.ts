@@ -1,5 +1,5 @@
 import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logDebug, _logError } from "../../shared/utils/_log";
+import { _log, _logDebug, _logError, _logWarning } from "../../shared/utils/_log";
 import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
 import { _throw } from "../../shared/utils/_throw";
 import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
@@ -11,8 +11,9 @@ import i18nFactions from '../../shared/i18n/ogame/factions';
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { settingsService } from "../main";
-import { OgameCombatReport } from "@/shared/models/ogame/combats/OgameCombatReport";
+import { OgameCombatReport, FleetState } from "@/shared/models/ogame/combats/OgameCombatReport";
 import { getLanguage } from "@/shared/i18n/getLanguage";
+import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
 
 type CombatReportResult = {
     report: CombatReport;
@@ -28,7 +29,6 @@ export class CombatReportModule {
         const combatReportData = message.data;
 
         const db = await getPlayerDatabase(message.ogameMeta);
-
 
         // check if combat report already tracked => if true, return tracked data
         const knownReport = await db.get('combatReports', combatReportData.id);
@@ -57,9 +57,9 @@ export class CombatReportModule {
         }
 
         const isEspionageCombat = this.isEspionageCombat(message.data.ogameCombatReport);
+        _logWarning(`-----isEspionageCombat-----: ${isEspionageCombat}`);
         if (isEspionageCombat && shouldIgnoreEspionageCombats) {
-            _logDebug(`ignoring espionage combat with id ${combatReportData.id}`);
-            
+            _logError('ESPIONAGE REPORT IGNORED')
             await db.put('combatReports.ignored', combatReportData.id, combatReportData.id);
 
             return {
@@ -97,8 +97,18 @@ export class CombatReportModule {
     }
 
     private isEspionageCombat(combat: OgameCombatReport) {
-        return Object.values(combat.combatRounds[0].attackerShips).every(
-            attackerShips => Object.keys(attackerShips).length == 1 && (attackerShips[ShipType.espionageProbe] ?? 0) > 0
+        const attackerFleetIds = combat.players
+            .filter(player => player.side === 'attacker')
+            .map(player => player.fleetId);
+    
+        const attackerFleets = combat.combatRounds[0].fleets.filter(fleet => 
+            fleet.side === 'attacker' && attackerFleetIds.includes(fleet.fleetId)
+        );
+    
+        return attackerFleets.every(fleet => 
+            fleet.technologies.length === 1 && 
+            fleet.technologies[0].technologyId === ShipType.espionageProbe && 
+            fleet.technologies[0].remaining > 0
         );
     }
 
@@ -135,52 +145,53 @@ export class CombatReportModule {
     }
 
     private parseCombatReport(language: string, playerId: number, rawCombatReportData: RawCombatReportData): CombatReport {
-        const { id, ogameCombatReport } = rawCombatReportData;
+        const { id, date, ogameCombatReport } = rawCombatReportData;
+        _logDebug(`-----id-----: ${id}`);
 
         const languageKey = getLanguage(language);
         if(ogameCombatReport.isExpedition && languageKey == null) {
             _throw(`unsupported language '${language}'`);
         }
-        const attackingFleets = Object.values(ogameCombatReport.attacker);
+
         // lootFactor if player is one of the attackers = 1
         // if player a defending fleet but not the owner of the planet = 0
         // else if player lost and is owner of the planet = -1
         let lootFactor = 0;
         if (!ogameCombatReport.isExpedition) {
-            if (attackingFleets.some(fleet => fleet.ownerID == playerId)) {
+            if (ogameCombatReport.players.find(player => player.side === 'attacker' && player.player.id === playerId)) {
                 lootFactor = 1;
-            } else if (ogameCombatReport.defender[0].ownerID == playerId) {
+            } else if (ogameCombatReport.players.find(player => player.side === 'defender' && player.player.id === playerId)) {
                 lootFactor = -1;
             }
         }
-        lootFactor *= (ogameCombatReport.result == 'attacker' ? 1 : 0);
+        lootFactor *= (ogameCombatReport.result.winner == 'attacker' ? 1 : 0);
 
-        const result: CombatResultType = (attackingFleets.some(fleet => fleet.ownerID == playerId) && ogameCombatReport.result == 'attacker')
-            || (Object.values(ogameCombatReport.defender).some(fleet => fleet.ownerID == playerId) && ogameCombatReport.result == 'defender')
+        const result: CombatResultType = (ogameCombatReport.players.find(player => player.side === 'attacker' && player.player.id === playerId) && ogameCombatReport.result.winner == 'attacker')
+            || (ogameCombatReport.players.find(player => player.side === 'defender' && player.player.id === playerId) && ogameCombatReport.result.winner == 'defender')
             ? CombatResultType.won
-            : ogameCombatReport.result == 'draw'
+            : ogameCombatReport.result.winner == 'none'
                 ? CombatResultType.draw
                 : CombatResultType.lost;
 
-
         const expeditionAttackType = ogameCombatReport.isExpedition
-            ? ogameCombatReport.attacker[0].ownerName == i18nFactions[languageKey!].pirates
+            ? ogameCombatReport.players.find(player => player.side === 'attacker')?.player.name == i18nFactions[languageKey!].pirates
                 ? 'pirates'
                 : 'aliens'
             : null;
+        
+        const loot = { 
+            [ResourceType.metal]: ogameCombatReport.result.loot.metal * lootFactor, 
+            [ResourceType.crystal]: ogameCombatReport.result.loot.crystal * lootFactor, 
+            [ResourceType.deuterium]: ogameCombatReport.result.loot.deuterium * lootFactor, 
+        }; 
 
-        const loot = {
-            [ResourceType.metal]: ogameCombatReport.loot.metal * lootFactor,
-            [ResourceType.crystal]: ogameCombatReport.loot.crystal * lootFactor,
-            [ResourceType.deuterium]: ogameCombatReport.loot.deuterium * lootFactor,
-        };
-        const debrisField = {
-            [ResourceType.metal]: ogameCombatReport.debris.metal,
-            [ResourceType.crystal]: ogameCombatReport.debris.crystal,
-            [ResourceType.deuterium]: ogameCombatReport.debris.deuterium,
-        };
+        const debrisField = { 
+            [ResourceType.metal]: ogameCombatReport.result.debris.metal, 
+            [ResourceType.crystal]: ogameCombatReport.result.debris.crystal, 
+            [ResourceType.deuterium]: ogameCombatReport.result.debris.deuterium, 
+        }; 
 
-        const lostShips: Record<ShipType, number> = {
+        const lostShips: Record<number, number> = {
             [ShipType.battlecruiser]: 0,
             [ShipType.battleship]: 0,
             [ShipType.bomber]: 0,
@@ -201,52 +212,33 @@ export class CombatReportModule {
         };
 
         const lastRound = ogameCombatReport.combatRounds[ogameCombatReport.combatRounds.length - 1];
-        Object.keys(lastRound.attackerLosses ?? {}).forEach(fleetId => {
-            const id = parseIntSafe(fleetId, 10);
-            if (ogameCombatReport.attacker[id].ownerID != playerId)
-                return;
 
-            const loss = lastRound.attackerLosses?.[fleetId];
-            if (loss == null)
-                return;
+        lastRound.fleets.forEach(fleet => {
+            const fleetSide = fleet.side;
+            const fleetId = fleet.fleetId;
+        
+            const playerFleetExist = ogameCombatReport.players.some(player => player.side === fleetSide && player.fleetId === fleetId);
+            if (!playerFleetExist) return;
 
-            ShipTypes.forEach(ship => {
-                const countStr = loss![ship];
-                if (countStr == null)
-                    return;
-
-                const count = parseIntSafe(countStr, 10);
-                lostShips[ship] += count;
-            });
-        });
-        Object.keys(lastRound.defenderLosses ?? {}).forEach(fleetId => {
-            const id = parseIntSafe(fleetId, 10);
-            if (ogameCombatReport.defender[id].ownerID != playerId)
-                return;
-
-            const loss = lastRound.defenderLosses?.[fleetId];
-            if (loss == null)
-                return;
-
-            ShipTypes.forEach(ship => {
-                const countStr = loss![ship];
-                if (countStr == null)
-                    return;
-
-                const count = parseIntSafe(countStr, 10);
-                lostShips[ship] += count;
+            fleet.technologies.forEach(tech => {
+                if (lostShips[tech.technologyId] !== undefined) {
+                    lostShips[tech.technologyId] += tech.destroyed;
+                }
             });
         });
 
+        const coords = ogameCombatReport.coords.split(":");
+        const [galaxy, system, planet] = coords;
 
+        
         const report: CombatReport = {
             id,
-            date: new Date(ogameCombatReport.event_time).getTime(),
+            date,
             coordinates: {
-                galaxy: ogameCombatReport.coordinates.galaxy,
-                system: ogameCombatReport.coordinates.system,
-                position: ogameCombatReport.coordinates.position,
-                type: ogameCombatReport.coordinates.planetType,
+                galaxy: parseIntSafe(galaxy, 10),
+                system: parseIntSafe(system, 10),
+                position: parseIntSafe(planet, 10),
+                type: PlanetType.planet,
             },
             result,
             isExpedition: ogameCombatReport.isExpedition,

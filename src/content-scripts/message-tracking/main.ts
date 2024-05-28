@@ -16,16 +16,16 @@ const queryParams = getQueryParameters(location.search);
 export const settingsWrapper = {
     settings: {} as Settings,
 };
-if (queryParams.page == 'messages') {
-    init();
-}
+if (queryParams.page?.toLowerCase() == 'ingame' && queryParams.component?.toLowerCase() == 'messages') { 
+    init(); 
+} 
 
 async function init() {
     const settingsPromise = getSettings();
 
-    initExpeditionAndLifeformDiscoveryTracking();
+    //initExpeditionAndLifeformDiscoveryTracking();
     initCombatReportTracking();
-    initDebrisFieldReportTracking();
+    //initDebrisFieldReportTracking();
 
     settingsWrapper.settings = await settingsPromise;
 }
