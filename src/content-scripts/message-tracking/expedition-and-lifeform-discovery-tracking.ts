@@ -236,39 +236,20 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey | undefined, me
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         try {
-            // prepare message to service worker
-            const attributes = getMessageAttributes(msg, 'rawMessageData');
-            _logDebug(attributes);
+            // prepare message to service worker 
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`); 
+            const attributes = getMessageAttributes(element);
 
+            // We currently do not process expeditions missions as it was not the case if the language was null
             if (lang == null && attributes["messagetype"] === "41") {
                 unprocessedMessages.push(msg);
                 return;
             }
 
-            const timestamp = attributes["timestamp"] ?? _throw('Cannot find message timestamp');
-            const date = parseInt(timestamp, 10) * 1000;
-            if (isNaN(date)) {
-                _throw('Message timestamp is NaN');
-            }
-
-            const messageType = attributes["messagetype"] === "41" ? MessageType.TrackExpedition : MessageType.TrackLifeformDiscovery;
-            const messageTextElem = msg.querySelector('.msgContent') ?? _throw('Cannot find message content element');
-            const text = messageTextElem.textContent ?? '';
-            const html = messageTextElem.innerHTML;
-            
             // send message to service worker
-            const workerMessage: TrackExpeditionMessage | TrackLifeformDiscoveryMessage = {
-                type: messageType,
-                ogameMeta: getOgameMeta(),
-                data: {
-                    id,
-                    date,
-                    text,
-                    html,
-                    attributes
-                },
-                senderUuid: messageTrackingUuid,
-            };
+            const workerMessage = attributes["messagetype"] === "41" 
+            ? prepareExpeditionWorkerMessage(msg, id, attributes) 
+            : prepareLifeformDiscoveryWorkerMessage(id, attributes)
             sendMessage(workerMessage);
 
             // mark message as "waiting for result"
@@ -283,7 +264,7 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey | undefined, me
 
             // april fools
             if (lang != null) 
-                aprilFools_replaceMessage(messageType, lang, id, msg, date);
+                aprilFools_replaceMessage(workerMessage.type, lang, id, msg, workerMessage.data.date);
         } catch (error) {
             console.error(error);
             unprocessedMessages.push(msg);
@@ -291,6 +272,66 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey | undefined, me
     });
 
     return unprocessedMessages;
+}
+
+function prepareExpeditionWorkerMessage(msg: Element, id: number, attr: Record<string, string>): TrackExpeditionMessage {
+    const timestamp = attr["timestamp"] ?? _throw('Cannot find message timestamp');
+    const date = parseInt(timestamp, 10) * 1000;
+    if (isNaN(date)) {
+        _throw('Message timestamp is NaN');
+    }
+
+    const messageTextElem = msg.querySelector('.msgContent') ?? _throw('Cannot find message content element');
+    const text = messageTextElem.textContent ?? '';
+    const html = messageTextElem.innerHTML;
+
+    const workerMessage: TrackExpeditionMessage = {
+        type: MessageType.TrackExpedition,
+        ogameMeta: getOgameMeta(),
+        data: {
+            id,
+            date,
+            text,
+            html,
+            attributes:attr
+        },
+        senderUuid: messageTrackingUuid,
+    };
+
+    return workerMessage
+}
+
+function prepareLifeformDiscoveryWorkerMessage(id: number, attr: Record<string, string>): TrackLifeformDiscoveryMessage {
+    const timestamp = attr["timestamp"] ?? _throw('Cannot find message timestamp');
+    const discoveryType = attr["discoverytype"] || "nothing"
+    const artifactsSize = attr["artifactssize"] || undefined
+    const artifactsFound = attr["artifactsfound"] !== undefined ? parseIntSafe(attr["artifactsfound"]) : undefined
+    const lifeform = attr["lifeform"] || undefined
+    const lifeformExp = attr["lifeformgainedexperience"] !== undefined ? parseIntSafe(attr["lifeformgainedexperience"]) : undefined
+    const alreadyFound = attr["lifeformalreadyowned"] === "1" || undefined
+
+    const date = parseInt(timestamp, 10) * 1000;
+    if (isNaN(date)) {
+        _throw('Message timestamp is NaN');
+    }
+
+    const workerMessage: TrackLifeformDiscoveryMessage = {
+        type: MessageType.TrackLifeformDiscovery,
+        ogameMeta: getOgameMeta(),
+        data: {
+            id,
+            date,
+            discoveryType,
+            artifactsSize,
+            artifactsFound,
+            lifeform,
+            lifeformExp,
+            alreadyFound,
+        },
+        senderUuid: messageTrackingUuid,
+    };
+
+    return workerMessage
 }
 
 function sendNotificationMessages() {

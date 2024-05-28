@@ -1,14 +1,13 @@
-import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logDebug, _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { RawMessageData } from "../../shared/messages/tracking/common";
+import { RawLifeformDiscoveryMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType, ValidLifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 
 interface LifeformDiscoveryEventResult {
@@ -53,10 +52,11 @@ export class LifeformDiscoveryModule {
         }
     }
 
-    #parseLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEvent {
+    #parseLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEvent {
         let result
+        _logError(data)
 
-        switch(data.attributes["discoverytype"]) {
+        switch(data.discoveryType) {
             case 'artifacts':
                 result = this.#tryParseArtifactsLifeformDiscovery(data)
                 break;
@@ -64,12 +64,13 @@ export class LifeformDiscoveryModule {
                 result = this.#tryParseLostShipLifeformDiscovery(data)
                 break;
             case 'lifeform-xp':
-                if (data.attributes["lifeformalreadyowned"] == "1") {
+                if (data.alreadyFound) {
                     result = this.#tryParseKnownLifeformFoundLifeformDiscovery(data)
                 } else {
                     result = this.#tryParseNewLifeformFoundLifeformDiscovery(data)
                 }
                 break;
+            case 'nothing':
             default:
                 result = this.#tryParseNothingLifeformDiscovery(data)
                 break;
@@ -82,7 +83,7 @@ export class LifeformDiscoveryModule {
         return result;
     }
 
-    #tryParseNothingLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEventNothing | null {
+    #tryParseNothingLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNothing | null {
         return {
             id: data.id,
             date: data.date,
@@ -90,23 +91,14 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #tryParseArtifactsLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEventArtifacts | null {
-        const artifactsFound = data.attributes['artifactsfound'] ?? _throw("no artifacts value found");
-        const artifactSizeString = data.attributes['artifactssize'] ?? _throw("no artifacts size value found");
+    #tryParseArtifactsLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventArtifacts | null {
+        const artifacts = data.artifactsFound ?? _throw("no artifacts value found");
+        const artifactSizeString = data.artifactsSize ?? _throw("no artifacts size value found");
         const artifactSize = LifeformDiscoveryEventArtifactFindingSizes.find(size => size === artifactSizeString);
 
         if (!artifactSize) {
             return null;
         }
-
-        let artifacts = 0;
-        if (artifactSize !== LifeformDiscoveryEventArtifactFindingSize.storageFull) {
-            if (!artifactsFound) {
-                return null;
-            }
-            artifacts = parseIntSafe(artifactsFound, 10);
-        }
-
         return {
             id: data.id,
             date: data.date,
@@ -116,7 +108,7 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #tryParseLostShipLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEventLostShip | null {
+    #tryParseLostShipLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventLostShip | null {
         return {
             id: data.id,
             date: data.date,
@@ -124,25 +116,24 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #tryParseKnownLifeformFoundLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEventKnownLifeformFound | null {
-        const lifeformId = data.attributes['lifeform'];
-        const lifeformGainedExperience = data.attributes['lifeformgainedexperience'];
+    #tryParseKnownLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound | null {
+        const lifeformId = data.lifeform ?? _throw("no lifeform value found");
+        const experience = data.lifeformExp ?? _throw("no lifeform experience value found");
         
         const lifeformIndex = parseIntSafe(lifeformId, 10) - 1;
         const lifeform = ValidLifeformTypes[lifeformIndex] ?? _throw('did not find any lifeform');
-        const xp = parseIntSafe(lifeformGainedExperience);
     
         return {
             id: data.id,
             date: data.date,
             type: LifeformDiscoveryEventType.knownLifeformFound,
             lifeform,
-            experience: xp,
+            experience,
         };
     }
 
-    #tryParseNewLifeformFoundLifeformDiscovery(data: RawMessageData): LifeformDiscoveryEventNewLifeformFound | null {
-        const lifeformId = data.attributes['lifeform'];
+    #tryParseNewLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNewLifeformFound | null {
+        const lifeformId = data.lifeform ?? _throw("no lifeform value found");
         const lifeformIndex = parseIntSafe(lifeformId, 10) - 1;
         const lifeform = ValidLifeformTypes[lifeformIndex] ?? _throw('did not find any lifeform');
 
