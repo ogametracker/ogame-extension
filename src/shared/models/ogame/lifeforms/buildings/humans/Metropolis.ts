@@ -1,5 +1,6 @@
 import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -32,9 +33,17 @@ class MetropolisClass extends LifeformBuilding implements LifeformTechnologyBonu
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.metropolis;
     }
+
+    public appliesTo(research: LifeformTechnologyType) {
+        return true;
+    }
     
-    public getLifeformTechnologyBonus(level: number): number {
-        const bonus = 0.005; // 0.5%
+    public getLifeformTechnologyBonus(research: LifeformTechnologyType, level: number): number {
+        if(!this.appliesTo(research)) {
+            return 0;
+        }
+
+        const bonus = 0.00_5; // 0.5%
         return level * bonus;
     }
 }

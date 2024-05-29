@@ -3,6 +3,7 @@ import { Cost } from "../../common/Cost";
 import { ResourceType } from "../../resources/ResourceType";
 import { CostAndTimeReduction } from "../common-interfaces";
 import { LifeformBuildingType } from "../LifeformBuildingType";
+import { LifeformTechnologyType } from "../LifeformTechnologyType";
 import { LifeformBuilding } from "./LifeformBuilding";
 
 export interface ResourceProductionBonusLifeformBuilding extends LifeformBuilding {
@@ -11,7 +12,8 @@ export interface ResourceProductionBonusLifeformBuilding extends LifeformBuildin
 }
 
 export interface LifeformTechnologyBonusLifeformBuilding extends LifeformBuilding {
-    getLifeformTechnologyBonus(level: number): number;
+    appliesTo(research: LifeformTechnologyType): boolean;
+    getLifeformTechnologyBonus(research: LifeformTechnologyType, level: number): number;
 }
 
 export type AnyBuildingType = BuildingType | LifeformBuildingType;

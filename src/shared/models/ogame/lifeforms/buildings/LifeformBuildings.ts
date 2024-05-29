@@ -82,7 +82,9 @@ export const LifeformTechnologyBonusLifeformBuildingsByLifeform: Record<Lifeform
         ChipMassProduction,
         HighPerformanceTransformer,
     ],
-    [LifeformType.kaelesh]: [],
+    [LifeformType.kaelesh]: [
+        CloningLaboratory,
+    ],
 };
 export const LifeformTechnologyBonusLifeformBuildings = Object.values(LifeformTechnologyBonusLifeformBuildingsByLifeform).flatMap(r => r);
 

@@ -2,6 +2,7 @@ import { Cost } from "../../../common/Cost";
 import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -38,13 +39,21 @@ class HighPerformanceTransformerClass extends LifeformBuilding implements Resour
         return LifeformBuildingType.highPerformanceTransformer;
     }
 
-    public getLifeformTechnologyBonus(level: number): number {
-        const techBonus = 0.003; // 0.3%
-        return techBonus * level;
-    }
-
-    public appliesTo(resource: ResourceType | 'energy'): boolean {
+    public appliesTo(resource: ResourceType | 'energy' | LifeformTechnologyType): boolean {
+        if(LifeformTechnologyTypes.includes(resource as LifeformTechnologyType)) {
+            return true;
+        }
+        
         return resource == 'energy';
+    }
+    
+    public getLifeformTechnologyBonus(research: LifeformTechnologyType, level: number): number {
+        if(!this.appliesTo(research)) {
+            return 0;
+        }
+
+        const bonus = 0.00_3; // 0.3%
+        return level * bonus;
     }
 
     public getProductionBonus(level: number): Cost {
