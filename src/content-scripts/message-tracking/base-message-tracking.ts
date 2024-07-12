@@ -6,6 +6,7 @@ import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMess
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { cssClasses } from "./utils";
 import { expeditionTracking } from "./expedition-tracking";
+import { lifeformDiscoveryTracking } from "./lifeform-discovery-tracking";
 
 type Tracking = {
     onMessage: (message: Message<MessageType, any>) => void;
@@ -16,6 +17,7 @@ type Tracking = {
 const trackings: Tracking[] = [
     debrisFieldTracking,
     expeditionTracking,
+    lifeformDiscoveryTracking,
 ];
 
 let pageContentElement: Element | null = null;

@@ -328,8 +328,9 @@ $image-size-small: 24px;
         align-items: center;
 
         .ogame-tracker_lifeform-icon {
-            border-radius: 4px;
-            border: 1px solid;
+            border-radius: 4px !important;
+            border-width: 1px !important;
+            border-style: solid !important;
             min-width: 0 !important;
 
             &--humans {
