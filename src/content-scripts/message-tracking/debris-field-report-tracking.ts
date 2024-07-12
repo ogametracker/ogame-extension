@@ -1,10 +1,9 @@
-import { parse } from "date-fns";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
-import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { _logDebug } from "../../shared/utils/_log";
+import { _logDebug, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
+import { getMessageAttributes } from "../../shared/utils/getMessageAttributes";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
 import { MessageTrackingErrorMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
@@ -14,12 +13,9 @@ import { sendMessage } from "@/shared/communication/sendMessage";
 import { messageTrackingUuid } from "@/shared/uuid";
 import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
-import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
+import { ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
-import { LanguageKey } from "@/shared/i18n/LanguageKey";
-import { getLanguage } from "@/shared/i18n/getLanguage";
-import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
-
+ 
 let tabContent: Element | null = null;
 
 const notificationIds = {
@@ -36,11 +32,11 @@ const totalDebrisFieldResult: DebrisFieldReportTrackingNotificationMessageData =
         deuterium: 0,
     },
 };
-
+ 
 export function initDebrisFieldReportTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
-    const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
+    const contentElem = document.querySelector('#pageContent .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
         if (tabContent?.isConnected != true) {
             setupObserver();
@@ -50,17 +46,11 @@ export function initDebrisFieldReportTracking() {
 }
 
 function setupObserver() {
-    const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.misc}"]`) ?? _throw('Cannot find label of misc messages');
-    const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of misc messages tab content');
-    tabContent = document.querySelector(`#${tabContentId}`);
-    const tabContentElem = tabContent ?? _throw('Cannot find content element of misc messages');
+    tabContent = document.querySelector(`.messagesHolder`);
+    const tabContentElement = tabContent ?? _throw('Cannot find messages holder element');
 
-    const meta = getOgameMeta();
-    const lang = getLanguage(meta.userLanguage);
-    if (lang != null) {
-        const observer = new MutationObserver(() => trackDebrisFieldReports(lang, tabContentElem));
-        observer.observe(tabContentElem, { childList: true, subtree: true });
-    }
+    const observer = new MutationObserver(() => trackDebrisFieldReports(tabContentElement));
+    observer.observe(tabContentElement, { childList: true, subtree: true });
 }
 
 function onMessage(message: Message<MessageType, any>) {
@@ -74,15 +64,15 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewDebrisFieldReport: {
             const msg = message as DebrisFieldReportMessage;
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
-            li.classList.add(cssClasses.messages.debrisFieldReport);
+            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
+            div.classList.add(cssClasses.messages.debrisFieldReport);
 
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.processed);
+            div.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            div.classList.add(cssClasses.messages.processed);
             if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
-                li.classList.add(cssClasses.messages.hideContent);
+                div.classList.add(cssClasses.messages.hideContent);
             }
-            addOrSetCustomMessageContent(li, `
+            addOrSetCustomMessageContent(div, `
                 <div 
                     class="ogame-tracker-debris-field-report" 
                     style="--columns: ${msg.data.deuterium != null ? 3 : 2}"
@@ -117,11 +107,11 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
+            const div = document.querySelector(`div.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
 
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.error);
-            addOrSetCustomMessageContent(li, false);
+            div.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            div.classList.add(cssClasses.messages.error);
+            addOrSetCustomMessageContent(div, false);
 
             delete waitingForReports[id];
             failedToTrackReport[id] = true;
@@ -131,32 +121,36 @@ function onMessage(message: Message<MessageType, any>) {
     }
 }
 
-function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
-    const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-        .filter(elem => !elem.classList.contains(cssClasses.messages.base));
-    const headers = messageHeaders[lang];
+function trackDebrisFieldReports(elem: Element) {
+    const tabLabel = document.querySelector(`.tabsWrapper .innerTabItem.active[data-subtab-id="${tabIds.misc}"]`);
+    if (tabLabel == null) {
+        return;
+    }
+
+    const messages = Array.from(elem.querySelectorAll('div.msg[data-msg-id]'))
+        .filter(elem => {
+            const messageType = elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype');
+            return !elem.classList.contains(cssClasses.messages.base) && messageType === "32"; // @WONKY maybe created a typed version for messageTypes 
+        });
 
     messages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         try {
             // prepare message to service worker
-            const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
-            const date = parse(dateText, dateTimeFormat, new Date()).getTime();
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
+            const attributes = getMessageAttributes(element); 
+
+            const timestamp = attributes["timestamp"] ?? _throw('Cannot find message timestamp');
+            const coords = attributes["coords"] ?? _throw('Cannot find message coordinates');
+            const recycledResourcesString = attributes['recycledresources'] ?? _throw('Cannot find message recycledresources');
+            const recycledResources = JSON.parse(recycledResourcesString)
+
+            const date = parseInt(timestamp, 10) * 1000;
             if (isNaN(date)) {
-                _throw('Message date is NaN');
+                _throw('Message timestamp is NaN');
             }
-
-            const messageTextElem = msg.querySelector('.msg_content') ?? _throw('Cannot find message content element');
-            const text = messageTextElem.textContent ?? '';
-            const html = messageTextElem.innerHTML;
-
-            const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
-            if (!messageTitle.toLowerCase().includes(headers.debrisField.toLowerCase())) {
-                //ignore anything that's not a DF harvest report
-                return;
-            }
-
+            
             // send message to service worker
             const workerMessage: TrackDebrisFieldReportMessage = {
                 type: MessageType.TrackDebrisFieldReport,
@@ -164,8 +158,12 @@ function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
                 data: {
                     id,
                     date,
-                    text,
-                    html,
+                    coords,
+                    resources: {
+                        metal: recycledResources.metal ?? 0,
+                        crystal: recycledResources.crystal ?? 0,
+                        deuterium: recycledResources.deuterium ?? null
+                    }
                 },
                 senderUuid: messageTrackingUuid,
             };
@@ -180,7 +178,7 @@ function trackDebrisFieldReports(lang: LanguageKey, elem: Element) {
 
             waitingForReports[id] = true;
         } catch (error) {
-            console.error(error);
+            _logError(error);
 
             msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
             addOrSetCustomMessageContent(msg, false);
