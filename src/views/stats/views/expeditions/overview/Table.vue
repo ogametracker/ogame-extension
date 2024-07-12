@@ -66,10 +66,12 @@
         }
 
         private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ExpeditionEventTypes.map(type => ({
-                label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.events[type], 0),
-            }));
+            return ExpeditionEventTypes
+                .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
+                .map(type => ({
+                    label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
+                    getValue: expos => expos.reduce((acc, expo) => acc + expo.events[type], 0),
+                }));
         }
 
         private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {

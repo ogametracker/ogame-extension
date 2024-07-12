@@ -76,14 +76,16 @@
         }
 
         private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return ExpeditionEventTypes.map(type => ({
-                key: type,
-                label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
-                color: this.colors[type],
-                filled: true,
-                getValue: result => result.events[type],
-                showAverage: true,
-            }));
+            return ExpeditionEventTypes
+                .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
+                .map(type => ({
+                    key: type,
+                    label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
+                    color: this.colors[type],
+                    filled: true,
+                    getValue: result => result.events[type],
+                    showAverage: true,
+                }));
         }
 
         private getSum(datasets: ScollableChartFooterDataset[]): number {

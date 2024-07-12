@@ -132,7 +132,12 @@ class ExpeditionDataModuleClass extends Vue {
             this.$set(this.dailyResults, day, dailyResult);
         }
 
-        dailyResult.events[expedition.type]++;
+        const mappedType = ({
+            [ExpeditionEventType.aliens]: ExpeditionEventType.combat,
+            [ExpeditionEventType.pirates]: ExpeditionEventType.combat,
+        } as Partial<Record<ExpeditionEventType, ExpeditionEventType>>)[expedition.type] ?? expedition.type;
+
+        dailyResult.events[mappedType]++;
         dailyResult.depletion[expedition.depletion ?? 'unknown']++;
 
         switch (expedition.type) {
