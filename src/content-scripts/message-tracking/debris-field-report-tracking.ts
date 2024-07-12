@@ -15,9 +15,10 @@ import { v4 } from "uuid";
 import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
+import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
+import { parseCoordinates } from "@/shared/utils/parseCoordinates";
+import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
  
-let tabContent: Element | null = null;
-
 const notificationIds = {
     result: v4(),
     error: v4(),
@@ -32,26 +33,6 @@ const totalDebrisFieldResult: DebrisFieldReportTrackingNotificationMessageData =
         deuterium: 0,
     },
 };
- 
-export function initDebrisFieldReportTracking() {
-    chrome.runtime.onMessage.addListener(message => onMessage(message));
-
-    const contentElem = document.querySelector('#pageContent .content') ?? _throw('Cannot find content element');
-    const initObserver = new MutationObserver(() => {
-        if (tabContent?.isConnected != true) {
-            setupObserver();
-        }
-    });
-    initObserver.observe(contentElem, { subtree: true, childList: true });
-}
-
-function setupObserver() {
-    tabContent = document.querySelector(`.messagesHolder`);
-    const tabContentElement = tabContent ?? _throw('Cannot find messages holder element');
-
-    const observer = new MutationObserver(() => trackDebrisFieldReports(tabContentElement));
-    observer.observe(tabContentElement, { childList: true, subtree: true });
-}
 
 function onMessage(message: Message<MessageType, any>) {
     const ogameMeta = getOgameMeta();
@@ -121,16 +102,16 @@ function onMessage(message: Message<MessageType, any>) {
     }
 }
 
-function trackDebrisFieldReports(elem: Element) {
-    const tabLabel = document.querySelector(`.tabsWrapper .innerTabItem.active[data-subtab-id="${tabIds.misc}"]`);
-    if (tabLabel == null) {
-        return;
-    }
-
-    const messages = Array.from(elem.querySelectorAll('div.msg[data-msg-id]'))
+function trackDebrisFieldReports() {
+    const messages = Array.from(document.querySelectorAll('div.msg[data-msg-id]'))
         .filter(elem => {
-            const messageType = elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype');
-            return !elem.classList.contains(cssClasses.messages.base) && messageType === "32"; // @WONKY maybe created a typed version for messageTypes 
+            const messageType = parseIntSafe(
+                elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype') 
+                ?? '-1' // for some reason not all messages have a type attribute, e.g. espionage reports, so we fall back to something unused
+            );
+
+            return messageType == OgameRawMessageType.debrisFieldHarvestReport 
+                && !elem.classList.contains(cssClasses.messages.base);
         });
 
     messages.forEach(msg => {
@@ -139,14 +120,16 @@ function trackDebrisFieldReports(elem: Element) {
         try {
             // prepare message to service worker
             const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
-            const attributes = getMessageAttributes(element); 
+            const {
+                timestamp: date, 
+                targetcoordinates: coords, 
+                recycledresources: recycledResources, 
+            } = getMessageAttributes(element, {
+                timestamp: value => parseIntSafe(value, 10) * 1000,
+                targetcoordinates: value => parseCoordinates(value, PlanetType.debrisField),
+                recycledresources: json => JSON.parse(json) as { metal: number; crystal: number; deuterium: number },
+            }); 
 
-            const timestamp = attributes["timestamp"] ?? _throw('Cannot find message timestamp');
-            const coords = attributes["coords"] ?? _throw('Cannot find message coordinates');
-            const recycledResourcesString = attributes['recycledresources'] ?? _throw('Cannot find message recycledresources');
-            const recycledResources = JSON.parse(recycledResourcesString)
-
-            const date = parseInt(timestamp, 10) * 1000;
             if (isNaN(date)) {
                 _throw('Message timestamp is NaN');
             }
@@ -235,3 +218,8 @@ function updateReportResults(msg: DebrisFieldReportMessage) {
 
     sendNotificationMessages();
 }
+
+export const debrisFieldTracking = {
+    onMessage,
+    track: trackDebrisFieldReports,
+};

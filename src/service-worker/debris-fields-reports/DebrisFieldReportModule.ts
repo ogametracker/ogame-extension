@@ -1,10 +1,8 @@
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
+import { RawDebrisFieldMessageData, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
 import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
-import { RawDebrisFieldMessageData } from "../../shared/messages/tracking/common";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 
 interface DebrisFieldReportResult {
@@ -59,8 +57,8 @@ export class DebrisFieldReportModule {
     }
 
     private tryParseDebrisFieldReport(data: RawDebrisFieldMessageData): { success: true, report: DebrisFieldReport } {    
-        const deuterium = data.resources.deuterium != null ? data.resources.deuterium : undefined;
-        const isExpeditionDebrisField = data.coords.endsWith(':16');
+        const deuterium = data.resources.deuterium ?? undefined;
+        const isExpeditionDebrisField = data.coords.system == 16;
     
         return {
             success: true,
