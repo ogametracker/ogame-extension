@@ -274,7 +274,6 @@ class ExcelExportClass {
             `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.position})`,
             `${$i18n.$t.extension.excelExport.combats.coordinates} (${$i18n.$t.extension.excelExport.combats.targetType})`,
             $i18n.$t.extension.excelExport.combats.combatType,
-            $i18n.$t.extension.excelExport.combats.expeditionCombatOpponent,
             ...ResourceTypes.map(resource => `${$i18n.$t.extension.excelExport.combats.loot} (${$i18n.$t.extension.resources[resource]})`),
             ...ShipTypes.map(ship => `${$i18n.$t.extension.excelExport.combats.lostShips} (${$i18n.$t.ogame.ships[ship]})`),
             `${$i18n.$t.extension.excelExport.combats.debrisField} (${$i18n.$t.extension.resources[ResourceType.metal]})`,
@@ -288,9 +287,6 @@ class ExcelExportClass {
             combat.coordinates.position,
             combat.coordinates.type == PlanetType.moon ? $i18n.$t.extension.excelExport.combats.moon : $i18n.$t.extension.excelExport.combats.planet,
             combat.isExpedition ? $i18n.$t.extension.excelExport.combats.expeditionCombat : $i18n.$t.extension.excelExport.combats.playerCombat,
-            combat.isExpedition
-                ? combat.expeditionAttackType == 'pirates' ? $i18n.$t.extension.excelExport.combats.pirates : $i18n.$t.extension.excelExport.combats.aliens
-                : '',
             ...ResourceTypes.map(resource => combat.loot[resource]),
             ...ShipTypes.map(ship => combat.lostShips[ship]),
             combat.debrisField.metal,

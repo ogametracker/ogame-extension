@@ -7,14 +7,17 @@ import { parseIntSafe } from "@/shared/utils/parseNumbers";
 import { cssClasses } from "./utils";
 import { expeditionTracking } from "./expedition-tracking";
 import { lifeformDiscoveryTracking } from "./lifeform-discovery-tracking";
+import { combatTracking } from "./combat-report-tracking";
 
 type Tracking = {
     onMessage: (message: Message<MessageType, any>) => void;
     messageType: OgameRawMessageType;
     track: (messages: Element[]) => void;
+    onInit?: () => void;
 };
 
 const trackings: Tracking[] = [
+    combatTracking,
     debrisFieldTracking,
     expeditionTracking,
     lifeformDiscoveryTracking,
@@ -25,6 +28,8 @@ let pageContentElement: Element | null = null;
 export function initMessageTracking() {
     trackings.forEach(t => {
         chrome.runtime.onMessage.addListener(message => t.onMessage(message));
+
+        t.onInit?.();
     });
 
     const contentElem = document.querySelector('#pageContent .content') ?? _throw('Cannot find content element');
