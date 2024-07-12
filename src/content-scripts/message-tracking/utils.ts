@@ -1,11 +1,5 @@
 import { _throw } from "../../shared/utils/_throw";
 
-export const tabIds = {
-    combats: 21,
-    expedition: 22,
-    misc: 24,
-};
-
 const cssBase = 'ogame-tracker';
 
 export const cssClasses = {

@@ -474,7 +474,7 @@ class ExcelExportClass {
         const data = allExpeditions.map(expo => [
             $i18n.$d(expo.date, 'datetime'),
             $i18n.$t.extension.expeditions.expeditionEvents[expo.type],
-            'size' in expo ? $i18n.$t.extension.expeditions.expeditionEventSizes[expo.size] : '',
+            'size' in expo && expo.size != null ? $i18n.$t.extension.expeditions.expeditionEventSizes[expo.size] : '',
             $i18n.$t.extension.expeditions.depletionLevels[expo.depletion ?? 'unknown'],
             ...ResourceTypes.map(resource => expo.type == ExpeditionEventType.resources ? expo.resources[resource] : ''),
             ...ExpeditionFindableShipTypes.map(ship => expo.type == ExpeditionEventType.fleet ? expo.fleet[ship] : ''),

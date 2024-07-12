@@ -4,7 +4,7 @@ import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
 import { getMessageAttributes } from "../../shared/utils/getMessageAttributes";
-import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
+import { addOrSetCustomMessageContent, cssClasses, formatNumber } from "./utils";
 import { MessageTrackingErrorMessage } from '../../shared/messages/tracking/misc';
 import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
@@ -102,18 +102,7 @@ function onMessage(message: Message<MessageType, any>) {
     }
 }
 
-function trackDebrisFieldReports() {
-    const messages = Array.from(document.querySelectorAll('div.msg[data-msg-id]'))
-        .filter(elem => {
-            const messageType = parseIntSafe(
-                elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype') 
-                ?? '-1' // for some reason not all messages have a type attribute, e.g. espionage reports, so we fall back to something unused
-            );
-
-            return messageType == OgameRawMessageType.debrisFieldHarvestReport 
-                && !elem.classList.contains(cssClasses.messages.base);
-        });
-
+function trackDebrisFieldReports(messages: Element[]) {
     messages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
@@ -125,9 +114,18 @@ function trackDebrisFieldReports() {
                 targetcoordinates: coords, 
                 recycledresources: recycledResources, 
             } = getMessageAttributes(element, {
-                timestamp: value => parseIntSafe(value, 10) * 1000,
-                targetcoordinates: value => parseCoordinates(value, PlanetType.debrisField),
-                recycledresources: json => JSON.parse(json) as { metal: number; crystal: number; deuterium: number },
+                timestamp: {
+                    optional: false,
+                    conversion: value => parseIntSafe(value, 10) * 1000, 
+                },
+                targetcoordinates: {
+                    optional: false,
+                    conversion: value => parseCoordinates(value, PlanetType.debrisField), 
+                },
+                recycledresources: {
+                    optional: false,
+                    conversion: json => JSON.parse(json) as { metal: number; crystal: number; deuterium: number }, 
+                },
             }); 
 
             if (isNaN(date)) {
@@ -221,5 +219,6 @@ function updateReportResults(msg: DebrisFieldReportMessage) {
 
 export const debrisFieldTracking = {
     onMessage,
+    messageType: OgameRawMessageType.debrisFieldHarvestReport,
     track: trackDebrisFieldReports,
 };

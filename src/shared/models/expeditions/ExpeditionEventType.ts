@@ -5,8 +5,11 @@ export enum ExpeditionEventType {
     delay = 'delay',
     early = 'early',
     darkMatter = 'darkMatter',
+    /** legacy */
     pirates = 'pirates',
+    /** legacy */
     aliens = 'aliens',
+    combat = 'combat',
     item = 'item',
     trader = 'trader',
     lostFleet = 'lostFleet',
@@ -20,6 +23,7 @@ export const ExpeditionEventTypes = [
     ExpeditionEventType.darkMatter,
     ExpeditionEventType.pirates,
     ExpeditionEventType.aliens,
+    ExpeditionEventType.combat,
     ExpeditionEventType.item,
     ExpeditionEventType.trader,
     ExpeditionEventType.lostFleet,

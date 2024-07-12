@@ -1,11 +1,10 @@
 import { TryActionResult } from "../../shared/TryActionResult";
 import { _log, _logDebug, _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { RawLifeformDiscoveryMessageData } from "../../shared/messages/tracking/common";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
 import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
+import { RawLifeformDiscoveryMessageData, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
@@ -26,7 +25,7 @@ export class LifeformDiscoveryModule {
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(knownLifeformDiscovery),
+                    lifeformDiscovery: knownLifeformDiscovery,
                     isAlreadyTracked: true,
                 },
             };
@@ -42,7 +41,7 @@ export class LifeformDiscoveryModule {
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(lifeformDiscovery),
+                    lifeformDiscovery,
                     isAlreadyTracked: false,
                 },
             };
@@ -145,33 +144,3 @@ export class LifeformDiscoveryModule {
         };
     }
 }
-
-//#region april fools
-function transformResult(result: LifeformDiscoveryEvent): LifeformDiscoveryEvent {
-    if(!isAprilFools(result.id, result.date)) {
-        return result;
-    }
-
-    switch(result.type) {
-        case LifeformDiscoveryEventType.artifacts: return {
-            ...result,
-            artifacts: result.id % 4,
-        };
-
-        case LifeformDiscoveryEventType.knownLifeformFound: return {
-            ...result,
-            experience: result.id % 379,
-        };
-
-        default: return result;
-    }
-}
-
-function isAprilFools(id: number, time: number) {
-    const date = new Date(time);
-    const now = new Date();
-
-    return now.getDate() == 1 && now.getMonth() == 4 - 1
-        && date.getHours() > id % 18;
-}
-//#endregion

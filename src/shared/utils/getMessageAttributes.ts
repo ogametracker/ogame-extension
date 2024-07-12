@@ -12,16 +12,32 @@ export function getRawMessageAttributes(element: Element): Record<string, string
     return extractedAttributes;
 }
 
-export function getMessageAttributes<T extends Record<string, (rawValue: string) => any>>(element: Element, conversions: T)
-    : { [Key in keyof T]: ReturnType<T[Key]> }
+export function getMessageAttributes<
+    T extends Record<string, {
+        optional: boolean;
+        conversion: (rawValue: string) => any,
+    }>
+>(element: Element, conversions: T)
+    : { [Key in keyof T]: T[Key]['optional'] extends true 
+        ? (ReturnType<T[Key]['conversion']> | undefined)
+        : ReturnType<T[Key]['conversion']> 
+    }
 {
     const rawAttributes = getRawMessageAttributes(element);
 
     const result = {} as any; // :(
-    for(const [key, conversion] of Object.entries(conversions)) {
-        const rawValue = rawAttributes[key] ?? _throw(`missing raw attribute value for attribute 'data-raw-${key}'`);
+    for(const [key, {conversion, optional}] of Object.entries(conversions)) {
+        const rawValue = rawAttributes[key];
 
-        result[key] = conversion(rawValue);
+        if(rawValue == null) {
+            if(!optional) {
+                _throw(`missing raw attribute value for attribute 'data-raw-${key}'`);
+            }
+
+            result[key] = undefined;
+        } else {
+            result[key] = conversion(rawValue);
+        }
     }
 
     return result;
