@@ -3,4 +3,5 @@ export interface RawMessageData {
     date: number;
     text: string;
     html: string;
+    attributes: { [key: string]: string }; 
 }

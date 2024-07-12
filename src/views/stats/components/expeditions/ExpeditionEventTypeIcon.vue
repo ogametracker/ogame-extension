@@ -7,6 +7,7 @@
     <o-resource v-else-if="type == ExpeditionEventType.darkMatter" resource="dark-matter" size="24px" />
     <span v-else-if="type == ExpeditionEventType.pirates" class="mdi mdi-pirate" :style="{ color: colors.pirates }" />
     <span v-else-if="type == ExpeditionEventType.aliens" class="mdi mdi-alien" :style="{ color: colors.aliens }" />
+    <span v-else-if="type == ExpeditionEventType.combat" class="mdi mdi-sword-cross" :style="{ color: colors.combat }" />
     <o-item v-else-if="type == ExpeditionEventType.item" :item="detroidItem" size="24px" />
     <span v-else-if="type == ExpeditionEventType.trader" class="mdi mdi-swap-horizontal-bold" :style="{ color: colors.trader }" />
     <span v-else-if="type == ExpeditionEventType.lostFleet" class="mdi mdi-cross" :style="{ color: colors.lostFleet }" />

@@ -1,7 +1,7 @@
 export enum LifeformDiscoveryEventType {
     /** nothing happened */
     nothing = 'nothing',
-    /** discovery probe was los */
+    /** legacy: discovery probe was lost */
     lostShip = 'lostShip',
     /** dicovered a new (not previously known) lifeform */
     newLifeformFound = 'newLifeformFound',

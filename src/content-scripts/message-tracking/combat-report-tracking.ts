@@ -9,7 +9,7 @@ import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import { addOrSetCustomMessageContent, cssClasses, formatNumber, tabIds } from "./utils";
+import { addOrSetCustomMessageContent, cssClasses, formatNumber } from "./utils";
 import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
 import { sendMessage } from "@/shared/communication/sendMessage";
 import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
@@ -18,11 +18,16 @@ import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from "@/shared/m
 import { v4 } from "uuid";
 import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
 import { TryActionResult } from "@/shared/TryActionResult";
+import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
+import { getMessageAttributes } from "@/shared/utils/getMessageAttributes";
+import { parseIntSafe } from "@/shared/utils/parseNumbers";
+import { createRecord } from "@/shared/utils/createRecord";
+import { ShipTypes } from "@/shared/models/ogame/ships/ShipTypes";
+import { ShipType } from "@/shared/models/ogame/ships/ShipType";
+import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
 
 const domParser = new DOMParser();
 const combatJsonRegex = /var combatData = jQuery\.parseJSON\('(?<json>[^\n]+)'\);/;
-
-let tabContent: Element | null = null;
 
 const notificationIds = {
     result: v4(),
@@ -43,30 +48,6 @@ const shouldTrackResolvers: Record<number, (value: boolean) => void> = {};
 
 const maxRetries = 5;
 const retryCombats: { id: number; date: number; attempt: number; msg: Element }[] = [];
-
-export function initCombatReportTracking() {
-    chrome.runtime.onMessage.addListener(message => onMessage(message));
-
-    const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
-    const initObserver = new MutationObserver(() => {
-        if (tabContent?.isConnected != true) {
-            setupObserver();
-        }
-    });
-    initObserver.observe(contentElem, { subtree: true, childList: true });
-
-    retryLoadCombats();
-}
-
-function setupObserver() {
-    const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.combats}"]`) ?? _throw('Cannot find label of combat report messages');
-    const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of combat report messages tab content');
-    tabContent = document.querySelector(`#${tabContentId}`);
-    const tabContentElem = tabContent ?? _throw('Cannot find content element of combat report messages');
-
-    const observer = new MutationObserver(async () => await trackCombatReports(tabContentElem));
-    observer.observe(tabContentElem, { childList: true, subtree: true });
-}
 
 function sendNotificationMessages() {
     const failed = Object.keys(failedToTrackCombats).length;
@@ -127,7 +108,7 @@ function onMessage(message: Message<MessageType, any>) {
             shouldTrackResolvers[msg.data.id]?.(false);
             delete shouldTrackResolvers[msg.data.id];
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
+            const li = document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
@@ -147,7 +128,7 @@ function onMessage(message: Message<MessageType, any>) {
             shouldTrackResolvers[combatReport.id]?.(false);
             delete shouldTrackResolvers[combatReport.id];
 
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
+            const li = document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
@@ -203,7 +184,7 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
+            const li = document.querySelector(`.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
@@ -217,10 +198,15 @@ function onMessage(message: Message<MessageType, any>) {
     }
 }
 
-async function trackCombatReports(elem: Element) {
-    const messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-        .filter(elem => !elem.classList.contains(cssClasses.messages.base))
-        .filter(elem => elem.querySelector('.msg_actions a.txt_link') != null); // ignore combat reports of intergalactic missiles or 1-round combats without proper report
+export const combatTracking = {
+    onMessage,
+    messageType: OgameRawMessageType.combatReport,
+    track: trackCombatReports,
+    onInit: () => retryLoadCombats(),
+}
+
+async function trackCombatReports(msgs: Element[]) {
+    const messages = msgs.filter(elem => elem.querySelector('.msg_actions a.txt_link') != null); // ignore combat reports of intergalactic missiles or 1-round combats without proper report
 
     // add base css class to prevent multiple loads of the same combat report 
     messages.forEach(msg => msg.classList.add(cssClasses.messages.base));
@@ -245,37 +231,23 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
             return;
         }
 
-        const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
-        const date = parse(dateText, dateTimeFormat, new Date()).getTime();
-        if (isNaN(date)) {
-            _throw('Message date is NaN');
-        }
-
         // mark message as "waiting for result"
         msg.classList.add(cssClasses.messages.waitingToBeProcessed);
         addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
+        
+        const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
+        const { timestamp: date } = getMessageAttributes(element, {
+            timestamp: {
+                optional: false,
+                conversion: value => parseIntSafe(value, 10) * 1000, 
+            },
+        }); 
 
-        const messageUrl = `/game/index.php?page=messages&ajax=1&tabid=${tabIds.combats}&messageId=${id}`;
-        const loadingCombatResult = await loadOgameCombatReport(messageUrl);
-
-        // ogame error (e.g. 503) with valid response
-        if (!loadingCombatResult.success) {
-            const newAttempt = (attempt ?? 0) + 1;
-            if(newAttempt > maxRetries) {
-                _throw(`failed to load combat report ${id} after ${maxRetries} retries`);
-            }
-
-            _logWarning(`failed to load combat report ${id}, retrying (attempt ${newAttempt})`);
-            retryCombats.push({
-                id,
-                attempt: newAttempt,
-                date: getRetryTime(newAttempt),
-                msg,
-            });
-            return;
+        if (isNaN(date)) {
+            _throw('Message timestamp is NaN');
         }
 
-        const ogameCombatReport = loadingCombatResult.result;
+        const ogameCombatReport = parseCombatReportData(element);
 
         // skip if is expedition fight and the language is not supported
         if (ogameCombatReport.isExpedition && !isSupportedLanguage(ogameMeta.userLanguage)) {
@@ -308,6 +280,81 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
         failedToTrackCombats[id] = true;
         sendNotificationMessages();
     }
+}
+
+function parseCombatReportData(element: Element): OgameCombatReport { 
+    const { playerId } = getOgameMeta();
+
+    const { 
+        defenderspaceobject: rawDefenderInfo,
+        combatrounds: rawCombatRounds,
+        result: rawResult,
+        fleets: rawFleets,
+     } = getMessageAttributes(element, {
+        defenderspaceobject: {
+            optional: false,
+            conversion: json => JSON.parse(json), 
+        },
+        result: {
+            optional: false,
+            conversion: json => JSON.parse(json), 
+        },
+        combatrounds: {
+            optional: false,
+            conversion: json => JSON.parse(json), 
+        },
+        fleets: {
+            optional: false,
+            conversion: json => JSON.parse(json), 
+        },
+    }); 
+
+    const playerFleets = rawFleets.filter((f: any) => f.player?.id == playerId);
+    const lastCombatRound = rawCombatRounds[rawCombatRounds.length - 1] ?? { fleets: [] };
+
+    const playerFleetIds = playerFleets.map((f: any) => f.fleetId);
+    const playerLossesPerFleet: Record<ShipType, number>[] = lastCombatRound.fleets
+        .filter((f: any) => playerFleetIds.includes(f.fleetId))
+        .map((f: any) => createRecord(ShipTypes, (ship: ShipType) => f.technologies.find((t: any) => t.technologyId == ship)?.destroyedTotal ?? 0));
+
+    const playerLosses = createRecord(ShipTypes, ship => {
+        return playerLossesPerFleet
+            .map(fleet => fleet[ship])
+            .reduce((acc, cur) => acc + cur, 0);
+    });
+
+    const isEspionageCombat = rawFleets
+        .filter((f: any) => f.side == 'attacker')
+        .every((f: any) => f.combatTechnologies.every((t: any) => t.technologyId == ShipType.espionageProbe));
+
+    return {
+        winner: rawResult.winner,
+        isOwner: rawDefenderInfo.owner?.id == playerId,
+        coordinates: {
+            ...rawDefenderInfo.coordinates,
+            type: rawDefenderInfo.type == 'planet' ? PlanetType.planet : PlanetType.moon,
+        },
+        isExpedition: rawDefenderInfo.coordinates.position == 16,
+
+        isEspionageCombat,
+
+        isAttacker: playerFleets.some((f: any) => f.side == 'attacker'),
+        isDefender: playerFleets.some((f: any) => f.side == 'defender'),
+
+        loot: {
+            metal: rawResult.loot.resources.find((r: any) => r.resource == 'metal')?.amount ?? 0,
+            crystal: rawResult.loot.resources.find((r: any) => r.resource == 'crystal')?.amount ?? 0,
+            deuterium: rawResult.loot.resources.find((r: any) => r.resource == 'deuterium')?.amount ?? 0,
+        },
+
+        debris: {
+            metal: rawResult.debris.resources.find((r: any) => r.resource == 'metal')?.amount ?? 0,
+            crystal: rawResult.debris.resources.find((r: any) => r.resource == 'crystal')?.amount ?? 0,
+            deuterium: rawResult.debris.resources.find((r: any) => r.resource == 'deuterium')?.amount ?? 0,
+        },
+
+        playerLosses,
+    };
 }
 
 function getRetryTime(attempt: number) {
@@ -345,7 +392,10 @@ function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
 }
 
 async function loadOgameCombatReport(url: string): Promise<TryActionResult<OgameCombatReport>> {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, { 
+        method: 'GET',
+        redirect: 'error',
+    });
     if (!response.ok) {
         return { success: false };
     }

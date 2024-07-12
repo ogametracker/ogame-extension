@@ -64,6 +64,7 @@ function trackPlayerClass() {
 function trackOwnedPlanets() {
     observerCallbacks.push({
         selector: '#planetList',
+        runWhenExistsSelector: '#bannerSkyscrapercomponent, #bottom',
         callback: element => {
             const planetElems = element.querySelectorAll('.smallplanet');
             const ownedPlanets: BasicPlanetData[] = [];
@@ -247,7 +248,10 @@ function updateFleetTracking() {
         const destinationCoordinatesType = getCoordinateType(row.querySelector('.destFleet') ?? _throw('no dest icon found'));;
         const destinationCoordinates = parseCoordinates(destinationCoordinatesText.trim(), destinationCoordinatesType);
 
-        const tooltipHtml = row.querySelector('[class*="icon_movement"] .tooltip')?.getAttribute('title') ?? _throw('no tooltip found');
+        const tooltipElement = row.querySelector('[class*="icon_movement"] .tooltip, [class*="icon_movement_reserve"] .tooltip');
+        // Checking for data-tooltip-title and title as OGLight is refactoring it to title
+        const tooltipHtml = tooltipElement?.getAttribute('data-tooltip-title') ?? tooltipElement?.getAttribute('title') ?? _throw('no tooltip found');
+
         const tooltipTextElem = document.createElement('div');
         tooltipTextElem.innerHTML = tooltipHtml;
         const tooltipText = tooltipTextElem.textContent ?? '';

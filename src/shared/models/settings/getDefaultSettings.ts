@@ -118,6 +118,7 @@ export function getDefaultSettings(language: LanguageKey): Settings {
                     [ExpeditionEventType.darkMatter]: '#33bcdb',
                     [ExpeditionEventType.pirates]: '#ffb592',
                     [ExpeditionEventType.aliens]: '#92ffdc',
+                    [ExpeditionEventType.combat]: '#ffb592',
                     [ExpeditionEventType.item]: '#6f23e1',
                     [ExpeditionEventType.trader]: '#fbbc04',
                     [ExpeditionEventType.lostFleet]: '#d11515',

@@ -39,6 +39,7 @@ export const de: ExpeditionsTranslations = {
         [ExpeditionEventType.darkMatter]: ogamePremium.darkMatter,
         [ExpeditionEventType.pirates]: ogameFactions.pirates,
         [ExpeditionEventType.aliens]: ogameFactions.aliens,
+        [ExpeditionEventType.combat]: 'Kampf',
         [ExpeditionEventType.item]: 'Item',
         [ExpeditionEventType.trader]: 'Händler',
         [ExpeditionEventType.lostFleet]: 'Flottenverlust',

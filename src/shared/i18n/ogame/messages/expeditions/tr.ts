@@ -19,7 +19,7 @@ export const tr: ExpeditionMessages = {
         ],
         [ExpeditionEventSize.large]: [
             /* TODO tr 'Eine */'spontane Hyperraumverzerrung'/* hat es deiner Expedition ermöglicht, eine große Menge dunkler Materie sicherzustellen!'*/,
-            /* TODO tr 'Unsere Expedition meldet einen ersten Kontakt der besonderen Art. Anscheinend hat */'eine Energiekreatur, die sich Legorianer nannte'/*, die Schiffe der Expedition durchflogen und dann beschlossen, der unterentwickelten Spezies ein wenig auszuhelfen - es materialisierte sich ein Behälter mit dunkler Materie an Bord der Brücke!'*/,
+            /*'Keşif ekibimiz özel bir ırk ile ilk teması kurdu. Görünüşe bakılırsa bu yaratık */'enerjiden oluşuyor ve kendisine Legor`un Cocuğu'/* adını vermiş. Keşif gemilerimiz arasında uçtuktan sonra bu gelişmemiş ırkımıza yardım etme kararı alıyor ve geminin güvertesinde birden karanlık maddeyle dolu bir kasa beliriyor!'*/,
         ],
         regex: (darkMatter: string) => new RegExp(`(?<amount>[^\\s]+) (?<name>${darkMatter}) ele geçirildi`, 'i'),
     },
@@ -82,7 +82,7 @@ export const tr: ExpeditionMessages = {
 
     [ExpeditionEventType.trader]: [
         /*'Kesif filon */'biraz utangac bir alien irkina rastliyor'/* . Acikcasi bu kadar cekingen alien ile de ilk kez karsilasiyorsun ve seninkiler de olaylari yavastan aliyorlar. Bir süre iletisim kurduktan sonra, aralarindan bir temsilciyi degis tokus edilebilecek mallarla dünyana göndermeyi öneriyorlar.'*/,
-        /* TODO tr 'Deine Expeditionsflotte hatte ein Notsignal aufgefangen. Es handelte sich um einen Megafrachter, der im starken Gravitationsfeld eines Planetoiden gefangen war. Nachdem der Frachter erfolgreich befreit worden war, verkündete der Frachterkapitän feierlich, seine Befreier als bevorzugte Exklusivkunden */'in sein schwarzes Buch'/* aufzunehmen.'*/,
+        /*'Kesif filon acil durum sinyali yakaladi! Sinyali gönderen, yakinindaki gezegenin cekim gücünden cikamayan dev bir nakliye gemisiydi. Basarili bir kurtarma operasyonundan sonra nakliye gemisinin kaptani kurtaricilari onuruna bir sölen düzenleyip, */'isimlerini özel müsteri defterine ekledi',
     ],
 
     [ExpeditionEventType.early]: [

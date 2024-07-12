@@ -1,17 +1,15 @@
-import { LanguageKey } from "../../shared/i18n/LanguageKey";
 import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logError, _logWarning } from "../../shared/utils/_log";
+import { _log, _logDebug, _logError, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
-import i18nDiscoveries from '../../shared/i18n/ogame/messages/lifeform-discoveries';
-import { RawMessageData } from "../../shared/messages/tracking/common";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { getPlayerDatabase } from "@/shared/db/access";
-import { getLanguage } from "@/shared/i18n/getLanguage";
 import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
+import { RawLifeformDiscoveryMessageData, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType, ValidLifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
 import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
+import { OgameRawLifeformDiscoveryType } from "@/shared/models/ogame/messages/OgameRawLifeformDiscoveryType";
+import { OgameRawArtifactFindSize } from "@/shared/models/ogame/messages/OgameRawArtifactFindSize";
+import { OgameRawLifeformType } from "@/shared/models/ogame/messages/OgameRawLifeformType";
 
 interface LifeformDiscoveryEventResult {
     lifeformDiscovery: LifeformDiscoveryEvent;
@@ -21,7 +19,6 @@ interface LifeformDiscoveryEventResult {
 export class LifeformDiscoveryModule {
     public async tryTrackExpedition(message: TrackLifeformDiscoveryMessage): Promise<TryActionResult<LifeformDiscoveryEventResult>> {
         const lifeformDiscoveryEventData = message.data;
-        const { userLanguage } = message.ogameMeta;
         const db = await getPlayerDatabase(message.ogameMeta);
 
         // check if discovery already tracked => if true, return tracked data
@@ -30,27 +27,23 @@ export class LifeformDiscoveryModule {
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(knownLifeformDiscovery),
+                    lifeformDiscovery: knownLifeformDiscovery,
                     isAlreadyTracked: true,
                 },
             };
-        }
+        } 
 
         // otherwise parse and save result
         let lifeformDiscovery: LifeformDiscoveryEvent;
         try {
-            const languageKey = getLanguage(userLanguage, true);
-            lifeformDiscovery = this.#parseLifeformDiscovery(languageKey, {
-                ...lifeformDiscoveryEventData,
-                text: lifeformDiscoveryEventData.text.replace(/\s+/g, ' ').trim(),
-            });
+            lifeformDiscovery = this.#parseLifeformDiscovery(lifeformDiscoveryEventData);
 
             await db.put('lifeformDiscoveries', lifeformDiscovery);
 
             return {
                 success: true,
                 result: {
-                    lifeformDiscovery: transformResult(lifeformDiscovery),
+                    lifeformDiscovery,
                     isAlreadyTracked: false,
                 },
             };
@@ -60,14 +53,13 @@ export class LifeformDiscoveryModule {
         }
     }
 
-    #parseLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEvent {
-        const result = this.#tryParseNothingLifeformDiscovery(language, data)
-            ?? this.#tryParseLostShipLifeformDiscovery(language, data)
-            // parse known lifeform first because they share the same message with a new lifeform discovery except the XP part
-            ?? this.#tryParseKnownLifeformFoundLifeformDiscovery(language, data)
-            ?? this.#tryParseNewLifeformFoundLifeformDiscovery(language, data)
-            ?? this.#tryParseArtifactsLifeformDiscovery(language, data)
-            ;
+    #parseLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEvent {
+        const result: LifeformDiscoveryEvent = {
+            [OgameRawLifeformDiscoveryType.none]: () => this.#parseNothingLifeformDiscovery(data),
+            [OgameRawLifeformDiscoveryType.artifacts]: () => this.#parseArtifactsLifeformDiscovery(data),
+            [OgameRawLifeformDiscoveryType.lifeformFound]: () => this.#parseLifeformFindDiscovery(data),
+            [OgameRawLifeformDiscoveryType.shipLost]: () => this.#parseLostShipLifeformDiscovery(data),
+        }[data.type]();
 
         if (result == null) {
             _throw('Unknown lifeform discovery type');
@@ -76,10 +68,9 @@ export class LifeformDiscoveryModule {
         return result;
     }
 
-    #tryParseNothingLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventNothing | null {
-        const i18nMessages = i18nDiscoveries[language].nothing;
-        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
-            return null;
+    #parseNothingLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNothing {
+        if(data.type != OgameRawLifeformDiscoveryType.none) {
+            _throw('unexpected lifeform discovery type');
         }
 
         return {
@@ -89,38 +80,33 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #tryParseArtifactsLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventArtifacts | null {
-        const i18nMessages = i18nDiscoveries[language].artifacts;
-        const size = (Object.keys(i18nMessages.size) as LifeformDiscoveryEventArtifactFindingSize[])
-            .find(s => this.#includesMessage(data.text, i18nMessages.size[s]));
-
-        if (size == null) {
-            return null;
+    #parseArtifactsLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventArtifacts {
+        if(data.type != OgameRawLifeformDiscoveryType.artifacts) {
+            _throw('unexpected lifeform discovery type');
         }
 
-        let artifacts = 0;
-        if (size != LifeformDiscoveryEventArtifactFindingSize.storageFull) {
-            const artifactsAmount = data.text.match(i18nMessages.numberOfArtifacts)?.groups?.artifacts;
-            if (artifactsAmount == null) {
-                return null;
-            }
+        const artifacts = data.artifactsFound ?? _throw('missing artifacts amount');
+        const artifactSize = data.artifactsSize ?? _throw('missing artifact find size');
 
-            artifacts = parseIntSafe(artifactsAmount);
-        }
+        const mappedSize = {
+            [OgameRawArtifactFindSize.small]: LifeformDiscoveryEventArtifactFindingSize.small,
+            [OgameRawArtifactFindSize.medium]: LifeformDiscoveryEventArtifactFindingSize.medium,
+            [OgameRawArtifactFindSize.large]: LifeformDiscoveryEventArtifactFindingSize.large,
+            [OgameRawArtifactFindSize.fullStorage]: LifeformDiscoveryEventArtifactFindingSize.storageFull,
+        }[artifactSize];
 
         return {
             id: data.id,
             date: data.date,
             type: LifeformDiscoveryEventType.artifacts,
             artifacts,
-            size,
+            size: mappedSize,
         };
     }
 
-    #tryParseLostShipLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventLostShip | null {
-        const i18nMessages = i18nDiscoveries[language].lostShip;
-        if (!i18nMessages.some(message => this.#includesMessage(data.text, message))) {
-            return null;
+    #parseLostShipLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventLostShip {
+        if(data.type != OgameRawLifeformDiscoveryType.shipLost) {
+            _throw('unexpected lifeform discovery type');
         }
 
         return {
@@ -130,39 +116,44 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #lifeformClassNames: Record<ValidLifeformType, string> = {
-        [LifeformType.humans]: 'lifeform1',
-        [LifeformType.rocktal]: 'lifeform2',
-        [LifeformType.mechas]: 'lifeform3',
-        [LifeformType.kaelesh]: 'lifeform4',
-    };
-
-    #tryParseKnownLifeformFoundLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventKnownLifeformFound | null {
-        const regex = i18nDiscoveries[language].knownLifeformFound;
-        const match = data.text.match(regex);
-        if (match?.groups == null) {
-            return null;
+    #parseLifeformFindDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound | LifeformDiscoveryEventNewLifeformFound {
+        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound) {
+            _throw('unexpected lifeform discovery type');
         }
 
-        const lifeform = ValidLifeformTypes.find(lf => data.html.includes(this.#lifeformClassNames[lf])) ?? _throw('did not find any lifeform');
-        const xp = parseIntSafe(match.groups.xp);
+        const isNewLifeform = data.isNewLifeform ?? _throw('missing whether lifeform is new or not');
 
+        return isNewLifeform
+            ? this.#tryParseNewLifeformFoundLifeformDiscovery(data)
+            : this.#tryParseKnownLifeformFoundLifeformDiscovery(data);
+    }
+
+    #tryParseKnownLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound {
+        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound || data.isNewLifeform != false) {
+            _throw('unexpected lifeform discovery type');
+        }
+
+        const lifeformId = data.lifeform ?? _throw('missing lifeform');
+        const lifeform = this.#mapLifeform(lifeformId);
+        
+        const experience = data.lifeformExperience ?? _throw('missing found experience');
+    
         return {
             id: data.id,
             date: data.date,
             type: LifeformDiscoveryEventType.knownLifeformFound,
             lifeform,
-            experience: xp,
+            experience,
         };
     }
 
-    #tryParseNewLifeformFoundLifeformDiscovery(language: LanguageKey, data: RawMessageData): LifeformDiscoveryEventNewLifeformFound | null {
-        const regex = i18nDiscoveries[language].newLifeformFound;
-        if (!regex.test(data.text)) {
-            return null;
+    #tryParseNewLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNewLifeformFound {
+        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound || data.isNewLifeform != true) {
+            _throw('unexpected lifeform discovery type');
         }
 
-        const lifeform = ValidLifeformTypes.find(lf => data.html.includes(this.#lifeformClassNames[lf])) ?? _throw('did not find any lifeform');
+        const lifeformId = data.lifeform ?? _throw('missing lifeform');
+        const lifeform = this.#mapLifeform(lifeformId);
 
         return {
             id: data.id,
@@ -172,38 +163,14 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #includesMessage(ogameText: string, message: string) {
-        return ogameText.toLowerCase().includes(message.toLowerCase());
+    #mapLifeform(lifeform: OgameRawLifeformType): ValidLifeformType {
+        return ({
+                    [OgameRawLifeformType.humans]: LifeformType.humans,
+                    [OgameRawLifeformType.rocktal]: LifeformType.rocktal,
+                    [OgameRawLifeformType.mechas]: LifeformType.mechas,
+                    [OgameRawLifeformType.kaelesh]: LifeformType.kaelesh,
+                } satisfies Record<OgameRawLifeformType, ValidLifeformType>
+            )[lifeform]
+            ?? _throw('invalid lifeform type');
     }
 }
-
-
-//#region april fools
-function transformResult(result: LifeformDiscoveryEvent): LifeformDiscoveryEvent {
-    if(!isAprilFools(result.id, result.date)) {
-        return result;
-    }
-
-    switch(result.type) {
-        case LifeformDiscoveryEventType.artifacts: return {
-            ...result,
-            artifacts: result.id % 4,
-        };
-
-        case LifeformDiscoveryEventType.knownLifeformFound: return {
-            ...result,
-            experience: result.id % 379,
-        };
-
-        default: return result;
-    }
-}
-
-function isAprilFools(id: number, time: number) {
-    const date = new Date(time);
-    const now = new Date();
-
-    return now.getDate() == 1 && now.getMonth() == 4 - 1
-        && date.getHours() > id % 18;
-}
-//#endregion

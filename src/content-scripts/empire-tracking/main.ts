@@ -23,7 +23,7 @@ interface PageTracker {
 
 interface ObserverCallback {
     selector: string;
-    asap?: boolean;
+    runWhenExistsSelector?: string;
     callback: (element: Element) => void;
 }
 
@@ -94,13 +94,15 @@ const pageTrackers: PageTracker[] = [
 export const observerCallbacks: ObserverCallback[] = [];
 const observer = new MutationObserver(() => {
     const siteFooter = document.querySelector('#siteFooter');
-    if (siteFooter == null) {
-        return;
-    }
 
     for (let i = 0; i < observerCallbacks.length; i++) {
         const observerCallback = observerCallbacks[i];
-        if (siteFooter == null && !observerCallback.asap) {
+        
+        const checkExistenceElem = observerCallback.runWhenExistsSelector != null
+            ? document.querySelector(observerCallback.runWhenExistsSelector)
+            : siteFooter;
+
+        if (checkExistenceElem == null) {
             continue;
         }
 
