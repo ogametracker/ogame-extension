@@ -130,7 +130,8 @@ export enum ItemHash {
     detroid_silver = '27cbcd52f16693023cb966e5026d8a1efbbfc0f9',
     detroid_gold = '0968999df2fe956aa4a07aea74921f860af7d97f',
     detroid_platinum = '3347bcd4ee59f1d3fa03c4d18a25bca2da81de82',
-    detroid_platinum_pts = 'e854c8d267fe0776ccd9e60a09a5fae90cbf653c',
+
+    detroid_mechaShipyard_bronze_pts = '50f666f32934372fab5fe0fdba70e028abdcd9f8',
 
     newtron_bronze = 'da4a2a1bb9afd410be07bc9736d87f1c8059e66d',
     newtron_silver = 'd26f4dab76fdc5296e3ebec11a1e1d2558c713ea',
@@ -341,7 +342,8 @@ const _ItemHashes: Record<ItemHash, 0> = {
     [ItemHash.detroid_silver]: 0,
     [ItemHash.detroid_gold]: 0,
     [ItemHash.detroid_platinum]: 0,
-    [ItemHash.detroid_platinum_pts]: 0,
+
+    [ItemHash.detroid_mechaShipyard_bronze_pts]: 0,
 
     [ItemHash.newtron_bronze]: 0,
     [ItemHash.newtron_silver]: 0,

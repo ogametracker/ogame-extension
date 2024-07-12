@@ -1077,16 +1077,15 @@ export const Items: Record<ItemHash, Item> = {
         hash: ItemHash.resourcePackage_deuterium,
         grade: ItemGrade.none,
     },
-
-    [ItemHash.detroid_platinum_pts]: {
-        hash: ItemHash.detroid_platinum,
-        image: "5fe7fc5e764286b3f588ef488df593235671a661",
-        smallImage: '9f6cdd9c0bfc9df332318e9e7602db5169726c54',
-        name: "DETROID Platin",
-        grade: ItemGrade.platinum,
+    
+    
+    [ItemHash.detroid_mechaShipyard_bronze_pts]: {
+        hash: ItemHash.detroid_mechaShipyard_bronze_pts,
+        image: "56724c3a1dcae8036bb172f0be833a6f9a28bc27",
+        smallImage: '610b867a8841d4a4c949d8a59719243580456452',
+        name: 'DETROID Bronze (Mecha-Shipyard)',
+        grade: ItemGrade.bronze,
     },
-    
-    
 
     [ItemHash.lifeformKraken_bronze_pts]: {
         hash: ItemHash.lifeformKraken_bronze_pts,

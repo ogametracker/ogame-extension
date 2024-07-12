@@ -40,6 +40,7 @@ export const pt_pt: RecursivePartial<ExpeditionsTranslations> = {
         [ExpeditionEventType.darkMatter]: ogamePremium.darkMatter,
         [ExpeditionEventType.pirates]: ogameFactions.pirates,
         [ExpeditionEventType.aliens]: ogameFactions.aliens,
+        [ExpeditionEventType.combat]: 'Combate',
         [ExpeditionEventType.item]: 'Item',
         [ExpeditionEventType.trader]: 'Mercador',
         [ExpeditionEventType.lostFleet]: 'Frota Perdida',

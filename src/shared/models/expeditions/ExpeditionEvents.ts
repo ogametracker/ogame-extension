@@ -73,10 +73,12 @@ export type ExpeditionEventItem = ExpeditionEventBase & {
 
 export type ExpeditionEventEarly = ExpeditionEventBase & {
     type: ExpeditionEventType.early;
+    size?: ExpeditionEventSize;
 };
 
 export type ExpeditionEventDelay = ExpeditionEventBase & {
     type: ExpeditionEventType.delay;
+    size?: ExpeditionEventSize;
 };
 
 export type ExpeditionEventTrader = ExpeditionEventBase & {
@@ -103,6 +105,11 @@ export type ExpeditionEventPirates = ExpeditionEventBase & {
     type: ExpeditionEventType.pirates;
 };
 
+export type ExpeditionEventCombat = ExpeditionEventBase & {
+    size: ExpeditionEventCombatSize;
+    type: ExpeditionEventType.combat;
+};
+
 export type ExpeditionEvent = ExpeditionEventDarkMatter
     | ExpeditionEventResources
     | ExpeditionEventFleet
@@ -113,4 +120,5 @@ export type ExpeditionEvent = ExpeditionEventDarkMatter
     | ExpeditionEventLostFleet
     | ExpeditionEventNothing
     | ExpeditionEventPirates
-    | ExpeditionEventAliens;
+    | ExpeditionEventAliens
+    | ExpeditionEventCombat;

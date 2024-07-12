@@ -24,5 +24,4 @@ export interface CombatReport {
     };
 
     isExpedition: boolean;
-    expeditionAttackType: 'pirates' | 'aliens' | null;
 }
