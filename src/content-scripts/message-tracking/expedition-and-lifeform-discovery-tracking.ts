@@ -1,12 +1,11 @@
-import { parse } from "date-fns";
 import { Message } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { ExpeditionMessage, TrackExpeditionMessage } from "../../shared/messages/tracking/expeditions";
-import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
-import { _log, _logDebug, _logWarning } from "../../shared/utils/_log";
+import { _log, _logDebug, _logWarning, _logError } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
+import { getMessageAttributes } from "../../shared/utils/getMessageAttributes";
 import { tabIds, cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
 import { ExpeditionEvent, ExpeditionEventCombatSize, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "../../shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionEventType";
@@ -31,7 +30,6 @@ import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@/share
 import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
 import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import messageHeaders from "@/shared/i18n/ogame/messages/message-titles";
 import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
 
 let tabContent: Element | null = null;
@@ -109,7 +107,7 @@ const totalExpeditionResult: ExpeditionTrackingNotificationMessageData = {
 export function initExpeditionAndLifeformDiscoveryTracking() {
     chrome.runtime.onMessage.addListener(message => onMessage(message));
 
-    const contentElem = document.querySelector('#content .content') ?? _throw('Cannot find content element');
+    const contentElem = document.querySelector('#pageContent .content') ?? _throw('Cannot find content element');
     const initObserver = new MutationObserver(() => {
         if (tabContent?.isConnected != true) {
             setupExpeditionMessageObserver();
@@ -119,10 +117,8 @@ export function initExpeditionAndLifeformDiscoveryTracking() {
 }
 
 function setupExpeditionMessageObserver() {
-    const tabLabel = document.querySelector(`[id^="subtabs-"][data-tabid="${tabIds.expedition}"]`) ?? _throw('Cannot find label of expedition messages');
-    const tabContentId = tabLabel.getAttribute('aria-controls') ?? _throw('Cannot find id of expedition messages tab content');
-    tabContent = document.querySelector(`#${tabContentId}`);
-    const tabContentElement = tabContent ?? _throw('Cannot find content element of expedition messages');
+    tabContent = document.querySelector(`.messagesHolder`);
+    const tabContentElement = tabContent ?? _throw('Cannot find messages holder element');
 
     const meta = getOgameMeta();
     if (isSupportedLanguage(meta.userLanguage)) {
@@ -141,19 +137,19 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.Expedition:
         case MessageType.NewExpedition: {
             const msg = message as ExpeditionMessage;
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
+            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             if (aprilFools_expeditionIds.has(msg.data.id)) {
                 return;
             }
 
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.processed);
+            div.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            div.classList.add(cssClasses.messages.processed);
             if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
-                li.classList.add(cssClasses.messages.hideContent);
+                div.classList.add(cssClasses.messages.hideContent);
             }
 
-            addExpeditionResultContent(li, msg.data);
+            addExpeditionResultContent(div, msg.data); 
 
             if (message.type == MessageType.NewExpedition) {
                 updateExpeditionResults(msg);
@@ -164,19 +160,19 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.LifeformDiscovery:
         case MessageType.NewLifeformDiscovery: {
             const msg = message as LifeformDiscoveryMessage;
-            const li = document.querySelector(`li.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
+            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
 
             if (aprilFools_lifeformDiscoveryIds.has(msg.data.id)) {
                 return;
             }
 
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.processed);
+            div.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            div.classList.add(cssClasses.messages.processed);
             if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
-                li.classList.add(cssClasses.messages.hideContent);
+                div.classList.add(cssClasses.messages.hideContent);
             }
 
-            addLifeformDiscoveryResultContent(li, msg.data);
+            addLifeformDiscoveryResultContent(div, msg.data);
 
             if (message.type == MessageType.NewLifeformDiscovery) {
                 updateLifeformDiscoveryResults(msg);
@@ -190,11 +186,11 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const li = document.querySelector(`li.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find message with id '${id}'`);
+            const div = document.querySelector(`div.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find message with id '${id}'`);
 
-            li.classList.remove(cssClasses.messages.waitingToBeProcessed);
-            li.classList.add(cssClasses.messages.error);
-            addOrSetCustomMessageContent(li, false);
+            div.classList.remove(cssClasses.messages.waitingToBeProcessed);
+            div.classList.add(cssClasses.messages.error);
+            addOrSetCustomMessageContent(div, false);
 
             delete waitingForMessageResult[id];
             failedToTrackMessages[id] = true;
@@ -205,17 +201,23 @@ function onMessage(message: Message<MessageType, any>) {
 }
 
 function trackMessages(elem: Element) {
+    const expeditionTab = document.querySelector(`.innerTabItem.active[data-subtab-id="${tabIds.expedition}"]`);
+    if (expeditionTab == null) {
+        return;
+    }
+
     const ogameMeta = getOgameMeta();
     const lang = getLanguage(ogameMeta.userLanguage);
 
-    let messages = Array.from(elem.querySelectorAll('li.msg[data-msg-id]'))
-        .filter(elem => !elem.classList.contains(cssClasses.messages.base));
+    let messages = Array.from(elem.querySelectorAll('div.msg[data-msg-id]'))
+    .filter(elem => {
+        const messageType = elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype');
+        return !elem.classList.contains(cssClasses.messages.base) && (messageType === "41" || messageType === "61");
+    });
 
-    if (lang != null) {
-        messages = trackExpeditionsOrLifeformDiscoveries(lang, messages);
-    }
-
-    messages.forEach(msg => {
+    // In theory we might already allow ogame tracker to be used for lifeform message as the language is not required anymore.
+    let unprocessedMessages = trackExpeditionsOrLifeformDiscoveries(lang, messages);
+    unprocessedMessages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
@@ -227,49 +229,27 @@ function trackMessages(elem: Element) {
     });
 }
 
-function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Element[]) {
+function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey | undefined, messages: Element[]) {
     const unprocessedMessages: Element[] = [];
-    const headers = messageHeaders[lang];
 
     messages.forEach(msg => {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         try {
-            // prepare message to service worker
-            const dateText = msg.querySelector('.msg_head .msg_date')?.textContent ?? _throw('Cannot find message date');
-            const date = parse(dateText, dateTimeFormat, new Date()).getTime();
-            if (isNaN(date)) {
-                _throw('Message date is NaN');
-            }
+            // prepare message to service worker 
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`); 
+            const attributes = getMessageAttributes(element);
 
-            const messageTextElem = msg.querySelector('.msg_content') ?? _throw('Cannot find message content element');
-            const text = messageTextElem.textContent ?? '';
-            const html = messageTextElem.innerHTML;
-
-            const messageTypeHeaders = {
-                [MessageType.TrackExpedition]: headers.expedition,
-                [MessageType.TrackLifeformDiscovery]: headers.lifeformDiscovery,
-            };
-
-            const messageTitle = msg.querySelector('.msg_title')?.textContent ?? '';
-            const messageType = (Object.keys(messageTypeHeaders) as (keyof typeof messageTypeHeaders)[])
-                .find(msgType => messageTitle.toLowerCase().includes(messageTypeHeaders[msgType].toLowerCase()) == true);
-            if (messageType == null) {
-                _throw(`unknown message type '${messageTitle}'`);
+            // We currently do not process expeditions missions as it was not the case if the language was null
+            if (lang == null && attributes["messagetype"] === "41") {
+                unprocessedMessages.push(msg);
+                return;
             }
 
             // send message to service worker
-            const workerMessage: TrackExpeditionMessage | TrackLifeformDiscoveryMessage = {
-                type: messageType,
-                ogameMeta: getOgameMeta(),
-                data: {
-                    id,
-                    date,
-                    text,
-                    html,
-                },
-                senderUuid: messageTrackingUuid,
-            };
+            const workerMessage = attributes["messagetype"] === "41" 
+            ? prepareExpeditionWorkerMessage(msg, id, attributes) 
+            : prepareLifeformDiscoveryWorkerMessage(id, attributes)
             sendMessage(workerMessage);
 
             // mark message as "waiting for result"
@@ -283,7 +263,8 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Elem
 
 
             // april fools
-            aprilFools_replaceMessage(messageType, lang, id, msg, date);
+            if (lang != null) 
+                aprilFools_replaceMessage(workerMessage.type, lang, id, msg, workerMessage.data.date);
         } catch (error) {
             console.error(error);
             unprocessedMessages.push(msg);
@@ -291,6 +272,66 @@ function trackExpeditionsOrLifeformDiscoveries(lang: LanguageKey, messages: Elem
     });
 
     return unprocessedMessages;
+}
+
+function prepareExpeditionWorkerMessage(msg: Element, id: number, attr: Record<string, string>): TrackExpeditionMessage {
+    const timestamp = attr["timestamp"] ?? _throw('Cannot find message timestamp');
+    const date = parseInt(timestamp, 10) * 1000;
+    if (isNaN(date)) {
+        _throw('Message timestamp is NaN');
+    }
+
+    const messageTextElem = msg.querySelector('.msgContent') ?? _throw('Cannot find message content element');
+    const text = messageTextElem.textContent ?? '';
+    const html = messageTextElem.innerHTML;
+
+    const workerMessage: TrackExpeditionMessage = {
+        type: MessageType.TrackExpedition,
+        ogameMeta: getOgameMeta(),
+        data: {
+            id,
+            date,
+            text,
+            html,
+            attributes:attr
+        },
+        senderUuid: messageTrackingUuid,
+    };
+
+    return workerMessage
+}
+
+function prepareLifeformDiscoveryWorkerMessage(id: number, attr: Record<string, string>): TrackLifeformDiscoveryMessage {
+    const timestamp = attr["timestamp"] ?? _throw('Cannot find message timestamp');
+    const discoveryType = attr["discoverytype"] || "nothing"
+    const artifactsSize = attr["artifactssize"] || undefined
+    const artifactsFound = attr["artifactsfound"] !== undefined ? parseIntSafe(attr["artifactsfound"]) : undefined
+    const lifeform = attr["lifeform"] || undefined
+    const lifeformExp = attr["lifeformgainedexperience"] !== undefined ? parseIntSafe(attr["lifeformgainedexperience"]) : undefined
+    const alreadyFound = attr["lifeformalreadyowned"] === "1" || undefined
+
+    const date = parseInt(timestamp, 10) * 1000;
+    if (isNaN(date)) {
+        _throw('Message timestamp is NaN');
+    }
+
+    const workerMessage: TrackLifeformDiscoveryMessage = {
+        type: MessageType.TrackLifeformDiscovery,
+        ogameMeta: getOgameMeta(),
+        data: {
+            id,
+            date,
+            discoveryType,
+            artifactsSize,
+            artifactsFound,
+            lifeform,
+            lifeformExp,
+            alreadyFound,
+        },
+        senderUuid: messageTrackingUuid,
+    };
+
+    return workerMessage
 }
 
 function sendNotificationMessages() {
@@ -771,7 +812,7 @@ function aprilFools_replaceExpeditionMessage(id: number, msg: Element) {
             const logbookReplacement = logbookReplacements[id % logbookReplacements.length];
             htmlReplacement += `<br><br>Logbuchnachtrag des Kommunikationsoffiziers: ${logbookReplacement}`;
 
-            msg.querySelector('.msg_content')!.innerHTML = htmlReplacement;
+            msg.querySelector('.msgContent')!.innerHTML = htmlReplacement;
         }
 
         setTimeout(() => onMessage(<MessageTrackingErrorMessage>{
@@ -789,7 +830,7 @@ function aprilFools_replaceLifeformDiscoveryMessage(id: number, msg: Element) {
     const seededRand = id * 16807 % 2147483647;
     const rand = (min: number, max: number) => Math.floor(min + seededRand % (max - min));
 
-    const msgContent = msg.querySelector('.msg_content')!;
+    const msgContent = msg.querySelector('.msgContent')!;
     const isLifeformFound = msg.innerHTML.match(/wurde die Lebensform .+ gefunden/);
     let replaced = false;
     if (isLifeformFound != null) {
