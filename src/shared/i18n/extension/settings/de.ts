@@ -170,8 +170,63 @@ export const de: SettingsTranslations = {
         importCallbacks: {
             importingSettings: 'Einstellungen werden imporiert',
             importingBasicData: 'Grundlegende Account- und Server-Informationen werden importiert',
-            importingAccounts: 'Accounts werden importiert',
-            importingUniverseHistories: 'Universumshistorien werden importiert',
+            importingUniverseHistories: (
+                serverIndex: number, 
+                serverTotal: number, 
+                entryIndex: number, 
+                entryTotal: number,
+            ) => {
+                const baseMessage = 'Universumshistorien werden importiert';
+
+                return `${baseMessage} (Server ${serverIndex + 1}/${serverTotal}, Eintrag ${entryIndex + 1}/${entryTotal})`;      
+            },
+            importingAccounts: (
+                accountIndex: number, 
+                totalAccounts: number, 
+                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                stepIndex: number,
+                stepTotal: number,
+            ) => {
+                const baseMessage = `Accounts werden importiert`;
+                const accountProgress = `${accountIndex + 1}/${totalAccounts}`;
+
+                if(type == 'account') {
+                    return `${baseMessage} (${accountProgress})`;
+                }
+
+                if(type == 'combat-reports') {
+                    return `${baseMessage} (${accountProgress}, Kampf ${stepIndex + 1}/${stepTotal})`;
+                }
+
+                if(type == 'expeditions') {
+                    return `${baseMessage} (${accountProgress}, Expedition ${stepIndex + 1}/${stepTotal})`;
+                }
+
+                if(type == 'debris-fields') {
+                    return `${baseMessage} (${accountProgress}, TF-Berícht ${stepIndex + 1}/${stepTotal})`;
+                }
+
+                if(type == 'lifeform-discoveries') {
+                    return `${baseMessage} (${accountProgress}, LF-Mission ${stepIndex + 1}/${stepTotal})`;
+                }
+
+                if(type == 'empire.data') {
+                    return `${baseMessage} (${accountProgress}, grundlegende Imperiumsdaten)`;
+                }
+
+                if(type == 'empire.planets') {
+                    return `${baseMessage} (${accountProgress}, Planet ${stepIndex + 1}/${stepTotal})`;
+                }
+                if(type == 'empire.moons') {
+                    return `${baseMessage} (${accountProgress}, Mond ${stepIndex + 1}/${stepTotal})`;
+                }
+
+                if(type == 'universe-specific-settings') {
+                    return `${baseMessage} (${accountProgress}, universumsspezifische Einstellungen)`;
+                }
+
+                throw new Error(`Invalid type '${type}'`);
+            },
         },
     },
     accessibility: {

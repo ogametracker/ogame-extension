@@ -53,6 +53,12 @@ function setupObserver() {
 }
 
 function trackMessages(tracking: Tracking) {
+    // only track messages from the "Fleets" tab to prevent tracking shared messages
+    const activeFleetTab = document.querySelector('.singleTab.marker[data-category-id="2"]');
+    if(activeFleetTab == null) {
+        return;
+    }
+
     const messages = Array.from(document.querySelectorAll('div.msg[data-msg-id]'))
         .filter(elem => {
             const messageType = parseIntSafe(

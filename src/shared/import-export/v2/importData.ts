@@ -8,9 +8,44 @@ import { V2Export, V2ExportedUniverseHistory } from ".";
 export type ImportCallbackInfo = (
     | { type: 'importing-settings' }
     | { type: 'importing-basic-accounts-and-servers' }
-    | { type: 'importing-account'; currentIndex: number; total: number; }
-    | { type: 'importing-universe-history'; currentIndex: number; total: number; }
+    | AccountImportCallbackInfo
+    | { 
+        type: 'importing-universe-history'; 
+        currentIndex: number; 
+        total: number; 
+        subIndex: number;
+        subTotal: number;
+    }
+    | { 
+        type: 'importing-server-settings';
+        currentIndex: number; 
+        total: number; 
+    }
 );
+export type AccountImportCallbackInfo = { 
+    type: 'importing-account'; 
+    currentIndex: number; 
+    total: number; 
+
+    step: { type: 'account' }
+        | { 
+            type: 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries';
+            currentIndex: number;
+            total: number;
+        }
+        | { type: 'universe-specific-settings' }
+        | { 
+            type: 'empire';
+            subtype: 'empire-data';
+        }
+        | { 
+            type: 'empire';
+            subtype: 'planets' | 'moons';
+            currentIndex: number;
+            total: number;
+        }
+        ;
+}
 
 export async function importData(data: V2Export, progressCallback?: (info: ImportCallbackInfo) => void): Promise<void> {
     const globalDb = await getGlobalDatabase();
@@ -60,13 +95,14 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
 
 
     for (let i = 0; i < data.accounts.length; i++) {
-        const account = data.accounts[i];
         progressCallback?.({
             type: 'importing-account',
             currentIndex: i,
             total: data.accounts.length,
+            step: { type: 'account' },
         });
-
+        
+        const account = data.accounts[i];
         const db = await getPlayerDatabase({
             ...account,
             userLanguage: 'doesnt-really-matter',
@@ -74,29 +110,94 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
         const tx = db.transaction(['combatReports', 'debrisFieldReports', 'expeditions', 'lifeformDiscoveries', 'empire', 'universeSpecificSettings'], 'readwrite');
 
         const combatReportStore = tx.objectStore('combatReports');
-        for (const combatReport of account.combatReports) {
+        for (let j = 0; j < account.combatReports.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'combat-reports',
+                    currentIndex: j,
+                    total: account.combatReports.length,
+                 },
+            });
+            
+            const combatReport = account.combatReports[j];
             await combatReportStore.put(combatReport);
         }
 
         const expeditionStore = tx.objectStore('expeditions');
-        for (const expedition of account.expeditions) {
+        for (let j = 0; j < account.expeditions.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'expeditions',
+                    currentIndex: j,
+                    total: account.expeditions.length,
+                 },
+            });
+            
+            const expedition = account.expeditions[j];
             await expeditionStore.put(expedition);
         }
 
         const debrisFieldReportStore = tx.objectStore('debrisFieldReports');
-        for (const debrisFieldReport of account.debrisFieldReports) {
+        for (let j = 0; j < account.debrisFieldReports.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'debris-fields',
+                    currentIndex: j,
+                    total: account.debrisFieldReports.length,
+                 },
+            });
+            
+            const debrisFieldReport = account.debrisFieldReports[j];
             await debrisFieldReportStore.put(debrisFieldReport);
         }
 
         const lifeformDiscoveryStore = tx.objectStore('lifeformDiscoveries');
-        for (const discovery of (account.lifeformDiscoveries ?? [])) {
+        const discoveries = account.lifeformDiscoveries ?? []; 
+        for (let j = 0; j < discoveries.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'lifeform-discoveries',
+                    currentIndex: j,
+                    total: discoveries.length,
+                 },
+            });
+            
+            const discovery = discoveries[j];
             await lifeformDiscoveryStore.put(discovery);
         }
 
         if (account.universeSpecificSettings != null) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { type: 'universe-specific-settings' },
+            });
+
             await tx.objectStore('universeSpecificSettings').put(account.universeSpecificSettings, 0);
         }
 
+        progressCallback?.({
+            type: 'importing-account',
+            currentIndex: i,
+            total: data.accounts.length,
+            step: { 
+                type: 'empire',
+                subtype: 'empire-data',
+            },
+        });
         const empireStore = tx.objectStore('empire');
         await empireStore.put(account.empire.allianceClass, 'allianceClass');
         await empireStore.put(account.empire.playerClass, 'playerClass');
@@ -112,7 +213,21 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
             await empireStore.put(account.empire.officers, 'officers');
         }
 
-        for (const planet of account.empire.planets) {
+        for(let j = 0; j < account.empire.planets.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'empire',
+                    subtype: 'planets',
+                    currentIndex: j,
+                    total: account.empire.planets.length,
+                },
+            });
+
+            const planet = account.empire.planets[j];
+
             const basicData: DbBasicPlanetData = {
                 id: planet.id,
                 coordinates: planet.coordinates,
@@ -142,7 +257,21 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
             }
         }
 
-        for (const moon of account.empire.moons) {
+        for(let j = 0; j < account.empire.moons.length; j++) {
+            progressCallback?.({
+                type: 'importing-account',
+                currentIndex: i,
+                total: data.accounts.length,
+                step: { 
+                    type: 'empire',
+                    subtype: 'moons',
+                    currentIndex: j,
+                    total: account.empire.moons.length,
+                },
+            });
+
+            const moon = account.empire.moons[j];
+
             const basicData: DbBasicMoonData = {
                 id: moon.id,
                 coordinates: moon.coordinates,
@@ -162,78 +291,102 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
 
     for (let i = 0; i < data.servers.length; i++) {
         const server = data.servers[i];
+        const history = server.universeHistory;
+        if (history == null) {
+            continue;
+        }
+
+        const db = await getUniverseHistoryDatabase({
+            language: server.language,
+            serverId: server.serverId,
+            playerId: 0,
+            userLanguage: 'doesnt-really-matter',
+        });
+        const tx = db.transaction([
+            '_lastUpdate',
+            'players', 'playerNames', 'playerAlliances', 'playerStates', 'playerScores',
+            'alliances', 'allianceTags', 'allianceNames', 'allianceMembers', 'allianceStates', 'allianceScores',
+            'planets', 'planetNames', 'planetStates', 'planetCoordinates',
+            'moons', 'moonNames', 'moonStates'
+        ], 'readwrite');
+
+        await tx.objectStore('_lastUpdate').put(history._lastUpdate, 0);
+
+        const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
+            'players',
+            'playerNames',
+            'playerAlliances',
+            'playerStates',
+            'playerScores',
+            'alliances',
+            'allianceTags',
+            'allianceNames',
+            'allianceMembers',
+            'allianceStates',
+            'allianceScores',
+            'planets',
+            'planetNames',
+            'planetStates',
+            'planetCoordinates',
+            'moons',
+            'moonNames',
+            'moonStates',
+        ];
+
+        const totalEntries = stores
+            .map(name => history[name].length)
+            .reduce((acc, cur) => acc + cur, 0);
+        let currentEntryIndex = 0;
+        
+        for (const storeName of stores) {            
+            const store = tx.objectStore(storeName);
+            const entries = history[storeName];
+
+            for (const entry of entries) {
+                progressCallback?.({
+                    type: 'importing-universe-history',
+                    currentIndex: i,
+                    total: data.servers.length,
+                    subIndex: currentEntryIndex,
+                    subTotal: totalEntries,
+                });
+
+                await store.put(entry);
+
+                currentEntryIndex++;
+            }
+        }
+
+        await tx.done;
+    }
+
+    for (let i = 0; i < data.servers.length; i++) {
+        const server = data.servers[i];
+        
         progressCallback?.({
-            type: 'importing-universe-history',
+            type: 'importing-server-settings',
             currentIndex: i,
             total: data.servers.length,
         });
 
-        const history = server.universeHistory;
-        if (history != null) {
-            const db = await getUniverseHistoryDatabase({
-                language: server.language,
-                serverId: server.serverId,
-                playerId: 0,
-                userLanguage: 'doesnt-really-matter',
-            });
-            const tx = db.transaction([
-                '_lastUpdate',
-                'players', 'playerNames', 'playerAlliances', 'playerStates', 'playerScores',
-                'alliances', 'allianceTags', 'allianceNames', 'allianceMembers', 'allianceStates', 'allianceScores',
-                'planets', 'planetNames', 'planetStates', 'planetCoordinates',
-                'moons', 'moonNames', 'moonStates'
-            ], 'readwrite');
-
-            await tx.objectStore('_lastUpdate').put(history._lastUpdate, 0);
-
-            const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
-                'players',
-                'playerNames',
-                'playerAlliances',
-                'playerStates',
-                'playerScores',
-                'alliances',
-                'allianceTags',
-                'allianceNames',
-                'allianceMembers',
-                'allianceStates',
-                'allianceScores',
-                'planets',
-                'planetNames',
-                'planetStates',
-                'planetCoordinates',
-                'moons',
-                'moonNames',
-                'moonStates',
-            ];
-            for (const storeName of stores) {
-                const store = tx.objectStore(storeName);
-                const entries = history[storeName];
-
-                for (const entry of entries) {
-                    await store.put(entry);
-                }
-            }
-
-            await tx.done;
+        if (server.serverSettings == null) {
+            continue;
         }
 
-        if (server.serverSettings != null) {
-            const db = await getServerDatabase({
-                language: server.language,
-                serverId: server.serverId,
-                playerId: 0,
-                userLanguage: 'doesnt-really-matter',
-            });
-            const tx = db.transaction('serverSettings', 'readwrite');
+        const db = await getServerDatabase({
+            language: server.language,
+            serverId: server.serverId,
+            playerId: 0,
+            userLanguage: 'doesnt-really-matter',
+        });
+        const tx = db.transaction('serverSettings', 'readwrite');
 
-            const store = tx.objectStore('serverSettings');
-            for (const entry of Object.entries(server.serverSettings)) {
-                const [key, value] = entry;
-                await store.put(value, key as (keyof DbServerSettings));
-            }
-
-            await tx.done;
+        const store = tx.objectStore('serverSettings');
+        for (const entry of Object.entries(server.serverSettings)) {
+            const [key, value] = entry;
+            await store.put(value, key as (keyof DbServerSettings));
         }
+
+        await tx.done;
     }
 }
