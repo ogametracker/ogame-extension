@@ -404,6 +404,8 @@
         }
 
         private onImportProgress_v2(progress: ImportCallbackInfo): void {
+            const stepSize = 100;
+
             switch (progress.type) {
                 case 'importing-settings': {
                     this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingSettings;
@@ -415,13 +417,98 @@
                     break;
                 }
 
-                case 'importing-account': {
-                    this.lastImportMessage = `${this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts} (${progress.currentIndex + 1}/${progress.total})`;
+                case 'importing-server-settings': {
+                    this.lastImportMessage = `${this.$i18n.$t.extension.settings.importExport.importCallbacks.importingServerSettings} (${progress.currentIndex + 1}/${progress.total})`;
+                    break;
+                }
+
+                case 'importing-account': {                    
+                    switch(progress.step.type) {
+                        case 'account': 
+                            this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts(
+                                progress.currentIndex,
+                                progress.total,
+                                'account',
+                                0,
+                                0,
+                                0,
+                                0,
+                            );
+                            break;
+
+                        case 'combat-reports': 
+                        case 'expeditions': 
+                        case 'debris-fields': 
+                        case 'lifeform-discoveries': 
+                            if(progress.step.currentIndex % stepSize != 0 && progress.step.currentIndex + 1 != progress.step.total) {
+                                return;
+                            }
+
+                            this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts(
+                                progress.currentIndex,
+                                progress.total,
+                                progress.step.type,
+                                progress.step.currentIndex,
+                                progress.step.total,
+                                0,
+                                0,
+                            );
+                            break;
+
+                        case 'universe-specific-settings': 
+                            this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts(
+                                progress.currentIndex,
+                                progress.total,
+                                'universe-specific-settings',
+                                0,
+                                0,
+                                0,
+                                0,
+                            );
+                            break;
+
+                        case 'empire': 
+                            switch(progress.step.subtype) {
+                                case 'empire-data': 
+                                    this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts(
+                                        progress.currentIndex,
+                                        progress.total,
+                                        'empire.data',
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                    );
+                                    break;
+                                case 'planets': 
+                                case 'moons': 
+                                    this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingAccounts(
+                                        progress.currentIndex,
+                                        progress.total,
+                                        `empire.${progress.step.subtype}`,
+                                        progress.step.currentIndex,
+                                        progress.step.total,
+                                        0,
+                                        0,
+                                    );
+                                    break;
+                            }
+                            break;  
+                    }
                     break;
                 }
 
                 case 'importing-universe-history': {
-                    this.lastImportMessage = `${this.$i18n.$t.extension.settings.importExport.importCallbacks.importingUniverseHistories} (${progress.currentIndex + 1}/${progress.total})`;
+                    if(progress.subIndex % stepSize != 0 && progress.subIndex + 1 != progress.subTotal) {
+                        return;
+                    }
+
+                    this.lastImportMessage = this.$i18n.$t.extension.settings.importExport.importCallbacks.importingUniverseHistories(
+                        progress.currentIndex,
+                        progress.total,
+                        progress.subIndex,
+                        progress.subTotal,
+                    );
                     break;
                 }
             }

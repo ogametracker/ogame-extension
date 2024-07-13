@@ -168,8 +168,19 @@ export interface SettingsTranslations {
         importCallbacks: {
             importingSettings: string;
             importingBasicData: string;
-            importingAccounts: string;
-            importingUniverseHistories: string;
+            importingUniverseHistories: (
+                serverIndex: number, 
+                serverTotal: number, 
+                entryIndex: number, 
+                entryTotal: number,
+            ) => string;
+            importingAccounts: (
+                accountIndex: number, 
+                totalAccounts: number, 
+                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                stepIndex: number,
+                stepTotal: number,
+            ) => string;
         };
     };
 
