@@ -1,6 +1,7 @@
 export enum OgameRawLifeformDiscoveryType {
     none = 'none',
     artifacts = 'artifacts',
-    lifeformFound = 'lifeform-xp',
+    lifeformExperience = 'lifeform-xp',
     shipLost = 'ship-lost',
+    lifeformFound = 'lifeform-found',
 }

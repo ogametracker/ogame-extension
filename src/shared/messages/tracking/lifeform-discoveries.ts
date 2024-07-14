@@ -11,7 +11,6 @@ export interface RawLifeformDiscoveryMessageData {
     type: OgameRawLifeformDiscoveryType;
     artifactsFound?: number;
     artifactsSize?: OgameRawArtifactFindSize;
-    isNewLifeform?: boolean;
     lifeform?: OgameRawLifeformType;
     lifeformExperience?: number;
 }

@@ -57,7 +57,8 @@ export class LifeformDiscoveryModule {
         const result: LifeformDiscoveryEvent = {
             [OgameRawLifeformDiscoveryType.none]: () => this.#parseNothingLifeformDiscovery(data),
             [OgameRawLifeformDiscoveryType.artifacts]: () => this.#parseArtifactsLifeformDiscovery(data),
-            [OgameRawLifeformDiscoveryType.lifeformFound]: () => this.#parseLifeformFindDiscovery(data),
+            [OgameRawLifeformDiscoveryType.lifeformExperience]: () => this.#parseLifeformExperienceDiscovery(data),
+            [OgameRawLifeformDiscoveryType.lifeformFound]: () => this.#parseNewLifeformFoundLifeformDiscovery(data),
             [OgameRawLifeformDiscoveryType.shipLost]: () => this.#parseLostShipLifeformDiscovery(data),
         }[data.type]();
 
@@ -116,20 +117,8 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #parseLifeformFindDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound | LifeformDiscoveryEventNewLifeformFound {
-        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound) {
-            _throw('unexpected lifeform discovery type');
-        }
-
-        const isNewLifeform = data.isNewLifeform ?? _throw('missing whether lifeform is new or not');
-
-        return isNewLifeform
-            ? this.#tryParseNewLifeformFoundLifeformDiscovery(data)
-            : this.#tryParseKnownLifeformFoundLifeformDiscovery(data);
-    }
-
-    #tryParseKnownLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound {
-        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound || data.isNewLifeform != false) {
+    #parseLifeformExperienceDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound {
+        if(data.type != OgameRawLifeformDiscoveryType.lifeformExperience) {
             _throw('unexpected lifeform discovery type');
         }
 
@@ -147,8 +136,8 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #tryParseNewLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNewLifeformFound {
-        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound || data.isNewLifeform != true) {
+    #parseNewLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNewLifeformFound {
+        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound) {
             _throw('unexpected lifeform discovery type');
         }
 

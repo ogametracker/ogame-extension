@@ -183,9 +183,6 @@ function trackLifeformDiscoveries(messages: Element[]) {
                     artifactsSize: rawArtifactsFindSize,
                     lifeform: rawLifeform,
                     lifeformExperience: rawLifeformExperience,
-                    isNewLifeform: rawLifeformAlreadyOwned != null 
-                        ? !rawLifeformAlreadyOwned 
-                        : undefined,
                 },
                 senderUuid: messageTrackingUuid,
             };
