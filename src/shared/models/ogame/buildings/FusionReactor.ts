@@ -17,7 +17,7 @@ class FusionReactorClass extends ProductionBuilding {
         return {
             metal: 0,
             crystal: 0,
-            deuterium: 10 * level * 1.1 ** level * dependencies.productionSettings.fusionReactor / 100 * dependencies.serverSettings.economySpeed,
+            deuterium: Math.trunc(10 * level * 1.1 ** level * dependencies.productionSettings.fusionReactor / 100 * dependencies.serverSettings.economySpeed),
             energy: 0,
         };
     }
