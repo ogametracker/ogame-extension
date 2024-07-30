@@ -1,11 +1,9 @@
-import { parse } from "date-fns";
 import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
 import { Message, MessageOgameMeta } from "../../shared/messages/Message";
 import { MessageType } from "../../shared/messages/MessageType";
 import { CombatReportMessage, CombatReportUnknownMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
 import { OgameCombatReport } from "../../shared/models/ogame/combats/OgameCombatReport";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
-import { dateTimeFormat } from "../../shared/ogame-web/constants";
 import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
 import { _logDebug, _logWarning } from "../../shared/utils/_log";
 import { _throw } from "../../shared/utils/_throw";
@@ -17,7 +15,6 @@ import { messageTrackingUuid } from "@/shared/uuid";
 import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
 import { v4 } from "uuid";
 import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
-import { TryActionResult } from "@/shared/TryActionResult";
 import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
 import { getMessageAttributes } from "@/shared/utils/getMessageAttributes";
 import { parseIntSafe } from "@/shared/utils/parseNumbers";
@@ -25,9 +22,6 @@ import { createRecord } from "@/shared/utils/createRecord";
 import { ShipTypes } from "@/shared/models/ogame/ships/ShipTypes";
 import { ShipType } from "@/shared/models/ogame/ships/ShipType";
 import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
-
-const domParser = new DOMParser();
-const combatJsonRegex = /var combatData = jQuery\.parseJSON\('(?<json>[^\n]+)'\);/;
 
 const notificationIds = {
     result: v4(),
@@ -348,17 +342,13 @@ function parseCombatReportData(element: Element): OgameCombatReport {
         },
 
         debris: {
-            metal: rawResult.debris.resources.find((r: any) => r.resource == 'metal')?.amount ?? 0,
-            crystal: rawResult.debris.resources.find((r: any) => r.resource == 'crystal')?.amount ?? 0,
-            deuterium: rawResult.debris.resources.find((r: any) => r.resource == 'deuterium')?.amount ?? 0,
+            metal: rawResult.debris.resources.find((r: any) => r.resource == 'metal')?.total ?? 0,
+            crystal: rawResult.debris.resources.find((r: any) => r.resource == 'crystal')?.total ?? 0,
+            deuterium: rawResult.debris.resources.find((r: any) => r.resource == 'deuterium')?.total ?? 0,
         },
 
         playerLosses,
     };
-}
-
-function getRetryTime(attempt: number) {
-    return Date.now() + (2 ** (attempt - 1)) * 1_000;
 }
 
 async function retryLoadCombats() {
@@ -389,30 +379,6 @@ function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
         };
         sendMessage(workerMessage);
     });
-}
-
-async function loadOgameCombatReport(url: string): Promise<TryActionResult<OgameCombatReport>> {
-    const response = await fetch(url, { 
-        method: 'GET',
-        redirect: 'error',
-    });
-    if (!response.ok) {
-        return { success: false };
-    }
-
-    const html = await response.text();
-
-    const doc = domParser.parseFromString(html, 'text/html');
-    const scripts = doc.querySelectorAll('script');
-    const combatScript = Array.from(scripts).find(script => (script.textContent ?? '').includes('var combatData =')) ?? _throw(`cannot find ogame combat data ('${url}')`);
-
-    const combatJsonMatch = combatScript.textContent?.match(combatJsonRegex) ?? _throw('no combat json match');
-    const combatJson = combatJsonMatch.groups?.json ?? _throw('had combat json match but without content');
-
-    return {
-        success: true,
-        result: JSON.parse(combatJson) as OgameCombatReport,
-    };
 }
 
 
