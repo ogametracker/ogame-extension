@@ -10,6 +10,8 @@ import { findBaseAmounts } from "../../expeditions/findBaseAmounts";
 import { ExpeditionFindableShipTypes } from "../../expeditions/ExpeditionEvents";
 import { ShipByTypes } from "../../ogame/ships/ShipTypes";
 import { Reaper } from "../../ogame/ships/Reaper";
+import { LifeformTechnologyType } from "../../ogame/lifeforms/LifeformTechnologyType";
+import { ExpeditionBonusLifeformTechnologies } from "../../ogame/lifeforms/technologies/LifeformTechnologies";
 
 export interface AmortizationExpeditionResultsPlanetState {
     id: number;
@@ -17,7 +19,7 @@ export interface AmortizationExpeditionResultsPlanetState {
     lifeformTechnologyExpeditionBonusFactor: Record<ExpeditionEventType, number>;
     discovererClassBonusFactor: number;
 
-    lifeformTechnologyBoost: number;
+    lifeformTechnologyBoost: Record<LifeformTechnologyType, number>;
     lifeformExperienceBoost: number;
 }
 
@@ -112,7 +114,7 @@ export class AmortizationExpeditionResultsBreakdown {
         let discovererClassBonus = 0;
 
         Object.values(this.options.planets).forEach(planet => {
-            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost, planet.lifeformExperienceBoost);
+            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost[LifeformTechnologyType.kaeleshDiscovererEnhancement], planet.lifeformExperienceBoost);
             discovererClassBonus += planet.discovererClassBonusFactor * techBonusFactor;
         });
 
@@ -127,7 +129,8 @@ export class AmortizationExpeditionResultsBreakdown {
         };
 
         Object.values(this.options.planets).forEach(planet => {
-            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost, planet.lifeformExperienceBoost);
+            // HACK: used sixth sense here but should probably check for every single expedition technology separately
+            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost[LifeformTechnologyType.sixthSense], planet.lifeformExperienceBoost);
 
             ExpeditionEventTypes.forEach(type => {
                 result[type] += planet.lifeformTechnologyExpeditionBonusFactor[type] * techBonusFactor;
@@ -186,8 +189,8 @@ export class AmortizationExpeditionResultsBreakdown {
                             ...createRecord(
                                 ResourceTypes,
                                 resource => baseAmount
-                                * resourceFactors.crystal // baseline for found fleet units is the same as crystal finds
-                                * fleetResourceFactors[resource]
+                                    * resourceFactors.crystal // baseline for found fleet units is the same as crystal finds
+                                    * fleetResourceFactors[resource]
                             ),
                         },
                         { energy: 0, ...this.options.fleetFindsResourceFactors },

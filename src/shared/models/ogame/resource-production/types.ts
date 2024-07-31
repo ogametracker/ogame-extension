@@ -6,6 +6,9 @@ import { getTechnologyBonusFactor } from "../lifeforms/utils";
 import { ResourceType } from "../resources/ResourceType";
 import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
 import { getCrawlerBoost } from "./getCrawlerBoost";
+import { LifeformTechnologyType } from "../lifeforms/LifeformTechnologyType";
+import { LowTemperatureDrives } from "../lifeforms/technologies/humans/LowTemperatureDrives";
+import { ResourceProductionBonusLifeformTechnologies } from "../lifeforms/technologies/LifeformTechnologies";
 
 
 interface GlobalProductionBonuses {
@@ -42,11 +45,11 @@ export interface EmpireProductionPlanetState {
 
     itemBonusProductionFactor: number;
     lifeformBuildingBonusProductionFactor: number;
-    lifeformTechnologyBonusProductionFactor: number;
+    lifeformTechnologyBonusProductionFactor: Record<LifeformTechnologyType, number>;
     lifeformTechnologyCrawlerProductionBonusFactor: number;
     collectorClassBonusFactor: number;
 
-    lifeformTechnologyBoost: number;
+    lifeformTechnologyBoost: Record<LifeformTechnologyType, number>;
     lifeformExperienceBoost: number;
 }
 
@@ -111,11 +114,23 @@ export class EmpireProductionBreakdown {
 
         this.#planetIds.forEach(planetId => {
             const planet = this.planets[planetId];
-            const techBonusFactor = getTechnologyBonusFactor(planet.lifeformTechnologyBoost, planet.lifeformExperienceBoost);
 
-            collectorClassBonusFactor += planet.collectorClassBonusFactor * techBonusFactor;
-            lifeformTechnologyProductionBonusFactor += planet.lifeformTechnologyBonusProductionFactor * techBonusFactor;
-            lifeformTechnologyCrawlerProductionBonusFactor += planet.lifeformTechnologyCrawlerProductionBonusFactor * techBonusFactor;
+            collectorClassBonusFactor += planet.collectorClassBonusFactor * getTechnologyBonusFactor(
+                planet.lifeformTechnologyBoost[LifeformTechnologyType.rocktalCollectorEnhancement],
+                planet.lifeformExperienceBoost,
+            );
+
+            ResourceProductionBonusLifeformTechnologies.forEach(prudctionBonusTechnology => {
+                lifeformTechnologyProductionBonusFactor += planet.lifeformTechnologyBonusProductionFactor[prudctionBonusTechnology.type] * getTechnologyBonusFactor(
+                    planet.lifeformTechnologyBoost[prudctionBonusTechnology.type],
+                    planet.lifeformExperienceBoost,
+                );
+            });
+
+            lifeformTechnologyCrawlerProductionBonusFactor += planet.lifeformTechnologyCrawlerProductionBonusFactor * getTechnologyBonusFactor(
+                planet.lifeformTechnologyBoost[LifeformTechnologyType.ionCrystalModules],
+                planet.lifeformExperienceBoost,
+            );
         });
 
         return {

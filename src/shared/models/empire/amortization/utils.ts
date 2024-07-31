@@ -10,7 +10,7 @@ import { ProductionBuildingDependencies } from "../../ogame/buildings/Production
 import { Coordinates } from "../../ogame/common/Coordinates";
 import { ItemHash } from "../../ogame/items/ItemHash";
 import { LifeformBuildingTypes } from "../../ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyTypes } from "../../ogame/lifeforms/LifeformTechnologyType";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../ogame/lifeforms/LifeformTechnologyType";
 import { ValidLifeformType, LifeformType } from "../../ogame/lifeforms/LifeformType";
 import { ResourceProductionBonusLifeformBuildingsByLifeform, AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildingsByLifeform, LifeformTechnologyBonusLifeformBuildingsByLifeform, LifeformTechnologyResearchBuildings } from "../../ogame/lifeforms/buildings/LifeformBuildings";
 import { getLifeformLevelTechnologyBonus } from "../../ogame/lifeforms/experience";
@@ -57,10 +57,12 @@ export function getLifeformTechnologyExpeditionBonusFactor(planetState: Amortiza
     );
 }
 
-export function getPlanetLifeformTechnologyBoost(planetState: AmortizationPlanetState) {
-    return planetState.lifeformTechnologyBoostBuildings.reduce(
-        (total, building) => total + building.getLifeformTechnologyBonus(planetState.data.lifeformBuildings[building.type]),
-        0
+export function getPlanetLifeformTechnologyBoost(planetState: AmortizationPlanetState): Record<LifeformTechnologyType, number> {
+    return createRecord(
+        LifeformTechnologyTypes,
+        technology => planetState.lifeformTechnologyBoostBuildings
+            .map(building => building.getLifeformTechnologyBonus(technology, planetState.data.lifeformBuildings[building.type]))
+            .reduce((total, cur) => total + cur, 0),
     );
 }
 export function getPlanetCollectorClassBonusFactor(planetState: AmortizationPlanetState) {
@@ -81,11 +83,27 @@ export function getPlanetLifeformBuildingBonusProductionFactor(planetState: Amor
         { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
     );
 }
-export function getPlanetLifeformTechnologyBonusProductionFactor(planetState: AmortizationPlanetState): Cost {
-    return planetState.lifeformResourceProductionBonusTechnologies.reduce<Cost>(
-        (total, tech) => addCost(total, tech.getProductionBonus(planetState.data.lifeformTechnologies[tech.type])),
-        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-    );
+export function getPlanetLifeformTechnologyBonusProductionFactor(planetState: AmortizationPlanetState): Record<keyof Cost, Record<LifeformTechnologyType, number>> {
+    return ResourceProductionBonusLifeformTechnologies
+        .filter(tech => planetState.lifeformResourceProductionBonusTechnologies.includes(tech))
+        .reduce<Record<keyof Cost, Record<LifeformTechnologyType, number>>>(
+            (total, tech) => {
+                const bonus = tech.getProductionBonus(planetState.data.lifeformTechnologies[tech.type]);
+
+                total.metal[tech.type] += bonus.metal;
+                total.crystal[tech.type] += bonus.crystal;
+                total.deuterium[tech.type] += bonus.deuterium;
+                total.energy[tech.type] += bonus.energy;
+
+                return total;
+            },
+            {
+                metal: createRecord(LifeformTechnologyTypes, 0),
+                crystal: createRecord(LifeformTechnologyTypes, 0),
+                deuterium: createRecord(LifeformTechnologyTypes, 0),
+                energy: createRecord(LifeformTechnologyTypes, 0),
+            },
+        );
 }
 
 
@@ -157,9 +175,11 @@ export function getPlanetState(planet: AmortizationPlanetSettings, serverSetting
     );
 
     // init lifeform technology boost
-    const lifeformTechnologyBoost = lifeformTechnologyBoostBuildings.reduce(
-        (total, boostBuilding) => total + boostBuilding.getLifeformTechnologyBonus(planetData.lifeformBuildings[boostBuilding.type]),
-        0,
+    const lifeformTechnologyBoost = createRecord(
+        LifeformTechnologyTypes,
+        technology => lifeformTechnologyBoostBuildings
+            .map(building => building.getLifeformTechnologyBonus(technology, planetData.lifeformBuildings[building.type]))
+            .reduce((total, cur) => total + cur, 0),
     );
 
     // init discoverer bonus

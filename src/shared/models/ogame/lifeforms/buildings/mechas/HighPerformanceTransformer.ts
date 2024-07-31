@@ -2,6 +2,7 @@ import { Cost } from "../../../common/Cost";
 import { ResourceType } from "../../../resources/ResourceType";
 import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -33,22 +34,34 @@ class HighPerformanceTransformerClass extends LifeformBuilding implements Resour
             { type: LifeformBonusTypeId.LifeformResearchBonusBoost },
         ];
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.highPerformanceTransformer;
     }
 
-    public getLifeformTechnologyBonus(level: number): number {
-        const techBonus = 0.003; // 0.3%
+    public get affectedTechnologies(): LifeformTechnologyType[] {
+        return LifeformTechnologyTypes;
+    }
+
+    public getLifeformTechnologyBonus(technology: LifeformTechnologyType, level: number): number {
+        if (!this.appliesTo(technology)) {
+            return 0;
+        }
+
+        const techBonus = 0.00_3; // 0.3%
         return techBonus * level;
     }
 
-    public appliesTo(resource: ResourceType | 'energy'): boolean {
-        return resource == 'energy';
+    public appliesTo(resourceOrTechnology: ResourceType | 'energy' | LifeformTechnologyType): boolean {
+        if (this.affectedTechnologies.includes(resourceOrTechnology as LifeformTechnologyType)) {
+            return true;
+        }
+
+        return resourceOrTechnology == 'energy';
     }
 
     public getProductionBonus(level: number): Cost {
-        const energyBonus = 0.011; // 1%
+        const energyBonus = 0.01; // 1%
         return {
             metal: 0,
             crystal: 0,

@@ -4,6 +4,7 @@ import { PlayerClass } from "../../classes/PlayerClass";
 import { LifeformType } from "../LifeformType";
 import { ClassBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
 import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
+import { LifeformTechnologyType } from "../LifeformTechnologyType";
 
 export function getLifeformCollectorClassBonus(player: LocalPlayerData): number {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
@@ -18,7 +19,8 @@ export function getLifeformCollectorClassBonus(player: LocalPlayerData): number 
             continue;
         }
 
-        const techFactor = 1 + technologyBonusByPlanet[planet.id];
+        const techFactor = 1 + technologyBonusByPlanet[planet.id][LifeformTechnologyType.rocktalCollectorEnhancement];
+        
         const collectorBonusTechnologies = ClassBonusLifeformTechnologies.filter(
             tech => planet.activeLifeformTechnologies.includes(tech.type)
         );

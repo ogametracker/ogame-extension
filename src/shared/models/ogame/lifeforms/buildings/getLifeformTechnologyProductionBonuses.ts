@@ -19,19 +19,20 @@ export function getLifeformTechnologyProductionBonus(player: LocalPlayerData): C
             continue;
         }
 
-        const techFactor = 1 + technologyBonusByPlanet[planet.id];
         const productionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(
             tech => planet.activeLifeformTechnologies.includes(tech.type)
         );
-        const baseProductionBonus = productionBonusTechnologies.reduce<Cost>((total, tech) => {
+
+        for (const tech of productionBonusTechnologies) {
+            const techFactor = 1 + technologyBonusByPlanet[planet.id][tech.type];
+
             const level = planet.lifeformTechnologies[tech.type];
             const bonus = tech.getProductionBonus(level);
 
-            return addCost(total, bonus);
-        }, { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
-        const productionBonus = multiplyCost(baseProductionBonus, techFactor);
+            const productionBonus = multiplyCost(bonus, techFactor);
 
-        techProductionBonuses.push(productionBonus);
+            techProductionBonuses.push(productionBonus);
+        }
     }
 
     return techProductionBonuses.reduce(
