@@ -247,6 +247,12 @@ export class EmpireProductionBreakdown {
         this.#planetIds.forEach(planetId => {
             planetStatesClone[planetId] = {
                 ...this.planets[planetId],
+                lifeformTechnologyBonusProductionFactor: {
+                    ...this.planets[planetId].lifeformTechnologyBonusProductionFactor,
+                },
+                lifeformTechnologyBoost: {
+                    ...this.planets[planetId].lifeformTechnologyBoost,
+                },
                 crawlers: {
                     ...this.planets[planetId].crawlers,
                 },
