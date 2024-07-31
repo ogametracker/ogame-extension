@@ -74,13 +74,7 @@
 
                     <div class="tech-row boosts">
                         <div />
-                        <div
-                            v-text="
-                                $i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.lifeformBuildingsBoost(
-                                    $i18n.$n(getPlanetLifeformTechnologyBoost(planet) * 100, smallPercentageFormat) + '%'
-                                )
-                            "
-                        />
+                        <div v-text="$i18n.$t.extension.empire.lifeforms.researchBonuses.breakdown.lifeformBuildingsBoost" />
                         <span v-for="type in types" :key="type.key" class="bonus">
                             <decimal-number
                                 :value="buildingsPlanetBonusesByType[planet.id][type.key] * 100"

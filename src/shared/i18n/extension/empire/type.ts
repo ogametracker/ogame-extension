@@ -187,7 +187,7 @@ export interface EmpireTranslations {
                 slot: string;
                 research: string;
                 bonus: string;
-                lifeformBuildingsBoost: (boost: string) => string;
+                lifeformBuildingsBoost: string;
                 lifeformLevelBoost: (lifeform: string, boost: string) => string;
 
                 bugBoost: string;
