@@ -107,7 +107,7 @@
             }
 
             const buildingsBoost = Math.min(
-                getPlanetLifeformTechnologyBoost(planet),
+                getPlanetLifeformTechnologyBoost(planet)[tech.type],
                 getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
             );
             

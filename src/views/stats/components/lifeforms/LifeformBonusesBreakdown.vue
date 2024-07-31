@@ -220,10 +220,10 @@
 
             Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
                 .forEach(pair => {
-                    const [planetId, breakdownds] = pair;
+                    const [planetId, breakdowns] = pair;
                     result[planetId] = {} as Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>;
 
-                    breakdownds.forEach(breakdown => {
+                    breakdowns.forEach(breakdown => {
                         const techBreakdown = (result[planetId][breakdown.technologyType] ??= {});
 
                         Object.entries(breakdown.bonuses).forEach(pair => {
@@ -253,10 +253,10 @@
 
             Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
                 .forEach(pair => {
-                    const [planetId, breakdownds] = pair;
+                    const [planetId, breakdowns] = pair;
                     result[planetId] = {};
 
-                    breakdownds.forEach(breakdown => {
+                    breakdowns.forEach(breakdown => {
                         Object.entries(breakdown.bonuses).forEach(pair => {
                             const [key, bonuses] = pair;
 
@@ -274,10 +274,10 @@
 
             Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
                 .forEach(pair => {
-                    const [planetId, breakdownds] = pair;
+                    const [planetId, breakdowns] = pair;
                     result[planetId] = {};
 
-                    breakdownds.forEach(breakdown => {
+                    breakdowns.forEach(breakdown => {
                         Object.entries(breakdown.bonuses).forEach(pair => {
                             const [key, bonuses] = pair;
 
@@ -295,10 +295,10 @@
 
             Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
                 .forEach(pair => {
-                    const [planetId, breakdownds] = pair;
+                    const [planetId, breakdowns] = pair;
                     result[planetId] = {};
 
-                    breakdownds.forEach(breakdown => {
+                    breakdowns.forEach(breakdown => {
                         Object.entries(breakdown.bonuses).forEach(pair => {
                             const [key, bonuses] = pair;
 
@@ -316,10 +316,10 @@
 
             Object.entries(this.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
                 .forEach(pair => {
-                    const [planetId, breakdownds] = pair;
+                    const [planetId, breakdowns] = pair;
                     result[planetId] = {};
 
-                    breakdownds.forEach(breakdown => {
+                    breakdowns.forEach(breakdown => {
                         Object.entries(breakdown.bonuses).forEach(pair => {
                             const [key, bonuses] = pair;
 

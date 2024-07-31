@@ -15,8 +15,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/lifeforms/LifeformBonusesBreakdown.vue';
     import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType';
-import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
+    import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
+    import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
 
 
     type BonusBreakdown = {
@@ -102,7 +102,7 @@ import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBon
 
 
             const buildingsBoost = Math.min(
-                getPlanetLifeformTechnologyBoost(planet),
+                getPlanetLifeformTechnologyBoost(planet)[tech.type],
                 getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
             );
             result.buildingsBoost += buildingsBoost;
