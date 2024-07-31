@@ -76,7 +76,7 @@
                 this.techs.filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
                     .forEach(tech => keys.forEach(key => {
                         const techBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type])[key];
-                        const techBoost = lifeformTechnologyBoostPerPlanet[planet.id];
+                        const techBoost = lifeformTechnologyBoostPerPlanet[planet.id][tech.type];
 
                         globalBonuses[key] += techBonus * (1 + techBoost);
                     }));

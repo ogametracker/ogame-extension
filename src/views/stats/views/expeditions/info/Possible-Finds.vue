@@ -264,7 +264,7 @@
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
                         : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
+                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
                     const total = baseBonus + levelBonus + buildingBonus;
                     techBonus += total;
@@ -284,7 +284,7 @@
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
                         : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
+                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
                     const total = baseBonus + levelBonus + buildingBonus;
                     techBonus += total;
@@ -304,7 +304,7 @@
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
                         : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
+                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
                     const total = baseBonus + levelBonus + buildingBonus;
                     techBonus += total;
@@ -324,7 +324,7 @@
                     const levelBonus = planet.activeLifeform == LifeformType.none
                         ? 0
                         : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id];
+                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
                     const total = baseBonus + levelBonus + buildingBonus;
                     techBonus += total;

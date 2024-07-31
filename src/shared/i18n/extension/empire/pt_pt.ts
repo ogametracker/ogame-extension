@@ -185,7 +185,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
                 slot: 'Slot',
                 research: 'Pesquisa',
                 bonus: 'Bónus',
-                lifeformBuildingsBoost: (boost: string) => `Boost de Edifícios de Forma de Vida (${boost})`,
+                lifeformBuildingsBoost: `Boost de Edifícios de Forma de Vida`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Boost de Nível de Forma de Vida (${lifeform}: ${boost})`,
                 bugBoost: 'Boost causado por bugs',
             },

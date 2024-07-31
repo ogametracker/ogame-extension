@@ -162,25 +162,7 @@ export class CombatReportModule {
             [ResourceType.deuterium]: ogameCombatReport.debris.deuterium,
         };
 
-        const lostShips: Record<ShipType, number> = {
-            [ShipType.battlecruiser]: 0,
-            [ShipType.battleship]: 0,
-            [ShipType.bomber]: 0,
-            [ShipType.colonyShip]: 0,
-            [ShipType.crawler]: 0,
-            [ShipType.cruiser]: 0,
-            [ShipType.deathStar]: 0,
-            [ShipType.destroyer]: 0,
-            [ShipType.espionageProbe]: 0,
-            [ShipType.heavyFighter]: 0,
-            [ShipType.largeCargo]: 0,
-            [ShipType.lightFighter]: 0,
-            [ShipType.pathfinder]: 0,
-            [ShipType.reaper]: 0,
-            [ShipType.recycler]: 0,
-            [ShipType.smallCargo]: 0,
-            [ShipType.solarSatellite]: 0,
-        };
+        const lostShips = ogameCombatReport.playerLosses;
 
         const report: CombatReport = {
             id,

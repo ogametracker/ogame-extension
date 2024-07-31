@@ -190,7 +190,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 slot: 'Emplacement',
                 research: 'Recherche',
                 bonus: 'Bonus',
-                lifeformBuildingsBoost: (boost: string) => `Amélioration des bâtiments de la forme de vie (${boost})`,
+                lifeformBuildingsBoost: `Amélioration des bâtiments de la forme de vie`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Amélioration du niveau de la forme de vie (${lifeform} : ${boost})`,
                 bugBoost: 'Bonus causé par des bugs',
             },

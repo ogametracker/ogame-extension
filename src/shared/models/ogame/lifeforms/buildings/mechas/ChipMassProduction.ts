@@ -1,5 +1,6 @@
 import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
 import { LifeformBuildingType } from "../../LifeformBuildingType";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
 import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
 import { LifeformBuilding } from "../LifeformBuilding";
 
@@ -33,7 +34,19 @@ class ChipMassProductionClass extends LifeformBuilding implements LifeformTechno
         return LifeformBuildingType.chipMassProduction;
     }
 
-    public getLifeformTechnologyBonus(level: number): number {
+    public get affectedTechnologies(): LifeformTechnologyType[] {
+        return LifeformTechnologyTypes;
+    }
+
+    public appliesTo(technology: LifeformTechnologyType): boolean {
+        return this.affectedTechnologies.includes(technology);
+    }
+
+    public getLifeformTechnologyBonus(technology: LifeformTechnologyType, level: number): number {
+        if (!this.appliesTo(technology)) {
+            return 0;
+        }
+
         const techBonus = 0.00_4; // 0.4%
         return techBonus * level;
     }

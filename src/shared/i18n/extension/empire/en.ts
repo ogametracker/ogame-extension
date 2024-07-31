@@ -198,7 +198,7 @@ export const en: EmpireTranslations = {
                 slot: 'Slot',
                 research: 'Research',
                 bonus: 'Bonus',
-                lifeformBuildingsBoost: (boost: string) => `Lifeform Building Boost (${boost})`,
+                lifeformBuildingsBoost: `Lifeform Building Boost`,
                 lifeformLevelBoost: (lifeform: string, boost: string) => `Lifeform Level Boost (${lifeform}: ${boost})`,
                 bugBoost: 'Boost caused by bugs',
             },
