@@ -107,8 +107,7 @@
                             :style="{ color: eventColors.early }"
                         />
                         <o-resource v-else-if="event == 'darkMatter'" :key="`event-icon-${event}`" resource="dark-matter" size="24px" class="icon" />
-                        <span v-else-if="event == 'pirates'" :key="`event-icon-${event}`" class="mdi mdi-pirate icon" :style="{ color: eventColors.pirates }" />
-                        <span v-else-if="event == 'aliens'" :key="`event-icon-${event}`" class="mdi mdi-alien icon" :style="{ color: eventColors.aliens }" />
+                        <span v-else-if="event == 'combat'" :key="`event-icon-${event}`" class="mdi mdi-sword-cross icon" :style="{ color: eventColors.combat }" />
                         <o-item v-else-if="event == 'item'" :key="`event-icon-${event}`" :item="detroidItem" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'trader'"
@@ -185,7 +184,7 @@
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
-import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
 
     @Component({
         components: {
@@ -205,8 +204,7 @@ import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
             ExpeditionEventType.fleet,
             ExpeditionEventType.delay,
             ExpeditionEventType.early,
-            ExpeditionEventType.pirates,
-            ExpeditionEventType.aliens,
+            ExpeditionEventType.combat,
             ExpeditionEventType.item,
             ExpeditionEventType.trader,
             ExpeditionEventType.nothing,
