@@ -62,7 +62,8 @@ export class ExpeditionModule {
 
     #parseExpedition(data: RawExpeditionMessageData): ExpeditionEvent {
         const result: ExpeditionEvent = {
-            [OgameRawExpeditionResultType.combat]: () => this.#parseCombatExpedition(data),
+            [OgameRawExpeditionResultType.combatAliens]: () => this.#parseCombatExpedition(data),
+            [OgameRawExpeditionResultType.combatPirates]: () => this.#parseCombatExpedition(data),
             [OgameRawExpeditionResultType.darkMatter]: () => this.#parseDarkMatterExpedition(data),
             [OgameRawExpeditionResultType.delayOrEarly]: () => this.#parseNavigationExpedition(data),
             [OgameRawExpeditionResultType.fleet]: () => this.#parseFleetExpedition(data),
@@ -123,7 +124,10 @@ export class ExpeditionModule {
     }
 
     #parseCombatExpedition(data: RawExpeditionMessageData): ExpeditionEventCombat {
-        if(data.type != OgameRawExpeditionResultType.combat) {
+        if(![
+            OgameRawExpeditionResultType.combatAliens, 
+            OgameRawExpeditionResultType.combatPirates,
+        ].includes(data.type)) {
             _throw('unexpected raw expedition type');
         }
         
