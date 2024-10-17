@@ -273,7 +273,7 @@ export const de: EmpireTranslations = {
                     increasedExpeditionFinds: 'Erhöhter Ertrag bei Expeditionen',
                     largerPlanets: 'Größere Planeten bei Kolonisierung',
                     additionalExpeditionSlots: 'Zusätzliche Expeditionsslots',
-                    reducedExpeditionCombatChance: 'Change auf Expeditionsgegner',
+                    reducedExpeditionCombatChance: 'Chance auf Expeditionsgegner',
                     phalanxRange: 'Erhöhte Phalanx-Reichweite',
                 },
                 general: {
