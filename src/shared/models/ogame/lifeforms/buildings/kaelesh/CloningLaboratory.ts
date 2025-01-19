@@ -17,7 +17,7 @@ class CloningLaboratoryClass extends LifeformBuilding implements LifeformTechnol
                 increaseFactor: 1.2,
             },
             deuterium: {
-                baseCost: 20_000,
+                baseCost: 5_000,
                 increaseFactor: 1.2,
             },
             energy: {
