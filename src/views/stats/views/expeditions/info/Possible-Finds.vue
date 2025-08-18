@@ -71,7 +71,6 @@
     import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
     import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
     import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
@@ -81,6 +80,9 @@
     import { ExpeditionFindableShipTypes } from "@/shared/models/expeditions/ExpeditionEvents";
     import { ShipByTypes } from "@/shared/models/ogame/ships/ShipTypes";
     import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
+    import { getExpeditionItemFindBonus } from "@/shared/models/ogame/expeditions/getExpeditionItemFindBonus";
+    import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+    import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
 
 
     type FindableUnits = {
@@ -367,10 +369,14 @@
                     };
                 }).sort((a,b) => b.score - a.score)[0];
 
+            const firstPlanet = Object.values(EmpireDataModule.empire.planets).find(p => !p.isMoon) as PlanetData;
+            const resourceSizeBoost = getExpeditionItemFindBonus(ExpeditionEventType.resources, Object.keys(firstPlanet.activeItems) as ItemHash[]);
+
             return createRecord(
                 ExpeditionEventSizes,
                 size => findBaseAmounts[size].map<FindableUnits>(base => {
-                    const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
+                    
+                    const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus) * (1 + resourceSizeBoost);
                     const shipUnits = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
                     const maxShipUnitsConverted = Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
 

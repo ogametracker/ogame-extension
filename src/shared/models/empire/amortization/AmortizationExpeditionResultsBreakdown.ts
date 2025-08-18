@@ -1,4 +1,4 @@
-import { createMappedRecord, createRecord } from "@/shared/utils/createRecord";
+import { createRecord } from "@/shared/utils/createRecord";
 import { ExpeditionEventSize, ExpeditionEventSizes } from "../../expeditions/ExpeditionEventSize";
 import { ExpeditionEventType, ExpeditionEventTypes } from "../../expeditions/ExpeditionEventType";
 import { PlayerClass } from "../../ogame/classes/PlayerClass";
@@ -11,7 +11,8 @@ import { ExpeditionFindableShipTypes } from "../../expeditions/ExpeditionEvents"
 import { ShipByTypes } from "../../ogame/ships/ShipTypes";
 import { Reaper } from "../../ogame/ships/Reaper";
 import { LifeformTechnologyType } from "../../ogame/lifeforms/LifeformTechnologyType";
-import { ExpeditionBonusLifeformTechnologies } from "../../ogame/lifeforms/technologies/LifeformTechnologies";
+import { ItemHash } from "../../ogame/items/ItemHash";
+import { getExpeditionItemFindBonus } from "../../ogame/expeditions/getExpeditionItemFindBonus";
 
 export interface AmortizationExpeditionResultsPlanetState {
     id: number;
@@ -74,6 +75,8 @@ export interface AmortizationExpeditionResultsBreakdownOptions {
 
     astrophysicsLevel: number;
     itemBonusSlots: number;
+
+    expeditionBoostItems: ItemHash[];
 
     fleetFindsResourceFactors: Record<ResourceType, number>;
     serverSettings: {
@@ -140,6 +143,21 @@ export class AmortizationExpeditionResultsBreakdown {
         return result;
     }
 
+    get #itemEventBonuses(): Record<ExpeditionEventType, number> {
+        const result: Record<ExpeditionEventType, number> = {
+            ...createRecord(ExpeditionEventTypes, 0),
+            [ExpeditionEventType.resources]: 0,
+            [ExpeditionEventType.fleet]: 0,
+        };
+
+        ExpeditionEventTypes.forEach(type => {
+            const boost = getExpeditionItemFindBonus(type, this.options.expeditionBoostItems);
+            result[type] += boost;
+        });
+
+        return result;
+    }
+
     get averageExpeditionFinds(): Cost {
         const scoreFactor = this.#resourceFindFactor;
 
@@ -150,6 +168,8 @@ export class AmortizationExpeditionResultsBreakdown {
             : 1;
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;
+
+        const itemBonuses = this.#itemEventBonuses;
 
 
         const averageResourceFindsBySize = createRecord(ExpeditionEventSizes, size => {
@@ -169,6 +189,7 @@ export class AmortizationExpeditionResultsBreakdown {
                     * pathfinderFactor
                     * eventTypeProbabilities.resources
                     * (1 + eventBonuses.resources)
+                    * (1 + itemBonuses.resources)
                 );
             }).reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
 
@@ -200,6 +221,7 @@ export class AmortizationExpeditionResultsBreakdown {
                     * pathfinderFactor
                     * eventTypeProbabilities.fleet
                     * (1 + eventBonuses.fleet)
+                    * (1 + itemBonuses.fleet)
                 );
             }).reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
 
