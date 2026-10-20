@@ -342,6 +342,7 @@ export class AmortizationItemGenerator {
             astrophysicsLevel: researchLevels[ResearchType.astrophysics],
             fleetFindsResourceFactors: this.#settings.expeditions.fleetUnitsFactors,
             itemBonusSlots: getItemSlotBonus(globalActiveItems),
+            expeditionBoostItems: this.#settings.expeditions.items,
             playerClass: this.#settings.player.playerClass,
             serverSettings: {
                 discovererExpeditionSlotBonus: this.#serverSettings.playerClasses.discoverer.bonusExpeditionSlots,

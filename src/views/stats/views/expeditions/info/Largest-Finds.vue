@@ -72,6 +72,9 @@
         shipAmounts: Record<ExpeditionFindableShipType, TopList<ShipAmountFind>>;
     }
 
+    // the ship amounts are rendered separately and are not a simple top list, so they are excluded here
+    type FindKey = Exclude<keyof Finds, 'shipAmounts'>;
+
     @Component({
         components: {
             ExpeditionSizeIcon,
@@ -113,11 +116,11 @@
             })),
         };
 
-        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
+        private readonly keys: FindKey[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
 
         private selectedShip: ExpeditionFindableShipType = ShipType.espionageProbe;
 
-        private get keyTranslations(): Record<keyof Finds, string> {
+        private get keyTranslations(): Record<FindKey, string> {
             return {
                 metal: this.$i18n.$t.ogame.resources.metal,
                 crystal: this.$i18n.$t.ogame.resources.crystal,
@@ -132,7 +135,7 @@
             };
         }
 
-        private get colors(): Record<keyof Finds, string> {
+        private get colors(): Record<FindKey, string> {
             const colors = SettingsDataModule.settings.colors;
 
             return {
