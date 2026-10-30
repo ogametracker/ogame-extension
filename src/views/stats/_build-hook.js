@@ -130,7 +130,9 @@ const code = `
         import { RouteConfig } from 'vue-router';
 
         const routes: RouteConfig[] = ${JSON.stringify(vueRoutes, null, 4)
-            /* */.replace(/"component": "(.+)"(,|\n)/g, 'component: $1$2')
+            // unquote the component arrow function and un-escape the quotes JSON.stringify
+            // added inside it, otherwise webpack cannot parse the webpackChunkName magic comment
+            /* */.replace(/"component": "(.+)"(,|\n)/g, (_, component, separator) => `component: ${component.replace(/\\"/g, '"')}${separator}`)
             /* */.replace(/"([^"]+)":/g, '$1:')
     /**/};
 

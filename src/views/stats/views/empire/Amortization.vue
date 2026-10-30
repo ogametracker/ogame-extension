@@ -582,6 +582,7 @@ import { getPlanetExpeditionState, getPlanetState } from '@/shared/models/empire
             admiral: false,
             astrophysicsLevel: 0,
             itemBonusSlots: 0,
+            expeditionBoostItems: [],
             fleetFindsResourceFactors: createRecord(ResourceTypes, () => 0),
             planets: {},
             serverSettings: {
@@ -949,6 +950,7 @@ import { getPlanetExpeditionState, getPlanetState } from '@/shared/models/empire
                 admiral: this.playerSettings.officers.admiral,
                 astrophysicsLevel: this.playerSettings.levelAstrophysics,
                 itemBonusSlots: bonusExpoSlots,
+                expeditionBoostItems: expoSlotItems,
                 fleetFindsResourceFactors: {
                     metal: settings.expeditionFoundShipsResourceUnits.factor,
                     crystal: settings.expeditionFoundShipsResourceUnits.factor,

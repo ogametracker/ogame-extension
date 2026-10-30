@@ -46,12 +46,12 @@
 <script lang="ts">
     import { PlanetData } from '@/shared/models/empire/PlanetData';
     import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@/shared/models/ogame/buildings/BuildingTypes';
+    import { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@/shared/models/ogame/buildings/BuildingType';
     import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
     import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
+    import { DefenseCount } from '@/shared/models/empire/DefenseCount';
     import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
     import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
@@ -70,7 +70,8 @@
         supplies: Record<PlanetSupplyBuildingType, number>;
         facilities: Record<PlanetFacilityBuildingType, number>;
         ships: Record<ShipType, number>;
-        defenses: Record<DefenseType, number>;
+        // the shield domes are booleans, so this is not a Record<DefenseType, number>
+        defenses: DefenseCount;
     }
 
     @Component({})
@@ -144,7 +145,7 @@
                     supplies: createRecord(PlanetSupplyBuildingTypes, b => planet.buildings[b]),
                     facilities: createRecord(PlanetFacilityBuildingTypes, b => planet.buildings[b]),
                     ships: createRecord(ShipTypes, s => planet.ships[s]),
-                    defenses: createRecord(DefenseTypes, d => planet.defense[d]),
+                    defenses: planet.defense,
                 };
                 return result;
             });

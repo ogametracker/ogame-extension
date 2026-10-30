@@ -52,7 +52,7 @@
 
         private ogameMeta: MessageOgameMeta = {
             language: '',
-            community: '',
+            userLanguage: 'doesnt-matter',
             serverId: 0,
             playerId: 0,
         };
@@ -77,6 +77,8 @@
             const params = new URLSearchParams(location.search);
             this.ogameMeta = {
                 language: params.get('language') ?? _throw('expected language query parameter'),
+                // not passed to the notification page, and not used to compare metas
+                userLanguage: 'doesnt-matter',
                 serverId: parseIntSafe(params.get('server') ?? _throw('expected server query parameter'), 10),
                 playerId: parseIntSafe(params.get('player') ?? _throw('expected player query parameter'), 10),
             };

@@ -111,7 +111,10 @@
             });
 
 
-            const db = await getPlayerDatabase(account);
+            const db = await getPlayerDatabase({
+                ...account,
+                userLanguage: 'doesnt-really-matter',
+            });
             const tx = db.transaction(['expeditions', 'combatReports', 'debrisFieldReports'], 'readwrite');
 
             const expeditionStore = tx.objectStore('expeditions');
