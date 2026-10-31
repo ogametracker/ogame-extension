@@ -8,7 +8,7 @@
             'o-item--hide-grade': hideItemGrade,
         }"
         :style="{
-            'background-image': `url(/img/ogame/items/${fullItem.image}.png)`,
+            'background-image': `url(${imageUrl})`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -22,6 +22,21 @@
     import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
     import { Items } from '@/shared/models/ogame/items/Items';
     import { Item } from '@/shared/models/ogame/items/Item';
+    import { getItemImageUrl, ItemImageServer } from '@/shared/models/ogame/items/getItemImageUrl';
+    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+
+    // the extension pages showing items are opened for one account and carry its server in the url
+    function getServerFromLocation(): ItemImageServer | undefined {
+        const params = new URLSearchParams(location.search);
+        const serverId = params.get('server');
+        const language = params.get('language');
+        if (serverId == null || language == null) {
+            return undefined;
+        }
+
+        return { serverId: parseIntSafe(serverId, 10), language };
+    }
+    const server = getServerFromLocation();
 
     @Component({})
     export default class OItem extends Vue {
@@ -51,6 +66,10 @@
 
         private get fullItem(): Item {
             return Items[this.item];
+        }
+
+        private get imageUrl(): string {
+            return getItemImageUrl(this.fullItem, server);
         }
     }
 </script>

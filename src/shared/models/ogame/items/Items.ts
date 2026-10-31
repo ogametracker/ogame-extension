@@ -1590,14 +1590,14 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.metalBooster_bronze_30days_pts]: {
         name: 'Metall-Booster Bronze (30 Tage)',
-        image: '5d5f545b5c5969593c1bf4198da2664db75857b9',
+        image: 'faeec30bda80516b1980ae5f288c52ce3b722179',
         smallImage: '',
         hash: ItemHash.metalBooster_bronze_30days_pts,
         grade: ItemGrade.bronze,
     },
     [ItemHash.metalBooster_bronze_90days_pts]: {
         name: 'Metall-Booster Bronze (90 Tage)',
-        image: '8bd9c40b9aae821cd7a19b24e414bf437f81191e',
+        image: '8e79c707e15202862ec16d631c62426644832513',
         smallImage: '',
         hash: ItemHash.metalBooster_bronze_90days_pts,
         grade: ItemGrade.bronze,
@@ -1654,14 +1654,14 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.crystalBooster_bronze_30days_pts]: {
         name: 'Kristall-Booster Bronze (30 Tage)',
-        image: '7d4c8923bc936f09fef244db74d25413372e2217',
+        image: '60f69fe12de2e9ec9cb46b531baf7b7e9001d16d',
         smallImage: '',
         hash: ItemHash.crystalBooster_bronze_30days_pts,
         grade: ItemGrade.bronze,
     },
     [ItemHash.crystalBooster_bronze_90days_pts]: {
         name: 'Kristall-Booster Bronze (90 Tage)',
-        image: '479a2800c485772418e620d3a356a96a3bd7fca4',
+        image: '75980ec2c3b3c47f65f06c756b481715c236bb22',
         smallImage: '',
         hash: ItemHash.crystalBooster_bronze_90days_pts,
         grade: ItemGrade.bronze,
@@ -1718,14 +1718,14 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.deuteriumBooster_bronze_30days_pts]: {
         name: 'Deuterium-Booster Bronze (30 Tage)',
-        image: '5416e185557bbd18f832feafde73fd46f3573239',
+        image: '1c18520afcaebc354ece0863fa03ec9f00ae9767',
         smallImage: '',
         hash: ItemHash.deuteriumBooster_bronze_30days_pts,
         grade: ItemGrade.bronze,
     },
     [ItemHash.deuteriumBooster_bronze_90days_pts]: {
         name: 'Deuterium-Booster Bronze (90 Tage)',
-        image: '2bd548012a7bea6bc1227f9c904754de1cfaf0bc',
+        image: 'a6d31df2be45ac0552915f15c5880aad8bacba7b',
         smallImage: '',
         hash: ItemHash.deuteriumBooster_bronze_90days_pts,
         grade: ItemGrade.bronze,
@@ -1782,14 +1782,14 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.energyBooster_bronze_30days_pts]: {
         hash: ItemHash.energyBooster_bronze_30days_pts,
-        image: '2be67177003ef1d6b19195e100fb22d3c2ff5891',
+        image: 'a41a624da6b37ed1125076796010b84d6b5cb755',
         smallImage: '',
         name: 'Energie-Booster Bronze (30 Tage)',
         grade: ItemGrade.bronze,
     },
     [ItemHash.energyBooster_bronze_90days_pts]: {
         hash: ItemHash.energyBooster_bronze_90days_pts,
-        image: 'abf12608d09c541979620e02a82bcd740451dd8f',
+        image: '3ce03a7729dd15030bab7c97145ab535b5327483',
         smallImage: '',
         name: 'Energie-Booster Bronze (90 Tage)',
         grade: ItemGrade.bronze,
@@ -1905,28 +1905,28 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.lifeformKraken_bronze_pts]: {
         hash: ItemHash.lifeformKraken_bronze_pts,
-        image: "4834adbcab85f74ad1a2030e3eccc89f35c9cfbb",
+        image: "6ada3d390532aefaa3d0c7d6423716bf5c64c75d",
         smallImage: "fe38c0ce79edcf0fa53a8a6aebd58d5d27d0e1fd",
         name: 'KRAKEN Bronze (Lifeform)',
         grade: ItemGrade.bronze,
     },
     [ItemHash.lifeformKraken_silver_pts]: {
         hash: ItemHash.lifeformKraken_silver_pts,
-        image: "27f5d8ceafc520bcc0f7071981aff62aaefa796b",
+        image: "d4f9684b1842ce849bc070c0c98fb9455d4cbd13",
         smallImage: "fb0017c2f817bc4c9b94336c2b0d845e08fbe06b",
         name: 'KRAKEN Silber (Lifeform)',
         grade: ItemGrade.silver,
     },
     [ItemHash.lifeformKraken_gold_pts]: {
         hash: ItemHash.lifeformKraken_gold_pts,
-        image: "d3ed9dfe986ecba129b4a4580d1709acbc732139",
+        image: "8ea421125cc0e8a720a9d0c7c490188a3ce45906",
         smallImage: "b754fae952ba44a4ee0aea13d2d4bc99cd73b069",
         name: 'KRAKEN Gold (Lifeform)',
         grade: ItemGrade.gold,
     },
     [ItemHash.lifeformKraken_platinum_pts]: {
         hash: ItemHash.lifeformKraken_platinum_pts,
-        image: "27fc57078a3df32bc3db4db076e7040d20d1dcc3",
+        image: "16fd88c2da5ca378a87e2a83d73d3d555062e66e",
         smallImage: "94849b2f1461d41042096eb8ad536820731a4a5f",
         name: 'KRAKEN Platin (Lifeform)',
         grade: ItemGrade.platinum,
@@ -1934,28 +1934,28 @@ export const Items: Record<ItemHash, Item> = {
 
     [ItemHash.lifeformNewtron_bronze_pts]: {
         hash: ItemHash.lifeformNewtron_bronze_pts,
-        image: "be56c3b36189b16830e07a625f182fe4ab75b878",
+        image: "dd780a5cd8c69475812a21c7203d276429f5154c",
         smallImage: "014b7b201f1fc889f6c5da1757a60e0b759c5ec1",
         name: 'NEWTRON Bronze (Lifeform)',
         grade: ItemGrade.bronze,
     },
     [ItemHash.lifeformNewtron_silver_pts]: {
         hash: ItemHash.lifeformNewtron_silver_pts,
-        image: "d7ffe87869bafd8ec84c8d50774861d7c716985b",
+        image: "7b8ca3e53d2e2a9f2fc8014361ee09a965d7f2e3",
         smallImage: "30c32146a7926d10b1be12cff6f19771836d0e46",
         name: 'NEWTRON Silber (Lifeform)',
         grade: ItemGrade.silver,
     },
     [ItemHash.lifeformNewtron_gold_pts]: {
         hash: ItemHash.lifeformNewtron_gold_pts,
-        image: "3fbe027e0579e94fe88d873857a28d22d6b2411b",
+        image: "7ffa53ee2312d8d775b93940ef77f6a0ec3039e4",
         smallImage: "5cd1c6979271dee76c1eb096a5ed940e2c1da705",
         name: 'NEWTRON Gold (Lifeform)',
         grade: ItemGrade.gold,
     },
     [ItemHash.lifeformNewtron_platinum_pts]: {
         hash: ItemHash.lifeformNewtron_platinum_pts,
-        image: "c8b583a18c98a93041ccc82269af5886e972403e",
+        image: "84787bb32ec4f6a25ab66c28aa06a4c40228617e",
         smallImage: "8b6043a1c79f378b5cef68439e40c1be387ade42",
         name: 'NEWTRON Platin (Lifeform)',
         grade: ItemGrade.platinum,

@@ -19,15 +19,14 @@ export interface ItemEffect {
     expeditionImprovedChances?: boolean;
     /** relative reduction of expedition delays, e.g. 0.75 for "Reduces expedition delays by 75%" */
     expeditionDelayReduction?: number;
-    /** relative bonus on the mine production of one resource on a planet */
-    resourceProductionBonus?: Partial<Record<ResourceType, number>>;
     /**
-     * relative bonus on the mine production of all three resources on a planet.
+     * relative bonus on the mine production of a planet, per resource.
      *
-     * Kept apart from `resourceProductionBonus` because the two stack: a 60% metal booster
-     * together with a 40% all-resource booster yields +100% metal, not +60%.
+     * The bonuses of all active items add up: a 60% metal booster together with a 40%
+     * all-resource booster yields +100% metal. OGame allows only one active booster of
+     * a kind, so summing never counts the same kind twice.
      */
-    allResourceProductionBonus?: number;
+    resourceProductionBonus?: Partial<Record<ResourceType, number>>;
     /** relative bonus on the energy production of a single planet */
     energyProductionBonus?: number;
 }
@@ -114,11 +113,11 @@ export const ItemEffects: Partial<Record<ItemHash, ItemEffect>> = {
     [ItemHash.energyBooster_platinum_30days_pts]: { energyProductionBonus: 0.8 },
     [ItemHash.energyBooster_platinum_90days]: { energyProductionBonus: 0.8 },
     [ItemHash.energyBooster_platinum_90days_pts]: { energyProductionBonus: 0.8 },
-    [ItemHash.resourceBooster_all_15percent_7days]: { allResourceProductionBonus: 0.15 },
-    [ItemHash.resourceBooster_all_20percent_7days]: { allResourceProductionBonus: 0.2 },
-    [ItemHash.resourceBooster_all_25percent_7days]: { allResourceProductionBonus: 0.25 },
-    [ItemHash.resourceBooster_all_30percent_7days]: { allResourceProductionBonus: 0.3 },
-    [ItemHash.resourceBooster_all_40percent_7days]: { allResourceProductionBonus: 0.4 },
+    [ItemHash.resourceBooster_all_15percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.15, [ResourceType.crystal]: 0.15, [ResourceType.deuterium]: 0.15 } },
+    [ItemHash.resourceBooster_all_20percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.2, [ResourceType.crystal]: 0.2, [ResourceType.deuterium]: 0.2 } },
+    [ItemHash.resourceBooster_all_25percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.25, [ResourceType.crystal]: 0.25, [ResourceType.deuterium]: 0.25 } },
+    [ItemHash.resourceBooster_all_30percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.3, [ResourceType.crystal]: 0.3, [ResourceType.deuterium]: 0.3 } },
+    [ItemHash.resourceBooster_all_40percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.4, [ResourceType.crystal]: 0.4, [ResourceType.deuterium]: 0.4 } },
     [ItemHash.expeditionslots_bronze_7days]: { expeditionSlots: 1 },
     [ItemHash.expeditionslots_bronze_7days_pts]: { expeditionSlots: 1 },
     [ItemHash.expeditionslots_bronze_30days]: { expeditionSlots: 1 },
@@ -270,22 +269,22 @@ export const ItemEffects: Partial<Record<ItemHash, ItemEffect>> = {
     [ItemHash.metalBooster_silver_90days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.2 } },
     [ItemHash.metalBooster_silver_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.2 } },
     [ItemHash.metalBooster_silver_30days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.2 } },
-    [ItemHash.resourceBooster_all_10percent_7days]: { allResourceProductionBonus: 0.1 },
-    [ItemHash.resourceBooster_all_10percent_3days]: { allResourceProductionBonus: 0.1 },
-    [ItemHash.resourceBooster_all_15percent_30days]: { allResourceProductionBonus: 0.15 },
-    [ItemHash.resourceBooster_all_15percent_90days]: { allResourceProductionBonus: 0.15 },
-    [ItemHash.resourceBooster_all_15percent_7days_2]: { allResourceProductionBonus: 0.15 },
-    [ItemHash.resourceBooster_all_20percent_3days]: { allResourceProductionBonus: 0.2 },
-    [ItemHash.resourceBooster_all_20percent_90days]: { allResourceProductionBonus: 0.2 },
-    [ItemHash.resourceBooster_all_20percent_30days]: { allResourceProductionBonus: 0.2 },
-    [ItemHash.resourceBooster_all_20percent_7days_2]: { allResourceProductionBonus: 0.2 },
-    [ItemHash.resourceBooster_all_25percent_90days]: { allResourceProductionBonus: 0.25 },
-    [ItemHash.resourceBooster_all_25percent_7days_2]: { allResourceProductionBonus: 0.25 },
-    [ItemHash.resourceBooster_all_25percent_30days]: { allResourceProductionBonus: 0.25 },
-    [ItemHash.resourceBooster_all_30percent_7days_2]: { allResourceProductionBonus: 0.3 },
-    [ItemHash.resourceBooster_all_30percent_90days]: { allResourceProductionBonus: 0.3 },
-    [ItemHash.resourceBooster_all_30percent_30days]: { allResourceProductionBonus: 0.3 },
-    [ItemHash.resourceBooster_all_40percent_30days]: { allResourceProductionBonus: 0.4 },
-    [ItemHash.resourceBooster_all_40percent_90days]: { allResourceProductionBonus: 0.4 },
-    [ItemHash.resourceBooster_all_40percent_7days_2]: { allResourceProductionBonus: 0.4 },
+    [ItemHash.resourceBooster_all_10percent_7days]: { resourceProductionBonus: { [ResourceType.metal]: 0.1, [ResourceType.crystal]: 0.1, [ResourceType.deuterium]: 0.1 } },
+    [ItemHash.resourceBooster_all_10percent_3days]: { resourceProductionBonus: { [ResourceType.metal]: 0.1, [ResourceType.crystal]: 0.1, [ResourceType.deuterium]: 0.1 } },
+    [ItemHash.resourceBooster_all_15percent_30days]: { resourceProductionBonus: { [ResourceType.metal]: 0.15, [ResourceType.crystal]: 0.15, [ResourceType.deuterium]: 0.15 } },
+    [ItemHash.resourceBooster_all_15percent_90days]: { resourceProductionBonus: { [ResourceType.metal]: 0.15, [ResourceType.crystal]: 0.15, [ResourceType.deuterium]: 0.15 } },
+    [ItemHash.resourceBooster_all_15percent_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.15, [ResourceType.crystal]: 0.15, [ResourceType.deuterium]: 0.15 } },
+    [ItemHash.resourceBooster_all_20percent_3days]: { resourceProductionBonus: { [ResourceType.metal]: 0.2, [ResourceType.crystal]: 0.2, [ResourceType.deuterium]: 0.2 } },
+    [ItemHash.resourceBooster_all_20percent_90days]: { resourceProductionBonus: { [ResourceType.metal]: 0.2, [ResourceType.crystal]: 0.2, [ResourceType.deuterium]: 0.2 } },
+    [ItemHash.resourceBooster_all_20percent_30days]: { resourceProductionBonus: { [ResourceType.metal]: 0.2, [ResourceType.crystal]: 0.2, [ResourceType.deuterium]: 0.2 } },
+    [ItemHash.resourceBooster_all_20percent_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.2, [ResourceType.crystal]: 0.2, [ResourceType.deuterium]: 0.2 } },
+    [ItemHash.resourceBooster_all_25percent_90days]: { resourceProductionBonus: { [ResourceType.metal]: 0.25, [ResourceType.crystal]: 0.25, [ResourceType.deuterium]: 0.25 } },
+    [ItemHash.resourceBooster_all_25percent_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.25, [ResourceType.crystal]: 0.25, [ResourceType.deuterium]: 0.25 } },
+    [ItemHash.resourceBooster_all_25percent_30days]: { resourceProductionBonus: { [ResourceType.metal]: 0.25, [ResourceType.crystal]: 0.25, [ResourceType.deuterium]: 0.25 } },
+    [ItemHash.resourceBooster_all_30percent_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.3, [ResourceType.crystal]: 0.3, [ResourceType.deuterium]: 0.3 } },
+    [ItemHash.resourceBooster_all_30percent_90days]: { resourceProductionBonus: { [ResourceType.metal]: 0.3, [ResourceType.crystal]: 0.3, [ResourceType.deuterium]: 0.3 } },
+    [ItemHash.resourceBooster_all_30percent_30days]: { resourceProductionBonus: { [ResourceType.metal]: 0.3, [ResourceType.crystal]: 0.3, [ResourceType.deuterium]: 0.3 } },
+    [ItemHash.resourceBooster_all_40percent_30days]: { resourceProductionBonus: { [ResourceType.metal]: 0.4, [ResourceType.crystal]: 0.4, [ResourceType.deuterium]: 0.4 } },
+    [ItemHash.resourceBooster_all_40percent_90days]: { resourceProductionBonus: { [ResourceType.metal]: 0.4, [ResourceType.crystal]: 0.4, [ResourceType.deuterium]: 0.4 } },
+    [ItemHash.resourceBooster_all_40percent_7days_2]: { resourceProductionBonus: { [ResourceType.metal]: 0.4, [ResourceType.crystal]: 0.4, [ResourceType.deuterium]: 0.4 } },
 };

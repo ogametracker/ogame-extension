@@ -65,6 +65,11 @@ const slotGrades = { 1: 'bronze', 2: 'silver', 3: 'gold' };
 const mineBoosterGrades = { 10: 'bronze', 20: 'silver', 30: 'gold', 40: 'platinum' };
 const energyBoosterGrades = { 20: 'bronze', 40: 'silver', 60: 'gold', 80: 'platinum' };
 
+// an all-resource booster is a mine booster with the same bonus on every resource
+function allResourcesBonus(bonus) {
+    return { metal: bonus, crystal: bonus, deuterium: bonus };
+}
+
 function cleanEffect(rawEffect) {
     return (rawEffect ?? '')
         .replace(/&#43;/g, '+')
@@ -163,7 +168,7 @@ function classify(item) {
         const percent = parseInt(match[1], 10);
         return {
             name: `resourceBooster_all_${percent}percent_${duration}`,
-            effect: { allResourceProductionBonus: percent / 100 },
+            effect: { resourceProductionBonus: allResourcesBonus(percent / 100) },
             grade: 'none',
         };
     }
@@ -212,7 +217,7 @@ function effectFromMemberName(name) {
         return { energyProductionBonus: percent / 100 };
     }
     if ((match = base.match(/^resourceBooster_all_(\d+)percent_/))) {
-        return { allResourceProductionBonus: parseInt(match[1], 10) / 100 };
+        return { resourceProductionBonus: allResourcesBonus(parseInt(match[1], 10) / 100) };
     }
 
     return null;
@@ -241,9 +246,6 @@ function formatEffect(effect) {
             .map(([resource, bonus]) => `[ResourceType.${resource}]: ${bonus}`)
             .join(', ');
         parts.push(`resourceProductionBonus: { ${inner} }`);
-    }
-    if (effect.allResourceProductionBonus != null) {
-        parts.push(`allResourceProductionBonus: ${effect.allResourceProductionBonus}`);
     }
     if (effect.energyProductionBonus != null) {
         parts.push(`energyProductionBonus: ${effect.energyProductionBonus}`);
@@ -286,15 +288,14 @@ export interface ItemEffect {
     expeditionImprovedChances?: boolean;
     /** relative reduction of expedition delays, e.g. 0.75 for "Reduces expedition delays by 75%" */
     expeditionDelayReduction?: number;
-    /** relative bonus on the mine production of one resource on a planet */
-    resourceProductionBonus?: Partial<Record<ResourceType, number>>;
     /**
-     * relative bonus on the mine production of all three resources on a planet.
+     * relative bonus on the mine production of a planet, per resource.
      *
-     * Kept apart from \`resourceProductionBonus\` because the two stack: a 60% metal booster
-     * together with a 40% all-resource booster yields +100% metal, not +60%.
+     * The bonuses of all active items add up: a 60% metal booster together with a 40%
+     * all-resource booster yields +100% metal. OGame allows only one active booster of
+     * a kind, so summing never counts the same kind twice.
      */
-    allResourceProductionBonus?: number;
+    resourceProductionBonus?: Partial<Record<ResourceType, number>>;
     /** relative bonus on the energy production of a single planet */
     energyProductionBonus?: number;
 }
