@@ -11,6 +11,7 @@ import { ExpeditionEventType } from "../../shared/models/expeditions/ExpeditionE
 import { ExpeditionEventSize } from "../../shared/models/expeditions/ExpeditionEventSize";
 import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
 import { Items } from "../../shared/models/ogame/items/Items";
+import { getItemImageUrl } from "../../shared/models/ogame/items/getItemImageUrl";
 import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
 import { parseIntSafe } from "../../shared/utils/parseNumbers";
 import { sendMessage } from "@/shared/communication/sendMessage";
@@ -468,7 +469,7 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
         case ExpeditionEventType.item: {
             const item = Items[expedition.itemHash];
-            const imageUrl = chrome.runtime.getURL(`/img/ogame/items/${item.image}.png`);
+            const imageUrl = getItemImageUrl(item);
             return `
                 <a href="/game/index.php?page=shop#item=${expedition.itemHash}&page=inventory">
                     <div class="${getExpeditionResultClass(expedition)}">
