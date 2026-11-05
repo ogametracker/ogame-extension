@@ -9,60 +9,55 @@
             'background-image': `url(/img/ogame/ships/${image}.jpg)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
+        v-on="legacyListeners"
+        v-bind="$props"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
+    import { computed, defineComponent } from 'vue';
+    import type { PropType } from 'vue';
+    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
 
-    @Component({})
-    export default class OShip extends Vue {
+    const imageMap: Record<ShipType, string> = {
+        [ShipType.smallCargo]: 'small-cargo',
+        [ShipType.largeCargo]: 'large-cargo',
+        [ShipType.lightFighter]: 'light-fighter',
+        [ShipType.heavyFighter]: 'heavy-fighter',
+        [ShipType.cruiser]: 'cruiser',
+        [ShipType.battleship]: 'battleship',
+        [ShipType.colonyShip]: 'colony-ship',
+        [ShipType.recycler]: 'recycler',
+        [ShipType.espionageProbe]: 'espionage-probe',
+        [ShipType.bomber]: 'bomber',
+        [ShipType.solarSatellite]: 'solar-satellite',
+        [ShipType.destroyer]: 'destroyer',
+        [ShipType.deathStar]: 'death-star',
+        [ShipType.battlecruiser]: 'battlecruiser',
+        [ShipType.crawler]: 'crawler',
+        [ShipType.reaper]: 'reaper',
+        [ShipType.pathfinder]: 'pathfinder',
+    };
 
-        @Prop({
-            required: true,
-            type: Number as PropType<ShipType>,
-            validator: (value: number) => (ShipTypes as number[]).includes(value),
-        })
-        private ship!: ShipType;
-
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-
-        private get image() {
-            return this.imageMap[this.ship];
-        }
-        private readonly imageMap: Record<ShipType, string> = {
-            [ShipType.smallCargo]: 'small-cargo',
-            [ShipType.largeCargo]: 'large-cargo',
-            [ShipType.lightFighter]: 'light-fighter',
-            [ShipType.heavyFighter]: 'heavy-fighter',
-            [ShipType.cruiser]: 'cruiser',
-            [ShipType.battleship]: 'battleship',
-            [ShipType.colonyShip]: 'colony-ship',
-            [ShipType.recycler]: 'recycler',
-            [ShipType.espionageProbe]: 'espionage-probe',
-            [ShipType.bomber]: 'bomber',
-            [ShipType.solarSatellite]: 'solar-satellite',
-            [ShipType.destroyer]: 'destroyer',
-            [ShipType.deathStar]: 'death-star',
-            [ShipType.battlecruiser]: 'battlecruiser',
-            [ShipType.crawler]: 'crawler',
-            [ShipType.reaper]: 'reaper',
-            [ShipType.pathfinder]: 'pathfinder',
-        };
-    }
+    export default defineComponent({
+        props: {
+            ship: {
+                required: true,
+                type: Number as PropType<ShipType>,
+                validator: (value: number) => (ShipTypes as number[]).includes(value),
+            },
+            size: { required: false, type: String, default: '32px' },
+            disabled: { required: false, type: Boolean },
+            fade: { required: false, type: Boolean },
+        },
+        setup(props) {
+            const legacyListeners = useLegacyComponentListeners();
+            const image = computed(() => imageMap[props.ship]);
+            return { legacyListeners, image };
+        },
+    });
 </script>
 <style lang="scss" scoped>
     .o-ship {

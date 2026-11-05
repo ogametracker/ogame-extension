@@ -24,9 +24,9 @@ zipdir('./', {
     filter: (path, /** @type {import('fs').Stats} */stat) => {
         path = fixPath(path);
         if(stat.isDirectory()) {
-            return !ignoreDirs.includes(path);
+            return !ignoreDirs.includes(path) && !path.endsWith('/node_modules');
         }
 
-        return !ignoreDirs.some(dir => fixPath(path).startsWith(dir + '/'));
+        return !path.includes('/node_modules/') && !ignoreDirs.some(dir => path.startsWith(dir + '/'));
     },
 });

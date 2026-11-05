@@ -12,45 +12,42 @@
             'background-image': `url(/img/ogame/lifeforms/${image}.png)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
+        v-on="legacyListeners"
+        v-bind="$props"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
+    import { computed, defineComponent } from 'vue';
+    import type { PropType } from 'vue';
+    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { LifeformType, LifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
 
-    @Component({})
-    export default class OLifeform extends Vue {
-        @Prop({
-            required: true,
-            type: String as PropType<LifeformType>,
-            validator: (value: string) => (LifeformTypes as string[]).includes(value)
-        })
-        private lifeform!: LifeformType;
+    const imageMap: Record<LifeformType, string> = {
+        [LifeformType.humans]: 'humans',
+        [LifeformType.rocktal]: 'rocktal',
+        [LifeformType.mechas]: 'mechas',
+        [LifeformType.kaelesh]: 'kaelesh',
+        [LifeformType.none]: 'none',
+    };
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-        private get image() {
-            return this.imageMap[this.lifeform];
-        }
-        private readonly imageMap: Record<LifeformType, string> = {
-            [LifeformType.humans]: 'humans',
-            [LifeformType.rocktal]: 'rocktal',
-            [LifeformType.mechas]: 'mechas',
-            [LifeformType.kaelesh]: 'kaelesh',
-            [LifeformType.none]: 'none',
-        };
-    }
+    export default defineComponent({
+        props: {
+            lifeform: {
+                required: true,
+                type: String as PropType<LifeformType>,
+                validator: (value: string) => (LifeformTypes as string[]).includes(value)
+            },
+            size: { required: false, type: String, default: '32px' },
+            disabled: { required: false, type: Boolean },
+            fade: { required: false, type: Boolean },
+        },
+        setup(props) {
+            const legacyListeners = useLegacyComponentListeners();
+            const image = computed(() => imageMap[props.lifeform]);
+            return { legacyListeners, image };
+        },
+    });
 </script>
 <style lang="scss" scoped>
     .o-lifeform {

@@ -39,6 +39,10 @@ console.log('creating Vue build');
 fs.writeFileSync(`.env.local`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
 const vueBuildMode = isDev ? 'development' : 'production';
 execSync(`vue-cli-service build --modern --mode ${vueBuildMode}`, { stdio: 'inherit' });
+execSync(`npm run build --workspace ogame-tracker-notifications -- --mode ${vueBuildMode}`, {
+    stdio: 'inherit',
+    env: { ...process.env, BROWSER: browser, NODE_ENV: vueBuildMode },
+});
 
 // copy favicon to output dir
 console.log(`Copying favicon`);

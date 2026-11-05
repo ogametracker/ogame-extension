@@ -1,0 +1,19 @@
+{
+  "name": "ogame-tracker-notifications",
+  "private": true,
+  "scripts": {
+    "build": "npm run typecheck && vite build",
+    "typecheck": "node typecheck.cjs --noEmit"
+  },
+  "dependencies": {
+    "pinia": "4.1.0",
+    "vue": "3.5.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "sass": "^1.107.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.6",
+    "vue-tsc": "3.3.14"
+  }
+}

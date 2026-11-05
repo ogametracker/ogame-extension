@@ -9,47 +9,44 @@
             'background-image': `url(/img/ogame/resources/${image}.upscaled.png)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
+        v-on="legacyListeners"
+        v-bind="$props"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
+    import { computed, defineComponent } from 'vue';
+    import type { PropType } from 'vue';
+    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
 
     export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
 
-    @Component({})
-    export default class OResource extends Vue {
-        @Prop({
-            required: true,
-            type: String as PropType<ExtendedResourceType>,
-            validator: (value: string) => ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value)
-        })
-        private resource!: ExtendedResourceType;
+    const imageMap: Record<ExtendedResourceType, string> = {
+        [ResourceType.metal]: 'metal',
+        [ResourceType.crystal]: 'crystal',
+        [ResourceType.deuterium]: 'deuterium',
+        energy: 'energy',
+        'dark-matter': 'dark-matter',
+    };
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-        private get image() {
-            return this.imageMap[this.resource];
-        }
-        private readonly imageMap: Record<ExtendedResourceType, string> = {
-            [ResourceType.metal]: 'metal',
-            [ResourceType.crystal]: 'crystal',
-            [ResourceType.deuterium]: 'deuterium',
-            energy: 'energy',
-            'dark-matter': 'dark-matter',
-        };
-    }
+    export default defineComponent({
+        props: {
+            resource: {
+                required: true,
+                type: String as PropType<ExtendedResourceType>,
+                validator: (value: string) => ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value)
+            },
+            size: { required: false, type: String, default: '32px' },
+            disabled: { required: false, type: Boolean },
+            fade: { required: false, type: Boolean },
+        },
+        setup(props) {
+            const legacyListeners = useLegacyComponentListeners();
+            const image = computed(() => imageMap[props.resource]);
+            return { legacyListeners, image };
+        },
+    });
 </script>
 <style lang="scss" scoped>
     .o-resource {

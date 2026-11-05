@@ -4,30 +4,20 @@
         :title="title"
         :message="message"
         :saturate="0.6"
-        @remove="$emit('remove')"
+        @remove="emit('remove')"
     />
 </template>
 
-<script lang="ts">
-    import { MessageTrackingErrorNotificationMessage } from '@/shared/messages/notifications';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+    import { computed } from 'vue';
+    import type { MessageTrackingErrorNotificationMessage } from '@/shared/messages/notifications';
     import Notification from '../Notification.vue';
+    import { formatNumber, translate } from '../../i18n';
 
-    @Component({
-        components: {
-            Notification,
-        }
-    })
-    export default class MessageTrackingErrorNotification extends Vue {
-        @Prop({ required: true, type: Object })
-        private notification!: MessageTrackingErrorNotificationMessage['data'];
+    const { notification } = defineProps<{ notification: MessageTrackingErrorNotificationMessage['data'] }>();
+    const emit = defineEmits<{ remove: [] }>();
 
-        private get title() {
-            return this.$i18n.$t.extension.notifications.messageTrackingError.title(this.$i18n.$n(this.notification.count));
-        }
+    const title = computed(() => translate(t => t.extension.notifications.messageTrackingError.title(formatNumber(notification.count))));
 
-        private get message() {
-            return this.$i18n.$t.extension.notifications.messageTrackingError.message(this.$i18n.$n(this.notification.count));
-        }
-    }
+    const message = computed(() => translate(t => t.extension.notifications.messageTrackingError.message(formatNumber(notification.count))));
 </script>

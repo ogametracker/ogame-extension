@@ -11,18 +11,19 @@
             'background-image': `url(${imageUrl})`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
+        v-on="legacyListeners"
+        v-bind="$props"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
+    import { computed, defineComponent } from 'vue';
+    import type { PropType } from 'vue';
+    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
     import { Items } from '@/shared/models/ogame/items/Items';
-    import { Item } from '@/shared/models/ogame/items/Item';
-    import { getItemImageUrl, ItemImageServer } from '@/shared/models/ogame/items/getItemImageUrl';
+    import type { Item } from '@/shared/models/ogame/items/Item';
+    import { getItemImageUrl, type ItemImageServer } from '@/shared/models/ogame/items/getItemImageUrl';
     import { parseIntSafe } from '@/shared/utils/parseNumbers';
 
     // the extension pages showing items are opened for one account and carry its server in the url
@@ -38,40 +39,26 @@
     }
     const server = getServerFromLocation();
 
-    @Component({})
-    export default class OItem extends Vue {
-
-        @Prop({
-            required: true,
-            type: String as PropType<ItemHash>,
-            validator: (value: string) => (ItemHashes as string[]).includes(value)
-        })
-        private item!: ItemHash;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private hideItemGrade!: boolean;
-
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private fade!: boolean;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private showTooltip!: boolean; //TODO: item tooltip
-
-
-        private get fullItem(): Item {
-            return Items[this.item];
-        }
-
-        private get imageUrl(): string {
-            return getItemImageUrl(this.fullItem, server);
-        }
-    }
+    export default defineComponent({
+        props: {
+            item: {
+                required: true,
+                type: String as PropType<ItemHash>,
+                validator: (value: string) => (ItemHashes as string[]).includes(value)
+            },
+            hideItemGrade: { required: false, type: Boolean, default: false },
+            size: { required: false, type: String, default: '32px' },
+            disabled: { required: false, type: Boolean, default: false },
+            fade: { required: false, type: Boolean, default: false },
+            showTooltip: { required: false, type: Boolean, default: false },
+        },
+        setup(props) {
+            const legacyListeners = useLegacyComponentListeners();
+            const fullItem = computed<Item>(() => Items[props.item]);
+            const imageUrl = computed(() => getItemImageUrl(fullItem.value, server));
+            return { legacyListeners, fullItem, imageUrl };
+        },
+    });
 </script>
 <style lang="scss" scoped>
     $ogame-item-grades: (

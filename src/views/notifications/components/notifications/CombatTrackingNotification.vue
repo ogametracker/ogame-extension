@@ -1,36 +1,36 @@
 <template>
-    <notification type="info" :title="title" @remove="$emit('remove')" :timeout="10000">
+    <notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
         <template #message>
             <div v-if="notification.count > 0" v-text="message" />
 
             <template v-if="hasLoot">
                 <hr />
                 <div class="resources-grid" v-if="showSimplified">
-                    <o-resource resource="metal" />
+                    <o-resource :resource="ResourceType.metal" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.metal < 0,
                             fade: notification.resources.metal == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.metal)"
+                        v-text="formatNumber(notification.resources.metal)"
                     />
 
-                    <o-resource resource="crystal" />
+                    <o-resource :resource="ResourceType.crystal" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.crystal < 0,
                             fade: notification.resources.crystal == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.crystal)"
+                        v-text="formatNumber(notification.resources.crystal)"
                     />
 
-                    <o-resource resource="deuterium" />
+                    <o-resource :resource="ResourceType.deuterium" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.deuterium < 0,
                             fade: notification.resources.deuterium == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.deuterium)"
+                        v-text="formatNumber(notification.resources.deuterium)"
                     />
 
                     <span class="mdi mdi-sigma" />
@@ -39,44 +39,44 @@
                             'negative-loot': sum < 0,
                             fade: sum == 0,
                         }"
-                        v-text="$i18n.$n(sum)"
+                        v-text="formatNumber(sum)"
                     />
                 </div>
                 <div class="text-grid" v-else>
-                    <span v-text="$i18n.$t.extension.resources[ResourceType.metal]" />
+                    <span v-text="translate(t => t.extension.resources[ResourceType.metal])" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.metal < 0,
                             fade: notification.resources.metal == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.metal)"
+                        v-text="formatNumber(notification.resources.metal)"
                     />
 
-                    <span v-text="$i18n.$t.extension.resources[ResourceType.crystal]" />
+                    <span v-text="translate(t => t.extension.resources[ResourceType.crystal])" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.crystal < 0,
                             fade: notification.resources.crystal == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.crystal)"
+                        v-text="formatNumber(notification.resources.crystal)"
                     />
 
-                    <span v-text="$i18n.$t.extension.resources[ResourceType.deuterium]" />
+                    <span v-text="translate(t => t.extension.resources[ResourceType.deuterium])" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.deuterium < 0,
                             fade: notification.resources.deuterium == 0,
                         }"
-                        v-text="$i18n.$n(notification.resources.deuterium)"
+                        v-text="formatNumber(notification.resources.deuterium)"
                     />
 
-                    <span v-text="$i18n.$t.extension.common.sum" />
+                    <span v-text="translate(t => t.extension.common.sum)" />
                     <span
                         :class="{
                             'negative-loot': sum < 0,
                             fade: sum == 0,
                         }"
-                        v-text="$i18n.$n(sum)"
+                        v-text="formatNumber(sum)"
                     />
                 </div>
             </template>
@@ -84,46 +84,32 @@
     </notification>
 </template>
 
-<script lang="ts">
-    import { CombatTrackingNotificationMessageData } from '@/shared/messages/notifications';
-import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+    import { computed } from 'vue';
+    import type { CombatTrackingNotificationMessageData } from '@/shared/messages/notifications';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
     import Notification from '../Notification.vue';
+    import OResource from '@/views/_shared/components/ogame/OResource.vue';
+    import { formatNumber, translate } from '../../i18n';
+    import { useSettingsStore } from '../../stores/settings';
 
-    @Component({
-        components: {
-            Notification,
-        }
-    })
-    export default class CombatTrackingNotification extends Vue {
-        @Prop({ required: true, type: Object })
-        private notification!: CombatTrackingNotificationMessageData;
+    const { notification } = defineProps<{ notification: CombatTrackingNotificationMessageData }>();
+    const emit = defineEmits<{ remove: [] }>();
+    const settingsStore = useSettingsStore();
 
-        private readonly ResourceType = ResourceType;
+    const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
 
-        private get showSimplified() {
-            return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
-        }
+    const title = computed(() => translate(t => t.extension.notifications.combatTracking.title(formatNumber(notification.count))));
 
-        private get title() {
-            return this.$i18n.$t.extension.notifications.combatTracking.title(this.$i18n.$n(this.notification.count));
-        }
+    const message = computed(() => translate(t => t.extension.notifications.combatTracking.message(formatNumber(notification.count))));
 
-        private get message() {
-            return this.$i18n.$t.extension.notifications.combatTracking.message(this.$i18n.$n(this.notification.count));
-        }
+    const hasLoot = computed(() => Object.values(notification.resources).reduce((acc, cur) => acc + cur, 0) > 0);
 
-        private get hasLoot() {
-            return Object.values(this.notification.resources).reduce((acc, cur) => acc + cur, 0) > 0;
-        }
-
-        private get sum() {
-            return this.notification.resources.metal
-                + this.notification.resources.crystal
-                + this.notification.resources.deuterium;
-        }
-    }
+    const sum = computed(() =>
+        notification.resources.metal
+            + notification.resources.crystal
+            + notification.resources.deuterium,
+    );
 </script>
 <style lang="scss" scoped>
     .negative-loot {

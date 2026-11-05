@@ -4,30 +4,20 @@
         :title="title"
         :message="message"
         :saturate="0.6"
-        @remove="$emit('remove')"
+        @remove="emit('remove')"
     />
 </template>
 
-<script lang="ts">
-    import { ExpeditionTrackingLostFleetNotificationMessage } from '@/shared/messages/notifications';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+    import { computed } from 'vue';
+    import type { ExpeditionTrackingLostFleetNotificationMessage } from '@/shared/messages/notifications';
     import Notification from '../Notification.vue';
+    import { formatNumber, translate } from '../../i18n';
 
-    @Component({
-        components: {
-            Notification,
-        }
-    })
-    export default class ExpeditionTrackingNotification extends Vue {
-        @Prop({ required: true, type: Object })
-        private notification!: ExpeditionTrackingLostFleetNotificationMessage['data'];
+    const { notification } = defineProps<{ notification: ExpeditionTrackingLostFleetNotificationMessage['data'] }>();
+    const emit = defineEmits<{ remove: [] }>();
 
-        private get title() {
-            return this.$i18n.$t.extension.notifications.expeditionTracking.fleetLost.title(this.$i18n.$n(this.notification.count));
-        }
+    const title = computed(() => translate(t => t.extension.notifications.expeditionTracking.fleetLost.title(formatNumber(notification.count))));
 
-        private get message() {
-            return this.$i18n.$t.extension.notifications.expeditionTracking.fleetLost.message(this.$i18n.$n(this.notification.count));
-        }
-    }
+    const message = computed(() => translate(t => t.extension.notifications.expeditionTracking.fleetLost.message(formatNumber(notification.count))));
 </script>

@@ -4,7 +4,7 @@ const fs = require('fs');
 const viewsDir = './src/views';
 const views = fs.readdirSync(viewsDir, { withFileTypes: true })
     // only directories that have a main.ts
-    .filter(file => file.isDirectory()
+    .filter(file => file.isDirectory() && file.name !== 'notifications'
         && fs.readdirSync(`${viewsDir}/${file.name}`, { withFileTypes: true })
             .some(f => f.isFile() && f.name == 'main.ts')
     )

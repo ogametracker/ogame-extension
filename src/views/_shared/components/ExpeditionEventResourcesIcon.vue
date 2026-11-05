@@ -1,19 +1,21 @@
 <template>
     <span class="tri-resource">
-        <o-resource resource="metal" :size="size" />
-        <o-resource resource="crystal" :size="size" />
-        <o-resource resource="deuterium" :size="size" />
+        <o-resource :resource="ResourceType.metal" :size="size" />
+        <o-resource :resource="ResourceType.crystal" :size="size" />
+        <o-resource :resource="ResourceType.deuterium" :size="size" />
     </span>
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { defineComponent } from 'vue';
+    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import OResource from './ogame/OResource.vue';
 
-    @Component({})
-    export default class ExpeditionEventResourcesIcon extends Vue {
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-    }
+    export default defineComponent({
+        components: { OResource },
+        props: { size: { type: String, default: '32px' } },
+        setup: () => ({ ResourceType }),
+    });
 </script>
 <style lang="scss" scoped>
     .tri-resource {

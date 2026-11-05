@@ -4,7 +4,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { LanguageKey } from "../LanguageKey";
 import { ExtensionTranslations } from "./type";
 import extensionMessages from './';
-import { _logWarning } from "@/shared/utils/_log";
+import { createTranslationTree } from "./createTranslationTree";
 import { RecursivePartial } from "@/shared/types/RecursivePartial";
 
 type I18nDateTimeFormatKey = 'date' | 'datetime' | 'time' | 'time_hm';
@@ -13,7 +13,7 @@ type I18nLanguageRootMap<TRoot> = Partial<Record<LanguageKey, TRoot>>;
 type I18nDateTimeFormats<T> = Partial<Record<I18nDateTimeFormatKey, T>>;
 export type I18nDateTimeFormat = string | Intl.DateTimeFormatOptions;
 
-export interface I18nOptions<TMessages, TDateTimeFormats> {
+export interface I18nOptions<TMessages extends object, TDateTimeFormats> {
     locale: LanguageKey;
     localeRegion?: string;
     fallbackLocales: RequiredLanguageKey[];
@@ -24,99 +24,12 @@ export interface I18nOptions<TMessages, TDateTimeFormats> {
 type RequiredLanguageKey = LanguageKey.de | LanguageKey.en;
 type PartialLanguageKey = Exclude<LanguageKey, RequiredLanguageKey>;
 export type I18nDateTimeFormatMap<T> = Record<RequiredLanguageKey, I18nDateTimeFormats<T>> & Partial<Record<PartialLanguageKey, I18nDateTimeFormats<T>>>;
-export type I18nMessageMap<T> = Record<RequiredLanguageKey, T> & RecursivePartial<Record<PartialLanguageKey, T>>;
-export type I18nFullMessageMap<T> = Record<LanguageKey, T>;
-
-class I18nMessageProxy<TMessages, TDateTimeFormats extends I18nDateTimeFormat> {
-    readonly #i18n: I18n<TMessages, TDateTimeFormats>;
-    readonly #cache = {} as Record<LanguageKey, Record<string, any>>;
-
-    constructor(i18n: I18n<TMessages, TDateTimeFormats>, messages: I18nLanguageRootMap<TMessages>) {
-        this.#i18n = i18n;
-
-        this.#transformI18nObject(messages);
-    }
-
-    #transformI18nObject(obj: I18nLanguageRootMap<TMessages>) {
-        const keys = Object.keys(LanguageKey) as LanguageKey[];
-        keys.forEach(key => {
-            this.#transform(
-                this as any,
-                obj[key] ?? {},
-                key,
-                '',
-            );
-        });
-    }
-
-    #transform(root: I18nLanguageRootMap<TMessages>, obj: Record<string, any>, lang: LanguageKey, fullRootKey: string) {
-        Object.keys(obj).forEach(key => {
-            const value = obj[key];
-
-            const fieldKey = `$${key}`;
-            const localRoot = ((root as any)[fieldKey] ??= {}) as any;
-
-            const keyPrefix = fullRootKey == '' ? '' : `${fullRootKey}.`;
-            const fullKey = `${keyPrefix}${key}`;
-
-            if (value instanceof Object && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
-                this.#transform(localRoot, value, lang, fullKey);
-
-                if (!Object.getOwnPropertyNames(root).includes(key)) {
-                    Object.defineProperty(root, key, {
-                        get: () => {
-                            this.#i18n.throwOnDisabled();
-
-                            const self = root as any;
-                            return self[fieldKey];
-                        }
-                    });
-                }
-            } else {
-                localRoot[lang] = value;
-
-                const localeCache = (this.#cache[lang] ??= {});
-                localeCache[fullKey] = value;
-
-                if (!Object.getOwnPropertyNames(root).includes(key)) {
-                    Object.defineProperty(root, key, {
-                        get: () => {
-                            this.#i18n.throwOnDisabled();
-
-                            return this.#getTranslation(fullKey);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    #getTranslation(fullKey: string): string | Error {
-        let result = this.#cache[this.#i18n.locale]?.[fullKey];
-        if (result != null) {
-            return result;
-        }
-
-        let lastLocale = this.#i18n.locale;
-        for (const fallbackLocale of this.#i18n.fallbackLocales) {
-            result = this.#cache[fallbackLocale]?.[fullKey];
-            if (result != null) {
-                return result;
-            }
-
-            lastLocale = fallbackLocale;
-        }
-
-        _throw(`$i18n: did not find key '${fullKey}' for any locale`);
-    }
-}
 
 @Component({})
-export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extends Vue {
+export class I18n<TMessages extends object, TDateTimeFormats extends I18nDateTimeFormat> extends Vue {
     public enabled = true;
     public locale = LanguageKey.de;
     public localeRegion: string | null = null;
-    private _proxy: I18nMessageProxy<TMessages, TDateTimeFormats> = null!;
     public fallbackLocales: LanguageKey[] = [LanguageKey.en];
 
     /* we trick typescript here, it think the object looks like this
@@ -138,9 +51,8 @@ export class I18n<TMessages, TDateTimeFormats extends I18nDateTimeFormat> extend
     public dateTimeFormats: I18nDateTimeFormats<TDateTimeFormats> = null!;
 
     public init(options: I18nOptions<TMessages, TDateTimeFormats>): I18n<TMessages, TDateTimeFormats> {
-        this._proxy = new I18nMessageProxy<TMessages, TDateTimeFormats>(this, options.messages as any);
-        this.$t = this._proxy as any;
-        this.dateTimeFormats = new I18nMessageProxy<any, TDateTimeFormats>(this, options.dateTimeFormats as any) as any;
+        this.$t = createTranslationTree<TMessages>(this, options.messages);
+        this.dateTimeFormats = createTranslationTree<I18nDateTimeFormats<TDateTimeFormats>>(this, options.dateTimeFormats);
 
         this.locale = options.locale;
         this.localeRegion = options.localeRegion ?? null;

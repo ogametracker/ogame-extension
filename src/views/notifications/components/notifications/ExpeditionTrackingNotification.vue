@@ -1,31 +1,31 @@
 <template>
-    <notification type="info" :title="title" :timeout="10000" @remove="$emit('remove')">
+    <notification type="info" :title="title" :timeout="10000" @remove="emit('remove')">
         <template #message>
             <template v-if="hasSummary">
-                <h4 v-text="$i18n.$t.extension.notifications.expeditionTracking.result.summary" />
+                <h4 v-text="translate(t => t.extension.notifications.expeditionTracking.result.summary)" />
 
                 <template v-if="showSimplified">
                     <div class="result-grid resources-grid" v-if="foundResources">
                         <template v-if="notification.resources.metal > 0">
-                            <o-resource resource="metal" class="icon" />
-                            <span v-text="$i18n.$n(notification.resources.metal)" />
+                            <o-resource :resource="ResourceType.metal" class="icon" />
+                            <span v-text="formatNumber(notification.resources.metal)" />
                         </template>
                         <template v-if="notification.resources.crystal > 0">
-                            <o-resource resource="crystal" class="icon" />
-                            <span v-text="$i18n.$n(notification.resources.crystal)" />
+                            <o-resource :resource="ResourceType.crystal" class="icon" />
+                            <span v-text="formatNumber(notification.resources.crystal)" />
                         </template>
                         <template v-if="notification.resources.deuterium > 0">
-                            <o-resource resource="deuterium" class="icon" />
-                            <span v-text="$i18n.$n(notification.resources.deuterium)" />
+                            <o-resource :resource="ResourceType.deuterium" class="icon" />
+                            <span v-text="formatNumber(notification.resources.deuterium)" />
                         </template>
 
                         <span class="mdi mdi-sigma icon" />
-                        <span v-text="$i18n.$n(resourceSum)" />
+                        <span v-text="formatNumber(resourceSum)" />
                     </div>
 
                     <div class="result-grid" v-if="notification.darkMatter > 0">
                         <o-resource resource="dark-matter" class="icon" />
-                        <span v-text="$i18n.$n(notification.darkMatter)" />
+                        <span v-text="formatNumber(notification.darkMatter)" />
                     </div>
 
                     <div class="result-flex" v-if="notification.items.length > 0">
@@ -33,10 +33,10 @@
                     </div>
 
                     <div class="result-grid" v-if="foundShips">
-                        <template v-for="ship in ships">
+                        <template v-for="ship in ships" :key="ship">
                             <template v-if="notification.ships[ship] > 0">
-                                <o-ship :ship="ship" :key="`ship-icon-${ship}`" class="icon" />
-                                <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
+                                <o-ship :ship="ship" class="icon" />
+                                <span v-text="formatNumber(notification.ships[ship])" />
                             </template>
                         </template>
                     </div>
@@ -45,25 +45,25 @@
                 <template v-else>
                     <div class="text-grid" v-if="foundResources">
                         <template v-if="notification.resources.metal > 0">
-                            <span v-text="$i18n.$t.extension.resources[ResourceType.metal]" />
-                            <span v-text="$i18n.$n(notification.resources.metal)" />
+                            <span v-text="translate(t => t.extension.resources[ResourceType.metal])" />
+                            <span v-text="formatNumber(notification.resources.metal)" />
                         </template>
                         <template v-if="notification.resources.crystal > 0">
-                            <span v-text="$i18n.$t.extension.resources[ResourceType.crystal]" />
-                            <span v-text="$i18n.$n(notification.resources.crystal)" />
+                            <span v-text="translate(t => t.extension.resources[ResourceType.crystal])" />
+                            <span v-text="formatNumber(notification.resources.crystal)" />
                         </template>
                         <template v-if="notification.resources.deuterium > 0">
-                            <span v-text="$i18n.$t.extension.resources[ResourceType.deuterium]" />
-                            <span v-text="$i18n.$n(notification.resources.deuterium)" />
+                            <span v-text="translate(t => t.extension.resources[ResourceType.deuterium])" />
+                            <span v-text="formatNumber(notification.resources.deuterium)" />
                         </template>
 
-                        <span v-text="$i18n.$t.extension.common.sum" />
-                        <span v-text="$i18n.$n(resourceSum)" />
+                        <span v-text="translate(t => t.extension.common.sum)" />
+                        <span v-text="formatNumber(resourceSum)" />
                     </div>
 
                     <div class="text-grid" v-if="notification.darkMatter > 0">
-                        <span v-text="$i18n.$t.ogame.premium.darkMatter" />
-                        <span v-text="$i18n.$n(notification.darkMatter)" />
+                        <span v-text="translate(t => t.ogame.premium.darkMatter)" />
+                        <span v-text="formatNumber(notification.darkMatter)" />
                     </div>
 
                     <hr v-if="notification.darkMatter > 0 && notification.items.length > 0" />
@@ -75,10 +75,10 @@
                     <hr v-if="notification.items.length > 0 && foundShips" />
 
                     <div class="text-grid" v-if="foundShips">
-                        <template v-for="ship in ships">
+                        <template v-for="ship in ships" :key="ship">
                             <template v-if="notification.ships[ship] > 0">
-                                <span v-text="$i18n.$t.ogame.ships[ship]" :key="`ship-name-${ship}`" />
-                                <span v-text="$i18n.$n(notification.ships[ship])" :key="`ship-count-${ship}`" />
+                                <span v-text="translate(t => t.ogame.ships[ship])" />
+                                <span v-text="formatNumber(notification.ships[ship])" />
                             </template>
                         </template>
                     </div>
@@ -87,62 +87,57 @@
                 <hr />
             </template>
 
-            <h4 v-text="$i18n.$t.extension.notifications.expeditionTracking.result.events" />
+            <h4 v-text="translate(t => t.extension.notifications.expeditionTracking.result.events)" />
             <div class="result-grid" v-if="showSimplified">
-                <template v-for="event in expeditionEvents">
+                <template v-for="event in expeditionEvents" :key="event">
                     <template v-if="notification.events[event] > 0">
-                        <span v-if="event == 'nothing'" :key="`event-icon-${event}`" class="mdi mdi-close icon" :style="{ color: eventColors.nothing }" />
-                        <expedition-event-resources-icon v-else-if="event == 'resources'" :key="`event-icon-${event}`" size="24px" class="icon" />
-                        <o-ship v-else-if="event == 'fleet'" :key="`event-icon-${event}`" :ship="ShipType.battleship" size="24px" class="icon" />
+                        <span v-if="event == 'nothing'" class="mdi mdi-close icon" :style="{ color: eventColors?.nothing }" />
+                        <expedition-event-resources-icon v-else-if="event == 'resources'" size="24px" class="icon" />
+                        <o-ship v-else-if="event == 'fleet'" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'delay'"
-                            :key="`event-icon-${event}`"
                             class="mdi mdi-clock-outline icon"
-                            :style="{ color: eventColors.delay }"
+                            :style="{ color: eventColors?.delay }"
                         />
                         <span
                             v-else-if="event == 'early'"
-                            :key="`event-icon-${event}`"
                             class="mdi mdi-clock-outline icon"
-                            :style="{ color: eventColors.early }"
+                            :style="{ color: eventColors?.early }"
                         />
-                        <o-resource v-else-if="event == 'darkMatter'" :key="`event-icon-${event}`" resource="dark-matter" size="24px" class="icon" />
-                        <span v-else-if="event == 'combat'" :key="`event-icon-${event}`" class="mdi mdi-sword-cross icon" :style="{ color: eventColors.combat }" />
-                        <o-item v-else-if="event == 'item'" :key="`event-icon-${event}`" :item="detroidItem" size="24px" class="icon" />
+                        <o-resource v-else-if="event == 'darkMatter'" resource="dark-matter" size="24px" class="icon" />
+                        <span v-else-if="event == 'combat'" class="mdi mdi-sword-cross icon" :style="{ color: eventColors?.combat }" />
+                        <o-item v-else-if="event == 'item'" :item="detroidItem" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'trader'"
-                            :key="`event-icon-${event}`"
                             class="mdi mdi-swap-horizontal-bold icon"
-                            :style="{ color: eventColors.trader }"
+                            :style="{ color: eventColors?.trader }"
                         />
                         <span
                             v-else-if="event == 'lostFleet'"
-                            :key="`event-icon-${event}`"
                             class="mdi mdi-cross icon"
-                            :style="{ color: eventColors.lostFleet }"
+                            :style="{ color: eventColors?.lostFleet }"
                         />
 
-                        <span v-text="$i18n.$n(notification.events[event])" :key="`event-count-${event}`" />
+                        <span v-text="formatNumber(notification.events[event])" />
                     </template>
                 </template>
             </div>
             <div v-else class="text-grid events">
-                <template v-for="event in expeditionEvents">
+                <template v-for="event in expeditionEvents" :key="event">
                     <template v-if="notification.events[event] > 0">
-                        <span v-text="$i18n.$t.extension.expeditions.expeditionEvents[event]" :key="`event-name-${event}`" />
-                        <span v-text="$i18n.$n(notification.events[event])" :key="`event-count-${event}`" />
+                        <span v-text="translate(t => t.extension.expeditions.expeditionEvents[event])" />
+                        <span v-text="formatNumber(notification.events[event])" />
                     </template>
                 </template>
             </div>
 
             <template v-if="hasDepletion">
                 <hr />
-                <h4 v-text="$i18n.$t.extension.expeditions.depletion" />
+                <h4 v-text="translate(t => t.extension.expeditions.depletion)" />
                 <div class="result-grid" v-if="showSimplified">
-                    <template v-for="level in DepletionLevels">
+                    <template v-for="level in depletionLevels" :key="level">
                         <template v-if="notification.depletion[level] > 0">
                             <span
-                                :key="`icon-${level}`"
                                 class="icon mdi"
                                 :class="
                                     {
@@ -153,17 +148,17 @@
                                         high: 'mdi-signal-cellular-3',
                                     }[level]
                                 "
-                                :style="{ color: depletionColors[level] }"
+                                :style="{ color: depletionColors?.[level] }"
                             />
-                            <span :key="`amount-${level}`" v-text="$i18n.$n(notification.depletion[level])" />
+                            <span v-text="formatNumber(notification.depletion[level])" />
                         </template>
                     </template>
                 </div>
                 <div v-else class="text-grid events">
-                    <template v-for="level in DepletionLevels">
+                    <template v-for="level in depletionLevels" :key="level">
                         <template v-if="notification.depletion[level] > 0">
-                            <span v-text="$i18n.$t.extension.expeditions.depletionLevels[level]" :key="`depletion-name-${level}`" />
-                            <span v-text="$i18n.$n(notification.depletion[level])" :key="`depletion-count-${level}`" />
+                            <span v-text="translate(t => t.extension.expeditions.depletionLevels[level])" />
+                            <span v-text="formatNumber(notification.depletion[level])" />
                         </template>
                     </template>
                 </div>
@@ -172,93 +167,69 @@
     </notification>
 </template>
 
-<script lang="ts">
-    import { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+<script setup lang="ts">
+    import { computed } from 'vue';
+    import type { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
     import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
     import Notification from '../Notification.vue';
     import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
     import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
     import { ShipType } from '@/shared/models/ogame/ships/ShipType';
     import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { type ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
+    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+    import OResource from '@/views/_shared/components/ogame/OResource.vue';
+    import OShip from '@/views/_shared/components/ogame/OShip.vue';
+    import OItem from '@/views/_shared/components/ogame/OItem.vue';
+    import { formatNumber, translate } from '../../i18n';
+    import { useSettingsStore } from '../../stores/settings';
 
-    @Component({
-        components: {
-            Notification,
-            ExpeditionEventResourcesIcon,
-        }
-    })
-    export default class ExpeditionTrackingNotification extends Vue {
-        @Prop({ required: true, type: Object })
-        private notification!: ExpeditionTrackingNotificationMessageData;
+    const { notification } = defineProps<{ notification: ExpeditionTrackingNotificationMessageData }>();
+    const emit = defineEmits<{ remove: [] }>();
+    const settingsStore = useSettingsStore();
 
-        private readonly detroidItem = ItemHash.detroid_bronze;
-        private readonly expeditionEvents = [
-            ExpeditionEventType.lostFleet,
-            ExpeditionEventType.resources,
-            ExpeditionEventType.darkMatter,
-            ExpeditionEventType.fleet,
-            ExpeditionEventType.delay,
-            ExpeditionEventType.early,
-            ExpeditionEventType.combat,
-            ExpeditionEventType.item,
-            ExpeditionEventType.trader,
-            ExpeditionEventType.nothing,
-        ];
-        private readonly ShipType = ShipType;
-        private readonly ResourceType = ResourceType;
+    const detroidItem = ItemHash.detroid_bronze;
+    const expeditionEvents = [
+        ExpeditionEventType.lostFleet,
+        ExpeditionEventType.resources,
+        ExpeditionEventType.darkMatter,
+        ExpeditionEventType.fleet,
+        ExpeditionEventType.delay,
+        ExpeditionEventType.early,
+        ExpeditionEventType.combat,
+        ExpeditionEventType.item,
+        ExpeditionEventType.trader,
+        ExpeditionEventType.nothing,
+    ];
 
-        private readonly DepletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+    const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
-        private readonly ships = [...ShipTypes].sort((a, b) => a - b);
+    const ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
+    const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
 
-        private get showSimplified() {
-            return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
-        }
+    const foundResources = computed(() => Object.values(notification.resources).some(r => r > 0));
+    const foundShips = computed(() => Object.values(notification.ships).some(r => r > 0));
+    const count = computed(() =>
+        Object.values(notification.events)
+            .reduce((acc, cur) => acc + cur, 0),
+    );
 
-        private get hasSummary() {
-            return this.foundResources || this.notification.darkMatter > 0 || this.foundShips;
-        }
+    const hasSummary = computed(() => foundResources.value || notification.darkMatter > 0 || foundShips.value);
 
-        private get title() {
-            return this.$i18n.$t.extension.notifications.expeditionTracking.result.title(this.$i18n.$n(this.count));
-        }
+    const title = computed(() => translate(t => t.extension.notifications.expeditionTracking.result.title(formatNumber(count.value))));
 
-        private get hasDepletion() {
-            return Object.values(this.notification.depletion).some(c => c > 0);
-        }
+    const hasDepletion = computed(() => Object.values(notification.depletion).some(c => c > 0));
 
-        private get foundResources() {
-            return Object.values(this.notification.resources).some(r => r > 0);
-        }
-        private get foundShips() {
-            return Object.values(this.notification.ships).some(r => r > 0);
-        }
+    const eventColors = computed(() => settingsStore.settings?.colors.expeditions.events);
 
-        private get count() {
-            return Object.values(this.notification.events)
-                .reduce((acc, cur) => acc + cur, 0);
-        }
+    const depletionColors = computed(() => settingsStore.settings?.colors.expeditions.depletion);
 
-        private get eventColors() {
-            return SettingsDataModule.settings.colors.expeditions.events;
-        }
-
-        private get depletionColors() {
-            return SettingsDataModule.settings.colors.expeditions.depletion;
-        }
-
-        private get resourceSum() {
-            return this.notification.resources.metal
-                + this.notification.resources.crystal
-                + this.notification.resources.deuterium;
-        }
-    }
+    const resourceSum = computed(() =>
+        notification.resources.metal
+            + notification.resources.crystal
+            + notification.resources.deuterium,
+    );
 </script>
 <style lang="scss" scoped>
     .result-grid {

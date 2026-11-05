@@ -4,7 +4,7 @@ Operation System:
 any that can run Node.js
 
 Tools necessary:
-Node.js >= 15
+Node.js 20.19+ or 22.12+
 
 How to build:
 1. npm install
@@ -19,3 +19,6 @@ How to build:
     - created zip-archive will be there as well
 
 Alternatively run `npm run publish` which will create zipped production builds for both Chrome and Firefox ready to upload.
+
+The extension build includes the Vue 3 Notifications workspace. Run
+`npm run typecheck --workspace ogame-tracker-notifications` to check its Vue and TypeScript files.
