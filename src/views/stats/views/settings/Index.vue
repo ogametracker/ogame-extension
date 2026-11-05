@@ -55,11 +55,6 @@
                     to: { name: 'settings/linked-accounts' },
                 },
                 {
-                    label: this.$i18n.$t.extension.settings.tabs.migrateOldData,
-                    href: '/views/migrate.html',
-                    target: '_blank',
-                },
-                {
                     label: this.$i18n.$t.extension.settings.tabs.dangerZone,
                     to: { name: 'settings/danger-zone' },
                     class: 'danger-zone',

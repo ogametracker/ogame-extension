@@ -42,24 +42,9 @@ const services: MessageService[] = [
 ];
 
 try {
-    chrome.runtime.onInstalled.addListener(async () => await showMigrationWindow());
     chrome.runtime.onMessage.addListener(async message => await onMessage(message));
 } catch (error) {
     _logError(error);
-}
-
-async function showMigrationWindow() {
-    const hasData = (await chrome.storage.local.getBytesInUse()) > 0;
-    const migrated = await chrome.storage.local.get('migration-v1-to-v2');
-    if (!hasData || migrated['migration-v1-to-v2'] == true) {
-        return;
-    }
-
-    await chrome.tabs.create({
-        active: true,
-        index: 0,
-        url: '/views/migrate.html',
-    });
 }
 
 async function onMessage(message: Message<MessageType, any>) {

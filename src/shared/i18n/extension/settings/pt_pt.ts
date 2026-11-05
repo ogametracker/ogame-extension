@@ -16,7 +16,6 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         accessbility: 'Acessibilidade',
         linkAccounts: 'Linkar Contas',
 
-        migrateOldData: 'Migrar dados antigos',
     },
     dateRanges: {
         defaultNames: {

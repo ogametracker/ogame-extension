@@ -15,7 +15,6 @@ export interface SettingsTranslations {
         accessbility: string;
         linkAccounts: string;
 
-        migrateOldData: string;
     };
     dateRanges: {
         defaultNames: {

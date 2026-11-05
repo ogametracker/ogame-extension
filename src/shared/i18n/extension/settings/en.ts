@@ -15,7 +15,6 @@ export const en: SettingsTranslations = {
         accessbility: 'Accessibility',
         linkAccounts: 'Link Accounts',
 
-        migrateOldData: 'Migrate old data',
     },
     dateRanges: {
         defaultNames: {
