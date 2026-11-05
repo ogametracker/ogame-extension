@@ -1,14 +1,43 @@
 {
-    "extends": "../../../tsconfig.json",
     "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "useDefineForClassFields": true,
+        "sourceMap": true,
+        "types": [
+            "chrome"
+        ],
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "scripthost"
+        ],
         "jsx": "preserve",
         "importHelpers": true,
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "@stats/*": ["./*"],
-            "vue": ["./node_modules/vue"]
+            "@stats/*": [
+                "./*"
+            ],
+            "vue": [
+                "./node_modules/vue"
+            ]
         }
     },
-    "include": ["**/*.ts", "**/*.vue"]
+    "include": [
+        "**/*.ts",
+        "**/*.vue"
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/dist"
+    ]
 }

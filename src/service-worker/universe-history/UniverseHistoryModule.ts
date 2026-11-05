@@ -17,7 +17,6 @@ import { XMLParser } from "fast-xml-parser";
 import { IDBPTransaction, StoreNames } from "idb";
 import { settingsService } from "../main";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace OgameApi {
     export interface Response {
         timestamp: string;
