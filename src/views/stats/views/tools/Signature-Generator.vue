@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts">
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { _throw } from '@/shared/utils/_throw';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
     import { Component, Ref, Vue } from 'vue-property-decorator';
     import { CombatReportDataModule } from '../../data/CombatReportDataModule';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';

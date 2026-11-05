@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-    import { OgameTrackerUniverseHistoryAllianceTag } from '@/shared/db/schema/universe-history';
+    import { OgameTrackerUniverseHistoryAllianceTag } from '@ogame-tracker/shared/db/schema/universe-history';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { GridTableColumn } from '../common/GridTable.vue';

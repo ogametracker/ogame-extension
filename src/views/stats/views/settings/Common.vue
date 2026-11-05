@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
     import ExtensionLanguageSettings from '@stats/components/settings/ExtensionLanguageSettings.vue';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
     import ForceUpdateServerSettings from '@stats/components/settings/ForceUpdateServerSettings.vue';

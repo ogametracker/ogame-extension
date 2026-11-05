@@ -1,8 +1,8 @@
-import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { HighscoreTypeName } from "@/shared/models/ogame/highscore";
-import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformDiscoveryEvent } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
+import { HighscoreTypeName } from "@ogame-tracker/shared/models/ogame/highscore";
+import { LifeformBuildingType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformType, ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
 import { CombatReport } from "../../models/combat-reports/CombatReport";
 import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
 import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";

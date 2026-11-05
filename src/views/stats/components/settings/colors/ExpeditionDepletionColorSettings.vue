@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
 

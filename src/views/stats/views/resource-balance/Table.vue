@@ -37,21 +37,21 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import DetailedResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
+    import DetailedResourceBalanceSettings from '@stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
     import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import { addDays, differenceInDays, startOfDay } from 'date-fns';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@/views/stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
-    import IncludeShipsLostInCombatsInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
-    import IncludeLostLootResourcesInResourceBalance from '@/views/stats/components/settings/resource-balance/IncludeLostLootResourcesInResourceBalance.vue';
+    import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
+    import IncludeShipsLostInCombatsInResourceBalance from '@stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
+    import IncludeLostLootResourcesInResourceBalance from '@stats/components/settings/resource-balance/IncludeLostLootResourcesInResourceBalance.vue';
     import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
     type EventType = 'expedition' | 'combat-report' | 'debris-field-report';

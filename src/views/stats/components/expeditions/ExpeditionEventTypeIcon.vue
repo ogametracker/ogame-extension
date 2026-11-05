@@ -15,12 +15,12 @@
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
+    import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
 
     @Component({
         components: {

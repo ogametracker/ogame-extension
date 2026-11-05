@@ -10,20 +10,20 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
     import { Component, Vue } from 'vue-property-decorator';
-    import LifeformPlanetBonusesComponent, { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@/views/stats/components/lifeforms/LifeformPlanetBonuses.vue';
-    import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-    import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformBuildingsByType, LifeformTechnologyResearchBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { LifeformTechnologyResearchBuilding } from '@/shared/models/ogame/lifeforms/buildings/interfaces';
-    import { ResearchCostAndTimeReductionLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { getLifeformTechnologyBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformTechnologyBonus';
-    import { ResearchCostAndTimeReductionLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import LifeformPlanetBonusesComponent, { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
+    import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
+    import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformBuildingsByType, LifeformTechnologyResearchBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { LifeformTechnologyResearchBuilding } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
+    import { ResearchCostAndTimeReductionLifeformTechnologies } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { getLifeformTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/getLifeformTechnologyBonus';
+    import { ResearchCostAndTimeReductionLifeformTechnology } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
     type Bonuses = {
         cost: number;

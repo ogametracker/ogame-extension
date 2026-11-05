@@ -1,6 +1,6 @@
-import { getGlobalDatabase } from "@/shared/db/access";
-import { LanguageKey } from "@/shared/i18n/LanguageKey";
-import { mergeDeep } from "@/shared/utils/mergeDeep";
+import { getGlobalDatabase } from "@ogame-tracker/shared/db/access";
+import { LanguageKey } from "@ogame-tracker/shared/i18n/LanguageKey";
+import { mergeDeep } from "@ogame-tracker/shared/utils/mergeDeep";
 import { getDefaultSettings } from "./getDefaultSettings";
 import { Settings } from "./Settings";
 

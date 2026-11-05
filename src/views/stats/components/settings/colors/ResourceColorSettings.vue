@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
 

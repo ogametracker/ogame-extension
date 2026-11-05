@@ -1,4 +1,4 @@
-import { PlanetData } from "@/shared/models/empire/PlanetData";
+import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
 import { addCost, Cost } from "../../common/Cost";
 import { ResourceProductionBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
 

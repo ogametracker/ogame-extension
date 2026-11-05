@@ -42,35 +42,35 @@
 </template>
 
 <script lang="ts">
-    import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabase } from '@/shared/db/access';
-    import { VersionedDataExport } from '@/shared/import-export';
-    import { V2Export, V2ExportedAccount, V2ExportedEmpire, V2ExportedEmpireMoon, V2ExportedEmpirePlanet, V2ExportedServer, V2ExportedServerSettings, V2ExportedUniverseHistory } from '@/shared/import-export/v2';
-    import { _log, _logDebug, _logError } from '@/shared/utils/_log';
+    import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';
+    import { VersionedDataExport } from '@ogame-tracker/shared/import-export';
+    import { V2Export, V2ExportedAccount, V2ExportedEmpire, V2ExportedEmpireMoon, V2ExportedEmpirePlanet, V2ExportedServer, V2ExportedServerSettings, V2ExportedUniverseHistory } from '@ogame-tracker/shared/import-export/v2';
+    import { _log, _logDebug, _logError } from '@ogame-tracker/shared/utils/_log';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import { downloadFile } from '@stats/utils/downloadFile';
     import { format } from 'date-fns/esm';
-    import { OgameTrackerPlayerDbSchema } from '@/shared/db/schema';
+    import { OgameTrackerPlayerDbSchema } from '@ogame-tracker/shared/db/schema';
     import { IDBPTransaction } from 'idb';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { _throw } from '@/shared/utils/_throw';
-    import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbPlayerOfficers, DbPlayerResearchLevels, DbShipAmounts } from '@/shared/db/schema/player';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { MoonBuildingTypes, PlanetBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
-    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
-    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
-    import { DbServer } from '@/shared/db/schema/global';
-    import { importData as importData_v1ToV2 } from '@/shared/import-export/v1-to-v2/importData';
-    import { ImportCallbackInfo, importData as importData_v2 } from '@/shared/import-export/v2/importData';
-    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { DbServerSettings } from '@/shared/db/schema/server';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+    import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbPlayerOfficers, DbPlayerResearchLevels, DbShipAmounts } from '@ogame-tracker/shared/db/schema/player';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { MoonBuildingTypes, PlanetBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+    import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+    import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+    import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+    import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
+    import { DbServer } from '@ogame-tracker/shared/db/schema/global';
+    import { importData as importData_v1ToV2 } from '@ogame-tracker/shared/import-export/v1-to-v2/importData';
+    import { ImportCallbackInfo, importData as importData_v2 } from '@ogame-tracker/shared/import-export/v2/importData';
+    import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformTechnologyType, LifeformTechnologyTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformBuildingTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { DbServerSettings } from '@ogame-tracker/shared/db/schema/server';
 
     @Component({})
     export default class ImportExport extends Vue {

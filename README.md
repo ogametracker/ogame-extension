@@ -7,7 +7,7 @@ Tools necessary:
 Node.js 20.19+ or 22.12+
 
 How to build:
-1. npm install
+1. npm ci
 
 2. then one of
     - npm run dev:firefox (development build for Firefox)
@@ -20,5 +20,15 @@ How to build:
 
 Alternatively run `npm run publish` which will create zipped production builds for both Chrome and Firefox ready to upload.
 
-The extension build includes the Vue 3 Notifications workspace. Run
-`npm run typecheck --workspace ogame-tracker-notifications` to check its Vue and TypeScript files.
+The repository uses npm workspaces. Stats owns its Vue 2 toolchain, and Notifications owns its
+Vue 3 toolchain. The service worker and each content script also have their own package and
+build command. Browser modules import TypeScript from `@ogame-tracker/shared`. The two views
+also use `@ogame-tracker/view-shared` for common icons and styles.
+
+Run `npm run build --workspace @ogame-tracker/stats` (or use the workspace name for any other
+entry point) to build just that package into its own `dist` directory. Standalone builds default
+to Chrome. Set the `BROWSER` environment variable to `firefox` for Firefox. The root build commands
+assemble these outputs, static assets, and the manifest into the extension's root `dist` directory.
+
+Run `npm run typecheck --workspace @ogame-tracker/notifications` to check the Vue 3 app, or
+`npm run typecheck --workspace @ogame-tracker/shared` to check the shared library.

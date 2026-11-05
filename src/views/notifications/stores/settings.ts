@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { onScopeDispose, shallowRef } from 'vue';
 import { v4 } from 'uuid';
-import { sendMessage } from '@/shared/communication/sendMessage';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { MessageType } from '@/shared/messages/MessageType';
-import type { MessageOgameMeta } from '@/shared/messages/Message';
-import type { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@/shared/messages/settings';
-import type { Settings } from '@/shared/models/settings/Settings';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import type { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import type { Settings } from '@ogame-tracker/shared/models/settings/Settings';
 
 export const useSettingsStore = defineStore('notification-settings', () => {
     const settings = shallowRef<Settings>();

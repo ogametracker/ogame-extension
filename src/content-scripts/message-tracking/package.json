@@ -1,0 +1,17 @@
+{
+  "name": "@ogame-tracker/message-tracking",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "ogame-build-browser-script"
+  },
+  "dependencies": {
+    "@ogame-tracker/shared": "0.1.0",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@ogame-tracker/browser-script-build": "0.1.0",
+    "@types/chrome": "0.0.208",
+    "@types/uuid": "8.3.4"
+  }
+}

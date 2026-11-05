@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-    import { DbAccount } from '@/shared/db/schema/global';
+    import { DbAccount } from '@ogame-tracker/shared/db/schema/global';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { UniversesAndAccountsDataModule } from '../data/UniversesAndAccountsDataModule';
     import { getRGBString } from '../utils/getRGBString';

@@ -1,11 +1,11 @@
 // Chrome currently shuts down the background service worker about every 5 minutes.
 // Thus this script sends a message every 60 seconds to keep the service worker alive as long as an OGame page is open.
 
-import { sendMessage } from '@/shared/communication/sendMessage';
-import { StayAliveMessage } from '@/shared/messages/internal';
-import { MessageType } from '@/shared/messages/MessageType';
-import { getOgameMeta } from '@/shared/ogame-web/getOgameMeta';
-import { internalUuid } from '@/shared/uuid';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { StayAliveMessage } from '@ogame-tracker/shared/messages/internal';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { internalUuid } from '@ogame-tracker/shared/uuid';
 
 
 setTimeout(() => renew(), 0);

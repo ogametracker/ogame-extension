@@ -1,5 +1,5 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
+import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
 import { EmpireTranslations } from "./type";
 
 export const en: EmpireTranslations = {

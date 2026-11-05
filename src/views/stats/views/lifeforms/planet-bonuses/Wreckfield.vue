@@ -12,19 +12,19 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
     import { Component, Vue } from 'vue-property-decorator';
-    import LifeformPlanetBonusesComponent, { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@/views/stats/components/lifeforms/LifeformPlanetBonuses.vue';
-    import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-    import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformBuildingsByType, SpaceDockBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { SpaceDockBonusLifeformBuilding } from '@/shared/models/ogame/lifeforms/buildings/interfaces';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { SpaceDock } from '@/shared/models/ogame/buildings/SpaceDock';
-import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import LifeformPlanetBonusesComponent, { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
+    import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
+    import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformBuildingsByType, SpaceDockBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { SpaceDockBonusLifeformBuilding } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { SpaceDock } from '@ogame-tracker/shared/models/ogame/buildings/SpaceDock';
+import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
 
     type Key = 'wreckfield';
 

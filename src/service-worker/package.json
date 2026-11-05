@@ -1,0 +1,18 @@
+{
+  "name": "@ogame-tracker/service-worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "ogame-build-browser-script"
+  },
+  "dependencies": {
+    "@ogame-tracker/shared": "0.1.0",
+    "date-fns": "2.28.0",
+    "fast-xml-parser": "4.0.7",
+    "idb": "7.0.1"
+  },
+  "devDependencies": {
+    "@ogame-tracker/browser-script-build": "0.1.0",
+    "@types/chrome": "0.0.208"
+  }
+}

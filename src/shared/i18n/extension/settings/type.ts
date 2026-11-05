@@ -1,4 +1,4 @@
-import { DbAccount, DbServer } from "@/shared/db/schema/global";
+import { DbAccount, DbServer } from "@ogame-tracker/shared/db/schema/global";
 
 export interface SettingsTranslations {
     tabs: {

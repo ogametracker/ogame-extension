@@ -29,15 +29,15 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
     import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
+import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {

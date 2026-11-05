@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { Tab } from '@/views/stats/components/common/TabView.vue';
+    import { Tab } from '@stats/components/common/TabView.vue';
 
     @Component({})
     export default class Index extends Vue {

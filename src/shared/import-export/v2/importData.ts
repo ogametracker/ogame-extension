@@ -1,7 +1,7 @@
-import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
-import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
-import { DbBasicMoonData, DbBasicPlanetData } from "@/shared/db/schema/player";
-import { DbServerSettings } from "@/shared/db/schema/server";
+import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getUniverseHistoryDatabase } from "@ogame-tracker/shared/db/access";
+import { OgameTrackerUniverseHistoryDbSchema } from "@ogame-tracker/shared/db/schema";
+import { DbBasicMoonData, DbBasicPlanetData } from "@ogame-tracker/shared/db/schema/player";
+import { DbServerSettings } from "@ogame-tracker/shared/db/schema/server";
 import { StoreNames } from "idb";
 import { V2Export, V2ExportedUniverseHistory } from ".";
 

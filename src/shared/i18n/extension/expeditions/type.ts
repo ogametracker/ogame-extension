@@ -1,7 +1,7 @@
-import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
-import { ExpeditionEventCombatSize } from "@/shared/models/expeditions/ExpeditionEvents";
-import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionEventCombatSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionEventSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
 
 export interface ExpeditionsTranslations {
     header: string;

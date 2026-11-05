@@ -3,20 +3,20 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType, ValidLifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { StatsBonus, StatsBonusLifeformTechnology } from '@/shared/models/ogame/lifeforms/technologies/interfaces';
-    import { StatsBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/lifeforms';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+    import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType, ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { StatsBonus, StatsBonusLifeformTechnology } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
+    import { StatsBonusLifeformTechnologies } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
     import { Component, Vue } from 'vue-property-decorator';
-    import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@/views/stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
-import { getLifeformBonusLimit } from '@/shared/models/ogame/lifeforms/LifeformBonusLimits';
-import { LifeformBonusTypeId } from '@/shared/models/ogame/lifeforms/LifeformBonusType';
+    import LifeformBonusesBreakdown, { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+    import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
 
     type StatsBonuses = {
         armor: number;

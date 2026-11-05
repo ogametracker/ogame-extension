@@ -1,8 +1,8 @@
-import { ogameTrackerNotificationWindowResizeEventName } from "@/shared/messages/communication";
-import { _throw } from "@/shared/utils/_throw";
+import { ogameTrackerNotificationWindowResizeEventName } from "@ogame-tracker/shared/messages/communication";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 
 import './styles.scss';
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
 
 const iframe = document.createElement('iframe');
 iframe.id = 'ogame-tracker-notifications__v2';

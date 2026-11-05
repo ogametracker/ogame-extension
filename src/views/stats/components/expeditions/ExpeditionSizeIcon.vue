@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
+    import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
     import { SettingsDataModule } from '../../data/SettingsDataModule';

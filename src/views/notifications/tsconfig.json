@@ -1,12 +1,11 @@
 {
     "extends": "../../../tsconfig.json",
     "compilerOptions": {
+        "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"],
-            "vue": ["src/views/notifications/node_modules/vue"]
+            "vue": ["./node_modules/vue"]
         },
         "moduleResolution": "bundler"
     },
-    "include": ["**/*.ts", "**/*.vue"],
-    "exclude": ["node_modules"]
+    "include": ["**/*.ts", "**/*.vue"]
 }

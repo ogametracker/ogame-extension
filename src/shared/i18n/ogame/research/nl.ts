@@ -1,4 +1,4 @@
-import { ResearchType } from "@/shared/models/ogame/research/ResearchType";
+import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
 import { ResearchTranslations } from "./types";
 
 export const nl: ResearchTranslations = {

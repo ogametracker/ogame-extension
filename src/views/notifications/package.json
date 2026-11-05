@@ -1,19 +1,25 @@
 {
-  "name": "ogame-tracker-notifications",
+  "name": "@ogame-tracker/notifications",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "npm run typecheck && vite build",
-    "typecheck": "node typecheck.cjs --noEmit"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@ogame-tracker/shared": "0.1.0",
+    "@ogame-tracker/view-shared": "0.1.0",
     "pinia": "4.1.0",
-    "vue": "3.5.45"
+    "vue": "3.5.45",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "sass": "^1.107.1",
     "typescript": "5.9.3",
     "vite": "8.3.6",
-    "vue-tsc": "3.3.14"
+    "vue-tsc": "3.3.14",
+    "@types/chrome": "0.0.208",
+    "@types/uuid": "8.3.4"
   }
 }

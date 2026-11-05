@@ -5,7 +5,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@/views/stats/components/common/ListNav.vue';
+    import { ListNavItem } from '@stats/components/common/ListNav.vue';
     import { EmpireDataModule } from '../../data/EmpireDataModule';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
 

@@ -42,14 +42,14 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
-    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
+    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
     @Component({
         components: {

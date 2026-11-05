@@ -9,15 +9,15 @@ import { PlayerClass } from '../../models/ogame/classes/PlayerClass';
 import { AllianceClass } from '../../models/ogame/classes/AllianceClass';
 import { BuildingType } from '../../models/ogame/buildings/BuildingType';
 import { ResearchType } from '../../models/ogame/research/ResearchType';
-import { ProductionSettings } from '@/shared/models/empire/ProductionSettings';
-import { PlanetActiveItems } from '@/shared/models/empire/PlanetActiveItems';
-import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-import { LifeformBuildingType } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-import { LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-import { FleetMissionType } from '@/shared/models/ogame/fleets/FleetMissionType';
-import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-import { Fleets } from '@/shared/models/ogame/fleets/types';
-import { MissileType } from '@/shared/models/ogame/missiles/MissileType';
+import { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
+import { PlanetActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
+import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { FleetMissionType } from '@ogame-tracker/shared/models/ogame/fleets/FleetMissionType';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { Fleets } from '@ogame-tracker/shared/models/ogame/fleets/types';
+import { MissileType } from '@ogame-tracker/shared/models/ogame/missiles/MissileType';
 
 
 // basic planet/moon data

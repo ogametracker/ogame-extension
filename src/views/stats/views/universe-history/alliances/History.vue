@@ -45,18 +45,18 @@
 </template>
 
 <script lang="ts">
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { Tab } from '@stats/components/common/Tabs.vue';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+    import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@stats/data/UniverseHistoryDataModule';
     import { Component, Vue } from 'vue-property-decorator';
     import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
     import StatusHistoryChart from '@stats/components/universe-history/StatusHistoryChart.vue';
     import AllianceTagHistoryTable from '@stats/components/universe-history/AllianceTagHistoryTable.vue';
     import AllianceNameHistoryTable from '@stats/components/universe-history/AllianceNameHistoryTable.vue';
     import AllianceMemberHistoryTable from '@stats/components/universe-history/AllianceMemberHistoryTable.vue';
-    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
+    import { UniverseSpecificSettingsDataModule } from '@stats/data/UniverseSpecificSettingsDataModule';
 
 
     @Component({

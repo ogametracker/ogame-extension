@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-    import { _throw } from '@/shared/utils/_throw';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 

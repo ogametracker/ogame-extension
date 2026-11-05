@@ -21,7 +21,7 @@
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
     import { useLegacyComponentListeners } from './useLegacyComponentListeners';
-    import { LifeformType, LifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { LifeformType, LifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
     const imageMap: Record<LifeformType, string> = {
         [LifeformType.humans]: 'humans',

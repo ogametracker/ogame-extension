@@ -1,4 +1,4 @@
-import { _throw } from "@/shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 
 function getMetalProductionBoost(position: number) {
     switch (position) {

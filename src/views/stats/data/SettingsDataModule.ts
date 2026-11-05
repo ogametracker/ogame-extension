@@ -1,13 +1,13 @@
-import { MessageType } from '@/shared/messages/MessageType';
-import { Message } from '@/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { Component, Vue } from 'vue-property-decorator';
-import { broadcastMessage } from '@/shared/communication/broadcastMessage';
-import { Settings } from '@/shared/models/settings/Settings';
-import { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@/shared/messages/settings';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getGlobalDatabase } from '@/shared/db/access';
-import { sendMessage } from '@/shared/communication/sendMessage';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { Settings } from '@ogame-tracker/shared/models/settings/Settings';
+import { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getGlobalDatabase } from '@ogame-tracker/shared/db/access';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
 
 @Component
 class SettingsDataModuleClass extends Vue {

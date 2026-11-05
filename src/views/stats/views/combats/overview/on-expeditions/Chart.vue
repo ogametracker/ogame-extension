@@ -45,11 +45,11 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-    import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+    import { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
+    import { CombatResultType, CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 

@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import DecimalNumber from './DecimalNumber.vue';
+import LoadingSpinner from './LoadingSpinner.vue';
 
 import Checkbox from './Checkbox.vue';
 import CheckboxButton from './CheckboxButton.vue';
@@ -11,6 +13,8 @@ import ScrollableChart from './scrollable-chart/ScrollableChart.vue';
 import TabView from './TabView.vue';
 import Tabs from './Tabs.vue';
 
+Vue.component('decimal-number', DecimalNumber);
+Vue.component('loading-spinner', LoadingSpinner);
 Vue.component('checkbox', Checkbox);
 Vue.component('checkbox-button', CheckboxButton);
 Vue.component('custom-dialog', CustomDialog);

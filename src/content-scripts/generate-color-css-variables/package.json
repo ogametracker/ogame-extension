@@ -1,0 +1,15 @@
+{
+  "name": "@ogame-tracker/generate-color-css-variables",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "ogame-build-browser-script"
+  },
+  "dependencies": {
+    "@ogame-tracker/shared": "0.1.0"
+  },
+  "devDependencies": {
+    "@ogame-tracker/browser-script-build": "0.1.0",
+    "@types/chrome": "0.0.208"
+  }
+}

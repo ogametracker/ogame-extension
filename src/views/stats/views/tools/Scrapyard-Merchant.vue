@@ -61,15 +61,15 @@
 
 <script lang="ts">
 import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
-import { Defense } from '@/shared/models/ogame/defenses/Defense';
-import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
-import { DefenseByTypes, DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
-import { Ship } from '@/shared/models/ogame/ships/Ship';
-import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-import { ShipByTypes, ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
-import { createRecord } from '@/shared/utils/createRecord';
+import { Defense } from '@ogame-tracker/shared/models/ogame/defenses/Defense';
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { DefenseByTypes, DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+import { Ship } from '@ogame-tracker/shared/models/ogame/ships/Ship';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ShipByTypes, ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { GridTableColumn } from '../../components/common/GridTable.vue';
-import { addCost, Cost, multiplyCost } from '@/shared/models/ogame/common/Cost';
+import { addCost, Cost, multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 import { SettingsDataModule } from '../../data/SettingsDataModule';
 

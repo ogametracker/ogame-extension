@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-    import { $i18n } from '@/shared/i18n/extension/$i18n';
+    import { $i18n } from '@stats/i18n';
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 

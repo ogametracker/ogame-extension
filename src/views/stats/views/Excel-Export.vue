@@ -70,7 +70,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ExcelExport as Export, ExcelExportOptions } from '@/views/stats/models/excel-export';
+    import { ExcelExport as Export, ExcelExportOptions } from '@stats/models/excel-export';
     import { format } from 'date-fns';
 
     @Component({})

@@ -1,5 +1,5 @@
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { _throw } from "@/shared/utils/_throw";
+import { LifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 
 export function getActiveLifeform() {
     const element = document.querySelector('#lifeform') ?? _throw('did not find active lifeform element');

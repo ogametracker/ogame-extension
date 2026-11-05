@@ -32,10 +32,10 @@
 <script setup lang="ts">
     import { onMounted, onUnmounted, ref, shallowReactive } from 'vue';
     import { v4 } from 'uuid';
-    import { ogameTrackerNotificationWindowResizeEventName } from '@/shared/messages/communication';
-    import { MessageType } from '@/shared/messages/MessageType';
-    import { NotificationType } from '@/shared/messages/notifications';
-    import type { MessageOgameMeta, NoDataMessage } from '@/shared/messages/Message';
+    import { ogameTrackerNotificationWindowResizeEventName } from '@ogame-tracker/shared/messages/communication';
+    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+    import { NotificationType } from '@ogame-tracker/shared/messages/notifications';
+    import type { MessageOgameMeta, NoDataMessage } from '@ogame-tracker/shared/messages/Message';
     import type {
         CombatTrackingNotificationMessage,
         DebrisFieldReportTrackingNotificationMessage,
@@ -43,8 +43,8 @@
         ExpeditionTrackingNotificationMessage,
         LifeformDiscoveryTrackingNotificationMessage,
         MessageTrackingErrorNotificationMessage,
-    } from '@/shared/messages/notifications';
-    import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
+    } from '@ogame-tracker/shared/messages/notifications';
+    import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
     import MessageTrackingErrorNotification from './components/notifications/MessageTrackingErrorNotification.vue';
     import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
     import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';

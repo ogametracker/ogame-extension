@@ -94,8 +94,8 @@
 </template>
 
 <script lang="ts">
-    import { $i18n } from '@/shared/i18n/extension/$i18n';
-    import { _throw } from '@/shared/utils/_throw';
+    import { $i18n } from '@stats/i18n';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
     import { PropType } from 'vue';
     import { Component, Prop, PropSync, Ref, Vue, Watch } from 'vue-property-decorator';
     import ScrollableChartSvg from './ScrollableChartSvg.vue';

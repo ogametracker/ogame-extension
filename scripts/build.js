@@ -1,48 +1,38 @@
-const { execSync } = require('child_process');
+const { execFileSync, execSync } = require('child_process');
 const process = require('process');
 const fs = require('fs');
+const path = require('node:path');
 
 const isDev = process.argv.includes('--dev');
 const noTag = process.argv.includes('--no-tag');
 const manualVersion = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
-if (browser == null) {
+if (browser !== 'chrome' && browser !== 'firefox') {
     throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
 }
 
 console.log(`Building OGame Tracker (browser=${browser}, dev=${isDev})`);
-// run _build-hook.js files in view directories (if exist)
-const viewsDir = './src/views';
-const viewBuildHooks = fs.readdirSync(viewsDir, { withFileTypes: true })
-    // only directories that have a main.ts
-    .filter(file => file.isDirectory()
-        && fs.readdirSync(`${viewsDir}/${file.name}`, { withFileTypes: true })
-            .some(f => f.isFile() && f.name == '_build-hook.js')
-    )
-    .map(dir => `${viewsDir}/${dir.name}/_build-hook.js`);
+const mode = isDev ? 'development' : 'production';
+const buildEnv = { ...process.env, BROWSER: browser, NODE_ENV: mode };
+const contentScripts = fs.readdirSync('src/content-scripts', { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => `src/content-scripts/${entry.name}`);
+const views = ['src/views/stats', 'src/views/notifications'];
+const serviceWorker = 'src/service-worker';
 
-viewBuildHooks.forEach(hookPath => {
-    console.log(`\tRunning hook '${hookPath}'`);
-    const output = execSync(`node ${hookPath}`);
-    console.log(output.toString());
-});
+execSync('npm run build --workspaces --if-present', { stdio: 'inherit', env: buildEnv });
 
-// build content script + service worker
-console.log(`Building content scripts and service worker`);
-const webpackBuildMode = isDev ? 'development' : 'production';
-execSync(`npx webpack --mode=${webpackBuildMode} --node-env=${webpackBuildMode} --env browser=${browser} ${isDev ? 'dev=true' : ''}`, { stdio: 'inherit' });
-
-// build vue views
-console.log('building views');
-// create .env file with VUE_APP_BROWSER environment variable
-console.log('creating Vue build');
-fs.writeFileSync(`.env.local`, `VUE_APP_BROWSER=${browser}`, 'utf-8');
-const vueBuildMode = isDev ? 'development' : 'production';
-execSync(`vue-cli-service build --modern --mode ${vueBuildMode}`, { stdio: 'inherit' });
-execSync(`npm run build --workspace ogame-tracker-notifications -- --mode ${vueBuildMode}`, {
-    stdio: 'inherit',
-    env: { ...process.env, BROWSER: browser, NODE_ENV: vueBuildMode },
-});
+// Assemble the extension only after each workspace has built successfully.
+const dist = path.resolve(__dirname, '../dist');
+fs.rmSync(dist, { recursive: true, force: true });
+fs.cpSync('static', dist, { recursive: true });
+for (const workspace of contentScripts) {
+    fs.cpSync(`${workspace}/dist`, path.join(dist, 'content-scripts'), { recursive: true });
+}
+fs.cpSync(`${serviceWorker}/dist`, dist, { recursive: true });
+for (const workspace of views) {
+    fs.cpSync(`${workspace}/dist`, path.join(dist, 'views'), { recursive: true });
+}
 
 // copy favicon to output dir
 console.log(`Copying favicon`);
@@ -50,7 +40,10 @@ fs.copyFileSync(`static/icon128${isDev ? '-dev' : ''}.png`, 'dist/favicon.png');
 
 // generate manifest
 console.log(`Generating manifest`);
-execSync(`node scripts/generate-manifest.js ${isDev ? '--dev' : ''} --browser=${browser} ${manualVersion != null ? `--version ${manualVersion}` : ''}`, { stdio: 'inherit' });
+const manifestArgs = ['scripts/generate-manifest.js', '--browser=' + browser];
+if (isDev) manifestArgs.push('--dev');
+if (manualVersion != null) manifestArgs.push('--version', manualVersion);
+execFileSync(process.execPath, manifestArgs, { stdio: 'inherit' });
 
 const manifest = JSON.parse(fs.readFileSync('./dist/manifest.json'));
 const version = manifest.version;
@@ -79,8 +72,8 @@ if (!isDev) {
         const tagName = `${manifest.name.replace(/\s/g, '_')}/${browser}/${version}`;
         try {
             console.log(`creating git tag '${tagName}'`);
-            execSync(`git tag ${tagName}`);
-            execSync(`git push origin ${tagName}`);
+            execFileSync('git', ['tag', tagName]);
+            execFileSync('git', ['push', 'origin', tagName]);
             console.log('created tag successfully');
         } catch (e) {
             console.log('FAILED to add git tag');

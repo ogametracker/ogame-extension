@@ -1,4 +1,4 @@
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
 import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
 import { AllianceClass } from "../classes/AllianceClass";
 import { PlayerClass } from "../classes/PlayerClass";

@@ -1,4 +1,4 @@
-import { ExpeditionEventType, ExpeditionEventTypes } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventType, ExpeditionEventTypes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
 import { LifeformTechnologyType } from "../../LifeformTechnologyType";
 import { ExpeditionBonusLifeformTechnology } from "../interfaces";
 import { LifeformTechnology } from "../LifeformTechnology";

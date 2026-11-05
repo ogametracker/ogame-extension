@@ -1,11 +1,11 @@
-import { _throw } from "@/shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { format } from "date-fns";
 import { Component, Vue } from "vue-property-decorator";
-import { LanguageKey } from "../LanguageKey";
-import { ExtensionTranslations } from "./type";
-import extensionMessages from './';
-import { createTranslationTree } from "./createTranslationTree";
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
+import { LanguageKey } from "@ogame-tracker/shared/i18n/LanguageKey";
+import { ExtensionTranslations } from "@ogame-tracker/shared/i18n/extension/type";
+import extensionMessages from '@ogame-tracker/shared/i18n/extension';
+import { createTranslationTree } from "@ogame-tracker/shared/i18n/extension/createTranslationTree";
+import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
 
 type I18nDateTimeFormatKey = 'date' | 'datetime' | 'time' | 'time_hm';
 

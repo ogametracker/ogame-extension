@@ -1,16 +1,16 @@
-import { _throw } from "../../shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { DefenseType } from '../../shared/models/ogame/defenses/DefenseType';
-import { DefenseTypes } from '../../shared/models/ogame/defenses/DefenseTypes';
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { UpdatePlanetDefenseCountsMessage, UpdatePlanetMissileCountsMessage } from "../../shared/messages/tracking/empire";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { MessageType } from "../../shared/messages/MessageType";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { createRecord } from "@/shared/utils/createRecord";
-import { MissileTypes } from "@/shared/models/ogame/missiles/MissileTypes";
-import { MissileType } from "@/shared/models/ogame/missiles/MissileType";
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { UpdatePlanetDefenseCountsMessage, UpdatePlanetMissileCountsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
+import { MissileTypes } from "@ogame-tracker/shared/models/ogame/missiles/MissileTypes";
+import { MissileType } from "@ogame-tracker/shared/models/ogame/missiles/MissileType";
 
 export function trackDefensesPage() {
     observerCallbacks.push({

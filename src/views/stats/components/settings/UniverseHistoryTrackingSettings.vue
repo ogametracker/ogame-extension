@@ -37,10 +37,10 @@
 </template>
 
 <script lang="ts">
-    import { getLanguage } from '@/shared/i18n/getLanguage';
-import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+    import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GlobalOgameMetaData } from '../../data/global';
     import { SettingsDataModule } from '../../data/SettingsDataModule';

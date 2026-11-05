@@ -1,0 +1,16 @@
+{
+  "name": "@ogame-tracker/view-shared",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ogame-tracker/shared": "0.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^2.7.5 || ^3.5.45"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    }
+  }
+}

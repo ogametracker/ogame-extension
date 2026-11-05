@@ -1,5 +1,5 @@
 import { LifeformTranslations } from "./types";
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
 
 export const pt_pt: LifeformTranslations = {
     [LifeformType.none]: 'Nenhuma forma de vida',

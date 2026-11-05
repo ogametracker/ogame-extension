@@ -53,17 +53,17 @@
 </template>
 
 <script lang="ts">
-    import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
-    import { HighscoreTypeNames } from '@/shared/models/ogame/highscore';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { _throw } from '@/shared/utils/_throw';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@/views/stats/data/UniverseHistoryDataModule';
-    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
+    import { DbUniverseHistoryScoreType } from '@ogame-tracker/shared/db/schema/universe-history';
+    import { HighscoreTypeNames } from '@ogame-tracker/shared/models/ogame/highscore';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+    import { Tab } from '@stats/components/common/Tabs.vue';
+    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
+    import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@stats/data/UniverseHistoryDataModule';
+    import { UniverseSpecificSettingsDataModule } from '@stats/data/UniverseSpecificSettingsDataModule';
     import { addDays } from 'date-fns';
     import startOfDay from 'date-fns/startOfDay';
     import { Component, Prop, Vue } from 'vue-property-decorator';

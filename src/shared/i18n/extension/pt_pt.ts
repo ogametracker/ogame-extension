@@ -25,7 +25,7 @@ import { pt_pt as tools } from './tools/pt_pt';
 
 import { pt_pt as excelExport } from './excelExport/pt_pt';
 import { pt_pt as playerClasses } from './playerClasses/pt_pt';
-import { RecursivePartial } from '@/shared/types/RecursivePartial';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const pt_pt: RecursivePartial<ExtensionTranslations> = {
     ogame: {

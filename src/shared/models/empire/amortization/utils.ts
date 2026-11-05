@@ -1,4 +1,4 @@
-import { createRecord } from "@/shared/utils/createRecord";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
 import { ExpeditionEventTypes } from "../../expeditions/ExpeditionEventType";
 import { PlayerClass } from "../../ogame/classes/PlayerClass";
 import { AmortizationPlanetState } from "./AmortizationItemGenerator";

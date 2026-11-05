@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@/views/stats/components/common/ListNav.vue';
+    import { ListNavItem } from '@stats/components/common/ListNav.vue';
 
     @Component({})
     export default class Index extends Vue {

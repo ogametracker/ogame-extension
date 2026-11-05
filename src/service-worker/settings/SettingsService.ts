@@ -1,14 +1,14 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { _throw } from '../../shared/utils/_throw';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { SettingsMessage } from '../../shared/messages/settings';
-import { serviceWorkerUuid } from '@/shared/uuid';
-import { Settings } from '@/shared/models/settings/Settings';
-import { LanguageKey } from '@/shared/i18n/LanguageKey';
-import { loadSettings } from '@/shared/models/settings/loadSettings';
-import { getLanguage } from '@/shared/i18n/getLanguage';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
+import { Settings } from '@ogame-tracker/shared/models/settings/Settings';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { loadSettings } from '@ogame-tracker/shared/models/settings/loadSettings';
+import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
 
 export class SettingsService implements MessageService {
     private _settings: Settings = null!;

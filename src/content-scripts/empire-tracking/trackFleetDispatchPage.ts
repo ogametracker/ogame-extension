@@ -1,13 +1,13 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { createRecord } from "@/shared/utils/createRecord";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { MessageType } from "../../shared/messages/MessageType";
-import { UpdatePlanetShipCountsMessage } from "../../shared/messages/tracking/empire";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
-import { NonStationaryShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { _throw } from "../../shared/utils/_throw";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { UpdatePlanetShipCountsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
+import { NonStationaryShipTypes } from "@ogame-tracker/shared/models/ogame/ships/ShipTypes";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { observerCallbacks } from "./main";
 
 export function trackFleetDispatchPage(): void {

@@ -1,10 +1,10 @@
-import { PlanetData } from "@/shared/models/empire/PlanetData";
-import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
-import { addCost, Cost } from "@/shared/models/ogame/common/Cost";
-import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { ClassBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
-import { createRecord } from "@/shared/utils/createRecord";
+import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
+import { PlayerClass } from "@ogame-tracker/shared/models/ogame/classes/PlayerClass";
+import { addCost, Cost } from "@ogame-tracker/shared/models/ogame/common/Cost";
+import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { ClassBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
 
 export function getPlanetCollectorClassBonusFactor(planet: PlanetData): number {
     return ClassBonusLifeformTechnologies

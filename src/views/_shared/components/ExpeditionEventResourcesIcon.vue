@@ -8,7 +8,7 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
     import OResource from './ogame/OResource.vue';
 
     export default defineComponent({

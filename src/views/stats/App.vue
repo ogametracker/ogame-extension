@@ -86,13 +86,13 @@
     import { UniversesAndAccountsDataModule } from "./data/UniversesAndAccountsDataModule";
     import { GlobalOgameMetaData } from "./data/global";
     import { getRGBString } from './utils/getRGBString';
-    import { delay } from '@/shared/utils/delay';
-    import { _throw } from "@/shared/utils/_throw";
+    import { delay } from '@ogame-tracker/shared/utils/delay';
+    import { _throw } from "@ogame-tracker/shared/utils/_throw";
     import { SettingsDataModule } from "./data/SettingsDataModule";
     import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
     import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
     import { _constants } from '@stats/_constants';
-    import { ogameTrackerCloseDialogEventName } from "@/shared/messages/communication";
+    import { ogameTrackerCloseDialogEventName } from "@ogame-tracker/shared/messages/communication";
 
     interface Tab {
         key: string;

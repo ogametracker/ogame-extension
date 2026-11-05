@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+    import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
 

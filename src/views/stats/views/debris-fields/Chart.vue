@@ -23,12 +23,12 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
     import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
     import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
     import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
     import { getRGB, getRGBString } from '../../utils/getRGBString';

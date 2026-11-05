@@ -1,4 +1,4 @@
-import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
+import { BuildingType } from "@ogame-tracker/shared/models/ogame/buildings/BuildingType";
 import { BuildingTranslations } from "./types";
 
 export const da: BuildingTranslations = {

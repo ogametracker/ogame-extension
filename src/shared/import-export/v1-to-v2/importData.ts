@@ -1,5 +1,5 @@
-import { getGlobalDatabase, getPlayerDatabase } from "@/shared/db/access";
-import { _logDebug } from "@/shared/utils/_log";
+import { getGlobalDatabase, getPlayerDatabase } from "@ogame-tracker/shared/db/access";
+import { _logDebug } from "@ogame-tracker/shared/utils/_log";
 import { V1ToV2Export, V1ToV2ExportedAccount } from ".";
 
 export async function importData(data: V1ToV2Export): Promise<void> {

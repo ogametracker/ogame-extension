@@ -1,8 +1,8 @@
-import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
-import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { Coordinates } from "@ogame-tracker/shared/models/ogame/common/Coordinates";
+import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
+import { LifeformBuildingType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
 import { CrawlerProductionPercentage } from "../CrawlerProductionPercentage";
 
 export interface AmortizationPlanetSettings {

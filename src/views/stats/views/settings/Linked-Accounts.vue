@@ -50,8 +50,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
 import { UniversesAndAccountsDataModule } from '../../data/UniversesAndAccountsDataModule';
-import { _throw } from '@/shared/utils/_throw';
-import { DbAccount } from '@/shared/db/schema/global';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { DbAccount } from '@ogame-tracker/shared/db/schema/global';
 import { GlobalOgameMetaData } from '../../data/global';
 
 interface KnownAccount {

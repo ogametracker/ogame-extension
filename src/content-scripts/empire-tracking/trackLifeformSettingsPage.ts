@@ -1,13 +1,13 @@
 import { observerCallbacks } from "./main";
-import { _throw } from "../../shared/utils/_throw";
-import { UpdateLifeformExperienceMessage } from "../../shared/messages/tracking/empire";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { MessageType } from "../../shared/messages/MessageType";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { getLifeformExperienceNeededForLevel } from "@/shared/models/ogame/lifeforms/experience";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { UpdateLifeformExperienceMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { LifeformType, ValidLifeformTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { getLifeformExperienceNeededForLevel } from "@ogame-tracker/shared/models/ogame/lifeforms/experience";
 
 export function trackLifeformSettingsPage() {
     observerCallbacks.push({

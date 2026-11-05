@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ExpeditionEventCombatSize } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+    import { ExpeditionEventCombatSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
 

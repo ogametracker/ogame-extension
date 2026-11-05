@@ -26,11 +26,11 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
     @Component({
         components: {

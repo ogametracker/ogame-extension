@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
     import { computed } from 'vue';
-    import type { MessageTrackingErrorNotificationMessage } from '@/shared/messages/notifications';
+    import type { MessageTrackingErrorNotificationMessage } from '@ogame-tracker/shared/messages/notifications';
     import Notification from '../Notification.vue';
     import { formatNumber, translate } from '../../i18n';
 

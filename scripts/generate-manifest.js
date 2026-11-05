@@ -5,7 +5,7 @@ const { generateVersion } = require('./_generateVersion');
 const isDev = process.argv.includes('--dev');
 const version = process.argv.includes('--version') ? process.argv[process.argv.indexOf('--version') + 1] : null;
 const browser = process.argv.find(arg => arg.startsWith('--browser='))?.split('=')?.[1];
-if (browser == null) {
+if (browser !== 'chrome' && browser !== 'firefox') {
     throw new Error('No browser provided. Build with option --browser=<chrome|firefox>');
 }
 
@@ -14,22 +14,16 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
     .filter(file => file.isDirectory())
     .map(dir => dir.name)
     .map(dirName => {
-        const files = fs.readdirSync('./dist/content-scripts', { withFileTypes: true })
-            .filter(file => file.isFile())
-            .map(file => file.name)
-            .filter(fileName => fileName.startsWith(dirName) && !fileName.endsWith('.map'));
-
         const options = JSON.parse(fs.readFileSync(`${contentScriptDir}/${dirName}/options.json`, 'utf-8'));
-
-        ['js', 'css'].forEach(type => {
-            const file = files.find(file => file.endsWith(`.${type}`));
-            if (file == null) {
-                return;
-            }
-
-            options[type] ??= [];
-            options[type].push(`content-scripts/${file}`);
-        });
+        const script = `content-scripts/${dirName}.js`;
+        const stylesheet = `content-scripts/${dirName}.css`;
+        if (!fs.existsSync(`./dist/${script}`)) {
+            throw new Error(`Missing content script bundle: ${script}`);
+        }
+        options.js = [...(options.js ?? []), script];
+        if (fs.existsSync(`./dist/${stylesheet}`)) {
+            options.css = [...(options.css ?? []), stylesheet];
+        }
 
         ['js', 'css'].forEach(type => {
             const files = options[type];
@@ -43,7 +37,6 @@ const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
         return options;
     });
 
-const now = new Date();
 const manifest = {
     name: 'OGame Tracker' + (isDev ? ' DEV' : ''),
     description: '__MSG_appDesc__',

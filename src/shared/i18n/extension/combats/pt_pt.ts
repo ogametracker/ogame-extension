@@ -1,6 +1,6 @@
-import { CombatResultType } from "@/shared/models/combat-reports/CombatResultType";
+import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
 import { CombatsTranslations } from "./type";
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
+import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
 
 export const pt_pt: RecursivePartial<CombatsTranslations> = {
     header: 'Combates',

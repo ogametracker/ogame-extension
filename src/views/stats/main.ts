@@ -1,7 +1,6 @@
-import '@/views/_shared/styles/index.scss';
+import '@ogame-tracker/view-shared/styles/index.scss';
 
-import '@/views/_shared/components/common';
-import '@/views/_shared/components/ogame';
+import '@stats/components/ogame';
 import './components/common';
 
 import Vue from 'vue';
@@ -9,8 +8,8 @@ import App from './App.vue';
 import { router } from './router';
 import './extend-vue';
 import { SettingsDataModule } from './data/SettingsDataModule';
-import { $i18n } from '@/shared/i18n/extension/$i18n';
-import { addIconFonts } from '../_shared/addIconFonts';
+import { $i18n } from '@stats/i18n';
+import { addIconFonts } from '@ogame-tracker/view-shared/addIconFonts';
 
 void init();
 

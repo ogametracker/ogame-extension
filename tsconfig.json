@@ -3,32 +3,14 @@
         "target": "esnext",
         "module": "esnext",
         "strict": true,
-        "jsx": "preserve",
-        "importHelpers": true,
         "moduleResolution": "node",
-        "experimentalDecorators": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "useDefineForClassFields": true,
         "sourceMap": true,
-        "baseUrl": ".",
-        "types": [
-            "webpack-env",
-            "chrome"
-        ],
-        "paths": {
-            "@/*": [
-                "src/*",
-            ],
-            "@stats/*": [
-                "src/views/stats/*"
-            ],
-            "@notifications/*": [
-                "src/views/notifications/*"
-            ],
-        },
+        "types": ["chrome"],
         "lib": [
             "esnext",
             "dom",
@@ -36,12 +18,6 @@
             "scripthost"
         ]
     },
-    "include": [
-        "src/**/*.ts",
-        "tests/**/*.ts",
-    ],
-    "exclude": [
-        "node_modules",
-        "src/views/notifications"
-    ],
+    "include": [],
+    "exclude": ["**/node_modules", "**/dist"]
 }

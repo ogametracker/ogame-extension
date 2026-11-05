@@ -25,7 +25,7 @@ import { fr as tools } from './tools/fr';
 
 import { fr as excelExport } from './excelExport/fr';
 import { fr as playerClasses } from './playerClasses/fr';
-import { RecursivePartial } from '@/shared/types/RecursivePartial';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const fr: RecursivePartial<ExtensionTranslations> = {
     ogame: {

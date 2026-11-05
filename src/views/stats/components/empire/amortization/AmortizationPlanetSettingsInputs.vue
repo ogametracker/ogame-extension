@@ -153,22 +153,22 @@
 </template>
 
 <script lang="ts">
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { _throw } from '@/shared/utils/_throw';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
     import { PropType } from 'vue';
     import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
-    import { getAverageTemperature } from '@/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
+    import { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
     @Component({})
     export default class AmortizationPlanetSettingsInputs extends Vue {

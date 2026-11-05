@@ -1,9 +1,9 @@
-import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionsTranslations } from "./type";
 import { en as ogamePremium } from '../../ogame/premium/en';
 import { en as ogameFactions } from '../../ogame/factions/en';
-import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
 
 export const en: ExpeditionsTranslations = {
     header: 'Expeditions',

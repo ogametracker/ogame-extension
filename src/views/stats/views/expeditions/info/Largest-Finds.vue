@@ -36,21 +36,21 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+    import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
     import { Component, Vue } from 'vue-property-decorator';
     import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
-    import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
+    import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
+    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes, ExpeditionFindableShipType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
     import { GridTableColumn } from '../../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
-    import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { TopList } from '@/views/stats/models/TopList';
-    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
-    import { createRecord } from "@/shared/utils/createRecord";
+    import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { TopList } from '@stats/models/TopList';
+    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
+    import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
 
     type Find = {
         size: ExpeditionEventSize;

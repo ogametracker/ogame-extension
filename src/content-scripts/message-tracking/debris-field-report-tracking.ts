@@ -1,23 +1,23 @@
-import { Message } from "../../shared/messages/Message";
-import { MessageType } from "../../shared/messages/MessageType";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { _logDebug, _logError } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { getMessageAttributes } from "../../shared/utils/getMessageAttributes";
+import { Message } from "@ogame-tracker/shared/messages/Message";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { _logDebug, _logError } from "@ogame-tracker/shared/utils/_log";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { getMessageAttributes } from "@ogame-tracker/shared/utils/getMessageAttributes";
 import { addOrSetCustomMessageContent, cssClasses, formatNumber } from "./utils";
-import { MessageTrackingErrorMessage } from '../../shared/messages/tracking/misc';
-import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '../../shared/messages/tracking/debris-fields';
-import { ogameMetasEqual } from "../../shared/ogame-web/ogameMetasEqual";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { messageTrackingUuid } from "@/shared/uuid";
+import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { messageTrackingUuid } from "@ogame-tracker/shared/uuid";
 import { v4 } from "uuid";
-import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
-import { ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
+import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@ogame-tracker/shared/messages/notifications";
+import { ResourceTypes } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
 import { settingsWrapper } from "./main";
-import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
-import { parseCoordinates } from "@/shared/utils/parseCoordinates";
-import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
+import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
+import { parseCoordinates } from "@ogame-tracker/shared/utils/parseCoordinates";
+import { PlanetType } from "@ogame-tracker/shared/models/ogame/common/PlanetType";
  
 const notificationIds = {
     result: v4(),

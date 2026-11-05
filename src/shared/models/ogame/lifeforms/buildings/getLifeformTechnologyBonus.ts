@@ -1,6 +1,6 @@
-import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@/shared/models/empire/PlanetData";
-import { createRecord } from "@/shared/utils/createRecord";
+import { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
+import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
 import { getLifeformLevelTechnologyBonus } from "../experience";
 import { LifeformType, ValidLifeformTypes } from "../LifeformType";
 import { LifeformTechnologyBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";

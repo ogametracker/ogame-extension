@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
+    import { ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
     import { startOfDay, subDays } from 'date-fns';
     import differenceInDays from 'date-fns/differenceInDays';
     import addDays from 'date-fns/esm/addDays/index';
     import { Component, Vue } from 'vue-property-decorator';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 
     @Component({})
     export default class Charts extends Vue {

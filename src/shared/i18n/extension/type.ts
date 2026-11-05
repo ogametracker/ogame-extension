@@ -1,4 +1,4 @@
-import { RecursivePartial } from '@/shared/types/RecursivePartial';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 import { BuildingTranslations } from '../ogame/buildings/types';
 import { LifeformBuildingsTranslations } from '../ogame/lifeforms/buildings/types';
 import { LifeformTechnologiesTranslations } from '../ogame/lifeforms/technologies/types';

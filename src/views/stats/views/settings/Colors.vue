@@ -13,14 +13,14 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import ExpeditionEventColorSettings from '@/views/stats/components/settings/colors/ExpeditionEventColorSettings.vue';
-    import ExpeditionEventSizeColorSettings from '@/views/stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
-    import ExpeditionDepletionColorSettings from '@/views/stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
-    import CombatResultColorSettings from '@/views/stats/components/settings/colors/CombatResultColorSettings.vue';
-    import ResourceColorSettings from '@/views/stats/components/settings/colors/ResourceColorSettings.vue';
-    import ShipColorSettings from '@/views/stats/components/settings/colors/ShipColorSettings.vue';
-    import LifeformColorSettings from '@/views/stats/components/settings/colors/LifeformColorSettings.vue';
-    import LifeformDiscoveryColorSettings from '@/views/stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
+    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
+    import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
+    import ExpeditionDepletionColorSettings from '@stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
+    import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
+    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+    import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+    import LifeformColorSettings from '@stats/components/settings/colors/LifeformColorSettings.vue';
+    import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
 
     @Component({
         components: {

@@ -1,12 +1,12 @@
 <template>
     <div
-        class="o-alliance-class"
+        class="o-defense"
         :class="{
-            'o-alliance-class--disabled': disabled,
-            'o-alliance-class--fade': fade,
+            'o-defense--disabled': disabled,
+            'o-defense--fade': fade,
         }"
         :style="{
-            'background-image': `url(/img/ogame/alliance-classes/${image}.png)`,
+            'background-image': `url(/img/ogame/defense/${image}.jpg)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -17,17 +17,18 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { AllianceClass, AllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
+    import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+    import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
 
     @Component({})
-    export default class OAllianceClass extends Vue {
+    export default class ODefense extends Vue {
 
         @Prop({
             required: true,
-            type: String as PropType<AllianceClass>,
-            validator: (value: string) => (AllianceClasses as string[]).includes(value)
+            type: Number as PropType<DefenseType>,
+            validator: (value: number) => (DefenseTypes as number[]).includes(value),
         })
-        private allianceClass!: AllianceClass;
+        private defense!: DefenseType;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
@@ -40,18 +41,22 @@
 
 
         private get image() {
-            return this.imageMap[this.allianceClass];
+            return this.imageMap[this.defense];
         }
-        private readonly imageMap: Record<AllianceClass, string> = {
-            [AllianceClass.none]: 'none',
-            [AllianceClass.researcher]: 'researcher',
-            [AllianceClass.trader]: 'trader',
-            [AllianceClass.warrior]: 'warrior',
+        private readonly imageMap: Record<DefenseType, string> = {
+            [DefenseType.rocketLauncher]: 'rocket-launcher',
+            [DefenseType.lightLaser]: 'light-laser',
+            [DefenseType.heavyLaser]: 'heavy-laser',
+            [DefenseType.gaussCannon]: 'gauss-cannon',
+            [DefenseType.ionCannon]: 'ion-cannon',
+            [DefenseType.plasmaTurret]: 'plasma-turret',
+            [DefenseType.smallShieldDome]: 'small-shield-dome',
+            [DefenseType.largeShieldDome]: 'large-shield-dome',
         };
     }
 </script>
 <style lang="scss" scoped>
-    .o-alliance-class {
+    .o-defense {
         width: 1em;
         height: 1em;
         display: inline-block;

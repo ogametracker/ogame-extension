@@ -1,6 +1,6 @@
-import { getUniverseHistoryDatabase } from '@/shared/db/access';
-import { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
-import { parseIntSafe } from '@/shared/utils/parseNumbers';
+import { getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';
+import { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 import { StoreNames } from 'idb';
 import { Component, Vue } from 'vue-property-decorator';
 import { GlobalOgameMetaData } from './global';

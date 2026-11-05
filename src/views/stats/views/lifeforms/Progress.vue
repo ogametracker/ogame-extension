@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
-    import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { LifeformDiscoveryDataModule } from '@/views/stats/data/LifeformDiscoveryDataModule';
+    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+    import { ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
     interface LifeformProgressItem {

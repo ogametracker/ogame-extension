@@ -1,12 +1,12 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { MessageType } from "../../shared/messages/MessageType";
-import { UpdatePlanetActiveItemsMessage } from "../../shared/messages/tracking/empire";
-import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
-import { ItemHash } from "../../shared/models/ogame/items/ItemHash";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { _throw } from "../../shared/utils/_throw";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { UpdatePlanetActiveItemsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { PlanetActiveItems } from "@ogame-tracker/shared/models/empire/PlanetActiveItems";
+import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 
 export function trackOverviewPage(): void {
     const activeItems: PlanetActiveItems = {};

@@ -1,4 +1,4 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
+import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
 import { AboutTranslations } from "./type";
 
 export const fr: RecursivePartial<AboutTranslations> = {

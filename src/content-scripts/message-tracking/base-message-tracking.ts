@@ -1,9 +1,9 @@
-import { _throw } from "@/shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { debrisFieldTracking } from "./debris-field-report-tracking";
-import { Message } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
+import { Message } from "@ogame-tracker/shared/messages/Message";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
 import { cssClasses } from "./utils";
 import { expeditionTracking } from "./expedition-tracking";
 import { lifeformDiscoveryTracking } from "./lifeform-discovery-tracking";

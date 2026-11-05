@@ -1,20 +1,20 @@
-import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-import { MessageType } from '@/shared/messages/MessageType';
-import { NewExpeditionMessage } from '@/shared/messages/tracking/expeditions';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { NewExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
-import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
-import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-import { multiplyCost } from '@/shared/models/ogame/common/Cost';
-import { createRecord } from '@/shared/utils/createRecord';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { ExpeditionEventSize, ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DailyExpeditionResult {

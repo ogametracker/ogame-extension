@@ -41,17 +41,17 @@
 </template>
 
 <script lang="ts">
-    import { AmortizationExpeditionSettings } from '@/shared/models/empire/amortization/AmortizationExpeditionSettings';
+    import { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';
     import { Component, Prop, PropSync, Vue, VModel, Watch } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { _throw } from '@/shared/utils/_throw';
-    import { AmortizationExpeditionResultsBreakdown } from '@/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
-    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { getItemSlotBonus } from '@/shared/models/ogame/expeditions/getItemSlotBonus';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+    import { AmortizationExpeditionResultsBreakdown } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
+    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+    import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
     @Component({})
     export default class AmortizationExpeditionSettingsInputs extends Vue {

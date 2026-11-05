@@ -44,21 +44,21 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
-    import { DefenseCount } from '@/shared/models/empire/DefenseCount';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+    import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+    import { DefenseCount } from '@ogame-tracker/shared/models/empire/DefenseCount';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '@stats/components/common/GridTable.vue';
     import { EmpireDataModule } from '@stats/data/EmpireDataModule';
-    import { createRecord } from '@/shared/utils/createRecord';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
     type SupplyBuilding = PlanetSupplyBuildingType
 

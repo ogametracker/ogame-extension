@@ -43,12 +43,12 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
+    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
 
     @Component({

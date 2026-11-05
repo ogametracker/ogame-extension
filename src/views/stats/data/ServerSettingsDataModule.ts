@@ -1,11 +1,11 @@
-import { MessageType } from '@/shared/messages/MessageType';
-import { Message } from '@/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { ServerSettings } from '@/shared/models/server-settings/ServerSettings';
-import { getServerDatabase } from '@/shared/db/access';
-import { DbServerSettings } from '@/shared/db/schema/server';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { ServerSettings } from '@ogame-tracker/shared/models/server-settings/ServerSettings';
+import { getServerDatabase } from '@ogame-tracker/shared/db/access';
+import { DbServerSettings } from '@ogame-tracker/shared/db/schema/server';
 
 @Component
 class ServerSettingsDataModuleClass extends Vue {

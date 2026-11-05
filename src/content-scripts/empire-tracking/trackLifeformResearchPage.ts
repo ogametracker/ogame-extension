@@ -1,12 +1,12 @@
 import { observerCallbacks } from "./main";
-import { _throw } from "../../shared/utils/_throw";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { UpdatePlanetActiveLifeformTechnologyLevelsMessage } from "../../shared/messages/tracking/empire";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { MessageType } from "../../shared/messages/MessageType";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { UpdatePlanetActiveLifeformTechnologyLevelsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { LifeformTechnologyType, LifeformTechnologyTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
 
 export function trackLifeformResearchPage() {
     observerCallbacks.push({

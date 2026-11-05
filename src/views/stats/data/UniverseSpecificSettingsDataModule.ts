@@ -1,11 +1,11 @@
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getPlayerDatabase } from "@/shared/db/access";
-import { Message } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { NotifyUniverseSpecificSettingsUpdateMessage } from "@/shared/messages/universe-specific-settings";
-import { loadUniverseSpecificSettings } from "@/shared/models/universe-specific-settings/loadUniverseSpecificSettings";
-import { UniverseSpecificSettings } from "@/shared/models/universe-specific-settings/UniverseSpecificSettings";
-import { ogameMetasEqual } from "@/shared/ogame-web/ogameMetasEqual";
+import { broadcastMessage } from "@ogame-tracker/shared/communication/broadcastMessage";
+import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
+import { Message } from "@ogame-tracker/shared/messages/Message";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { NotifyUniverseSpecificSettingsUpdateMessage } from "@ogame-tracker/shared/messages/universe-specific-settings";
+import { loadUniverseSpecificSettings } from "@ogame-tracker/shared/models/universe-specific-settings/loadUniverseSpecificSettings";
+import { UniverseSpecificSettings } from "@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings";
+import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
 import { Component, Vue } from 'vue-property-decorator';
 import { GlobalOgameMetaData, statsViewUuid } from "./global";
 

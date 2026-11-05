@@ -1,19 +1,19 @@
 import { Component, Vue } from 'vue-property-decorator';
-import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@/shared/db/access';
-import { DbAccount, DbLinkedAccount, DbServer } from '@/shared/db/schema/global';
+import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@ogame-tracker/shared/db/access';
+import { DbAccount, DbLinkedAccount, DbServer } from '@ogame-tracker/shared/db/schema/global';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { CombatReportDataModule } from './CombatReportDataModule';
 import { deleteDB, StoreNames } from 'idb';
-import { sendMessage } from '@/shared/communication/sendMessage';
-import { DropDatabaseConnectionsMessage } from '@/shared/messages/internal';
-import { MessageType } from '@/shared/messages/MessageType';
-import { OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from '@/shared/db/schema';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { DropDatabaseConnectionsMessage } from '@ogame-tracker/shared/messages/internal';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from '@ogame-tracker/shared/db/schema';
 import { UniverseHistoryDataModule } from './UniverseHistoryDataModule';
 import { ExpeditionDataModule } from './ExpeditionDataModule';
 import { DebrisFieldReportDataModule } from './DebrisFieldReportDataModule';
 import { EmpireDataModule } from './EmpireDataModule';
 import { ServerSettingsDataModule } from './ServerSettingsDataModule';
-import { MessageOgameMeta } from '@/shared/messages/Message';
+import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 
 @Component
 class UniversesAndAccountsDataModuleClass extends Vue {

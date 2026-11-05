@@ -87,21 +87,21 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
     import { Component, Vue } from 'vue-property-decorator';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
-    import { PlanetType } from '@/shared/models/ogame/common/PlanetType';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { getLifeformCollectorClassBonus } from '@/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
-    import { getMaxActiveCrawlers } from '@/shared/models/ogame/resource-production/getMaxActiveCrawlers';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { getCrawlerCountForMaximumBoost } from '@/shared/models/ogame/resource-production/getCrawlerCountForMaximumBoost';
-    import { getProductionBreakdowns } from '@/views/stats/models/empire/production';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+    import { PlanetType } from '@ogame-tracker/shared/models/ogame/common/PlanetType';
+    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
+    import { getLifeformCollectorClassBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/getLifeformCollectorClassBonus';
+    import { getMaxActiveCrawlers } from '@ogame-tracker/shared/models/ogame/resource-production/getMaxActiveCrawlers';
+    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+    import { getCrawlerCountForMaximumBoost } from '@ogame-tracker/shared/models/ogame/resource-production/getCrawlerCountForMaximumBoost';
+    import { getProductionBreakdowns } from '@stats/models/empire/production';
 
     interface ProductionMineItem {
         planet: {

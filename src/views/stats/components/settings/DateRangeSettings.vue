@@ -101,8 +101,8 @@
 </template>
 
 <script lang="ts">
-    import { DateRange, DateRangeType } from '@/shared/models/settings/DateRange';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
+    import { DateRange, DateRangeType } from '@ogame-tracker/shared/models/settings/DateRange';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
     import { getRangeDays } from '../../utils/dateRanges';

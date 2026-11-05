@@ -1,4 +1,4 @@
-import { _throw } from "../../shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 
 export function getRawMessageAttributes(element: Element): Record<string, string> {
     const attributes = element.attributes;

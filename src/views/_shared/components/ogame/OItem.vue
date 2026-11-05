@@ -20,11 +20,11 @@
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
     import { useLegacyComponentListeners } from './useLegacyComponentListeners';
-    import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
-    import { Items } from '@/shared/models/ogame/items/Items';
-    import type { Item } from '@/shared/models/ogame/items/Item';
-    import { getItemImageUrl, type ItemImageServer } from '@/shared/models/ogame/items/getItemImageUrl';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+    import { ItemHash, ItemHashes } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
+    import type { Item } from '@ogame-tracker/shared/models/ogame/items/Item';
+    import { getItemImageUrl, type ItemImageServer } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
     // the extension pages showing items are opened for one account and carry its server in the url
     function getServerFromLocation(): ItemImageServer | undefined {

@@ -247,34 +247,34 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { FusionReactor } from '@/shared/models/ogame/buildings/FusionReactor';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { CrawlerProductionPercentage } from '@/shared/models/empire/CrawlerProductionPercentage';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
+    import { FusionReactor } from '@ogame-tracker/shared/models/ogame/buildings/FusionReactor';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { ItemHash, ItemHashes } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
+    import { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
+    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
     import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import { PlanetProductionBreakdown } from '@/shared/models/ogame/resource-production/types';
-    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
+    import { PlanetProductionBreakdown } from '@ogame-tracker/shared/models/ogame/resource-production/types';
+    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
     import { getProductionBreakdowns } from '@stats/models/empire/production';
-    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { LocalPlayerData } from '@/shared/models/empire/LocalPlayerData';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+    import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
     import AmortizationPlanetSettingsInputs from '@stats/components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
     import AmortizationPlayerSettingsInputs from '@stats/components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
-    import { AmortizationPlanetSettings } from '@/shared/models/empire/amortization/AmortizationPlanetSettings';
-    import { _throw } from '@/shared/utils/_throw';
-    import { AllianceClass } from '@/shared/models/ogame/classes/AllianceClass';
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@/shared/models/ogame/lifeforms/experience';
+    import { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+    import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 
     interface ProductionItem {
         planet: {

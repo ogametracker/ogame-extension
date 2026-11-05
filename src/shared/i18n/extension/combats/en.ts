@@ -1,4 +1,4 @@
-import { CombatResultType } from "@/shared/models/combat-reports/CombatResultType";
+import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
 import { CombatsTranslations } from "./type";
 
 export const en: CombatsTranslations = {

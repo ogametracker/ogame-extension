@@ -1,0 +1,17 @@
+{
+  "name": "@ogame-tracker/browser-script-build",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "ogame-build-browser-script": "build.js"
+  },
+  "dependencies": {
+    "css-loader": "6.5.1",
+    "mini-css-extract-plugin": "2.5.2",
+    "sass": "1.107.1",
+    "sass-loader": "12.4.0",
+    "ts-loader": "9.5.1",
+    "typescript": "5.3.3",
+    "webpack": "5.66.0"
+  }
+}

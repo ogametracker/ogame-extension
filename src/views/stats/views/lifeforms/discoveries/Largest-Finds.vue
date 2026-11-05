@@ -73,17 +73,17 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
+    import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
     import { GridTableColumn } from '../../../components/common/GridTable.vue';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
-    import { LifeformDiscoveryEventArtifactFindingSize } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
-    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { LifeformDiscoveryDataModule } from '@/views/stats/data/LifeformDiscoveryDataModule';
-    import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
-    import { LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
-    import { TopList } from '@/views/stats/models/TopList';
+    import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
+    import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+    import { LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+    import { TopList } from '@stats/models/TopList';
 
     type ArtifactsFind = {
         size: LifeformDiscoveryEventArtifactFindingSize;

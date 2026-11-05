@@ -2,13 +2,13 @@ import Vue from 'vue';
 import OAllianceClass from './OAllianceClass.vue';
 import OBuilding from './OBuilding.vue';
 import ODefense from './ODefense.vue';
-import OItem from './OItem.vue';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
 import OOfficer from './OOfficer.vue';
 import OPlayerClass from './OPlayerClass.vue';
 import OResearch from './OResearch.vue';
-import OResource from './OResource.vue';
-import OShip from './OShip.vue';
-import OLifeform from './OLifeform.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
 import OLifeformBuilding from './OLifeformBuilding.vue';
 import OLifeformTechnology from './OLifeformTechnology.vue';
 

@@ -34,7 +34,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '@stats/components/common/GridTable.vue';
     import { isInRange } from '@stats/utils/dateRanges';
-    import { _throw } from '@/shared/utils/_throw';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
     import startOfDay from 'date-fns/startOfDay/index';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 

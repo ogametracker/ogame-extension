@@ -1,7 +1,7 @@
-import { getQueryParameters } from "../../shared/utils/getQueryParameters";
+import { getQueryParameters } from "@ogame-tracker/shared/utils/getQueryParameters";
 import { trackAlliancePage } from "./trackAlliancePage";
 import { trackResearchPage } from "./trackResearchPage";
-import { _throw } from "../../shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { trackSuppliesPage } from "./trackSuppliesPage";
 import { trackFacilitiesPage } from "./trackFacilitiesPage";
 import { trackShipyardPage } from "./trackShipyardPage";

@@ -1,14 +1,14 @@
-import { MessageOgameMeta } from "../../shared/messages/Message";
-import { _logDebug } from "@/shared/utils/_log";
+import { MessageOgameMeta } from "@ogame-tracker/shared/messages/Message";
+import { _logDebug } from "@ogame-tracker/shared/utils/_log";
 import { XMLParser } from "fast-xml-parser";
-import { getServerDatabase } from "@/shared/db/access";
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { NotifyServerSettingsUpdateMessage } from "@/shared/messages/tracking/server-settings";
-import { MessageType } from "@/shared/messages/MessageType";
-import { serviceWorkerUuid } from "@/shared/uuid";
-import { parseFloatSafe } from "@/shared/utils/parseNumbers";
-import { _throw } from "@/shared/utils/_throw";
-import { DbServerSettings } from "@/shared/db/schema/server";
+import { getServerDatabase } from "@ogame-tracker/shared/db/access";
+import { broadcastMessage } from "@ogame-tracker/shared/communication/broadcastMessage";
+import { NotifyServerSettingsUpdateMessage } from "@ogame-tracker/shared/messages/tracking/server-settings";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { serviceWorkerUuid } from "@ogame-tracker/shared/uuid";
+import { parseFloatSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { DbServerSettings } from "@ogame-tracker/shared/db/schema/server";
 
 declare namespace OgameApi {
     interface ServerSettingsXml {

@@ -59,30 +59,30 @@
 </template>
 
 <script lang="ts">
-    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
+    import { ExpeditionEventSize, ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
     import { Component, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '../../../components/common/GridTable.vue';
     import { EmpireDataModule } from '../../../data/EmpireDataModule';
     import { SettingsDataModule } from '../../../data/SettingsDataModule';
     import { getRGBString } from '../../../utils/getRGBString';
-    import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
     import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
-    import { findBaseAmounts } from '@/shared/models/expeditions/findBaseAmounts';
-    import { ExpeditionFindableShipTypes } from "@/shared/models/expeditions/ExpeditionEvents";
-    import { ShipByTypes } from "@/shared/models/ogame/ships/ShipTypes";
-    import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
-    import { getExpeditionItemFindBonus } from "@/shared/models/ogame/expeditions/getExpeditionItemFindBonus";
-    import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
-    import { ItemHash } from "@/shared/models/ogame/items/ItemHash";
+    import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
+    import { getExpeditionFindFactor } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindFactor';
+    import { findBaseAmounts } from '@ogame-tracker/shared/models/expeditions/findBaseAmounts';
+    import { ExpeditionFindableShipTypes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
+    import { ShipByTypes } from "@ogame-tracker/shared/models/ogame/ships/ShipTypes";
+    import { getMsuOrDsu } from "@stats/models/settings/getMsuOrDsu";
+    import { getExpeditionItemFindBonus } from "@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus";
+    import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
+    import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
 
 
     type FindableUnits = {

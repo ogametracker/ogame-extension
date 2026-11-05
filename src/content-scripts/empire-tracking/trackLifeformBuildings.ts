@@ -1,11 +1,11 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { MessageType } from "@/shared/messages/MessageType";
-import { UpdatePlanetActiveLifeformBuildingLevelsMessage } from "@/shared/messages/tracking/empire";
-import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { _throw } from "@/shared/utils/_throw";
-import { empireTrackingUuid } from "@/shared/uuid";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { UpdatePlanetActiveLifeformBuildingLevelsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { LifeformBuildingType, LifeformBuildingTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
 import { observerCallbacks } from "./main";
 
 export function trackLifeformBuildingsPage() {

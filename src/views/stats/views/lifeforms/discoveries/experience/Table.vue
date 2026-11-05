@@ -31,9 +31,9 @@
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@/views/stats/data/LifeformDiscoveryDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { LifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+    import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
     @Component({
         components: {

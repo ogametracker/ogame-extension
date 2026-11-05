@@ -1,9 +1,9 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { _throw } from '../../shared/utils/_throw';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { ServerSettingsModule } from './ServerSettingsModule';
-import { getStorageKeyPrefix } from '@/shared/utils/getStorageKeyPrefix';
+import { getStorageKeyPrefix } from '@ogame-tracker/shared/utils/getStorageKeyPrefix';
 
 export class ServerSettingsService implements MessageService {
     private readonly modules: Record<string, ServerSettingsModule> = {};

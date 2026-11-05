@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({})

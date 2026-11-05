@@ -3,7 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "src/views/notifications"
+    "scripts/browser-script-build",
+    "src/shared",
+    "src/views/_shared",
+    "src/views/stats",
+    "src/views/notifications",
+    "src/service-worker",
+    "src/content-scripts/*"
   ],
   "scripts": {
     "dev:firefox": "node scripts/build.js --dev --browser=firefox",
@@ -12,44 +18,21 @@
     "build:chrome": "node scripts/build.js --browser=chrome",
     "publish": "node scripts/full-release-build.js"
   },
-  "dependencies": {
-    "@mdi/font": "^6.5.95",
-    "date-fns": "^2.28.0",
-    "fast-xml-parser": "^4.0.7",
-    "idb": "^7.0.1",
-    "semaphore-async-await": "^1.5.1",
-    "uuid": "^8.3.2",
-    "vue": "^2.7.5",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^9.1.2",
-    "vue-router": "^3.5.1",
-    "vuedraggable": "^2.24.3",
-    "xlsx": "^0.18.5"
-  },
   "devDependencies": {
-    "@types/chrome": "^0.0.208",
-    "@types/uuid": "^8.3.4",
-    "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
-    "@vue/cli-plugin-router": "~5.0.0-rc.1",
-    "@vue/cli-plugin-typescript": "~5.0.0-rc.1",
-    "@vue/cli-service": "~5.0.0-rc.1",
-    "@vue/eslint-config-typescript": "^10.0.0",
-    "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^10.2.0",
-    "css-loader": "^6.5.1",
-    "eslint": "^8.11.0",
-    "eslint-plugin-vue": "^8.5.0",
-    "mini-css-extract-plugin": "^2.4.7",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0",
-    "ts-loader": "^9.5.1",
-    "ts-node": "^10.9.1",
-    "typescript": "5.3.3",
-    "vue-template-compiler": "^2.7.5",
-    "webpack": "^5.66.0",
-    "webpack-cli": "^4.9.1",
-    "zip-dir": "^2.0.0"
+    "@typescript-eslint/eslint-plugin": "5.16.0",
+    "@typescript-eslint/parser": "5.16.0",
+    "date-fns": "2.28.0",
+    "eslint": "8.11.0",
+    "fast-xml-parser": "4.0.7",
+    "typescript": "4.9.5",
+    "zip-dir": "2.0.0"
+  },
+  "overrides": {
+    "@typescript-eslint/eslint-plugin": {
+      "typescript": "$typescript"
+    },
+    "@typescript-eslint/parser": {
+      "typescript": "$typescript"
+    }
   }
 }

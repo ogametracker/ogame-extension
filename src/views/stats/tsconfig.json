@@ -1,0 +1,14 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "importHelpers": true,
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "@stats/*": ["./*"],
+            "vue": ["./node_modules/vue"]
+        }
+    },
+    "include": ["**/*.ts", "**/*.vue"]
+}

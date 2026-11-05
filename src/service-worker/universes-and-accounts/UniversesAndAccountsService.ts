@@ -1,7 +1,7 @@
-import { getGlobalDatabase } from "@/shared/db/access";
-import { Message } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from "@/shared/messages/tracking/empire";
+import { getGlobalDatabase } from "@ogame-tracker/shared/db/access";
+import { Message } from "@ogame-tracker/shared/messages/Message";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from "@ogame-tracker/shared/messages/tracking/empire";
 import { MessageService } from "../MessageService";
 
 export class UniversesAndAccountsService implements MessageService {

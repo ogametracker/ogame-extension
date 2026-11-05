@@ -23,15 +23,15 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEventType, ExpeditionEventTypes } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
     import ExpeditionEventTypeIcon from '@stats/components/expeditions/ExpeditionEventTypeIcon.vue';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { _throw } from '@/shared/utils/_throw';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
     @Component({
         components: {

@@ -80,9 +80,9 @@
 <script setup lang="ts">
     import { computed } from 'vue';
     import Notification from '../Notification.vue';
-    import type { LifeformDiscoveryTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import OLifeform from '@/views/_shared/components/ogame/OLifeform.vue';
+    import type { LifeformDiscoveryTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+    import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
     import { formatNumber, translate } from '../../i18n';
     import { useSettingsStore } from '../../stores/settings';
 

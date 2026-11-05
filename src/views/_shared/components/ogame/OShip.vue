@@ -18,8 +18,8 @@
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
     import { useLegacyComponentListeners } from './useLegacyComponentListeners';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 
     const imageMap: Record<ShipType, string> = {
         [ShipType.smallCargo]: 'small-cargo',

@@ -1,6 +1,6 @@
-import { getPlayerDatabase } from "@/shared/db/access";
-import { MessageOgameMeta } from "@/shared/messages/Message";
-import { mergeDeep } from "@/shared/utils/mergeDeep";
+import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
+import { MessageOgameMeta } from "@ogame-tracker/shared/messages/Message";
+import { mergeDeep } from "@ogame-tracker/shared/utils/mergeDeep";
 import { UniverseSpecificSettings } from "./UniverseSpecificSettings";
 
 const defaultSettings: UniverseSpecificSettings = {

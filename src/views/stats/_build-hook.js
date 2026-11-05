@@ -88,7 +88,6 @@ routes.forEach(route => {
 });
 
 
-const imports = {};
 const getVueRoutes = (tree) => {
     return Object.values(tree).map(route => {
 
@@ -105,10 +104,8 @@ const getVueRoutes = (tree) => {
         }
 
         if (route.componentPath != null) {
-            const localImportPath = route.componentPath.split('/views/stats/')[1];
-            const importPath = '@stats/' + localImportPath;
+            const localImportPath = path.relative(__dirname, route.componentPath).replace(/\\/g, '/');
             const componentName = localImportPath.replace(/\/|(\.vue)|\-/g, '');
-            imports[componentName] = importPath;
 
             vueRoute.component = `() => import(/* webpackChunkName: "stats-view-${componentName}" */ '../${localImportPath}')`;
         }

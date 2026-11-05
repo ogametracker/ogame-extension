@@ -1,6 +1,6 @@
-import { _throw } from '@/shared/utils/_throw';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { LanguageKey } from '../LanguageKey';
-import type { RecursivePartial } from '@/shared/types/RecursivePartial';
+import type { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 type RequiredLanguageKey = LanguageKey.de | LanguageKey.en;
 type PartialLanguageKey = Exclude<LanguageKey, RequiredLanguageKey>;

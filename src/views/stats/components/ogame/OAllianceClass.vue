@@ -1,12 +1,12 @@
 <template>
     <div
-        class="o-player-class"
+        class="o-alliance-class"
         :class="{
-            'o-player-class--disabled': disabled,
-            'o-player-class--fade': fade,
+            'o-alliance-class--disabled': disabled,
+            'o-alliance-class--fade': fade,
         }"
         :style="{
-            'background-image': `url(/img/ogame/player-classes/${image}.png)`,
+            'background-image': `url(/img/ogame/alliance-classes/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -17,16 +17,17 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { PlayerClass, PlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
+    import { AllianceClass, AllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
 
     @Component({})
-    export default class OPlayerClass extends Vue {
+    export default class OAllianceClass extends Vue {
+
         @Prop({
             required: true,
-            type: String as PropType<PlayerClass>,
-            validator: (value: string) => (PlayerClasses as string[]).includes(value)
+            type: String as PropType<AllianceClass>,
+            validator: (value: string) => (AllianceClasses as string[]).includes(value)
         })
-        private playerClass!: PlayerClass;
+        private allianceClass!: AllianceClass;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
@@ -39,18 +40,18 @@
 
 
         private get image() {
-            return this.imageMap[this.playerClass];
+            return this.imageMap[this.allianceClass];
         }
-        private readonly imageMap: Record<PlayerClass, string> = {
-            [PlayerClass.collector]: 'collector',
-            [PlayerClass.discoverer]: 'explorer',
-            [PlayerClass.general]: 'general',
-            [PlayerClass.none]: 'none',
+        private readonly imageMap: Record<AllianceClass, string> = {
+            [AllianceClass.none]: 'none',
+            [AllianceClass.researcher]: 'researcher',
+            [AllianceClass.trader]: 'trader',
+            [AllianceClass.warrior]: 'warrior',
         };
     }
 </script>
 <style lang="scss" scoped>
-    .o-player-class {
+    .o-alliance-class {
         width: 1em;
         height: 1em;
         display: inline-block;

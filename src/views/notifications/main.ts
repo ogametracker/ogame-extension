@@ -1,12 +1,12 @@
 import { createPinia, disposePinia } from 'pinia';
 import { createApp } from 'vue';
-import { parseIntSafe } from '@/shared/utils/parseNumbers';
-import { _throw } from '@/shared/utils/_throw';
-import type { MessageOgameMeta } from '@/shared/messages/Message';
-import { addIconFonts } from '../_shared/addIconFonts';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import type { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { addIconFonts } from '@ogame-tracker/view-shared/addIconFonts';
 import App from './App.vue';
 import { useSettingsStore } from './stores/settings';
-import '@/views/_shared/styles/index.scss';
+import '@ogame-tracker/view-shared/styles/index.scss';
 
 async function main() {
     addIconFonts();

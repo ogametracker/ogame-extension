@@ -1,9 +1,9 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { MessageType } from "@/shared/messages/MessageType";
-import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from "@/shared/messages/tracking/empire";
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
-import { _throw } from "@/shared/utils/_throw";
-import { universeAccountTrackingUuid } from "@/shared/uuid";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { universeAccountTrackingUuid } from "@ogame-tracker/shared/uuid";
 
 const observer = new MutationObserver(() => {
     const body = document.querySelector('body');

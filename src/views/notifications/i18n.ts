@@ -1,7 +1,7 @@
-import extensionMessages from '@/shared/i18n/extension';
-import { createTranslationTree } from '@/shared/i18n/extension/createTranslationTree';
-import type { ExtensionTranslations } from '@/shared/i18n/extension/type';
-import { LanguageKey } from '@/shared/i18n/LanguageKey';
+import extensionMessages from '@ogame-tracker/shared/i18n/extension';
+import { createTranslationTree } from '@ogame-tracker/shared/i18n/extension/createTranslationTree';
+import type { ExtensionTranslations } from '@ogame-tracker/shared/i18n/extension/type';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
 import { useSettingsStore } from './stores/settings';
 
 const messages = createTranslationTree<ExtensionTranslations>({

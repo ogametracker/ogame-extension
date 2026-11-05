@@ -29,9 +29,9 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
+    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
     import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
     @Component({

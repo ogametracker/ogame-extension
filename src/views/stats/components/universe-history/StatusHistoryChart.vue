@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-    import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
+    import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
     import { addDays, startOfDay, subDays } from 'date-fns';
     import { Component, Prop, Vue, Ref, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';

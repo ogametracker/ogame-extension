@@ -1,4 +1,4 @@
-import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
+import { ResourceType, ResourceTypes } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
 import { SettingsDataModule } from "../../data/SettingsDataModule";
 
 export function getMsuOrDsu(resources: Partial<Record<ResourceType, number>>, factors: Partial<Record<ResourceType, number>> = {}): number {

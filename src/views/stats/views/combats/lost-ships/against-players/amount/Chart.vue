@@ -45,10 +45,10 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@/views/stats/data/CombatReportDataModule';
-    import { ShipTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
     import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 

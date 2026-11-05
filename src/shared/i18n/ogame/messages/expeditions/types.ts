@@ -1,5 +1,5 @@
-import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
-import { ExpeditionEventCombatSize } from "@/shared/models/expeditions/ExpeditionEvents";
+import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionEventCombatSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
 import { ExpeditionEventSize } from "../../../../models/expeditions/ExpeditionEventSize";
 import { ExpeditionEventType } from "../../../../models/expeditions/ExpeditionEventType";
 

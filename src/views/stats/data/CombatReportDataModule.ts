@@ -1,18 +1,18 @@
-import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-import { MessageType } from '@/shared/messages/MessageType';
-import { NewCombatReportMessage } from '@/shared/messages/tracking/combat-reports';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { NewCombatReportMessage } from '@ogame-tracker/shared/messages/tracking/combat-reports';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
-import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
-import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-import { createRecord } from '@/shared/utils/createRecord';
-import { ShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-import { multiplyCost } from '@/shared/models/ogame/common/Cost';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { CombatResultType, CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { ShipTypes, ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
 
 export interface DailyCombatReportResult {

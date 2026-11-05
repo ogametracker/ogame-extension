@@ -49,20 +49,20 @@
 </template>
 
 <script lang="ts">
-    import { OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { GlobalOgameMetaData } from '@/views/stats/data/global';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
+    import { OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
+    import { Tab } from '@stats/components/common/Tabs.vue';
+    import { GlobalOgameMetaData } from '@stats/data/global';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+    import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@stats/data/UniverseHistoryDataModule';
     import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
     import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
     import StatusHistoryChart from '@stats/components/universe-history/StatusHistoryChart.vue';
     import PlayerNameHistoryTable from '@stats/components/universe-history/PlayerNameHistoryTable.vue';
     import PlayerAllianceHistoryTable from '@stats/components/universe-history/PlayerAllianceHistoryTable.vue';
     import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
-    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
+    import { UniverseSpecificSettingsDataModule } from '@stats/data/UniverseSpecificSettingsDataModule';
 
     @Component({
         components: {

@@ -10,12 +10,12 @@
 </template>
 
 <script lang="ts">
-    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import ColorSettingsTable from './ColorSettingsTable.vue';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
+    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
 
     @Component({
         components: {

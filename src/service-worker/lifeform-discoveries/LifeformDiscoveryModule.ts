@@ -1,15 +1,15 @@
-import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logDebug, _logError, _logWarning } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { getPlayerDatabase } from "@/shared/db/access";
-import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { RawLifeformDiscoveryMessageData, TrackLifeformDiscoveryMessage } from "@/shared/messages/tracking/lifeform-discoveries";
-import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { OgameRawLifeformDiscoveryType } from "@/shared/models/ogame/messages/OgameRawLifeformDiscoveryType";
-import { OgameRawArtifactFindSize } from "@/shared/models/ogame/messages/OgameRawArtifactFindSize";
-import { OgameRawLifeformType } from "@/shared/models/ogame/messages/OgameRawLifeformType";
+import { TryActionResult } from "@ogame-tracker/shared/TryActionResult";
+import { _log, _logDebug, _logError, _logWarning } from "@ogame-tracker/shared/utils/_log";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
+import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
+import { RawLifeformDiscoveryMessageData, TrackLifeformDiscoveryMessage } from "@ogame-tracker/shared/messages/tracking/lifeform-discoveries";
+import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformType, ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
+import { OgameRawLifeformDiscoveryType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType";
+import { OgameRawArtifactFindSize } from "@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize";
+import { OgameRawLifeformType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType";
 
 interface LifeformDiscoveryEventResult {
     lifeformDiscovery: LifeformDiscoveryEvent;

@@ -1,18 +1,18 @@
-import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logDebug, _logError } from "../../shared/utils/_log";
-import { CombatReport } from "../../shared/models/combat-reports/CombatReport";
-import { _throw } from "../../shared/utils/_throw";
-import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
-import { CombatResultType } from "../../shared/models/combat-reports/CombatResultType";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
-import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
-import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
-import i18nFactions from '../../shared/i18n/ogame/factions';
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { getPlayerDatabase } from "@/shared/db/access";
+import { TryActionResult } from "@ogame-tracker/shared/TryActionResult";
+import { _log, _logDebug, _logError } from "@ogame-tracker/shared/utils/_log";
+import { CombatReport } from "@ogame-tracker/shared/models/combat-reports/CombatReport";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { RawCombatReportData, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "@ogame-tracker/shared/messages/tracking/combat-reports";
+import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
+import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
+import { ShipTypes } from "@ogame-tracker/shared/models/ogame/ships/ShipTypes";
+import { ResourceType } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
+import i18nFactions from '@ogame-tracker/shared/i18n/ogame/factions';
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
 import { settingsService } from "../main";
-import { OgameCombatReport } from "@/shared/models/ogame/combats/OgameCombatReport";
-import { getLanguage } from "@/shared/i18n/getLanguage";
+import { OgameCombatReport } from "@ogame-tracker/shared/models/ogame/combats/OgameCombatReport";
+import { getLanguage } from "@ogame-tracker/shared/i18n/getLanguage";
 
 type CombatReportResult = {
     report: CombatReport;

@@ -50,9 +50,9 @@
 </template>
 
 <script lang="ts">
-    import { sendMessage } from '@/shared/communication/sendMessage';
-    import { MessageType } from '@/shared/messages/MessageType';
-    import { TrackManualDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
+    import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+    import { TrackManualDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
     import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';

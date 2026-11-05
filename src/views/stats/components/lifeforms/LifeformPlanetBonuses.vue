@@ -98,13 +98,13 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { BuildingTypes } from '@/shared/models/ogame/buildings/BuildingTypes';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
 
     export type LifeformPlanetBonusesType<TKey extends string = string> = {
         key: TKey;

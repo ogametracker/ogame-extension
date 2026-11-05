@@ -1,4 +1,4 @@
-import { DefenseType } from "@/shared/models/ogame/defenses/DefenseType";
+import { DefenseType } from "@ogame-tracker/shared/models/ogame/defenses/DefenseType";
 import { DefenseTranslations } from "./types";
 
 export const tr: DefenseTranslations = {

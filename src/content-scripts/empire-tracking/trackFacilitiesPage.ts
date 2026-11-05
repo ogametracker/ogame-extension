@@ -1,14 +1,14 @@
-import { _throw } from "../../shared/utils/_throw";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { observerCallbacks } from "./main";
-import { BuildingType } from '../../shared/models/ogame/buildings/BuildingType';
-import { MoonFacilityBuildingTypes, PlanetFacilityBuildingTypes } from '../../shared/models/ogame/buildings/BuildingTypes';
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { UpdatePlanetBuildingLevelsMessage } from "../../shared/messages/tracking/empire";
-import { MessageType } from "../../shared/messages/MessageType";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { createRecord } from "@/shared/utils/createRecord";
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { MoonFacilityBuildingTypes, PlanetFacilityBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
+import { UpdatePlanetBuildingLevelsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
+import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
+import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
 
 export function trackFacilitiesPage() {
     observerCallbacks.push({

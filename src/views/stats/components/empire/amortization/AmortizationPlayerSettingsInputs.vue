@@ -80,14 +80,14 @@
 
 <script lang="ts">
     import { PropType } from 'vue';
-    import { AllianceClass, SelectableAllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
-    import { PlayerClass, SelectablePlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
+    import { AllianceClass, SelectableAllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+    import { PlayerClass, SelectablePlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
     import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
-    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
     @Component({
         components: {

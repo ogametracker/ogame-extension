@@ -66,11 +66,11 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GridTableColumn } from '@stats/components/common/GridTable.vue';
     import { EmpireDataModule } from '@stats/data/EmpireDataModule';

@@ -1,14 +1,14 @@
-import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
-import { MessageType } from '@/shared/messages/MessageType';
-import { NewDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { DebrisFieldReport } from '@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { NewDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
 import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
 import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
-import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 export type DebrisFieldResources = Record<ResourceType, number>;
 

@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
+    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
     import { Component, Vue } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 

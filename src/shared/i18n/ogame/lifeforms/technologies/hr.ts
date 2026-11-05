@@ -1,6 +1,6 @@
 import { LifeformTechnologiesTranslations } from "./types";
 import { en } from './en';
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
 
 export const hr: LifeformTechnologiesTranslations = {
     [LifeformTechnologyType.intergalacticEnvoys]: 'Međuzvjezdani Izaslanici', 

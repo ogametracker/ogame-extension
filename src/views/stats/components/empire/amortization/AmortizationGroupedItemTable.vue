@@ -113,16 +113,16 @@
     import { PropType } from 'vue';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { GroupedAmortizationItem } from '@stats/models/empire/amortization';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { MineBuildingType } from '@/shared/models/empire/amortization/models';
-    import { BuildingType } from '@/shared/models/ogame/buildings/BuildingType';
-    import { LifeformBuildingTypes } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologyTypes } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+    import { MineBuildingType } from '@ogame-tracker/shared/models/empire/amortization/models';
+    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+    import { LifeformBuildingTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+    import { LifeformTechnologyTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
     import { GridTableColumn } from '../../common/GridTable.vue';
-    import { addCost, Cost } from '@/shared/models/ogame/common/Cost';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
+    import { addCost, Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
 
     interface TableItem {
         planet?: number;

@@ -1,13 +1,13 @@
-import { Message } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { _throw } from '../../shared/utils/_throw';
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { CombatReportModule } from './CombatReportModule';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '../../shared/messages/tracking/combat-reports';
-import { serviceWorkerUuid } from '@/shared/uuid';
-import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '@/shared/messages/tracking/misc';
-import { _logDebug } from '@/shared/utils/_log';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { CombatReportMessage, CombatReportUnknownMessage, NewCombatReportMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from '@ogame-tracker/shared/messages/tracking/combat-reports';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { _logDebug } from '@ogame-tracker/shared/utils/_log';
 
 export class CombatReportService implements MessageService {
     private readonly combatReportModule = new CombatReportModule();

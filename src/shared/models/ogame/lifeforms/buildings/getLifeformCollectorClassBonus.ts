@@ -1,5 +1,5 @@
-import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@/shared/models/empire/PlanetData";
+import { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
+import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
 import { PlayerClass } from "../../classes/PlayerClass";
 import { LifeformType } from "../LifeformType";
 import { ClassBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";

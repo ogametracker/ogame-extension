@@ -1,10 +1,10 @@
-import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
+import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
 import { ExpeditionsTranslations } from "./type";
 import { fr as ogamePremium } from '../../ogame/premium/fr';
 import { fr as ogameFactions } from '../../ogame/factions/fr';
-import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
+import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
+import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
 
 export const fr: RecursivePartial<ExpeditionsTranslations> = {header: 'Expéditions',
     tabHeaders: {

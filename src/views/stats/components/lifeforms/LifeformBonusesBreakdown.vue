@@ -129,17 +129,17 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { getLifeformLevel, getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { EmpireDataModule } from '@/views/stats/data/EmpireDataModule';
-    import { getPlanetLifeformTechnologyBoost } from '@/views/stats/models/lifeforms';
+    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { getLifeformLevel, getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+    import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+    import { ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+    import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
     export type LifeformBonusesBreakdownType<TKey extends string = string> = {
         key: TKey;

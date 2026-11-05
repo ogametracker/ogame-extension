@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-    import { ResourceConversionMode } from '@/shared/models/settings/Settings';
+    import { ResourceConversionMode } from '@ogame-tracker/shared/models/settings/Settings';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SettingsDataModule } from '../../data/SettingsDataModule';
 

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-    import { OgameTrackerUniverseHistoryAllianceMembers } from '@/shared/db/schema/universe-history';
+    import { OgameTrackerUniverseHistoryAllianceMembers } from '@ogame-tracker/shared/db/schema/universe-history';
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
     import { GridTableColumn } from '../common/GridTable.vue';

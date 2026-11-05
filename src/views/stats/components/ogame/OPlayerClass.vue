@@ -1,12 +1,12 @@
 <template>
     <div
-        class="o-defense"
+        class="o-player-class"
         :class="{
-            'o-defense--disabled': disabled,
-            'o-defense--fade': fade,
+            'o-player-class--disabled': disabled,
+            'o-player-class--fade': fade,
         }"
         :style="{
-            'background-image': `url(/img/ogame/defense/${image}.jpg)`,
+            'background-image': `url(/img/ogame/player-classes/${image}.png)`,
             'font-size': size,
         }"
         v-on="$listeners"
@@ -17,18 +17,16 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { DefenseType } from '@/shared/models/ogame/defenses/DefenseType';
-    import { DefenseTypes } from '@/shared/models/ogame/defenses/DefenseTypes';
+    import { PlayerClass, PlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
 
     @Component({})
-    export default class ODefense extends Vue {
-
+    export default class OPlayerClass extends Vue {
         @Prop({
             required: true,
-            type: Number as PropType<DefenseType>,
-            validator: (value: number) => (DefenseTypes as number[]).includes(value),
+            type: String as PropType<PlayerClass>,
+            validator: (value: string) => (PlayerClasses as string[]).includes(value)
         })
-        private defense!: DefenseType;
+        private playerClass!: PlayerClass;
 
         @Prop({ required: false, type: String, default: '32px' })
         private size!: string;
@@ -41,22 +39,18 @@
 
 
         private get image() {
-            return this.imageMap[this.defense];
+            return this.imageMap[this.playerClass];
         }
-        private readonly imageMap: Record<DefenseType, string> = {
-            [DefenseType.rocketLauncher]: 'rocket-launcher',
-            [DefenseType.lightLaser]: 'light-laser',
-            [DefenseType.heavyLaser]: 'heavy-laser',
-            [DefenseType.gaussCannon]: 'gauss-cannon',
-            [DefenseType.ionCannon]: 'ion-cannon',
-            [DefenseType.plasmaTurret]: 'plasma-turret',
-            [DefenseType.smallShieldDome]: 'small-shield-dome',
-            [DefenseType.largeShieldDome]: 'large-shield-dome',
+        private readonly imageMap: Record<PlayerClass, string> = {
+            [PlayerClass.collector]: 'collector',
+            [PlayerClass.discoverer]: 'explorer',
+            [PlayerClass.general]: 'general',
+            [PlayerClass.none]: 'none',
         };
     }
 </script>
 <style lang="scss" scoped>
-    .o-defense {
+    .o-player-class {
         width: 1em;
         height: 1em;
         display: inline-block;

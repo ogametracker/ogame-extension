@@ -1,7 +1,7 @@
-import { Message } from "../shared/messages/Message";
-import { MessageType } from "../shared/messages/MessageType";
-import { _log, _logDebug, _logError, _logWarning } from "../shared/utils/_log";
-import { _throw } from "../shared/utils/_throw";
+import { Message } from "@ogame-tracker/shared/messages/Message";
+import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
+import { _log, _logDebug, _logError, _logWarning } from "@ogame-tracker/shared/utils/_log";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
 import { CombatReportService } from "./combat-reports/CombatReportService";
 import { DebrisFieldReportService } from "./debris-fields-reports/DebrisFieldReportService";
 import { EmpireService } from "./empire/EmpireService";
@@ -13,8 +13,8 @@ import { ServerSettingsService } from "./server-settings/ServerSettingsService";
 import { SettingsService } from "./settings/SettingsService";
 import { UniverseHistoryService } from "./universe-history/UniverseHistoryService";
 import { UniversesAndAccountsService } from "./universes-and-accounts/UniversesAndAccountsService";
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { serviceWorkerUuid } from "@/shared/uuid";
+import { broadcastMessage } from "@ogame-tracker/shared/communication/broadcastMessage";
+import { serviceWorkerUuid } from "@ogame-tracker/shared/uuid";
 
 export const settingsService = new SettingsService();
 

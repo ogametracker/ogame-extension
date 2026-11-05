@@ -169,18 +169,18 @@
 
 <script setup lang="ts">
     import { computed } from 'vue';
-    import type { ExpeditionTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
+    import type { ExpeditionTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+    import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
     import Notification from '../Notification.vue';
-    import ExpeditionEventResourcesIcon from '@/views/_shared/components/ExpeditionEventResourcesIcon.vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { type ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { ExpeditionFindableShipTypes } from '@/shared/models/expeditions/ExpeditionEvents';
-    import OResource from '@/views/_shared/components/ogame/OResource.vue';
-    import OShip from '@/views/_shared/components/ogame/OShip.vue';
-    import OItem from '@/views/_shared/components/ogame/OItem.vue';
+    import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
+    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+    import { type ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+    import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+    import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
+    import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
     import { formatNumber, translate } from '../../i18n';
     import { useSettingsStore } from '../../stores/settings';
 

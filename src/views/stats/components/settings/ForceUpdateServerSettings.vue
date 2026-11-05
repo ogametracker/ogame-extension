@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
-    import { sendMessage } from '@/shared/communication/sendMessage';
-    import { MessageType } from '@/shared/messages/MessageType';
-    import { ForceUpdateServerSettingsMessage } from '@/shared/messages/server-settings';
+    import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+    import { ForceUpdateServerSettingsMessage } from '@ogame-tracker/shared/messages/server-settings';
     import { Component, Vue } from 'vue-property-decorator';
     import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
     import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';

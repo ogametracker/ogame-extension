@@ -17,8 +17,8 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import { PropType } from 'vue';
-    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { ResearchTypes } from '@/shared/models/ogame/research/ResearchTypes';
+    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+    import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 
     @Component({})
     export default class OResearch extends Vue {

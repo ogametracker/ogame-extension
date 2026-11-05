@@ -86,10 +86,10 @@
 
 <script setup lang="ts">
     import { computed } from 'vue';
-    import type { CombatTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+    import type { CombatTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
     import Notification from '../Notification.vue';
-    import OResource from '@/views/_shared/components/ogame/OResource.vue';
+    import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
     import { formatNumber, translate } from '../../i18n';
     import { useSettingsStore } from '../../stores/settings';
 

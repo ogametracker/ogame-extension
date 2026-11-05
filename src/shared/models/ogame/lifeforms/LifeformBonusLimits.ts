@@ -1,4 +1,4 @@
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
+import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
 import { BuildingType } from "../buildings/BuildingType";
 import { ResearchType } from "../research/ResearchType";
 import { LifeformBuildingType } from "./LifeformBuildingType";

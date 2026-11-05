@@ -37,9 +37,9 @@
 </template>
 
 <script lang="ts">
-    import { DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState } from '@/shared/db/schema/universe-history';
-    import { compareCoordinates, Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+    import { DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState } from '@ogame-tracker/shared/db/schema/universe-history';
+    import { compareCoordinates, Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
     import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator';
     import { UniverseHistoryDataModule, UniverseHistoryPlanetHistory } from '../../data/UniverseHistoryDataModule';
 

@@ -1,9 +1,9 @@
-import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logError } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { RawDebrisFieldMessageData, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
-import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
-import { getPlayerDatabase } from "@/shared/db/access";
+import { TryActionResult } from "@ogame-tracker/shared/TryActionResult";
+import { _log, _logError } from "@ogame-tracker/shared/utils/_log";
+import { _throw } from "@ogame-tracker/shared/utils/_throw";
+import { RawDebrisFieldMessageData, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "@ogame-tracker/shared/messages/tracking/debris-fields";
+import { DebrisFieldReport } from "@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport";
+import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
 
 interface DebrisFieldReportResult {
     report: DebrisFieldReport;

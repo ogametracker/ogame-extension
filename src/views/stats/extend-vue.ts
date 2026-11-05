@@ -1,4 +1,4 @@
-import { $i18n } from '@/shared/i18n/extension/$i18n';
+import { $i18n } from '@stats/i18n';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { SettingsDataModule } from './data/SettingsDataModule';

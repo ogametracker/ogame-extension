@@ -18,7 +18,7 @@
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
     import { useLegacyComponentListeners } from './useLegacyComponentListeners';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
+    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
     export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
 
