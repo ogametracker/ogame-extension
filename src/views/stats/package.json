@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "build": "tsx _build-hook.ts && npm run typecheck && vite build",
+        "build": "tsx _build-hook.mts && npm run typecheck && vite build",
         "typecheck": "vue-tsc --noEmit",
         "lint": "oxlint --fix --config ../../../.oxlintrc.json .",
         "lint:check": "oxlint --config ../../../.oxlintrc.json .",

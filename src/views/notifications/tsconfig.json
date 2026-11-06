@@ -15,6 +15,6 @@
             "vue": ["./node_modules/vue"]
         }
     },
-    "include": ["**/*.ts", "**/*.vue"],
+    "include": ["**/*.ts", "**/*.vue", "vite.config.mts"],
     "exclude": ["**/node_modules", "**/dist"]
 }

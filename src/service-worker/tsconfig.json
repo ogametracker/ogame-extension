@@ -12,6 +12,6 @@
         "lib": ["esnext", "dom", "dom.iterable"],
         "noEmit": true
     },
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts", "vite.config.mts"],
     "exclude": ["**/node_modules", "**/dist"]
 }

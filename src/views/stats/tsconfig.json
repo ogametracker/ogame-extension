@@ -17,6 +17,6 @@
         },
         "noEmit": true
     },
-    "include": ["**/*.ts", "**/*.vue"],
+    "include": ["**/*.ts", "**/*.vue", "_build-hook.mts", "vite.config.mts"],
     "exclude": ["**/node_modules", "**/dist"]
 }

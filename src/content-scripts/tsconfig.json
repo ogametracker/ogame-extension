@@ -10,6 +10,6 @@
         "types": ["chrome", "node"],
         "lib": ["esnext", "dom", "dom.iterable"]
     },
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts", "vite.config.mts"],
     "exclude": ["**/node_modules", "**/dist"]
 }
