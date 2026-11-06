@@ -1,26 +1,16 @@
 import { addDays, addMonths, addWeeks, addYears, startOfMonth, startOfWeek, startOfYear, subDays, subMonths, subWeeks, subYears } from 'date-fns';
 import startOfDay from 'date-fns/startOfDay';
 
-export type DateRangeType = 'day' | 'week' | 'month' | 'year';
-export type FullDateRangeType = DateRangeType | 'all';
+import type { DateRange, NormalDateRange } from '@ogame-tracker/shared/models/settings/DateRange';
 
-interface NormalDateRange {
-    type: DateRangeType;
-    skip: number;
-    take: number;
-    label: string;
+interface RangeDays {
+    firstDay: Date;
+    lastDay: Date;
 }
 
-interface AllDateRange {
-    type: 'all';
-    label?: undefined;
-}
-
-export type DateRange = NormalDateRange | AllDateRange;
-
-export function getRangeDays(range: AllDateRange): | null;
-export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date };
-export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date } | null {
+export function getRangeDays(range: NormalDateRange): RangeDays;
+export function getRangeDays(range: DateRange): RangeDays | null;
+export function getRangeDays(range: DateRange): RangeDays | null {
 
     let firstRangeDayIncl: Date;
     let lastRangeDayExcl: Date;
@@ -66,7 +56,7 @@ export function getRangeDays(range: DateRange): { firstDay: Date; lastDay: Date 
 
 export function isInRange(date: number | Date, range: DateRange): boolean {
     const rangeDays = getRangeDays(range);
-    if(rangeDays == null) {
+    if (rangeDays == null) {
         return true;
     }
 
