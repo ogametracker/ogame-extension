@@ -2,7 +2,7 @@
     <div class="lifeform-planet-bonuses" :style="`--bonus-types: ${types.length}`">
         <div class="header-row">
             <div class="title">
-                <slot v-if="$scopedSlots.header != null" name="header" />
+                <slot v-if="$slots.header != null" name="header" />
                 <span v-else v-text="header" />
             </div>
 
@@ -36,7 +36,7 @@
                             :fade-decimals="false"
                             style="--small-fraction-size: 0.75em"
                         />
-                        <span 
+                        <span
                             v-if="
                                 limits[type.key](Number.MAX_SAFE_INTEGER) == getTotalPlanetBonus(planets[planet.id], type.key)
                                 || limits[type.key](Number.MIN_SAFE_INTEGER) == getTotalPlanetBonus(planets[planet.id], type.key)
@@ -49,21 +49,21 @@
                 <template v-if="expandedPlanets[planet.id] == true">
                     <div v-for="building in buildingsSorted" :key="building" class="tech-row">
                         <template v-if="
-                            (LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building) && planet.lifeformBuildings[building] > 0)
+                            (!isStandardBuilding(building) && LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building) && planet.lifeformBuildings[building] > 0)
                             || forceIncludeBuildings.includes(building)
                         ">
                             <div />
-                            <div v-if="BuildingTypes.includes(building)" class="tech">
+                            <div v-if="isStandardBuilding(building)" class="tech">
                                 <o-building :building="building" size="24px" />
-                                <span v-text="$i18n.$t.ogame.buildings[building] + ` (${planet.buildings[building]})`" />
+                                <span v-text="translations().ogame.buildings[building] + ` (${(planet.buildings[building as keyof typeof planet.buildings] ?? 0)})`" />
                             </div>
                             <div v-else class="tech">
                                 <o-lifeform-building :building="building" size="24px" />
-                                <span v-text="$i18n.$t.ogame.lifeformBuildings[building] + ` (${planet.lifeformBuildings[building]})`" />
+                                <span v-text="translations().ogame.lifeformBuildings[building] + ` (${planet.lifeformBuildings[building]})`" />
                             </div>
                             <span v-for="type in types" :key="type.key" class="bonus">
                                 <decimal-number
-                                    :value="planets[planet.id].bonusByBuilding[type.key][building] * 100"
+                                    :value="(planets[planet.id].bonusByBuilding[type.key][building] ?? 0) * 100"
                                     suffix="%"
                                     :digits="3"
                                     :fade-decimals="false"
@@ -77,7 +77,7 @@
                         <div />
                         <div>
                             <router-link :to="{ name: researchBonusBreakdownRouteName }" style="text-decoration: none">
-                                <span v-text="$i18n.$t.extension.empire.lifeforms.globalResearchBonus" />
+                                <span v-text="translations().extension.empire.lifeforms.globalResearchBonus" />
                                 <span class="mdi mdi-open-in-new" />
                             </router-link>
                         </div>
@@ -98,100 +98,87 @@
 </template>
 
 <script lang="ts">
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 
-    export type LifeformPlanetBonusesType<TKey extends string = string> = {
-        key: TKey;
-        label: string;
-    }
+export type LifeformPlanetBonusesType<TKey extends string = string> = {
+    key: TKey;
+    label: string;
+}
 
-    export type LifeformPlanetBonuses<TKey extends string = string> = {
-        planet: PlanetData;
-        bonusByBuilding: Record<TKey, Record<LifeformBuildingType, number>>;
-    }
-
-    @Component({})
-    export default class LifeformBonusesBreakdown extends Vue {
-
-        @Prop({ required: false, type: String, default: () => '' })
-        private header!: string;
-
-        @Prop({ required: true, type: Array as PropType<LifeformPlanetBonusesType[]> })
-        private types!: LifeformPlanetBonusesType[];
-
-        @Prop({ required: true, type: Object as PropType<Record<string, number>> })
-        private technologyBonuses!: Record<string, number>;
-
-        @Prop({ required: false, type: Boolean })
-        private noTechnologyBonuses!: boolean;
-
-        @Prop({ required: true, type: Object as PropType<Record<number, LifeformPlanetBonuses>> })
-        private planets!: Record<number, LifeformPlanetBonuses>;
-
-        @Prop({ required: true, type: Array as PropType<LifeformBuildingType[]> })
-        private buildings!: LifeformBuildingType[];
-
-        @Prop({ required: false, type: Array as PropType<LifeformBuildingType[]>, default: () => [] })
-        private forceIncludeBuildings!: LifeformBuildingType[];
-
-        @Prop({ required: true, type: Object as PropType<Record<string, (value: number) => number>> })
-        private limits!: Record<string, (value: number) => number>;
-
-        @Prop({ required: true, type: String })
-        private researchBonusBreakdownRouteName!: string;
-
-        private get buildingsSorted(): LifeformBuildingType[] {
-            return [...this.buildings].sort((a, b) => a - b);
-        }
-
-        private readonly BuildingTypes = BuildingTypes;
-
-        private readonly LifeformBuildingTypesByLifeform = LifeformBuildingTypesByLifeform;
-
-        private readonly expandedPlanets: Partial<Record<number, boolean>> = {};
-
-        private togglePlanet(id: number) {
-            Vue.set(this.expandedPlanets, id, !(this.expandedPlanets[id] ?? false));
-        }
-
-        private formatCoordinates(coords: Coordinates) {
-            return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
-        }
-
-        private getTotalPlanetBonus(planet: LifeformPlanetBonuses, type: string): number {
-            const bonus = Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + cur, 0)
-                + (this.noTechnologyBonuses ? 0 : this.technologyBonuses[type]);
-
-            return this.limits[type](bonus);
-        }
-
-        private get averageBonus(): Record<string, number> {
-            const result: Record<string, number> = {};
-
-            this.types.forEach(type => {
-                const total = Object.values(this.planets)
-                    .map(planet => this.getTotalPlanetBonus(planet, type.key))
-                    .reduce((total, cur) => total + cur, 0);
-                
-                result[type.key] = total / this.empirePlanets.length;
-            });
-
-            return result;
-        }
-
-        private get empirePlanets() {
-            return EmpireDataModule.empire.planetOrder
-                .map(id => EmpireDataModule.empire.planets[id])
-                .filter(planet => !planet.isMoon) as PlanetData[]
-        }
-    }
+export type LifeformPlanetBonuses<TKey extends string = string> = {
+    planet: PlanetData;
+    bonusByBuilding: Record<TKey, Partial<Record<LifeformBuildingType | BuildingType, number>>>;
+}
 </script>
+
+<script setup lang="ts">
+import { computed, reactive } from 'vue';
+import { translations } from '@stats/i18n';
+import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { useEmpireStore } from '@stats/data/EmpireDataModule';
+import type { PropType } from 'vue';
+import type { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+
+const props = defineProps({
+    header: { required: false, type: String, default: () => '' },
+    types: { required: true, type: Array as PropType<LifeformPlanetBonusesType[]> },
+    technologyBonuses: { required: true, type: Object as PropType<Record<string, number>> },
+    noTechnologyBonuses: { required: false, type: Boolean },
+    planets: { required: true, type: Object as PropType<Record<number, LifeformPlanetBonuses>> },
+    buildings: { required: true, type: Array as PropType<(LifeformBuildingType | BuildingType)[]> },
+    forceIncludeBuildings: { required: false, type: Array as PropType<(LifeformBuildingType | BuildingType)[]>, default: () => [] },
+    limits: { required: true, type: Object as PropType<Record<string, (value: number) => number>> },
+    researchBonusBreakdownRouteName: { required: true, type: String },
+});
+
+const empireStore = useEmpireStore();
+
+function isStandardBuilding(building: BuildingType | LifeformBuildingType): building is BuildingType {
+    return (BuildingTypes as readonly number[]).includes(building);
+}
+
+const buildingsSorted = computed<(LifeformBuildingType | BuildingType)[]>(() => [...props.buildings].sort((a, b) => a - b));
+
+const expandedPlanets = reactive<Partial<Record<number, boolean>>>({});
+
+function togglePlanet(id: number) {
+    expandedPlanets[id] = !(expandedPlanets[id] ?? false);
+}
+
+function formatCoordinates(coords: Coordinates) {
+    return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
+}
+
+function getTotalPlanetBonus(planet: LifeformPlanetBonuses, type: string): number {
+    const bonus = Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + (cur ?? 0), 0)
+        + (props.noTechnologyBonuses ? 0 : props.technologyBonuses[type]);
+
+    return props.limits[type](bonus);
+}
+
+const averageBonus = computed<Record<string, number>>(() => {
+    const result: Record<string, number> = {};
+
+    props.types.forEach(type => {
+        const total = Object.values(props.planets)
+            .map(planet => getTotalPlanetBonus(planet, type.key))
+            .reduce((total, cur) => total + cur, 0);
+
+        result[type.key] = total / empirePlanets.value.length;
+    });
+
+    return result;
+});
+
+const empirePlanets = computed(() => {
+    return empireStore.empire.planetOrder
+        .map(id => empireStore.empire.planets[id])
+        .filter(planet => !planet.isMoon) as PlanetData[]
+});
+</script>
+
 <style lang="scss" scoped>
     .lifeform-planet-bonuses {
         --border-radius: 4px;
