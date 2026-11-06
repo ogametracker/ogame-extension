@@ -54,6 +54,10 @@ export interface ExpeditionsTranslations {
             shipFindBonus: string;
             darkMatterFindBonus: string;
             discovererBonus: string;
+            resourceFindItemBonus: string;
+            improvedChancesItemBonus: string;
+            active: string;
+            inactive: string;
         };
 
         maximumFinds: string;

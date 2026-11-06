@@ -80,6 +80,10 @@ export const en: ExpeditionsTranslations = {
             shipFindBonus: 'Bonus ship finds',
             darkMatterFindBonus: 'Bonus Dark Matter finds',
             discovererBonus: 'Discoverer class bonus',
+            resourceFindItemBonus: 'Resource finds item bonus',
+            improvedChancesItemBonus: 'Expedition Computer',
+            active: 'active',
+            inactive: 'not active',
         },
 
         maximumFinds: 'Maximum Finds',

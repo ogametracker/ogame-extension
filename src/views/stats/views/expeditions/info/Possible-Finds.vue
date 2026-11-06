@@ -4,8 +4,16 @@
             <GridTable inline :columns="infoColumns" :items="infoItems" no-header>
                 <template #cell-value="{ value, item }">
                     <OPlayerClass v-if="item.type == 'playerClass'" :player-class="value" />
+                    <span v-else-if="item.type == 'string'" v-text="value" />
                     <span v-else-if="item.type == 'number'" v-text="value" />
-                    <span v-else v-text="formatNumber(value * 100, percentageFormat) + '%'" />
+                    <DecimalNumber
+                        v-else
+                        :value="value * 100"
+                        :digits="3"
+                        :fade-decimals="false"
+                        style="--small-fraction-size: 0.75em"
+                        suffix="%"
+                    />
                 </template>
             </GridTable>
 
@@ -100,8 +108,10 @@ import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes'
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 import { getExpeditionItemFindBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { isItemActive } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
+import { Item } from '@ogame-tracker/shared/models/ogame/items/Item.js';
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 
 type FindableUnits = {
     metal: number;
@@ -118,11 +128,6 @@ const empireStore = useEmpireStore();
 const serverSettingsStore = useServerSettingsStore();
 
 const sizes = ExpeditionEventSizes;
-
-const percentageFormat: Intl.NumberFormatOptions = {
-    maximumFractionDigits: 3,
-    minimumFractionDigits: 3,
-};
 
 const sizeColors = computed<Record<ExpeditionEventSize, string>>(() => {
     const colors = settingsStore.settings.colors.expeditions.sizes;
@@ -170,7 +175,11 @@ const infoColumns = computed<GridTableColumn<'label' | 'value'>[]>(() => {
 });
 
 const infoItems = computed<
-    { type: 'playerClass' | 'percentage' | 'number'; label: string; value: number | PlayerClass }[]
+    ((
+        | { type: 'playerClass'; value: PlayerClass }
+        | { type: 'percentage' | 'number'; value: number }
+        | { type: 'string'; value: string }
+    ) & { label: string })[]
 >(() => {
     const localInfo = info.value;
 
@@ -204,6 +213,18 @@ const infoItems = computed<
             type: 'percentage',
             label: translations().extension.expeditions.possibleFinds.info.discovererBonus,
             value: localInfo.discovererBonus,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.resourceFindItemBonus,
+            value: localInfo.resourceFindItemBonus,
+        },
+        {
+            type: 'string',
+            label: translations().extension.expeditions.possibleFinds.info.improvedChancesItemBonus,
+            value: localInfo.improvedChancesItemBonus
+                ? translations().extension.expeditions.possibleFinds.info.active
+                : translations().extension.expeditions.possibleFinds.info.inactive,
         },
     ];
 });
@@ -362,6 +383,21 @@ const info = computed(() => {
         return total + techBonus;
     }, 0);
 
+    const resourceFindItemBonus = getExpeditionItemFindBonus(
+        ExpeditionEventType.resources,
+        Object.values(empireStore.empire.planets).flatMap(planet => Object.keys(planet.activeItems) as ItemId[]),
+    );
+
+    const improvedChancesItemBonus = Object.values(empireStore.empire.planets)
+        .flatMap(planet => Object.keys(planet.activeItems) as ItemId[])
+        .map(itemId => Items[itemId])
+        .find(
+            (item): item is Item & { effect: { type: 'expeditionImprovedChances' } } =>
+                item.effect?.type == 'expeditionImprovedChances',
+        )
+        ? true
+        : false;
+
     return {
         playerClass: empire.playerClass,
         ecoSpeed: serverSettingsStore.serverSettings.speed.economy,
@@ -369,6 +405,8 @@ const info = computed(() => {
         shipFindBonus,
         discovererBonus,
         darkMatterBonus,
+        resourceFindItemBonus,
+        improvedChancesItemBonus,
     };
 });
 
@@ -398,12 +436,6 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
     }).sort((a, b) => b.score - a.score)[0];
 
     const firstPlanet = Object.values(empireStore.empire.planets).find(p => !p.isMoon) as PlanetData | undefined;
-    const activeItems = firstPlanet?.activeItems ?? {};
-    const now = Date.now();
-    const resourceSizeBoost = getExpeditionItemFindBonus(
-        ExpeditionEventType.resources,
-        (Object.keys(activeItems) as ItemId[]).filter(id => isItemActive(now, activeItems[id])),
-    );
 
     return createRecord(ExpeditionEventSizes, size =>
         findBaseAmounts[size].map<FindableUnits>(base => {
@@ -413,9 +445,11 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
                 * pathfinderFactor
                 * classFactor
                 * (1 + localInfo.resourceFindBonus)
-                * (1 + resourceSizeBoost);
+                * (1 + localInfo.resourceFindItemBonus);
+
             const shipUnits =
                 (topPointsFactors * base * pathfinderFactor * classFactor * (1 + localInfo.shipFindBonus)) / 2;
+
             const maxShipUnitsConverted =
                 Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
 
