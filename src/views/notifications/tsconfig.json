@@ -1,25 +1,22 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
         "target": "esnext",
         "module": "esnext",
         "strict": true,
         "moduleResolution": "bundler",
+        "allowArbitraryExtensions": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "useDefineForClassFields": true,
-        "sourceMap": true,
+        "noEmit": true,
         "types": [
             "chrome"
         ],
         "lib": [
             "esnext",
             "dom",
-            "dom.iterable",
-            "scripthost"
+            "dom.iterable"
         ],
-        "baseUrl": ".",
         "paths": {
             "vue": [
                 "./node_modules/vue"

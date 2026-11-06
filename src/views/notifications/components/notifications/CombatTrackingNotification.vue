@@ -1,12 +1,12 @@
 <template>
-    <notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
+    <Notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
         <template #message>
             <div v-if="notification.count > 0" v-text="message" />
 
             <template v-if="hasLoot">
                 <hr />
                 <div class="resources-grid" v-if="showSimplified">
-                    <o-resource :resource="ResourceType.metal" />
+                    <OResource :resource="ResourceType.metal" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.metal < 0,
@@ -15,7 +15,7 @@
                         v-text="formatNumber(notification.resources.metal)"
                     />
 
-                    <o-resource :resource="ResourceType.crystal" />
+                    <OResource :resource="ResourceType.crystal" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.crystal < 0,
@@ -24,7 +24,7 @@
                         v-text="formatNumber(notification.resources.crystal)"
                     />
 
-                    <o-resource :resource="ResourceType.deuterium" />
+                    <OResource :resource="ResourceType.deuterium" />
                     <span
                         :class="{
                             'negative-loot': notification.resources.deuterium < 0,
@@ -81,7 +81,7 @@
                 </div>
             </template>
         </template>
-    </notification>
+    </Notification>
 </template>
 
 <script setup lang="ts">

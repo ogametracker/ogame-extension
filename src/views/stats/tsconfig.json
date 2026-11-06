@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
+        "rootDir": "../..",
         "target": "esnext",
         "module": "esnext",
         "strict": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
+        "allowArbitraryExtensions": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "useDefineForClassFields": true,
         "sourceMap": true,
         "types": [
             "chrome"
@@ -16,19 +15,20 @@
         "lib": [
             "esnext",
             "dom",
-            "dom.iterable",
-            "scripthost"
+            "dom.iterable"
         ],
         "jsx": "preserve",
         "importHelpers": true,
         "experimentalDecorators": true,
-        "baseUrl": ".",
         "paths": {
             "@stats/*": [
                 "./*"
             ],
             "vue": [
                 "./node_modules/vue"
+            ],
+            "vue/types/*": [
+                "./node_modules/vue/types/*"
             ]
         }
     },

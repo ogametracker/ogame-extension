@@ -1,8 +1,8 @@
 <template>
     <span class="tri-resource">
-        <o-resource :resource="ResourceType.metal" :size="size" />
-        <o-resource :resource="ResourceType.crystal" :size="size" />
-        <o-resource :resource="ResourceType.deuterium" :size="size" />
+        <OResource :resource="ResourceType.metal" :size="size" />
+        <OResource :resource="ResourceType.crystal" :size="size" />
+        <OResource :resource="ResourceType.deuterium" :size="size" />
     </span>
 </template>
 

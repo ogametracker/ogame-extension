@@ -1,5 +1,5 @@
 <template>
-    <notification type="info" :title="title" :timeout="10000" @remove="emit('remove')">
+    <Notification type="info" :title="title" :timeout="10000" @remove="emit('remove')">
         <template #message>
             <div v-text="message" />
 
@@ -7,7 +7,7 @@
                 <hr />
                 <div class="result-grid">
                     <template v-for="lifeform in notification.newLifeforms" :key="lifeform">
-                        <o-lifeform :lifeform="lifeform" class="icon" />
+                        <OLifeform :lifeform="lifeform" class="icon" />
                         <span v-text="translate(t => t.ogame.lifeforms[lifeform])" />
                     </template>
                 </div>
@@ -18,7 +18,7 @@
                 <div class="result-grid xp-grid">
                     <template v-for="lifeform in ValidLifeformTypes" :key="lifeform">
                         <template v-if="notification.lifeformExperience[lifeform] > 0">
-                            <o-lifeform :lifeform="lifeform" class="icon" />
+                            <OLifeform :lifeform="lifeform" class="icon" />
                             <div class="xp-column">
                                 <span v-text="translate(t => t.ogame.lifeforms[lifeform])" />
                                 <span v-text="`+${formatNumber(notification.lifeformExperience[lifeform])} XP`" />
@@ -74,7 +74,7 @@
                 </template>
             </div>
         </template>
-    </notification>
+    </Notification>
 </template>
 
 <script setup lang="ts">

@@ -2,6 +2,7 @@
   "name": "@ogame-tracker/notifications",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "npm run typecheck && vite build",
     "typecheck": "vue-tsc --noEmit"
@@ -20,6 +21,7 @@
     "vite": "8.3.6",
     "vue-tsc": "3.3.14",
     "@types/chrome": "0.0.208",
+    "@types/node": "26.6.6",
     "@types/uuid": "8.3.4"
   }
 }

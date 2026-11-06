@@ -3,21 +3,17 @@
         "target": "esnext",
         "module": "esnext",
         "strict": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "useDefineForClassFields": true,
-        "sourceMap": true,
+        "noEmit": true,
         "types": [
             "chrome"
         ],
         "lib": [
             "esnext",
             "dom",
-            "dom.iterable",
-            "scripthost"
+            "dom.iterable"
         ]
     },
     "include": [

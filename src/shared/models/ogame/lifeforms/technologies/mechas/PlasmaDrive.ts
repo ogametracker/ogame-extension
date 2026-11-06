@@ -36,9 +36,7 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
     }
 
     public appliesTo(ship: ShipType): boolean {
-        return (NonStationaryShipTypes as ShipType[])
-            .filter(s => s != ShipType.deathStar)
-            .includes(ship);
+        return ship !== ShipType.deathStar && NonStationaryShipTypes.some(type => type === ship);
     }
 
     public getStatsBonus(ship: ShipType, level: number): StatsBonus {

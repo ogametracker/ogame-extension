@@ -1,5 +1,5 @@
 <template>
-    <notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
+    <Notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
         <template #message>
             <div v-text="message" />
 
@@ -8,7 +8,7 @@
                 <div class="resources-grid" v-if="showSimplified">
                     <template v-for="resource in ResourceTypes" :key="resource">
                         <template v-if="notification.resources[resource] > 0">
-                            <o-resource :resource="resource" />
+                            <OResource :resource="resource" />
                             <span v-text="formatNumber(notification.resources[resource])"/>
                         </template>
                     </template>
@@ -29,7 +29,7 @@
                 </div>
             </template>
         </template>
-    </notification>
+    </Notification>
 </template>
 
 <script setup lang="ts">

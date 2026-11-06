@@ -1,5 +1,5 @@
 <template>
-    <notification
+    <Notification
         type="error"
         :title="title"
         :message="message"

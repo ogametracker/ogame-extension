@@ -1,5 +1,5 @@
 <template>
-    <notification type="info" :title="title" :timeout="10000" @remove="emit('remove')">
+    <Notification type="info" :title="title" :timeout="10000" @remove="emit('remove')">
         <template #message>
             <template v-if="hasSummary">
                 <h4 v-text="translate(t => t.extension.notifications.expeditionTracking.result.summary)" />
@@ -7,15 +7,15 @@
                 <template v-if="showSimplified">
                     <div class="result-grid resources-grid" v-if="foundResources">
                         <template v-if="notification.resources.metal > 0">
-                            <o-resource :resource="ResourceType.metal" class="icon" />
+                            <OResource :resource="ResourceType.metal" class="icon" />
                             <span v-text="formatNumber(notification.resources.metal)" />
                         </template>
                         <template v-if="notification.resources.crystal > 0">
-                            <o-resource :resource="ResourceType.crystal" class="icon" />
+                            <OResource :resource="ResourceType.crystal" class="icon" />
                             <span v-text="formatNumber(notification.resources.crystal)" />
                         </template>
                         <template v-if="notification.resources.deuterium > 0">
-                            <o-resource :resource="ResourceType.deuterium" class="icon" />
+                            <OResource :resource="ResourceType.deuterium" class="icon" />
                             <span v-text="formatNumber(notification.resources.deuterium)" />
                         </template>
 
@@ -24,18 +24,18 @@
                     </div>
 
                     <div class="result-grid" v-if="notification.darkMatter > 0">
-                        <o-resource resource="dark-matter" class="icon" />
+                        <OResource resource="dark-matter" class="icon" />
                         <span v-text="formatNumber(notification.darkMatter)" />
                     </div>
 
                     <div class="result-flex" v-if="notification.items.length > 0">
-                        <o-item v-for="(item, i) in notification.items" :key="i" :item="item" />
+                        <OItem v-for="(item, i) in notification.items" :key="i" :item="item" />
                     </div>
 
                     <div class="result-grid" v-if="foundShips">
                         <template v-for="ship in ships" :key="ship">
                             <template v-if="notification.ships[ship] > 0">
-                                <o-ship :ship="ship" class="icon" />
+                                <OShip :ship="ship" class="icon" />
                                 <span v-text="formatNumber(notification.ships[ship])" />
                             </template>
                         </template>
@@ -92,8 +92,8 @@
                 <template v-for="event in expeditionEvents" :key="event">
                     <template v-if="notification.events[event] > 0">
                         <span v-if="event == 'nothing'" class="mdi mdi-close icon" :style="{ color: eventColors?.nothing }" />
-                        <expedition-event-resources-icon v-else-if="event == 'resources'" size="24px" class="icon" />
-                        <o-ship v-else-if="event == 'fleet'" :ship="ShipType.battleship" size="24px" class="icon" />
+                        <ExpeditionEventResourcesIcon v-else-if="event == 'resources'" size="24px" class="icon" />
+                        <OShip v-else-if="event == 'fleet'" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'delay'"
                             class="mdi mdi-clock-outline icon"
@@ -104,9 +104,9 @@
                             class="mdi mdi-clock-outline icon"
                             :style="{ color: eventColors?.early }"
                         />
-                        <o-resource v-else-if="event == 'darkMatter'" resource="dark-matter" size="24px" class="icon" />
+                        <OResource v-else-if="event == 'darkMatter'" resource="dark-matter" size="24px" class="icon" />
                         <span v-else-if="event == 'combat'" class="mdi mdi-sword-cross icon" :style="{ color: eventColors?.combat }" />
-                        <o-item v-else-if="event == 'item'" :item="detroidItem" size="24px" class="icon" />
+                        <OItem v-else-if="event == 'item'" :item="detroidItem" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'trader'"
                             class="mdi mdi-swap-horizontal-bold icon"
@@ -164,7 +164,7 @@
                 </div>
             </template>
         </template>
-    </notification>
+    </Notification>
 </template>
 
 <script setup lang="ts">
