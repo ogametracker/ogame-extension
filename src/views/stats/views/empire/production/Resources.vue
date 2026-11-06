@@ -7,12 +7,12 @@
                     <span class="mdi mdi-menu-down" v-if="!showSettings" />
                     <span class="mdi mdi-menu-up" v-else />
 
-                    <span v-if="!showProductionSettings" v-text="$i18n.$t.extension.empire.production.settings.header" />
-                    <span v-else v-text="$i18n.$t.extension.empire.production.settings.applyAndClose" />
+                    <span v-if="!showProductionSettings" v-text="translations().extension.empire.production.settings.header" />
+                    <span v-else v-text="translations().extension.empire.production.settings.applyAndClose" />
                 </button>
                 <button @click="resetProductionSettings()" class="ml-2">
                     <span class="mdi mdi-refresh" />
-                    <span v-text="$i18n.$t.extension.empire.production.settings.reset" />
+                    <span v-text="translations().extension.empire.production.settings.reset" />
                 </button>
             </div>
 
@@ -28,15 +28,15 @@
                     <amortization-planet-settings-inputs
                         v-for="planetSetting in planetSettings"
                         :key="planetSetting.id"
-                        :value="planetSetting"
-                        :planetData="empire.planets[planetSetting.id]"
+                        :model-value="planetSetting"
+                        :planet-data="empire.planets[planetSetting.id] as PlanetData"
                         production-mode
                     />
                 </div>
             </div>
         </div>
 
-        <div v-text="$i18n.$t.extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" v-show="!showProductionSettings" />
+        <div v-text="translations().extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" v-show="!showProductionSettings" />
         <grid-table
             :columns="columns"
             :items="items"
@@ -55,14 +55,14 @@
             <template #header-deuterium>
                 <o-resource resource="deuterium" size="75px" />
             </template>
-            <template #header-total> {{ $i18n.$t.extension.common.resourceUnits }} </template>
+            <template #header-total> {{ translations().extension.common.resourceUnits }} </template>
             <template #header-totalConverted>
-                {{ `${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})` }}
+                {{ `${translations().extension.common.resourceUnits} (${conversionModeText})` }}
             </template>
 
             <template #header-productionSettings>
                 <div class="production-settings-mini-table">
-                    <span class="header" v-text="$i18n.$t.extension.empire.production.activeProductionSettings" />
+                    <span class="header" v-text="translations().extension.empire.production.activeProductionSettings" />
                     <o-building :building="BuildingType.metalMine" />
                     <o-building :building="BuildingType.crystalMine" />
                     <o-building :building="BuildingType.deuteriumSynthesizer" />
@@ -70,7 +70,7 @@
                     <o-building :building="BuildingType.fusionReactor" />
                     <o-ship :ship="ShipType.solarSatellite" />
                     <o-ship :ship="ShipType.crawler" />
-                    <span style="grid-column: auto / span 4" v-text="$i18n.$t.extension.empire.production.items" />
+                    <span style="grid-column: auto / span 4" v-text="translations().extension.empire.production.items" />
                 </div>
             </template>
 
@@ -96,28 +96,28 @@
                     <span v-text="settings.solarSatellite" />
                     <span v-text="settings.crawler" />
 
-                    <template v-for="(item, i) in getActiveItems(prodItem)">
-                        <span v-if="item == null" :key="i" />
-                        <o-item v-else :key="i" :item="item" size="24px" />
+                    <template v-for="(item, i) in getActiveItems(prodItem)" :key="i">
+                        <span v-if="item == null" />
+                        <o-item v-else :item="item" size="24px" />
                     </template>
                 </div>
             </template>
 
             <template #cell-breakdown="{ item }">
                 <div v-if="showBreakdown[item.planet.id]" class="breakdown-list">
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.basicIncome" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.mineProduction" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.consumption" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.lifeformBuildings" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.crawlers" />
-                    <div v-text="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.items" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.geologist" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.commandStaff" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.playerClass" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.allianceClass" />
-                    <div v-text="$i18n.$t.extension.empire.production.breakdown.lifeformTechnologies" />
-                    <div class="breakdown-sum" v-text="$i18n.$t.extension.common.sum" />
+                    <div v-text="translations().extension.empire.production.breakdown.basicIncome" />
+                    <div v-text="translations().extension.empire.production.breakdown.mineProduction" />
+                    <div v-text="translations().extension.empire.production.breakdown.consumption" />
+                    <div v-text="translations().extension.empire.production.breakdown.lifeformBuildings" />
+                    <div v-text="translations().extension.empire.production.breakdown.crawlers" />
+                    <div v-text="translations().ogame.research[ResearchType.plasmaTechnology]" />
+                    <div v-text="translations().extension.empire.production.breakdown.items" />
+                    <div v-text="translations().extension.empire.production.breakdown.geologist" />
+                    <div v-text="translations().extension.empire.production.breakdown.commandStaff" />
+                    <div v-text="translations().extension.empire.production.breakdown.playerClass" />
+                    <div v-text="translations().extension.empire.production.breakdown.allianceClass" />
+                    <div v-text="translations().extension.empire.production.breakdown.lifeformTechnologies" />
+                    <div class="breakdown-sum" v-text="translations().extension.common.sum" />
                 </div>
             </template>
             <template #cell-metal="{ value, item }">
@@ -246,539 +246,534 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { FusionReactor } from '@ogame-tracker/shared/models/ogame/buildings/FusionReactor';
-    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { ItemHash, ItemHashes } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
-    import { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
-    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
-    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import { PlanetProductionBreakdown } from '@ogame-tracker/shared/models/ogame/resource-production/types';
-    import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
-    import { getProductionBreakdowns } from '@stats/models/empire/production';
-    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
-    import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
-    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import AmortizationPlanetSettingsInputs from '@stats/components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
-    import AmortizationPlayerSettingsInputs from '@stats/components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
-    import { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
-    import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+import { translations } from '@stats/i18n';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { FusionReactor } from '@ogame-tracker/shared/models/ogame/buildings/FusionReactor';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
+import type { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+import type { PlanetProductionBreakdown } from '@ogame-tracker/shared/models/ogame/resource-production/types';
+import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
+import { getProductionBreakdowns } from '@stats/models/empire/production';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import type { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { useEmpireStore } from '@stats/data/EmpireDataModule';
+import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+import AmortizationPlanetSettingsInputs from '@stats/components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
+import AmortizationPlayerSettingsInputs from '@stats/components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
+import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 
-    interface ProductionItem {
-        planet: {
-            id: number;
-            name: string;
-            coordinates: Coordinates;
+interface ProductionItem {
+    planet: {
+        id: number;
+        name: string;
+        coordinates: Coordinates;
+    };
+    metal: PlanetProductionBreakdown;
+    crystal: PlanetProductionBreakdown;
+    deuterium: PlanetProductionBreakdown;
+    fusionReactorConsumption: number;
+    total: number;
+    totalConverted: number;
+
+    productionSettings: ProductionSettingsItem;
+    activeItems: ItemHash[];
+
+    isResourcePackageRow?: boolean;
+}
+
+interface ProductionSettingsItem {
+    metalMine: number;
+    crystalMine: number;
+    deuteriumSynthesizer: number;
+    solarPlant: number;
+    fusionReactor: number;
+    solarSatellite: number;
+    crawler: number;
+}
+
+const empireStore = useEmpireStore();
+
+const settingsStore = useSettingsStore();
+
+const serverSettingsStore = useServerSettingsStore();
+
+const showSettings = ref(false);
+
+const showProductionSettings = ref(false);
+
+const playerSettings = ref<AmortizationPlayerSettings>({
+    optimizeForResources: [],
+    officers: {
+        admiral: false,
+        commander: false,
+        engineer: false,
+        geologist: false,
+        technocrat: false,
+    },
+    playerClass: PlayerClass.none,
+    allianceClass: AllianceClass.none,
+    levelPlasmaTechnology: 0,
+    levelAstrophysics: 0,
+    numberOfUnusedRaidColonySlots: 0,
+    lifeformLevels: createRecord(ValidLifeformTypes, 0),
+});
+
+const planetSettings = ref<AmortizationPlanetSettings[]>([]);
+
+function onPlayerClassSelectionChanged(newClass: PlayerClass) {
+    if (!showProductionSettings.value) {
+        return;
+    }
+
+    const isCollector = newClass == PlayerClass.collector;
+    const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
+
+    planetSettings.value.forEach(p => {
+        p.crawlers.percentage = percentage;
+        p.crawlers.max = isCollector;
+    });
+}
+
+function resetProductionSettings() {
+    const localEmpire = empireStore.empire;
+
+    playerSettings.value = {
+        officers: { ...localEmpire.officers },
+        playerClass: localEmpire.playerClass,
+        allianceClass: localEmpire.allianceClass,
+        levelPlasmaTechnology: localEmpire.research[ResearchType.plasmaTechnology],
+        lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empireStore.lifeformExperience[lf])),
+
+        // don't matter
+        optimizeForResources: [],
+        levelAstrophysics: 0,
+        numberOfUnusedRaidColonySlots: 0,
+    };
+    planetSettings.value = getPlanetSettings();
+}
+
+const empire = computed<LocalPlayerData>(() => {
+    const localEmpire = JSON.parse(JSON.stringify(empireStore.empire)) as LocalPlayerData;
+    localEmpire.playerClass = playerSettings.value.playerClass;
+    localEmpire.allianceClass = playerSettings.value.allianceClass;
+    localEmpire.officers = playerSettings.value.officers;
+    localEmpire.research[ResearchType.plasmaTechnology] = playerSettings.value.levelPlasmaTechnology;
+
+    planetSettings.value.forEach(ps => {
+        const planet = localEmpire.planets[ps.id] as PlanetData;
+        planet.maxTemperature = ps.maxTemperature;
+        planet.coordinates.position = ps.position;
+        planet.activeItems = createRecord(ps.activeItems, 'permanent');
+        planet.buildings[BuildingType.metalMine] = ps.mines?.metalMine ?? _throw('no metal mine level');
+        planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
+        planet.buildings[BuildingType.deuteriumSynthesizer] = ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
+        planet.ships[ShipType.crawler] = ps.crawlers.max ? 10_000 : ps.crawlers.count;
+        planet.productionSettings[ShipType.crawler] = ps.crawlers.percentage;
+        planet.activeLifeform = ps.lifeform;
+        planet.activeLifeformTechnologies = ps.activeLifeformTechnologies;
+        planet.lifeformTechnologies = {
+            ...planet.lifeformTechnologies,
+            ...ps.lifeformTechnologyLevels,
         };
-        metal: PlanetProductionBreakdown;
-        crystal: PlanetProductionBreakdown;
-        deuterium: PlanetProductionBreakdown;
-        fusionReactorConsumption: number;
-        total: number;
-        totalConverted: number;
+        planet.lifeformBuildings = {
+            ...planet.lifeformBuildings,
+            ...ps.lifeformBuildingLevels,
+        };
+    });
 
-        productionSettings: ProductionSettingsItem;
-        activeItems: ItemHash[];
+    return localEmpire;
+});
 
-        isResourcePackageRow?: boolean;
-    }
+const resourcePackageAmounts = {
+    all: 0,
+    metal: 0,
+    crystal: 0,
+    deuterium: 0,
+};
 
-    interface ProductionSettingsItem {
-        metalMine: number;
-        crystalMine: number;
-        deuteriumSynthesizer: number;
-        solarPlant: number;
-        fusionReactor: number;
-        solarSatellite: number;
-        crawler: number;
-    }
+const conversionModeText = computed(() => {
+    return settingsStore.settings.conversionRates.mode == 'msu'
+        ? translations().extension.common.msu
+        : translations().extension.common.dsu;
+});
 
+function getPlanetSettings(): AmortizationPlanetSettings[] {
+    const isCollector = playerSettings.value.playerClass == PlayerClass.collector;
 
-    @Component({
-        components: {
-            ShowConvertedResourcesInCellsSettings,
-            AmortizationPlanetSettingsInputs,
-            AmortizationPlayerSettingsInputs,
+    return planets.value.map<AmortizationPlanetSettings>(planet => ({
+        include: true,
+        ignoreEmptyLifeformTechnologySlots: false,
+
+        id: planet.id,
+        name: planet.name,
+        position: planet.coordinates.position,
+        coordinates: planet.coordinates,
+        maxTemperature: planet.maxTemperature,
+        activeItems: Object.keys(planet.activeItems) as ItemHash[],
+        lifeform: planet.activeLifeform,
+        activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
+        lifeformBuildingLevels: { ...planet.lifeformBuildings },
+        lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
+        mines: {
+            metalMine: planet.buildings[BuildingType.metalMine],
+            crystalMine: planet.buildings[BuildingType.crystalMine],
+            deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
         },
-    })
-    export default class Resources extends Vue {
-        private readonly ItemHash = ItemHash;
-        private readonly BuildingType = BuildingType;
-        private readonly ShipType = ShipType;
-        private readonly ResearchType = ResearchType;
+        crawlers: {
+            percentage: !isCollector && planet.productionSettings[ShipType.crawler] > 100
+                ? 100
+                : planet.productionSettings[ShipType.crawler],
+            count: planet.ships[ShipType.crawler],
+            max: false,
+        },
+    }));
+}
 
-        private showSettings = false;
+const columns = computed<GridTableColumn<keyof ProductionItem | 'breakdown'>[]>(() => {
+    const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
+        {
+            key: 'planet',
+            label: translations().extension.empire.planet,
+        },
+        { key: 'breakdown', size: '200px' },
+        { key: 'metal' },
+        { key: 'crystal' },
+        { key: 'deuterium' },
+        {
+            key: 'total',
+            class: 'total-column',
+        },
+    ];
 
-        private showProductionSettings = false;
-        private playerSettings: AmortizationPlayerSettings = {
-            optimizeForResources: [],
-            officers: {
-                admiral: false,
-                commander: false,
-                engineer: false,
-                geologist: false,
-                technocrat: false,
-            },
-            playerClass: PlayerClass.none,
-            allianceClass: AllianceClass.none,
-            levelPlasmaTechnology: 0,
-            levelAstrophysics: 0,
-            numberOfUnusedRaidColonySlots: 0,
-            lifeformLevels: createRecord(ValidLifeformTypes, 0),
-        };
-        private planetSettings: AmortizationPlanetSettings[] = [];
-
-
-        @Watch('playerSettings.playerClass')
-        private onPlayerClassSelectionChanged(newClass: PlayerClass) {
-            if (!this.showProductionSettings) {
-                return;
-            }
-
-            const isCollector = newClass == PlayerClass.collector;
-            const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
-
-            this.planetSettings.forEach(p => {
-                p.crawlers.percentage = percentage;
-                p.crawlers.max = isCollector;
-            });
-        }
-
-        private mounted() {
-            this.resetProductionSettings();
-        }
-
-        private resetProductionSettings() {
-            const empire = EmpireDataModule.empire;
-
-            this.playerSettings = {
-                officers: { ...empire.officers },
-                playerClass: empire.playerClass,
-                allianceClass: empire.allianceClass,
-                levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
-                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(EmpireDataModule.lifeformExperience[lf])),
-
-                // don't matter
-                optimizeForResources: [],
-                levelAstrophysics: 0,
-                numberOfUnusedRaidColonySlots: 0,
-            };
-            this.planetSettings = this.getPlanetSettings();
-        }
-
-        private get empire(): LocalPlayerData {
-            const empire = JSON.parse(JSON.stringify(EmpireDataModule.empire)) as LocalPlayerData;
-            empire.playerClass = this.playerSettings.playerClass;
-            empire.allianceClass = this.playerSettings.allianceClass;
-            empire.officers = this.playerSettings.officers;
-            empire.research[ResearchType.plasmaTechnology] = this.playerSettings.levelPlasmaTechnology;
-
-            this.planetSettings.forEach(ps => {
-                const planet = empire.planets[ps.id] as PlanetData;
-                planet.maxTemperature = ps.maxTemperature;
-                planet.coordinates.position = ps.position;
-                planet.activeItems = createRecord(ps.activeItems, 'permanent');
-                planet.buildings[BuildingType.metalMine] = ps.mines?.metalMine ?? _throw('no metal mine level');
-                planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
-                planet.buildings[BuildingType.deuteriumSynthesizer] = ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
-                planet.ships[ShipType.crawler] = ps.crawlers.max ? 10_000 : ps.crawlers.count;
-                planet.productionSettings[ShipType.crawler] = ps.crawlers.percentage;
-                planet.activeLifeform = ps.lifeform;
-                planet.activeLifeformTechnologies = ps.activeLifeformTechnologies;
-                planet.lifeformTechnologies = {
-                    ...planet.lifeformTechnologies,
-                    ...ps.lifeformTechnologyLevels,
-                };
-                planet.lifeformBuildings = {
-                    ...planet.lifeformBuildings,
-                    ...ps.lifeformBuildingLevels,
-                };
-            });
-
-            return empire;
-        }
-
-        private readonly resourcePackageAmounts = {
-            all: 0,
-            metal: 0,
-            crystal: 0,
-            deuterium: 0,
-        };
-
-        private get conversionModeText() {
-            return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.extension.common.msu
-                : this.$i18n.$t.extension.common.dsu;
-        }
-
-        private getPlanetSettings(): AmortizationPlanetSettings[] {
-            const isCollector = this.playerSettings.playerClass == PlayerClass.collector;
-
-            return this.planets.map<AmortizationPlanetSettings>(planet => ({
-                include: true,
-                ignoreEmptyLifeformTechnologySlots: false,
-
-                id: planet.id,
-                name: planet.name,
-                position: planet.coordinates.position,
-                coordinates: planet.coordinates,
-                maxTemperature: planet.maxTemperature,
-                activeItems: Object.keys(planet.activeItems) as ItemHash[],
-                lifeform: planet.activeLifeform,
-                activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
-                lifeformBuildingLevels: { ...planet.lifeformBuildings },
-                lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
-                mines: {
-                    metalMine: planet.buildings[BuildingType.metalMine],
-                    crystalMine: planet.buildings[BuildingType.crystalMine],
-                    deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
-                },
-                crawlers: {
-                    percentage: !isCollector && planet.productionSettings[ShipType.crawler] > 100
-                        ? 100
-                        : planet.productionSettings[ShipType.crawler],
-                    count: planet.ships[ShipType.crawler],
-                    max: false,
-                },
-            }));
-        }
-
-        private get columns(): GridTableColumn<keyof ProductionItem | 'breakdown'>[] {
-            const result: GridTableColumn<keyof ProductionItem | 'breakdown'>[] = [
-                {
-                    key: 'planet',
-                    label: this.$i18n.$t.extension.empire.planet,
-                },
-                { key: 'breakdown', size: '200px' },
-                { key: 'metal' },
-                { key: 'crystal' },
-                { key: 'deuterium' },
-                {
-                    key: 'total',
-                    class: 'total-column',
-                },
-            ];
-
-            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
-                result.push({ key: 'totalConverted' });
-            }
-
-            result.push({
-                key: 'productionSettings',
-                class: 'production-settings-column',
-                headerClass: 'production-settings-header-column',
-                size: 'max-content',
-            });
-
-            return result;
-        }
-
-        private get maxItemCount() {
-            return Math.max(...this.items.map(i => i.activeItems.length));
-        }
-
-        private get productionBreakdowns() {
-            const lifeformExperience = createRecord(
-                ValidLifeformTypes,
-                lf => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lf]),
-            );
-
-            return getProductionBreakdowns(this.empire, lifeformExperience);
-        }
-
-        private get fusionReactorConsumptions(): Record<number, number> {
-            const result: Record<number, number> = {};
-
-            this.planets.forEach(planet => {
-                const fusionReactorConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], {
-                    planet: {
-                        position: planet.coordinates.position,
-                        temperature: planet.maxTemperature,
-                    },
-                    productionSettings: {
-                        metalMine: planet.productionSettings[BuildingType.metalMine],
-                        crystalMine: planet.productionSettings[BuildingType.crystalMine],
-                        deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
-                        fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
-                    },
-                    serverSettings: {
-                        economySpeed: ServerSettingsDataModule.serverSettings.speed.economy,
-                        crystalBoost: ServerSettingsDataModule.serverSettings.resourceProduction.productionFactorBonus.crystal,
-                    },
-                }).deuterium;
-
-                result[planet.id] = fusionReactorConsumption;
-            });
-
-            return result;
-        }
-
-        private get items(): ProductionItem[] {
-            if (this.planetSettings.length == 0) {
-                return [];
-            }
-
-            const productionBreakdowns = this.productionBreakdowns;
-            const fusionReactorConsumptions = this.fusionReactorConsumptions;
-
-            return this.planets.map<ProductionItem>(planet => {
-                const production = {
-                    metal: productionBreakdowns.metal.getProductionBreakdown(planet.id),
-                    crystal: productionBreakdowns.crystal.getProductionBreakdown(planet.id),
-                    deuterium: productionBreakdowns.deuterium.getProductionBreakdown(planet.id),
-                };
-
-                const settings = this.planetSettings.find(p => p.id == planet.id) ?? _throw('no planet settings found');
-
-                return {
-                    planet,
-                    ...production,
-                    fusionReactorConsumption: fusionReactorConsumptions[planet.id],
-                    total: production.metal.total + production.crystal.total + production.deuterium.total - fusionReactorConsumptions[planet.id],
-                    totalConverted: getMsuOrDsu({
-                        metal: production.metal.total,
-                        crystal: production.crystal.total,
-                        deuterium: production.deuterium.total - fusionReactorConsumptions[planet.id],
-                    }),
-
-                    productionSettings: {
-                        metalMine: planet.productionSettings[BuildingType.metalMine],
-                        crystalMine: planet.productionSettings[BuildingType.crystalMine],
-                        deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
-                        solarPlant: planet.productionSettings[BuildingType.solarPlant],
-                        fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
-
-                        solarSatellite: planet.productionSettings[ShipType.solarSatellite],
-                        crawler: settings.crawlers.percentage,
-                    },
-
-                    activeItems: settings.activeItems,
-                };
-            });
-        }
-
-        private get footerItems(): ProductionItem[] {
-            const productionBreakdowns = this.productionBreakdowns;
-            const productionPerHour = productionBreakdowns.getTotal();
-
-            const metalPerHour = productionPerHour.metal;
-            const crystalPerHour = productionPerHour.crystal;
-            const deuteriumPerHour = productionPerHour.deuterium - Object.values(this.fusionReactorConsumptions).reduce((total, cur) => total + cur, 0);
-            const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
-            const totalConvertedPerHour = getMsuOrDsu({
-                metal: metalPerHour,
-                crystal: crystalPerHour,
-                deuterium: deuteriumPerHour,
-            });
-
-            const metalPackages = metalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.metal);
-            const crystalPackages = crystalPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.crystal);
-            const deuteriumPackages = deuteriumPerHour * 24 * (this.resourcePackageAmounts.all + this.resourcePackageAmounts.deuterium);
-
-            return [
-                {
-                    planet: {
-                        id: 0,
-                        name: this.$i18n.$t.extension.empire.production.averagePerHour,
-                        coordinates: null!,
-                    },
-                    metal: { total: metalPerHour / this.planets.length } as PlanetProductionBreakdown,
-                    crystal: { total: crystalPerHour / this.planets.length } as PlanetProductionBreakdown,
-                    deuterium: { total: deuteriumPerHour / this.planets.length } as PlanetProductionBreakdown,
-                    fusionReactorConsumption: 0,
-                    total: totalPerHour / this.planets.length,
-                    totalConverted: totalConvertedPerHour / this.planets.length,
-
-                    productionSettings: null!,
-                    activeItems: [],
-                },
-                {
-                    planet: {
-                        id: 0,
-                        name: this.$i18n.$t.extension.empire.production.totalPerHour,
-                        coordinates: null!,
-                    },
-                    metal: { total: metalPerHour } as PlanetProductionBreakdown,
-                    crystal: { total: crystalPerHour } as PlanetProductionBreakdown,
-                    deuterium: { total: deuteriumPerHour } as PlanetProductionBreakdown,
-                    fusionReactorConsumption: 0,
-                    total: totalPerHour,
-                    totalConverted: totalConvertedPerHour,
-
-                    productionSettings: null!,
-                    activeItems: [],
-                },
-                {
-                    planet: {
-                        id: 0,
-                        name: this.$i18n.$t.extension.empire.production.totalPerDay,
-                        coordinates: null!,
-                    },
-                    metal: { total: metalPerHour * 24 } as PlanetProductionBreakdown,
-                    crystal: { total: crystalPerHour * 24 } as PlanetProductionBreakdown,
-                    deuterium: { total: deuteriumPerHour * 24 } as PlanetProductionBreakdown,
-                    fusionReactorConsumption: 0,
-                    total: totalPerHour * 24,
-                    totalConverted: totalConvertedPerHour * 24,
-
-                    productionSettings: null!,
-                    activeItems: [],
-                },
-                {
-                    planet: {
-                        id: 0,
-                        name: this.$i18n.$t.extension.empire.production.totalPerWeek,
-                        coordinates: null!,
-                    },
-                    metal: { total: metalPerHour * 24 * 7 } as PlanetProductionBreakdown,
-                    crystal: { total: crystalPerHour * 24 * 7 } as PlanetProductionBreakdown,
-                    deuterium: { total: deuteriumPerHour * 24 * 7 } as PlanetProductionBreakdown,
-                    fusionReactorConsumption: 0,
-                    total: totalPerHour * 24 * 7,
-                    totalConverted: totalConvertedPerHour * 24 * 7,
-
-                    productionSettings: null!,
-                    activeItems: [],
-                },
-                {
-                    isResourcePackageRow: true,
-                    planet: {
-                        id: 0,
-                        name: 'row-for-resource-packages',
-                        coordinates: null!,
-                    },
-                    metal: { total: metalPackages } as PlanetProductionBreakdown,
-                    crystal: { total: crystalPackages } as PlanetProductionBreakdown,
-                    deuterium: { total: deuteriumPackages } as PlanetProductionBreakdown,
-                    fusionReactorConsumption: 0,
-                    total: metalPackages + crystalPackages + deuteriumPackages,
-                    totalConverted: getMsuOrDsu({
-                        metal: metalPackages,
-                        crystal: crystalPackages,
-                        deuterium: deuteriumPackages,
-                    }),
-
-                    productionSettings: null!,
-                    activeItems: [],
-                },
-            ];
-        }
-
-        private showBreakdown: Record<number, boolean> = {};
-
-        @Watch('planets', { immediate: true })
-        private onPlanetsChanged() {
-            this.planets.forEach(planet => {
-                if (this.showBreakdown[planet.id] == null) {
-                    this.$set(this.showBreakdown, planet.id, false);
-                }
-            });
-        }
-
-        private toggleBreakdown(planetId: number) {
-            this.showBreakdown[planetId] = !this.showBreakdown[planetId];
-        }
-
-        private get planets(): PlanetData[] {
-            return Object.values(EmpireDataModule.empire.planets)
-                .filter(planet => !planet.isMoon)
-                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - this.empire.planetOrder.indexOf(b.id)) as PlanetData[];
-        }
-
-        private readonly productionBoostItems_metal: ItemHash[] = [
-            ItemHash.metalBooster_bronze_1day,
-            ItemHash.metalBooster_bronze_7days,
-            ItemHash.metalBooster_silver_7days,
-            ItemHash.metalBooster_silver_30days,
-            ItemHash.metalBooster_silver_90days,
-            ItemHash.metalBooster_gold_7days,
-            ItemHash.metalBooster_gold_30days,
-            ItemHash.metalBooster_gold_90days,
-            ItemHash.metalBooster_platinum_7days,
-            ItemHash.metalBooster_platinum_30days,
-            ItemHash.metalBooster_platinum_90days,
-        ];
-        private readonly productionBoostItems_crystal: ItemHash[] = [
-            ItemHash.crystalBooster_bronze_1day,
-            ItemHash.crystalBooster_bronze_7days,
-            ItemHash.crystalBooster_silver_7days,
-            ItemHash.crystalBooster_silver_30days,
-            ItemHash.crystalBooster_silver_90days,
-            ItemHash.crystalBooster_gold_7days,
-            ItemHash.crystalBooster_gold_30days,
-            ItemHash.crystalBooster_gold_90days,
-            ItemHash.crystalBooster_platinum_7days,
-            ItemHash.crystalBooster_platinum_30days,
-            ItemHash.crystalBooster_platinum_90days,
-        ];
-        private readonly productionBoostItems_deuterium: ItemHash[] = [
-            ItemHash.deuteriumBooster_bronze_1day,
-            ItemHash.deuteriumBooster_bronze_7days,
-            ItemHash.deuteriumBooster_silver_7days,
-            ItemHash.deuteriumBooster_silver_30days,
-            ItemHash.deuteriumBooster_silver_90days,
-            ItemHash.deuteriumBooster_gold_7days,
-            ItemHash.deuteriumBooster_gold_30days,
-            ItemHash.deuteriumBooster_gold_90days,
-            ItemHash.deuteriumBooster_platinum_7days,
-            ItemHash.deuteriumBooster_platinum_30days,
-            ItemHash.deuteriumBooster_platinum_90days,
-        ];
-        private readonly productionBoostItems_energy: ItemHash[] = [
-            ItemHash.energyBooster_bronze_7days,
-            ItemHash.energyBooster_silver_7days,
-            ItemHash.energyBooster_silver_30days,
-            ItemHash.energyBooster_silver_90days,
-            ItemHash.energyBooster_gold_7days,
-            ItemHash.energyBooster_gold_30days,
-            ItemHash.energyBooster_gold_90days,
-            ItemHash.energyBooster_platinum_7days,
-            ItemHash.energyBooster_platinum_30days,
-            ItemHash.energyBooster_platinum_90days,
-        ];
-
-        private getActiveItems(item: ProductionItem): (ItemHash | null)[] {
-            return [
-                item.activeItems.find(item => this.productionBoostItems_metal.includes(item)) ?? null,
-                item.activeItems.find(item => this.productionBoostItems_crystal.includes(item)) ?? null,
-                item.activeItems.find(item => this.productionBoostItems_deuterium.includes(item)) ?? null,
-                item.activeItems.find(item => this.productionBoostItems_energy.includes(item)) ?? null,
-            ];
-        }
+    if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
+        result.push({ key: 'totalConverted' });
     }
+
+    result.push({
+        key: 'productionSettings',
+        class: 'production-settings-column',
+        headerClass: 'production-settings-header-column',
+        size: 'max-content',
+    });
+
+    return result;
+});
+
+const maxItemCount = computed(() => Math.max(...items.value.map(i => i.activeItems.length)));
+
+const productionBreakdowns = computed(() => {
+    const lifeformExperience = createRecord(
+        ValidLifeformTypes,
+        lf => getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lf]),
+    );
+
+    return getProductionBreakdowns(empire.value, lifeformExperience);
+});
+
+const fusionReactorConsumptions = computed<Record<number, number>>(() => {
+    const result: Record<number, number> = {};
+
+    planets.value.forEach(planet => {
+        const fusionReactorConsumption = FusionReactor.getConsumption(planet.buildings[BuildingType.fusionReactor], {
+            planet: {
+                position: planet.coordinates.position,
+                temperature: planet.maxTemperature,
+            },
+            productionSettings: {
+                metalMine: planet.productionSettings[BuildingType.metalMine],
+                crystalMine: planet.productionSettings[BuildingType.crystalMine],
+                deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
+                fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
+            },
+            serverSettings: {
+                economySpeed: serverSettingsStore.serverSettings.speed.economy,
+                crystalBoost: serverSettingsStore.serverSettings.resourceProduction.productionFactorBonus.crystal,
+            },
+        }).deuterium;
+
+        result[planet.id] = fusionReactorConsumption;
+    });
+
+    return result;
+});
+
+const items = computed<ProductionItem[]>(() => {
+    if (planetSettings.value.length == 0) {
+        return [];
+    }
+
+    const localProductionBreakdowns = productionBreakdowns.value;
+    const localFusionReactorConsumptions = fusionReactorConsumptions.value;
+
+    return planets.value.map<ProductionItem>(planet => {
+        const production = {
+            metal: localProductionBreakdowns.metal.getProductionBreakdown(planet.id),
+            crystal: localProductionBreakdowns.crystal.getProductionBreakdown(planet.id),
+            deuterium: localProductionBreakdowns.deuterium.getProductionBreakdown(planet.id),
+        };
+
+        const settings = planetSettings.value.find(p => p.id == planet.id) ?? _throw('no planet settings found');
+
+        return {
+            planet,
+            ...production,
+            fusionReactorConsumption: localFusionReactorConsumptions[planet.id],
+            total: production.metal.total + production.crystal.total + production.deuterium.total - localFusionReactorConsumptions[planet.id],
+            totalConverted: getMsuOrDsu({
+                metal: production.metal.total,
+                crystal: production.crystal.total,
+                deuterium: production.deuterium.total - localFusionReactorConsumptions[planet.id],
+            }),
+
+            productionSettings: {
+                metalMine: planet.productionSettings[BuildingType.metalMine],
+                crystalMine: planet.productionSettings[BuildingType.crystalMine],
+                deuteriumSynthesizer: planet.productionSettings[BuildingType.deuteriumSynthesizer],
+                solarPlant: planet.productionSettings[BuildingType.solarPlant],
+                fusionReactor: planet.productionSettings[BuildingType.fusionReactor],
+
+                solarSatellite: planet.productionSettings[ShipType.solarSatellite],
+                crawler: settings.crawlers.percentage,
+            },
+
+            activeItems: settings.activeItems,
+        };
+    });
+});
+
+const footerItems = computed<ProductionItem[]>(() => {
+    const localProductionBreakdowns = productionBreakdowns.value;
+    const productionPerHour = localProductionBreakdowns.getTotal();
+
+    const metalPerHour = productionPerHour.metal;
+    const crystalPerHour = productionPerHour.crystal;
+    const deuteriumPerHour = productionPerHour.deuterium - Object.values(fusionReactorConsumptions.value).reduce((total, cur) => total + cur, 0);
+    const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
+    const totalConvertedPerHour = getMsuOrDsu({
+        metal: metalPerHour,
+        crystal: crystalPerHour,
+        deuterium: deuteriumPerHour,
+    });
+
+    const metalPackages = metalPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.metal);
+    const crystalPackages = crystalPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.crystal);
+    const deuteriumPackages = deuteriumPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.deuterium);
+
+    return [
+        {
+            planet: {
+                id: 0,
+                name: translations().extension.empire.production.averagePerHour,
+                coordinates: null!,
+            },
+            metal: { total: metalPerHour / planets.value.length } as PlanetProductionBreakdown,
+            crystal: { total: crystalPerHour / planets.value.length } as PlanetProductionBreakdown,
+            deuterium: { total: deuteriumPerHour / planets.value.length } as PlanetProductionBreakdown,
+            fusionReactorConsumption: 0,
+            total: totalPerHour / planets.value.length,
+            totalConverted: totalConvertedPerHour / planets.value.length,
+
+            productionSettings: null!,
+            activeItems: [],
+        },
+        {
+            planet: {
+                id: 0,
+                name: translations().extension.empire.production.totalPerHour,
+                coordinates: null!,
+            },
+            metal: { total: metalPerHour } as PlanetProductionBreakdown,
+            crystal: { total: crystalPerHour } as PlanetProductionBreakdown,
+            deuterium: { total: deuteriumPerHour } as PlanetProductionBreakdown,
+            fusionReactorConsumption: 0,
+            total: totalPerHour,
+            totalConverted: totalConvertedPerHour,
+
+            productionSettings: null!,
+            activeItems: [],
+        },
+        {
+            planet: {
+                id: 0,
+                name: translations().extension.empire.production.totalPerDay,
+                coordinates: null!,
+            },
+            metal: { total: metalPerHour * 24 } as PlanetProductionBreakdown,
+            crystal: { total: crystalPerHour * 24 } as PlanetProductionBreakdown,
+            deuterium: { total: deuteriumPerHour * 24 } as PlanetProductionBreakdown,
+            fusionReactorConsumption: 0,
+            total: totalPerHour * 24,
+            totalConverted: totalConvertedPerHour * 24,
+
+            productionSettings: null!,
+            activeItems: [],
+        },
+        {
+            planet: {
+                id: 0,
+                name: translations().extension.empire.production.totalPerWeek,
+                coordinates: null!,
+            },
+            metal: { total: metalPerHour * 24 * 7 } as PlanetProductionBreakdown,
+            crystal: { total: crystalPerHour * 24 * 7 } as PlanetProductionBreakdown,
+            deuterium: { total: deuteriumPerHour * 24 * 7 } as PlanetProductionBreakdown,
+            fusionReactorConsumption: 0,
+            total: totalPerHour * 24 * 7,
+            totalConverted: totalConvertedPerHour * 24 * 7,
+
+            productionSettings: null!,
+            activeItems: [],
+        },
+        {
+            isResourcePackageRow: true,
+            planet: {
+                id: 0,
+                name: 'row-for-resource-packages',
+                coordinates: null!,
+            },
+            metal: { total: metalPackages } as PlanetProductionBreakdown,
+            crystal: { total: crystalPackages } as PlanetProductionBreakdown,
+            deuterium: { total: deuteriumPackages } as PlanetProductionBreakdown,
+            fusionReactorConsumption: 0,
+            total: metalPackages + crystalPackages + deuteriumPackages,
+            totalConverted: getMsuOrDsu({
+                metal: metalPackages,
+                crystal: crystalPackages,
+                deuterium: deuteriumPackages,
+            }),
+
+            productionSettings: null!,
+            activeItems: [],
+        },
+    ];
+});
+
+const showBreakdown = ref<Record<number, boolean>>({});
+
+function onPlanetsChanged() {
+    planets.value.forEach(planet => {
+        if (showBreakdown.value[planet.id] == null) {
+            showBreakdown.value[planet.id] = false;
+        }
+    });
+}
+
+function toggleBreakdown(planetId: number) {
+    showBreakdown.value[planetId] = !showBreakdown.value[planetId];
+}
+
+const planets = computed<PlanetData[]>(() => {
+    return Object.values(empireStore.empire.planets)
+        .filter(planet => !planet.isMoon)
+        .sort((a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empire.value.planetOrder.indexOf(b.id)) as PlanetData[];
+});
+
+const productionBoostItems_metal: ItemHash[] = [
+    ItemHash.metalBooster_bronze_1day,
+    ItemHash.metalBooster_bronze_7days,
+    ItemHash.metalBooster_silver_7days,
+    ItemHash.metalBooster_silver_30days,
+    ItemHash.metalBooster_silver_90days,
+    ItemHash.metalBooster_gold_7days,
+    ItemHash.metalBooster_gold_30days,
+    ItemHash.metalBooster_gold_90days,
+    ItemHash.metalBooster_platinum_7days,
+    ItemHash.metalBooster_platinum_30days,
+    ItemHash.metalBooster_platinum_90days,
+];
+
+const productionBoostItems_crystal: ItemHash[] = [
+    ItemHash.crystalBooster_bronze_1day,
+    ItemHash.crystalBooster_bronze_7days,
+    ItemHash.crystalBooster_silver_7days,
+    ItemHash.crystalBooster_silver_30days,
+    ItemHash.crystalBooster_silver_90days,
+    ItemHash.crystalBooster_gold_7days,
+    ItemHash.crystalBooster_gold_30days,
+    ItemHash.crystalBooster_gold_90days,
+    ItemHash.crystalBooster_platinum_7days,
+    ItemHash.crystalBooster_platinum_30days,
+    ItemHash.crystalBooster_platinum_90days,
+];
+
+const productionBoostItems_deuterium: ItemHash[] = [
+    ItemHash.deuteriumBooster_bronze_1day,
+    ItemHash.deuteriumBooster_bronze_7days,
+    ItemHash.deuteriumBooster_silver_7days,
+    ItemHash.deuteriumBooster_silver_30days,
+    ItemHash.deuteriumBooster_silver_90days,
+    ItemHash.deuteriumBooster_gold_7days,
+    ItemHash.deuteriumBooster_gold_30days,
+    ItemHash.deuteriumBooster_gold_90days,
+    ItemHash.deuteriumBooster_platinum_7days,
+    ItemHash.deuteriumBooster_platinum_30days,
+    ItemHash.deuteriumBooster_platinum_90days,
+];
+
+const productionBoostItems_energy: ItemHash[] = [
+    ItemHash.energyBooster_bronze_7days,
+    ItemHash.energyBooster_silver_7days,
+    ItemHash.energyBooster_silver_30days,
+    ItemHash.energyBooster_silver_90days,
+    ItemHash.energyBooster_gold_7days,
+    ItemHash.energyBooster_gold_30days,
+    ItemHash.energyBooster_gold_90days,
+    ItemHash.energyBooster_platinum_7days,
+    ItemHash.energyBooster_platinum_30days,
+    ItemHash.energyBooster_platinum_90days,
+];
+
+function getActiveItems(item: ProductionItem): (ItemHash | null)[] {
+    return [
+        item.activeItems.find(item => productionBoostItems_metal.includes(item)) ?? null,
+        item.activeItems.find(item => productionBoostItems_crystal.includes(item)) ?? null,
+        item.activeItems.find(item => productionBoostItems_deuterium.includes(item)) ?? null,
+        item.activeItems.find(item => productionBoostItems_energy.includes(item)) ?? null,
+    ];
+}
+
+watch(() => playerSettings.value.playerClass, onPlayerClassSelectionChanged);
+
+watch(() => planets.value, onPlanetsChanged, { immediate: true });
+
+onMounted(() => {
+    resetProductionSettings();
+});
 </script>
+
 <style lang="scss" scoped>
     .resources-production-table {
         max-height: 100%;
         overflow: auto;
 
-        &::v-deep {
-            .total-column {
-                border-left: 1px solid rgba(var(--color), 0.33);
-            }
+        :deep(.total-column) {
+            border-left: 1px solid rgba(var(--color), 0.33);
+        }
 
-            .production-settings-column {
-                border-left: 3px double rgba(var(--color), 0.5);
-            }
-            .production-settings-header-column {
-                border-left: 3px solid transparent;
-            }
+        :deep(.production-settings-column) {
+            border-left: 3px double rgba(var(--color), 0.5);
+        }
+        :deep(.production-settings-header-column) {
+            border-left: 3px solid transparent;
+        }
 
-            > .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell {
-                border-top: 3px double rgba(var(--color), 0.5);
-            }
+        :deep(> .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell) {
+            border-top: 3px double rgba(var(--color), 0.5);
         }
     }
 

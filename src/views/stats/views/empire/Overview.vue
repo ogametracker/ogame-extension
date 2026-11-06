@@ -43,119 +43,111 @@
     </grid-table>
 </template>
 
-<script lang="ts">
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-    import { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
-    import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
-    import { DefenseCount } from '@ogame-tracker/shared/models/empire/DefenseCount';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import type { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+import type { DefenseCount } from '@ogame-tracker/shared/models/empire/DefenseCount';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import { useEmpireStore } from '@stats/data/EmpireDataModule';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
-    type SupplyBuilding = PlanetSupplyBuildingType
+type SupplyBuilding = PlanetSupplyBuildingType
 
-    interface PlanetEmpireItem {
-        planet: {
-            name: string;
-            coordinates: string;
+interface PlanetEmpireItem {
+    planet: {
+        name: string;
+        coordinates: string;
+    };
+    supplies: Record<PlanetSupplyBuildingType, number>;
+    facilities: Record<PlanetFacilityBuildingType, number>;
+    ships: Record<ShipType, number>;
+    // the shield domes are booleans, so this is not a Record<DefenseType, number>
+    defenses: DefenseCount;
+}
+
+const empireStore = useEmpireStore();
+
+const columns = computed<GridTableColumn<keyof PlanetEmpireItem>[]>(() => {
+    return [
+        {
+            key: 'planet',
+            label: translations().extension.empire.planet,
+            size: '250px',
+        },
+        {
+            key: 'supplies',
+            label: translations().extension.empire.overview.supplyBuildings,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'left-text',
+            class: 'left-text',
+        },
+        {
+            key: 'facilities',
+            label: translations().extension.empire.overview.facilityBuildings,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'left-text',
+            class: 'left-text',
+        },
+        // {
+        //     key: 'ships',
+        //     label: 'LOCA: Ships',
+        //     style: {
+        //         'justify-items': 'start',
+        //     },
+        //     headerClass: 'left-text',
+        //     class: 'left-text',
+        // },
+        // {
+        //     key: 'defenses',
+        //     label: 'LOCA: Defenses',
+        //     style: {
+        //         'justify-items': 'start',
+        //     },
+        //     headerClass: 'left-text',
+        //     class: 'left-text',
+        // },
+    ];
+});
+
+const items = computed<PlanetEmpireItem[]>(() => {
+    const player = empireStore.empire;
+
+    const planets = player.planetOrder
+        .map(planetId => player.planets[planetId])
+        .filter(planet => !planet.isMoon) as PlanetData[];
+
+    return planets.map<PlanetEmpireItem>(planet => {
+
+        const result: PlanetEmpireItem = {
+            planet: {
+                name: planet.name,
+                coordinates: formatCoordinates(planet.coordinates),
+            },
+            supplies: createRecord(PlanetSupplyBuildingTypes, b => planet.buildings[b]),
+            facilities: createRecord(PlanetFacilityBuildingTypes, b => planet.buildings[b]),
+            ships: createRecord(ShipTypes, s => planet.ships[s]),
+            defenses: planet.defense,
         };
-        supplies: Record<PlanetSupplyBuildingType, number>;
-        facilities: Record<PlanetFacilityBuildingType, number>;
-        ships: Record<ShipType, number>;
-        // the shield domes are booleans, so this is not a Record<DefenseType, number>
-        defenses: DefenseCount;
-    }
+        return result;
+    });
+});
 
-    @Component({})
-    export default class Overview extends Vue {
-
-        private readonly PlanetSupplyBuildingTypes = PlanetSupplyBuildingTypes;
-        private readonly PlanetFacilityBuildingTypes = PlanetFacilityBuildingTypes;
-        private readonly ShipTypes = ShipTypes;
-        private readonly DefenseTypes = DefenseTypes;
-
-        private get columns(): GridTableColumn<keyof PlanetEmpireItem>[] {
-            return [
-                {
-                    key: 'planet',
-                    label: this.$i18n.$t.extension.empire.planet,
-                    size: '250px',
-                },
-                {
-                    key: 'supplies',
-                    label: this.$i18n.$t.extension.empire.overview.supplyBuildings,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'left-text',
-                    class: 'left-text',
-                },
-                {
-                    key: 'facilities',
-                    label: this.$i18n.$t.extension.empire.overview.facilityBuildings,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'left-text',
-                    class: 'left-text',
-                },
-                // {
-                //     key: 'ships',
-                //     label: 'LOCA: Ships',
-                //     style: {
-                //         'justify-items': 'start',
-                //     },
-                //     headerClass: 'left-text',
-                //     class: 'left-text',
-                // },
-                // {
-                //     key: 'defenses',
-                //     label: 'LOCA: Defenses',
-                //     style: {
-                //         'justify-items': 'start',
-                //     },
-                //     headerClass: 'left-text',
-                //     class: 'left-text',
-                // },
-            ];
-        }
-
-        private get items(): PlanetEmpireItem[] {
-            const player = EmpireDataModule.empire;
-
-            const planets = player.planetOrder
-                .map(planetId => player.planets[planetId])
-                .filter(planet => !planet.isMoon) as PlanetData[];
-
-            return planets.map<PlanetEmpireItem>(planet => {
-
-                const result: PlanetEmpireItem = {
-                    planet: {
-                        name: planet.name,
-                        coordinates: this.formatCoordinates(planet.coordinates),
-                    },
-                    supplies: createRecord(PlanetSupplyBuildingTypes, b => planet.buildings[b]),
-                    facilities: createRecord(PlanetFacilityBuildingTypes, b => planet.buildings[b]),
-                    ships: createRecord(ShipTypes, s => planet.ships[s]),
-                    defenses: planet.defense,
-                };
-                return result;
-            });
-        }
-
-        private formatCoordinates(coords: Coordinates) {
-            return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
-        }
-    }
+function formatCoordinates(coords: Coordinates) {
+    return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
+}
 </script>
+
 <style lang="scss" scoped>
     .supplies-table,
     .facilities-table,
@@ -165,7 +157,7 @@
         display: grid;
         column-gap: 8px;
         justify-items: center;
-            
+
         > span {
             display: flex;
             flex-direction: column;
@@ -185,7 +177,7 @@
     .ships-table {
         grid-template-columns: repeat(17, 1fr);
     }
-    
+
     .defenses-table {
         grid-template-columns: repeat(8, 1fr);
     }
@@ -193,31 +185,29 @@
     .empire-table {
         max-height: 100%;
 
-        &::v-deep {
-            .left-text {
-                text-align: left;
-                justify-content: start;
-            }
+        :deep(.left-text) {
+            text-align: left;
+            justify-content: start;
+        }
 
-            .grid-cell {
-                padding-inline: 16px;
-            }
+        :deep(.grid-cell) {
+            padding-inline: 16px;
+        }
 
-            // .center-text {
-            //     text-align: center;
-            //     justify-content: center;
-            // }
+        // .center-text {
+        //     text-align: center;
+        //     justify-content: center;
+        // }
 
-            // .building-levels {
-            //     display: grid;
-            //     grid-template-columns: repeat(12, 1fr);
-            //     gap: 4px;
+        // .building-levels {
+        //     display: grid;
+        //     grid-template-columns: repeat(12, 1fr);
+        //     gap: 4px;
 
-            // }
+        // }
 
-            .fade {
-                opacity: 0.1;
-            }
+        :deep(.fade) {
+            opacity: 0.1;
         }
     }
 </style>

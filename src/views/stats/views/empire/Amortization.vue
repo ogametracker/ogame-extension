@@ -1,38 +1,38 @@
 <template>
     <div class="amortization">
         <div class="amortization-container">
-            <div class="amortization-settings" :style="{ overflow: showSettings ? 'auto' : null }">
+            <div class="amortization-settings" :style="{ overflow: showSettings ? 'auto' : undefined }">
                 <div class="amortization-settings-header">
                     <button @click="toggleSettings()">
                         <span class="mdi mdi-cogs" />
                         <span class="mdi mdi-menu-down" v-if="!showSettings" />
                         <span class="mdi mdi-menu-up" v-else />
 
-                        <span v-if="!showSettings" v-text="$i18n.$t.extension.empire.amortization.settings.header" />
-                        <span v-else v-text="$i18n.$t.extension.empire.amortization.settings.applyAndClose" />
+                        <span v-if="!showSettings" v-text="translations().extension.empire.amortization.settings.header" />
+                        <span v-else v-text="translations().extension.empire.amortization.settings.applyAndClose" />
                     </button>
 
                     <div class="generating-count">
                         <span
                             v-if="generatingItemCount != null"
-                            v-text="`${$i18n.$t.extension.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
+                            v-text="`${translations().extension.empire.amortization.info.generatingItems}: ${generatingItemCount.count}/${generatingItemCount.total}`"
                         />
                         <template v-if="saveStateDate == null">
                             <button
                                 v-if="items.length > 0"
                                 :disabled="generatingItemCount != null || items.length == 0 || showSettings"
                                 class="mr-1"
-                                v-text="$i18n.$t.extension.empire.amortization.saveLoad.saveButton"
+                                v-text="translations().extension.empire.amortization.saveLoad.saveButton"
                                 @click="saveItems()"
                             />
                             <button
                                 v-if="savedAmortization != null"
                                 :disabled="generatingItemCount != null"
-                                v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadButton($i18n.$d(savedAmortization.date, 'datetime'))"
+                                v-text="translations().extension.empire.amortization.saveLoad.loadButton(formatDate(savedAmortization.date, 'datetime'))"
                                 @click="loadItems()"
                             />
                         </template>
-                        <span v-else v-text="$i18n.$t.extension.empire.amortization.saveLoad.loadedSave($i18n.$d(savedAmortization.date, 'datetime'), $i18n.$n(saveStateHiddenItems))" />
+                        <span v-else-if="savedAmortization" v-text="translations().extension.empire.amortization.saveLoad.loadedSave(formatDate(savedAmortization.date, 'datetime'), formatNumber(saveStateHiddenItems))" />
                     </div>
 
                     <floating-menu v-model="showInfoMenu" left>
@@ -43,8 +43,8 @@
                         </template>
 
                         <div class="infos">
-                            <span v-text="$i18n.$t.extension.empire.amortization.info.slowCalculation" />
-                            <span v-text="$i18n.$t.extension.empire.amortization.info.ctrlClick" />
+                            <span v-text="translations().extension.empire.amortization.info.slowCalculation" />
+                            <span v-text="translations().extension.empire.amortization.info.ctrlClick" />
                         </div>
                     </floating-menu>
 
@@ -58,7 +58,7 @@
                         <show-converted-resources-in-cells-settings>
                             <div class="msu-settings-amortization-info">
                                 <span class="mdi mdi-alert" />
-                                <span v-text="$i18n.$t.extension.settings.showConvertedUnitsInTables.infoAmortization" />
+                                <span v-text="translations().extension.settings.showConvertedUnitsInTables.infoAmortization" />
                             </div>
                         </show-converted-resources-in-cells-settings>
                     </floating-menu>
@@ -67,55 +67,55 @@
                 <div v-show="showSettings" class="amortization-settings-container">
                     <div class="flex-settings">
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.header" />
+                            <h3 v-text="translations().extension.empire.amortization.settings.playerSettings.header" />
                             <amortization-player-settings-inputs v-model="playerSettings" />
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.header" />
+                            <h3 v-text="translations().extension.empire.amortization.settings.includeSettings.header" />
                             <div class="include-settings">
                                 <checkbox
                                     v-model="includeSettings.mines"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.mines"
+                                    :label="translations().extension.empire.amortization.settings.includeSettings.mines"
                                 />
                                 <checkbox
                                     v-model="includeSettings.expeditions"
-                                >   
+                                >
                                     <template #label>
-                                        <span v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditions" />
+                                        <span v-text="translations().extension.empire.amortization.settings.includeSettings.expeditions" />
                                         <br/>
-                                        <i v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.expeditionsRequirement" />
+                                        <i v-text="translations().extension.empire.amortization.settings.includeSettings.expeditionsRequirement" />
                                     </template>
                                 </checkbox>
 
                                 <checkbox
                                     v-model="includeSettings.lifeformProductionBonusBuildings"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformProductionBonusBuildings"
+                                    :label="translations().extension.empire.amortization.settings.includeSettings.lifeformProductionBonusBuildings"
                                 />
                                 <checkbox
                                     v-model="includeSettings.lifeformTechnologyBoostBuildings"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformTechnologyBoostBuildings"
+                                    :label="translations().extension.empire.amortization.settings.includeSettings.lifeformTechnologyBoostBuildings"
                                 />
                                 <checkbox
                                     v-model="includeSettings.lifeformProductionBonusTechnologies"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformProductionBonusTechnologies"
+                                    :label="translations().extension.empire.amortization.settings.includeSettings.lifeformProductionBonusTechnologies"
                                 />
                                 <checkbox
                                     v-model="includeSettings.lifeformExpeditionBonusTechnologies"
-                                    :label="$i18n.$t.extension.empire.amortization.settings.includeSettings.lifeformExpeditionBonusTechnologies"
+                                    :label="translations().extension.empire.amortization.settings.includeSettings.lifeformExpeditionBonusTechnologies"
                                 />
 
                                 <checkbox
                                     v-model="includeSettings.plasmaTechnology"
-                                    :label="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]"
+                                    :label="translations().ogame.research[ResearchType.plasmaTechnology]"
                                 />
                                 <checkbox
                                     v-model="includeSettings.astrophysics"
-                                >   
+                                >
                                     <template #label>
-                                        <span v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.astrophysicsAndColony" />
+                                        <span v-text="translations().extension.empire.amortization.settings.includeSettings.astrophysicsAndColony" />
                                         <br/>
-                                        <i v-text="$i18n.$t.extension.empire.amortization.settings.includeSettings.astrophysicsPerformanceNote" />
+                                        <i v-text="translations().extension.empire.amortization.settings.includeSettings.astrophysicsPerformanceNote" />
                                     </template>
                                 </checkbox>
                             </div>
@@ -124,8 +124,8 @@
                         <div>
                             <h3
                                 v-text="
-                                    $i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.header(
-                                        $i18n.$t.ogame.research[ResearchType.astrophysics]
+                                    translations().extension.empire.amortization.settings.astrophysicsSettings.header(
+                                        translations().ogame.research[ResearchType.astrophysics]
                                     )
                                 "
                             />
@@ -135,12 +135,12 @@
                         </div>
 
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
+                            <h3 v-text="translations().extension.empire.amortization.settings.expeditionSettings.header" />
                             <div class="expeditionsettings">
-                                <amortization-expedition-settings-inputs 
-                                    v-model="expeditionSettings" 
-                                    :playerSettings="playerSettings" 
-                                    :breakdown="expoBreakdown" 
+                                <amortization-expedition-settings-inputs
+                                    v-model="expeditionSettings"
+                                    :playerSettings="playerSettings"
+                                    :breakdown="expoBreakdown"
                                 />
                             </div>
                         </div>
@@ -148,18 +148,18 @@
                         <hr style="width: 100%" />
 
                         <div>
-                            <h3 v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.header" />
+                            <h3 v-text="translations().extension.empire.amortization.settings.planetSettings.header" />
                             <div class="global-planet-settings">
                                 <button
-                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.deselectItems"
+                                    v-text="translations().extension.empire.amortization.settings.planetSettings.global.deselectItems"
                                     @click="deselectAllItems()"
                                 />
                                 <button
-                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.ignoreInactiveLifeformTechnologySlots"
+                                    v-text="translations().extension.empire.amortization.settings.planetSettings.global.ignoreInactiveLifeformTechnologySlots"
                                     @click="ignoreAllInactiveSlots()"
                                 />
                                 <button
-                                    v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.global.deselectAllPlanets"
+                                    v-text="translations().extension.empire.amortization.settings.planetSettings.global.deselectAllPlanets"
                                     @click="deselectAllPlanets()"
                                 />
                             </div>
@@ -170,7 +170,7 @@
                                     :key="planetSetting.id"
                                     v-model="planetSettings[planetSetting.id]"
                                     toggleable
-                                    :planetData="empire.planets[planetSetting.id]"
+                                    :planet-data="empire.planets[planetSetting.id] as PlanetData"
                                 />
                             </div>
                         </div>
@@ -179,9 +179,9 @@
             </div>
 
             <div class="amortization-table" v-if="!showSettings">
-                <template>
+                <template v-if="!isGroupedItemsView">
                     <grid-table
-                        v-show="!isGroupedItemsView"
+
                         :items="items"
                         :columns="columns"
                         :footerItems="footerItems"
@@ -191,12 +191,12 @@
                         row-borders
                     >
                         <template #header-checkbox>
-                            <checkbox :value="selectedCount == items.length" @input="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
+                            <checkbox :model-value="selectedCount == items.length" @update:model-value="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
                         </template>
 
                         <template #header-cost>
                             <div class="cost-grid">
-                                <span v-text="$i18n.$t.extension.empire.amortization.table.cost" style="grid-column: 2" />
+                                <span v-text="translations().extension.empire.amortization.table.cost" style="grid-column: 2" />
                                 <o-resource resource="metal" style="grid-column: 1" />
                                 <o-resource resource="crystal" />
                                 <o-resource resource="deuterium" />
@@ -204,7 +204,7 @@
                         </template>
 
                         <template #cell-checkbox="{ index, item }">
-                            <checkbox :value="item.selected" @input-extended="toggleItemSelection(item, index, $event.ctrl)" />
+                            <checkbox :model-value="item.selected" @input-extended="toggleItemSelection(item, index, $event.ctrl)" />
                         </template>
                         <template #cell-what="{ item, index }">
                             <div
@@ -217,15 +217,15 @@
                                     <span v-text="formatPlanetCoordinates(item.planetId)" />
                                 </span>
                                 <span v-else class="planet">
-                                    <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                                    <span v-text="`${translations().extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
                                     <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                 </span>
 
                                 <div class="levels">
-                                    <template v-for="(additionalLifeformBuilding, i) in item.additionalLifeformBuildings">
-                                        <o-lifeform-building :key="`icon-${i}`" :building="additionalLifeformBuilding.building" size="36px" />
-                                        <span class="name-and-level" :key="`name-level-${i}`">
-                                            <span v-text="$i18n.$t.ogame.lifeformBuildings[additionalLifeformBuilding.building]" />
+                                    <template v-for="(additionalLifeformBuilding, i) in item.additionalLifeformBuildings" :key="i">
+                                        <o-lifeform-building :building="additionalLifeformBuilding.building" size="36px" />
+                                        <span class="name-and-level">
+                                            <span v-text="translations().ogame.lifeformBuildings[additionalLifeformBuilding.building]" />
                                             <span
                                                 v-if="additionalLifeformBuilding.levels.from != additionalLifeformBuilding.levels.to"
                                                 v-text="`${additionalLifeformBuilding.levels.from} - ${additionalLifeformBuilding.levels.to}`"
@@ -237,21 +237,21 @@
                                     <template v-if="item.type == 'mine'">
                                         <o-building :building="item.mine" size="36px" />
                                         <span class="name-and-level">
-                                            <span v-text="$i18n.$t.ogame.buildings[item.mine]" />
+                                            <span v-text="translations().ogame.buildings[item.mine]" />
                                             <span v-text="item.level" />
                                         </span>
                                     </template>
                                     <template v-else-if="item.type == 'lifeform-building'">
                                         <o-lifeform-building :building="item.building" size="36px" />
                                         <span class="name-and-level">
-                                            <span v-text="$i18n.$t.ogame.lifeformBuildings[item.building]" />
+                                            <span v-text="translations().ogame.lifeformBuildings[item.building]" />
                                             <span v-text="item.level" />
                                         </span>
                                     </template>
                                     <template v-else-if="item.type == 'lifeform-technology'">
                                         <o-lifeform-technology :technology="item.technology" size="36px" />
                                         <span class="name-and-level">
-                                            <span v-text="$i18n.$t.ogame.lifeformTechnologies[item.technology]" />
+                                            <span v-text="translations().ogame.lifeformTechnologies[item.technology]" />
                                             <span v-text="item.level" />
                                         </span>
                                     </template>
@@ -281,13 +281,13 @@
                                         <span class="name-and-level">
                                             <i
                                                 v-if="'building' in additionalLifeformStuffGroup"
-                                                v-text="$i18n.$t.ogame.lifeformBuildings[additionalLifeformStuffGroup.building]"
+                                                v-text="translations().ogame.lifeformBuildings[additionalLifeformStuffGroup.building!]"
                                             />
-                                            <i v-else v-text="$i18n.$t.ogame.lifeformTechnologies[additionalLifeformStuffGroup.technology]" />
+                                            <i v-else v-text="translations().ogame.lifeformTechnologies[additionalLifeformStuffGroup.technology!]" />
 
                                             <i
                                                 v-text="
-                                                    $i18n.$t.extension.empire.amortization.table.levelsOnPlanets(
+                                                    translations().extension.empire.amortization.table.levelsOnPlanets(
                                                         additionalLifeformStuffGroup.totalLevels,
                                                         additionalLifeformStuffGroup.planetIds.size
                                                     )
@@ -313,7 +313,7 @@
                                                 <span
                                                     v-text="
                                                         `${
-                                                            $i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony
+                                                            translations().extension.empire.amortization.settings.astrophysicsSettings.newColony
                                                         } ${-additionalLifeformStuff.planetId}`
                                                     "
                                                 />
@@ -330,9 +330,9 @@
                                             <span class="name-and-level">
                                                 <span
                                                     v-if="'building' in additionalLifeformStuffGroup"
-                                                    v-text="$i18n.$t.ogame.lifeformBuildings[additionalLifeformStuffGroup.building]"
+                                                    v-text="translations().ogame.lifeformBuildings[additionalLifeformStuffGroup.building!]"
                                                 />
-                                                <span v-else v-text="$i18n.$t.ogame.lifeformTechnologies[additionalLifeformStuffGroup.technology]" />
+                                                <span v-else v-text="translations().ogame.lifeformTechnologies[additionalLifeformStuffGroup.technology!]" />
 
                                                 <span
                                                     v-if="additionalLifeformStuff.levels.from != additionalLifeformStuff.levels.to"
@@ -347,7 +347,7 @@
                                 <span />
                                 <o-research :research="ResearchType.plasmaTechnology" size="36px" />
                                 <span class="name-and-level">
-                                    <span v-text="$i18n.$t.ogame.research[ResearchType.plasmaTechnology]" />
+                                    <span v-text="translations().ogame.research[ResearchType.plasmaTechnology]" />
                                     <span v-text="item.level" />
                                 </span>
                             </div>
@@ -355,7 +355,7 @@
                                 <span style="display: contents">
                                     <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" style="grid-column: 2" />
                                     <span class="name-and-level">
-                                        <span v-text="$i18n.$t.ogame.research[ResearchType.astrophysics]" />
+                                        <span v-text="translations().ogame.research[ResearchType.astrophysics]" />
 
                                         <span v-if="item.levels.length == 0" v-text="'-'" />
                                         <span v-else-if="item.levels.length == 1" v-text="item.levels[0]" />
@@ -364,7 +364,7 @@
                                 </span>
 
                                 <span class="planet" style="align-self: start; grid-row: 2">
-                                    <span v-text="`${$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
+                                    <span v-text="`${translations().extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.newPlanetId}`" />
                                     <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                 </span>
 
@@ -373,7 +373,7 @@
                                         <template v-if="item.builtLevels.mines[building] > 0">
                                             <o-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                             <span :key="`${building}-name-level`" class="name-and-level">
-                                                <span v-text="$i18n.$t.ogame.buildings[building]" />
+                                                <span v-text="translations().ogame.buildings[building]" />
                                                 <span v-text="`0 - ${item.builtLevels.mines[building]}`" />
                                             </span>
                                         </template>
@@ -384,7 +384,7 @@
                                         <template v-if="item.builtLevels.lifeformBuildings[building] > 0">
                                             <o-lifeform-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                             <span :key="`${building}-name-level`" class="name-and-level">
-                                                <span v-text="$i18n.$t.ogame.lifeformBuildings[building]" />
+                                                <span v-text="translations().ogame.lifeformBuildings[building]" />
                                                 <span v-text="`0 - ${item.builtLevels.lifeformBuildings[building]}`" />
                                             </span>
                                         </template>
@@ -395,7 +395,7 @@
                                         <template v-if="item.builtLevels.lifeformTechnologies[tech] > 0">
                                             <o-lifeform-technology :key="`${tech}-icon`" :technology="tech" size="36px" style="grid-column: 2" />
                                             <span :key="`${tech}-name-level`" class="name-and-level">
-                                                <span v-text="$i18n.$t.ogame.lifeformTechnologies[tech]" />
+                                                <span v-text="translations().ogame.lifeformTechnologies[tech]" />
                                                 <span v-text="`0 - ${item.builtLevels.lifeformTechnologies[tech]}`" />
                                             </span>
                                         </template>
@@ -407,9 +407,9 @@
 
                         <template #cell-cost="{ value }">
                             <div class="cost-grid">
-                                <span v-text="$i18n.$n(value.metal)" :class="{ zero: value.metal == 0 }" />
-                                <span v-text="$i18n.$n(value.crystal)" :class="{ zero: value.crystal == 0 }" />
-                                <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
+                                <span v-text="formatNumber(value.metal)" :class="{ zero: value.metal == 0 }" />
+                                <span v-text="formatNumber(value.crystal)" :class="{ zero: value.crystal == 0 }" />
+                                <span v-text="formatNumber(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                             </div>
                         </template>
                         <template #cell-costConverted="{ value }">
@@ -437,14 +437,14 @@
                         </template>
 
                         <template #cell-timeInHours="{ value }">
-                            <span v-text="$i18n.$timespan(value * 60 * 60)" />
+                            <span v-text="formatTimespan(value * 60 * 60)" />
                         </template>
 
                         <template #footer-cost="{ value }">
                             <div class="cost-grid">
-                                <span v-text="$i18n.$n(value.metal)" :class="{ zero: value.metal == 0 }" />
-                                <span v-text="$i18n.$n(value.crystal)" :class="{ zero: value.crystal == 0 }" />
-                                <span v-text="$i18n.$n(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
+                                <span v-text="formatNumber(value.metal)" :class="{ zero: value.metal == 0 }" />
+                                <span v-text="formatNumber(value.crystal)" :class="{ zero: value.crystal == 0 }" />
+                                <span v-text="formatNumber(value.deuterium)" :class="{ zero: value.deuterium == 0 }" />
                             </div>
                         </template>
                         <template #footer-costConverted="{ value }">
@@ -480,7 +480,7 @@
                             :disabled="generatingItemCount != null"
                         >
                             <span class="mdi mdi-plus" />
-                            <span v-text="$i18n.$t.extension.empire.amortization.generateItems($i18n.$n(count))" />
+                            <span v-text="translations().extension.empire.amortization.generateItems(formatNumber(count))" />
                         </button>
                     </div>
                 </template>
@@ -495,788 +495,793 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
-    import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
-    import { addCost, Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { Component, Vue, Watch } from 'vue-property-decorator';
-    import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
-    import AmortizationPlayerSettingsInputs from '../../components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
-    import AmortizationGroupedItemTable from '../../components/empire/amortization/AmortizationGroupedItemTable.vue';
-    import AmortizationExpeditionSettingsInputs from '../../components/empire/amortization/AmortizationExpeditionSettingsInputs.vue';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
-    import { GridTableColumn } from '../../components/common/GridTable.vue';
-    import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
-    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-    import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
-    import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
-    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { AmortizationAstrophysicsSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationAstrophysicsSettings';
-    import { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@ogame-tracker/shared/models/empire/amortization/models';
-    import { AmortizationGenerationSettings, AmortizationItemGenerator } from '@ogame-tracker/shared/models/empire/amortization/AmortizationItemGenerator';
-    import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { delay } from '@ogame-tracker/shared/utils/delay';
-    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
-    import { UniverseSpecificSettingsDataModule } from '../../data/UniverseSpecificSettingsDataModule';
-    import { UniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { GroupedAmortizationItem, GroupedAmortizationItemGroup, GroupedPlasmaTechnologyItem } from '../../models/empire/amortization';
-    import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
-    import { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
-    import { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { startOfToday, subDays } from 'date-fns';
-    import { AmortizationExpeditionResultsBreakdown, AmortizationExpeditionResultsBreakdownOptions } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
-    import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
+<script setup lang="ts">
+import { computed, nextTick, onMounted, ref, watch, reactive, shallowReactive, shallowRef } from 'vue';
+import { translations, formatNumber, formatDate, formatTimespan } from '@stats/i18n';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { addCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
+import AmortizationPlayerSettingsInputs from '../../components/empire/amortization/AmortizationPlayerSettingsInputs.vue';
+import AmortizationGroupedItemTable from '../../components/empire/amortization/AmortizationGroupedItemTable.vue';
+import AmortizationExpeditionSettingsInputs from '../../components/empire/amortization/AmortizationExpeditionSettingsInputs.vue';
+import { useEmpireStore } from '../../data/EmpireDataModule';
+import type { GridTableColumn } from '../../components/common/GridTable.vue';
+import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+import { useServerSettingsStore } from '../../data/ServerSettingsDataModule';
+import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypes, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
+import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
+import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+import type { AmortizationItem, BaseAmortizationItem, LifeformBuildingLevels, LifeformTechnologyLevels, MineBuildingType } from '@ogame-tracker/shared/models/empire/amortization/models';
+import { AmortizationItemGenerator } from '@ogame-tracker/shared/models/empire/amortization/AmortizationItemGenerator';
+import type { AmortizationGenerationSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationItemGenerator';
+import { LifeformTechnologyBonusLifeformBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import { delay } from '@ogame-tracker/shared/utils/delay';
+import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+import { useUniverseSpecificSettingsStore } from '../../data/UniverseSpecificSettingsDataModule';
+import type { UniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import type { GroupedAmortizationItem, GroupedAmortizationItemGroup } from '../../models/empire/amortization';
+import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import type { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
+import type { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';
+import { useExpeditionStore } from '../../data/ExpeditionDataModule';
+import { startOfToday, subDays } from 'date-fns';
+import { AmortizationExpeditionResultsBreakdown } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
+import type { AmortizationExpeditionResultsBreakdownOptions } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
+import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
 import { getPlanetExpeditionState, getPlanetState } from '@ogame-tracker/shared/models/empire/amortization/utils';
 
-    type AmortizationViewItem = AmortizationItem & {
-        selected: boolean;
+type AmortizationViewItem = AmortizationItem & {
+    selected: boolean;
+};
+
+interface AdditionalLifeformStuffGroup {
+    items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
+    totalLevels: number;
+    planetIds: Set<number>;
+    building?: LifeformBuildingType;
+    technology?: LifeformTechnologyType;
+}
+
+const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
+
+const empireStore = useEmpireStore();
+
+const serverSettingsStore = useServerSettingsStore();
+
+const settingsStore = useSettingsStore();
+
+const expeditionStore = useExpeditionStore();
+
+const numberFormat: Intl.NumberFormatOptions = {
+    maximumFractionDigits: 0,
+};
+
+const showSettingsMenu = ref(false);
+
+const showInfoMenu = ref(false);
+
+const mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
+
+const expoBreakdown = shallowRef(new AmortizationExpeditionResultsBreakdown(reactive({
+    playerClass: PlayerClass.none,
+    admiral: false,
+    astrophysicsLevel: 0,
+    itemBonusSlots: 0,
+    expeditionBoostItems: [],
+    fleetFindsResourceFactors: createRecord(ResourceTypes, () => 0),
+    planets: {},
+    serverSettings: {
+        topScore: 0,
+        economySpeed: 0,
+        discovererExpeditionBonus: 0,
+        discovererExpeditionSlotBonus: 0,
+    },
+})));
+
+const applicableBuildingTypes = [
+    ...ResourceProductionBonusLifeformBuildings,
+    ...LifeformTechnologyBonusLifeformBuildings,
+].map(b => b.type);
+
+const applicableLifeformBuildingTypes = computed<LifeformBuildingType[]>(() => {
+    const lfBuildings = LifeformBuildingTypesByLifeform[astrophysicsSettings.value.lifeform];
+    return lfBuildings.filter(building => applicableBuildingTypes.includes(building));
+});
+
+const applicableLifeformTechnologyTypes = LifeformTechnologyTypes.sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]);
+
+const savedAmortization = computed(() => universeSpecificSettingsStore.settings.savedAmortization);
+
+function onPlayerClassSelectionChanged(newClass: PlayerClass) {
+    const isCollector = newClass == PlayerClass.collector;
+    const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
+
+    planetSettingsSorted.value.forEach(p => {
+        p.crawlers.percentage = percentage;
+        p.crawlers.max = isCollector;
+    });
+
+    astrophysicsSettings.value.crawlers.percentage = percentage;
+    astrophysicsSettings.value.crawlers.max = isCollector;
+}
+
+async function saveItems() {
+    const localSavedAmortization: UniverseSpecificSettings['savedAmortization'] = {
+        date: Date.now(),
+        items: items.value,
     };
 
-    interface AdditionalLifeformStuffGroup {
-        items: (LifeformBuildingLevels | LifeformTechnologyLevels)[];
-        totalLevels: number;
-        planetIds: Set<number>;
-        building?: LifeformBuildingType;
-        technology?: LifeformTechnologyType;
+    await universeSpecificSettingsStore.updateSettings({
+        ...universeSpecificSettingsStore.settings,
+        savedAmortization: localSavedAmortization,
+    });
+}
+
+function loadItems() {
+    const localSavedAmortization = universeSpecificSettingsStore.settings.savedAmortization;
+    if (localSavedAmortization == null) {
+        return;
     }
 
-    @Component({
-        components: {
-            AmortizationPlanetSettingsInputs,
-            AmortizationPlayerSettingsInputs,
-            AmortizationGroupedItemTable,
-            AmortizationExpeditionSettingsInputs,
-            ShowConvertedResourcesInCellsSettings,
-        },
-    })
-    export default class Amortization extends Vue {
-        private readonly numberFormat: Intl.NumberFormatOptions = {
-            maximumFractionDigits: 0,
-        };
+    showSettings.value = false;
+    generator.value = null;
+    selectedCount.value = 0;
+    isGroupedItemsView.value = false;
 
-        private showSettingsMenu = false;
-        private showInfoMenu = false;
+    saveStateDate.value = localSavedAmortization.date;
+    amortizationItems.value = shallowReactive(localSavedAmortization.items
+        .filter(item => !getIsDone(item))
+        .map(item => shallowReactive({ ...item, selected: false })));
+    saveStateHiddenItems.value = localSavedAmortization.items.length - amortizationItems.value.length;
+}
 
-        private readonly BuildingType = BuildingType;
-        private readonly ResearchType = ResearchType;
-        private readonly mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
-        private readonly LifeformBuildingTypes = LifeformBuildingTypes;
-        private readonly LifeformTechnologyTypes = LifeformTechnologyTypes;
-
-        private expoBreakdown = new AmortizationExpeditionResultsBreakdown({
-            playerClass: PlayerClass.none,
-            admiral: false,
-            astrophysicsLevel: 0,
-            itemBonusSlots: 0,
-            expeditionBoostItems: [],
-            fleetFindsResourceFactors: createRecord(ResourceTypes, () => 0),
-            planets: {},
-            serverSettings: {
-                topScore: 0,
-                economySpeed: 0,
-                discovererExpeditionBonus: 0,
-                discovererExpeditionSlotBonus: 0,
-            },
-        });
-
-        private readonly applicableBuildingTypes = [
-            ...ResourceProductionBonusLifeformBuildings,
-            ...LifeformTechnologyBonusLifeformBuildings,
-        ].map(b => b.type);
-
-        private get applicableLifeformBuildingTypes(): LifeformBuildingType[] {
-            const lfBuildings = LifeformBuildingTypesByLifeform[this.astrophysicsSettings.lifeform];
-            return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
-        }
-        private readonly applicableLifeformTechnologyTypes = LifeformTechnologyTypes.sort((a,b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]); // sorted by slot
-
-        private get savedAmortization() {
-            return UniverseSpecificSettingsDataModule.settings.savedAmortization;
-        }
-
-        @Watch('playerSettings.playerClass')
-        private onPlayerClassSelectionChanged(newClass: PlayerClass) {
-            const isCollector = newClass == PlayerClass.collector;
-            const percentage: CrawlerProductionPercentage = isCollector ? 150 : 100;
-
-            this.planetSettingsSorted.forEach(p => {
-                p.crawlers.percentage = percentage;
-                p.crawlers.max = isCollector;
-            });
-
-            this.astrophysicsSettings.crawlers.percentage = percentage;
-            this.astrophysicsSettings.crawlers.max = isCollector;
-        }
-
-        private async saveItems() {
-            const savedAmortization: UniverseSpecificSettings['savedAmortization'] = {
-                date: Date.now(),
-                items: this.items,
-            };
-
-            await UniverseSpecificSettingsDataModule.updateSettings({
-                ...UniverseSpecificSettingsDataModule.settings,
-                savedAmortization,
-            });
-        }
-
-        private loadItems() {
-            const savedAmortization = UniverseSpecificSettingsDataModule.settings.savedAmortization;
-            if (savedAmortization == null) {
-                return;
+function getIsDone(item: AmortizationItem): boolean {
+    const itemType = item.type;
+    switch (item.type) {
+        case 'mine': {
+            if (item.planetId < 0) {
+                return false; //TODO: how to check if an item on a new planet was done?
             }
 
-            this.showSettings = false;
-            this.generator = null;
-            this.selectedCount = 0;
-            this.isGroupedItemsView = false;
-
-            this.saveStateDate = savedAmortization.date;
-            this.amortizationItems = savedAmortization.items
-                .filter(item => !this.getIsDone(item))
-                .map<AmortizationViewItem>(item => ({
-                    ...item,
-                    selected: false,
-                }));
-            this.saveStateHiddenItems = savedAmortization.items.length - this.amortizationItems.length;
+            const planet = empire.planets[item.planetId] as PlanetData | undefined;
+            return planet == null || planet.buildings[item.mine] >= item.level;
         }
 
-        private getIsDone(item: AmortizationItem): boolean {
-            const itemType = item.type;
-            switch (item.type) {
-                case 'mine': {
-                    if (item.planetId < 0) {
-                        return false; //TODO: how to check if an item on a new planet was done?
-                    }
+        case 'plasma-technology': {
+            return empire.research[ResearchType.plasmaTechnology] >= item.level;
+        }
 
-                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
-                    return planet == null || planet.buildings[item.mine] >= item.level;
+        case 'astrophysics-and-colony': {
+            return false; //TODO: how to check if an astro+colony item was done?
+        }
+
+        case 'lifeform-building': {
+            if (item.planetId < 0) {
+                return false; //TODO: how to check if an item on a new planet was done?
+            }
+
+            const planet = empire.planets[item.planetId] as PlanetData | undefined;
+            return planet == null || planet.lifeformBuildings[item.building] >= item.level;
+        }
+
+        case 'lifeform-technology': {
+            if (item.planetId < 0) {
+                return false; //TODO: how to check if an item on a new planet was done?
+            }
+
+            const planet = empire.planets[item.planetId] as PlanetData | undefined;
+            return planet == null || planet.lifeformTechnologies[item.technology] >= item.level;
+        }
+
+        default: _throw(`Invalid amortization item type '${itemType}'`);
+    }
+}
+
+function getPlanetName(id: number): string {
+    return empire.planets[id]?.name
+        ?? `${translations().extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
+}
+
+function formatPlanetCoordinates(id: number): string {
+    const coordinates = empire.planets[id]?.coordinates as Coordinates | undefined;
+    if (coordinates == null) {
+        return '';
+    }
+
+    return formatCoordinates(coordinates);
+}
+
+const saveStateDate = ref<number | null>(null);
+
+const saveStateHiddenItems = ref(0);
+
+const playerSettings = ref<AmortizationPlayerSettings>({
+    optimizeForResources: [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium],
+    officers: {
+        admiral: false,
+        commander: false,
+        engineer: false,
+        geologist: false,
+        technocrat: false,
+    },
+    playerClass: PlayerClass.none,
+    allianceClass: AllianceClass.none,
+    levelPlasmaTechnology: 0,
+    levelAstrophysics: 0,
+    numberOfUnusedRaidColonySlots: 0,
+    lifeformLevels: createRecord(ValidLifeformTypes, 0),
+});
+
+const planetSettings = ref<Record<number, AmortizationPlanetSettings>>({});
+
+const astrophysicsSettings = ref<AmortizationPlanetSettings>({
+    include: true,
+    id: -1,
+    name: '',
+    position: 8,
+    maxTemperature: getAverageTemperature(8),
+    activeItems: [],
+    crawlers: {
+        percentage: 100,
+        count: 0,
+        max: false,
+    },
+    ignoreEmptyLifeformTechnologySlots: false,
+    lifeform: LifeformType.none,
+    activeLifeformTechnologies: [],
+});
+
+const includeSettings = ref<AmortizationGenerationSettings['include']>({
+    astrophysics: false,
+    plasmaTechnology: true,
+    expeditions: true,
+    mines: true,
+
+    lifeformProductionBonusBuildings: true,
+    lifeformTechnologyBoostBuildings: true,
+    lifeformProductionBonusTechnologies: true,
+    lifeformExpeditionBonusTechnologies: true,
+});
+
+const expeditionSettings = ref<AmortizationExpeditionSettings>({
+    wavesPerDay: 8,
+    items: [],
+    fleetUnitsFactors: {
+        metal: 0.35,
+        crystal: 0.35,
+        deuterium: 0.35,
+    },
+    serverSettings: {
+        topScore: 100_000_001,
+        economySpeed: 1,
+        discovererExpeditionBonus: 0.5,
+        discovererExpeditionSlotBonus: 2,
+    },
+});
+
+const showSettings = ref(true);
+
+const empire = empireStore.empire;
+
+const generator = shallowRef<AmortizationItemGenerator | null>(null);
+
+const amortizationItems = shallowRef<AmortizationViewItem[]>(shallowReactive([]));
+
+const selectedCount = ref(0);
+
+const generatingItemCount = ref<{ total: number; count: number } | null>(null);
+
+const planetSettingsSorted = computed<AmortizationPlanetSettings[]>(() => {
+    return Object.values(planetSettings.value)
+        .sort((a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empireStore.empire.planetOrder.indexOf(b.id));
+});
+
+function toggleSettings() {
+    saveStateDate.value = null;
+
+    if (!showSettings.value) {
+        stopGenerating.value = true;
+        showSettings.value = true;
+    }
+    else {
+        stopGenerating.value = false;
+        showSettings.value = false;
+        initItems();
+        selectedCount.value = 0;
+        isGroupedItemsView.value = false;
+
+        void insertNextAmortizationItems(25);
+    }
+}
+
+function clone<T>(data: T): T {
+    return JSON.parse(JSON.stringify(data)) as T;
+}
+
+function initItems(): void {
+    generator.value = new AmortizationItemGenerator({
+        settings: {
+            player: clone(playerSettings.value),
+            planets: clone(planetSettings.value),
+            astrophysics: clone(astrophysicsSettings.value),
+            expeditions: clone(expeditionSettings.value),
+            include: clone(includeSettings.value),
+        },
+        lifeformExperience: createRecord(
+            ValidLifeformTypes,
+            lifeform => getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lifeform]),
+        ),
+        serverSettings: clone(serverSettingsStore.serverSettings),
+        getMsuOrDsu,
+    });
+    amortizationItems.value = shallowReactive([]);
+}
+
+const stopGenerating = ref(false);
+
+async function insertNextAmortizationItems(count: number): Promise<void> {
+    if (generatingItemCount.value != null) {
+        return;
+    }
+
+    generatingItemCount.value = { total: count, count: 0 };
+    await nextTick();
+
+    while (count > 0) {
+        const next = generator.value?.nextItem();
+
+        if (next == null || stopGenerating.value) {
+            break;
+        }
+
+        amortizationItems.value.push(shallowReactive({
+            ...next,
+            selected: false,
+        }));
+        count--;
+
+        generatingItemCount.value.count++;
+        await nextTick();
+        await delay(10);
+    }
+
+    generatingItemCount.value = null;
+}
+
+function initSettings() {
+    const localEmpire = empire;
+    const serverSettings = serverSettingsStore.serverSettings;
+    const settings = settingsStore.settings;
+
+    playerSettings.value = {
+        ...playerSettings.value,
+
+        lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(empireStore.lifeformExperience[lf])),
+        officers: { ...localEmpire.officers },
+        playerClass: localEmpire.playerClass,
+        allianceClass: localEmpire.allianceClass,
+        levelPlasmaTechnology: localEmpire.research[ResearchType.plasmaTechnology],
+        levelAstrophysics: localEmpire.research[ResearchType.astrophysics],
+    };
+
+    planetSettings.value = (Object.values(localEmpire.planets).filter(p => !p.isMoon) as PlanetData[])
+        .reduce((acc, planet) => {
+            const settings: AmortizationPlanetSettings = {
+                include: true,
+                id: planet.id,
+                name: planet.name,
+                maxTemperature: planet.maxTemperature,
+                coordinates: planet.coordinates,
+                position: planet.coordinates.position,
+                mines: {
+                    metalMine: planet.buildings[BuildingType.metalMine],
+                    crystalMine: planet.buildings[BuildingType.crystalMine],
+                    deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
+                },
+                activeItems: Object.keys(planet.activeItems) as ItemHash[],
+                crawlers: {
+                    percentage: planet.productionSettings[ShipType.crawler],
+                    count: planet.ships[ShipType.crawler],
+                    max: localEmpire.playerClass == PlayerClass.collector,
+                },
+                lifeform: planet.activeLifeform,
+                activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
+                ignoreEmptyLifeformTechnologySlots: false,
+                lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
+                lifeformBuildingLevels: { ...planet.lifeformBuildings },
+            };
+            acc[planet.id] = settings;
+            return acc;
+        }, {} as Record<number, AmortizationPlanetSettings>);
+
+    const astroLifeform = serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none;
+    astrophysicsSettings.value = {
+        ...astrophysicsSettings.value,
+        lifeform: astroLifeform,
+        activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[astroLifeform]],
+
+        name: translations().extension.empire.amortization.settings.astrophysicsSettings.newColony,
+        crawlers: {
+            percentage: localEmpire.playerClass == PlayerClass.collector ? 150 : 100,
+            count: 0,
+            max: localEmpire.playerClass == PlayerClass.collector,
+        },
+    };
+
+    const expoSlotItems = Object.keys(Object.values(localEmpire.planets)[0].activeItems) as ItemHash[];
+    const bonusExpoSlots = getItemSlotBonus(createRecord(expoSlotItems, _ => 'permanent' as const));
+
+    const days = Array.from({ length: 7 }).map((_, i) => subDays(startOfToday(), i + 1).getTime());
+    const expoCounts = days.map(day => expeditionStore.dailyResults[day])
+        .map(res => res == null
+            ? 0
+            : Object.values(res.events).reduce((total, cur) => total + cur, 0))
+        .filter(res => res > 0);
+    const avgExpos = expoCounts.reduce((total, cur) => total + cur, 0) / Math.max(1, expoCounts.length);
+    const expoServerSettings: AmortizationExpeditionResultsBreakdownOptions['serverSettings'] = {
+        topScore: serverSettings.topScore ?? 100_000_001,
+        economySpeed: serverSettings.speed.economy,
+        discovererExpeditionBonus: serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
+        discovererExpeditionSlotBonus: serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
+    };
+
+    const lifeformExperience = createRecord(
+        ValidLifeformTypes,
+        lifeform => getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lifeform]),
+    );
+    expoBreakdown.value = new AmortizationExpeditionResultsBreakdown(reactive({
+        playerClass: playerSettings.value.playerClass,
+        admiral: playerSettings.value.officers.admiral,
+        astrophysicsLevel: playerSettings.value.levelAstrophysics,
+        itemBonusSlots: bonusExpoSlots,
+        expeditionBoostItems: expoSlotItems,
+        fleetFindsResourceFactors: {
+            metal: settings.expeditionFoundShipsResourceUnits.factor,
+            crystal: settings.expeditionFoundShipsResourceUnits.factor,
+            deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
+        },
+        serverSettings: expoServerSettings,
+        planets: createMappedRecord(
+            Object.values(planetSettings.value),
+            planet => planet.id,
+            planet => getPlanetExpeditionState(getPlanetState(planet, serverSettings, lifeformExperience)),
+        ),
+    }));
+    const avgWaves = Math.round(10 * avgExpos / expoBreakdown.value.slots) / 10;
+
+    expeditionSettings.value = {
+        items: expoSlotItems,
+        wavesPerDay: avgWaves,
+        fleetUnitsFactors: {
+            metal: settings.expeditionFoundShipsResourceUnits.factor,
+            crystal: settings.expeditionFoundShipsResourceUnits.factor,
+            deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
+        },
+        serverSettings: expoServerSettings,
+    };
+}
+
+const columns = computed<GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[]>(() => {
+    const showConversion = settingsStore.settings.showCellsWithConvertedResourceUnits;
+
+    const result: GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] = [
+        { key: 'checkbox', size: 'auto' },
+        { key: 'what', size: 'auto' },
+        { key: 'cost', size: '3fr' },
+    ];
+
+    if (showConversion) {
+        result.push({
+            key: 'costConverted',
+            label: `${translations().extension.empire.amortization.table.cost} (${settingsStore.settings.conversionRates.mode == 'msu'
+                ? translations().extension.common.msu
+                : translations().extension.common.dsu
+                })`,
+            size: '1fr',
+        });
+    }
+
+    result.push({
+        key: 'productionDelta',
+        label: translations().extension.empire.amortization.table.productionPlus,
+        size: '1fr',
+    });
+
+    if (showConversion) {
+        result.push({
+            key: 'productionDeltaConverted',
+            label: `${translations().extension.empire.amortization.table.productionPlus} (${settingsStore.settings.conversionRates.mode == 'msu'
+                ? translations().extension.common.msu
+                : translations().extension.common.dsu
+                })`,
+            size: '1fr',
+        });
+    }
+
+    result.push({
+        key: 'timeInHours',
+        label: translations().extension.empire.amortization.table.amortizationTime,
+        size: '1fr',
+    });
+
+    return result;
+});
+
+const items = computed<AmortizationItem[]>(() => amortizationItems.value);
+
+const footerItems = computed<BaseAmortizationItem[]>(() => {
+    let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+    let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+    let productionDeltaConverted = 0;
+
+    amortizationItems.value.filter(i => i.selected).forEach(item => {
+        cost = addCost(cost, item.cost);
+        productionDelta = addCost(productionDelta, item.productionDelta);
+        productionDeltaConverted += item.productionDeltaConverted;
+    });
+
+    return [{
+        cost,
+        costConverted: getMsuOrDsu(cost),
+        productionDelta,
+        productionDeltaConverted,
+        timeInHours: 0,
+    }];
+});
+
+function formatCoordinates(coordinates: Coordinates): string {
+    return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
+}
+
+function cellClassProvider(_: any, item: AmortizationViewItem): string {
+    const classes: string[] = [];
+
+    switch (item.type) {
+        case 'astrophysics-and-colony': {
+            classes.push('astrophysics-cell');
+            break;
+        }
+        case 'plasma-technology': {
+            classes.push('plasmatech-cell');
+            break;
+        }
+
+        default: break;
+    }
+
+    return classes.join(' ');
+}
+
+function toggleItemSelection(item?: AmortizationViewItem, index?: number, selectAllUntilIndex?: boolean) {
+    if (item == null || index == null) {
+        const allSelected = selectedCount.value == amortizationItems.value.length;
+        selectedCount.value = allSelected ? 0 : amortizationItems.value.length;
+        amortizationItems.value.forEach(i => i.selected = !allSelected);
+        return;
+    }
+
+    const select = !item.selected;
+    const min = selectAllUntilIndex ? 0 : index;
+    const max = index;
+    for (let index = min;index <= max;index++) {
+        const itemAtIndex = amortizationItems.value[index];
+
+        if (!select && itemAtIndex.selected) {
+            itemAtIndex.selected = false;
+            selectedCount.value--;
+        }
+        else if (select && !itemAtIndex.selected) {
+            itemAtIndex.selected = true;
+            selectedCount.value++;
+        }
+    }
+}
+
+function deselectAllPlanets() {
+    Object.values(planetSettings.value).forEach(planet => planet.include = false);
+}
+
+function getAdditionalLifeformStuffGroups(additionalLifeformStuff: (LifeformBuildingLevels | LifeformTechnologyLevels)[]): AdditionalLifeformStuffGroup[] {
+    const groups: AdditionalLifeformStuffGroup[] = [];
+    const groupsByType: Record<number, AdditionalLifeformStuffGroup> = {};
+
+    additionalLifeformStuff.forEach(stuff => {
+        const type = 'building' in stuff ? stuff.building : stuff.technology;
+
+        let group = groupsByType[type];
+        if (group == null) {
+            group = groupsByType[type] = {
+                items: [],
+                planetIds: new Set<number>(),
+                building: 'building' in stuff ? stuff.building : undefined,
+                technology: 'technology' in stuff ? stuff.technology : undefined,
+                totalLevels: 0,
+            };
+            groups.push(group);
+        }
+
+        group.planetIds.add(stuff.planetId);
+        group.items.push(stuff);
+        group.totalLevels += stuff.levels.to - stuff.levels.from + 1;
+    });
+
+    return groups;
+}
+
+const showAmotizationGroup = reactive<Partial<Record<string, boolean>>>({});
+
+function toggleAmortizationGroup(groupName: string) {
+    if (showAmotizationGroup[groupName] == null) {
+        showAmotizationGroup[groupName] = true;
+    }
+    else {
+        showAmotizationGroup[groupName] = !showAmotizationGroup[groupName];
+    }
+}
+
+const isGroupedItemsView = ref(false);
+
+const groupedItems = ref<GroupedAmortizationItemGroup>({});
+
+function showGroupedItems() {
+    groupedItems.value = amortizationItems.value
+        .filter(i => i.selected)
+        .reduce<GroupedAmortizationItemGroup>((groups, cur) => {
+            const getPlanetItem = (id: number) => {
+                return (groups[id] ??= {
+                    type: 'planet-item',
+                    planetId: id,
+                    astrophysicsLevels: [],
+                    mines: createRecord(mineBuildingTypes, _ => []),
+                    lifeformBuildings: createRecord(LifeformBuildingTypes, _ => []),
+                    lifeformTechnologies: createRecord(LifeformTechnologyTypes, _ => []),
+                });
+            };
+            const getLevelRangeArray = (levels: { from: number; to: number } | number) => {
+                if (typeof levels === 'number') {
+                    return Array.from({ length: levels }).map((_, i) => i + 1);
                 }
 
+                return Array.from({
+                    length: levels.to - levels.from + 1,
+                }).map((_, i) => levels.from + i);
+            };
+
+            switch (cur.type) {
                 case 'plasma-technology': {
-                    return this.empire.research[ResearchType.plasmaTechnology] >= item.level;
+                    const groupItem = (groups.plasmaTechnology ??= {
+                        type: 'plasma-technology',
+                        levels: [],
+                    });
+                    groupItem.levels.push(cur.level);
+
+                    cur.additionalLifeformStuff.forEach(lfStuff => {
+                        const planetItem = getPlanetItem(lfStuff.planetId);
+                        const levels = getLevelRangeArray(lfStuff.levels);
+                        if ('building' in lfStuff) {
+                            planetItem.lifeformBuildings[lfStuff.building!].push(...levels);
+                        }
+                        else {
+                            planetItem.lifeformTechnologies[lfStuff.technology!].push(...levels);
+                        }
+                    });
+                    return groups;
+                }
+
+                case 'mine': {
+                    const item = getPlanetItem(cur.planetId);
+                    item.mines[cur.mine].push(cur.level);
+
+                    cur.additionalLifeformBuildings.forEach(add => {
+                        const levels = getLevelRangeArray(add.levels);
+                        item.lifeformBuildings[add.building].push(...levels);
+                    });
+
+                    return groups;
                 }
 
                 case 'astrophysics-and-colony': {
-                    return false; //TODO: how to check if an astro+colony item was done?
+                    const item = getPlanetItem(cur.newPlanetId);
+                    mineBuildingTypes.forEach(mine => {
+                        const levels = getLevelRangeArray(cur.builtLevels.mines[mine]);
+                        item.mines[mine].push(...levels);
+                    });
+                    LifeformBuildingTypes.forEach(b => {
+                        const levels = getLevelRangeArray(cur.builtLevels.lifeformBuildings[b]);
+                        item.lifeformBuildings[b].push(...levels);
+                    });
+                    LifeformTechnologyTypes.forEach(t => {
+                        const levels = getLevelRangeArray(cur.builtLevels.lifeformTechnologies[t]);
+                        item.lifeformTechnologies[t].push(...levels);
+                    });
+                    item.astrophysicsLevels.push(...cur.levels);
+
+                    return groups;
                 }
 
                 case 'lifeform-building': {
-                    if (item.planetId < 0) {
-                        return false; //TODO: how to check if an item on a new planet was done?
-                    }
+                    const item = getPlanetItem(cur.planetId);
+                    item.lifeformBuildings[cur.building].push(cur.level);
+                    cur.additionalLifeformBuildings.forEach(b => {
+                        const levels = getLevelRangeArray(b.levels);
+                        item.lifeformBuildings[b.building].push(...levels);
+                    });
 
-                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
-                    return planet == null || planet.lifeformBuildings[item.building] >= item.level;
+                    return groups;
                 }
 
                 case 'lifeform-technology': {
-                    if (item.planetId < 0) {
-                        return false; //TODO: how to check if an item on a new planet was done?
-                    }
+                    const item = getPlanetItem(cur.planetId);
+                    item.lifeformTechnologies[cur.technology].push(cur.level);
+                    cur.additionalLifeformBuildings.forEach(b => {
+                        const levels = getLevelRangeArray(b.levels);
+                        item.lifeformBuildings[b.building].push(...levels);
+                    });
 
-                    const planet = this.empire.planets[item.planetId] as PlanetData | undefined;
-                    return planet == null || planet.lifeformTechnologies[item.technology] >= item.level;
+                    return groups;
                 }
 
-                default: _throw(`Invalid amortization item type '${itemType}'`);
+                default: _throw('invalid type');
             }
-        }
+        }, {} as GroupedAmortizationItemGroup);
 
-        private getPlanetName(id: number): string {
-            return this.empire.planets[id]?.name
-                ?? `${this.$i18n.$t.extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
-        }
-        private formatPlanetCoordinates(id: number): string {
-            const coordinates = this.empire.planets[id]?.coordinates as Coordinates | undefined;
-            if (coordinates == null) {
-                return '';
-            }
+    isGroupedItemsView.value = true;
+}
 
-            return this.formatCoordinates(coordinates);
-        }
+const groupedItemsSorted = computed<GroupedAmortizationItem[]>(() => {
+    const result = planetSettingsSorted.value
+        .map(p => groupedItems.value[p.id])
+        .filter(g => g != null) as GroupedAmortizationItem[];
 
-        private saveStateDate: number | null = null;
-        private saveStateHiddenItems = 0;
-
-
-        private playerSettings: AmortizationPlayerSettings = {
-            optimizeForResources: [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium],
-            officers: {
-                admiral: false,
-                commander: false,
-                engineer: false,
-                geologist: false,
-                technocrat: false,
-            },
-            playerClass: PlayerClass.none,
-            allianceClass: AllianceClass.none,
-            levelPlasmaTechnology: 0,
-            levelAstrophysics: 0,
-            numberOfUnusedRaidColonySlots: 0,
-            lifeformLevels: createRecord(ValidLifeformTypes, 0),
-        };
-        private planetSettings: Record<number, AmortizationPlanetSettings> = {};
-        private astrophysicsSettings: AmortizationAstrophysicsSettings = {
-            id: -1,
-            name: '',
-            position: 8,
-            maxTemperature: getAverageTemperature(8),
-            activeItems: [],
-            crawlers: {
-                percentage: 100,
-                count: 0,
-                max: false,
-            },
-            ignoreEmptyLifeformTechnologySlots: false,
-            lifeform: LifeformType.none,
-            activeLifeformTechnologies: [],
-        };
-        private includeSettings: AmortizationGenerationSettings['include'] = {
-            astrophysics: false,
-            plasmaTechnology: true,
-            expeditions: true,
-            mines: true,
-            
-            lifeformProductionBonusBuildings: true,
-            lifeformTechnologyBoostBuildings: true,
-            lifeformProductionBonusTechnologies: true,
-            lifeformExpeditionBonusTechnologies: true,
-        };
-        private expeditionSettings: AmortizationExpeditionSettings = {
-            wavesPerDay: 8,
-            items: [],
-            fleetUnitsFactors: {
-                metal: 0.35,
-                crystal: 0.35,
-                deuterium: 0.35,
-            },
-            serverSettings: {
-                topScore: 100_000_001,
-                economySpeed: 1,
-                discovererExpeditionBonus: 0.5,
-                discovererExpeditionSlotBonus: 2,
-            },
-        };
-
-        private showSettings = true;
-
-        private readonly empire = EmpireDataModule.empire;
-        private generator: AmortizationItemGenerator | null = null;
-        private amortizationItems: AmortizationViewItem[] = [];
-        private selectedCount = 0;
-
-        private generatingItemCount: { total: number; count: number } | null = null;
-
-        private get planetSettingsSorted(): AmortizationPlanetSettings[] {
-            return Object.values(this.planetSettings)
-                .sort((a, b) => EmpireDataModule.empire.planetOrder.indexOf(a.id) - EmpireDataModule.empire.planetOrder.indexOf(b.id));
-        }
-
-        private mounted() {
-            this.initSettings();
-        }
-
-        private toggleSettings() {
-            this.saveStateDate = null;
-
-            if (!this.showSettings) {
-                this.stopGenerating = true;
-                this.showSettings = true;
-            }
-            else {
-                this.stopGenerating = false;
-                this.showSettings = false;
-                this.initItems();
-                this.selectedCount = 0;
-                this.isGroupedItemsView = false;
-
-                void this.insertNextAmortizationItems(25);
-            }
-        }
-
-        private clone<T>(data: T): T {
-            return JSON.parse(JSON.stringify(data)) as T;
-        }
-
-        private initItems(): void {
-            this.generator = new AmortizationItemGenerator({
-                settings: {
-                    player: this.clone(this.playerSettings),
-                    planets: this.clone(this.planetSettings),
-                    astrophysics: this.clone(this.astrophysicsSettings),
-                    expeditions: this.clone(this.expeditionSettings),
-                    include: this.clone(this.includeSettings),
-                },
-                lifeformExperience: createRecord(
-                    ValidLifeformTypes, 
-                    lifeform => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lifeform]),
-                ),
-                serverSettings: this.clone(ServerSettingsDataModule.serverSettings),
-                getMsuOrDsu,
-            });
-            this.amortizationItems = [];
-        }
-
-        private stopGenerating = false;
-        private async insertNextAmortizationItems(count: number): Promise<void> {
-            if (this.generatingItemCount != null) {
-                return;
-            }
-
-            this.generatingItemCount = { total: count, count: 0 };
-            await this.$nextTick();
-
-            while (count > 0) {
-                const next = this.generator?.nextItem();
-
-                if (next == null || this.stopGenerating) {
-                    break;
-                }
-
-                this.amortizationItems.push({
-                    ...next,
-                    selected: false,
-                });
-                count--;
-
-                this.generatingItemCount.count++;
-                await this.$nextTick();
-                await delay(10);
-            }
-
-            this.generatingItemCount = null;
-        }
-
-        private initSettings() {
-            const empire = this.empire;
-            const serverSettings = ServerSettingsDataModule.serverSettings;
-            const settings = SettingsDataModule.settings;
-
-            this.playerSettings = {
-                ...this.playerSettings,
-
-                lifeformLevels: createRecord(ValidLifeformTypes, lf => getLifeformLevel(EmpireDataModule.lifeformExperience[lf])),
-                officers: { ...empire.officers },
-                playerClass: empire.playerClass,
-                allianceClass: empire.allianceClass,
-                levelPlasmaTechnology: empire.research[ResearchType.plasmaTechnology],
-                levelAstrophysics: empire.research[ResearchType.astrophysics],
-            };
-
-            this.planetSettings = (Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[])
-                .reduce((acc, planet) => {
-                    const settings: AmortizationPlanetSettings = {
-                        include: true,
-                        id: planet.id,
-                        name: planet.name,
-                        maxTemperature: planet.maxTemperature,
-                        coordinates: planet.coordinates,
-                        position: planet.coordinates.position,
-                        mines: {
-                            metalMine: planet.buildings[BuildingType.metalMine],
-                            crystalMine: planet.buildings[BuildingType.crystalMine],
-                            deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
-                        },
-                        activeItems: Object.keys(planet.activeItems) as ItemHash[],
-                        crawlers: {
-                            percentage: planet.productionSettings[ShipType.crawler],
-                            count: planet.ships[ShipType.crawler],
-                            max: empire.playerClass == PlayerClass.collector,
-                        },
-                        lifeform: planet.activeLifeform,
-                        activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
-                        ignoreEmptyLifeformTechnologySlots: false,
-                        lifeformTechnologyLevels: { ...planet.lifeformTechnologies },
-                        lifeformBuildingLevels: { ...planet.lifeformBuildings },
-                    };
-                    acc[planet.id] = settings;
-                    return acc;
-                }, {} as Record<number, AmortizationPlanetSettings>);
-
-            const astroLifeform = serverSettings.lifeforms.enabled ? LifeformType.rocktal : LifeformType.none;
-            this.astrophysicsSettings = {
-                ...this.astrophysicsSettings,
-                lifeform: astroLifeform,
-                activeLifeformTechnologies: [...LifeformTechnologyTypesByLifeform[astroLifeform]],
-
-                name: this.$i18n.$t.extension.empire.amortization.settings.astrophysicsSettings.newColony,
-                crawlers: {
-                    percentage: empire.playerClass == PlayerClass.collector ? 150 : 100,
-                    count: 0,
-                    max: empire.playerClass == PlayerClass.collector,
-                },
-            };
-
-
-
-            const expoSlotItems = Object.keys(Object.values(empire.planets)[0].activeItems) as ItemHash[];
-            const bonusExpoSlots = getItemSlotBonus(createRecord(expoSlotItems, _ => 'permanent' as const));
-
-            const days = Array.from({ length: 7 }).map((_, i) => subDays(startOfToday(), i + 1).getTime());
-            const expoCounts = days.map(day => ExpeditionDataModule.dailyResults[day])
-                .map(res => res == null
-                    ? 0
-                    : Object.values(res.events).reduce((total, cur) => total + cur, 0))
-                .filter(res => res > 0);
-            const avgExpos = expoCounts.reduce((total, cur) => total + cur, 0) / Math.max(1, expoCounts.length);
-            const expoServerSettings: AmortizationExpeditionResultsBreakdownOptions['serverSettings'] = {
-                topScore: serverSettings.topScore ?? 100_000_001,
-                economySpeed: serverSettings.speed.economy,
-                discovererExpeditionBonus: serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
-                discovererExpeditionSlotBonus: serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
-            };
-            
-            const lifeformExperience = createRecord(
-                ValidLifeformTypes, 
-                lifeform => getLifeformExperienceNeededForLevel(this.playerSettings.lifeformLevels[lifeform]),
-            );
-            this.expoBreakdown = new AmortizationExpeditionResultsBreakdown({
-                playerClass: this.playerSettings.playerClass,
-                admiral: this.playerSettings.officers.admiral,
-                astrophysicsLevel: this.playerSettings.levelAstrophysics,
-                itemBonusSlots: bonusExpoSlots,
-                expeditionBoostItems: expoSlotItems,
-                fleetFindsResourceFactors: {
-                    metal: settings.expeditionFoundShipsResourceUnits.factor,
-                    crystal: settings.expeditionFoundShipsResourceUnits.factor,
-                    deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
-                },
-                serverSettings: expoServerSettings,
-                planets: createMappedRecord(
-                    Object.values(this.planetSettings),
-                    planet => planet.id,
-                    planet => getPlanetExpeditionState(getPlanetState(planet, serverSettings, lifeformExperience)),
-                ),
-            });
-            const avgWaves = Math.round(10 * avgExpos / this.expoBreakdown.slots) / 10;
-
-            this.expeditionSettings = {
-                items: expoSlotItems,
-                wavesPerDay: avgWaves,
-                fleetUnitsFactors: {
-                    metal: settings.expeditionFoundShipsResourceUnits.factor,
-                    crystal: settings.expeditionFoundShipsResourceUnits.factor,
-                    deuterium: settings.expeditionFoundShipsResourceUnits.deuteriumFactor,
-                },
-                serverSettings: expoServerSettings,
-            };
-        }
-
-        private get columns(): GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] {
-            const showConversion = SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
-
-            const result: GridTableColumn<keyof BaseAmortizationItem | 'what' | 'checkbox'>[] = [
-                { key: 'checkbox', size: 'auto' },
-                { key: 'what', size: 'auto' },
-                { key: 'cost', size: '3fr' },
-            ];
-
-            if (showConversion) {
-                result.push({
-                    key: 'costConverted',
-                    label: `${this.$i18n.$t.extension.empire.amortization.table.cost} (${SettingsDataModule.settings.conversionRates.mode == 'msu'
-                        ? this.$i18n.$t.extension.common.msu
-                        : this.$i18n.$t.extension.common.dsu
-                        })`,
-                    size: '1fr',
-                });
-            }
-
-            result.push({
-                key: 'productionDelta',
-                label: this.$i18n.$t.extension.empire.amortization.table.productionPlus,
-                size: '1fr',
-            });
-
-            if (showConversion) {
-                result.push({
-                    key: 'productionDeltaConverted',
-                    label: `${this.$i18n.$t.extension.empire.amortization.table.productionPlus} (${SettingsDataModule.settings.conversionRates.mode == 'msu'
-                        ? this.$i18n.$t.extension.common.msu
-                        : this.$i18n.$t.extension.common.dsu
-                        })`,
-                    size: '1fr',
-                });
-            }
-
-            result.push({
-                key: 'timeInHours',
-                label: this.$i18n.$t.extension.empire.amortization.table.amortizationTime,
-                size: '1fr',
-            });
-
-            return result;
-        }
-
-        private get items(): AmortizationItem[] {
-            return this.amortizationItems;
-        }
-
-        private get footerItems(): BaseAmortizationItem[] {
-            let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-            let productionDelta: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-            let productionDeltaConverted = 0;
-
-            this.amortizationItems.filter(i => i.selected).forEach(item => {
-                cost = addCost(cost, item.cost);
-                productionDelta = addCost(productionDelta, item.productionDelta);
-                productionDeltaConverted += item.productionDeltaConverted;
-            });
-
-            return [{
-                cost,
-                costConverted: getMsuOrDsu(cost),
-                productionDelta,
-                productionDeltaConverted,
-                timeInHours: 0,
-            }];
-        }
-
-        private formatCoordinates(coordinates: Coordinates): string {
-            return `[${coordinates.galaxy}:${coordinates.system}:${coordinates.position}]`;
-        }
-
-        private cellClassProvider(_: any, item: AmortizationViewItem): string {
-            const classes: string[] = [];
-
-            switch (item.type) {
-                case 'astrophysics-and-colony': {
-                    classes.push('astrophysics-cell');
-                    break;
-                }
-                case 'plasma-technology': {
-                    classes.push('plasmatech-cell');
-                    break;
-                }
-
-                default: break;
-            }
-
-            return classes.join(' ');
-        }
-
-        private toggleItemSelection(item?: AmortizationViewItem, index?: number, selectAllUntilIndex?: boolean) {
-            if (item == null || index == null) {
-                const allSelected = this.selectedCount == this.amortizationItems.length;
-                this.selectedCount = allSelected ? 0 : this.amortizationItems.length;
-                this.amortizationItems.forEach(i => i.selected = !allSelected);
-                return;
-            }
-
-            const select = !item.selected;
-            const min = selectAllUntilIndex ? 0 : index;
-            const max = index;
-            for (let index = min; index <= max; index++) {
-                const itemAtIndex = this.amortizationItems[index];
-
-                if (!select && itemAtIndex.selected) {
-                    itemAtIndex.selected = false;
-                    this.selectedCount--;
-                }
-                else if (select && !itemAtIndex.selected) {
-                    itemAtIndex.selected = true;
-                    this.selectedCount++;
-                }
-            }
-        }
-
-        private deselectAllPlanets() {
-            Object.values(this.planetSettings).forEach(planet => planet.include = false);
-        }
-
-        private getAdditionalLifeformStuffGroups(additionalLifeformStuff: (LifeformBuildingLevels | LifeformTechnologyLevels)[]): AdditionalLifeformStuffGroup[] {
-            const groups: AdditionalLifeformStuffGroup[] = [];
-            const groupsByType: Record<number, AdditionalLifeformStuffGroup> = {};
-
-            additionalLifeformStuff.forEach(stuff => {
-                const type = 'building' in stuff ? stuff.building : stuff.technology;
-
-                let group = groupsByType[type];
-                if (group == null) {
-                    group = groupsByType[type] = {
-                        items: [],
-                        planetIds: new Set<number>(),
-                        building: 'building' in stuff ? stuff.building : undefined,
-                        technology: 'technology' in stuff ? stuff.technology : undefined,
-                        totalLevels: 0,
-                    };
-                    groups.push(group);
-                }
-
-                group.planetIds.add(stuff.planetId);
-                group.items.push(stuff);
-                group.totalLevels += stuff.levels.to - stuff.levels.from + 1;
-            });
-
-            return groups;
-        }
-
-        private readonly showAmotizationGroup: Partial<Record<string, boolean>> = {};
-        private toggleAmortizationGroup(groupName: string) {
-            if (this.showAmotizationGroup[groupName] == null) {
-                this.$set(this.showAmotizationGroup, groupName, true);
-            }
-            else {
-                this.showAmotizationGroup[groupName] = !this.showAmotizationGroup[groupName];
-            }
-        }
-
-        private isGroupedItemsView = false;
-        private groupedItems: GroupedAmortizationItemGroup = {};
-
-        private showGroupedItems() {
-            this.groupedItems = this.amortizationItems
-                .filter(i => i.selected)
-                .reduce<GroupedAmortizationItemGroup>((groups, cur) => {
-                    const getPlanetItem = (id: number) => {
-                        return (groups[id] ??= {
-                            type: 'planet-item',
-                            planetId: id,
-                            astrophysicsLevels: [],
-                            mines: createRecord(this.mineBuildingTypes, _ => []),
-                            lifeformBuildings: createRecord(LifeformBuildingTypes, _ => []),
-                            lifeformTechnologies: createRecord(LifeformTechnologyTypes, _ => []),
-                        });
-                    };
-                    const getLevelRangeArray = (levels: { from: number; to: number } | number) => {
-                        if (typeof levels === 'number') {
-                            return Array.from({ length: levels }).map((_, i) => i + 1);
-                        }
-
-                        return Array.from({
-                            length: levels.to - levels.from + 1,
-                        }).map((_, i) => levels.from + i);
-                    };
-
-                    switch (cur.type) {
-                        case 'plasma-technology': {
-                            const groupItem = (groups.plasmaTechnology ??= {
-                                type: 'plasma-technology',
-                                levels: [],
-                            });
-                            groupItem.levels.push(cur.level);
-
-                            cur.additionalLifeformStuff.forEach(lfStuff => {
-                                const planetItem = getPlanetItem(lfStuff.planetId);
-                                const levels = getLevelRangeArray(lfStuff.levels);
-                                if ('building' in lfStuff) {
-                                    planetItem.lifeformBuildings[lfStuff.building].push(...levels);
-                                }
-                                else {
-                                    planetItem.lifeformTechnologies[lfStuff.technology].push(...levels);
-                                }
-                            });
-                            return groups;
-                        }
-
-                        case 'mine': {
-                            const item = getPlanetItem(cur.planetId);
-                            item.mines[cur.mine].push(cur.level);
-
-                            cur.additionalLifeformBuildings.forEach(add => {
-                                const levels = getLevelRangeArray(add.levels);
-                                item.lifeformBuildings[add.building].push(...levels);
-                            });
-
-                            return groups;
-                        }
-
-                        case 'astrophysics-and-colony': {
-                            const item = getPlanetItem(cur.newPlanetId);
-                            this.mineBuildingTypes.forEach(mine => {
-                                const levels = getLevelRangeArray(cur.builtLevels.mines[mine]);
-                                item.mines[mine].push(...levels);
-                            });
-                            LifeformBuildingTypes.forEach(b => {
-                                const levels = getLevelRangeArray(cur.builtLevels.lifeformBuildings[b]);
-                                item.lifeformBuildings[b].push(...levels);
-                            });
-                            LifeformTechnologyTypes.forEach(t => {
-                                const levels = getLevelRangeArray(cur.builtLevels.lifeformTechnologies[t]);
-                                item.lifeformTechnologies[t].push(...levels);
-                            });
-                            item.astrophysicsLevels.push(...cur.levels);
-
-                            return groups;
-                        }
-
-                        case 'lifeform-building': {
-                            const item = getPlanetItem(cur.planetId);
-                            item.lifeformBuildings[cur.building].push(cur.level);
-                            cur.additionalLifeformBuildings.forEach(b => {
-                                const levels = getLevelRangeArray(b.levels);
-                                item.lifeformBuildings[b.building].push(...levels);
-                            });
-
-                            return groups;
-                        }
-
-                        case 'lifeform-technology': {
-                            const item = getPlanetItem(cur.planetId);
-                            item.lifeformTechnologies[cur.technology].push(cur.level);
-                            cur.additionalLifeformBuildings.forEach(b => {
-                                const levels = getLevelRangeArray(b.levels);
-                                item.lifeformBuildings[b.building].push(...levels);
-                            });
-
-                            return groups;
-                        }
-
-                        default: _throw('invalid type');
-                    }
-                }, {} as GroupedAmortizationItemGroup);
-
-            this.isGroupedItemsView = true;
-        }
-
-        private get groupedItemsSorted(): GroupedAmortizationItem[] {
-            const result = this.planetSettingsSorted
-                .map(p => this.groupedItems[p.id])
-                .filter(g => g != null) as GroupedAmortizationItem[];
-
-            if (this.groupedItems.plasmaTechnology != null) {
-                result.unshift(this.groupedItems.plasmaTechnology);
-            }
-
-            Object.keys(this.groupedItems)
-                .map(i => parseInt(i))
-                .filter(i => i < 0)
-                .forEach(id => {
-                    result.push(this.groupedItems[id]);
-                });
-
-            return result;
-        }
-
-        private showNormalItems() {
-            this.isGroupedItemsView = false;
-            this.groupedItems = {};
-        }
-
-        private deselectAllItems() {
-            this.planetSettingsSorted.forEach(p => p.activeItems = []);
-        }
-
-        private ignoreAllInactiveSlots() {
-            this.planetSettingsSorted.forEach(p => p.ignoreEmptyLifeformTechnologySlots = true);
-        }
+    if (groupedItems.value.plasmaTechnology != null) {
+        result.unshift(groupedItems.value.plasmaTechnology);
     }
+
+    Object.keys(groupedItems.value)
+        .map(i => parseInt(i))
+        .filter(i => i < 0)
+        .forEach(id => {
+            result.push(groupedItems.value[id]);
+        });
+
+    return result;
+});
+
+function showNormalItems() {
+    isGroupedItemsView.value = false;
+    groupedItems.value = {};
+}
+
+function deselectAllItems() {
+    planetSettingsSorted.value.forEach(p => p.activeItems = []);
+}
+
+function ignoreAllInactiveSlots() {
+    planetSettingsSorted.value.forEach(p => p.ignoreEmptyLifeformTechnologySlots = true);
+}
+
+watch(() => playerSettings.value.playerClass, onPlayerClassSelectionChanged);
+
+onMounted(() => {
+    initSettings();
+});
 </script>
+
 <style lang="scss" scoped>
     .cost-grid {
         display: grid;
@@ -1369,16 +1374,14 @@ import { getPlanetExpeditionState, getPlanetState } from '@ogame-tracker/shared/
             grid-template-rows: 1fr auto;
             gap: 8px;
 
-            &::v-deep {
-                .astrophysics-cell,
-                .astrophysics-cell ~ .grid-table-cell {
-                    background-color: rgba(64, 129, 152, 0.25) !important;
-                }
+            :deep(.astrophysics-cell),
+            :deep(.astrophysics-cell ~ .grid-table-cell) {
+                background-color: rgba(64, 129, 152, 0.25) !important;
+            }
 
-                .plasmatech-cell,
-                .plasmatech-cell ~ .grid-table-cell {
-                    background-color: rgba(123, 255, 95, 0.1) !important;
-                }
+            :deep(.plasmatech-cell),
+            :deep(.plasmatech-cell ~ .grid-table-cell) {
+                background-color: rgba(123, 255, 95, 0.1) !important;
             }
         }
 
