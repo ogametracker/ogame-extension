@@ -1,106 +1,102 @@
 <template>
     <lifeform-planet-bonuses-component
-        :technologyBonuses="{}" 
+        :technologyBonuses="{}"
         no-technology-bonuses
-        :types="bonusTypes" 
-        :buildings="buildings" 
+        :types="bonusTypes"
+        :buildings="buildings"
         :forceIncludeBuildings="[BuildingType.spaceDock]"
-        :planets="planets" 
-        :limits="limits" 
-        research-bonus-breakdown-route-name="lifeforms/bonus-breakdown/resource-production" 
+        :planets="planets"
+        :limits="limits"
+        research-bonus-breakdown-route-name="lifeforms/bonus-breakdown/resource-production"
     />
 </template>
 
-<script lang="ts">
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { Component, Vue } from 'vue-property-decorator';
-    import LifeformPlanetBonusesComponent, { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
-    import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
-    import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformBuildingsByType, SpaceDockBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
-    import { SpaceDockBonusLifeformBuilding } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
-    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { SpaceDock } from '@ogame-tracker/shared/models/ogame/buildings/SpaceDock';
-import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import LifeformPlanetBonusesComponent from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
+import type { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
+import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
+import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
+import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformBuildingsByType, SpaceDockBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { useEmpireStore } from '@stats/data/EmpireDataModule';
+import type { SpaceDockBonusLifeformBuilding } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { SpaceDock } from '@ogame-tracker/shared/models/ogame/buildings/SpaceDock';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
 
-    type Key = 'wreckfield';
+type Key = 'wreckfield';
 
-    @Component({
-        components: {
-            LifeformPlanetBonusesComponent,
-        }
-    })
-    export default class ResourceProduction extends Vue {
-        private get bonusTypes(): LifeformPlanetBonusesType<Key>[] {
-            return [
-                {
-                    key: 'wreckfield',
-                    label: this.$i18n.$t.extension.empire.lifeforms.planetBonuses.wreckfield.header,
-                },
-            ];
-        }
+const empireStore = useEmpireStore();
 
-        private readonly BuildingType = BuildingType;
+const serverSettingsStore = useServerSettingsStore();
 
-        private readonly buildings: (LifeformBuildingType | BuildingType)[] = [
-            SpaceDock.type,
-            ...SpaceDockBonusLifeformBuildings.map(b => b.type),
-        ];
+const bonusTypes = computed<LifeformPlanetBonusesType<Key>[]>(() => {
+    return [
+        {
+            key: 'wreckfield',
+            label: translations().extension.empire.lifeforms.planetBonuses.wreckfield.header,
+        },
+    ];
+});
 
-        private get limits(): Record<Key, (value: number) => number> {
-            const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.SpaceDockBonus });
+const buildings: (LifeformBuildingType | BuildingType)[] = [
+    SpaceDock.type,
+    ...SpaceDockBonusLifeformBuildings.map(b => b.type),
+];
+
+const limits = computed<Record<Key, (value: number) => number>>(() => {
+    const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.SpaceDockBonus });
+    return {
+        wreckfield: value => limit != null ? Math.min(value, limit) : value,
+    };
+});
+
+const empirePlanets = computed(() => {
+    return empireStore.empire.planetOrder
+        .map(id => empireStore.empire.planets[id])
+        .filter(planet => !planet.isMoon) as PlanetData[];
+});
+
+const planets = computed<Record<number, LifeformPlanetBonuses<Key>>>(() => {
+    return createMappedRecord(
+        empirePlanets.value,
+
+        planet => planet.id,
+        planet => {
+            const activeBuildingTypes = (LifeformBuildingTypesByLifeform[planet.activeLifeform] as (LifeformBuildingType | BuildingType)[])
+                .filter(b => buildings.includes(b))
+                .concat(SpaceDock.type);
+
+            const bonusByBuilding = createRecord<Key, Record<LifeformBuildingType | BuildingType, number>>(
+                ['wreckfield'],
+                () => createRecord(
+                    activeBuildingTypes,
+                    type => {
+                        const dfSetting = serverSettingsStore.serverSettings.combats.debrisFieldFactors.ships;
+                        const wfFactor = SpaceDock.getWreckfield(planet.buildings[BuildingType.spaceDock], dfSetting);
+
+                        if (type == BuildingType.spaceDock) {
+                            return wfFactor;
+                        }
+
+                        const lfBuildingType = type as LifeformBuildingType;
+                        const bonus = (LifeformBuildingsByType[lfBuildingType] as SpaceDockBonusLifeformBuilding)
+                            .getSpaceDockBonus(planet.lifeformBuildings[lfBuildingType])
+
+                        return bonus * wfFactor;
+                    },
+                )
+            );
+
             return {
-                wreckfield: value => limit != null ? Math.min(value, limit) : value,
+                planet,
+                bonusByBuilding,
             };
         }
-
-        private get empirePlanets() {
-            return EmpireDataModule.empire.planetOrder
-                    .map(id => EmpireDataModule.empire.planets[id])
-                    .filter(planet => !planet.isMoon) as PlanetData[];
-        }
-
-        private get planets(): Record<number, LifeformPlanetBonuses<Key>> {
-            return createMappedRecord(
-                this.empirePlanets,
-
-                planet => planet.id,
-                planet => {
-                    const activeBuildingTypes = (LifeformBuildingTypesByLifeform[planet.activeLifeform] as (LifeformBuildingType | BuildingType)[])
-                        .filter(b => this.buildings.includes(b))
-                        .concat(SpaceDock.type); 
-
-                    
-                    const bonusByBuilding = createRecord<Key, Record<LifeformBuildingType | BuildingType, number>>(
-                        ['wreckfield'], 
-                        () => createRecord(
-                            activeBuildingTypes, 
-                            type =>  {
-                                const dfSetting = ServerSettingsDataModule.serverSettings.combats.debrisFieldFactors.ships;
-                                const wfFactor = SpaceDock.getWreckfield(planet.buildings[BuildingType.spaceDock], dfSetting);
-                                    
-                                if(type == BuildingType.spaceDock) {
-                                    return wfFactor;
-                                }
-
-                                const lfBuildingType = type as LifeformBuildingType;
-                                const bonus =  (LifeformBuildingsByType[lfBuildingType] as SpaceDockBonusLifeformBuilding)
-                                    .getSpaceDockBonus(planet.lifeformBuildings[lfBuildingType])
-
-                                return bonus * wfFactor;
-                            },
-                        )
-                    );
-
-                    return {
-                        planet,
-                        bonusByBuilding,
-                    };
-                }
-            );
-        }
-    }
+    );
+});
 </script>

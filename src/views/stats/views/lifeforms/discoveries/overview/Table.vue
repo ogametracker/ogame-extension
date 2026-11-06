@@ -11,15 +11,15 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <span v-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
+                <span v-if="value == translations().extension.empire.lifeforms.eventTypes.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
                 <span
-                    v-else-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.lostShip"
+                    v-else-if="value == translations().extension.empire.lifeforms.eventTypes.lostShip"
                     class="mdi mdi-skull-crossbones-outline"
                     :style="{ color: colors.lostShip }"
                 />
                 <span v-else-if="value == lifeformFoundLabel" class="mdi mdi-star-shooting" :style="{ color: colors.knownLifeformFound }" />
                 <span
-                    v-else-if="value == $i18n.$t.extension.empire.lifeforms.eventTypes.artifacts"
+                    v-else-if="value == translations().extension.empire.lifeforms.eventTypes.artifacts"
                     class="mdi mdi-pyramid"
                     :style="{ color: colors.artifacts }"
                 />
@@ -38,77 +38,71 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
+import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const lifeformDiscoveryStore = useLifeformDiscoveryStore();
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const settingsStore = useSettingsStore();
 
-        private get discoveries() {
-            return LifeformDiscoveryDataModule.dailyResultsArray;
-        }
+const showSettings = ref(false);
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
-        }
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
 
-        private get eventTypes(): Record<string, LifeformDiscoveryEventType> {
-            return {
-                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.nothing]: LifeformDiscoveryEventType.nothing,
-                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
-                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
-                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
-                [this.$i18n.$t.extension.empire.lifeforms.eventTypes.artifacts]: LifeformDiscoveryEventType.artifacts,
-            };
-        }
+const discoveries = computed(() => lifeformDiscoveryStore.dailyResultsArray);
 
-        private get lifeformFoundLabel() {
-            return this.$i18n.$t.extension.empire.lifeforms.lifeformFound;
-        }
+const colors = computed(() => settingsStore.settings.colors.lifeformDiscoveries.events);
 
-        private get items(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
-            const typeGroups: LifeformDiscoveryEventType[][] = [
-                [LifeformDiscoveryEventType.nothing],
-                [LifeformDiscoveryEventType.lostShip],
-                [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
-                [LifeformDiscoveryEventType.artifacts],
-            ]
-            return typeGroups.map(group => ({
-                label: group.length == 1 ? this.$i18n.$t.extension.empire.lifeforms.eventTypes[group[0]] : this.lifeformFoundLabel,
-                getValue: discoveries => discoveries.reduce(
-                    (acc, disc) => acc + group.reduce((acc, cur) => acc + disc.events[cur], 0),
-                    0
-                ),
-            }));
-        }
+const eventTypes = computed<Record<string, LifeformDiscoveryEventType>>(() => {
+    return {
+        [translations().extension.empire.lifeforms.eventTypes.nothing]: LifeformDiscoveryEventType.nothing,
+        [translations().extension.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
+        [translations().extension.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
+        [translations().extension.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
+        [translations().extension.empire.lifeforms.eventTypes.artifacts]: LifeformDiscoveryEventType.artifacts,
+    };
+});
 
-        private get footerItems(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: discoveries => discoveries.reduce(
-                    (acc, disc) => acc + Object.values(disc.events).reduce((acc, cur) => acc + cur, 0),
-                    0
-                ),
-            }];
-        }
-    }
+const lifeformFoundLabel = computed(() => translations().extension.empire.lifeforms.lifeformFound);
+
+const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
+    const typeGroups: LifeformDiscoveryEventType[][] = [
+        [LifeformDiscoveryEventType.nothing],
+        [LifeformDiscoveryEventType.lostShip],
+        [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
+        [LifeformDiscoveryEventType.artifacts],
+    ]
+    return typeGroups.map(group => ({
+        label: group.length == 1 ? translations().extension.empire.lifeforms.eventTypes[group[0]] : lifeformFoundLabel.value,
+        getValue: nextDiscoveries => nextDiscoveries.reduce(
+            (acc, disc) => acc + group.reduce((acc, cur) => acc + disc.events[cur], 0),
+            0
+        ),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextDiscoveries => nextDiscoveries.reduce(
+            (acc, disc) => acc + Object.values(disc.events).reduce((acc, cur) => acc + cur, 0),
+            0
+        ),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);

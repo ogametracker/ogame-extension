@@ -3,8 +3,8 @@
         <stats-chart :firstDay="firstDay" :itemsPerDay="missionsPerDay" :datasets="datasets" stacked show-average>
             <template #tooltip-footer="{ datasets }">
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                    <div v-text="$i18n.$t.extension.empire.lifeforms.artifacts" />
+                    <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
+                    <div v-text="translations().extension.empire.lifeforms.artifacts" />
                 </div>
             </template>
         </stats-chart>
@@ -21,56 +21,49 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
-    import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
+import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
+import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            LifeformDiscoveryColorSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const lifeformDiscoveryStore = useLifeformDiscoveryStore();
 
-        private get color() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries.events.artifacts;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return LifeformDiscoveryDataModule.firstDay;
-        }
+const color = computed(() => settingsStore.settings.colors.lifeformDiscoveries.events.artifacts);
 
-        private get missionsPerDay() {
-            return LifeformDiscoveryDataModule.dailyResults;
-        }
+const firstDay = computed(() => lifeformDiscoveryStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyLifeformDiscoveryResult>[] {
-            return [{
-                key: 'artifacts',
-                label: this.$i18n.$t.extension.empire.lifeforms.artifacts,
-                color: this.color,
-                filled: true,
-                getValue: (result: DailyLifeformDiscoveryResult) => result.artifacts,
-                showAverage: true,
-            }];
-        }
+const missionsPerDay = computed(() => lifeformDiscoveryStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyLifeformDiscoveryResult>[]>(() => {
+    return [{
+        key: 'artifacts',
+        label: translations().extension.empire.lifeforms.artifacts,
+        color: color.value,
+        filled: true,
+        getValue: (result: DailyLifeformDiscoveryResult) => result.artifacts,
+        showAverage: true,
+    }];
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

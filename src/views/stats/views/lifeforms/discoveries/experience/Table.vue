@@ -27,66 +27,62 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
+import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const lifeformDiscoveryStore = useLifeformDiscoveryStore();
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const settingsStore = useSettingsStore();
 
-        private get discoveries() {
-            return LifeformDiscoveryDataModule.dailyResultsArray;
-        }
+const showSettings = ref(false);
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.lifeforms;
-        }
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
 
-        private get lifeformTypes(): Record<string, LifeformType> {
-            return {
-                [this.$i18n.$t.ogame.lifeforms.humans]: LifeformType.humans,
-                [this.$i18n.$t.ogame.lifeforms.rocktal]: LifeformType.rocktal,
-                [this.$i18n.$t.ogame.lifeforms.mechas]: LifeformType.mechas,
-                [this.$i18n.$t.ogame.lifeforms.kaelesh]: LifeformType.kaelesh,
-            };
-        }
+const discoveries = computed(() => lifeformDiscoveryStore.dailyResultsArray);
 
-        private get items(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
-            return ValidLifeformTypes.map(lifeform => ({
-                label: this.$i18n.$t.ogame.lifeforms[lifeform],
-                getValue: discoveries => discoveries.reduce(
-                    (acc, disc) => acc + disc.lifeformExperience[lifeform],
-                    0
-                ),
-            }));
-        }
+const colors = computed(() => settingsStore.settings.colors.lifeforms);
 
-        private get footerItems(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: discoveries => discoveries.reduce(
-                    (acc, disc) => acc + Object.values(disc.lifeformExperience).reduce((acc, cur) => acc + cur, 0),
-                    0
-                ),
-            }];
-        }
-    }
+const lifeformTypes = computed<Record<string, LifeformType>>(() => {
+    return {
+        [translations().ogame.lifeforms.humans]: LifeformType.humans,
+        [translations().ogame.lifeforms.rocktal]: LifeformType.rocktal,
+        [translations().ogame.lifeforms.mechas]: LifeformType.mechas,
+        [translations().ogame.lifeforms.kaelesh]: LifeformType.kaelesh,
+    };
+});
+
+const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
+    return ValidLifeformTypes.map(lifeform => ({
+        label: translations().ogame.lifeforms[lifeform],
+        getValue: nextDiscoveries => nextDiscoveries.reduce(
+            (acc, disc) => acc + disc.lifeformExperience[lifeform],
+            0
+        ),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextDiscoveries => nextDiscoveries.reduce(
+            (acc, disc) => acc + Object.values(disc.lifeformExperience).reduce((acc, cur) => acc + cur, 0),
+            0
+        ),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;

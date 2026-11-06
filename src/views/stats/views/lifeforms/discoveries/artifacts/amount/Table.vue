@@ -20,41 +20,35 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
-    import { LifeformDiscoveryEventArtifactFindingSizes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
+import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
+import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            LifeformDiscoveryColorSettings,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const settingsStore = useSettingsStore();
 
-        private get color() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries.events.artifacts;
-        }
+const lifeformDiscoveryStore = useLifeformDiscoveryStore();
 
-        private get missions() {
-            return LifeformDiscoveryDataModule.dailyResultsArray;
-        }
+const showSettings = ref(false);
 
-        private get items(): RangedStatsTableItem<DailyLifeformDiscoveryResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.empire.lifeforms.artifacts,
-                getValue: missions => missions.reduce((acc, expo) => acc + expo.artifacts, 0),
-            }];
-        }
-    }
+const color = computed(() => settingsStore.settings.colors.lifeformDiscoveries.events.artifacts);
+
+const missions = computed(() => lifeformDiscoveryStore.dailyResultsArray);
+
+const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
+    return [{
+        label: translations().extension.empire.lifeforms.artifacts,
+        getValue: nextMissions => nextMissions.reduce((acc, expo) => acc + expo.artifacts, 0),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);

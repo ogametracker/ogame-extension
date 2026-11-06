@@ -4,15 +4,15 @@
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.extension.expeditions.finds" />
+                        <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
+                        <div v-text="translations().extension.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.expeditions.finds} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.expeditions.finds} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -29,55 +29,49 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { DailyLifeformDiscoveryResult, LifeformDiscoveryDataModule } from '@stats/data/LifeformDiscoveryDataModule';
-    import { LifeformDiscoveryEventArtifactFindingSizes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
+import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
+import { LifeformDiscoveryEventArtifactFindingSizes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
 
-    @Component({
-        components: {
-            StatsChart,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const lifeformDiscoveryStore = useLifeformDiscoveryStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries.artifactFindingSizes;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return LifeformDiscoveryDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.lifeformDiscoveries.artifactFindingSizes);
 
-        private get missionsPerDay() {
-            return LifeformDiscoveryDataModule.dailyResults;
-        }
+const firstDay = computed(() => lifeformDiscoveryStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyLifeformDiscoveryResult>[] {
-            return LifeformDiscoveryEventArtifactFindingSizes.map(size => ({
-                key: size,
-                label: this.$i18n.$t.extension.empire.lifeforms.artifactFindingSizes[size],
-                color: this.colors[size],
-                filled: true,
-                getValue: result => result.artifactSizes[size],
-                showAverage: true,
-            }));
-        }
+const missionsPerDay = computed(() => lifeformDiscoveryStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyLifeformDiscoveryResult>[]>(() => {
+    return LifeformDiscoveryEventArtifactFindingSizes.map(size => ({
+        key: size,
+        label: translations().extension.empire.lifeforms.artifactFindingSizes[size],
+        color: colors.value[size],
+        filled: true,
+        getValue: result => result.artifactSizes[size],
+        showAverage: true,
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;
