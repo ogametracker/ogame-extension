@@ -8,7 +8,7 @@
 
         <div class="fake-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.extension.debrisFields.addDebrisFieldManually.title" />
+                <span v-text="translations().extension.debrisFields.addDebrisFieldManually.title" />
             </div>
             <div class="fake-table-body">
                 <span>
@@ -40,7 +40,7 @@
                 </span>
                 <button
                     class="add"
-                    v-text="$i18n.$t.extension.debrisFields.addDebrisFieldManually.buttonText"
+                    v-text="translations().extension.debrisFields.addDebrisFieldManually.buttonText"
                     @click="addManualDebrisFieldReport()"
                     :disabled="(metal == 0 && crystal == 0) || datetime == null"
                 />
@@ -49,66 +49,68 @@
     </floating-menu>
 </template>
 
-<script lang="ts">
-    import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
-    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-    import { TrackManualDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { TrackManualDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
+import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
 
-    @Component({})
-    export default class ManuallyAddDebrisFieldMenu extends Vue {
-        private show = false;
+const debrisFieldReportStore = useDebrisFieldReportStore();
 
-        private datetimeString = "";
-        private metal = 0;
-        private crystal = 0;
+const show = ref(false);
 
+const datetimeString = ref("");
 
-        private get nextId() {
-            const minId = Math.min(0, DebrisFieldReportDataModule.minId);
-            return minId - 1;
-        }
+const metal = ref(0);
 
-        private get datetime(): number | null {
-            if (this.datetimeString == "") {
-                return null;
-            }
+const crystal = ref(0);
 
-            const datetime = new Date(this.datetimeString).getTime();
-            if (isNaN(datetime)) {
-                return null;
-            }
+const nextId = computed(() => {
+    const minId = Math.min(0, debrisFieldReportStore.minId);
+    return minId - 1;
+});
 
-            return datetime;
-        }
-
-        private addManualDebrisFieldReport() {
-            const date = this.datetime;
-            if (date == null) {
-                return;
-            }
-
-            const message: TrackManualDebrisFieldReportMessage = {
-                ogameMeta: GlobalOgameMetaData,
-                type: MessageType.TrackManualDebrisFieldReport,
-                data: {
-                    id: this.nextId,
-                    date: date,
-                    metal: this.metal,
-                    crystal: this.crystal,
-                },
-                senderUuid: statsViewUuid,
-            };
-            sendMessage(message);
-
-            this.datetimeString = "";
-            this.metal = 0;
-            this.crystal = 0;
-        }
+const datetime = computed<number | null>(() => {
+    if (datetimeString.value == "") {
+        return null;
     }
+
+    const localDatetime = new Date(datetimeString.value).getTime();
+    if (isNaN(localDatetime)) {
+        return null;
+    }
+
+    return localDatetime;
+});
+
+function addManualDebrisFieldReport() {
+    const date = datetime.value;
+    if (date == null) {
+        return;
+    }
+
+    const message: TrackManualDebrisFieldReportMessage = {
+        ogameMeta: GlobalOgameMetaData,
+        type: MessageType.TrackManualDebrisFieldReport,
+        data: {
+            id: nextId.value,
+            date: date,
+            metal: metal.value,
+            crystal: crystal.value,
+        },
+        senderUuid: statsViewUuid,
+    };
+    sendMessage(message);
+
+    datetimeString.value = "";
+    metal.value = 0;
+    crystal.value = 0;
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         border: 1px solid rgba(var(--color), 0.5);
