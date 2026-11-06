@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "lint": "oxlint --config ../../../.oxlintrc.json .",
+        "lint": "oxlint --fix --config ../../../.oxlintrc.json .",
+        "lint:check": "oxlint --config ../../../.oxlintrc.json .",
         "format": "oxfmt --config ../../../.oxfmtrc.json .",
         "format:check": "npm run format -- --check"
     },

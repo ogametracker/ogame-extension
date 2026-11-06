@@ -6,7 +6,8 @@
     "scripts": {
         "build": "npm run typecheck && vite build",
         "typecheck": "tsc --noEmit",
-        "lint": "oxlint --config ../../.oxlintrc.json .",
+        "lint": "oxlint --fix --config ../../.oxlintrc.json .",
+        "lint:check": "oxlint --config ../../.oxlintrc.json .",
         "format": "oxfmt --config ../../.oxfmtrc.json .",
         "format:check": "npm run format -- --check"
     },

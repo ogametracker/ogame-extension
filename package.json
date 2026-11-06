@@ -17,6 +17,7 @@
     "build:chrome": "node scripts/build.js --browser=chrome",
     "publish": "node scripts/full-release-build.js",
     "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
     "format": "npm run format --workspaces",
     "format:check": "npm run format:check --workspaces"
   },

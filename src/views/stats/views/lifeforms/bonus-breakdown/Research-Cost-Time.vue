@@ -152,7 +152,7 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
 const experience = computed(() => empireStore.lifeformExperience);
 
 const hasResearchBonusBug = computed(() => {
-    const [major, minor] = serverSettingsStore.serverSettings.version.split(/[\.\-]/g).map(s => parseInt(s));
+    const [major, minor] = serverSettingsStore.serverSettings.version.split(/[.\-]/g).map(s => parseInt(s));
     return major < 10 || (major == 10 && minor < 2);
 });
 
