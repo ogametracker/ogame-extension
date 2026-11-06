@@ -16,7 +16,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
 
@@ -47,8 +50,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'capacity
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<'capacity'>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<'capacity'>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -61,9 +64,10 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'capacity
                             buildings: planetBonuses.buildings,
                             level: planetBonuses.level,
                             total: planetBonuses.total,
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
@@ -71,7 +75,7 @@ const limits = computed<Record<'capacity', (value: number) => number>>(() => {
     const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.DenCapacityBonus });
 
     return {
-        capacity: value => limit != null ? Math.min(value, limit) : value,
+        capacity: value => (limit != null ? Math.min(value, limit) : value),
     };
 });
 
@@ -86,9 +90,7 @@ function getPlanetBonus(tech: DenCapacityBonusLifeformTechnology, planet: Planet
         total: 0,
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-    ) {
+    if (planet.activeLifeform == LifeformType.none || !planet.activeLifeformTechnologies.includes(tech.type)) {
         return result;
     }
 
@@ -99,7 +101,8 @@ function getPlanetBonus(tech: DenCapacityBonusLifeformTechnology, planet: Planet
     result.buildingsBoost += buildingsBoost;
 
     const baseBonus = tech.getDenCapacityBonus(planet.lifeformTechnologies[tech.type]);
-    const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+    const lifeformLevelBonus =
+        baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
     const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
     const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

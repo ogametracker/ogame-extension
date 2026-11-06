@@ -1,4 +1,4 @@
-import { Building } from "./Building";
+import { Building } from './Building';
 
 export abstract class StorageBuilding extends Building {
     public abstract getStorage(level: number): number;

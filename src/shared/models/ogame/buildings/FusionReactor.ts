@@ -1,9 +1,8 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { ProductionBuilding, ProductionBuildingDependencies } from './ProductionBuilding';
 
 class FusionReactorClass extends ProductionBuilding {
-    
     public get type() {
         return BuildingType.fusionReactor;
     }
@@ -17,7 +16,10 @@ class FusionReactorClass extends ProductionBuilding {
         return {
             metal: 0,
             crystal: 0,
-            deuterium: Math.trunc(10 * level * 1.1 ** level * dependencies.productionSettings.fusionReactor / 100 * dependencies.serverSettings.economySpeed),
+            deuterium: Math.trunc(
+                ((10 * level * 1.1 ** level * dependencies.productionSettings.fusionReactor) / 100) *
+                    dependencies.serverSettings.economySpeed,
+            ),
             energy: 0,
         };
     }

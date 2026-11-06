@@ -29,21 +29,21 @@
 
             <Tabs :tabs="tabs">
                 <template v-for="key in keys" #[`tab-content-${key}`]>
-                        <span v-if="allianceScoresLoading" :key="`score-${key}-loading`" class="loading" />
-                        <ScrollableChart
-                            v-else-if="allianceIds.length > 0"
-                            :key="`score-${key}`"
-                            :datasets="scoreDatasets[key]"
-                            continue-last-value
-                            show-x-values-in-grid
-                            :tick-interval="1000 * 60 * 60 * 24"
-                            :ticks="30"
-                            :tick-list="days"
-                            :min-tick="firstDay"
-                            :max-tick="nextDay"
-                            :x-label-formatter="(x: number) => formatDate(x, 'date')"
-                            :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
-                        />
+                    <span v-if="allianceScoresLoading" :key="`score-${key}-loading`" class="loading" />
+                    <ScrollableChart
+                        v-else-if="allianceIds.length > 0"
+                        :key="`score-${key}`"
+                        :datasets="scoreDatasets[key]"
+                        continue-last-value
+                        show-x-values-in-grid
+                        :tick-interval="1000 * 60 * 60 * 24"
+                        :ticks="30"
+                        :tick-list="days"
+                        :min-tick="firstDay"
+                        :max-tick="nextDay"
+                        :x-label-formatter="(x: number) => formatDate(x, 'date')"
+                        :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
+                    />
                 </template>
             </Tabs>
         </template>
@@ -198,7 +198,7 @@ const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
             {
                 key: 'lifeformDiscoveries',
                 label: translations().extension.universeHistory.highscoreTabs.lifeformDiscoveries,
-            }
+            },
         );
     }
 
@@ -206,23 +206,22 @@ const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
 });
 
 const tableColumns = computed<GridTableColumn<'alliance'>[]>(() => {
-    return [{
-        key: 'alliance',
-        label: translations().extension.universeHistory.allianceSelection.header,
-        headerClass: 'alliance-selection-table-cell',
-        class: 'alliance-selection-table-cell',
-    }];
-});
-
-const tableItems = computed<{ alliance: UniverseHistoryAlliance | null }[]>(() => {
     return [
-        { alliance: null },
-        ...selectedAlliances.value.map(alliance => ({ alliance })),
+        {
+            key: 'alliance',
+            label: translations().extension.universeHistory.allianceSelection.header,
+            headerClass: 'alliance-selection-table-cell',
+            class: 'alliance-selection-table-cell',
+        },
     ];
 });
 
+const tableItems = computed<{ alliance: UniverseHistoryAlliance | null }[]>(() => {
+    return [{ alliance: null }, ...selectedAlliances.value.map(alliance => ({ alliance }))];
+});
+
 const allianceIds = computed<number[]>(() => {
-    return (route.query.alliances as string | null ?? '')
+    return ((route.query.alliances as string | null) ?? '')
         .split(',')
         .filter(id => id.length > 0)
         .map(allianceId => parseIntSafe(allianceId, 10));
@@ -245,32 +244,43 @@ async function loadAllianceScores() {
     scoreDatasets.value = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
 
     const datasetsByAlliance: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
-    allianceIds.value.forEach(p => datasetsByAlliance[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>);
+    allianceIds.value.forEach(
+        p => (datasetsByAlliance[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>),
+    );
 
     keys.forEach(key => {
         scoreDatasets.value[key] = [];
 
-        allianceIds.value.forEach((pid, i) => datasetsByAlliance[pid][key] = {
-            key: `${pid}-${key}`,
-            values: [],
-            color: colors[i % colors.length],
-            label: getAllianceString(alliances.value.find(p => p.id == pid) ?? _throw(`no alliance with id '${pid}' found`)),
-            filled: false,
-            stack: false,
-            hidePoints: false,
-        });
+        allianceIds.value.forEach(
+            (pid, i) =>
+                (datasetsByAlliance[pid][key] = {
+                    key: `${pid}-${key}`,
+                    values: [],
+                    color: colors[i % colors.length],
+                    label: getAllianceString(
+                        alliances.value.find(p => p.id == pid) ?? _throw(`no alliance with id '${pid}' found`),
+                    ),
+                    filled: false,
+                    stack: false,
+                    hidePoints: false,
+                }),
+        );
     });
 
     let minDate = Number.MAX_SAFE_INTEGER;
 
     const scores = await universeHistoryStore.getAllianceScoreHistory(allianceIds.value);
     const types = HighscoreTypeNames;
-    const lastScores = createRecord(allianceIds.value, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
+    const lastScores = createRecord(allianceIds.value, () => createRecord(types, null)) as Record<
+        number,
+        Record<DbUniverseHistoryScoreType, number | null>
+    >;
 
     scores.forEach((score, i) => {
         minDate = Math.min(minDate, score.date);
 
-        if (lastScores[score.allianceId][score.type] == score.score) { //no duplicates if only position changed
+        if (lastScores[score.allianceId][score.type] == score.score) {
+            //no duplicates if only position changed
             return;
         }
         if (!types.includes(score.type)) {
@@ -301,7 +311,7 @@ const days = computed(() => {
     const localDays: number[] = [];
 
     const maxDay = nextDay.value;
-    for (let day = firstDay.value;day <= maxDay;day = addDays(day, 1).getTime()) {
+    for (let day = firstDay.value; day <= maxDay; day = addDays(day, 1).getTime()) {
         localDays.push(day);
     }
 
@@ -315,9 +325,7 @@ function getAllianceString(ally: UniverseHistoryAlliance) {
 }
 
 const allianceNames = computed(() => {
-    return alliances.value
-        .map(alliance => getAllianceString(alliance))
-        .sort();
+    return alliances.value.map(alliance => getAllianceString(alliance)).sort();
 });
 
 const selectedAlliances = computed(() => allianceIds.value.map(pid => alliances.value.find(p => p.id == pid)!));
@@ -332,10 +340,7 @@ async function onAllianceSelected(name: string) {
     selectedAllianceName.value = '';
 
     const localAllianceIds = (route.query.alliances as string | null)?.split(',') ?? [];
-    await updateAllianceIdRoute([
-        ...localAllianceIds.filter(pid => pid != alliance.id.toString()),
-        alliance.id,
-    ]);
+    await updateAllianceIdRoute([...localAllianceIds.filter(pid => pid != alliance.id.toString()), alliance.id]);
     await loadAllianceScores();
 }
 
@@ -360,7 +365,7 @@ function updateSettings(allyIds: number[]) {
 }
 
 async function updateAllianceIdRoute(ids: (string | number)[]) {
-    updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
+    updateSettings(ids.map(id => (typeof id === 'string' ? parseIntSafe(id, 10) : id)));
 
     await router.replace({
         query: {
@@ -382,41 +387,41 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .highscores {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
+.highscores {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
 
-    .alliance-selection {
+.alliance-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            :deep(.alliance-selection-table-cell) {
-                text-align: left;
-                justify-content: start;
-                border-bottom: 1px solid rgba(var(--color), 0.5);
-            }
+        :deep(.alliance-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
+.list {
+    display: flex;
+    flex-direction: column;
 
-        &-item {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 12px;
-            align-items: center;
+    &-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        align-items: center;
 
-            .mdi {
-                transform: scale(1.5);
-                cursor: pointer;
-            }
+        .mdi {
+            transform: scale(1.5);
+            cursor: pointer;
         }
     }
+}
 </style>

@@ -20,18 +20,13 @@ export function createTranslationTree<T>(
     const tree: Record<string, unknown> = {};
     const cache: Partial<Record<LanguageKey, Record<string, unknown>>> = {};
 
-    function addTranslations(
-        root: Record<string, unknown>,
-        values: object,
-        language: LanguageKey,
-        prefix: string,
-    ) {
+    function addTranslations(root: Record<string, unknown>, values: object, language: LanguageKey, prefix: string) {
         for (const [key, value] of Object.entries(values)) {
             const storageKey = `$${key}`;
             const path = prefix ? `${prefix}.${key}` : key;
             const children = (root[storageKey] ??= {}) as Record<string, unknown>;
-            const isBranch = value != null && typeof value === 'object'
-                && Object.getPrototypeOf(value) === Object.prototype;
+            const isBranch =
+                value != null && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype;
 
             if (isBranch) {
                 addTranslations(children, value, language, path);

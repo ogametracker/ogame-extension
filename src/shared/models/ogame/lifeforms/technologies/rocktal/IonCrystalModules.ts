@@ -1,10 +1,13 @@
-import { Cost } from "../../../common/Cost";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { Cost } from '../../../common/Cost';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
-class IonCrystalModulesClass extends LifeformTechnology implements CrawlerProductionBonusAndConsumptionReductionLifeformTechnology {
+class IonCrystalModulesClass
+    extends LifeformTechnology
+    implements CrawlerProductionBonusAndConsumptionReductionLifeformTechnology
+{
     public constructor() {
         super({
             metal: {

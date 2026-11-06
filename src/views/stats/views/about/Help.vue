@@ -2,7 +2,13 @@
     <div class="help">
         <Tabs :tabs="tabs">
             <template #tab-content-faq>
-                <GridTable v-for="(item, i) in itemsFaq" :key="i" :columns="getColumnsFaq(item)" :items="[item]" class="faq-table" />
+                <GridTable
+                    v-for="(item, i) in itemsFaq"
+                    :key="i"
+                    :columns="getColumnsFaq(item)"
+                    :items="[item]"
+                    class="faq-table"
+                />
             </template>
 
             <template #tab-content-tips>
@@ -10,7 +16,10 @@
                 <div class="tip" v-text="translations().extension.about.faqHelp.tips.numbersKeyboardNavigation" />
                 <div class="tip">
                     <span v-text="translations().extension.about.faqHelp.tips.amortizationTable.part1" />
-                    <RouterLink :to="{ name: 'empire/amortization' }" v-text="translations().extension.about.faqHelp.tips.amortizationTable.name" />
+                    <RouterLink
+                        :to="{ name: 'empire/amortization' }"
+                        v-text="translations().extension.about.faqHelp.tips.amortizationTable.name"
+                    />
                     <span v-text="translations().extension.about.faqHelp.tips.amortizationTable.part2" />
                 </div>
                 <div class="tip" v-text="translations().extension.about.faqHelp.tips.inlineSettings" />
@@ -44,10 +53,12 @@ interface FaqItem {
 const discordInviteLink = _constants.discordInviteLink;
 
 function getColumnsFaq(item: FaqItem): GridTableColumn<keyof FaqItem>[] {
-    return [{
-        key: 'text',
-        label: item.header,
-    }];
+    return [
+        {
+            key: 'text',
+            label: item.header,
+        },
+    ];
 }
 
 const itemsFaq = computed<FaqItem[]>(() => {
@@ -86,45 +97,45 @@ const tabs = computed<Tab[]>(() => {
 </script>
 
 <style lang="scss" scoped>
-    .faq-table {
-        width: 450px;
+.faq-table {
+    width: 450px;
 
-        :deep(.grid-table-cell) {
-            text-align: left;
-            justify-content: flex-start;
-        }
-
-        + .faq-table {
-            margin-top: 4px;
-        }
+    :deep(.grid-table-cell) {
+        text-align: left;
+        justify-content: flex-start;
     }
 
-    .tip {
+    + .faq-table {
         margin-top: 4px;
-        width: 450px;
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        box-shadow: 0 0 6px 0 rgba(black, 0.333);
-        background: rgba(var(--color), 0.1);
-        padding: 8px 16px;
     }
+}
 
-    .discord-message {
-        font-weight: bold;
-        width: 450px;
-        background-color: black;
-        background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        box-shadow: 0 0 6px 0 rgba(black, 0.333);
-        padding: 8px 16px;
-    }
+.tip {
+    margin-top: 4px;
+    width: 450px;
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 rgba(black, 0.333);
+    background: rgba(var(--color), 0.1);
+    padding: 8px 16px;
+}
 
-    .help {
-        display: grid;
-        height: 100%;
-        max-height: 100%;
-        grid-template-rows: 1fr auto;
-        gap: 8px;
-    }
+.discord-message {
+    font-weight: bold;
+    width: 450px;
+    background-color: black;
+    background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 rgba(black, 0.333);
+    padding: 8px 16px;
+}
+
+.help {
+    display: grid;
+    height: 100%;
+    max-height: 100%;
+    grid-template-rows: 1fr auto;
+    gap: 8px;
+}
 </style>

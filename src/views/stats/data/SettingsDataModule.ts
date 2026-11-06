@@ -7,7 +7,11 @@ import type { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
 import type { Settings } from '@ogame-tracker/shared/models/settings/Settings';
-import type { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import type {
+    NotifySettingsUpdateMessage,
+    RequestSettingsMessage,
+    SettingsMessage,
+} from '@ogame-tracker/shared/messages/settings';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getGlobalDatabase } from '@ogame-tracker/shared/db/access';
 import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
@@ -30,7 +34,7 @@ export const useSettingsStore = defineStore('settings', () => {
                 ogameMeta: GlobalOgameMetaData,
                 senderUuid: statsViewUuid,
                 type: MessageType.NotifySettingsUpdate,
-            }
+            };
             await broadcastMessage(msg);
         })().catch(console.error);
     }

@@ -1,4 +1,4 @@
-import { ResourceType } from "../resources/ResourceType";
+import { ResourceType } from '../resources/ResourceType';
 
 export const GeologistProductionBonus = 0.1; // 10%
 export const CommandStaffProductionBonus = 0.02; // 2%

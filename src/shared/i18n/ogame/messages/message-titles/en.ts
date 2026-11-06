@@ -1,4 +1,4 @@
-import { MessageTitles } from "./types";
+import { MessageTitles } from './types';
 
 export const en: MessageTitles = {
     expedition: 'Expedition Result',

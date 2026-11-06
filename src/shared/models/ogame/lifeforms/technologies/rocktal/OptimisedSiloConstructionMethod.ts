@@ -1,12 +1,15 @@
-import { BuildingType } from "../../../buildings/BuildingType";
-import { BuildingTypes } from "../../../buildings/BuildingTypes";
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { BuildingCostAndTimeReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { BuildingType } from '../../../buildings/BuildingType';
+import { BuildingTypes } from '../../../buildings/BuildingTypes';
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { BuildingCostAndTimeReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
-class OptimisedSiloConstructionMethodClass extends LifeformTechnology implements BuildingCostAndTimeReductionLifeformTechnology {
+class OptimisedSiloConstructionMethodClass
+    extends LifeformTechnology
+    implements BuildingCostAndTimeReductionLifeformTechnology
+{
     public constructor() {
         super({
             metal: {
@@ -29,17 +32,16 @@ class OptimisedSiloConstructionMethodClass extends LifeformTechnology implements
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return BuildingTypes.filter(b => this.appliesTo(b))
-            .flatMap<LifeformBonusType>(b => [
-                {
-                    type: LifeformBonusTypeId.TechTimeReduction,
-                    tech: b,
-                },
-                {
-                    type: LifeformBonusTypeId.TechCostReduction,
-                    tech: b,
-                },
-            ]);
+        return BuildingTypes.filter(b => this.appliesTo(b)).flatMap<LifeformBonusType>(b => [
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech: b,
+            },
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech: b,
+            },
+        ]);
     }
 
     public appliesTo(building: BuildingType): boolean {

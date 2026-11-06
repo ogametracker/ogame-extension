@@ -7,7 +7,6 @@ import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
 import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
 import { internalUuid } from '@ogame-tracker/shared/uuid';
 
-
 setTimeout(() => renew(), 0);
 
 function renew() {

@@ -1,5 +1,5 @@
-import { ItemGrade } from "./ItemGrade";
-import { ItemHash } from "./ItemHash";
+import { ItemGrade } from './ItemGrade';
+import { ItemHash } from './ItemHash';
 
 export interface Item {
     name: string;

@@ -9,11 +9,17 @@
             <div v-for="type in types" :key="type.key" class="partial-bonus">
                 <div class="title" v-text="type.label" />
                 <span class="total-value">
-                    <DecimalNumber :value="totalBonus[type.key] * 100" suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
+                    <DecimalNumber
+                        :value="totalBonus[type.key] * 100"
+                        suffix="%"
+                        :digits="3"
+                        :fade-decimals="false"
+                        style="--small-fraction-size: 0.75em"
+                    />
                     <span
                         v-if="
-                            limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key]
-                            || limits[type.key](Number.MIN_SAFE_INTEGER) == totalBonus[type.key]
+                            limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key] ||
+                            limits[type.key](Number.MIN_SAFE_INTEGER) == totalBonus[type.key]
                         "
                         class="mdi mdi-alert-outline"
                     />
@@ -48,17 +54,38 @@
 
                 <template v-if="expandedPlanets[planet.id] == true">
                     <div class="tech-header-row">
-                        <div class="slot" v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.slot" />
-                        <div class="tech" v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.research" />
-                        <div v-for="type in types" :key="type.key" class="bonus" v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.bonus" />
+                        <div
+                            class="slot"
+                            v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.slot"
+                        />
+                        <div
+                            class="tech"
+                            v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.research"
+                        />
+                        <div
+                            v-for="type in types"
+                            :key="type.key"
+                            class="bonus"
+                            v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.bonus"
+                        />
                     </div>
 
                     <div v-for="tech in technologiesSorted" :key="tech" class="tech-row">
-                        <template v-if="planet.activeLifeformTechnologies.includes(tech) && planet.lifeformTechnologies[tech] > 0">
+                        <template
+                            v-if="
+                                planet.activeLifeformTechnologies.includes(tech) &&
+                                planet.lifeformTechnologies[tech] > 0
+                            "
+                        >
                             <div class="slot" v-text="LifeformTechnologySlots[tech]" />
                             <div class="tech">
                                 <OLifeformTechnology :technology="tech" size="24px" />
-                                <span v-text="translations().ogame.lifeformTechnologies[tech] + ` (${planet.lifeformTechnologies[tech]})`" />
+                                <span
+                                    v-text="
+                                        translations().ogame.lifeformTechnologies[tech] +
+                                        ` (${planet.lifeformTechnologies[tech]})`
+                                    "
+                                />
                             </div>
                             <span v-for="type in types" :key="type.key" class="bonus">
                                 <DecimalNumber
@@ -74,7 +101,12 @@
 
                     <div class="tech-row boosts">
                         <div />
-                        <div v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.lifeformBuildingsBoost" />
+                        <div
+                            v-text="
+                                translations().extension.empire.lifeforms.researchBonuses.breakdown
+                                    .lifeformBuildingsBoost
+                            "
+                        />
                         <span v-for="type in types" :key="type.key" class="bonus">
                             <DecimalNumber
                                 :value="buildingsPlanetBonusesByType[planet.id][type.key] * 100"
@@ -92,7 +124,10 @@
                             v-text="
                                 translations().extension.empire.lifeforms.researchBonuses.breakdown.lifeformLevelBoost(
                                     translations().ogame.lifeforms[planet.activeLifeform],
-                                    formatNumber(getLifeformLevelTechnologyBonus(experience[planet.activeLifeform]) * 100, smallPercentageFormat) + '%'
+                                    formatNumber(
+                                        getLifeformLevelTechnologyBonus(experience[planet.activeLifeform]) * 100,
+                                        smallPercentageFormat,
+                                    ) + '%',
                                 )
                             "
                         />
@@ -107,11 +142,12 @@
                         </span>
                     </div>
 
-                    <div class="tech-row boosts" v-if="Object.values(planetBugBonusesByType[planet.id]).some(val => val != 0)">
+                    <div
+                        class="tech-row boosts"
+                        v-if="Object.values(planetBugBonusesByType[planet.id]).some(val => val != 0)"
+                    >
                         <div />
-                        <div
-                            v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.bugBoost"
-                        />
+                        <div v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.bugBoost" />
                         <span v-for="type in types" :key="type.key" class="bonus">
                             <DecimalNumber
                                 :value="planetBugBonusesByType[planet.id][type.key] * 100"
@@ -130,25 +166,31 @@
 
 <script lang="ts">
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import {
+    LifeformTechnologySlots,
+    LifeformTechnologyType,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
 export type LifeformBonusesBreakdownType<TKey extends string = string> = {
     key: TKey;
     label: string;
-}
+};
 
 export type LifeformBonusesPlanetBreakdown<TKey extends string = string> = {
     planet: PlanetData;
     technologyType: LifeformTechnologyType;
-    bonuses: Record<TKey, {
-        base: number;
-        buildings: number;
-        level: number;
-        total: number;
+    bonuses: Record<
+        TKey,
+        {
+            base: number;
+            buildings: number;
+            level: number;
+            total: number;
 
-        bugBonus?: number;
-    }>;
-}
+            bugBonus?: number;
+        }
+    >;
+};
 </script>
 
 <script setup lang="ts">
@@ -157,7 +199,10 @@ import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue
 import { computed, reactive } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-import { getLifeformLevel, getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import {
+    getLifeformLevel,
+    getLifeformLevelTechnologyBonus,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
@@ -175,7 +220,9 @@ const props = defineProps({
 
 const empireStore = useEmpireStore();
 
-const technologiesSorted = computed<LifeformTechnologyType[]>(() => [...props.technologies].sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]));
+const technologiesSorted = computed<LifeformTechnologyType[]>(() =>
+    [...props.technologies].sort((a, b) => LifeformTechnologySlots[a] - LifeformTechnologySlots[b]),
+);
 
 const smallPercentageFormat: Intl.NumberFormatOptions = {
     minimumFractionDigits: 1,
@@ -194,15 +241,26 @@ function formatCoordinates(coords: Coordinates) {
 
 const experience = computed(() => empireStore.lifeformExperience);
 
-const levels = computed<Record<ValidLifeformType, number>>(() => createRecord(ValidLifeformTypes, type => getLifeformLevel(experience.value[type])));
+const levels = computed<Record<ValidLifeformType, number>>(() =>
+    createRecord(ValidLifeformTypes, type => getLifeformLevel(experience.value[type])),
+);
 
-const totalPlanetBonusesByTechnologyType = computed<Record<number, Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>>>(() => {
-    const result: Record<number, Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>> = {};
+const totalPlanetBonusesByTechnologyType = computed<
+    Record<number, Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>>
+>(() => {
+    const result: Record<
+        number,
+        Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>
+    > = {};
 
-    Object.entries(props.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+    Object.entries(props.planets)
+        .map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
         .forEach(pair => {
             const [planetId, breakdowns] = pair;
-            result[planetId] = {} as Record<LifeformTechnologyType, Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>>;
+            result[planetId] = {} as Record<
+                LifeformTechnologyType,
+                Record<string, LifeformBonusesPlanetBreakdown['bonuses'][string]>
+            >;
 
             breakdowns.forEach(breakdown => {
                 const techBreakdown = (result[planetId][breakdown.technologyType] ??= {});
@@ -223,7 +281,7 @@ const totalPlanetBonusesByTechnologyType = computed<Record<number, Record<Lifefo
                     techBreakdown[key].total += bonuses.total;
                     techBreakdown[key].bugBonus! += bonuses.bugBonus ?? 0;
                 });
-            })
+            });
         });
 
     return result;
@@ -232,7 +290,8 @@ const totalPlanetBonusesByTechnologyType = computed<Record<number, Record<Lifefo
 const buildingsPlanetBonusesByType = computed<Record<number, Record<string, number>>>(() => {
     const result: Record<number, Record<string, number>> = {};
 
-    Object.entries(props.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+    Object.entries(props.planets)
+        .map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
         .forEach(pair => {
             const [planetId, breakdowns] = pair;
             result[planetId] = {};
@@ -244,7 +303,7 @@ const buildingsPlanetBonusesByType = computed<Record<number, Record<string, numb
                     result[planetId][key] ??= 0;
                     result[planetId][key] += bonuses.buildings;
                 });
-            })
+            });
         });
 
     return result;
@@ -253,7 +312,8 @@ const buildingsPlanetBonusesByType = computed<Record<number, Record<string, numb
 const levelPlanetBonusesByType = computed<Record<number, Record<string, number>>>(() => {
     const result: Record<number, Record<string, number>> = {};
 
-    Object.entries(props.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+    Object.entries(props.planets)
+        .map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
         .forEach(pair => {
             const [planetId, breakdowns] = pair;
             result[planetId] = {};
@@ -265,7 +325,7 @@ const levelPlanetBonusesByType = computed<Record<number, Record<string, number>>
                     result[planetId][key] ??= 0;
                     result[planetId][key] += bonuses.level;
                 });
-            })
+            });
         });
 
     return result;
@@ -274,7 +334,8 @@ const levelPlanetBonusesByType = computed<Record<number, Record<string, number>>
 const planetBugBonusesByType = computed<Record<number, Record<string, number>>>(() => {
     const result: Record<number, Record<string, number>> = {};
 
-    Object.entries(props.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+    Object.entries(props.planets)
+        .map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
         .forEach(pair => {
             const [planetId, breakdowns] = pair;
             result[planetId] = {};
@@ -286,7 +347,7 @@ const planetBugBonusesByType = computed<Record<number, Record<string, number>>>(
                     result[planetId][key] ??= 0;
                     result[planetId][key] += bonuses.bugBonus ?? 0;
                 });
-            })
+            });
         });
 
     return result;
@@ -295,7 +356,8 @@ const planetBugBonusesByType = computed<Record<number, Record<string, number>>>(
 const totalPlanetBonusesByType = computed<Record<number, Record<string, number>>>(() => {
     const result: Record<number, Record<string, number>> = {};
 
-    Object.entries(props.planets).map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
+    Object.entries(props.planets)
+        .map(entry => [parseIntSafe(entry[0]), entry[1]] as const)
         .forEach(pair => {
             const [planetId, breakdowns] = pair;
             result[planetId] = {};
@@ -307,147 +369,146 @@ const totalPlanetBonusesByType = computed<Record<number, Record<string, number>>
                     result[planetId][key] ??= 0;
                     result[planetId][key] += bonuses.total;
                 });
-            })
+            });
         });
 
     return result;
 });
 
 const totalBonus = computed<Record<string, number>>(() => {
-    return Object.values(props.planets)
-        .reduce<Record<string, number>>((total, cur) => {
-            cur.forEach(bonusBreakdown => {
-                Object.keys(bonusBreakdown.bonuses).forEach(key => {
-                    total[key] ??= 0;
-                    total[key] = props.limits[key](total[key] + bonusBreakdown.bonuses[key].total);
-                });
+    return Object.values(props.planets).reduce<Record<string, number>>((total, cur) => {
+        cur.forEach(bonusBreakdown => {
+            Object.keys(bonusBreakdown.bonuses).forEach(key => {
+                total[key] ??= 0;
+                total[key] = props.limits[key](total[key] + bonusBreakdown.bonuses[key].total);
             });
-            return total;
-        }, {});
+        });
+        return total;
+    }, {});
 });
 
 const empirePlanets = computed(() => {
     return empireStore.empire.planetOrder
         .map(id => empireStore.empire.planets[id])
-        .filter(planet => !planet.isMoon) as PlanetData[]
+        .filter(planet => !planet.isMoon) as PlanetData[];
 });
 </script>
 
 <style lang="scss" scoped>
-    .lifeform-bonus-breakdown {
-        --border-radius: 4px;
+.lifeform-bonus-breakdown {
+    --border-radius: 4px;
 
-        display: inline-grid;
-        grid-template-columns: auto 1fr repeat(var(--bonus-types), auto);
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: var(--border-radius);
+    display: inline-grid;
+    grid-template-columns: auto 1fr repeat(var(--bonus-types), auto);
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: var(--border-radius);
+
+    * {
+        display: flex;
+        padding: 4px 12px;
+        align-items: center;
+    }
+}
+
+.toggle > .mdi {
+    font-size: 24px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.header-row {
+    display: contents;
+
+    & > * {
+        background-color: black;
+        background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    }
+
+    & > *:first-of-type {
+        border-top-left-radius: var(--border-radius);
+    }
+    & > *:last-of-type {
+        border-top-right-radius: var(--border-radius);
+    }
+
+    .partial-bonus {
+        flex-direction: column;
+        align-items: end;
 
         * {
-            display: flex;
-            padding: 4px 12px;
-            align-items: center;
-        }
-    }
-
-    .toggle > .mdi {
-        font-size: 24px;
-        padding: 0;
-        cursor: pointer;
-    }
-
-    .header-row {
-        display: contents;
-
-        & > * {
-            background-color: black;
-            background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        }
-
-        & > *:first-of-type {
-            border-top-left-radius: var(--border-radius);
-        }
-        & > *:last-of-type {
-            border-top-right-radius: var(--border-radius);
-        }
-
-        .partial-bonus {
-            flex-direction: column;
-            align-items: end;
-
-            * {
-                padding: 0;
-            }
-        }
-
-        .title {
-            grid-column: 1 / span 2;
-
-            * {
-                padding: 0;
-            }
-        }
-    }
-
-    .planet-row {
-        display: contents;
-        --opacity: 0.3;
-
-        &:nth-of-type(odd) {
-            --opacity: 0.25;
-        }
-
-        .planet-header-row {
-            display: contents;
-
-            > * {
-                background: rgba(var(--color), var(--opacity));
-            }
-        }
-    }
-
-    .tech-row {
-        display: contents;
-
-        &:nth-of-type(odd) > * {
-            background: rgba(var(--color), 0.05);
-        }
-
-        &.boosts > * {
-            border-top: 1px solid rgba(var(--color), 0.3);
-        }
-    }
-
-    .tech-header-row {
-        display: contents;
-        font-style: italic;
-    }
-
-    .tech {
-        .o-lifeform-technology {
-            display: inline-block !important;
             padding: 0;
         }
     }
 
-    .slot {
-        justify-content: end;
+    .title {
+        grid-column: 1 / span 2;
+
+        * {
+            padding: 0;
+        }
     }
-    .bonus {
-        justify-content: end;
+}
+
+.planet-row {
+    display: contents;
+    --opacity: 0.3;
+
+    &:nth-of-type(odd) {
+        --opacity: 0.25;
     }
 
-    .fade {
-        color: rgba(white, 0.2);
+    .planet-header-row {
+        display: contents;
+
+        > * {
+            background: rgba(var(--color), var(--opacity));
+        }
+    }
+}
+
+.tech-row {
+    display: contents;
+
+    &:nth-of-type(odd) > * {
+        background: rgba(var(--color), 0.05);
     }
 
-    .decimal-number {
-        align-items: end !important;
+    &.boosts > * {
+        border-top: 1px solid rgba(var(--color), 0.3);
+    }
+}
+
+.tech-header-row {
+    display: contents;
+    font-style: italic;
+}
+
+.tech {
+    .o-lifeform-technology {
+        display: inline-block !important;
         padding: 0;
     }
+}
 
-    .total-value {
-        display: flex;
-        flex-direction: column;
-        align-items: end;
-    }
+.slot {
+    justify-content: end;
+}
+.bonus {
+    justify-content: end;
+}
+
+.fade {
+    color: rgba(white, 0.2);
+}
+
+.decimal-number {
+    align-items: end !important;
+    padding: 0;
+}
+
+.total-value {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
 </style>

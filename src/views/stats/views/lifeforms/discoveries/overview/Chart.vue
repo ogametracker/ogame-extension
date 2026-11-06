@@ -12,7 +12,11 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getTotal(datasets))" />
-                    <div v-text="`${translations().extension.empire.lifeforms.discoveryMissions} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.empire.lifeforms.discoveryMissions} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -60,12 +64,13 @@ const datasets = computed<StatsChartDataset<DailyLifeformDiscoveryResult>[]>(() 
         [LifeformDiscoveryEventType.lostShip],
         [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
         [LifeformDiscoveryEventType.artifacts],
-    ]
+    ];
     return typeGroups.map(group => ({
         key: group[0],
-        label: group.length == 1
-            ? translations().extension.empire.lifeforms.eventTypes[group[0]]
-            : translations().extension.empire.lifeforms.lifeformFound,
+        label:
+            group.length == 1
+                ? translations().extension.empire.lifeforms.eventTypes[group[0]]
+                : translations().extension.empire.lifeforms.lifeformFound,
         color: group.length == 1 ? colors.value[group[0]] : colors.value.knownLifeformFound,
         filled: true,
         getValue: (result: DailyLifeformDiscoveryResult) => group.reduce((acc, cur) => acc + result.events[cur], 0),
@@ -83,20 +88,20 @@ function getTotal(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

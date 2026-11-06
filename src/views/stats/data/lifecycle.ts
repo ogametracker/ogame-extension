@@ -16,7 +16,9 @@ export function createReadiness() {
 
 export function listenForMessages(handle: (message: Message) => void | Promise<void>) {
     const listener = (message: Message) => {
-        void Promise.resolve().then(() => handle(message)).catch(console.error);
+        void Promise.resolve()
+            .then(() => handle(message))
+            .catch(console.error);
     };
     chrome.runtime.onMessage.addListener(listener);
     onScopeDispose(() => chrome.runtime.onMessage.removeListener(listener));

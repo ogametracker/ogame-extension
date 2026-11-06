@@ -35,19 +35,24 @@ export default defineConfig(({ mode }) => {
             sourcemap: 'inline',
         },
         // The manifest injects each entry as a classic script at its own match and run_at.
-        environments: Object.fromEntries(entries.map(({ name, environment }, index) => [environment, {
-            consumer: 'client',
-            build: {
-                emptyOutDir: index === 0,
-                lib: {
-                    entry: resolve(root, name, 'main.ts'),
-                    formats: ['iife'],
-                    name: 'OGameTrackerContentScript',
-                    fileName: () => `${name}.js`,
-                    cssFileName: name,
-                },
-            },
-        } satisfies EnvironmentOptions])),
+        environments: Object.fromEntries(
+            entries.map(({ name, environment }, index) => [
+                environment,
+                {
+                    consumer: 'client',
+                    build: {
+                        emptyOutDir: index === 0,
+                        lib: {
+                            entry: resolve(root, name, 'main.ts'),
+                            formats: ['iife'],
+                            name: 'OGameTrackerContentScript',
+                            fileName: () => `${name}.js`,
+                            cssFileName: name,
+                        },
+                    },
+                } satisfies EnvironmentOptions,
+            ]),
+        ),
         builder: {
             async buildApp(builder) {
                 for (const { environment } of entries) {

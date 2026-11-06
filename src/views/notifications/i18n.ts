@@ -4,12 +4,15 @@ import type { ExtensionTranslations } from '@ogame-tracker/shared/i18n/extension
 import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
 import { useSettingsStore } from './stores/settings';
 
-const messages = createTranslationTree<ExtensionTranslations>({
-    get locale() {
-        return useSettingsStore().settings?.extensionLanguage ?? LanguageKey.en;
+const messages = createTranslationTree<ExtensionTranslations>(
+    {
+        get locale() {
+            return useSettingsStore().settings?.extensionLanguage ?? LanguageKey.en;
+        },
+        fallbackLocales: [LanguageKey.en, LanguageKey.de],
     },
-    fallbackLocales: [LanguageKey.en, LanguageKey.de],
-}, extensionMessages);
+    extensionMessages,
+);
 
 export function translate<T>(select: (translations: ExtensionTranslations) => T): T {
     return select(messages);

@@ -18,7 +18,12 @@
                     left: `${statusHistoryGraphOffset}px`,
                 }"
             >
-                <div v-for="tick in statusHistoryTicks" :key="`x-tick-line-${tick.date}`" class="x-tick-line" :style="`--x-tick: ${tick.position}`" />
+                <div
+                    v-for="tick in statusHistoryTicks"
+                    :key="`x-tick-line-${tick.date}`"
+                    class="x-tick-line"
+                    :style="`--x-tick: ${tick.position}`"
+                />
 
                 <div
                     v-for="(item, i) in statusHistoryItems"
@@ -65,7 +70,10 @@
 import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { translations, formatDate } from '@stats/i18n';
-import type { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+import type {
+    DbUniverseHistoryPlayerStateItem,
+    OgameTrackerUniverseHistoryPlayerState,
+} from '@ogame-tracker/shared/db/schema/universe-history';
 import { addDays, startOfDay, subDays } from 'date-fns';
 import { useUniverseHistoryStore } from '../../data/UniverseHistoryDataModule';
 
@@ -111,12 +119,14 @@ const statusHistoryItems = computed<StatusHistoryItem[]>(() => {
         const end = ((nextHistory[i + 1]?.date ?? Date.now()) - startDate) / ticks;
 
         if (item.state == 'deleted' || item.state == null) {
-            return [{
-                status: item.state,
-                start,
-                end,
-                class: item.state ?? 'active',
-            }];
+            return [
+                {
+                    status: item.state,
+                    start,
+                    end,
+                    class: item.state ?? 'active',
+                },
+            ];
         }
 
         return item.state.map(state => ({
@@ -190,127 +200,127 @@ watch(() => props.playerId, onPlayerIdChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-    $status-bar-height: 40px;
-    $status-bar-margin: 5px;
-    $status: (
-        admin: #f48406,
-        banned: #ffffff,
-        vacation: #00ffff,
-        inactive: #6e6e6e,
-        inactive-long: #4f4f4f,
-        outlaw: #ff33ff,
-        active: #7aff43,
-        deleted: #880000,
-    );
-    $status-count: 8;
-    $status-offset: (
-        active: 0,
-        vacation: 1,
-        inactive: 2,
-        inactive-long: 3,
-        banned: 4,
-        outlaw: 5,
-        deleted: 6,
-        admin: 7,
-    );
+$status-bar-height: 40px;
+$status-bar-margin: 5px;
+$status: (
+    admin: #f48406,
+    banned: #ffffff,
+    vacation: #00ffff,
+    inactive: #6e6e6e,
+    inactive-long: #4f4f4f,
+    outlaw: #ff33ff,
+    active: #7aff43,
+    deleted: #880000,
+);
+$status-count: 8;
+$status-offset: (
+    active: 0,
+    vacation: 1,
+    inactive: 2,
+    inactive-long: 3,
+    banned: 4,
+    outlaw: 5,
+    deleted: 6,
+    admin: 7,
+);
 
-    .status-history-grid {
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        grid-template-rows: #{$status-count * $status-bar-height + ($status-count - 1) * $status-bar-margin} 100px;
+.status-history-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: #{$status-count * $status-bar-height + ($status-count - 1) * $status-bar-margin} 100px;
 
-        > .graph,
-        > .x-ticks {
+    > .graph,
+    > .x-ticks {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    > .graph {
+        > .bars {
+            position: absolute;
             width: 100%;
             height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
+            top: 0;
 
-        > .graph {
-            > .bars {
+            > .bar {
                 position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
+                height: $status-bar-height;
+                border-radius: 4px;
 
-                > .bar {
-                    position: absolute;
-                    height: $status-bar-height;
-                    border-radius: 4px;
-
-                    @each $name, $color in $status {
-                        &.#{$name} {
-                            background: $color;
-                            top: #{($status-bar-height + $status-bar-margin) * map-get($status-offset, $name)};
-                        }
+                @each $name, $color in $status {
+                    &.#{$name} {
+                        background: $color;
+                        top: #{($status-bar-height + $status-bar-margin) * map-get($status-offset, $name)};
                     }
                 }
-
-                > .x-tick-line {
-                    height: 100%;
-                    left: calc(var(--x-tick) * 100%);
-                    top: 0;
-                    width: 1px;
-                    position: absolute;
-                    background: rgba(white, 0.15);
-                }
             }
 
-            > .y-tick {
-                height: $status-bar-height;
-                left: 0;
-                width: 100%;
-                top: calc(var(--y-tick) * #{$status-bar-height + $status-bar-margin});
-                position: absolute;
-
-                &::before {
-                    position: absolute;
-                    content: "";
-                    height: 1px;
-                    top: calc(50% - 0.5px);
-                    width: 100%;
-                    display: block;
-                    background: rgba(white, 0.2);
-                }
-            }
-        }
-
-        > .y-ticks {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-rows: repeat($status-count, $status-bar-height);
-            row-gap: $status-bar-margin;
-            align-items: center;
-            color: #888;
-            font-size: 12px;
-        }
-
-        > .x-ticks {
-            grid-column: 1 / span 2;
-            clip-path: polygon(100px 0, 100% 0, 100% 100%, 0 100%);
-
-            > .x-ticks-container {
-                position: absolute;
+            > .x-tick-line {
+                height: 100%;
+                left: calc(var(--x-tick) * 100%);
                 top: 0;
-                width: 100%;
-
-                > .x-tick {
-                    position: absolute;
-                    top: 0;
-                    transform-origin: top right;
-                    transform: translateY(10px) translateX(-100%) translateX(-5px) rotate(-45deg);
-                    left: calc(100px + var(--x-tick) * (100% - 100px));
-                    color: #888;
-                    font-size: 12px;
-                }
+                width: 1px;
+                position: absolute;
+                background: rgba(white, 0.15);
             }
         }
 
-        > .scrollbar {
-            overflow: auto;
-            grid-column: 2;
+        > .y-tick {
+            height: $status-bar-height;
+            left: 0;
+            width: 100%;
+            top: calc(var(--y-tick) * #{$status-bar-height + $status-bar-margin});
+            position: absolute;
+
+            &::before {
+                position: absolute;
+                content: '';
+                height: 1px;
+                top: calc(50% - 0.5px);
+                width: 100%;
+                display: block;
+                background: rgba(white, 0.2);
+            }
         }
     }
+
+    > .y-ticks {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: repeat($status-count, $status-bar-height);
+        row-gap: $status-bar-margin;
+        align-items: center;
+        color: #888;
+        font-size: 12px;
+    }
+
+    > .x-ticks {
+        grid-column: 1 / span 2;
+        clip-path: polygon(100px 0, 100% 0, 100% 100%, 0 100%);
+
+        > .x-ticks-container {
+            position: absolute;
+            top: 0;
+            width: 100%;
+
+            > .x-tick {
+                position: absolute;
+                top: 0;
+                transform-origin: top right;
+                transform: translateY(10px) translateX(-100%) translateX(-5px) rotate(-45deg);
+                left: calc(100px + var(--x-tick) * (100% - 100px));
+                color: #888;
+                font-size: 12px;
+            }
+        }
+    }
+
+    > .scrollbar {
+        overflow: auto;
+        grid-column: 2;
+    }
+}
 </style>

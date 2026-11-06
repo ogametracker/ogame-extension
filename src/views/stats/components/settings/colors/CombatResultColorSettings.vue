@@ -22,11 +22,7 @@ const settingsStore = useSettingsStore();
 
 const labels = computed<Record<CombatResultType, string>>(() => translations().extension.combats.combatResults);
 
-const keys: CombatResultType[] = [
-    CombatResultType.won,
-    CombatResultType.lost,
-    CombatResultType.draw,
-];
+const keys: CombatResultType[] = [CombatResultType.won, CombatResultType.lost, CombatResultType.draw];
 
 const colors = computed(() => settingsStore.settings.colors.combatResults);
 

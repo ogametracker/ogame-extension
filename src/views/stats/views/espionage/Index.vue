@@ -1,5 +1,3 @@
 <template>
-    <div>
-        TODO: Espionage report tracking
-    </div>
+    <div>TODO: Espionage report tracking</div>
 </template>

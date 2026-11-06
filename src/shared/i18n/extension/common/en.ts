@@ -1,4 +1,4 @@
-import { CommonTranslations } from "./type";
+import { CommonTranslations } from './type';
 
 export const en: CommonTranslations = {
     averagePerDay: '⌀ per day',

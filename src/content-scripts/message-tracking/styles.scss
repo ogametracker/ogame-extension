@@ -151,7 +151,7 @@ $image-size-small: 24px;
                 row-gap: 4px;
             }
 
-            +.resource-units {
+            + .resource-units {
                 display: flex;
                 padding: 4px;
                 border-radius: 4px;
@@ -218,7 +218,7 @@ $image-size-small: 24px;
         &--nothing {
             color: var(--ogame-tracker--expedition-event--nothing);
 
-            >.mdi {
+            > .mdi {
                 font-size: 16px !important;
             }
         }
@@ -231,357 +231,349 @@ $image-size-small: 24px;
             border-style: solid;
 
             $ogame-item-grades: (
-                "none": #2374ba,
-                "bronze": #834b2d,
-                "silver": #8d939c,
-                "gold": #ffb84a,
-                "platinum": #7e3d8e,
+                'none': #2374ba,
+                'bronze': #834b2d,
+                'silver': #8d939c,
+                'gold': #ffb84a,
+                'platinum': #7e3d8e,
             );
 
-        @each $grade, $color in $ogame-item-grades {
-            &.item-grade--#{$grade} {
-                border-color: $color;
-            }
-        }
-    }
-
-    &--size {
-        &-small {
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid var(--ogame-tracker--expedition-size--small);
-
-            .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--small);
-                font-size: 24px !important;
-            }
-        }
-
-        &-medium {
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid var(--ogame-tracker--expedition-size--medium);
-
-            .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--medium);
-                font-size: 28px !important;
-            }
-        }
-
-        &-large {
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid var(--ogame-tracker--expedition-size--large);
-
-            .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--large);
-                font-size: 32px !important;
-            }
-        }
-
-        &-fled-death-star {
-            border: 1px solid var(--ogame-tracker--expedition-size--fled-death-star);
-
-            .ogame-tracker-expedition--size-icon {
-                color: var(--ogame-tracker--expedition-size--fled-death-star);
-                font-size: 24px !important;
-            }
-        }
-    }
-
-    .mdi {
-        font-size: 32px;
-    }
-}
-
-&-lifeform-discovery-result {
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-    color: white;
-    font-weight: bold;
-
-    &--nothing {
-        color: var(--ogame-tracker--lifeform-discovery-event--nothing);
-
-        >.mdi {
-            font-size: 16px !important;
-        }
-    }
-
-    &--lostShip {
-        color: var(--ogame-tracker--lifeform-discovery-event--lostShip);
-
-        .mdi {
-            font-size: 20px !important;
-        }
-    }
-
-    &--knownLifeformFound,
-    &--newLifeformFound {
-        display: inline-flex;
-        column-gap: 4px;
-        align-items: center;
-
-        .ogame-tracker_lifeform-icon {
-            border-radius: 4px !important;
-            border-width: 1px !important;
-            border-style: solid !important;
-            min-width: 0 !important;
-
-            &--humans {
-                border-color: var(--ogame-tracker--lifeform--humans);
-
-                +span {
-                    color: var(--ogame-tracker--lifeform--humans);
+            @each $grade, $color in $ogame-item-grades {
+                &.item-grade--#{$grade} {
+                    border-color: $color;
                 }
             }
-
-            &--rocktal {
-                border-color: var(--ogame-tracker--lifeform--rocktal);
-
-                +span {
-                    color: var(--ogame-tracker--lifeform--rocktal);
-                }
-            }
-
-            &--mechas {
-                border-color: var(--ogame-tracker--lifeform--mechas);
-
-                +span {
-                    color: var(--ogame-tracker--lifeform--mechas);
-                }
-            }
-
-            &--kaelesh {
-                border-color: var(--ogame-tracker--lifeform--kaelesh);
-
-                +span {
-                    color: var(--ogame-tracker--lifeform--kaelesh);
-                }
-            }
-        }
-    }
-
-    &--newLifeformFound {
-        >.mdi {
-            font-size: 28px;
-            color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
-        }
-    }
-
-    &--artifacts {
-        padding-right: 8px !important;
-
-        >.mdi {
-            font-size: 28px;
-            color: var(--ogame-tracker--lifeform-discovery-event--artifacts);
         }
 
         &--size {
-            &-normal {
+            &-small {
                 padding: 4px;
                 border-radius: 4px;
-                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--normal);
+                border: 1px solid var(--ogame-tracker--expedition-size--small);
 
-                .ogame-tracker-lifeform-discovery-result--size-icon {
-                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--normal);
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--small);
                     font-size: 24px !important;
                 }
             }
 
-            &-big {
+            &-medium {
                 padding: 4px;
                 border-radius: 4px;
-                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--big);
+                border: 1px solid var(--ogame-tracker--expedition-size--medium);
 
-                .ogame-tracker-lifeform-discovery-result--size-icon {
-                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--big);
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--medium);
                     font-size: 28px !important;
                 }
             }
 
-            &-huge {
+            &-large {
                 padding: 4px;
                 border-radius: 4px;
-                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
+                border: 1px solid var(--ogame-tracker--expedition-size--large);
 
-                .ogame-tracker-lifeform-discovery-result--size-icon {
-                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--large);
                     font-size: 32px !important;
                 }
             }
 
-            &-full {
-                padding: 4px;
-                border-radius: 4px;
-                border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--full);
+            &-fled-death-star {
+                border: 1px solid var(--ogame-tracker--expedition-size--fled-death-star);
 
-                .ogame-tracker-lifeform-discovery-result--size-icon {
-                    color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--full);
-                    font-size: 28px !important;
+                .ogame-tracker-expedition--size-icon {
+                    color: var(--ogame-tracker--expedition-size--fled-death-star);
+                    font-size: 24px !important;
+                }
+            }
+        }
+
+        .mdi {
+            font-size: 32px;
+        }
+    }
+
+    &-lifeform-discovery-result {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+        color: white;
+        font-weight: bold;
+
+        &--nothing {
+            color: var(--ogame-tracker--lifeform-discovery-event--nothing);
+
+            > .mdi {
+                font-size: 16px !important;
+            }
+        }
+
+        &--lostShip {
+            color: var(--ogame-tracker--lifeform-discovery-event--lostShip);
+
+            .mdi {
+                font-size: 20px !important;
+            }
+        }
+
+        &--knownLifeformFound,
+        &--newLifeformFound {
+            display: inline-flex;
+            column-gap: 4px;
+            align-items: center;
+
+            .ogame-tracker_lifeform-icon {
+                border-radius: 4px !important;
+                border-width: 1px !important;
+                border-style: solid !important;
+                min-width: 0 !important;
+
+                &--humans {
+                    border-color: var(--ogame-tracker--lifeform--humans);
+
+                    + span {
+                        color: var(--ogame-tracker--lifeform--humans);
+                    }
+                }
+
+                &--rocktal {
+                    border-color: var(--ogame-tracker--lifeform--rocktal);
+
+                    + span {
+                        color: var(--ogame-tracker--lifeform--rocktal);
+                    }
+                }
+
+                &--mechas {
+                    border-color: var(--ogame-tracker--lifeform--mechas);
+
+                    + span {
+                        color: var(--ogame-tracker--lifeform--mechas);
+                    }
+                }
+
+                &--kaelesh {
+                    border-color: var(--ogame-tracker--lifeform--kaelesh);
+
+                    + span {
+                        color: var(--ogame-tracker--lifeform--kaelesh);
+                    }
+                }
+            }
+        }
+
+        &--newLifeformFound {
+            > .mdi {
+                font-size: 28px;
+                color: var(--ogame-tracker--lifeform-discovery-event--newLifeformFound);
+            }
+        }
+
+        &--artifacts {
+            padding-right: 8px !important;
+
+            > .mdi {
+                font-size: 28px;
+                color: var(--ogame-tracker--lifeform-discovery-event--artifacts);
+            }
+
+            &--size {
+                &-normal {
+                    padding: 4px;
+                    border-radius: 4px;
+                    border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--normal);
+
+                    .ogame-tracker-lifeform-discovery-result--size-icon {
+                        color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--normal);
+                        font-size: 24px !important;
+                    }
+                }
+
+                &-big {
+                    padding: 4px;
+                    border-radius: 4px;
+                    border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--big);
+
+                    .ogame-tracker-lifeform-discovery-result--size-icon {
+                        color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--big);
+                        font-size: 28px !important;
+                    }
+                }
+
+                &-huge {
+                    padding: 4px;
+                    border-radius: 4px;
+                    border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
+
+                    .ogame-tracker-lifeform-discovery-result--size-icon {
+                        color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--huge);
+                        font-size: 32px !important;
+                    }
+                }
+
+                &-full {
+                    padding: 4px;
+                    border-radius: 4px;
+                    border: 1px solid var(--ogame-tracker--lifeform-discovery-result--artifacts--size--full);
+
+                    .ogame-tracker-lifeform-discovery-result--size-icon {
+                        color: var(--ogame-tracker--lifeform-discovery-result--artifacts--size--full);
+                        font-size: 28px !important;
+                    }
                 }
             }
         }
     }
-}
 
-&-debris-field-report, &-transport-report {
-    display: inline-grid;
-    grid-template-columns: repeat(var(--columns), 1fr);
-    font-weight: bold;
-    align-items: center;
-    justify-items: center;
-    column-gap: 16px;
-
-    border: 1px solid rgba(white, 0.25);
-    padding: 4px;
-    border-radius: 4px;
-
-    color: white;
-
-    & .no-resources {
-        color: rgba(white, 0.3);
-    }
-}
-
-&-combat-report {
-    color: white;
-    font-weight: bold;
-    display: grid;
-    gap: 8px;
-    justify-items: center;
-
-    .ogame-tracker-resource {
-        width: $image-size-small;
-        height: $image-size-small;
-        margin-left: 16px;
-    }
-
-    &--loot-table {
+    &-debris-field-report,
+    &-transport-report {
         display: inline-grid;
-        grid-template-columns: repeat(3, auto 1fr);
+        grid-template-columns: repeat(var(--columns), 1fr);
+        font-weight: bold;
         align-items: center;
-        gap: 4px;
+        justify-items: center;
+        column-gap: 16px;
 
-        padding: 4px;
         border: 1px solid rgba(white, 0.25);
-        border-radius: 4px;
-    }
-
-    &--debris-field-table {
-        display: inline-grid;
-        grid-template-columns: auto repeat(3, auto 1fr);
-        align-items: center;
-        gap: 4px;
-
         padding: 4px;
-        border: 1px solid rgba(white, 0.25);
         border-radius: 4px;
 
-        >.head {
-            grid-column: 1 / span 4;
-            justify-self: center;
-        }
+        color: white;
 
-        .ogti-debris-field {
-            font-size: 24px;
+        & .no-resources {
+            color: rgba(white, 0.3);
         }
     }
 
-    &--negative-loot {
-        color: #d43635;
+    &-combat-report {
+        color: white;
+        font-weight: bold;
+        display: grid;
+        gap: 8px;
+        justify-items: center;
+
+        .ogame-tracker-resource {
+            width: $image-size-small;
+            height: $image-size-small;
+            margin-left: 16px;
+        }
+
+        &--loot-table {
+            display: inline-grid;
+            grid-template-columns: repeat(3, auto 1fr);
+            align-items: center;
+            gap: 4px;
+
+            padding: 4px;
+            border: 1px solid rgba(white, 0.25);
+            border-radius: 4px;
+        }
+
+        &--debris-field-table {
+            display: inline-grid;
+            grid-template-columns: auto repeat(3, auto 1fr);
+            align-items: center;
+            gap: 4px;
+
+            padding: 4px;
+            border: 1px solid rgba(white, 0.25);
+            border-radius: 4px;
+
+            > .head {
+                grid-column: 1 / span 4;
+                justify-self: center;
+            }
+
+            .ogti-debris-field {
+                font-size: 24px;
+            }
+        }
+
+        &--negative-loot {
+            color: #d43635;
+        }
+
+        &--no-loot {
+            color: rgba(white, 0.3);
+        }
     }
 
-    &--no-loot {
-        color: rgba(white, 0.3);
-    }
-}
-
-&-resource,
-&-ship {
-    width: $image-size;
-    height: $image-size;
-    display: inline-block;
-    background-size: cover;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    border-radius: 4px;
-}
-
-&-resource {
-    $resources: (
-        "metal",
-        "crystal",
-        "deuterium",
-        "energy",
-        "dark-matter",
-        "tritium"
-    );
-
-@each $resource in $resources {
-    &.#{$resource} {
-        background-image: url(/img/ogame/resources/#{$resource}.upscaled.png);
-    }
-}
-}
-
-&-ship {
-    $ships: (
-        202: "small-cargo",
-        203: "large-cargo",
-        204: "light-fighter",
-        205: "heavy-fighter",
-        206: "cruiser",
-        207: "battleship",
-        208: "colony-ship",
-        209: "recycler",
-        210: "espionage-probe",
-        211: "bomber",
-        212: "solar-satellite",
-        213: "destroyer",
-        214: "death-star",
-        215: "battlecruiser",
-        217: "crawler",
-        218: "reaper",
-        219: "pathfinder",
-    );
-
-@each $number, $ship in $ships {
-    &.ship-#{$number} {
-        background-image: url(/img/ogame/ships/#{$ship}.jpg);
-    }
-}
-}
-
-// taken from https://projects.lukehaas.me/css-loaders/ and adjusted
-&-loader {
-    font-size: 20px;
-    position: relative;
-    text-indent: -9999em;
-    border-radius: 50%;
-    width: 1em;
-    height: 1em;
-
-    border: 0.11em solid transparent;
-    border-left: 0.11em solid #ffffff;
-
-    transform: translateZ(0);
-    animation: load8 1s infinite ease-in-out;
-}
-
-@keyframes load8 {
-    0% {
-        transform: rotate(0deg);
+    &-resource,
+    &-ship {
+        width: $image-size;
+        height: $image-size;
+        display: inline-block;
+        background-size: cover;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        border-radius: 4px;
     }
 
-    100% {
-        transform: rotate(360deg);
+    &-resource {
+        $resources: ('metal', 'crystal', 'deuterium', 'energy', 'dark-matter', 'tritium');
+
+        @each $resource in $resources {
+            &.#{$resource} {
+                background-image: url(/img/ogame/resources/#{$resource}.upscaled.png);
+            }
+        }
+    }
+
+    &-ship {
+        $ships: (
+            202: 'small-cargo',
+            203: 'large-cargo',
+            204: 'light-fighter',
+            205: 'heavy-fighter',
+            206: 'cruiser',
+            207: 'battleship',
+            208: 'colony-ship',
+            209: 'recycler',
+            210: 'espionage-probe',
+            211: 'bomber',
+            212: 'solar-satellite',
+            213: 'destroyer',
+            214: 'death-star',
+            215: 'battlecruiser',
+            217: 'crawler',
+            218: 'reaper',
+            219: 'pathfinder',
+        );
+
+        @each $number, $ship in $ships {
+            &.ship-#{$number} {
+                background-image: url(/img/ogame/ships/#{$ship}.jpg);
+            }
+        }
+    }
+
+    // taken from https://projects.lukehaas.me/css-loaders/ and adjusted
+    &-loader {
+        font-size: 20px;
+        position: relative;
+        text-indent: -9999em;
+        border-radius: 50%;
+        width: 1em;
+        height: 1em;
+
+        border: 0.11em solid transparent;
+        border-left: 0.11em solid #ffffff;
+
+        transform: translateZ(0);
+        animation: load8 1s infinite ease-in-out;
+    }
+
+    @keyframes load8 {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }
-}
-
-
 
 //#region april fools
 .dm-patched {

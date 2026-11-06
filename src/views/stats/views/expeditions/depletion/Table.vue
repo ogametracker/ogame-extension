@@ -1,18 +1,27 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage show-average :averageNumberFormatOptions="avgFormat">
+        <RangedStatsTable
+            :dataItems="expos"
+            :items="items"
+            :footerItems="footerItems"
+            show-percentage
+            show-average
+            :averageNumberFormatOptions="avgFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
                 <span
                     class="mdi"
-                    :class="{
-                        unknown: 'mdi-help',
-                        none: 'mdi-signal-cellular-outline',
-                        low: 'mdi-signal-cellular-1',
-                        medium: 'mdi-signal-cellular-2',
-                        high: 'mdi-signal-cellular-3',
-                    }[depletionLevelsByLabel[value]]"
+                    :class="
+                        {
+                            unknown: 'mdi-help',
+                            none: 'mdi-signal-cellular-outline',
+                            low: 'mdi-signal-cellular-1',
+                            medium: 'mdi-signal-cellular-2',
+                            high: 'mdi-signal-cellular-3',
+                        }[depletionLevelsByLabel[value]]
+                    "
                     :style="{ color: colors[depletionLevelsByLabel[value]] }"
                 />
             </template>
@@ -40,7 +49,10 @@ import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
 import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
@@ -69,35 +81,40 @@ const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextExpos => depletionLevels.reduce(
-            (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.depletion[type], 0),
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextExpos =>
+                depletionLevels.reduce(
+                    (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.depletion[type], 0),
+                    0,
+                ),
+        },
+    ];
 });
 
 const depletionLevelsByLabel = computed<Record<string, ExpeditionDepletionLevel | 'unknown'>>(() => {
     return createRecord(
         depletionLevels.map(level => translations().extension.expeditions.depletionLevels[level]),
-        label => depletionLevels.find(level => label == translations().extension.expeditions.depletionLevels[level]) ?? _throw(`failed to find depletion level for label '${label}'`),
+        label =>
+            depletionLevels.find(level => label == translations().extension.expeditions.depletionLevels[level]) ??
+            _throw(`failed to find depletion level for label '${label}'`),
     );
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

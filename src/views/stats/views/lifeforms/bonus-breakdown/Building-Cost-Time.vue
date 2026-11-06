@@ -1,7 +1,12 @@
 <template>
     <div>
         <select v-model.number="building" style="display: block; margin-bottom: 4px">
-            <option v-for="building in Buildings" :key="building" :value="building" v-text="translations().ogame.buildings[building]" />
+            <option
+                v-for="building in Buildings"
+                :key="building"
+                :value="building"
+                v-text="translations().ogame.buildings[building]"
+            />
         </select>
 
         <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
@@ -32,7 +37,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
 import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
 import type { CostAndTimeReduction } from '@ogame-tracker/shared/models/ogame/lifeforms/common-interfaces';
@@ -68,9 +76,7 @@ const bonusTypes: LifeformBonusesBreakdownType<keyof Bonuses>[] = [
 const technologies = BuildingCostAndTimeReductionLifeformTechnologies;
 
 const techs = computed<LifeformTechnologyType[]>(() => {
-    return technologies
-        .filter(tech => tech.appliesTo(building.value))
-        .map(t => t.type);
+    return technologies.filter(tech => tech.appliesTo(building.value)).map(t => t.type);
 });
 
 const limits = computed<Record<keyof Bonuses, (value: number) => number>>(() => {
@@ -78,8 +84,8 @@ const limits = computed<Record<keyof Bonuses, (value: number) => number>>(() => 
     const timeLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechTimeReduction, tech: building.value });
 
     return {
-        cost: value => costLimit != null ? Math.max(value, -costLimit) : value,
-        time: value => timeLimit != null ? Math.max(value, -timeLimit) : value,
+        cost: value => (costLimit != null ? Math.max(value, -costLimit) : value),
+        time: value => (timeLimit != null ? Math.max(value, -timeLimit) : value),
     };
 });
 
@@ -93,8 +99,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -107,9 +113,10 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
                             buildings: planetBonuses.buildings[key],
                             level: planetBonuses.level[key],
                             total: planetBonuses.total[key],
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
@@ -124,9 +131,10 @@ function getPlanetBonus(tech: BuildingCostAndTimeReductionLifeformTechnology, pl
         total: { cost: 0, time: 0 },
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-        || !tech.appliesTo(building.value)
+    if (
+        planet.activeLifeform == LifeformType.none ||
+        !planet.activeLifeformTechnologies.includes(tech.type) ||
+        !tech.appliesTo(building.value)
     ) {
         return result;
     }
@@ -147,7 +155,8 @@ function getPlanetBonus(tech: BuildingCostAndTimeReductionLifeformTechnology, pl
         const [bonusType, statsType] = pair;
 
         const baseBonus = -1 * bonuses[statsType];
-        const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+        const lifeformLevelBonus =
+            baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
         const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
         const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

@@ -66,16 +66,18 @@ const columns = computed<GridTableColumn<keyof TagHistoryItem | '-'>[]>(() => {
 });
 
 const items = computed<TagHistoryItem[]>(() => {
-    return history.value.map<TagHistoryItem>((item, i, nextHistory) => {
-        const start = i == 0 ? null : item.date;
-        const end = nextHistory[i + 1]?.date ?? null;
+    return history.value
+        .map<TagHistoryItem>((item, i, nextHistory) => {
+            const start = i == 0 ? null : item.date;
+            const end = nextHistory[i + 1]?.date ?? null;
 
-        return {
-            tag: item.tag,
-            start,
-            end,
-        };
-    }).reverse();
+            return {
+                tag: item.tag,
+                start,
+                end,
+            };
+        })
+        .reverse();
 });
 
 watch(() => props.allianceId, onAllianceIdChanged, { immediate: true });

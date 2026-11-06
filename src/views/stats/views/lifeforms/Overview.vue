@@ -15,7 +15,10 @@
             <div class="building-levels">
                 <span v-for="building in item.buildings" :key="building">
                     <OLifeformBuilding :building="building" :disabled="item.buildingLevels[building] == 0" />
-                    <span v-text="item.buildingLevels[building]" :class="{ fade: item.buildingLevels[building] == 0 }" />
+                    <span
+                        v-text="item.buildingLevels[building]"
+                        :class="{ fade: item.buildingLevels[building] == 0 }"
+                    />
                 </span>
             </div>
         </template>
@@ -23,7 +26,11 @@
         <template #cell-lifeformTechsTier1="{ item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in item.lifeformTechsTier1" :key="i">
-                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
                     <span v-else />
                 </template>
                 <span
@@ -37,7 +44,11 @@
         <template #cell-lifeformTechsTier2="{ item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in item.lifeformTechsTier2" :key="i">
-                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
                     <span v-else />
                 </template>
                 <span
@@ -51,7 +62,11 @@
         <template #cell-lifeformTechsTier3="{ item }">
             <div class="lifeform-tech-table">
                 <template v-for="(tech, i) in item.lifeformTechsTier3" :key="i">
-                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
                     <span v-else />
                 </template>
                 <span
@@ -74,8 +89,14 @@ import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-import { LifeformTechnologySlots, LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformTechnologySlots,
+    LifeformTechnologyType,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
@@ -170,16 +191,19 @@ const items = computed<PlanetLifeformItem[]>(() => {
             buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
             buildingLevels: planet.lifeformBuildings,
             lifeformTechsTier1: Array.from({ length: 6 }).map(
-                (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6)
-                    ?? null
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6) ??
+                    null,
             ),
             lifeformTechsTier2: Array.from({ length: 6 }).map(
-                (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6)
-                    ?? null
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6) ??
+                    null,
             ),
             lifeformTechsTier3: Array.from({ length: 6 }).map(
-                (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6)
-                    ?? null
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6) ??
+                    null,
             ),
             lifeformTechnologies: planet.lifeformTechnologies,
         };
@@ -193,42 +217,42 @@ function formatCoordinates(coords: Coordinates) {
 </script>
 
 <style lang="scss" scoped>
-    .lifeform-tech-table {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        column-gap: 4px;
-        justify-items: center;
+.lifeform-tech-table {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    column-gap: 4px;
+    justify-items: center;
+}
+
+.lifeform-table {
+    max-height: 100%;
+
+    :deep(.left-text) {
+        text-align: left;
+        justify-content: start;
     }
 
-    .lifeform-table {
-        max-height: 100%;
+    :deep(.center-text) {
+        text-align: center;
+        justify-content: center;
+    }
 
-        :deep(.left-text) {
-            text-align: left;
-            justify-content: start;
-        }
+    :deep(.building-levels) {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 4px;
 
-        :deep(.center-text) {
-            text-align: center;
+        > span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
         }
-
-        :deep(.building-levels) {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 4px;
-
-            > span {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-
-        :deep(.fade) {
-            opacity: 0.1;
-        }
     }
+
+    :deep(.fade) {
+        opacity: 0.1;
+    }
+}
 </style>

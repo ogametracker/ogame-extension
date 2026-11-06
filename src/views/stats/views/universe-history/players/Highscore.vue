@@ -29,21 +29,21 @@
 
             <Tabs :tabs="tabs">
                 <template v-for="key in keys" #[`tab-content-${key}`]>
-                        <span v-if="playerScoresLoading" :key="`score-${key}-loading`" class="loading" />
-                        <ScrollableChart
-                            v-else-if="playerIds.length > 0"
-                            :key="`score-${key}`"
-                            :datasets="scoreDatasets[key]"
-                            continue-last-value
-                            show-x-values-in-grid
-                            :tick-interval="1000 * 60 * 60 * 24"
-                            :ticks="30"
-                            :tick-list="days"
-                            :min-tick="firstDay"
-                            :max-tick="nextDay"
-                            :x-label-formatter="(x: number) => formatDate(x, 'date')"
-                            :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
-                        />
+                    <span v-if="playerScoresLoading" :key="`score-${key}-loading`" class="loading" />
+                    <ScrollableChart
+                        v-else-if="playerIds.length > 0"
+                        :key="`score-${key}`"
+                        :datasets="scoreDatasets[key]"
+                        continue-last-value
+                        show-x-values-in-grid
+                        :tick-interval="1000 * 60 * 60 * 24"
+                        :ticks="30"
+                        :tick-list="days"
+                        :min-tick="firstDay"
+                        :max-tick="nextDay"
+                        :x-label-formatter="(x: number) => formatDate(x, 'date')"
+                        :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
+                    />
                 </template>
             </Tabs>
         </template>
@@ -199,7 +199,7 @@ const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
             {
                 key: 'lifeformDiscoveries',
                 label: translations().extension.universeHistory.highscoreTabs.lifeformDiscoveries,
-            }
+            },
         );
     }
 
@@ -207,23 +207,22 @@ const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
 });
 
 const tableColumns = computed<GridTableColumn<'player'>[]>(() => {
-    return [{
-        key: 'player',
-        label: translations().extension.universeHistory.playerSelection.header,
-        headerClass: 'player-selection-table-cell',
-        class: 'player-selection-table-cell',
-    }];
-});
-
-const tableItems = computed<{ player: UniverseHistoryPlayer | null }[]>(() => {
     return [
-        { player: null },
-        ...selectedPlayers.value.map(player => ({ player })),
+        {
+            key: 'player',
+            label: translations().extension.universeHistory.playerSelection.header,
+            headerClass: 'player-selection-table-cell',
+            class: 'player-selection-table-cell',
+        },
     ];
 });
 
+const tableItems = computed<{ player: UniverseHistoryPlayer | null }[]>(() => {
+    return [{ player: null }, ...selectedPlayers.value.map(player => ({ player }))];
+});
+
 const playerIds = computed<number[]>(() => {
-    return (route.query.players as string | null ?? '')
+    return ((route.query.players as string | null) ?? '')
         .split(',')
         .filter(id => id.length > 0)
         .map(playerId => parseIntSafe(playerId, 10))
@@ -249,32 +248,41 @@ async function loadPlayerScores() {
     scoreDatasets.value = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
 
     const datasetsByPlayer: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
-    playerIds.value.forEach(p => datasetsByPlayer[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>);
+    playerIds.value.forEach(
+        p => (datasetsByPlayer[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>),
+    );
 
     keys.forEach(key => {
         scoreDatasets.value[key] = [];
 
-        playerIds.value.forEach((pid, i) => datasetsByPlayer[pid][key] = {
-            key: `${pid}-${key}`,
-            values: [],
-            color: colors[i % colors.length],
-            label: players.value.find(p => p.id == pid)?.name ?? _throw(`no player with id '${pid}' found`),
-            filled: false,
-            stack: false,
-            hidePoints: false,
-        });
+        playerIds.value.forEach(
+            (pid, i) =>
+                (datasetsByPlayer[pid][key] = {
+                    key: `${pid}-${key}`,
+                    values: [],
+                    color: colors[i % colors.length],
+                    label: players.value.find(p => p.id == pid)?.name ?? _throw(`no player with id '${pid}' found`),
+                    filled: false,
+                    stack: false,
+                    hidePoints: false,
+                }),
+        );
     });
 
     let minDate = Number.MAX_SAFE_INTEGER;
 
     const scores = await universeHistoryStore.getPlayerScoreHistory(playerIds.value);
     const types = HighscoreTypeNames;
-    const lastScores = createRecord(playerIds.value, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
+    const lastScores = createRecord(playerIds.value, () => createRecord(types, null)) as Record<
+        number,
+        Record<DbUniverseHistoryScoreType, number | null>
+    >;
 
     scores.forEach((score, i) => {
         minDate = Math.min(minDate, score.date);
 
-        if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
+        if (lastScores[score.playerId][score.type] == score.score) {
+            //no duplicates if only position changed
             return;
         }
         if (!types.includes(score.type)) {
@@ -305,7 +313,7 @@ const days = computed(() => {
     const localDays: number[] = [];
 
     const maxDay = nextDay.value;
-    for (let day = firstDay.value;day <= maxDay;day = addDays(day, 1).getTime()) {
+    for (let day = firstDay.value; day <= maxDay; day = addDays(day, 1).getTime()) {
         localDays.push(day);
     }
 
@@ -315,9 +323,7 @@ const days = computed(() => {
 const players = computed(() => universeHistoryStore.players);
 
 const playerNames = computed(() => {
-    return players.value
-        .map(player => player.name)
-        .sort();
+    return players.value.map(player => player.name).sort();
 });
 
 const selectedPlayers = computed(() => playerIds.value.map(pid => players.value.find(p => p.id == pid)!));
@@ -332,10 +338,7 @@ async function onPlayerSelected(name: string) {
     selectedPlayerName.value = '';
 
     const localPlayerIds = (route.query.players as string | null)?.split(',') ?? [];
-    await updatePlayerIdRoute([
-        ...localPlayerIds.filter(pid => pid != player.id.toString()),
-        player.id,
-    ]);
+    await updatePlayerIdRoute([...localPlayerIds.filter(pid => pid != player.id.toString()), player.id]);
     await loadPlayerScores();
 }
 
@@ -360,7 +363,7 @@ function updateSettings(nextPlayerIds: number[]) {
 }
 
 async function updatePlayerIdRoute(ids: (string | number)[]) {
-    updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
+    updateSettings(ids.map(id => (typeof id === 'string' ? parseIntSafe(id, 10) : id)));
 
     await router.replace({
         query: {
@@ -383,41 +386,41 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .highscores {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
+.highscores {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
 
-    .player-selection {
+.player-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            :deep(.player-selection-table-cell) {
-                text-align: left;
-                justify-content: start;
-                border-bottom: 1px solid rgba(var(--color), 0.5);
-            }
+        :deep(.player-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
+.list {
+    display: flex;
+    flex-direction: column;
 
-        &-item {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 12px;
-            align-items: center;
+    &-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        align-items: center;
 
-            .mdi {
-                transform: scale(1.5);
-                cursor: pointer;
-            }
+        .mdi {
+            transform: scale(1.5);
+            cursor: pointer;
         }
     }
+}
 </style>

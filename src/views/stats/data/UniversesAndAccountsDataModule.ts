@@ -2,7 +2,14 @@ import { toDatabaseRecord } from './toDatabaseRecord';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { createReadiness } from './lifecycle';
-import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@ogame-tracker/shared/db/access';
+import {
+    getGlobalDatabase,
+    getPlayerDatabase,
+    getPlayerDatabaseName,
+    getServerDatabase,
+    getServerDatabaseName,
+    getUniverseHistoryDatabaseName,
+} from '@ogame-tracker/shared/db/access';
 import type { DbAccount, DbLinkedAccount, DbServer } from '@ogame-tracker/shared/db/schema/global';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
 import { useCombatReportStore } from './CombatReportDataModule';
@@ -31,14 +38,14 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
     }
 
     const currentAccount = computed<DbAccount>(() => {
-        const accEqual = (a: {
-            serverId: number;
-            serverLanguage: string;
-            id: number;
-        }, b: MessageOgameMeta) =>
-            a.serverId == b.serverId
-            && a.serverLanguage == b.language
-            && a.id == b.playerId;
+        const accEqual = (
+            a: {
+                serverId: number;
+                serverLanguage: string;
+                id: number;
+            },
+            b: MessageOgameMeta,
+        ) => a.serverId == b.serverId && a.serverLanguage == b.language && a.id == b.playerId;
 
         const account = accounts.value.find(a => accEqual(a, GlobalOgameMetaData));
 
@@ -56,15 +63,16 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
 
     const currentServer = computed<DbServer>(() => {
         const server = servers.value.find(
-            s => s.id == GlobalOgameMetaData.serverId
-                && s.language == GlobalOgameMetaData.language
+            s => s.id == GlobalOgameMetaData.serverId && s.language == GlobalOgameMetaData.language,
         );
 
-        return server ?? {
-            id: GlobalOgameMetaData.serverId,
-            language: GlobalOgameMetaData.language,
-            name: GlobalOgameMetaData.serverId.toString(),
-        };
+        return (
+            server ?? {
+                id: GlobalOgameMetaData.serverId,
+                language: GlobalOgameMetaData.language,
+                name: GlobalOgameMetaData.serverId.toString(),
+            }
+        );
     });
 
     async function loadData() {
@@ -73,9 +81,12 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
 
         accounts.value = (await tx.objectStore('accounts').getAll()).map(account => ({
             ...account,
-            linkedAccounts: (account.linkedAccounts ?? []).filter(linked => (
-                linked.id !== account.id || linked.serverId !== account.serverId || linked.serverLanguage !== account.serverLanguage
-            )),
+            linkedAccounts: (account.linkedAccounts ?? []).filter(
+                linked =>
+                    linked.id !== account.id ||
+                    linked.serverId !== account.serverId ||
+                    linked.serverLanguage !== account.serverLanguage,
+            ),
         }));
         servers.value = await tx.objectStore('servers').getAll();
 
@@ -92,9 +103,16 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
         await useEmpireStore().clear();
 
         const globalDb = await getGlobalDatabase();
-        await globalDb.delete('accounts', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language, GlobalOgameMetaData.playerId]);
+        await globalDb.delete('accounts', [
+            GlobalOgameMetaData.serverId,
+            GlobalOgameMetaData.language,
+            GlobalOgameMetaData.playerId,
+        ]);
 
-        const otherAccountsCount = await globalDb.countFromIndex('accounts', 'server', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language]);
+        const otherAccountsCount = await globalDb.countFromIndex('accounts', 'server', [
+            GlobalOgameMetaData.serverId,
+            GlobalOgameMetaData.language,
+        ]);
         if (otherAccountsCount > 0) {
             return;
         }
@@ -112,7 +130,9 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
             accountRecord.linkedAccounts = [];
         }
 
-        const accountIsLinked = accountRecord.linkedAccounts!.some(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        const accountIsLinked = accountRecord.linkedAccounts!.some(
+            a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage,
+        );
         if (accountIsLinked) {
             return;
         }
@@ -133,7 +153,9 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
         if (accountRecord.linkedAccounts == null) {
             accountRecord.linkedAccounts = [];
         }
-        const index = accountRecord.linkedAccounts!.findIndex(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        const index = accountRecord.linkedAccounts!.findIndex(
+            a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage,
+        );
         if (index >= 0) {
             accountRecord.linkedAccounts!.splice(index, 1);
         }

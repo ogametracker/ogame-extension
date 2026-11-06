@@ -14,7 +14,10 @@
                 >
                     <span class="ogti ogti-planet" />
                     <div v-text="planet.name.value" :class="{ change: planet.name.hasChange }" />
-                    <div v-text="formatCoords(planet.coordinates.value)" :class="{ change: planet.coordinates.hasChange }" />
+                    <div
+                        v-text="formatCoords(planet.coordinates.value)"
+                        :class="{ change: planet.coordinates.hasChange }"
+                    />
 
                     <div
                         v-if="planet.moon != null"
@@ -40,7 +43,10 @@
 import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { formatNumber, formatDate } from '@stats/i18n';
-import type { DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState } from '@ogame-tracker/shared/db/schema/universe-history';
+import type {
+    DbUniverseHistoryCoordinates,
+    DbUniverseHistoryPlanetMoonState,
+} from '@ogame-tracker/shared/db/schema/universe-history';
 import { compareCoordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
@@ -125,7 +131,7 @@ const props = defineProps({
 
 const universeHistoryStore = useUniverseHistoryStore();
 
-const container = useTemplateRef<HTMLDivElement>("container");
+const container = useTemplateRef<HTMLDivElement>('container');
 
 const parentContainer = computed<HTMLElement>(() => container.value!.closest('main')!);
 
@@ -147,7 +153,9 @@ function updateClientHeight() {
 
     const containerHeight = container.value!.clientHeight;
     const parentHeight = parentContainer.value.clientHeight;
-    const lastRowHeight = container.value!.querySelector(`.row:nth-of-type(${items.value.length}) > .date-column`)!.clientHeight;
+    const lastRowHeight = container.value!.querySelector(
+        `.row:nth-of-type(${items.value.length}) > .date-column`,
+    )!.clientHeight;
 
     const offset = Math.max(parentHeight, containerHeight) - lastRowHeight - 24; // 2*12px = padding of main
     clientHeight.value = offset;
@@ -159,8 +167,7 @@ async function onPlayerIdChanged() {
     history.value = await universeHistoryStore.getPlayerPlanetsAndMoonsHistory(props.playerId);
     history.value.sort((a, b) => a.id - b.id);
 
-    getKnownMoons(history.value)
-        .forEach(moon => moonSizes.value[moon.id] = moon.size);
+    getKnownMoons(history.value).forEach(moon => (moonSizes.value[moon.id] = moon.size));
 
     prepareData();
 
@@ -191,10 +198,16 @@ function prepareData() {
     items.value = getItems(changes, dates);
 }
 
-function getItems(changesByDate: Record<number, Partial<Record<number, PlanetChange>>>, dates: number[]): PlanetItemRow[] {
+function getItems(
+    changesByDate: Record<number, Partial<Record<number, PlanetChange>>>,
+    dates: number[],
+): PlanetItemRow[] {
     const currentPlanetStates: Partial<Record<number, PlanetState>> = {};
 
-    const getNewState = (oldState: "deleted" | "new" | null | undefined, newState: DbUniverseHistoryPlanetMoonState | undefined): 'new' | null => {
+    const getNewState = (
+        oldState: 'deleted' | 'new' | null | undefined,
+        newState: DbUniverseHistoryPlanetMoonState | undefined,
+    ): 'new' | null => {
         if (oldState === undefined) {
             return 'new';
         }
@@ -269,20 +282,21 @@ function getItems(changesByDate: Record<number, Partial<Record<number, PlanetCha
                     hasChange: change.coordinates !== undefined,
                 },
 
-                moon: newState.moon == null
-                    ? null
-                    : {
-                        id: newState.moon.id,
-                        size: newState.moon.size,
-                        name: {
-                            value: newState.moon.name,
-                            hasChange: Object.values(change.moons).some(mc => mc.name !== undefined),
-                        },
-                        state: {
-                            value: newState.state,
-                            hasChange: Object.values(change.moons).some(mc => mc.state !== undefined),
-                        },
-                    },
+                moon:
+                    newState.moon == null
+                        ? null
+                        : {
+                              id: newState.moon.id,
+                              size: newState.moon.size,
+                              name: {
+                                  value: newState.moon.name,
+                                  hasChange: Object.values(change.moons).some(mc => mc.name !== undefined),
+                              },
+                              state: {
+                                  value: newState.state,
+                                  hasChange: Object.values(change.moons).some(mc => mc.state !== undefined),
+                              },
+                          },
             };
 
             row.items.push(item);
@@ -367,13 +381,17 @@ function getChangesByDate(): Record<number, Partial<Record<number, PlanetChange>
     };
 
     history.value.forEach(planet => {
-        planet.names.forEach(nextHistory => getPlanet(nextHistory.date, planet.id).name = nextHistory.name);
-        planet.states.forEach(nextHistory => getPlanet(nextHistory.date, planet.id).state = nextHistory.state);
-        planet.coordinates.forEach(nextHistory => getPlanet(nextHistory.date, planet.id).coordinates = nextHistory.coordinates);
+        planet.names.forEach(nextHistory => (getPlanet(nextHistory.date, planet.id).name = nextHistory.name));
+        planet.states.forEach(nextHistory => (getPlanet(nextHistory.date, planet.id).state = nextHistory.state));
+        planet.coordinates.forEach(
+            nextHistory => (getPlanet(nextHistory.date, planet.id).coordinates = nextHistory.coordinates),
+        );
 
         planet.moons.forEach(moon => {
-            moon.names.forEach(nextHistory => getMoon(nextHistory.date, planet.id, moon.id).name = nextHistory.name);
-            moon.states.forEach(nextHistory => getMoon(nextHistory.date, planet.id, moon.id).state = nextHistory.state);
+            moon.names.forEach(nextHistory => (getMoon(nextHistory.date, planet.id, moon.id).name = nextHistory.name));
+            moon.states.forEach(
+                nextHistory => (getMoon(nextHistory.date, planet.id, moon.id).state = nextHistory.state),
+            );
         });
     });
 
@@ -408,88 +426,88 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-    .planets-moons-history {
-        width: fit-content;
-        display: grid;
-        grid-template-columns: repeat(calc(1 + var(--planets)), 1fr);
+.planets-moons-history {
+    width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(calc(1 + var(--planets)), 1fr);
 
-        .header-row,
-        .row {
-            display: contents;
-        }
-    }
-
-    .deleted {
-        color: red;
-    }
-
-    .new,
-    .new .change {
-        color: lime;
-    }
-
-    .change {
-        color: orange;
-    }
-
+    .header-row,
     .row {
-        > div {
-            position: sticky;
-            top: 0;
-            background: rgb(var(--color));
-            padding: 8px;
-            background: black linear-gradient(0deg, rgba(var(--color), 0.1), rgba(var(--color), 0.1));
-        }
-
-        &:nth-of-type(odd) > div {
-            background: black linear-gradient(0deg, rgba(var(--color), 0.15), rgba(var(--color), 0.15));
-        }
-    }
-
-    .planet,
-    .moon {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        align-items: center;
-        column-gap: 8px;
-        line-height: 1;
-        white-space: nowrap;
-
-        .ogti {
-            grid-row: auto / span 2;
-            grid-column: 1;
-            font-size: 36px;
-        }
-    }
-
-    .planet {
-        grid-template-rows: repeat(2, 3fr) repeat(2, 2fr);
-
-        &--empty {
-            grid-column: var(--start) / calc(2 + var(--planets));
-        }
-    }
-
-    .moon {
-        grid-template-rows: 1fr 1fr;
         display: contents;
-        font-size: 10px;
+    }
+}
 
-        > .ogti {
-            font-size: 24px;
-            justify-self: end;
-        }
+.deleted {
+    color: red;
+}
+
+.new,
+.new .change {
+    color: lime;
+}
+
+.change {
+    color: orange;
+}
+
+.row {
+    > div {
+        position: sticky;
+        top: 0;
+        background: rgb(var(--color));
+        padding: 8px;
+        background: black linear-gradient(0deg, rgba(var(--color), 0.1), rgba(var(--color), 0.1));
     }
 
-    .date-column {
-        grid-column: 1;
+    &:nth-of-type(odd) > div {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.15), rgba(var(--color), 0.15));
+    }
+}
+
+.planet,
+.moon {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 8px;
+    line-height: 1;
+    white-space: nowrap;
+
+    .ogti {
         grid-row: auto / span 2;
-        display: flex;
-        align-items: center;
-    }
-
-    .scroller {
-        height: calc(1px * var(--offset));
         grid-column: 1;
+        font-size: 36px;
     }
+}
+
+.planet {
+    grid-template-rows: repeat(2, 3fr) repeat(2, 2fr);
+
+    &--empty {
+        grid-column: var(--start) / calc(2 + var(--planets));
+    }
+}
+
+.moon {
+    grid-template-rows: 1fr 1fr;
+    display: contents;
+    font-size: 10px;
+
+    > .ogti {
+        font-size: 24px;
+        justify-self: end;
+    }
+}
+
+.date-column {
+    grid-column: 1;
+    grid-row: auto / span 2;
+    display: flex;
+    align-items: center;
+}
+
+.scroller {
+    height: calc(1px * var(--offset));
+    grid-column: 1;
+}
 </style>

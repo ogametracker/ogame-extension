@@ -1,25 +1,13 @@
 <template>
-    <GridTable
-        class="color-settings"
-        :columns="columns"
-        :items="items"
-        style="width: max-content"
-    >
+    <GridTable class="color-settings" :columns="columns" :items="items" style="width: max-content">
         <template #header-key="{ label }">
             <span v-text="label" />
             <ResetButton @reset="emit('reset')" />
         </template>
         <template #cell-key="{ value: key }">
             <label class="color-input">
-                <input
-                    type="color"
-                    :value="colors[key as K]"
-                    @change="updateColor(key, $event)"
-                />
-                <div
-                    class="color-indicator"
-                    :style="{ background: colors[key as K] }"
-                />
+                <input type="color" :value="colors[key as K]" @change="updateColor(key, $event)" />
+                <div class="color-indicator" :style="{ background: colors[key as K] }" />
                 <span v-text="labels[key as K]" />
             </label>
         </template>
@@ -44,11 +32,13 @@ const emit = defineEmits<{ reset: [] }>();
 const colors = defineModel<Record<K, string>>({ required: true, type: Object as PropType<Record<K, string>> });
 
 const columns = computed<GridTableColumn[]>(() => {
-    return [{
-        key: 'key',
-        label: props.header,
-        headerClass: 'color-settings-header',
-    }];
+    return [
+        {
+            key: 'key',
+            label: props.header,
+            headerClass: 'color-settings-header',
+        },
+    ];
 });
 
 const items = computed<{ key: K }[]>(() => {
@@ -60,39 +50,39 @@ function updateColor(key: K, event: Event) {
     if (event.target instanceof HTMLInputElement) {
         colors.value = {
             ...colors.value,
-            [key]: event.target.value
+            [key]: event.target.value,
         };
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .color-input {
-        display: flex;
-        flex-grow: 1;
-        align-items: center;
-        cursor: pointer;
-        column-gap: 4px;
+.color-input {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    cursor: pointer;
+    column-gap: 4px;
 
-        > input[type="color"] {
-            width: 0;
-            height: 0;
-            box-sizing: border-box;
-            transform: scale(0);
-            display: inline;
-            padding: 0;
-            border: none;
-        }
-
-        > .color-indicator {
-            height: 24px;
-            width: 24px;
-            display: inline-block;
-            border-radius: 4px;
-        }
+    > input[type='color'] {
+        width: 0;
+        height: 0;
+        box-sizing: border-box;
+        transform: scale(0);
+        display: inline;
+        padding: 0;
+        border: none;
     }
 
-    .color-settings:deep(.color-settings-header) {
-        justify-content: center;
+    > .color-indicator {
+        height: 24px;
+        width: 24px;
+        display: inline-block;
+        border-radius: 4px;
     }
+}
+
+.color-settings:deep(.color-settings-header) {
+    justify-content: center;
+}
 </style>

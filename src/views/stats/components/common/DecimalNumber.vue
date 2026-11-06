@@ -10,7 +10,11 @@
         <span v-if="prefix != ''" v-text="prefix" />
 
         <span v-text="formatNumber(integerValue, format)" />
-        <span v-if="digits > 0" class="fraction" v-text="formatNumber(decimalValue, fractionNumberFormat).substring(1)" />
+        <span
+            v-if="digits > 0"
+            class="fraction"
+            v-text="formatNumber(decimalValue, fractionNumberFormat).substring(1)"
+        />
 
         <span v-if="suffix != ''" v-text="suffix" />
     </span>
@@ -54,23 +58,23 @@ const integerValue = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-    .decimal-number {
-        --small-fraction-size: 0.65em;
+.decimal-number {
+    --small-fraction-size: 0.65em;
 
-        &.fade-value {
+    &.fade-value {
+        color: rgba(white, 0.1);
+
+        .fraction {
             color: rgba(white, 0.1);
-
-            .fraction {
-                color: rgba(white, 0.1);
-            }
-        }
-
-        &.small-fraction .fraction {
-            font-size: var(--small-fraction-size);
-        }
-
-        &.fade-decimals .fraction {
-            color: rgba(white, 0.333);
         }
     }
+
+    &.small-fraction .fraction {
+        font-size: var(--small-fraction-size);
+    }
+
+    &.fade-decimals .fraction {
+        color: rgba(white, 0.333);
+    }
+}
 </style>

@@ -1,4 +1,4 @@
-import { FactionTranslations } from "./types";
+import { FactionTranslations } from './types';
 
 export const es_mx: FactionTranslations = {
     pirates: 'Piratas',

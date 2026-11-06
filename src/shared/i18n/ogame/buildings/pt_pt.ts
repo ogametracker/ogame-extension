@@ -1,5 +1,5 @@
-import { BuildingType } from "@ogame-tracker/shared/models/ogame/buildings/BuildingType";
-import { BuildingTranslations } from "./types";
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { BuildingTranslations } from './types';
 
 export const pt_pt: BuildingTranslations = {
     [BuildingType.metalMine]: 'Mina de Metal',

@@ -1,7 +1,7 @@
-import { DefenseType } from "@ogame-tracker/shared/models/ogame/defenses/DefenseType";
-import { DefenseTranslations } from "./types";
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { DefenseTranslations } from './types';
 
-export const en: DefenseTranslations =  {
+export const en: DefenseTranslations = {
     [DefenseType.rocketLauncher]: 'Rocket Launcher',
     [DefenseType.lightLaser]: 'Light Laser',
     [DefenseType.heavyLaser]: 'Heavy Laser',

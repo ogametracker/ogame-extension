@@ -1,21 +1,21 @@
 {
-  "name": "@ogame-tracker/view-shared",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "lint": "oxlint --config ../../../.oxlintrc.json .",
-    "format": "oxfmt --config ../../../.oxfmtrc.json .",
-    "format:check": "npm run format -- --check"
-  },
-  "dependencies": {
-    "@ogame-tracker/shared": "0.1.0"
-  },
-  "peerDependencies": {
-    "vue": "^3.5.45"
-  },
-  "peerDependenciesMeta": {
-    "vue": {
-      "optional": true
+    "name": "@ogame-tracker/view-shared",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "lint": "oxlint --config ../../../.oxlintrc.json .",
+        "format": "oxfmt --config ../../../.oxfmtrc.json .",
+        "format:check": "npm run format -- --check"
+    },
+    "dependencies": {
+        "@ogame-tracker/shared": "0.1.0"
+    },
+    "peerDependencies": {
+        "vue": "^3.5.45"
+    },
+    "peerDependenciesMeta": {
+        "vue": {
+            "optional": true
+        }
     }
-  }
 }

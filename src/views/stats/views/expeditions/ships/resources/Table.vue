@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable
+            :dataItems="expos"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -75,10 +81,11 @@ const resourceTypes = computed<Record<string, ResourceType>>(() => {
 const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
     return ResourceTypes.map(resource => ({
         label: translations().extension.resources[resource],
-        getValue: nextExpos => nextExpos.reduce(
-            (acc, expo) => acc + expo.findings.fleetResourceUnits[resource] * factors.value[resource],
-            0
-        ),
+        getValue: nextExpos =>
+            nextExpos.reduce(
+                (acc, expo) => acc + expo.findings.fleetResourceUnits[resource] * factors.value[resource],
+                0,
+            ),
     }));
 });
 
@@ -86,23 +93,23 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
     const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: nextExpos => nextExpos.reduce(
-                (acc, expo) => acc
-                    + expo.findings.fleetResourceUnits.metal * factors.value.metal
-                    + expo.findings.fleetResourceUnits.crystal * factors.value.crystal
-                    + expo.findings.fleetResourceUnits.deuterium * factors.value.deuterium,
-                0
-            ),
+            getValue: nextExpos =>
+                nextExpos.reduce(
+                    (acc, expo) =>
+                        acc +
+                        expo.findings.fleetResourceUnits.metal * factors.value.metal +
+                        expo.findings.fleetResourceUnits.crystal * factors.value.crystal +
+                        expo.findings.fleetResourceUnits.deuterium * factors.value.deuterium,
+                    0,
+                ),
         },
     ];
 
     if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
         result.push({
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
-            getValue: nextExpos => nextExpos.reduce(
-                (acc, expo) => acc + getMsuOrDsu(expo.findings.fleetResourceUnits, factors.value),
-                0
-            ),
+            getValue: nextExpos =>
+                nextExpos.reduce((acc, expo) => acc + getMsuOrDsu(expo.findings.fleetResourceUnits, factors.value), 0),
         });
     }
 
@@ -111,25 +118,25 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
+    hr {
+        width: 100%;
     }
+}
 </style>

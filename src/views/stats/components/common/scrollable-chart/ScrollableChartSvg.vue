@@ -86,16 +86,12 @@
                     <template v-for="dataset in reversedDatasets" :key="dataset.key">
                         <circle
                             v-if="
-                                dataset.normalizedValuesByNormalizedX[x] != null
-                                && dataset.valuesByNormalizedX[x] != 0
+                                dataset.normalizedValuesByNormalizedX[x] != null && dataset.valuesByNormalizedX[x] != 0
                             "
                             v-show="dataset.visible && !dataset.hidePoints"
                             class="dataset-point"
                             :cx="x * width"
-                            :cy="
-                                height *
-                                (1 - dataset.normalizedValuesByNormalizedX[x])
-                            "
+                            :cy="height * (1 - dataset.normalizedValuesByNormalizedX[x])"
                             :style="{ fill: dataset.color }"
                         />
                     </template>
@@ -128,7 +124,10 @@ const props = defineProps({
     reversedDatasets: { required: true, type: Array as PropType<ScrollableChartInternalDataset[]> },
 });
 
-const activeXNormalizedSync = defineModel<number | null>('activeXNormalized', { required: true, type: Number as PropType<number | null> });
+const activeXNormalizedSync = defineModel<number | null>('activeXNormalized', {
+    required: true,
+    type: Number as PropType<number | null>,
+});
 
 function getRectWidth(xIndex: number) {
     const xValuesNormalized = props.xValuesNormalized;
@@ -142,72 +141,72 @@ function getRectWidth(xIndex: number) {
 </script>
 
 <style lang="scss" scoped>
-    .translation-group {
-        transform: translateX(var(--chart-x-translation));
-    }
+.translation-group {
+    transform: translateX(var(--chart-x-translation));
+}
 
-    .x-tick-grid-line {
-        stroke: rgba(white, 0.0666);
+.x-tick-grid-line {
+    stroke: rgba(white, 0.0666);
+    stroke-width: 1px;
+    fill: none;
+
+    &.x-tick-grid-line-active {
+        stroke: rgba(white, 0.5);
+        stroke-width: 3px;
+    }
+}
+
+.x-grid-line {
+    stroke: rgba(white, 0.15);
+    stroke-width: 1px;
+    fill: none;
+
+    &.x-grid-line-active {
+        stroke: rgba(white, 0.5);
+        stroke-width: 3px;
+    }
+}
+
+.y-grid-line {
+    stroke: rgba(white, 0.2);
+    stroke-width: 1px;
+    fill: none;
+}
+
+.x-grid-line--first,
+.y-grid-line--first {
+    stroke: rgba(white, 0.75);
+}
+
+.dataset-background {
+    stroke: none;
+}
+
+.dataset-line {
+    fill: none;
+    stroke-width: 2px;
+    filter: brightness(0.7);
+
+    &--dashed {
+        stroke-dasharray: 5px;
         stroke-width: 1px;
-        fill: none;
-
-        &.x-tick-grid-line-active {
-            stroke: rgba(white, 0.5);
-            stroke-width: 3px;
-        }
     }
+}
 
-    .x-grid-line {
-        stroke: rgba(white, 0.15);
+.dataset-point-group {
+    .dataset-point {
+        stroke: rgba(black, 0.5);
+        r: 3px;
         stroke-width: 1px;
-        fill: none;
-
-        &.x-grid-line-active {
-            stroke: rgba(white, 0.5);
-            stroke-width: 3px;
-        }
     }
 
-    .y-grid-line {
-        stroke: rgba(white, 0.2);
-        stroke-width: 1px;
-        fill: none;
+    .dataset-point-group-rect {
+        fill: transparent;
     }
 
-    .x-grid-line--first,
-    .y-grid-line--first {
-        stroke: rgba(white, 0.75);
+    &:hover > .dataset-point {
+        stroke: rgba(black, 0.5);
+        r: 4px;
     }
-
-    .dataset-background {
-        stroke: none;
-    }
-
-    .dataset-line {
-        fill: none;
-        stroke-width: 2px;
-        filter: brightness(0.7);
-
-        &--dashed {
-            stroke-dasharray: 5px;
-            stroke-width: 1px;
-        }
-    }
-
-    .dataset-point-group {
-        .dataset-point {
-            stroke: rgba(black, 0.5);
-            r: 3px;
-            stroke-width: 1px;
-        }
-
-        .dataset-point-group-rect {
-            fill: transparent;
-        }
-
-        &:hover > .dataset-point {
-            stroke: rgba(black, 0.5);
-            r: 4px;
-        }
-    }
+}
 </style>

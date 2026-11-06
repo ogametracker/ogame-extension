@@ -49,14 +49,26 @@
             />
         </span>
 
-        <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.plasmaTechnology])" />
+        <span
+            v-text="
+                translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(
+                    translations().ogame.research[ResearchType.plasmaTechnology],
+                )
+            "
+        />
         <span>
             <OResearch :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
         <template v-if="!productionMode">
-            <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.astrophysics])" />
+            <span
+                v-text="
+                    translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(
+                        translations().ogame.research[ResearchType.astrophysics],
+                    )
+                "
+            />
             <span>
                 <OResearch :research="ResearchType.astrophysics" />
                 <input type="number" :value="settings.levelAstrophysics" disabled />
@@ -64,7 +76,13 @@
 
             <span v-text="translations().extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
             <span>
-                <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
+                <input
+                    type="number"
+                    v-model.number="settings.numberOfUnusedRaidColonySlots"
+                    :min="0"
+                    :max="100"
+                    step="1"
+                />
             </span>
         </template>
 
@@ -99,7 +117,10 @@ defineProps({
     productionMode: { required: false, type: Boolean, default: () => false },
 });
 
-const settings = defineModel<AmortizationPlayerSettings>({ required: true, type: Object as PropType<AmortizationPlayerSettings> });
+const settings = defineModel<AmortizationPlayerSettings>({
+    required: true,
+    type: Object as PropType<AmortizationPlayerSettings>,
+});
 
 const resources = ResourceTypes;
 
@@ -130,66 +151,65 @@ function toggleAllianceClass(allianceClass: AllianceClass): void {
 function toggleOptimizeForResource(resource: ResourceType) {
     if (settings.value.optimizeForResources.includes(resource)) {
         settings.value.optimizeForResources = settings.value.optimizeForResources.filter(r => r != resource);
-    }
-    else {
+    } else {
         settings.value.optimizeForResources.push(resource);
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .player-settings {
-        display: grid;
-        grid-template-columns: minmax(auto, 150px) 1fr;
-        align-items: center;
-        gap: 8px 16px;
+.player-settings {
+    display: grid;
+    grid-template-columns: minmax(auto, 150px) 1fr;
+    align-items: center;
+    gap: 8px 16px;
+
+    > * {
+        display: flex;
+
+        &:nth-of-type(2n + 1) {
+            justify-self: flex-end;
+            text-align: right;
+        }
+    }
+
+    input[type='number'] {
+        width: 60px;
+    }
+
+    .o-officer,
+    .o-player-class,
+    .o-alliance-class,
+    .toggleable-resource {
+        cursor: pointer;
+    }
+
+    .gap {
+        column-gap: 8px;
 
         > * {
             display: flex;
-
-            &:nth-of-type(2n + 1) {
-                justify-self: flex-end;
-                text-align: right;
-            }
-        }
-
-        input[type="number"] {
-            width: 60px;
-        }
-
-        .o-officer,
-        .o-player-class,
-        .o-alliance-class,
-        .toggleable-resource {
-            cursor: pointer;
-        }
-
-        .gap {
-            column-gap: 8px;
-
-            > * {
-                display: flex;
-            }
         }
     }
+}
 
-    .conversion-rate-settings {
-        display: contents;
+.conversion-rate-settings {
+    display: contents;
 
-        :deep(.fake-table-header) {
-            background: none;
-            justify-content: end;
-            padding-right: 0;
-        }
-        :deep(.fake-table-body) {
-            padding-left: 0;
-        }
+    :deep(.fake-table-header) {
+        background: none;
+        justify-content: end;
+        padding-right: 0;
     }
-
-    .lifeform-level-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        row-gap: 4px;
-        align-items: stretch;
+    :deep(.fake-table-body) {
+        padding-left: 0;
     }
+}
+
+.lifeform-level-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    align-items: stretch;
+}
 </style>

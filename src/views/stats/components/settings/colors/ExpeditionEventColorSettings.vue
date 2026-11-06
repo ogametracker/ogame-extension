@@ -20,7 +20,9 @@ import ColorSettingsTable from './ColorSettingsTable.vue';
 
 const settingsStore = useSettingsStore();
 
-const labels = computed<Record<ExpeditionEventType, string>>(() => translations().extension.expeditions.expeditionEvents);
+const labels = computed<Record<ExpeditionEventType, string>>(
+    () => translations().extension.expeditions.expeditionEvents,
+);
 
 const keys: ExpeditionEventType[] = [
     ExpeditionEventType.nothing,

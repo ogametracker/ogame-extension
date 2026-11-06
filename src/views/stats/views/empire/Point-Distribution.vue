@@ -36,13 +36,26 @@ import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import { DefenseByTypes, DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
 import { FleetMissionType } from '@ogame-tracker/shared/models/ogame/fleets/FleetMissionType';
 import type { Fleet } from '@ogame-tracker/shared/models/ogame/fleets/types';
-import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-import { LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformBuildingsByType,
+    ResourceProductionBonusLifeformBuildings,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import {
+    LifeformBuildingTypes,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformTechnologiesByType } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 import { ResearchByTypes, ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-import { CivilShipTypes, MilitaryShipTypes, MoonShipTypes, NonStationaryShipTypes, PlanetShipTypes, ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import {
+    CivilShipTypes,
+    MilitaryShipTypes,
+    MoonShipTypes,
+    NonStationaryShipTypes,
+    PlanetShipTypes,
+    ShipByTypes,
+} from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import type { GridTableColumn } from '../../components/common/GridTable.vue';
 import { useEmpireStore } from '../../data/EmpireDataModule';
 import { useLifeformDiscoveryStore } from '../../data/LifeformDiscoveryDataModule';
@@ -173,7 +186,7 @@ const highscoreItems = computed<PointDistributionRow[]>(() => {
             label: 'LOCA: Lifeforms',
             points: lifeforms,
         });
-    };
+    }
 
     return result;
 });
@@ -181,10 +194,12 @@ const highscoreItems = computed<PointDistributionRow[]>(() => {
 const highscoreFooterItems = computed<PointDistributionRow[]>(() => {
     const total = Object.values(highscorePoints.value).reduce((total, points) => total + points, 0); //TODO: dont include defenses twice
 
-    return [{
-        label: 'LOCA: Total Points',
-        points: total,
-    }];
+    return [
+        {
+            label: 'LOCA: Total Points',
+            points: total,
+        },
+    ];
 });
 
 const items = computed<PointDistributionRow[]>(() => {
@@ -216,7 +231,7 @@ const items = computed<PointDistributionRow[]>(() => {
                 points: total.lifeformTechnologiesInactive,
             },
         );
-    };
+    }
 
     result.push(
         {
@@ -245,10 +260,12 @@ const items = computed<PointDistributionRow[]>(() => {
 });
 
 const footerItems = computed<PointDistributionRow[]>(() => {
-    return [{
-        label: 'LOCA: Actual Total Points',
-        points: pointDistribution.value.total,
-    }];
+    return [
+        {
+            label: 'LOCA: Actual Total Points',
+            points: pointDistribution.value.total,
+        },
+    ];
 });
 
 const planets = computed(() => planetAndMoons.value.filter(p => !p.isMoon) as PlanetData[]);
@@ -278,7 +295,10 @@ function getLifeformPoints(): number {
         return total + points;
     }, 0);
 
-    const lifeformDiscoveries = Object.values(lifeformDiscoveryStore.lifeforms).reduce((total, info) => total + info.discoveriesCount, 0);
+    const lifeformDiscoveries = Object.values(lifeformDiscoveryStore.lifeforms).reduce(
+        (total, info) => total + info.discoveriesCount,
+        0,
+    );
 
     return buildingPoints + technologyPoints + lifeformDiscoveries;
 }
@@ -286,78 +306,78 @@ function getLifeformPoints(): number {
 function getEconomyPoints(): number {
     const defense = planets.value.reduce((total, planet) => total + getDefensePoints(planet), 0);
 
-    const phalanxesAndJumpGates = (planetAndMoons.value.filter(p => p.isMoon) as MoonData[])
-        .reduce((total, moon) => {
-            const phalanx = getAccumulativeCost(moon.buildings[BuildingType.sensorPhalanx], SensorPhalanx);
-            const jumpGate = getAccumulativeCost(moon.buildings[BuildingType.jumpGate], SensorPhalanx);
+    const phalanxesAndJumpGates = (planetAndMoons.value.filter(p => p.isMoon) as MoonData[]).reduce((total, moon) => {
+        const phalanx = getAccumulativeCost(moon.buildings[BuildingType.sensorPhalanx], SensorPhalanx);
+        const jumpGate = getAccumulativeCost(moon.buildings[BuildingType.jumpGate], SensorPhalanx);
 
-            const points = getPoints(phalanx) + getPoints(jumpGate);
-            return total + points;
-        }, 0);
-
-    const civilShipTypes = NonStationaryShipTypes.filter(shipType => (CivilShipTypes as ShipType[]).includes(shipType));
-    const civilShips = planetAndMoons.value.reduce((total, planet) => {
-        let points: number;
-
-        if (planet.isMoon) {
-            points = MoonShipTypes
-                .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
-
-                    return total + getPoints(cost);
-                }, 0);
-        }
-        else {
-            points = PlanetShipTypes
-                .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
-
-                    return total + getPoints(cost);
-                }, 0);
-        }
-
-        return total + points;
-    }, 0) + ownReturningFleets.value.reduce((total, fleet) => {
-        const points = civilShipTypes.reduce((total, shipType) => {
-            const count = fleet.ships[shipType];
-            const ship = ShipByTypes[shipType];
-
-            const cost = multiplyCost(ship.cost, count);
-            return total + getPoints(cost);
-        }, 0);
-
+        const points = getPoints(phalanx) + getPoints(jumpGate);
         return total + points;
     }, 0);
 
-    const buildings = planetAndMoons.value
-        .reduce((total, planet) => {
+    const civilShipTypes = NonStationaryShipTypes.filter(shipType => (CivilShipTypes as ShipType[]).includes(shipType));
+    const civilShips =
+        planetAndMoons.value.reduce((total, planet) => {
             let points: number;
 
             if (planet.isMoon) {
-                points = MoonBuildingTypes.reduce((total, type) => {
-                    const building = BuildingsByType[type];
-                    const level = planet.buildings[type];
-                    const cost = getAccumulativeCost(level, building);
+                points = MoonShipTypes.filter(ship => (CivilShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
-                    return total + getPoints(cost);
-                }, 0);
-            }
-            else {
-                points = PlanetBuildingTypes.reduce((total, type) => {
-                    const building = BuildingsByType[type];
-                    const level = planet.buildings[type];
-                    const cost = getAccumulativeCost(level, building);
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
+            } else {
+                points = PlanetShipTypes.filter(ship => (CivilShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
-                    return total + getPoints(cost);
-                }, 0);
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
             }
 
             return total + points;
+        }, 0) +
+        ownReturningFleets.value.reduce((total, fleet) => {
+            const points = civilShipTypes.reduce((total, shipType) => {
+                const count = fleet.ships[shipType];
+                const ship = ShipByTypes[shipType];
+
+                const cost = multiplyCost(ship.cost, count);
+                return total + getPoints(cost);
+            }, 0);
+
+            return total + points;
         }, 0);
+
+    const buildings = planetAndMoons.value.reduce((total, planet) => {
+        let points: number;
+
+        if (planet.isMoon) {
+            points = MoonBuildingTypes.reduce((total, type) => {
+                const building = BuildingsByType[type];
+                const level = planet.buildings[type];
+                const cost = getAccumulativeCost(level, building);
+
+                return total + getPoints(cost);
+            }, 0);
+        } else {
+            points = PlanetBuildingTypes.reduce((total, type) => {
+                const building = BuildingsByType[type];
+                const level = planet.buildings[type];
+                const cost = getAccumulativeCost(level, building);
+
+                return total + getPoints(cost);
+            }, 0);
+        }
+
+        return total + points;
+    }, 0);
 
     return defense + buildings + phalanxesAndJumpGates / 2 + civilShips / 2;
 }
@@ -365,90 +385,97 @@ function getEconomyPoints(): number {
 function getMilitaryPoints(): number {
     const defense = planets.value.reduce((total, planet) => total + getDefensePoints(planet), 0);
 
-    const phalanxesAndJumpGates = (planetAndMoons.value.filter(p => p.isMoon) as MoonData[])
-        .reduce((total, moon) => {
-            const phalanx = getAccumulativeCost(moon.buildings[BuildingType.sensorPhalanx], SensorPhalanx);
-            const jumpGate = getAccumulativeCost(moon.buildings[BuildingType.jumpGate], SensorPhalanx);
+    const phalanxesAndJumpGates = (planetAndMoons.value.filter(p => p.isMoon) as MoonData[]).reduce((total, moon) => {
+        const phalanx = getAccumulativeCost(moon.buildings[BuildingType.sensorPhalanx], SensorPhalanx);
+        const jumpGate = getAccumulativeCost(moon.buildings[BuildingType.jumpGate], SensorPhalanx);
 
-            const points = getPoints(phalanx) + getPoints(jumpGate);
+        const points = getPoints(phalanx) + getPoints(jumpGate);
+        return total + points;
+    }, 0);
+
+    const militaryShipTypes = NonStationaryShipTypes.filter(shipType =>
+        (MilitaryShipTypes as ShipType[]).includes(shipType),
+    );
+    const militaryShips =
+        planetAndMoons.value.reduce((total, planet) => {
+            let points: number;
+
+            if (planet.isMoon) {
+                points = MoonShipTypes.filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
+
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
+            } else {
+                points = PlanetShipTypes.filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
+
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
+            }
+
+            return total + points;
+        }, 0) +
+        ownReturningFleets.value.reduce((total, fleet) => {
+            const points = militaryShipTypes.reduce((total, shipType) => {
+                const count = fleet.ships[shipType];
+                const ship = ShipByTypes[shipType];
+
+                const cost = multiplyCost(ship.cost, count);
+                return total + getPoints(cost);
+            }, 0);
+
             return total + points;
         }, 0);
 
-    const militaryShipTypes = NonStationaryShipTypes.filter(shipType => (MilitaryShipTypes as ShipType[]).includes(shipType));
-    const militaryShips = planetAndMoons.value.reduce((total, planet) => {
-        let points: number;
-
-        if (planet.isMoon) {
-            points = MoonShipTypes
-                .filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
-
-                    return total + getPoints(cost);
-                }, 0);
-        }
-        else {
-            points = PlanetShipTypes
-                .filter(ship => (MilitaryShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
-
-                    return total + getPoints(cost);
-                }, 0);
-        }
-
-        return total + points;
-    }, 0) + ownReturningFleets.value.reduce((total, fleet) => {
-        const points = militaryShipTypes.reduce((total, shipType) => {
-            const count = fleet.ships[shipType];
-            const ship = ShipByTypes[shipType];
-
-            const cost = multiplyCost(ship.cost, count);
-            return total + getPoints(cost);
-        }, 0);
-
-        return total + points;
-    }, 0);
-
     const civilShipTypes = NonStationaryShipTypes.filter(shipType => (CivilShipTypes as ShipType[]).includes(shipType));
-    const civilShips = planetAndMoons.value.reduce((total, planet) => {
-        let points: number;
+    const civilShips =
+        planetAndMoons.value.reduce((total, planet) => {
+            let points: number;
 
-        if (planet.isMoon) {
-            points = MoonShipTypes
-                .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
+            if (planet.isMoon) {
+                points = MoonShipTypes.filter(ship => (CivilShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
-                    return total + getPoints(cost);
-                }, 0);
-        }
-        else {
-            points = PlanetShipTypes
-                .filter(ship => (CivilShipTypes as ShipType[]).includes(ship))
-                .reduce((total, shipType) => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = multiplyCost(ship.cost, planet.ships[shipType]);
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
+            } else {
+                points = PlanetShipTypes.filter(ship => (CivilShipTypes as ShipType[]).includes(ship)).reduce(
+                    (total, shipType) => {
+                        const ship = ShipByTypes[shipType];
+                        const cost = multiplyCost(ship.cost, planet.ships[shipType]);
 
-                    return total + getPoints(cost);
-                }, 0);
-        }
+                        return total + getPoints(cost);
+                    },
+                    0,
+                );
+            }
 
-        return total + points;
-    }, 0) + ownReturningFleets.value.reduce((total, fleet) => {
-        const points = civilShipTypes.reduce((total, shipType) => {
-            const count = fleet.ships[shipType];
-            const ship = ShipByTypes[shipType];
+            return total + points;
+        }, 0) +
+        ownReturningFleets.value.reduce((total, fleet) => {
+            const points = civilShipTypes.reduce((total, shipType) => {
+                const count = fleet.ships[shipType];
+                const ship = ShipByTypes[shipType];
 
-            const cost = multiplyCost(ship.cost, count);
-            return total + getPoints(cost);
+                const cost = multiplyCost(ship.cost, count);
+                return total + getPoints(cost);
+            }, 0);
+
+            return total + points;
         }, 0);
-
-        return total + points;
-    }, 0);
 
     return defense + phalanxesAndJumpGates / 2 + militaryShips + civilShips / 2;
 }
@@ -470,10 +497,12 @@ const planetPointDistributions = computed<PlanetPointDistributionItem[]>(() => {
 });
 
 function getLifeformTechnologyPoints(planet: PlanetData, active: boolean): number {
-    const lifeformTechnologyTypes = LifeformTechnologyTypes.filter(type => planet.activeLifeformTechnologies.includes(type) == active);
+    const lifeformTechnologyTypes = LifeformTechnologyTypes.filter(
+        type => planet.activeLifeformTechnologies.includes(type) == active,
+    );
 
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-    lifeformTechnologyTypes.forEach((type) => {
+    lifeformTechnologyTypes.forEach(type => {
         const technology = LifeformTechnologiesByType[type];
         cost = addCost(cost, getAccumulativeCost(planet.lifeformTechnologies[type], technology));
     }, 0);
@@ -496,7 +525,7 @@ const researchPoints = computed<number>(() => {
     const researchLevels = empireStore.empire.research;
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-    ResearchTypes.forEach((researchType) => {
+    ResearchTypes.forEach(researchType => {
         const research = ResearchByTypes[researchType];
         cost = addCost(cost, getAccumulativeCost(researchLevels[researchType], research));
     });
@@ -529,11 +558,10 @@ function getDefensePoints(planet: PlanetDataBase): number {
 const ownReturningFleets = computed<Fleet[]>(() => {
     const fleets = empireStore.empire.fleets;
     const localPlanets = planetAndMoons.value;
-    return fleets.filter(fleet =>
-        (
-            fleet.isReturnFlight
-            || fleet.mission == FleetMissionType.deployment
-        ) && localPlanets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates))
+    return fleets.filter(
+        fleet =>
+            (fleet.isReturnFlight || fleet.mission == FleetMissionType.deployment) &&
+            localPlanets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates)),
     );
 });
 
@@ -556,14 +584,13 @@ const fleetsShipPoints = computed<number>(() => {
 function getPlanetShipPoints(planet: PlanetData): number {
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-    PlanetShipTypes
-        .forEach(shipType => {
-            const count = planet.ships[shipType];
-            const ship = ShipByTypes[shipType];
+    PlanetShipTypes.forEach(shipType => {
+        const count = planet.ships[shipType];
+        const ship = ShipByTypes[shipType];
 
-            const totalCost = multiplyCost(ship.cost, count);
-            cost = addCost(cost, totalCost);
-        });
+        const totalCost = multiplyCost(ship.cost, count);
+        cost = addCost(cost, totalCost);
+    });
 
     return getPoints(cost);
 }
@@ -571,14 +598,13 @@ function getPlanetShipPoints(planet: PlanetData): number {
 function getMoonShipPoints(moon: MoonData): number {
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-    MoonShipTypes
-        .forEach(shipType => {
-            const count = moon.ships[shipType];
-            const ship = ShipByTypes[shipType];
+    MoonShipTypes.forEach(shipType => {
+        const count = moon.ships[shipType];
+        const ship = ShipByTypes[shipType];
 
-            const totalCost = multiplyCost(ship.cost, count);
-            cost = addCost(cost, totalCost);
-        });
+        const totalCost = multiplyCost(ship.cost, count);
+        cost = addCost(cost, totalCost);
+    });
 
     return getPoints(cost);
 }
@@ -592,7 +618,7 @@ function getOtherLifeformBuildingPoints(planet: PlanetData, active: boolean): nu
     const lfBuildingTypes = allLifeformBuildingTypes.filter(type => !exclude.includes(type));
 
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
-    lfBuildingTypes.forEach((type) => {
+    lfBuildingTypes.forEach(type => {
         const building = LifeformBuildingsByType[type];
         cost = addCost(cost, getAccumulativeCost(planet.lifeformBuildings[type], building));
     }, 0);
@@ -603,7 +629,7 @@ function getOtherLifeformBuildingPoints(planet: PlanetData, active: boolean): nu
 function getAccumulativeCost(level: number, buildable: { getCost(level: number): Cost }): Cost {
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-    for (let l = 1;l <= level;l++) {
+    for (let l = 1; l <= level; l++) {
         cost = addCost(cost, buildable.getCost(l));
     }
 
@@ -613,7 +639,7 @@ function getAccumulativeCost(level: number, buildable: { getCost(level: number):
 function getPlanetBuildingPoints(planet: PlanetData): number {
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
 
-    PlanetBuildingTypes.forEach((mine) => {
+    PlanetBuildingTypes.forEach(mine => {
         const building = BuildingsByType[mine];
         cost = addCost(cost, getAccumulativeCost(planet.buildings[mine], building));
     });

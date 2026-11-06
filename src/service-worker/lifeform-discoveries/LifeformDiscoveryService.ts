@@ -5,7 +5,11 @@ import { MessageService } from '../MessageService';
 import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
 import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
 import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
-import { LifeformDiscoveryMessage, NewLifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
+import {
+    LifeformDiscoveryMessage,
+    NewLifeformDiscoveryMessage,
+    TrackLifeformDiscoveryMessage,
+} from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
 import { LifeformDiscoveryModule } from './LifeformDiscoveryModule';
 
 export class LifeformDiscoveryService implements MessageService {

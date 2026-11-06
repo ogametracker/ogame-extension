@@ -1,9 +1,9 @@
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from "../../LifeformBuildingType";
-import { LifeformType } from "../../LifeformType";
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '../../LifeformBuildingType';
+import { LifeformType } from '../../LifeformType';
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {
     public constructor() {
@@ -44,7 +44,7 @@ class MegalithClass extends LifeformBuilding implements AnyBuildingCostAndTimeRe
         return LifeformBuildingType.megalith;
     }
 
-    public readonly affectedBuildings: AnyBuildingType[]=  LifeformBuildingTypesByLifeform[LifeformType.rocktal];
+    public readonly affectedBuildings: AnyBuildingType[] = LifeformBuildingTypesByLifeform[LifeformType.rocktal];
 
     public getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction {
         if (!this.appliesTo(building)) {

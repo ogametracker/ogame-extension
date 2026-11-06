@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { CommonTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { CommonTranslations } from './type';
 
 export const fr: RecursivePartial<CommonTranslations> = {
     averagePerDay: '⌀ par jour',

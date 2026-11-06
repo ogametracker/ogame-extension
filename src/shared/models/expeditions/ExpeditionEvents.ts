@@ -17,17 +17,19 @@ interface ExpeditionEventWithSize {
     size: ExpeditionEventSize;
 }
 
-export type ExpeditionEventDarkMatter = ExpeditionEventBase & ExpeditionEventWithSize & {
-    type: ExpeditionEventType.darkMatter;
-    darkMatter: number;
-};
+export type ExpeditionEventDarkMatter = ExpeditionEventBase &
+    ExpeditionEventWithSize & {
+        type: ExpeditionEventType.darkMatter;
+        darkMatter: number;
+    };
 
 export type ExpeditionEventResourcesAmount = Record<ResourceType, number>;
 
-export type ExpeditionEventResources = ExpeditionEventBase & ExpeditionEventWithSize & {
-    type: ExpeditionEventType.resources;
-    resources: ExpeditionEventResourcesAmount;
-};
+export type ExpeditionEventResources = ExpeditionEventBase &
+    ExpeditionEventWithSize & {
+        type: ExpeditionEventType.resources;
+        resources: ExpeditionEventResourcesAmount;
+    };
 
 export type ExpeditionFindableShipType =
     | ShipType.lightFighter
@@ -41,8 +43,7 @@ export type ExpeditionFindableShipType =
     | ShipType.pathfinder
     | ShipType.smallCargo
     | ShipType.largeCargo
-    | ShipType.espionageProbe
-    ;
+    | ShipType.espionageProbe;
 export const ExpeditionFindableShipTypes: ExpeditionFindableShipType[] = [
     ShipType.lightFighter,
     ShipType.heavyFighter,
@@ -58,13 +59,13 @@ export const ExpeditionFindableShipTypes: ExpeditionFindableShipType[] = [
     ShipType.espionageProbe,
 ];
 
-
 export type ExpeditionFindableFleet = Partial<Record<ExpeditionFindableShipType, number>>;
 
-export type ExpeditionEventFleet = ExpeditionEventBase & ExpeditionEventWithSize & {
-    type: ExpeditionEventType.fleet;
-    fleet: ExpeditionFindableFleet;
-};
+export type ExpeditionEventFleet = ExpeditionEventBase &
+    ExpeditionEventWithSize & {
+        type: ExpeditionEventType.fleet;
+        fleet: ExpeditionFindableFleet;
+    };
 
 export type ExpeditionEventItem = ExpeditionEventBase & {
     type: ExpeditionEventType.item;
@@ -110,7 +111,8 @@ export type ExpeditionEventCombat = ExpeditionEventBase & {
     type: ExpeditionEventType.combat;
 };
 
-export type ExpeditionEvent = ExpeditionEventDarkMatter
+export type ExpeditionEvent =
+    | ExpeditionEventDarkMatter
     | ExpeditionEventResources
     | ExpeditionEventFleet
     | ExpeditionEventItem

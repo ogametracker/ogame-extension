@@ -12,12 +12,18 @@ import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/og
 import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ResourceProductionBonusLifeformTechnology } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
-import { LifeformTechnologiesByType, ResourceProductionBonusLifeformTechnologies } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+import {
+    LifeformTechnologiesByType,
+    ResourceProductionBonusLifeformTechnologies,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
 
@@ -55,10 +61,10 @@ const techs: LifeformTechnologyType[] = ResourceProductionBonusLifeformTechnolog
 const limits = computed<Record<'metal' | 'crystal' | 'deuterium' | 'energy', (value: number) => number>>(() => {
     const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ResourceProductionBonus });
     return {
-        metal: value => limit != null ? Math.min(value, limit) : value,
-        crystal: value => limit != null ? Math.min(value, limit) : value,
-        deuterium: value => limit != null ? Math.min(value, limit) : value,
-        energy: value => limit != null ? Math.min(value, limit) : value,
+        metal: value => (limit != null ? Math.min(value, limit) : value),
+        crystal: value => (limit != null ? Math.min(value, limit) : value),
+        deuterium: value => (limit != null ? Math.min(value, limit) : value),
+        energy: value => (limit != null ? Math.min(value, limit) : value),
     };
 });
 
@@ -68,29 +74,34 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Cos
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => techs.map<LifeformBonusesPlanetBreakdown<keyof Cost>>(techType => {
-            const tech = LifeformTechnologiesByType[techType] as ResourceProductionBonusLifeformTechnology;
-            const planetBonuses = getPlanetBonus(tech, planet);
+        planet =>
+            techs.map<LifeformBonusesPlanetBreakdown<keyof Cost>>(techType => {
+                const tech = LifeformTechnologiesByType[techType] as ResourceProductionBonusLifeformTechnology;
+                const planetBonuses = getPlanetBonus(tech, planet);
 
-            return {
-                planet,
-                technologyType: techType,
-                bonuses: createRecord<keyof Cost, LifeformBonusesPlanetBreakdown['bonuses'][string]>(
-                    ['metal', 'crystal', 'deuterium', 'energy'],
-                    key => ({
-                        base: planetBonuses.base[key],
-                        buildings: planetBonuses.buildings[key],
-                        level: planetBonuses.level[key],
-                        total: planetBonuses.total[key],
-                    })),
-            };
-        })
+                return {
+                    planet,
+                    technologyType: techType,
+                    bonuses: createRecord<keyof Cost, LifeformBonusesPlanetBreakdown['bonuses'][string]>(
+                        ['metal', 'crystal', 'deuterium', 'energy'],
+                        key => ({
+                            base: planetBonuses.base[key],
+                            buildings: planetBonuses.buildings[key],
+                            level: planetBonuses.level[key],
+                            total: planetBonuses.total[key],
+                        }),
+                    ),
+                };
+            }),
     );
 });
 
 const experience = computed(() => empireStore.lifeformExperience);
 
-function getPlanetBonus(tech: ResourceProductionBonusLifeformTechnology, planet: PlanetData): ResourceProductionBonusBreakdown {
+function getPlanetBonus(
+    tech: ResourceProductionBonusLifeformTechnology,
+    planet: PlanetData,
+): ResourceProductionBonusBreakdown {
     if (planet.activeLifeform == LifeformType.none || !planet.activeLifeformTechnologies.includes(tech.type)) {
         return {
             base: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
@@ -107,7 +118,10 @@ function getPlanetBonus(tech: ResourceProductionBonusLifeformTechnology, planet:
     );
 
     const baseBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type]);
-    const lifeformLevelBonus = multiplyCost(baseBonus, getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform]));
+    const lifeformLevelBonus = multiplyCost(
+        baseBonus,
+        getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform]),
+    );
     const lifeformBuildingBonus = multiplyCost(baseBonus, buildingsBoost);
 
     return {

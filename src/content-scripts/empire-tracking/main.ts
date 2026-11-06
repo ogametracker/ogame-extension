@@ -1,20 +1,20 @@
-import { getQueryParameters } from "@ogame-tracker/shared/utils/getQueryParameters";
-import { trackAlliancePage } from "./trackAlliancePage";
-import { trackResearchPage } from "./trackResearchPage";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { trackSuppliesPage } from "./trackSuppliesPage";
-import { trackFacilitiesPage } from "./trackFacilitiesPage";
-import { trackShipyardPage } from "./trackShipyardPage";
-import { trackFleetDispatchPage } from "./trackFleetDispatchPage";
-import { trackDefensesPage } from "./trackDefensesPage";
-import { trackOverviewPage } from "./trackOverviewPage";
-import { trackResourceSettingsPage } from "./trackResourceSettingsPage";
-import { trackEmpirePage } from "./trackEmpirePage";
-import { trackOnIngamePages } from "./trackOnIngamePages";
-import { trackLifeformBuildingsPage } from "./trackLifeformBuildings";
-import { trackLifeformResearchPage } from "./trackLifeformResearchPage";
-import { trackLifeformSettingsPage } from "./trackLifeformSettingsPage";
-import { trackLifeformBonusesPage } from "./trackLifeformBonusesPage";
+import { getQueryParameters } from '@ogame-tracker/shared/utils/getQueryParameters';
+import { trackAlliancePage } from './trackAlliancePage';
+import { trackResearchPage } from './trackResearchPage';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { trackSuppliesPage } from './trackSuppliesPage';
+import { trackFacilitiesPage } from './trackFacilitiesPage';
+import { trackShipyardPage } from './trackShipyardPage';
+import { trackFleetDispatchPage } from './trackFleetDispatchPage';
+import { trackDefensesPage } from './trackDefensesPage';
+import { trackOverviewPage } from './trackOverviewPage';
+import { trackResourceSettingsPage } from './trackResourceSettingsPage';
+import { trackEmpirePage } from './trackEmpirePage';
+import { trackOnIngamePages } from './trackOnIngamePages';
+import { trackLifeformBuildingsPage } from './trackLifeformBuildings';
+import { trackLifeformResearchPage } from './trackLifeformResearchPage';
+import { trackLifeformSettingsPage } from './trackLifeformSettingsPage';
+import { trackLifeformBonusesPage } from './trackLifeformBonusesPage';
 
 interface PageTracker {
     condition: (queryParams: Record<string, string>) => boolean;
@@ -32,7 +32,10 @@ const queryParams = getQueryParameters(location.search);
 const pageTrackers: PageTracker[] = [
     {
         action: () => trackOnIngamePages(),
-        condition: query => ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(query.page?.toLowerCase()),
+        condition: query =>
+            ['ingame', 'messages', 'chat', 'shop', 'highscore', 'rewards', 'premium', 'resourceSettings'].includes(
+                query.page?.toLowerCase(),
+            ),
     },
     {
         action: () => trackResearchPage(),
@@ -68,7 +71,9 @@ const pageTrackers: PageTracker[] = [
     },
     {
         action: () => trackResourceSettingsPage(),
-        condition: query => (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings') || query.page?.toLowerCase() == 'resourcesettings',
+        condition: query =>
+            (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings') ||
+            query.page?.toLowerCase() == 'resourcesettings',
     },
     {
         action: () => trackLifeformBuildingsPage(),
@@ -97,10 +102,11 @@ const observer = new MutationObserver(() => {
 
     for (let i = 0; i < observerCallbacks.length; i++) {
         const observerCallback = observerCallbacks[i];
-        
-        const checkExistenceElem = observerCallback.runWhenExistsSelector != null
-            ? document.querySelector(observerCallback.runWhenExistsSelector)
-            : siteFooter;
+
+        const checkExistenceElem =
+            observerCallback.runWhenExistsSelector != null
+                ? document.querySelector(observerCallback.runWhenExistsSelector)
+                : siteFooter;
 
         if (checkExistenceElem == null) {
             continue;

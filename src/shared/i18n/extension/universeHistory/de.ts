@@ -1,8 +1,8 @@
-import { UniverseHistoryTranslations } from "./type";
+import { UniverseHistoryTranslations } from './type';
 
 export const de: UniverseHistoryTranslations = {
     header: 'Universumshistorie',
-    settings: {  
+    settings: {
         messages: {
             notEnabledHtml: `
             <b>Highscore-Tracking des Universums ist deaktiviert.</b><br/>
@@ -26,7 +26,7 @@ export const de: UniverseHistoryTranslations = {
             Mindestens einmal täglich werden Highscores und Universumsinformationen (sofern aktiviert) aktualisiert.<br/>
             Die Uhrzeiten für die Aktualisierungen können unten eingestellt werden.
             Falls eine Aktualisierung zu einer Uhrzeit verpasst wurde, wird das Update so früh wie möglich nachgeholt.
-            `
+            `,
         },
         enableHighscoreTrackingOnly: 'Highscore-Tracking aktivieren',
         enableHistoryTracking: 'Tracking der Universumshistorie aktivieren',
@@ -96,6 +96,7 @@ export const de: UniverseHistoryTranslations = {
         deleted: 'Gelöscht',
         admin: 'Admin',
     },
-    
-    loadingTakingLong: 'Das Laden der Daten dauert länger als erwartet. Vermutlich wird die Datenbank gerade aktualisiert, bitte warte oder versuch es später erneut.',
+
+    loadingTakingLong:
+        'Das Laden der Daten dauert länger als erwartet. Vermutlich wird die Datenbank gerade aktualisiert, bitte warte oder versuch es später erneut.',
 };

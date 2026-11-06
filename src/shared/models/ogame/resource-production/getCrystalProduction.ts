@@ -1,9 +1,12 @@
-function getCrystalProductionBoost(position: number, serverPositionBoost: {
-    default: number;
-    pos1: number;
-    pos2: number;
-    pos3: number;
-}) {
+function getCrystalProductionBoost(
+    position: number,
+    serverPositionBoost: {
+        default: number;
+        pos1: number;
+        pos2: number;
+        pos3: number;
+    },
+) {
     switch (position) {
         case 1:
             return serverPositionBoost.pos1;

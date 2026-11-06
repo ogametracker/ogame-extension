@@ -7,7 +7,10 @@
                         <div class="number" v-text="formatNumber(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="translations().extension.common.resourceUnits" />
 
-                        <div class="number" v-text="formatNumber(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
+                        <div
+                            class="number"
+                            v-text="formatNumber(getConvertedResourcesAmount(getVisibleDatasets(datasets)))"
+                        />
                         <div v-text="`${translations().extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
@@ -108,7 +111,9 @@ const includeLostShipsFactor = computed<Record<ResourceType, number>>(() => {
     };
 });
 
-const includeFoundShips = computed(() => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits);
+const includeFoundShips = computed(
+    () => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits,
+);
 
 const includeLostShips = computed(() => settingsStore.settings.resourceBalance.includeLostShipsResourceUnits);
 
@@ -121,11 +126,7 @@ const conversionModeText = computed(() => {
 });
 
 const firstDay = computed(() => {
-    return min([
-        expeditionStore.firstDay,
-        combatReportStore.firstDay,
-        debrisFieldReportStore.firstDay,
-    ]);
+    return min([expeditionStore.firstDay, combatReportStore.firstDay, debrisFieldReportStore.firstDay]);
 });
 
 const eventsPerDay = computed<Record<number, DayEvents>>(() => {
@@ -165,14 +166,15 @@ const datasets = computed<StatsChartDataset<DayEvents>[]>(() => {
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
             color: colors.value.totalConverted,
             filled: false,
-            getValue: dayEvents => getMsuOrDsu({
-                metal: getResource(dayEvents, ResourceType.metal),
-                crystal: getResource(dayEvents, ResourceType.crystal),
-                deuterium: getResource(dayEvents, ResourceType.deuterium),
-            }),
+            getValue: dayEvents =>
+                getMsuOrDsu({
+                    metal: getResource(dayEvents, ResourceType.metal),
+                    crystal: getResource(dayEvents, ResourceType.crystal),
+                    deuterium: getResource(dayEvents, ResourceType.deuterium),
+                }),
             stack: false,
             showAverage: true,
-        }
+        },
     ];
 });
 
@@ -182,9 +184,7 @@ function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): Scolla
 
 function getResourcesAmount(nextDatasets: ScollableChartFooterDataset[]): number {
     const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-    return nextDatasets
-        .filter(d => resources.includes(d.key.toString()))
-        .reduce((acc, cur) => acc + cur.value, 0);
+    return nextDatasets.filter(d => resources.includes(d.key.toString())).reduce((acc, cur) => acc + cur.value, 0);
 }
 
 function getConvertedResourcesAmount(nextDatasets: ScollableChartFooterDataset[]): number {
@@ -197,9 +197,11 @@ function getConvertedResourcesAmount(nextDatasets: ScollableChartFooterDataset[]
 }
 
 function getResource(dayEvents: DayEvents, resource: ResourceType): number {
-    return getExpeditionResourceAmount(dayEvents.expeditions, resource)
-        + getCombatResourceAmount(dayEvents.combatReports, resource)
-        + getDebrisFieldResourceAmount(dayEvents.debrisFieldReports, resource);
+    return (
+        getExpeditionResourceAmount(dayEvents.expeditions, resource) +
+        getCombatResourceAmount(dayEvents.combatReports, resource) +
+        getDebrisFieldResourceAmount(dayEvents.debrisFieldReports, resource)
+    );
 }
 
 function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
@@ -208,8 +210,9 @@ function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefi
     }
 
     const localIncludeFoundShipsFactor = includeFoundShipsFactor.value[resource];
-    const total = expeditions.findings.resources[resource]
-        + expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
+    const total =
+        expeditions.findings.resources[resource] +
+        expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
 
     return total;
 }
@@ -220,21 +223,23 @@ function getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefin
     }
 
     const lostLootFactor = includeLostLoot.value ? 1 : 0;
-    const lootResources = dailyReports.loot.lost[resource] * lostLootFactor
-        + dailyReports.loot.gained[resource];
+    const lootResources = dailyReports.loot.lost[resource] * lostLootFactor + dailyReports.loot.gained[resource];
 
     const localIncludeLostShipsFactor = includeLostShipsFactor.value[resource];
-    const lostShipResourceUnits = (
-        dailyReports.lostShips.onExpeditions.resourceUnits[resource]
-        + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
-    ) * localIncludeLostShipsFactor;
+    const lostShipResourceUnits =
+        (dailyReports.lostShips.onExpeditions.resourceUnits[resource] +
+            dailyReports.lostShips.againstPlayers.resourceUnits[resource]) *
+        localIncludeLostShipsFactor;
 
     const total = lootResources - lostShipResourceUnits;
 
     return total;
 }
 
-function getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
+function getDebrisFieldResourceAmount(
+    reports: DailyDebrisFieldReportResult | undefined,
+    resource: ResourceType,
+): number {
     if (reports == null) {
         return 0;
     }
@@ -244,34 +249,34 @@ function getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | un
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
+    }
+}
+
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+    hr {
+        width: 100%;
     }
-
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
-    }
+}
 </style>

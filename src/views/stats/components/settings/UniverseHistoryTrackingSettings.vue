@@ -1,6 +1,9 @@
 <template>
     <div class="universe-history-tracking">
-        <div v-if="!settings.enabled" v-html="translations().extension.universeHistory.settings.messages.notEnabledHtml" />
+        <div
+            v-if="!settings.enabled"
+            v-html="translations().extension.universeHistory.settings.messages.notEnabledHtml"
+        />
 
         <CheckboxButton
             :model-value="settings.enabled"
@@ -11,7 +14,10 @@
 
         <hr />
 
-        <div v-if="settings.enabled && !settings.trackHistory" v-html="translations().extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
+        <div
+            v-if="settings.enabled && !settings.trackHistory"
+            v-html="translations().extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml"
+        />
         <CheckboxButton
             v-if="settings.enabled"
             :model-value="settings.trackHistory"
@@ -52,7 +58,7 @@ const settingsStore = useSettingsStore();
 const timeSelection = computed<Record<number, boolean>>(() => {
     const result: Record<number, boolean> = {};
 
-    for (let i = 0;i <= 23;i++) {
+    for (let i = 0; i <= 23; i++) {
         const time = i * 60 * 60 * 1000;
         result[time] = settings.value.updateTimes.includes(time);
     }
@@ -87,8 +93,7 @@ function setTimeEnabled(timeStr: string, enabled: boolean) {
     let updateTimes = settings.value.updateTimes;
     if (enabled && !updateTimes.includes(time)) {
         updateTimes.push(time);
-    }
-    else if (!enabled && updateTimes.includes(time)) {
+    } else if (!enabled && updateTimes.includes(time)) {
         updateTimes = updateTimes.filter(t => t != time);
     }
 
@@ -118,9 +123,9 @@ function setTrackHistory(trackHistory: boolean) {
 </script>
 
 <style lang="scss" scoped>
-    .time-grid {
-        display: inline-grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 4px;
-    }
+.time-grid {
+    display: inline-grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+}
 </style>

@@ -1,6 +1,6 @@
-import { getGlobalDatabase, getPlayerDatabase } from "@ogame-tracker/shared/db/access";
-import { _logDebug } from "@ogame-tracker/shared/utils/_log";
-import { V1ToV2Export, V1ToV2ExportedAccount } from ".";
+import { getGlobalDatabase, getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { _logDebug } from '@ogame-tracker/shared/utils/_log';
+import { V1ToV2Export, V1ToV2ExportedAccount } from '.';
 
 export async function importData(data: V1ToV2Export): Promise<void> {
     _logDebug(`data import: ${data.type}`);
@@ -22,7 +22,6 @@ async function importAccount(account: V1ToV2ExportedAccount) {
         language: account.language,
         name: account.universeName,
     });
-
 
     const db = await getPlayerDatabase({
         ...account,

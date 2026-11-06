@@ -1,7 +1,7 @@
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { LifeformTechnology } from "../LifeformTechnology";
-import { PhalanxRangeBonusLifeformTechnology } from "../interfaces";
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { LifeformTechnology } from '../LifeformTechnology';
+import { PhalanxRangeBonusLifeformTechnology } from '../interfaces';
 
 class InterplanetaryAnalysisNetworkClass extends LifeformTechnology implements PhalanxRangeBonusLifeformTechnology {
     public constructor() {

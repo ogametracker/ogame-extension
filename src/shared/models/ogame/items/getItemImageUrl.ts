@@ -1,4 +1,4 @@
-import { Item } from "./Item";
+import { Item } from './Item';
 
 export interface ItemImageServer {
     serverId: number;

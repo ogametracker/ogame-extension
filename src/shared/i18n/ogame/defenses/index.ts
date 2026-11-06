@@ -1,5 +1,5 @@
-import { LanguageKey } from "../../LanguageKey";
-import { DefenseTranslations } from "./types";
+import { LanguageKey } from '../../LanguageKey';
+import { DefenseTranslations } from './types';
 import { de } from './de';
 import { en } from './en';
 import { tr } from './tr';

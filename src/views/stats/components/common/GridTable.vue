@@ -141,7 +141,11 @@ const props = defineProps({
     noHeader: { required: false, type: Boolean },
     inline: { required: false, type: Boolean },
     footerItems: { required: false, type: Array as PropType<Record<string | number, any>[]>, default: () => [] },
-    cellClassProvider: { required: false, type: Function as PropType<(value: any, item: any) => string>, default: () => '' },
+    cellClassProvider: {
+        required: false,
+        type: Function as PropType<(value: any, item: any) => string>,
+        default: () => '',
+    },
     sticky: { required: false, type: String as PropType<string | null>, default: null },
     stickyFooter: { required: false, type: Boolean, default: false },
     hideRow: { required: false, type: Function as PropType<(item: any) => boolean>, default: () => false },
@@ -166,9 +170,7 @@ const slots = defineSlots<{
 }>();
 
 const gridColumns = computed<string>(() => {
-    return props.columns
-        .map(col => col.size ?? 'auto')
-        .join(' ');
+    return props.columns.map(col => col.size ?? 'auto').join(' ');
 });
 
 const tableElement = useTemplateRef<Element>('element');
@@ -188,103 +190,105 @@ function onScroll() {
     emit('scroll', scrollData);
 }
 
-function getMatchingSlotNames(columnKey: string): { name: string, match: RegExpMatchArray }[] {
-    return Object.keys(slots).map(name => ({
-        name,
-        match: columnKey.match(`^${name}$`),
-    })).filter(r => r.match != null) as { name: string, match: RegExpMatchArray }[];
+function getMatchingSlotNames(columnKey: string): { name: string; match: RegExpMatchArray }[] {
+    return Object.keys(slots)
+        .map(name => ({
+            name,
+            match: columnKey.match(`^${name}$`),
+        }))
+        .filter(r => r.match != null) as { name: string; match: RegExpMatchArray }[];
 }
 </script>
 
 <style lang="scss" scoped>
-    .grid-table {
-        --border-radius: 4px;
-        display: grid;
-        border: 1px solid rgba(var(--color), 0.5);
+.grid-table {
+    --border-radius: 4px;
+    display: grid;
+    border: 1px solid rgba(var(--color), 0.5);
 
-        border-radius: var(--border-radius);
+    border-radius: var(--border-radius);
 
-        z-index: 0;
+    z-index: 0;
 
-        &--inline {
-            display: inline-grid;
+    &--inline {
+        display: inline-grid;
+    }
+
+    &-head,
+    &-body,
+    &-foot,
+    &-row {
+        display: contents;
+    }
+
+    &-head .grid-table-cell {
+        z-index: 1;
+        background-color: black;
+        background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    }
+
+    &-body {
+        .grid-table-row:nth-of-type(odd) .grid-table-cell {
+            background: rgba(var(--color), 0.05);
         }
 
-        &-head,
-        &-body,
-        &-foot,
-        &-row {
-            display: contents;
-        }
-
-        &-head .grid-table-cell {
-            z-index: 1;
-            background-color: black;
-            background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        }
-
-        &-body {
-            .grid-table-row:nth-of-type(odd) .grid-table-cell {
-                background: rgba(var(--color), 0.05);
-            }
-
-            .grid-table-row:hover .grid-table-cell {
-                background: rgba(var(--color), 0.15);
-            }
-        }
-
-        &-foot .grid-table-row {
-            &:first-of-type .grid-table-cell {
-                border-top: 3px double rgba(var(--color), 0.5);
-            }
-
-            .grid-table-cell {
-                background: black linear-gradient(0deg, rgba(var(--color), 0.2), rgba(var(--color), 0.2)) !important;
-            }
-        }
-
-        &-cell {
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            text-align: right;
-        }
-
-        &--sticky-header > &-head > &-cell {
-            position: sticky;
-            top: 0;
-        }
-        &--sticky-header {
-            max-height: var(--grid-table--sticky-height);
-            overflow: auto;
-        }
-
-        &--sticky-footer > &-foot &-cell {
-            position: sticky;
-            bottom: 0;
-        }
-
-        &--has-row-borders {
-            .grid-table-row + .grid-table-row > .grid-table-cell {
-                border-top: 1px solid rgba(var(--color), 0.3333);
-            }
+        .grid-table-row:hover .grid-table-cell {
+            background: rgba(var(--color), 0.15);
         }
     }
-    .grid-table-head {
-        > .grid-table-cell.first {
-            border-top-left-radius: calc(var(--border-radius) - 2px);
+
+    &-foot .grid-table-row {
+        &:first-of-type .grid-table-cell {
+            border-top: 3px double rgba(var(--color), 0.5);
         }
-        > .grid-table-cell.last {
-            border-top-right-radius: calc(var(--border-radius) - 2px);
-        }
-    }
-    .grid-table-foot .grid-table-row:last-of-type {
-        > .grid-table-cell.first {
-            border-bottom-left-radius: calc(var(--border-radius) - 2px);
-        }
-        > .grid-table-cell.last {
-            border-bottom-right-radius: calc(var(--border-radius) - 2px);
+
+        .grid-table-cell {
+            background: black linear-gradient(0deg, rgba(var(--color), 0.2), rgba(var(--color), 0.2)) !important;
         }
     }
+
+    &-cell {
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        text-align: right;
+    }
+
+    &--sticky-header > &-head > &-cell {
+        position: sticky;
+        top: 0;
+    }
+    &--sticky-header {
+        max-height: var(--grid-table--sticky-height);
+        overflow: auto;
+    }
+
+    &--sticky-footer > &-foot &-cell {
+        position: sticky;
+        bottom: 0;
+    }
+
+    &--has-row-borders {
+        .grid-table-row + .grid-table-row > .grid-table-cell {
+            border-top: 1px solid rgba(var(--color), 0.3333);
+        }
+    }
+}
+.grid-table-head {
+    > .grid-table-cell.first {
+        border-top-left-radius: calc(var(--border-radius) - 2px);
+    }
+    > .grid-table-cell.last {
+        border-top-right-radius: calc(var(--border-radius) - 2px);
+    }
+}
+.grid-table-foot .grid-table-row:last-of-type {
+    > .grid-table-cell.first {
+        border-bottom-left-radius: calc(var(--border-radius) - 2px);
+    }
+    > .grid-table-cell.last {
+        border-bottom-right-radius: calc(var(--border-radius) - 2px);
+    }
+}
 </style>

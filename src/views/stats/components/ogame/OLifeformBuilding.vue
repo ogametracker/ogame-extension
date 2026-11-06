@@ -18,11 +18,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { PropType } from 'vue';
-import { LifeformBuildingType, LifeformBuildingTypes, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypes,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
 const props = defineProps({
-    building: { required: true, type: Number as PropType<LifeformBuildingType>, validator: (value: number) => (LifeformBuildingTypes as number[]).includes(value) },
+    building: {
+        required: true,
+        type: Number as PropType<LifeformBuildingType>,
+        validator: (value: number) => (LifeformBuildingTypes as number[]).includes(value),
+    },
     size: { required: false, type: String, default: '32px' },
     disabled: { required: false, type: Boolean },
     fade: { required: false, type: Boolean },
@@ -84,39 +92,41 @@ const imageMap: Record<LifeformBuildingType, string> = {
     [LifeformBuildingType.supraRefractor]: 'supra-refractor',
 };
 
-const lifeform = computed(() => ValidLifeformTypes.find(lf => LifeformBuildingTypesByLifeform[lf].includes(props.building)));
+const lifeform = computed(() =>
+    ValidLifeformTypes.find(lf => LifeformBuildingTypesByLifeform[lf].includes(props.building)),
+);
 </script>
 
 <style lang="scss" scoped>
-    .o-lifeform-building {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
-        border: 1px solid;
+.o-lifeform-building {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
+    border: 1px solid;
 
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
-
-        &--humans {
-            border-color: #7ec000;
-        }
-        &--rocktal {
-            border-color: #df6642;
-        }
-        &--mechas {
-            border-color: #4b91e7;
-        }
-        &--kaelesh {
-            border-color: #9863e9;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+
+    &--humans {
+        border-color: #7ec000;
+    }
+    &--rocktal {
+        border-color: #df6642;
+    }
+    &--mechas {
+        border-color: #4b91e7;
+    }
+    &--kaelesh {
+        border-color: #9863e9;
+    }
+}
 </style>

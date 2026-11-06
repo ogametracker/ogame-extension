@@ -35,7 +35,10 @@
                             }"
                         >
                             <span class="chart-tooltip-item-color" :style="{ color: dataset.color }" />
-                            <span class="chart-tooltip-item-value" v-text="tooltipValueFormatter(getLastValue(dataset, activeXNormalized))" />
+                            <span
+                                class="chart-tooltip-item-value"
+                                v-text="tooltipValueFormatter(getLastValue(dataset, activeXNormalized))"
+                            />
                             <span class="chart-tooltip-item-label" v-text="dataset.label" />
                         </div>
 
@@ -95,7 +98,7 @@
 
 <script lang="ts">
 function findPrevious<T>(array: T[], maxIndex: number, predicate: (item: T) => boolean): T | null {
-    for (let i = Math.min(maxIndex, array.length - 1);i >= 0;i--) {
+    for (let i = Math.min(maxIndex, array.length - 1); i >= 0; i--) {
         const item = array[i];
         if (predicate(item)) {
             return item;
@@ -169,9 +172,21 @@ const props = defineProps({
     minTick: { required: false, type: Number as PropType<number | null>, default: () => null },
     maxTick: { required: false, type: Number as PropType<number | null>, default: () => null },
     tickList: { required: false, type: Array as PropType<number[] | null>, default: () => null },
-    xLabelFormatter: { required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => formatNumber(value) },
-    tooltipValueFormatter: { required: false, type: Function as PropType<(value: number) => string>, default: (value: number) => formatNumber(value) },
-    tooltipFooterProvider: { required: false, type: Function as PropType<((values: Record<string, number>) => string | string[]) | null>, default: null },
+    xLabelFormatter: {
+        required: false,
+        type: Function as PropType<(value: number) => string>,
+        default: (value: number) => formatNumber(value),
+    },
+    tooltipValueFormatter: {
+        required: false,
+        type: Function as PropType<(value: number) => string>,
+        default: (value: number) => formatNumber(value),
+    },
+    tooltipFooterProvider: {
+        required: false,
+        type: Function as PropType<((values: Record<string, number>) => string | string[]) | null>,
+        default: null,
+    },
     hideTooltipFooter: { required: false, type: Boolean, default: () => false },
     xLabelTooltipFormatter: { required: false, type: Function as PropType<(value: number) => string>, default: null },
 });
@@ -205,15 +220,16 @@ const hasTooltipFooter = computed(() => {
         return false;
     }
 
-    return props.tooltipFooterProvider != null
-        || (footerSlotDatasets.value.length > 0 && slots['tooltip-footer'] != null);
+    return (
+        props.tooltipFooterProvider != null || (footerSlotDatasets.value.length > 0 && slots['tooltip-footer'] != null)
+    );
 });
 
 function getLastValue(dataset: ScrollableChartInternalDataset, xNormalized: number): number {
     const xs = xValuesNormalized.value;
     const index = xs.indexOf(xNormalized);
 
-    for (let i = index;i >= 0;i--) {
+    for (let i = index; i >= 0; i--) {
         const value = dataset.originalValuesByNormalizedX[xs[i]];
         if (value != null) {
             return value;
@@ -238,13 +254,16 @@ const footerTexts = computed<string[]>(() => {
         return [];
     }
 
-    const values: Record<string, number> = internalDatasets.value.reduce((acc, dataset) => {
-        const y = dataset.originalValuesByNormalizedX[x];
-        if (y != null) {
-            acc[dataset.key] = y;
-        }
-        return acc;
-    }, {} as Record<string, number>);
+    const values: Record<string, number> = internalDatasets.value.reduce(
+        (acc, dataset) => {
+            const y = dataset.originalValuesByNormalizedX[x];
+            if (y != null) {
+                acc[dataset.key] = y;
+            }
+            return acc;
+        },
+        {} as Record<string, number>,
+    );
 
     const footer = props.tooltipFooterProvider(values);
     if (footer instanceof Array) {
@@ -305,7 +324,7 @@ const xAxisTicks = computed<number[]>(() => {
     const { min, max } = xRange.value;
     const result: number[] = [];
 
-    for (let x = min;x <= max;x += props.tickInterval) {
+    for (let x = min; x <= max; x += props.tickInterval) {
         result.push(x);
     }
     return result;
@@ -321,14 +340,16 @@ const xValues = computed(() => {
     return [...result].sort((a, b) => a - b);
 });
 
-const xValuesNormalized = computed(() => xValues.value.map(x => (x - xRange.value.min) / (props.tickInterval * visibleTickCount.value)));
+const xValuesNormalized = computed(() =>
+    xValues.value.map(x => (x - xRange.value.min) / (props.tickInterval * visibleTickCount.value)),
+);
 
 const xValuesByXNormalized = computed<Record<number, number>>(() => {
     const result: Record<number, number> = {};
 
     const x = xValues.value;
     const xNormalized = xValuesNormalized.value;
-    for (let i = 0;i < x.length;i++) {
+    for (let i = 0; i < x.length; i++) {
         result[xNormalized[i]] = x[i];
     }
 
@@ -352,8 +373,7 @@ function updateYGridLines() {
         negative: 0,
     };
 
-    outerLoop:
-    for (let stepFactor = 1;;stepFactor *= yGridConfig.stepFactor) {
+    outerLoop: for (let stepFactor = 1; ; stepFactor *= yGridConfig.stepFactor) {
         for (let stepBase of yGridConfig.stepBases) {
             let curStep = stepBase * stepFactor;
 
@@ -375,11 +395,11 @@ function updateYGridLines() {
     const localHeight = height.value;
     const lines: YGridLineData = {};
     const count = stepCount.positive + stepCount.negative;
-    for (let c = 0;c <= count;c++) {
-        const relativeC = (c - stepCount.negative);
+    for (let c = 0; c <= count; c++) {
+        const relativeC = c - stepCount.negative;
         const y = step * relativeC;
         lines[y] = {
-            svg: localHeight - localHeight * c / count,
+            svg: localHeight - (localHeight * c) / count,
             fraction: c / count,
         };
     }
@@ -399,11 +419,11 @@ function updateYGridLines() {
 function updateXAndYRange() {
     const localXRange = {
         min: props.minTick ?? Number.MAX_SAFE_INTEGER,
-        max: props.maxTick ?? Number.MIN_SAFE_INTEGER
+        max: props.maxTick ?? Number.MIN_SAFE_INTEGER,
     };
     const localYRange = {
         min: props.showZeroY ? 0 : Number.MAX_SAFE_INTEGER,
-        max: Number.MIN_SAFE_INTEGER
+        max: Number.MIN_SAFE_INTEGER,
     };
 
     internalDatasets.value.forEach(dataset => {
@@ -419,26 +439,30 @@ function updateXAndYRange() {
     xRange.value = localXRange;
     yRange.value = localYRange;
 
-    if ((yRange.value.max - yRange.value.min) < internalConfig.grid.y.minLines) {
+    if (yRange.value.max - yRange.value.min < internalConfig.grid.y.minLines) {
         yRange.value.max = yRange.value.min + internalConfig.grid.y.minLines;
     }
 }
 
 const reversedDatasets = computed(() => [...internalDatasets.value].reverse());
 
-const visibleTickCount = computed(() => Math.min(props.ticks, Math.ceil((xRange.value.max - xRange.value.min) / props.tickInterval)));
+const visibleTickCount = computed(() =>
+    Math.min(props.ticks, Math.ceil((xRange.value.max - xRange.value.min) / props.tickInterval)),
+);
 
-const maxXNormalized = computed(() => (xRange.value.max - xRange.value.min) / (props.tickInterval * visibleTickCount.value));
+const maxXNormalized = computed(
+    () => (xRange.value.max - xRange.value.min) / (props.tickInterval * visibleTickCount.value),
+);
 
 function updateValues() {
-    internalDatasets.value.forEach((internalDataset) => {
-        internalDataset.values.forEach(point => internalDataset.valuesByX[point.x] = point.y);
+    internalDatasets.value.forEach(internalDataset => {
+        internalDataset.values.forEach(point => (internalDataset.valuesByX[point.x] = point.y));
     });
 
     internalDatasets.value.forEach((internalDataset, i, nextInternalDatasets) => {
         const previousVisibleAndStackedDataset = findPrevious(nextInternalDatasets, i - 1, d => d.visible && d.stack);
 
-        internalDataset.values.forEach(point => internalDataset.originalValuesByX[point.x] = point.y);
+        internalDataset.values.forEach(point => (internalDataset.originalValuesByX[point.x] = point.y));
 
         const values = internalDataset.values.map((point, i) => {
             let { x, y } = point;
@@ -471,7 +495,8 @@ function updateNormalizedValues() {
         internalDataset.normalizedValues = normalizedValues.map(p => ({ x: p.xNormalized, y: p.yNormalized }));
 
         if (internalDataset.average != null) {
-            internalDataset.normalizedAverage = (internalDataset.average - yRange.value.min) / (yRange.value.max - yRange.value.min);
+            internalDataset.normalizedAverage =
+                (internalDataset.average - yRange.value.min) / (yRange.value.max - yRange.value.min);
         }
 
         internalDataset.valuesByNormalizedX = {};
@@ -524,7 +549,10 @@ function updatePaths() {
 
     internalDatasets.value = internalDatasets.value.map(dataset => {
         const svgPathSegments = computeSvgPathSegments(dataset.normalizedValues, dataset.internalValues);
-        if (props.continueLastValue && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < maxXNormalized.value) {
+        if (
+            props.continueLastValue &&
+            dataset.normalizedValues[dataset.normalizedValues.length - 1].x < maxXNormalized.value
+        ) {
             const lastSegment = svgPathSegments[svgPathSegments.length - 1];
             lastSegment.push({
                 x: maxXNormalized.value * localWidth,
@@ -533,13 +561,16 @@ function updatePaths() {
         }
         const linePath = getSvgPath(svgPathSegments);
 
-        const bgPath = `M 0 ${zeroY} `
-            + `L${linePath.substring(1)} `
-            + `L ${localWidth * maxXNormalized.value} ${zeroY}`;
+        const bgPath =
+            `M 0 ${zeroY} ` + `L${linePath.substring(1)} ` + `L ${localWidth * maxXNormalized.value} ${zeroY}`;
 
         let avgLinePath = '';
         if (dataset.normalizedAverage != null) {
-            const avgSvgValue = computeSvgPathSegments([{ x: 0, y: dataset.normalizedAverage }], [{ x: 0, y: normalizedZeroY }], false)[0][0].y;
+            const avgSvgValue = computeSvgPathSegments(
+                [{ x: 0, y: dataset.normalizedAverage }],
+                [{ x: 0, y: normalizedZeroY }],
+                false,
+            )[0][0].y;
             avgLinePath = `M 0 ${avgSvgValue} L ${localWidth * maxXNormalized.value} ${avgSvgValue}`;
         }
 
@@ -557,21 +588,23 @@ function updatePaths() {
 }
 
 function getSvgPath(segments: Point[][]) {
-    const svgCommands = segments.map(
-        points => points.map(
-            (point, i) => `${i == 0 ? 'M' : 'L'} ${point.x} ${point.y}`
-        ).join(' ')
+    const svgCommands = segments.map(points =>
+        points.map((point, i) => `${i == 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' '),
     );
     return svgCommands.join(' ');
 }
 
-function computeSvgPathSegments(normalizedValues: Point[], values: Point[], splitSegmentsOnConsecutiveZeros = true): Point[][] {
+function computeSvgPathSegments(
+    normalizedValues: Point[],
+    values: Point[],
+    splitSegmentsOnConsecutiveZeros = true,
+): Point[][] {
     const localWidth = width.value;
     const localHeight = height.value;
 
     const segments: Point[][] = [];
     let currentSegment: Point[] = [];
-    for (let i = 0;i < normalizedValues.length;i++) {
+    for (let i = 0; i < normalizedValues.length; i++) {
         const normalizedValue = normalizedValues[i];
         const value = values[i];
         const nextValue: Point | undefined = values[i + 1];
@@ -600,7 +633,7 @@ function computeSvgPathSegments(normalizedValues: Point[], values: Point[], spli
             const x = localWidth * point.x;
             const y = localHeight * (1 - point.y);
             return { x, y };
-        })
+        }),
     );
 }
 
@@ -622,7 +655,9 @@ function updateTickOffset() {
     if (scrollbarContainer.value! == null) {
         throw new Error('scrollbar container is null');
     }
-    scrolledFraction.value = scrollbarContainer.value!.scrollLeft / (scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth);
+    scrolledFraction.value =
+        scrollbarContainer.value!.scrollLeft /
+        (scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth);
     leftX.value = (maxXNormalized.value - 1) * scrolledFraction.value;
 }
 
@@ -634,7 +669,8 @@ onMounted(async () => {
     await nextTick();
     onResize();
     resizeObserver.observe(svgContainer.value! ?? _throw('svgContainer is null'));
-    scrollbarContainer.value!.scrollLeft = scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth;
+    scrollbarContainer.value!.scrollLeft =
+        scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth;
 });
 
 onUnmounted(() => {
@@ -643,166 +679,166 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-    .scrollable-chart {
-        width: 100%;
-        height: 100%;
-        display: grid;
-        grid-template-rows: 1fr auto;
+.scrollable-chart {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-template-rows: 1fr auto;
+
+    &.no-legend {
+        grid-template-columns: 1fr;
+        padding-right: 16px; // necessary because overflow of last x-axis label will cause a scrollbar if there is no legend
     }
+}
 
-    svg {
-        width: 100%;
-        height: 100%;
-        overflow: visible;
-    }
+.chart-content {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: 1fr 100px;
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr 200px;
-        grid-template-rows: 1fr auto;
+.svg-container {
+    grid-row: 1;
+    grid-column: 2;
+    min-height: 250px;
+    min-width: 500px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+}
 
-        &.no-legend {
-            grid-template-columns: 1fr;
-            padding-right: 16px; // necessary because overflow of last x-axis label will cause a scrollbar if there is no legend
-        }
-    }
+.chart-y-axis {
+    grid-row: 1;
+    grid-column: 1;
 
-    .chart-content {
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        grid-template-rows: 1fr 100px;
-    }
+    position: relative;
 
-    .svg-container {
-        grid-row: 1;
-        grid-column: 2;
-        min-height: 250px;
-        min-width: 500px;
-        position: relative;
-        overflow: hidden;
-        margin-right: 10px;
-    }
-
-    .chart-y-axis {
-        grid-row: 1;
-        grid-column: 1;
-
-        position: relative;
-
-        > .y-axis-label {
-            position: absolute;
-            right: 0;
-            transform: translate(-15px, 50%);
-            white-space: pre;
-            color: #888;
-            font-size: 12px;
-
-            &:last-of-type {
-                transform: translate(-15px, 100%);
-            }
-        }
-    }
-
-    .chart-legend {
-        grid-row: 1 / span 2;
-        grid-column: 2;
-        padding: 0 12px;
-    }
-
-    .legend-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        align-items: center;
-        cursor: pointer;
-        padding: 4px 8px;
-
-        &:hover {
-            background-color: rgba(var(--color), 0.1);
-            border-radius: 4px;
-        }
-
-        &-hidden {
-            text-decoration: line-through;
-            opacity: 0.4;
-
-            .legend-item-color {
-                filter: grayscale(100%);
-            }
-        }
-    }
-
-    .legend-item-color {
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
-        background: currentColor;
-        margin-right: 4px;
-    }
-
-    .chart-tooltip {
+    > .y-axis-label {
         position: absolute;
-        top: 0;
-        border: 1px solid rgba(var(--color), 0.5);
-        background-color: rgba(black, 0.9);
-        background-image: linear-gradient(to right, rgba(var(--color), 0.2), rgba(var(--color), 0.2));
-
-        padding: 12px;
-        border-radius: 4px;
-        left: calc(100% * var(--x));
-        transform: translateX(calc(-100% * var(--x)));
+        right: 0;
+        transform: translate(-15px, 50%);
         white-space: pre;
-        line-height: 1;
+        color: #888;
+        font-size: 12px;
 
-        display: grid;
-        grid-template-columns: auto auto 1fr;
-        gap: 2px 6px;
-        align-items: center;
-        width: max-content;
-        font-size: 0.75rem;
-        pointer-events: none;
+        &:last-of-type {
+            transform: translate(-15px, 100%);
+        }
+    }
+}
 
-        &-item {
-            display: contents;
+.chart-legend {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    padding: 0 12px;
+}
 
-            &.zero > * {
-                opacity: 0.4;
-            }
+.legend-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 8px;
 
-            &-color {
-                display: inline-block;
-                width: 9px;
-                height: 9px;
-                border-radius: 2px;
-                background: currentColor;
-            }
-            &-value {
-                text-align: right;
-                font-weight: bold;
-            }
+    &:hover {
+        background-color: rgba(var(--color), 0.1);
+        border-radius: 4px;
+    }
+
+    &-hidden {
+        text-decoration: line-through;
+        opacity: 0.4;
+
+        .legend-item-color {
+            filter: grayscale(100%);
+        }
+    }
+}
+
+.legend-item-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: currentColor;
+    margin-right: 4px;
+}
+
+.chart-tooltip {
+    position: absolute;
+    top: 0;
+    border: 1px solid rgba(var(--color), 0.5);
+    background-color: rgba(black, 0.9);
+    background-image: linear-gradient(to right, rgba(var(--color), 0.2), rgba(var(--color), 0.2));
+
+    padding: 12px;
+    border-radius: 4px;
+    left: calc(100% * var(--x));
+    transform: translateX(calc(-100% * var(--x)));
+    white-space: pre;
+    line-height: 1;
+
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 2px 6px;
+    align-items: center;
+    width: max-content;
+    font-size: 0.75rem;
+    pointer-events: none;
+
+    &-item {
+        display: contents;
+
+        &.zero > * {
+            opacity: 0.4;
         }
 
-        &-header,
-        &-footer {
-            grid-column: 1 / span 3;
+        &-color {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            background: currentColor;
+        }
+        &-value {
+            text-align: right;
             font-weight: bold;
         }
-
-        &-header {
-            margin-bottom: 4px;
-        }
-        &-footer {
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px solid rgba(var(--color), 0.5);
-        }
     }
 
-    .scrollbar-container {
-        margin-left: 100px;
-        overflow-x: auto;
-
-        > div {
-            height: 1px;
-        }
+    &-header,
+    &-footer {
+        grid-column: 1 / span 3;
+        font-weight: bold;
     }
+
+    &-header {
+        margin-bottom: 4px;
+    }
+    &-footer {
+        margin-top: 4px;
+        padding-top: 4px;
+        border-top: 1px solid rgba(var(--color), 0.5);
+    }
+}
+
+.scrollbar-container {
+    margin-left: 100px;
+    overflow-x: auto;
+
+    > div {
+        height: 1px;
+    }
+}
 </style>

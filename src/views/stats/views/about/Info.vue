@@ -17,14 +17,7 @@
 
         <h3 v-text="translations().extension.about.info.table.global.header" />
         <LoadingSpinner v-if="loading" />
-        <GridTable
-            v-else
-            :items="itemsGlobal"
-            :columns="columns"
-            class="info-table"
-            no-header
-            style="width: 400px"
-        />
+        <GridTable v-else :items="itemsGlobal" :columns="columns" class="info-table" no-header style="width: 400px" />
     </div>
 </template>
 
@@ -157,22 +150,18 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .info-table {
-        width: fit-content;
-    }
+.info-table {
+    width: fit-content;
+}
 
-    .version {
-        font-weight: bold;
-        width: fit-content;
-        background-color: black;
-        background-image: linear-gradient(
-            0deg,
-            rgba(var(--color), 0.5),
-            rgba(var(--color), 0.7)
-        );
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        box-shadow: 0 0 6px 0 rgb(0 0 0 / 33%);
-        padding: 8px 16px;
-    }
+.version {
+    font-weight: bold;
+    width: fit-content;
+    background-color: black;
+    background-image: linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 33%);
+    padding: 8px 16px;
+}
 </style>

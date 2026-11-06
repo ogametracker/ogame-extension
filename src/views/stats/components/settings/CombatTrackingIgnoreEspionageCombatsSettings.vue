@@ -34,24 +34,24 @@ function setIgnoreEspionageCombats(ignoreEspionageFights: boolean) {
 </script>
 
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-        max-width: 400px;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+    max-width: 400px;
 
-        &-header {
-            background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-            justify-content: center;
-        }
-
-        &-header,
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
     }
+
+    &-header,
+    &-body {
+        height: 100%;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+}
 </style>

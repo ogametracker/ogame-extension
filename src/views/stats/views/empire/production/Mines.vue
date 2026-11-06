@@ -23,7 +23,9 @@
         <template #cell-planet="{ value: planet }">
             <div class="planet-info">
                 <span v-text="planet.name" />
-                <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
+                <span>
+                    [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}]
+                </span>
             </div>
         </template>
 
@@ -40,7 +42,11 @@
                     />
                     <span>/{{ formatNumber(value.maximum) }}</span>
                 </span>
-                <span v-text="`(${formatNumber(value.available)} ${translations().extension.empire.production.mines.crawlersAvailable})`" />
+                <span
+                    v-text="
+                        `(${formatNumber(value.available)} ${translations().extension.empire.production.mines.crawlersAvailable})`
+                    "
+                />
             </div>
         </template>
 
@@ -76,10 +82,18 @@
                         'crawlers-bad': value.active == 0,
                     }"
                 />
-                <span v-text="`(${formatNumber(value.available, avgNumberFormat)} ${translations().extension.empire.production.mines.crawlersAvailable})`" />
+                <span
+                    v-text="
+                        `(${formatNumber(value.available, avgNumberFormat)} ${translations().extension.empire.production.mines.crawlersAvailable})`
+                    "
+                />
                 <span
                     style="grid-column: 1 / span 2"
-                    v-text="translations().extension.empire.production.mines.crawlersToReachLimit(formatNumber(effectiveCrawlerLimit))"
+                    v-text="
+                        translations().extension.empire.production.mines.crawlersToReachLimit(
+                            formatNumber(effectiveCrawlerLimit),
+                        )
+                    "
                 />
             </div>
         </template>
@@ -138,8 +152,7 @@ const avgNumberFormat: Intl.NumberFormatOptions = {
 const serverSettings = computed(() => serverSettingsStore.serverSettings);
 
 const effectiveCrawlerLimit = computed(() => {
-    const bonus = getProductionBreakdowns(player.value, empireStore.lifeformExperience).metal
-        .getLifeformBonusFactors()
+    const bonus = getProductionBreakdowns(player.value, empireStore.lifeformExperience).metal.getLifeformBonusFactors()
         .lifeformTechnologyCrawlerProductionBonusFactor;
 
     return getCrawlerCountForMaximumBoost({
@@ -149,8 +162,10 @@ const effectiveCrawlerLimit = computed(() => {
             crawlerProductionBonus: bonus,
         },
         serverSettings: {
-            geologistActiveCrawlerFactorBonus: serverSettings.value.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
-            collectorCrawlerProductionFactorBonus: serverSettings.value.playerClasses.collector.crawlers.productionFactorBonus,
+            geologistActiveCrawlerFactorBonus:
+                serverSettings.value.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+            collectorCrawlerProductionFactorBonus:
+                serverSettings.value.playerClasses.collector.crawlers.productionFactorBonus,
             crawlerProductionFactorPerUnit: serverSettings.value.playerClasses.crawlers.productionBoostFactorPerUnit,
             crawlerMaxProductionFactor: serverSettings.value.playerClasses.crawlers.maxProductionFactor,
         },
@@ -210,33 +225,32 @@ const footerItems = computed<ProductionMineItem[]>(() => {
 const collectorBonus = computed(() => getLifeformCollectorClassBonus(player.value));
 
 const items = computed<ProductionMineItem[]>(() => {
-    return planets.value
-        .map(planet => {
-            const maxActiveCrawlers = getMaxActiveCrawlers(
-                planet.buildings[BuildingType.metalMine],
-                planet.buildings[BuildingType.crystalMine],
-                planet.buildings[BuildingType.deuteriumSynthesizer],
-                player.value.playerClass == PlayerClass.collector,
-                player.value.officers.geologist,
-                serverSettingsStore.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
-                collectorBonus.value,
-            );
-            const availableCrawlers = planet.ships[ShipType.crawler];
+    return planets.value.map(planet => {
+        const maxActiveCrawlers = getMaxActiveCrawlers(
+            planet.buildings[BuildingType.metalMine],
+            planet.buildings[BuildingType.crystalMine],
+            planet.buildings[BuildingType.deuteriumSynthesizer],
+            player.value.playerClass == PlayerClass.collector,
+            player.value.officers.geologist,
+            serverSettingsStore.serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
+            collectorBonus.value,
+        );
+        const availableCrawlers = planet.ships[ShipType.crawler];
 
-            return {
-                planet,
-                metalMine: planet.buildings[BuildingType.metalMine],
-                crystalMine: planet.buildings[BuildingType.crystalMine],
-                deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
-                solarPlant: planet.buildings[BuildingType.solarPlant],
-                fusionReactor: planet.buildings[BuildingType.fusionReactor],
-                crawlers: {
-                    available: availableCrawlers,
-                    maximum: maxActiveCrawlers,
-                    active: Math.min(availableCrawlers, maxActiveCrawlers),
-                },
-            };
-        });
+        return {
+            planet,
+            metalMine: planet.buildings[BuildingType.metalMine],
+            crystalMine: planet.buildings[BuildingType.crystalMine],
+            deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
+            solarPlant: planet.buildings[BuildingType.solarPlant],
+            fusionReactor: planet.buildings[BuildingType.fusionReactor],
+            crawlers: {
+                available: availableCrawlers,
+                maximum: maxActiveCrawlers,
+                active: Math.min(availableCrawlers, maxActiveCrawlers),
+            },
+        };
+    });
 });
 
 const player = computed<LocalPlayerData>(() => empireStore.empire);
@@ -244,33 +258,35 @@ const player = computed<LocalPlayerData>(() => empireStore.empire);
 const planets = computed<PlanetData[]>(() => {
     return Object.values(empireStore.empire.planets)
         .filter(planet => !planet.isMoon)
-        .sort((a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empireStore.empire.planetOrder.indexOf(b.id)) as PlanetData[];
+        .sort(
+            (a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empireStore.empire.planetOrder.indexOf(b.id),
+        ) as PlanetData[];
 });
 </script>
 
 <style lang="scss" scoped>
-    .crawlers {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        width: 100%;
-        column-gap: 8px;
-        justify-items: end;
+.crawlers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    column-gap: 8px;
+    justify-items: end;
 
-        &-good {
-            color: #4caf50;
-        }
-        &-ok {
-            color: #ffc107;
-        }
-        &-bad {
-            color: #dd2c00;
-        }
+    &-good {
+        color: #4caf50;
     }
+    &-ok {
+        color: #ffc107;
+    }
+    &-bad {
+        color: #dd2c00;
+    }
+}
 
-    .planet-info {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        justify-items: end;
-        column-gap: 8px;
-    }
+.planet-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-items: end;
+    column-gap: 8px;
+}
 </style>

@@ -1,19 +1,18 @@
-import { observerCallbacks } from "./main";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { UpdateLifeformExperienceMessage } from "@ogame-tracker/shared/messages/tracking/empire";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { LifeformType, ValidLifeformTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { getLifeformExperienceNeededForLevel } from "@ogame-tracker/shared/models/ogame/lifeforms/experience";
+import { observerCallbacks } from './main';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { UpdateLifeformExperienceMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { getLifeformExperienceNeededForLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 
 export function trackLifeformSettingsPage() {
     observerCallbacks.push({
         selector: '#technologies',
         callback: element => {
-
             const lifeformExperience: Partial<Record<LifeformType, number>> = {};
             const index: Record<LifeformType, number> = {
                 [LifeformType.none]: 0,
@@ -25,24 +24,25 @@ export function trackLifeformSettingsPage() {
             ValidLifeformTypes.forEach(lifeform => {
                 const selector = `.lifeform${index[lifeform]} + .levelinformation > .xpbar`;
                 const elem = element.querySelector(selector);
-                if(elem == null) {
+                if (elem == null) {
                     return;
                 }
                 const title = elem.getAttribute('data-tooltip-title') ?? _throw('no experience title found');
                 const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s\/]*)\/?\d?/i);
-                
-                const levelText = match?.groups?.level.replace(/[^\d]/g, '') 
-                    ?? elem.querySelector('.currentlevel')?.textContent?.trim()
-                    ?? _throw('no level match');
+
+                const levelText =
+                    match?.groups?.level.replace(/[^\d]/g, '') ??
+                    elem.querySelector('.currentlevel')?.textContent?.trim() ??
+                    _throw('no level match');
                 const level = parseIntSafe(levelText, 10);
 
                 let currentExp = 0;
-                if(level < 100) {
+                if (level < 100) {
                     const currentExpText = match?.groups?.exp.replace(/[^\d]/g, '') ?? _throw('no exp match');
                     currentExp = parseIntSafe(currentExpText, 10);
                 }
                 const exp = getLifeformExperienceNeededForLevel(level) + currentExp;
-                
+
                 lifeformExperience[lifeform] = exp;
             });
 

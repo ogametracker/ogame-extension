@@ -1,14 +1,7 @@
 <template>
     <div class="scrapyard-merchant">
         <div>
-            <input
-                type="number"
-                min="35"
-                max="75"
-                step="1"
-                :value="percentage"
-                @input="setPercentage($event)"
-            />
+            <input type="number" min="35" max="75" step="1" :value="percentage" @input="setPercentage($event)" />
             <span v-text="translations().extension.tools.scrapyardMerchant.percentage" />
         </div>
 
@@ -32,20 +25,8 @@
                 </template>
             </template>
             <template #cell-count="{ item }">
-                <input
-                    v-if="'baseSpeed' in item"
-                    type="number"
-                    min="0"
-                    step="1"
-                    v-model.number="ships[item.type]"
-                />
-                <input
-                    v-else
-                    type="number"
-                    min="0"
-                    step="1"
-                    v-model.number="defenses[item.type]"
-                />
+                <input v-if="'baseSpeed' in item" type="number" min="0" step="1" v-model.number="ships[item.type]" />
+                <input v-else type="number" min="0" step="1" v-model.number="defenses[item.type]" />
             </template>
             <template #[`(cell|footer)-${resourcesRegex}`]="{ match, item }">
                 <span
@@ -149,19 +130,14 @@ function getMsuOrDsu(cost: Cost) {
 const footerItems = [{}];
 
 const items = computed<(Ship | Defense)[]>(() => {
-    return [
-        ...ShipTypes.map(type => ShipByTypes[type]),
-        ...DefenseTypes.map(type => DefenseByTypes[type]),
-    ];
+    return [...ShipTypes.map(type => ShipByTypes[type]), ...DefenseTypes.map(type => DefenseByTypes[type])];
 });
 
 async function setPercentage(event: InputEvent) {
     const input = event.target as HTMLInputElement;
     const value = parseInt(input.value);
 
-    const localPercentage = isNaN(value)
-        ? 0
-        : Math.max(35, Math.min(75, Math.trunc(value)));
+    const localPercentage = isNaN(value) ? 0 : Math.max(35, Math.min(75, Math.trunc(value)));
 
     percentage.value = value;
     await nextTick();

@@ -1,7 +1,7 @@
-import { Cost } from "../../common/Cost";
-import { CostAndIncreaseFactor } from "../common-interfaces";
-import { LifeformTechnologyType } from "../LifeformTechnologyType";
-import { LifeformBonusType } from "../LifeformBonusType";
+import { Cost } from '../../common/Cost';
+import { CostAndIncreaseFactor } from '../common-interfaces';
+import { LifeformTechnologyType } from '../LifeformTechnologyType';
+import { LifeformBonusType } from '../LifeformBonusType';
 
 interface LifeformTechnologyConstructionParams {
     metal: CostAndIncreaseFactor;
@@ -35,7 +35,7 @@ export abstract class LifeformTechnology {
         };
     }
 
-    private getResourceCost(baseCost: number, increaseFactor: number, level: number): number { 
+    private getResourceCost(baseCost: number, increaseFactor: number, level: number): number {
         return Math.floor(baseCost * increaseFactor ** (level - 1) * level);
     }
 }

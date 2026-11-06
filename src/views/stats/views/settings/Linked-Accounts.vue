@@ -9,25 +9,15 @@
                 <hr />
 
                 <span v-text="translations().extension.settings.linkAccounts.linkedAccounts" />
-                <div
-                    v-for="account in linkedAccounts"
-                    :key="account.key"
-                    class="linked-account"
-                >
-                    <span
-                        class="mdi mdi-delete delete"
-                        @click="unlinkAccount(account)"
-                    />
+                <div v-for="account in linkedAccounts" :key="account.key" class="linked-account">
+                    <span class="mdi mdi-delete delete" @click="unlinkAccount(account)" />
                     <span v-text="`${account.name} (${account.universeName})`" />
                 </div>
 
                 <hr />
 
                 <div v-text="translations().extension.settings.linkAccounts.linkAccount" />
-                <select
-                    @change="onAccountSelected(($event.target as HTMLInputElement).value)"
-                    v-model="selectedValue"
-                >
+                <select @change="onAccountSelected(($event.target as HTMLInputElement).value)" v-model="selectedValue">
                     <optgroup
                         v-for="accountGroup in linkableAccounts"
                         :key="accountGroup.serverName"
@@ -78,24 +68,28 @@ const currentAccountString = computed(() => {
 const linkedAccounts = computed<KnownAccount[]>(() => {
     const linked = universesAndAccountsStore.currentAccount.linkedAccounts ?? [];
 
-    return (linked.map(acc => universesAndAccountsStore.accounts.find(
-        a => a.serverId == acc.serverId
-            && a.serverLanguage == acc.serverLanguage
-            && a.id == acc.id
-    )).filter(acc => acc != null) as KnownAccount[])
-        .map<KnownAccount>(acc => mapAccount(acc));
+    return (
+        linked
+            .map(acc =>
+                universesAndAccountsStore.accounts.find(
+                    a => a.serverId == acc.serverId && a.serverLanguage == acc.serverLanguage && a.id == acc.id,
+                ),
+            )
+            .filter(acc => acc != null) as KnownAccount[]
+    ).map<KnownAccount>(acc => mapAccount(acc));
 });
 
 function mapAccount(acc: DbAccount): KnownAccount {
-    const server = universesAndAccountsStore.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage);
+    const server = universesAndAccountsStore.servers.find(
+        s => s.id == acc.serverId && s.language == acc.serverLanguage,
+    );
     let serverName = `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`;
     if (server != null) {
         let name = server.name;
         let prefix = `${server.language.toUpperCase()} `;
         if (name.startsWith(prefix)) {
             serverName = name;
-        }
-        else {
+        } else {
             serverName = prefix + name;
         }
     }
@@ -113,25 +107,28 @@ function mapAccount(acc: DbAccount): KnownAccount {
 const linkableAccounts = computed<{ serverName: string; accounts: KnownAccount[] }[]>(() => {
     const localLinkedAccounts = linkedAccounts.value;
 
-    const accEqual = (a: {
-        serverId: number;
-        serverLanguage: string;
-        id: number;
-    }, b: {
-        serverId: number;
-        serverLanguage: string;
-        id: number;
-    }) =>
-        a.serverId == b.serverId
-        && a.serverLanguage == b.serverLanguage
-        && a.id == b.id;
+    const accEqual = (
+        a: {
+            serverId: number;
+            serverLanguage: string;
+            id: number;
+        },
+        b: {
+            serverId: number;
+            serverLanguage: string;
+            id: number;
+        },
+    ) => a.serverId == b.serverId && a.serverLanguage == b.serverLanguage && a.id == b.id;
 
     const accounts = universesAndAccountsStore.accounts
-        .filter(a => !accEqual(a, {
-            id: GlobalOgameMetaData.playerId,
-            serverId: GlobalOgameMetaData.serverId,
-            serverLanguage: GlobalOgameMetaData.language,
-        }))
+        .filter(
+            a =>
+                !accEqual(a, {
+                    id: GlobalOgameMetaData.playerId,
+                    serverId: GlobalOgameMetaData.serverId,
+                    serverLanguage: GlobalOgameMetaData.language,
+                }),
+        )
         .filter(a => !localLinkedAccounts.some(acc => accEqual(acc, a)))
         .map<KnownAccount>(acc => mapAccount(acc))
         .sort((a, b) => {
@@ -168,10 +165,12 @@ const linkableAccounts = computed<{ serverName: string; accounts: KnownAccount[]
         (groups[serverKey] ??= []).push(acc);
     });
 
-    const result = Object.keys(groups).sort().map(key => ({
-        serverName: groups[key][0].universeName,
-        accounts: groups[key],
-    }));
+    const result = Object.keys(groups)
+        .sort()
+        .map(key => ({
+            serverName: groups[key][0].universeName,
+            accounts: groups[key],
+        }));
     return result;
 });
 
@@ -197,7 +196,7 @@ async function unlinkAccount(account: KnownAccount) {
     await universesAndAccountsStore.unlinkAccount({
         serverId: account.serverId,
         serverLanguage: account.serverLanguage,
-        id: account.id
+        id: account.id,
     });
 
     window.location.reload();

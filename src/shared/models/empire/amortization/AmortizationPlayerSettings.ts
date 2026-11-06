@@ -1,7 +1,7 @@
-import { AllianceClass } from "@ogame-tracker/shared/models/ogame/classes/AllianceClass";
-import { PlayerClass } from "@ogame-tracker/shared/models/ogame/classes/PlayerClass";
-import { ValidLifeformType } from "../../ogame/lifeforms/LifeformType";
-import { ResourceType } from "../../ogame/resources/ResourceType";
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { ValidLifeformType } from '../../ogame/lifeforms/LifeformType';
+import { ResourceType } from '../../ogame/resources/ResourceType';
 
 export interface AmortizationPlayerSettings {
     optimizeForResources: ResourceType[];

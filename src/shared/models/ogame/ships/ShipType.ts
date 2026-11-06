@@ -23,7 +23,7 @@ export type NonStationaryShipType = Exclude<ShipType, StationaryShipType>;
 export type PlanetShipType = ShipType;
 export type MoonShipType = Exclude<ShipType, ShipType.crawler>;
 
-export type MilitaryShipType = (
+export type MilitaryShipType =
     | ShipType.lightFighter
     | ShipType.heavyFighter
     | ShipType.cruiser
@@ -34,13 +34,11 @@ export type MilitaryShipType = (
     | ShipType.deathStar
     | ShipType.reaper
     | ShipType.pathfinder
-    | ShipType.crawler // yes, it's counted to the military ships
-);
-export type CivilShipType = (
+    | ShipType.crawler; // yes, it's counted to the military ships
+export type CivilShipType =
     | ShipType.smallCargo
     | ShipType.largeCargo
     | ShipType.colonyShip
     | ShipType.recycler
     | ShipType.espionageProbe
-    | ShipType.solarSatellite
-);
+    | ShipType.solarSatellite;

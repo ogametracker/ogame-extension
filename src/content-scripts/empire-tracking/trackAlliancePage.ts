@@ -1,11 +1,11 @@
-import { observerCallbacks } from "./main";
+import { observerCallbacks } from './main';
 import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { UpdateAllianceClassMessage } from "@ogame-tracker/shared/messages/tracking/empire";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { UpdateAllianceClassMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
 
 export function trackAlliancePage(): void {
     observerCallbacks.push({

@@ -38,7 +38,7 @@ export interface DailyCombatReportResult {
         gained: Record<ResourceType, number>;
         lost: Record<ResourceType, number>;
         total: Record<ResourceType, number>;
-    }
+    };
 }
 
 export const useCombatReportStore = defineStore('combatReport', () => {
@@ -73,10 +73,7 @@ export const useCombatReportStore = defineStore('combatReport', () => {
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         let minDate: number | null = null;
         for (const account of accounts) {
@@ -123,14 +120,16 @@ export const useCombatReportStore = defineStore('combatReport', () => {
             dailyResult.results.againstPlayers[report.result]++;
         }
 
-        const lostShips = report.isExpedition ? dailyResult.lostShips.onExpeditions : dailyResult.lostShips.againstPlayers;
+        const lostShips = report.isExpedition
+            ? dailyResult.lostShips.onExpeditions
+            : dailyResult.lostShips.againstPlayers;
         for (const ship of ShipTypes) {
             lostShips.ships[ship] += report.lostShips[ship];
 
             const shipData = ShipByTypes[ship];
             const resourceUnits = multiplyCost(shipData.cost, report.lostShips[ship]);
 
-            ResourceTypes.forEach(resource => lostShips.resourceUnits[resource] += resourceUnits[resource]);
+            ResourceTypes.forEach(resource => (lostShips.resourceUnits[resource] += resourceUnits[resource]));
         }
 
         for (const resource of ResourceTypes) {

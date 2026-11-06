@@ -1,8 +1,7 @@
-import { Cost } from "../common/Cost";
-import { Missile } from "./Missile";
+import { Cost } from '../common/Cost';
+import { Missile } from './Missile';
 
 class InterplanetaryMissileClass extends Missile {
-
     public get cost(): Cost {
         return {
             metal: 12_500,

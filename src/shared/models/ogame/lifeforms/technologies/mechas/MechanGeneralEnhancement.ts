@@ -1,8 +1,8 @@
-import { PlayerClass, PlayerClasses } from "../../../classes/PlayerClass";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ClassBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { PlayerClass, PlayerClasses } from '../../../classes/PlayerClass';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ClassBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class MechanGeneralEnhancementClass extends LifeformTechnology implements ClassBonusLifeformTechnology {
     public constructor() {
@@ -27,11 +27,10 @@ class MechanGeneralEnhancementClass extends LifeformTechnology implements ClassB
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return PlayerClasses.filter(p => this.appliesTo(p))
-            .map<LifeformBonusType>(playerClass => ({
-                type: LifeformBonusTypeId.PlayerClassBonus,
-                playerClass,
-            }));
+        return PlayerClasses.filter(p => this.appliesTo(p)).map<LifeformBonusType>(playerClass => ({
+            type: LifeformBonusTypeId.PlayerClassBonus,
+            playerClass,
+        }));
     }
 
     public appliesTo(playerClass: PlayerClass): boolean {
@@ -39,7 +38,7 @@ class MechanGeneralEnhancementClass extends LifeformTechnology implements ClassB
     }
 
     public getClassBonus(playerClass: PlayerClass, level: number): number {
-        if(!this.appliesTo(playerClass)) {
+        if (!this.appliesTo(playerClass)) {
             return 0;
         }
 

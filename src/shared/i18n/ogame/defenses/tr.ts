@@ -1,5 +1,5 @@
-import { DefenseType } from "@ogame-tracker/shared/models/ogame/defenses/DefenseType";
-import { DefenseTranslations } from "./types";
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { DefenseTranslations } from './types';
 
 export const tr: DefenseTranslations = {
     [DefenseType.rocketLauncher]: 'Roketatar',

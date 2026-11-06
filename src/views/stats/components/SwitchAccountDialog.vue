@@ -4,8 +4,17 @@
         <div v-else>
             <div v-text="translations().extension.switchAccounts.title" />
             <select @change="gotoAccount()" v-model="selectedAccountKey">
-                <optgroup v-for="accountGroup in knownAccountGroups" :key="accountGroup.serverName" :label="accountGroup.serverName">
-                    <option v-for="account in accountGroup.accounts" :key="account.key" :value="account.key" v-text="account.name" />
+                <optgroup
+                    v-for="accountGroup in knownAccountGroups"
+                    :key="accountGroup.serverName"
+                    :label="accountGroup.serverName"
+                >
+                    <option
+                        v-for="account in accountGroup.accounts"
+                        :key="account.key"
+                        :value="account.key"
+                        v-text="account.name"
+                    />
                 </optgroup>
             </select>
         </div>
@@ -51,15 +60,16 @@ function getColorVariable(hexColor: string | null): string | null {
 }
 
 function mapAccount(acc: DbAccount): KnownAccount {
-    const server = universesAndAccountsStore.servers.find(s => s.id == acc.serverId && s.language == acc.serverLanguage);
+    const server = universesAndAccountsStore.servers.find(
+        s => s.id == acc.serverId && s.language == acc.serverLanguage,
+    );
     let serverName = `${acc.serverLanguage.toUpperCase()} ${acc.serverId}`;
     if (server != null) {
         let name = server.name;
         let prefix = `${server.language.toUpperCase()} `;
         if (name.startsWith(prefix)) {
             serverName = name;
-        }
-        else {
+        } else {
             serverName = prefix + name;
         }
     }
@@ -111,10 +121,12 @@ async function loadKnownAccounts(): Promise<void> {
         (groups[serverKey] ??= []).push(acc);
     });
 
-    const result = Object.keys(groups).sort().map(key => ({
-        serverName: groups[key][0].universeName,
-        accounts: groups[key],
-    }));
+    const result = Object.keys(groups)
+        .sort()
+        .map(key => ({
+            serverName: groups[key][0].universeName,
+            accounts: groups[key],
+        }));
     knownAccountGroups.value = result;
 }
 
@@ -141,7 +153,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    select {
-        width: 100%;
-    }
+select {
+    width: 100%;
+}
 </style>

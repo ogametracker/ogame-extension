@@ -52,8 +52,14 @@ import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-import type { PlanetSupplyBuildingType, PlanetFacilityBuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-import { PlanetSupplyBuildingTypes, PlanetFacilityBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+import type {
+    PlanetSupplyBuildingType,
+    PlanetFacilityBuildingType,
+} from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import {
+    PlanetSupplyBuildingTypes,
+    PlanetFacilityBuildingTypes,
+} from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
@@ -62,7 +68,7 @@ import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
-type SupplyBuilding = PlanetSupplyBuildingType
+type SupplyBuilding = PlanetSupplyBuildingType;
 
 interface PlanetEmpireItem {
     planet: {
@@ -132,7 +138,6 @@ const items = computed<PlanetEmpireItem[]>(() => {
         .filter(planet => !planet.isMoon) as PlanetData[];
 
     return planets.map<PlanetEmpireItem>(planet => {
-
         const result: PlanetEmpireItem = {
             planet: {
                 name: planet.name,
@@ -153,65 +158,65 @@ function formatCoordinates(coords: Coordinates) {
 </script>
 
 <style lang="scss" scoped>
-    .supplies-table,
-    .facilities-table,
-    .ships-table,
-    .defenses-table {
-        // width: 100%;
-        display: grid;
-        column-gap: 8px;
-        justify-items: center;
+.supplies-table,
+.facilities-table,
+.ships-table,
+.defenses-table {
+    // width: 100%;
+    display: grid;
+    column-gap: 8px;
+    justify-items: center;
 
-        > span {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    > span {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.supplies-table {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.facilities-table {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.ships-table {
+    grid-template-columns: repeat(17, 1fr);
+}
+
+.defenses-table {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.empire-table {
+    max-height: 100%;
+
+    :deep(.left-text) {
+        text-align: left;
+        justify-content: start;
     }
 
-    .supplies-table {
-        grid-template-columns: repeat(8, 1fr);
+    :deep(.grid-cell) {
+        padding-inline: 16px;
     }
 
-    .facilities-table {
-        grid-template-columns: repeat(8, 1fr);
+    // .center-text {
+    //     text-align: center;
+    //     justify-content: center;
+    // }
+
+    // .building-levels {
+    //     display: grid;
+    //     grid-template-columns: repeat(12, 1fr);
+    //     gap: 4px;
+
+    // }
+
+    :deep(.fade) {
+        opacity: 0.1;
     }
-
-    .ships-table {
-        grid-template-columns: repeat(17, 1fr);
-    }
-
-    .defenses-table {
-        grid-template-columns: repeat(8, 1fr);
-    }
-
-    .empire-table {
-        max-height: 100%;
-
-        :deep(.left-text) {
-            text-align: left;
-            justify-content: start;
-        }
-
-        :deep(.grid-cell) {
-            padding-inline: 16px;
-        }
-
-        // .center-text {
-        //     text-align: center;
-        //     justify-content: center;
-        // }
-
-        // .building-levels {
-        //     display: grid;
-        //     grid-template-columns: repeat(12, 1fr);
-        //     gap: 4px;
-
-        // }
-
-        :deep(.fade) {
-            opacity: 0.1;
-        }
-    }
+}
 </style>

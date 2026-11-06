@@ -1,22 +1,23 @@
-import { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
-import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
-import { getLifeformLevelTechnologyBonus } from "../experience";
-import { LifeformType, ValidLifeformTypes } from "../LifeformType";
-import { LifeformTechnologyBonusLifeformBuildingsByLifeform } from "./LifeformBuildings";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "../LifeformTechnologyType";
+import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { getLifeformLevelTechnologyBonus } from '../experience';
+import { LifeformType, ValidLifeformTypes } from '../LifeformType';
+import { LifeformTechnologyBonusLifeformBuildingsByLifeform } from './LifeformBuildings';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '../LifeformTechnologyType';
 
-export function getLifeformTechnologyBonus(player: LocalPlayerData): Record<number, Record<LifeformTechnologyType, number>> {
+export function getLifeformTechnologyBonus(
+    player: LocalPlayerData,
+): Record<number, Record<LifeformTechnologyType, number>> {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
 
     const technologyBonusByPlanet = createRecord(
         planets.map(p => p.id),
-        () => createRecord(LifeformTechnologyTypes, 0)
+        () => createRecord(LifeformTechnologyTypes, 0),
     );
 
-    const levelTechnologyBonus = createRecord(
-        ValidLifeformTypes,
-        lf => getLifeformLevelTechnologyBonus(player.lifeformExperience[lf]),
+    const levelTechnologyBonus = createRecord(ValidLifeformTypes, lf =>
+        getLifeformLevelTechnologyBonus(player.lifeformExperience[lf]),
     );
     for (const planet of planets) {
         if (planet.activeLifeform == LifeformType.none) {

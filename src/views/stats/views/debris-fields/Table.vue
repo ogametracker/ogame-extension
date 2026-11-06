@@ -101,7 +101,11 @@ const footerItems = computed<RangedStatsTableItem<DailyDebrisFieldReportResult>[
     const result: RangedStatsTableItem<DailyDebrisFieldReportResult>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: reports => reports.reduce((acc, report) => acc + report.total.metal + report.total.crystal + report.total.deuterium, 0),
+            getValue: reports =>
+                reports.reduce(
+                    (acc, report) => acc + report.total.metal + report.total.crystal + report.total.deuterium,
+                    0,
+                ),
         },
     ];
 
@@ -117,37 +121,37 @@ const footerItems = computed<RangedStatsTableItem<DailyDebrisFieldReportResult>[
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
 
-        :deep(.sum-item) {
-            font-weight: bold;
-            border-top: 1px solid rgba(var(--color), 0.5);
-            margin-top: 1px;
-        }
+    :deep(.sum-item) {
+        font-weight: bold;
+        border-top: 1px solid rgba(var(--color), 0.5);
+        margin-top: 1px;
+    }
+}
+
+.multi-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    column-gap: 8px;
+
+    .three-column {
+        grid-column: 1 / span 3;
     }
 
-    .multi-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+    hr {
+        width: 100%;
     }
-
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        column-gap: 8px;
-
-        .three-column {
-            grid-column: 1 / span 3;
-        }
-
-        hr {
-            width: 100%;
-        }
-    }
+}
 </style>

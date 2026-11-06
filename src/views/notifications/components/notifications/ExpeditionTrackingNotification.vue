@@ -91,7 +91,11 @@
             <div class="result-grid" v-if="showSimplified">
                 <template v-for="event in expeditionEvents" :key="event">
                     <template v-if="notification.events[event] > 0">
-                        <span v-if="event == 'nothing'" class="mdi mdi-close icon" :style="{ color: eventColors?.nothing }" />
+                        <span
+                            v-if="event == 'nothing'"
+                            class="mdi mdi-close icon"
+                            :style="{ color: eventColors?.nothing }"
+                        />
                         <ExpeditionEventResourcesIcon v-else-if="event == 'resources'" size="24px" class="icon" />
                         <OShip v-else-if="event == 'fleet'" :ship="ShipType.battleship" size="24px" class="icon" />
                         <span
@@ -105,7 +109,11 @@
                             :style="{ color: eventColors?.early }"
                         />
                         <OResource v-else-if="event == 'darkMatter'" resource="dark-matter" size="24px" class="icon" />
-                        <span v-else-if="event == 'combat'" class="mdi mdi-sword-cross icon" :style="{ color: eventColors?.combat }" />
+                        <span
+                            v-else-if="event == 'combat'"
+                            class="mdi mdi-sword-cross icon"
+                            :style="{ color: eventColors?.combat }"
+                        />
                         <OItem v-else-if="event == 'item'" :item="detroidItem" size="24px" class="icon" />
                         <span
                             v-else-if="event == 'trader'"
@@ -168,127 +176,127 @@
 </template>
 
 <script setup lang="ts">
-    import { computed } from 'vue';
-    import type { ExpeditionTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
-    import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-    import Notification from '../Notification.vue';
-    import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { type ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-    import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
-    import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
-    import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
-    import { formatNumber, translate } from '../../i18n';
-    import { useSettingsStore } from '../../stores/settings';
+import { computed } from 'vue';
+import type { ExpeditionTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import Notification from '../Notification.vue';
+import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import {
+    type ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import { formatNumber, translate } from '../../i18n';
+import { useSettingsStore } from '../../stores/settings';
 
-    const { notification } = defineProps<{ notification: ExpeditionTrackingNotificationMessageData }>();
-    const emit = defineEmits<{ remove: [] }>();
-    const settingsStore = useSettingsStore();
+const { notification } = defineProps<{ notification: ExpeditionTrackingNotificationMessageData }>();
+const emit = defineEmits<{ remove: [] }>();
+const settingsStore = useSettingsStore();
 
-    const detroidItem = ItemHash.detroid_bronze;
-    const expeditionEvents = [
-        ExpeditionEventType.lostFleet,
-        ExpeditionEventType.resources,
-        ExpeditionEventType.darkMatter,
-        ExpeditionEventType.fleet,
-        ExpeditionEventType.delay,
-        ExpeditionEventType.early,
-        ExpeditionEventType.combat,
-        ExpeditionEventType.item,
-        ExpeditionEventType.trader,
-        ExpeditionEventType.nothing,
-    ];
+const detroidItem = ItemHash.detroid_bronze;
+const expeditionEvents = [
+    ExpeditionEventType.lostFleet,
+    ExpeditionEventType.resources,
+    ExpeditionEventType.darkMatter,
+    ExpeditionEventType.fleet,
+    ExpeditionEventType.delay,
+    ExpeditionEventType.early,
+    ExpeditionEventType.combat,
+    ExpeditionEventType.item,
+    ExpeditionEventType.trader,
+    ExpeditionEventType.nothing,
+];
 
-    const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
-    const ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
+const ships = [...ExpeditionFindableShipTypes].sort((a, b) => a - b);
 
-    const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
+const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
 
-    const foundResources = computed(() => Object.values(notification.resources).some(r => r > 0));
-    const foundShips = computed(() => Object.values(notification.ships).some(r => r > 0));
-    const count = computed(() =>
-        Object.values(notification.events)
-            .reduce((acc, cur) => acc + cur, 0),
-    );
+const foundResources = computed(() => Object.values(notification.resources).some(r => r > 0));
+const foundShips = computed(() => Object.values(notification.ships).some(r => r > 0));
+const count = computed(() => Object.values(notification.events).reduce((acc, cur) => acc + cur, 0));
 
-    const hasSummary = computed(() => foundResources.value || notification.darkMatter > 0 || foundShips.value);
+const hasSummary = computed(() => foundResources.value || notification.darkMatter > 0 || foundShips.value);
 
-    const title = computed(() => translate(t => t.extension.notifications.expeditionTracking.result.title(formatNumber(count.value))));
+const title = computed(() =>
+    translate(t => t.extension.notifications.expeditionTracking.result.title(formatNumber(count.value))),
+);
 
-    const hasDepletion = computed(() => Object.values(notification.depletion).some(c => c > 0));
+const hasDepletion = computed(() => Object.values(notification.depletion).some(c => c > 0));
 
-    const eventColors = computed(() => settingsStore.settings?.colors.expeditions.events);
+const eventColors = computed(() => settingsStore.settings?.colors.expeditions.events);
 
-    const depletionColors = computed(() => settingsStore.settings?.colors.expeditions.depletion);
+const depletionColors = computed(() => settingsStore.settings?.colors.expeditions.depletion);
 
-    const resourceSum = computed(() =>
-        notification.resources.metal
-            + notification.resources.crystal
-            + notification.resources.deuterium,
-    );
+const resourceSum = computed(
+    () => notification.resources.metal + notification.resources.crystal + notification.resources.deuterium,
+);
 </script>
 <style lang="scss" scoped>
-    .result-grid {
-        &.resources-grid {
-            grid-template-columns: repeat(2, 32px 1fr);
-        }
-
-        display: grid;
-        grid-template-columns: repeat(3, 32px 1fr);
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
-
-        + .result-grid,
-        + .result-flex {
-            margin-top: 8px;
-        }
-
-        .mdi {
-            transform: scale(1.5);
-            width: 24px;
-            text-align: center;
-            height: 20px;
-        }
-
-        .icon {
-            justify-self: center;
-        }
+.result-grid {
+    &.resources-grid {
+        grid-template-columns: repeat(2, 32px 1fr);
     }
 
-    .result-flex {
-        display: flex;
-        flex-direction: row;
-        column-gap: 8px;
-        row-gap: 4px;
+    display: grid;
+    grid-template-columns: repeat(3, 32px 1fr);
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
 
-        + .result-grid {
-            margin-top: 8px;
-        }
+    + .result-grid,
+    + .result-flex {
+        margin-top: 8px;
     }
 
-    .text-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
-
-        &.events {
-            grid-template-columns: repeat(2, auto 1fr);
-        }
+    .mdi {
+        transform: scale(1.5);
+        width: 24px;
+        text-align: center;
+        height: 20px;
     }
 
-    .text-grid,
-    .result-flex {
-        + .text-grid {
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px solid rgba(var(--color));
-        }
+    .icon {
+        justify-self: center;
     }
+}
+
+.result-flex {
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    row-gap: 4px;
+
+    + .result-grid {
+        margin-top: 8px;
+    }
+}
+
+.text-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
+
+    &.events {
+        grid-template-columns: repeat(2, auto 1fr);
+    }
+}
+
+.text-grid,
+.result-flex {
+    + .text-grid {
+        margin-top: 4px;
+        padding-top: 4px;
+        border-top: 1px solid rgba(var(--color));
+    }
+}
 </style>

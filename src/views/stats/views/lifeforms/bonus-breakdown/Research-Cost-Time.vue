@@ -2,15 +2,31 @@
     <div>
         <select v-model="research" style="display: block; margin-bottom: 4px">
             <optgroup :label="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.researches">
-                <option v-for="research in Researches" :key="research" :value="research" v-text="translations().ogame.research[research]" />
+                <option
+                    v-for="research in Researches"
+                    :key="research"
+                    :value="research"
+                    v-text="translations().ogame.research[research]"
+                />
             </optgroup>
-            <option value="lifeform-researches" v-text="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
+            <option
+                value="lifeform-researches"
+                v-text="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches"
+            />
         </select>
 
         <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
-                <div style="display: flex; flex-direction: column; align-items: start" v-if="research == 'lifeform-researches'">
-                    <span v-text="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
+                <div
+                    style="display: flex; flex-direction: column; align-items: start"
+                    v-if="research == 'lifeform-researches'"
+                >
+                    <span
+                        v-text="
+                            translations().extension.empire.lifeforms.researchBonuses.researchCostTime
+                                .lifeformResearches
+                        "
+                    />
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: start" v-else>
                     <span>
@@ -38,7 +54,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import type { CostAndTimeReduction } from '@ogame-tracker/shared/models/ogame/lifeforms/common-interfaces';
 import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
 import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
@@ -79,24 +98,22 @@ const bonusTypes: LifeformBonusesBreakdownType<keyof Bonuses>[] = [
 const technologies = ResearchCostAndTimeReductionLifeformTechnologies;
 
 const techs = computed<LifeformTechnologyType[]>(() => {
-    const localResearch = research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
+    const localResearch =
+        research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
 
-    return technologies
-        .filter(tech => tech.appliesTo(localResearch))
-        .map(t => t.type);
+    return technologies.filter(tech => tech.appliesTo(localResearch)).map(t => t.type);
 });
 
 const limits = computed<Record<keyof Bonuses, (value: number) => number>>(() => {
-    const localResearch = research.value == 'lifeform-researches'
-        ? LifeformTechnologyType.intergalacticEnvoys
-        : research.value;
+    const localResearch =
+        research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
 
     const costLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechCostReduction, tech: localResearch });
     const timeLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.TechTimeReduction, tech: localResearch });
 
     return {
-        cost: value => costLimit != null ? Math.max(value, -costLimit) : value,
-        time: value => timeLimit != null ? Math.max(value, -timeLimit) : value,
+        cost: value => (costLimit != null ? Math.max(value, -costLimit) : value),
+        time: value => (timeLimit != null ? Math.max(value, -timeLimit) : value),
     };
 });
 
@@ -110,8 +127,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -125,9 +142,10 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
                             level: planetBonuses.level[key],
                             total: planetBonuses.total[key],
                             bugBonus: planetBonuses.bugBonus[key],
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
@@ -147,11 +165,13 @@ function getPlanetBonus(tech: ResearchCostAndTimeReductionLifeformTechnology, pl
         total: { cost: 0, time: 0 },
         bugBonus: { cost: 0, time: 0 },
     };
-    const localResearch = research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
+    const localResearch =
+        research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-        || !tech.appliesTo(localResearch)
+    if (
+        planet.activeLifeform == LifeformType.none ||
+        !planet.activeLifeformTechnologies.includes(tech.type) ||
+        !tech.appliesTo(localResearch)
     ) {
         return result;
     }
@@ -175,7 +195,9 @@ function getPlanetBonus(tech: ResearchCostAndTimeReductionLifeformTechnology, pl
         const baseBonus = -1 * bonuses[statsType];
         result.base[bonusType] += baseBonus;
 
-        const levelBoost = getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+        const levelBoost = getLifeformLevelTechnologyBonus(
+            experience.value[planet.activeLifeform as ValidLifeformType],
+        );
         const lifeformLevelBonus = baseBonus * levelBoost;
         result.level[bonusType] += lifeformLevelBonus;
 

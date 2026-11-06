@@ -56,21 +56,23 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
     return [
         {
             label: translations().extension.common.sum,
-            getValue: nextCombats => CombatResultTypes.reduce((acc, result) => acc + nextCombats.reduce(
-                (acc, cur) => acc + cur.results.againstPlayers[result], 0),
-                0
-            ),
+            getValue: nextCombats =>
+                CombatResultTypes.reduce(
+                    (acc, result) =>
+                        acc + nextCombats.reduce((acc, cur) => acc + cur.results.againstPlayers[result], 0),
+                    0,
+                ),
         },
     ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

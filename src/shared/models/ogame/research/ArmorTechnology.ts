@@ -1,8 +1,7 @@
-import { Cost } from "../common/Cost";
-import { Research } from "./Research";
+import { Cost } from '../common/Cost';
+import { Research } from './Research';
 
 class ArmorTechnologyClass extends Research {
-
     public getCost(level: number): Cost {
         return {
             metal: 500 * 2 ** level,
@@ -11,6 +10,5 @@ class ArmorTechnologyClass extends Research {
             energy: 0,
         };
     }
-
 }
 export const ArmorTechnology = new ArmorTechnologyClass();

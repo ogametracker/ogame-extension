@@ -1,10 +1,9 @@
-import { Cost } from "../common/Cost";
-import { Ship } from "./Ship";
-import { ShipType } from "./ShipType";
+import { Cost } from '../common/Cost';
+import { Ship } from './Ship';
+import { ShipType } from './ShipType';
 
 class SolarSatelliteClass extends Ship {
-
-    public get type() { 
+    public get type() {
         return ShipType.solarSatellite;
     }
 
@@ -13,12 +12,12 @@ class SolarSatelliteClass extends Ship {
             metal: 0,
             crystal: 2_000,
             deuterium: 500,
-            energy: 0,            
+            energy: 0,
         };
     }
 
     public baseHull(): number {
-         return 2_000;
+        return 2_000;
     }
 
     public baseShield(): number {
@@ -30,7 +29,7 @@ class SolarSatelliteClass extends Ship {
     }
 
     public baseSpeed(): number {
-         return 0;
+        return 0;
     }
 
     public baseCargoCapacity(): number {

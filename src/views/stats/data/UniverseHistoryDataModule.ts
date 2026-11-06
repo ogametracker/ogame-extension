@@ -2,7 +2,22 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { createReadiness } from './lifecycle';
 import { getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';
-import type { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+import type {
+    OgameTrackerUniverseHistoryAllianceMembers,
+    OgameTrackerUniverseHistoryAllianceName,
+    OgameTrackerUniverseHistoryAllianceScore,
+    OgameTrackerUniverseHistoryAllianceTag,
+    OgameTrackerUniverseHistoryDbSchema,
+    OgameTrackerUniverseHistoryMoonName,
+    OgameTrackerUniverseHistoryMoonState,
+    OgameTrackerUniverseHistoryPlanetCoordinates,
+    OgameTrackerUniverseHistoryPlanetName,
+    OgameTrackerUniverseHistoryPlanetState,
+    OgameTrackerUniverseHistoryPlayerAlliance,
+    OgameTrackerUniverseHistoryPlayerName,
+    OgameTrackerUniverseHistoryPlayerScore,
+    OgameTrackerUniverseHistoryPlayerState,
+} from '@ogame-tracker/shared/db/schema/universe-history';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 import type { StoreNames } from 'idb';
 import { GlobalOgameMetaData } from './global';
@@ -204,27 +219,25 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
     async function getNumberOfTotalEntries(): Promise<number> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
 
-        const totalCount = await db.count('allianceMembers')
-            + await db.count('allianceNames')
-            + await db.count('allianceScores')
-            + await db.count('allianceStates')
-            + await db.count('allianceTags')
-            + await db.count('alliances')
-
-            + await db.count('moonNames')
-            + await db.count('moonStates')
-            + await db.count('moons')
-
-            + await db.count('planetCoordinates')
-            + await db.count('planetNames')
-            + await db.count('planetStates')
-            + await db.count('planets')
-
-            + await db.count('playerAlliances')
-            + await db.count('playerNames')
-            + await db.count('playerScores')
-            + await db.count('playerStates')
-            + await db.count('players');
+        const totalCount =
+            (await db.count('allianceMembers')) +
+            (await db.count('allianceNames')) +
+            (await db.count('allianceScores')) +
+            (await db.count('allianceStates')) +
+            (await db.count('allianceTags')) +
+            (await db.count('alliances')) +
+            (await db.count('moonNames')) +
+            (await db.count('moonStates')) +
+            (await db.count('moons')) +
+            (await db.count('planetCoordinates')) +
+            (await db.count('planetNames')) +
+            (await db.count('planetStates')) +
+            (await db.count('planets')) +
+            (await db.count('playerAlliances')) +
+            (await db.count('playerNames')) +
+            (await db.count('playerScores')) +
+            (await db.count('playerStates')) +
+            (await db.count('players'));
 
         return totalCount;
     }
@@ -253,10 +266,24 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const storeNames: StoreNames<OgameTrackerUniverseHistoryDbSchema>[] = [
             '_lastUpdate',
-            'allianceMembers', 'allianceNames', 'allianceScores', 'allianceStates', 'allianceTags', 'alliances',
-            'moonNames', 'moonStates', 'moons',
-            'planetCoordinates', 'planetNames', 'planetStates', 'planets',
-            'playerAlliances', 'playerNames', 'playerScores', 'playerStates', 'players'
+            'allianceMembers',
+            'allianceNames',
+            'allianceScores',
+            'allianceStates',
+            'allianceTags',
+            'alliances',
+            'moonNames',
+            'moonStates',
+            'moons',
+            'planetCoordinates',
+            'planetNames',
+            'planetStates',
+            'planets',
+            'playerAlliances',
+            'playerNames',
+            'playerScores',
+            'playerStates',
+            'players',
         ];
         const tx = db.transaction(storeNames, 'readwrite');
 
@@ -268,9 +295,14 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
 
     async function getPlayerPlanetsAndMoonsHistory(playerId: number): Promise<UniverseHistoryPlanetHistory[]> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
-        const storeNames: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & (`${'planet' | 'moon'}${string}`))[] = [
-            'planetCoordinates', 'planetNames', 'planetStates', 'planets',
-            'moonNames', 'moonStates', 'moons',
+        const storeNames: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & `${'planet' | 'moon'}${string}`)[] = [
+            'planetCoordinates',
+            'planetNames',
+            'planetStates',
+            'planets',
+            'moonNames',
+            'moonStates',
+            'moons',
         ];
         const tx = db.transaction(storeNames, 'readonly');
 
@@ -280,7 +312,10 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
         const playerPlanets = await planetStore.index('playerId').getAll(playerId);
 
         for (const planet of playerPlanets) {
-            const planetCoordinatesHistory = await tx.objectStore('planetCoordinates').index('planetId').getAll(planet.id);
+            const planetCoordinatesHistory = await tx
+                .objectStore('planetCoordinates')
+                .index('planetId')
+                .getAll(planet.id);
             const planetNameHistory = await tx.objectStore('planetNames').index('planetId').getAll(planet.id);
             const planetStateHistory = await tx.objectStore('planetStates').index('planetId').getAll(planet.id);
 

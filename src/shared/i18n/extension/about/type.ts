@@ -2,7 +2,7 @@ export interface AboutTranslations {
     faqHelp: {
         header: string;
         faq: {
-            header: string;   
+            header: string;
             fleetLostOnExpedition: {
                 header: string;
                 text: string;

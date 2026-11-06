@@ -4,4 +4,3 @@ export enum OgameRawArtifactFindSize {
     large = 'huge',
     fullStorage = 'full',
 }
-

@@ -66,16 +66,18 @@ const nameHistoryColumns = computed<GridTableColumn<keyof NameHistoryItem | '-'>
 });
 
 const nameHistoryItems = computed<NameHistoryItem[]>(() => {
-    return history.value.map<NameHistoryItem>((item, i, nextHistory) => {
-        const start = i == 0 ? null : item.date;
-        const end = nextHistory[i + 1]?.date ?? null;
+    return history.value
+        .map<NameHistoryItem>((item, i, nextHistory) => {
+            const start = i == 0 ? null : item.date;
+            const end = nextHistory[i + 1]?.date ?? null;
 
-        return {
-            name: item.name,
-            start,
-            end,
-        };
-    }).reverse();
+            return {
+                name: item.name,
+                start,
+                end,
+            };
+        })
+        .reverse();
 });
 
 watch(() => props.playerId, onPlayerIdChanged, { immediate: true });

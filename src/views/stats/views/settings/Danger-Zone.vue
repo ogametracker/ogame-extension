@@ -4,32 +4,20 @@
             <button class="delete-button" @click="clearExpeditions()">
                 <span class="ogti ogti-expedition" />
                 <span
-                    v-text="
-                        translations().extension.settings.dangerZone.deleteExpeditions.button(
-                            accountAndServer
-                        )
-                    "
+                    v-text="translations().extension.settings.dangerZone.deleteExpeditions.button(accountAndServer)"
                 />
             </button>
 
             <button class="delete-button" @click="clearCombats()">
                 <span class="ogti ogti-attack" />
-                <span
-                    v-text="
-                        translations().extension.settings.dangerZone.deleteCombats.button(
-                            accountAndServer
-                        )
-                    "
-                />
+                <span v-text="translations().extension.settings.dangerZone.deleteCombats.button(accountAndServer)" />
             </button>
 
             <button class="delete-button" @click="clearDebrisFieldReports()">
                 <span class="ogti ogti-debris-field" />
                 <span
                     v-text="
-                        translations().extension.settings.dangerZone.deleteDebrisFieldReports.button(
-                            accountAndServer
-                        )
+                        translations().extension.settings.dangerZone.deleteDebrisFieldReports.button(accountAndServer)
                     "
                 />
             </button>
@@ -38,33 +26,19 @@
 
         <button class="delete-button" @click="deleteAccount()">
             <span class="mdi mdi-account" />
-            <span
-                v-text="
-                    translations().extension.settings.dangerZone.deleteAccount.button(
-                        accountAndServer
-                    )
-                "
-            />
+            <span v-text="translations().extension.settings.dangerZone.deleteAccount.button(accountAndServer)" />
         </button>
         <hr />
 
         <button class="delete-button" @click="deleteUniverseHistory()">
             <span class="mdi mdi-update" />
-            <span
-                v-text="
-                    translations().extension.settings.dangerZone.deleteUniverseHistory.button(
-                        server
-                    )
-                "
-            />
+            <span v-text="translations().extension.settings.dangerZone.deleteUniverseHistory.button(server)" />
         </button>
         <hr />
 
         <button class="delete-button" @click="deleteEverything()">
             <span class="mdi mdi-delete" />
-            <span
-                v-text="translations().extension.settings.dangerZone.deleteEverything.button"
-            />
+            <span v-text="translations().extension.settings.dangerZone.deleteEverything.button" />
         </button>
 
         <div class="danger-zone-overlay" v-if="isDeleting">
@@ -107,9 +81,12 @@ const accountAndServer = computed(() => {
 
 async function clearExpeditions() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteExpeditions.confirmationText(accountAndServer.value, formatNumber(expeditionStore.count))
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteExpeditions.confirmationText(
+            accountAndServer.value,
+            formatNumber(expeditionStore.count),
+        ) +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -123,9 +100,12 @@ async function clearExpeditions() {
 
 async function clearCombats() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteCombats.confirmationText(accountAndServer.value, formatNumber(combatReportStore.count))
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteCombats.confirmationText(
+            accountAndServer.value,
+            formatNumber(combatReportStore.count),
+        ) +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -139,9 +119,12 @@ async function clearCombats() {
 
 async function clearDebrisFieldReports() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(accountAndServer.value, formatNumber(debrisFieldReportStore.count))
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(
+            accountAndServer.value,
+            formatNumber(debrisFieldReportStore.count),
+        ) +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -155,9 +138,9 @@ async function clearDebrisFieldReports() {
 
 async function deleteAccount() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteAccount.confirmationText(accountAndServer.value)
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteAccount.confirmationText(accountAndServer.value) +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -170,9 +153,9 @@ async function deleteAccount() {
 
 async function deleteUniverseHistory() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteUniverseHistory.confirmationText(accountAndServer.value)
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteUniverseHistory.confirmationText(accountAndServer.value) +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -186,18 +169,18 @@ async function deleteUniverseHistory() {
 
 async function deleteEverything() {
     let confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteEverything.confirmationText1
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText1 +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
     if (!confirmed) {
         return;
     }
 
     confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteEverything.confirmationText2
-        + '\n\n'
-        + translations().extension.settings.dangerZone.doYouWantToContinue
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText2 +
+            '\n\n' +
+            translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -218,52 +201,52 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    hr {
-        width: 100%;
+hr {
+    width: 100%;
+}
+
+.danger-zone-content {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.delete-messages {
+    display: inline-flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.delete-button {
+    --color: 255, 0, 0;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    column-gap: 4px;
+    align-items: center;
+    max-width: 350px;
+    text-align: left;
+    line-height: 1.25;
+
+    .ogti {
+        font-size: 36px;
     }
 
-    .danger-zone-content {
-        display: inline-flex;
-        flex-direction: column;
+    .mdi {
+        font-size: 30px;
     }
+}
 
-    .delete-messages {
-        display: inline-flex;
-        flex-direction: column;
-        row-gap: 8px;
-    }
-
-    .delete-button {
-        --color: 255, 0, 0;
-        padding: 4px;
-        display: grid;
-        grid-template-columns: 36px 1fr;
-        column-gap: 4px;
-        align-items: center;
-        max-width: 350px;
-        text-align: left;
-        line-height: 1.25;
-
-        .ogti {
-            font-size: 36px;
-        }
-
-        .mdi {
-            font-size: 30px;
-        }
-    }
-
-    .danger-zone-overlay {
-        --color: 255, 0, 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgb(black, 0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-    }
+.danger-zone-overlay {
+    --color: 255, 0, 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(black, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
 </style>

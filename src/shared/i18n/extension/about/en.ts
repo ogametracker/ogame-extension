@@ -1,4 +1,4 @@
-import { AboutTranslations } from "./type";
+import { AboutTranslations } from './type';
 
 export const en: AboutTranslations = {
     faqHelp: {
@@ -18,21 +18,25 @@ export const en: AboutTranslations = {
                 text: 'Your resource production depends on various factors, and their changes would have to be tracked permanently. While this is possible, an implementation of this feature would be much more complex than it would be of use for its users.',
             },
             whatAreAverages: {
-                header: 'What does the \'⌀ per day\' mean?',
+                header: "What does the '⌀ per day' mean?",
                 text: 'This is the average over all days with at least one tracked event.',
             },
         },
         tips: {
             header: 'Tips',
-            rightClickDefaultRoute: 'You can right-click a main tab on the left side or any of its sub-menu items to set this menu as standard for the selected route.',
-            numbersKeyboardNavigation: 'You can open the pages of the tabs with a digit by pressing the respective digit key on your keyboard.',
+            rightClickDefaultRoute:
+                'You can right-click a main tab on the left side or any of its sub-menu items to set this menu as standard for the selected route.',
+            numbersKeyboardNavigation:
+                'You can open the pages of the tabs with a digit by pressing the respective digit key on your keyboard.',
             amortizationTable: {
                 part1: 'Want to know what to build or research next to improve your resource production the most efficient way? Try the\xa0',
                 name: 'interactive amortization calculator',
                 part2: '.',
             },
-            inlineSettings: 'You can change related settings immediately by pressing the small gear icon on the right side.',
-            switchAccountHtml: 'You can open the OGame Tracker interface for another tracked account by clicking the <span class="mdi mdi-account-multiple"></span> icon and selecting the account.',
+            inlineSettings:
+                'You can change related settings immediately by pressing the small gear icon on the right side.',
+            switchAccountHtml:
+                'You can open the OGame Tracker interface for another tracked account by clicking the <span class="mdi mdi-account-multiple"></span> icon and selecting the account.',
         },
 
         messageDiscord: {

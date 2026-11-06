@@ -8,7 +8,7 @@ import type { ExtensionTranslations } from './type';
 const translations: I18nMessageMap<ExtensionTranslations> = {
     de,
     en,
-    "pt-pt": pt_pt,
+    'pt-pt': pt_pt,
     fr,
 };
 export default translations;

@@ -59,10 +59,7 @@ export const useDebrisFieldReportStore = defineStore('debrisFieldReport', () => 
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         let minDate: number | null = null;
         for (const account of accounts) {
@@ -111,8 +108,7 @@ export const useDebrisFieldReportStore = defineStore('debrisFieldReport', () => 
             dailyResult.expedition.metal += report.metal;
             dailyResult.expedition.crystal += report.crystal;
             dailyResult.expedition.deuterium += report.deuterium ?? 0;
-        }
-        else {
+        } else {
             dailyResult.normal.metal += report.metal;
             dailyResult.normal.crystal += report.crystal;
             dailyResult.normal.deuterium += report.deuterium ?? 0;

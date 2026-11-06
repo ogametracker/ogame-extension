@@ -1,5 +1,5 @@
-import { LifeformBuildingType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformBuildingsTranslations } from "./types";
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformBuildingsTranslations } from './types';
 
 export const zh_tw: LifeformBuildingsTranslations = {
     [LifeformBuildingType.residentialSector]: '居住區域',

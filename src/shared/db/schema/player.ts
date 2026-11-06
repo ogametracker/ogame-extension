@@ -1,23 +1,27 @@
-import { CombatReport } from "@ogame-tracker/shared/models/combat-reports/CombatReport";
-import { DebrisFieldReport } from "@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport";
-import { ExpeditionEvent } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
-import { LifeformDiscoveryEvent } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { BuildingType, MoonBuildingType, PlanetBuildingType } from "@ogame-tracker/shared/models/ogame/buildings/BuildingType";
-import { AllianceClass } from "@ogame-tracker/shared/models/ogame/classes/AllianceClass";
-import { PlayerClass } from "@ogame-tracker/shared/models/ogame/classes/PlayerClass";
-import { Coordinates } from "@ogame-tracker/shared/models/ogame/common/Coordinates";
-import { DefenseType } from "@ogame-tracker/shared/models/ogame/defenses/DefenseType";
-import { FleetMissionType } from "@ogame-tracker/shared/models/ogame/fleets/FleetMissionType";
-import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
-import { LifeformBuildingType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
-import { MissileType } from "@ogame-tracker/shared/models/ogame/missiles/MissileType";
-import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
-import { ResourceType } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
-import { NonStationaryShipType, ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
-import { UniverseSpecificSettings } from "@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings";
-import { DBSchema } from "idb";
+import { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
+import { DebrisFieldReport } from '@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport';
+import { ExpeditionEvent } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import {
+    BuildingType,
+    MoonBuildingType,
+    PlanetBuildingType,
+} from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { FleetMissionType } from '@ogame-tracker/shared/models/ogame/fleets/FleetMissionType';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { MissileType } from '@ogame-tracker/shared/models/ogame/missiles/MissileType';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { NonStationaryShipType, ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { UniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings';
+import { DBSchema } from 'idb';
 
 export interface DbBasicMoonData {
     id: number;
@@ -40,11 +44,13 @@ export type DbActiveItems = Partial<Record<ItemHash, number | 'permanent'>>;
 
 export type DbShipAmounts = Record<ShipType, number>;
 
-export type DbDefenseAmounts = 
-    Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
-    & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+export type DbDefenseAmounts = Record<
+    Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>,
+    number
+> &
+    Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
 
-export type DbMissileAmounts = Record<MissileType, number>
+export type DbMissileAmounts = Record<MissileType, number>;
 
 export type DbPlanetProductionSettings = {
     [BuildingType.metalMine]: number;
@@ -68,7 +74,6 @@ export type DbPlayerResearchLevels = Record<ResearchType, number>;
 
 export type DbPlayerPlanetIds = number[];
 
-
 export type DbPlayerLifeformExperience = Record<Exclude<LifeformType, LifeformType.none>, number>;
 export type DbPlanetSelectedLifeform = LifeformType;
 export type DbPlanetLifeformBuildingLevels = Record<LifeformBuildingType, number>;
@@ -87,14 +92,13 @@ interface DbFleet {
 }
 export type DbFleets = DbFleet[];
 
-type DbEmpire = (
+type DbEmpire =
     | { key: 'allianceClass'; value: AllianceClass }
     | { key: 'officers'; value: DbPlayerOfficers }
     | { key: 'playerClass'; value: PlayerClass }
     | { key: 'research'; value: DbPlayerResearchLevels }
     | { key: 'planetOrder'; value: DbPlayerPlanetIds }
     | { key: 'lifeformExperience'; value: DbPlayerLifeformExperience }
-
     | { key: `planet.${number}`; value: DbBasicPlanetData }
     | { key: `planet.${number}.buildings`; value: DbPlanetBuildingLevels }
     | { key: `planet.${number}.ships`; value: DbShipAmounts }
@@ -106,16 +110,12 @@ type DbEmpire = (
     | { key: `planet.${number}.lifeformBuildings`; value: DbPlanetLifeformBuildingLevels }
     | { key: `planet.${number}.lifeformTechnologies`; value: DbPlanetLifeformTechnologyLevels }
     | { key: `planet.${number}.activeLifeformTechnologies`; value: DbPlanetActiveLifeformTechnologies }
-
     | { key: `moon.${number}`; value: DbBasicMoonData }
     | { key: `moon.${number}.buildings`; value: DbMoonBuildingLevels }
     | { key: `moon.${number}.ships`; value: DbShipAmounts }
     | { key: `moon.${number}.defenses`; value: DbDefenseAmounts }
     | { key: `moon.${number}.activeItems`; value: DbActiveItems }
-
-    | { key: 'fleets'; value: DbFleets }
-);
-
+    | { key: 'fleets'; value: DbFleets };
 
 export interface OgameTrackerPlayerDbSchema extends DBSchema {
     combatReports: {
@@ -148,4 +148,4 @@ export interface OgameTrackerPlayerDbSchema extends DBSchema {
         key: 0;
         value: UniverseSpecificSettings;
     };
-};
+}

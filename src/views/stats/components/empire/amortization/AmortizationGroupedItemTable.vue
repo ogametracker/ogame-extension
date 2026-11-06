@@ -1,5 +1,12 @@
 <template>
-    <GridTable :items="groupedItems" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer row-borders>
+    <GridTable
+        :items="groupedItems"
+        :footerItems="footerItems"
+        :columns="columns"
+        sticky="100%"
+        sticky-footer
+        row-borders
+    >
         <template #header-cost>
             <div class="cost-grid">
                 <span v-text="translations().extension.empire.amortization.table.cost" style="grid-column: 2" />
@@ -16,7 +23,11 @@
                     <span v-text="formatPlanetCoordinates(item.planetId)" />
                 </span>
                 <span v-else class="planet">
-                    <span v-text="`${translations().extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`" />
+                    <span
+                        v-text="
+                            `${translations().extension.empire.amortization.settings.astrophysicsSettings.newColony} ${-item.planetId}`
+                        "
+                    />
                     <span v-text="`[-:-:${newColonyPosition}]`" />
                 </span>
             </template>
@@ -30,7 +41,12 @@
                     <span class="name-and-level">
                         <span v-text="translations().ogame.research[ResearchType.astrophysics]" />
                         <span v-if="item.astrophysicsLevels.length == 1" v-text="item.astrophysicsLevels[0]" />
-                        <span v-else v-text="`${item.astrophysicsLevels[0]} - ${item.astrophysicsLevels[item.astrophysicsLevels.length - 1]}`" />
+                        <span
+                            v-else
+                            v-text="
+                                `${item.astrophysicsLevels[0]} - ${item.astrophysicsLevels[item.astrophysicsLevels.length - 1]}`
+                            "
+                        />
                     </span>
                 </template>
 
@@ -39,12 +55,17 @@
                         <OLifeformBuilding :building="lfBuilding" size="36px" :key="`image-${lfBuilding}`" />
                         <span class="name-and-level" :key="`level-${lfBuilding}`">
                             <span v-text="translations().ogame.lifeformBuildings[lfBuilding]" />
-                            <span v-if="item.lifeformBuildings[lfBuilding].length == 1" v-text="item.lifeformBuildings[lfBuilding][0]" />
+                            <span
+                                v-if="item.lifeformBuildings[lfBuilding].length == 1"
+                                v-text="item.lifeformBuildings[lfBuilding][0]"
+                            />
                             <span
                                 v-else
                                 v-text="
                                     `${item.lifeformBuildings[lfBuilding][0]} - ${
-                                        item.lifeformBuildings[lfBuilding][item.lifeformBuildings[lfBuilding].length - 1]
+                                        item.lifeformBuildings[lfBuilding][
+                                            item.lifeformBuildings[lfBuilding].length - 1
+                                        ]
                                     }`
                                 "
                             />
@@ -58,7 +79,10 @@
                         <span class="name-and-level" :key="`level-${mine}`">
                             <span v-text="translations().ogame.buildings[mine]" />
                             <span v-if="item.mines[mine].length == 1" v-text="item.mines[mine][0]" />
-                            <span v-else v-text="`${item.mines[mine][0]} - ${item.mines[mine][item.mines[mine].length - 1]}`" />
+                            <span
+                                v-else
+                                v-text="`${item.mines[mine][0]} - ${item.mines[mine][item.mines[mine].length - 1]}`"
+                            />
                         </span>
                     </template>
                 </template>
@@ -68,7 +92,10 @@
                         <OLifeformTechnology :technology="lfTech" size="36px" :key="`image-${lfTech}`" />
                         <span class="name-and-level" :key="`level-${lfTech}`">
                             <span v-text="translations().ogame.lifeformTechnologies[lfTech]" />
-                            <span v-if="item.lifeformTechnologies[lfTech].length == 1" v-text="item.lifeformTechnologies[lfTech][0]" />
+                            <span
+                                v-if="item.lifeformTechnologies[lfTech].length == 1"
+                                v-text="item.lifeformTechnologies[lfTech][0]"
+                            />
                             <span
                                 v-else
                                 v-text="
@@ -150,7 +177,11 @@ const settingsStore = useSettingsStore();
 
 const empireStore = useEmpireStore();
 
-const mineBuildingTypes: MineBuildingType[] = [BuildingType.metalMine, BuildingType.crystalMine, BuildingType.deuteriumSynthesizer];
+const mineBuildingTypes: MineBuildingType[] = [
+    BuildingType.metalMine,
+    BuildingType.crystalMine,
+    BuildingType.deuteriumSynthesizer,
+];
 
 const columns = computed<GridTableColumn<keyof TableItem>[]>(() => {
     return [
@@ -171,22 +202,24 @@ const columns = computed<GridTableColumn<keyof TableItem>[]>(() => {
         },
         {
             key: 'costConverted',
-            label: `${translations().extension.empire.amortization.table.cost} (${settingsStore.settings.conversionRates.mode == 'msu'
-                ? translations().extension.common.msu
-                : translations().extension.common.dsu
-                })`,
+            label: `${translations().extension.empire.amortization.table.cost} (${
+                settingsStore.settings.conversionRates.mode == 'msu'
+                    ? translations().extension.common.msu
+                    : translations().extension.common.dsu
+            })`,
             size: '1fr',
         },
     ];
 });
 
 const footerItems = computed<[TableItem]>(() => {
-    return [{
-        item: null!,
+    return [
+        {
+            item: null!,
 
-        cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-        costConverted: 0,
-        /* TODO: total best cost after reduction
+            cost: { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+            costConverted: 0,
+            /* TODO: total best cost after reduction
         cost: props.groupedItems.reduce<Cost>(
             (total, cur) => addCost(total, cur.cost),
             { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
@@ -196,12 +229,15 @@ const footerItems = computed<[TableItem]>(() => {
             0,
         ),
         */
-    }];
+        },
+    ];
 });
 
 function getPlanetName(id: number): string {
-    return empireStore.empire.planets[id]?.name
-        ?? `${translations().extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`;
+    return (
+        empireStore.empire.planets[id]?.name ??
+        `${translations().extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`
+    );
 }
 
 function formatPlanetCoordinates(id: number): string {
@@ -219,28 +255,28 @@ function formatCoordinates(coordinates: Coordinates): string {
 </script>
 
 <style lang="scss" scoped>
-    .cost-grid {
-        display: grid;
-        width: 100%;
-        grid-template-columns: repeat(3, 1fr);
-        justify-items: end;
-    }
+.cost-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: end;
+}
 
-    .name-and-level {
-        display: grid;
-        text-align: left;
-        justify-self: start;
-    }
+.name-and-level {
+    display: grid;
+    text-align: left;
+    justify-self: start;
+}
 
-    .build-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 4px;
-        align-items: center;
-    }
+.build-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px;
+    align-items: center;
+}
 
-    .planet {
-        display: grid;
-        justify-self: end;
-    }
+.planet {
+    display: grid;
+    justify-self: end;
+}
 </style>

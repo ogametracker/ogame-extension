@@ -15,85 +15,76 @@
                         </td>
                     </tr>
                 </thead>
-                <Draggable
-                    tag="tbody"
-                    v-model="items"
-                    :item-key="rangeKey"
-                    handle=".grab"
-                    @change="onItemsUpdated()"
-                >
+                <Draggable tag="tbody" v-model="items" :item-key="rangeKey" handle=".grab" @change="onItemsUpdated()">
                     <template #item="{ element: range }">
-                    <tr>
-                        <td>
-                            <span class="grab mdi mdi-drag" />
-                        </td>
-                        <td>
-                            <span
-                                v-if="range.type != 'all'"
-                                class="delete mdi mdi-delete"
-                                @click="deleteRange(range)"
-                            />
-                        </td>
-                        <td>
-                            <input
-                                v-if="range.type != 'all'"
-                                type="text"
-                                v-model.lazy="range.label"
-                                @change="onItemsUpdated()"
-                            />
-                            <span
-                                v-else
-                                v-text="translations().extension.settings.dateRanges.since(translations().extension.settings.dateRanges.firstDayTemplate)"
-                            />
-                        </td>
-                        <td>
-                            <select
-                                v-if="range.type != 'all'"
-                                v-model="range.type"
-                                @change="onItemsUpdated()"
-                            >
-                                <option
-                                    v-for="rangeType in rangeTypes"
-                                    :key="rangeType"
-                                    :value="rangeType"
-                                    v-text="translations().extension.settings.dateRanges[rangeType]"
+                        <tr>
+                            <td>
+                                <span class="grab mdi mdi-drag" />
+                            </td>
+                            <td>
+                                <span
+                                    v-if="range.type != 'all'"
+                                    class="delete mdi mdi-delete"
+                                    @click="deleteRange(range)"
                                 />
-                            </select>
-                        </td>
-                        <td>
-                            <input
-                                v-if="range.type != 'all'"
-                                type="number"
-                                v-model="range.skip"
-                                @change="onItemsUpdated()"
-                            />
-                        </td>
-                        <td style="text-align: left; padding-left: 0">
-                            <span v-text="translations().extension.settings.dateRanges[`${range.type}sAgo`]" />
-                        </td>
-                        <td>
-                            <input
-                                v-if="range.type != 'all'"
-                                type="number"
-                                v-model="range.take"
-                                @change="onItemsUpdated()"
-                            />
-                        </td>
-                        <td style="text-align: left; padding-left: 0">
-                            <span v-text="translations().extension.settings.dateRanges[`${range.type}s`]" />
-                        </td>
-                        <td v-text="getRangeText(range)" style="font-style: italic;" />
-                    </tr>
+                            </td>
+                            <td>
+                                <input
+                                    v-if="range.type != 'all'"
+                                    type="text"
+                                    v-model.lazy="range.label"
+                                    @change="onItemsUpdated()"
+                                />
+                                <span
+                                    v-else
+                                    v-text="
+                                        translations().extension.settings.dateRanges.since(
+                                            translations().extension.settings.dateRanges.firstDayTemplate,
+                                        )
+                                    "
+                                />
+                            </td>
+                            <td>
+                                <select v-if="range.type != 'all'" v-model="range.type" @change="onItemsUpdated()">
+                                    <option
+                                        v-for="rangeType in rangeTypes"
+                                        :key="rangeType"
+                                        :value="rangeType"
+                                        v-text="translations().extension.settings.dateRanges[rangeType]"
+                                    />
+                                </select>
+                            </td>
+                            <td>
+                                <input
+                                    v-if="range.type != 'all'"
+                                    type="number"
+                                    v-model="range.skip"
+                                    @change="onItemsUpdated()"
+                                />
+                            </td>
+                            <td style="text-align: left; padding-left: 0">
+                                <span v-text="translations().extension.settings.dateRanges[`${range.type}sAgo`]" />
+                            </td>
+                            <td>
+                                <input
+                                    v-if="range.type != 'all'"
+                                    type="number"
+                                    v-model="range.take"
+                                    @change="onItemsUpdated()"
+                                />
+                            </td>
+                            <td style="text-align: left; padding-left: 0">
+                                <span v-text="translations().extension.settings.dateRanges[`${range.type}s`]" />
+                            </td>
+                            <td v-text="getRangeText(range)" style="font-style: italic" />
+                        </tr>
                     </template>
                 </Draggable>
                 <tfoot>
                     <tr>
                         <td />
                         <td>
-                            <span
-                                class="add mdi mdi-plus"
-                                @click="addNewRange()"
-                            />
+                            <span class="add mdi mdi-plus" @click="addNewRange()" />
                         </td>
                         <td colspan="7" />
                     </tr>
@@ -129,12 +120,7 @@ function rangeKey(range: DateRange): number {
     return key;
 }
 
-const rangeTypes: DateRangeType[] = [
-    'day',
-    'week',
-    'month',
-    'year',
-];
+const rangeTypes: DateRangeType[] = ['day', 'week', 'month', 'year'];
 
 function getRangeText(range: DateRange): string {
     if (range.type == 'all') {
@@ -200,27 +186,27 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-    .mdi {
-        opacity: 0.5;
-        transform: scale(1.5);
-        display: inline-block;
+.mdi {
+    opacity: 0.5;
+    transform: scale(1.5);
+    display: inline-block;
 
-        &:hover {
-            opacity: 1;
-        }
+    &:hover {
+        opacity: 1;
     }
+}
 
-    .delete,
-    .add {
-        cursor: pointer;
-    }
+.delete,
+.add {
+    cursor: pointer;
+}
 
-    .grab {
-        cursor: grab;
-    }
+.grab {
+    cursor: grab;
+}
 
-    input[type="number"] {
-        width: 64px;
-        margin-right: 0.5rem;
-    }
+input[type='number'] {
+    width: 64px;
+    margin-right: 0.5rem;
+}
 </style>

@@ -2,7 +2,10 @@ import { defineStore } from 'pinia';
 import { computed, onScopeDispose, ref } from 'vue';
 import { createReadiness, listenForMessages } from './lifecycle';
 import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-import type { ExpeditionEvent, ExpeditionFindableShipType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import type {
+    ExpeditionEvent,
+    ExpeditionFindableShipType,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
 import type { NewExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
 import type { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
@@ -11,13 +14,22 @@ import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-import { ExpeditionEventSize, ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import {
+    ExpeditionEventSize,
+    ExpeditionEventSizes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
 import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
 
 export interface DailyExpeditionResult {
@@ -86,10 +98,7 @@ export const useExpeditionStore = defineStore('expedition', () => {
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         const rawExpeditions: ExpeditionEvent[] = [];
         for (const account of accounts) {
@@ -124,10 +133,13 @@ export const useExpeditionStore = defineStore('expedition', () => {
         dailyResults.value[day] ??= getNewDailyResult(day);
         const dailyResult = dailyResults.value[day];
 
-        const mappedType = ({
-            [ExpeditionEventType.aliens]: ExpeditionEventType.combat,
-            [ExpeditionEventType.pirates]: ExpeditionEventType.combat,
-        } as Partial<Record<ExpeditionEventType, ExpeditionEventType>>)[expedition.type] ?? expedition.type;
+        const mappedType =
+            (
+                {
+                    [ExpeditionEventType.aliens]: ExpeditionEventType.combat,
+                    [ExpeditionEventType.pirates]: ExpeditionEventType.combat,
+                } as Partial<Record<ExpeditionEventType, ExpeditionEventType>>
+            )[expedition.type] ?? expedition.type;
 
         dailyResult.events[mappedType]++;
         dailyResult.depletion[expedition.depletion ?? 'unknown']++;
@@ -171,7 +183,7 @@ export const useExpeditionStore = defineStore('expedition', () => {
                     const resourceUnits = multiplyCost(shipData.cost, count);
 
                     for (const resource of ResourceTypes) {
-                        dailyResult.findings.fleetResourceUnits[resource] += resourceUnits[resource]
+                        dailyResult.findings.fleetResourceUnits[resource] += resourceUnits[resource];
                     }
                 }
                 break;

@@ -14,53 +14,54 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent } from 'vue';
-    import type { PropType } from 'vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { computed, defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
-    export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
+export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
 
-    const imageMap: Record<ExtendedResourceType, string> = {
-        [ResourceType.metal]: 'metal',
-        [ResourceType.crystal]: 'crystal',
-        [ResourceType.deuterium]: 'deuterium',
-        energy: 'energy',
-        'dark-matter': 'dark-matter',
-    };
+const imageMap: Record<ExtendedResourceType, string> = {
+    [ResourceType.metal]: 'metal',
+    [ResourceType.crystal]: 'crystal',
+    [ResourceType.deuterium]: 'deuterium',
+    energy: 'energy',
+    'dark-matter': 'dark-matter',
+};
 
-    export default defineComponent({
-        props: {
-            resource: {
-                required: true,
-                type: String as PropType<ExtendedResourceType>,
-                validator: (value: string) => ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value)
-            },
-            size: { required: false, type: String, default: '32px' },
-            disabled: { required: false, type: Boolean },
-            fade: { required: false, type: Boolean },
+export default defineComponent({
+    props: {
+        resource: {
+            required: true,
+            type: String as PropType<ExtendedResourceType>,
+            validator: (value: string) =>
+                ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value),
         },
-        setup(props) {
-            const image = computed(() => imageMap[props.resource]);
-            return { image };
-        },
-    });
+        size: { required: false, type: String, default: '32px' },
+        disabled: { required: false, type: Boolean },
+        fade: { required: false, type: Boolean },
+    },
+    setup(props) {
+        const image = computed(() => imageMap[props.resource]);
+        return { image };
+    },
+});
 </script>
 <style lang="scss" scoped>
-    .o-resource {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
+.o-resource {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
 
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+}
 </style>

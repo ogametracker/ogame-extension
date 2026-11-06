@@ -5,29 +5,59 @@
         </div>
 
         <div class="body">
-            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay" />
+            <span
+                v-text="translations().extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay"
+            />
             <span>
                 <input type="number" v-model.number.lazy="settings.wavesPerDay" min="0" max="20" step="0.1" />
             </span>
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.items" />
             <span class="item-grid">
-                <OItem v-for="item in slotItems" :key="item" :item="item" :disabled="!settings.items.includes(item)" @click="toggleItem(item)" />
+                <OItem
+                    v-for="item in slotItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleItem(item)"
+                />
             </span>
 
-            <i v-text="translations().extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay" />
+            <i
+                v-text="
+                    translations().extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay
+                "
+            />
             <i v-text="formatNumber(expeditionsPerDay)" />
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.shipUnitFactors" />
             <div class="resource-factors">
                 <OResource :resource="ResourceType.metal" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.metal" min="0" max="1" step="0.01" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.metal"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
 
                 <OResource :resource="ResourceType.crystal" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.crystal" min="0" max="1" step="0.01" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.crystal"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
 
                 <OResource :resource="ResourceType.deuterium" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.deuterium" min="0" max="1" step="0.01" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.deuterium"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
             </div>
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.topPlayerScore" />
@@ -61,7 +91,10 @@ const props = defineProps({
     breakdown: { required: true, type: Object as PropType<AmortizationExpeditionResultsBreakdown> },
 });
 
-const settings = defineModel<AmortizationExpeditionSettings>({ required: true, type: Object as PropType<AmortizationExpeditionSettings> });
+const settings = defineModel<AmortizationExpeditionSettings>({
+    required: true,
+    type: Object as PropType<AmortizationExpeditionSettings>,
+});
 
 const topScores = computed<Record<number, string>>(() => {
     return {
@@ -119,16 +152,19 @@ function onSettingsChanged() {
     props.breakdown.options.playerClass = props.playerSettings.playerClass;
     props.breakdown.options.admiral = props.playerSettings.officers.admiral;
     props.breakdown.options.astrophysicsLevel = props.playerSettings.levelAstrophysics;
-    props.breakdown.options.itemBonusSlots = getItemSlotBonus(createRecord(settings.value.items, _ => 'permanent' as const));
+    props.breakdown.options.itemBonusSlots = getItemSlotBonus(
+        createRecord(settings.value.items, _ => 'permanent' as const),
+    );
     props.breakdown.options.fleetFindsResourceFactors = settings.value.fleetUnitsFactors;
     props.breakdown.options.serverSettings = settings.value.serverSettings;
 
     if (topScores.value[settings.value.serverSettings.topScore] == null) {
-        settings.value.serverSettings.topScore = Object.keys(topScores.value)
-            .map(k => parseIntSafe(k))
-            .sort((a, b) => b - a)
-            .find(score => score <= settings.value.serverSettings.topScore)
-            ?? _throw('failed to find matching top score');
+        settings.value.serverSettings.topScore =
+            Object.keys(topScores.value)
+                .map(k => parseIntSafe(k))
+                .sort((a, b) => b - a)
+                .find(score => score <= settings.value.serverSettings.topScore) ??
+            _throw('failed to find matching top score');
     }
 }
 
@@ -138,8 +174,7 @@ function toggleItem(item: ItemHash) {
     const index = settings.value.items.indexOf(item);
     if (index < 0) {
         settings.value.items.push(item);
-    }
-    else {
+    } else {
         settings.value.items.splice(index, 1);
     }
 }
@@ -150,59 +185,59 @@ watch(() => props.playerSettings, onSettingsChanged, { immediate: true, deep: tr
 </script>
 
 <style lang="scss" scoped>
-    .expedition-settings {
-        width: 300px;
-        border: 1px solid rgba(var(--color), 0.5);
-        display: flex;
-        flex-direction: column;
-        border-radius: 4px;
-        overflow: hidden;
+.expedition-settings {
+    width: 300px;
+    border: 1px solid rgba(var(--color), 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    overflow: hidden;
 
-        &.disabled {
-            --color: 80, 80, 80;
-            backdrop-filter: grayscale(0.5);
-        }
+    &.disabled {
+        --color: 80, 80, 80;
+        backdrop-filter: grayscale(0.5);
     }
+}
 
-    .header,
-    .body {
-        padding: 8px;
-    }
-    .header {
-        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        text-align: center;
-    }
+.header,
+.body {
+    padding: 8px;
+}
+.header {
+    background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    text-align: center;
+}
 
-    .body {
-        display: grid;
-        grid-template-columns: minmax(auto, 100px) 1fr;
-        align-items: center;
-        gap: 8px 16px;
-    }
+.body {
+    display: grid;
+    grid-template-columns: minmax(auto, 100px) 1fr;
+    align-items: center;
+    gap: 8px 16px;
+}
 
-    input[type="number"] {
-        width: 60px;
-    }
+input[type='number'] {
+    width: 60px;
+}
 
-    .topScore {
-        width: 100%;
-    }
+.topScore {
+    width: 100%;
+}
 
-    .item-grid {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        width: max-content;
-        gap: 4px;
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    width: max-content;
+    gap: 4px;
 
-        > .o-item {
-            cursor: pointer;
-        }
+    > .o-item {
+        cursor: pointer;
     }
+}
 
-    .resource-factors {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        width: max-content;
-        gap: 4px;
-    }
+.resource-factors {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    width: max-content;
+    gap: 4px;
+}
 </style>

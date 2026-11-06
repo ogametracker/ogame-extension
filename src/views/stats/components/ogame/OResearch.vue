@@ -19,7 +19,11 @@ import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/Resear
 import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 
 const props = defineProps({
-    research: { required: true, type: Number as PropType<ResearchType>, validator: (value: number) => (ResearchTypes as number[]).includes(value) },
+    research: {
+        required: true,
+        type: Number as PropType<ResearchType>,
+        validator: (value: number) => (ResearchTypes as number[]).includes(value),
+    },
     size: { required: false, type: String, default: '32px' },
     disabled: { required: false, type: Boolean },
     fade: { required: false, type: Boolean },
@@ -48,21 +52,21 @@ const imageMap: Record<ResearchType, string> = {
 </script>
 
 <style lang="scss" scoped>
-    .o-research {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
+.o-research {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
 
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+}
 </style>

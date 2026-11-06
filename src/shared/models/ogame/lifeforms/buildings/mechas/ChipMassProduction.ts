@@ -1,8 +1,8 @@
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { LifeformTechnologyBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class ChipMassProductionClass extends LifeformBuilding implements LifeformTechnologyBonusLifeformBuilding {
     public constructor() {
@@ -29,7 +29,7 @@ class ChipMassProductionClass extends LifeformBuilding implements LifeformTechno
     public get bonuses(): LifeformBonusType[] {
         return [{ type: LifeformBonusTypeId.LifeformResearchBonusBoost }];
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.chipMassProduction;
     }

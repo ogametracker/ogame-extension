@@ -1,7 +1,7 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { EmpireTranslations } from "./type";
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { EmpireTranslations } from './type';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const fr: RecursivePartial<EmpireTranslations> = {
     header: 'Empire',
@@ -10,14 +10,15 @@ export const fr: RecursivePartial<EmpireTranslations> = {
         header: 'Production',
         subHeaders: {
             resourceProduction: 'Production de ressources',
-            mineOverview: 'Vue d\'ensemble des mines',
+            mineOverview: "Vue d'ensemble des mines",
         },
         averagePerHour: '⌀ par heure',
         totalPerHour: 'total par heure',
         totalPerDay: 'total par jour',
         totalPerWeek: 'total par semaine',
         activeProductionSettings: 'Paramètres de production actifs',
-        messageProduction100: 'Les valeurs affichées se réfèrent à un facteur de production de 100% et ne tiennent pas compte du manque d\'énergie.',
+        messageProduction100:
+            "Les valeurs affichées se réfèrent à un facteur de production de 100% et ne tiennent pas compte du manque d'énergie.",
 
         mines: {
             crawlersAvailable: 'disponibles',
@@ -32,9 +33,9 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             crawlers: 'Foreuses',
             items: 'Objets',
             geologist: 'Géologue',
-            commandStaff: 'Conseil d\'officiers',
+            commandStaff: "Conseil d'officiers",
             playerClass: 'Classe de joueur',
-            allianceClass: 'Classe d\'alliance',
+            allianceClass: "Classe d'alliance",
             lifeformTechnologies: 'Technologies formes de vie',
         },
 
@@ -51,11 +52,12 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             cost: 'Coût',
             levels: 'Niveaux',
             productionPlus: 'Production en plus',
-            amortizationTime: 'Temps d\'amortissement',
+            amortizationTime: "Temps d'amortissement",
             groupSelectedItems: 'Regrouper les objets sélectionnés',
             showOriginalItems: 'Afficher tous les objets individuellement',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'niveau' : 'niveaux'} sur ${planets} ${planets == 1 ? 'planète' : 'planètes'}`,
+            levelsOnPlanets: (levels, planets) =>
+                `${levels} ${levels == 1 ? 'niveau' : 'niveaux'} sur ${planets} ${planets == 1 ? 'planète' : 'planètes'}`,
         },
 
         settings: {
@@ -67,16 +69,18 @@ export const fr: RecursivePartial<EmpireTranslations> = {
 
                 mines: 'Mines',
                 expeditions: 'Expéditions',
-                expeditionsRequirement: 'Remarque : Nécessite "Recherche des formes de vie" et/ou "Astrophysique" activée',
+                expeditionsRequirement:
+                    'Remarque : Nécessite "Recherche des formes de vie" et/ou "Astrophysique" activée',
                 astrophysicsAndColony: 'Astrophysique et nouvelles colonies',
-                astrophysicsPerformanceNote: 'Remarque : Intensif en calcul, affectera considérablement les performances',
+                astrophysicsPerformanceNote:
+                    'Remarque : Intensif en calcul, affectera considérablement les performances',
             },
             playerSettings: {
                 header: 'Paramètres généraux',
                 optimizeForResources: 'Optimiser pour les ressources sélectionnées',
                 officers: 'Officiers',
                 playerClass: 'Classe de joueur',
-                allianceClass: 'Classe d\'alliance',
+                allianceClass: "Classe d'alliance",
                 currentLevelOf: (name: string) => `Niveau actuel de ${name}`,
                 lifeformLevels: 'Niveaux de la forme de vie',
 
@@ -91,7 +95,8 @@ export const fr: RecursivePartial<EmpireTranslations> = {
 
                 global: {
                     deselectItems: 'Désélectionner tous les éléments',
-                    ignoreInactiveLifeformTechnologySlots: 'Ignorer les emplacements inactifs des technologies forme de vie pour toutes les planètes',
+                    ignoreInactiveLifeformTechnologySlots:
+                        'Ignorer les emplacements inactifs des technologies forme de vie pour toutes les planètes',
                     deselectAllPlanets: 'Désélectionner toutes les planètes',
                 },
 
@@ -114,11 +119,11 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 ignoreEmptySlots: 'Ignorer les emplacements inactifs',
             },
             expeditionSettings: {
-                header: 'Paramètres d\'expédition',
+                header: "Paramètres d'expédition",
                 averageWavesPerDay: '⌀ Vagues par jour',
-                items: 'Objets d\'expédition',
+                items: "Objets d'expédition",
                 averageExpeditionsPerDay: '⌀ Expéditions par jour',
-                shipUnitFactors: 'Facteurs d\'unité de ressources des vaisseaux',
+                shipUnitFactors: "Facteurs d'unité de ressources des vaisseaux",
                 topPlayerScore: 'Score du meilleur joueur',
             },
         },
@@ -126,14 +131,16 @@ export const fr: RecursivePartial<EmpireTranslations> = {
         info: {
             generatingItems: 'Calcul des prochains meilleurs investissements',
 
-            slowCalculation: 'Le calcul d\'amortissement est devenu assez lent maintenant qu\'il inclut les bâtiments et technologies formes de vie. Cela devrait être amélioré à l\'avenir.',
-            ctrlClick: 'Ctrl + Clic sur une case pour (dé)sélectionner tous les éléments jusqu\'à celui sélectionné.',
+            slowCalculation:
+                "Le calcul d'amortissement est devenu assez lent maintenant qu'il inclut les bâtiments et technologies formes de vie. Cela devrait être amélioré à l'avenir.",
+            ctrlClick: "Ctrl + Clic sur une case pour (dé)sélectionner tous les éléments jusqu'à celui sélectionné.",
         },
 
         saveLoad: {
-            saveButton: 'Enregistrer les résultats d\'amortissement calculés',
+            saveButton: "Enregistrer les résultats d'amortissement calculés",
             loadButton: (date: string) => `Charger la sauvegarde (${date})`,
-            loadedSave: (date: string, hiddenItems: string) => `Affichage des résultats sauvegardés (${date}) - ${hiddenItems} lignes masquées`,
+            loadedSave: (date: string, hiddenItems: string) =>
+                `Affichage des résultats sauvegardés (${date}) - ${hiddenItems} lignes masquées`,
             abandonedPlanet: 'Planète abandonnée',
         },
 
@@ -142,7 +149,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
     lifeforms: {
         header: 'Formes de vie',
         subHeaders: {
-            overview: 'Vue d\'ensemble',
+            overview: "Vue d'ensemble",
             progress: 'Progression',
             discoveryMissions: 'Missions de découverte',
 
@@ -164,7 +171,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
         discoveryMissions: 'Missions de découverte',
         eventTypes: {
             [LifeformDiscoveryEventType.nothing]: 'Aucune découverte',
-            [LifeformDiscoveryEventType.lostShip]: 'Vaisseau d\'exploration perdu',
+            [LifeformDiscoveryEventType.lostShip]: "Vaisseau d'exploration perdu",
             [LifeformDiscoveryEventType.newLifeformFound]: 'Nouvelle forme de vie',
             [LifeformDiscoveryEventType.knownLifeformFound]: 'Expérience de la forme de vie',
             [LifeformDiscoveryEventType.artifacts]: 'Artéfacts trouvés',
@@ -179,7 +186,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
         alwaysAvailable: 'Toujours disponible',
         artifacts: 'Artéfacts',
 
-        experiencePoints: 'Points d\'expérience',
+        experiencePoints: "Points d'expérience",
         discoveredOn: 'Forme de vie découverte le',
         numberOfLifeformDiscoveries: 'Nombre de découvertes de formes de vie',
 
@@ -191,20 +198,21 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 research: 'Recherche',
                 bonus: 'Bonus',
                 lifeformBuildingsBoost: `Amélioration des bâtiments de la forme de vie`,
-                lifeformLevelBoost: (lifeform: string, boost: string) => `Amélioration du niveau de la forme de vie (${lifeform} : ${boost})`,
+                lifeformLevelBoost: (lifeform: string, boost: string) =>
+                    `Amélioration du niveau de la forme de vie (${lifeform} : ${boost})`,
                 bugBoost: 'Bonus causé par des bugs',
             },
             production: {
                 header: 'Production de ressources',
             },
             expeditionFinds: {
-                header: 'Découvertes d\'expédition',
+                header: "Découvertes d'expédition",
                 resources: 'Ressources',
                 ships: 'Vaisseaux',
                 fleetLoss: 'Pertes de flotte',
             },
             expeditionSpeed: {
-                header: 'Vitesse d\'arrivée en expédition',
+                header: "Vitesse d'arrivée en expédition",
                 bonus: 'Bonus de vitesse',
             },
             ships: {
@@ -238,7 +246,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             crawlers: {
                 header: 'Foreuses',
                 productionBonus: 'Production de ressources',
-                energyConsumption: 'Consommation d\'énergie',
+                energyConsumption: "Consommation d'énergie",
             },
             denCapacity: {
                 header: 'Capacité de la cachette',
@@ -254,7 +262,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
 
                 collector: {
                     productionBonus: 'Augmentation de la production des mines',
-                    energyProductionBonus: 'Augmentation de la production d\'énergie',
+                    energyProductionBonus: "Augmentation de la production d'énergie",
                     transporterSpeedBonus: 'Bonus de vitesse pour les transporteurs',
                     transporterCargoBonus: 'Bonus de cargo pour les transporteurs',
                     crawlerProductionBonus: 'Bonus de production des foreuses',
@@ -264,7 +272,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                     researchDuration: 'Durée des recherches',
                     increasedExpeditionFinds: 'Gain accru lors des expéditions',
                     largerPlanets: 'Planètes plus grandes lors de la colonisation',
-                    additionalExpeditionSlots: 'Slot d\'expédition supplémentaires',
+                    additionalExpeditionSlots: "Slot d'expédition supplémentaires",
                     reducedExpeditionCombatChance: 'Réduction du risque de combats lors des expéditions',
                     phalanxRange: 'Augmentation de la portée de la phalange',
                 },
@@ -272,7 +280,8 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                     combatShipSpeed: 'Bonus de vitesse des vaisseaux de combat',
                     recyclerSpeed: 'Bonus de vitesse des recycleurs',
                     fuelConsumption: 'Consommation de carburant pour tous les vaisseaux',
-                    increasedCargoRecyclersPathfinders: 'Augmentation de la capacité de charge des recycleurs/éclaireurs',
+                    increasedCargoRecyclersPathfinders:
+                        'Augmentation de la capacité de charge des recycleurs/éclaireurs',
                     additionalCombatResearchLevels: 'Niveaux des recherches de combat supplémentaires',
                     additionalFleetSlots: 'Flottes supplémentaires',
                     additionalMoonFields: 'Champs de lune supplémentaires',

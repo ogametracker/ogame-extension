@@ -26,13 +26,19 @@ import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/og
 import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-import type { StatsBonus, StatsBonusLifeformTechnology } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
+import type {
+    StatsBonus,
+    StatsBonusLifeformTechnology,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
 import { StatsBonusLifeformTechnologies } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
@@ -82,19 +88,17 @@ const bonusTypes: LifeformBonusesBreakdownType<keyof StatsBonuses>[] = [
 const technologies = StatsBonusLifeformTechnologies;
 
 const techs = computed<LifeformTechnologyType[]>(() => {
-    return technologies
-        .filter(tech => tech.appliesTo(ship.value))
-        .map(t => t.type);
+    return technologies.filter(tech => tech.appliesTo(ship.value)).map(t => t.type);
 });
 
 const limits = computed<Record<keyof StatsBonuses, (value: number) => number>>(() => {
     const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.StatsBonus, tech: ship.value });
     return {
-        armor: value => limit != null ? Math.min(value, limit) : value,
-        shield: value => limit != null ? Math.min(value, limit) : value,
-        damage: value => limit != null ? Math.min(value, limit) : value,
-        cargo: value => limit != null ? Math.min(value, limit) : value,
-        speed: value => limit != null ? Math.min(value, limit) : value,
+        armor: value => (limit != null ? Math.min(value, limit) : value),
+        shield: value => (limit != null ? Math.min(value, limit) : value),
+        damage: value => (limit != null ? Math.min(value, limit) : value),
+        cargo: value => (limit != null ? Math.min(value, limit) : value),
+        speed: value => (limit != null ? Math.min(value, limit) : value),
     };
 });
 
@@ -108,8 +112,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Sta
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<keyof StatsBonuses>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<keyof StatsBonuses>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -122,9 +126,10 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Sta
                             buildings: planetBonuses.buildings[key],
                             level: planetBonuses.level[key],
                             total: planetBonuses.total[key],
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
@@ -139,9 +144,10 @@ function getPlanetBonus(tech: StatsBonusLifeformTechnology, planet: PlanetData):
         total: { armor: 0, shield: 0, damage: 0, cargo: 0, speed: 0 },
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-        || !tech.appliesTo(ship.value)
+    if (
+        planet.activeLifeform == LifeformType.none ||
+        !planet.activeLifeformTechnologies.includes(tech.type) ||
+        !tech.appliesTo(ship.value)
     ) {
         return result;
     }
@@ -165,7 +171,8 @@ function getPlanetBonus(tech: StatsBonusLifeformTechnology, planet: PlanetData):
         const [bonusType, statsType] = pair;
 
         const baseBonus = bonuses[statsType];
-        const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+        const lifeformLevelBonus =
+            baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
         const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
         const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

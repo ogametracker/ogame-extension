@@ -19,11 +19,7 @@
                     <component
                         :is="tab.to != null ? RouterLink : tab.href != null ? 'a' : 'div'"
                         :target="tab.href != null ? '_blank' : null"
-                        v-bind="
-                            tab.href != null
-                            ? { href: tab.href }
-                            : { to: tab.to }
-                        "
+                        v-bind="tab.href != null ? { href: tab.href } : { to: tab.to }"
                         :active-class="tab.to != null ? 'nav-item-active' : null"
                         :class="[
                             {
@@ -54,7 +50,12 @@
                     </component>
                 </template>
 
-                <SetDefaultRouteButton v-if="tab.canBeDefault && tab.to" :label="translations().extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
+                <SetDefaultRouteButton
+                    v-if="tab.canBeDefault && tab.to"
+                    :label="translations().extension.settings.setDefaultRoute"
+                    rootRouteName=""
+                    :routeName="tab.to.name"
+                />
             </FloatingMenu>
 
             <template v-if="isIframeMode">
@@ -77,7 +78,11 @@
             <span v-text="accountAndServer" />
         </footer>
 
-        <SwitchAccountDialog v-if="showAccountSwitchDialog" :color="colors.switchAccount" @close="showAccountSwitchDialog = false" />
+        <SwitchAccountDialog
+            v-if="showAccountSwitchDialog"
+            :color="colors.switchAccount"
+            @close="showAccountSwitchDialog = false"
+        />
     </div>
 </template>
 
@@ -87,14 +92,14 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router';
 import { getDefaultRouteName } from './router';
 import { translations } from '@stats/i18n';
-import { useUniversesAndAccountsStore } from "./data/UniversesAndAccountsDataModule";
+import { useUniversesAndAccountsStore } from './data/UniversesAndAccountsDataModule';
 import { getRGBString } from './utils/getRGBString';
 import { delay } from '@ogame-tracker/shared/utils/delay';
-import { useSettingsStore } from "./data/SettingsDataModule";
-import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
+import { useSettingsStore } from './data/SettingsDataModule';
+import SetDefaultRouteButton from '@stats/components/settings/SetDefaultRouteButton.vue';
 import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
 import { _constants } from '@stats/_constants';
-import { ogameTrackerCloseDialogEventName } from "@ogame-tracker/shared/messages/communication";
+import { ogameTrackerCloseDialogEventName } from '@ogame-tracker/shared/messages/communication';
 
 interface Tab {
     key: string;
@@ -137,9 +142,7 @@ const isIframeMode = computed(() => {
 });
 
 const activeTab = computed<Tab | null>(() => {
-    return tabs.value.find(tab => tab.to != null &&
-        route.matched.some(route => route.name == tab.to?.name)
-    ) ?? null;
+    return tabs.value.find(tab => tab.to != null && route.matched.some(route => route.name == tab.to?.name)) ?? null;
 });
 
 const tabWithMenu = ref<Tab | null>(null);
@@ -234,7 +237,7 @@ const tabs = computed<Tab[]>(() => {
         {
             key: 'space',
             style: {
-                'flex-grow': 1
+                'flex-grow': 1,
             },
             noNavItem: true,
         },
@@ -274,7 +277,7 @@ const tabs = computed<Tab[]>(() => {
         },
         {
             key: 'switch-account',
-            customAction: () => showAccountSwitchDialog.value = true,
+            customAction: () => (showAccountSwitchDialog.value = true),
             icon: 'mdi mdi-account-multiple',
             color: colors.switchAccount,
         },
@@ -285,9 +288,7 @@ const tabs = computed<Tab[]>(() => {
 
 const activeColor = computed<string | null>(() => {
     const matchedRoutes = route.matched;
-    return matchedRoutes.map(route => route.meta?.color)
-        .find(color => color != null)
-        ?? null;
+    return matchedRoutes.map(route => route.meta?.color).find(color => color != null) ?? null;
 });
 
 function getColor(tab: Tab): string | null {
@@ -360,153 +361,157 @@ onUnmounted(() => window.removeEventListener('keypress', onShortcut));
 </script>
 
 <style lang="scss" scoped>
-    #app {
-        color: white;
-        height: 100vh;
+#app {
+    color: white;
+    height: 100vh;
 
-        display: grid;
-        grid-template-rows: auto 1fr;
+    display: grid;
+    grid-template-rows: auto 1fr;
 
-        background-color: black;
-        background-image: linear-gradient(52deg, rgba(var(--color), 0.02), rgba(var(--color), 0.08));
+    background-color: black;
+    background-image: linear-gradient(52deg, rgba(var(--color), 0.02), rgba(var(--color), 0.08));
 
-        overflow: auto;
+    overflow: auto;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    border-bottom: 2px solid rgb(var(--color));
+}
+
+.nav-item {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0 12px 0 6px;
+
+    &.icon-only {
+        padding: 0 12px;
+    }
+
+    &.nav-item-active,
+    &.nav-item-active:hover {
+        background: linear-gradient(to bottom, rgba(var(--color), 0.7), rgb(var(--color)));
+    }
+    &:hover {
+        background: linear-gradient(to bottom, rgba(var(--color), 0.25), rgba(var(--color), 0.5));
+    }
+
+    &-label {
+        position: relative;
+    }
+
+    &-keyboard-shortcut-icon {
+        font-size: 16px;
+        position: absolute;
+        top: -14px;
+        left: -5px;
+    }
+
+    &-home-icon {
+        position: absolute;
+        left: 2px;
+        bottom: -2px;
+        font-size: 12px !important;
+    }
+
+    > .ogti {
+        font-size: 36px;
+    }
+    > .mdi {
+        font-size: 28px;
+    }
+
+    > .ogti + *,
+    > .mdi + * {
+        margin-left: 6px;
+    }
+}
+
+main {
+    padding: 16px 16px 0 16px;
+    overflow: hidden;
+}
+footer {
+    padding: 4px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+}
+
+.close-overlay {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.nav-item.donate {
+    font-weight: bold;
+
+    &:not(:hover):not(.nav-item-active) {
+        color: rgb(var(--color));
+    }
+
+    &:hover {
+        background: rgba(var(--color), 0.5);
+        text-shadow:
+            0 0 3px black,
+            0 0 8px rgb(var(--color)),
+            0 0 16px rgb(var(--color)),
+            0 0 24px rgb(var(--color));
+    }
+
+    &.nav-item-active,
+    &.nav-item-active:hover {
+        background: rgb(var(--color));
+        color: black;
+        text-shadow: none;
+    }
+}
+
+#app.donate-page {
+    background: black linear-gradient(180deg, rgb(var(--color)), #ffc165);
+
+    main {
+        color: black;
+    }
+
+    footer {
+        color: black;
     }
 
     nav {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-
-        border-bottom: 2px solid rgb(var(--color));
+        background: black;
     }
+}
 
-    .nav-item {
-        height: 50px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        cursor: pointer;
-        text-decoration: none;
-        padding: 0 12px 0 6px;
-
-        &.icon-only {
-            padding: 0 12px;
-        }
-
-        &.nav-item-active,
-        &.nav-item-active:hover {
-            background: linear-gradient(to bottom, rgba(var(--color), 0.7), rgb(var(--color)));
-        }
-        &:hover {
-            background: linear-gradient(to bottom, rgba(var(--color), 0.25), rgba(var(--color), 0.5));
-        }
-
-        &-label {
-            position: relative;
-        }
-
-        &-keyboard-shortcut-icon {
-            font-size: 16px;
-            position: absolute;
-            top: -14px;
-            left: -5px;
-        }
-
-        &-home-icon {
-            position: absolute;
-            left: 2px;
-            bottom: -2px;
-            font-size: 12px !important;
-        }
-
-        > .ogti {
-            font-size: 36px;
-        }
-        > .mdi {
-            font-size: 28px;
-        }
-
-        > .ogti + *,
-        > .mdi + * {
-            margin-left: 6px;
-        }
+.tab_floating-menu {
+    &:deep(.floating-menu) {
+        left: 50%;
+        top: 50%;
+        z-index: 0 !important;
     }
+}
 
-    main {
-        padding: 16px 16px 0 16px;
-        overflow: hidden;
+.made-with-love {
+    text-decoration: none;
+
+    &.router-link-active {
+        color: black;
     }
-    footer {
-        padding: 4px 16px;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 16px;
-    }
+}
 
-    .close-overlay {
-        opacity: 0.5;
-        cursor: pointer;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
-
-    .nav-item.donate {
-        font-weight: bold;
-
-        &:not(:hover):not(.nav-item-active) {
-            color: rgb(var(--color));
-        }
-
-        &:hover {
-            background: rgba(var(--color), 0.5);
-            text-shadow: 0 0 3px black, 0 0 8px rgb(var(--color)), 0 0 16px rgb(var(--color)), 0 0 24px rgb(var(--color));
-        }
-
-        &.nav-item-active,
-        &.nav-item-active:hover {
-            background: rgb(var(--color));
-            color: black;
-            text-shadow: none;
-        }
-    }
-
-    #app.donate-page {
-        background: black linear-gradient(180deg, rgb(var(--color)), #ffc165);
-
-        main {
-            color: black;
-        }
-
-        footer {
-            color: black;
-        }
-
-        nav {
-            background: black;
-        }
-    }
-
-    .tab_floating-menu {
-        &:deep(.floating-menu) {
-            left: 50%;
-            top: 50%;
-            z-index: 0 !important;
-        }
-    }
-
-    .made-with-love {
-        text-decoration: none;
-
-        &.router-link-active {
-            color: black;
-        }
-    }
-
-    .ogti-planet-moon::before {
-        transform: scale(1.2);
-    }
+.ogti-planet-moon::before {
+    transform: scale(1.2);
+}
 </style>

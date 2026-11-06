@@ -1,6 +1,6 @@
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class AdvancedRecyclingPlantClass extends LifeformBuilding {
     public constructor() {

@@ -1,5 +1,5 @@
-import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
-import { CombatsTranslations } from "./type";
+import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { CombatsTranslations } from './type';
 
 export const de: CombatsTranslations = {
     header: 'Kämpfe',
@@ -12,7 +12,7 @@ export const de: CombatsTranslations = {
             onExpeditions: 'Auf Expeditionen',
 
             amount: 'Menge',
-            resources: 'Rohstoffeinheiten'
+            resources: 'Rohstoffeinheiten',
         },
     },
     combats: 'Kämpfe',

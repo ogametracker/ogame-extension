@@ -1,11 +1,6 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable
-            :dataItems="expos"
-            :items="items"
-            show-average
-            :averageNumberFormatOptions="avgFormat"
-        >
+        <RangedStatsTable :dataItems="expos" :items="items" show-average :averageNumberFormatOptions="avgFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -48,19 +43,21 @@ const avgFormat = ref<Intl.NumberFormatOptions>({
 const expos = computed(() => expeditionStore.dailyResultsArray);
 
 const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().ogame.premium.darkMatter,
-        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
-    }];
+    return [
+        {
+            label: translations().ogame.premium.darkMatter,
+            getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

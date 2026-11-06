@@ -1,7 +1,7 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
-export const hu: ShipTranslations =  {
+export const hu: ShipTranslations = {
     [ShipType.lightFighter]: 'Könnyű Harcos',
     [ShipType.heavyFighter]: 'Nehéz Harcos',
     [ShipType.cruiser]: 'Cirkáló',

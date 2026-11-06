@@ -1,4 +1,4 @@
-import { MessageOgameMeta } from "../messages/Message";
+import { MessageOgameMeta } from '../messages/Message';
 
 export function getStorageKeyPrefix(meta: MessageOgameMeta, includePlayerId: boolean): string {
     const { serverId, language, playerId } = meta;

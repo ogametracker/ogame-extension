@@ -1,14 +1,14 @@
-import { MessageOgameMeta } from "@ogame-tracker/shared/messages/Message";
-import { _logDebug } from "@ogame-tracker/shared/utils/_log";
-import { XMLParser } from "fast-xml-parser";
-import { getServerDatabase } from "@ogame-tracker/shared/db/access";
-import { broadcastMessage } from "@ogame-tracker/shared/communication/broadcastMessage";
-import { NotifyServerSettingsUpdateMessage } from "@ogame-tracker/shared/messages/tracking/server-settings";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { serviceWorkerUuid } from "@ogame-tracker/shared/uuid";
-import { parseFloatSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { DbServerSettings } from "@ogame-tracker/shared/db/schema/server";
+import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { _logDebug } from '@ogame-tracker/shared/utils/_log';
+import { XMLParser } from 'fast-xml-parser';
+import { getServerDatabase } from '@ogame-tracker/shared/db/access';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { NotifyServerSettingsUpdateMessage } from '@ogame-tracker/shared/messages/tracking/server-settings';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
+import { parseFloatSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { DbServerSettings } from '@ogame-tracker/shared/db/schema/server';
 
 declare namespace OgameApi {
     interface ServerSettingsXml {
@@ -108,20 +108,26 @@ declare namespace OgameApi {
 
 type ServerSettingsMapping<
     TKeyFrom extends keyof OgameApi.ServerData = keyof OgameApi.ServerData,
-    TKeyTo extends keyof DbServerSettings = keyof DbServerSettings
+    TKeyTo extends keyof DbServerSettings = keyof DbServerSettings,
 > = {
     fromKey: TKeyFrom;
     toKey: TKeyTo;
 } & (
-        | { type: StringConstructor | NumberConstructor | BooleanConstructor }
-        | { conversion: (value: OgameApi.ServerData[TKeyFrom], serverData: OgameApi.ServerData) => DbServerSettings[TKeyTo] }
-    );
+    | { type: StringConstructor | NumberConstructor | BooleanConstructor }
+    | {
+          conversion: (
+              value: OgameApi.ServerData[TKeyFrom],
+              serverData: OgameApi.ServerData,
+          ) => DbServerSettings[TKeyTo];
+      }
+);
 
 const $keyTypes: Record<keyof OgameApi.ServerData, ServerSettingsMapping> = {
     name: {
         fromKey: 'name',
         toKey: 'name',
-        conversion: (name, serverData) => (name as string | undefined) ?? `${serverData.language.toUpperCase()} ${serverData.number}`,
+        conversion: (name, serverData) =>
+            (name as string | undefined) ?? `${serverData.language.toUpperCase()} ${serverData.number}`,
     },
     number: {
         fromKey: 'number',
@@ -546,7 +552,7 @@ const $keyTypes: Record<keyof OgameApi.ServerData, ServerSettingsMapping> = {
     lifeformSettings: {
         fromKey: 'lifeformSettings',
         toKey: 'lifeformsEnabled',
-        conversion: (value) => value != null,
+        conversion: value => value != null,
     },
 };
 
@@ -563,12 +569,14 @@ export class ServerSettingsModule {
     public constructor(meta: MessageOgameMeta) {
         this.meta = meta;
 
-        void this.init()
+        void this.init();
     }
 
     private async init() {
         try {
-            _logDebug(`initializing server settings updates for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
+            _logDebug(
+                `initializing server settings updates for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`,
+            );
             const db = await getServerDatabase(this.meta);
             const lastUpdate = (await db.get('serverSettings', '_lastUpdate')) as number;
             const timeLeft = Math.max(0, this.interval - (Date.now() - lastUpdate));
@@ -577,9 +585,12 @@ export class ServerSettingsModule {
                 await this.update();
             }, timeLeft);
         } catch (error) {
-            setTimeout(async () => {
-                await this.update();
-            }, 1000 * 60 * 5); // try again after 5min
+            setTimeout(
+                async () => {
+                    await this.update();
+                },
+                1000 * 60 * 5,
+            ); // try again after 5min
         }
     }
 
@@ -590,20 +601,24 @@ export class ServerSettingsModule {
 
     private async updateServerSettings(): Promise<void> {
         // load and parse server settings
-        const { serverData } = await this.getXml<OgameApi.ServerSettingsXml & { 'xmlns:xsi': string, 'xsi:noNamespaceSchemaLocation': string, timestamp: string, serverId: string }>('serverData.xml');
-        const playerScores = await this.getXml<{ 
+        const { serverData } = await this.getXml<
+            OgameApi.ServerSettingsXml & {
+                'xmlns:xsi': string;
+                'xsi:noNamespaceSchemaLocation': string;
+                timestamp: string;
+                serverId: string;
+            }
+        >('serverData.xml');
+        const playerScores = await this.getXml<{
             highscore: {
                 player: {
-                    id: string; 
+                    id: string;
                     position: string;
                     score: string;
                 }[];
             };
         }>('highscore.xml?category=1&type=0');
-        const topScore = Math.max(
-            parseFloat(playerScores.highscore.player[0].score),
-            parseFloat(serverData.topScore),
-        );
+        const topScore = Math.max(parseFloat(playerScores.highscore.player[0].score), parseFloat(serverData.topScore));
 
         // update settings in db
         const db = await getServerDatabase(this.meta);
@@ -618,27 +633,29 @@ export class ServerSettingsModule {
             if ('type' in mapping) {
                 if (mapping.type == String) {
                     if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
+                        _throw(
+                            `Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`,
+                        );
                     }
                     value = serverDataValue.toString();
-                }
-                else if (mapping.type == Number) {
+                } else if (mapping.type == Number) {
                     if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
+                        _throw(
+                            `Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`,
+                        );
                     }
                     value = parseFloatSafe(serverDataValue);
-                }
-                else if (mapping.type == Boolean) {
+                } else if (mapping.type == Boolean) {
                     if (typeof serverDataValue !== 'string' && typeof serverDataValue !== 'number') {
-                        _throw(`Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`);
+                        _throw(
+                            `Expected string or number, got object of type '${typeof serverDataValue}' for key '${key}'`,
+                        );
                     }
                     value = serverDataValue == '1';
-                }
-                else {
+                } else {
                     _throw('invalid type', mapping.type);
                 }
-            }
-            else {
+            } else {
                 value = mapping.conversion(serverDataValue, serverData);
             }
 
@@ -654,7 +671,7 @@ export class ServerSettingsModule {
             type: MessageType.NotifyServerSettingsUpdate,
             ogameMeta: this.meta,
             senderUuid: serviceWorkerUuid,
-        }
+        };
         await broadcastMessage(message);
     }
 

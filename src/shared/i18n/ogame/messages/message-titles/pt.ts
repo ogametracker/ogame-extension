@@ -1,4 +1,4 @@
-import { MessageTitles } from "./types";
+import { MessageTitles } from './types';
 
 export const pt: MessageTitles = {
     expedition: 'Resultado da Exploração Espacial',

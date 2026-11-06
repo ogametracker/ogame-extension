@@ -1,15 +1,25 @@
-import { TryActionResult } from "@ogame-tracker/shared/TryActionResult";
-import { _log, _logDebug, _logError, _logWarning } from "@ogame-tracker/shared/utils/_log";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
-import { LifeformDiscoveryEvent, LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound, LifeformDiscoveryEventLostShip, LifeformDiscoveryEventNewLifeformFound, LifeformDiscoveryEventNothing } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { RawLifeformDiscoveryMessageData, TrackLifeformDiscoveryMessage } from "@ogame-tracker/shared/messages/tracking/lifeform-discoveries";
-import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType, ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
-import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { OgameRawLifeformDiscoveryType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType";
-import { OgameRawArtifactFindSize } from "@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize";
-import { OgameRawLifeformType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType";
+import { TryActionResult } from '@ogame-tracker/shared/TryActionResult';
+import { _log, _logDebug, _logError, _logWarning } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import {
+    LifeformDiscoveryEvent,
+    LifeformDiscoveryEventArtifacts,
+    LifeformDiscoveryEventKnownLifeformFound,
+    LifeformDiscoveryEventLostShip,
+    LifeformDiscoveryEventNewLifeformFound,
+    LifeformDiscoveryEventNothing,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import {
+    RawLifeformDiscoveryMessageData,
+    TrackLifeformDiscoveryMessage,
+} from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { LifeformType, ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { OgameRawLifeformDiscoveryType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType';
+import { OgameRawArtifactFindSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize';
+import { OgameRawLifeformType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType';
 
 interface LifeformDiscoveryEventResult {
     lifeformDiscovery: LifeformDiscoveryEvent;
@@ -17,7 +27,9 @@ interface LifeformDiscoveryEventResult {
 }
 
 export class LifeformDiscoveryModule {
-    public async tryTrackExpedition(message: TrackLifeformDiscoveryMessage): Promise<TryActionResult<LifeformDiscoveryEventResult>> {
+    public async tryTrackExpedition(
+        message: TrackLifeformDiscoveryMessage,
+    ): Promise<TryActionResult<LifeformDiscoveryEventResult>> {
         const lifeformDiscoveryEventData = message.data;
         const db = await getPlayerDatabase(message.ogameMeta);
 
@@ -31,7 +43,7 @@ export class LifeformDiscoveryModule {
                     isAlreadyTracked: true,
                 },
             };
-        } 
+        }
 
         // otherwise parse and save result
         let lifeformDiscovery: LifeformDiscoveryEvent;
@@ -70,7 +82,7 @@ export class LifeformDiscoveryModule {
     }
 
     #parseNothingLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNothing {
-        if(data.type != OgameRawLifeformDiscoveryType.none) {
+        if (data.type != OgameRawLifeformDiscoveryType.none) {
             _throw('unexpected lifeform discovery type');
         }
 
@@ -82,7 +94,7 @@ export class LifeformDiscoveryModule {
     }
 
     #parseArtifactsLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventArtifacts {
-        if(data.type != OgameRawLifeformDiscoveryType.artifacts) {
+        if (data.type != OgameRawLifeformDiscoveryType.artifacts) {
             _throw('unexpected lifeform discovery type');
         }
 
@@ -106,7 +118,7 @@ export class LifeformDiscoveryModule {
     }
 
     #parseLostShipLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventLostShip {
-        if(data.type != OgameRawLifeformDiscoveryType.shipLost) {
+        if (data.type != OgameRawLifeformDiscoveryType.shipLost) {
             _throw('unexpected lifeform discovery type');
         }
 
@@ -118,15 +130,15 @@ export class LifeformDiscoveryModule {
     }
 
     #parseLifeformExperienceDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventKnownLifeformFound {
-        if(data.type != OgameRawLifeformDiscoveryType.lifeformExperience) {
+        if (data.type != OgameRawLifeformDiscoveryType.lifeformExperience) {
             _throw('unexpected lifeform discovery type');
         }
 
         const lifeformId = data.lifeform ?? _throw('missing lifeform');
         const lifeform = this.#mapLifeform(lifeformId);
-        
+
         const experience = data.lifeformExperience ?? _throw('missing found experience');
-    
+
         return {
             id: data.id,
             date: data.date,
@@ -136,8 +148,10 @@ export class LifeformDiscoveryModule {
         };
     }
 
-    #parseNewLifeformFoundLifeformDiscovery(data: RawLifeformDiscoveryMessageData): LifeformDiscoveryEventNewLifeformFound {
-        if(data.type != OgameRawLifeformDiscoveryType.lifeformFound) {
+    #parseNewLifeformFoundLifeformDiscovery(
+        data: RawLifeformDiscoveryMessageData,
+    ): LifeformDiscoveryEventNewLifeformFound {
+        if (data.type != OgameRawLifeformDiscoveryType.lifeformFound) {
             _throw('unexpected lifeform discovery type');
         }
 
@@ -153,13 +167,15 @@ export class LifeformDiscoveryModule {
     }
 
     #mapLifeform(lifeform: OgameRawLifeformType): ValidLifeformType {
-        return ({
+        return (
+            (
+                {
                     [OgameRawLifeformType.humans]: LifeformType.humans,
                     [OgameRawLifeformType.rocktal]: LifeformType.rocktal,
                     [OgameRawLifeformType.mechas]: LifeformType.mechas,
                     [OgameRawLifeformType.kaelesh]: LifeformType.kaelesh,
                 } satisfies Record<OgameRawLifeformType, ValidLifeformType>
-            )[lifeform]
-            ?? _throw('invalid lifeform type');
+            )[lifeform] ?? _throw('invalid lifeform type')
+        );
     }
 }

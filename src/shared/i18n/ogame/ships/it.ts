@@ -1,5 +1,5 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
 export const it: ShipTranslations = {
     [ShipType.lightFighter]: 'Caccia Leggero',

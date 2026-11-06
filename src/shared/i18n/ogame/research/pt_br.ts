@@ -1,5 +1,5 @@
-import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
-import { ResearchTranslations } from "./types";
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResearchTranslations } from './types';
 
 export const pt_br: ResearchTranslations = {
     [ResearchType.energyTechnology]: 'Tecnologia de Energia',

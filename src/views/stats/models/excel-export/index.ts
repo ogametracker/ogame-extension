@@ -1,10 +1,16 @@
 import { translations, formatDate } from '@stats/i18n';
 import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
 import { CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
 import { ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
-import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 import { PlanetType } from '@ogame-tracker/shared/models/ogame/common/PlanetType';
 import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
@@ -61,7 +67,6 @@ export interface ExcelExportOptions {
 }
 
 class ExcelExportClass {
-
     public async create(options: ExcelExportOptions, filename: string) {
         const workbook = xlsx.utils.book_new();
 
@@ -95,7 +100,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.lifeformDiscoveries.prefix} - ${translations().extension.excelExport.lifeformDiscoveries.sheets.dailyExperience}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.lifeformDiscoveries.prefix} - ${translations().extension.excelExport.lifeformDiscoveries.sheets.dailyExperience}`,
+        );
     }
 
     async #writeLifeformDiscoveries_rawData(workbook: xlsx.WorkBook) {
@@ -112,13 +121,14 @@ class ExcelExportClass {
         ];
         const data = allDiscoveries.map(disc => [
             formatDate(disc.date, 'datetime'),
-            ({
+            {
                 [LifeformDiscoveryEventType.nothing]: translations().extension.empire.lifeforms.eventTypes.nothing,
                 [LifeformDiscoveryEventType.lostShip]: translations().extension.empire.lifeforms.eventTypes.lostShip,
-                [LifeformDiscoveryEventType.knownLifeformFound]: translations().extension.empire.lifeforms.lifeformFound,
+                [LifeformDiscoveryEventType.knownLifeformFound]:
+                    translations().extension.empire.lifeforms.lifeformFound,
                 [LifeformDiscoveryEventType.newLifeformFound]: translations().extension.empire.lifeforms.lifeformFound,
                 [LifeformDiscoveryEventType.artifacts]: translations().extension.empire.lifeforms.eventTypes.artifacts,
-            }[disc.type]),
+            }[disc.type],
             'lifeform' in disc ? translations().ogame.lifeforms[disc.lifeform] : '',
             'experience' in disc ? disc.experience : '',
             'size' in disc ? disc.size : '',
@@ -126,7 +136,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.lifeformDiscoveries.prefix} - ${translations().extension.excelExport.debrisFields.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.lifeformDiscoveries.prefix} - ${translations().extension.excelExport.debrisFields.sheets.rawData}`,
+        );
     }
 
     async #writeDebrisFields(workbook: xlsx.WorkBook, options: ExcelExportOptions_DebrisFields) {
@@ -151,27 +165,21 @@ class ExcelExportClass {
             const rows: [string, number, number, string][] = [];
 
             if (day.normal.metal > 0 || day.normal.crystal > 0) {
-                rows.push([
-                    formatDate(day.date, 'date'),
-                    day.normal.metal,
-                    day.normal.crystal,
-                    '1-15',
-                ]);
+                rows.push([formatDate(day.date, 'date'), day.normal.metal, day.normal.crystal, '1-15']);
             }
             if (day.expedition.metal > 0 || day.expedition.crystal > 0) {
-                rows.push([
-                    formatDate(day.date, 'date'),
-                    day.expedition.metal,
-                    day.expedition.crystal,
-                    '16',
-                ]);
+                rows.push([formatDate(day.date, 'date'), day.expedition.metal, day.expedition.crystal, '16']);
             }
 
             return rows;
         });
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.debrisFields.prefix} - ${translations().extension.excelExport.debrisFields.sheets.dailyResources}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.debrisFields.prefix} - ${translations().extension.excelExport.debrisFields.sheets.dailyResources}`,
+        );
     }
 
     async #writeDebrisFields_rawData(workbook: xlsx.WorkBook) {
@@ -188,14 +196,15 @@ class ExcelExportClass {
             formatDate(report.date, 'datetime'),
             report.metal,
             report.crystal,
-            report.isExpeditionDebrisField == null ? ''
-                : report.isExpeditionDebrisField
-                    ? '16'
-                    : '1-15'
+            report.isExpeditionDebrisField == null ? '' : report.isExpeditionDebrisField ? '16' : '1-15',
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.debrisFields.prefix} - ${translations().extension.excelExport.debrisFields.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.debrisFields.prefix} - ${translations().extension.excelExport.debrisFields.sheets.rawData}`,
+        );
     }
 
     async #writeCombats(workbook: xlsx.WorkBook, options: ExcelExportOptions_Combats) {
@@ -224,11 +233,17 @@ class ExcelExportClass {
         ];
         const data = dailyResults.map(day => [
             formatDate(day.date, 'date'),
-            ...ShipTypes.map(ship => day.lostShips.againstPlayers.ships[ship] + day.lostShips.onExpeditions.ships[ship]),
+            ...ShipTypes.map(
+                ship => day.lostShips.againstPlayers.ships[ship] + day.lostShips.onExpeditions.ships[ship],
+            ),
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyLostShips}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyLostShips}`,
+        );
     }
     #writeCombats_dailyLoot(workbook: xlsx.WorkBook) {
         const dailyResults = useCombatReportStore().dailyResultsArray;
@@ -243,15 +258,25 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyLoot}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyLoot}`,
+        );
     }
     #writeCombats_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = useCombatReportStore().dailyResultsArray;
 
         const headers = [
             translations().extension.common.date,
-            ...CombatResultTypes.map(type => `${translations().extension.excelExport.combats.againstPlayers} (${translations().extension.combats.combatResults[type]})`),
-            ...CombatResultTypes.map(type => `${translations().extension.excelExport.combats.onExpeditions} (${translations().extension.combats.combatResults[type]})`),
+            ...CombatResultTypes.map(
+                type =>
+                    `${translations().extension.excelExport.combats.againstPlayers} (${translations().extension.combats.combatResults[type]})`,
+            ),
+            ...CombatResultTypes.map(
+                type =>
+                    `${translations().extension.excelExport.combats.onExpeditions} (${translations().extension.combats.combatResults[type]})`,
+            ),
         ];
         const data = dailyResults.map(day => [
             formatDate(day.date, 'date'),
@@ -260,7 +285,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyResults}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.dailyResults}`,
+        );
     }
     async #writeCombats_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
@@ -274,8 +303,14 @@ class ExcelExportClass {
             `${translations().extension.excelExport.combats.coordinates} (${translations().extension.excelExport.combats.position})`,
             `${translations().extension.excelExport.combats.coordinates} (${translations().extension.excelExport.combats.targetType})`,
             translations().extension.excelExport.combats.combatType,
-            ...ResourceTypes.map(resource => `${translations().extension.excelExport.combats.loot} (${translations().extension.resources[resource]})`),
-            ...ShipTypes.map(ship => `${translations().extension.excelExport.combats.lostShips} (${translations().ogame.ships[ship]})`),
+            ...ResourceTypes.map(
+                resource =>
+                    `${translations().extension.excelExport.combats.loot} (${translations().extension.resources[resource]})`,
+            ),
+            ...ShipTypes.map(
+                ship =>
+                    `${translations().extension.excelExport.combats.lostShips} (${translations().ogame.ships[ship]})`,
+            ),
             `${translations().extension.excelExport.combats.debrisField} (${translations().extension.resources[ResourceType.metal]})`,
             `${translations().extension.excelExport.combats.debrisField} (${translations().extension.resources[ResourceType.crystal]})`,
         ];
@@ -285,8 +320,12 @@ class ExcelExportClass {
             combat.coordinates.galaxy,
             combat.coordinates.system,
             combat.coordinates.position,
-            combat.coordinates.type == PlanetType.moon ? translations().extension.excelExport.combats.moon : translations().extension.excelExport.combats.planet,
-            combat.isExpedition ? translations().extension.excelExport.combats.expeditionCombat : translations().extension.excelExport.combats.playerCombat,
+            combat.coordinates.type == PlanetType.moon
+                ? translations().extension.excelExport.combats.moon
+                : translations().extension.excelExport.combats.planet,
+            combat.isExpedition
+                ? translations().extension.excelExport.combats.expeditionCombat
+                : translations().extension.excelExport.combats.playerCombat,
             ...ResourceTypes.map(resource => combat.loot[resource]),
             ...ShipTypes.map(ship => combat.lostShips[ship]),
             combat.debrisField.metal,
@@ -294,7 +333,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.combats.prefix} - ${translations().extension.excelExport.combats.sheets.rawData}`,
+        );
     }
 
     async #writeExpeditions(workbook: xlsx.WorkBook, options: ExcelExportOptions_Expeditions) {
@@ -346,7 +389,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDepletion}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDepletion}`,
+        );
     }
     #writeExpeditions_dailyDarkMatter_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -361,22 +408,24 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDarkMatterSize}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDarkMatterSize}`,
+        );
     }
     #writeExpeditions_dailyDarkMatter_amount(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
 
-        const headers = [
-            translations().extension.common.date,
-            translations().ogame.premium.darkMatter,
-        ];
-        const data = dailyResults.map(day => [
-            formatDate(day.date, 'date'),
-            day.findings.darkMatter,
-        ]);
+        const headers = [translations().extension.common.date, translations().ogame.premium.darkMatter];
+        const data = dailyResults.map(day => [formatDate(day.date, 'date'), day.findings.darkMatter]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDarkMatter}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyDarkMatter}`,
+        );
     }
     #writeExpeditions_dailyShips_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -391,7 +440,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyShipsSize}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyShipsSize}`,
+        );
     }
     #writeExpeditions_dailyShips_amount(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -406,7 +459,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyShips}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyShips}`,
+        );
     }
     #writeExpeditions_dailyResources_sizes(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -421,7 +478,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResourcesSize}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResourcesSize}`,
+        );
     }
     #writeExpeditions_dailyResources_amount(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -436,7 +497,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResources}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResources}`,
+        );
     }
     #writeExpeditions_dailyOverview(workbook: xlsx.WorkBook) {
         const dailyResults = useExpeditionStore().dailyResultsArray;
@@ -451,7 +516,11 @@ class ExcelExportClass {
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResults}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.dailyResults}`,
+        );
     }
     async #writeExpeditions_rawData(workbook: xlsx.WorkBook) {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
@@ -470,16 +539,26 @@ class ExcelExportClass {
         const data = allExpeditions.map(expo => [
             formatDate(expo.date, 'datetime'),
             translations().extension.expeditions.expeditionEvents[expo.type],
-            'size' in expo && expo.size != null ? translations().extension.expeditions.expeditionEventSizes[expo.size] : '',
+            'size' in expo && expo.size != null
+                ? translations().extension.expeditions.expeditionEventSizes[expo.size]
+                : '',
             translations().extension.expeditions.depletionLevels[expo.depletion ?? 'unknown'],
-            ...ResourceTypes.map(resource => expo.type == ExpeditionEventType.resources ? expo.resources[resource] : ''),
-            ...ExpeditionFindableShipTypes.map(ship => expo.type == ExpeditionEventType.fleet ? expo.fleet[ship] : ''),
+            ...ResourceTypes.map(resource =>
+                expo.type == ExpeditionEventType.resources ? expo.resources[resource] : '',
+            ),
+            ...ExpeditionFindableShipTypes.map(ship =>
+                expo.type == ExpeditionEventType.fleet ? expo.fleet[ship] : '',
+            ),
             expo.type == ExpeditionEventType.darkMatter ? expo.darkMatter : '',
             expo.type == ExpeditionEventType.item ? expo.itemHash : '', //TODO: item name
         ]);
         const sheet = xlsx.utils.aoa_to_sheet([headers, ...data]);
 
-        xlsx.utils.book_append_sheet(workbook, sheet, `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.rawData}`);
+        xlsx.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${translations().extension.excelExport.expeditions.prefix} - ${translations().extension.excelExport.expeditions.sheets.rawData}`,
+        );
     }
 }
 

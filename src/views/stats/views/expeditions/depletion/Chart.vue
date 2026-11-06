@@ -12,7 +12,11 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getSum(datasets))" />
-                    <div v-text="`${translations().extension.expeditions.expeditions} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.expeditions.expeditions} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -40,7 +44,10 @@ import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
 import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import ExpeditionDepletionColorSettings from '@stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 
 const settingsStore = useSettingsStore();
 
@@ -77,20 +84,20 @@ function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

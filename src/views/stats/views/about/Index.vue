@@ -1,5 +1,5 @@
 <template>
-    <Page :nav-items="navItems"/>
+    <Page :nav-items="navItems" />
 </template>
 
 <script setup lang="ts">

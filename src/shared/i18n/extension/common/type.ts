@@ -9,7 +9,7 @@ export interface CommonTranslations {
     dsu: string;
     date: string;
     dateTime: string;
-    
+
     madeWithLove1: string;
     madeWithLove2: string;
 }

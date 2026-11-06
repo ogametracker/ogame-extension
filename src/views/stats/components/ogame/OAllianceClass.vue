@@ -18,7 +18,11 @@ import type { PropType } from 'vue';
 import { AllianceClass, AllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
 
 const props = defineProps({
-    allianceClass: { required: true, type: String as PropType<AllianceClass>, validator: (value: string) => (AllianceClasses as string[]).includes(value) },
+    allianceClass: {
+        required: true,
+        type: String as PropType<AllianceClass>,
+        validator: (value: string) => (AllianceClasses as string[]).includes(value),
+    },
     size: { required: false, type: String, default: '32px' },
     disabled: { required: false, type: Boolean },
     fade: { required: false, type: Boolean },
@@ -35,21 +39,21 @@ const imageMap: Record<AllianceClass, string> = {
 </script>
 
 <style lang="scss" scoped>
-    .o-alliance-class {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
+.o-alliance-class {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
 
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+}
 </style>

@@ -75,27 +75,31 @@ const columns = computed<GridTableColumn<keyof MembersHistoryItem | '-'>[]>(() =
 });
 
 const items = computed<MembersHistoryItem[]>(() => {
-    return history.value.map<MembersHistoryItem>((item, i, nextHistory) => {
-        const start = i == 0 ? null : item.date;
-        const end = nextHistory[i + 1]?.date ?? null;
+    return history.value
+        .map<MembersHistoryItem>((item, i, nextHistory) => {
+            const start = i == 0 ? null : item.date;
+            const end = nextHistory[i + 1]?.date ?? null;
 
-        return {
-            members: item.members.map(id => playerNames.value[id]).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())),
-            start,
-            end,
-        };
-    }).reverse();
+            return {
+                members: item.members
+                    .map(id => playerNames.value[id])
+                    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())),
+                start,
+                end,
+            };
+        })
+        .reverse();
 });
 
 watch(() => props.allianceId, onAllianceIdChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-    .member-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        justify-items: start;
-        column-gap: 16px;
-        width: 100%;
-    }
+.member-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: start;
+    column-gap: 16px;
+    width: 100%;
+}
 </style>

@@ -1,8 +1,11 @@
-import { ExpeditionEventType, ExpeditionEventTypes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ExpeditionBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ExpeditionBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
 
 class GravitationSensorsClass extends LifeformTechnology implements ExpeditionBonusLifeformTechnology {
     public constructor() {
@@ -27,19 +30,18 @@ class GravitationSensorsClass extends LifeformTechnology implements ExpeditionBo
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ExpeditionEventTypes.filter(t => this.appliesTo(t))
-            .map<LifeformBonusType>(event => ({
-                type: LifeformBonusTypeId.ExpeditionBonus,
-                event,
-            }));
+        return ExpeditionEventTypes.filter(t => this.appliesTo(t)).map<LifeformBonusType>(event => ({
+            type: LifeformBonusTypeId.ExpeditionBonus,
+            event,
+        }));
     }
-    
+
     public appliesTo(type: ExpeditionEventType): boolean {
         return type == ExpeditionEventType.darkMatter;
     }
-    
+
     public getExpeditionBonus(type: ExpeditionEventType, level: number): number {
-        if(!this.appliesTo(type)) {
+        if (!this.appliesTo(type)) {
             return 0;
         }
 

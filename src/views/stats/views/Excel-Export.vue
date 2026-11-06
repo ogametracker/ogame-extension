@@ -9,19 +9,46 @@
                     <span v-text="translations().extension.excelExport.groups.expeditions.header" />
                 </div>
                 <div class="fake-table-body">
-                    <Checkbox v-model="exportOptions.expeditions.rawData" :label="translations().extension.excelExport.groups.expeditions.rawData" />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.rawData"
+                        :label="translations().extension.excelExport.groups.expeditions.rawData"
+                    />
 
-                    <Checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="translations().extension.excelExport.groups.expeditions.dailyOverview" />
-                    <Checkbox v-model="exportOptions.expeditions.depletionPerDay" :label="translations().extension.excelExport.groups.expeditions.dailyDepletion" />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.overviewPerDay"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyOverview"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.depletionPerDay"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyDepletion"
+                    />
 
-                    <Checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyResources" />
-                    <Checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyResourceSizes" />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.resourcesPerDay.amount"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyResources"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.resourcesPerDay.sizes"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyResourceSizes"
+                    />
 
-                    <Checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyShips" />
-                    <Checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyShipSizes" />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.shipsPerDay.amount"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyShips"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.shipsPerDay.sizes"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyShipSizes"
+                    />
 
-                    <Checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatter" />
-                    <Checkbox v-model="exportOptions.expeditions.darkMatterPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatterSizes" />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.darkMatterPerDay.amount"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatter"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.expeditions.darkMatterPerDay.sizes"
+                        :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatterSizes"
+                    />
                 </div>
             </div>
 
@@ -30,11 +57,23 @@
                     <span v-text="translations().extension.excelExport.groups.combats.header" />
                 </div>
                 <div class="fake-table-body">
-                    <Checkbox v-model="exportOptions.combats.rawData" :label="translations().extension.excelExport.groups.combats.rawData" />
+                    <Checkbox
+                        v-model="exportOptions.combats.rawData"
+                        :label="translations().extension.excelExport.groups.combats.rawData"
+                    />
 
-                    <Checkbox v-model="exportOptions.combats.overviewPerDay" :label="translations().extension.excelExport.groups.combats.dailyResults" />
-                    <Checkbox v-model="exportOptions.combats.lootBalancePerDay" :label="translations().extension.excelExport.groups.combats.dailyLoot" />
-                    <Checkbox v-model="exportOptions.combats.lostShipsPerDay" :label="translations().extension.excelExport.groups.combats.dailyLostShips" />
+                    <Checkbox
+                        v-model="exportOptions.combats.overviewPerDay"
+                        :label="translations().extension.excelExport.groups.combats.dailyResults"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.combats.lootBalancePerDay"
+                        :label="translations().extension.excelExport.groups.combats.dailyLoot"
+                    />
+                    <Checkbox
+                        v-model="exportOptions.combats.lostShipsPerDay"
+                        :label="translations().extension.excelExport.groups.combats.dailyLostShips"
+                    />
                 </div>
             </div>
 
@@ -43,9 +82,15 @@
                     <span v-text="translations().extension.excelExport.groups.debrisFields.header" />
                 </div>
                 <div class="fake-table-body">
-                    <Checkbox v-model="exportOptions.debrisFields.rawData" :label="translations().extension.excelExport.groups.debrisFields.rawData" />
+                    <Checkbox
+                        v-model="exportOptions.debrisFields.rawData"
+                        :label="translations().extension.excelExport.groups.debrisFields.rawData"
+                    />
 
-                    <Checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="translations().extension.excelExport.groups.debrisFields.dailyResources" />
+                    <Checkbox
+                        v-model="exportOptions.debrisFields.resourcesPerDay"
+                        :label="translations().extension.excelExport.groups.debrisFields.dailyResources"
+                    />
                 </div>
             </div>
 
@@ -54,15 +99,25 @@
                     <span v-text="translations().extension.excelExport.groups.lifeformDiscoveries.header" />
                 </div>
                 <div class="fake-table-body">
-                    <Checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="translations().extension.excelExport.groups.lifeformDiscoveries.rawData" />
+                    <Checkbox
+                        v-model="exportOptions.lifeformDiscoveries.rawData"
+                        :label="translations().extension.excelExport.groups.lifeformDiscoveries.rawData"
+                    />
 
-                    <Checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="translations().extension.excelExport.groups.lifeformDiscoveries.dailyExperience" />
+                    <Checkbox
+                        v-model="exportOptions.lifeformDiscoveries.experiencePerDay"
+                        :label="translations().extension.excelExport.groups.lifeformDiscoveries.dailyExperience"
+                    />
                 </div>
             </div>
         </div>
 
         <div class="export-area">
-            <button v-text="translations().extension.excelExport.generateButton" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
+            <button
+                v-text="translations().extension.excelExport.generateButton"
+                @click="generateExport()"
+                :disabled="!isAnyOptionSet || isExporting"
+            />
             <LoadingSpinner v-if="isExporting" />
         </div>
     </div>
@@ -125,7 +180,7 @@ const isAnyOptionSet = computed(() => {
             }
             return isSet(value);
         });
-    }
+    };
 
     return isSet(exportOptions);
 });
@@ -138,41 +193,41 @@ async function generateExport() {
 </script>
 
 <style lang="scss" scoped>
-    .export-settings {
+.export-settings {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.export-area {
+    margin-top: 8px;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.fake-table {
+    max-width: 400px;
+    border: 1px solid rgba(var(--color), 0.5);
+    grid-template-rows: auto 1fr;
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+
+    &-header {
+        height: 100%;
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
+        align-items: center;
+        padding: 8px;
         display: flex;
-        flex-direction: row;
-        gap: 16px;
     }
 
-    .export-area {
-        margin-top: 8px;
-        display: inline-flex;
+    &-body {
+        height: 100%;
+        padding: 8px;
+        display: flex;
         flex-direction: column;
+        justify-content: start;
     }
-
-    .fake-table {
-        max-width: 400px;
-        border: 1px solid rgba(var(--color), 0.5);
-        grid-template-rows: auto 1fr;
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-
-        &-header {
-            height: 100%;
-            background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-            justify-content: center;
-            align-items: center;
-            padding: 8px;
-            display: flex;
-        }
-
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-        }
-    }
+}
 </style>

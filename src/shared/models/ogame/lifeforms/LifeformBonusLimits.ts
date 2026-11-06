@@ -1,9 +1,9 @@
-import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
-import { BuildingType } from "../buildings/BuildingType";
-import { ResearchType } from "../research/ResearchType";
-import { LifeformBuildingType } from "./LifeformBuildingType";
-import { LifeformTechnologyType } from "./LifeformTechnologyType";
-import { LifeformBonusType, LifeformBonusTypeId } from "./LifeformBonusType";
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { BuildingType } from '../buildings/BuildingType';
+import { ResearchType } from '../research/ResearchType';
+import { LifeformBuildingType } from './LifeformBuildingType';
+import { LifeformTechnologyType } from './LifeformTechnologyType';
+import { LifeformBonusType, LifeformBonusTypeId } from './LifeformBonusType';
 
 export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefined {
     switch (bonus.type) {
@@ -19,7 +19,6 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             // ship/defense bonuses have no cap
             return undefined;
 
-            
         case LifeformBonusTypeId.TechTimeReduction:
             switch (bonus.tech) {
                 case ResearchType.espionageTechnology:
@@ -138,8 +137,6 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             }
             return undefined;
 
-
-
         case LifeformBonusTypeId.TechCostReduction:
             switch (bonus.tech) {
                 case ResearchType.espionageTechnology:
@@ -253,13 +250,9 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             }
             return undefined;
 
-
-
         case LifeformBonusTypeId.DenCapacityBonus:
             // den capacity bonus has no cap
             return undefined;
-
-
 
         case LifeformBonusTypeId.CrawlerBonus:
             // crawler production bonus has no cap
@@ -283,7 +276,7 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             return undefined;
 
         case LifeformBonusTypeId.ExpeditionEventProbabilityBonus:
-            switch(bonus.event) {
+            switch (bonus.event) {
                 case ExpeditionEventType.lostFleet:
                     return 0.5;
             }
@@ -303,7 +296,7 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             return 0.99; //TODO: only 70% for the Kaelesh building, why?
 
         case LifeformBonusTypeId.FoodConsumptionReduction:
-            return 0.8;  //TODO: only 50% for the Kaelesh building, why?
+            return 0.8; //TODO: only 50% for the Kaelesh building, why?
 
         case LifeformBonusTypeId.MaxPopulationBonus:
             return 1.0;
@@ -332,6 +325,6 @@ export function getLifeformBonusLimit(bonus: LifeformBonusType): number | undefi
             return 0.3;
 
         default:
-            throw new Error("invalid bonus type");
+            throw new Error('invalid bonus type');
     }
 }

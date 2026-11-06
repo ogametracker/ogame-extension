@@ -42,14 +42,16 @@ const showSettings = ref(false);
 const color = computed(() => settingsStore.settings.colors.expeditions.events.darkMatter);
 
 const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
-    return [{
-        key: 'dark-matter',
-        label: translations().ogame.premium.darkMatter,
-        color: color.value,
-        filled: true,
-        getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,
-        showAverage: true,
-    }];
+    return [
+        {
+            key: 'dark-matter',
+            label: translations().ogame.premium.darkMatter,
+            color: color.value,
+            filled: true,
+            getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,
+            showAverage: true,
+        },
+    ];
 });
 
 const firstDay = computed(() => expeditionStore.firstDay);
@@ -58,10 +60,10 @@ const exposPerDay = computed(() => expeditionStore.dailyResults);
 </script>
 
 <style lang="scss" scoped>
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

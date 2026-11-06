@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { DebrisFieldsTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { DebrisFieldsTranslations } from './type';
 
 export const fr: RecursivePartial<DebrisFieldsTranslations> = {
     header: 'Champs de débris',

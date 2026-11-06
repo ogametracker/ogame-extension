@@ -16,7 +16,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
@@ -46,7 +49,7 @@ const limits = computed<Record<'fuelConsumption', (value: number) => number>>(()
     const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.FuelConsumptionReduction });
 
     return {
-        fuelConsumption: value => limit != null ? Math.max(value, -limit) : value,
+        fuelConsumption: value => (limit != null ? Math.max(value, -limit) : value),
     };
 });
 
@@ -56,8 +59,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'fuelCons
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<'fuelConsumption'>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<'fuelConsumption'>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -70,9 +73,10 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'fuelCons
                             buildings: planetBonuses.buildings,
                             level: planetBonuses.level,
                             total: planetBonuses.total,
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
@@ -87,9 +91,7 @@ function getPlanetBonus(tech: FuelConsumptionReductionLifeformTechnology, planet
         total: 0,
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-    ) {
+    if (planet.activeLifeform == LifeformType.none || !planet.activeLifeformTechnologies.includes(tech.type)) {
         return result;
     }
 
@@ -99,8 +101,10 @@ function getPlanetBonus(tech: FuelConsumptionReductionLifeformTechnology, planet
     );
     result.buildingsBoost += buildingsBoost;
 
-    const baseBonus = -1 * tech.getFuelConsumptionReduction(ShipType.lightFighter, planet.lifeformTechnologies[tech.type]);
-    const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+    const baseBonus =
+        -1 * tech.getFuelConsumptionReduction(ShipType.lightFighter, planet.lifeformTechnologies[tech.type]);
+    const lifeformLevelBonus =
+        baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
     const lifeformBuildingBonus = baseBonus * buildingsBoost;
     const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;
 

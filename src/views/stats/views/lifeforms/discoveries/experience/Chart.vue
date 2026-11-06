@@ -12,7 +12,11 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getTotal(datasets))" />
-                    <div v-text="`${translations().extension.empire.lifeforms.experiencePoints} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.empire.lifeforms.experiencePoints} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -75,20 +79,20 @@ function getTotal(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

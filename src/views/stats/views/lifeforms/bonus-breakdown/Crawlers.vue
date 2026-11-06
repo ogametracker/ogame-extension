@@ -16,7 +16,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
 
@@ -51,12 +54,14 @@ const technologies = CrawlerProductionBonusAndConsumptionReductionLifeformTechno
 const techs = computed<LifeformTechnologyType[]>(() => technologies.map(t => t.type));
 
 const limits = computed<Record<keyof Bonuses, (value: number) => number>>(() => {
-    const energyConsumptionLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.CrawlerEnergyConsumptionReduction });
+    const energyConsumptionLimit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.CrawlerEnergyConsumptionReduction,
+    });
     const productionLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.CrawlerBonus });
 
     return {
-        energyConsumption: value => energyConsumptionLimit != null ? Math.max(value, -energyConsumptionLimit) : value,
-        production: value => productionLimit != null ? Math.min(value, productionLimit) : value,
+        energyConsumption: value => (energyConsumptionLimit != null ? Math.max(value, -energyConsumptionLimit) : value),
+        production: value => (productionLimit != null ? Math.min(value, productionLimit) : value),
     };
 });
 
@@ -66,8 +71,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<keyof Bonuses>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -80,15 +85,19 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Bon
                             buildings: planetBonuses.buildings[key],
                             level: planetBonuses.level[key],
                             total: planetBonuses.total[key],
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
 const experience = computed(() => empireStore.lifeformExperience);
 
-function getPlanetBonus(tech: CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, planet: PlanetData): BonusBreakdown {
+function getPlanetBonus(
+    tech: CrawlerProductionBonusAndConsumptionReductionLifeformTechnology,
+    planet: PlanetData,
+): BonusBreakdown {
     const result: BonusBreakdown = {
         base: { production: 0, energyConsumption: 0 },
         level: { production: 0, energyConsumption: 0 },
@@ -97,9 +106,7 @@ function getPlanetBonus(tech: CrawlerProductionBonusAndConsumptionReductionLifef
         total: { production: 0, energyConsumption: 0 },
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-    ) {
+    if (planet.activeLifeform == LifeformType.none || !planet.activeLifeformTechnologies.includes(tech.type)) {
         return result;
     }
 
@@ -122,7 +129,8 @@ function getPlanetBonus(tech: CrawlerProductionBonusAndConsumptionReductionLifef
         const [bonusType, statsType] = pair;
 
         const baseBonus = bonuses[statsType];
-        const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+        const lifeformLevelBonus =
+            baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
         const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
         const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

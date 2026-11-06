@@ -9,26 +9,12 @@
         "skipLibCheck": true,
         "esModuleInterop": true,
         "noEmit": true,
-        "types": [
-            "chrome"
-        ],
-        "lib": [
-            "esnext",
-            "dom",
-            "dom.iterable"
-        ],
+        "types": ["chrome"],
+        "lib": ["esnext", "dom", "dom.iterable"],
         "paths": {
-            "vue": [
-                "./node_modules/vue"
-            ]
+            "vue": ["./node_modules/vue"]
         }
     },
-    "include": [
-        "**/*.ts",
-        "**/*.vue"
-    ],
-    "exclude": [
-        "**/node_modules",
-        "**/dist"
-    ]
+    "include": ["**/*.ts", "**/*.vue"],
+    "exclude": ["**/node_modules", "**/dist"]
 }

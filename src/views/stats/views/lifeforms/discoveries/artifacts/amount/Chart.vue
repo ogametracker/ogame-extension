@@ -46,14 +46,16 @@ const firstDay = computed(() => lifeformDiscoveryStore.firstDay);
 const missionsPerDay = computed(() => lifeformDiscoveryStore.dailyResults);
 
 const datasets = computed<StatsChartDataset<DailyLifeformDiscoveryResult>[]>(() => {
-    return [{
-        key: 'artifacts',
-        label: translations().extension.empire.lifeforms.artifacts,
-        color: color.value,
-        filled: true,
-        getValue: (result: DailyLifeformDiscoveryResult) => result.artifacts,
-        showAverage: true,
-    }];
+    return [
+        {
+            key: 'artifacts',
+            label: translations().extension.empire.lifeforms.artifacts,
+            color: color.value,
+            filled: true,
+            getValue: (result: DailyLifeformDiscoveryResult) => result.artifacts,
+            showAverage: true,
+        },
+    ];
 });
 
 function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
@@ -66,20 +68,20 @@ function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

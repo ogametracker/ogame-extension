@@ -1,8 +1,10 @@
-import type { MineBuildingType } from "@ogame-tracker/shared/models/empire/amortization/models";
-import { LifeformBuildingType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import type { MineBuildingType } from '@ogame-tracker/shared/models/empire/amortization/models';
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
-export type GroupedAmortizationItemGroup = Record<number, GroupedAmortizationPlanetItem> & { plasmaTechnology?: GroupedPlasmaTechnologyItem };
+export type GroupedAmortizationItemGroup = Record<number, GroupedAmortizationPlanetItem> & {
+    plasmaTechnology?: GroupedPlasmaTechnologyItem;
+};
 
 export type GroupedAmortizationItem = GroupedAmortizationPlanetItem | GroupedPlasmaTechnologyItem;
 

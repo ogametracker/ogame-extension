@@ -1,5 +1,5 @@
-import { ItemHash } from "../../ogame/items/ItemHash";
-import { ResourceType } from "../../ogame/resources/ResourceType";
+import { ItemHash } from '../../ogame/items/ItemHash';
+import { ResourceType } from '../../ogame/resources/ResourceType';
 
 export interface AmortizationExpeditionSettings {
     wavesPerDay: number;

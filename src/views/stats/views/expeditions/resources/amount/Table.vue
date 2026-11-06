@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable
+            :dataItems="expos"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -72,23 +78,22 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
     const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: nextExpos => nextExpos.reduce(
-                (acc, expo) => acc
-                    + expo.findings.resources.metal
-                    + expo.findings.resources.crystal
-                    + expo.findings.resources.deuterium,
-                0
-            ),
+            getValue: nextExpos =>
+                nextExpos.reduce(
+                    (acc, expo) =>
+                        acc +
+                        expo.findings.resources.metal +
+                        expo.findings.resources.crystal +
+                        expo.findings.resources.deuterium,
+                    0,
+                ),
         },
     ];
 
     if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
         result.push({
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
-            getValue: nextExpos => nextExpos.reduce(
-                (acc, expo) => acc + getMsuOrDsu(expo.findings.resources),
-                0
-            ),
+            getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + getMsuOrDsu(expo.findings.resources), 0),
         });
     }
 
@@ -97,11 +102,11 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

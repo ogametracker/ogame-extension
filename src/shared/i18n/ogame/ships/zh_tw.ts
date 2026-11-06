@@ -1,5 +1,5 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
 export const zh_tw: ShipTranslations = {
     [ShipType.lightFighter]: '輕型戰鬥機',

@@ -1,20 +1,38 @@
 <template>
-    <GridTable :columns="columns" :items="rows" :footer-items="footerRows" :cell-class-provider="getCellClass" class="ranged-stats-table">
+    <GridTable
+        :columns="columns"
+        :items="rows"
+        :footer-items="footerRows"
+        :cell-class-provider="getCellClass"
+        class="ranged-stats-table"
+    >
         <!-- oh god this is ugly -->
         <template v-for="(column, i) in columns" v-slot:[`cell-${column.key}`]="{ value, item }">
             <span :key="column.key" class="ranged-stats-table-cell">
                 <template v-if="column.key == 'label'">
-                    <slot v-if="column.slotName != null && $slots[column.slotName] != null" :name="column.slotName" :value="value" />
+                    <slot
+                        v-if="column.slotName != null && $slots[column.slotName] != null"
+                        :name="column.slotName"
+                        :value="value"
+                    />
                     <span v-else :key="i" v-text="value" />
                 </template>
                 <template v-else-if="column.key == 'subLabel'">
-                    <span v-for="(item, i) in ('items' in item ? item.items : [])" :key="i" :class="item.labelClass">
-                        <slot v-if="column.slotName != null && $slots[column.slotName] != null" :name="column.slotName" :value="item.label" />
+                    <span v-for="(item, i) in 'items' in item ? item.items : []" :key="i" :class="item.labelClass">
+                        <slot
+                            v-if="column.slotName != null && $slots[column.slotName] != null"
+                            :name="column.slotName"
+                            :value="item.label"
+                        />
                         <span v-else v-text="item.label" />
                     </span>
                 </template>
                 <template v-else>
-                    <span v-for="(item, i) in ('items' in item ? item.items : [item])" :key="i" :class="[getCellClass(item[column.key]), item.class]">
+                    <span
+                        v-for="(item, i) in 'items' in item ? item.items : [item]"
+                        :key="i"
+                        :class="[getCellClass(item[column.key]), item.class]"
+                    >
                         <span v-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                         <span v-else v-text="item[column.key]" />
                     </span>
@@ -47,7 +65,9 @@ interface GroupedRangedStatsTableItem<T extends RangeStatsTableItemWithDate> {
     items: SingleRangedStatsTableItem<T>[];
 }
 
-export type RangedStatsTableItem<T extends RangeStatsTableItemWithDate> = SingleRangedStatsTableItem<T> | GroupedRangedStatsTableItem<T>;
+export type RangedStatsTableItem<T extends RangeStatsTableItemWithDate> =
+    | SingleRangedStatsTableItem<T>
+    | GroupedRangedStatsTableItem<T>;
 
 interface SimpleRangedStatsTableRow {
     label: string;
@@ -86,8 +106,16 @@ const props = defineProps({
     showAverage: { required: false, type: Boolean },
     items: { required: true, type: Array as PropType<RangedStatsTableItem<T>[]> },
     footerItems: { required: false, type: Array as PropType<RangedStatsTableItem<T>[]>, default: () => [] },
-    numberFormatOptions: { required: false, type: Object as PropType<Intl.NumberFormatOptions | undefined>, default: undefined },
-    averageNumberFormatOptions: { required: false, type: Object as PropType<Intl.NumberFormatOptions | undefined>, default: undefined },
+    numberFormatOptions: {
+        required: false,
+        type: Object as PropType<Intl.NumberFormatOptions | undefined>,
+        default: undefined,
+    },
+    averageNumberFormatOptions: {
+        required: false,
+        type: Object as PropType<Intl.NumberFormatOptions | undefined>,
+        default: undefined,
+    },
     dataItems: { required: true, type: Array as PropType<T[]> },
 });
 
@@ -113,10 +141,7 @@ const dataItemsByRange = computed<T[][]>(() => {
 });
 
 const firstDay = computed(() => {
-    return dataItemsByRange.value.reduce((acc, cur) => Math.min(
-        acc,
-        Math.min(...cur.map(t => t.date)),
-    ), Date.now());
+    return dataItemsByRange.value.reduce((acc, cur) => Math.min(acc, Math.min(...cur.map(t => t.date))), Date.now());
 });
 
 const columns = computed<RangeStatsTableColumn[]>(() => {
@@ -125,7 +150,7 @@ const columns = computed<RangeStatsTableColumn[]>(() => {
             key: 'label',
             label: '',
             slotName: 'label',
-        }
+        },
     ];
     if (hasGroupedItems.value) {
         localColumns.push({
@@ -135,17 +160,21 @@ const columns = computed<RangeStatsTableColumn[]>(() => {
         });
     }
 
-    localColumns.push(...dateRanges.value.map((range, i) => ({
-        key: i,
-        label: range.label ?? translations().extension.settings.dateRanges.since(formatDate(firstDay.value, 'date')),
-        formatter: (value: number) => formatNumber(value, props.numberFormatOptions),
-    })));
+    localColumns.push(
+        ...dateRanges.value.map((range, i) => ({
+            key: i,
+            label:
+                range.label ?? translations().extension.settings.dateRanges.since(formatDate(firstDay.value, 'date')),
+            formatter: (value: number) => formatNumber(value, props.numberFormatOptions),
+        })),
+    );
 
     if (props.showAverage) {
         localColumns.push({
             key: 'average',
             label: translations().extension.common.averagePerDay,
-            formatter: (value: number) => formatNumber(value, props.averageNumberFormatOptions ?? props.numberFormatOptions)
+            formatter: (value: number) =>
+                formatNumber(value, props.averageNumberFormatOptions ?? props.numberFormatOptions),
         });
     }
 
@@ -153,12 +182,13 @@ const columns = computed<RangeStatsTableColumn[]>(() => {
         localColumns.push({
             key: 'percentage',
             label: '%',
-            formatter: (value: number | '') => value != ''
-                ? formatNumber(value, {
-                    minimumFractionDigits: 3,
-                    maximumFractionDigits: 3,
-                })
-                : value
+            formatter: (value: number | '') =>
+                value != ''
+                    ? formatNumber(value, {
+                          minimumFractionDigits: 3,
+                          maximumFractionDigits: 3,
+                      })
+                    : value,
         });
     }
 
@@ -168,23 +198,34 @@ const columns = computed<RangeStatsTableColumn[]>(() => {
 const rows = computed<(RangedStatsTableRow & { class?: string })[]>(() => {
     const localDataItemsByRange = dataItemsByRange.value;
 
-    const allRangeIndex = dateRanges.value.findIndex(range => range.type == 'all')
-        ?? _throw(`failed to find range 'all'`);
+    const allRangeIndex =
+        dateRanges.value.findIndex(range => range.type == 'all') ?? _throw(`failed to find range 'all'`);
     const dataItemDays = localDataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
     const daysWithDataItems = new Set(dataItemDays).size;
 
-    const totalValue = Math.max(1, props.items
-        .map(item => 'getValue' in item
-            ? item.getValue(localDataItemsByRange[allRangeIndex])
-            : item.items.reduce((acc, i) => acc + i.getValue(localDataItemsByRange[allRangeIndex]), 0)
-        )
-        .reduce((acc, cur) => acc + cur, 0)
+    const totalValue = Math.max(
+        1,
+        props.items
+            .map(item =>
+                'getValue' in item
+                    ? item.getValue(localDataItemsByRange[allRangeIndex])
+                    : item.items.reduce((acc, i) => acc + i.getValue(localDataItemsByRange[allRangeIndex]), 0),
+            )
+            .reduce((acc, cur) => acc + cur, 0),
     );
 
-    return props.items.map(item => mapItemToRow(item, localDataItemsByRange, allRangeIndex, daysWithDataItems, totalValue));
+    return props.items.map(item =>
+        mapItemToRow(item, localDataItemsByRange, allRangeIndex, daysWithDataItems, totalValue),
+    );
 });
 
-function mapItemToRow(item: RangedStatsTableItem<T>, nextDataItemsByRange: T[][], allRangeIndex: number, daysWithDataItems: number, totalValue: number): (RangedStatsTableRow & { class?: string; labelClass?: string }) {
+function mapItemToRow(
+    item: RangedStatsTableItem<T>,
+    nextDataItemsByRange: T[][],
+    allRangeIndex: number,
+    daysWithDataItems: number,
+    totalValue: number,
+): RangedStatsTableRow & { class?: string; labelClass?: string } {
     if ('getValue' in item) {
         const row: SimpleRangedStatsTableRow = {
             label: item.label,
@@ -201,31 +242,41 @@ function mapItemToRow(item: RangedStatsTableItem<T>, nextDataItemsByRange: T[][]
         }
 
         if (props.showPercentage) {
-            row.percentage = 100 * allRangeValue / totalValue;
+            row.percentage = (100 * allRangeValue) / totalValue;
         }
         return row;
     }
 
     return {
         label: item.label,
-        items: item.items.map(subitem => mapItemToRow(subitem, nextDataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow),
+        items: item.items.map(
+            subitem =>
+                mapItemToRow(
+                    subitem,
+                    nextDataItemsByRange,
+                    allRangeIndex,
+                    daysWithDataItems,
+                    totalValue,
+                ) as SimpleRangedStatsTableRow,
+        ),
     };
 }
 
 const footerRows = computed<RangedStatsTableRow[]>(() => {
     const localDataItemsByRange = dataItemsByRange.value;
 
-    const allRangeIndex = dateRanges.value.findIndex(range => range.type == 'all')
-        ?? _throw(`failed to find range 'all'`);
+    const allRangeIndex =
+        dateRanges.value.findIndex(range => range.type == 'all') ?? _throw(`failed to find range 'all'`);
     const dataItemDays = localDataItemsByRange[allRangeIndex].map(expo => startOfDay(expo.date).getTime());
     const daysWithDataItems = new Set(dataItemDays).size;
 
     return props.footerItems.map(item => {
         const row: RangedStatsTableRow = {
             label: item.label,
-            ...dateRanges.value.map((_, rangeIndex) => 'getValue' in item
-                ? item.getValue(localDataItemsByRange[rangeIndex])
-                : item.items.reduce((acc, i) => acc + i.getValue(localDataItemsByRange[rangeIndex]), 0)
+            ...dateRanges.value.map((_, rangeIndex) =>
+                'getValue' in item
+                    ? item.getValue(localDataItemsByRange[rangeIndex])
+                    : item.items.reduce((acc, i) => acc + i.getValue(localDataItemsByRange[rangeIndex]), 0),
             ),
             percentage: '',
         };
@@ -249,17 +300,17 @@ function getCellClass(value: any): string {
 </script>
 
 <style lang="scss" scoped>
-    .grid-table {
-        text-align: right;
+.grid-table {
+    text-align: right;
 
-        &:deep(.fade-value) {
-            color: rgba(white, 0.1);
-        }
+    &:deep(.fade-value) {
+        color: rgba(white, 0.1);
     }
+}
 
-    .ranged-stats-table-cell {
-        display: grid;
-        height: 100%;
-        align-items: center;
-    }
+.ranged-stats-table-cell {
+    display: grid;
+    height: 100%;
+    align-items: center;
+}
 </style>

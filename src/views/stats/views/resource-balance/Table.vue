@@ -1,7 +1,13 @@
 <template>
     <div class="table-container">
         <div>
-            <RangedStatsTable :dataItems="events" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+            <RangedStatsTable
+                :dataItems="events"
+                :items="items"
+                :footerItems="footerItems"
+                show-average
+                :averageNumberFormatOptions="avgNumberFormat"
+            >
                 <template #cell-label="{ value }">
                     <span v-text="value" class="mr-2" />
 
@@ -73,8 +79,6 @@ interface DailyEvents {
     debrisFields?: DailyDebrisFieldReportResult;
 }
 
-;
-
 const settingsStore = useSettingsStore();
 
 const combatReportStore = useCombatReportStore();
@@ -101,7 +105,9 @@ const includeFoundShipsFactor = computed<Record<ResourceType, number>>(() => {
     };
 });
 
-const includeFoundShips = computed(() => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits);
+const includeFoundShips = computed(
+    () => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits,
+);
 
 const includeLostShips = computed(() => settingsStore.settings.resourceBalance.includeLostShipsResourceUnits);
 
@@ -131,12 +137,14 @@ const events = computed<DailyEvents[]>(() => {
     const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
     const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
 
-    return days.map<DailyEvents>(day => ({
-        date: day,
-        expeditions: expeditionStore.dailyResults[day],
-        combats: combatReportStore.dailyResults[day],
-        debrisFields: debrisFieldReportStore.dailyResults[day],
-    })).filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
+    return days
+        .map<DailyEvents>(day => ({
+            date: day,
+            expeditions: expeditionStore.dailyResults[day],
+            combats: combatReportStore.dailyResults[day],
+            debrisFields: debrisFieldReportStore.dailyResults[day],
+        }))
+        .filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
 });
 
 const settings = computed(() => settingsStore.settings.resourceBalance);
@@ -159,7 +167,10 @@ const items = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
         return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
             label: translations().extension.resources[resource],
             items: types[resource].map(eventType => ({
-                label: eventType == null ? translations().extension.common.sum : translations().extension.resourceBalance[eventType],
+                label:
+                    eventType == null
+                        ? translations().extension.common.sum
+                        : translations().extension.resourceBalance[eventType],
                 getValue: nextEvents => getResources(nextEvents, eventType, resource),
                 class: eventType == null ? 'sum-item' : '',
                 labelClass: eventType == null ? 'sum-item' : '',
@@ -176,18 +187,24 @@ const items = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
 function getResources(nextEvents: DailyEvents[], eventType: EventType | null, resource: ResourceType): number {
     return nextEvents.reduce((acc, event) => {
         switch (eventType) {
-            case 'expedition': return acc + getResource({ date: event.date, expeditions: event.expeditions }, resource);
-            case 'combat-report': return acc + getResource({ date: event.date, combats: event.combats }, resource);
-            case 'debris-field-report': return acc + getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
-            case null: return acc + getResource(event, resource);
+            case 'expedition':
+                return acc + getResource({ date: event.date, expeditions: event.expeditions }, resource);
+            case 'combat-report':
+                return acc + getResource({ date: event.date, combats: event.combats }, resource);
+            case 'debris-field-report':
+                return acc + getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
+            case null:
+                return acc + getResource(event, resource);
         }
     }, 0);
 }
 
 function getResource(dayEvents: DailyEvents, resource: ResourceType): number {
-    return getExpeditionResourceAmount(dayEvents.expeditions, resource)
-        + getCombatResourceAmount(dayEvents.combats, resource)
-        + getDebrisFieldResourceAmount(dayEvents.debrisFields, resource);
+    return (
+        getExpeditionResourceAmount(dayEvents.expeditions, resource) +
+        getCombatResourceAmount(dayEvents.combats, resource) +
+        getDebrisFieldResourceAmount(dayEvents.debrisFields, resource)
+    );
 }
 
 function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
@@ -196,8 +213,9 @@ function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefi
     }
 
     const localIncludeFoundShipsFactor = includeFoundShipsFactor.value[resource];
-    const total = expeditions.findings.resources[resource]
-        + expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
+    const total =
+        expeditions.findings.resources[resource] +
+        expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
 
     return total;
 }
@@ -208,21 +226,23 @@ function getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefin
     }
 
     const lostLootFactor = includeLostLoot.value ? 1 : 0;
-    const lootResources = dailyReports.loot.lost[resource] * lostLootFactor
-        + dailyReports.loot.gained[resource];
+    const lootResources = dailyReports.loot.lost[resource] * lostLootFactor + dailyReports.loot.gained[resource];
 
     const localIncludeLostShipsFactor = includeLostShipsFactor.value[resource];
-    const lostShipResourceUnits = (
-        dailyReports.lostShips.onExpeditions.resourceUnits[resource]
-        + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
-    ) * localIncludeLostShipsFactor;
+    const lostShipResourceUnits =
+        (dailyReports.lostShips.onExpeditions.resourceUnits[resource] +
+            dailyReports.lostShips.againstPlayers.resourceUnits[resource]) *
+        localIncludeLostShipsFactor;
 
     const total = lootResources - lostShipResourceUnits;
 
     return total;
 }
 
-function getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
+function getDebrisFieldResourceAmount(
+    reports: DailyDebrisFieldReportResult | undefined,
+    resource: ResourceType,
+): number {
     if (reports == null) {
         return 0;
     }
@@ -234,28 +254,36 @@ const footerItems = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
     const result: RangedStatsTableItem<DailyEvents>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: nextEvents => ResourceTypes.reduce(
-                (total, resource) => total + EventTypes.reduce(
-                    (total, eventType) => total + getResources(nextEvents, eventType, resource),
-                    0
+            getValue: nextEvents =>
+                ResourceTypes.reduce(
+                    (total, resource) =>
+                        total +
+                        EventTypes.reduce(
+                            (total, eventType) => total + getResources(nextEvents, eventType, resource),
+                            0,
+                        ),
+                    0,
                 ),
-                0
-            ),
         },
     ];
 
     if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
         result.push({
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
-            getValue: nextEvents => ResourceTypes.reduce(
-                (total, resource) => total + EventTypes.reduce(
-                    (total, eventType) => total + getMsuOrDsu({
-                        [resource]: getResources(nextEvents, eventType, resource)
-                    }),
-                    0
+            getValue: nextEvents =>
+                ResourceTypes.reduce(
+                    (total, resource) =>
+                        total +
+                        EventTypes.reduce(
+                            (total, eventType) =>
+                                total +
+                                getMsuOrDsu({
+                                    [resource]: getResources(nextEvents, eventType, resource),
+                                }),
+                            0,
+                        ),
+                    0,
                 ),
-                0
-            ),
         });
     }
 
@@ -264,31 +292,31 @@ const footerItems = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
 
-        :deep(.sum-item) {
-            font-weight: bold;
-            border-top: 1px solid rgba(var(--color), 0.5);
-            margin-top: 1px;
-        }
+    :deep(.sum-item) {
+        font-weight: bold;
+        border-top: 1px solid rgba(var(--color), 0.5);
+        margin-top: 1px;
+    }
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
+    hr {
+        width: 100%;
     }
+}
 </style>

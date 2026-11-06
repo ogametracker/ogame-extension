@@ -57,7 +57,7 @@ const computedDatasets = computed<ScrollableChartDataset[]>(() => {
     const filteredItemDays = itemByDay.filter(items => items != null).length;
 
     return props.datasets.map(dataset => {
-        const values = itemByDay.map(item => item == null ? 0 : dataset.getValue(item));
+        const values = itemByDay.map(item => (item == null ? 0 : dataset.getValue(item)));
         const total = values.reduce((acc, cur) => acc + cur, 0);
 
         return {

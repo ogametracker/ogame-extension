@@ -23,10 +23,10 @@ import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/Li
 </script>
 
 <style lang="scss" scoped>
-    .colors {
-        display: flex;
-        align-items: flex-start;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
+.colors {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+}
 </style>

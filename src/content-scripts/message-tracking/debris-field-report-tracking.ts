@@ -1,24 +1,32 @@
-import { Message } from "@ogame-tracker/shared/messages/Message";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { _logDebug, _logError } from "@ogame-tracker/shared/utils/_log";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { getMessageAttributes } from "@ogame-tracker/shared/utils/getMessageAttributes";
-import { addOrSetCustomMessageContent, cssClasses, formatNumber } from "./utils";
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { _logDebug, _logError } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getMessageAttributes } from '@ogame-tracker/shared/utils/getMessageAttributes';
+import { addOrSetCustomMessageContent, cssClasses, formatNumber } from './utils';
 import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
-import { DebrisFieldReportMessage, TrackDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
-import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { messageTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { v4 } from "uuid";
-import { DebrisFieldReportTrackingNotificationMessage, DebrisFieldReportTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@ogame-tracker/shared/messages/notifications";
-import { ResourceTypes } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
-import { settingsWrapper } from "./main";
-import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
-import { parseCoordinates } from "@ogame-tracker/shared/utils/parseCoordinates";
-import { PlanetType } from "@ogame-tracker/shared/models/ogame/common/PlanetType";
- 
+import {
+    DebrisFieldReportMessage,
+    TrackDebrisFieldReportMessage,
+} from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { messageTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { v4 } from 'uuid';
+import {
+    DebrisFieldReportTrackingNotificationMessage,
+    DebrisFieldReportTrackingNotificationMessageData,
+    MessageTrackingErrorNotificationMessage,
+    NotificationType,
+} from '@ogame-tracker/shared/messages/notifications';
+import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { settingsWrapper } from './main';
+import { OgameRawMessageType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType';
+import { parseCoordinates } from '@ogame-tracker/shared/utils/parseCoordinates';
+import { PlanetType } from '@ogame-tracker/shared/models/ogame/common/PlanetType';
+
 const notificationIds = {
     result: v4(),
     error: v4(),
@@ -45,7 +53,9 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewDebrisFieldReport: {
             const msg = message as DebrisFieldReportMessage;
 
-            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
+                _throw(`failed to find debris field report with id '${msg.data.id}'`);
             div.classList.add(cssClasses.messages.debrisFieldReport);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
@@ -53,7 +63,9 @@ function onMessage(message: Message<MessageType, any>) {
             if (settingsWrapper.settings.messageTracking.showSimplifiedResults) {
                 div.classList.add(cssClasses.messages.hideContent);
             }
-            addOrSetCustomMessageContent(div, `
+            addOrSetCustomMessageContent(
+                div,
+                `
                 <div 
                     class="ogame-tracker-debris-field-report" 
                     style="--columns: ${msg.data.deuterium != null ? 3 : 2}"
@@ -67,13 +79,16 @@ function onMessage(message: Message<MessageType, any>) {
                     <div class="${msg.data.crystal == 0 ? 'no-resources' : ''}">
                         ${formatNumber(msg.data.crystal)}
                     </div>
-                    ${msg.data.deuterium != null
-                    ? ` <div class="${msg.data.deuterium == 0 ? 'no-resources' : ''}">
+                    ${
+                        msg.data.deuterium != null
+                            ? ` <div class="${msg.data.deuterium == 0 ? 'no-resources' : ''}">
                             ${formatNumber(msg.data.deuterium)}
                         </div>`
-                    : ''}
+                            : ''
+                    }
                 </div>
-            `);
+            `,
+            );
 
             delete waitingForReports[msg.data.id];
             if (message.type == MessageType.NewDebrisFieldReport) {
@@ -88,7 +103,9 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const div = document.querySelector(`div.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
+                _throw(`failed to find combat report message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);
@@ -110,28 +127,28 @@ function trackDebrisFieldReports(messages: Element[]) {
             // prepare message to service worker
             const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
             const {
-                timestamp: date, 
-                targetcoordinates: coords, 
-                recycledresources: recycledResources, 
+                timestamp: date,
+                targetcoordinates: coords,
+                recycledresources: recycledResources,
             } = getMessageAttributes(element, {
                 timestamp: {
                     optional: false,
-                    conversion: value => parseIntSafe(value, 10) * 1000, 
+                    conversion: value => parseIntSafe(value, 10) * 1000,
                 },
                 targetcoordinates: {
                     optional: false,
-                    conversion: value => parseCoordinates(value, PlanetType.debrisField), 
+                    conversion: value => parseCoordinates(value, PlanetType.debrisField),
                 },
                 recycledresources: {
                     optional: false,
-                    conversion: json => JSON.parse(json) as { metal: number; crystal: number; deuterium: number }, 
+                    conversion: json => JSON.parse(json) as { metal: number; crystal: number; deuterium: number },
                 },
-            }); 
+            });
 
             if (isNaN(date)) {
                 _throw('Message timestamp is NaN');
             }
-            
+
             // send message to service worker
             const workerMessage: TrackDebrisFieldReportMessage = {
                 type: MessageType.TrackDebrisFieldReport,
@@ -143,18 +160,15 @@ function trackDebrisFieldReports(messages: Element[]) {
                     resources: {
                         metal: recycledResources.metal ?? 0,
                         crystal: recycledResources.crystal ?? 0,
-                        deuterium: recycledResources.deuterium ?? null
-                    }
+                        deuterium: recycledResources.deuterium ?? null,
+                    },
                 },
                 senderUuid: messageTrackingUuid,
             };
             sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(
-                cssClasses.messages.base,
-                cssClasses.messages.waitingToBeProcessed,
-            );
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed);
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
             waitingForReports[id] = true;
@@ -212,7 +226,7 @@ function updateReportResults(msg: DebrisFieldReportMessage) {
     delete waitingForReports[msg.data.id];
     totalDebrisFieldResult.count++;
 
-    ResourceTypes.forEach(resource => totalDebrisFieldResult.resources[resource] += msg.data[resource] ?? 0);
+    ResourceTypes.forEach(resource => (totalDebrisFieldResult.resources[resource] += msg.data[resource] ?? 0));
 
     sendNotificationMessages();
 }

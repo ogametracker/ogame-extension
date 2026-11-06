@@ -2,15 +2,15 @@ import { toDatabaseRecord } from './toDatabaseRecord';
 import { defineStore } from 'pinia';
 import { shallowRef } from 'vue';
 import { createReadiness, listenForMessages } from './lifecycle';
-import { broadcastMessage } from "@ogame-tracker/shared/communication/broadcastMessage";
-import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
-import type { Message } from "@ogame-tracker/shared/messages/Message";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import type { NotifyUniverseSpecificSettingsUpdateMessage } from "@ogame-tracker/shared/messages/universe-specific-settings";
-import { loadUniverseSpecificSettings } from "@ogame-tracker/shared/models/universe-specific-settings/loadUniverseSpecificSettings";
-import type { UniverseSpecificSettings } from "@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings";
-import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
-import { GlobalOgameMetaData, statsViewUuid } from "./global";
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import type { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { NotifyUniverseSpecificSettingsUpdateMessage } from '@ogame-tracker/shared/messages/universe-specific-settings';
+import { loadUniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/loadUniverseSpecificSettings';
+import type { UniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 
 export const useUniverseSpecificSettingsStore = defineStore('universeSpecificSettings', () => {
     const { ready, resolveReady, rejectReady } = createReadiness();
@@ -30,7 +30,7 @@ export const useUniverseSpecificSettingsStore = defineStore('universeSpecificSet
                 ogameMeta: GlobalOgameMetaData,
                 senderUuid: statsViewUuid,
                 type: MessageType.NotifyUniverseSpecificSettingsUpdate,
-            }
+            };
             await broadcastMessage(msg);
         })().catch(console.error);
     }

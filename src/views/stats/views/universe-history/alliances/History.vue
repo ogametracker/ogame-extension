@@ -76,19 +76,20 @@ const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
 const historyTrackingEnabled = computed(() => settingsStore.settings.universeHistory.trackHistory);
 
 const tableColumns = computed<GridTableColumn<'alliance'>[]>(() => {
-    return [{
-        key: 'alliance',
-        label: translations().extension.universeHistory.allianceSelection.header,
-        headerClass: 'alliance-selection-table-cell',
-        class: 'alliance-selection-table-cell',
-    }];
+    return [
+        {
+            key: 'alliance',
+            label: translations().extension.universeHistory.allianceSelection.header,
+            headerClass: 'alliance-selection-table-cell',
+            class: 'alliance-selection-table-cell',
+        },
+    ];
 });
 
 const tableItems = computed<{ alliance: UniverseHistoryAlliance | null }[]>(() => {
-    return [
-        { alliance: null },
-        { alliance: selectedAlliance.value },
-    ].filter((value, i, array) => array.findIndex(v => v.alliance == value.alliance) == i);
+    return [{ alliance: null }, { alliance: selectedAlliance.value }].filter(
+        (value, i, array) => array.findIndex(v => v.alliance == value.alliance) == i,
+    );
 });
 
 const tabs = computed<Tab[]>(() => {
@@ -112,7 +113,7 @@ const selectedAlliance = computed(() => universeHistoryStore.alliances.find(p =>
 
 const allianceId = computed<number | null>(() => {
     try {
-        const localAllianceId = parseIntSafe(route.query.alliance as string | null ?? '', 10);
+        const localAllianceId = parseIntSafe((route.query.alliance as string | null) ?? '', 10);
         return localAllianceId;
     } catch {
         return null;
@@ -160,9 +161,7 @@ async function updateAllianceIdRoute(id: number) {
 }
 
 const allianceNames = computed(() => {
-    return universeHistoryStore.alliances
-        .map(alliance => getAllyString(alliance))
-        .sort();
+    return universeHistoryStore.alliances.map(alliance => getAllyString(alliance)).sort();
 });
 
 function getAllyString(alliance: UniverseHistoryAlliance) {
@@ -192,35 +191,35 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .history {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
+.history {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
-    }
+.list {
+    display: flex;
+    flex-direction: column;
+}
 
-    .alliance-selection {
+.alliance-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            :deep(.alliance-selection-table-cell) {
-                text-align: left;
-                justify-content: start;
-                border-bottom: 1px solid rgba(var(--color), 0.5);
-            }
+        :deep(.alliance-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .date-range {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 4px;
-    }
+.date-range {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 4px;
+}
 </style>

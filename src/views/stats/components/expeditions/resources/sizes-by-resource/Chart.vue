@@ -12,7 +12,11 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getSum(datasets))" />
-                    <div v-text="`${translations().extension.expeditions.finds} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.expeditions.finds} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -45,7 +49,11 @@ import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 const props = defineProps({
-    resource: { required: true, type: String as PropType<ResourceType>, validator: (value: ResourceType) => ResourceTypes.includes(value) },
+    resource: {
+        required: true,
+        type: String as PropType<ResourceType>,
+        validator: (value: ResourceType) => ResourceTypes.includes(value),
+    },
 });
 
 const settingsStore = useSettingsStore();
@@ -81,20 +89,20 @@ function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

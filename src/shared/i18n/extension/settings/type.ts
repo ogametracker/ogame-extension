@@ -1,4 +1,4 @@
-import { DbAccount, DbServer } from "@ogame-tracker/shared/db/schema/global";
+import { DbAccount, DbServer } from '@ogame-tracker/shared/db/schema/global';
 
 export interface SettingsTranslations {
     tabs: {
@@ -14,7 +14,6 @@ export interface SettingsTranslations {
         dangerZone: string;
         accessbility: string;
         linkAccounts: string;
-
     };
     dateRanges: {
         defaultNames: {
@@ -168,15 +167,24 @@ export interface SettingsTranslations {
             importingSettings: string;
             importingBasicData: string;
             importingUniverseHistories: (
-                serverIndex: number, 
-                serverTotal: number, 
-                entryIndex: number, 
+                serverIndex: number,
+                serverTotal: number,
+                entryIndex: number,
                 entryTotal: number,
             ) => string;
             importingAccounts: (
-                accountIndex: number, 
-                totalAccounts: number, 
-                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                accountIndex: number,
+                totalAccounts: number,
+                type:
+                    | 'account'
+                    | 'combat-reports'
+                    | 'expeditions'
+                    | 'debris-fields'
+                    | 'lifeform-discoveries'
+                    | 'universe-specific-settings'
+                    | 'empire.data'
+                    | 'empire.planets'
+                    | 'empire.moons',
                 stepIndex: number,
                 stepTotal: number,
             ) => string;

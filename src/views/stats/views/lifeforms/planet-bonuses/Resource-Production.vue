@@ -15,11 +15,20 @@ import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
 import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import LifeformPlanetBonusesComponent from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
-import type { LifeformPlanetBonusesType, LifeformPlanetBonuses } from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
+import type {
+    LifeformPlanetBonusesType,
+    LifeformPlanetBonuses,
+} from '@stats/components/lifeforms/LifeformPlanetBonuses.vue';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
-import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-import { LifeformBuildingsByType, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformBuildingsByType,
+    ResourceProductionBonusLifeformBuildings,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import type { ResourceProductionBonusLifeformBuilding } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
@@ -55,10 +64,10 @@ const buildings: LifeformBuildingType[] = ResourceProductionBonusLifeformBuildin
 const limits = computed<Record<keyof Cost, (value: number) => number>>(() => {
     const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ResourceProductionBonus });
     return {
-        metal: value => limit != null ? Math.min(value, limit) : value,
-        crystal: value => limit != null ? Math.min(value, limit) : value,
-        deuterium: value => limit != null ? Math.min(value, limit) : value,
-        energy: value => limit != null ? Math.min(value, limit) : value,
+        metal: value => (limit != null ? Math.min(value, limit) : value),
+        crystal: value => (limit != null ? Math.min(value, limit) : value),
+        deuterium: value => (limit != null ? Math.min(value, limit) : value),
+        energy: value => (limit != null ? Math.min(value, limit) : value),
     };
 });
 
@@ -70,13 +79,16 @@ const technologyBonuses = computed<Record<keyof Cost, number>>(() => {
 
     const lifeformTechnologyBoostPerPlanet = getLifeformTechnologyBonus(empireStore.empire);
     empirePlanets.value.forEach(planet => {
-        techs.filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
-            .forEach(tech => keys.forEach(key => {
-                const techBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type])[key];
-                const techBoost = lifeformTechnologyBoostPerPlanet[planet.id][tech.type];
+        techs
+            .filter(tech => planet.activeLifeformTechnologies.includes(tech.type))
+            .forEach(tech =>
+                keys.forEach(key => {
+                    const techBonus = tech.getProductionBonus(planet.lifeformTechnologies[tech.type])[key];
+                    const techBoost = lifeformTechnologyBoostPerPlanet[planet.id][tech.type];
 
-                globalBonuses[key] += techBonus * (1 + techBoost);
-            }));
+                    globalBonuses[key] += techBonus * (1 + techBoost);
+                }),
+            );
     });
 
     return globalBonuses;
@@ -94,21 +106,26 @@ const planets = computed<Record<number, LifeformPlanetBonuses<keyof Cost>>>(() =
 
         planet => planet.id,
         planet => {
-            const activeBuildingTypes = LifeformBuildingTypesByLifeform[planet.activeLifeform].filter(b => buildings.includes(b));
+            const activeBuildingTypes = LifeformBuildingTypesByLifeform[planet.activeLifeform].filter(b =>
+                buildings.includes(b),
+            );
             const bonusByBuilding = createRecord<keyof Cost, Record<LifeformBuildingType, number>>(
                 ['metal', 'crystal', 'deuterium', 'energy'],
-                key => createRecord(
-                    activeBuildingTypes,
-                    type => (LifeformBuildingsByType[type] as ResourceProductionBonusLifeformBuilding)
-                        .getProductionBonus(planet.lifeformBuildings[type])[key]
-                )
+                key =>
+                    createRecord(
+                        activeBuildingTypes,
+                        type =>
+                            (
+                                LifeformBuildingsByType[type] as ResourceProductionBonusLifeformBuilding
+                            ).getProductionBonus(planet.lifeformBuildings[type])[key],
+                    ),
             );
 
             return {
                 planet,
                 bonusByBuilding,
-            }
-        }
+            };
+        },
     );
 });
 </script>

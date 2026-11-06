@@ -1,8 +1,8 @@
-import { FleetMissionType, FleetMissionTypes } from "../../../fleets/FleetMissionType";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { LifeformTechnology } from "../LifeformTechnology";
-import { FleetSpeedBonusLifeformTechnology } from "../interfaces";
+import { FleetMissionType, FleetMissionTypes } from '../../../fleets/FleetMissionType';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { LifeformTechnology } from '../LifeformTechnology';
+import { FleetSpeedBonusLifeformTechnology } from '../interfaces';
 
 class IntergalacticEnvoysClass extends LifeformTechnology implements FleetSpeedBonusLifeformTechnology {
     public constructor() {
@@ -27,11 +27,10 @@ class IntergalacticEnvoysClass extends LifeformTechnology implements FleetSpeedB
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return FleetMissionTypes.filter(m => this.appliesTo(m))
-            .map<LifeformBonusType>(missionType => ({
-                type: LifeformBonusTypeId.FleetSpeedBonus,
-                missionType,
-            }));
+        return FleetMissionTypes.filter(m => this.appliesTo(m)).map<LifeformBonusType>(missionType => ({
+            type: LifeformBonusTypeId.FleetSpeedBonus,
+            missionType,
+        }));
     }
 
     appliesTo(type: FleetMissionType): boolean {

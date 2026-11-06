@@ -1,4 +1,4 @@
-import { SettingsTranslations } from "./type";
+import { SettingsTranslations } from './type';
 
 export const en: SettingsTranslations = {
     tabs: {
@@ -14,7 +14,6 @@ export const en: SettingsTranslations = {
         dangerZone: 'Danger Zone',
         accessbility: 'Accessibility',
         linkAccounts: 'Link Accounts',
-
     },
     dateRanges: {
         defaultNames: {
@@ -25,7 +24,7 @@ export const en: SettingsTranslations = {
             currentMonth: 'Current month',
             newRange: 'new range',
         },
-        since: (date) => `Since ${date}`,
+        since: date => `Since ${date}`,
         firstDayTemplate: '<first day>',
         headers: {
             label: 'Label',
@@ -63,7 +62,8 @@ export const en: SettingsTranslations = {
             dsuLong: 'Convert to Deuterium',
         },
         extensionLanguage: 'UI language (within OGame Tracker)',
-        extensionLanguageFallbackHint: 'English texts will be shown if texts are not available in the selected language.',
+        extensionLanguageFallbackHint:
+            'English texts will be shown if texts are not available in the selected language.',
 
         serverSettings: {
             title: 'Server data',
@@ -114,30 +114,38 @@ export const en: SettingsTranslations = {
         doYouWantToContinue: 'ARE YOU SURE YOU WANT TO CONTINUE?',
 
         deleteExpeditions: {
-            button: (account: string) => `Delete all tracked expeditions for the currently selected account (${account})`,
-            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked expeditions will be deleted for the currently selected account (${account}).`,
+            button: (account: string) =>
+                `Delete all tracked expeditions for the currently selected account (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `If you confirm, all ${count} tracked expeditions will be deleted for the currently selected account (${account}).`,
         },
         deleteCombats: {
             button: (account: string) => `Delete all tracked combats for the currently selected account (${account})`,
-            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked combats will be deleted for the currently selected account (${account}).`,
+            confirmationText: (account: string, count: string) =>
+                `If you confirm, all ${count} tracked combats will be deleted for the currently selected account (${account}).`,
         },
         deleteDebrisFieldReports: {
-            button: (account: string) => `Delete all tracked debris field harvest reports for the currently selected account (${account})`,
-            confirmationText: (account: string, count: string) => `If you confirm, all ${count} tracked debris field harvest reports will be deleted for the currently selected account (${account}).`,
+            button: (account: string) =>
+                `Delete all tracked debris field harvest reports for the currently selected account (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `If you confirm, all ${count} tracked debris field harvest reports will be deleted for the currently selected account (${account}).`,
         },
         deleteAccount: {
             button: (account: string) => `Delete all data of the currently selected account (${account})`,
-            confirmationText: (account: string) => `If you confirm, all tracked data for the currently selected account (${account}) will be deleted.\n`
-                + `This includes tracked universe history data if there is no other account tracked for this universe.`,
+            confirmationText: (account: string) =>
+                `If you confirm, all tracked data for the currently selected account (${account}) will be deleted.\n` +
+                `This includes tracked universe history data if there is no other account tracked for this universe.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Delete tracked universe history of currently selected universe (${server})`,
-            confirmationText: (server: string) => `If you confirm, all tracked universe history data for the currently selected universe (${server}) will be deleted.`,
+            confirmationText: (server: string) =>
+                `If you confirm, all tracked universe history data for the currently selected universe (${server}) will be deleted.`,
         },
         deleteEverything: {
             button: 'Delete all data',
-            confirmationText1: `If you confirm, all data will be deleted.\n`
-                + 'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
+            confirmationText1:
+                `If you confirm, all data will be deleted.\n` +
+                'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
             confirmationText2: 'Please confirm again that you want to delete all data.',
         },
     },
@@ -145,8 +153,10 @@ export const en: SettingsTranslations = {
     importExport: {
         export: {
             header: 'Export',
-            description: 'Here you can export your data. This will include relevant data of all your tracked accounts and their servers.',
-            includeUniverseHistory: 'include universe history in export (this may greatly increase file size and import time!)',
+            description:
+                'Here you can export your data. This will include relevant data of all your tracked accounts and their servers.',
+            includeUniverseHistory:
+                'include universe history in export (this may greatly increase file size and import time!)',
             button: 'Start export',
             wait: 'Please wait while your data is being prepared for the export...',
 
@@ -170,57 +180,66 @@ export const en: SettingsTranslations = {
             importingSettings: 'Importing your settings',
             importingBasicData: 'Importing basic account and server data',
             importingUniverseHistories: (
-                serverIndex: number, 
-                serverTotal: number, 
-                entryIndex: number, 
+                serverIndex: number,
+                serverTotal: number,
+                entryIndex: number,
                 entryTotal: number,
             ) => {
                 const baseMessage = 'Importing server universe history';
 
-                return `${baseMessage} (server ${serverIndex + 1}/${serverTotal}, entry ${entryIndex + 1}/${entryTotal})`;      
+                return `${baseMessage} (server ${serverIndex + 1}/${serverTotal}, entry ${entryIndex + 1}/${entryTotal})`;
             },
             importingAccounts: (
-                accountIndex: number, 
-                totalAccounts: number, 
-                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                accountIndex: number,
+                totalAccounts: number,
+                type:
+                    | 'account'
+                    | 'combat-reports'
+                    | 'expeditions'
+                    | 'debris-fields'
+                    | 'lifeform-discoveries'
+                    | 'universe-specific-settings'
+                    | 'empire.data'
+                    | 'empire.planets'
+                    | 'empire.moons',
                 stepIndex: number,
                 stepTotal: number,
             ) => {
                 const baseMessage = `Importing accounts`;
                 const accountProgress = `${accountIndex + 1}/${totalAccounts}`;
 
-                if(type == 'account') {
+                if (type == 'account') {
                     return `${baseMessage} (${accountProgress})`;
                 }
 
-                if(type == 'combat-reports') {
+                if (type == 'combat-reports') {
                     return `${baseMessage} (${accountProgress}, combat ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'expeditions') {
+                if (type == 'expeditions') {
                     return `${baseMessage} (${accountProgress}, expedition ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'debris-fields') {
+                if (type == 'debris-fields') {
                     return `${baseMessage} (${accountProgress}, debris field ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'lifeform-discoveries') {
+                if (type == 'lifeform-discoveries') {
                     return `${baseMessage} (${accountProgress}, lifeform mission ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'empire.data') {
+                if (type == 'empire.data') {
                     return `${baseMessage} (${accountProgress}, basic empire data)`;
                 }
 
-                if(type == 'empire.planets') {
+                if (type == 'empire.planets') {
                     return `${baseMessage} (${accountProgress}, planet ${stepIndex + 1}/${stepTotal})`;
                 }
-                if(type == 'empire.moons') {
+                if (type == 'empire.moons') {
                     return `${baseMessage} (${accountProgress}, moon ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'universe-specific-settings') {
+                if (type == 'universe-specific-settings') {
                     return `${baseMessage} (${accountProgress}, universe specific settings)`;
                 }
 
@@ -245,10 +264,10 @@ export const en: SettingsTranslations = {
     linkAccounts: {
         header: (account: string) => `Link accounts with the current account (${account})`,
         descriptionHtml: (account: string) =>
-            `You should only link accounts if you want the OGame Tracker to consider data of the linked accounts as data of the current account (${account}).<br/>`
-            + `This is often the case when an account has been merged to another server and is handled as a separate account in the OGame Tracker.<br/><br/>`
-            + `Example: <br/>`
-            + `<ol>
+            `You should only link accounts if you want the OGame Tracker to consider data of the linked accounts as data of the current account (${account}).<br/>` +
+            `This is often the case when an account has been merged to another server and is handled as a separate account in the OGame Tracker.<br/><br/>` +
+            `Example: <br/>` +
+            `<ol>
                     <li>the player "OGame Professional" is playing on the server "EN Milkyway"</li>
                     <li>the server "EN Milkyway" becomes exodus universe during a merge</li>
                     <li>the player "OGame Professional" merges their account to "EN Cartwheel"</li>   

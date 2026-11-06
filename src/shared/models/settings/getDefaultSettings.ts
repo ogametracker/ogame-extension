@@ -1,31 +1,34 @@
-import { createTranslationTree } from "../../i18n/extension/createTranslationTree";
-import { de } from "../../i18n/extension/settings/de";
-import { en } from "../../i18n/extension/settings/en";
-import { fr } from "../../i18n/extension/settings/fr";
-import { pt_pt } from "../../i18n/extension/settings/pt_pt";
-import type { SettingsTranslations } from "../../i18n/extension/settings/type";
-import { LanguageKey } from "../../i18n/LanguageKey";
-import { CombatResultType } from "../combat-reports/CombatResultType";
-import { ExpeditionDepletionLevel } from "../expeditions/ExpeditionDepletionLevel";
-import { ExpeditionEventSize } from "../expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "../expeditions/ExpeditionEventType";
-import { LifeformDiscoveryEventArtifactFindingSize } from "../lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "../lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType } from "../ogame/lifeforms/LifeformType";
-import { ResourceType } from "../ogame/resources/ResourceType";
-import { ShipType } from "../ogame/ships/ShipType";
-import { Settings } from "./Settings";
+import { createTranslationTree } from '../../i18n/extension/createTranslationTree';
+import { de } from '../../i18n/extension/settings/de';
+import { en } from '../../i18n/extension/settings/en';
+import { fr } from '../../i18n/extension/settings/fr';
+import { pt_pt } from '../../i18n/extension/settings/pt_pt';
+import type { SettingsTranslations } from '../../i18n/extension/settings/type';
+import { LanguageKey } from '../../i18n/LanguageKey';
+import { CombatResultType } from '../combat-reports/CombatResultType';
+import { ExpeditionDepletionLevel } from '../expeditions/ExpeditionDepletionLevel';
+import { ExpeditionEventSize } from '../expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '../expeditions/ExpeditionEventType';
+import { LifeformDiscoveryEventArtifactFindingSize } from '../lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '../lifeform-discoveries/LifeformDiscoveryEventType';
+import { LifeformType } from '../ogame/lifeforms/LifeformType';
+import { ResourceType } from '../ogame/resources/ResourceType';
+import { ShipType } from '../ogame/ships/ShipType';
+import { Settings } from './Settings';
 
 export function getDefaultSettings(language: LanguageKey): Settings {
-    const names = createTranslationTree<SettingsTranslations['dateRanges']['defaultNames']>({
-        locale: language,
-        fallbackLocales: [LanguageKey.en, LanguageKey.de],
-    }, {
-        de: de.dateRanges.defaultNames,
-        en: en.dateRanges.defaultNames,
-        fr: fr.dateRanges?.defaultNames,
-        'pt-pt': pt_pt.dateRanges?.defaultNames,
-    });
+    const names = createTranslationTree<SettingsTranslations['dateRanges']['defaultNames']>(
+        {
+            locale: language,
+            fallbackLocales: [LanguageKey.en, LanguageKey.de],
+        },
+        {
+            de: de.dateRanges.defaultNames,
+            en: en.dateRanges.defaultNames,
+            fr: fr.dateRanges?.defaultNames,
+            'pt-pt': pt_pt.dateRanges?.defaultNames,
+        },
+    );
 
     const defaultSettings: Settings = {
         dateRanges: [

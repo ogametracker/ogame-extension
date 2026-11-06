@@ -8,12 +8,18 @@ import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import {
+    LifeformDiscoveryEventType,
+    LifeformDiscoveryEventTypes,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 import type { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
 import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { NewLifeformDiscoveryMessage } from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
-import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import {
+    LifeformDiscoveryEventArtifactFindingSize,
+    LifeformDiscoveryEventArtifactFindingSizes,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
 import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
 
 export interface DailyLifeformDiscoveryResult {
@@ -36,10 +42,12 @@ export const useLifeformDiscoveryStore = defineStore('lifeformDiscovery', () => 
 
     const dailyResults = ref<Partial<Record<number, DailyLifeformDiscoveryResult>>>({});
 
-    const lifeforms = ref<Record<ValidLifeformType, LifeformDiscoveryProgressInfo>>(createRecord(ValidLifeformTypes, lf => ({
-        discoveriesCount: 0,
-        gainedExperience: 0,
-    })));
+    const lifeforms = ref<Record<ValidLifeformType, LifeformDiscoveryProgressInfo>>(
+        createRecord(ValidLifeformTypes, lf => ({
+            discoveriesCount: 0,
+            gainedExperience: 0,
+        })),
+    );
 
     const internal_firstDate = ref<number | null>(null);
 
@@ -66,10 +74,7 @@ export const useLifeformDiscoveryStore = defineStore('lifeformDiscovery', () => 
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         return accounts;
     }
@@ -132,8 +137,7 @@ export const useLifeformDiscoveryStore = defineStore('lifeformDiscovery', () => 
         if (discovery.type == LifeformDiscoveryEventType.newLifeformFound) {
             lifeforms.value[discovery.lifeform].discoveredDate = discovery.date;
             lifeforms.value[discovery.lifeform].discoveriesCount++;
-        }
-        else if (discovery.type == LifeformDiscoveryEventType.knownLifeformFound) {
+        } else if (discovery.type == LifeformDiscoveryEventType.knownLifeformFound) {
             lifeforms.value[discovery.lifeform].discoveriesCount++;
             lifeforms.value[discovery.lifeform].gainedExperience += discovery.experience;
         }

@@ -1,9 +1,9 @@
-import { ShipType } from "../../../ships/ShipType";
-import { NonStationaryShipTypes } from "../../../ships/ShipTypes";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { FuelConsumptionReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ShipType } from '../../../ships/ShipType';
+import { NonStationaryShipTypes } from '../../../ships/ShipTypes';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { FuelConsumptionReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class EfficiencyModuleClass extends LifeformTechnology implements FuelConsumptionReductionLifeformTechnology {
     public constructor() {
@@ -36,13 +36,13 @@ class EfficiencyModuleClass extends LifeformTechnology implements FuelConsumptio
     }
 
     public getFuelConsumptionReduction(ship: ShipType, level: number): number {
-        if(!this.appliesTo(ship)) {
+        if (!this.appliesTo(ship)) {
             return 0;
         }
 
         const reductionPerLevel = 0.00_03; //0.03%
         const maxReduction = 0.3; //30%
-        
+
         return Math.min(maxReduction, reductionPerLevel * level);
     }
 

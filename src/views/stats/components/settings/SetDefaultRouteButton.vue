@@ -32,13 +32,13 @@ function setDefaultRoute(ev: MouseEvent) {
 </script>
 
 <style lang="scss" scoped>
-    .default-route-button {
-        display: flex;
-        gap: 4px;
-        align-items: center;
+.default-route-button {
+    display: flex;
+    gap: 4px;
+    align-items: center;
 
-        .mdi {
-            font-size: 20px;
-        }
+    .mdi {
+        font-size: 20px;
     }
+}
 </style>

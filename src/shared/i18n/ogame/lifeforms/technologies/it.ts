@@ -1,5 +1,5 @@
-import { LifeformTechnologyType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformTechnologiesTranslations } from "./types";
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformTechnologiesTranslations } from './types';
 
 export const it: LifeformTechnologiesTranslations = {
     [LifeformTechnologyType.intergalacticEnvoys]: 'Ambasciatori intergalattici',

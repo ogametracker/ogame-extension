@@ -1,9 +1,6 @@
 <template>
     <div class="page">
-        <ListNav
-            :items="navItems"
-            :root-route-name="rootRouteName"
-        />
+        <ListNav :items="navItems" :root-route-name="rootRouteName" />
 
         <div class="page-content">
             <RouterView />
@@ -24,16 +21,16 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-    .page {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        height: 100%;
-        column-gap: 16px;
-    }
+.page {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    column-gap: 16px;
+}
 
-    .page-content {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-    }
+.page-content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
 </style>

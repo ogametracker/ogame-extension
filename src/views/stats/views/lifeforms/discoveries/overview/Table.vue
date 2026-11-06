@@ -11,13 +11,21 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <span v-if="value == translations().extension.empire.lifeforms.eventTypes.nothing" class="mdi mdi-close" :style="{ color: colors.nothing }" />
+                <span
+                    v-if="value == translations().extension.empire.lifeforms.eventTypes.nothing"
+                    class="mdi mdi-close"
+                    :style="{ color: colors.nothing }"
+                />
                 <span
                     v-else-if="value == translations().extension.empire.lifeforms.eventTypes.lostShip"
                     class="mdi mdi-skull-crossbones-outline"
                     :style="{ color: colors.lostShip }"
                 />
-                <span v-else-if="value == lifeformFoundLabel" class="mdi mdi-star-shooting" :style="{ color: colors.knownLifeformFound }" />
+                <span
+                    v-else-if="value == lifeformFoundLabel"
+                    class="mdi mdi-star-shooting"
+                    :style="{ color: colors.knownLifeformFound }"
+                />
                 <span
                     v-else-if="value == translations().extension.empire.lifeforms.eventTypes.artifacts"
                     class="mdi mdi-pyramid"
@@ -69,8 +77,10 @@ const eventTypes = computed<Record<string, LifeformDiscoveryEventType>>(() => {
     return {
         [translations().extension.empire.lifeforms.eventTypes.nothing]: LifeformDiscoveryEventType.nothing,
         [translations().extension.empire.lifeforms.eventTypes.lostShip]: LifeformDiscoveryEventType.lostShip,
-        [translations().extension.empire.lifeforms.eventTypes.newLifeformFound]: LifeformDiscoveryEventType.newLifeformFound,
-        [translations().extension.empire.lifeforms.eventTypes.knownLifeformFound]: LifeformDiscoveryEventType.knownLifeformFound,
+        [translations().extension.empire.lifeforms.eventTypes.newLifeformFound]:
+            LifeformDiscoveryEventType.newLifeformFound,
+        [translations().extension.empire.lifeforms.eventTypes.knownLifeformFound]:
+            LifeformDiscoveryEventType.knownLifeformFound,
         [translations().extension.empire.lifeforms.eventTypes.artifacts]: LifeformDiscoveryEventType.artifacts,
     };
 });
@@ -83,39 +93,43 @@ const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() 
         [LifeformDiscoveryEventType.lostShip],
         [LifeformDiscoveryEventType.newLifeformFound, LifeformDiscoveryEventType.knownLifeformFound],
         [LifeformDiscoveryEventType.artifacts],
-    ]
+    ];
     return typeGroups.map(group => ({
-        label: group.length == 1 ? translations().extension.empire.lifeforms.eventTypes[group[0]] : lifeformFoundLabel.value,
-        getValue: nextDiscoveries => nextDiscoveries.reduce(
-            (acc, disc) => acc + group.reduce((acc, cur) => acc + disc.events[cur], 0),
-            0
-        ),
+        label:
+            group.length == 1
+                ? translations().extension.empire.lifeforms.eventTypes[group[0]]
+                : lifeformFoundLabel.value,
+        getValue: nextDiscoveries =>
+            nextDiscoveries.reduce((acc, disc) => acc + group.reduce((acc, cur) => acc + disc.events[cur], 0), 0),
     }));
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextDiscoveries => nextDiscoveries.reduce(
-            (acc, disc) => acc + Object.values(disc.events).reduce((acc, cur) => acc + cur, 0),
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextDiscoveries =>
+                nextDiscoveries.reduce(
+                    (acc, disc) => acc + Object.values(disc.events).reduce((acc, cur) => acc + cur, 0),
+                    0,
+                ),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

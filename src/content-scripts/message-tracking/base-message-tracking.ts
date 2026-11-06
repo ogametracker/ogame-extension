@@ -1,13 +1,13 @@
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { debrisFieldTracking } from "./debris-field-report-tracking";
-import { Message } from "@ogame-tracker/shared/messages/Message";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { cssClasses } from "./utils";
-import { expeditionTracking } from "./expedition-tracking";
-import { lifeformDiscoveryTracking } from "./lifeform-discovery-tracking";
-import { combatTracking } from "./combat-report-tracking";
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { debrisFieldTracking } from './debris-field-report-tracking';
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { OgameRawMessageType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { cssClasses } from './utils';
+import { expeditionTracking } from './expedition-tracking';
+import { lifeformDiscoveryTracking } from './lifeform-discovery-tracking';
+import { combatTracking } from './combat-report-tracking';
 
 type Tracking = {
     onMessage: (message: Message<MessageType, any>) => void;
@@ -16,12 +16,7 @@ type Tracking = {
     onInit?: () => void;
 };
 
-const trackings: Tracking[] = [
-    combatTracking,
-    debrisFieldTracking,
-    expeditionTracking,
-    lifeformDiscoveryTracking,
-];
+const trackings: Tracking[] = [combatTracking, debrisFieldTracking, expeditionTracking, lifeformDiscoveryTracking];
 
 let pageContentElement: Element | null = null;
 
@@ -55,20 +50,17 @@ function setupObserver() {
 function trackMessages(tracking: Tracking) {
     // only track messages from the "Fleets" tab to prevent tracking shared messages
     const activeFleetTab = document.querySelector('.singleTab.marker[data-category-id="2"]');
-    if(activeFleetTab == null) {
+    if (activeFleetTab == null) {
         return;
     }
 
-    const messages = Array.from(document.querySelectorAll('div.msg[data-msg-id]'))
-        .filter(elem => {
-            const messageType = parseIntSafe(
-                elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype') 
-                ?? '-1' // for some reason not all messages have a type attribute, e.g. espionage reports, so we fall back to something unused
-            );
+    const messages = Array.from(document.querySelectorAll('div.msg[data-msg-id]')).filter(elem => {
+        const messageType = parseIntSafe(
+            elem.querySelector('.rawMessageData')?.getAttribute('data-raw-messagetype') ?? '-1', // for some reason not all messages have a type attribute, e.g. espionage reports, so we fall back to something unused
+        );
 
-            return messageType == tracking.messageType
-                && !elem.classList.contains(cssClasses.messages.base);
-        });
+        return messageType == tracking.messageType && !elem.classList.contains(cssClasses.messages.base);
+    });
 
     tracking.track(messages);
 }

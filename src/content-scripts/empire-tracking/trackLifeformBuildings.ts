@@ -1,25 +1,31 @@
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { UpdatePlanetActiveLifeformBuildingLevelsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
-import { LifeformBuildingType, LifeformBuildingTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { observerCallbacks } from "./main";
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { UpdatePlanetActiveLifeformBuildingLevelsMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypes,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { observerCallbacks } from './main';
 
 export function trackLifeformBuildingsPage() {
     observerCallbacks.push({
         selector: '#technologies > .icons',
         callback: element => {
-            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
-                ?? _throw('no meta element found for ogame-planet-id');
+            const planetIdText =
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
+                _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const buildingLevels: Partial<Record<LifeformBuildingType, number>> = {};
 
             LifeformBuildingTypes.forEach(building => {
-                const levelText = element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value');
+                const levelText = element
+                    .querySelector(`[data-technology="${building}"] .level`)
+                    ?.getAttribute('data-value');
                 if (levelText == null) {
                     return; // ignore buildings of other lifeforms which we won't find here
                 }

@@ -1,8 +1,8 @@
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { LifeformTechnologyBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class MetropolisClass extends LifeformBuilding implements LifeformTechnologyBonusLifeformBuilding {
     public constructor() {

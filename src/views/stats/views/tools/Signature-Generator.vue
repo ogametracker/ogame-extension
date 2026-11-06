@@ -87,25 +87,29 @@ async function initImages() {
     const promises: Promise<void>[] = [];
 
     backgrounds.forEach(bg => {
-        promises.push(new Promise<void>(resolve => {
-            const img = new Image();
-            img.addEventListener('load', () => {
-                backgroundImages[bg] = img;
-                resolve();
-            });
-            img.src = getBackgroundImgUrl(bg);
-        }));
+        promises.push(
+            new Promise<void>(resolve => {
+                const img = new Image();
+                img.addEventListener('load', () => {
+                    backgroundImages[bg] = img;
+                    resolve();
+                });
+                img.src = getBackgroundImgUrl(bg);
+            }),
+        );
     });
 
     ResourceTypes.forEach(resource => {
-        promises.push(new Promise<void>(resolve => {
-            const img = new Image();
-            img.addEventListener('load', () => {
-                resourceImages[resource] = img;
-                resolve();
-            });
-            img.src = getResourceImgUrl(resource);
-        }));
+        promises.push(
+            new Promise<void>(resolve => {
+                const img = new Image();
+                img.addEventListener('load', () => {
+                    resourceImages[resource] = img;
+                    resolve();
+                });
+                img.src = getResourceImgUrl(resource);
+            }),
+        );
     });
 
     await Promise.all(promises);
@@ -207,7 +211,7 @@ function draw() {
         if (alignRight && maxWidth != null) {
             const measurement = textCtx.measureText(text);
             x = Math.max(x, x + maxWidth - measurement.width);
-        };
+        }
 
         for (const shadow of shadows) {
             shadowCtx.shadowColor = `rgba(0, 0, 0, ${shadow.opacity})`;
@@ -243,13 +247,15 @@ function draw() {
             translations().extension.tools.signatureGenerator.totalPerDay,
             translations().extension.tools.signatureGenerator.totalPerWeek,
         ];
-        cells1.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: padding,
-            y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
-            maxWidth: colWidth,
-            alignRight: true,
-        }));
+        cells1.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: padding,
+                y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
 
         const xMetal = padding + colWidth;
         drawTextWithShadow({
@@ -260,7 +266,13 @@ function draw() {
             maxWidth: colWidth - resourceImgSize - 5,
             alignRight: true,
         });
-        localCtx.drawImage(resourceImages.metal, xMetal + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
+        localCtx.drawImage(
+            resourceImages.metal,
+            xMetal + colWidth - resourceImgSize,
+            padding + yOffset,
+            resourceImgSize,
+            resourceImgSize,
+        );
         const totalMetal = productionBreakdowns.value.metal.getTotal();
         const cellsMetal = [
             formatNumber(productionBreakdowns.value.metal.getAverage(), numberFormat),
@@ -268,13 +280,15 @@ function draw() {
             formatNumber(totalMetal * 24, numberFormat),
             formatNumber(totalMetal * 24 * 7, numberFormat),
         ];
-        cellsMetal.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: xMetal,
-            y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
-            maxWidth: colWidth,
-            alignRight: true
-        }));
+        cellsMetal.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: xMetal,
+                y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
 
         const xCrystal = padding + 2 * colWidth;
         drawTextWithShadow({
@@ -285,7 +299,13 @@ function draw() {
             maxWidth: colWidth - resourceImgSize - 5,
             alignRight: true,
         });
-        localCtx.drawImage(resourceImages.crystal, xCrystal + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
+        localCtx.drawImage(
+            resourceImages.crystal,
+            xCrystal + colWidth - resourceImgSize,
+            padding + yOffset,
+            resourceImgSize,
+            resourceImgSize,
+        );
         const totalCrystal = productionBreakdowns.value.crystal.getTotal();
         const cellsCrystal = [
             formatNumber(productionBreakdowns.value.crystal.getAverage(), numberFormat),
@@ -293,13 +313,15 @@ function draw() {
             formatNumber(totalCrystal * 24, numberFormat),
             formatNumber(totalCrystal * 24 * 7, numberFormat),
         ];
-        cellsCrystal.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: xCrystal,
-            y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
-            maxWidth: colWidth,
-            alignRight: true
-        }));
+        cellsCrystal.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: xCrystal,
+                y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
 
         const xDeut = padding + 3 * colWidth;
         drawTextWithShadow({
@@ -310,7 +332,13 @@ function draw() {
             maxWidth: colWidth - resourceImgSize - 5,
             alignRight: true,
         });
-        localCtx.drawImage(resourceImages.deuterium, xDeut + colWidth - resourceImgSize, padding + yOffset, resourceImgSize, resourceImgSize);
+        localCtx.drawImage(
+            resourceImages.deuterium,
+            xDeut + colWidth - resourceImgSize,
+            padding + yOffset,
+            resourceImgSize,
+            resourceImgSize,
+        );
         const totalDeut = productionBreakdowns.value.deuterium.getTotal(true);
         const cellsDeut = [
             formatNumber(productionBreakdowns.value.deuterium.getAverage(true), numberFormat),
@@ -318,13 +346,15 @@ function draw() {
             formatNumber(totalDeut * 24, numberFormat),
             formatNumber(totalDeut * 24 * 7, numberFormat),
         ];
-        cellsDeut.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: xDeut,
-            y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
-            maxWidth: colWidth,
-            alignRight: true,
-        }));
+        cellsDeut.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: xDeut,
+                y: padding + resourceImgSize + (i + 1) * yStep + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
     };
     const drawDivider = (yOffset: number) => {
         localCtx.fillStyle = 'rgba(255,255,255,0.5)';
@@ -338,13 +368,15 @@ function draw() {
             translations().extension.tools.signatureGenerator.combats,
             translations().extension.tools.signatureGenerator.debrisFieldReports,
         ];
-        events.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: padding + i * colWidth,
-            y: yStart + yOffset,
-            maxWidth: colWidth,
-            alignRight: true,
-        }));
+        events.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: padding + i * colWidth,
+                y: yStart + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
 
         const numbers = [
             formatNumber(expeditionStore.count),
@@ -352,13 +384,15 @@ function draw() {
             formatNumber(combatReportStore.count),
             formatNumber(debrisFieldReportStore.count),
         ];
-        numbers.forEach((text, i) => drawTextWithShadow({
-            text,
-            x: padding + i * colWidth,
-            y: yStart + yStep + yOffset,
-            maxWidth: colWidth,
-            alignRight: true,
-        }));
+        numbers.forEach((text, i) =>
+            drawTextWithShadow({
+                text,
+                x: padding + i * colWidth,
+                y: yStart + yStep + yOffset,
+                maxWidth: colWidth,
+                alignRight: true,
+            }),
+        );
     };
     const drawPlayerName = () => {
         const curAccount = universesAndAccountsStore.currentAccount;
@@ -416,43 +450,43 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .canvas-container {
-        width: 600px;
-        height: 300px;
+.canvas-container {
+    width: 600px;
+    height: 300px;
+}
+
+.generator {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    height: 100%;
+
+    &-settings {
+        border-left: 1px solid rgba(var(--color), 0.5);
+        padding-left: 16px;
+        overflow: auto;
     }
+}
 
-    .generator {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 16px;
-        height: 100%;
+.background-previews {
+    padding-top: 2px;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
 
-        &-settings {
-            border-left: 1px solid rgba(var(--color), 0.5);
-            padding-left: 16px;
-            overflow: auto;
-        }
+.background-preview {
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+    width: 100%;
+    min-width: 200px;
+    max-width: 400px;
+    aspect-ratio: 2 / 1;
+
+    &--active {
+        outline: 2px solid red;
     }
-
-    .background-previews {
-        padding-top: 2px;
-        display: grid;
-        gap: 8px;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 8px;
-    }
-
-    .background-preview {
-        background-size: cover;
-        background-position: center;
-        border-radius: 4px;
-        width: 100%;
-        min-width: 200px;
-        max-width: 400px;
-        aspect-ratio: 2 / 1;
-
-        &--active {
-            outline: 2px solid red;
-        }
-    }
+}
 </style>

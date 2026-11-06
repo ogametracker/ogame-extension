@@ -4,7 +4,12 @@ import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { DebrisFieldReportModule } from './DebrisFieldReportModule';
 import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
-import { DebrisFieldReportMessage, NewDebrisFieldReportMessage, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import {
+    DebrisFieldReportMessage,
+    NewDebrisFieldReportMessage,
+    TrackDebrisFieldReportMessage,
+    TrackManualDebrisFieldReportMessage,
+} from '@ogame-tracker/shared/messages/tracking/debris-fields';
 import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
 import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
 
@@ -55,11 +60,10 @@ export class DebrisFieldReportService implements MessageService {
                 break;
             }
 
-
             case MessageType.TrackManualDebrisFieldReport: {
                 const msg = message as TrackManualDebrisFieldReportMessage;
                 await this.dfModule.trackManualDebrisFieldReport(msg);
-                
+
                 const newDfReportMessage: NewDebrisFieldReportMessage = {
                     ogameMeta: message.ogameMeta,
                     type: MessageType.NewDebrisFieldReport,

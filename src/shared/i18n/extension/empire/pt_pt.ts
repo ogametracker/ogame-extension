@@ -1,7 +1,7 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { EmpireTranslations } from "./type";
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { EmpireTranslations } from './type';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const pt_pt: RecursivePartial<EmpireTranslations> = {
     header: 'Império',
@@ -17,7 +17,8 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
         totalPerDay: 'total por dia',
         totalPerWeek: 'total por semana',
         activeProductionSettings: 'Definições de Produção Activas',
-        messageProduction100: 'Os valores apresentados são com base no factor de produção de 100% e não tem em conta a falta de energia.',
+        messageProduction100:
+            'Os valores apresentados são com base no factor de produção de 100% e não tem em conta a falta de energia.',
 
         mines: {
             crawlersAvailable: 'disponivel',
@@ -55,7 +56,8 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
             groupSelectedItems: 'Agrupar items selecionados',
             showOriginalItems: 'Mostrar todos os items individualmente',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'nível' : 'níveis'} ${planets == 1 ? 'no' : 'nos'} ${planets} ${planets == 1 ? 'planeta' : 'planetas'}`,
+            levelsOnPlanets: (levels, planets) =>
+                `${levels} ${levels == 1 ? 'nível' : 'níveis'} ${planets == 1 ? 'no' : 'nos'} ${planets} ${planets == 1 ? 'planeta' : 'planetas'}`,
         },
 
         settings: {
@@ -89,7 +91,8 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
 
                 global: {
                     deselectItems: 'Desmarcar todos os items',
-                    ignoreInactiveLifeformTechnologySlots: 'Ignorar slots de tecnologias inactivas de forma de vida para todos os planetas',
+                    ignoreInactiveLifeformTechnologySlots:
+                        'Ignorar slots de tecnologias inactivas de forma de vida para todos os planetas',
                 },
 
                 includeInResult: 'Incluir no cálculo',
@@ -123,14 +126,16 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
         info: {
             generatingItems: 'A calcular os próximos melhores items',
 
-            slowCalculation: 'O cálculo da amortização ficará bastante mais lento agora que os edifícios e tecnologias das formas de vida foram incluídas. Isto será, provavelmente, optimizado no futuro.',
+            slowCalculation:
+                'O cálculo da amortização ficará bastante mais lento agora que os edifícios e tecnologias das formas de vida foram incluídas. Isto será, provavelmente, optimizado no futuro.',
             ctrlClick: 'Ctrl + Click numa checkbox para (des)selecionar todos os item até ao selecionado.',
         },
 
         saveLoad: {
             saveButton: 'Gravar resultados do cálculo da amortização',
             loadButton: (date: string) => `Carregar gravação (${date})`,
-            loadedSave: (date: string, hiddenItems: string) => `A ver os resultados guardados (${date}) - ${hiddenItems} entradas escondidas`,
+            loadedSave: (date: string, hiddenItems: string) =>
+                `A ver os resultados guardados (${date}) - ${hiddenItems} entradas escondidas`,
             abandonedPlanet: 'Planeta Destruído',
         },
 
@@ -186,7 +191,8 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
                 research: 'Pesquisa',
                 bonus: 'Bónus',
                 lifeformBuildingsBoost: `Boost de Edifícios de Forma de Vida`,
-                lifeformLevelBoost: (lifeform: string, boost: string) => `Boost de Nível de Forma de Vida (${lifeform}: ${boost})`,
+                lifeformLevelBoost: (lifeform: string, boost: string) =>
+                    `Boost de Nível de Forma de Vida (${lifeform}: ${boost})`,
                 bugBoost: 'Boost causado por bugs',
             },
             production: {

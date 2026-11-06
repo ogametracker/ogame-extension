@@ -1,33 +1,21 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable
-            :dataItems="expos"
-            :items="items"
-            :footerItems="footerItems"
-            show-percentage
-        >
+        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage>
             <template #cell-label="{ value }">
                 <span v-text="value" />
 
                 <span
-                    v-if="
-                        value == translations().extension.expeditions.expeditionEventSizes.small
-                    "
+                    v-if="value == translations().extension.expeditions.expeditionEventSizes.small"
                     class="mdi mdi-hexagon-slice-1"
                     :style="{ color: colors.small }"
                 />
                 <span
-                    v-else-if="
-                        value ==
-                        translations().extension.expeditions.expeditionEventSizes.medium
-                    "
+                    v-else-if="value == translations().extension.expeditions.expeditionEventSizes.medium"
                     class="mdi mdi-hexagon-slice-3"
                     :style="{ color: colors.medium }"
                 />
                 <span
-                    v-else-if="
-                        value == translations().extension.expeditions.expeditionEventSizes.large
-                    "
+                    v-else-if="value == translations().extension.expeditions.expeditionEventSizes.large"
                     class="mdi mdi-hexagon-slice-5"
                     :style="{ color: colors.large }"
                 />
@@ -76,25 +64,27 @@ const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextExpos => nextExpos.reduce((acc, cur) => acc + cur.events.darkMatter, 0),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextExpos => nextExpos.reduce((acc, cur) => acc + cur.events.darkMatter, 0),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

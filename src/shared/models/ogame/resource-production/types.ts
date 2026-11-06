@@ -1,15 +1,19 @@
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
-import { AllianceClass } from "../classes/AllianceClass";
-import { PlayerClass } from "../classes/PlayerClass";
-import { getTechnologyBonusFactor } from "../lifeforms/utils";
-import { ResourceType } from "../resources/ResourceType";
-import { AllianceClassTraderProductionBonus, CommandStaffProductionBonus, GeologistProductionBonus, PlasmaTechnologyProductionBonus } from "./constants";
-import { getCrawlerBoost } from "./getCrawlerBoost";
-import { LifeformTechnologyType } from "../lifeforms/LifeformTechnologyType";
-import { LowTemperatureDrives } from "../lifeforms/technologies/humans/LowTemperatureDrives";
-import { ResourceProductionBonusLifeformTechnologies } from "../lifeforms/technologies/LifeformTechnologies";
-
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { CrawlerProductionPercentage } from '../../empire/CrawlerProductionPercentage';
+import { AllianceClass } from '../classes/AllianceClass';
+import { PlayerClass } from '../classes/PlayerClass';
+import { getTechnologyBonusFactor } from '../lifeforms/utils';
+import { ResourceType } from '../resources/ResourceType';
+import {
+    AllianceClassTraderProductionBonus,
+    CommandStaffProductionBonus,
+    GeologistProductionBonus,
+    PlasmaTechnologyProductionBonus,
+} from './constants';
+import { getCrawlerBoost } from './getCrawlerBoost';
+import { LifeformTechnologyType } from '../lifeforms/LifeformTechnologyType';
+import { LowTemperatureDrives } from '../lifeforms/technologies/humans/LowTemperatureDrives';
+import { ResourceProductionBonusLifeformTechnologies } from '../lifeforms/technologies/LifeformTechnologies';
 
 interface GlobalProductionBonuses {
     collectorClassBonusFactor: number;
@@ -74,7 +78,6 @@ export class EmpireProductionBreakdown {
         crawlerMaxProductionFactor: number;
     };
 
-
     public constructor(
         resource: ResourceType,
 
@@ -115,22 +118,28 @@ export class EmpireProductionBreakdown {
         this.#planetIds.forEach(planetId => {
             const planet = this.planets[planetId];
 
-            collectorClassBonusFactor += planet.collectorClassBonusFactor * getTechnologyBonusFactor(
-                planet.lifeformTechnologyBoost[LifeformTechnologyType.rocktalCollectorEnhancement],
-                planet.lifeformExperienceBoost,
-            );
-
-            ResourceProductionBonusLifeformTechnologies.forEach(prudctionBonusTechnology => {
-                lifeformTechnologyProductionBonusFactor += planet.lifeformTechnologyBonusProductionFactor[prudctionBonusTechnology.type] * getTechnologyBonusFactor(
-                    planet.lifeformTechnologyBoost[prudctionBonusTechnology.type],
+            collectorClassBonusFactor +=
+                planet.collectorClassBonusFactor *
+                getTechnologyBonusFactor(
+                    planet.lifeformTechnologyBoost[LifeformTechnologyType.rocktalCollectorEnhancement],
                     planet.lifeformExperienceBoost,
                 );
+
+            ResourceProductionBonusLifeformTechnologies.forEach(prudctionBonusTechnology => {
+                lifeformTechnologyProductionBonusFactor +=
+                    planet.lifeformTechnologyBonusProductionFactor[prudctionBonusTechnology.type] *
+                    getTechnologyBonusFactor(
+                        planet.lifeformTechnologyBoost[prudctionBonusTechnology.type],
+                        planet.lifeformExperienceBoost,
+                    );
             });
 
-            lifeformTechnologyCrawlerProductionBonusFactor += planet.lifeformTechnologyCrawlerProductionBonusFactor * getTechnologyBonusFactor(
-                planet.lifeformTechnologyBoost[LifeformTechnologyType.ionCrystalModules],
-                planet.lifeformExperienceBoost,
-            );
+            lifeformTechnologyCrawlerProductionBonusFactor +=
+                planet.lifeformTechnologyCrawlerProductionBonusFactor *
+                getTechnologyBonusFactor(
+                    planet.lifeformTechnologyBoost[LifeformTechnologyType.ionCrystalModules],
+                    planet.lifeformExperienceBoost,
+                );
         });
 
         return {
@@ -153,15 +162,17 @@ export class EmpireProductionBreakdown {
         const {
             collectorClassBonusFactor,
             lifeformTechnologyProductionBonusFactor,
-            lifeformTechnologyCrawlerProductionBonusFactor
+            lifeformTechnologyCrawlerProductionBonusFactor,
         } = globalBonuses;
 
         const mineProduction = this.planets[planetId].mineProduction;
 
-        const playerClassFactor = (this.playerClass == PlayerClass.collector ? 1 : 0)
-            * this.serverSettings.collectorProductionFactor
-            * (1 + collectorClassBonusFactor);
-        const allianceClassFactor = (this.allianceClass == AllianceClass.trader ? 1 : 0) * AllianceClassTraderProductionBonus;
+        const playerClassFactor =
+            (this.playerClass == PlayerClass.collector ? 1 : 0) *
+            this.serverSettings.collectorProductionFactor *
+            (1 + collectorClassBonusFactor);
+        const allianceClassFactor =
+            (this.allianceClass == AllianceClass.trader ? 1 : 0) * AllianceClassTraderProductionBonus;
         const geologistFactor = this.geologist ? GeologistProductionBonus : 0;
         const commandStaffFactor = this.commandStaff ? CommandStaffProductionBonus : 0;
 
@@ -187,29 +198,30 @@ export class EmpireProductionBreakdown {
         });
 
         const baseProduction = this.planets[planetId].baseProduction; // base production
-        const plasmaTechnologyProduction = (mineProduction * this.plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource]); // plasma technology bonus production
+        const plasmaTechnologyProduction =
+            mineProduction * this.plasmaTechnologyLevel * PlasmaTechnologyProductionBonus[this.#resource]; // plasma technology bonus production
         const crawlerProduction = mineProduction * crawlerProductionFactor; // crawler bonus production
         const playerClassProduction = mineProduction * playerClassFactor; // player class bonus production
         const allianceClassProduction = mineProduction * allianceClassFactor; // alliance class bonus production
         const geologistProduction = mineProduction * geologistFactor; // geologist bonus production
         const commandStaffProduction = mineProduction * commandStaffFactor; // command staff bonus production
         const itemProduction = mineProduction * this.planets[planetId].itemBonusProductionFactor; // item bonus production
-        const lifeformBuildingsProduction = mineProduction * this.planets[planetId].lifeformBuildingBonusProductionFactor; // lifeform buildings bonus production
+        const lifeformBuildingsProduction =
+            mineProduction * this.planets[planetId].lifeformBuildingBonusProductionFactor; // lifeform buildings bonus production
         const lifeformTechnologiesProduction = mineProduction * lifeformTechnologyProductionBonusFactor; // lifeform technology bonus production
 
         const total =
-            baseProduction
-            + mineProduction
-            + plasmaTechnologyProduction
-            + crawlerProduction
-            + playerClassProduction
-            + allianceClassProduction
-            + geologistProduction
-            + commandStaffProduction
-            + itemProduction
-            + lifeformBuildingsProduction
-            + lifeformTechnologiesProduction
-            ;
+            baseProduction +
+            mineProduction +
+            plasmaTechnologyProduction +
+            crawlerProduction +
+            playerClassProduction +
+            allianceClassProduction +
+            geologistProduction +
+            commandStaffProduction +
+            itemProduction +
+            lifeformBuildingsProduction +
+            lifeformTechnologiesProduction;
 
         return {
             baseProduction,
@@ -240,7 +252,6 @@ export class EmpireProductionBreakdown {
     public getAverage(includeConsumption = false) {
         return this.getTotal(includeConsumption) / this.#planetIds.length;
     }
-
 
     public clone(): EmpireProductionBreakdown {
         const planetStatesClone: Record<number, EmpireProductionPlanetState> = {};

@@ -1,4 +1,4 @@
-import { MessageTitles } from "./types";
+import { MessageTitles } from './types';
 
 export const hr: MessageTitles = {
     expedition: 'Rezultati ekspedicija',

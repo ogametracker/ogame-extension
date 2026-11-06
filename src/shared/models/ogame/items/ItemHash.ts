@@ -979,5 +979,5 @@ const _ItemHashes: Record<ItemHash, 0> = {
     [ItemHash.resourceBooster_all_40percent_30days]: 0,
     [ItemHash.resourceBooster_all_40percent_90days]: 0,
     [ItemHash.resourceBooster_all_40percent_7days_2]: 0,
-}
+};
 export const ItemHashes = Object.keys(_ItemHashes) as ItemHash[];

@@ -18,7 +18,13 @@
         </div>
 
         <div class="find-column" :style="`--color: ${colors.shipUnitsConverted}`">
-            <h3 v-text="translations().extension.expeditions.topFinds.title(translations().extension.expeditions.topFinds.shipAmount)" />
+            <h3
+                v-text="
+                    translations().extension.expeditions.topFinds.title(
+                        translations().extension.expeditions.topFinds.shipAmount,
+                    )
+                "
+            />
             <select v-model.number="selectedShip" style="display: block; margin-bottom: 4px">
                 <option v-for="ship in ShipTypes" :key="ship" :value="ship" v-text="translations().ogame.ships[ship]" />
             </select>
@@ -46,7 +52,12 @@ import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/Resou
 import { useExpeditionStore } from '../../../data/ExpeditionDataModule';
 import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
 import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-import type { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import type {
+    ExpeditionEventDarkMatter,
+    ExpeditionEventFleet,
+    ExpeditionEventResources,
+    ExpeditionFindableShipType,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
 import type { GridTableColumn } from '../../../components/common/GridTable.vue';
 import { useSettingsStore } from '../../../data/SettingsDataModule';
 import { getRGBString } from '../../../utils/getRGBString';
@@ -54,18 +65,18 @@ import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes'
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { TopList } from '@stats/models/TopList';
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
-import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
 type Find = {
     size: ExpeditionEventSize;
     amount: number;
     date: number;
-}
+};
 
 type ShipAmountFind = {
     amount: number;
     date: number;
-}
+};
 
 type Finds = {
     metal: TopList<Find>;
@@ -75,7 +86,7 @@ type Finds = {
     shipUnitsConverted: TopList<Find>;
     darkMatter: TopList<Find>;
     shipAmounts: Record<ExpeditionFindableShipType, TopList<ShipAmountFind>>;
-}
+};
 
 type FindKey = Exclude<keyof Finds, 'shipAmounts'>;
 
@@ -112,10 +123,14 @@ const largestFinds: Finds = {
         comparator: (a, b) => b.amount - a.amount,
         maxSize: 25,
     }),
-    shipAmounts: createRecord(ExpeditionFindableShipTypes, ship => new TopList<ShipAmountFind>({
-        comparator: (a, b) => b.amount - a.amount,
-        maxSize: 25,
-    })),
+    shipAmounts: createRecord(
+        ExpeditionFindableShipTypes,
+        ship =>
+            new TopList<ShipAmountFind>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+    ),
 };
 
 const keys: FindKey[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
@@ -128,9 +143,12 @@ const keyTranslations = computed<Record<FindKey, string>>(() => {
         crystal: translations().ogame.resources.crystal,
         deuterium: translations().ogame.resources.deuterium,
         shipUnits: translations().extension.expeditions.topFinds.shipUnits,
-        shipUnitsConverted: translations().extension.expeditions.topFinds.shipUnits + ` (${settingsStore.settings.conversionRates.mode == 'msu'
-                ? translations().extension.common.msu
-                : translations().extension.common.dsu
+        shipUnitsConverted:
+            translations().extension.expeditions.topFinds.shipUnits +
+            ` (${
+                settingsStore.settings.conversionRates.mode == 'msu'
+                    ? translations().extension.common.msu
+                    : translations().extension.common.dsu
             })`,
         darkMatter: translations().ogame.premium.darkMatter,
     };
@@ -236,11 +254,12 @@ function addFleetExpo(expo: ExpeditionEventFleet) {
 }
 
 function addResourceExpo(expo: ExpeditionEventResources) {
-    const resource = expo.resources.metal > 0
-        ? ResourceType.metal
-        : expo.resources.crystal > 0
-            ? ResourceType.crystal
-            : ResourceType.deuterium;
+    const resource =
+        expo.resources.metal > 0
+            ? ResourceType.metal
+            : expo.resources.crystal > 0
+              ? ResourceType.crystal
+              : ResourceType.deuterium;
 
     if (expo.resources[resource] == 0) {
         return;
@@ -259,11 +278,9 @@ onMounted(async () => {
     expeditions.forEach(expo => {
         if (expo.type == ExpeditionEventType.resources) {
             addResourceExpo(expo);
-        }
-        else if (expo.type == ExpeditionEventType.fleet) {
+        } else if (expo.type == ExpeditionEventType.fleet) {
             addFleetExpo(expo);
-        }
-        else if (expo.type == ExpeditionEventType.darkMatter) {
+        } else if (expo.type == ExpeditionEventType.darkMatter) {
             addDarkMatterExpo(expo);
         }
     });
@@ -273,13 +290,13 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .scaled-icon {
-        transform: scale(1.6);
-    }
+.scaled-icon {
+    transform: scale(1.6);
+}
 
-    .find-column {
-        display: inline-flex;
-        flex-direction: column;
-        margin-right: 16px;
-    }
+.find-column {
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 16px;
+}
 </style>

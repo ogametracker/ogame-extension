@@ -7,11 +7,18 @@
         <template #cell-discoverDate="{ value, item }">
             <i v-if="item.lifeform == 'humans'" v-text="translations().extension.empire.lifeforms.alwaysAvailable" />
             <span v-else-if="value != null" v-text="formatDate(value, 'datetime')" />
-            <span v-else-if="item.totalExperience > 0" v-text="translations().extension.empire.lifeforms.discoveryDateUnknown" />
+            <span
+                v-else-if="item.totalExperience > 0"
+                v-text="translations().extension.empire.lifeforms.discoveryDateUnknown"
+            />
             <i v-else v-text="translations().extension.empire.lifeforms.notDiscoveredYet" />
         </template>
         <template #cell-level="{ item }">
-            <span v-text="`${item.level} (${formatNumber(item.levelExperience)}/${formatNumber(item.neededLevelExperience)} XP)`" />
+            <span
+                v-text="
+                    `${item.level} (${formatNumber(item.levelExperience)}/${formatNumber(item.neededLevelExperience)} XP)`
+                "
+            />
         </template>
         <template #cell-totalExperience="{ value }">
             <span v-text="formatNumber(value)" />
@@ -27,7 +34,10 @@ import GridTable from '@stats/components/common/GridTable.vue';
 import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
 import { computed } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
-import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import {
+    getLifeformExperienceNeededForLevel,
+    getLifeformLevel,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
@@ -85,7 +95,8 @@ const items = computed<LifeformProgressItem[]>(() => {
             lifeform,
             level,
             levelExperience: Math.max(0, exp - getLifeformExperienceNeededForLevel(level)),
-            neededLevelExperience: getLifeformExperienceNeededForLevel(level + 1) - getLifeformExperienceNeededForLevel(level),
+            neededLevelExperience:
+                getLifeformExperienceNeededForLevel(level + 1) - getLifeformExperienceNeededForLevel(level),
             totalExperience: exp,
             findingCount: lifeformInfo[lifeform].discoveriesCount,
             discoverDate: lifeformInfo[lifeform].discoveredDate,

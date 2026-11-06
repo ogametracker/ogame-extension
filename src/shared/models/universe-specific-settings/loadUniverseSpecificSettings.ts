@@ -1,7 +1,7 @@
-import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
-import { MessageOgameMeta } from "@ogame-tracker/shared/messages/Message";
-import { mergeDeep } from "@ogame-tracker/shared/utils/mergeDeep";
-import { UniverseSpecificSettings } from "./UniverseSpecificSettings";
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { mergeDeep } from '@ogame-tracker/shared/utils/mergeDeep';
+import { UniverseSpecificSettings } from './UniverseSpecificSettings';
 
 const defaultSettings: UniverseSpecificSettings = {
     universeHistory: {
@@ -19,7 +19,7 @@ export async function loadUniverseSpecificSettings(meta: MessageOgameMeta): Prom
 
     const settings = mergeDeep<UniverseSpecificSettings>(
         defaultSettings,
-        (await db.get('universeSpecificSettings', 0)) ?? {} as UniverseSpecificSettings,
+        (await db.get('universeSpecificSettings', 0)) ?? ({} as UniverseSpecificSettings),
     );
     return settings;
 }

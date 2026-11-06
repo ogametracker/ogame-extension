@@ -1,10 +1,9 @@
-import { Cost } from "../common/Cost";
-import { Ship } from "./Ship";
-import { ShipType } from "./ShipType";
+import { Cost } from '../common/Cost';
+import { Ship } from './Ship';
+import { ShipType } from './ShipType';
 
 class HeavyFighterClass extends Ship {
-
-    public get type() { 
+    public get type() {
         return ShipType.heavyFighter;
     }
 
@@ -13,12 +12,12 @@ class HeavyFighterClass extends Ship {
             metal: 6_000,
             crystal: 4_000,
             deuterium: 0,
-            energy: 0,            
+            energy: 0,
         };
     }
 
     public baseHull(): number {
-         return 10_000;
+        return 10_000;
     }
 
     public baseShield(): number {
@@ -30,7 +29,7 @@ class HeavyFighterClass extends Ship {
     }
 
     public baseSpeed(): number {
-         return 10_000;
+        return 10_000;
     }
 
     public baseCargoCapacity(): number {

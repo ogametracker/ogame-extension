@@ -1,12 +1,15 @@
-import { Cost } from "../../../common/Cost";
-import { ResourceType } from "../../../resources/ResourceType";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { Cost } from '../../../common/Cost';
+import { ResourceType } from '../../../resources/ResourceType';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { LifeformTechnologyBonusLifeformBuilding, ResourceProductionBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
-class HighPerformanceTransformerClass extends LifeformBuilding implements ResourceProductionBonusLifeformBuilding, LifeformTechnologyBonusLifeformBuilding {
+class HighPerformanceTransformerClass
+    extends LifeformBuilding
+    implements ResourceProductionBonusLifeformBuilding, LifeformTechnologyBonusLifeformBuilding
+{
     public constructor() {
         super({
             metal: {

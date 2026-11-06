@@ -1,4 +1,4 @@
-import { DBSchema } from "idb";
+import { DBSchema } from 'idb';
 
 export interface DbServerSettings {
     _lastUpdate: number;
@@ -90,7 +90,7 @@ export interface DbServerSettings {
     exodusRatioDeuterium: number;
 
     lifeformsEnabled: boolean;
-};
+}
 type DbServerSettingsItem<T extends keyof DbServerSettings = keyof DbServerSettings> = {
     key: T;
     value: DbServerSettings[T];

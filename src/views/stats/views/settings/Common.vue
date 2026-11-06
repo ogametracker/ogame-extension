@@ -15,8 +15,8 @@ import ForceUpdateServerSettings from '@stats/components/settings/ForceUpdateSer
 </script>
 
 <style lang="scss" scoped>
-    .common-settings {
-        display: grid;
-        row-gap: 16px;
-    }
+.common-settings {
+    display: grid;
+    row-gap: 16px;
+}
 </style>

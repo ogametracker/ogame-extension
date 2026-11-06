@@ -1,11 +1,9 @@
-import { NotificationTranslations } from "./type";
+import { NotificationTranslations } from './type';
 
 export const de: NotificationTranslations = {
     combatTracking: {
         title: (value: string) =>
-            value == '1'
-                ? `${value} neuer Kampfbericht getrackt`
-                : `${value} neue Kampfberichte getrackt`,
+            value == '1' ? `${value} neuer Kampfbericht getrackt` : `${value} neue Kampfberichte getrackt`,
         message: (value: string) =>
             value == '1'
                 ? `Es wurde ${value} neuer Kampfbericht getrackt.`
@@ -13,9 +11,7 @@ export const de: NotificationTranslations = {
     },
     debrisFieldReportTracking: {
         title: (value: string) =>
-            value == '1'
-                ? `${value} neuer TF-Abbaubericht getrackt`
-                : `${value} neue TF-Abbauberichte getrackt`,
+            value == '1' ? `${value} neuer TF-Abbaubericht getrackt` : `${value} neue TF-Abbauberichte getrackt`,
         message: (value: string) =>
             value == '1'
                 ? `Es wurde ${value} neuer TF-Abbaubericht getrackt.`
@@ -23,10 +19,7 @@ export const de: NotificationTranslations = {
     },
     expeditionTracking: {
         fleetLost: {
-            title: (value: string) =>
-                value == '1'
-                    ? `${value} Flottenverlust`
-                    : `${value} Flottenverluste`,
+            title: (value: string) => (value == '1' ? `${value} Flottenverlust` : `${value} Flottenverluste`),
             message: (value: string) =>
                 value == '1'
                     ? `${value} Flotte ist nicht von ihrer Expedition zurückgekehrt.`
@@ -34,9 +27,7 @@ export const de: NotificationTranslations = {
         },
         result: {
             title: (value: string) =>
-                value == '1'
-                    ? `${value} neue Expedition getrackt`
-                    : `${value} neue Expeditionen getrackt`,
+                value == '1' ? `${value} neue Expedition getrackt` : `${value} neue Expeditionen getrackt`,
             summary: 'Zusammenfassung der Funde',
             events: 'Expeditionsereignisse',
         },

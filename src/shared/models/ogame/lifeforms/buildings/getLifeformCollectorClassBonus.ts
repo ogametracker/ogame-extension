@@ -1,10 +1,10 @@
-import { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
-import { PlayerClass } from "../../classes/PlayerClass";
-import { LifeformType } from "../LifeformType";
-import { ClassBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
-import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
-import { LifeformTechnologyType } from "../LifeformTechnologyType";
+import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { PlayerClass } from '../../classes/PlayerClass';
+import { LifeformType } from '../LifeformType';
+import { ClassBonusLifeformTechnologies } from '../technologies/LifeformTechnologies';
+import { getLifeformTechnologyBonus } from './getLifeformTechnologyBonus';
+import { LifeformTechnologyType } from '../LifeformTechnologyType';
 
 export function getLifeformCollectorClassBonus(player: LocalPlayerData): number {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
@@ -20,9 +20,9 @@ export function getLifeformCollectorClassBonus(player: LocalPlayerData): number 
         }
 
         const techFactor = 1 + technologyBonusByPlanet[planet.id][LifeformTechnologyType.rocktalCollectorEnhancement];
-        
-        const collectorBonusTechnologies = ClassBonusLifeformTechnologies.filter(
-            tech => planet.activeLifeformTechnologies.includes(tech.type)
+
+        const collectorBonusTechnologies = ClassBonusLifeformTechnologies.filter(tech =>
+            planet.activeLifeformTechnologies.includes(tech.type),
         );
         const baseCollectorBonus = collectorBonusTechnologies.reduce<number>((total, tech) => {
             const level = planet.lifeformTechnologies[tech.type];

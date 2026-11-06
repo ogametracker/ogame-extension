@@ -1,13 +1,13 @@
-import { Defense } from "./Defense";
-import { DefenseType } from "./DefenseType";
-import { GaussCannon } from "./GaussCannon";
-import { HeavyLaser } from "./HeavyLaser";
-import { IonCannon } from "./IonCannon";
-import { LargeShieldDome } from "./LargeShieldDome";
-import { LightLaser } from "./LightLaser";
-import { PlasmaTurret } from "./PlasmaTurret";
-import { RocketLauncher } from "./RocketLauncher";
-import { SmallShieldDome } from "./SmallShieldDome";
+import { Defense } from './Defense';
+import { DefenseType } from './DefenseType';
+import { GaussCannon } from './GaussCannon';
+import { HeavyLaser } from './HeavyLaser';
+import { IonCannon } from './IonCannon';
+import { LargeShieldDome } from './LargeShieldDome';
+import { LightLaser } from './LightLaser';
+import { PlasmaTurret } from './PlasmaTurret';
+import { RocketLauncher } from './RocketLauncher';
+import { SmallShieldDome } from './SmallShieldDome';
 
 export const DefenseTypes: DefenseType[] = [
     DefenseType.rocketLauncher,
@@ -19,7 +19,6 @@ export const DefenseTypes: DefenseType[] = [
     DefenseType.smallShieldDome,
     DefenseType.largeShieldDome,
 ];
-
 
 export const DefenseByTypes: Record<DefenseType, Defense> = {
     [DefenseType.rocketLauncher]: RocketLauncher,

@@ -1,9 +1,8 @@
-import { Cost } from "../common/Cost";
-import { Building } from "./Building";
-import { BuildingType } from "./BuildingType";
+import { Cost } from '../common/Cost';
+import { Building } from './Building';
+import { BuildingType } from './BuildingType';
 
 class SensorPhalanxClass extends Building {
-
     public get type() {
         return BuildingType.sensorPhalanx;
     }

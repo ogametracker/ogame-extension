@@ -15,8 +15,8 @@ import IncludeLostLootResourcesInResourceBalance from '@stats/components/setting
 </script>
 
 <style lang="scss" scoped>
-    .resource-balance-settings {
-        display: grid;
-        row-gap: 16px;
-    }
+.resource-balance-settings {
+    display: grid;
+    row-gap: 16px;
+}
 </style>

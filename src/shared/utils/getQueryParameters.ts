@@ -9,7 +9,7 @@ export function getQueryParameters(query: string): Record<string, string> {
     }
 
     query.split('&').forEach(pair => {
-        const [ key, value ] = pair.split('=');
+        const [key, value] = pair.split('=');
         result[key] = value;
     });
 

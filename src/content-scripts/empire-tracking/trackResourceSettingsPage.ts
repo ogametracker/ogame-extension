@@ -1,29 +1,37 @@
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { _logError } from "@ogame-tracker/shared/utils/_log";
-import { empireTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { UpdateAllianceClassMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdateResearchLevelsMessage } from "@ogame-tracker/shared/messages/tracking/empire";
-import { CrawlerProductionPercentage } from "@ogame-tracker/shared/models/empire/CrawlerProductionPercentage";
-import { ProductionPercentage } from "@ogame-tracker/shared/models/empire/ProductionPercentage";
-import { BuildingType } from "@ogame-tracker/shared/models/ogame/buildings/BuildingType";
-import { AllianceClass } from "@ogame-tracker/shared/models/ogame/classes/AllianceClass";
-import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
-import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { observerCallbacks } from "./main";
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { _logError } from '@ogame-tracker/shared/utils/_log';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import {
+    UpdateAllianceClassMessage,
+    UpdatePlanetBuildingLevelsMessage,
+    UpdatePlanetProductionSettingsMessage,
+    UpdatePlanetShipCountsMessage,
+    UpdateResearchLevelsMessage,
+} from '@ogame-tracker/shared/messages/tracking/empire';
+import { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
+import { ProductionPercentage } from '@ogame-tracker/shared/models/empire/ProductionPercentage';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { observerCallbacks } from './main';
 
 export function trackResourceSettingsPage(): void {
     observerCallbacks.push({
         selector: '#inhalt .mainRS',
         callback: element => {
-            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
-                ?? _throw('no meta element found for ogame-planet-id');
+            const planetIdText =
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
+                _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
-            const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
-                ?? _throw('did not find meta ogame-planet-type');
+            const planetType =
+                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content ??
+                _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
             try {
@@ -36,7 +44,10 @@ export function trackResourceSettingsPage(): void {
                         data: {
                             [BuildingType.metalMine]: getLevelOrAmount(element, BuildingType.metalMine),
                             [BuildingType.crystalMine]: getLevelOrAmount(element, BuildingType.crystalMine),
-                            [BuildingType.deuteriumSynthesizer]: getLevelOrAmount(element, BuildingType.deuteriumSynthesizer),
+                            [BuildingType.deuteriumSynthesizer]: getLevelOrAmount(
+                                element,
+                                BuildingType.deuteriumSynthesizer,
+                            ),
                             [BuildingType.fusionReactor]: getLevelOrAmount(element, BuildingType.fusionReactor),
                             [BuildingType.solarPlant]: getLevelOrAmount(element, BuildingType.solarPlant),
                         },
@@ -44,11 +55,9 @@ export function trackResourceSettingsPage(): void {
                     senderUuid: empireTrackingUuid,
                 };
                 sendMessage(buildingsMessage);
-            }
-            catch (err) {
+            } catch (err) {
                 _logError(err);
             }
-
 
             try {
                 const solSatMessage: UpdatePlanetShipCountsMessage = {
@@ -64,11 +73,9 @@ export function trackResourceSettingsPage(): void {
                     senderUuid: empireTrackingUuid,
                 };
                 sendMessage(solSatMessage);
-            }
-            catch (err) {
+            } catch (err) {
                 _logError(err);
             }
-
 
             try {
                 const researchMessage: UpdateResearchLevelsMessage = {
@@ -80,11 +87,9 @@ export function trackResourceSettingsPage(): void {
                     senderUuid: empireTrackingUuid,
                 };
                 sendMessage(researchMessage);
-            }
-            catch (err) {
+            } catch (err) {
                 _logError(err);
             }
-
 
             try {
                 const allyClassMessage: UpdateAllianceClassMessage = {
@@ -94,11 +99,9 @@ export function trackResourceSettingsPage(): void {
                     senderUuid: empireTrackingUuid,
                 };
                 sendMessage(allyClassMessage);
-            }
-            catch (err) {
+            } catch (err) {
                 _logError(err);
             }
-
 
             try {
                 const productionSettingsMessage: UpdatePlanetProductionSettingsMessage = {
@@ -108,20 +111,40 @@ export function trackResourceSettingsPage(): void {
                         isMoon,
                         planetId,
                         data: {
-                            [BuildingType.metalMine]: getProductionPercentage(element, BuildingType.metalMine) as ProductionPercentage,
-                            [BuildingType.crystalMine]: getProductionPercentage(element, BuildingType.crystalMine) as ProductionPercentage,
-                            [BuildingType.deuteriumSynthesizer]: getProductionPercentage(element, BuildingType.deuteriumSynthesizer) as ProductionPercentage,
-                            [BuildingType.solarPlant]: getProductionPercentage(element, BuildingType.solarPlant) as ProductionPercentage,
-                            [BuildingType.fusionReactor]: getProductionPercentage(element, BuildingType.fusionReactor) as ProductionPercentage,
-                            [ShipType.solarSatellite]: getProductionPercentage(element, ShipType.solarSatellite) as ProductionPercentage,
-                            [ShipType.crawler]: getProductionPercentage(element, ShipType.crawler) as CrawlerProductionPercentage,
+                            [BuildingType.metalMine]: getProductionPercentage(
+                                element,
+                                BuildingType.metalMine,
+                            ) as ProductionPercentage,
+                            [BuildingType.crystalMine]: getProductionPercentage(
+                                element,
+                                BuildingType.crystalMine,
+                            ) as ProductionPercentage,
+                            [BuildingType.deuteriumSynthesizer]: getProductionPercentage(
+                                element,
+                                BuildingType.deuteriumSynthesizer,
+                            ) as ProductionPercentage,
+                            [BuildingType.solarPlant]: getProductionPercentage(
+                                element,
+                                BuildingType.solarPlant,
+                            ) as ProductionPercentage,
+                            [BuildingType.fusionReactor]: getProductionPercentage(
+                                element,
+                                BuildingType.fusionReactor,
+                            ) as ProductionPercentage,
+                            [ShipType.solarSatellite]: getProductionPercentage(
+                                element,
+                                ShipType.solarSatellite,
+                            ) as ProductionPercentage,
+                            [ShipType.crawler]: getProductionPercentage(
+                                element,
+                                ShipType.crawler,
+                            ) as CrawlerProductionPercentage,
                         },
                     },
                     senderUuid: empireTrackingUuid,
                 };
                 sendMessage(productionSettingsMessage);
-            }
-            catch (err) {
+            } catch (err) {
                 _logError(err);
             }
         },
@@ -129,7 +152,9 @@ export function trackResourceSettingsPage(): void {
 }
 
 function getLevelOrAmount(element: Element, id: number): number {
-    const label = element.querySelector(`tr[class~="${id}"] .label`)?.textContent ?? _throw(`no label element found for techid ${id}`);
+    const label =
+        element.querySelector(`tr[class~="${id}"] .label`)?.textContent ??
+        _throw(`no label element found for techid ${id}`);
     const regex = /\b(?<level>\d+)\b/;
 
     const levelText = label.match(regex)?.groups?.level ?? _throw('no level text found');
@@ -155,14 +180,13 @@ function getAllianceClass(element: Element): AllianceClass {
 }
 
 function getProductionPercentage(element: Element, techId: number): number {
-    const select = element.querySelector(`select[name="productionFactor[${techId}]"]`) as HTMLSelectElement | null
-        ?? _throw(`select not found for techid ${techId}`);
+    const select =
+        (element.querySelector(`select[name="productionFactor[${techId}]"]`) as HTMLSelectElement | null) ??
+        _throw(`select not found for techid ${techId}`);
 
     const levelOrAmount = getLevelOrAmount(element, techId);
     // sometimes production is set to 0% for level/count 0 items, but will change to 100 automatically afterwards, so we just set it to 100
-    if (levelOrAmount == 0)
-        return 100;
+    if (levelOrAmount == 0) return 100;
 
     return parseIntSafe(select.value, 10);
 }
-

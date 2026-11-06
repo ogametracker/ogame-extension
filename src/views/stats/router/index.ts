@@ -10,7 +10,11 @@ function collectRouteNames(records: readonly RouteRecordRaw[]) {
     for (const record of records) {
         if (typeof record.name === 'string') {
             routeNames.add(record.name);
-            if (typeof record.redirect === 'object' && 'name' in record.redirect && typeof record.redirect.name === 'string') {
+            if (
+                typeof record.redirect === 'object' &&
+                'name' in record.redirect &&
+                typeof record.redirect.name === 'string'
+            ) {
                 defaultRouteNames.set(record.name, record.redirect.name);
             }
         }
@@ -32,7 +36,7 @@ export function createStatsRouter(settings: ReturnType<typeof useSettingsStore>)
             const name = typeof record.name === 'string' ? record.name : '';
             const redirect = defaultRouteNames.get(name);
             if (!redirect) {
-                return children ? { ...record, children } as RouteRecordRaw : record;
+                return children ? ({ ...record, children } as RouteRecordRaw) : record;
             }
             return {
                 ...record,

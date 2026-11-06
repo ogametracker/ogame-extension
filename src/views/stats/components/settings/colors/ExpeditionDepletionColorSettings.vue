@@ -13,7 +13,10 @@
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
@@ -23,7 +26,9 @@ const settingsStore = useSettingsStore();
 
 const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
-const labels = computed<Record<ExpeditionDepletionLevel | 'unknown', string>>(() => createRecord(depletionLevels, level => translations().extension.expeditions.depletionLevels[level]));
+const labels = computed<Record<ExpeditionDepletionLevel | 'unknown', string>>(() =>
+    createRecord(depletionLevels, level => translations().extension.expeditions.depletionLevels[level]),
+);
 
 const keys = depletionLevels;
 

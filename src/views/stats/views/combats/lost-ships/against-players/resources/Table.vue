@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="reportsPerDay" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable
+            :dataItems="reportsPerDay"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -80,11 +86,11 @@ const items = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(() => {
 
     return ResourceTypes.map(resource => ({
         label: translations().extension.resources[resource],
-        getValue: reports => reports.reduce(
-            (acc, report) => acc
-                + report.lostShips.againstPlayers.resourceUnits[resource] * localFactors[resource],
-            0
-        ),
+        getValue: reports =>
+            reports.reduce(
+                (acc, report) => acc + report.lostShips.againstPlayers.resourceUnits[resource] * localFactors[resource],
+                0,
+            ),
     }));
 });
 
@@ -98,20 +104,22 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
     const result: RangedStatsTableItem<DailyCombatReportResult>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: reports => reports.reduce(
-                (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, localFactors),
-                0
-            ),
+            getValue: reports =>
+                reports.reduce(
+                    (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, localFactors),
+                    0,
+                ),
         },
     ];
 
     if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
         result.push({
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
-            getValue: reports => reports.reduce(
-                (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, localFactors),
-                0
-            ),
+            getValue: reports =>
+                reports.reduce(
+                    (acc, report) => acc + getMsuOrDsu(report.lostShips.againstPlayers.resourceUnits, localFactors),
+                    0,
+                ),
         });
     }
 
@@ -120,25 +128,25 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
+    hr {
+        width: 100%;
     }
+}
 </style>

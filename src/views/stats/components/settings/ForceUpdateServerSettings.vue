@@ -9,7 +9,10 @@
                 <b v-text="formatDate(lastUpdate, 'datetime')" />
             </div>
 
-            <button @click="forceUpdate()" v-text="translations().extension.settings.common.serverSettings.forceUpdate" />
+            <button
+                @click="forceUpdate()"
+                v-text="translations().extension.settings.common.serverSettings.forceUpdate"
+            />
         </div>
     </div>
 </template>
@@ -34,7 +37,6 @@ function forceUpdate() {
         senderUuid: statsViewUuid,
     };
     sendMessage(message);
-
 }
 
 onMounted(async () => {
@@ -43,35 +45,30 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-        max-width: 400px;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+    max-width: 400px;
 
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-        }
-
-        &-header,
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        &-body {
-            flex-direction: column;
-            align-items: start;
-            gap: 4px;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
     }
+
+    &-header,
+    &-body {
+        height: 100%;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    &-body {
+        flex-direction: column;
+        align-items: start;
+        gap: 4px;
+    }
+}
 </style>

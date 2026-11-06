@@ -12,10 +12,10 @@ export class UniverseHistoryService implements MessageService {
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
         const key = getStorageKeyPrefix(message.ogameMeta, false);
 
-        if(message.type == MessageType.NotifySettingsUpdate) {
+        if (message.type == MessageType.NotifySettingsUpdate) {
             _logDebug('re-init universe history tracking after settings change');
-            
-            for(const key of Object.keys(this.modules)) {
+
+            for (const key of Object.keys(this.modules)) {
                 await this.modules[key].init();
             }
         }
@@ -24,7 +24,7 @@ export class UniverseHistoryService implements MessageService {
             return;
         }
 
-        const module = this.modules[key] = new UniverseHistoryModule(message.ogameMeta);
+        const module = (this.modules[key] = new UniverseHistoryModule(message.ogameMeta));
         await module.init();
     }
 }

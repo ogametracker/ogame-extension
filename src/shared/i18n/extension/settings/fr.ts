@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { SettingsTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { SettingsTranslations } from './type';
 
 export const fr: RecursivePartial<SettingsTranslations> = {
     tabs: {
@@ -11,22 +11,21 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         combats: 'Combats',
         debrisFields: 'Champs de débris',
         resourceBalance: 'Balance des ressources',
-        universeHistory: 'Historique de l\'univers',
+        universeHistory: "Historique de l'univers",
         dangerZone: 'Zone dangereuse',
         accessbility: 'Accessibilité',
         linkAccounts: 'Lier les comptes',
-
     },
     dateRanges: {
         defaultNames: {
-            today: 'Aujourd\'hui',
+            today: "Aujourd'hui",
             yesterday: 'Hier',
             currentWeek: 'Semaine en cours',
             lastWeek: 'Semaine dernière',
             currentMonth: 'Mois en cours',
             newRange: 'nouvelle plage',
         },
-        since: (date) => `Depuis le ${date}`,
+        since: date => `Depuis le ${date}`,
         firstDayTemplate: '<premier jour>',
         headers: {
             label: 'Étiquette',
@@ -49,8 +48,8 @@ export const fr: RecursivePartial<SettingsTranslations> = {
     },
     colors: {
         combatResults: 'Résultats des combats',
-        expeditionEvents: 'Événements d\'expédition',
-        expeditionEventSizes: 'Tailles d\'événements d\'expédition',
+        expeditionEvents: "Événements d'expédition",
+        expeditionEventSizes: "Tailles d'événements d'expédition",
         expeditionDepletionLevels: 'Épuisement du système',
         lifeformDiscoveries: 'Découvertes de formes de vie',
         lifeforms: 'Formes de vie',
@@ -63,8 +62,9 @@ export const fr: RecursivePartial<SettingsTranslations> = {
             msuLong: 'Convertir en Métal (USM)',
             dsuLong: 'Convertir en Deutérium (USD)',
         },
-        extensionLanguage: 'Langue de l\'interface utilisateur (dans OGame Tracker)',
-        extensionLanguageFallbackHint: 'Les textes en anglais seront affichés si les textes ne sont pas disponibles dans la langue sélectionnée.',
+        extensionLanguage: "Langue de l'interface utilisateur (dans OGame Tracker)",
+        extensionLanguageFallbackHint:
+            'Les textes en anglais seront affichés si les textes ne sont pas disponibles dans la langue sélectionnée.',
 
         serverSettings: {
             title: 'Données du serveur',
@@ -73,13 +73,14 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         },
     },
     expeditions: {
-        resourceUnitFactorsOfShipFoundOnExpeditions: 'Pondération de la valeur en ressources des vaisseaux trouvés lors des expéditions',
+        resourceUnitFactorsOfShipFoundOnExpeditions:
+            'Pondération de la valeur en ressources des vaisseaux trouvés lors des expéditions',
     },
     combats: {
         resourceUnitFactorsOfLostShips: 'Pondération de la valeur en ressources des vaisseaux perdus en combat',
         ignoreEspionageCombats: {
-            title: 'Ignorer les combats d\'espionnage',
-            label: 'Ignorer les rapports de combat d\'espionnage pour le suivi des combats',
+            title: "Ignorer les combats d'espionnage",
+            label: "Ignorer les rapports de combat d'espionnage pour le suivi des combats",
         },
     },
     resourceBalance: {
@@ -89,7 +90,8 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         },
         includeShipsFoundOnExpeditions: {
             header: 'Vaisseaux trouvés lors des expéditions',
-            checkboxLabel: 'Inclure les ressources des vaisseaux trouvés lors des expéditions dans le bilan des ressources',
+            checkboxLabel:
+                'Inclure les ressources des vaisseaux trouvés lors des expéditions dans le bilan des ressources',
         },
         includeShipsLostInCombats: {
             header: 'Vaisseaux perdus en combats',
@@ -104,7 +106,8 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         title: 'USM/USD dans les tables',
         label: 'Afficher les valeurs converties USM/USD dans les tables',
 
-        infoAmortization: 'Le temps d\'amortissement sera toujours calculé en utilisant le coût et la production en USM/USD',
+        infoAmortization:
+            "Le temps d'amortissement sera toujours calculé en utilisant le coût et la production en USM/USD",
     },
 
     reset: 'Réinitialiser les paramètres',
@@ -115,30 +118,40 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         doYouWantToContinue: 'ÊTES-VOUS SÛR DE VOULOIR CONTINUER ?',
 
         deleteExpeditions: {
-            button: (account: string) => `Supprimer toutes les expéditions suivies pour le compte actuellement sélectionné (${account})`,
-            confirmationText: (account: string, count: string) => `Si vous confirmez, toutes les ${count} expéditions suivies seront supprimées pour le compte actuellement sélectionné (${account}).`,
+            button: (account: string) =>
+                `Supprimer toutes les expéditions suivies pour le compte actuellement sélectionné (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Si vous confirmez, toutes les ${count} expéditions suivies seront supprimées pour le compte actuellement sélectionné (${account}).`,
         },
         deleteCombats: {
-            button: (account: string) => `Supprimer tous les combats suivis pour le compte actuellement sélectionné (${account})`,
-            confirmationText: (account: string, count: string) => `Si vous confirmez, tous les ${count} combats suivis seront supprimés pour le compte actuellement sélectionné (${account}).`,
+            button: (account: string) =>
+                `Supprimer tous les combats suivis pour le compte actuellement sélectionné (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Si vous confirmez, tous les ${count} combats suivis seront supprimés pour le compte actuellement sélectionné (${account}).`,
         },
         deleteDebrisFieldReports: {
-            button: (account: string) => `Supprimer tous les rapports de récolte de champs de débris suivis pour le compte actuellement sélectionné (${account})`,
-            confirmationText: (account: string, count: string) => `Si vous confirmez, tous les ${count} rapports de récolte de champs de débris suivis seront supprimés pour le compte actuellement sélectionné (${account}).`,
+            button: (account: string) =>
+                `Supprimer tous les rapports de récolte de champs de débris suivis pour le compte actuellement sélectionné (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Si vous confirmez, tous les ${count} rapports de récolte de champs de débris suivis seront supprimés pour le compte actuellement sélectionné (${account}).`,
         },
         deleteAccount: {
             button: (account: string) => `Supprimer toutes les données du compte actuellement sélectionné (${account})`,
-            confirmationText: (account: string) => `Si vous confirmez, toutes les données suivies pour le compte actuellement sélectionné (${account}) seront supprimées.\n`
-                + `Cela inclut les données suivies de l'historique de l'univers s'il n'y a pas d'autre compte suivi pour cet univers.`,
+            confirmationText: (account: string) =>
+                `Si vous confirmez, toutes les données suivies pour le compte actuellement sélectionné (${account}) seront supprimées.\n` +
+                `Cela inclut les données suivies de l'historique de l'univers s'il n'y a pas d'autre compte suivi pour cet univers.`,
         },
         deleteUniverseHistory: {
-            button: (server: string) => `Supprimer l'historique de l'univers suivi du serveur actuellement sélectionné (${server})`,
-            confirmationText: (server: string) => `Si vous confirmez, toutes les données d'historique de l'univers suivies pour le serveur actuellement sélectionné (${server}) seront supprimées.`,
+            button: (server: string) =>
+                `Supprimer l'historique de l'univers suivi du serveur actuellement sélectionné (${server})`,
+            confirmationText: (server: string) =>
+                `Si vous confirmez, toutes les données d'historique de l'univers suivies pour le serveur actuellement sélectionné (${server}) seront supprimées.`,
         },
         deleteEverything: {
             button: 'Supprimer toutes les données',
-            confirmationText1: `Si vous confirmez, toutes les données seront supprimées.\n`
-                + 'Cela inclut les données suivies de chaque compte, y compris les expéditions suivies, les combats suivis, les rapports de récolte de champs de débris suivis, les données d\'historique de l\'univers et plus encore.',
+            confirmationText1:
+                `Si vous confirmez, toutes les données seront supprimées.\n` +
+                "Cela inclut les données suivies de chaque compte, y compris les expéditions suivies, les combats suivis, les rapports de récolte de champs de débris suivis, les données d'historique de l'univers et plus encore.",
             confirmationText2: 'Veuillez confirmer à nouveau que vous voulez supprimer toutes les données.',
         },
     },
@@ -146,24 +159,27 @@ export const fr: RecursivePartial<SettingsTranslations> = {
     importExport: {
         export: {
             header: 'Exporter',
-            description: 'Ici, vous pouvez exporter vos données. Cela inclura les données pertinentes de tous vos comptes suivis et de leurs serveurs.',
-            includeUniverseHistory: 'inclure l\'historique de l\'univers dans l\'exportation (cela peut considérablement augmenter la taille du fichier et le temps d\'importation !)',
-            button: 'Commencer l\'exportation',
-            wait: 'Veuillez patienter pendant que vos données sont préparées pour l\'exportation...',
+            description:
+                'Ici, vous pouvez exporter vos données. Cela inclura les données pertinentes de tous vos comptes suivis et de leurs serveurs.',
+            includeUniverseHistory:
+                "inclure l'historique de l'univers dans l'exportation (cela peut considérablement augmenter la taille du fichier et le temps d'importation !)",
+            button: "Commencer l'exportation",
+            wait: "Veuillez patienter pendant que vos données sont préparées pour l'exportation...",
 
             errors: {
-                unexpectedError: 'Une erreur inattendue s\'est produite lors de l\'exportation de vos données.',
+                unexpectedError: "Une erreur inattendue s'est produite lors de l'exportation de vos données.",
             },
         },
         import: {
             header: 'Importer',
-            description: 'Ici, vous pouvez importer vos données à partir d\'un fichier. Veuillez sélectionner votre fichier.',
-            button: 'Commencer l\'importation',
+            description:
+                "Ici, vous pouvez importer vos données à partir d'un fichier. Veuillez sélectionner votre fichier.",
+            button: "Commencer l'importation",
             wait: 'Veuillez patienter pendant que vos données sont importées...',
 
             errors: {
                 invalidFormat: 'Le format du fichier est invalide.',
-                unexpectedError: 'Une erreur inattendue s\'est produite lors de l\'importation de vos données.',
+                unexpectedError: "Une erreur inattendue s'est produite lors de l'importation de vos données.",
             },
         },
 
@@ -171,57 +187,66 @@ export const fr: RecursivePartial<SettingsTranslations> = {
             importingSettings: 'Importation de vos paramètres',
             importingBasicData: 'Importation des données de base du compte et du serveur',
             importingUniverseHistories: (
-                serverIndex: number, 
-                serverTotal: number, 
-                entryIndex: number, 
+                serverIndex: number,
+                serverTotal: number,
+                entryIndex: number,
                 entryTotal: number,
             ) => {
                 const baseMessage = `Importation de l'historique de l'univers du serveur`;
 
-                return `${baseMessage} (serveur ${serverIndex + 1}/${serverTotal}, entrée ${entryIndex + 1}/${entryTotal})`;      
+                return `${baseMessage} (serveur ${serverIndex + 1}/${serverTotal}, entrée ${entryIndex + 1}/${entryTotal})`;
             },
             importingAccounts: (
-                accountIndex: number, 
-                totalAccounts: number, 
-                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                accountIndex: number,
+                totalAccounts: number,
+                type:
+                    | 'account'
+                    | 'combat-reports'
+                    | 'expeditions'
+                    | 'debris-fields'
+                    | 'lifeform-discoveries'
+                    | 'universe-specific-settings'
+                    | 'empire.data'
+                    | 'empire.planets'
+                    | 'empire.moons',
                 stepIndex: number,
                 stepTotal: number,
             ) => {
                 const baseMessage = `Importation des comptes`;
                 const accountProgress = `${accountIndex + 1}/${totalAccounts}`;
 
-                if(type == 'account') {
+                if (type == 'account') {
                     return `${baseMessage} (${accountProgress})`;
                 }
 
-                if(type == 'combat-reports') {
+                if (type == 'combat-reports') {
                     return `${baseMessage} (${accountProgress}, combat ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'expeditions') {
+                if (type == 'expeditions') {
                     return `${baseMessage} (${accountProgress}, expédition ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'debris-fields') {
+                if (type == 'debris-fields') {
                     return `${baseMessage} (${accountProgress}, champ de débris ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'lifeform-discoveries') {
+                if (type == 'lifeform-discoveries') {
                     return `${baseMessage} (${accountProgress}, mission de découverte ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'empire.data') {
+                if (type == 'empire.data') {
                     return `${baseMessage} (${accountProgress}, données de base de l'empire)`;
                 }
 
-                if(type == 'empire.planets') {
+                if (type == 'empire.planets') {
                     return `${baseMessage} (${accountProgress}, planète ${stepIndex + 1}/${stepTotal})`;
                 }
-                if(type == 'empire.moons') {
+                if (type == 'empire.moons') {
                     return `${baseMessage} (${accountProgress}, lune ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'universe-specific-settings') {
+                if (type == 'universe-specific-settings') {
                     return `${baseMessage} (${accountProgress}, paramètres spécifiques à l'univers)`;
                 }
 
@@ -232,7 +257,7 @@ export const fr: RecursivePartial<SettingsTranslations> = {
     accessibility: {
         showSimplifiedResults: {
             title: 'Visualisation simplifiée',
-            label: 'Visualisation simplifiée, masque les messages originaux des résultats d\'expédition et des rapports de récolte de champs de débris, et affiche des icônes au lieu de textes dans les notifications.',
+            label: "Visualisation simplifiée, masque les messages originaux des résultats d'expédition et des rapports de récolte de champs de débris, et affiche des icônes au lieu de textes dans les notifications.",
         },
     },
 
@@ -246,10 +271,10 @@ export const fr: RecursivePartial<SettingsTranslations> = {
     linkAccounts: {
         header: (account: string) => `Lier des comptes avec le compte actuel (${account})`,
         descriptionHtml: (account: string) =>
-            `Vous ne devriez lier des comptes que si vous voulez que l'OGame Tracker considère les données des comptes liés comme des données du compte actuel (${account}).<br/>`
-            + `C'est souvent le cas lorsque qu'un compte a été fusionné avec un autre serveur et est traité comme un compte distinct dans l'OGame Tracker.<br/><br/>`
-            + `Exemple: <br/>`
-            + `<ol>
+            `Vous ne devriez lier des comptes que si vous voulez que l'OGame Tracker considère les données des comptes liés comme des données du compte actuel (${account}).<br/>` +
+            `C'est souvent le cas lorsque qu'un compte a été fusionné avec un autre serveur et est traité comme un compte distinct dans l'OGame Tracker.<br/><br/>` +
+            `Exemple: <br/>` +
+            `<ol>
                     <li>le joueur "OGame Professional" joue sur le serveur "FR Voie Lactée"</li>
                     <li>le serveur "FR Voie Lactée" devient un univers exode lors d'une fusion</li>
                     <li>le joueur "OGame Professional" fusionne son compte avec "FR Trèfle"</li>

@@ -3,105 +3,114 @@
         <template v-for="[id, notification] in notifications" :key="id">
             <MessageTrackingErrorNotification
                 v-if="notification.type === NotificationType.MessageTrackingError"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
             <ExpeditionTrackingNotification
                 v-else-if="notification.type === NotificationType.ExpeditionTracking"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
             <ExpeditionTrackingLostFleetNotification
                 v-else-if="notification.type === NotificationType.ExpeditionTrackingLostFleet"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
             <CombatTrackingNotification
                 v-else-if="notification.type === NotificationType.CombatTracking"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
             <DebrisFieldReportTrackingNotification
                 v-else-if="notification.type === NotificationType.DebrisFieldReportTracking"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
             <LifeformDiscoveryTrackingNotification
                 v-else-if="notification.type === NotificationType.LifeformDiscoveryTracking"
-                :notification="notification" @remove="notifications.delete(id)"
+                :notification="notification"
+                @remove="notifications.delete(id)"
             />
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { onMounted, onUnmounted, ref, shallowReactive } from 'vue';
-    import { v4 } from 'uuid';
-    import { ogameTrackerNotificationWindowResizeEventName } from '@ogame-tracker/shared/messages/communication';
-    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-    import { NotificationType } from '@ogame-tracker/shared/messages/notifications';
-    import type { MessageOgameMeta, NoDataMessage } from '@ogame-tracker/shared/messages/Message';
-    import type {
-        CombatTrackingNotificationMessage,
-        DebrisFieldReportTrackingNotificationMessage,
-        ExpeditionTrackingLostFleetNotificationMessage,
-        ExpeditionTrackingNotificationMessage,
-        LifeformDiscoveryTrackingNotificationMessage,
-        MessageTrackingErrorNotificationMessage,
-    } from '@ogame-tracker/shared/messages/notifications';
-    import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
-    import MessageTrackingErrorNotification from './components/notifications/MessageTrackingErrorNotification.vue';
-    import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
-    import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';
-    import CombatTrackingNotification from './components/notifications/CombatTrackingNotification.vue';
-    import DebrisFieldReportTrackingNotification from './components/notifications/DebrisFieldReportTrackingNotification.vue';
-    import LifeformDiscoveryTrackingNotification from './components/notifications/LifeformDiscoveryTrackingNotification.vue';
+import { onMounted, onUnmounted, ref, shallowReactive } from 'vue';
+import { v4 } from 'uuid';
+import { ogameTrackerNotificationWindowResizeEventName } from '@ogame-tracker/shared/messages/communication';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { NotificationType } from '@ogame-tracker/shared/messages/notifications';
+import type { MessageOgameMeta, NoDataMessage } from '@ogame-tracker/shared/messages/Message';
+import type {
+    CombatTrackingNotificationMessage,
+    DebrisFieldReportTrackingNotificationMessage,
+    ExpeditionTrackingLostFleetNotificationMessage,
+    ExpeditionTrackingNotificationMessage,
+    LifeformDiscoveryTrackingNotificationMessage,
+    MessageTrackingErrorNotificationMessage,
+} from '@ogame-tracker/shared/messages/notifications';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import MessageTrackingErrorNotification from './components/notifications/MessageTrackingErrorNotification.vue';
+import ExpeditionTrackingNotification from './components/notifications/ExpeditionTrackingNotification.vue';
+import ExpeditionTrackingLostFleetNotification from './components/notifications/ExpeditionTrackingLostFleetNotification.vue';
+import CombatTrackingNotification from './components/notifications/CombatTrackingNotification.vue';
+import DebrisFieldReportTrackingNotification from './components/notifications/DebrisFieldReportTrackingNotification.vue';
+import LifeformDiscoveryTrackingNotification from './components/notifications/LifeformDiscoveryTrackingNotification.vue';
 
-    type NotificationMessage =
-        | CombatTrackingNotificationMessage
-        | DebrisFieldReportTrackingNotificationMessage
-        | ExpeditionTrackingLostFleetNotificationMessage
-        | ExpeditionTrackingNotificationMessage
-        | LifeformDiscoveryTrackingNotificationMessage
-        | MessageTrackingErrorNotificationMessage;
+type NotificationMessage =
+    | CombatTrackingNotificationMessage
+    | DebrisFieldReportTrackingNotificationMessage
+    | ExpeditionTrackingLostFleetNotificationMessage
+    | ExpeditionTrackingNotificationMessage
+    | LifeformDiscoveryTrackingNotificationMessage
+    | MessageTrackingErrorNotificationMessage;
 
-    const { account } = defineProps<{ account: MessageOgameMeta }>();
-    const container = ref<HTMLElement>();
-    const notifications = shallowReactive(new Map<string, NotificationMessage['data']>());
+const { account } = defineProps<{ account: MessageOgameMeta }>();
+const container = ref<HTMLElement>();
+const notifications = shallowReactive(new Map<string, NotificationMessage['data']>());
 
-    function onMessage(message: NoDataMessage<MessageType>) {
-        if (message.type === MessageType.Notification && ogameMetasEqual(message.ogameMeta, account)) {
-            const { data } = message as NotificationMessage;
-            notifications.set(data.messageId ?? v4(), data);
-        }
+function onMessage(message: NoDataMessage<MessageType>) {
+    if (message.type === MessageType.Notification && ogameMetasEqual(message.ogameMeta, account)) {
+        const { data } = message as NotificationMessage;
+        notifications.set(data.messageId ?? v4(), data);
     }
+}
 
-    let resizeObserver: ResizeObserver | undefined;
+let resizeObserver: ResizeObserver | undefined;
 
-    onMounted(() => {
-        chrome.runtime.onMessage.addListener(onMessage);
-        const element = container.value;
-        if (element) {
-            resizeObserver = new ResizeObserver(() => {
-                window.parent.postMessage({
+onMounted(() => {
+    chrome.runtime.onMessage.addListener(onMessage);
+    const element = container.value;
+    if (element) {
+        resizeObserver = new ResizeObserver(() => {
+            window.parent.postMessage(
+                {
                     type: ogameTrackerNotificationWindowResizeEventName,
                     width: element.clientWidth,
                     height: element.clientHeight,
-                }, '*');
-            });
-            resizeObserver.observe(element);
-        }
-    });
+                },
+                '*',
+            );
+        });
+        resizeObserver.observe(element);
+    }
+});
 
-    onUnmounted(() => {
-        chrome.runtime.onMessage.removeListener(onMessage);
-        resizeObserver?.disconnect();
-    });
+onUnmounted(() => {
+    chrome.runtime.onMessage.removeListener(onMessage);
+    resizeObserver?.disconnect();
+});
 </script>
 
 <style lang="scss" scoped>
-    .notification-list {
-        width: max-content;
-        display: grid;
-        overflow: hidden;
+.notification-list {
+    width: max-content;
+    display: grid;
+    overflow: hidden;
 
-        &.has-notifications {
-            padding: 8px;
-        }
+    &.has-notifications {
+        padding: 8px;
     }
+}
 </style>

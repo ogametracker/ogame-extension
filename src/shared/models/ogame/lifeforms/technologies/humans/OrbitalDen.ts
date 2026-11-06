@@ -1,7 +1,7 @@
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { DenCapacityBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { DenCapacityBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class OrbitalDenClass extends LifeformTechnology implements DenCapacityBonusLifeformTechnology {
     public constructor() {
@@ -28,7 +28,7 @@ class OrbitalDenClass extends LifeformTechnology implements DenCapacityBonusLife
     public get bonuses(): LifeformBonusType[] {
         return [{ type: LifeformBonusTypeId.DenCapacityBonus }];
     }
-    
+
     public getDenCapacityBonus(level: number): number {
         const bonusPerLevel = 0.04; //4%
         return bonusPerLevel * level;

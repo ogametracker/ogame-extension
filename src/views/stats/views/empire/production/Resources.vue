@@ -1,13 +1,24 @@
 <template>
     <div class="table-container">
-        <div style="grid-column: 1 / span 2; display: grid; grid-template-rows: auto 1fr; max-height: 100%; overflow: hidden">
+        <div
+            style="
+                grid-column: 1 / span 2;
+                display: grid;
+                grid-template-rows: auto 1fr;
+                max-height: 100%;
+                overflow: hidden;
+            "
+        >
             <div>
                 <button @click="showProductionSettings = !showProductionSettings">
                     <span class="mdi mdi-cogs" />
                     <span class="mdi mdi-menu-down" v-if="!showSettings" />
                     <span class="mdi mdi-menu-up" v-else />
 
-                    <span v-if="!showProductionSettings" v-text="translations().extension.empire.production.settings.header" />
+                    <span
+                        v-if="!showProductionSettings"
+                        v-text="translations().extension.empire.production.settings.header"
+                    />
                     <span v-else v-text="translations().extension.empire.production.settings.applyAndClose" />
                 </button>
                 <button @click="resetProductionSettings()" class="ml-2">
@@ -36,7 +47,11 @@
             </div>
         </div>
 
-        <div v-text="translations().extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" v-show="!showProductionSettings" />
+        <div
+            v-text="translations().extension.empire.production.messageProduction100"
+            style="grid-column: 1 / span 2"
+            v-show="!showProductionSettings"
+        />
         <GridTable
             :columns="columns"
             :items="items"
@@ -70,14 +85,21 @@
                     <OBuilding :building="BuildingType.fusionReactor" />
                     <OShip :ship="ShipType.solarSatellite" />
                     <OShip :ship="ShipType.crawler" />
-                    <span style="grid-column: auto / span 4" v-text="translations().extension.empire.production.items" />
+                    <span
+                        style="grid-column: auto / span 4"
+                        v-text="translations().extension.empire.production.items"
+                    />
                 </div>
             </template>
 
             <template #cell-planet="{ value: planet }">
                 <div class="planet-info">
                     <span v-text="planet.name" />
-                    <span> [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{ planet.coordinates.position }}] </span>
+                    <span>
+                        [{{ planet.coordinates.galaxy }}:{{ planet.coordinates.system }}:{{
+                            planet.coordinates.position
+                        }}]
+                    </span>
                     <span
                         class="mdi toggle-breakdown"
                         :class="showBreakdown[planet.id] ? 'mdi-menu-up' : 'mdi-menu-down'"
@@ -165,7 +187,10 @@
                     <template v-if="showBreakdown[item.planet.id]">
                         <DecimalNumber :value="value.baseProduction" />
                         <DecimalNumber :value="value.mineProduction" />
-                        <DecimalNumber :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }" :value="-item.fusionReactorConsumption" />
+                        <DecimalNumber
+                            :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }"
+                            :value="-item.fusionReactorConsumption"
+                        />
                         <DecimalNumber :value="value.lifeformBuildingsProduction" />
                         <DecimalNumber :value="value.crawlerProduction" />
                         <DecimalNumber :value="value.plasmaTechnologyProduction" />
@@ -283,7 +308,10 @@ import AmortizationPlayerSettingsInputs from '@stats/components/empire/amortizat
 import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
-import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import {
+    getLifeformExperienceNeededForLevel,
+    getLifeformLevel,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 
 interface ProductionItem {
     planet: {
@@ -389,7 +417,8 @@ const empire = computed<LocalPlayerData>(() => {
         planet.activeItems = createRecord(ps.activeItems, 'permanent');
         planet.buildings[BuildingType.metalMine] = ps.mines?.metalMine ?? _throw('no metal mine level');
         planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
-        planet.buildings[BuildingType.deuteriumSynthesizer] = ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
+        planet.buildings[BuildingType.deuteriumSynthesizer] =
+            ps.mines?.deuteriumSynthesizer ?? _throw('no deuterium synthesizer level');
         planet.ships[ShipType.crawler] = ps.crawlers.max ? 10_000 : ps.crawlers.count;
         planet.productionSettings[ShipType.crawler] = ps.crawlers.percentage;
         planet.activeLifeform = ps.lifeform;
@@ -443,9 +472,10 @@ function getPlanetSettings(): AmortizationPlanetSettings[] {
             deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
         },
         crawlers: {
-            percentage: !isCollector && planet.productionSettings[ShipType.crawler] > 100
-                ? 100
-                : planet.productionSettings[ShipType.crawler],
+            percentage:
+                !isCollector && planet.productionSettings[ShipType.crawler] > 100
+                    ? 100
+                    : planet.productionSettings[ShipType.crawler],
             count: planet.ships[ShipType.crawler],
             max: false,
         },
@@ -485,9 +515,8 @@ const columns = computed<GridTableColumn<keyof ProductionItem | 'breakdown'>[]>(
 const maxItemCount = computed(() => Math.max(...items.value.map(i => i.activeItems.length)));
 
 const productionBreakdowns = computed(() => {
-    const lifeformExperience = createRecord(
-        ValidLifeformTypes,
-        lf => getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lf]),
+    const lifeformExperience = createRecord(ValidLifeformTypes, lf =>
+        getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lf]),
     );
 
     return getProductionBreakdowns(empire.value, lifeformExperience);
@@ -541,7 +570,11 @@ const items = computed<ProductionItem[]>(() => {
             planet,
             ...production,
             fusionReactorConsumption: localFusionReactorConsumptions[planet.id],
-            total: production.metal.total + production.crystal.total + production.deuterium.total - localFusionReactorConsumptions[planet.id],
+            total:
+                production.metal.total +
+                production.crystal.total +
+                production.deuterium.total -
+                localFusionReactorConsumptions[planet.id],
             totalConverted: getMsuOrDsu({
                 metal: production.metal.total,
                 crystal: production.crystal.total,
@@ -570,7 +603,9 @@ const footerItems = computed<ProductionItem[]>(() => {
 
     const metalPerHour = productionPerHour.metal;
     const crystalPerHour = productionPerHour.crystal;
-    const deuteriumPerHour = productionPerHour.deuterium - Object.values(fusionReactorConsumptions.value).reduce((total, cur) => total + cur, 0);
+    const deuteriumPerHour =
+        productionPerHour.deuterium -
+        Object.values(fusionReactorConsumptions.value).reduce((total, cur) => total + cur, 0);
     const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
     const totalConvertedPerHour = getMsuOrDsu({
         metal: metalPerHour,
@@ -688,7 +723,9 @@ function toggleBreakdown(planetId: number) {
 const planets = computed<PlanetData[]>(() => {
     return Object.values(empireStore.empire.planets)
         .filter(planet => !planet.isMoon)
-        .sort((a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empire.value.planetOrder.indexOf(b.id)) as PlanetData[];
+        .sort(
+            (a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empire.value.planetOrder.indexOf(b.id),
+        ) as PlanetData[];
 });
 
 const productionBoostItems_metal: ItemHash[] = [
@@ -765,85 +802,85 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-    .resources-production-table {
-        max-height: 100%;
-        overflow: auto;
+.resources-production-table {
+    max-height: 100%;
+    overflow: auto;
 
-        :deep(.total-column) {
-            border-left: 1px solid rgba(var(--color), 0.33);
-        }
-
-        :deep(.production-settings-column) {
-            border-left: 3px double rgba(var(--color), 0.5);
-        }
-        :deep(.production-settings-header-column) {
-            border-left: 3px solid transparent;
-        }
-
-        :deep(> .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell) {
-            border-top: 3px double rgba(var(--color), 0.5);
-        }
+    :deep(.total-column) {
+        border-left: 1px solid rgba(var(--color), 0.33);
     }
 
-    .planet-info {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        justify-items: end;
-        column-gap: 8px;
-        align-self: start;
+    :deep(.production-settings-column) {
+        border-left: 3px double rgba(var(--color), 0.5);
+    }
+    :deep(.production-settings-header-column) {
+        border-left: 3px solid transparent;
     }
 
-    .production-settings-mini-table {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr) repeat(4, 24px);
-        width: 100%;
-        justify-items: center;
-        align-items: center;
-        gap: 8px;
+    :deep(> .grid-table-foot > .grid-table-row:last-of-type > .grid-table-cell) {
+        border-top: 3px double rgba(var(--color), 0.5);
+    }
+}
 
-        > .header {
-            grid-column: 1 / span 11;
-        }
-        > * {
-            padding: 0 4px;
-        }
+.planet-info {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    justify-items: end;
+    column-gap: 8px;
+    align-self: start;
+}
+
+.production-settings-mini-table {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) repeat(4, 24px);
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+    gap: 8px;
+
+    > .header {
+        grid-column: 1 / span 11;
+    }
+    > * {
+        padding: 0 4px;
+    }
+}
+
+.resource-packages-cell {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+
+    > input[type='number'] {
+        width: 60px;
+    }
+}
+
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto 1fr;
+    align-items: start;
+    height: 100%;
+}
+
+.toggle-breakdown {
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+.breakdown-list {
+    display: flex;
+    flex-direction: column;
+
+    &--expanded .breakdown-sum {
+        font-weight: bold;
+        border-top: 1px solid rgba(var(--color), 0.5);
+        margin-top: 1px;
     }
 
-    .resource-packages-cell {
-        display: grid;
-        grid-template-columns: repeat(2, auto);
-
-        > input[type="number"] {
-            width: 60px;
-        }
+    .negative-value {
+        color: rgb(209, 21, 21);
     }
-
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto 1fr;
-        align-items: start;
-        height: 100%;
-    }
-
-    .toggle-breakdown {
-        transform: scale(1.5);
-        cursor: pointer;
-    }
-
-    .breakdown-list {
-        display: flex;
-        flex-direction: column;
-
-        &--expanded .breakdown-sum {
-            font-weight: bold;
-            border-top: 1px solid rgba(var(--color), 0.5);
-            margin-top: 1px;
-        }
-
-        .negative-value {
-            color: rgb(209, 21, 21);
-        }
-    }
+}
 </style>

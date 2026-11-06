@@ -67,30 +67,30 @@ const lifeformTypes = computed<Record<string, LifeformType>>(() => {
 const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
     return ValidLifeformTypes.map(lifeform => ({
         label: translations().ogame.lifeforms[lifeform],
-        getValue: nextDiscoveries => nextDiscoveries.reduce(
-            (acc, disc) => acc + disc.lifeformExperience[lifeform],
-            0
-        ),
+        getValue: nextDiscoveries => nextDiscoveries.reduce((acc, disc) => acc + disc.lifeformExperience[lifeform], 0),
     }));
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextDiscoveries => nextDiscoveries.reduce(
-            (acc, disc) => acc + Object.values(disc.lifeformExperience).reduce((acc, cur) => acc + cur, 0),
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextDiscoveries =>
+                nextDiscoveries.reduce(
+                    (acc, disc) => acc + Object.values(disc.lifeformExperience).reduce((acc, cur) => acc + cur, 0),
+                    0,
+                ),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

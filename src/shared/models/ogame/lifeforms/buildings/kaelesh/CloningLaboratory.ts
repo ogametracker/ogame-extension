@@ -1,9 +1,9 @@
-import { LifeformBonusType } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from "../../LifeformTechnologyType";
-import { LifeformType } from "../../LifeformType";
-import { LifeformTechnologyBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '../../LifeformTechnologyType';
+import { LifeformType } from '../../LifeformType';
+import { LifeformTechnologyBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class CloningLaboratoryClass extends LifeformBuilding implements LifeformTechnologyBonusLifeformBuilding {
     public constructor() {

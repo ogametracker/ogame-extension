@@ -1,4 +1,4 @@
-import { ExcelExportTranslations } from "./type";
+import { ExcelExportTranslations } from './type';
 
 export const en: ExcelExportTranslations = {
     header: 'Excel Export',
@@ -97,7 +97,7 @@ export const en: ExcelExportTranslations = {
     lifeformDiscoveries: {
         prefix: 'LF',
 
-        sheets:{
+        sheets: {
             rawData: 'Raw Data',
             dailyExperience: 'Daily Experience',
         },

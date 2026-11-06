@@ -1,6 +1,6 @@
-import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
-import { CombatsTranslations } from "./type";
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
+import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { CombatsTranslations } from './type';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const pt_pt: RecursivePartial<CombatsTranslations> = {
     header: 'Combates',
@@ -13,7 +13,7 @@ export const pt_pt: RecursivePartial<CombatsTranslations> = {
             onExpeditions: 'Em Expedições',
 
             amount: 'Quantidade',
-            resources: 'Unidades de Recursos'
+            resources: 'Unidades de Recursos',
         },
     },
     combats: 'Combates',

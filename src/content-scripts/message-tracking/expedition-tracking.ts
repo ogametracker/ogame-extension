@@ -1,36 +1,49 @@
-import { Message } from "@ogame-tracker/shared/messages/Message";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { ExpeditionMessage, TrackExpeditionMessage } from "@ogame-tracker/shared/messages/tracking/expeditions";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { _log, _logDebug, _logWarning, _logError } from "@ogame-tracker/shared/utils/_log";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { getMessageAttributes } from "@ogame-tracker/shared/utils/getMessageAttributes";
-import { cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ExpeditionEvent, ExpeditionEventCombatSize, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
-import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
-import { ExpeditionEventSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
-import { ResourceType } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
-import { Items } from "@ogame-tracker/shared/models/ogame/items/Items";
-import { getItemImageUrl } from "@ogame-tracker/shared/models/ogame/items/getItemImageUrl";
-import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { MessageTrackingErrorMessage } from "@ogame-tracker/shared/messages/tracking/misc";
-import { messageTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { v4 } from "uuid";
-import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
-import { ExpeditionTrackingLostFleetNotificationMessage, ExpeditionTrackingNotificationMessage, ExpeditionTrackingNotificationMessageData, LifeformDiscoveryTrackingNotificationMessage, LifeformDiscoveryTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@ogame-tracker/shared/messages/notifications";
-import { addCost, Cost, multiplyCost } from "@ogame-tracker/shared/models/ogame/common/Cost";
-import { ShipByTypes } from "@ogame-tracker/shared/models/ogame/ships/ShipTypes";
-import { settingsWrapper } from "./main";
-import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
-import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
-import { parseCoordinates } from "@ogame-tracker/shared/utils/parseCoordinates";
-import { OgameRawExpeditionResultType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionResultType";
-import { OgameRawExpeditionSize } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionSize";
-import { OgameRawExpeditionDepletionLevel } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel";
-import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
-import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { ExpeditionMessage, TrackExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { _log, _logDebug, _logWarning, _logError } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getMessageAttributes } from '@ogame-tracker/shared/utils/getMessageAttributes';
+import { cssClasses, addOrSetCustomMessageContent, formatNumber } from './utils';
+import {
+    ExpeditionEvent,
+    ExpeditionEventCombatSize,
+    ExpeditionFindableShipType,
+    ExpeditionFindableShipTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
+import { getItemImageUrl } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { messageTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { v4 } from 'uuid';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import {
+    ExpeditionTrackingLostFleetNotificationMessage,
+    ExpeditionTrackingNotificationMessage,
+    ExpeditionTrackingNotificationMessageData,
+    LifeformDiscoveryTrackingNotificationMessage,
+    LifeformDiscoveryTrackingNotificationMessageData,
+    MessageTrackingErrorNotificationMessage,
+    NotificationType,
+} from '@ogame-tracker/shared/messages/notifications';
+import { addCost, Cost, multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { settingsWrapper } from './main';
+import { ExpeditionDepletionLevel } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { OgameRawMessageType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType';
+import { parseCoordinates } from '@ogame-tracker/shared/utils/parseCoordinates';
+import { OgameRawExpeditionResultType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionResultType';
+import { OgameRawExpeditionSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionSize';
+import { OgameRawExpeditionDepletionLevel } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
 const errorId = v4();
 const expeditionNotificationIds = {
@@ -95,7 +108,9 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.Expedition:
         case MessageType.NewExpedition: {
             const msg = message as ExpeditionMessage;
-            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
+                _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.processed);
@@ -103,7 +118,7 @@ function onMessage(message: Message<MessageType, any>) {
                 div.classList.add(cssClasses.messages.hideContent);
             }
 
-            addExpeditionResultContent(div, msg.data); 
+            addExpeditionResultContent(div, msg.data);
 
             if (message.type == MessageType.NewExpedition) {
                 updateExpeditionResults(msg);
@@ -117,7 +132,9 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const div = document.querySelector(`div.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find message with id '${id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
+                _throw(`failed to find message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);
@@ -159,8 +176,8 @@ function trackExpeditions(messages: Element[]) {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         try {
-            // send message to service worker 
-            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`); 
+            // send message to service worker
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
 
             const {
                 timestamp: date,
@@ -195,15 +212,20 @@ function trackExpeditions(messages: Element[]) {
                 },
                 resourcesgained: {
                     optional: true,
-                    conversion: json => JSON.parse(json) as Partial<Record<'metal' | 'crystal' | 'deuterium' | 'darkMatter', number>>,
+                    conversion: json =>
+                        JSON.parse(json) as Partial<Record<'metal' | 'crystal' | 'deuterium' | 'darkMatter', number>>,
                 },
                 technologiesgained: {
                     optional: true,
-                    conversion: json => JSON.parse(json) as Partial<Record<ExpeditionFindableShipType, { name: string; amount: number }>>,
+                    conversion: json =>
+                        JSON.parse(json) as Partial<
+                            Record<ExpeditionFindableShipType, { name: string; amount: number }>
+                        >,
                 },
                 navigation: {
                     optional: true,
-                    conversion: json => JSON.parse(json) as Record<'returnTimeAbsoluteIncreaseHours' | 'returnTimeMultiplier', number>,
+                    conversion: json =>
+                        JSON.parse(json) as Record<'returnTimeAbsoluteIncreaseHours' | 'returnTimeMultiplier', number>,
                 },
                 itemsgained: {
                     optional: true,
@@ -229,21 +251,19 @@ function trackExpeditions(messages: Element[]) {
                     resources: rawResources,
                     ships: createRecord(ExpeditionFindableShipTypes, ship => rawShips?.[ship]?.amount ?? 0),
                     item: rawItems?.[0].id,
-                    navigationType: rawNavigation == null
-                        ? undefined
-                        : rawNavigation?.returnTimeMultiplier == 1 
-                            ? 'delay'
-                            : 'early',
+                    navigationType:
+                        rawNavigation == null
+                            ? undefined
+                            : rawNavigation?.returnTimeMultiplier == 1
+                              ? 'delay'
+                              : 'early',
                 },
                 senderUuid: messageTrackingUuid,
             };
             sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(
-                cssClasses.messages.base,
-                cssClasses.messages.waitingToBeProcessed,
-            );
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed);
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
             waitingForMessageResult[id] = true;
@@ -322,7 +342,7 @@ function getExpeditionDepletionHtml(expedition: ExpeditionEvent): string {
     }
 
     const depletionLevelClass = getDepletionLevelClass(expedition.depletion);
-    return `<span class="${depletionLevelClass}"></span>`
+    return `<span class="${depletionLevelClass}"></span>`;
 }
 
 function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
@@ -353,36 +373,58 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
                 .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
                 .filter(key => (expedition.fleet[key] ?? 0) > 0);
 
-            const units = ships.reduce<Cost>((total, ship) => {
-                const shipCost = multiplyCost(ShipByTypes[ship].cost, expedition.fleet[ship] ?? 0);
-                const adjustedCost = multiplyCost(shipCost, settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor);
-                return addCost(total, adjustedCost);
-            }, { metal: 0, crystal: 0, deuterium: 0, energy: 0 })
+            const units = ships.reduce<Cost>(
+                (total, ship) => {
+                    const shipCost = multiplyCost(ShipByTypes[ship].cost, expedition.fleet[ship] ?? 0);
+                    const adjustedCost = multiplyCost(
+                        shipCost,
+                        settingsWrapper.settings.expeditionFoundShipsResourceUnits.factor,
+                    );
+                    return addCost(total, adjustedCost);
+                },
+                { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
+            );
 
             return `
                 <div class="ogame-tracker-expedition-result--fleet_wrapper">
                     <div class="${getExpeditionResultClass(expedition)}">
                         <div class="${getExpeditionSizeIconClass(expedition.size)}"></div>
-                        ${ships.map(ship => `
+                        ${ships
+                            .map(
+                                ship => `
                             <div class="ship-count-item">
                                 <div class="ogame-tracker-ship ship-${ship}"></div>
                                 <div>${formatNumber(expedition.fleet[ship] ?? 0)}</div>
                             </div>
-                        `).join('')}
+                        `,
+                            )
+                            .join('')}
                     </div>
                     <div class="resource-units">
-                        ${units.metal > 0 ? `
+                        ${
+                            units.metal > 0
+                                ? `
                         <div class="ogame-tracker-resource metal"></div>
                         <div class="metal">${formatNumber(units.metal)}</div>
-                        ` : ''}
-                        ${units.crystal > 0 ? `
+                        `
+                                : ''
+                        }
+                        ${
+                            units.crystal > 0
+                                ? `
                         <div class="ogame-tracker-resource crystal"></div>
                         <div class="crystal">${formatNumber(units.crystal)}</div>
-                        ` : ''}
-                        ${units.deuterium > 0 ? `
+                        `
+                                : ''
+                        }
+                        ${
+                            units.deuterium > 0
+                                ? `
                         <div class="ogame-tracker-resource deuterium"></div>
                         <div class="deuterium">${formatNumber(units.deuterium)}</div>
-                        ` : ''}
+                        `
+                                : ''
+                        }
                     </div>
                 </div>
             `;
@@ -402,9 +444,9 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             return `
                 <div class="${getExpeditionResultClass(expedition)}">
                     ${
-                        expedition.size != null 
-                        ? `<div class="${getExpeditionSizeIconClass(expedition.size)}"></div>` 
-                        : ''
+                        expedition.size != null
+                            ? `<div class="${getExpeditionSizeIconClass(expedition.size)}"></div>`
+                            : ''
                     }
                     <div class="mdi mdi-clock-outline"></div>
                 </div>
@@ -415,9 +457,9 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
             return `
                 <div class="${getExpeditionResultClass(expedition)}">
                     ${
-                        expedition.size != null 
-                        ? `<div class="${getExpeditionSizeIconClass(expedition.size)}"></div>` 
-                        : ''
+                        expedition.size != null
+                            ? `<div class="${getExpeditionSizeIconClass(expedition.size)}"></div>`
+                            : ''
                     }
                     <div class="mdi mdi-clock-fast"></div>
                 </div>
@@ -486,33 +528,41 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
                 </div>
             `;
         }
-        default: _throw('unknown expedition type');
+        default:
+            _throw('unknown expedition type');
     }
 }
 
 function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
-    return `ogame-tracker-expedition-result--depletion-level ogame-tracker-expedition-result--depletion-level-${level} mdi ` + ({
-        [ExpeditionDepletionLevel.none]: 'mdi-signal-cellular-outline',
-        [ExpeditionDepletionLevel.low]: 'mdi-signal-cellular-1',
-        [ExpeditionDepletionLevel.medium]: 'mdi-signal-cellular-2',
-        [ExpeditionDepletionLevel.high]: 'mdi-signal-cellular-3',
-    }[level]);
+    return (
+        `ogame-tracker-expedition-result--depletion-level ogame-tracker-expedition-result--depletion-level-${level} mdi ` +
+        {
+            [ExpeditionDepletionLevel.none]: 'mdi-signal-cellular-outline',
+            [ExpeditionDepletionLevel.low]: 'mdi-signal-cellular-1',
+            [ExpeditionDepletionLevel.medium]: 'mdi-signal-cellular-2',
+            [ExpeditionDepletionLevel.high]: 'mdi-signal-cellular-3',
+        }[level]
+    );
 }
 
 function getExpeditionSizeIconClass(size: ExpeditionEventSize | ExpeditionEventCombatSize) {
-    return 'ogame-tracker-expedition--size-icon mdi ' + (<Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>>{
-        [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
-        [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',
-        [ExpeditionEventSize.large]: 'mdi-hexagon-slice-5',
-        'fled-death-star': 'mdi-run-fast',
-    })[size];
+    return (
+        'ogame-tracker-expedition--size-icon mdi ' +
+        (<Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>>{
+            [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
+            [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',
+            [ExpeditionEventSize.large]: 'mdi-hexagon-slice-5',
+            'fled-death-star': 'mdi-run-fast',
+        })[size]
+    );
 }
 
 function getExpeditionResultClass(expedition: ExpeditionEvent) {
     let cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${expedition.type}`;
 
-    if (expedition.type == ExpeditionEventType.fleet
-        && ExpeditionFindableShipTypes.every(ship => (expedition.fleet[ship] ?? 0) > 0)
+    if (
+        expedition.type == ExpeditionEventType.fleet &&
+        ExpeditionFindableShipTypes.every(ship => (expedition.fleet[ship] ?? 0) > 0)
     ) {
         cssClass += ' ogame-tracker-expedition-result--fleet--rainbow';
     }
@@ -533,8 +583,9 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
     switch (msg.data.type) {
         case ExpeditionEventType.resources: {
             const resources = msg.data.resources;
-            [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
-                .forEach(resource => totalExpeditionResult.resources[resource] += resources[resource]);
+            [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].forEach(
+                resource => (totalExpeditionResult.resources[resource] += resources[resource]),
+            );
             break;
         }
 
@@ -544,7 +595,7 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
                 .map(ship => parseIntSafe(ship, 10) as ExpeditionFindableShipType)
                 .forEach(ship => {
                     totalExpeditionResult.ships[ship] ??= 0;
-                    totalExpeditionResult.ships[ship] += (fleet[ship] ?? 0);
+                    totalExpeditionResult.ships[ship] += fleet[ship] ?? 0;
                 });
             break;
         }
@@ -559,7 +610,8 @@ function updateExpeditionResults(msg: ExpeditionMessage) {
             break;
         }
 
-        default: break;
+        default:
+            break;
     }
     sendNotificationMessages();
 }

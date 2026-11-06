@@ -82,19 +82,20 @@ const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
 const historyTrackingEnabled = computed(() => settingsStore.settings.universeHistory.trackHistory);
 
 const tableColumns = computed<GridTableColumn<'player'>[]>(() => {
-    return [{
-        key: 'player',
-        label: translations().extension.universeHistory.playerSelection.header,
-        headerClass: 'player-selection-table-cell',
-        class: 'player-selection-table-cell',
-    }];
+    return [
+        {
+            key: 'player',
+            label: translations().extension.universeHistory.playerSelection.header,
+            headerClass: 'player-selection-table-cell',
+            class: 'player-selection-table-cell',
+        },
+    ];
 });
 
 const tableItems = computed<{ player: UniverseHistoryPlayer | null }[]>(() => {
-    return [
-        { player: null },
-        { player: selectedPlayer.value },
-    ].filter((value, i, array) => array.findIndex(v => v.player == value.player) == i);
+    return [{ player: null }, { player: selectedPlayer.value }].filter(
+        (value, i, array) => array.findIndex(v => v.player == value.player) == i,
+    );
 });
 
 const tabs = computed<Tab[]>(() => {
@@ -122,7 +123,7 @@ const selectedPlayer = computed(() => universeHistoryStore.players.find(p => p.i
 
 const playerId = computed<number | null>(() => {
     try {
-        const localPlayerId = parseIntSafe(route.query.player as string | null ?? '', 10);
+        const localPlayerId = parseIntSafe((route.query.player as string | null) ?? '', 10);
         return localPlayerId;
     } catch {
         return null;
@@ -138,8 +139,8 @@ async function redirectToDefault() {
         return;
     }
 
-    const defaultPlayerId = universeSpecificSettingsStore.settings.universeHistory.players.history
-        ?? GlobalOgameMetaData.playerId;
+    const defaultPlayerId =
+        universeSpecificSettingsStore.settings.universeHistory.players.history ?? GlobalOgameMetaData.playerId;
 
     await updatePlayerIdRoute(defaultPlayerId);
 }
@@ -170,9 +171,7 @@ async function updatePlayerIdRoute(id: number) {
 }
 
 const playerNames = computed(() => {
-    return universeHistoryStore.players
-        .map(player => player.name)
-        .sort();
+    return universeHistoryStore.players.map(player => player.name).sort();
 });
 
 async function onPlayerSelected(name: string) {
@@ -198,35 +197,35 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .history {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
+.history {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
-    }
+.list {
+    display: flex;
+    flex-direction: column;
+}
 
-    .player-selection {
+.player-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            :deep(.player-selection-table-cell) {
-                text-align: left;
-                justify-content: start;
-                border-bottom: 1px solid rgba(var(--color), 0.5);
-            }
+        :deep(.player-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .date-range {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 4px;
-    }
+.date-range {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 4px;
+}
 </style>

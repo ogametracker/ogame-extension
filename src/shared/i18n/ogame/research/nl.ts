@@ -1,5 +1,5 @@
-import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
-import { ResearchTranslations } from "./types";
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResearchTranslations } from './types';
 
 export const nl: ResearchTranslations = {
     [ResearchType.energyTechnology]: 'Energietechniek',
@@ -19,18 +19,3 @@ export const nl: ResearchTranslations = {
     [ResearchType.shieldingTechnology]: 'Schildtechniek',
     [ResearchType.armorTechnology]: 'Pantsertechniek',
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

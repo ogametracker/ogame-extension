@@ -76,7 +76,7 @@ const datasets = computed<StatsChartDataset<DailyDebrisFieldReportResult>[]>(() 
                 getValue: result => getMsuOrDsu(result.total),
                 stack: false,
                 showAverage: true,
-            }
+            },
         ];
     }
 
@@ -105,36 +105,36 @@ const datasets = computed<StatsChartDataset<DailyDebrisFieldReportResult>[]>(() 
             getValue: result => getMsuOrDsu(result.total),
             stack: false,
             showAverage: true,
-        }
+        },
     ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
+
+.multi-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .multi-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+    hr {
+        width: 100%;
     }
-
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: repeat(2, auto);
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
-    }
+}
 </style>

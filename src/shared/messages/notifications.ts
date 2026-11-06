@@ -1,12 +1,12 @@
-import { ExpeditionDepletionLevel } from "../models/expeditions/ExpeditionDepletionLevel";
-import { ExpeditionFindableShipType } from "../models/expeditions/ExpeditionEvents";
-import { ExpeditionEventType } from "../models/expeditions/ExpeditionEventType";
-import { LifeformDiscoveryEventType } from "../models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { ItemHash } from "../models/ogame/items/ItemHash";
-import { ValidLifeformType } from "../models/ogame/lifeforms/LifeformType";
-import { ResourceType } from "../models/ogame/resources/ResourceType";
-import { Message } from "./Message";
-import { MessageType } from "./MessageType";
+import { ExpeditionDepletionLevel } from '../models/expeditions/ExpeditionDepletionLevel';
+import { ExpeditionFindableShipType } from '../models/expeditions/ExpeditionEvents';
+import { ExpeditionEventType } from '../models/expeditions/ExpeditionEventType';
+import { LifeformDiscoveryEventType } from '../models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { ItemHash } from '../models/ogame/items/ItemHash';
+import { ValidLifeformType } from '../models/ogame/lifeforms/LifeformType';
+import { ResourceType } from '../models/ogame/resources/ResourceType';
+import { Message } from './Message';
+import { MessageType } from './MessageType';
 
 export enum NotificationType {
     ExpeditionTracking = 'message-tracking/expeditions',
@@ -22,7 +22,10 @@ export interface BasicNotificationData<T extends NotificationType> {
     type: T;
 }
 
-export type NotificationMessage<TType extends NotificationType = NotificationType, TData extends {} = {}> = Message<MessageType.Notification, TData & BasicNotificationData<TType>>;
+export type NotificationMessage<TType extends NotificationType = NotificationType, TData extends {} = {}> = Message<
+    MessageType.Notification,
+    TData & BasicNotificationData<TType>
+>;
 
 // notification messages for message tracking
 export interface ExpeditionTrackingNotificationMessageData {
@@ -33,8 +36,14 @@ export interface ExpeditionTrackingNotificationMessageData {
     events: Record<ExpeditionEventType, number>;
     depletion: Record<ExpeditionDepletionLevel | 'unknown', number>;
 }
-export type ExpeditionTrackingNotificationMessage = NotificationMessage<NotificationType.ExpeditionTracking, ExpeditionTrackingNotificationMessageData>;
-export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<NotificationType.ExpeditionTrackingLostFleet, { count: number }>;
+export type ExpeditionTrackingNotificationMessage = NotificationMessage<
+    NotificationType.ExpeditionTracking,
+    ExpeditionTrackingNotificationMessageData
+>;
+export type ExpeditionTrackingLostFleetNotificationMessage = NotificationMessage<
+    NotificationType.ExpeditionTrackingLostFleet,
+    { count: number }
+>;
 
 export interface LifeformDiscoveryTrackingNotificationMessageData {
     events: Record<LifeformDiscoveryEventType, number>;
@@ -42,18 +51,30 @@ export interface LifeformDiscoveryTrackingNotificationMessageData {
     lifeformExperience: Record<ValidLifeformType, number>;
     artifacts: number;
 }
-export type LifeformDiscoveryTrackingNotificationMessage = NotificationMessage<NotificationType.LifeformDiscoveryTracking, LifeformDiscoveryTrackingNotificationMessageData>;
+export type LifeformDiscoveryTrackingNotificationMessage = NotificationMessage<
+    NotificationType.LifeformDiscoveryTracking,
+    LifeformDiscoveryTrackingNotificationMessageData
+>;
 
 export interface CombatTrackingNotificationMessageData {
     count: number;
     resources: Record<ResourceType, number>;
 }
-export type CombatTrackingNotificationMessage = NotificationMessage<NotificationType.CombatTracking, CombatTrackingNotificationMessageData>;
+export type CombatTrackingNotificationMessage = NotificationMessage<
+    NotificationType.CombatTracking,
+    CombatTrackingNotificationMessageData
+>;
 
 export interface DebrisFieldReportTrackingNotificationMessageData {
     count: number;
     resources: Record<ResourceType, number>;
 }
-export type DebrisFieldReportTrackingNotificationMessage = NotificationMessage<NotificationType.DebrisFieldReportTracking, DebrisFieldReportTrackingNotificationMessageData>;
+export type DebrisFieldReportTrackingNotificationMessage = NotificationMessage<
+    NotificationType.DebrisFieldReportTracking,
+    DebrisFieldReportTrackingNotificationMessageData
+>;
 
-export type MessageTrackingErrorNotificationMessage = NotificationMessage<NotificationType.MessageTrackingError, { count: number }>;
+export type MessageTrackingErrorNotificationMessage = NotificationMessage<
+    NotificationType.MessageTrackingError,
+    { count: number }
+>;

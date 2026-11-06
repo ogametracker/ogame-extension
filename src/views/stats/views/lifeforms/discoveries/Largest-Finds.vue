@@ -2,9 +2,18 @@
     <LoadingSpinner v-if="loading" />
     <div v-else>
         <div class="find-column">
-            <h3 v-text="`${translations().extension.empire.lifeforms.topFinds.topFinds} (${translations().extension.empire.lifeforms.topFinds.artifacts})`" />
+            <h3
+                v-text="
+                    `${translations().extension.empire.lifeforms.topFinds.topFinds} (${translations().extension.empire.lifeforms.topFinds.artifacts})`
+                "
+            />
 
-            <GridTable inline :columns="artifactColumns" :items="largestFinds.artifacts.values" :style="`--color: ${colors.artifacts}`">
+            <GridTable
+                inline
+                :columns="artifactColumns"
+                :items="largestFinds.artifacts.values"
+                :style="`--color: ${colors.artifacts}`"
+            >
                 <template #cell-size="{ value }">
                     <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
@@ -29,8 +38,8 @@
                 inline
                 :columns="experienceColumns"
                 :items="largestFinds.experience[key].values"
-                :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
-            ">
+                :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`"
+            >
                 <template #cell-lifeform="{ value }">
                     <OLifeform :lifeform="value" size="22px" />
                 </template>
@@ -55,8 +64,8 @@
                 inline
                 :columns="experienceColumns"
                 :items="smallestFinds.experience[key].values"
-                :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
-            ">
+                :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`"
+            >
                 <template #cell-lifeform="{ value }">
                     <OLifeform :lifeform="value" size="22px" />
                 </template>
@@ -87,7 +96,10 @@ import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifef
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
 import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
-import type { LifeformDiscoveryEventArtifacts, LifeformDiscoveryEventKnownLifeformFound } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import type {
+    LifeformDiscoveryEventArtifacts,
+    LifeformDiscoveryEventKnownLifeformFound,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
 import { TopList } from '@stats/models/TopList';
 
 type ArtifactsFind = {
@@ -119,10 +131,14 @@ const largestFinds: Finds = {
         maxSize: 25,
     }),
     experience: {
-        ...createRecord(ValidLifeformTypes, () => new TopList<ExperienceFind>({
-            comparator: (a, b) => b.amount - a.amount,
-            maxSize: 25,
-        })),
+        ...createRecord(
+            ValidLifeformTypes,
+            () =>
+                new TopList<ExperienceFind>({
+                    comparator: (a, b) => b.amount - a.amount,
+                    maxSize: 25,
+                }),
+        ),
         all: new TopList<ExperienceFind>({
             comparator: (a, b) => b.amount - a.amount,
             maxSize: 25,
@@ -136,10 +152,14 @@ const smallestFinds: Finds = {
         maxSize: 25,
     }),
     experience: {
-        ...createRecord(ValidLifeformTypes, () => new TopList<ExperienceFind>({
-            comparator: (a, b) => a.amount - b.amount,
-            maxSize: 25,
-        })),
+        ...createRecord(
+            ValidLifeformTypes,
+            () =>
+                new TopList<ExperienceFind>({
+                    comparator: (a, b) => a.amount - b.amount,
+                    maxSize: 25,
+                }),
+        ),
         all: new TopList<ExperienceFind>({
             comparator: (a, b) => a.amount - b.amount,
             maxSize: 25,
@@ -200,7 +220,10 @@ const experienceColumns = computed<GridTableColumn<keyof ExperienceFind>[]>(() =
     ];
 });
 
-function addExperienceFind(discovery: LifeformDiscoveryEventKnownLifeformFound, lifeform: ValidLifeformType | 'all' = discovery.lifeform) {
+function addExperienceFind(
+    discovery: LifeformDiscoveryEventKnownLifeformFound,
+    lifeform: ValidLifeformType | 'all' = discovery.lifeform,
+) {
     largestFinds.experience[lifeform].add({
         lifeform: discovery.lifeform,
         amount: discovery.experience,
@@ -227,8 +250,7 @@ onMounted(async () => {
     discoveries.forEach(d => {
         if (d.type == LifeformDiscoveryEventType.artifacts) {
             addArtifactFind(d);
-        }
-        else if (d.type == LifeformDiscoveryEventType.knownLifeformFound) {
+        } else if (d.type == LifeformDiscoveryEventType.knownLifeformFound) {
             addExperienceFind(d);
             addExperienceFind(d, 'all');
         }
@@ -239,13 +261,13 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .scaled-icon {
-        transform: scale(1.6);
-    }
+.scaled-icon {
+    transform: scale(1.6);
+}
 
-    .find-column {
-        display: inline-flex;
-        flex-direction: column;
-        margin-right: 16px;
-    }
+.find-column {
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 16px;
+}
 </style>

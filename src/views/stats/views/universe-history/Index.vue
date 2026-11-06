@@ -51,7 +51,7 @@ const navItems = computed<ListNavItem[]>(() => {
 
 onMounted(async () => {
     loadingStart.value = Date.now();
-    timeout.value = window.setTimeout(() => showLoadingMessage.value = true, 5_000);
+    timeout.value = window.setTimeout(() => (showLoadingMessage.value = true), 5_000);
 
     await serverSettingsStore.ready;
     await universeHistoryStore.ready;

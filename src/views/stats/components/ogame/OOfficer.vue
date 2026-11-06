@@ -26,7 +26,11 @@ export enum OOfficerType {
 import type { PropType } from 'vue';
 
 defineProps({
-    officer: { required: true, type: String as PropType<OOfficerType>, validator: (value: string) => (Object.values(OOfficerType) as string[]).includes(value) },
+    officer: {
+        required: true,
+        type: String as PropType<OOfficerType>,
+        validator: (value: string) => (Object.values(OOfficerType) as string[]).includes(value),
+    },
     size: { required: false, type: String, default: '32px' },
     disabled: { required: false, type: Boolean },
     fade: { required: false, type: Boolean },
@@ -34,21 +38,21 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-    .o-officer {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
+.o-officer {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
 
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+}
 </style>

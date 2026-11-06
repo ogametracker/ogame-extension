@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable
+            :dataItems="combats"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -50,7 +56,8 @@ const combats = computed(() => combatReportStore.dailyResultsArray);
 const items = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(() => {
     return ShipTypes.map(ship => ({
         label: translations().ogame.ships[ship],
-        getValue: nextCombats => nextCombats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
+        getValue: nextCombats =>
+            nextCombats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
     }));
 });
 
@@ -58,11 +65,13 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
     return [
         {
             label: translations().extension.common.sum,
-            getValue: nextCombats => ShipTypes.reduce(
-                (total, ship) => total + nextCombats.reduce(
-                    (acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
-                0
-            ),
+            getValue: nextCombats =>
+                ShipTypes.reduce(
+                    (total, ship) =>
+                        total +
+                        nextCombats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
+                    0,
+                ),
         },
     ];
 });
@@ -91,11 +100,11 @@ const shipTable = computed<Record<string, ShipType>>(() => {
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

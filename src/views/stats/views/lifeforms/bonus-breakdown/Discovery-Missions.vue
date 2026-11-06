@@ -16,7 +16,10 @@ import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/cr
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { FleetMissionType } from '@ogame-tracker/shared/models/ogame/fleets/FleetMissionType';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
@@ -38,7 +41,9 @@ const bonusTypes: LifeformBonusesBreakdownType<'speed'>[] = [
     },
 ];
 
-const technologies = FleetSpeedBonusLifeformTechnologies.filter(tech => tech.appliesTo(FleetMissionType.searchForLifeforms));
+const technologies = FleetSpeedBonusLifeformTechnologies.filter(tech =>
+    tech.appliesTo(FleetMissionType.searchForLifeforms),
+);
 
 const techs = computed<LifeformTechnologyType[]>(() => technologies.map(t => t.type));
 
@@ -48,8 +53,8 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'speed'>[
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => technologies
-            .map<LifeformBonusesPlanetBreakdown<'speed'>>(tech => {
+        planet =>
+            technologies.map<LifeformBonusesPlanetBreakdown<'speed'>>(tech => {
                 const planetBonuses = getPlanetBonus(tech, planet);
 
                 return {
@@ -62,19 +67,23 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<'speed'>[
                             buildings: planetBonuses.buildings,
                             level: planetBonuses.level,
                             total: planetBonuses.total,
-                        })),
+                        }),
+                    ),
                 };
-            })
+            }),
     );
 });
 
 const experience = computed(() => empireStore.lifeformExperience);
 
 const limits = computed<Record<'speed', (value: number) => number>>(() => {
-    const limit = getLifeformBonusLimit({ type: LifeformBonusTypeId.FleetSpeedBonus, missionType: FleetMissionType.searchForLifeforms });
+    const limit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.FleetSpeedBonus,
+        missionType: FleetMissionType.searchForLifeforms,
+    });
 
     return {
-        speed: value => limit != null ? Math.min(value, limit) : value,
+        speed: value => (limit != null ? Math.min(value, limit) : value),
     };
 });
 
@@ -87,9 +96,7 @@ function getPlanetBonus(tech: FleetSpeedBonusLifeformTechnology, planet: PlanetD
         total: 0,
     };
 
-    if (planet.activeLifeform == LifeformType.none
-        || !planet.activeLifeformTechnologies.includes(tech.type)
-    ) {
+    if (planet.activeLifeform == LifeformType.none || !planet.activeLifeformTechnologies.includes(tech.type)) {
         return result;
     }
 
@@ -99,8 +106,12 @@ function getPlanetBonus(tech: FleetSpeedBonusLifeformTechnology, planet: PlanetD
     );
     result.buildingsBoost += buildingsBoost;
 
-    const baseBonus = tech.getFleetSpeedBonus(FleetMissionType.searchForLifeforms, planet.lifeformTechnologies[tech.type]);
-    const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+    const baseBonus = tech.getFleetSpeedBonus(
+        FleetMissionType.searchForLifeforms,
+        planet.lifeformTechnologies[tech.type],
+    );
+    const lifeformLevelBonus =
+        baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
     const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
     const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

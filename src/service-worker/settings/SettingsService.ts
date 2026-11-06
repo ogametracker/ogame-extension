@@ -24,7 +24,7 @@ export class SettingsService implements MessageService {
     }
 
     constructor() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+        this._ready = new Promise<void>(resolve => (this._resolveReady = resolve));
         void this.initSettings();
     }
 
@@ -34,7 +34,7 @@ export class SettingsService implements MessageService {
     }
 
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
-        switch(message.type) {            
+        switch (message.type) {
             case MessageType.RequestSettings: {
                 await this.broadcastSettings(message.ogameMeta);
                 break;

@@ -11,8 +11,8 @@ import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/sett
 </script>
 
 <style lang="scss" scoped>
-    .combat-settings {
-        display: grid;
-        row-gap: 16px;
-    }
+.combat-settings {
+    display: grid;
+    row-gap: 16px;
+}
 </style>

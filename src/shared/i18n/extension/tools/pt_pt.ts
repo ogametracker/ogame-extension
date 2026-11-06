@@ -1,10 +1,10 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { ToolsTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { ToolsTranslations } from './type';
 
 export const pt_pt: RecursivePartial<ToolsTranslations> = {
     signatureGenerator: {
         header: 'Gerador de Assinatura',
-        
+
         averagePerHour: '⌀/hora',
         totalPerHour: 'por hora',
         totalPerDay: 'por dia',

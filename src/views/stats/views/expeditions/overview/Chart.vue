@@ -1,21 +1,10 @@
 <template>
     <div class="chart-container">
-        <StatsChart
-            :datasets="datasets"
-            :firstDay="firstDay"
-            :itemsPerDay="exposPerDay"
-        >
+        <StatsChart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="exposPerDay">
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                formatNumber(getSum(getVisibleDatasets(datasets)))
-                            "
-                        />
+                        <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
                         <div v-text="translations().extension.expeditions.expeditions" />
                     </div>
                     <hr />
@@ -23,7 +12,11 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getSum(datasets))" />
-                    <div v-text="`${translations().extension.expeditions.expeditions} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.expeditions.expeditions} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -44,7 +37,10 @@
 import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
-import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import StatsChart from '@stats/components/stats/StatsChart.vue';
 import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
 import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
@@ -70,16 +66,16 @@ function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): Scolla
 }
 
 const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
-    return ExpeditionEventTypes
-        .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
-        .map(type => ({
-            key: type,
-            label: translations().extension.expeditions.expeditionEvents[type],
-            color: colors.value[type],
-            filled: true,
-            getValue: result => result.events[type],
-            showAverage: true,
-        }));
+    return ExpeditionEventTypes.filter(
+        type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type),
+    ).map(type => ({
+        key: type,
+        label: translations().extension.expeditions.expeditionEvents[type],
+        color: colors.value[type],
+        filled: true,
+        getValue: result => result.events[type],
+        showAverage: true,
+    }));
 });
 
 function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
@@ -88,20 +84,20 @@ function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

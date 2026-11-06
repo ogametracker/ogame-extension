@@ -1,14 +1,15 @@
-import { ExpeditionEventSize } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
-import { ExpeditionsTranslations } from "./type";
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ExpeditionsTranslations } from './type';
 import { fr as ogamePremium } from '../../ogame/premium/fr';
 import { fr as ogameFactions } from '../../ogame/factions/fr';
-import { ExpeditionDepletionLevel } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
+import { ExpeditionDepletionLevel } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
-export const fr: RecursivePartial<ExpeditionsTranslations> = {header: 'Expéditions',
+export const fr: RecursivePartial<ExpeditionsTranslations> = {
+    header: 'Expéditions',
     tabHeaders: {
-        overview: 'Vue d\'ensemble',
+        overview: "Vue d'ensemble",
         foundResources: 'Ressources',
         foundShips: 'Vaisseaux',
         foundDarkMatter: ogamePremium.darkMatter,
@@ -77,12 +78,12 @@ export const fr: RecursivePartial<ExpeditionsTranslations> = {header: 'Expéditi
             economySpeed: 'Vitesse économique',
             resourceFindBonus: 'Bonus de découvertes de ressources',
             shipFindBonus: 'Bonus de découvertes de vaisseaux',
-            darkMatterFindBonus: 'Bonus de découvertes d\'Antimatière',
+            darkMatterFindBonus: "Bonus de découvertes d'Antimatière",
             discovererBonus: 'Bonus de classe Explorateur',
         },
 
         maximumFinds: 'Découvertes maximales',
-        findsDarkMatter: 'Plages de découvertes d\'Antimatière',
+        findsDarkMatter: "Plages de découvertes d'Antimatière",
 
         listOfPossibleFinds: 'Liste des découvertes possibles (ressources, unités de vaisseaux)',
         findSizes: (size: string) => `Quantités possibles (${size})`,

@@ -3,7 +3,9 @@
         <div class="header">
             <span v-text="settings.name" />
             <span v-if="settings.coordinates != null">
-                [{{ settings.coordinates.galaxy }}:{{ settings.coordinates.system }}:{{ settings.coordinates.position }}]
+                [{{ settings.coordinates.galaxy }}:{{ settings.coordinates.system }}:{{
+                    settings.coordinates.position
+                }}]
             </span>
         </div>
 
@@ -52,7 +54,11 @@
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
                     <input type="number" v-model.number="settings.crawlers.percentage" step="10" min="0" max="150" />
-                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
+                    <span
+                        v-text="
+                            translations().extension.empire.amortization.settings.planetSettings.crawlers.percentage
+                        "
+                    />
                 </div>
                 <div class="crawler-grid-row">
                     <CheckboxButton
@@ -62,8 +68,18 @@
                             '--color': settings.crawlers.max ? '0, 255, 0' : null,
                         }"
                     >
-                        <span v-if="settings.crawlers.max" v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
-                        <span v-else v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
+                        <span
+                            v-if="settings.crawlers.max"
+                            v-text="
+                                translations().extension.empire.amortization.settings.planetSettings.crawlers.maxCount
+                            "
+                        />
+                        <span
+                            v-else
+                            v-text="
+                                translations().extension.empire.amortization.settings.planetSettings.crawlers.fixCount
+                            "
+                        />
                     </CheckboxButton>
                     <input type="number" v-model.number="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
@@ -106,15 +122,26 @@
 
             <span />
             <span>
-                <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
+                <button
+                    class="toggle-lifeform-settings"
+                    @click="showLifeformSettings = !showLifeformSettings"
+                    :disabled="settings.lifeform == 'none'"
+                >
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
-                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformSettings" />
+                    <span
+                        v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformSettings"
+                    />
                 </button>
             </span>
 
             <template v-if="showLifeformSettings">
                 <template v-if="settings.lifeformTechnologyLevels != null">
-                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
+                    <span
+                        v-text="
+                            translations().extension.empire.amortization.settings.planetSettings
+                                .relevantLifeformBuildings
+                        "
+                    />
                     <span class="lifeform-building-grid">
                         <template v-for="building in applicableLifeformBuildings" :key="building">
                             <OLifeformBuilding :building="building" />
@@ -123,10 +150,16 @@
                     </span>
                 </template>
 
-                <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformTechnologies" />
+                <span
+                    v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformTechnologies"
+                />
                 <span>
                     <span class="lifeform-tech-grid">
-                        <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">
+                        <span
+                            v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
+                            :key="`slot-${slot}`"
+                            class="row"
+                        >
                             <hr v-if="slot == 7 || slot == 13" />
 
                             <OLifeformTechnology
@@ -164,9 +197,21 @@ import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
 import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import {
+    AnyBuildingCostAndTimeReductionLifeformBuildings,
+    LifeformTechnologyBonusLifeformBuildings,
+    LifeformTechnologyResearchBuildings,
+    ResourceProductionBonusLifeformBuildings,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformTechnologySlots,
+    LifeformTechnologyType,
+    LifeformTechnologyTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
@@ -192,10 +237,13 @@ const slots: number[] = Array.from({ length: 18 }).map((_, i) => i + 1);
 
 const lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechnologyType>> = createRecord(
     slots,
-    slot => createRecord(
-        ValidLifeformTypes,
-        lf => LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ?? _throw('invalid slot')
-    )
+    slot =>
+        createRecord(
+            ValidLifeformTypes,
+            lf =>
+                LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ??
+                _throw('invalid slot'),
+        ),
 );
 
 function getSelectedLifeformTechBySlot(slot: number): LifeformTechnologyType | null {
@@ -215,7 +263,10 @@ const applicableLifeformBuildings = computed<LifeformBuildingType[]>(() => {
     return lfBuildings.filter(building => applicableBuildingTypes.includes(building));
 });
 
-const settings = defineModel<AmortizationPlanetSettings>({ required: true, type: Object as PropType<AmortizationPlanetSettings> });
+const settings = defineModel<AmortizationPlanetSettings>({
+    required: true,
+    type: Object as PropType<AmortizationPlanetSettings>,
+});
 
 function onSettingsChanged() {
     const lifeform = settings.value.lifeform;
@@ -228,11 +279,15 @@ function onSettingsChanged() {
         const remove = settings.value.activeLifeformTechnologies.filter(tech => {
             const slot = LifeformTechnologySlots[tech];
 
-            return !planetData.activeLifeformTechnologies.some(planetTech => slot == LifeformTechnologySlots[planetTech]);
+            return !planetData.activeLifeformTechnologies.some(
+                planetTech => slot == LifeformTechnologySlots[planetTech],
+            );
         });
 
         if (remove.length > 0) {
-            settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(tech => !remove.includes(tech));
+            settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(
+                tech => !remove.includes(tech),
+            );
         }
     }
 }
@@ -308,13 +363,21 @@ const boosterItemsMap: Partial<Record<ItemHash, ItemHash>> = {
 
 const showLifeformSettings = ref(false);
 
-const isCrawlerOverloadEnabled = computed(() => serverSettingsStore.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled);
+const isCrawlerOverloadEnabled = computed(
+    () => serverSettingsStore.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
+);
 
 const activeBooster = computed(() => {
     return {
-        metal: boosterItems.metal.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
-        crystal: boosterItems.crystal.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
-        deuterium: boosterItems.deuterium.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
+        metal: boosterItems.metal.find(item =>
+            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
+        ),
+        crystal: boosterItems.crystal.find(item =>
+            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
+        ),
+        deuterium: boosterItems.deuterium.find(item =>
+            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
+        ),
     };
 });
 
@@ -345,9 +408,10 @@ function toggleLifeform(lifeform: LifeformType) {
 function toggleLifeformTech(tech: LifeformTechnologyType) {
     if (settings.value.activeLifeformTechnologies.includes(tech)) {
         settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(t => t != tech);
-    }
-    else {
-        settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(t => LifeformTechnologySlots[t] != LifeformTechnologySlots[tech]);
+    } else {
+        settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(
+            t => LifeformTechnologySlots[t] != LifeformTechnologySlots[tech],
+        );
         settings.value.activeLifeformTechnologies.push(tech);
     }
 }
@@ -358,109 +422,109 @@ watch(() => settings.value.position, onAstrophysicsSettingsPlanetPositionChanged
 </script>
 
 <style lang="scss" scoped>
-    .planet-settings {
-        width: 330px;
-        border: 1px solid rgba(var(--color), 0.5);
+.planet-settings {
+    width: 330px;
+    border: 1px solid rgba(var(--color), 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    overflow: hidden;
+
+    &.disabled {
+        --color: 80, 80, 80;
+        backdrop-filter: grayscale(0.5);
+    }
+}
+
+.header {
+    background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    text-align: center;
+}
+
+.header,
+.body {
+    padding: 8px;
+}
+
+.body {
+    display: grid;
+    grid-template-columns: minmax(auto, 100px) 1fr;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+input[type='number'] {
+    width: 60px;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    width: max-content;
+    gap: 4px;
+
+    > .o-item {
+        cursor: pointer;
+    }
+}
+
+.mine-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    align-items: stretch;
+}
+
+.crawler-grid {
+    display: grid;
+    gap: 4px;
+
+    &-row {
         display: flex;
-        flex-direction: column;
-        border-radius: 4px;
-        overflow: hidden;
-
-        &.disabled {
-            --color: 80, 80, 80;
-            backdrop-filter: grayscale(0.5);
-        }
-    }
-
-    .header {
-        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        text-align: center;
-    }
-
-    .header,
-    .body {
-        padding: 8px;
-    }
-
-    .body {
-        display: grid;
-        grid-template-columns: minmax(auto, 100px) 1fr;
+        column-gap: 4px;
         align-items: center;
-        gap: 8px 16px;
+    }
+}
+
+.lifeform-grid {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: repeat(4, auto);
+    width: max-content;
+
+    .o-lifeform {
+        cursor: pointer;
+    }
+}
+
+.lifeform-tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, auto) 1fr;
+    width: max-content;
+    gap: 4px;
+
+    .row {
+        display: contents;
     }
 
-    input[type="number"] {
-        width: 60px;
+    hr {
+        grid-column: 1 / 6;
+        width: 100%;
     }
 
-    .item-grid {
-        display: grid;
-        grid-template-columns: repeat(4, auto);
-        width: max-content;
-        gap: 4px;
-
-        > .o-item {
-            cursor: pointer;
-        }
+    .o-lifeform-technology {
+        cursor: pointer;
     }
 
-    .mine-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        row-gap: 4px;
-        align-items: stretch;
+    input[type='number'] {
+        width: 50px;
     }
+}
 
-    .crawler-grid {
-        display: grid;
-        gap: 4px;
-
-        &-row {
-            display: flex;
-            column-gap: 4px;
-            align-items: center;
-        }
-    }
-
-    .lifeform-grid {
-        display: grid;
-        gap: 4px;
-        grid-template-columns: repeat(4, auto);
-        width: max-content;
-
-        .o-lifeform {
-            cursor: pointer;
-        }
-    }
-
-    .lifeform-tech-grid {
-        display: grid;
-        grid-template-columns: repeat(4, auto) 1fr;
-        width: max-content;
-        gap: 4px;
-
-        .row {
-            display: contents;
-        }
-
-        hr {
-            grid-column: 1 / 6;
-            width: 100%;
-        }
-
-        .o-lifeform-technology {
-            cursor: pointer;
-        }
-
-        input[type="number"] {
-            width: 50px;
-        }
-    }
-
-    .lifeform-building-grid {
-        display: grid;
-        grid-template-columns: repeat(2, auto);
-        width: max-content;
-        gap: 4px;
-    }
+.lifeform-building-grid {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    width: max-content;
+    gap: 4px;
+}
 </style>

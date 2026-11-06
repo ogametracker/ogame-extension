@@ -1,7 +1,7 @@
-import { Coordinates } from "../common/Coordinates";
-import { FleetMissionType } from "./FleetMissionType";
-import { ResourceType } from "../resources/ResourceType";
-import { NonStationaryShipType } from "../ships/ShipType";
+import { Coordinates } from '../common/Coordinates';
+import { FleetMissionType } from './FleetMissionType';
+import { ResourceType } from '../resources/ResourceType';
+import { NonStationaryShipType } from '../ships/ShipType';
 
 export interface Fleet {
     id: number;

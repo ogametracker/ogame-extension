@@ -1,28 +1,36 @@
-import { Message } from "@ogame-tracker/shared/messages/Message";
-import { MessageType } from "@ogame-tracker/shared/messages/MessageType";
-import { getOgameMeta } from "@ogame-tracker/shared/ogame-web/getOgameMeta";
-import { _log, _logDebug, _logWarning, _logError } from "@ogame-tracker/shared/utils/_log";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { getMessageAttributes } from "@ogame-tracker/shared/utils/getMessageAttributes";
-import { cssClasses, addOrSetCustomMessageContent, formatNumber } from "./utils";
-import { ogameMetasEqual } from "@ogame-tracker/shared/ogame-web/ogameMetasEqual";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { sendMessage } from "@ogame-tracker/shared/communication/sendMessage";
-import { MessageTrackingErrorMessage } from "@ogame-tracker/shared/messages/tracking/misc";
-import { messageTrackingUuid } from "@ogame-tracker/shared/uuid";
-import { v4 } from "uuid";
-import { settingsWrapper } from "./main";
-import { LifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from "@ogame-tracker/shared/messages/tracking/lifeform-discoveries";
-import { LifeformDiscoveryEvent } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { LifeformDiscoveryEventType } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { LifeformType, ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
-import { LifeformDiscoveryEventArtifactFindingSize } from "@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { OgameRawMessageType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType";
-import { LifeformDiscoveryTrackingNotificationMessage, LifeformDiscoveryTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@ogame-tracker/shared/messages/notifications";
-import { parseCoordinates } from "@ogame-tracker/shared/utils/parseCoordinates";
-import { OgameRawLifeformDiscoveryType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType";
-import { OgameRawArtifactFindSize } from "@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize";
-import { OgameRawLifeformType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType";
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { _log, _logDebug, _logWarning, _logError } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { getMessageAttributes } from '@ogame-tracker/shared/utils/getMessageAttributes';
+import { cssClasses, addOrSetCustomMessageContent, formatNumber } from './utils';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { messageTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { v4 } from 'uuid';
+import { settingsWrapper } from './main';
+import {
+    LifeformDiscoveryMessage,
+    TrackLifeformDiscoveryMessage,
+} from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
+import { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { LifeformType, ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { OgameRawMessageType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType';
+import {
+    LifeformDiscoveryTrackingNotificationMessage,
+    LifeformDiscoveryTrackingNotificationMessageData,
+    MessageTrackingErrorNotificationMessage,
+    NotificationType,
+} from '@ogame-tracker/shared/messages/notifications';
+import { parseCoordinates } from '@ogame-tracker/shared/utils/parseCoordinates';
+import { OgameRawLifeformDiscoveryType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType';
+import { OgameRawArtifactFindSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize';
+import { OgameRawLifeformType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType';
 
 const errorId = v4();
 const lifeformDiscoveriesId = v4();
@@ -54,11 +62,12 @@ function onMessage(message: Message<MessageType, any>) {
     }
 
     switch (message.type) {
-
         case MessageType.LifeformDiscovery:
         case MessageType.NewLifeformDiscovery: {
             const msg = message as LifeformDiscoveryMessage;
-            const div = document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
+                _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.processed);
@@ -80,7 +89,9 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const div = document.querySelector(`div.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find message with id '${id}'`);
+            const div =
+                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
+                _throw(`failed to find message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);
@@ -122,8 +133,8 @@ function trackLifeformDiscoveries(messages: Element[]) {
         const id = parseIntSafe(msg.getAttribute('data-msg-id') ?? _throw('Cannot find message id'), 10);
 
         try {
-            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);  
-            
+            const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
+
             const {
                 timestamp: date,
                 coords,
@@ -189,10 +200,7 @@ function trackLifeformDiscoveries(messages: Element[]) {
             sendMessage(workerMessage);
 
             // mark message as "waiting for result"
-            msg.classList.add(
-                cssClasses.messages.base,
-                cssClasses.messages.waitingToBeProcessed,
-            );
+            msg.classList.add(cssClasses.messages.base, cssClasses.messages.waitingToBeProcessed);
             addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
 
             waitingForMessageResult[id] = true;
@@ -211,7 +219,10 @@ function sendNotificationMessages() {
         sendErrorNotificationMessage(failed);
     }
 
-    const lifeformDiscoveryCount = Object.values(totalLifeformDiscoveryResult.events).reduce((acc, cur) => acc + cur, 0);
+    const lifeformDiscoveryCount = Object.values(totalLifeformDiscoveryResult.events).reduce(
+        (acc, cur) => acc + cur,
+        0,
+    );
     if (lifeformDiscoveryCount > 0) {
         const msg: LifeformDiscoveryTrackingNotificationMessage = {
             type: MessageType.Notification,
@@ -294,26 +305,33 @@ function getLifeformDiscoveryResultContentHtml(lifeformDiscovery: LifeformDiscov
             `;
         }
 
-        default: _throw('unknown lifeform discovery type');
+        default:
+            _throw('unknown lifeform discovery type');
     }
 }
 
-function getLifeformDiscoveryResultClass(result: LifeformDiscoveryEventType, size?: LifeformDiscoveryEventArtifactFindingSize) {
+function getLifeformDiscoveryResultClass(
+    result: LifeformDiscoveryEventType,
+    size?: LifeformDiscoveryEventArtifactFindingSize,
+) {
     const cssClass = `ogame-tracker-lifeform-discovery-result ogame-tracker-lifeform-discovery-result--${result}`;
     if (size == null) {
         return cssClass;
     }
 
-    return `${cssClass} ogame-tracker-lifeform-discovery-result--artifacts--size-${size}`
+    return `${cssClass} ogame-tracker-lifeform-discovery-result--artifacts--size-${size}`;
 }
 
 function getLifeformDiscoveryMissionArtifactSizeIconClass(size: LifeformDiscoveryEventArtifactFindingSize) {
-    return 'ogame-tracker-lifeform-discovery-result--size-icon mdi ' + ({
-        [LifeformDiscoveryEventArtifactFindingSize.small]: 'mdi-hexagon-slice-1',
-        [LifeformDiscoveryEventArtifactFindingSize.medium]: 'mdi-hexagon-slice-3',
-        [LifeformDiscoveryEventArtifactFindingSize.large]: 'mdi-hexagon-slice-5',
-        [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'mdi-hexagon-outline',
-    }[size]);
+    return (
+        'ogame-tracker-lifeform-discovery-result--size-icon mdi ' +
+        {
+            [LifeformDiscoveryEventArtifactFindingSize.small]: 'mdi-hexagon-slice-1',
+            [LifeformDiscoveryEventArtifactFindingSize.medium]: 'mdi-hexagon-slice-3',
+            [LifeformDiscoveryEventArtifactFindingSize.large]: 'mdi-hexagon-slice-5',
+            [LifeformDiscoveryEventArtifactFindingSize.storageFull]: 'mdi-hexagon-outline',
+        }[size]
+    );
 }
 
 function getLifeformClass(lifeform: ValidLifeformType) {
@@ -347,7 +365,8 @@ function updateLifeformDiscoveryResults(msg: LifeformDiscoveryMessage) {
             break;
         }
 
-        default: break;
+        default:
+            break;
     }
     sendNotificationMessages();
 }

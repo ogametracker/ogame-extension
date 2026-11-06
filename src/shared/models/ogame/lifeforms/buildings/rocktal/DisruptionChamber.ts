@@ -1,11 +1,14 @@
-import { Cost } from "../../../common/Cost";
-import { ResourceType } from "../../../resources/ResourceType";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { Cost } from '../../../common/Cost';
+import { ResourceType } from '../../../resources/ResourceType';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { ResourceConsumptionReductionLifeformBuilding, ResourceProductionBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
-class DisruptionChamberClass extends LifeformBuilding implements ResourceProductionBonusLifeformBuilding, ResourceConsumptionReductionLifeformBuilding {
+class DisruptionChamberClass
+    extends LifeformBuilding
+    implements ResourceProductionBonusLifeformBuilding, ResourceConsumptionReductionLifeformBuilding
+{
     public constructor() {
         super({
             metal: {
@@ -33,7 +36,7 @@ class DisruptionChamberClass extends LifeformBuilding implements ResourceProduct
             { type: LifeformBonusTypeId.EnergyConsumptionReduction },
         ];
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.disruptionChamber;
     }

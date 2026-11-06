@@ -15,14 +15,32 @@ export enum HighscoreType {
 }
 
 export type HighscoreTypeName =
-    'total' | 'economy' | 'research'
-    | 'military' | 'militaryBuilt' | 'militaryDestroyed' | 'militaryLost'
-    | 'honor' | 'numberOfShips'
-    | 'lifeform' | 'lifeformEconomy' | 'lifeformTechnology' | 'lifeformDiscoveries';
+    | 'total'
+    | 'economy'
+    | 'research'
+    | 'military'
+    | 'militaryBuilt'
+    | 'militaryDestroyed'
+    | 'militaryLost'
+    | 'honor'
+    | 'numberOfShips'
+    | 'lifeform'
+    | 'lifeformEconomy'
+    | 'lifeformTechnology'
+    | 'lifeformDiscoveries';
 
 export const HighscoreTypeNames: HighscoreTypeName[] = [
-    'total', 'economy', 'research',
-    'military', 'militaryBuilt', 'militaryDestroyed', 'militaryLost',
-    'honor', 'numberOfShips',
-    'lifeform', 'lifeformEconomy', 'lifeformTechnology', 'lifeformDiscoveries'
+    'total',
+    'economy',
+    'research',
+    'military',
+    'militaryBuilt',
+    'militaryDestroyed',
+    'militaryLost',
+    'honor',
+    'numberOfShips',
+    'lifeform',
+    'lifeformEconomy',
+    'lifeformTechnology',
+    'lifeformDiscoveries',
 ];

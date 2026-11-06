@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable
+            :dataItems="combats"
+            :items="items"
+            :footerItems="footerItems"
+            show-average
+            :averageNumberFormatOptions="avgNumberFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -20,7 +26,7 @@
             <hr class="two-column" />
             <ShowConvertedResourcesInCellsSettings />
             <hr class="two-column" />
-            <DateRangeSettings class="two-column"  />
+            <DateRangeSettings class="two-column" />
         </FloatingMenu>
     </div>
 </template>
@@ -74,20 +80,19 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
     const result: RangedStatsTableItem<DailyCombatReportResult>[] = [
         {
             label: translations().extension.common.resourceUnits,
-            getValue: nextCombats => nextCombats.reduce(
-                (acc, combat) => acc + combat.loot.total.metal + combat.loot.total.crystal + combat.loot.total.deuterium,
-                0
-            ),
+            getValue: nextCombats =>
+                nextCombats.reduce(
+                    (acc, combat) =>
+                        acc + combat.loot.total.metal + combat.loot.total.crystal + combat.loot.total.deuterium,
+                    0,
+                ),
         },
     ];
 
     if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
         result.push({
             label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
-            getValue: nextCombats => nextCombats.reduce(
-                (acc, combat) => acc + getMsuOrDsu(combat.loot.total),
-                0
-            ),
+            getValue: nextCombats => nextCombats.reduce((acc, combat) => acc + getMsuOrDsu(combat.loot.total), 0),
         });
     }
 
@@ -96,25 +101,25 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
+
+.floating-settings:deep(.floating-menu) {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 8px;
+
+    .two-column {
+        grid-column: 1 / span 2;
     }
 
-    .floating-settings:deep(.floating-menu) {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 8px;
-
-        .two-column {
-            grid-column: 1 / span 2;
-        }
-
-        hr {
-            width: 100%;
-        }
+    hr {
+        width: 100%;
     }
+}
 </style>

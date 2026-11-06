@@ -1,4 +1,4 @@
-import { ExcelExportTranslations } from "./type";
+import { ExcelExportTranslations } from './type';
 
 export const de: ExcelExportTranslations = {
     header: 'Excel-Export',

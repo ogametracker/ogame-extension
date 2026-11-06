@@ -13,30 +13,16 @@
             <div class="fake-table-body">
                 <span>
                     <OResource :resource="ResourceType.metal" />
-                    <input
-                        type="number"
-                        value="1"
-                        v-model.number.lazy="metal"
-                        min="0"
-                        step="1"
-                    />
+                    <input type="number" value="1" v-model.number.lazy="metal" min="0" step="1" />
                 </span>
 
                 <span>
                     <OResource :resource="ResourceType.crystal" />
-                    <input
-                        type="number"
-                        v-model.number.lazy="crystal"
-                        min="0"
-                        step="1"
-                    />
+                    <input type="number" v-model.number.lazy="crystal" min="0" step="1" />
                 </span>
                 <span>
                     <span class="mdi mdi-calendar calendar-icon" />
-                    <input
-                        type="datetime-local"
-                        v-model.lazy="datetimeString"
-                    />
+                    <input type="datetime-local" v-model.lazy="datetimeString" />
                 </span>
                 <button
                     class="add"
@@ -65,7 +51,7 @@ const debrisFieldReportStore = useDebrisFieldReportStore();
 
 const show = ref(false);
 
-const datetimeString = ref("");
+const datetimeString = ref('');
 
 const metal = ref(0);
 
@@ -77,7 +63,7 @@ const nextId = computed(() => {
 });
 
 const datetime = computed<number | null>(() => {
-    if (datetimeString.value == "") {
+    if (datetimeString.value == '') {
         return null;
     }
 
@@ -108,63 +94,58 @@ function addManualDebrisFieldReport() {
     };
     sendMessage(message);
 
-    datetimeString.value = "";
+    datetimeString.value = '';
     metal.value = 0;
     crystal.value = 0;
 }
 </script>
 
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
 
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-            align-items: center;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
+        align-items: center;
+    }
 
-        &-header,
-        &-body {
-            padding: 8px;
+    &-header,
+    &-body {
+        padding: 8px;
+        display: flex;
+    }
+
+    &-body {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        > * {
             display: flex;
         }
-
-        &-body {
-            flex-direction: column;
-            gap: 4px;
-            align-items: flex-start;
-            justify-content: flex-start;
-
-            > * {
-                display: flex;
-            }
-        }
     }
+}
 
-    input {
-        width: 180px;
-    }
+input {
+    width: 180px;
+}
 
-    .mdi.calendar-icon {
-        transform: scale(2);
-        width: 32px;
-        align-self: center;
-        justify-self: center;
-        display: flex;
-        justify-content: center;
-    }
+.mdi.calendar-icon {
+    transform: scale(2);
+    width: 32px;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+}
 
-    button.add {
-        align-self: stretch;
-        justify-content: center;
-    }
+button.add {
+    align-self: stretch;
+    justify-content: center;
+}
 </style>

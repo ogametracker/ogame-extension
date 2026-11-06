@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { ExcelExportTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { ExcelExportTranslations } from './type';
 
 export const pt_pt: RecursivePartial<ExcelExportTranslations> = {
     header: 'Exportar para Excel',
@@ -98,7 +98,7 @@ export const pt_pt: RecursivePartial<ExcelExportTranslations> = {
     lifeformDiscoveries: {
         prefix: 'LF',
 
-        sheets:{
+        sheets: {
             rawData: 'Dados em bruto',
             dailyExperience: 'Experiência - diário',
         },

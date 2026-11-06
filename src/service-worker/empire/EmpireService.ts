@@ -4,7 +4,27 @@ import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
 import { EmpireModule } from './EmpireModule';
-import { NotifyEmpireDataUpdateMessage, UpdateActiveOfficersMessage, UpdateAllianceClassMessage, UpdateFleetsMessage, UpdateLifeformExperienceMessage, UpdateOwnedPlanetsMessage, UpdatePlanetActiveItemsMessage, UpdatePlanetActiveLifeformBuildingLevelsMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage, UpdatePlanetBuildingLevelsMessage, UpdatePlanetDefenseCountsMessage, UpdatePlanetLifeformBuildingLevelsMessage, UpdatePlanetLifeformTechnologyLevelsMessage, UpdatePlanetMissileCountsMessage, UpdatePlanetProductionSettingsMessage, UpdatePlanetShipCountsMessage, UpdatePlayerClassMessage, UpdateResearchLevelsMessage, UpdateSelectedLifeformMessage, } from '@ogame-tracker/shared/messages/tracking/empire';
+import {
+    NotifyEmpireDataUpdateMessage,
+    UpdateActiveOfficersMessage,
+    UpdateAllianceClassMessage,
+    UpdateFleetsMessage,
+    UpdateLifeformExperienceMessage,
+    UpdateOwnedPlanetsMessage,
+    UpdatePlanetActiveItemsMessage,
+    UpdatePlanetActiveLifeformBuildingLevelsMessage,
+    UpdatePlanetActiveLifeformTechnologyLevelsMessage,
+    UpdatePlanetBuildingLevelsMessage,
+    UpdatePlanetDefenseCountsMessage,
+    UpdatePlanetLifeformBuildingLevelsMessage,
+    UpdatePlanetLifeformTechnologyLevelsMessage,
+    UpdatePlanetMissileCountsMessage,
+    UpdatePlanetProductionSettingsMessage,
+    UpdatePlanetShipCountsMessage,
+    UpdatePlayerClassMessage,
+    UpdateResearchLevelsMessage,
+    UpdateSelectedLifeformMessage,
+} from '@ogame-tracker/shared/messages/tracking/empire';
 import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
 
 export class EmpireService implements MessageService {
@@ -78,7 +98,6 @@ export class EmpireService implements MessageService {
                 break;
             }
 
-
             case MessageType.UpdateSelectedLifeform: {
                 const msg = message as UpdateSelectedLifeformMessage;
                 await this.empireModule.updateSelectedLifeform(msg.ogameMeta, msg.data);
@@ -116,7 +135,8 @@ export class EmpireService implements MessageService {
                 break;
             }
 
-            default: return; // send no update notification
+            default:
+                return; // send no update notification
         }
 
         await this.notifyEmpireUpdate(message.ogameMeta);

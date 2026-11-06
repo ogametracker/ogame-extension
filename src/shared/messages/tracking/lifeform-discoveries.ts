@@ -15,6 +15,9 @@ export interface RawLifeformDiscoveryMessageData {
     lifeformExperience?: number;
 }
 
-export type TrackLifeformDiscoveryMessage = Message<MessageType.TrackLifeformDiscovery, RawLifeformDiscoveryMessageData>;
+export type TrackLifeformDiscoveryMessage = Message<
+    MessageType.TrackLifeformDiscovery,
+    RawLifeformDiscoveryMessageData
+>;
 export type LifeformDiscoveryMessage = Message<MessageType.LifeformDiscovery, LifeformDiscoveryEvent>;
 export type NewLifeformDiscoveryMessage = Message<MessageType.NewLifeformDiscovery, LifeformDiscoveryEvent>;

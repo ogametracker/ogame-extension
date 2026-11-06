@@ -1,7 +1,7 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
-export const nl: ShipTranslations =  {
+export const nl: ShipTranslations = {
     [ShipType.lightFighter]: 'Licht gevechtsschip',
     [ShipType.heavyFighter]: 'Zwaar gevechtsschip',
     [ShipType.cruiser]: 'Kruiser',
@@ -20,20 +20,3 @@ export const nl: ShipTranslations =  {
     [ShipType.solarSatellite]: 'Zonne-energiesatelliet',
     [ShipType.crawler]: 'Processer',
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

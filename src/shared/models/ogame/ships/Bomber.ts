@@ -1,10 +1,9 @@
-import { Cost } from "../common/Cost";
-import { Ship } from "./Ship";
-import { ShipType } from "./ShipType";
+import { Cost } from '../common/Cost';
+import { Ship } from './Ship';
+import { ShipType } from './ShipType';
 
 class BomberClass extends Ship {
-
-    public get type() { 
+    public get type() {
         return ShipType.bomber;
     }
 
@@ -13,12 +12,12 @@ class BomberClass extends Ship {
             metal: 50_000,
             crystal: 25_000,
             deuterium: 15_000,
-            energy: 0,            
+            energy: 0,
         };
     }
 
     public baseHull(): number {
-         return 75_000;
+        return 75_000;
     }
 
     public baseShield(): number {
@@ -30,7 +29,7 @@ class BomberClass extends Ship {
     }
 
     public baseSpeed(): number {
-         return 5_000;
+        return 5_000;
     }
 
     public baseCargoCapacity(): number {

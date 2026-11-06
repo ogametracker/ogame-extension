@@ -1,4 +1,4 @@
-import { _logDebug } from "../_log";
+import { _logDebug } from '../_log';
 
 export function __measure<T>(name: string, action: () => T): T {
     const start = performance.now();

@@ -1,6 +1,13 @@
 <template>
     <div class="table-container">
-        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage show-average :averageNumberFormatOptions="avgFormat">
+        <RangedStatsTable
+            :dataItems="expos"
+            :items="items"
+            :footerItems="footerItems"
+            show-percentage
+            show-average
+            :averageNumberFormatOptions="avgFormat"
+        >
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -26,7 +33,10 @@ import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
 import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
 import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
@@ -50,10 +60,14 @@ const avgFormat = ref<Intl.NumberFormatOptions>({
 });
 
 function getExpeditionEventType(text: string): ExpeditionEventType {
-    const reverseMap = createRecord(ExpeditionEventTypes, type => translations().extension.expeditions.expeditionEvents[type]);
-    return (Object.entries(reverseMap) as [ExpeditionEventType, string][])
-        .find(e => e[1] == text)?.[0]
-        ?? _throw('failed to find fitting type');
+    const reverseMap = createRecord(
+        ExpeditionEventTypes,
+        type => translations().extension.expeditions.expeditionEvents[type],
+    );
+    return (
+        (Object.entries(reverseMap) as [ExpeditionEventType, string][]).find(e => e[1] == text)?.[0] ??
+        _throw('failed to find fitting type')
+    );
 }
 
 const colors = computed(() => settingsStore.settings.colors.expeditions.events);
@@ -61,37 +75,40 @@ const colors = computed(() => settingsStore.settings.colors.expeditions.events);
 const expos = computed(() => expeditionStore.dailyResultsArray);
 
 const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return ExpeditionEventTypes
-        .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
-        .map(type => ({
-            label: translations().extension.expeditions.expeditionEvents[type],
-            getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
-        }));
+    return ExpeditionEventTypes.filter(
+        type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type),
+    ).map(type => ({
+        label: translations().extension.expeditions.expeditionEvents[type],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
+    }));
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextExpos => ExpeditionEventTypes.reduce(
-            (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextExpos =>
+                ExpeditionEventTypes.reduce(
+                    (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
+                    0,
+                ),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

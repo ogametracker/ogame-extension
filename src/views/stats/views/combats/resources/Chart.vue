@@ -7,7 +7,10 @@
                         <div class="number" v-text="formatNumber(getResourcesAmount(getVisibleDatasets(datasets)))" />
                         <div v-text="translations().extension.common.resourceUnits" />
 
-                        <div class="number" v-text="formatNumber(getConvertedResourcesAmount(getVisibleDatasets(datasets)))" />
+                        <div
+                            class="number"
+                            v-text="formatNumber(getConvertedResourcesAmount(getVisibleDatasets(datasets)))"
+                        />
                         <div v-text="`${translations().extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
@@ -15,10 +18,18 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getResourcesAmount(datasets))" />
-                    <div v-text="`${translations().extension.common.resourceUnits} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.common.resourceUnits} (${translations().extension.common.total})`
+                        "
+                    />
 
                     <div class="number" v-text="formatNumber(getConvertedResourcesAmount(datasets))" />
-                    <div v-text="`${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -91,7 +102,7 @@ const datasets = computed<StatsChartDataset<DailyCombatReportResult>[]>(() => {
             getValue: result => getMsuOrDsu(result.loot.total),
             stack: false,
             showAverage: true,
-        }
+        },
     ];
 });
 
@@ -101,9 +112,7 @@ function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): Scolla
 
 function getResourcesAmount(nextDatasets: ScollableChartFooterDataset[]): number {
     const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-    return nextDatasets
-        .filter(d => resources.includes(d.key.toString()))
-        .reduce((acc, cur) => acc + cur.value, 0);
+    return nextDatasets.filter(d => resources.includes(d.key.toString())).reduce((acc, cur) => acc + cur.value, 0);
 }
 
 function getConvertedResourcesAmount(nextDatasets: ScollableChartFooterDataset[]): number {
@@ -117,20 +126,20 @@ function getConvertedResourcesAmount(nextDatasets: ScollableChartFooterDataset[]
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

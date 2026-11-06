@@ -10,13 +10,23 @@ import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/og
 import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-import type { ExpeditionBonusLifeformTechnology, ExpeditionEventProbabilityBonusLifeformTechnology } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
-import { ExpeditionBonusLifeformTechnologies, ExpeditionEventProbabilityBonusLifeformTechnologies, LifeformTechnologiesByType } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+import type {
+    ExpeditionBonusLifeformTechnology,
+    ExpeditionEventProbabilityBonusLifeformTechnology,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
+import {
+    ExpeditionBonusLifeformTechnologies,
+    ExpeditionEventProbabilityBonusLifeformTechnologies,
+    LifeformTechnologiesByType,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { getPlanetLifeformTechnologyBoost } from '@stats/models/lifeforms';
 import LifeformBonusesBreakdown from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
-import type { LifeformBonusesBreakdownType, LifeformBonusesPlanetBreakdown } from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
+import type {
+    LifeformBonusesBreakdownType,
+    LifeformBonusesPlanetBreakdown,
+} from '@stats/components/lifeforms/LifeformBonusesBreakdown.vue';
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
@@ -62,16 +72,28 @@ const technologies = [...ExpeditionEventProbabilityBonusLifeformTechnologies, ..
 const techs: LifeformTechnologyType[] = technologies.map(t => t.type);
 
 const limits = computed<Record<keyof ExpeditionBonuses, (value: number) => number>>(() => {
-    const resourcesLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.resources });
-    const shipsLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.fleet });
-    const darkMatterLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionBonus, event: ExpeditionEventType.darkMatter });
-    const fleetLossLimit = getLifeformBonusLimit({ type: LifeformBonusTypeId.ExpeditionEventProbabilityBonus, event: ExpeditionEventType.lostFleet });
+    const resourcesLimit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.ExpeditionBonus,
+        event: ExpeditionEventType.resources,
+    });
+    const shipsLimit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.ExpeditionBonus,
+        event: ExpeditionEventType.fleet,
+    });
+    const darkMatterLimit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.ExpeditionBonus,
+        event: ExpeditionEventType.darkMatter,
+    });
+    const fleetLossLimit = getLifeformBonusLimit({
+        type: LifeformBonusTypeId.ExpeditionEventProbabilityBonus,
+        event: ExpeditionEventType.lostFleet,
+    });
 
     return {
-        resources: value => resourcesLimit != null ? Math.min(value, resourcesLimit) : value,
-        ships: value => shipsLimit != null ? Math.min(value, shipsLimit) : value,
-        darkMatter: value => darkMatterLimit != null ? Math.min(value, darkMatterLimit) : value,
-        fleetLoss: value => fleetLossLimit != null ? Math.max(value, -fleetLossLimit) : value,
+        resources: value => (resourcesLimit != null ? Math.min(value, resourcesLimit) : value),
+        ships: value => (shipsLimit != null ? Math.min(value, shipsLimit) : value),
+        darkMatter: value => (darkMatterLimit != null ? Math.min(value, darkMatterLimit) : value),
+        fleetLoss: value => (fleetLossLimit != null ? Math.max(value, -fleetLossLimit) : value),
     };
 });
 
@@ -81,29 +103,36 @@ const planets = computed<Record<number, LifeformBonusesPlanetBreakdown<keyof Exp
             .map(id => empireStore.empire.planets[id])
             .filter(planet => !planet.isMoon) as PlanetData[],
         planet => planet.id,
-        planet => techs.map<LifeformBonusesPlanetBreakdown<keyof ExpeditionBonuses>>(techType => {
-            const tech = LifeformTechnologiesByType[techType] as ExpeditionBonusLifeformTechnology | ExpeditionEventProbabilityBonusLifeformTechnology;
-            const planetBonuses = getPlanetBonus(tech, planet);
+        planet =>
+            techs.map<LifeformBonusesPlanetBreakdown<keyof ExpeditionBonuses>>(techType => {
+                const tech = LifeformTechnologiesByType[techType] as
+                    | ExpeditionBonusLifeformTechnology
+                    | ExpeditionEventProbabilityBonusLifeformTechnology;
+                const planetBonuses = getPlanetBonus(tech, planet);
 
-            return {
-                planet,
-                technologyType: techType,
-                bonuses: createRecord<keyof ExpeditionBonuses, LifeformBonusesPlanetBreakdown['bonuses'][string]>(
-                    ['resources', 'ships', 'darkMatter', 'fleetLoss'],
-                    key => ({
-                        base: planetBonuses.base[key],
-                        buildings: planetBonuses.buildings[key],
-                        level: planetBonuses.level[key],
-                        total: planetBonuses.total[key],
-                    })),
-            };
-        })
+                return {
+                    planet,
+                    technologyType: techType,
+                    bonuses: createRecord<keyof ExpeditionBonuses, LifeformBonusesPlanetBreakdown['bonuses'][string]>(
+                        ['resources', 'ships', 'darkMatter', 'fleetLoss'],
+                        key => ({
+                            base: planetBonuses.base[key],
+                            buildings: planetBonuses.buildings[key],
+                            level: planetBonuses.level[key],
+                            total: planetBonuses.total[key],
+                        }),
+                    ),
+                };
+            }),
     );
 });
 
 const experience = computed(() => empireStore.lifeformExperience);
 
-function getPlanetBonus(tech: ExpeditionBonusLifeformTechnology | ExpeditionEventProbabilityBonusLifeformTechnology, planet: PlanetData): ExpeditionBonusBreakdown {
+function getPlanetBonus(
+    tech: ExpeditionBonusLifeformTechnology | ExpeditionEventProbabilityBonusLifeformTechnology,
+    planet: PlanetData,
+): ExpeditionBonusBreakdown {
     const result: ExpeditionBonusBreakdown = {
         base: { resources: 0, ships: 0, darkMatter: 0, fleetLoss: 0 },
         level: { resources: 0, ships: 0, darkMatter: 0, fleetLoss: 0 },
@@ -130,10 +159,12 @@ function getPlanetBonus(tech: ExpeditionBonusLifeformTechnology | ExpeditionEven
     (Object.entries(mapping) as [keyof ExpeditionBonuses, ExpeditionEventType][]).forEach(pair => {
         const [bonusType, eventType] = pair;
 
-        const baseBonus = 'getExpeditionBonus' in tech
-            ? tech.getExpeditionBonus(eventType, planet.lifeformTechnologies[tech.type])
-            : tech.getExpeditionEventProbabilityBonus(eventType, planet.lifeformTechnologies[tech.type]);
-        const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
+        const baseBonus =
+            'getExpeditionBonus' in tech
+                ? tech.getExpeditionBonus(eventType, planet.lifeformTechnologies[tech.type])
+                : tech.getExpeditionEventProbabilityBonus(eventType, planet.lifeformTechnologies[tech.type]);
+        const lifeformLevelBonus =
+            baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform as ValidLifeformType]);
         const lifeformBuildingBonus = baseBonus * buildingsBoost;
 
         const total = baseBonus + lifeformLevelBonus + lifeformBuildingBonus;

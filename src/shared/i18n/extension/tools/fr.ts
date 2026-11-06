@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { ToolsTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { ToolsTranslations } from './type';
 
 export const fr: RecursivePartial<ToolsTranslations> = {
     signatureGenerator: {
@@ -21,5 +21,4 @@ export const fr: RecursivePartial<ToolsTranslations> = {
         percentage: '% au ferrailleur',
         count: 'Compte',
     },
-
 };

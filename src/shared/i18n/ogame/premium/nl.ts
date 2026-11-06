@@ -1,4 +1,4 @@
-import { PremiumTranslations } from "./types";
+import { PremiumTranslations } from './types';
 
 export const nl: PremiumTranslations = {
     darkMatter: 'Donkere Materie',

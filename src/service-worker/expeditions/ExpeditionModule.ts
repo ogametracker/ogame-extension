@@ -1,22 +1,45 @@
-import { LanguageKey } from "@ogame-tracker/shared/i18n/LanguageKey";
-import { ExpeditionEvent, ExpeditionEventAliens, ExpeditionEventCombat, ExpeditionEventDarkMatter, ExpeditionEventDelay, ExpeditionEventEarly, ExpeditionEventFleet, ExpeditionEventItem, ExpeditionEventLostFleet, ExpeditionEventNothing, ExpeditionEventPirates, ExpeditionEventResources, ExpeditionEventTrader, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEvents";
-import { TryActionResult } from "@ogame-tracker/shared/TryActionResult";
-import { _log, _logDebug, _logError, _logWarning } from "@ogame-tracker/shared/utils/_log";
-import { _throw } from "@ogame-tracker/shared/utils/_throw";
-import { ExpeditionEventCombatSizes, ExpeditionEventSize, ExpeditionEventSizes } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@ogame-tracker/shared/models/expeditions/ExpeditionEventType";
-import { ResourceType, ResourceTypes } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
-import { ItemHash } from "@ogame-tracker/shared/models/ogame/items/ItemHash";
-import { RawExpeditionMessageData, TrackExpeditionMessage } from "@ogame-tracker/shared/messages/tracking/expeditions";
-import { RawMessageData } from "@ogame-tracker/shared/messages/tracking/common";
-import { parseIntSafe } from "@ogame-tracker/shared/utils/parseNumbers";
-import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
-import { getLanguage } from "@ogame-tracker/shared/i18n/getLanguage";
-import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from "@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel";
-import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
-import { OgameRawExpeditionResultType } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionResultType";
-import { OgameRawExpeditionDepletionLevel } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel";
-import { OgameRawExpeditionSize } from "@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionSize";
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import {
+    ExpeditionEvent,
+    ExpeditionEventAliens,
+    ExpeditionEventCombat,
+    ExpeditionEventDarkMatter,
+    ExpeditionEventDelay,
+    ExpeditionEventEarly,
+    ExpeditionEventFleet,
+    ExpeditionEventItem,
+    ExpeditionEventLostFleet,
+    ExpeditionEventNothing,
+    ExpeditionEventPirates,
+    ExpeditionEventResources,
+    ExpeditionEventTrader,
+    ExpeditionFindableShipType,
+    ExpeditionFindableShipTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { TryActionResult } from '@ogame-tracker/shared/TryActionResult';
+import { _log, _logDebug, _logError, _logWarning } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import {
+    ExpeditionEventCombatSizes,
+    ExpeditionEventSize,
+    ExpeditionEventSizes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { RawExpeditionMessageData, TrackExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
+import { RawMessageData } from '@ogame-tracker/shared/messages/tracking/common';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
+import {
+    ExpeditionDepletionLevel,
+    ExpeditionDepletionLevels,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { OgameRawExpeditionResultType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionResultType';
+import { OgameRawExpeditionDepletionLevel } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel';
+import { OgameRawExpeditionSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionSize';
 
 interface ExpeditionEventResult {
     expedition: ExpeditionEvent;
@@ -71,7 +94,7 @@ export class ExpeditionModule {
             [OgameRawExpeditionResultType.lostFleet]: () => this.#parseLostFleetExpedition(data),
             [OgameRawExpeditionResultType.nothing]: () => this.#parseNoEventExpedition(data),
             [OgameRawExpeditionResultType.resources]: () => this.#parseResourceExpedition(data),
-            [OgameRawExpeditionResultType.trader]: () => this.#parseTraderExpedition(data), 
+            [OgameRawExpeditionResultType.trader]: () => this.#parseTraderExpedition(data),
         }[data.type]();
 
         if (result == null) {
@@ -87,7 +110,7 @@ export class ExpeditionModule {
     }
 
     #parseDepletion(data: RawExpeditionMessageData): ExpeditionDepletionLevel | undefined {
-        if(data.depletion == null) {
+        if (data.depletion == null) {
             return undefined;
         }
 
@@ -100,7 +123,7 @@ export class ExpeditionModule {
     }
 
     #parseNoEventExpedition(data: RawExpeditionMessageData): ExpeditionEventNothing {
-        if(data.type != OgameRawExpeditionResultType.nothing) {
+        if (data.type != OgameRawExpeditionResultType.nothing) {
             _throw('unexpected raw expedition type');
         }
 
@@ -112,10 +135,10 @@ export class ExpeditionModule {
     }
 
     #parseLostFleetExpedition(data: RawExpeditionMessageData): ExpeditionEventLostFleet {
-        if(data.type != OgameRawExpeditionResultType.lostFleet) {
+        if (data.type != OgameRawExpeditionResultType.lostFleet) {
             _throw('unexpected raw expedition type');
         }
-        
+
         return {
             id: data.id,
             date: data.date,
@@ -124,13 +147,12 @@ export class ExpeditionModule {
     }
 
     #parseCombatExpedition(data: RawExpeditionMessageData): ExpeditionEventCombat {
-        if(![
-            OgameRawExpeditionResultType.combatAliens, 
-            OgameRawExpeditionResultType.combatPirates,
-        ].includes(data.type)) {
+        if (
+            ![OgameRawExpeditionResultType.combatAliens, OgameRawExpeditionResultType.combatPirates].includes(data.type)
+        ) {
             _throw('unexpected raw expedition type');
         }
-        
+
         const size = this.#mapSize(data.size) ?? _throw('missing expedition combat size');
 
         return {
@@ -142,10 +164,10 @@ export class ExpeditionModule {
     }
 
     #parseTraderExpedition(data: RawExpeditionMessageData): ExpeditionEventTrader {
-        if(data.type != OgameRawExpeditionResultType.trader) {
+        if (data.type != OgameRawExpeditionResultType.trader) {
             _throw('unexpected raw expedition type');
         }
-        
+
         return {
             id: data.id,
             date: data.date,
@@ -154,29 +176,27 @@ export class ExpeditionModule {
     }
 
     #parseNavigationExpedition(data: RawExpeditionMessageData): ExpeditionEventDelay | ExpeditionEventEarly {
-        if(data.type != OgameRawExpeditionResultType.delayOrEarly) {
+        if (data.type != OgameRawExpeditionResultType.delayOrEarly) {
             _throw('unexpected raw expedition type');
         }
 
         const size = this.#mapSize(data.size) ?? _throw('missing expedition navigation event size');
 
         const navigationType = data.navigationType ?? _throw('missing raw navigation event type');
-        
+
         return {
             id: data.id,
             date: data.date,
             size,
-            type: navigationType == 'delay' 
-                ? ExpeditionEventType.delay
-                : ExpeditionEventType.early,
+            type: navigationType == 'delay' ? ExpeditionEventType.delay : ExpeditionEventType.early,
         };
     }
 
     #parseItemExpedition(data: RawExpeditionMessageData): ExpeditionEventItem {
-        if(data.type != OgameRawExpeditionResultType.item) {
+        if (data.type != OgameRawExpeditionResultType.item) {
             _throw('unexpected raw expedition type');
         }
-        
+
         return {
             type: ExpeditionEventType.item,
             id: data.id,
@@ -186,10 +206,10 @@ export class ExpeditionModule {
     }
 
     #parseFleetExpedition(data: RawExpeditionMessageData): ExpeditionEventFleet {
-        if(data.type != OgameRawExpeditionResultType.fleet) {
+        if (data.type != OgameRawExpeditionResultType.fleet) {
             _throw('unexpected raw expedition type');
         }
-        
+
         const size = this.#mapSize(data.size) ?? _throw('missing ship find size');
         const foundShips: Partial<Record<ExpeditionFindableShipType, number>> = {};
 
@@ -200,7 +220,7 @@ export class ExpeditionModule {
             }
         });
 
-        if(Object.keys(foundShips).length == 0) {
+        if (Object.keys(foundShips).length == 0) {
             _logWarning('found ships but there are no ship amounts');
         }
 
@@ -214,10 +234,10 @@ export class ExpeditionModule {
     }
 
     #parseDarkMatterExpedition(data: RawExpeditionMessageData): ExpeditionEventDarkMatter {
-        if(data.type != OgameRawExpeditionResultType.darkMatter) {
+        if (data.type != OgameRawExpeditionResultType.darkMatter) {
             _throw('unexpected raw expedition type');
         }
-        
+
         const size = this.#mapSize(data.size) ?? _throw('missing dark matter find size');
         const amount = data.darkMatter ?? _throw('missing dark matter amount');
 
@@ -230,23 +250,23 @@ export class ExpeditionModule {
         };
     }
 
-    #parseResourceExpedition(data: RawExpeditionMessageData): ExpeditionEventResources {   
-        if(data.type != OgameRawExpeditionResultType.resources) {
+    #parseResourceExpedition(data: RawExpeditionMessageData): ExpeditionEventResources {
+        if (data.type != OgameRawExpeditionResultType.resources) {
             _throw('unexpected raw expedition type');
         }
-        
+
         const size = this.#mapSize(data.size) ?? _throw('missing resource find size');
-        
+
         const resources: ExpeditionEventResources['resources'] = {
             [ResourceType.metal]: data.resources?.metal ?? 0,
             [ResourceType.crystal]: data.resources?.crystal ?? 0,
             [ResourceType.deuterium]: data.resources?.deuterium ?? 0,
         };
 
-        if(resources.metal + resources.crystal + resources.deuterium == 0) {
+        if (resources.metal + resources.crystal + resources.deuterium == 0) {
             _logWarning('found resources but resource amounts are 0');
         }
-    
+
         return {
             type: ExpeditionEventType.resources,
             id: data.id,
@@ -257,7 +277,7 @@ export class ExpeditionModule {
     }
 
     #mapSize(rawSize?: OgameRawExpeditionSize): ExpeditionEventSize | undefined {
-        if(rawSize == null) {
+        if (rawSize == null) {
             return undefined;
         }
 

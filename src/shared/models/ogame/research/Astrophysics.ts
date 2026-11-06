@@ -1,8 +1,7 @@
-import { Cost } from "../common/Cost";
-import { Research } from "./Research";
+import { Cost } from '../common/Cost';
+import { Research } from './Research';
 
 class AstrophysicsClass extends Research {
-
     public getCost(level: number): Cost {
         return {
             metal: Math.floor(100 * 40 * 1.75 ** (level - 1)),
@@ -11,6 +10,5 @@ class AstrophysicsClass extends Research {
             energy: 0,
         };
     }
-
 }
 export const Astrophysics = new AstrophysicsClass();

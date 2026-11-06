@@ -5,22 +5,42 @@
                 <span v-text="value" />
 
                 <span
-                    v-if="value == translations().extension.empire.lifeforms.artifactFindingSizes[LifeformDiscoveryEventArtifactFindingSize.small]"
+                    v-if="
+                        value ==
+                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                            LifeformDiscoveryEventArtifactFindingSize.small
+                        ]
+                    "
                     class="mdi mdi-hexagon-slice-1"
                     :style="{ color: colors[LifeformDiscoveryEventArtifactFindingSize.small] }"
                 />
                 <span
-                    v-else-if="value == translations().extension.empire.lifeforms.artifactFindingSizes[LifeformDiscoveryEventArtifactFindingSize.medium]"
+                    v-else-if="
+                        value ==
+                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                            LifeformDiscoveryEventArtifactFindingSize.medium
+                        ]
+                    "
                     class="mdi mdi-hexagon-slice-3"
                     :style="{ color: colors[LifeformDiscoveryEventArtifactFindingSize.medium] }"
                 />
                 <span
-                    v-else-if="value == translations().extension.empire.lifeforms.artifactFindingSizes[LifeformDiscoveryEventArtifactFindingSize.large]"
+                    v-else-if="
+                        value ==
+                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                            LifeformDiscoveryEventArtifactFindingSize.large
+                        ]
+                    "
                     class="mdi mdi-hexagon-slice-5"
                     :style="{ color: colors[LifeformDiscoveryEventArtifactFindingSize.large] }"
                 />
                 <span
-                    v-else-if="value == translations().extension.empire.lifeforms.artifactFindingSizes[LifeformDiscoveryEventArtifactFindingSize.storageFull]"
+                    v-else-if="
+                        value ==
+                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                            LifeformDiscoveryEventArtifactFindingSize.storageFull
+                        ]
+                    "
                     class="mdi mdi-hexagon-outline"
                     :style="{ color: colors[LifeformDiscoveryEventArtifactFindingSize.storageFull] }"
                 />
@@ -49,7 +69,10 @@ import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue'
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import { useLifeformDiscoveryStore } from '@stats/data/LifeformDiscoveryDataModule';
 import type { DailyLifeformDiscoveryResult } from '@stats/data/LifeformDiscoveryDataModule';
-import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import {
+    LifeformDiscoveryEventArtifactFindingSize,
+    LifeformDiscoveryEventArtifactFindingSizes,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
 
 const settingsStore = useSettingsStore();
 
@@ -69,25 +92,27 @@ const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() 
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: expos => expos.reduce((acc, cur) => acc + cur.events.artifacts, 0),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: expos => expos.reduce((acc, cur) => acc + cur.events.artifacts, 0),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

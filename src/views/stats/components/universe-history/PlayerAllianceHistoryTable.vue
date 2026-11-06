@@ -71,16 +71,18 @@ const allianceHistoryColumns = computed<GridTableColumn<keyof AllianceHistoryIte
 });
 
 const allianceHistoryItems = computed<AllianceHistoryItem[]>(() => {
-    return history.value.map<AllianceHistoryItem>((item, i, nextHistory) => {
-        const start = i == 0 ? null : item.date;
-        const end = nextHistory[i + 1]?.date ?? null;
+    return history.value
+        .map<AllianceHistoryItem>((item, i, nextHistory) => {
+            const start = i == 0 ? null : item.date;
+            const end = nextHistory[i + 1]?.date ?? null;
 
-        return {
-            alliance: universeHistoryStore.alliances.find(a => a.id == item.allianceId) ?? null,
-            start,
-            end,
-        };
-    }).reverse();
+            return {
+                alliance: universeHistoryStore.alliances.find(a => a.id == item.allianceId) ?? null,
+                start,
+                end,
+            };
+        })
+        .reverse();
 });
 
 watch(() => props.playerId, onPlayerIdChanged, { immediate: true });

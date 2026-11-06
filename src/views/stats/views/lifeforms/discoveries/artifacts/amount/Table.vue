@@ -43,25 +43,27 @@ const color = computed(() => settingsStore.settings.colors.lifeformDiscoveries.e
 const missions = computed(() => lifeformDiscoveryStore.dailyResultsArray);
 
 const items = computed<RangedStatsTableItem<DailyLifeformDiscoveryResult>[]>(() => {
-    return [{
-        label: translations().extension.empire.lifeforms.artifacts,
-        getValue: nextMissions => nextMissions.reduce((acc, expo) => acc + expo.artifacts, 0),
-    }];
+    return [
+        {
+            label: translations().extension.empire.lifeforms.artifacts,
+            getValue: nextMissions => nextMissions.reduce((acc, expo) => acc + expo.artifacts, 0),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .ranged-stats-table .mdi {
-        transform: translateX(-30%) scale(1.6);
-        width: 24px;
-        display: inline-block;
-    }
+.ranged-stats-table .mdi {
+    transform: translateX(-30%) scale(1.6);
+    width: 24px;
+    display: inline-block;
+}
 
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

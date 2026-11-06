@@ -1,9 +1,9 @@
-import { RecursivePartial } from "@ogame-tracker/shared/types/RecursivePartial";
-import { ResourceBalanceTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { ResourceBalanceTranslations } from './type';
 
 export const fr: RecursivePartial<ResourceBalanceTranslations> = {
     header: 'Bilan des ressources',
-    "combat-report": 'des combats',
-    "debris-field-report": 'des champs de débris',
+    'combat-report': 'des combats',
+    'debris-field-report': 'des champs de débris',
     expedition: 'des expéditions',
 };

@@ -1,4 +1,4 @@
-import { LifeformType } from "./LifeformType";
+import { LifeformType } from './LifeformType';
 
 export enum LifeformBuildingType {
     // humans

@@ -1,25 +1,25 @@
 {
-  "name": "@ogame-tracker/content-scripts",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "npm run typecheck && vite build",
-    "typecheck": "tsc",
-    "lint": "oxlint --config ../../.oxlintrc.json .",
-    "format": "oxfmt --config ../../.oxfmtrc.json .",
-    "format:check": "npm run format -- --check"
-  },
-  "dependencies": {
-    "@ogame-tracker/shared": "0.1.0",
-    "uuid": "8.3.2"
-  },
-  "devDependencies": {
-    "@types/chrome": "0.0.208",
-    "@types/node": "26.6.6",
-    "@types/uuid": "8.3.4",
-    "sass": "1.107.1",
-    "typescript": "5.9.3",
-    "vite": "8.3.6"
-  }
+    "name": "@ogame-tracker/content-scripts",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "npm run typecheck && vite build",
+        "typecheck": "tsc",
+        "lint": "oxlint --config ../../.oxlintrc.json .",
+        "format": "oxfmt --config ../../.oxfmtrc.json .",
+        "format:check": "npm run format -- --check"
+    },
+    "dependencies": {
+        "@ogame-tracker/shared": "0.1.0",
+        "uuid": "8.3.2"
+    },
+    "devDependencies": {
+        "@types/chrome": "0.0.208",
+        "@types/node": "26.6.6",
+        "@types/uuid": "8.3.4",
+        "sass": "1.107.1",
+        "typescript": "5.9.3",
+        "vite": "8.3.6"
+    }
 }

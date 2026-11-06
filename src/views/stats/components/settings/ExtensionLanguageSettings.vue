@@ -5,24 +5,14 @@
         </div>
         <div class="fake-table-body">
             <select :value="language" @change="setLanguage(($event.target as HTMLSelectElement).value as LanguageKey)">
-                <option
-                    v-for="lang in langs"
-                    :key="lang"
-                    :value="lang"
-                    v-text="languageNames[lang]"
-                />
+                <option v-for="lang in langs" :key="lang" :value="lang" v-text="languageNames[lang]" />
             </select>
             <select
                 v-if="Object.keys(getRegions(language)).length > 0"
                 :value="languageRegion"
                 @change="setLanguageRegion(($event.target as HTMLInputElement).value)"
             >
-                <option
-                    v-for="(name, region) in getRegions(language)"
-                    :key="region"
-                    :value="region"
-                    v-text="name"
-                />
+                <option v-for="(name, region) in getRegions(language)" :key="region" :value="region" v-text="name" />
             </select>
             <span v-text="translations().extension.settings.common.extensionLanguageFallbackHint" />
         </div>
@@ -37,12 +27,7 @@ import { useSettingsStore } from '../../data/SettingsDataModule';
 
 const settingsStore = useSettingsStore();
 
-const langs = ref<LanguageKey[]>([
-    LanguageKey.de,
-    LanguageKey.en,
-    LanguageKey['pt-pt'],
-    LanguageKey.fr,
-]);
+const langs = ref<LanguageKey[]>([LanguageKey.de, LanguageKey.en, LanguageKey['pt-pt'], LanguageKey.fr]);
 
 const languageNames = ref<Partial<Record<LanguageKey, string>>>({
     [LanguageKey.de]: 'Deutsch',
@@ -53,8 +38,8 @@ const languageNames = ref<Partial<Record<LanguageKey, string>>>({
 
 const regions = ref<Partial<Record<LanguageKey, Record<string, string>>>>({
     [LanguageKey.en]: {
-        'gb': 'United Kingdom',
-        'us': 'United States',
+        gb: 'United Kingdom',
+        us: 'United States',
     },
 });
 
@@ -84,35 +69,30 @@ function setLanguageRegion(region?: string) {
 </script>
 
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-        max-width: 400px;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+    max-width: 400px;
 
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-        }
-
-        &-header,
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;;
-            align-items: center;
-        }
-
-        &-body {
-            flex-direction: column;
-            align-items: start;
-            gap: 4px;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
     }
+
+    &-header,
+    &-body {
+        height: 100%;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    &-body {
+        flex-direction: column;
+        align-items: start;
+        gap: 4px;
+    }
+}
 </style>

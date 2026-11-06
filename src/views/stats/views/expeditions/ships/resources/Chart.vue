@@ -7,7 +7,10 @@
                         <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
                         <div v-text="translations().extension.common.resourceUnits" />
 
-                        <div class="number" v-text="formatNumber(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
+                        <div
+                            class="number"
+                            v-text="formatNumber(getConvertedResourceUnits(getVisibleDatasets(datasets)))"
+                        />
                         <div v-text="`${translations().extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
@@ -15,10 +18,18 @@
 
                 <div class="footer-item">
                     <div class="number" v-text="formatNumber(getSum(datasets))" />
-                    <div v-text="`${translations().extension.common.resourceUnits} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${translations().extension.common.resourceUnits} (${translations().extension.common.total})`
+                        "
+                    />
 
                     <div class="number" v-text="formatNumber(getConvertedResourceUnits(datasets))" />
-                    <div v-text="`${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`" />
+                    <div
+                        v-text="
+                            `${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
         </StatsChart>
@@ -89,7 +100,8 @@ const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
             label: translations().extension.resources[resource],
             color: colors.value[resource],
             filled: true,
-            getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource] * factors.value[resource],
+            getValue: (result: DailyExpeditionResult) =>
+                result.findings.fleetResourceUnits[resource] * factors.value[resource],
             showAverage: true,
         })),
         {
@@ -110,9 +122,7 @@ function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): Scolla
 
 function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
     const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-    return nextDatasets
-        .filter(d => resources.includes(d.key.toString()))
-        .reduce((acc, cur) => acc + cur.value, 0);
+    return nextDatasets.filter(d => resources.includes(d.key.toString())).reduce((acc, cur) => acc + cur.value, 0);
 }
 
 function getConvertedResourceUnits(nextDatasets: ScollableChartFooterDataset[]): number {
@@ -126,20 +136,20 @@ function getConvertedResourceUnits(nextDatasets: ScollableChartFooterDataset[]):
 </script>
 
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

@@ -1,9 +1,7 @@
 <template>
     <div class="fake-table expedition-ship-resource-units-factor-settings">
         <div class="fake-table-header">
-            <span
-                v-text="translations().extension.settings.expeditions.resourceUnitFactorsOfShipFoundOnExpeditions"
-            />
+            <span v-text="translations().extension.settings.expeditions.resourceUnitFactorsOfShipFoundOnExpeditions" />
         </div>
         <div class="fake-table-body">
             <span class="inputs">
@@ -88,65 +86,60 @@ watch(() => factors.value, onFactorsChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-    .expedition-ship-resource-units-factor-settings {
+.expedition-ship-resource-units-factor-settings {
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+    max-width: 400px;
+
+    > * {
         display: flex;
-        align-items: center;
-        column-gap: 16px;
-        max-width: 400px;
+    }
+
+    input {
+        width: 60px;
+    }
+
+    .inputs {
+        display: flex;
+        column-gap: 8px;
 
         > * {
             display: flex;
         }
+    }
+}
 
-        input {
-            width: 60px;
-        }
+.two-resources {
+    display: flex;
+    position: relative;
 
-        .inputs {
-            display: flex;
-            column-gap: 8px;
+    > .o-resource:first-of-type {
+        position: absolute;
+        clip-path: polygon(0 0, 0 100%, 100% 0);
+    }
+    > .o-resource:last-of-type {
+        clip-path: polygon(100% 100%, 0 100%, 100% 0);
+    }
+}
 
-            > * {
-                display: flex;
-            }
-        }
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
     }
 
-    .two-resources {
+    &-header,
+    &-body {
+        height: 100%;
+        padding: 8px;
         display: flex;
-        position: relative;
-
-        > .o-resource:first-of-type {
-            position: absolute;
-            clip-path: polygon(0 0, 0 100%, 100% 0);
-        }
-        > .o-resource:last-of-type {
-            clip-path: polygon(100% 100%, 0 100%, 100% 0);
-        }
+        align-items: center;
     }
-
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-        }
-
-        &-header,
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-        }
-    }
+}
 </style>

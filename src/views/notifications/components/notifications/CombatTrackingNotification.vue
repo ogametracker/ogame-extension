@@ -85,66 +85,68 @@
 </template>
 
 <script setup lang="ts">
-    import { computed } from 'vue';
-    import type { CombatTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
-    import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import Notification from '../Notification.vue';
-    import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
-    import { formatNumber, translate } from '../../i18n';
-    import { useSettingsStore } from '../../stores/settings';
+import { computed } from 'vue';
+import type { CombatTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import Notification from '../Notification.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { formatNumber, translate } from '../../i18n';
+import { useSettingsStore } from '../../stores/settings';
 
-    const { notification } = defineProps<{ notification: CombatTrackingNotificationMessageData }>();
-    const emit = defineEmits<{ remove: [] }>();
-    const settingsStore = useSettingsStore();
+const { notification } = defineProps<{ notification: CombatTrackingNotificationMessageData }>();
+const emit = defineEmits<{ remove: [] }>();
+const settingsStore = useSettingsStore();
 
-    const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
+const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
 
-    const title = computed(() => translate(t => t.extension.notifications.combatTracking.title(formatNumber(notification.count))));
+const title = computed(() =>
+    translate(t => t.extension.notifications.combatTracking.title(formatNumber(notification.count))),
+);
 
-    const message = computed(() => translate(t => t.extension.notifications.combatTracking.message(formatNumber(notification.count))));
+const message = computed(() =>
+    translate(t => t.extension.notifications.combatTracking.message(formatNumber(notification.count))),
+);
 
-    const hasLoot = computed(() => Object.values(notification.resources).reduce((acc, cur) => acc + cur, 0) > 0);
+const hasLoot = computed(() => Object.values(notification.resources).reduce((acc, cur) => acc + cur, 0) > 0);
 
-    const sum = computed(() =>
-        notification.resources.metal
-            + notification.resources.crystal
-            + notification.resources.deuterium,
-    );
+const sum = computed(
+    () => notification.resources.metal + notification.resources.crystal + notification.resources.deuterium,
+);
 </script>
 <style lang="scss" scoped>
-    .negative-loot {
-        color: red;
+.negative-loot {
+    color: red;
+}
+
+.fade {
+    color: rgba(white, 0.1);
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 32px 1fr);
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
+
+    .mdi {
+        transform: scale(1.5);
+        width: 24px;
+        text-align: center;
+        height: 20px;
     }
 
-    .fade {
-        color: rgba(white, 0.1);
+    .mdi,
+    .o-resource {
+        justify-self: center;
     }
+}
 
-    .resources-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 32px 1fr);
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
-
-        .mdi {
-            transform: scale(1.5);
-            width: 24px;
-            text-align: center;
-            height: 20px;
-        }
-
-        .mdi,
-        .o-resource {
-            justify-self: center;
-        }
-    }
-
-    .text-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
-    }
+.text-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
+}
 </style>

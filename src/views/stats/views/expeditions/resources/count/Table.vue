@@ -66,25 +66,29 @@ const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().extension.common.resourceUnits,
-        getValue: nextExpos => nextExpos.reduce(
-            (acc, expo) => acc
-                + expo.findings.resourceCount.metal
-                + expo.findings.resourceCount.crystal
-                + expo.findings.resourceCount.deuterium,
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.resourceUnits,
+            getValue: nextExpos =>
+                nextExpos.reduce(
+                    (acc, expo) =>
+                        acc +
+                        expo.findings.resourceCount.metal +
+                        expo.findings.resourceCount.crystal +
+                        expo.findings.resourceCount.deuterium,
+                    0,
+                ),
+        },
+    ];
 });
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

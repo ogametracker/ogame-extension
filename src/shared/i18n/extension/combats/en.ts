@@ -1,5 +1,5 @@
-import { CombatResultType } from "@ogame-tracker/shared/models/combat-reports/CombatResultType";
-import { CombatsTranslations } from "./type";
+import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { CombatsTranslations } from './type';
 
 export const en: CombatsTranslations = {
     header: 'Combats',
@@ -12,7 +12,7 @@ export const en: CombatsTranslations = {
             onExpeditions: 'On Expeditions',
 
             amount: 'Amount',
-            resources: 'Resource Units'
+            resources: 'Resource Units',
         },
     },
     combats: 'Combats',

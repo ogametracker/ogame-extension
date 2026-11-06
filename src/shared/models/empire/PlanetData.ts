@@ -16,7 +16,7 @@ export interface PlanetData extends PlanetDataBase {
 
     productionSettings: ProductionSettings;
     missiles: Record<MissileType, number>;
-    
+
     activeLifeform: LifeformType;
     lifeformBuildings: PlanetLifeformBuildingLevels;
     lifeformTechnologies: PlanetLifeformTechnologyLevels;

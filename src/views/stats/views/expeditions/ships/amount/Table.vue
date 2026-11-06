@@ -58,16 +58,18 @@ const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
 });
 
 const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
-    return [{
-        label: translations().extension.common.sum,
-        getValue: nextExpos => nextExpos.reduce(
-            (acc, expo) => acc + ExpeditionFindableShipTypes.reduce(
-                (acc, ship) => acc + (expo.findings.fleet[ship] ?? 0),
-                0
-            ),
-            0
-        ),
-    }];
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextExpos =>
+                nextExpos.reduce(
+                    (acc, expo) =>
+                        acc +
+                        ExpeditionFindableShipTypes.reduce((acc, ship) => acc + (expo.findings.fleet[ship] ?? 0), 0),
+                    0,
+                ),
+        },
+    ];
 });
 
 const shipTable = computed<Record<string, ShipType>>(() => {
@@ -94,11 +96,11 @@ const shipTable = computed<Record<string, ShipType>>(() => {
 </script>
 
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

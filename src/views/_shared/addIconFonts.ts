@@ -1,4 +1,4 @@
-import { env } from "@ogame-tracker/shared/env";
+import { env } from '@ogame-tracker/shared/env';
 
 export function addIconFonts() {
     const browser = env.browser;

@@ -21,7 +21,6 @@ import ColorSettingsTable from './ColorSettingsTable.vue';
 const settingsStore = useSettingsStore();
 
 const labels = computed<Record<ShipType, string>>(() => {
-
     return {
         [ShipType.lightFighter]: translations().ogame.ships[ShipType.lightFighter],
         [ShipType.heavyFighter]: translations().ogame.ships[ShipType.heavyFighter],
