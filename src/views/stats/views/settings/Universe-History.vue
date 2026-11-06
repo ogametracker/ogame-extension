@@ -1,5 +1,5 @@
 <template>
-    <universe-history-tracking-settings />
+    <UniverseHistoryTrackingSettings />
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-    <size-table :resource="ResourceType.deuterium" />
+    <SizeTable :resource="ResourceType.deuterium" />
 </template>
 
 <script setup lang="ts">

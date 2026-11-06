@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage>
+        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage>
             <template #cell-label="{ value }">
                 <span v-text="value" />
 
@@ -8,21 +8,22 @@
                 <span v-else-if="value == translations().extension.expeditions.expeditionEventSizes.medium" class="mdi mdi-hexagon-slice-3" :style="{ color: colors.medium }" />
                 <span v-else-if="value == translations().extension.expeditions.expeditionEventSizes.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <date-range-settings />
-        </floating-menu>
+            <DateRangeSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PropType } from 'vue';

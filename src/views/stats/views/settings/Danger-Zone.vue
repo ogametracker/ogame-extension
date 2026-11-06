@@ -68,12 +68,13 @@
         </button>
 
         <div class="danger-zone-overlay" v-if="isDeleting">
-            <loading-spinner />
+            <LoadingSpinner />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import { useCombatReportStore } from '../../data/CombatReportDataModule';

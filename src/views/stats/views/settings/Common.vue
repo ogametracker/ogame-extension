@@ -1,9 +1,9 @@
 <template>
     <div class="common-settings">
-        <extension-language-settings />
-        <conversion-rate-settings />
-        <show-converted-resources-in-cells-settings />
-        <force-update-server-settings />
+        <ExtensionLanguageSettings />
+        <ConversionRateSettings />
+        <ShowConvertedResourcesInCellsSettings />
+        <ForceUpdateServerSettings />
     </div>
 </template>
 

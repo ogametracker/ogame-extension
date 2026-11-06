@@ -1,16 +1,16 @@
 <template>
-    <grid-table :items="groupedItems" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer row-borders>
+    <GridTable :items="groupedItems" :footerItems="footerItems" :columns="columns" sticky="100%" sticky-footer row-borders>
         <template #header-cost>
             <div class="cost-grid">
                 <span v-text="translations().extension.empire.amortization.table.cost" style="grid-column: 2" />
-                <o-resource resource="metal" style="grid-column: 1" />
-                <o-resource resource="crystal" />
-                <o-resource resource="deuterium" />
+                <OResource :resource="ResourceType.metal" style="grid-column: 1" />
+                <OResource :resource="ResourceType.crystal" />
+                <OResource :resource="ResourceType.deuterium" />
             </div>
         </template>
 
         <template #cell-planet="{ item }">
-            <template v-if="item.planetId != null">
+            <template v-if="item.type === 'planet-item'">
                 <span v-if="item.planetId > 0" class="planet">
                     <span v-text="getPlanetName(item.planetId)" />
                     <span v-text="formatPlanetCoordinates(item.planetId)" />
@@ -26,7 +26,7 @@
             <div v-if="item.type == 'plasma-technology'" class="build-grid">TODO:</div>
             <div v-else class="build-grid">
                 <template v-if="item.astrophysicsLevels.length > 0">
-                    <o-research :research="ResearchType.astrophysics" size="36px" />
+                    <OResearch :research="ResearchType.astrophysics" size="36px" />
                     <span class="name-and-level">
                         <span v-text="translations().ogame.research[ResearchType.astrophysics]" />
                         <span v-if="item.astrophysicsLevels.length == 1" v-text="item.astrophysicsLevels[0]" />
@@ -36,7 +36,7 @@
 
                 <template v-for="lfBuilding in LifeformBuildingTypes">
                     <template v-if="item.lifeformBuildings[lfBuilding].length > 0">
-                        <o-lifeform-building :building="lfBuilding" size="36px" :key="`image-${lfBuilding}`" />
+                        <OLifeformBuilding :building="lfBuilding" size="36px" :key="`image-${lfBuilding}`" />
                         <span class="name-and-level" :key="`level-${lfBuilding}`">
                             <span v-text="translations().ogame.lifeformBuildings[lfBuilding]" />
                             <span v-if="item.lifeformBuildings[lfBuilding].length == 1" v-text="item.lifeformBuildings[lfBuilding][0]" />
@@ -54,7 +54,7 @@
 
                 <template v-for="mine in mineBuildingTypes">
                     <template v-if="item.mines[mine].length > 0">
-                        <o-building :building="mine" size="36px" :key="`image-${mine}`" />
+                        <OBuilding :building="mine" size="36px" :key="`image-${mine}`" />
                         <span class="name-and-level" :key="`level-${mine}`">
                             <span v-text="translations().ogame.buildings[mine]" />
                             <span v-if="item.mines[mine].length == 1" v-text="item.mines[mine][0]" />
@@ -65,7 +65,7 @@
 
                 <template v-for="lfTech in LifeformTechnologyTypes">
                     <template v-if="item.lifeformTechnologies[lfTech].length > 0">
-                        <o-lifeform-technology :technology="lfTech" size="36px" :key="`image-${lfTech}`" />
+                        <OLifeformTechnology :technology="lfTech" size="36px" :key="`image-${lfTech}`" />
                         <span class="name-and-level" :key="`level-${lfTech}`">
                             <span v-text="translations().ogame.lifeformTechnologies[lfTech]" />
                             <span v-if="item.lifeformTechnologies[lfTech].length == 1" v-text="item.lifeformTechnologies[lfTech][0]" />
@@ -92,7 +92,7 @@
         </template>
 
         <template #cell-costConverted="{ value }">
-            <decimal-number :value="value" />
+            <DecimalNumber :value="value" />
         </template>
 
         <template #footer-cost="{ value }">
@@ -104,12 +104,20 @@
         </template>
 
         <template #footer-costConverted="{ value }">
-            <decimal-number :value="value" />
+            <DecimalNumber :value="value" />
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import GridTable from '@stats/components/common/GridTable.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
+import OResearch from '@stats/components/ogame/OResearch.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { PropType } from 'vue';

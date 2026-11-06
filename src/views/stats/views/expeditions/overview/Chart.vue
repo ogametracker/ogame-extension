@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart
+        <StatsChart
             :datasets="datasets"
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
@@ -26,21 +26,22 @@
                     <div v-text="`${translations().extension.expeditions.expeditions} (${translations().extension.common.total})`" />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <expedition-event-color-settings />
-        </floating-menu>
+            <ExpeditionEventColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';

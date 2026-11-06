@@ -9,7 +9,7 @@
             <div v-for="type in types" :key="type.key" class="partial-bonus">
                 <div class="title" v-text="type.label" />
                 <span class="total-value">
-                    <decimal-number :value="totalBonus[type.key] * 100" suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
+                    <DecimalNumber :value="totalBonus[type.key] * 100" suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
                     <span
                         v-if="
                             limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key]
@@ -36,7 +36,7 @@
                     </div>
                     <div v-text="`${planet.name} ${formatCoordinates(planet.coordinates)}`" />
                     <span v-for="type in types" :key="type.key" class="bonus">
-                        <decimal-number
+                        <DecimalNumber
                             :value="totalPlanetBonusesByType[planet.id][type.key] * 100"
                             suffix="%"
                             :digits="3"
@@ -57,11 +57,11 @@
                         <template v-if="planet.activeLifeformTechnologies.includes(tech) && planet.lifeformTechnologies[tech] > 0">
                             <div class="slot" v-text="LifeformTechnologySlots[tech]" />
                             <div class="tech">
-                                <o-lifeform-technology :technology="tech" size="24px" />
+                                <OLifeformTechnology :technology="tech" size="24px" />
                                 <span v-text="translations().ogame.lifeformTechnologies[tech] + ` (${planet.lifeformTechnologies[tech]})`" />
                             </div>
                             <span v-for="type in types" :key="type.key" class="bonus">
-                                <decimal-number
+                                <DecimalNumber
                                     :value="totalPlanetBonusesByTechnologyType[planet.id][tech][type.key].base * 100"
                                     suffix="%"
                                     :digits="3"
@@ -76,7 +76,7 @@
                         <div />
                         <div v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.lifeformBuildingsBoost" />
                         <span v-for="type in types" :key="type.key" class="bonus">
-                            <decimal-number
+                            <DecimalNumber
                                 :value="buildingsPlanetBonusesByType[planet.id][type.key] * 100"
                                 suffix="%"
                                 :digits="3"
@@ -97,7 +97,7 @@
                             "
                         />
                         <span v-for="type in types" :key="type.key" class="bonus">
-                            <decimal-number
+                            <DecimalNumber
                                 :value="levelPlanetBonusesByType[planet.id][type.key] * 100"
                                 suffix="%"
                                 :digits="3"
@@ -113,7 +113,7 @@
                             v-text="translations().extension.empire.lifeforms.researchBonuses.breakdown.bugBoost"
                         />
                         <span v-for="type in types" :key="type.key" class="bonus">
-                            <decimal-number
+                            <DecimalNumber
                                 :value="planetBugBonusesByType[planet.id][type.key] * 100"
                                 suffix="%"
                                 :digits="3"
@@ -152,6 +152,8 @@ export type LifeformBonusesPlanetBreakdown<TKey extends string = string> = {
 </script>
 
 <script setup lang="ts">
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
 import { computed, reactive } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';

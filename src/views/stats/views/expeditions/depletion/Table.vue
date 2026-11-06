@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage show-average :averageNumberFormatOptions="avgFormat">
+        <RangedStatsTable :dataItems="expos" :items="items" :footerItems="footerItems" show-percentage show-average :averageNumberFormatOptions="avgFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
@@ -16,21 +16,22 @@
                     :style="{ color: colors[depletionLevelsByLabel[value]] }"
                 />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <date-range-settings />
-        </floating-menu>
+            <DateRangeSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';

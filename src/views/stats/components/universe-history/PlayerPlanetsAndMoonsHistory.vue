@@ -1,5 +1,5 @@
 <template>
-    <loading-spinner v-if="loading" />
+    <LoadingSpinner v-if="loading" />
     <div v-else :style="`--planets: ${history.length}; --offset: ${clientHeight}`">
         <div class="planets-moons-history" ref="container">
             <div class="row" v-for="item in items" :key="item.date">
@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { formatNumber, formatDate } from '@stats/i18n';
 import type { DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState } from '@ogame-tracker/shared/db/schema/universe-history';

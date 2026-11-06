@@ -1,31 +1,33 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <o-resource :resource="resourceTypes[value]" size="24px" />
+                <OResource :resource="resourceTypes[value]" size="24px" />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left class="floating-settings">
+        <FloatingMenu v-model="showSettings" left class="floating-settings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <conversion-rate-settings />
-            <combat-tracking-ignore-espionage-combats-settings />
+            <ConversionRateSettings />
+            <CombatTrackingIgnoreEspionageCombatsSettings />
             <hr class="two-column" />
-            <show-converted-resources-in-cells-settings />
+            <ShowConvertedResourcesInCellsSettings />
             <hr class="two-column" />
-            <date-range-settings class="two-column"  />
-        </floating-menu>
+            <DateRangeSettings class="two-column"  />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';

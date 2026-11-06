@@ -4,7 +4,7 @@
             <span v-text="translations().extension.settings.accessibility.showSimplifiedResults.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox
+            <Checkbox
                 :model-value="showSimplifiedResults"
                 @update:model-value="toggleShowSimplifiedResults($event)"
                 :label="translations().extension.settings.accessibility.showSimplifiedResults.label"
@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';

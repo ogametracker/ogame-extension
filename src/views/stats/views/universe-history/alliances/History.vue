@@ -1,8 +1,8 @@
 <template>
     <div class="history" v-if="historyTrackingEnabled">
-        <loading-spinner v-if="dataModuleLoading" />
+        <LoadingSpinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table :columns="tableColumns" :items="tableItems" class="alliance-selection-table">
+            <GridTable :columns="tableColumns" :items="tableItems" class="alliance-selection-table">
                 <template #cell-alliance="{ value: alliance }">
                     <template v-if="alliance == null">
                         <input
@@ -24,27 +24,30 @@
                         <span v-text="`[${alliance.tag}] ${alliance.name}`" />
                     </div>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <tabs :tabs="tabs">
+            <Tabs :tabs="tabs">
                 <template #tab-content-tag>
-                    <alliance-tag-history-table v-if="allianceId != null" :allianceId="allianceId" />
+                    <AllianceTagHistoryTable v-if="allianceId != null" :allianceId="allianceId" />
                 </template>
 
                 <template #tab-content-name>
-                    <alliance-name-history-table v-if="allianceId != null" :allianceId="allianceId" />
+                    <AllianceNameHistoryTable v-if="allianceId != null" :allianceId="allianceId" />
                 </template>
 
                 <template #tab-content-members>
-                    <alliance-member-history-table v-if="allianceId != null" :allianceId="allianceId" />
+                    <AllianceMemberHistoryTable v-if="allianceId != null" :allianceId="allianceId" />
                 </template>
-            </tabs>
+            </Tabs>
         </template>
     </div>
-    <universe-history-tracking-settings v-else />
+    <UniverseHistoryTrackingSettings v-else />
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { translations } from '@stats/i18n';

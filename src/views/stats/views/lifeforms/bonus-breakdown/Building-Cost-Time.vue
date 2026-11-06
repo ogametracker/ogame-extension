@@ -4,20 +4,21 @@
             <option v-for="building in Buildings" :key="building" :value="building" v-text="translations().ogame.buildings[building]" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
+        <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
                     <span>
-                        <o-building :building="building" class="mr-2" />
+                        <OBuilding :building="building" class="mr-2" />
                         <span v-text="translations().ogame.buildings[building]" />
                     </span>
                 </div>
             </template>
-        </lifeform-bonuses-breakdown>
+        </LifeformBonusesBreakdown>
     </div>
 </template>
 
 <script setup lang="ts">
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

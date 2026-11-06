@@ -1,8 +1,8 @@
 <template>
     <div class="history" v-if="historyTrackingEnabled">
-        <loading-spinner v-if="dataModuleLoading" />
+        <LoadingSpinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table :columns="tableColumns" :items="tableItems" class="player-selection-table">
+            <GridTable :columns="tableColumns" :items="tableItems" class="player-selection-table">
                 <template #cell-player="{ value: player }">
                     <template v-if="player == null">
                         <input
@@ -24,31 +24,34 @@
                         <span v-text="player.name" />
                     </div>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <tabs :tabs="tabs">
+            <Tabs :tabs="tabs">
                 <template #tab-content-status>
-                    <status-history-chart v-if="playerId != null" :playerId="playerId" />
+                    <StatusHistoryChart v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-nickname>
-                    <player-name-history-table v-if="playerId != null" :playerId="playerId" />
+                    <PlayerNameHistoryTable v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-alliance>
-                    <player-alliance-history-table v-if="playerId != null" :playerId="playerId" />
+                    <PlayerAllianceHistoryTable v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-planet-moons>
-                    <player-planets-and-moons-history v-if="playerId != null" :playerId="playerId" />
+                    <PlayerPlanetsAndMoonsHistory v-if="playerId != null" :playerId="playerId" />
                 </template>
-            </tabs>
+            </Tabs>
         </template>
     </div>
-    <universe-history-tracking-settings v-else />
+    <UniverseHistoryTrackingSettings v-else />
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { translations } from '@stats/i18n';

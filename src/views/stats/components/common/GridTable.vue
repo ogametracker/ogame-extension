@@ -131,13 +131,13 @@ export interface GridTableScrollEvent {
 }
 </script>
 
-<script setup lang="ts" generic="TKey extends string | number = string">
-import { computed, useSlots, useTemplateRef } from 'vue';
+<script setup lang="ts" generic="TKey extends string | number, TRow extends Record<string | number, any>">
+import { computed, useTemplateRef } from 'vue';
 import type { PropType } from 'vue';
 
 const props = defineProps({
     columns: { required: true, type: Array as PropType<GridTableColumn<TKey>[]> },
-    items: { required: true, type: Array as PropType<Record<string | number, any>[]> },
+    items: { required: true, type: Array as PropType<TRow[]> },
     noHeader: { required: false, type: Boolean },
     inline: { required: false, type: Boolean },
     footerItems: { required: false, type: Array as PropType<Record<string | number, any>[]>, default: () => [] },
@@ -150,7 +150,20 @@ const props = defineProps({
 
 const emit = defineEmits<{ scroll: [event: GridTableScrollEvent] }>();
 
-const slots = useSlots();
+type CellSlot<TRow> = {
+    match: RegExpMatchArray;
+    value: any;
+    item: TRow;
+    index: number;
+};
+
+const slots = defineSlots<{
+    [name: `header-${string}`]: (props: { match: RegExpMatchArray; label?: string }) => unknown;
+    [name: `cell-${string}`]: (props: CellSlot<TRow>) => unknown;
+    [name: `footer-${string}`]: (props: CellSlot<Record<string | number, any>>) => unknown;
+    // Some callers supply a regular expression that matches multiple column names.
+    [name: string]: (props: any) => unknown;
+}>();
 
 const gridColumns = computed<string>(() => {
     return props.columns

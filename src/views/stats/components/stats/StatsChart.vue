@@ -1,5 +1,5 @@
 <template>
-    <scrollable-chart
+    <ScrollableChart
         :datasets="computedDatasets"
         :x-label-formatter="formatDayIndex"
         :no-legend="noLegend"
@@ -8,7 +8,7 @@
         <template #tooltip-footer="{ datasets }">
             <slot name="tooltip-footer" :datasets="datasets" />
         </template>
-    </scrollable-chart>
+    </ScrollableChart>
 </template>
 
 <script lang="ts">
@@ -26,6 +26,7 @@ export interface StatsChartDataset<T> {
 </script>
 
 <script setup lang="ts" generic="T">
+import ScrollableChart from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
 import { computed } from 'vue';
 import { formatDate } from '@stats/i18n';
 import type { PropType } from 'vue';

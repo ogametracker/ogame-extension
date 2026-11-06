@@ -1,8 +1,9 @@
 <template>
-    <page :nav-items="navItems"/>
+    <Page :nav-items="navItems"/>
 </template>
 
 <script setup lang="ts">
+import Page from '@stats/components/common/Page.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ListNavItem } from '../../components/common/ListNav.vue';

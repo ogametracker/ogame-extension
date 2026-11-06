@@ -4,24 +4,26 @@
             <option v-for="playerClass in PlayerClasses" :key="playerClass" :value="playerClass" v-text="translations().extension.playerClasses[playerClass]" />
         </select>
 
-        <grid-table inline :columns="classBonusesColumns" :items="classBonusesRows">
+        <GridTable inline :columns="classBonusesColumns" :items="classBonusesRows">
             <template #cell-base="{ value, item }">
-                <decimal-number v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
-                <decimal-number v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" />
+                <DecimalNumber v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
+                <DecimalNumber v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" />
             </template>
             <template #cell-actual="{ value, item }">
-                <decimal-number v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
-                <decimal-number v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" :fade-decimals="false" />
+                <DecimalNumber v-if="item.isPercentage" :value="value * 100" suffix="%" :digits="3" :fade-decimals="false" />
+                <DecimalNumber v-else :value="value" :digits="value % 1 == 0 ? 0 : 3" :fade-decimals="false" />
             </template>
-        </grid-table>
+        </GridTable>
 
         <hr />
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
+        <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
     </div>
 </template>
 
 <script setup lang="ts">
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import GridTable from '@stats/components/common/GridTable.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

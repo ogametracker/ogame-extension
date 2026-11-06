@@ -18,14 +18,14 @@
 
             <div v-show="showProductionSettings" class="mt-2" style="overflow: auto">
                 <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                    <amortization-player-settings-inputs
+                    <AmortizationPlayerSettingsInputs
                         v-model="playerSettings"
                         :lifeform-levels="playerSettings.lifeformLevels"
                         production-mode
                         style="height: max-content; margin-top: 44px"
                     />
 
-                    <amortization-planet-settings-inputs
+                    <AmortizationPlanetSettingsInputs
                         v-for="planetSetting in planetSettings"
                         :key="planetSetting.id"
                         :model-value="planetSetting"
@@ -37,7 +37,7 @@
         </div>
 
         <div v-text="translations().extension.empire.production.messageProduction100" style="grid-column: 1 / span 2" v-show="!showProductionSettings" />
-        <grid-table
+        <GridTable
             :columns="columns"
             :items="items"
             sticky="100%"
@@ -47,13 +47,13 @@
             v-show="!showProductionSettings"
         >
             <template #header-metal>
-                <o-resource resource="metal" size="75px" />
+                <OResource :resource="ResourceType.metal" size="75px" />
             </template>
             <template #header-crystal>
-                <o-resource resource="crystal" size="75px" />
+                <OResource :resource="ResourceType.crystal" size="75px" />
             </template>
             <template #header-deuterium>
-                <o-resource resource="deuterium" size="75px" />
+                <OResource :resource="ResourceType.deuterium" size="75px" />
             </template>
             <template #header-total> {{ translations().extension.common.resourceUnits }} </template>
             <template #header-totalConverted>
@@ -63,13 +63,13 @@
             <template #header-productionSettings>
                 <div class="production-settings-mini-table">
                     <span class="header" v-text="translations().extension.empire.production.activeProductionSettings" />
-                    <o-building :building="BuildingType.metalMine" />
-                    <o-building :building="BuildingType.crystalMine" />
-                    <o-building :building="BuildingType.deuteriumSynthesizer" />
-                    <o-building :building="BuildingType.solarPlant" />
-                    <o-building :building="BuildingType.fusionReactor" />
-                    <o-ship :ship="ShipType.solarSatellite" />
-                    <o-ship :ship="ShipType.crawler" />
+                    <OBuilding :building="BuildingType.metalMine" />
+                    <OBuilding :building="BuildingType.crystalMine" />
+                    <OBuilding :building="BuildingType.deuteriumSynthesizer" />
+                    <OBuilding :building="BuildingType.solarPlant" />
+                    <OBuilding :building="BuildingType.fusionReactor" />
+                    <OShip :ship="ShipType.solarSatellite" />
+                    <OShip :ship="ShipType.crawler" />
                     <span style="grid-column: auto / span 4" v-text="translations().extension.empire.production.items" />
                 </div>
             </template>
@@ -98,7 +98,7 @@
 
                     <template v-for="(item, i) in getActiveItems(prodItem)" :key="i">
                         <span v-if="item == null" />
-                        <o-item v-else :item="item" size="24px" />
+                        <OItem v-else :item="item" size="24px" />
                     </template>
                 </div>
             </template>
@@ -123,130 +123,138 @@
             <template #cell-metal="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <decimal-number :value="value.baseProduction" />
-                        <decimal-number :value="value.mineProduction" />
-                        <decimal-number :value="0" />
-                        <decimal-number :value="value.lifeformBuildingsProduction" />
-                        <decimal-number :value="value.crawlerProduction" />
-                        <decimal-number :value="value.plasmaTechnologyProduction" />
-                        <decimal-number :value="value.itemProduction" />
-                        <decimal-number :value="value.geologistProduction" />
-                        <decimal-number :value="value.commandStaffProduction" />
-                        <decimal-number :value="value.playerClassProduction" />
-                        <decimal-number :value="value.allianceClassProduction" />
-                        <decimal-number :value="value.lifeformTechnologiesProduction" />
+                        <DecimalNumber :value="value.baseProduction" />
+                        <DecimalNumber :value="value.mineProduction" />
+                        <DecimalNumber :value="0" />
+                        <DecimalNumber :value="value.lifeformBuildingsProduction" />
+                        <DecimalNumber :value="value.crawlerProduction" />
+                        <DecimalNumber :value="value.plasmaTechnologyProduction" />
+                        <DecimalNumber :value="value.itemProduction" />
+                        <DecimalNumber :value="value.geologistProduction" />
+                        <DecimalNumber :value="value.commandStaffProduction" />
+                        <DecimalNumber :value="value.playerClassProduction" />
+                        <DecimalNumber :value="value.allianceClassProduction" />
+                        <DecimalNumber :value="value.lifeformTechnologiesProduction" />
                     </template>
 
-                    <decimal-number class="breakdown-sum" :value="value.total" />
+                    <DecimalNumber class="breakdown-sum" :value="value.total" />
                 </div>
             </template>
             <template #cell-crystal="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <decimal-number :value="value.baseProduction" />
-                        <decimal-number :value="value.mineProduction" />
-                        <decimal-number :value="0" />
-                        <decimal-number :value="value.lifeformBuildingsProduction" />
-                        <decimal-number :value="value.crawlerProduction" />
-                        <decimal-number :value="value.plasmaTechnologyProduction" />
-                        <decimal-number :value="value.itemProduction" />
-                        <decimal-number :value="value.geologistProduction" />
-                        <decimal-number :value="value.commandStaffProduction" />
-                        <decimal-number :value="value.playerClassProduction" />
-                        <decimal-number :value="value.allianceClassProduction" />
-                        <decimal-number :value="value.lifeformTechnologiesProduction" />
+                        <DecimalNumber :value="value.baseProduction" />
+                        <DecimalNumber :value="value.mineProduction" />
+                        <DecimalNumber :value="0" />
+                        <DecimalNumber :value="value.lifeformBuildingsProduction" />
+                        <DecimalNumber :value="value.crawlerProduction" />
+                        <DecimalNumber :value="value.plasmaTechnologyProduction" />
+                        <DecimalNumber :value="value.itemProduction" />
+                        <DecimalNumber :value="value.geologistProduction" />
+                        <DecimalNumber :value="value.commandStaffProduction" />
+                        <DecimalNumber :value="value.playerClassProduction" />
+                        <DecimalNumber :value="value.allianceClassProduction" />
+                        <DecimalNumber :value="value.lifeformTechnologiesProduction" />
                     </template>
 
-                    <decimal-number class="breakdown-sum" :value="value.total" />
+                    <DecimalNumber class="breakdown-sum" :value="value.total" />
                 </div>
             </template>
             <template #cell-deuterium="{ value, item }">
                 <div class="breakdown-list" :class="showBreakdown[item.planet.id] ? 'breakdown-list--expanded' : null">
                     <template v-if="showBreakdown[item.planet.id]">
-                        <decimal-number :value="value.baseProduction" />
-                        <decimal-number :value="value.mineProduction" />
-                        <decimal-number :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }" :value="-item.fusionReactorConsumption" />
-                        <decimal-number :value="value.lifeformBuildingsProduction" />
-                        <decimal-number :value="value.crawlerProduction" />
-                        <decimal-number :value="value.plasmaTechnologyProduction" />
-                        <decimal-number :value="value.itemProduction" />
-                        <decimal-number :value="value.geologistProduction" />
-                        <decimal-number :value="value.commandStaffProduction" />
-                        <decimal-number :value="value.playerClassProduction" />
-                        <decimal-number :value="value.allianceClassProduction" />
-                        <decimal-number :value="value.lifeformTechnologiesProduction" />
+                        <DecimalNumber :value="value.baseProduction" />
+                        <DecimalNumber :value="value.mineProduction" />
+                        <DecimalNumber :class="{ 'negative-value': -item.fusionReactorConsumption < 0 }" :value="-item.fusionReactorConsumption" />
+                        <DecimalNumber :value="value.lifeformBuildingsProduction" />
+                        <DecimalNumber :value="value.crawlerProduction" />
+                        <DecimalNumber :value="value.plasmaTechnologyProduction" />
+                        <DecimalNumber :value="value.itemProduction" />
+                        <DecimalNumber :value="value.geologistProduction" />
+                        <DecimalNumber :value="value.commandStaffProduction" />
+                        <DecimalNumber :value="value.playerClassProduction" />
+                        <DecimalNumber :value="value.allianceClassProduction" />
+                        <DecimalNumber :value="value.lifeformTechnologiesProduction" />
                     </template>
 
-                    <decimal-number class="breakdown-sum" :value="value.total - item.fusionReactorConsumption" />
+                    <DecimalNumber class="breakdown-sum" :value="value.total - item.fusionReactorConsumption" />
                 </div>
             </template>
             <template #cell-total="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value" />
+                    <DecimalNumber :value="value" />
                 </div>
             </template>
             <template #cell-totalConverted="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value" />
+                    <DecimalNumber :value="value" />
                 </div>
             </template>
 
             <template #footer-planet="{ value, item }">
                 <span v-if="!item.isResourcePackageRow" v-text="value.name" />
                 <span v-else class="resource-packages-cell">
-                    <o-item :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
+                    <OItem :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.all" min="0" step="1" />
 
-                    <o-item :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
+                    <OItem :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.metal" min="0" step="1" />
 
-                    <o-item :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
+                    <OItem :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.crystal" min="0" step="1" />
 
-                    <o-item :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
+                    <OItem :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
                 </span>
             </template>
             <template #footer-metal="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value.total" />
+                    <DecimalNumber :value="value.total" />
                 </div>
             </template>
             <template #footer-crystal="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value.total" />
+                    <DecimalNumber :value="value.total" />
                 </div>
             </template>
             <template #footer-deuterium="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value.total" />
+                    <DecimalNumber :value="value.total" />
                 </div>
             </template>
             <template #footer-total="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value" />
+                    <DecimalNumber :value="value" />
                 </div>
             </template>
             <template #footer-totalConverted="{ value }">
                 <div class="breakdown-list">
-                    <decimal-number :value="value" />
+                    <DecimalNumber :value="value" />
                 </div>
             </template>
-        </grid-table>
+        </GridTable>
 
-        <floating-menu v-model="showSettings" left v-show="!showProductionSettings">
+        <FloatingMenu v-model="showSettings" left v-show="!showProductionSettings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <show-converted-resources-in-cells-settings />
-        </floating-menu>
+            <ShowConvertedResourcesInCellsSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import GridTable from '@stats/components/common/GridTable.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

@@ -1,13 +1,15 @@
 <template>
     <div v-if="!ready">
-        <loading-spinner />
+        <LoadingSpinner />
         <div v-if="showLoadingMessage" v-text="translations().extension.universeHistory.loadingTakingLong" />
     </div>
-    <page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />
-    <universe-history-tracking-settings v-else />
+    <Page v-else-if="enabled" :nav-items="navItems" :root-route-name="rootRoute" />
+    <UniverseHistoryTrackingSettings v-else />
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Page from '@stats/components/common/Page.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ListNavItem } from '@stats/components/common/ListNav.vue';

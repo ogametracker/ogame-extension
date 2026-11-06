@@ -11,36 +11,36 @@
 
             <span class="inputs" v-if="conversionMode == 'msu'">
                 <span>
-                    <o-resource resource="crystal" />
+                    <OResource :resource="ResourceType.crystal" />
                     <input type="number" :value="1" readonly />
                     <span class="equal mdi mdi-equal" />
                     <input type="number" v-model.number.lazy="msu.crystal" @change="updateMsuConversionRates()" min="1" max="3" step="0.01" />
-                    <o-resource resource="metal" />
+                    <OResource :resource="ResourceType.metal" />
                 </span>
 
                 <span>
-                    <o-resource resource="deuterium" />
+                    <OResource :resource="ResourceType.deuterium" />
                     <input type="number" :value="1" readonly />
                     <span class="equal mdi mdi-equal" />
                     <input type="number" v-model.number.lazy="msu.deuterium" @change="updateMsuConversionRates()" min="2" max="5" step="0.01" />
-                    <o-resource resource="metal" />
+                    <OResource :resource="ResourceType.metal" />
                 </span>
             </span>
             <span class="inputs" v-else>
                 <span>
-                    <o-resource resource="metal" />
+                    <OResource :resource="ResourceType.metal" />
                     <input type="number" v-model.number.lazy="dsu.metal" @change="updateDsuConversionRates()" min="2" max="5" step="0.01" />
                     <span class="equal mdi mdi-equal" />
                     <input type="number" :value="1" readonly />
-                    <o-resource resource="deuterium" />
+                    <OResource :resource="ResourceType.deuterium" />
                 </span>
 
                 <span>
-                    <o-resource resource="crystal" />
+                    <OResource :resource="ResourceType.crystal" />
                     <input type="number" v-model.number.lazy="dsu.crystal" @change="updateDsuConversionRates()" min="1" max="3" step="0.01" />
                     <span class="equal mdi mdi-equal" />
                     <input type="number" :value="1" readonly />
-                    <o-resource resource="deuterium" />
+                    <OResource :resource="ResourceType.deuterium" />
                 </span>
             </span>
         </div>
@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ResourceConversionMode } from '@ogame-tracker/shared/models/settings/Settings';

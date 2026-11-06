@@ -3,8 +3,6 @@ import { createApp } from 'vue';
 import { addIconFonts } from '@ogame-tracker/view-shared/addIconFonts';
 import '@ogame-tracker/view-shared/styles/index.scss';
 import App from './App.vue';
-import { registerCommonComponents } from './components/common';
-import { registerOgameComponents } from './components/ogame';
 import { useCombatReportStore } from './data/CombatReportDataModule';
 import { useDebrisFieldReportStore } from './data/DebrisFieldReportDataModule';
 import { useEmpireStore } from './data/EmpireDataModule';
@@ -41,8 +39,6 @@ async function init() {
 
     const router = createStatsRouter(settings);
     app.use(router);
-    registerCommonComponents(app);
-    registerOgameComponents(app);
     await router.isReady();
     app.mount('#stats');
 }

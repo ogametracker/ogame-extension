@@ -1,28 +1,30 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
+        <RangedStatsTable :dataItems="combats" :items="items" :footerItems="footerItems" show-average :averageNumberFormatOptions="avgNumberFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <o-ship :ship="shipTable[value]" size="24px" />
+                <OShip :ship="shipTable[value]" size="24px" />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <combat-tracking-ignore-espionage-combats-settings />
+            <CombatTrackingIgnoreEspionageCombatsSettings />
             <hr />
-            <date-range-settings />
-        </floating-menu>
+            <DateRangeSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';

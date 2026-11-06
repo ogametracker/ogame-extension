@@ -1,6 +1,6 @@
 <template>
     <div class="accessibility-settings">
-        <show-simplified-results-settings />
+        <ShowSimplifiedResultsSettings />
     </div>
 </template>
 

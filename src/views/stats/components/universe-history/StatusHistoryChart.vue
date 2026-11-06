@@ -1,5 +1,5 @@
 <template>
-    <loading-spinner v-if="loading" />
+    <LoadingSpinner v-if="loading" />
     <div v-else class="status-history-grid">
         <div class="y-ticks">
             <span v-for="(label, i) in statusHistoryLabels" :key="`status-label-${i}`" v-text="label" />
@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { translations, formatDate } from '@stats/i18n';
 import type { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';

@@ -12,7 +12,7 @@
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.items" />
             <span class="item-grid">
-                <o-item v-for="item in slotItems" :key="item" :item="item" :disabled="!settings.items.includes(item)" @click="toggleItem(item)" />
+                <OItem v-for="item in slotItems" :key="item" :item="item" :disabled="!settings.items.includes(item)" @click="toggleItem(item)" />
             </span>
 
             <i v-text="translations().extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay" />
@@ -20,13 +20,13 @@
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.shipUnitFactors" />
             <div class="resource-factors">
-                <o-resource resource="metal" />
+                <OResource :resource="ResourceType.metal" />
                 <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.metal" min="0" max="1" step="0.01" />
 
-                <o-resource resource="crystal" />
+                <OResource :resource="ResourceType.crystal" />
                 <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.crystal" min="0" max="1" step="0.01" />
 
-                <o-resource resource="deuterium" />
+                <OResource :resource="ResourceType.deuterium" />
                 <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.deuterium" min="0" max="1" step="0.01" />
             </div>
 
@@ -41,6 +41,9 @@
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, watch } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';

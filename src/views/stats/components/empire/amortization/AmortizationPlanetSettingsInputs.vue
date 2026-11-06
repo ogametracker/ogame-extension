@@ -10,7 +10,7 @@
         <div class="body">
             <template v-if="toggleable">
                 <span v-text="translations().extension.empire.amortization.settings.planetSettings.includeInResult" />
-                <checkbox v-model="settings.include" />
+                <Checkbox v-model="settings.include" />
             </template>
 
             <span v-text="translations().extension.empire.amortization.settings.planetSettings.position" />
@@ -25,21 +25,21 @@
 
             <span v-text="translations().extension.empire.amortization.settings.planetSettings.activeItems" />
             <span class="item-grid">
-                <o-item
+                <OItem
                     v-for="item in boosterItems.metal"
                     :key="item"
                     :item="item"
                     :disabled="item != activeBooster.metal"
                     @click="toggleBooster(item, boosterItems.metal)"
                 />
-                <o-item
+                <OItem
                     v-for="item in boosterItems.crystal"
                     :key="item"
                     :item="item"
                     :disabled="item != activeBooster.crystal"
                     @click="toggleBooster(item, boosterItems.crystal)"
                 />
-                <o-item
+                <OItem
                     v-for="item in boosterItems.deuterium"
                     :key="item"
                     :item="item"
@@ -55,7 +55,7 @@
                     <span v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
                 </div>
                 <div class="crawler-grid-row">
-                    <checkbox-button
+                    <CheckboxButton
                         v-model="settings.crawlers.max"
                         :unchecked-color="null"
                         :style="{
@@ -64,7 +64,7 @@
                     >
                         <span v-if="settings.crawlers.max" v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
                         <span v-else v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
-                    </checkbox-button>
+                    </CheckboxButton>
                     <input type="number" v-model.number="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
             </span>
@@ -72,20 +72,20 @@
             <template v-if="settings.mines != null">
                 <span v-text="translations().extension.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
-                    <o-building :building="BuildingType.metalMine" />
+                    <OBuilding :building="BuildingType.metalMine" />
                     <input type="number" v-model.number="settings.mines.metalMine" />
 
-                    <o-building :building="BuildingType.crystalMine" />
+                    <OBuilding :building="BuildingType.crystalMine" />
                     <input type="number" v-model.number="settings.mines.crystalMine" />
 
-                    <o-building :building="BuildingType.deuteriumSynthesizer" />
+                    <OBuilding :building="BuildingType.deuteriumSynthesizer" />
                     <input type="number" v-model.number="settings.mines.deuteriumSynthesizer" />
                 </span>
             </template>
 
             <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeform" />
             <span class="lifeform-grid">
-                <o-lifeform
+                <OLifeform
                     v-for="lifeform in lifeforms"
                     :key="lifeform"
                     :lifeform="lifeform"
@@ -97,7 +97,7 @@
             <template v-if="planetData != null && !productionMode">
                 <span />
                 <span>
-                    <checkbox
+                    <Checkbox
                         v-model="settings.ignoreEmptyLifeformTechnologySlots"
                         :label="translations().extension.empire.amortization.settings.planetSettings.ignoreEmptySlots"
                     />
@@ -117,7 +117,7 @@
                     <span v-text="translations().extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
                         <template v-for="building in applicableLifeformBuildings" :key="building">
-                            <o-lifeform-building :building="building" />
+                            <OLifeformBuilding :building="building" />
                             <input type="number" v-model.number="settings.lifeformBuildingLevels![building]" />
                         </template>
                     </span>
@@ -129,7 +129,7 @@
                         <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">
                             <hr v-if="slot == 7 || slot == 13" />
 
-                            <o-lifeform-technology
+                            <OLifeformTechnology
                                 v-for="lifeform in lifeforms"
                                 :key="lifeformTechBySlot[slot][lifeform]"
                                 :technology="lifeformTechBySlot[slot][lifeform]"
@@ -153,6 +153,13 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
+import CheckboxButton from '@stats/components/common/CheckboxButton.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
 import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';

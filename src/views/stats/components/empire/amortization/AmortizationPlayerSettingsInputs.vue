@@ -1,11 +1,11 @@
 <template>
     <div class="player-settings">
         <template v-if="!productionMode">
-            <conversion-rate-settings class="conversion-rate-settings" />
+            <ConversionRateSettings class="conversion-rate-settings" />
 
             <span v-text="translations().extension.empire.amortization.settings.playerSettings.optimizeForResources" />
             <span class="gap">
-                <o-resource
+                <OResource
                     v-for="resource in resources"
                     :key="resource"
                     class="toggleable-resource"
@@ -18,10 +18,10 @@
 
         <span v-text="translations().extension.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
-            <o-officer
+            <OOfficer
                 v-for="(active, officer) in settings.officers"
                 :key="officer"
-                :officer="officer"
+                :officer="OOfficerType[officer]"
                 :disabled="!active"
                 @click="settings.officers[officer] = !settings.officers[officer]"
             />
@@ -29,7 +29,7 @@
 
         <span v-text="translations().extension.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
-            <o-player-class
+            <OPlayerClass
                 v-for="playerClass in playerClasses"
                 :key="playerClass"
                 :player-class="playerClass"
@@ -40,7 +40,7 @@
 
         <span v-text="translations().extension.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
-            <o-alliance-class
+            <OAllianceClass
                 v-for="allyClass in allianceClasses"
                 :key="allyClass"
                 :alliance-class="allyClass"
@@ -51,14 +51,14 @@
 
         <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.plasmaTechnology])" />
         <span>
-            <o-research :research="ResearchType.plasmaTechnology" />
+            <OResearch :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
         <template v-if="!productionMode">
             <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.astrophysics])" />
             <span>
-                <o-research :research="ResearchType.astrophysics" />
+                <OResearch :research="ResearchType.astrophysics" />
                 <input type="number" :value="settings.levelAstrophysics" disabled />
             </span>
 
@@ -71,7 +71,7 @@
         <span v-text="translations().extension.empire.amortization.settings.playerSettings.lifeformLevels" />
         <span class="lifeform-level-grid">
             <span v-for="lifeform in LifeformTypes" :key="lifeform" style="display: contents">
-                <o-lifeform :lifeform="lifeform" />
+                <OLifeform :lifeform="lifeform" />
                 <input type="number" v-model.number="settings.lifeformLevels[lifeform]" min="0" step="1" />
             </span>
         </span>
@@ -79,6 +79,12 @@
 </template>
 
 <script setup lang="ts">
+import OAllianceClass from '@stats/components/ogame/OAllianceClass.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
+import OOfficer, { OOfficerType } from '@stats/components/ogame/OOfficer.vue';
+import OPlayerClass from '@stats/components/ogame/OPlayerClass.vue';
+import OResearch from '@stats/components/ogame/OResearch.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { translations } from '@stats/i18n';
 import type { PropType } from 'vue';
 import { AllianceClass, SelectableAllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';

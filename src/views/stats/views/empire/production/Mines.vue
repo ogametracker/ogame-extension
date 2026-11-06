@@ -1,23 +1,23 @@
 <template>
-    <grid-table :columns="columns" :items="items" :footerItems="footerItems">
+    <GridTable :columns="columns" :items="items" :footerItems="footerItems">
         <template #header-metalMine>
-            <o-building :building="BuildingType.metalMine" size="75px" />
+            <OBuilding :building="BuildingType.metalMine" size="75px" />
         </template>
         <template #header-crystalMine>
-            <o-building :building="BuildingType.crystalMine" size="75px" />
+            <OBuilding :building="BuildingType.crystalMine" size="75px" />
         </template>
         <template #header-deuteriumSynthesizer>
-            <o-building :building="BuildingType.deuteriumSynthesizer" size="75px" />
+            <OBuilding :building="BuildingType.deuteriumSynthesizer" size="75px" />
         </template>
         <template #header-solarPlant>
-            <o-building :building="BuildingType.solarPlant" size="75px" />
+            <OBuilding :building="BuildingType.solarPlant" size="75px" />
         </template>
         <template #header-fusionReactor>
-            <o-building :building="BuildingType.fusionReactor" size="75px" />
+            <OBuilding :building="BuildingType.fusionReactor" size="75px" />
         </template>
 
         <template #header-crawlers>
-            <o-ship :ship="ShipType.crawler" size="75px" />
+            <OShip :ship="ShipType.crawler" size="75px" />
         </template>
 
         <template #cell-planet="{ value: planet }">
@@ -83,10 +83,13 @@
                 />
             </div>
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

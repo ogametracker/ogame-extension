@@ -1,25 +1,27 @@
 <template>
     <div class="point-distribution">
-        <grid-table :columns="columns" :items="items" :footerItems="footerItems" inline>
+        <GridTable :columns="columns" :items="items" :footerItems="footerItems" inline>
             <template #cell-points="{ value }">
-                <decimal-number :value="value" />
+                <DecimalNumber :value="value" />
             </template>
             <template #footer-points="{ value }">
-                <decimal-number :value="value" />
+                <DecimalNumber :value="value" />
             </template>
-        </grid-table>
-        <grid-table :columns="columns" :items="highscoreItems" :footerItems="highscoreFooterItems" inline>
+        </GridTable>
+        <GridTable :columns="columns" :items="highscoreItems" :footerItems="highscoreFooterItems" inline>
             <template #cell-points="{ value }">
-                <decimal-number :value="value" />
+                <DecimalNumber :value="value" />
             </template>
             <template #footer-points="{ value }">
-                <decimal-number :value="value" />
+                <DecimalNumber :value="value" />
             </template>
-        </grid-table>
+        </GridTable>
     </div>
 </template>
 
 <script setup lang="ts">
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import GridTable from '@stats/components/common/GridTable.vue';
 import { computed } from 'vue';
 import type { MoonData } from '@ogame-tracker/shared/models/empire/MoonData';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart
+        <StatsChart
             :datasets="datasets"
             :firstDay="firstDay"
             :itemsPerDay="reportsPerDay"
@@ -26,23 +26,24 @@
                     <div v-text="`${translations().extension.combats.combats} (${translations().extension.common.total})`" />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <combat-tracking-ignore-espionage-combats-settings />
+            <CombatTrackingIgnoreEspionageCombatsSettings />
             <hr />
-            <combat-result-color-settings />
-        </floating-menu>
+            <CombatResultColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import StatsChart from '@stats/components/stats/StatsChart.vue';

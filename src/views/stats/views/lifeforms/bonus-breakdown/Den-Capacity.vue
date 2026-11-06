@@ -1,5 +1,5 @@
 <template>
-    <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
+    <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits" />
 </template>
 
 <script setup lang="ts">

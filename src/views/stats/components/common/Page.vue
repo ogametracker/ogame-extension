@@ -1,17 +1,19 @@
 <template>
     <div class="page">
-        <list-nav
+        <ListNav
             :items="navItems"
             :root-route-name="rootRouteName"
         />
 
         <div class="page-content">
-            <router-view />
+            <RouterView />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import ListNav from '@stats/components/common/ListNav.vue';
+import { RouterView } from 'vue-router';
 import type { PropType } from 'vue';
 import type { ListNavItem } from './ListNav.vue';
 

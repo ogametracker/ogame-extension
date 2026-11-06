@@ -1,5 +1,5 @@
 <template>
-    <size-chart :resource="ResourceType.metal" />
+    <SizeChart :resource="ResourceType.metal" />
 </template>
 
 <script setup lang="ts">

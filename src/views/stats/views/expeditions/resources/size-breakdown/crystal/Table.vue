@@ -1,5 +1,5 @@
 <template>
-    <size-table :resource="ResourceType.crystal" />
+    <SizeTable :resource="ResourceType.crystal" />
 </template>
 
 <script setup lang="ts">

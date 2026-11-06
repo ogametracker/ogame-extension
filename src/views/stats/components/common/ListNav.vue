@@ -1,6 +1,6 @@
 <template>
     <div class="nav-list" :style="{ overflow: showsAnyMenu ? 'visible' : undefined }">
-        <floating-menu
+        <FloatingMenu
             v-for="(item, i) in items"
             :key="i"
             :model-value="rootRouteName != null && showMenu[i] == true"
@@ -9,7 +9,7 @@
         >
             <template #activator>
                 <component
-                    :is="item.to != null ? 'router-link' : 'a'"
+                    :is="item.to != null ? RouterLink : 'a'"
                     class="nav-list-item"
                     :class="item.class"
                     v-bind="
@@ -26,14 +26,14 @@
                 </component>
             </template>
 
-            <set-default-route-button
+            <SetDefaultRouteButton
                 v-if="rootRouteName != null && item.to != null"
                 :label="translations().extension.settings.setDefaultSubRoute"
                 :rootRouteName="rootRouteName"
                 :routeName="item.to.name"
                 @click="showMenu[i] = false"
             />
-        </floating-menu>
+        </FloatingMenu>
     </div>
 </template>
 
@@ -54,6 +54,8 @@ export type ListNavItem = {
 </script>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import { RouterLink } from 'vue-router';
 import { computed, ref } from 'vue';
 import { getDefaultRouteName } from '@stats/router';
 import { translations } from '@stats/i18n';

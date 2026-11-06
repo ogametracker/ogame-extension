@@ -11,11 +11,11 @@
                         <td colspan="2" v-text="translations().extension.settings.dateRanges.headers.rangeStart" />
                         <td colspan="2" v-text="translations().extension.settings.dateRanges.headers.rangeContains" />
                         <td>
-                            <reset-button @reset="resetDateRanges()" />
+                            <ResetButton @reset="resetDateRanges()" />
                         </td>
                     </tr>
                 </thead>
-                <draggable
+                <Draggable
                     tag="tbody"
                     v-model="items"
                     :item-key="rangeKey"
@@ -85,7 +85,7 @@
                         <td v-text="getRangeText(range)" style="font-style: italic;" />
                     </tr>
                     </template>
-                </draggable>
+                </Draggable>
                 <tfoot>
                     <tr>
                         <td />
@@ -111,7 +111,7 @@ import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDef
 import { useSettingsStore } from '../../data/SettingsDataModule';
 import { getRangeDays } from '../../utils/dateRanges';
 import ResetButton from './ResetButton.vue';
-import draggable from 'vuedraggable';
+import Draggable from 'vuedraggable';
 
 const settingsStore = useSettingsStore();
 

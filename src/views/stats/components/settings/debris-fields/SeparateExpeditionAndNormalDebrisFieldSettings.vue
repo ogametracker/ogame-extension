@@ -4,7 +4,7 @@
             <span v-text="translations().extension.settings.debrisFields.separateExpeditionDebrisFields.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox
+            <Checkbox
                 :model-value="separateExpeditionDebrisFields"
                 @update:model-value="toggle($event)"
                 :label="translations().extension.settings.debrisFields.separateExpeditionDebrisFields.label"
@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';

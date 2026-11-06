@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="rows" :footer-items="footerRows" :cell-class-provider="getCellClass" class="ranged-stats-table">
+    <GridTable :columns="columns" :items="rows" :footer-items="footerRows" :cell-class-provider="getCellClass" class="ranged-stats-table">
         <!-- oh god this is ugly -->
         <template v-for="(column, i) in columns" v-slot:[`cell-${column.key}`]="{ value, item }">
             <span :key="column.key" class="ranged-stats-table-cell">
@@ -8,13 +8,13 @@
                     <span v-else :key="i" v-text="value" />
                 </template>
                 <template v-else-if="column.key == 'subLabel'">
-                    <span v-for="(item, i) in item.items" :key="i" :class="item.labelClass">
+                    <span v-for="(item, i) in ('items' in item ? item.items : [])" :key="i" :class="item.labelClass">
                         <slot v-if="column.slotName != null && $slots[column.slotName] != null" :name="column.slotName" :value="item.label" />
                         <span v-else v-text="item.label" />
                     </span>
                 </template>
                 <template v-else>
-                    <span v-for="(item, i) in item.items || [item]" :key="i" :class="[getCellClass(item[column.key]), item.class]">
+                    <span v-for="(item, i) in ('items' in item ? item.items : [item])" :key="i" :class="[getCellClass(item[column.key]), item.class]">
                         <span v-if="column.formatter != null" v-text="column.formatter(item[column.key])" />
                         <span v-else v-text="item[column.key]" />
                     </span>
@@ -25,7 +25,7 @@
         <template v-for="(index, name) in $slots" v-slot:[name]="data">
             <slot :name="name" v-bind="data" />
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script lang="ts">
@@ -51,6 +51,8 @@ export type RangedStatsTableItem<T extends RangeStatsTableItemWithDate> = Single
 
 interface SimpleRangedStatsTableRow {
     label: string;
+    class?: string;
+    labelClass?: string;
     percentage?: number | '';
     average?: number;
 
@@ -70,6 +72,7 @@ interface RangeStatsTableColumn extends GridTableColumn<keyof SimpleRangedStatsT
 </script>
 
 <script setup lang="ts" generic="T extends RangeStatsTableItemWithDate">
+import GridTable from '@stats/components/common/GridTable.vue';
 import { computed } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
 import type { PropType } from 'vue';
@@ -183,7 +186,7 @@ const rows = computed<(RangedStatsTableRow & { class?: string })[]>(() => {
 
 function mapItemToRow(item: RangedStatsTableItem<T>, nextDataItemsByRange: T[][], allRangeIndex: number, daysWithDataItems: number, totalValue: number): (RangedStatsTableRow & { class?: string; labelClass?: string }) {
     if ('getValue' in item) {
-        const row: SimpleRangedStatsTableRow & { class?: string; labelClass?: string } = {
+        const row: SimpleRangedStatsTableRow = {
             label: item.label,
             class: item.class,
             labelClass: item.labelClass,
@@ -205,7 +208,7 @@ function mapItemToRow(item: RangedStatsTableItem<T>, nextDataItemsByRange: T[][]
 
     return {
         label: item.label,
-        items: item.items.map(subitem => mapItemToRow(subitem, nextDataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow & { class?: string; labelClass?: string }),
+        items: item.items.map(subitem => mapItemToRow(subitem, nextDataItemsByRange, allRangeIndex, daysWithDataItems, totalValue) as SimpleRangedStatsTableRow),
     };
 }
 

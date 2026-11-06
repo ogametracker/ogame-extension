@@ -1,13 +1,13 @@
 <template>
     <div class="colors">
-        <expedition-event-color-settings />
-        <expedition-event-size-color-settings />
-        <expedition-depletion-color-settings />
-        <combat-result-color-settings />
-        <resource-color-settings />
-        <ship-color-settings />
-        <lifeform-discovery-color-settings />
-        <lifeform-color-settings />
+        <ExpeditionEventColorSettings />
+        <ExpeditionEventSizeColorSettings />
+        <ExpeditionDepletionColorSettings />
+        <CombatResultColorSettings />
+        <ResourceColorSettings />
+        <ShipColorSettings />
+        <LifeformDiscoveryColorSettings />
+        <LifeformColorSettings />
     </div>
 </template>
 

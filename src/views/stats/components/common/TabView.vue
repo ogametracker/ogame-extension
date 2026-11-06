@@ -1,7 +1,7 @@
 <template>
     <div class="tab-view">
         <header :style="{ '--tab-count': tabs.length }">
-            <floating-menu
+            <FloatingMenu
                 v-for="(tab, i) in tabs"
                 :key="i"
                 :model-value="rootRouteName != null && showMenu[i] == true"
@@ -9,29 +9,29 @@
                 class="tab_floating-menu"
             >
                 <template #activator>
-                    <router-link :to="tab.to" class="tab" active-class="tab--active" @contextmenu="openDefaultMenu(i, $event)">
+                    <RouterLink :to="tab.to" class="tab" active-class="tab--active" @contextmenu="openDefaultMenu(i, $event)">
                         <span class="tab-content">
                             <span v-if="tab.label != null" v-text="tab.label" />
                             <span v-if="isDefaultRoute(tab.to)" class="tab-item-home-icon mdi mdi-home" />
                         </span>
-                    </router-link>
+                    </RouterLink>
                 </template>
 
-                <set-default-route-button
+                <SetDefaultRouteButton
                     v-if="rootRouteName != null"
                     :label="translations().extension.settings.setDefaultSubRoute"
                     :rootRouteName="rootRouteName"
                     :routeName="tab.to.name"
                     @click="showMenu[i] = false"
                 />
-            </floating-menu>
+            </FloatingMenu>
         </header>
         <main>
-            <router-view v-slot="{ Component }">
-                <keep-alive>
+            <RouterView v-slot="{ Component }">
+                <KeepAlive>
                     <component :is="Component" />
-                </keep-alive>
-            </router-view>
+                </KeepAlive>
+            </RouterView>
         </main>
     </div>
 </template>
@@ -46,7 +46,9 @@ export interface Tab {
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import { RouterLink, RouterView } from 'vue-router';
+import { KeepAlive, computed, ref } from 'vue';
 import { getDefaultRouteName } from '@stats/router';
 import { translations } from '@stats/i18n';
 import type { PropType } from 'vue';

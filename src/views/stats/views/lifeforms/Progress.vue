@@ -1,8 +1,8 @@
 <template>
-    <grid-table :columns="columns" :items="items" sticky="100%">
+    <GridTable :columns="columns" :items="items" sticky="100%">
         <template #cell-lifeform="{ value }">
             <span class="mr-2" v-text="translations().ogame.lifeforms[value]" />
-            <o-lifeform :lifeform="value" />
+            <OLifeform :lifeform="value" />
         </template>
         <template #cell-discoverDate="{ value, item }">
             <i v-if="item.lifeform == 'humans'" v-text="translations().extension.empire.lifeforms.alwaysAvailable" />
@@ -19,10 +19,12 @@
         <template #cell-findingCount="{ value }">
             <span v-text="formatNumber(value)" />
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
 import { computed } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
 import { getLifeformExperienceNeededForLevel, getLifeformLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';

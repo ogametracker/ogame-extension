@@ -9,7 +9,7 @@
             <div v-for="type in types" :key="type.key" class="partial-bonus">
                 <div class="title" v-text="type.label" />
                 <span class="avg-value">
-                    <decimal-number :value="averageBonus[type.key] * 100" prefix="⌀ " suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
+                    <DecimalNumber :value="averageBonus[type.key] * 100" prefix="⌀ " suffix="%" :digits="3" :fade-decimals="false" style="--small-fraction-size: 0.75em" />
                 </span>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     </div>
                     <div v-text="`${planet.name} ${formatCoordinates(planet.coordinates)}`" />
                     <span v-for="type in types" :key="type.key" class="bonus">
-                        <decimal-number
+                        <DecimalNumber
                             :value="getTotalPlanetBonus(planets[planet.id], type.key) * 100"
                             suffix="%"
                             :digits="3"
@@ -54,15 +54,15 @@
                         ">
                             <div />
                             <div v-if="isStandardBuilding(building)" class="tech">
-                                <o-building :building="building" size="24px" />
+                                <OBuilding :building="building" size="24px" />
                                 <span v-text="translations().ogame.buildings[building] + ` (${(planet.buildings[building as keyof typeof planet.buildings] ?? 0)})`" />
                             </div>
                             <div v-else class="tech">
-                                <o-lifeform-building :building="building" size="24px" />
+                                <OLifeformBuilding :building="building" size="24px" />
                                 <span v-text="translations().ogame.lifeformBuildings[building] + ` (${planet.lifeformBuildings[building]})`" />
                             </div>
                             <span v-for="type in types" :key="type.key" class="bonus">
-                                <decimal-number
+                                <DecimalNumber
                                     :value="(planets[planet.id].bonusByBuilding[type.key][building] ?? 0) * 100"
                                     suffix="%"
                                     :digits="3"
@@ -76,13 +76,13 @@
                     <div v-if="!noTechnologyBonuses" class="tech-row">
                         <div />
                         <div>
-                            <router-link :to="{ name: researchBonusBreakdownRouteName }" style="text-decoration: none">
+                            <RouterLink :to="{ name: researchBonusBreakdownRouteName }" style="text-decoration: none">
                                 <span v-text="translations().extension.empire.lifeforms.globalResearchBonus" />
                                 <span class="mdi mdi-open-in-new" />
-                            </router-link>
+                            </RouterLink>
                         </div>
                         <span v-for="type in types" :key="type.key" class="bonus">
-                            <decimal-number
+                            <DecimalNumber
                                 :value="technologyBonuses[type.key] * 100"
                                 suffix="%"
                                 :digits="3"
@@ -113,6 +113,10 @@ export type LifeformPlanetBonuses<TKey extends string = string> = {
 </script>
 
 <script setup lang="ts">
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import { RouterLink } from 'vue-router';
 import { computed, reactive } from 'vue';
 import { translations } from '@stats/i18n';
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';

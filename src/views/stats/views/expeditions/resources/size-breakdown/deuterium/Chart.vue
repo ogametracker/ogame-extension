@@ -1,5 +1,5 @@
 <template>
-    <size-chart :resource="ResourceType.deuterium" />
+    <SizeChart :resource="ResourceType.deuterium" />
 </template>
 
 <script setup lang="ts">

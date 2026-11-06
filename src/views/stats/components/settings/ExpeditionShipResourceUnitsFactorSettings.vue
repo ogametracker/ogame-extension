@@ -9,8 +9,8 @@
             <span class="inputs">
                 <span>
                     <span class="two-resources">
-                        <o-resource resource="metal" />
-                        <o-resource resource="crystal" />
+                        <OResource :resource="ResourceType.metal" />
+                        <OResource :resource="ResourceType.crystal" />
                     </span>
 
                     <input
@@ -26,7 +26,7 @@
                 </span>
 
                 <span>
-                    <o-resource resource="deuterium" />
+                    <OResource :resource="ResourceType.deuterium" />
                     <input
                         type="number"
                         v-model.number.lazy="deuteriumFactor"
@@ -44,6 +44,8 @@
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import { useSettingsStore } from '../../data/SettingsDataModule';

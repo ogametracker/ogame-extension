@@ -2,7 +2,7 @@
     <div class="universe-history-tracking">
         <div v-if="!settings.enabled" v-html="translations().extension.universeHistory.settings.messages.notEnabledHtml" />
 
-        <checkbox-button
+        <CheckboxButton
             :model-value="settings.enabled"
             :label="translations().extension.universeHistory.settings.enableHighscoreTrackingOnly"
             @update:model-value="setEnabled($event)"
@@ -12,7 +12,7 @@
         <hr />
 
         <div v-if="settings.enabled && !settings.trackHistory" v-html="translations().extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
-        <checkbox-button
+        <CheckboxButton
             v-if="settings.enabled"
             :model-value="settings.trackHistory"
             :label="translations().extension.universeHistory.settings.enableHistoryTracking"
@@ -24,7 +24,7 @@
 
         <div v-html="translations().extension.universeHistory.settings.messages.trackingTimesHtml" />
         <div class="time-grid">
-            <checkbox-button
+            <CheckboxButton
                 v-for="(enabled, time) in timeSelection"
                 :key="time"
                 :model-value="enabled"
@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import CheckboxButton from '@stats/components/common/CheckboxButton.vue';
 import { computed } from 'vue';
 import { translations, formatDate } from '@stats/i18n';
 import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';

@@ -1,8 +1,8 @@
 <template>
     <div class="resource-balance-settings">
-        <detailed-resource-balance-settings />
-        <include-ships-found-on-expeditions-in-resource-balance-settings />
-        <include-ships-lost-in-combats-in-resource-balance />
+        <DetailedResourceBalanceSettings />
+        <IncludeShipsFoundOnExpeditionsInResourceBalanceSettings />
+        <IncludeShipsLostInCombatsInResourceBalance />
         <IncludeLostLootResourcesInResourceBalance />
     </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
+        <RangedStatsTable
             :dataItems="debrisFieldReports"
             :items="items"
             :footerItems="footerItems"
@@ -10,30 +10,32 @@
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <o-resource :resource="resourceTypes[value]" size="24px" />
+                <OResource :resource="resourceTypes[value]" size="24px" />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
         <span class="multi-menu">
-            <floating-menu v-model="showSettings" left class="floating-settings">
+            <FloatingMenu v-model="showSettings" left class="floating-settings">
                 <template #activator>
                     <button @click="showSettings = !showSettings">
                         <span class="mdi mdi-cog" />
                     </button>
                 </template>
 
-                <conversion-rate-settings />
-                <show-converted-resources-in-cells-settings />
-                <separate-expedition-and-normal-debris-field-settings />
+                <ConversionRateSettings />
+                <ShowConvertedResourcesInCellsSettings />
+                <SeparateExpeditionAndNormalDebrisFieldSettings />
                 <hr class="three-column" />
-                <date-range-settings class="three-column" />
-            </floating-menu>
-            <manually-add-debris-field-menu />
+                <DateRangeSettings class="three-column" />
+            </FloatingMenu>
+            <ManuallyAddDebrisFieldMenu />
         </span>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';

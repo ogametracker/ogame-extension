@@ -1,9 +1,11 @@
 <template>
-    <loading-spinner v-if="loading" />
-    <page v-else :nav-items="navItems" :root-route-name="rootRoute" />
+    <LoadingSpinner v-if="loading" />
+    <Page v-else :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Page from '@stats/components/common/Page.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ListNavItem } from '@stats/components/common/ListNav.vue';

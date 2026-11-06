@@ -1,12 +1,12 @@
 <template>
-    <loading-spinner v-if="loading" />
+    <LoadingSpinner v-if="loading" />
     <div v-else>
         <div v-for="key in keys" :key="key" class="find-column">
             <h3 v-text="translations().extension.expeditions.topFinds.title(keyTranslations[key])" />
 
-            <grid-table inline :columns="columns" :items="largestFinds[key].values" :style="`--color: ${colors[key]}`">
+            <GridTable inline :columns="columns" :items="largestFinds[key].values" :style="`--color: ${colors[key]}`">
                 <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
+                    <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
                 <template #cell-amount="{ value }">
                     <span v-text="formatNumber(value)" />
@@ -14,7 +14,7 @@
                 <template #cell-date="{ value }">
                     <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <div class="find-column" :style="`--color: ${colors.shipUnitsConverted}`">
@@ -23,19 +23,21 @@
                 <option v-for="ship in ShipTypes" :key="ship" :value="ship" v-text="translations().ogame.ships[ship]" />
             </select>
 
-            <grid-table inline :columns="shipColumns" :items="largestFinds.shipAmounts[selectedShip].values">
+            <GridTable inline :columns="shipColumns" :items="largestFinds.shipAmounts[selectedShip].values">
                 <template #cell-amount="{ value }">
                     <span v-text="formatNumber(value)" />
                 </template>
                 <template #cell-date="{ value }">
                     <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
 import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';

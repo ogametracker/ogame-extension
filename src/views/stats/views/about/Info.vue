@@ -4,8 +4,8 @@
         <hr />
 
         <h3 v-text="translations().extension.about.info.table.currentAccount.header" />
-        <loading-spinner v-if="loading" />
-        <grid-table
+        <LoadingSpinner v-if="loading" />
+        <GridTable
             v-else
             :items="itemsCurrentAccount"
             :columns="columns"
@@ -16,8 +16,8 @@
         <hr />
 
         <h3 v-text="translations().extension.about.info.table.global.header" />
-        <loading-spinner v-if="loading" />
-        <grid-table
+        <LoadingSpinner v-if="loading" />
+        <GridTable
             v-else
             :items="itemsGlobal"
             :columns="columns"
@@ -29,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
 import type { GridTableColumn } from '../../components/common/GridTable.vue';

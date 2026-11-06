@@ -1,44 +1,44 @@
 <template>
     <div>
         <div class="small-tables">
-            <grid-table inline :columns="infoColumns" :items="infoItems" no-header>
+            <GridTable inline :columns="infoColumns" :items="infoItems" no-header>
                 <template #cell-value="{ value, item }">
-                    <o-player-class v-if="item.type == 'playerClass'" :player-class="value" />
+                    <OPlayerClass v-if="item.type == 'playerClass'" :player-class="value" />
                     <span v-else-if="item.type == 'number'" v-text="value" />
                     <span v-else v-text="formatNumber(value * 100, percentageFormat) + '%'" />
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <grid-table inline :columns="maxFindsColumns" :items="maxFindsItems">
+            <GridTable inline :columns="maxFindsColumns" :items="maxFindsItems">
                 <template #cell-key="{ value }">
                     <template v-if="value == 'metal'">
-                        <o-resource resource="metal" size="24px" />
+                        <OResource :resource="ResourceType.metal" size="24px" />
                         <span v-text="formatNumber(finds.large[finds.large.length - 1].metal)" />
                     </template>
                     <template v-else-if="value == 'crystal'">
-                        <o-resource resource="crystal" size="24px" />
+                        <OResource :resource="ResourceType.crystal" size="24px" />
                         <span v-text="formatNumber(finds.large[finds.large.length - 1].crystal)" />
                     </template>
                     <template v-else-if="value == 'deuterium'">
-                        <o-resource resource="deuterium" size="24px" />
+                        <OResource :resource="ResourceType.deuterium" size="24px" />
                         <span v-text="formatNumber(finds.large[finds.large.length - 1].deuterium)" />
                     </template>
                     <template v-else-if="value == 'shipUnits'">
-                        <o-ship :ship="ShipType.battleship" size="24px" />
+                        <OShip :ship="ShipType.battleship" size="24px" />
                         <span v-text="formatNumber(finds.large[finds.large.length - 1].shipUnits)" />
                     </template>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <grid-table inline :columns="darkMatterColumns" :items="darkMatterItems">
+            <GridTable inline :columns="darkMatterColumns" :items="darkMatterItems">
                 <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
+                    <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
                 <template #cell-amount="{ item }">
-                    <o-resource resource="dark-matter" size="24px" />
+                    <OResource resource="dark-matter" size="24px" />
                     <span v-text="`${formatNumber(item.amount[0])} - ${formatNumber(item.amount[1])}`" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <hr />
@@ -46,19 +46,24 @@
         <h3 v-text="translations().extension.expeditions.possibleFinds.listOfPossibleFinds" />
         <div class="find-col" v-for="size in sizes" :key="size">
             <h3 class="table-title">
-                <expedition-size-icon :size="size" />
+                <ExpeditionSizeIcon :size="size" />
                 <span v-text="translations().extension.expeditions.possibleFinds.findSizes(translations().extension.expeditions.expeditionEventSizes[size])" />
             </h3>
-            <grid-table inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
+            <GridTable inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
                 <template v-slot:[`cell-.+`]="{ value }">
                     <span v-text="formatNumber(value)" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import GridTable from '@stats/components/common/GridTable.vue';
+import OPlayerClass from '@stats/components/ogame/OPlayerClass.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import { ExpeditionEventSize, ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';

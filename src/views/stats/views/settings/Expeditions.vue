@@ -1,6 +1,6 @@
 <template>
     <div>
-        <expedition-ship-resource-units-factor-settings />
+        <ExpeditionShipResourceUnitsFactorSettings />
     </div>
 </template>
 

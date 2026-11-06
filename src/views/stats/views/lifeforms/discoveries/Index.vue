@@ -1,8 +1,9 @@
 <template>
-    <page :nav-items="navItems" root-route-name="lifeforms/discoveries" />
+    <Page :nav-items="navItems" root-route-name="lifeforms/discoveries" />
 </template>
 
 <script setup lang="ts">
+import Page from '@stats/components/common/Page.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ListNavItem } from '@stats/components/common/ListNav.vue';

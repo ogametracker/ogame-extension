@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="eventsPerDay">
+        <StatsChart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="eventsPerDay">
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
@@ -21,29 +21,30 @@
                     <div v-text="`${translations().extension.common.resourceUnits} (${conversionModeText})`" />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left class="floating-settings">
+        <FloatingMenu v-model="showSettings" left class="floating-settings">
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <expedition-ship-resource-units-factor-settings />
-            <lost-ship-resource-units-factor-settings />
+            <ExpeditionShipResourceUnitsFactorSettings />
+            <LostShipResourceUnitsFactorSettings />
             <hr class="two-column" />
-            <include-ships-found-on-expeditions-in-resource-balance-settings />
-            <include-ships-lost-in-combats-in-resource-balance />
+            <IncludeShipsFoundOnExpeditionsInResourceBalanceSettings />
+            <IncludeShipsLostInCombatsInResourceBalance />
             <IncludeLostLootResourcesInResourceBalance />
             <hr class="two-column" />
-            <conversion-rate-settings />
-            <resource-color-settings />
-        </floating-menu>
+            <ConversionRateSettings />
+            <ResourceColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import StatsChart from '@stats/components/stats/StatsChart.vue';

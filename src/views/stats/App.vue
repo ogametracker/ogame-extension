@@ -7,7 +7,7 @@
         :class="activeTab ? activeTab.appClass : ''"
     >
         <nav>
-            <floating-menu
+            <FloatingMenu
                 :model-value="tabWithMenu == tab"
                 @update:model-value="tabWithMenu = null"
                 v-for="tab in tabs"
@@ -17,7 +17,7 @@
             >
                 <template #activator>
                     <component
-                        :is="tab.to != null ? 'router-link' : tab.href != null ? 'a' : 'div'"
+                        :is="tab.to != null ? RouterLink : tab.href != null ? 'a' : 'div'"
                         :target="tab.href != null ? '_blank' : null"
                         v-bind="
                             tab.href != null
@@ -54,8 +54,8 @@
                     </component>
                 </template>
 
-                <set-default-route-button v-if="tab.canBeDefault && tab.to" :label="translations().extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
-            </floating-menu>
+                <SetDefaultRouteButton v-if="tab.canBeDefault && tab.to" :label="translations().extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
+            </FloatingMenu>
 
             <template v-if="isIframeMode">
                 <div style="width: 24px" />
@@ -65,25 +65,26 @@
             </template>
         </nav>
         <main>
-            <router-view />
+            <RouterView />
         </main>
         <footer>
-            <router-link :to="{ name: 'donate' }" class="made-with-love">
+            <RouterLink :to="{ name: 'donate' }" class="made-with-love">
                 <span v-text="translations().extension.common.madeWithLove1" class="mr-1" />
                 <span class="mdi mdi-heart" style="color: #ff1f1f" />
                 <span v-text="translations().extension.common.madeWithLove2" class="ml-1" />
-            </router-link>
+            </RouterLink>
 
             <span v-text="accountAndServer" />
         </footer>
 
-        <switch-account-dialog v-if="showAccountSwitchDialog" :color="colors.switchAccount" @close="showAccountSwitchDialog = false" />
+        <SwitchAccountDialog v-if="showAccountSwitchDialog" :color="colors.switchAccount" @close="showAccountSwitchDialog = false" />
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router';
 import { getDefaultRouteName } from './router';
 import { translations } from '@stats/i18n';
 import { useUniversesAndAccountsStore } from "./data/UniversesAndAccountsDataModule";

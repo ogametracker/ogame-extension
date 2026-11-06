@@ -4,7 +4,7 @@
             <span v-text="translations().extension.settings.resourceBalance.includeLostLootResources.header" />
         </div>
         <div class="fake-table-body">
-            <checkbox
+            <Checkbox
                 :model-value="include"
                 @update:model-value="toggleInclude($event)"
                 :label="translations().extension.settings.resourceBalance.includeLostLootResources.checkboxLabel"
@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import { useSettingsStore } from '../../../data/SettingsDataModule';

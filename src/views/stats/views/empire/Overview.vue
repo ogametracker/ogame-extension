@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="empire-table" sticky="100%">
+    <GridTable :columns="columns" :items="items" class="empire-table" sticky="100%">
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
@@ -9,7 +9,7 @@
         <template #cell-supplies="{ value, item }">
             <div class="supplies-table">
                 <span v-for="building in PlanetSupplyBuildingTypes" :key="building">
-                    <o-building :building="building" :disabled="value[building] == 0" />
+                    <OBuilding :building="building" :disabled="value[building] == 0" />
                     <span v-text="value[building]" :class="{ fade: value[building] == 0 }" />
                 </span>
             </div>
@@ -18,7 +18,7 @@
         <template #cell-facilities="{ value, item }">
             <div class="facilities-table">
                 <span v-for="building in PlanetFacilityBuildingTypes" :key="building">
-                    <o-building :building="building" :disabled="value[building] == 0" />
+                    <OBuilding :building="building" :disabled="value[building] == 0" />
                     <span v-text="value[building]" :class="{ fade: value[building] == 0 }" />
                 </span>
             </div>
@@ -27,7 +27,7 @@
         <template #cell-ships="{ value, item }">
             <div class="ships-table">
                 <span v-for="ship in ShipTypes" :key="ship">
-                    <o-ship :ship="ship" :disabled="value[ship] == 0" />
+                    <OShip :ship="ship" :disabled="value[ship] == 0" />
                     <span v-text="value[ship]" :class="{ fade: value[ship] == 0 }" />
                 </span>
             </div>
@@ -35,15 +35,19 @@
         <template #cell-defenses="{ value, item }">
             <div class="defenses-table">
                 <span v-for="defense in DefenseTypes" :key="defense">
-                    <o-defense :defense="defense" :disabled="value[defense] == 0" />
+                    <ODefense :defense="defense" :disabled="value[defense] == 0" />
                     <span v-text="value[defense]" :class="{ fade: value[defense] == 0 }" />
                 </span>
             </div>
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import ODefense from '@stats/components/ogame/ODefense.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

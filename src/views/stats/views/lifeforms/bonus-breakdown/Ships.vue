@@ -4,20 +4,21 @@
             <option v-for="ship in Ships" :key="ship" :value="ship" v-text="translations().ogame.ships[ship]" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
+        <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start">
                     <span>
-                        <o-ship :ship="ship" class="mr-2" />
+                        <OShip :ship="ship" class="mr-2" />
                         <span v-text="translations().ogame.ships[ship]" />
                     </span>
                 </div>
             </template>
-        </lifeform-bonuses-breakdown>
+        </LifeformBonusesBreakdown>
     </div>
 </template>
 
 <script setup lang="ts">
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

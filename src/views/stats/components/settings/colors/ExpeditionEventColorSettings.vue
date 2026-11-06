@@ -1,5 +1,5 @@
 <template>
-    <color-settings-table
+    <ColorSettingsTable
         :header="translations().extension.settings.colors.expeditionEvents"
         :labels="labels"
         :keys="keys"

@@ -1,27 +1,28 @@
 <template>
     <div class="chart-container">
-        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay" no-tooltip-footer />
+        <StatsChart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay" no-tooltip-footer />
 
         <span class="multi-menu">
-            <floating-menu v-model="showSettings" left class="floating-settings">
+            <FloatingMenu v-model="showSettings" left class="floating-settings">
                 <template #activator>
                     <button @click="showSettings = !showSettings">
                         <span class="mdi mdi-cog" />
                     </button>
                 </template>
 
-                <conversion-rate-settings />
-                <separate-expedition-and-normal-debris-field-settings />
+                <ConversionRateSettings />
+                <SeparateExpeditionAndNormalDebrisFieldSettings />
                 <hr class="two-column" />
-                <resource-color-settings />
-            </floating-menu>
+                <ResourceColorSettings />
+            </FloatingMenu>
 
-            <manually-add-debris-field-menu />
+            <ManuallyAddDebrisFieldMenu />
         </span>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';

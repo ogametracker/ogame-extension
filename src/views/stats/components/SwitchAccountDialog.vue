@@ -1,6 +1,6 @@
 <template>
-    <custom-dialog show-close @close="emit('close')" :style="`--color: ${getColorVariable(color)};`">
-        <loading-spinner v-if="!knownAccountsLoaded" />
+    <CustomDialog show-close @close="emit('close')" :style="`--color: ${getColorVariable(color)};`">
+        <LoadingSpinner v-if="!knownAccountsLoaded" />
         <div v-else>
             <div v-text="translations().extension.switchAccounts.title" />
             <select @change="gotoAccount()" v-model="selectedAccountKey">
@@ -9,10 +9,12 @@
                 </optgroup>
             </select>
         </div>
-    </custom-dialog>
+    </CustomDialog>
 </template>
 
 <script setup lang="ts">
+import CustomDialog from '@stats/components/common/CustomDialog.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { DbAccount } from '@ogame-tracker/shared/db/schema/global';

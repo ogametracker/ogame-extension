@@ -3,7 +3,7 @@
         <div class="chart-container" :class="{ 'no-legend': noLegend }">
             <div class="chart-content" v-if="isReady">
                 <div class="svg-container" ref="svg-container" @mouseleave="activeXNormalized = null">
-                    <scrollable-chart-svg
+                    <ScrollableChartSvg
                         v-if="internalDatasets.length > 0"
                         :width="width"
                         :height="height"
@@ -58,7 +58,7 @@
                     />
                 </div>
 
-                <scrollable-chart-x-axis-labels
+                <ScrollableChartXAxisLabels
                     :width="width"
                     :maxXNormalized="maxXNormalized"
                     :xAxisTicks="xAxisTicks"

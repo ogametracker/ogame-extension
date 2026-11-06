@@ -1,8 +1,8 @@
 <template>
     <div class="highscores">
-        <loading-spinner v-if="dataModuleLoading" />
+        <LoadingSpinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table :columns="tableColumns" :items="tableItems" class="alliance-selection-table">
+            <GridTable :columns="tableColumns" :items="tableItems" class="alliance-selection-table">
                 <template #cell-alliance="{ value: alliance }">
                     <template v-if="alliance == null">
                         <input
@@ -25,12 +25,12 @@
                         <span v-text="getAllianceString(alliance)" />
                     </div>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <tabs :tabs="tabs">
+            <Tabs :tabs="tabs">
                 <template v-for="key in keys" #[`tab-content-${key}`]>
                         <span v-if="allianceScoresLoading" :key="`score-${key}-loading`" class="loading" />
-                        <scrollable-chart
+                        <ScrollableChart
                             v-else-if="allianceIds.length > 0"
                             :key="`score-${key}`"
                             :datasets="scoreDatasets[key]"
@@ -45,12 +45,16 @@
                             :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
                         />
                 </template>
-            </tabs>
+            </Tabs>
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import ScrollableChart from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { translations, formatDate } from '@stats/i18n';

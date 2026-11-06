@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
+        <RangedStatsTable
             :dataItems="discoveries"
             :items="items"
             :footerItems="footerItems"
@@ -24,21 +24,22 @@
                     :style="{ color: colors.artifacts }"
                 />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <date-range-settings />
-        </floating-menu>
+            <DateRangeSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';

@@ -1,9 +1,11 @@
 <template>
-    <loading-spinner v-if="loading" />
-    <tab-view v-else :tabs="tabs" root-route-name="resource-balance" />
+    <LoadingSpinner v-if="loading" />
+    <TabView v-else :tabs="tabs" root-route-name="resource-balance" />
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import TabView from '@stats/components/common/TabView.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { Tab } from '@stats/components/common/TabView.vue';

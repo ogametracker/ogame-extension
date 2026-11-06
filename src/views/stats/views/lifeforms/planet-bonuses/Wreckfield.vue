@@ -1,5 +1,5 @@
 <template>
-    <lifeform-planet-bonuses-component
+    <LifeformPlanetBonusesComponent
         :technologyBonuses="{}"
         no-technology-bonuses
         :types="bonusTypes"

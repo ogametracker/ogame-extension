@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky="100%">
+    <GridTable :columns="columns" :items="items" class="lifeform-table" sticky="100%">
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
@@ -8,64 +8,68 @@
 
         <template #cell-lifeform="{ value }">
             <span v-text="translations().ogame.lifeforms[value]" class="mr-2" />
-            <o-lifeform :lifeform="value" size="48px" />
+            <OLifeform :lifeform="value" size="48px" />
         </template>
 
-        <template #cell-buildings="{ value, item }">
+        <template #cell-buildings="{ item }">
             <div class="building-levels">
-                <span v-for="building in value" :key="building">
-                    <o-lifeform-building :building="building" :disabled="item.buildingLevels[building] == 0" />
+                <span v-for="building in item.buildings" :key="building">
+                    <OLifeformBuilding :building="building" :disabled="item.buildingLevels[building] == 0" />
                     <span v-text="item.buildingLevels[building]" :class="{ fade: item.buildingLevels[building] == 0 }" />
                 </span>
             </div>
         </template>
 
-        <template #cell-lifeformTechsTier1="{ value, item }">
+        <template #cell-lifeformTechsTier1="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value" :key="i">
-                    <o-lifeform-technology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                <template v-for="(tech, i) in item.lifeformTechsTier1" :key="i">
+                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier1"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-        <template #cell-lifeformTechsTier2="{ value, item }">
+        <template #cell-lifeformTechsTier2="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value" :key="i">
-                    <o-lifeform-technology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                <template v-for="(tech, i) in item.lifeformTechsTier2" :key="i">
+                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier2"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-        <template #cell-lifeformTechsTier3="{ value, item }">
+        <template #cell-lifeformTechsTier3="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value" :key="i">
-                    <o-lifeform-technology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
+                <template v-for="(tech, i) in item.lifeformTechsTier3" :key="i">
+                    <OLifeformTechnology v-if="tech != null" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
                     <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier3"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

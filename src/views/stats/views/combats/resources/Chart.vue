@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay">
+        <StatsChart :datasets="datasets" :firstDay="firstDay" :itemsPerDay="reportsPerDay">
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
@@ -21,25 +21,26 @@
                     <div v-text="`${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`" />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <conversion-rate-settings />
+            <ConversionRateSettings />
             <hr />
-            <combat-tracking-ignore-espionage-combats-settings />
+            <CombatTrackingIgnoreEspionageCombatsSettings />
             <hr />
-            <resource-color-settings />
-        </floating-menu>
+            <ResourceColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import StatsChart from '@stats/components/stats/StatsChart.vue';

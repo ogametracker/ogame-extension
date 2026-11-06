@@ -35,7 +35,7 @@
                         <span v-else-if="savedAmortization" v-text="translations().extension.empire.amortization.saveLoad.loadedSave(formatDate(savedAmortization.date, 'datetime'), formatNumber(saveStateHiddenItems))" />
                     </div>
 
-                    <floating-menu v-model="showInfoMenu" left>
+                    <FloatingMenu v-model="showInfoMenu" left>
                         <template #activator>
                             <button @click="showInfoMenu = !showInfoMenu">
                                 <span class="mdi mdi-help" />
@@ -46,39 +46,39 @@
                             <span v-text="translations().extension.empire.amortization.info.slowCalculation" />
                             <span v-text="translations().extension.empire.amortization.info.ctrlClick" />
                         </div>
-                    </floating-menu>
+                    </FloatingMenu>
 
-                    <floating-menu v-model="showSettingsMenu" left>
+                    <FloatingMenu v-model="showSettingsMenu" left>
                         <template #activator>
                             <button @click="showSettingsMenu = !showSettingsMenu">
                                 <span class="mdi mdi-cog" />
                             </button>
                         </template>
 
-                        <show-converted-resources-in-cells-settings>
+                        <ShowConvertedResourcesInCellsSettings>
                             <div class="msu-settings-amortization-info">
                                 <span class="mdi mdi-alert" />
                                 <span v-text="translations().extension.settings.showConvertedUnitsInTables.infoAmortization" />
                             </div>
-                        </show-converted-resources-in-cells-settings>
-                    </floating-menu>
+                        </ShowConvertedResourcesInCellsSettings>
+                    </FloatingMenu>
                 </div>
 
                 <div v-show="showSettings" class="amortization-settings-container">
                     <div class="flex-settings">
                         <div>
                             <h3 v-text="translations().extension.empire.amortization.settings.playerSettings.header" />
-                            <amortization-player-settings-inputs v-model="playerSettings" />
+                            <AmortizationPlayerSettingsInputs v-model="playerSettings" />
                         </div>
 
                         <div>
                             <h3 v-text="translations().extension.empire.amortization.settings.includeSettings.header" />
                             <div class="include-settings">
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.mines"
                                     :label="translations().extension.empire.amortization.settings.includeSettings.mines"
                                 />
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.expeditions"
                                 >
                                     <template #label>
@@ -86,30 +86,30 @@
                                         <br/>
                                         <i v-text="translations().extension.empire.amortization.settings.includeSettings.expeditionsRequirement" />
                                     </template>
-                                </checkbox>
+                                </Checkbox>
 
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.lifeformProductionBonusBuildings"
                                     :label="translations().extension.empire.amortization.settings.includeSettings.lifeformProductionBonusBuildings"
                                 />
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.lifeformTechnologyBoostBuildings"
                                     :label="translations().extension.empire.amortization.settings.includeSettings.lifeformTechnologyBoostBuildings"
                                 />
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.lifeformProductionBonusTechnologies"
                                     :label="translations().extension.empire.amortization.settings.includeSettings.lifeformProductionBonusTechnologies"
                                 />
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.lifeformExpeditionBonusTechnologies"
                                     :label="translations().extension.empire.amortization.settings.includeSettings.lifeformExpeditionBonusTechnologies"
                                 />
 
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.plasmaTechnology"
                                     :label="translations().ogame.research[ResearchType.plasmaTechnology]"
                                 />
-                                <checkbox
+                                <Checkbox
                                     v-model="includeSettings.astrophysics"
                                 >
                                     <template #label>
@@ -117,7 +117,7 @@
                                         <br/>
                                         <i v-text="translations().extension.empire.amortization.settings.includeSettings.astrophysicsPerformanceNote" />
                                     </template>
-                                </checkbox>
+                                </Checkbox>
                             </div>
                         </div>
 
@@ -130,14 +130,14 @@
                                 "
                             />
                             <div class="astrophysics-settings">
-                                <amortization-planet-settings-inputs v-model="astrophysicsSettings" />
+                                <AmortizationPlanetSettingsInputs v-model="astrophysicsSettings" />
                             </div>
                         </div>
 
                         <div>
                             <h3 v-text="translations().extension.empire.amortization.settings.expeditionSettings.header" />
                             <div class="expeditionsettings">
-                                <amortization-expedition-settings-inputs
+                                <AmortizationExpeditionSettingsInputs
                                     v-model="expeditionSettings"
                                     :playerSettings="playerSettings"
                                     :breakdown="expoBreakdown"
@@ -165,7 +165,7 @@
                             </div>
 
                             <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                                <amortization-planet-settings-inputs
+                                <AmortizationPlanetSettingsInputs
                                     v-for="planetSetting in planetSettingsSorted"
                                     :key="planetSetting.id"
                                     v-model="planetSettings[planetSetting.id]"
@@ -180,7 +180,7 @@
 
             <div class="amortization-table" v-if="!showSettings">
                 <template v-if="!isGroupedItemsView">
-                    <grid-table
+                    <GridTable
 
                         :items="items"
                         :columns="columns"
@@ -191,20 +191,20 @@
                         row-borders
                     >
                         <template #header-checkbox>
-                            <checkbox :model-value="selectedCount == items.length" @update:model-value="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
+                            <Checkbox :model-value="selectedCount == items.length" @update:model-value="toggleItemSelection()" check-color="rgb(var(--color))" color="white" />
                         </template>
 
                         <template #header-cost>
                             <div class="cost-grid">
                                 <span v-text="translations().extension.empire.amortization.table.cost" style="grid-column: 2" />
-                                <o-resource resource="metal" style="grid-column: 1" />
-                                <o-resource resource="crystal" />
-                                <o-resource resource="deuterium" />
+                                <OResource :resource="ResourceType.metal" style="grid-column: 1" />
+                                <OResource :resource="ResourceType.crystal" />
+                                <OResource :resource="ResourceType.deuterium" />
                             </div>
                         </template>
 
                         <template #cell-checkbox="{ index, item }">
-                            <checkbox :model-value="item.selected" @input-extended="toggleItemSelection(item, index, $event.ctrl)" />
+                            <Checkbox :model-value="item.selected" @input-extended="toggleItemSelection(item, index, $event.ctrl)" />
                         </template>
                         <template #cell-what="{ item, index }">
                             <div
@@ -223,7 +223,7 @@
 
                                 <div class="levels">
                                     <template v-for="(additionalLifeformBuilding, i) in item.additionalLifeformBuildings" :key="i">
-                                        <o-lifeform-building :building="additionalLifeformBuilding.building" size="36px" />
+                                        <OLifeformBuilding :building="additionalLifeformBuilding.building" size="36px" />
                                         <span class="name-and-level">
                                             <span v-text="translations().ogame.lifeformBuildings[additionalLifeformBuilding.building]" />
                                             <span
@@ -235,21 +235,21 @@
                                     </template>
 
                                     <template v-if="item.type == 'mine'">
-                                        <o-building :building="item.mine" size="36px" />
+                                        <OBuilding :building="item.mine" size="36px" />
                                         <span class="name-and-level">
                                             <span v-text="translations().ogame.buildings[item.mine]" />
                                             <span v-text="item.level" />
                                         </span>
                                     </template>
                                     <template v-else-if="item.type == 'lifeform-building'">
-                                        <o-lifeform-building :building="item.building" size="36px" />
+                                        <OLifeformBuilding :building="item.building" size="36px" />
                                         <span class="name-and-level">
                                             <span v-text="translations().ogame.lifeformBuildings[item.building]" />
                                             <span v-text="item.level" />
                                         </span>
                                     </template>
                                     <template v-else-if="item.type == 'lifeform-technology'">
-                                        <o-lifeform-technology :technology="item.technology" size="36px" />
+                                        <OLifeformTechnology :technology="item.technology" size="36px" />
                                         <span class="name-and-level">
                                             <span v-text="translations().ogame.lifeformTechnologies[item.technology]" />
                                             <span v-text="item.level" />
@@ -271,12 +271,12 @@
                                             @click="toggleAmortizationGroup(`item-${index}_group-${i}`)"
                                         />
 
-                                        <o-lifeform-building
+                                        <OLifeformBuilding
                                             v-if="additionalLifeformStuffGroup.building != null"
                                             :building="additionalLifeformStuffGroup.building"
                                             size="36px"
                                         />
-                                        <o-lifeform-technology v-else :technology="additionalLifeformStuffGroup.technology" size="36px" />
+                                        <OLifeformTechnology v-else-if="additionalLifeformStuffGroup.technology != null" :technology="additionalLifeformStuffGroup.technology" size="36px" />
 
                                         <span class="name-and-level">
                                             <i
@@ -320,12 +320,12 @@
                                                 <span v-text="`[-:-:${astrophysicsSettings.position}]`" />
                                             </span>
 
-                                            <o-lifeform-building
+                                            <OLifeformBuilding
                                                 v-if="'building' in additionalLifeformStuff"
                                                 :building="additionalLifeformStuff.building"
                                                 size="36px"
                                             />
-                                            <o-lifeform-technology v-else :technology="additionalLifeformStuff.technology" size="36px" />
+                                            <OLifeformTechnology v-else :technology="additionalLifeformStuff.technology" size="36px" />
 
                                             <span class="name-and-level">
                                                 <span
@@ -345,7 +345,7 @@
                                 </div>
 
                                 <span />
-                                <o-research :research="ResearchType.plasmaTechnology" size="36px" />
+                                <OResearch :research="ResearchType.plasmaTechnology" size="36px" />
                                 <span class="name-and-level">
                                     <span v-text="translations().ogame.research[ResearchType.plasmaTechnology]" />
                                     <span v-text="item.level" />
@@ -353,7 +353,7 @@
                             </div>
                             <div v-else-if="item.type == 'astrophysics-and-colony'" class="what-cell what-cell--colony">
                                 <span style="display: contents">
-                                    <o-research :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" style="grid-column: 2" />
+                                    <OResearch :research="ResearchType.astrophysics" :disabled="item.levels.length == 0" size="36px" style="grid-column: 2" />
                                     <span class="name-and-level">
                                         <span v-text="translations().ogame.research[ResearchType.astrophysics]" />
 
@@ -371,7 +371,7 @@
                                 <span class="colony-mines" style="display: contents">
                                     <template v-for="building in mineBuildingTypes">
                                         <template v-if="item.builtLevels.mines[building] > 0">
-                                            <o-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
+                                            <OBuilding :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                             <span :key="`${building}-name-level`" class="name-and-level">
                                                 <span v-text="translations().ogame.buildings[building]" />
                                                 <span v-text="`0 - ${item.builtLevels.mines[building]}`" />
@@ -382,7 +382,7 @@
                                 <span class="colony-lifeform-buildings" style="display: contents">
                                     <template v-for="building in applicableLifeformBuildingTypes">
                                         <template v-if="item.builtLevels.lifeformBuildings[building] > 0">
-                                            <o-lifeform-building :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
+                                            <OLifeformBuilding :key="`${building}-icon`" :building="building" size="36px" style="grid-column: 2" />
                                             <span :key="`${building}-name-level`" class="name-and-level">
                                                 <span v-text="translations().ogame.lifeformBuildings[building]" />
                                                 <span v-text="`0 - ${item.builtLevels.lifeformBuildings[building]}`" />
@@ -393,7 +393,7 @@
                                 <span class="colony-lifeform-technologies" style="display: contents">
                                     <template v-for="tech in applicableLifeformTechnologyTypes">
                                         <template v-if="item.builtLevels.lifeformTechnologies[tech] > 0">
-                                            <o-lifeform-technology :key="`${tech}-icon`" :technology="tech" size="36px" style="grid-column: 2" />
+                                            <OLifeformTechnology :key="`${tech}-icon`" :technology="tech" size="36px" style="grid-column: 2" />
                                             <span :key="`${tech}-name-level`" class="name-and-level">
                                                 <span v-text="translations().ogame.lifeformTechnologies[tech]" />
                                                 <span v-text="`0 - ${item.builtLevels.lifeformTechnologies[tech]}`" />
@@ -413,27 +413,27 @@
                             </div>
                         </template>
                         <template #cell-costConverted="{ value }">
-                            <decimal-number :value="value" />
+                            <DecimalNumber :value="value" />
                         </template>
 
                         <template #cell-productionDelta="{ value }">
                             <div class="production-delta-grid">
                                 <template v-if="value.metal > 0">
-                                    <o-resource resource="metal" size="18px" />
-                                    <decimal-number :value="value.metal" />
+                                    <OResource :resource="ResourceType.metal" size="18px" />
+                                    <DecimalNumber :value="value.metal" />
                                 </template>
                                 <template v-if="value.crystal > 0">
-                                    <o-resource resource="crystal" size="18px" />
-                                    <decimal-number :value="value.crystal" />
+                                    <OResource :resource="ResourceType.crystal" size="18px" />
+                                    <DecimalNumber :value="value.crystal" />
                                 </template>
                                 <template v-if="value.deuterium > 0">
-                                    <o-resource resource="deuterium" size="18px" />
-                                    <decimal-number :value="value.deuterium" />
+                                    <OResource :resource="ResourceType.deuterium" size="18px" />
+                                    <DecimalNumber :value="value.deuterium" />
                                 </template>
                             </div>
                         </template>
                         <template #cell-productionDeltaConverted="{ value }">
-                            <decimal-number :value="value" />
+                            <DecimalNumber :value="value" />
                         </template>
 
                         <template #cell-timeInHours="{ value }">
@@ -448,29 +448,29 @@
                             </div>
                         </template>
                         <template #footer-costConverted="{ value }">
-                            <decimal-number :value="value" />
+                            <DecimalNumber :value="value" />
                         </template>
                         <template #footer-productionDelta="{ value }">
                             <div class="production-delta-grid">
                                 <template v-if="value.metal > 0">
-                                    <o-resource resource="metal" size="18px" />
-                                    <decimal-number :value="value.metal" />
+                                    <OResource :resource="ResourceType.metal" size="18px" />
+                                    <DecimalNumber :value="value.metal" />
                                 </template>
                                 <template v-if="value.crystal > 0">
-                                    <o-resource resource="crystal" size="18px" />
-                                    <decimal-number :value="value.crystal" />
+                                    <OResource :resource="ResourceType.crystal" size="18px" />
+                                    <DecimalNumber :value="value.crystal" />
                                 </template>
                                 <template v-if="value.deuterium > 0">
-                                    <o-resource resource="deuterium" size="18px" />
-                                    <decimal-number :value="value.deuterium" />
+                                    <OResource :resource="ResourceType.deuterium" size="18px" />
+                                    <DecimalNumber :value="value.deuterium" />
                                 </template>
                             </div>
                         </template>
                         <template #footer-productionDeltaConverted="{ value }">
-                            <decimal-number :value="value" />
+                            <DecimalNumber :value="value" />
                         </template>
                         <template #footer-timeInHours />
-                    </grid-table>
+                    </GridTable>
 
                     <div style="display: flex; gap: 8px" v-if="generator != null" v-show="!isGroupedItemsView">
                         <button
@@ -485,7 +485,7 @@
                     </div>
                 </template>
 
-                <amortization-grouped-item-table
+                <AmortizationGroupedItemTable
                     v-if="isGroupedItemsView"
                     :groupedItems="groupedItemsSorted"
                     :newColonyPosition="astrophysicsSettings.position"
@@ -496,6 +496,15 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import GridTable from '@stats/components/common/GridTable.vue';
+import OBuilding from '@stats/components/ogame/OBuilding.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
+import OResearch from '@stats/components/ogame/OResearch.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, nextTick, onMounted, ref, watch, reactive, shallowReactive, shallowRef } from 'vue';
 import { translations, formatNumber, formatDate, formatTimespan } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
@@ -1022,7 +1031,7 @@ const columns = computed<GridTableColumn<keyof BaseAmortizationItem | 'what' | '
     return result;
 });
 
-const items = computed<AmortizationItem[]>(() => amortizationItems.value);
+const items = computed(() => amortizationItems.value);
 
 const footerItems = computed<BaseAmortizationItem[]>(() => {
     let cost: Cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };

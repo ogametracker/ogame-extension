@@ -1,6 +1,6 @@
 <template>
     <div>
-        <separate-expedition-and-normal-debris-field-settings />
+        <SeparateExpeditionAndNormalDebrisFieldSettings />
     </div>
 </template>
 

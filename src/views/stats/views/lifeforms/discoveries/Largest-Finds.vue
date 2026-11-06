@@ -1,12 +1,12 @@
 <template>
-    <loading-spinner v-if="loading" />
+    <LoadingSpinner v-if="loading" />
     <div v-else>
         <div class="find-column">
             <h3 v-text="`${translations().extension.empire.lifeforms.topFinds.topFinds} (${translations().extension.empire.lifeforms.topFinds.artifacts})`" />
 
-            <grid-table inline :columns="artifactColumns" :items="largestFinds.artifacts.values" :style="`--color: ${colors.artifacts}`">
+            <GridTable inline :columns="artifactColumns" :items="largestFinds.artifacts.values" :style="`--color: ${colors.artifacts}`">
                 <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
+                    <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
                 <template #cell-amount="{ value }">
                     <span v-text="formatNumber(value)" />
@@ -14,7 +14,7 @@
                 <template #cell-date="{ value }">
                     <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <div v-for="key in experienceKeys" :key="`largest-${key}`" class="find-column">
@@ -25,14 +25,14 @@
                 <span v-text="')'" />
             </h3>
 
-            <grid-table
+            <GridTable
                 inline
                 :columns="experienceColumns"
                 :items="largestFinds.experience[key].values"
                 :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
             ">
                 <template #cell-lifeform="{ value }">
-                    <o-lifeform :lifeform="value" size="22px" />
+                    <OLifeform :lifeform="value" size="22px" />
                 </template>
                 <template #cell-amount="{ value }">
                     <span v-text="formatNumber(value)" />
@@ -40,7 +40,7 @@
                 <template #cell-date="{ value }">
                     <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <div v-for="key in experienceKeys" :key="`smallest-${key}`" class="find-column">
@@ -51,14 +51,14 @@
                 <span v-text="')'" />
             </h3>
 
-            <grid-table
+            <GridTable
                 inline
                 :columns="experienceColumns"
                 :items="smallestFinds.experience[key].values"
                 :style="`--color: ${key == 'all' ? colors.experience : colors.lifeform[key]}`
             ">
                 <template #cell-lifeform="{ value }">
-                    <o-lifeform :lifeform="value" size="22px" />
+                    <OLifeform :lifeform="value" size="22px" />
                 </template>
                 <template #cell-amount="{ value }">
                     <span v-text="formatNumber(value)" />
@@ -66,12 +66,15 @@
                 <template #cell-date="{ value }">
                     <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
 import { computed, onMounted, ref } from 'vue';
 import { translations, formatNumber, formatDate } from '@stats/i18n';
 import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';

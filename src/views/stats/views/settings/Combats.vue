@@ -1,7 +1,7 @@
 <template>
     <div class="combat-settings">
-        <lost-ship-resource-units-factor-settings />
-        <combat-tracking-ignore-espionage-combats-settings />
+        <LostShipResourceUnitsFactorSettings />
+        <CombatTrackingIgnoreEspionageCombatsSettings />
     </div>
 </template>
 

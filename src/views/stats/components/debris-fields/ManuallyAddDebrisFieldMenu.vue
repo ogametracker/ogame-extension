@@ -1,5 +1,5 @@
 <template>
-    <floating-menu v-model="show" left>
+    <FloatingMenu v-model="show" left>
         <template #activator>
             <button @click="show = !show">
                 <span class="mdi mdi-plus" />
@@ -12,7 +12,7 @@
             </div>
             <div class="fake-table-body">
                 <span>
-                    <o-resource resource="metal" />
+                    <OResource :resource="ResourceType.metal" />
                     <input
                         type="number"
                         value="1"
@@ -23,7 +23,7 @@
                 </span>
 
                 <span>
-                    <o-resource resource="crystal" />
+                    <OResource :resource="ResourceType.crystal" />
                     <input
                         type="number"
                         v-model.number.lazy="crystal"
@@ -46,10 +46,13 @@
                 />
             </div>
         </div>
-    </floating-menu>
+    </FloatingMenu>
 </template>
 
 <script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';

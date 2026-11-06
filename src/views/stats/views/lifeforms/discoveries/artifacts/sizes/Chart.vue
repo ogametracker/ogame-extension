@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart :firstDay="firstDay" :itemsPerDay="missionsPerDay" :datasets="datasets" stacked show-average>
+        <StatsChart :firstDay="firstDay" :itemsPerDay="missionsPerDay" :datasets="datasets" stacked show-average>
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
@@ -15,9 +15,9 @@
                     <div v-text="`${translations().extension.expeditions.finds} (${translations().extension.common.total})`" />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
@@ -25,11 +25,12 @@
             </template>
 
             Coming soon
-        </floating-menu>
+        </FloatingMenu>
     </div>
 </template>
 
 <script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import { computed, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import StatsChart from '@stats/components/stats/StatsChart.vue';

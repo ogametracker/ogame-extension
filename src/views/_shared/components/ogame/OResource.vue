@@ -1,6 +1,7 @@
 <template>
     <div
         class="o-resource"
+        :resource="resource"
         :class="{
             'o-resource--disabled': disabled,
             'o-resource--fade': fade,
@@ -9,7 +10,6 @@
             'background-image': `url(/img/ogame/resources/${image}.upscaled.png)`,
             'font-size': size,
         }"
-
     />
 </template>
 

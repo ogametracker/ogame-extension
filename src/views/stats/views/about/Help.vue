@@ -1,8 +1,8 @@
 <template>
     <div class="help">
-        <tabs :tabs="tabs">
+        <Tabs :tabs="tabs">
             <template #tab-content-faq>
-                <grid-table v-for="(item, i) in itemsFaq" :key="i" :columns="getColumnsFaq(item)" :items="[item]" class="faq-table" />
+                <GridTable v-for="(item, i) in itemsFaq" :key="i" :columns="getColumnsFaq(item)" :items="[item]" class="faq-table" />
             </template>
 
             <template #tab-content-tips>
@@ -10,13 +10,13 @@
                 <div class="tip" v-text="translations().extension.about.faqHelp.tips.numbersKeyboardNavigation" />
                 <div class="tip">
                     <span v-text="translations().extension.about.faqHelp.tips.amortizationTable.part1" />
-                    <router-link :to="{ name: 'empire/amortization' }" v-text="translations().extension.about.faqHelp.tips.amortizationTable.name" />
+                    <RouterLink :to="{ name: 'empire/amortization' }" v-text="translations().extension.about.faqHelp.tips.amortizationTable.name" />
                     <span v-text="translations().extension.about.faqHelp.tips.amortizationTable.part2" />
                 </div>
                 <div class="tip" v-text="translations().extension.about.faqHelp.tips.inlineSettings" />
                 <div class="tip" v-html="translations().extension.about.faqHelp.tips.switchAccountHtml" />
             </template>
-        </tabs>
+        </Tabs>
 
         <div class="discord-message">
             <span v-text="translations().extension.about.faqHelp.messageDiscord.part1" />
@@ -27,6 +27,9 @@
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
+import { RouterLink } from 'vue-router';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import type { GridTableColumn } from '../../components/common/GridTable.vue';

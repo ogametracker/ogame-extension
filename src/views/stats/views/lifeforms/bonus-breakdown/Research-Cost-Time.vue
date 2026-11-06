@@ -7,23 +7,24 @@
             <option value="lifeform-researches" v-text="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
         </select>
 
-        <lifeform-bonuses-breakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
+        <LifeformBonusesBreakdown :types="bonusTypes" :technologies="techs" :planets="planets" :limits="limits">
             <template #header>
                 <div style="display: flex; flex-direction: column; align-items: start" v-if="research == 'lifeform-researches'">
                     <span v-text="translations().extension.empire.lifeforms.researchBonuses.researchCostTime.lifeformResearches" />
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: start" v-else>
                     <span>
-                        <o-research :research="research" class="mr-2" />
+                        <OResearch :research="research" class="mr-2" />
                         <span v-text="translations().ogame.research[research]" />
                     </span>
                 </div>
             </template>
-        </lifeform-bonuses-breakdown>
+        </LifeformBonusesBreakdown>
     </div>
 </template>
 
 <script setup lang="ts">
+import OResearch from '@stats/components/ogame/OResearch.vue';
 import { computed, ref } from 'vue';
 import { translations } from '@stats/i18n';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';

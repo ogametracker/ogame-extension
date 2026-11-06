@@ -7,7 +7,7 @@
             <div class="fake-table-body">
                 <div v-text="translations().extension.settings.importExport.export.description" />
                 <span>
-                    <checkbox v-model="exportUniverseHistory" :label="translations().extension.settings.importExport.export.includeUniverseHistory" />
+                    <Checkbox v-model="exportUniverseHistory" :label="translations().extension.settings.importExport.export.includeUniverseHistory" />
                 </span>
                 <button @click="exportData()" :disabled="isExporting">
                     <span class="mdi mdi-database-export" />
@@ -15,7 +15,7 @@
                 </button>
                 <template v-if="isExporting">
                     <span v-text="translations().extension.settings.importExport.export.wait" />
-                    <loading-spinner />
+                    <LoadingSpinner />
                 </template>
             </div>
         </div>
@@ -33,7 +33,7 @@
                 </button>
                 <template v-if="isImporting">
                     <span v-text="translations().extension.settings.importExport.import.wait" />
-                    <loading-spinner />
+                    <LoadingSpinner />
                     <span v-text="lastImportMessage" />
                 </template>
             </div>
@@ -42,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { ref, useTemplateRef } from 'vue';
 import { translations } from '@stats/i18n';
 import { getGlobalDatabase, getPlayerDatabase, getServerDatabase, getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';

@@ -6,7 +6,7 @@
             :key="x"
         >
             <div class="day-items">
-                <o-item v-for="(item, j) in itemHashes" :key="j" :item="item" />
+                <OItem v-for="(item, j) in itemHashes" :key="j" :item="item" />
             </div>
 
             <div class="day-label">
@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
 import { computed, onMounted, useTemplateRef } from 'vue';
 import { formatDate } from '@stats/i18n';
 import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';

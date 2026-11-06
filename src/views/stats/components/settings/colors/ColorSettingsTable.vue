@@ -1,5 +1,5 @@
 <template>
-    <grid-table
+    <GridTable
         class="color-settings"
         :columns="columns"
         :items="items"
@@ -7,7 +7,7 @@
     >
         <template #header-key="{ label }">
             <span v-text="label" />
-            <reset-button @reset="emit('reset')" />
+            <ResetButton @reset="emit('reset')" />
         </template>
         <template #cell-key="{ value: key }">
             <label class="color-input">
@@ -23,10 +23,11 @@
                 <span v-text="labels[key as K]" />
             </label>
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts" generic="K extends string | number">
+import GridTable from '@stats/components/common/GridTable.vue';
 import { computed } from 'vue';
 import type { PropType } from 'vue';
 import type { GridTableColumn } from '../../common/GridTable.vue';

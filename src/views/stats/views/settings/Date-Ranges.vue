@@ -1,5 +1,5 @@
 <template>
-    <date-range-settings />
+    <DateRangeSettings />
 </template>
 
 <script setup lang="ts">

@@ -4,13 +4,14 @@
             <span v-text="translations().extension.settings.showConvertedUnitsInTables.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox :model-value="showCellsWithConvertedResourceUnits" @update:model-value="toggle($event)" :label="translations().extension.settings.showConvertedUnitsInTables.label" />
+            <Checkbox :model-value="showCellsWithConvertedResourceUnits" @update:model-value="toggle($event)" :label="translations().extension.settings.showConvertedUnitsInTables.label" />
             <slot />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
 import { computed } from 'vue';
 import { translations } from '@stats/i18n';
 import { useSettingsStore } from '../../data/SettingsDataModule';

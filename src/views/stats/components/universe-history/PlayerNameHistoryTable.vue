@@ -1,6 +1,6 @@
 <template>
-    <loading-spinner v-if="loading" />
-    <grid-table v-else :columns="nameHistoryColumns" :items="nameHistoryItems" inline>
+    <LoadingSpinner v-if="loading" />
+    <GridTable v-else :columns="nameHistoryColumns" :items="nameHistoryItems" inline>
         <template #cell-start="{ value }">
             <span v-if="value != null" v-text="formatDate(value, 'date')" />
             <span v-else v-text="'?'" />
@@ -12,10 +12,12 @@
             <span v-if="value != null" v-text="formatDate(value, 'date')" />
             <span v-else v-text="translations().extension.universeHistory.today" />
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
 import { computed, ref, watch } from 'vue';
 import { translations, formatDate } from '@stats/i18n';
 import type { OgameTrackerUniverseHistoryPlayerName } from '@ogame-tracker/shared/db/schema/universe-history';

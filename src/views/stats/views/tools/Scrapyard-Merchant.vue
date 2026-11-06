@@ -12,61 +12,63 @@
             <span v-text="translations().extension.tools.scrapyardMerchant.percentage" />
         </div>
 
-        <grid-table
+        <GridTable
             class="scrap-table"
             :columns="columns"
             :items="items"
             :footer-items="footerItems"
-            sticky
+            sticky="100%"
             sticky-footer
         >
             <template #cell-type="{ item }">
-                <template v-if="item.type in ships">
-                    <span v-text="translations().ogame.ships[item.type as ShipType]" class="mr-2" />
-                    <o-ship :ship="item.type" size="24px" />
+                <template v-if="'baseSpeed' in item">
+                    <span v-text="translations().ogame.ships[item.type]" class="mr-2" />
+                    <OShip :ship="item.type" size="24px" />
                 </template>
 
-                <template v-else-if="item.type in defenses">
-                    <span v-text="translations().ogame.defenses[item.type as DefenseType]" class="mr-2" />
-                    <o-defense :defense="item.type" size="24px" />
+                <template v-else>
+                    <span v-text="translations().ogame.defenses[item.type]" class="mr-2" />
+                    <ODefense :defense="item.type" size="24px" />
                 </template>
             </template>
             <template #cell-count="{ item }">
                 <input
-                    v-if="item.type in ships"
+                    v-if="'baseSpeed' in item"
                     type="number"
                     min="0"
                     step="1"
-                    v-model.number="ships[item.type as ShipType]"
+                    v-model.number="ships[item.type]"
                 />
                 <input
-                    v-else-if="item.type in defenses"
+                    v-else
                     type="number"
                     min="0"
                     step="1"
-                    v-model.number="defenses[item.type as DefenseType]"
+                    v-model.number="defenses[item.type]"
                 />
             </template>
             <template #[`(cell|footer)-${resourcesRegex}`]="{ match, item }">
                 <span
+                    v-if="match.groups?.resource"
                     v-text="formatNumber(getTotalCost(item)[match.groups.resource as keyof Cost])"
                 />
             </template>
             <template #[`(cell|footer)-msu-dsu`]="{ item }">
                 <span v-text="formatNumber(getMsuOrDsu(getTotalCost(item)))" />
             </template>
-        </grid-table>
+        </GridTable>
     </div>
 </template>
 
 <script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import ODefense from '@stats/components/ogame/ODefense.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
 import { computed, nextTick, reactive, ref } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import { Defense } from '@ogame-tracker/shared/models/ogame/defenses/Defense';
-import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
 import { DefenseByTypes, DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
 import { Ship } from '@ogame-tracker/shared/models/ogame/ships/Ship';
-import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipByTypes, ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import type { GridTableColumn } from '../../components/common/GridTable.vue';
