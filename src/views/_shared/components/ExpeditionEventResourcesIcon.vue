@@ -6,17 +6,15 @@
     </span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 import OResource from './ogame/OResource.vue';
 
-export default defineComponent({
-    components: { OResource },
-    props: { size: { type: String, default: '32px' } },
-    setup: () => ({ ResourceType }),
+defineProps({
+    size: { type: String, default: '32px' },
 });
 </script>
+
 <style lang="scss" scoped>
 .tri-resource {
     position: relative;

@@ -15,10 +15,21 @@
     />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import type { PropType } from 'vue';
 import { LifeformType, LifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+
+const props = defineProps({
+    lifeform: {
+        required: true,
+        type: String as PropType<LifeformType>,
+        validator: (value: string) => (LifeformTypes as string[]).includes(value),
+    },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
 const imageMap: Record<LifeformType, string> = {
     [LifeformType.humans]: 'humans',
@@ -28,23 +39,9 @@ const imageMap: Record<LifeformType, string> = {
     [LifeformType.none]: 'none',
 };
 
-export default defineComponent({
-    props: {
-        lifeform: {
-            required: true,
-            type: String as PropType<LifeformType>,
-            validator: (value: string) => (LifeformTypes as string[]).includes(value),
-        },
-        size: { required: false, type: String, default: '32px' },
-        disabled: { required: false, type: Boolean },
-        fade: { required: false, type: Boolean },
-    },
-    setup(props) {
-        const image = computed(() => imageMap[props.lifeform]);
-        return { image };
-    },
-});
+const image = computed(() => imageMap[props.lifeform]);
 </script>
+
 <style lang="scss" scoped>
 .o-lifeform {
     width: 1em;

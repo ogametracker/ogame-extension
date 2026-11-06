@@ -12,11 +12,22 @@
     />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 import type { PropType } from 'vue';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+
+const props = defineProps({
+    ship: {
+        required: true,
+        type: Number as PropType<ShipType>,
+        validator: (value: number) => (ShipTypes as number[]).includes(value),
+    },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
 const imageMap: Record<ShipType, string> = {
     [ShipType.smallCargo]: 'small-cargo',
@@ -38,23 +49,9 @@ const imageMap: Record<ShipType, string> = {
     [ShipType.pathfinder]: 'pathfinder',
 };
 
-export default defineComponent({
-    props: {
-        ship: {
-            required: true,
-            type: Number as PropType<ShipType>,
-            validator: (value: number) => (ShipTypes as number[]).includes(value),
-        },
-        size: { required: false, type: String, default: '32px' },
-        disabled: { required: false, type: Boolean },
-        fade: { required: false, type: Boolean },
-    },
-    setup(props) {
-        const image = computed(() => imageMap[props.ship]);
-        return { image };
-    },
-});
+const image = computed(() => imageMap[props.ship]);
 </script>
+
 <style lang="scss" scoped>
 .o-ship {
     width: 1em;

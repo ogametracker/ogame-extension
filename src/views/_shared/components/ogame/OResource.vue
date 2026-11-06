@@ -14,11 +14,26 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
+</script>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+
+const props = defineProps({
+    resource: {
+        required: true,
+        type: String as PropType<ExtendedResourceType>,
+        validator: (value: string) =>
+            ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value),
+    },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
 const imageMap: Record<ExtendedResourceType, string> = {
     [ResourceType.metal]: 'metal',
@@ -28,24 +43,9 @@ const imageMap: Record<ExtendedResourceType, string> = {
     'dark-matter': 'dark-matter',
 };
 
-export default defineComponent({
-    props: {
-        resource: {
-            required: true,
-            type: String as PropType<ExtendedResourceType>,
-            validator: (value: string) =>
-                ['energy', 'dark-matter'].includes(value) || (ResourceTypes as string[]).includes(value),
-        },
-        size: { required: false, type: String, default: '32px' },
-        disabled: { required: false, type: Boolean },
-        fade: { required: false, type: Boolean },
-    },
-    setup(props) {
-        const image = computed(() => imageMap[props.resource]);
-        return { image };
-    },
-});
+const image = computed(() => imageMap[props.resource]);
 </script>
+
 <style lang="scss" scoped>
 .o-resource {
     width: 1em;
