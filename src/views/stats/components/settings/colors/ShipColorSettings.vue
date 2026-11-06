@@ -1,89 +1,82 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.ships"
+        :header="translations().extension.settings.colors.ships"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const labels = computed<Record<ShipType, string>>(() => {
+
+    return {
+        [ShipType.lightFighter]: translations().ogame.ships[ShipType.lightFighter],
+        [ShipType.heavyFighter]: translations().ogame.ships[ShipType.heavyFighter],
+        [ShipType.cruiser]: translations().ogame.ships[ShipType.cruiser],
+        [ShipType.battleship]: translations().ogame.ships[ShipType.battleship],
+        [ShipType.bomber]: translations().ogame.ships[ShipType.bomber],
+        [ShipType.battlecruiser]: translations().ogame.ships[ShipType.battlecruiser],
+        [ShipType.destroyer]: translations().ogame.ships[ShipType.destroyer],
+        [ShipType.reaper]: translations().ogame.ships[ShipType.reaper],
+        [ShipType.pathfinder]: translations().ogame.ships[ShipType.pathfinder],
+        [ShipType.smallCargo]: translations().ogame.ships[ShipType.smallCargo],
+        [ShipType.largeCargo]: translations().ogame.ships[ShipType.largeCargo],
+        [ShipType.espionageProbe]: translations().ogame.ships[ShipType.espionageProbe],
+        [ShipType.deathStar]: translations().ogame.ships[ShipType.deathStar],
+        [ShipType.recycler]: translations().ogame.ships[ShipType.recycler],
+        [ShipType.colonyShip]: translations().ogame.ships[ShipType.colonyShip],
+        [ShipType.crawler]: translations().ogame.ships[ShipType.crawler],
+        [ShipType.solarSatellite]: translations().ogame.ships[ShipType.solarSatellite],
+    };
+});
+
+const keys: ShipType[] = [
+    ShipType.lightFighter,
+    ShipType.heavyFighter,
+    ShipType.cruiser,
+    ShipType.battleship,
+    ShipType.bomber,
+    ShipType.battlecruiser,
+    ShipType.destroyer,
+    ShipType.reaper,
+    ShipType.pathfinder,
+    ShipType.smallCargo,
+    ShipType.largeCargo,
+    ShipType.espionageProbe,
+    ShipType.deathStar,
+    ShipType.recycler,
+    ShipType.colonyShip,
+    ShipType.crawler,
+    ShipType.solarSatellite,
+];
+
+const colors = computed(() => settingsStore.settings.colors.ships);
+
+function updateColors(value: Record<ShipType, string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            ships: value,
         },
-    })
-    export default class ShipColorSettings extends Vue {
+    });
+}
 
-        private get labels(): Record<ShipType, string> {
-
-            return {
-                [ShipType.lightFighter]: this.$i18n.$t.ogame.ships[ShipType.lightFighter],
-                [ShipType.heavyFighter]: this.$i18n.$t.ogame.ships[ShipType.heavyFighter],
-                [ShipType.cruiser]: this.$i18n.$t.ogame.ships[ShipType.cruiser],
-                [ShipType.battleship]: this.$i18n.$t.ogame.ships[ShipType.battleship],
-                [ShipType.bomber]: this.$i18n.$t.ogame.ships[ShipType.bomber],
-                [ShipType.battlecruiser]: this.$i18n.$t.ogame.ships[ShipType.battlecruiser],
-                [ShipType.destroyer]: this.$i18n.$t.ogame.ships[ShipType.destroyer],
-                [ShipType.reaper]: this.$i18n.$t.ogame.ships[ShipType.reaper],
-                [ShipType.pathfinder]: this.$i18n.$t.ogame.ships[ShipType.pathfinder],
-                [ShipType.smallCargo]: this.$i18n.$t.ogame.ships[ShipType.smallCargo],
-                [ShipType.largeCargo]: this.$i18n.$t.ogame.ships[ShipType.largeCargo],
-                [ShipType.espionageProbe]: this.$i18n.$t.ogame.ships[ShipType.espionageProbe],
-                [ShipType.deathStar]: this.$i18n.$t.ogame.ships[ShipType.deathStar],
-                [ShipType.recycler]: this.$i18n.$t.ogame.ships[ShipType.recycler],
-                [ShipType.colonyShip]: this.$i18n.$t.ogame.ships[ShipType.colonyShip],
-                [ShipType.crawler]: this.$i18n.$t.ogame.ships[ShipType.crawler],
-                [ShipType.solarSatellite]: this.$i18n.$t.ogame.ships[ShipType.solarSatellite],
-            };
-        }
-
-        private readonly keys: ShipType[] = [
-            ShipType.lightFighter,
-            ShipType.heavyFighter,
-            ShipType.cruiser,
-            ShipType.battleship,
-            ShipType.bomber,
-            ShipType.battlecruiser,
-            ShipType.destroyer,
-            ShipType.reaper,
-            ShipType.pathfinder,
-            ShipType.smallCargo,
-            ShipType.largeCargo,
-            ShipType.espionageProbe,
-            ShipType.deathStar,
-            ShipType.recycler,
-            ShipType.colonyShip,
-            ShipType.crawler,
-            ShipType.solarSatellite,
-        ];
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.ships;
-        }
-
-        private updateColors(value: Record<ShipType, string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    ships: value,
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.ships;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.ships;
+    updateColors(defaultColors);
+}
 </script>

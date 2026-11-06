@@ -1,49 +1,47 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.common.serverSettings.title" />
+            <span v-text="translations().extension.settings.common.serverSettings.title" />
         </div>
         <div class="fake-table-body">
             <div>
-                <span v-text="$i18n.$t.extension.settings.common.serverSettings.lastUpdate + ': '" />
-                <b v-text="$i18n.$d(lastUpdate, 'datetime')" />
+                <span v-text="translations().extension.settings.common.serverSettings.lastUpdate + ': '" />
+                <b v-text="formatDate(lastUpdate, 'datetime')" />
             </div>
 
-            <button @click="forceUpdate()" v-text="$i18n.$t.extension.settings.common.serverSettings.forceUpdate" />
+            <button @click="forceUpdate()" v-text="translations().extension.settings.common.serverSettings.forceUpdate" />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
-    import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-    import { ForceUpdateServerSettingsMessage } from '@ogame-tracker/shared/messages/server-settings';
-    import { Component, Vue } from 'vue-property-decorator';
-    import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
-    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { translations, formatDate } from '@stats/i18n';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { ForceUpdateServerSettingsMessage } from '@ogame-tracker/shared/messages/server-settings';
+import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
+import { useServerSettingsStore } from '../../data/ServerSettingsDataModule';
 
-    @Component({})
-    export default class ForceUpdateServerSettings extends Vue {
+const serverSettingsStore = useServerSettingsStore();
 
-        get lastUpdate() {
-            return ServerSettingsDataModule.lastUpdate!;
-        }
+const lastUpdate = computed(() => serverSettingsStore.lastUpdate!);
 
-        async mounted() {
-            await ServerSettingsDataModule.ready;
-        }
+function forceUpdate() {
+    const message: ForceUpdateServerSettingsMessage = {
+        ogameMeta: GlobalOgameMetaData,
+        type: MessageType.ForceUpdateServerSettings,
+        senderUuid: statsViewUuid,
+    };
+    sendMessage(message);
 
-        forceUpdate() {
-            const message: ForceUpdateServerSettingsMessage = {
-                ogameMeta: GlobalOgameMetaData,
-                type: MessageType.ForceUpdateServerSettings,
-                senderUuid: statsViewUuid,
-            };
-            sendMessage(message);
+}
 
-        }
-    }
+onMounted(async () => {
+    await serverSettingsStore.ready;
+});
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         border: 1px solid rgba(var(--color), 0.5);

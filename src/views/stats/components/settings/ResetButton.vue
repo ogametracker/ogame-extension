@@ -1,16 +1,15 @@
 <template>
-    <button class="reset-button" @click="$emit('reset')" :title="$i18n.$t.extension.settings.reset">
+    <button class="reset-button" @click="emit('reset')" :title="translations().extension.settings.reset">
         <span class="mdi mdi-refresh" />
     </button>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { translations } from '@stats/i18n';
 
-    @Component({})
-    export default class ResetButton extends Vue {
-    }
+const emit = defineEmits(['reset']);
 </script>
+
 <style lang="scss" scoped>
     .reset-button {
         background: rgba(var(--color), 0.25) !important;

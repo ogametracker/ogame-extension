@@ -1,41 +1,38 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.resourceBalance.detailedResourceBalance.header" />
+            <span v-text="translations().extension.settings.resourceBalance.detailedResourceBalance.header" />
         </div>
         <div class="fake-table-body">
             <checkbox
-                :value="showDetailedBreakdown"
-                @input="toggleDetailedBreakdown($event)"
-                :label="$i18n.$t.extension.settings.resourceBalance.detailedResourceBalance.checkboxLabel"
+                :model-value="showDetailedBreakdown"
+                @update:model-value="toggleDetailedBreakdown($event)"
+                :label="translations().extension.settings.resourceBalance.detailedResourceBalance.checkboxLabel"
             />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '../../../data/SettingsDataModule';
 
-    @Component({})
-    export default class DetailedResourceBalanceSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private get showDetailedBreakdown() {
-            return SettingsDataModule.settings.resourceBalance.showDetailedBreakdown;
-        }
+const showDetailedBreakdown = computed(() => settingsStore.settings.resourceBalance.showDetailedBreakdown);
 
-        private toggleDetailedBreakdown(showDetailedBreakdown: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                resourceBalance: {
-                    ...SettingsDataModule.settings.resourceBalance,
-                    showDetailedBreakdown,
-                },
-            });
-        }
-
-    }
+function toggleDetailedBreakdown(nextShowDetailedBreakdown: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        resourceBalance: {
+            ...settingsStore.settings.resourceBalance,
+            showDetailedBreakdown: nextShowDetailedBreakdown,
+        },
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         border: 1px solid rgba(var(--color), 0.5);

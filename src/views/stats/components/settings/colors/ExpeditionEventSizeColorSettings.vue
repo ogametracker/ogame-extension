@@ -1,61 +1,52 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.expeditionEventSizes"
+        :header="translations().extension.settings.colors.expeditionEventSizes"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-    import { ExpeditionEventCombatSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
-    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { Component, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import type { ExpeditionEventCombatSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const labels = computed(() => translations().extension.expeditions.expeditionEventSizes);
+
+const keys: (ExpeditionEventSize | ExpeditionEventCombatSize)[] = [
+    ExpeditionEventSize.small,
+    ExpeditionEventSize.medium,
+    ExpeditionEventSize.large,
+    'fled-death-star',
+];
+
+const colors = computed(() => settingsStore.settings.colors.expeditions.sizes);
+
+function updateColors(value: Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            expeditions: {
+                ...settingsStore.settings.colors.expeditions,
+                sizes: value,
+            },
         },
-    })
-    export default class ExpeditionEventSizeColorSettings extends Vue {
+    });
+}
 
-        private get labels(): Record<ExpeditionEventSize, string> {
-            return this.$i18n.$t.extension.expeditions.expeditionEventSizes;
-        }
-
-        private readonly keys: (ExpeditionEventSize | ExpeditionEventCombatSize)[] = [
-            ExpeditionEventSize.small,
-            ExpeditionEventSize.medium,
-            ExpeditionEventSize.large,
-            'fled-death-star',
-        ];
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.sizes;
-        }
-
-        private updateColors(value: Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    expeditions: {
-                        ...SettingsDataModule.settings.colors.expeditions,
-                        sizes: value,
-                    },
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.sizes;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.sizes;
+    updateColors(defaultColors);
+}
 </script>

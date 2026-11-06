@@ -2,7 +2,7 @@
     <div class="fake-table expedition-ship-resource-units-factor-settings">
         <div class="fake-table-header">
             <span
-                v-text="$i18n.$t.extension.settings.expeditions.resourceUnitFactorsOfShipFoundOnExpeditions"
+                v-text="translations().extension.settings.expeditions.resourceUnitFactorsOfShipFoundOnExpeditions"
             />
         </div>
         <div class="fake-table-body">
@@ -43,46 +43,48 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class ExpeditionShipResourceUnitsFactorSettings extends Vue {
-        private factor = 1;
-        private deuteriumFactor = 1;
-        private isFocused = false;
+const settingsStore = useSettingsStore();
 
-        private get factors() {
-            return SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
-        }
+const factor = ref(1);
 
-        @Watch('factors', { immediate: true })
-        private onFactorsChanged() {
-            const { factor, deuteriumFactor } = this.factors;
+const deuteriumFactor = ref(1);
 
-            if (!this.isFocused) {
-                this.factor = factor;
-                this.deuteriumFactor = deuteriumFactor;
-            }
-        }
+const isFocused = ref(false);
 
-        private updateFactors() {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                expeditionFoundShipsResourceUnits: {
-                    factor: this.factor,
-                    deuteriumFactor: this.deuteriumFactor,
-                },
-            });
-        }
+const factors = computed(() => settingsStore.settings.expeditionFoundShipsResourceUnits);
 
-        private onBlur() {
-            this.isFocused = false;
-            this.onFactorsChanged();
-        }
+function onFactorsChanged() {
+    const { factor: localFactor, deuteriumFactor: localDeuteriumFactor } = factors.value;
+
+    if (!isFocused.value) {
+        factor.value = localFactor;
+        deuteriumFactor.value = localDeuteriumFactor;
     }
+}
+
+function updateFactors() {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        expeditionFoundShipsResourceUnits: {
+            factor: factor.value,
+            deuteriumFactor: deuteriumFactor.value,
+        },
+    });
+}
+
+function onBlur() {
+    isFocused.value = false;
+    onFactorsChanged();
+}
+
+watch(() => factors.value, onFactorsChanged, { immediate: true });
 </script>
+
 <style lang="scss" scoped>
     .expedition-ship-resource-units-factor-settings {
         display: flex;

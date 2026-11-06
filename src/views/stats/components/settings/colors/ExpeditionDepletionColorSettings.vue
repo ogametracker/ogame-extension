@@ -1,58 +1,49 @@
 <template>
     <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.expeditionDepletionLevels"
+        :header="translations().extension.settings.colors.expeditionDepletionLevels"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+
+const labels = computed<Record<ExpeditionDepletionLevel | 'unknown', string>>(() => createRecord(depletionLevels, level => translations().extension.expeditions.depletionLevels[level]));
+
+const keys = depletionLevels;
+
+const colors = computed(() => settingsStore.settings.colors.expeditions.depletion);
+
+function updateColors(value: Record<ExpeditionDepletionLevel | 'unknown', string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            expeditions: {
+                ...settingsStore.settings.colors.expeditions,
+                depletion: value,
+            },
         },
-    })
-    export default class ExpeditionDepletionColorSettings extends Vue {
+    });
+}
 
-        private readonly depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
-
-        private get labels(): Record<ExpeditionDepletionLevel | 'unknown', string> {
-            return createRecord(this.depletionLevels, level => this.$i18n.$t.extension.expeditions.depletionLevels[level]);
-        }
-
-        private readonly keys = this.depletionLevels;
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.depletion;
-        }
-
-        private updateColors(value: Record<ExpeditionDepletionLevel | 'unknown', string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    expeditions: {
-                        ...SettingsDataModule.settings.colors.expeditions,
-                        depletion: value,
-                    },
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.depletion;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.expeditions.depletion;
+    updateColors(defaultColors);
+}
 </script>

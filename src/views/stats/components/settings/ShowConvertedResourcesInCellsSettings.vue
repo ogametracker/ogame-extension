@@ -1,35 +1,32 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.showConvertedUnitsInTables.title" />
+            <span v-text="translations().extension.settings.showConvertedUnitsInTables.title" />
         </div>
         <div class="fake-table-body">
-            <checkbox :value="showCellsWithConvertedResourceUnits" @input="toggle($event)" :label="$i18n.$t.extension.settings.showConvertedUnitsInTables.label" />
+            <checkbox :model-value="showCellsWithConvertedResourceUnits" @update:model-value="toggle($event)" :label="translations().extension.settings.showConvertedUnitsInTables.label" />
             <slot />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class ShowConvertedResourcesInCellsSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private get showCellsWithConvertedResourceUnits() {
-            return SettingsDataModule.settings.showCellsWithConvertedResourceUnits;
-        }
+const showCellsWithConvertedResourceUnits = computed(() => settingsStore.settings.showCellsWithConvertedResourceUnits);
 
-        private toggle(showCellsWithConvertedResourceUnits: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                showCellsWithConvertedResourceUnits,
-            });
-        }
-
-    }
+function toggle(nextShowCellsWithConvertedResourceUnits: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        showCellsWithConvertedResourceUnits: nextShowCellsWithConvertedResourceUnits,
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         max-width: 400px;

@@ -1,34 +1,34 @@
 <template>
     <div class="universe-history-tracking">
-        <div v-if="!settings.enabled" v-html="$i18n.$t.extension.universeHistory.settings.messages.notEnabledHtml" />
+        <div v-if="!settings.enabled" v-html="translations().extension.universeHistory.settings.messages.notEnabledHtml" />
 
         <checkbox-button
-            :value="settings.enabled"
-            :label="$i18n.$t.extension.universeHistory.settings.enableHighscoreTrackingOnly"
-            @input="setEnabled($event)"
+            :model-value="settings.enabled"
+            :label="translations().extension.universeHistory.settings.enableHighscoreTrackingOnly"
+            @update:model-value="setEnabled($event)"
             color="#00ff00"
         />
 
         <hr />
 
-        <div v-if="settings.enabled && !settings.trackHistory" v-html="$i18n.$t.extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
+        <div v-if="settings.enabled && !settings.trackHistory" v-html="translations().extension.universeHistory.settings.messages.historyTrackingNotEnabledHtml" />
         <checkbox-button
             v-if="settings.enabled"
-            :value="settings.trackHistory"
-            :label="$i18n.$t.extension.universeHistory.settings.enableHistoryTracking"
-            @input="setTrackHistory($event)"
+            :model-value="settings.trackHistory"
+            :label="translations().extension.universeHistory.settings.enableHistoryTracking"
+            @update:model-value="setTrackHistory($event)"
             color="#00ff00"
         />
 
         <hr />
 
-        <div v-html="$i18n.$t.extension.universeHistory.settings.messages.trackingTimesHtml" />
+        <div v-html="translations().extension.universeHistory.settings.messages.trackingTimesHtml" />
         <div class="time-grid">
             <checkbox-button
                 v-for="(enabled, time) in timeSelection"
                 :key="time"
-                :value="enabled"
-                @input="setTimeEnabled(time, $event)"
+                :model-value="enabled"
+                @update:model-value="setTimeEnabled(time, $event)"
                 :label="formatTime(time)"
                 color="#00ff00"
             />
@@ -36,87 +36,86 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations, formatDate } from '@stats/i18n';
+import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
 import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
-    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { GlobalOgameMetaData } from '../../data/global';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { GlobalOgameMetaData } from '../../data/global';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class UniverseHistoryTrackingSettings extends Vue {
-        private get timeSelection(): Record<number, boolean> {
-            const result: Record<number, boolean> = {};
+const settingsStore = useSettingsStore();
 
-            for (let i = 0; i <= 23; i++) {
-                const time = i * 60 * 60 * 1000;
-                result[time] = this.settings.updateTimes.includes(time);
-            }
+const timeSelection = computed<Record<number, boolean>>(() => {
+    const result: Record<number, boolean> = {};
 
-            return result;
-        }
-
-        private get settings() {
-            return SettingsDataModule.settings.universeHistory;
-        }
-
-        private formatTime(timeStr: string) {
-            const time = parseIntSafe(timeStr, 10) + new Date(0).getTimezoneOffset() * 60 * 1000;
-            return this.$i18n.$d(time, 'time_hm');
-        }
-
-        private setEnabled(enabled: boolean) {
-            const universeHistory = {
-                ...this.settings,
-                enabled,
-            };
-            if (!enabled) {
-                universeHistory.trackHistory = false;
-            }
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                universeHistory,
-            });
-        }
-
-        private setTimeEnabled(timeStr: string, enabled: boolean) {
-            const time = parseIntSafe(timeStr, 10);
-            let updateTimes = this.settings.updateTimes;
-            if (enabled && !updateTimes.includes(time)) {
-                updateTimes.push(time);
-            }
-            else if (!enabled && updateTimes.includes(time)) {
-                updateTimes = updateTimes.filter(t => t != time);
-            }
-
-            if (updateTimes.length == 0) {
-                const languageKey = getLanguage(GlobalOgameMetaData.userLanguage) ?? LanguageKey.en;
-                updateTimes = getDefaultSettings(languageKey).universeHistory.updateTimes;
-            }
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                universeHistory: {
-                    ...this.settings,
-                    updateTimes,
-                },
-            });
-        }
-
-        private setTrackHistory(trackHistory: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                universeHistory: {
-                    ...this.settings,
-                    trackHistory,
-                },
-            });
-        }
+    for (let i = 0;i <= 23;i++) {
+        const time = i * 60 * 60 * 1000;
+        result[time] = settings.value.updateTimes.includes(time);
     }
+
+    return result;
+});
+
+const settings = computed(() => settingsStore.settings.universeHistory);
+
+function formatTime(timeStr: string) {
+    const time = parseIntSafe(timeStr, 10) + new Date(0).getTimezoneOffset() * 60 * 1000;
+    return formatDate(time, 'time_hm');
+}
+
+function setEnabled(enabled: boolean) {
+    const universeHistory = {
+        ...settings.value,
+        enabled,
+    };
+    if (!enabled) {
+        universeHistory.trackHistory = false;
+    }
+
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        universeHistory,
+    });
+}
+
+function setTimeEnabled(timeStr: string, enabled: boolean) {
+    const time = parseIntSafe(timeStr, 10);
+    let updateTimes = settings.value.updateTimes;
+    if (enabled && !updateTimes.includes(time)) {
+        updateTimes.push(time);
+    }
+    else if (!enabled && updateTimes.includes(time)) {
+        updateTimes = updateTimes.filter(t => t != time);
+    }
+
+    if (updateTimes.length == 0) {
+        const languageKey = getLanguage(GlobalOgameMetaData.userLanguage) ?? LanguageKey.en;
+        updateTimes = getDefaultSettings(languageKey).universeHistory.updateTimes;
+    }
+
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        universeHistory: {
+            ...settings.value,
+            updateTimes,
+        },
+    });
+}
+
+function setTrackHistory(trackHistory: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        universeHistory: {
+            ...settings.value,
+            trackHistory,
+        },
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .time-grid {
         display: inline-grid;

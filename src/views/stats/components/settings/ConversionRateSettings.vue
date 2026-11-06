@@ -1,12 +1,12 @@
 <template>
     <div class="conversion-rate-settings fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.common.conversionRates.title" />
+            <span v-text="translations().extension.settings.common.conversionRates.title" />
         </div>
         <div class="fake-table-body">
-            <select :value="conversionMode" @input="setConversionMode($event.target.value)">
-                <option value="msu" v-text="`${$i18n.$t.extension.settings.common.conversionRates.msuLong} (${$i18n.$t.extension.common.msu})`" />
-                <option value="dsu" v-text="`${$i18n.$t.extension.settings.common.conversionRates.dsuLong} (${$i18n.$t.extension.common.dsu})`" />
+            <select :value="conversionMode" @input="setConversionMode(($event.target as HTMLSelectElement).value as ResourceConversionMode)">
+                <option value="msu" v-text="`${translations().extension.settings.common.conversionRates.msuLong} (${translations().extension.common.msu})`" />
+                <option value="dsu" v-text="`${translations().extension.settings.common.conversionRates.dsuLong} (${translations().extension.common.dsu})`" />
             </select>
 
             <span class="inputs" v-if="conversionMode == 'msu'">
@@ -47,78 +47,77 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { ResourceConversionMode } from '@ogame-tracker/shared/models/settings/Settings';
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed, watch } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ResourceConversionMode } from '@ogame-tracker/shared/models/settings/Settings';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class ConversionRateSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private readonly msu = {
-            crystal: 2,
-            deuterium: 3,
-        };
-        private readonly dsu = {
-            metal: 3,
-            crystal: 2,
-        };
+const msu = {
+    crystal: 2,
+    deuterium: 3,
+};
 
-        private get msuRates() {
-            return SettingsDataModule.settings.conversionRates.msu;
-        }
-        private get dsuRates() {
-            return SettingsDataModule.settings.conversionRates.dsu;
-        }
-        private get conversionMode() {
-            return SettingsDataModule.settings.conversionRates.mode;
-        }
+const dsu = {
+    metal: 3,
+    crystal: 2,
+};
 
-        private setConversionMode(mode: ResourceConversionMode) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                conversionRates: {
-                    ...SettingsDataModule.settings.conversionRates,
-                    mode,
-                },
-            });
-        }
+const msuRates = computed(() => settingsStore.settings.conversionRates.msu);
 
-        @Watch('msuRates', { immediate: true })
-        private onMsuRatesChanged() {
-            const { crystal, deuterium } = this.msuRates;
-            this.msu.crystal = crystal;
-            this.msu.deuterium = deuterium;
-        }
+const dsuRates = computed(() => settingsStore.settings.conversionRates.dsu);
 
-        private updateMsuConversionRates() {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                conversionRates: {
-                    ...SettingsDataModule.settings.conversionRates,
-                    msu: this.msu,
-                },
-            });
-        }
+const conversionMode = computed(() => settingsStore.settings.conversionRates.mode);
 
-        @Watch('dsuRates', { immediate: true })
-        private onDsuRatesChanged() {
-            const { crystal, metal } = this.dsuRates;
-            this.dsu.crystal = crystal;
-            this.dsu.metal = metal;
-        }
+function setConversionMode(mode: ResourceConversionMode) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        conversionRates: {
+            ...settingsStore.settings.conversionRates,
+            mode,
+        },
+    });
+}
 
-        private updateDsuConversionRates() {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                conversionRates: {
-                    ...SettingsDataModule.settings.conversionRates,
-                    dsu: this.dsu,
-                },
-            });
-        }
-    }
+function onMsuRatesChanged() {
+    const { crystal, deuterium } = msuRates.value;
+    msu.crystal = crystal;
+    msu.deuterium = deuterium;
+}
+
+function updateMsuConversionRates() {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        conversionRates: {
+            ...settingsStore.settings.conversionRates,
+            msu: msu,
+        },
+    });
+}
+
+function onDsuRatesChanged() {
+    const { crystal, metal } = dsuRates.value;
+    dsu.crystal = crystal;
+    dsu.metal = metal;
+}
+
+function updateDsuConversionRates() {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        conversionRates: {
+            ...settingsStore.settings.conversionRates,
+            dsu: dsu,
+        },
+    });
+}
+
+watch(() => msuRates.value, onMsuRatesChanged, { immediate: true });
+
+watch(() => dsuRates.value, onDsuRatesChanged, { immediate: true });
 </script>
+
 <style lang="scss" scoped>
     .conversion-rate-settings {
         display: flex;

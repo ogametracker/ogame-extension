@@ -7,76 +7,64 @@
     >
         <template #header-key="{ label }">
             <span v-text="label" />
-            <reset-button @reset="$emit('reset')" />
+            <reset-button @reset="emit('reset')" />
         </template>
         <template #cell-key="{ value: key }">
-            <div
-                class="color-input"
-                @click="$refs[`colorInput-${key}`].click()"
-            >
+            <label class="color-input">
                 <input
                     type="color"
-                    :value="colors[key]"
+                    :value="colors[key as K]"
                     @change="updateColor(key, $event)"
-                    :ref="`colorInput-${key}`"
                 />
                 <div
                     class="color-indicator"
-                    :style="{ background: colors[key] }"
+                    :style="{ background: colors[key as K] }"
                 />
-                <span v-text="labels[key]" />
-            </div>
+                <span v-text="labels[key as K]" />
+            </label>
         </template>
     </grid-table>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import { GridTableColumn } from '../../common/GridTable.vue';
-    import ResetButton from '../ResetButton.vue';
+<script setup lang="ts" generic="K extends string | number">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import type { GridTableColumn } from '../../common/GridTable.vue';
+import ResetButton from '../ResetButton.vue';
 
-    @Component({
-        components: {
-            ResetButton,
-        },
-    })
-    export default class ColorSettingsTable extends Vue {
-        @Prop({ required: true, type: String })
-        private header!: string;
+const props = defineProps({
+    header: { required: true, type: String },
+    labels: { required: true, type: Object as PropType<Record<K, string>> },
+    keys: { required: false, type: Array as PropType<K[] | null>, default: () => null },
+});
 
-        @VModel({ required: true, type: Object as PropType<Record<string, string>> })
-        private colors!: Record<string, string>;
+const emit = defineEmits<{ reset: [] }>();
 
-        @Prop({ required: true, type: Object as PropType<Record<string, string>> })
-        private labels!: Record<string, string>;
+const colors = defineModel<Record<K, string>>({ required: true, type: Object as PropType<Record<K, string>> });
 
-        @Prop({ required: false, type: Array as PropType<string[]>, default: () => null })
-        private keys!: string[] | null;
+const columns = computed<GridTableColumn[]>(() => {
+    return [{
+        key: 'key',
+        label: props.header,
+        headerClass: 'color-settings-header',
+    }];
+});
 
-        private get columns(): GridTableColumn[] {
-            return [{
-                key: 'key',
-                label: this.header,
-                headerClass: 'color-settings-header',
-            }];
-        }
+const items = computed<{ key: K }[]>(() => {
+    const keys = props.keys ?? (Object.keys(colors.value) as K[]);
+    return keys.map(key => ({ key }));
+});
 
-        private get items(): { key: string }[] {
-            const keys = this.keys ?? Object.keys(this.colors);
-            return keys.map(key => ({ key }));
-        }
-
-        private updateColor(key: string, event: InputEvent) {
-            if (event.target instanceof HTMLInputElement) {
-                this.colors = {
-                    ...this.colors,
-                    [key]: event.target.value
-                };
-            }
-        }
+function updateColor(key: K, event: Event) {
+    if (event.target instanceof HTMLInputElement) {
+        colors.value = {
+            ...colors.value,
+            [key]: event.target.value
+        };
     }
+}
 </script>
+
 <style lang="scss" scoped>
     .color-input {
         display: flex;
@@ -103,7 +91,7 @@
         }
     }
 
-    .color-settings::v-deep .color-settings-header {
+    .color-settings:deep(.color-settings-header) {
         justify-content: center;
     }
 </style>

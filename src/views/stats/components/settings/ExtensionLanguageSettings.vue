@@ -1,10 +1,10 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.common.extensionLanguage" />
+            <span v-text="translations().extension.settings.common.extensionLanguage" />
         </div>
         <div class="fake-table-body">
-            <select :value="language" @change="setLanguage($event.target.value)">
+            <select :value="language" @change="setLanguage(($event.target as HTMLSelectElement).value as LanguageKey)">
                 <option
                     v-for="lang in langs"
                     :key="lang"
@@ -12,10 +12,10 @@
                     v-text="languageNames[lang]"
                 />
             </select>
-            <select 
-                v-if="Object.keys(getRegions(language)).length > 0" 
-                :value="languageRegion" 
-                @change="setLanguageRegion($event.target.value)"
+            <select
+                v-if="Object.keys(getRegions(language)).length > 0"
+                :value="languageRegion"
+                @change="setLanguageRegion(($event.target as HTMLInputElement).value)"
             >
                 <option
                     v-for="(name, region) in getRegions(language)"
@@ -24,65 +24,65 @@
                     v-text="name"
                 />
             </select>
-            <span v-text="$i18n.$t.extension.settings.common.extensionLanguageFallbackHint" />
+            <span v-text="translations().extension.settings.common.extensionLanguageFallbackHint" />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
-    import { Component, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class DetailedResourceBalanceSettings extends Vue {
-        private langs: LanguageKey[] = [
-            LanguageKey.de,
-            LanguageKey.en,
-            LanguageKey['pt-pt'],
-            LanguageKey.fr,
-        ];
-        private languageNames: Partial<Record<LanguageKey, string>> = {
-            [LanguageKey.de]: 'Deutsch',
-            [LanguageKey.en]: 'English',
-            [LanguageKey['pt-pt']]: 'Português',
-            [LanguageKey.fr]: 'Français',
-        };
-        private regions: Partial<Record<LanguageKey, Record<string, string>>> = {
-            [LanguageKey.en]: {
-                'gb': 'United Kingdom',
-                'us': 'United States',
-            },
-        };
+const settingsStore = useSettingsStore();
 
-        private getRegions(locale: LanguageKey): Record<string, string> {
-            return this.regions[locale] ?? {};
-        }
+const langs = ref<LanguageKey[]>([
+    LanguageKey.de,
+    LanguageKey.en,
+    LanguageKey['pt-pt'],
+    LanguageKey.fr,
+]);
 
-        private get language() {
-            return SettingsDataModule.settings.extensionLanguage;
-        }
-        private get languageRegion() {
-            return SettingsDataModule.settings.extensionLanguageRegion;
-        }
+const languageNames = ref<Partial<Record<LanguageKey, string>>>({
+    [LanguageKey.de]: 'Deutsch',
+    [LanguageKey.en]: 'English',
+    [LanguageKey['pt-pt']]: 'Português',
+    [LanguageKey.fr]: 'Français',
+});
 
-        private setLanguage(extensionLanguage: LanguageKey) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                extensionLanguage,
-            });
+const regions = ref<Partial<Record<LanguageKey, Record<string, string>>>>({
+    [LanguageKey.en]: {
+        'gb': 'United Kingdom',
+        'us': 'United States',
+    },
+});
 
-            this.setLanguageRegion(undefined);
-        }
+function getRegions(locale: LanguageKey): Record<string, string> {
+    return regions.value[locale] ?? {};
+}
 
-        private setLanguageRegion(region?: string) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                extensionLanguageRegion: region,
-            });
-        }
-    }
+const language = computed(() => settingsStore.settings.extensionLanguage);
+
+const languageRegion = computed(() => settingsStore.settings.extensionLanguageRegion);
+
+function setLanguage(extensionLanguage: LanguageKey) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        extensionLanguage,
+    });
+
+    setLanguageRegion(undefined);
+}
+
+function setLanguageRegion(region?: string) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        extensionLanguageRegion: region,
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         border: 1px solid rgba(var(--color), 0.5);

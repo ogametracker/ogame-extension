@@ -1,41 +1,38 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.resourceBalance.includeShipsLostInCombats.header" />
+            <span v-text="translations().extension.settings.resourceBalance.includeShipsLostInCombats.header" />
         </div>
         <div class="fake-table-body">
             <checkbox
-                :value="include"
-                @input="toggleInclude($event)"
-                :label="$i18n.$t.extension.settings.resourceBalance.includeShipsLostInCombats.checkboxLabel"
+                :model-value="include"
+                @update:model-value="toggleInclude($event)"
+                :label="translations().extension.settings.resourceBalance.includeShipsLostInCombats.checkboxLabel"
             />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '../../../data/SettingsDataModule';
 
-    @Component({})
-    export default class IncludeShipsLostInCombatsInResourceBalance extends Vue {
+const settingsStore = useSettingsStore();
 
-        private get include() {
-            return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
-        }
+const include = computed(() => settingsStore.settings.resourceBalance.includeLostShipsResourceUnits);
 
-        private toggleInclude(includeLostShipsResourceUnits: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                resourceBalance: {
-                    ...SettingsDataModule.settings.resourceBalance,
-                    includeLostShipsResourceUnits,
-                },
-            });
-        }
-
-    }
+function toggleInclude(includeLostShipsResourceUnits: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        resourceBalance: {
+            ...settingsStore.settings.resourceBalance,
+            includeLostShipsResourceUnits,
+        },
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         border: 1px solid rgba(var(--color), 0.5);

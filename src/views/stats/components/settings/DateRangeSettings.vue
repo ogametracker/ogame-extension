@@ -6,10 +6,10 @@
                     <tr>
                         <td />
                         <td />
-                        <td v-text="$i18n.$t.extension.settings.dateRanges.headers.label" />
-                        <td v-text="$i18n.$t.extension.settings.dateRanges.headers.type" />
-                        <td colspan="2" v-text="$i18n.$t.extension.settings.dateRanges.headers.rangeStart" />
-                        <td colspan="2" v-text="$i18n.$t.extension.settings.dateRanges.headers.rangeContains" />
+                        <td v-text="translations().extension.settings.dateRanges.headers.label" />
+                        <td v-text="translations().extension.settings.dateRanges.headers.type" />
+                        <td colspan="2" v-text="translations().extension.settings.dateRanges.headers.rangeStart" />
+                        <td colspan="2" v-text="translations().extension.settings.dateRanges.headers.rangeContains" />
                         <td>
                             <reset-button @reset="resetDateRanges()" />
                         </td>
@@ -18,10 +18,12 @@
                 <draggable
                     tag="tbody"
                     v-model="items"
+                    :item-key="rangeKey"
                     handle=".grab"
                     @change="onItemsUpdated()"
                 >
-                    <tr v-for="(range, i) in items" :key="i">
+                    <template #item="{ element: range }">
+                    <tr>
                         <td>
                             <span class="grab mdi mdi-drag" />
                         </td>
@@ -39,9 +41,9 @@
                                 v-model.lazy="range.label"
                                 @change="onItemsUpdated()"
                             />
-                            <span 
+                            <span
                                 v-else
-                                v-text="$i18n.$t.extension.settings.dateRanges.since($i18n.$t.extension.settings.dateRanges.firstDayTemplate)" 
+                                v-text="translations().extension.settings.dateRanges.since(translations().extension.settings.dateRanges.firstDayTemplate)"
                             />
                         </td>
                         <td>
@@ -54,7 +56,7 @@
                                     v-for="rangeType in rangeTypes"
                                     :key="rangeType"
                                     :value="rangeType"
-                                    v-text="$i18n.$t.extension.settings.dateRanges[rangeType]"
+                                    v-text="translations().extension.settings.dateRanges[rangeType]"
                                 />
                             </select>
                         </td>
@@ -67,7 +69,7 @@
                             />
                         </td>
                         <td style="text-align: left; padding-left: 0">
-                            <span v-text="$i18n.$t.extension.settings.dateRanges[`${range.type}sAgo`]" />
+                            <span v-text="translations().extension.settings.dateRanges[`${range.type}sAgo`]" />
                         </td>
                         <td>
                             <input
@@ -78,10 +80,11 @@
                             />
                         </td>
                         <td style="text-align: left; padding-left: 0">
-                            <span v-text="$i18n.$t.extension.settings.dateRanges[`${range.type}s`]" />
+                            <span v-text="translations().extension.settings.dateRanges[`${range.type}s`]" />
                         </td>
                         <td v-text="getRangeText(range)" style="font-style: italic;" />
                     </tr>
+                    </template>
                 </draggable>
                 <tfoot>
                     <tr>
@@ -100,96 +103,102 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { DateRange, DateRangeType } from '@ogame-tracker/shared/models/settings/DateRange';
-    import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { getRangeDays } from '../../utils/dateRanges';
-    import ResetButton from './ResetButton.vue';
-    import draggable from 'vuedraggable';
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+import { translations, formatDate } from '@stats/i18n';
+import type { DateRange, DateRangeType } from '@ogame-tracker/shared/models/settings/DateRange';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+import { getRangeDays } from '../../utils/dateRanges';
+import ResetButton from './ResetButton.vue';
+import draggable from 'vuedraggable';
 
-    @Component({
-        components: {
-            ResetButton,
-            draggable,
-        },
-    })
-    export default class DateRangeSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private items: DateRange[] = [];
-        private readonly rangeTypes: DateRangeType[] = [
-            'day',
-            'week',
-            'month',
-            'year',
-        ];
+const items = ref<DateRange[]>([]);
+const rangeKeys = new WeakMap<DateRange, number>();
+let nextRangeKey = 0;
 
-        private getRangeText(range: DateRange): string {
-            if (range.type == 'all') {
-                return '';
-            }
-
-            const rangeDays = getRangeDays(range);
-            if(rangeDays.firstDay == rangeDays.lastDay) {
-                return this.$i18n.$d(rangeDays.firstDay, 'date');
-            }
-
-            return `${this.$i18n.$d(rangeDays.firstDay, 'date')} - ${this.$i18n.$d(rangeDays.lastDay, 'date')}`;
-        }
-
-        private mounted() {
-            this.initItems();
-        }
-
-        private initItems() {
-            this.items = [...SettingsDataModule.settings.dateRanges];
-        }
-
-        private async deleteRange(item: DateRange) {
-            this.items = this.items.filter(i => i != item);
-            await this.onItemsUpdated();
-        }
-
-        private addNewRange() {
-            this.items.push({
-                type: 'day',
-                skip: 0,
-                take: 1,
-                label: this.$i18n.$t.extension.settings.dateRanges.defaultNames.newRange,
-            });
-            this.onItemsUpdated();
-        }
-
-        private onItemsUpdated() {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                dateRanges: [...this.items],
-            });
-        }
-
-        private get settings() {
-            return SettingsDataModule.settings;
-        }
-
-        @Watch('settings')
-        private onSettingsChanged() {
-            this.initItems();
-        }
-
-
-        private resetDateRanges() {
-            const defaultRanges = getDefaultSettings(SettingsDataModule.settings.extensionLanguage).dateRanges;
-
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                dateRanges: defaultRanges,
-            });
-
-            this.initItems();
-        }
+function rangeKey(range: DateRange): number {
+    const existing = rangeKeys.get(range);
+    if (existing != null) {
+        return existing;
     }
+    const key = nextRangeKey++;
+    rangeKeys.set(range, key);
+    return key;
+}
+
+const rangeTypes: DateRangeType[] = [
+    'day',
+    'week',
+    'month',
+    'year',
+];
+
+function getRangeText(range: DateRange): string {
+    if (range.type == 'all') {
+        return '';
+    }
+
+    const rangeDays = getRangeDays(range);
+    if (rangeDays.firstDay == rangeDays.lastDay) {
+        return formatDate(rangeDays.firstDay, 'date');
+    }
+
+    return `${formatDate(rangeDays.firstDay, 'date')} - ${formatDate(rangeDays.lastDay, 'date')}`;
+}
+
+function initItems() {
+    items.value = [...settingsStore.settings.dateRanges];
+}
+
+async function deleteRange(item: DateRange) {
+    items.value = items.value.filter(i => i != item);
+    await onItemsUpdated();
+}
+
+function addNewRange() {
+    items.value.push({
+        type: 'day',
+        skip: 0,
+        take: 1,
+        label: translations().extension.settings.dateRanges.defaultNames.newRange,
+    });
+    onItemsUpdated();
+}
+
+function onItemsUpdated() {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        dateRanges: [...items.value],
+    });
+}
+
+const settings = computed(() => settingsStore.settings);
+
+function onSettingsChanged() {
+    initItems();
+}
+
+function resetDateRanges() {
+    const defaultRanges = getDefaultSettings(settingsStore.settings.extensionLanguage).dateRanges;
+
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        dateRanges: defaultRanges,
+    });
+
+    initItems();
+}
+
+watch(() => settings.value, onSettingsChanged);
+
+onMounted(() => {
+    initItems();
+});
 </script>
+
 <style lang="scss" scoped>
     .mdi {
         opacity: 0.5;

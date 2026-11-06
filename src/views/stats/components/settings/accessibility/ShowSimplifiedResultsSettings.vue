@@ -1,41 +1,39 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.accessibility.showSimplifiedResults.title" />
+            <span v-text="translations().extension.settings.accessibility.showSimplifiedResults.title" />
         </div>
         <div class="fake-table-body">
             <checkbox
-                :value="showSimplifiedResults"
-                @input="toggleShowSimplifiedResults($event)"
-                :label="$i18n.$t.extension.settings.accessibility.showSimplifiedResults.label"
+                :model-value="showSimplifiedResults"
+                @update:model-value="toggleShowSimplifiedResults($event)"
+                :label="translations().extension.settings.accessibility.showSimplifiedResults.label"
             />
             <slot />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
 
-    @Component({})
-    export default class ShowSimplifiedResultsSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private get showSimplifiedResults() {
-            return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
+const showSimplifiedResults = computed(() => settingsStore.settings.messageTracking.showSimplifiedResults);
+
+function toggleShowSimplifiedResults(nextShowSimplifiedResults: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        messageTracking: {
+            ...settingsStore.settings.messageTracking,
+            showSimplifiedResults: nextShowSimplifiedResults,
         }
-
-        private toggleShowSimplifiedResults(showSimplifiedResults: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                messageTracking: {
-                    ...SettingsDataModule.settings.messageTracking,
-                    showSimplifiedResults,
-                }
-            });
-        }
-    }
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         max-width: 400px;
