@@ -9,7 +9,7 @@
                 :value="percentage"
                 @input="setPercentage($event)"
             />
-            <span v-text="$i18n.$t.extension.tools.scrapyardMerchant.percentage" />
+            <span v-text="translations().extension.tools.scrapyardMerchant.percentage" />
         </div>
 
         <grid-table
@@ -22,12 +22,12 @@
         >
             <template #cell-type="{ item }">
                 <template v-if="item.type in ships">
-                    <span v-text="$i18n.$t.ogame.ships[item.type]" class="mr-2" />
+                    <span v-text="translations().ogame.ships[item.type as ShipType]" class="mr-2" />
                     <o-ship :ship="item.type" size="24px" />
                 </template>
 
                 <template v-else-if="item.type in defenses">
-                    <span v-text="$i18n.$t.ogame.defenses[item.type]" class="mr-2" />
+                    <span v-text="translations().ogame.defenses[item.type as DefenseType]" class="mr-2" />
                     <o-defense :defense="item.type" size="24px" />
                 </template>
             </template>
@@ -37,30 +37,31 @@
                     type="number"
                     min="0"
                     step="1"
-                    v-model.number="ships[item.type]"
+                    v-model.number="ships[item.type as ShipType]"
                 />
                 <input
                     v-else-if="item.type in defenses"
                     type="number"
                     min="0"
                     step="1"
-                    v-model.number="defenses[item.type]"
+                    v-model.number="defenses[item.type as DefenseType]"
                 />
             </template>
             <template #[`(cell|footer)-${resourcesRegex}`]="{ match, item }">
                 <span
-                    v-text="$i18n.$n(getTotalCost(item)[match.groups.resource])"
+                    v-text="formatNumber(getTotalCost(item)[match.groups.resource as keyof Cost])"
                 />
             </template>
             <template #[`(cell|footer)-msu-dsu`]="{ item }">
-                <span v-text="$i18n.$n(getMsuOrDsu(getTotalCost(item)))" />
+                <span v-text="formatNumber(getMsuOrDsu(getTotalCost(item)))" />
             </template>
         </grid-table>
     </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, nextTick, reactive, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
 import { Defense } from '@ogame-tracker/shared/models/ogame/defenses/Defense';
 import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
 import { DefenseByTypes, DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
@@ -68,100 +69,101 @@ import { Ship } from '@ogame-tracker/shared/models/ogame/ships/Ship';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipByTypes, ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-import { GridTableColumn } from '../../components/common/GridTable.vue';
-import { addCost, Cost, multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
-import { SettingsDataModule } from '../../data/SettingsDataModule';
+import type { GridTableColumn } from '../../components/common/GridTable.vue';
+import { addCost, multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { getMsuOrDsu as convertCost } from '../../models/settings/getMsuOrDsu';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
+const settingsStore = useSettingsStore();
 
-@Component({})
-export default class ScrapyardMerchant extends Vue {
-    private readonly resourcesRegex = '(?<resource>metal|crystal|deuterium)';
+const resourcesRegex = '(?<resource>metal|crystal|deuterium)';
 
-    private percentage = 35;
-    private get percentageComputed() {
-        return this.percentage;
-    }
-    private set percentageComputed(value: number) {
-        this.percentage = Math.max(35, Math.min(75, Math.trunc(value)));
-    }
+const percentage = ref(35);
 
-    private readonly ships: Record<ShipType, number> = createRecord(ShipTypes, 0);
-    private readonly defenses: Record<DefenseType, number> = createRecord(DefenseTypes, 0);
+const percentageComputed = computed({
+    get: () => percentage.value,
+    set: (value: number) => {
+        percentage.value = Math.max(35, Math.min(75, Math.trunc(value)));
+    },
+});
 
-    private get columns(): GridTableColumn[] {
-        return [
-            {
-                key: 'type',
-            },
-            {
-                key: 'count',
-                label: this.$i18n.$t.extension.tools.scrapyardMerchant.count,
-            },
-            {
-                key: 'metal',
-                label: this.$i18n.$t.ogame.resources.metal,
-            },
-            {
-                key: 'crystal',
-                label: this.$i18n.$t.ogame.resources.crystal,
-            },
-            {
-                key: 'deuterium',
-                label: this.$i18n.$t.ogame.resources.deuterium,
-            },
-            {
-                key: 'msu-dsu',
-                label: `${this.$i18n.$t.extension.common.resourceUnits} (${this.conversionModeText})`,
-            },
-        ];
-    }
+const ships = reactive(createRecord(ShipTypes, 0));
 
-    private get conversionModeText() {
-        return SettingsDataModule.settings.conversionRates.mode == 'msu'
-            ? this.$i18n.$t.extension.common.msu
-            : this.$i18n.$t.extension.common.dsu;
-    }
+const defenses = reactive(createRecord(DefenseTypes, 0));
 
-    private getTotalCost(item: Ship | Defense | {}): Cost {
-        const factor = this.percentage / 100;
+const columns = computed<GridTableColumn[]>(() => {
+    return [
+        {
+            key: 'type',
+        },
+        {
+            key: 'count',
+            label: translations().extension.tools.scrapyardMerchant.count,
+        },
+        {
+            key: 'metal',
+            label: translations().ogame.resources.metal,
+        },
+        {
+            key: 'crystal',
+            label: translations().ogame.resources.crystal,
+        },
+        {
+            key: 'deuterium',
+            label: translations().ogame.resources.deuterium,
+        },
+        {
+            key: 'msu-dsu',
+            label: `${translations().extension.common.resourceUnits} (${conversionModeText.value})`,
+        },
+    ];
+});
 
-        if ('type' in item) {
-            const count = 'baseSpeed' in item ? this.ships[item.type] : this.defenses[item.type];
-            return multiplyCost(item.cost, count * factor);
-        }
+const conversionModeText = computed(() => {
+    return settingsStore.settings.conversionRates.mode == 'msu'
+        ? translations().extension.common.msu
+        : translations().extension.common.dsu;
+});
 
-        return addCost(
-            ...ShipTypes.map(ship => multiplyCost(ShipByTypes[ship].cost, this.ships[ship] * factor)),
-            ...DefenseTypes.map(def => multiplyCost(DefenseByTypes[def].cost, this.defenses[def] * factor)),
-        );
+function getTotalCost(item: Ship | Defense | {}): Cost {
+    const factor = percentage.value / 100;
+
+    if ('type' in item) {
+        const count = 'baseSpeed' in item ? ships[item.type] : defenses[item.type];
+        return multiplyCost(item.cost, count * factor);
     }
 
-    private getMsuOrDsu(cost: Cost) {
-        return getMsuOrDsu(cost);
-    }
+    return addCost(
+        ...ShipTypes.map(ship => multiplyCost(ShipByTypes[ship].cost, ships[ship] * factor)),
+        ...DefenseTypes.map(def => multiplyCost(DefenseByTypes[def].cost, defenses[def] * factor)),
+    );
+}
 
-    private readonly footerItems = [{}];
+function getMsuOrDsu(cost: Cost) {
+    return convertCost(cost);
+}
 
-    private get items(): (Ship | Defense)[] {
-        return [
-            ...ShipTypes.map(type => ShipByTypes[type]),
-            ...DefenseTypes.map(type => DefenseByTypes[type]),
-        ];
-    }
+const footerItems = [{}];
 
-    private async setPercentage(event: InputEvent) {
-        const input = event.target as HTMLInputElement;
-        const value = parseInt(input.value);
+const items = computed<(Ship | Defense)[]>(() => {
+    return [
+        ...ShipTypes.map(type => ShipByTypes[type]),
+        ...DefenseTypes.map(type => DefenseByTypes[type]),
+    ];
+});
 
-        const percentage = isNaN(value)
-            ? 0
-            : Math.max(35, Math.min(75, Math.trunc(value)));
+async function setPercentage(event: InputEvent) {
+    const input = event.target as HTMLInputElement;
+    const value = parseInt(input.value);
 
-        this.percentage = value;
-        await this.$nextTick();
-        this.percentage = percentage;
-    }
+    const localPercentage = isNaN(value)
+        ? 0
+        : Math.max(35, Math.min(75, Math.trunc(value)));
+
+    percentage.value = value;
+    await nextTick();
+    percentage.value = localPercentage;
 }
 </script>
 
@@ -173,9 +175,7 @@ export default class ScrapyardMerchant extends Vue {
     max-height: 100%;
 }
 
-.scrap-table::v-deep {
-    .grid-table-body .grid-table-cell {
-        padding: 4px 8px;
-    }
+.scrap-table :deep(.grid-table-body .grid-table-cell) {
+    padding: 4px 8px;
 }
 </style>
