@@ -15,7 +15,8 @@ import {
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
 import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
+import { Items } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { getItem } from '@ogame-tracker/shared/models/ogame/items/ItemLookup';
 import { getItemImageUrl } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
@@ -510,10 +511,10 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
         }
 
         case ExpeditionEventType.item: {
-            const item = Items[expedition.itemHash];
+            const item = getItem(expedition.itemHash) ?? Items.detroid_30minutes;
             const imageUrl = getItemImageUrl(item);
             return `
-                <a href="/game/index.php?page=shop#item=${expedition.itemHash}&page=inventory">
+                <a href="/game/index.php?page=shop#item=${encodeURIComponent(expedition.itemHash)}&page=inventory">
                     <div class="${getExpeditionResultClass(expedition)}">
                         <img src="${imageUrl}" class="item-grade--${item.grade}" />
                     </div>

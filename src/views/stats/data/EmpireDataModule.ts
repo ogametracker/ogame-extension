@@ -14,6 +14,7 @@ import type { ResearchLevels } from '@ogame-tracker/shared/models/empire/Researc
 import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
 import type { MoonData } from '@ogame-tracker/shared/models/empire/MoonData';
+import { resolveActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
 import type {
     DbActiveItems,
     DbBasicMoonData,
@@ -135,7 +136,7 @@ export const useEmpireStore = defineStore('empire', () => {
                     buildings,
                     ships,
                     defense,
-                    activeItems,
+                    activeItems: resolveActiveItems(activeItems),
                 };
                 planets[id] = moonData;
             } else {
@@ -192,7 +193,7 @@ export const useEmpireStore = defineStore('empire', () => {
                     ships,
                     defense,
                     missiles,
-                    activeItems,
+                    activeItems: resolveActiveItems(activeItems),
                     productionSettings,
 
                     activeLifeform,

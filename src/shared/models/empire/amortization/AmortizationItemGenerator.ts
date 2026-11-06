@@ -13,7 +13,7 @@ import {
 } from '@ogame-tracker/shared/models/ogame/buildings/ProductionBuilding';
 import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import { addCost, Cost, multiplyCost, multiplyCostInt, subCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import {
     AnyBuildingCostAndTimeReductionLifeformBuilding,
     AnyBuildingType,
@@ -747,7 +747,7 @@ export class AmortizationItemGenerator {
 
         const planetSettings = this.#settings.astrophysics;
         const position = planetSettings.position;
-        const items = planetSettings.activeItems.reduce<Partial<Record<ItemHash, 'permanent'>>>((acc, cur) => {
+        const items = planetSettings.activeItems.reduce<Partial<Record<ItemId, 'permanent'>>>((acc, cur) => {
             acc[cur] = 'permanent';
             return acc;
         }, {});

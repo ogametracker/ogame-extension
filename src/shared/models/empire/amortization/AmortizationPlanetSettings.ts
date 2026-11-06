@@ -1,5 +1,5 @@
 import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
@@ -13,7 +13,7 @@ export interface AmortizationPlanetSettings {
     position: number;
     maxTemperature: number;
 
-    activeItems: ItemHash[];
+    activeItems: ItemId[];
     crawlers: {
         percentage: CrawlerProductionPercentage;
         count: number;

@@ -219,16 +219,16 @@
             <template #footer-planet="{ value, item }">
                 <span v-if="!item.isResourcePackageRow" v-text="value.name" />
                 <span v-else class="resource-packages-cell">
-                    <OItem :item="ItemHash.resourcePackage_all" size="32px" hide-item-grade />
+                    <OItem item="resourcePackage_all" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.all" min="0" step="1" />
 
-                    <OItem :item="ItemHash.resourcePackage_metal" size="32px" hide-item-grade />
+                    <OItem item="resourcePackage_metal" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.metal" min="0" step="1" />
 
-                    <OItem :item="ItemHash.resourcePackage_crystal" size="32px" hide-item-grade />
+                    <OItem item="resourcePackage_crystal" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.crystal" min="0" step="1" />
 
-                    <OItem :item="ItemHash.resourcePackage_deuterium" size="32px" hide-item-grade />
+                    <OItem item="resourcePackage_deuterium" size="32px" hide-item-grade />
                     <input type="number" v-model.number="resourcePackageAmounts.deuterium" min="0" step="1" />
                 </span>
             </template>
@@ -272,7 +272,7 @@
 </template>
 
 <script setup lang="ts">
-import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import GridTable from '@stats/components/common/GridTable.vue';
@@ -288,7 +288,7 @@ import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/Build
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
 import type { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
@@ -327,7 +327,7 @@ interface ProductionItem {
     totalConverted: number;
 
     productionSettings: ProductionSettingsItem;
-    activeItems: ItemHash[];
+    activeItems: ItemId[];
 
     isResourcePackageRow?: boolean;
 }
@@ -461,7 +461,7 @@ function getPlanetSettings(): AmortizationPlanetSettings[] {
         position: planet.coordinates.position,
         coordinates: planet.coordinates,
         maxTemperature: planet.maxTemperature,
-        activeItems: Object.keys(planet.activeItems) as ItemHash[],
+        activeItems: Object.keys(planet.activeItems) as ItemId[],
         lifeform: planet.activeLifeform,
         activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
         lifeformBuildingLevels: { ...planet.lifeformBuildings },
@@ -728,68 +728,20 @@ const planets = computed<PlanetData[]>(() => {
         ) as PlanetData[];
 });
 
-const productionBoostItems_metal: ItemHash[] = [
-    ItemHash.metalBooster_bronze_1day,
-    ItemHash.metalBooster_bronze_7days,
-    ItemHash.metalBooster_silver_7days,
-    ItemHash.metalBooster_silver_30days,
-    ItemHash.metalBooster_silver_90days,
-    ItemHash.metalBooster_gold_7days,
-    ItemHash.metalBooster_gold_30days,
-    ItemHash.metalBooster_gold_90days,
-    ItemHash.metalBooster_platinum_7days,
-    ItemHash.metalBooster_platinum_30days,
-    ItemHash.metalBooster_platinum_90days,
-];
-
-const productionBoostItems_crystal: ItemHash[] = [
-    ItemHash.crystalBooster_bronze_1day,
-    ItemHash.crystalBooster_bronze_7days,
-    ItemHash.crystalBooster_silver_7days,
-    ItemHash.crystalBooster_silver_30days,
-    ItemHash.crystalBooster_silver_90days,
-    ItemHash.crystalBooster_gold_7days,
-    ItemHash.crystalBooster_gold_30days,
-    ItemHash.crystalBooster_gold_90days,
-    ItemHash.crystalBooster_platinum_7days,
-    ItemHash.crystalBooster_platinum_30days,
-    ItemHash.crystalBooster_platinum_90days,
-];
-
-const productionBoostItems_deuterium: ItemHash[] = [
-    ItemHash.deuteriumBooster_bronze_1day,
-    ItemHash.deuteriumBooster_bronze_7days,
-    ItemHash.deuteriumBooster_silver_7days,
-    ItemHash.deuteriumBooster_silver_30days,
-    ItemHash.deuteriumBooster_silver_90days,
-    ItemHash.deuteriumBooster_gold_7days,
-    ItemHash.deuteriumBooster_gold_30days,
-    ItemHash.deuteriumBooster_gold_90days,
-    ItemHash.deuteriumBooster_platinum_7days,
-    ItemHash.deuteriumBooster_platinum_30days,
-    ItemHash.deuteriumBooster_platinum_90days,
-];
-
-const productionBoostItems_energy: ItemHash[] = [
-    ItemHash.energyBooster_bronze_7days,
-    ItemHash.energyBooster_silver_7days,
-    ItemHash.energyBooster_silver_30days,
-    ItemHash.energyBooster_silver_90days,
-    ItemHash.energyBooster_gold_7days,
-    ItemHash.energyBooster_gold_30days,
-    ItemHash.energyBooster_gold_90days,
-    ItemHash.energyBooster_platinum_7days,
-    ItemHash.energyBooster_platinum_30days,
-    ItemHash.energyBooster_platinum_90days,
-];
-
-function getActiveItems(item: ProductionItem): (ItemHash | null)[] {
-    return [
-        item.activeItems.find(item => productionBoostItems_metal.includes(item)) ?? null,
-        item.activeItems.find(item => productionBoostItems_crystal.includes(item)) ?? null,
-        item.activeItems.find(item => productionBoostItems_deuterium.includes(item)) ?? null,
-        item.activeItems.find(item => productionBoostItems_energy.includes(item)) ?? null,
-    ];
+function getActiveItems(item: ProductionItem): (ItemId | null)[] {
+    const resourceItems = ResourceTypes.map(
+        resource =>
+            item.activeItems.find(id => {
+                const effect = Items[id]?.effect;
+                return (
+                    effect?.type === 'resourceProductionBonus' &&
+                    effect.value[resource] != null &&
+                    Object.keys(effect.value).length === 1
+                );
+            }) ?? null,
+    );
+    const energyItem = item.activeItems.find(id => Items[id]?.effect?.type === 'energyProductionBonus');
+    return [...resourceItems, energyItem ?? null];
 }
 
 watch(() => playerSettings.value.playerClass, onPlayerClassSelectionChanged);

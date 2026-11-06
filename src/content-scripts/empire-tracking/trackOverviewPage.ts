@@ -2,14 +2,13 @@ import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
 import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
 import { UpdatePlanetActiveItemsMessage } from '@ogame-tracker/shared/messages/tracking/empire';
-import { PlanetActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import type { ActiveItemHashes } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
 import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
 export function trackOverviewPage(): void {
-    const activeItems: PlanetActiveItems = {};
+    const activeItems: ActiveItemHashes = Object.create(null);
 
     const observer = new MutationObserver(() => {
         if (
@@ -51,7 +50,7 @@ export function trackOverviewPage(): void {
                     activeUntil = ogameNow + durationLeft;
                 }
                 item.setAttribute('ogt-active-until', activeUntil.toString());
-                activeItems[hash as ItemHash] = activeUntil;
+                activeItems[hash] = activeUntil;
             } catch (error) {
                 console.error(error);
             }

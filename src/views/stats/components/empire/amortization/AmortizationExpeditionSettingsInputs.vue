@@ -78,7 +78,7 @@ import { computed, watch } from 'vue';
 import { translations, formatNumber } from '@stats/i18n';
 import type { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';
 import type { PropType } from 'vue';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { AmortizationExpeditionResultsBreakdown } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
 import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
@@ -109,45 +109,28 @@ const topScores = computed<Record<number, string>>(() => {
     };
 });
 
-const slotItems: ItemHash[] = [
-    ItemHash.expeditionslots_bronze_7days,
-    ItemHash.expeditionslots_silver_7days,
-    ItemHash.expeditionslots_gold_7days,
+const slotItems: ItemId[] = [
+    'expeditionslots_1slot_7days',
+    'expeditionslots_2slots_7days',
+    'expeditionslots_3slots_7days',
 ];
 
-const slotItemsMap: Partial<Record<ItemHash, ItemHash>> = {
-    [ItemHash.expeditionslots_bronze_7days]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_bronze_7days_pts]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_silver_7days]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_silver_7days_pts]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_gold_7days]: ItemHash.expeditionslots_gold_7days,
-    [ItemHash.expeditionslots_gold_7days_pts]: ItemHash.expeditionslots_gold_7days,
-
-    [ItemHash.expeditionslots_bronze_30days]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_bronze_30days_pts]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_silver_30days]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_silver_30days_pts]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_gold_30days]: ItemHash.expeditionslots_gold_7days,
-    [ItemHash.expeditionslots_gold_30days_pts]: ItemHash.expeditionslots_gold_7days,
-
-    [ItemHash.expeditionslots_bronze_90days]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_bronze_90days_pts]: ItemHash.expeditionslots_bronze_7days,
-    [ItemHash.expeditionslots_silver_90days]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_silver_90days_pts]: ItemHash.expeditionslots_silver_7days,
-    [ItemHash.expeditionslots_gold_90days]: ItemHash.expeditionslots_gold_7days,
-    [ItemHash.expeditionslots_gold_90days_pts]: ItemHash.expeditionslots_gold_7days,
-};
-
 function onSettingsChanged() {
-    const mapItems = (Object.keys(slotItemsMap) as ItemHash[]).filter(i => !slotItems.includes(i));
-    mapItems.forEach(item => {
-        const index = settings.value.items.indexOf(item);
-        if (index < 0) {
-            return;
+    const selected = settings.value.items.map(id => {
+        const effect = Items[id]?.effect;
+        if (effect?.type !== 'expeditionSlots') {
+            return id;
         }
-
-        settings.value.items.splice(index, 1, slotItemsMap[item] ?? _throw(`missing item configuration for '${item}'`));
+        const canonicalItem = slotItems.find(option => {
+            const optionEffect = Items[option]?.effect;
+            return optionEffect?.type === 'expeditionSlots' && optionEffect.value === effect.value;
+        });
+        return canonicalItem ?? id;
     });
+    const unique = [...new Set(selected)];
+    if (unique.length !== settings.value.items.length || unique.some((id, i) => id !== settings.value.items[i])) {
+        settings.value.items = unique;
+    }
 
     props.breakdown.options.playerClass = props.playerSettings.playerClass;
     props.breakdown.options.admiral = props.playerSettings.officers.admiral;
@@ -170,7 +153,7 @@ function onSettingsChanged() {
 
 const expeditionsPerDay = computed(() => props.breakdown.slots * settings.value.wavesPerDay);
 
-function toggleItem(item: ItemHash) {
+function toggleItem(item: ItemId) {
     const index = settings.value.items.indexOf(item);
     if (index < 0) {
         settings.value.items.push(item);

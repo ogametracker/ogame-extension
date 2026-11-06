@@ -8,7 +8,7 @@ import { AmortizationPlanetSettings } from './AmortizationPlanetSettings';
 import { BuildingType } from '../../ogame/buildings/BuildingType';
 import { ProductionBuildingDependencies } from '../../ogame/buildings/ProductionBuilding';
 import { Coordinates } from '../../ogame/common/Coordinates';
-import { ItemHash } from '../../ogame/items/ItemHash';
+import type { ItemId } from '../../ogame/items/Items.generated';
 import { LifeformBuildingTypes } from '../../ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType, LifeformTechnologyTypes } from '../../ogame/lifeforms/LifeformTechnologyType';
 import { ValidLifeformType, LifeformType } from '../../ogame/lifeforms/LifeformType';
@@ -295,7 +295,7 @@ export function getPlanetData(planet: AmortizationPlanetSettings): PlanetData {
                 acc[item] = 'permanent';
                 return acc;
             },
-            {} as Partial<Record<ItemHash, 'permanent'>>,
+            {} as Partial<Record<ItemId, 'permanent'>>,
         ),
         activeLifeform: planet.lifeform,
         activeLifeformTechnologies: [...planet.activeLifeformTechnologies],

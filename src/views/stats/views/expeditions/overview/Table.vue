@@ -41,7 +41,6 @@ import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
 import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 import ExpeditionEventTypeIcon from '@stats/components/expeditions/ExpeditionEventTypeIcon.vue';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
@@ -52,7 +51,7 @@ const expeditionStore = useExpeditionStore();
 
 const showSettings = ref(false);
 
-const detroidItem = ItemHash.detroid_bronze;
+const detroidItem = 'detroid_30minutes';
 
 const avgFormat = ref<Intl.NumberFormatOptions>({
     minimumFractionDigits: 1,

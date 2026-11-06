@@ -26,7 +26,6 @@ import {
 } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 import { RawExpeditionMessageData, TrackExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
 import { RawMessageData } from '@ogame-tracker/shared/messages/tracking/common';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';

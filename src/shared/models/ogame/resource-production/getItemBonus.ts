@@ -1,70 +1,34 @@
-import { PlanetActiveItems } from '../../empire/PlanetActiveItems';
-import { ItemHash } from '../items/ItemHash';
-import { ResourceType } from '../resources/ResourceType';
-
-const boostItems: Partial<Record<ItemHash, Partial<Record<ResourceType, number>>>> = {
-    [ItemHash.metalBooster_bronze_1day]: { metal: 0.1 },
-    [ItemHash.metalBooster_bronze_7days]: { metal: 0.1 },
-    [ItemHash.crystalBooster_bronze_1day]: { crystal: 0.1 },
-    [ItemHash.crystalBooster_bronze_7days]: { crystal: 0.1 },
-    [ItemHash.deuteriumBooster_bronze_1day]: { deuterium: 0.1 },
-    [ItemHash.deuteriumBooster_bronze_7days]: { deuterium: 0.1 },
-
-    [ItemHash.metalBooster_silver_7days]: { metal: 0.2 },
-    [ItemHash.metalBooster_silver_30days]: { metal: 0.2 },
-    [ItemHash.metalBooster_silver_90days]: { metal: 0.2 },
-    [ItemHash.crystalBooster_silver_7days]: { crystal: 0.2 },
-    [ItemHash.crystalBooster_silver_30days]: { crystal: 0.2 },
-    [ItemHash.crystalBooster_silver_90days]: { crystal: 0.2 },
-    [ItemHash.deuteriumBooster_silver_7days]: { deuterium: 0.2 },
-    [ItemHash.deuteriumBooster_silver_30days]: { deuterium: 0.2 },
-    [ItemHash.deuteriumBooster_silver_90days]: { deuterium: 0.2 },
-
-    [ItemHash.metalBooster_gold_7days]: { metal: 0.3 },
-    [ItemHash.metalBooster_gold_30days]: { metal: 0.3 },
-    [ItemHash.metalBooster_gold_90days]: { metal: 0.3 },
-    [ItemHash.crystalBooster_gold_7days]: { crystal: 0.3 },
-    [ItemHash.crystalBooster_gold_30days]: { crystal: 0.3 },
-    [ItemHash.crystalBooster_gold_90days]: { crystal: 0.3 },
-    [ItemHash.deuteriumBooster_gold_7days]: { deuterium: 0.3 },
-    [ItemHash.deuteriumBooster_gold_30days]: { deuterium: 0.3 },
-    [ItemHash.deuteriumBooster_gold_90days]: { deuterium: 0.3 },
-
-    [ItemHash.metalBooster_platinum_7days]: { metal: 0.4 },
-    [ItemHash.metalBooster_platinum_30days]: { metal: 0.4 },
-    [ItemHash.metalBooster_platinum_90days]: { metal: 0.4 },
-    [ItemHash.crystalBooster_platinum_7days]: { crystal: 0.4 },
-    [ItemHash.crystalBooster_platinum_30days]: { crystal: 0.4 },
-    [ItemHash.crystalBooster_platinum_90days]: { crystal: 0.4 },
-    [ItemHash.deuteriumBooster_platinum_7days]: { deuterium: 0.4 },
-    [ItemHash.deuteriumBooster_platinum_30days]: { deuterium: 0.4 },
-    [ItemHash.deuteriumBooster_platinum_90days]: { deuterium: 0.4 },
-
-    [ItemHash.resourceBooster_all_15percent_7days]: { metal: 0.15, crystal: 0.15, deuterium: 0.15 },
-    [ItemHash.resourceBooster_all_20percent_7days]: { metal: 0.2, crystal: 0.2, deuterium: 0.2 },
-    [ItemHash.resourceBooster_all_25percent_7days]: { metal: 0.25, crystal: 0.25, deuterium: 0.25 },
-    [ItemHash.resourceBooster_all_30percent_7days]: { metal: 0.3, crystal: 0.3, deuterium: 0.3 },
-    [ItemHash.resourceBooster_all_40percent_7days]: { metal: 0.4, crystal: 0.4, deuterium: 0.4 },
-};
+import type { PlanetActiveItems } from '../../empire/PlanetActiveItems';
+import { Items, type ItemId } from '../items/Items.generated';
+import type { ResourceType } from '../resources/ResourceType';
 
 export function getItemBonus(resource: ResourceType, activeItems: PlanetActiveItems): number {
     const now = Date.now();
+    let singleResourceBonus = Infinity;
+    let allResourceBonus = Infinity;
 
-    const activeBoostItemId = (Object.keys(boostItems) as ItemHash[])
-        .filter(id => boostItems[id]![resource] != null)
-        .find(id => isItemActive(now, activeItems[id]));
+    for (const id of Object.keys(activeItems) as ItemId[]) {
+        const effect = Items[id]?.effect;
+        const bonuses = effect?.type === 'resourceProductionBonus' ? effect.value : undefined;
+        const bonus = bonuses?.[resource];
+        if (bonuses == null || bonus == null || !isItemActive(now, activeItems[id])) {
+            continue;
+        }
 
-    const boost = boostItems[activeBoostItemId ?? ItemHash.collector]?.[resource] ?? 0;
-    return boost;
+        // Preserve the existing precedence when a snapshot contains overlapping boosts.
+        if (Object.keys(bonuses).length === 1) {
+            singleResourceBonus = Math.min(singleResourceBonus, bonus);
+        } else {
+            allResourceBonus = Math.min(allResourceBonus, bonus);
+        }
+    }
+
+    if (Number.isFinite(singleResourceBonus)) {
+        return singleResourceBonus;
+    }
+    return Number.isFinite(allResourceBonus) ? allResourceBonus : 0;
 }
 
-export function isItemActive(now: number, itemExpiration?: number | 'permanent') {
-    if (itemExpiration == null) {
-        return false;
-    }
-    if (itemExpiration == 'permanent') {
-        return true;
-    }
-
-    return itemExpiration > now;
+export function isItemActive(now: number, itemExpiration?: number | 'permanent'): boolean {
+    return itemExpiration === 'permanent' || (itemExpiration != null && itemExpiration > now);
 }

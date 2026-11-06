@@ -45,7 +45,6 @@ import {
 } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { useSettingsStore } from '../../data/SettingsDataModule';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
 
 defineProps({
@@ -58,7 +57,7 @@ defineProps({
 
 const settingsStore = useSettingsStore();
 
-const detroidItem = ItemHash.detroid_bronze;
+const detroidItem = 'detroid_30minutes';
 
 const colors = computed(() => settingsStore.settings.colors.expeditions.events);
 </script>

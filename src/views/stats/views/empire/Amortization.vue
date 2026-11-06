@@ -691,7 +691,7 @@ import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/Allian
 import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
 import { addCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
@@ -1116,7 +1116,7 @@ function initSettings() {
                     crystalMine: planet.buildings[BuildingType.crystalMine],
                     deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
                 },
-                activeItems: Object.keys(planet.activeItems) as ItemHash[],
+                activeItems: Object.keys(planet.activeItems) as ItemId[],
                 crawlers: {
                     percentage: planet.productionSettings[ShipType.crawler],
                     count: planet.ships[ShipType.crawler],
@@ -1148,7 +1148,7 @@ function initSettings() {
         },
     };
 
-    const expoSlotItems = Object.keys(Object.values(localEmpire.planets)[0].activeItems) as ItemHash[];
+    const expoSlotItems = Object.keys(Object.values(localEmpire.planets)[0].activeItems) as ItemId[];
     const bonusExpoSlots = getItemSlotBonus(createRecord(expoSlotItems, _ => 'permanent' as const));
 
     const days = Array.from({ length: 7 }).map((_, i) => subDays(startOfToday(), i + 1).getTime());

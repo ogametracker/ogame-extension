@@ -11,7 +11,7 @@ import { ExpeditionFindableShipTypes } from '../../expeditions/ExpeditionEvents'
 import { ShipByTypes } from '../../ogame/ships/ShipTypes';
 import { Reaper } from '../../ogame/ships/Reaper';
 import { LifeformTechnologyType } from '../../ogame/lifeforms/LifeformTechnologyType';
-import { ItemHash } from '../../ogame/items/ItemHash';
+import type { ItemId } from '../../ogame/items/Items.generated';
 import { getExpeditionItemFindBonus } from '../../ogame/expeditions/getExpeditionItemFindBonus';
 
 export interface AmortizationExpeditionResultsPlanetState {
@@ -76,7 +76,7 @@ export interface AmortizationExpeditionResultsBreakdownOptions {
     astrophysicsLevel: number;
     itemBonusSlots: number;
 
-    expeditionBoostItems: ItemHash[];
+    expeditionBoostItems: ItemId[];
 
     fleetFindsResourceFactors: Record<ResourceType, number>;
     serverSettings: {

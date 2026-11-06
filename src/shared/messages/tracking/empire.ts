@@ -1,7 +1,6 @@
 import { Coordinates } from '../../models/ogame/common/Coordinates';
 import { Message, NoDataMessage } from '../../messages/Message';
 import { MessageType } from '../MessageType';
-import { ItemHash } from '../../models/ogame/items/ItemHash';
 import { NonStationaryShipType, ShipType } from '../../models/ogame/ships/ShipType';
 import { DefenseType } from '../../models/ogame/defenses/DefenseType';
 import { PlayerOfficers } from '../../models/empire/PlayerOfficers';
@@ -10,7 +9,7 @@ import { AllianceClass } from '../../models/ogame/classes/AllianceClass';
 import { BuildingType } from '../../models/ogame/buildings/BuildingType';
 import { ResearchType } from '../../models/ogame/research/ResearchType';
 import { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
-import { PlanetActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
+import type { ActiveItemHashes } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
@@ -45,7 +44,7 @@ export interface PlanetDataWrapper<T> {
 // active items
 export type UpdatePlanetActiveItemsMessage = Message<
     MessageType.UpdatePlanetActiveItems,
-    PlanetDataWrapper<PlanetActiveItems>
+    PlanetDataWrapper<ActiveItemHashes>
 >;
 
 // research levels

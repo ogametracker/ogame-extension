@@ -22,12 +22,13 @@ import {
     UpdatePlanetShipCountsMessage,
     UpdateResearchLevelsMessage,
 } from '@ogame-tracker/shared/messages/tracking/empire';
-import { PlanetActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
+import { setActiveItemExpiry, type ActiveItemHashes } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
 import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
 import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
 import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
-import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
+import { Items } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { resolveItemIdBySmallImage } from '@ogame-tracker/shared/models/ogame/items/ItemLookup';
 import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
 import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
@@ -138,7 +139,7 @@ function trackPlanetActiveItems(planet: OgameEmpirePlanet, ogameNow: number) {
     const itemDoc = domParser.parseFromString(planet.equipment_html, 'text/html');
     const itemDivs = Array.from(itemDoc.querySelectorAll('ul.empireItems > li > div'));
 
-    const activeItems: PlanetActiveItems = {};
+    const activeItems: ActiveItemHashes = {};
     itemDivs.forEach(itemDiv => {
         const divWithImageStyle = itemDiv.querySelector(':scope > div[style]');
 
@@ -158,25 +159,29 @@ function trackPlanetActiveItems(planet: OgameEmpirePlanet, ogameNow: number) {
         const smallImageHash =
             backgroundUrlMatch.groups?.smallImageHash ?? _throw('matched but no background image url found');
 
-        const item = Object.values(Items).find(item => item.smallImage == smallImageHash);
-        if (item == null) {
-            _logWarning(`did not find item with small image hash '${smallImageHash}'`);
+        const durationLeftElem = itemDiv.querySelector('span[data-total-duration]');
+        if (durationLeftElem == null) {
+            _logWarning(`no duration for item with small image hash '${smallImageHash}'`);
             return;
         }
-
-        const durationLeftElem = itemDiv.querySelector('span[data-total-duration]') ?? _throw('no item duration found');
         const durationLeftText = durationLeftElem.textContent ?? _throw('no duration found');
         const totalDuration = parseIntSafe(
             durationLeftElem.getAttribute('data-total-duration') ?? _throw('no duration found'),
             10,
         );
 
+        const itemId = resolveItemIdBySmallImage(smallImageHash, totalDuration);
+        if (itemId == null) {
+            _logWarning(`could not resolve item with small image hash '${smallImageHash}' and duration ${totalDuration}`);
+            return;
+        }
+
         let activeUntil: number | 'permanent' = 'permanent';
         if (durationLeftText != '' && totalDuration > 0) {
             const durationLeft = parseIntSafe(durationLeftText, 10) * 1000;
             activeUntil = ogameNow + durationLeft;
         }
-        activeItems[item.hash] = activeUntil;
+        setActiveItemExpiry(activeItems, Items[itemId].hashes[0], activeUntil);
     });
     const message: UpdatePlanetActiveItemsMessage = {
         ogameMeta: getOgameMeta(),

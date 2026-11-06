@@ -32,21 +32,21 @@
                     :key="item"
                     :item="item"
                     :disabled="item != activeBooster.metal"
-                    @click="toggleBooster(item, boosterItems.metal)"
+                    @click="toggleBooster(item, ResourceType.metal)"
                 />
                 <OItem
                     v-for="item in boosterItems.crystal"
                     :key="item"
                     :item="item"
                     :disabled="item != activeBooster.crystal"
-                    @click="toggleBooster(item, boosterItems.crystal)"
+                    @click="toggleBooster(item, ResourceType.crystal)"
                 />
                 <OItem
                     v-for="item in boosterItems.deuterium"
                     :key="item"
                     :item="item"
                     :disabled="item != activeBooster.deuterium"
-                    @click="toggleBooster(item, boosterItems.deuterium)"
+                    @click="toggleBooster(item, ResourceType.deuterium)"
                 />
             </span>
 
@@ -196,7 +196,7 @@ import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue
 import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import {
     AnyBuildingCostAndTimeReductionLifeformBuildings,
     LifeformTechnologyBonusLifeformBuildings,
@@ -221,7 +221,7 @@ import type { PropType } from 'vue';
 import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
 import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 const props = defineProps({
     planetData: { required: false, type: Object as PropType<PlanetData | null> },
@@ -296,70 +296,39 @@ function onAstrophysicsSettingsPlanetPositionChanged(newPosition: number) {
     settings.value.maxTemperature = getAverageTemperature(newPosition);
 }
 
-const boosterItems = {
+const boosterItems: Record<ResourceType, ItemId[]> = {
     metal: [
-        ItemHash.metalBooster_bronze_7days,
-        ItemHash.metalBooster_silver_7days,
-        ItemHash.metalBooster_gold_7days,
-        ItemHash.metalBooster_platinum_7days,
+        'metalBooster_10percent_7days',
+        'metalBooster_20percent_7days',
+        'metalBooster_30percent_7days',
+        'metalBooster_40percent_7days',
     ],
     crystal: [
-        ItemHash.crystalBooster_bronze_7days,
-        ItemHash.crystalBooster_silver_7days,
-        ItemHash.crystalBooster_gold_7days,
-        ItemHash.crystalBooster_platinum_7days,
+        'crystalBooster_10percent_7days',
+        'crystalBooster_20percent_7days',
+        'crystalBooster_30percent_7days',
+        'crystalBooster_40percent_7days',
     ],
     deuterium: [
-        ItemHash.deuteriumBooster_bronze_7days,
-        ItemHash.deuteriumBooster_silver_7days,
-        ItemHash.deuteriumBooster_gold_7days,
-        ItemHash.deuteriumBooster_platinum_7days,
+        'deuteriumBooster_10percent_7days',
+        'deuteriumBooster_20percent_7days',
+        'deuteriumBooster_30percent_7days',
+        'deuteriumBooster_40percent_7days',
     ],
 };
 
-const boosterItemsMap: Partial<Record<ItemHash, ItemHash>> = {
-    //metal
-    [ItemHash.metalBooster_bronze_7days]: ItemHash.metalBooster_bronze_7days,
-    [ItemHash.metalBooster_silver_7days]: ItemHash.metalBooster_silver_7days,
-    [ItemHash.metalBooster_gold_7days]: ItemHash.metalBooster_gold_7days,
-    [ItemHash.metalBooster_platinum_7days]: ItemHash.metalBooster_platinum_7days,
-
-    [ItemHash.metalBooster_silver_30days]: ItemHash.metalBooster_silver_7days,
-    [ItemHash.metalBooster_gold_30days]: ItemHash.metalBooster_gold_7days,
-    [ItemHash.metalBooster_platinum_30days]: ItemHash.metalBooster_platinum_7days,
-
-    [ItemHash.metalBooster_silver_90days]: ItemHash.metalBooster_silver_7days,
-    [ItemHash.metalBooster_gold_90days]: ItemHash.metalBooster_gold_7days,
-    [ItemHash.metalBooster_platinum_90days]: ItemHash.metalBooster_platinum_7days,
-
-    //crystal
-    [ItemHash.crystalBooster_bronze_7days]: ItemHash.crystalBooster_bronze_7days,
-    [ItemHash.crystalBooster_silver_7days]: ItemHash.crystalBooster_silver_7days,
-    [ItemHash.crystalBooster_gold_7days]: ItemHash.crystalBooster_gold_7days,
-    [ItemHash.crystalBooster_platinum_7days]: ItemHash.crystalBooster_platinum_7days,
-
-    [ItemHash.crystalBooster_silver_30days]: ItemHash.crystalBooster_silver_7days,
-    [ItemHash.crystalBooster_gold_30days]: ItemHash.crystalBooster_gold_7days,
-    [ItemHash.crystalBooster_platinum_30days]: ItemHash.crystalBooster_platinum_7days,
-
-    [ItemHash.crystalBooster_silver_90days]: ItemHash.crystalBooster_silver_7days,
-    [ItemHash.crystalBooster_gold_90days]: ItemHash.crystalBooster_gold_7days,
-    [ItemHash.crystalBooster_platinum_90days]: ItemHash.crystalBooster_platinum_7days,
-
-    // deuterium
-    [ItemHash.deuteriumBooster_bronze_7days]: ItemHash.deuteriumBooster_bronze_7days,
-    [ItemHash.deuteriumBooster_silver_7days]: ItemHash.deuteriumBooster_silver_7days,
-    [ItemHash.deuteriumBooster_gold_7days]: ItemHash.deuteriumBooster_gold_7days,
-    [ItemHash.deuteriumBooster_platinum_7days]: ItemHash.deuteriumBooster_platinum_7days,
-
-    [ItemHash.deuteriumBooster_silver_30days]: ItemHash.deuteriumBooster_silver_7days,
-    [ItemHash.deuteriumBooster_gold_30days]: ItemHash.deuteriumBooster_gold_7days,
-    [ItemHash.deuteriumBooster_platinum_30days]: ItemHash.deuteriumBooster_platinum_7days,
-
-    [ItemHash.deuteriumBooster_silver_90days]: ItemHash.deuteriumBooster_silver_7days,
-    [ItemHash.deuteriumBooster_gold_90days]: ItemHash.deuteriumBooster_gold_7days,
-    [ItemHash.deuteriumBooster_platinum_90days]: ItemHash.deuteriumBooster_platinum_7days,
-};
+function getBoosterOption(id: ItemId, resource: ResourceType): ItemId | undefined {
+    const effect = Items[id]?.effect;
+    const bonuses = effect?.type === 'resourceProductionBonus' ? effect.value : undefined;
+    const bonus = bonuses?.[resource];
+    if (bonuses == null || bonus == null || Object.keys(bonuses).length !== 1) {
+        return undefined;
+    }
+    return boosterItems[resource].find(option => {
+        const optionEffect = Items[option]?.effect;
+        return optionEffect?.type === 'resourceProductionBonus' && optionEffect.value[resource] === bonus;
+    });
+}
 
 const showLifeformSettings = ref(false);
 
@@ -368,29 +337,19 @@ const isCrawlerOverloadEnabled = computed(
 );
 
 const activeBooster = computed(() => {
+    const selected = (resource: ResourceType) =>
+        boosterItems[resource].find(option => settings.value.activeItems.some(id => getBoosterOption(id, resource) === option));
+
     return {
-        metal: boosterItems.metal.find(item =>
-            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
-        ),
-        crystal: boosterItems.crystal.find(item =>
-            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
-        ),
-        deuterium: boosterItems.deuterium.find(item =>
-            settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item),
-        ),
+        metal: selected(ResourceType.metal),
+        crystal: selected(ResourceType.crystal),
+        deuterium: selected(ResourceType.deuterium),
     };
 });
 
-function toggleBooster(item: ItemHash, exclude: ItemHash[]) {
-    const active = settings.value.activeItems
-        .map(i => boosterItemsMap[i] as ItemHash)
-        .filter(i => i == item || !exclude.includes(i));
-
-    if (active.includes(item)) {
-        settings.value.activeItems = active.filter(i => i != item);
-    } else {
-        settings.value.activeItems = [...active, item];
-    }
+function toggleBooster(item: ItemId, resource: ResourceType) {
+    const remaining = settings.value.activeItems.filter(id => getBoosterOption(id, resource) == null);
+    settings.value.activeItems = activeBooster.value[resource] === item ? remaining : [...remaining, item];
 }
 
 function toggleLifeform(lifeform: LifeformType) {

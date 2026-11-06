@@ -181,7 +181,6 @@ import type { ExpeditionTrackingNotificationMessageData } from '@ogame-tracker/s
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import Notification from '../Notification.vue';
 import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 import {
@@ -199,7 +198,7 @@ const { notification } = defineProps<{ notification: ExpeditionTrackingNotificat
 const emit = defineEmits<{ remove: [] }>();
 const settingsStore = useSettingsStore();
 
-const detroidItem = ItemHash.detroid_bronze;
+const detroidItem = 'detroid_30minutes';
 const expeditionEvents = [
     ExpeditionEventType.lostFleet,
     ExpeditionEventType.resources,

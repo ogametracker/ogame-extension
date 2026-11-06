@@ -100,7 +100,8 @@ import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes'
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 import { getExpeditionItemFindBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { isItemActive } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
 
 type FindableUnits = {
     metal: number;
@@ -397,9 +398,11 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
     }).sort((a, b) => b.score - a.score)[0];
 
     const firstPlanet = Object.values(empireStore.empire.planets).find(p => !p.isMoon) as PlanetData | undefined;
+    const activeItems = firstPlanet?.activeItems ?? {};
+    const now = Date.now();
     const resourceSizeBoost = getExpeditionItemFindBonus(
         ExpeditionEventType.resources,
-        Object.keys(firstPlanet?.activeItems ?? {}) as ItemHash[],
+        (Object.keys(activeItems) as ItemId[]).filter(id => isItemActive(now, activeItems[id])),
     );
 
     return createRecord(ExpeditionEventSizes, size =>

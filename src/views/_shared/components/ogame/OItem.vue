@@ -16,10 +16,9 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import type { PropType } from 'vue';
-import { ItemHash, ItemHashes } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
-import type { Item } from '@ogame-tracker/shared/models/ogame/items/Item';
+import { getItem } from '@ogame-tracker/shared/models/ogame/items/ItemLookup';
+import { ItemGrade } from '@ogame-tracker/shared/models/ogame/items/ItemGrade';
+import { Items } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { getItemImageUrl, type ItemImageServer } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
@@ -40,8 +39,7 @@ export default defineComponent({
     props: {
         item: {
             required: true,
-            type: String as PropType<ItemHash>,
-            validator: (value: string) => (ItemHashes as string[]).includes(value),
+            type: String,
         },
         hideItemGrade: { required: false, type: Boolean, default: false },
         size: { required: false, type: String, default: '32px' },
@@ -50,7 +48,7 @@ export default defineComponent({
         showTooltip: { required: false, type: Boolean, default: false },
     },
     setup(props) {
-        const fullItem = computed<Item>(() => Items[props.item]);
+        const fullItem = computed(() => getItem(props.item) ?? { ...Items.detroid_30minutes, grade: ItemGrade.none });
         const imageUrl = computed(() => getItemImageUrl(fullItem.value, server));
         return { fullItem, imageUrl };
     },
