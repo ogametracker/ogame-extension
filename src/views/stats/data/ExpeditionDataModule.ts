@@ -1,9 +1,12 @@
-import { ExpeditionEvent, ExpeditionFindableShipType, ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { defineStore } from 'pinia';
+import { computed, onScopeDispose, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import type { ExpeditionEvent, ExpeditionFindableShipType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-import { NewExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
-import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import type { NewExpeditionMessage } from '@ogame-tracker/shared/messages/tracking/expeditions';
+import type { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
@@ -15,7 +18,7 @@ import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes'
 import { multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
-import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
+import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
 
 export interface DailyExpeditionResult {
     date: number;
@@ -37,54 +40,46 @@ export interface DailyExpeditionResult {
     depletion: Record<ExpeditionDepletionLevel | 'unknown', number>;
 }
 
-@Component
-class ExpeditionDataModuleClass extends Vue {
-    public dailyResults: Partial<Record<number, DailyExpeditionResult>> = {};
-    private internal_firstDate: number | null = null;
-    private internal_count = 0;
+export const useExpeditionStore = defineStore('expedition', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const dailyResults = ref<Partial<Record<number, DailyExpeditionResult>>>({});
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    const internal_firstDate = ref<number | null>(null);
+
+    const internal_count = ref(0);
+
+    const count = computed(() => {
+        return internal_count.value;
+    });
+
+    const dailyResultsArray = computed<DailyExpeditionResult[]>(() => {
+        return Object.values(dailyResults.value) as DailyExpeditionResult[];
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    public get count() {
-        return this.internal_count;
-    }
-
-    public get dailyResultsArray(): DailyExpeditionResult[] {
-        return Object.values(this.dailyResults) as DailyExpeditionResult[];
-    }
-
-    private async created() {
-        this._ready = new Promise<void>(async resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
-    }
-
-    private async loadData() {
-        await this.$nextTick();
-
-        const expeditions = await this.getRawData();
+    async function loadData() {
+        const expeditions = await getRawData();
 
         let minDate: number | null = null;
         expeditions.forEach(expedition => {
-            this.addExpeditionToDailyResult(expedition);
+            addExpeditionToDailyResult(expedition);
 
             minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, expedition.date);
         });
-        this.internal_firstDate = minDate;
-        
-        this._resolveReady();
+        internal_firstDate.value = minDate;
+
+        resolveReady();
     }
 
-    public async getRawData(): Promise<ExpeditionEvent[]> {
-        await UniversesAndAccountsDataModule.ready;
+    async function getRawData(): Promise<ExpeditionEvent[]> {
+        await useUniversesAndAccountsStore().ready;
 
-        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const la = useUniversesAndAccountsStore().currentAccount.linkedAccounts ?? [];
         const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
             playerId: acc.id,
             language: acc.serverLanguage,
@@ -106,31 +101,28 @@ class ExpeditionDataModuleClass extends Vue {
         return rawExpeditions;
     }
 
+    let addTimeout: number | undefined = undefined;
 
-    private addTimeout: number | undefined = undefined;
-    private addExpos: ExpeditionEvent[] = [];
+    let addExpos: ExpeditionEvent[] = [];
 
-    private addExpeditionToDailyResult_delayed(expo: ExpeditionEvent) {
-        this.addExpos.push(expo);
+    function addExpeditionToDailyResult_delayed(expo: ExpeditionEvent) {
+        addExpos.push(expo);
 
-        clearTimeout(this.addTimeout);
-        this.addTimeout = setTimeout(() => {
-            const addExpos = this.addExpos;
-            this.addExpos = [];
-            addExpos.forEach(expo => this.addExpeditionToDailyResult(expo));
+        clearTimeout(addTimeout);
+        addTimeout = window.setTimeout(() => {
+            const pending = addExpos;
+            addExpos = [];
+            pending.forEach(expo => addExpeditionToDailyResult(expo));
         }, 500);
     }
 
-    private addExpeditionToDailyResult(expedition: ExpeditionEvent) {
-        this.internal_count++;
+    function addExpeditionToDailyResult(expedition: ExpeditionEvent) {
+        internal_count.value++;
 
         const day = startOfDay(expedition.date).getTime();
 
-        let dailyResult = this.dailyResults[day];
-        if (dailyResult == null) {
-            dailyResult = this.getNewDailyResult(day);
-            this.$set(this.dailyResults, day, dailyResult);
-        }
+        dailyResults.value[day] ??= getNewDailyResult(day);
+        const dailyResult = dailyResults.value[day];
 
         const mappedType = ({
             [ExpeditionEventType.aliens]: ExpeditionEventType.combat,
@@ -187,7 +179,7 @@ class ExpeditionDataModuleClass extends Vue {
         }
     }
 
-    private getNewDailyResult(date: number): DailyExpeditionResult {
+    function getNewDailyResult(date: number): DailyExpeditionResult {
         return {
             date,
             events: createRecord(ExpeditionEventTypes, 0),
@@ -212,11 +204,11 @@ class ExpeditionDataModuleClass extends Vue {
         };
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private onMessage(msg: Message) {
+    function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -225,20 +217,34 @@ class ExpeditionDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewExpedition: {
                 const { data: expedition } = msg as NewExpeditionMessage;
-                this.addExpeditionToDailyResult_delayed(expedition);
+                addExpeditionToDailyResult_delayed(expedition);
                 break;
             }
         }
     }
 
-    public get firstDay(): number {
-        return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
-    }
+    const firstDay = computed<number>(() => {
+        return startOfDay(internal_firstDate.value ?? Date.now()).getTime();
+    });
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         await db.clear('expeditions');
     }
-}
 
-export const ExpeditionDataModule = new ExpeditionDataModuleClass();
+    onScopeDispose(() => clearTimeout(addTimeout));
+
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        dailyResults,
+        internal_firstDate,
+        internal_count,
+        count,
+        dailyResultsArray,
+        getRawData,
+        firstDay,
+        clear,
+    };
+});

@@ -1,8 +1,10 @@
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { createReadiness } from './lifecycle';
 import { getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';
-import { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+import type { OgameTrackerUniverseHistoryAllianceMembers, OgameTrackerUniverseHistoryAllianceName, OgameTrackerUniverseHistoryAllianceScore, OgameTrackerUniverseHistoryAllianceTag, OgameTrackerUniverseHistoryDbSchema, OgameTrackerUniverseHistoryMoonName, OgameTrackerUniverseHistoryMoonState, OgameTrackerUniverseHistoryPlanetCoordinates, OgameTrackerUniverseHistoryPlanetName, OgameTrackerUniverseHistoryPlanetState, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerScore, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
-import { StoreNames } from 'idb';
-import { Component, Vue } from 'vue-property-decorator';
+import type { StoreNames } from 'idb';
 import { GlobalOgameMetaData } from './global';
 
 export interface UniverseHistoryPlayer {
@@ -33,28 +35,21 @@ export interface UniverseHistoryMoonHistory {
     states: OgameTrackerUniverseHistoryMoonState[];
 }
 
-@Component
-class UniverseHistoryDataModuleClass extends Vue {
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+export const useUniverseHistoryStore = defineStore('universeHistory', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    const players = ref<UniverseHistoryPlayer[]>([]);
+
+    const alliances = ref<UniverseHistoryAlliance[]>([]);
+
+    async function initialize() {
+        await loadPlayers();
+        await loadAlliances();
+
+        resolveReady();
     }
 
-    public readonly players: UniverseHistoryPlayer[] = [];
-    public readonly alliances: UniverseHistoryAlliance[] = [];
-
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        await this.loadPlayers();
-        await this.loadAlliances();
-
-        this._resolveReady();
-    }
-
-    private async loadPlayers() {
+    async function loadPlayers() {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const tx = db.transaction('playerNames', 'readonly');
         const store = tx.objectStore('playerNames');
@@ -75,16 +70,16 @@ class UniverseHistoryDataModuleClass extends Vue {
             cursor = await cursor.continue();
         }
 
-        const players = Object.keys(playerNames)
+        const loadedPlayers = Object.keys(playerNames)
             .map(pid => parseIntSafe(pid, 10))
             .map<UniverseHistoryPlayer>(id => ({
                 id,
                 name: playerNames[id],
             }));
-        this.players.push(...players);
+        players.value.push(...loadedPlayers);
     }
 
-    private async loadAlliances() {
+    async function loadAlliances() {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const tx = db.transaction(['allianceNames', 'allianceTags'], 'readonly');
 
@@ -122,18 +117,17 @@ class UniverseHistoryDataModuleClass extends Vue {
             tagCursor = await tagCursor.continue();
         }
 
-        const alliances = Object.keys(allianceNames)
+        const loadedAlliances = Object.keys(allianceNames)
             .map(aid => parseIntSafe(aid, 10))
             .map<UniverseHistoryAlliance>(id => ({
                 id,
                 name: allianceNames[id],
                 tag: allianceTags[id],
             }));
-        this.alliances.push(...alliances);
+        alliances.value.push(...loadedAlliances);
     }
 
-
-    public async getPlayerScoreHistory(playerIds: number[]): Promise<OgameTrackerUniverseHistoryPlayerScore[]> {
+    async function getPlayerScoreHistory(playerIds: number[]): Promise<OgameTrackerUniverseHistoryPlayerScore[]> {
         const scores: OgameTrackerUniverseHistoryPlayerScore[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -153,7 +147,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return scores.sort((a, b) => a.date - b.date);
     }
 
-    public async getPlayerAllianceHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerAlliance[]> {
+    async function getPlayerAllianceHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerAlliance[]> {
         const states: OgameTrackerUniverseHistoryPlayerAlliance[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -171,7 +165,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return states.sort((a, b) => a.date - b.date);
     }
 
-    public async getPlayerNameHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerName[]> {
+    async function getPlayerNameHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerName[]> {
         const states: OgameTrackerUniverseHistoryPlayerName[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -189,7 +183,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return states.sort((a, b) => a.date - b.date);
     }
 
-    public async getPlayerStateHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerState[]> {
+    async function getPlayerStateHistory(playerId: number): Promise<OgameTrackerUniverseHistoryPlayerState[]> {
         const states: OgameTrackerUniverseHistoryPlayerState[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -207,7 +201,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return states.sort((a, b) => a.date - b.date);
     }
 
-    public async getNumberOfTotalEntries(): Promise<number> {
+    async function getNumberOfTotalEntries(): Promise<number> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
 
         const totalCount = await db.count('allianceMembers')
@@ -235,8 +229,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return totalCount;
     }
 
-
-    public async getAllianceScoreHistory(allianceIds: number[]): Promise<OgameTrackerUniverseHistoryAllianceScore[]> {
+    async function getAllianceScoreHistory(allianceIds: number[]): Promise<OgameTrackerUniverseHistoryAllianceScore[]> {
         const scores: OgameTrackerUniverseHistoryAllianceScore[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -256,7 +249,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return scores.sort((a, b) => a.date - b.date);
     }
 
-    public async deleteCurrentServer(): Promise<void> {
+    async function deleteCurrentServer(): Promise<void> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const storeNames: StoreNames<OgameTrackerUniverseHistoryDbSchema>[] = [
             '_lastUpdate',
@@ -273,7 +266,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         }
     }
 
-    public async getPlayerPlanetsAndMoonsHistory(playerId: number): Promise<UniverseHistoryPlanetHistory[]> {
+    async function getPlayerPlanetsAndMoonsHistory(playerId: number): Promise<UniverseHistoryPlanetHistory[]> {
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
         const storeNames: (StoreNames<OgameTrackerUniverseHistoryDbSchema> & (`${'planet' | 'moon'}${string}`))[] = [
             'planetCoordinates', 'planetNames', 'planetStates', 'planets',
@@ -320,7 +313,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return planetHistories;
     }
 
-    public async getAllianceTagHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceTag[]> {
+    async function getAllianceTagHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceTag[]> {
         const tags: OgameTrackerUniverseHistoryAllianceTag[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -338,7 +331,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return tags.sort((a, b) => a.date - b.date);
     }
 
-    public async getAllianceNameHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceName[]> {
+    async function getAllianceNameHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceName[]> {
         const names: OgameTrackerUniverseHistoryAllianceName[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -356,7 +349,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return names.sort((a, b) => a.date - b.date);
     }
 
-    public async getAllianceMemberHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceMembers[]> {
+    async function getAllianceMemberHistory(allianceId: number): Promise<OgameTrackerUniverseHistoryAllianceMembers[]> {
         const members: OgameTrackerUniverseHistoryAllianceMembers[] = [];
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -374,7 +367,7 @@ class UniverseHistoryDataModuleClass extends Vue {
         return members.sort((a, b) => a.date - b.date);
     }
 
-    public async getLatestPlayerNamesById(): Promise<Record<number, string>> {
+    async function getLatestPlayerNamesById(): Promise<Record<number, string>> {
         const players: Record<number, string> = {};
 
         const db = await getUniverseHistoryDatabase(GlobalOgameMetaData);
@@ -386,9 +379,9 @@ class UniverseHistoryDataModuleClass extends Vue {
         const playerNameStore = tx.objectStore('playerNames');
         const index = playerNameStore.index('playerId');
 
-        for(const player of playerIds) {
+        for (const player of playerIds) {
             const cursor = await index.openCursor(player.id, 'prev');
-            if(cursor == null) {
+            if (cursor == null) {
                 players[player.id] = player.id.toString();
                 console.warn(`failed to open cursor for player ${player.id}`);
                 continue;
@@ -399,6 +392,24 @@ class UniverseHistoryDataModuleClass extends Vue {
 
         return players;
     }
-}
 
-export const UniverseHistoryDataModule = new UniverseHistoryDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        players,
+        alliances,
+        getPlayerScoreHistory,
+        getPlayerAllianceHistory,
+        getPlayerNameHistory,
+        getPlayerStateHistory,
+        getNumberOfTotalEntries,
+        getAllianceScoreHistory,
+        deleteCurrentServer,
+        getPlayerPlanetsAndMoonsHistory,
+        getAllianceTagHistory,
+        getAllianceNameHistory,
+        getAllianceMemberHistory,
+        getLatestPlayerNamesById,
+    };
+});

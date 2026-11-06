@@ -1,4 +1,4 @@
-import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import type { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 import { v4 } from 'uuid';

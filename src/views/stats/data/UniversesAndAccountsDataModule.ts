@@ -1,39 +1,36 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { toDatabaseRecord } from './toDatabaseRecord';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import { createReadiness } from './lifecycle';
 import { getGlobalDatabase, getPlayerDatabase, getPlayerDatabaseName, getServerDatabase, getServerDatabaseName, getUniverseHistoryDatabaseName } from '@ogame-tracker/shared/db/access';
-import { DbAccount, DbLinkedAccount, DbServer } from '@ogame-tracker/shared/db/schema/global';
+import type { DbAccount, DbLinkedAccount, DbServer } from '@ogame-tracker/shared/db/schema/global';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
-import { CombatReportDataModule } from './CombatReportDataModule';
-import { deleteDB, StoreNames } from 'idb';
+import { useCombatReportStore } from './CombatReportDataModule';
+import { deleteDB } from 'idb';
+import type { StoreNames } from 'idb';
 import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
-import { DropDatabaseConnectionsMessage } from '@ogame-tracker/shared/messages/internal';
+import type { DropDatabaseConnectionsMessage } from '@ogame-tracker/shared/messages/internal';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-import { OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from '@ogame-tracker/shared/db/schema';
-import { UniverseHistoryDataModule } from './UniverseHistoryDataModule';
-import { ExpeditionDataModule } from './ExpeditionDataModule';
-import { DebrisFieldReportDataModule } from './DebrisFieldReportDataModule';
-import { EmpireDataModule } from './EmpireDataModule';
-import { ServerSettingsDataModule } from './ServerSettingsDataModule';
-import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import type { OgameTrackerPlayerDbSchema, OgameTrackerServerDbSchema } from '@ogame-tracker/shared/db/schema';
+import { useUniverseHistoryStore } from './UniverseHistoryDataModule';
+import { useExpeditionStore } from './ExpeditionDataModule';
+import { useDebrisFieldReportStore } from './DebrisFieldReportDataModule';
+import { useEmpireStore } from './EmpireDataModule';
+import { useServerSettingsStore } from './ServerSettingsDataModule';
+import type { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 
-@Component
-class UniversesAndAccountsDataModuleClass extends Vue {
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    public accounts: DbAccount[] = [];
-    public servers: DbServer[] = [];
+    const accounts = ref<DbAccount[]>([]);
 
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
+    const servers = ref<DbServer[]>([]);
 
-        await this.loadData();
+    async function initialize() {
+        await loadData();
     }
 
-    public get ready(): Promise<void> {
-        return this._ready;
-    }
-
-    public get currentAccount(): DbAccount {
+    const currentAccount = computed<DbAccount>(() => {
         const accEqual = (a: {
             serverId: number;
             serverLanguage: string;
@@ -43,7 +40,7 @@ class UniversesAndAccountsDataModuleClass extends Vue {
             && a.serverLanguage == b.language
             && a.id == b.playerId;
 
-        const account = this.accounts.find(a => accEqual(a, GlobalOgameMetaData));
+        const account = accounts.value.find(a => accEqual(a, GlobalOgameMetaData));
 
         if (account == null) {
             return {
@@ -54,12 +51,11 @@ class UniversesAndAccountsDataModuleClass extends Vue {
             };
         }
 
-        account.linkedAccounts = (account.linkedAccounts ?? []).filter(acc => !accEqual(acc, GlobalOgameMetaData));
         return account;
-    }
+    });
 
-    public get currentServer(): DbServer {
-        const server = this.servers.find(
+    const currentServer = computed<DbServer>(() => {
+        const server = servers.value.find(
             s => s.id == GlobalOgameMetaData.serverId
                 && s.language == GlobalOgameMetaData.language
         );
@@ -69,27 +65,31 @@ class UniversesAndAccountsDataModuleClass extends Vue {
             language: GlobalOgameMetaData.language,
             name: GlobalOgameMetaData.serverId.toString(),
         };
-    }
+    });
 
-    private async loadData() {
+    async function loadData() {
         const db = await getGlobalDatabase();
         const tx = db.transaction(['accounts', 'servers'], 'readonly');
 
-        this.accounts = await tx.objectStore('accounts').getAll();
-        this.servers = await tx.objectStore('servers').getAll();
+        accounts.value = (await tx.objectStore('accounts').getAll()).map(account => ({
+            ...account,
+            linkedAccounts: (account.linkedAccounts ?? []).filter(linked => (
+                linked.id !== account.id || linked.serverId !== account.serverId || linked.serverLanguage !== account.serverLanguage
+            )),
+        }));
+        servers.value = await tx.objectStore('servers').getAll();
 
         await tx.done;
 
-        this._resolveReady();
+        resolveReady();
     }
 
-    public async deleteCurrentAccount() {
-        await CombatReportDataModule.clear();
-        await ExpeditionDataModule.clear();
-        await DebrisFieldReportDataModule.clear();
+    async function deleteCurrentAccount() {
+        await useCombatReportStore().clear();
+        await useExpeditionStore().clear();
+        await useDebrisFieldReportStore().clear();
 
-        await EmpireDataModule.clear();
-
+        await useEmpireStore().clear();
 
         const globalDb = await getGlobalDatabase();
         await globalDb.delete('accounts', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language, GlobalOgameMetaData.playerId]);
@@ -99,53 +99,53 @@ class UniversesAndAccountsDataModuleClass extends Vue {
             return;
         }
 
-        await ServerSettingsDataModule.clear();
-        await UniverseHistoryDataModule.deleteCurrentServer();
+        await useServerSettingsStore().clear();
+        await useUniverseHistoryStore().deleteCurrentServer();
 
         await globalDb.delete('servers', [GlobalOgameMetaData.serverId, GlobalOgameMetaData.language]);
     }
 
-    public async linkAccount(account: DbLinkedAccount) {
-        const currentAccount = this.currentAccount;
-        console.debug('linking account ', account, 'with', currentAccount);
-        if (currentAccount.linkedAccounts == null) {
-            Vue.set(currentAccount, <keyof DbAccount>'linkedAccounts', []);
+    async function linkAccount(account: DbLinkedAccount) {
+        const accountRecord = currentAccount.value;
+        console.debug('linking account ', account, 'with', accountRecord);
+        if (accountRecord.linkedAccounts == null) {
+            accountRecord.linkedAccounts = [];
         }
 
-        const accountIsLinked = currentAccount.linkedAccounts!.some(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        const accountIsLinked = accountRecord.linkedAccounts!.some(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
         if (accountIsLinked) {
             return;
         }
-        currentAccount.linkedAccounts!.push(account);
+        accountRecord.linkedAccounts!.push(account);
 
         const db = await getGlobalDatabase();
         const tx = db.transaction(['accounts'], 'readwrite');
 
-        await tx.objectStore('accounts').put(currentAccount);
+        await tx.objectStore('accounts').put(toDatabaseRecord(accountRecord));
 
         await tx.done;
 
-        console.debug('successfully linked account ', account, 'with', currentAccount);
+        console.debug('successfully linked account ', account, 'with', accountRecord);
     }
 
-    public async unlinkAccount(account: DbLinkedAccount) {
-        const currentAccount = this.currentAccount;
-        if (currentAccount.linkedAccounts == null) {
-            Vue.set(currentAccount, <keyof DbAccount>'linkedAccounts', []);
+    async function unlinkAccount(account: DbLinkedAccount) {
+        const accountRecord = currentAccount.value;
+        if (accountRecord.linkedAccounts == null) {
+            accountRecord.linkedAccounts = [];
         }
-        const index = currentAccount.linkedAccounts!.findIndex(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
+        const index = accountRecord.linkedAccounts!.findIndex(a => a.id == account.id && a.serverId == account.serverId && a.serverLanguage == account.serverLanguage);
         if (index >= 0) {
-            currentAccount.linkedAccounts!.splice(index, 1);
+            accountRecord.linkedAccounts!.splice(index, 1);
         }
 
         const db = await getGlobalDatabase();
         const tx = db.transaction(['accounts'], 'readwrite');
 
-        await tx.objectStore('accounts').put(currentAccount);
+        await tx.objectStore('accounts').put(toDatabaseRecord(accountRecord));
         await tx.done;
     }
 
-    private sendDropConnectionsMessage() {
+    function sendDropConnectionsMessage() {
         const msg: DropDatabaseConnectionsMessage = {
             ogameMeta: GlobalOgameMetaData,
             type: MessageType.DropDatabaseConnections,
@@ -154,8 +154,8 @@ class UniversesAndAccountsDataModuleClass extends Vue {
         sendMessage(msg);
     }
 
-    public async deleteEverything() {
-        this.sendDropConnectionsMessage();
+    async function deleteEverything() {
+        sendDropConnectionsMessage();
 
         const allDatabases = await indexedDB.databases();
         for (const db of allDatabases) {
@@ -166,6 +166,18 @@ class UniversesAndAccountsDataModuleClass extends Vue {
             await deleteDB(db.name);
         }
     }
-}
 
-export const UniversesAndAccountsDataModule = new UniversesAndAccountsDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        accounts,
+        servers,
+        currentAccount,
+        currentServer,
+        deleteCurrentAccount,
+        linkAccount,
+        unlinkAccount,
+        deleteEverything,
+    };
+});

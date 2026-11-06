@@ -1,18 +1,20 @@
-import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import type { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-import { Message } from '@ogame-tracker/shared/messages/Message';
+import type { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getPlayerDatabase } from "@ogame-tracker/shared/db/access";
 import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
 import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
-import { PlayerOfficers } from '@ogame-tracker/shared/models/empire/PlayerOfficers';
-import { ResearchLevels } from '@ogame-tracker/shared/models/empire/ResearchLevels';
+import type { PlayerOfficers } from '@ogame-tracker/shared/models/empire/PlayerOfficers';
+import type { ResearchLevels } from '@ogame-tracker/shared/models/empire/ResearchLevels';
 import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
-import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-import { MoonData } from '@ogame-tracker/shared/models/empire/MoonData';
-import { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMissileAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@ogame-tracker/shared/db/schema/player';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import type { MoonData } from '@ogame-tracker/shared/models/empire/MoonData';
+import type { DbActiveItems, DbBasicMoonData, DbBasicPlanetData, DbDefenseAmounts, DbFleets, DbMissileAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlanetProductionSettings, DbPlayerLifeformExperience, DbShipAmounts } from '@ogame-tracker/shared/db/schema/player';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
 import { MoonBuildingTypes, PlanetBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
@@ -20,56 +22,50 @@ import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
 import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
-import { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
+import type { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
 import { Lock } from 'semaphore-async-await';
 import { delay } from '@ogame-tracker/shared/utils/delay';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { LifeformBuildingTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 import { LifeformTechnologyType, LifeformTechnologyTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-import { LifeformDiscoveryDataModule } from './LifeformDiscoveryDataModule';
+import { useLifeformDiscoveryStore } from './LifeformDiscoveryDataModule';
 import { MissileTypes } from '@ogame-tracker/shared/models/ogame/missiles/MissileTypes';
 
-@Component
-class EmpireDataModuleClass extends Vue {
-    public empire: LocalPlayerData = null!;
+export const useEmpireStore = defineStore('empire', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
-    private loading = 0;
-    private lock = new Lock();
+    const empire = ref<LocalPlayerData>(null!);
 
-    public get ready(): Promise<void> {
-        return this._ready;
-    }
+    let loading = 0;
 
-    public get lifeformExperience() {
-        const missionProgress = LifeformDiscoveryDataModule.lifeforms;
-        
+    const lock = new Lock();
+
+    const lifeformExperience = computed(() => {
+        const missionProgress = useLifeformDiscoveryStore().lifeforms;
+
         return createRecord(
             ValidLifeformTypes,
-            lf => Math.max(this.empire.lifeformExperience[lf], missionProgress[lf].gainedExperience),
+            lf => Math.max(empire.value.lifeformExperience[lf], missionProgress[lf].gainedExperience),
         );
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
-    }
-
-    private async loadData() {
-        this.loading++;
-        if (this.loading > 1) {
+    async function loadData() {
+        loading++;
+        if (loading > 1) {
             return;
         }
 
-        await this.lock.acquire();
+        await lock.acquire();
         await delay(200); // delay a bit because OGame empire view will cause many updates
 
         const db = await getPlayerDatabase(GlobalOgameMetaData);
@@ -140,7 +136,6 @@ class EmpireDataModuleClass extends Vue {
                     [ShipType.crawler]: playerClass == PlayerClass.collector ? 150 : 100,
                 }) as ProductionSettings;
 
-
                 const activeLifeform = (await store.get(`planet.${id}.lifeform`)) as LifeformType | undefined ?? LifeformType.none;
                 const lifeformBuildings = (await store.get(`planet.${id}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined ?? createRecord(LifeformBuildingTypes, 0);
                 const lifeformTechnologies = (await store.get(`planet.${id}.lifeformTechnologies`)) as DbPlanetLifeformTechnologyLevels | undefined ?? createRecord(LifeformTechnologyTypes, 0);
@@ -166,7 +161,7 @@ class EmpireDataModuleClass extends Vue {
         }
 
         const fleets = (await store.get('fleets') as DbFleets | undefined) ?? [];
-        this.empire = {
+        empire.value = {
             allianceClass,
             playerClass,
             officers,
@@ -177,12 +172,12 @@ class EmpireDataModuleClass extends Vue {
             fleets,
         };
 
-        this._resolveReady();
-        this.loading = 0;
-        this.lock.release();
+        resolveReady();
+        loading = 0;
+        lock.release();
     }
 
-    private async onMessage(msg: Message) {
+    async function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -190,16 +185,23 @@ class EmpireDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NotifyEmpireDataUpdate: {
-                await this.loadData();
+                await loadData();
                 break;
             }
         }
     }
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         await db.clear('empire');
     }
-}
 
-export const EmpireDataModule = new EmpireDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        empire,
+        lifeformExperience,
+        clear,
+    };
+});

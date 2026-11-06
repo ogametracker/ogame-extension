@@ -1,70 +1,50 @@
-import '@ogame-tracker/view-shared/styles/index.scss';
-
-import '@stats/components/ogame';
-import './components/common';
-
-import Vue from 'vue';
-import App from './App.vue';
-import { router } from './router';
-import './extend-vue';
-import { SettingsDataModule } from './data/SettingsDataModule';
-import { $i18n } from '@stats/i18n';
+import { createPinia, disposePinia } from 'pinia';
+import { createApp } from 'vue';
 import { addIconFonts } from '@ogame-tracker/view-shared/addIconFonts';
-
-void init();
-
+import '@ogame-tracker/view-shared/styles/index.scss';
+import App from './App.vue';
+import { registerCommonComponents } from './components/common';
+import { registerOgameComponents } from './components/ogame';
+import { useCombatReportStore } from './data/CombatReportDataModule';
+import { useDebrisFieldReportStore } from './data/DebrisFieldReportDataModule';
+import { useEmpireStore } from './data/EmpireDataModule';
+import { useExpeditionStore } from './data/ExpeditionDataModule';
+import { useLifeformDiscoveryStore } from './data/LifeformDiscoveryDataModule';
+import { useServerSettingsStore } from './data/ServerSettingsDataModule';
+import { useSettingsStore } from './data/SettingsDataModule';
+import { useUniverseHistoryStore } from './data/UniverseHistoryDataModule';
+import { useUniverseSpecificSettingsStore } from './data/UniverseSpecificSettingsDataModule';
+import { useUniversesAndAccountsStore } from './data/UniversesAndAccountsDataModule';
+import { createStatsRouter } from './router';
 
 async function init() {
     addIconFonts();
-    
-    await applyRouteSettings();
-    watchLanguage();
-    mountVue();
+
+    const pinia = createPinia();
+    const app = createApp(App);
+    app.use(pinia);
+    app.onUnmount(() => disposePinia(pinia));
+
+    // Subscribe before initial navigation so tracking can continue as data loads.
+    const settings = useSettingsStore(pinia);
+    useUniversesAndAccountsStore(pinia);
+    useServerSettingsStore(pinia);
+    useUniverseSpecificSettingsStore(pinia);
+    useUniverseHistoryStore(pinia);
+    useCombatReportStore(pinia);
+    useDebrisFieldReportStore(pinia);
+    useExpeditionStore(pinia);
+    useLifeformDiscoveryStore(pinia);
+    useEmpireStore(pinia);
+
+    await settings.ready;
+
+    const router = createStatsRouter(settings);
+    app.use(router);
+    registerCommonComponents(app);
+    registerOgameComponents(app);
+    await router.isReady();
+    app.mount('#stats');
 }
 
-function watchLanguage() {
-    new Vue().$watch(
-        () => SettingsDataModule.settings.extensionLanguage,
-        lang => $i18n.locale = lang,
-        { immediate: true }
-    );
-    new Vue().$watch(
-        () => SettingsDataModule.settings.extensionLanguageRegion,
-        region => $i18n.localeRegion = region ?? null,
-        { immediate: true }
-    );
-}
-
-async function applyRouteSettings() {
-    await SettingsDataModule.ready;
-
-    const routeSettings = SettingsDataModule.settings.defaultRoutes;
-    const allRoutes = router.getRoutes();
-
-    Object.keys(routeSettings).forEach(routeName => {
-        const route = allRoutes.find(route => route.name == routeName);
-        const targetRouteName = routeSettings[routeName];
-        const targetRoute = allRoutes.find(route => route.name == targetRouteName);
-        if (route == null || targetRoute == null) {
-            console.warn(`Route redirect could not resolved as at least one of the routes does not exist ('${routeName}' -> '${targetRouteName}')`);
-            delete routeSettings[routeName];
-            return;
-        }
-
-        route.redirect = { name: targetRouteName };
-    });
-    SettingsDataModule.updateSettings({
-        ...SettingsDataModule.settings,
-        defaultRoutes: routeSettings,
-    });
-}
-
-function mountVue() {
-    Vue.config.productionTip = false;
-
-    const vue = new Vue({
-        router,
-        render: h => h(App)
-    }).$mount('#app');
-}
-
+void init().catch(console.error);

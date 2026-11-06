@@ -1,43 +1,37 @@
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-import { Message } from '@ogame-tracker/shared/messages/Message';
+import type { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
-import { ServerSettings } from '@ogame-tracker/shared/models/server-settings/ServerSettings';
+import type { ServerSettings } from '@ogame-tracker/shared/models/server-settings/ServerSettings';
 import { getServerDatabase } from '@ogame-tracker/shared/db/access';
-import { DbServerSettings } from '@ogame-tracker/shared/db/schema/server';
+import type { DbServerSettings } from '@ogame-tracker/shared/db/schema/server';
 
-@Component
-class ServerSettingsDataModuleClass extends Vue {
-    public serverSettings: ServerSettings = this.mapServerSettings();
+export const useServerSettingsStore = defineStore('serverSettings', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const serverSettings = ref<ServerSettings>(mapServerSettings());
 
-    public get lastUpdate(): Date | null {
-        const lastUpdate = this.serverSettings?.lastUpdate;
+    const lastUpdate = computed<Date | null>(() => {
+        const lastUpdate = serverSettings.value?.lastUpdate;
         if (lastUpdate == null) {
             return null;
         }
         return new Date(lastUpdate);
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
-    }
-
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
-    }
-
-    private mapServerSettings(serverData?: DbServerSettings): ServerSettings {
+    function mapServerSettings(serverData?: DbServerSettings): ServerSettings {
         return {
             lastUpdate: serverData?._lastUpdate ?? 0,
             version: serverData?.version ?? '10.1.28',
@@ -70,9 +64,9 @@ class ServerSettingsDataModuleClass extends Vue {
                 },
                 defenseRepairFactor: serverData?.repairFactor ?? 0.7,
                 isAllianceCombatSystemEnabled: serverData?.acs ?? true,
-                isRapidfireEnabled: serverData?.rapidFire?? true,
+                isRapidfireEnabled: serverData?.rapidFire ?? true,
                 wreckfields: {
-                    isEnabled: serverData?.wfEnabled?? true,
+                    isEnabled: serverData?.wfEnabled ?? true,
                     minLostPercentage: serverData?.wfMinimumLossPercentage ?? 5,
                     minLostResources: serverData?.wfMinimumRessLost ?? 150_000,
                     repairableBasePercentage: serverData?.wfBasicPercentageRepairable ?? 45,
@@ -142,7 +136,7 @@ class ServerSettingsDataModuleClass extends Vue {
                     researchSpeedFactor: serverData?.explorerBonusIncreasedResearchSpeed ?? 0.25,
                     phalanxRangeFactorBonus: serverData?.explorerBonusPhalanxRange ?? 0.2,
                     planetSizeFactorBonus: serverData?.explorerBonusLargerPlanets ?? 0.1,
-                    hasBonusPlunderForInactivePlayers: serverData?.explorerBonusPlunderInactive?? true,
+                    hasBonusPlunderForInactivePlayers: serverData?.explorerBonusPlunderInactive ?? true,
                     expeditions: {
                         outcomeFactorBonus: serverData?.explorerBonusIncreasedExpeditionOutcome ?? 0.5,
                         enemyFactorReduction: serverData?.explorerBonusExpeditionEnemyReduction ?? 0.5,
@@ -170,27 +164,27 @@ class ServerSettingsDataModuleClass extends Vue {
         };
     }
 
-    private async loadData() {
+    async function loadData() {
         const db = await getServerDatabase(GlobalOgameMetaData);
         const tx = db.transaction('serverSettings', 'readonly');
         const store = tx.objectStore('serverSettings');
 
-        let serverSettings = {} as DbServerSettings;
+        let storedSettings = {} as DbServerSettings;
         const allKeys = await store.getAllKeys();
         for (const key of allKeys) {
             const value = await store.get(key);
-            serverSettings = {
-                ...serverSettings,
+            storedSettings = {
+                ...storedSettings,
                 [key]: value,
             };
         }
 
-        this.serverSettings = this.mapServerSettings(serverSettings);
+        serverSettings.value = mapServerSettings(storedSettings);
 
-        this._resolveReady();
+        resolveReady();
     }
 
-    private async onMessage(msg: Message) {
+    async function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData, false)) {
             return;
@@ -198,16 +192,23 @@ class ServerSettingsDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NotifyServerSettingsUpdate: {
-                await this.loadData();
+                await loadData();
                 break;
             }
         }
     }
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getServerDatabase(GlobalOgameMetaData);
         await db.clear('serverSettings');
     }
-}
 
-export const ServerSettingsDataModule = new ServerSettingsDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        serverSettings,
+        lastUpdate,
+        clear,
+    };
+});

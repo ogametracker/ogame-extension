@@ -1,28 +1,30 @@
+import { toDatabaseRecord } from './toDatabaseRecord';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
-import { Message } from '@ogame-tracker/shared/messages/Message';
+import type { Message } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData, statsViewUuid } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
-import { Settings } from '@ogame-tracker/shared/models/settings/Settings';
-import { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import type { Settings } from '@ogame-tracker/shared/models/settings/Settings';
+import type { NotifySettingsUpdateMessage, RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
 import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
 import { getGlobalDatabase } from '@ogame-tracker/shared/db/access';
 import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
 
-@Component
-class SettingsDataModuleClass extends Vue {
-    public settings: Settings = null!;
+export const useSettingsStore = defineStore('settings', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const settings = ref<Settings>(null!);
 
-    public updateSettings(settings: Settings) {
-        console.debug('updating settings', settings);
-        this.settings = settings;
+    function updateSettings(nextSettings: Settings) {
+        console.debug('updating settings', nextSettings);
+        const snapshot = toDatabaseRecord(nextSettings);
+        settings.value = nextSettings;
 
         void (async () => {
             const db = await getGlobalDatabase();
-            await db.put('settings', settings, 0);
+            await db.put('settings', snapshot, 0);
 
             const msg: NotifySettingsUpdateMessage = {
                 ogameMeta: GlobalOgameMetaData,
@@ -30,25 +32,19 @@ class SettingsDataModuleClass extends Vue {
                 type: MessageType.NotifySettingsUpdate,
             }
             await broadcastMessage(msg);
-        })();
+        })().catch(console.error);
     }
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    async function initialize() {
+        initCommunication();
+        requestData();
     }
 
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        this.requestData();
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
-    }
-
-    private requestData() {
+    function requestData() {
         const requestMessage: RequestSettingsMessage = {
             type: MessageType.RequestSettings,
             ogameMeta: GlobalOgameMetaData,
@@ -57,7 +53,7 @@ class SettingsDataModuleClass extends Vue {
         sendMessage(requestMessage);
     }
 
-    private async onMessage(msg: Message) {
+    async function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -69,19 +65,25 @@ class SettingsDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NotifySettingsUpdate: {
-                this.requestData();
+                requestData();
                 break;
             }
 
             case MessageType.Settings: {
                 const message = msg as SettingsMessage;
-                this.settings = message.data;
+                settings.value = message.data;
 
-                this._resolveReady();
+                resolveReady();
                 break;
             }
         }
     }
-}
 
-export const SettingsDataModule = new SettingsDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        settings,
+        updateSettings,
+    };
+});
