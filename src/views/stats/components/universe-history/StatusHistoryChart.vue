@@ -200,6 +200,8 @@ watch(() => props.playerId, onPlayerIdChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
+@use "sass:map";
+
 $status-bar-height: 40px;
 $status-bar-margin: 5px;
 $status: (
@@ -252,7 +254,7 @@ $status-offset: (
                 @each $name, $color in $status {
                     &.#{$name} {
                         background: $color;
-                        top: #{($status-bar-height + $status-bar-margin) * map-get($status-offset, $name)};
+                        top: #{($status-bar-height + $status-bar-margin) * map.get($status-offset, $name)};
                     }
                 }
             }

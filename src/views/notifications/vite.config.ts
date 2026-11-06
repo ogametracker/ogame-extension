@@ -15,11 +15,6 @@ export default defineConfig(({ mode }) => {
         publicDir: false,
         plugins: [vue()],
         define: { __OGT_BROWSER__: JSON.stringify(browser) },
-        css: {
-            preprocessorOptions: {
-                scss: { additionalData: `$browser: ${browser};` },
-            },
-        },
         build: {
             target: ['chrome109', 'firefox109'],
             minify: mode === 'production' && env.NODE_ENV !== 'development',

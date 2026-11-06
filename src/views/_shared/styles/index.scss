@@ -1,9 +1,8 @@
-@import 'reset';
-@import 'env';
+@use 'reset';
 
-@import 'common';
-@import 'inputs';
-@import 'scrollbar';
-@import 'tables';
+@use 'common';
+@use 'inputs';
+@use 'scrollbar';
+@use 'tables';
 
-@import 'helpers';
+@use 'helpers';

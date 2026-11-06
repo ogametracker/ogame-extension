@@ -26,11 +26,6 @@ export default defineConfig(({ mode }) => {
         },
         plugins: [vue()],
         define: { __OGT_BROWSER__: JSON.stringify(browser) },
-        css: {
-            preprocessorOptions: {
-                scss: { additionalData: `$browser: ${browser};` },
-            },
-        },
         build: {
             copyPublicDir: false,
             target: ['chrome109', 'firefox109'],

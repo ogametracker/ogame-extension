@@ -57,11 +57,11 @@ const imageUrl = computed(() => getItemImageUrl(fullItem.value, server));
 
 <style lang="scss" scoped>
 $ogame-item-grades: (
-    none: #2374ba,
-    bronze: #834b2d,
-    silver: #8d939c,
-    gold: #ffb84a,
-    platinum: #7e3d8e,
+    'none': #2374ba,
+    'bronze': #834b2d,
+    'silver': #8d939c,
+    'gold': #ffb84a,
+    'platinum': #7e3d8e,
 );
 
 .o-item {
