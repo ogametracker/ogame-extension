@@ -9,46 +9,31 @@
             'background-image': `url(/img/ogame/player-classes/${image}.png)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { PlayerClass, PlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { PlayerClass, PlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
 
-    @Component({})
-    export default class OPlayerClass extends Vue {
-        @Prop({
-            required: true,
-            type: String as PropType<PlayerClass>,
-            validator: (value: string) => (PlayerClasses as string[]).includes(value)
-        })
-        private playerClass!: PlayerClass;
+const props = defineProps({
+    playerClass: { required: true, type: String as PropType<PlayerClass>, validator: (value: string) => (PlayerClasses as string[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
+const image = computed(() => imageMap[props.playerClass]);
 
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-
-        private get image() {
-            return this.imageMap[this.playerClass];
-        }
-        private readonly imageMap: Record<PlayerClass, string> = {
-            [PlayerClass.collector]: 'collector',
-            [PlayerClass.discoverer]: 'explorer',
-            [PlayerClass.general]: 'general',
-            [PlayerClass.none]: 'none',
-        };
-    }
+const imageMap: Record<PlayerClass, string> = {
+    [PlayerClass.collector]: 'collector',
+    [PlayerClass.discoverer]: 'explorer',
+    [PlayerClass.general]: 'general',
+    [PlayerClass.none]: 'none',
+};
 </script>
+
 <style lang="scss" scoped>
     .o-player-class {
         width: 1em;

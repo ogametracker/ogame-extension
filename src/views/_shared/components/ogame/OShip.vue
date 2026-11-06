@@ -9,15 +9,13 @@
             'background-image': `url(/img/ogame/ships/${image}.jpg)`,
             'font-size': size,
         }"
-        v-on="legacyListeners"
-        v-bind="$props"
+
     />
 </template>
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
-    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
     import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 
@@ -53,9 +51,8 @@
             fade: { required: false, type: Boolean },
         },
         setup(props) {
-            const legacyListeners = useLegacyComponentListeners();
             const image = computed(() => imageMap[props.ship]);
-            return { legacyListeners, image };
+            return { image };
         },
     });
 </script>

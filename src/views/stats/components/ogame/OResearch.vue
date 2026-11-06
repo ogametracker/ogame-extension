@@ -9,60 +9,44 @@
             'background-image': `url(/img/ogame/research/${image}.jpg)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
-    import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
 
-    @Component({})
-    export default class OResearch extends Vue {
+const props = defineProps({
+    research: { required: true, type: Number as PropType<ResearchType>, validator: (value: number) => (ResearchTypes as number[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
-        @Prop({
-            required: true,
-            type: Number as PropType<ResearchType>,
-            validator: (value: number) => (ResearchTypes as number[]).includes(value)
-        })
-        private research!: ResearchType;
+const image = computed(() => imageMap[props.research]);
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-
-        private get image() {
-            return this.imageMap[this.research];
-        }
-        private readonly imageMap: Record<ResearchType, string> = {
-            [ResearchType.espionageTechnology]: 'espionage-technology',
-            [ResearchType.computerTechnology]: 'computer-technology',
-            [ResearchType.weaponsTechnology]: 'weapons-technology',
-            [ResearchType.shieldingTechnology]: 'shielding-technology',
-            [ResearchType.armorTechnology]: 'armor-technology',
-            [ResearchType.energyTechnology]: 'energy-technology',
-            [ResearchType.hyperspaceTechnology]: 'hyperspace-technology',
-            [ResearchType.combustionDrive]: 'combustion-drive',
-            [ResearchType.impulseDrive]: 'impulse-drive',
-            [ResearchType.hyperspaceDrive]: 'hyperspace-drive',
-            [ResearchType.laserTechnology]: 'laser-technology',
-            [ResearchType.ionTechnology]: 'ion-technology',
-            [ResearchType.plasmaTechnology]: 'plasma-technology',
-            [ResearchType.intergalacticResearchNetwork]: 'intergalactic-research-network',
-            [ResearchType.astrophysics]: 'astrophysics',
-            [ResearchType.gravitonTechnology]: 'graviton-technology',
-        };
-    }
+const imageMap: Record<ResearchType, string> = {
+    [ResearchType.espionageTechnology]: 'espionage-technology',
+    [ResearchType.computerTechnology]: 'computer-technology',
+    [ResearchType.weaponsTechnology]: 'weapons-technology',
+    [ResearchType.shieldingTechnology]: 'shielding-technology',
+    [ResearchType.armorTechnology]: 'armor-technology',
+    [ResearchType.energyTechnology]: 'energy-technology',
+    [ResearchType.hyperspaceTechnology]: 'hyperspace-technology',
+    [ResearchType.combustionDrive]: 'combustion-drive',
+    [ResearchType.impulseDrive]: 'impulse-drive',
+    [ResearchType.hyperspaceDrive]: 'hyperspace-drive',
+    [ResearchType.laserTechnology]: 'laser-technology',
+    [ResearchType.ionTechnology]: 'ion-technology',
+    [ResearchType.plasmaTechnology]: 'plasma-technology',
+    [ResearchType.intergalacticResearchNetwork]: 'intergalactic-research-network',
+    [ResearchType.astrophysics]: 'astrophysics',
+    [ResearchType.gravitonTechnology]: 'graviton-technology',
+};
 </script>
+
 <style lang="scss" scoped>
     .o-research {
         width: 1em;

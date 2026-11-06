@@ -9,47 +9,31 @@
             'background-image': `url(/img/ogame/alliance-classes/${image}.png)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { AllianceClass, AllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { AllianceClass, AllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
 
-    @Component({})
-    export default class OAllianceClass extends Vue {
+const props = defineProps({
+    allianceClass: { required: true, type: String as PropType<AllianceClass>, validator: (value: string) => (AllianceClasses as string[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
-        @Prop({
-            required: true,
-            type: String as PropType<AllianceClass>,
-            validator: (value: string) => (AllianceClasses as string[]).includes(value)
-        })
-        private allianceClass!: AllianceClass;
+const image = computed(() => imageMap[props.allianceClass]);
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-
-        private get image() {
-            return this.imageMap[this.allianceClass];
-        }
-        private readonly imageMap: Record<AllianceClass, string> = {
-            [AllianceClass.none]: 'none',
-            [AllianceClass.researcher]: 'researcher',
-            [AllianceClass.trader]: 'trader',
-            [AllianceClass.warrior]: 'warrior',
-        };
-    }
+const imageMap: Record<AllianceClass, string> = {
+    [AllianceClass.none]: 'none',
+    [AllianceClass.researcher]: 'researcher',
+    [AllianceClass.trader]: 'trader',
+    [AllianceClass.warrior]: 'warrior',
+};
 </script>
+
 <style lang="scss" scoped>
     .o-alliance-class {
         width: 1em;

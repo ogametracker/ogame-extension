@@ -11,15 +11,13 @@
             'background-image': `url(${imageUrl})`,
             'font-size': size,
         }"
-        v-on="legacyListeners"
-        v-bind="$props"
+
     />
 </template>
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
-    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ItemHash, ItemHashes } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
     import { Items } from '@ogame-tracker/shared/models/ogame/items/Items';
     import type { Item } from '@ogame-tracker/shared/models/ogame/items/Item';
@@ -53,10 +51,9 @@
             showTooltip: { required: false, type: Boolean, default: false },
         },
         setup(props) {
-            const legacyListeners = useLegacyComponentListeners();
             const fullItem = computed<Item>(() => Items[props.item]);
             const imageUrl = computed(() => getItemImageUrl(fullItem.value, server));
-            return { legacyListeners, fullItem, imageUrl };
+            return { fullItem, imageUrl };
         },
     });
 </script>

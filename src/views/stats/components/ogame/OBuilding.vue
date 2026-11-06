@@ -9,65 +9,51 @@
             'background-image': `url(/img/ogame/buildings/${image}.jpg)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { BuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
 
-    @Component({})
-    export default class OBuilding extends Vue {
-        @Prop({
-            required: true,
-            type: Number as PropType<BuildingType>,
-            validator: (value: number) => (BuildingTypes as number[]).includes(value)
-        })
-        private building!: BuildingType;
+const props = defineProps({
+    building: { required: true, type: Number as PropType<BuildingType>, validator: (value: number) => (BuildingTypes as number[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
+const image = computed(() => imageMap[props.building]);
 
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
+const imageMap: Record<BuildingType, string> = {
+    [BuildingType.metalMine]: 'metal-mine',
+    [BuildingType.crystalMine]: 'crystal-mine',
+    [BuildingType.deuteriumSynthesizer]: 'deuterium-synthesizer',
 
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
+    [BuildingType.metalStorage]: 'metal-storage',
+    [BuildingType.crystalStorage]: 'crystal-storage',
+    [BuildingType.deuteriumTank]: 'deuterium-tank',
 
-        private get image() {
-            return this.imageMap[this.building];
-        }
-        private readonly imageMap: Record<BuildingType, string> = {
-            [BuildingType.metalMine]: 'metal-mine',
-            [BuildingType.crystalMine]: 'crystal-mine',
-            [BuildingType.deuteriumSynthesizer]: 'deuterium-synthesizer',
+    [BuildingType.solarPlant]: 'solar-plant',
+    [BuildingType.fusionReactor]: 'fusion-reactor',
 
-            [BuildingType.metalStorage]: 'metal-storage',
-            [BuildingType.crystalStorage]: 'crystal-storage',
-            [BuildingType.deuteriumTank]: 'deuterium-tank',
+    [BuildingType.roboticsFactory]: 'robotics-factory',
+    [BuildingType.shipyard]: 'shipyard',
+    [BuildingType.researchLab]: 'research-lab',
+    [BuildingType.allianceDepot]: 'alliance-depot',
+    [BuildingType.missileSilo]: 'missile-silo',
+    [BuildingType.naniteFactory]: 'nanite-factory',
+    [BuildingType.terraformer]: 'terraformer',
+    [BuildingType.spaceDock]: 'space-dock',
 
-            [BuildingType.solarPlant]: 'solar-plant',
-            [BuildingType.fusionReactor]: 'fusion-reactor',
-
-            [BuildingType.roboticsFactory]: 'robotics-factory',
-            [BuildingType.shipyard]: 'shipyard',
-            [BuildingType.researchLab]: 'research-lab',
-            [BuildingType.allianceDepot]: 'alliance-depot',
-            [BuildingType.missileSilo]: 'missile-silo',
-            [BuildingType.naniteFactory]: 'nanite-factory',
-            [BuildingType.terraformer]: 'terraformer',
-            [BuildingType.spaceDock]: 'space-dock',
-
-            [BuildingType.lunarBase]: 'lunar-base',
-            [BuildingType.sensorPhalanx]: 'sensor-phalanx',
-            [BuildingType.jumpGate]: 'jump-gate',
-        };
-    }
+    [BuildingType.lunarBase]: 'lunar-base',
+    [BuildingType.sensorPhalanx]: 'sensor-phalanx',
+    [BuildingType.jumpGate]: 'jump-gate',
+};
 </script>
+
 <style lang="scss" scoped>
     .o-building {
         width: 1em;

@@ -12,15 +12,13 @@
             'background-image': `url(/img/ogame/lifeforms/${image}.png)`,
             'font-size': size,
         }"
-        v-on="legacyListeners"
-        v-bind="$props"
+
     />
 </template>
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
-    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { LifeformType, LifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
     const imageMap: Record<LifeformType, string> = {
@@ -43,9 +41,8 @@
             fade: { required: false, type: Boolean },
         },
         setup(props) {
-            const legacyListeners = useLegacyComponentListeners();
             const image = computed(() => imageMap[props.lifeform]);
-            return { legacyListeners, image };
+            return { image };
         },
     });
 </script>

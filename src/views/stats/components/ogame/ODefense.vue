@@ -9,52 +9,36 @@
             'background-image': `url(/img/ogame/defense/${image}.jpg)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
-    import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { DefenseType } from '@ogame-tracker/shared/models/ogame/defenses/DefenseType';
+import { DefenseTypes } from '@ogame-tracker/shared/models/ogame/defenses/DefenseTypes';
 
-    @Component({})
-    export default class ODefense extends Vue {
+const props = defineProps({
+    defense: { required: true, type: Number as PropType<DefenseType>, validator: (value: number) => (DefenseTypes as number[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
 
-        @Prop({
-            required: true,
-            type: Number as PropType<DefenseType>,
-            validator: (value: number) => (DefenseTypes as number[]).includes(value),
-        })
-        private defense!: DefenseType;
+const image = computed(() => imageMap[props.defense]);
 
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-
-
-        private get image() {
-            return this.imageMap[this.defense];
-        }
-        private readonly imageMap: Record<DefenseType, string> = {
-            [DefenseType.rocketLauncher]: 'rocket-launcher',
-            [DefenseType.lightLaser]: 'light-laser',
-            [DefenseType.heavyLaser]: 'heavy-laser',
-            [DefenseType.gaussCannon]: 'gauss-cannon',
-            [DefenseType.ionCannon]: 'ion-cannon',
-            [DefenseType.plasmaTurret]: 'plasma-turret',
-            [DefenseType.smallShieldDome]: 'small-shield-dome',
-            [DefenseType.largeShieldDome]: 'large-shield-dome',
-        };
-    }
+const imageMap: Record<DefenseType, string> = {
+    [DefenseType.rocketLauncher]: 'rocket-launcher',
+    [DefenseType.lightLaser]: 'light-laser',
+    [DefenseType.heavyLaser]: 'heavy-laser',
+    [DefenseType.gaussCannon]: 'gauss-cannon',
+    [DefenseType.ionCannon]: 'ion-cannon',
+    [DefenseType.plasmaTurret]: 'plasma-turret',
+    [DefenseType.smallShieldDome]: 'small-shield-dome',
+    [DefenseType.largeShieldDome]: 'large-shield-dome',
+};
 </script>
+
 <style lang="scss" scoped>
     .o-defense {
         width: 1em;

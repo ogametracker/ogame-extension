@@ -9,15 +9,13 @@
             'background-image': `url(/img/ogame/resources/${image}.upscaled.png)`,
             'font-size': size,
         }"
-        v-on="legacyListeners"
-        v-bind="$props"
+
     />
 </template>
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
     import type { PropType } from 'vue';
-    import { useLegacyComponentListeners } from './useLegacyComponentListeners';
     import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
     export type ExtendedResourceType = ResourceType | 'energy' | 'dark-matter';
@@ -42,9 +40,8 @@
             fade: { required: false, type: Boolean },
         },
         setup(props) {
-            const legacyListeners = useLegacyComponentListeners();
             const image = computed(() => imageMap[props.resource]);
-            return { legacyListeners, image };
+            return { image };
         },
     });
 </script>

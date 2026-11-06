@@ -9,43 +9,30 @@
             'background-image': `url(/img/ogame/officers/${officer}.png)`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-
-    export enum OOfficerType {
-        admiral = 'admiral',
-        commander = 'commander',
-        engineer = 'engineer',
-        geologist = 'geologist',
-        technocrat = 'technocrat',
-    }
-
-    @Component({})
-    export default class OOfficer extends Vue {
-
-        @Prop({
-            required: true,
-            type: String as PropType<OOfficerType>,
-            validator: (value: string) => (Object.values(OOfficerType) as string[]).includes(value)
-        })
-        private officer!: OOfficerType;
-
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean })
-        private fade!: boolean;
-    }
+export enum OOfficerType {
+    admiral = 'admiral',
+    commander = 'commander',
+    engineer = 'engineer',
+    geologist = 'geologist',
+    technocrat = 'technocrat',
+}
 </script>
+
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
+defineProps({
+    officer: { required: true, type: String as PropType<OOfficerType>, validator: (value: string) => (Object.values(OOfficerType) as string[]).includes(value) },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean },
+    fade: { required: false, type: Boolean },
+});
+</script>
+
 <style lang="scss" scoped>
     .o-officer {
         width: 1em;
